@@ -37,6 +37,8 @@ Partial Class AddNew
         Me.txtReplaceYear = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.cmdAdd = New System.Windows.Forms.Button()
+        Me.txtNotes = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'txtSerial
@@ -161,18 +163,37 @@ Partial Class AddNew
         '
         'cmdAdd
         '
-        Me.cmdAdd.Location = New System.Drawing.Point(350, 164)
+        Me.cmdAdd.Location = New System.Drawing.Point(350, 205)
         Me.cmdAdd.Name = "cmdAdd"
         Me.cmdAdd.Size = New System.Drawing.Size(97, 44)
         Me.cmdAdd.TabIndex = 14
         Me.cmdAdd.Text = "Add"
         Me.cmdAdd.UseVisualStyleBackColor = True
         '
+        'txtNotes
+        '
+        Me.txtNotes.Location = New System.Drawing.Point(120, 147)
+        Me.txtNotes.Multiline = True
+        Me.txtNotes.Name = "txtNotes"
+        Me.txtNotes.Size = New System.Drawing.Size(551, 52)
+        Me.txtNotes.TabIndex = 15
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(65, 167)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(38, 13)
+        Me.Label7.TabIndex = 16
+        Me.Label7.Text = "Notes:"
+        '
         'AddNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(812, 261)
+        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.txtNotes)
         Me.Controls.Add(Me.cmdAdd)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.txtReplaceYear)
@@ -210,4 +231,6 @@ Partial Class AddNew
     Friend WithEvents txtReplaceYear As TextBox
     Friend WithEvents Label6 As Label
     Friend WithEvents cmdAdd As Button
+    Friend WithEvents txtNotes As TextBox
+    Friend WithEvents Label7 As Label
 End Class

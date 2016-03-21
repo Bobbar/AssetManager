@@ -24,3 +24,29 @@
 \\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
 \\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\MySql.Data.Entity.dll
 \\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.config
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\Microsoft.ReportViewer.WinForms.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.Entity.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\Microsoft.SqlServer.Types.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\de\Microsoft.SqlServer.Types.resources.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\es\Microsoft.SqlServer.Types.resources.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\fr\Microsoft.SqlServer.Types.resources.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\it\Microsoft.SqlServer.Types.resources.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\ja\Microsoft.SqlServer.Types.resources.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\ko\Microsoft.SqlServer.Types.resources.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\pt\Microsoft.SqlServer.Types.resources.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\ru\Microsoft.SqlServer.Types.resources.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\zh-Hans\Microsoft.SqlServer.Types.resources.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\zh-Hant\Microsoft.SqlServer.Types.resources.dll
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Form1.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Resources.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbproj.GenerateResource.Cache

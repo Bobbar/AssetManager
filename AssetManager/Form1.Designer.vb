@@ -34,9 +34,12 @@ Partial Class Form1
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.DataGridHistory = New System.Windows.Forms.DataGridView()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabPage2.SuspendLayout()
+        CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -109,6 +112,7 @@ Partial Class Form1
         '
         'TabPage2
         '
+        Me.TabPage2.Controls.Add(Me.DataGridHistory)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
@@ -141,6 +145,14 @@ Partial Class Form1
         Me.Button1.Text = "New"
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'DataGridHistory
+        '
+        Me.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridHistory.Location = New System.Drawing.Point(23, 253)
+        Me.DataGridHistory.Name = "DataGridHistory"
+        Me.DataGridHistory.Size = New System.Drawing.Size(837, 280)
+        Me.DataGridHistory.TabIndex = 0
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -154,6 +166,8 @@ Partial Class Form1
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage1.PerformLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TabPage2.ResumeLayout(False)
+        CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -169,4 +183,5 @@ Partial Class Form1
     Friend WithEvents Button1 As Button
     Friend WithEvents ResultGrid As DataGridView
     Friend WithEvents Button2 As Button
+    Friend WithEvents DataGridHistory As DataGridView
 End Class
