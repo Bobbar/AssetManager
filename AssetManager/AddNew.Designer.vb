@@ -39,11 +39,15 @@ Partial Class AddNew
         Me.cmdAdd = New System.Windows.Forms.Button()
         Me.txtNotes = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.cmbEquipType = New System.Windows.Forms.ComboBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.txtPO = New System.Windows.Forms.TextBox()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'txtSerial
         '
-        Me.txtSerial.Location = New System.Drawing.Point(35, 49)
+        Me.txtSerial.Location = New System.Drawing.Point(15, 29)
         Me.txtSerial.Name = "txtSerial"
         Me.txtSerial.Size = New System.Drawing.Size(115, 20)
         Me.txtSerial.TabIndex = 0
@@ -51,7 +55,7 @@ Partial Class AddNew
         '
         'txtAssetTag
         '
-        Me.txtAssetTag.Location = New System.Drawing.Point(35, 101)
+        Me.txtAssetTag.Location = New System.Drawing.Point(15, 81)
         Me.txtAssetTag.Name = "txtAssetTag"
         Me.txtAssetTag.Size = New System.Drawing.Size(114, 20)
         Me.txtAssetTag.TabIndex = 1
@@ -60,7 +64,7 @@ Partial Class AddNew
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(32, 29)
+        Me.Label1.Location = New System.Drawing.Point(12, 9)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(33, 13)
         Me.Label1.TabIndex = 2
@@ -69,7 +73,7 @@ Partial Class AddNew
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(32, 81)
+        Me.Label2.Location = New System.Drawing.Point(12, 61)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(55, 13)
         Me.Label2.TabIndex = 3
@@ -77,7 +81,7 @@ Partial Class AddNew
         '
         'txtCurUser
         '
-        Me.txtCurUser.Location = New System.Drawing.Point(196, 49)
+        Me.txtCurUser.Location = New System.Drawing.Point(160, 29)
         Me.txtCurUser.Name = "txtCurUser"
         Me.txtCurUser.Size = New System.Drawing.Size(121, 20)
         Me.txtCurUser.TabIndex = 4
@@ -85,7 +89,7 @@ Partial Class AddNew
         '
         'txtDescription
         '
-        Me.txtDescription.Location = New System.Drawing.Point(196, 101)
+        Me.txtDescription.Location = New System.Drawing.Point(160, 81)
         Me.txtDescription.Name = "txtDescription"
         Me.txtDescription.Size = New System.Drawing.Size(251, 20)
         Me.txtDescription.TabIndex = 5
@@ -94,7 +98,7 @@ Partial Class AddNew
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(193, 29)
+        Me.Label3.Location = New System.Drawing.Point(157, 9)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(29, 13)
         Me.Label3.TabIndex = 6
@@ -103,7 +107,7 @@ Partial Class AddNew
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(193, 81)
+        Me.Label4.Location = New System.Drawing.Point(157, 61)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(60, 13)
         Me.Label4.TabIndex = 7
@@ -112,7 +116,7 @@ Partial Class AddNew
         'cmbLocation
         '
         Me.cmbLocation.FormattingEnabled = True
-        Me.cmbLocation.Location = New System.Drawing.Point(377, 49)
+        Me.cmbLocation.Location = New System.Drawing.Point(325, 29)
         Me.cmbLocation.Name = "cmbLocation"
         Me.cmbLocation.Size = New System.Drawing.Size(171, 21)
         Me.cmbLocation.TabIndex = 8
@@ -121,7 +125,7 @@ Partial Class AddNew
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(374, 29)
+        Me.Label5.Location = New System.Drawing.Point(322, 11)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(48, 13)
         Me.Label5.TabIndex = 9
@@ -129,8 +133,9 @@ Partial Class AddNew
         '
         'dtPurchaseDate
         '
-        Me.dtPurchaseDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dtPurchaseDate.Location = New System.Drawing.Point(499, 101)
+        Me.dtPurchaseDate.CustomFormat = "yyyy-MM-dd"
+        Me.dtPurchaseDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtPurchaseDate.Location = New System.Drawing.Point(456, 81)
         Me.dtPurchaseDate.Name = "dtPurchaseDate"
         Me.dtPurchaseDate.Size = New System.Drawing.Size(169, 20)
         Me.dtPurchaseDate.TabIndex = 10
@@ -138,7 +143,7 @@ Partial Class AddNew
         'lbPurchaseDate
         '
         Me.lbPurchaseDate.AutoSize = True
-        Me.lbPurchaseDate.Location = New System.Drawing.Point(496, 81)
+        Me.lbPurchaseDate.Location = New System.Drawing.Point(453, 61)
         Me.lbPurchaseDate.Name = "lbPurchaseDate"
         Me.lbPurchaseDate.Size = New System.Drawing.Size(78, 13)
         Me.lbPurchaseDate.TabIndex = 11
@@ -146,16 +151,16 @@ Partial Class AddNew
         '
         'txtReplaceYear
         '
-        Me.txtReplaceYear.Location = New System.Drawing.Point(602, 50)
+        Me.txtReplaceYear.Location = New System.Drawing.Point(537, 30)
         Me.txtReplaceYear.Name = "txtReplaceYear"
-        Me.txtReplaceYear.Size = New System.Drawing.Size(158, 20)
+        Me.txtReplaceYear.Size = New System.Drawing.Size(88, 20)
         Me.txtReplaceYear.TabIndex = 12
         Me.txtReplaceYear.Text = "txtReplaceYear"
         '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(599, 29)
+        Me.Label6.Location = New System.Drawing.Point(534, 9)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(72, 13)
         Me.Label6.TabIndex = 13
@@ -163,7 +168,7 @@ Partial Class AddNew
         '
         'cmdAdd
         '
-        Me.cmdAdd.Location = New System.Drawing.Point(350, 205)
+        Me.cmdAdd.Location = New System.Drawing.Point(325, 285)
         Me.cmdAdd.Name = "cmdAdd"
         Me.cmdAdd.Size = New System.Drawing.Size(97, 44)
         Me.cmdAdd.TabIndex = 14
@@ -172,7 +177,8 @@ Partial Class AddNew
         '
         'txtNotes
         '
-        Me.txtNotes.Location = New System.Drawing.Point(120, 147)
+        Me.txtNotes.Location = New System.Drawing.Point(74, 214)
+        Me.txtNotes.MaxLength = 200
         Me.txtNotes.Multiline = True
         Me.txtNotes.Name = "txtNotes"
         Me.txtNotes.Size = New System.Drawing.Size(551, 52)
@@ -181,17 +187,54 @@ Partial Class AddNew
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(65, 167)
+        Me.Label7.Location = New System.Drawing.Point(30, 226)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(38, 13)
         Me.Label7.TabIndex = 16
         Me.Label7.Text = "Notes:"
         '
+        'cmbEquipType
+        '
+        Me.cmbEquipType.FormattingEnabled = True
+        Me.cmbEquipType.Location = New System.Drawing.Point(669, 30)
+        Me.cmbEquipType.Name = "cmbEquipType"
+        Me.cmbEquipType.Size = New System.Drawing.Size(144, 21)
+        Me.cmbEquipType.TabIndex = 17
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(666, 11)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(84, 13)
+        Me.Label8.TabIndex = 18
+        Me.Label8.Text = "Equipment Type"
+        '
+        'txtPO
+        '
+        Me.txtPO.Location = New System.Drawing.Point(670, 82)
+        Me.txtPO.Name = "txtPO"
+        Me.txtPO.Size = New System.Drawing.Size(154, 20)
+        Me.txtPO.TabIndex = 19
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(669, 64)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(62, 13)
+        Me.Label9.TabIndex = 20
+        Me.Label9.Text = "PO Number"
+        '
         'AddNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(812, 261)
+        Me.ClientSize = New System.Drawing.Size(940, 341)
+        Me.Controls.Add(Me.Label9)
+        Me.Controls.Add(Me.txtPO)
+        Me.Controls.Add(Me.Label8)
+        Me.Controls.Add(Me.cmbEquipType)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.txtNotes)
         Me.Controls.Add(Me.cmdAdd)
@@ -233,4 +276,8 @@ Partial Class AddNew
     Friend WithEvents cmdAdd As Button
     Friend WithEvents txtNotes As TextBox
     Friend WithEvents Label7 As Label
+    Friend WithEvents cmbEquipType As ComboBox
+    Friend WithEvents Label8 As Label
+    Friend WithEvents txtPO As TextBox
+    Friend WithEvents Label9 As Label
 End Class
