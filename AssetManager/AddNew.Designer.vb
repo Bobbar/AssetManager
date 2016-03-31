@@ -43,6 +43,8 @@ Partial Class AddNew
         Me.Label8 = New System.Windows.Forms.Label()
         Me.txtPO = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
+        Me.cmbOSType = New System.Windows.Forms.ComboBox()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'txtSerial
@@ -135,7 +137,7 @@ Partial Class AddNew
         '
         Me.dtPurchaseDate.CustomFormat = "yyyy-MM-dd"
         Me.dtPurchaseDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtPurchaseDate.Location = New System.Drawing.Point(456, 81)
+        Me.dtPurchaseDate.Location = New System.Drawing.Point(437, 81)
         Me.dtPurchaseDate.Name = "dtPurchaseDate"
         Me.dtPurchaseDate.Size = New System.Drawing.Size(169, 20)
         Me.dtPurchaseDate.TabIndex = 10
@@ -143,7 +145,7 @@ Partial Class AddNew
         'lbPurchaseDate
         '
         Me.lbPurchaseDate.AutoSize = True
-        Me.lbPurchaseDate.Location = New System.Drawing.Point(453, 61)
+        Me.lbPurchaseDate.Location = New System.Drawing.Point(434, 64)
         Me.lbPurchaseDate.Name = "lbPurchaseDate"
         Me.lbPurchaseDate.Size = New System.Drawing.Size(78, 13)
         Me.lbPurchaseDate.TabIndex = 11
@@ -212,25 +214,44 @@ Partial Class AddNew
         '
         'txtPO
         '
-        Me.txtPO.Location = New System.Drawing.Point(670, 82)
+        Me.txtPO.Location = New System.Drawing.Point(793, 81)
         Me.txtPO.Name = "txtPO"
-        Me.txtPO.Size = New System.Drawing.Size(154, 20)
+        Me.txtPO.Size = New System.Drawing.Size(122, 20)
         Me.txtPO.TabIndex = 19
         '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(669, 64)
+        Me.Label9.Location = New System.Drawing.Point(790, 64)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(62, 13)
         Me.Label9.TabIndex = 20
         Me.Label9.Text = "PO Number"
+        '
+        'cmbOSType
+        '
+        Me.cmbOSType.FormattingEnabled = True
+        Me.cmbOSType.Location = New System.Drawing.Point(632, 82)
+        Me.cmbOSType.Name = "cmbOSType"
+        Me.cmbOSType.Size = New System.Drawing.Size(136, 21)
+        Me.cmbOSType.TabIndex = 21
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(629, 66)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(90, 13)
+        Me.Label10.TabIndex = 22
+        Me.Label10.Text = "Operating System"
         '
         'AddNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(940, 341)
+        Me.Controls.Add(Me.Label10)
+        Me.Controls.Add(Me.cmbOSType)
         Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.txtPO)
         Me.Controls.Add(Me.Label8)
@@ -280,4 +301,6 @@ Partial Class AddNew
     Friend WithEvents Label8 As Label
     Friend WithEvents txtPO As TextBox
     Friend WithEvents Label9 As Label
+    Friend WithEvents cmbOSType As ComboBox
+    Friend WithEvents Label10 As Label
 End Class
