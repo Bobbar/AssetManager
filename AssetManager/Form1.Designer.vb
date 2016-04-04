@@ -48,7 +48,7 @@ Partial Class Form1
         Me.Label5 = New System.Windows.Forms.Label()
         Me.cmbLocation_View = New System.Windows.Forms.ComboBox()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.txtDescription_View = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtCurUser_View = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -59,6 +59,7 @@ Partial Class Form1
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -220,6 +221,7 @@ Partial Class Form1
         '
         'TabPage2
         '
+        Me.TabPage2.Controls.Add(Me.Label14)
         Me.TabPage2.Controls.Add(Me.Label13)
         Me.TabPage2.Controls.Add(Me.cmbEquipType_View)
         Me.TabPage2.Controls.Add(Me.Label7)
@@ -229,7 +231,7 @@ Partial Class Form1
         Me.TabPage2.Controls.Add(Me.Label5)
         Me.TabPage2.Controls.Add(Me.cmbLocation_View)
         Me.TabPage2.Controls.Add(Me.Label4)
-        Me.TabPage2.Controls.Add(Me.TextBox3)
+        Me.TabPage2.Controls.Add(Me.txtDescription_View)
         Me.TabPage2.Controls.Add(Me.Label3)
         Me.TabPage2.Controls.Add(Me.txtCurUser_View)
         Me.TabPage2.Controls.Add(Me.Label2)
@@ -256,6 +258,7 @@ Partial Class Form1
         '
         'cmbEquipType_View
         '
+        Me.cmbEquipType_View.Enabled = False
         Me.cmbEquipType_View.FormattingEnabled = True
         Me.cmbEquipType_View.Location = New System.Drawing.Point(670, 41)
         Me.cmbEquipType_View.Name = "cmbEquipType_View"
@@ -273,6 +276,7 @@ Partial Class Form1
         '
         'txtReplacementYear_View
         '
+        Me.txtReplacementYear_View.Enabled = False
         Me.txtReplacementYear_View.Location = New System.Drawing.Point(456, 144)
         Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
         Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 20)
@@ -290,6 +294,7 @@ Partial Class Form1
         'dtPurchaseDate_View
         '
         Me.dtPurchaseDate_View.CustomFormat = "yyyy-MM-dd"
+        Me.dtPurchaseDate_View.Enabled = False
         Me.dtPurchaseDate_View.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.dtPurchaseDate_View.Location = New System.Drawing.Point(239, 144)
         Me.dtPurchaseDate_View.Name = "dtPurchaseDate_View"
@@ -307,6 +312,7 @@ Partial Class Form1
         '
         'cmbLocation_View
         '
+        Me.cmbLocation_View.Enabled = False
         Me.cmbLocation_View.FormattingEnabled = True
         Me.cmbLocation_View.Location = New System.Drawing.Point(237, 94)
         Me.cmbLocation_View.Name = "cmbLocation_View"
@@ -322,12 +328,13 @@ Partial Class Form1
         Me.Label4.TabIndex = 8
         Me.Label4.Text = "Description:"
         '
-        'TextBox3
+        'txtDescription_View
         '
-        Me.TextBox3.Location = New System.Drawing.Point(237, 44)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(304, 20)
-        Me.TextBox3.TabIndex = 7
+        Me.txtDescription_View.Enabled = False
+        Me.txtDescription_View.Location = New System.Drawing.Point(237, 44)
+        Me.txtDescription_View.Name = "txtDescription_View"
+        Me.txtDescription_View.Size = New System.Drawing.Size(304, 20)
+        Me.txtDescription_View.TabIndex = 7
         '
         'Label3
         '
@@ -340,6 +347,7 @@ Partial Class Form1
         '
         'txtCurUser_View
         '
+        Me.txtCurUser_View.Enabled = False
         Me.txtCurUser_View.Location = New System.Drawing.Point(36, 147)
         Me.txtCurUser_View.Name = "txtCurUser_View"
         Me.txtCurUser_View.Size = New System.Drawing.Size(132, 20)
@@ -356,6 +364,7 @@ Partial Class Form1
         '
         'txtSerial_View
         '
+        Me.txtSerial_View.Enabled = False
         Me.txtSerial_View.Location = New System.Drawing.Point(36, 95)
         Me.txtSerial_View.Name = "txtSerial_View"
         Me.txtSerial_View.Size = New System.Drawing.Size(133, 20)
@@ -372,6 +381,7 @@ Partial Class Form1
         '
         'txtAssetTag_View
         '
+        Me.txtAssetTag_View.Enabled = False
         Me.txtAssetTag_View.Location = New System.Drawing.Point(36, 44)
         Me.txtAssetTag_View.Name = "txtAssetTag_View"
         Me.txtAssetTag_View.Size = New System.Drawing.Size(134, 20)
@@ -416,6 +426,15 @@ Partial Class Form1
         Me.Button1.Text = "New"
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Location = New System.Drawing.Point(39, 258)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(39, 13)
+        Me.Label14.TabIndex = 17
+        Me.Label14.Text = "History"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -448,7 +467,7 @@ Partial Class Form1
     Friend WithEvents ResultGrid As DataGridView
     Friend WithEvents cmdClear As Button
     Friend WithEvents DataGridHistory As DataGridView
-    Friend WithEvents TextBox3 As TextBox
+    Friend WithEvents txtDescription_View As TextBox
     Friend WithEvents Label3 As Label
     Friend WithEvents txtCurUser_View As TextBox
     Friend WithEvents Label2 As Label
@@ -472,4 +491,5 @@ Partial Class Form1
     Friend WithEvents Label12 As Label
     Friend WithEvents cmbLocation As ComboBox
     Friend WithEvents Label13 As Label
+    Friend WithEvents Label14 As Label
 End Class

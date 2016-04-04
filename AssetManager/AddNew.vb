@@ -12,8 +12,6 @@ Public Class AddNew
         cmd.Connection = cn_global
         cmd.CommandText = strSqlQry1
         cmd.ExecuteNonQuery()
-
-
         Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_po,hist_osversion,hist_dev_UID) VALUES ('NEWD','" & strNotes & "','" & strSerial & "','" & strDescription & "','" & strLocation & "','" & strCurUser & "','" & strAssetTag & "','" & strPurchaseDate & "','" & strReplacementYear & "','" & strPO & "','" & strOSVersion & "','" & GetDeviceUID(strAssetTag) & "')"
         cmd.CommandText = strSqlQry2
         cmd.ExecuteNonQuery()
@@ -27,12 +25,11 @@ Public Class AddNew
         strPurchaseDate = dtPurchaseDate.Text
         Debug.Print(strPurchaseDate)
         strReplacementYear = Trim(txtReplaceYear.Text)
-        strLocation = GetShortValue(ComboType.Location, cmbLocation.SelectedIndex)
+        strLocation = GetCMBShortValue(ComboType.Location, cmbLocation.SelectedIndex)
         strCurUser = Trim(txtCurUser.Text)
         strNotes = Trim(txtNotes.Text)
-        strOSType = GetShortValue(ComboType.OSType, cmbOSType.SelectedIndex)
-        strEQType = GetShortValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
-
+        strOSType = GetCMBShortValue(ComboType.OSType, cmbOSType.SelectedIndex)
+        strEQType = GetCMBShortValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
         'strPO =
         'strOSVersion =
     End Sub
@@ -56,7 +53,7 @@ Public Class AddNew
         cmbLocation.Items.Clear()
         cmbLocation.Text = ""
         For i = 0 To UBound(Locations)
-            cmbLocation.Items.Insert(i, Locations(i).strLocationLong)
+            cmbLocation.Items.Insert(i, Locations(i).strLong)
         Next
     End Sub
     Private Sub FillEquipTypeCombo()
@@ -64,7 +61,7 @@ Public Class AddNew
         cmbEquipType.Items.Clear()
         cmbEquipType.Text = ""
         For i = 0 To UBound(EquipType)
-            cmbEquipType.Items.Insert(i, EquipType(i).strEquipTypeLong)
+            cmbEquipType.Items.Insert(i, EquipType(i).strLong)
         Next
     End Sub
     Private Sub FillOSTypeCombo()
@@ -72,7 +69,7 @@ Public Class AddNew
         cmbOSType.Items.Clear()
         cmbOSType.Text = ""
         For i = 0 To UBound(EquipType)
-            cmbOSType.Items.Insert(i, OSType(i).strOSTypeLong)
+            cmbOSType.Items.Insert(i, OSType(i).strLong)
         Next
     End Sub
     Private Sub AddNew_Activated(sender As Object, e As EventArgs) Handles Me.Activated
