@@ -3,7 +3,7 @@ Imports MySql.Data.MySqlClient
 Public Class AddNew
     Private strSerial As String, strDescription As String, strAssetTag As String, strPurchaseDate As String, strReplacementYear As String,
         strPO As String, strOSVersion As String, strLocation As String, strCurUser As String, strNotes As String, strOSType As String, strEQType As String
-    Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
+    Private Sub cmdAdd_Click(sender As Object, e As EventArgs)
         GetDBValues()
         cn_global.Open()
         Dim strSqlQry1 = "INSERT INTO devices (dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_replacement_year,dev_eq_type) VALUES ('" & strDescription & "','" & strLocation & "','" & strCurUser & "','" & strSerial & "','" & strAssetTag & "','" & strPurchaseDate & "','" & strReplacementYear & "','" & strEQType & "')"
@@ -33,7 +33,7 @@ Public Class AddNew
         'strPO =
         'strOSVersion =
     End Sub
-    Private Sub cmbLocation_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbLocation.SelectedIndexChanged
+    Private Sub cmbLocation_SelectedIndexChanged(sender As Object, e As EventArgs)
     End Sub
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
         ClearAll()

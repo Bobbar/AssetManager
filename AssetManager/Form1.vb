@@ -1,9 +1,12 @@
 ﻿Option Explicit On
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
+Imports System.DirectoryServices.AccountManagement
 Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'DBConnect()
+        Dim userFullName As String = UserPrincipal.Current.DisplayName
+        Debug.Print(userFullName)
         BuildLocationIndex()
         BuildChangeTypeIndex()
         BuildEquipTypeIndex()
@@ -24,7 +27,31 @@ Public Class Form1
     End Sub
     Private strSerial As String, strDescription As String, strAssetTag As String, strPurchaseDate As String, strReplacementYear As String,
         strPO As String, strOSVersion As String, strLocation As String, strCurUser As String, strNotes As String, strEQType As String
-    Private Sub cmbEquipType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbEquipType.SelectedIndexChanged
+    Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BlahToolStripMenuItem.Click
+        AddNew.Show()
+    End Sub
+    Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click
+        Dim reader As MySqlDataReader
+        Dim table As New DataTable
+        cn_global.Open()
+        GetSearchDBValues()
+        Dim strQry = "SELECT * FROM devices"
+        Dim cmd As New MySqlCommand(strQry, cn_global)
+        reader = cmd.ExecuteReader
+        table.Columns.Add("User", GetType(String))
+        table.Columns.Add("Asset ID", GetType(String))
+        table.Columns.Add("Serial", GetType(String))
+        table.Columns.Add("Description", GetType(String))
+        table.Columns.Add("Location", GetType(String))
+        table.Columns.Add("Purchase Date", GetType(String))
+        With reader
+            Do While .Read()
+                Debug.Print(!dev_description)
+                table.Rows.Add(!dev_cur_user,!dev_asset_tag,!dev_serial,!dev_description,!dev_location,!dev_purchase_date)
+            Loop
+        End With
+        ResultGrid.DataSource = table
+        cn_global.Close()
     End Sub
     Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
     End Sub
@@ -75,7 +102,7 @@ Public Class Form1
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
         Clear_All()
     End Sub
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
         AddNew.Show()
     End Sub
     Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick

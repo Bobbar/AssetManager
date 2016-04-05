@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Form1
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,9 +20,9 @@ Partial Class Form1
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.Label12 = New System.Windows.Forms.Label()
@@ -39,6 +39,7 @@ Partial Class Form1
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.txtSerial = New System.Windows.Forms.TextBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.cmbEquipType_View = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -57,14 +58,16 @@ Partial Class Form1
         Me.txtAssetTag_View = New System.Windows.Forms.TextBox()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Label14 = New System.Windows.Forms.Label()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BlahToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmbShowAll = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -72,14 +75,15 @@ Partial Class Form1
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.TabPage3)
-        Me.TabControl1.Location = New System.Drawing.Point(12, 58)
+        Me.TabControl1.Location = New System.Drawing.Point(12, 42)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1158, 618)
+        Me.TabControl1.Size = New System.Drawing.Size(1158, 634)
         Me.TabControl1.TabIndex = 0
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.cmbShowAll)
         Me.TabPage1.Controls.Add(Me.Label12)
         Me.TabPage1.Controls.Add(Me.cmbLocation)
         Me.TabPage1.Controls.Add(Me.Label11)
@@ -96,7 +100,7 @@ Partial Class Form1
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(1150, 592)
+        Me.TabPage1.Size = New System.Drawing.Size(1150, 608)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Search"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -171,7 +175,7 @@ Partial Class Form1
         '
         'cmdClear
         '
-        Me.cmdClear.Location = New System.Drawing.Point(954, 119)
+        Me.cmdClear.Location = New System.Drawing.Point(1021, 111)
         Me.cmdClear.Name = "cmdClear"
         Me.cmdClear.Size = New System.Drawing.Size(110, 32)
         Me.cmdClear.TabIndex = 4
@@ -185,18 +189,18 @@ Partial Class Form1
         Me.ResultGrid.AllowUserToResizeRows = False
         Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.ResultGrid.Location = New System.Drawing.Point(36, 303)
+        Me.ResultGrid.Location = New System.Drawing.Point(25, 160)
         Me.ResultGrid.MultiSelect = False
         Me.ResultGrid.Name = "ResultGrid"
         Me.ResultGrid.ReadOnly = True
         Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(808, 251)
+        Me.ResultGrid.Size = New System.Drawing.Size(1106, 442)
         Me.ResultGrid.TabIndex = 3
         '
         'cmdSearch
         '
-        Me.cmdSearch.Location = New System.Drawing.Point(954, 57)
+        Me.cmdSearch.Location = New System.Drawing.Point(1021, 47)
         Me.cmdSearch.Name = "cmdSearch"
         Me.cmdSearch.Size = New System.Drawing.Size(110, 56)
         Me.cmdSearch.TabIndex = 2
@@ -242,10 +246,19 @@ Partial Class Form1
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(1150, 592)
+        Me.TabPage2.Size = New System.Drawing.Size(1150, 608)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "View"
         Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Location = New System.Drawing.Point(39, 258)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(39, 13)
+        Me.Label14.TabIndex = 17
+        Me.Label14.Text = "History"
         '
         'Label13
         '
@@ -407,43 +420,53 @@ Partial Class Form1
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(1150, 592)
+        Me.TabPage3.Size = New System.Drawing.Size(1150, 608)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "Manage"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
-        'ContextMenuStrip1
+        'MenuStrip1
         '
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(1182, 24)
+        Me.MenuStrip1.TabIndex = 3
+        Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'Button1
+        'EditToolStripMenuItem
         '
-        Me.Button1.Location = New System.Drawing.Point(14, 16)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(78, 27)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "New"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BlahToolStripMenuItem})
+        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
+        Me.EditToolStripMenuItem.Text = "Actions"
         '
-        'Label14
+        'BlahToolStripMenuItem
         '
-        Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(39, 258)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(39, 13)
-        Me.Label14.TabIndex = 17
-        Me.Label14.Text = "History"
+        Me.BlahToolStripMenuItem.Name = "BlahToolStripMenuItem"
+        Me.BlahToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.BlahToolStripMenuItem.Text = "New"
+        '
+        'cmbShowAll
+        '
+        Me.cmbShowAll.Location = New System.Drawing.Point(1021, 10)
+        Me.cmbShowAll.Name = "cmbShowAll"
+        Me.cmbShowAll.Size = New System.Drawing.Size(109, 31)
+        Me.cmbShowAll.TabIndex = 13
+        Me.cmbShowAll.Text = "Show All"
+        Me.cmbShowAll.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1182, 688)
-        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.MenuStrip1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
-        Me.Text = "Form1"
+        Me.Text = "Asset Manager"
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage1.PerformLayout()
@@ -451,7 +474,10 @@ Partial Class Form1
         Me.TabPage2.ResumeLayout(False)
         Me.TabPage2.PerformLayout()
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -462,8 +488,6 @@ Partial Class Form1
     Friend WithEvents cmdSearch As Button
     Friend WithEvents txtAssetTag As TextBox
     Friend WithEvents txtSerial As TextBox
-    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
-    Friend WithEvents Button1 As Button
     Friend WithEvents ResultGrid As DataGridView
     Friend WithEvents cmdClear As Button
     Friend WithEvents DataGridHistory As DataGridView
@@ -492,4 +516,8 @@ Partial Class Form1
     Friend WithEvents cmbLocation As ComboBox
     Friend WithEvents Label13 As Label
     Friend WithEvents Label14 As Label
+    Friend WithEvents MenuStrip1 As MenuStrip
+    Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BlahToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents cmbShowAll As Button
 End Class

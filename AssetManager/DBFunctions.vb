@@ -1,34 +1,11 @@
 ﻿Option Explicit On
 Imports MySql.Data.MySqlClient
 Public Module DBFunctions
+    Public ReadOnly Property strLocalUser As String = Environment.UserName
     Public cn_global As New MySqlConnection("server=localhost;uid=root;pwd=SQLR00tP455W0rd;database=asset_manager")
     Public cn_global2 As New MySqlConnection("server=localhost;uid=root;pwd=SQLR00tP455W0rd;database=asset_manager")
     Public Const strDBDateTimeFormat As String = "YYYY-MM-DD hh:mm:ss"
     Public Const strDBDateFormat As String = "yyyy-MM-dd"
-    Public Structure LocationsStruct
-        Public strLocationLong As String
-        Public strLocationShort As String
-        Public strLocationID As String
-    End Structure
-    ' Public Locations() As LocationsStruct
-    Public Structure ChangeTypeStruct
-        Public strChangeTypeLong As String
-        Public strChangeTypeShort As String
-        Public strChangeTypeID As String
-    End Structure
-    ' Public ChangeType() As ChangeTypeStruct
-    Public Structure EquipTypeStruct
-        Public strEquipTypeLong As String
-        Public strEquipTypeShort As String
-        Public strEquipTypeID As String
-    End Structure
-    'Public EquipType() As EquipTypeStruct
-    Public Structure OSTypeStruct
-        Public strOSTypeLong As String
-        Public strOSTypeShort As String
-        Public strOSTypeID As String
-    End Structure
-    'Public OSType() As OSTypeStruct
     Public Structure Combo_Data
         Public strLong As String
         Public strShort As String
@@ -137,7 +114,7 @@ errs:
         Dim i As Integer
         SearchIndex = GetSearchIndex(Type)
         For i = 0 To UBound(SearchIndex)
-            If SearchIndex(i).strShort = ShortVal Then GetComboIndexFromShort = i
+            If SearchIndex(i).strShort = ShortVal Then Return i
         Next
     End Function
     Public Sub BuildChangeTypeIndex()
