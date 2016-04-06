@@ -50,3 +50,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Form1.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Resources.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbproj.GenerateResource.Cache
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View.resources

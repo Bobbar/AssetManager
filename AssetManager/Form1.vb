@@ -12,6 +12,8 @@ Public Class Form1
         BuildEquipTypeIndex()
         BuildOSTypeIndex()
         Clear_All()
+        View.Show()
+
     End Sub
     Private Sub Clear_All()
         txtAssetTag.Clear()
@@ -53,7 +55,7 @@ Public Class Form1
         ResultGrid.DataSource = table
         cn_global.Close()
     End Sub
-    Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
+    Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs)
     End Sub
     Private Sub GetSearchDBValues() 'cleanup user input for db
         strSerial = Trim(txtSerial.Text)
@@ -110,60 +112,31 @@ Public Class Form1
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.DoubleClick
         Debug.Print("Double CLICK!")
         Debug.Print(ResultGrid.Item(1, ResultGrid.CurrentRow.Index).Value)
-        ViewDevice(ResultGrid.Item(1, ResultGrid.CurrentRow.Index).Value)
+        View.ViewDevice(ResultGrid.Item(1, ResultGrid.CurrentRow.Index).Value)
+        View.Show()
+
     End Sub
-    Private Sub ViewDevice(ByVal strAssetTag As String)
-        Dim reader As MySqlDataReader
-        Dim table As New DataTable
-        cn_global.Open()
-        Dim strQry = "SELECT * FROM devices, historical WHERE dev_UID = hist_dev_UID AND dev_asset_tag = '" & strAssetTag & "'"
-        Debug.Print(strQry)
-        Dim cmd As New MySqlCommand(strQry, cn_global)
-        reader = cmd.ExecuteReader
-        table.Columns.Add("Action Type", GetType(String))
-        table.Columns.Add("User", GetType(String))
-        table.Columns.Add("Asset ID", GetType(String))
-        table.Columns.Add("Serial", GetType(String))
-        table.Columns.Add("Description", GetType(String))
-        table.Columns.Add("Location", GetType(String))
-        table.Columns.Add("Purchase Date", GetType(String))
-        With reader
-            Do While .Read()
-                Debug.Print(!dev_description)
-                txtAssetTag_View.Text = !dev_asset_tag
-                txtDescription_View.Text = !dev_description
-                cmbEquipType_View.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType,!dev_eq_type)
-                txtSerial_View.Text = !dev_serial
-                cmbLocation_View.SelectedIndex = GetComboIndexFromShort(ComboType.Location,!dev_location)
-                txtCurUser_View.Text = !dev_cur_user
-                dtPurchaseDate_View.Value = !dev_purchase_date
-                txtReplacementYear_View.Text = !dev_replacement_year
-                table.Rows.Add(GetHumanValue(ComboType.ChangeType,!hist_change_type),!dev_cur_user,!dev_asset_tag,!dev_serial,!dev_description,!dev_location,!dev_purchase_date)
-            Loop
-        End With
-        DataGridHistory.DataSource = table
-        cn_global.Close()
-    End Sub
+
     Private Sub FillEquipTypeCombo()
         Dim i As Integer
-        cmbEquipType_View.Items.Clear()
+        View.cmbEquipType_View.Items.Clear()
         cmbEquipType.Items.Clear()
-        cmbEquipType_View.Text = ""
+        View.cmbEquipType_View.Text = ""
         cmbEquipType.Text = ""
         For i = 0 To UBound(EquipType)
-            cmbEquipType_View.Items.Insert(i, EquipType(i).strLong)
+            View.cmbEquipType_View.Items.Insert(i, EquipType(i).strLong)
             cmbEquipType.Items.Insert(i, EquipType(i).strLong)
         Next
     End Sub
     Private Sub FillLocationCombo()
         Dim i As Integer
         cmbLocation.Items.Clear()
-        cmbLocation_View.Items.Clear()
+        View.cmbLocation_View.Items.Clear()
         cmbLocation.Text = ""
-        cmbLocation_View.Text = ""
+        View.cmbLocation_View.Text = ""
         For i = 0 To UBound(Locations)
             cmbLocation.Items.Insert(i, Locations(i).strLong)
-            cmbLocation_View.Items.Insert(i, Locations(i).strLong)
+            View.cmbLocation_View.Items.Insert(i, Locations(i).strLong)
         Next
     End Sub
 End Class
