@@ -1,7 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class View
     Inherits System.Windows.Forms.Form
-
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -13,10 +12,8 @@ Partial Class View
             MyBase.Dispose(disposing)
         End Try
     End Sub
-
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
-
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
@@ -40,15 +37,17 @@ Partial Class View
         Me.txtSerial_View = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag_View = New System.Windows.Forms.TextBox()
-        Me.DataGridHistory = New System.Windows.Forms.DataGridView()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.pnlViewControls = New System.Windows.Forms.Panel()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.cmbOSVersion = New System.Windows.Forms.ComboBox()
         Me.cmdUpdate = New System.Windows.Forms.Button()
-        CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.DataGridHistory = New System.Windows.Forms.DataGridView()
         Me.MenuStrip1.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
+        CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label14
@@ -200,21 +199,6 @@ Partial Class View
         Me.txtAssetTag_View.Size = New System.Drawing.Size(134, 20)
         Me.txtAssetTag_View.TabIndex = 19
         '
-        'DataGridHistory
-        '
-        Me.DataGridHistory.AllowUserToAddRows = False
-        Me.DataGridHistory.AllowUserToDeleteRows = False
-        Me.DataGridHistory.AllowUserToResizeRows = False
-        Me.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.DataGridHistory.Location = New System.Drawing.Point(30, 266)
-        Me.DataGridHistory.MultiSelect = False
-        Me.DataGridHistory.Name = "DataGridHistory"
-        Me.DataGridHistory.ReadOnly = True
-        Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(840, 237)
-        Me.DataGridHistory.TabIndex = 18
-        '
         'MenuStrip1
         '
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ActionsToolStripMenuItem})
@@ -234,11 +218,13 @@ Partial Class View
         'EditToolStripMenuItem
         '
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(94, 22)
         Me.EditToolStripMenuItem.Text = "Edit"
         '
         'pnlViewControls
         '
+        Me.pnlViewControls.Controls.Add(Me.Label8)
+        Me.pnlViewControls.Controls.Add(Me.cmbOSVersion)
         Me.pnlViewControls.Controls.Add(Me.cmdUpdate)
         Me.pnlViewControls.Controls.Add(Me.Label13)
         Me.pnlViewControls.Controls.Add(Me.cmbEquipType_View)
@@ -261,6 +247,23 @@ Partial Class View
         Me.pnlViewControls.Size = New System.Drawing.Size(841, 199)
         Me.pnlViewControls.TabIndex = 37
         '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(472, 75)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(63, 13)
+        Me.Label8.TabIndex = 37
+        Me.Label8.Text = "OS Version:"
+        '
+        'cmbOSVersion
+        '
+        Me.cmbOSVersion.FormattingEnabled = True
+        Me.cmbOSVersion.Location = New System.Drawing.Point(475, 91)
+        Me.cmbOSVersion.Name = "cmbOSVersion"
+        Me.cmbOSVersion.Size = New System.Drawing.Size(138, 21)
+        Me.cmbOSVersion.TabIndex = 36
+        '
         'cmdUpdate
         '
         Me.cmdUpdate.Location = New System.Drawing.Point(688, 118)
@@ -270,30 +273,42 @@ Partial Class View
         Me.cmdUpdate.Text = "Update"
         Me.cmdUpdate.UseVisualStyleBackColor = True
         '
+        'DataGridHistory
+        '
+        Me.DataGridHistory.AllowUserToAddRows = False
+        Me.DataGridHistory.AllowUserToDeleteRows = False
+        Me.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
+        Me.DataGridHistory.Location = New System.Drawing.Point(33, 273)
+        Me.DataGridHistory.MultiSelect = False
+        Me.DataGridHistory.Name = "DataGridHistory"
+        Me.DataGridHistory.ReadOnly = True
+        Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DataGridHistory.Size = New System.Drawing.Size(861, 238)
+        Me.DataGridHistory.TabIndex = 38
+        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.ClientSize = New System.Drawing.Size(983, 541)
+        Me.Controls.Add(Me.DataGridHistory)
         Me.Controls.Add(Me.pnlViewControls)
         Me.Controls.Add(Me.Label14)
-        Me.Controls.Add(Me.DataGridHistory)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "View"
         Me.Text = "View"
-        CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.pnlViewControls.ResumeLayout(False)
         Me.pnlViewControls.PerformLayout()
+        CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
-
     Friend WithEvents Label14 As Label
     Friend WithEvents Label13 As Label
     Friend WithEvents cmbEquipType_View As ComboBox
@@ -311,10 +326,12 @@ Partial Class View
     Friend WithEvents txtSerial_View As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents txtAssetTag_View As TextBox
-    Friend WithEvents DataGridHistory As DataGridView
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents pnlViewControls As Panel
     Friend WithEvents cmdUpdate As Button
+    Friend WithEvents cmbOSVersion As ComboBox
+    Friend WithEvents Label8 As Label
+    Friend WithEvents DataGridHistory As DataGridView
 End Class

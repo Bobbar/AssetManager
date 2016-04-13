@@ -102,14 +102,20 @@
     <Compile Include="AddNew.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.vb">
+    <Compile Include="AssetManager.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.vb">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <Compile Include="AssetManager.Designer.vb">
+      <DependentUpon>AssetManager.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DBFunctions.vb" />
+    <Compile Include="UpdateDevice.Designer.vb">
+      <DependentUpon>UpdateDevice.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateDevice.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -125,10 +131,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="OtherFunctions.vb" />
     <Compile Include="View.Designer.vb">
       <DependentUpon>View.vb</DependentUpon>
     </Compile>
     <Compile Include="View.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View_Entry.Designer.vb">
+      <DependentUpon>View_Entry.vb</DependentUpon>
+    </Compile>
+    <Compile Include="View_Entry.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
@@ -136,8 +149,11 @@
     <EmbeddedResource Include="AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <EmbeddedResource Include="AssetManager.resx">
+      <DependentUpon>AssetManager.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateDevice.resx">
+      <DependentUpon>UpdateDevice.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -147,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View.resx">
       <DependentUpon>View.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View_Entry.resx">
+      <DependentUpon>View_Entry.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

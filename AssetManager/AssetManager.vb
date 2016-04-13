@@ -2,7 +2,7 @@
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.DirectoryServices.AccountManagement
-Public Class Form1
+Public Class AssetManager
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'DBConnect()
         Dim userFullName As String = UserPrincipal.Current.DisplayName
@@ -12,8 +12,7 @@ Public Class Form1
         BuildEquipTypeIndex()
         BuildOSTypeIndex()
         Clear_All()
-        View.Show()
-
+        'View.Show()
     End Sub
     Private Sub Clear_All()
         txtAssetTag.Clear()
@@ -23,6 +22,9 @@ Public Class Form1
         txtCurUser.Clear()
         FillLocationCombo()
         FillEquipTypeCombo()
+        FillOSTypeCombo()
+        FillChangeTypeCombo()
+        ResultGrid.DataSource = Nothing
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         cn_global.Close()
@@ -55,21 +57,24 @@ Public Class Form1
         ResultGrid.DataSource = table
         cn_global.Close()
     End Sub
-    Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs)
-    End Sub
     Private Sub GetSearchDBValues() 'cleanup user input for db
         strSerial = Trim(txtSerial.Text)
         'strDescription = Trim(txtDescription.Text)
         strAssetTag = Trim(txtAssetTag.Text)
         'strPurchaseDate = Format(dtPurchaseDate.Text, strDBDateFormat)
         'strPurchaseDate = dtPurchaseDate.Text
-        strEQType = GetCMBShortValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
+        strEQType = GetDBValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
         'strReplacementYear = Trim(txtReplaceYear.Text)
-        strLocation = GetCMBShortValue(ComboType.Location, cmbLocation.SelectedIndex)
+        strLocation = GetDBValue(ComboType.Location, cmbLocation.SelectedIndex)
         strCurUser = Trim(txtCurUser.Text)
         'strNotes = Trim(txtNotes.Text)
         'strPO =
         'strOSVersion =
+    End Sub
+    Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
+    End Sub
+    Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
+        Clear_All()
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         'Dim cmd As New MySqlCommand
@@ -101,22 +106,24 @@ Public Class Form1
         ResultGrid.DataSource = table
         cn_global.Close()
     End Sub
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
         Clear_All()
     End Sub
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         AddNew.Show()
     End Sub
-    Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
-    End Sub
-    Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.DoubleClick
+    Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
         Debug.Print("Double CLICK!")
         Debug.Print(ResultGrid.Item(1, ResultGrid.CurrentRow.Index).Value)
         View.ViewDevice(ResultGrid.Item(1, ResultGrid.CurrentRow.Index).Value)
         View.Show()
-
     End Sub
-
+    Public Sub RefreshCombos()
+        FillEquipTypeCombo()
+        FillLocationCombo()
+        FillChangeTypeCombo()
+        FillOSTypeCombo()
+    End Sub
     Private Sub FillEquipTypeCombo()
         Dim i As Integer
         View.cmbEquipType_View.Items.Clear()
@@ -137,6 +144,22 @@ Public Class Form1
         For i = 0 To UBound(Locations)
             cmbLocation.Items.Insert(i, Locations(i).strLong)
             View.cmbLocation_View.Items.Insert(i, Locations(i).strLong)
+        Next
+    End Sub
+    Private Sub FillChangeTypeCombo()
+        Dim i As Integer
+        UpdateDev.cmbUpdate_ChangeType.Items.Clear()
+        UpdateDev.cmbUpdate_ChangeType.Text = ""
+        For i = 0 To UBound(ChangeType)
+            UpdateDev.cmbUpdate_ChangeType.Items.Insert(i, ChangeType(i).strLong)
+        Next
+    End Sub
+    Private Sub FillOSTypeCombo()
+        Dim i As Integer
+        View.cmbOSVersion.Items.Clear()
+        View.cmbOSVersion.Text = ""
+        For i = 0 To UBound(OSType)
+            View.cmbOSVersion.Items.Insert(i, OSType(i).strLong)
         Next
     End Sub
 End Class

@@ -3,19 +3,21 @@ Imports MySql.Data.MySqlClient
 Public Class AddNew
     Private strSerial As String, strDescription As String, strAssetTag As String, strPurchaseDate As String, strReplacementYear As String,
         strPO As String, strOSVersion As String, strLocation As String, strCurUser As String, strNotes As String, strOSType As String, strEQType As String
-    Private Sub cmdAdd_Click(sender As Object, e As EventArgs)
+    Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
         GetDBValues()
         cn_global.Open()
-        Dim strSqlQry1 = "INSERT INTO devices (dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_replacement_year,dev_eq_type) VALUES ('" & strDescription & "','" & strLocation & "','" & strCurUser & "','" & strSerial & "','" & strAssetTag & "','" & strPurchaseDate & "','" & strReplacementYear & "','" & strEQType & "')"
+        Dim strSqlQry1 = "INSERT INTO devices (dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_replacement_year,dev_eq_type,dev_osversion) VALUES ('" & strDescription & "','" & strLocation & "','" & strCurUser & "','" & strSerial & "','" & strAssetTag & "','" & strPurchaseDate & "','" & strReplacementYear & "','" & strEQType & "','" & strOSType & "')"
         Debug.Print(strSqlQry1)
         Dim cmd As New MySqlCommand
         cmd.Connection = cn_global
         cmd.CommandText = strSqlQry1
         cmd.ExecuteNonQuery()
-        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_po,hist_osversion,hist_dev_UID) VALUES ('NEWD','" & strNotes & "','" & strSerial & "','" & strDescription & "','" & strLocation & "','" & strCurUser & "','" & strAssetTag & "','" & strPurchaseDate & "','" & strReplacementYear & "','" & strPO & "','" & strOSVersion & "','" & GetDeviceUID(strAssetTag) & "')"
+        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_po,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type) VALUES ('NEWD','" & strNotes & "','" & strSerial & "','" & strDescription & "','" & strLocation & "','" & strCurUser & "','" & strAssetTag & "','" & strPurchaseDate & "','" & strReplacementYear & "','" & strPO & "','" & strOSVersion & "','" & GetDeviceUID(strAssetTag) & "','" & strLocalUser & "','" & strEQType & "')"
         cmd.CommandText = strSqlQry2
         cmd.ExecuteNonQuery()
         cn_global.Close()
+        Dim blah = MsgBox("New Device Added", vbOKOnly, "Complete")
+        ClearAll()
     End Sub
     Private Sub GetDBValues() 'cleanup user input for db
         strSerial = Trim(txtSerial.Text)
@@ -25,11 +27,11 @@ Public Class AddNew
         strPurchaseDate = dtPurchaseDate.Text
         Debug.Print(strPurchaseDate)
         strReplacementYear = Trim(txtReplaceYear.Text)
-        strLocation = GetCMBShortValue(ComboType.Location, cmbLocation.SelectedIndex)
+        strLocation = GetDBValue(ComboType.Location, cmbLocation.SelectedIndex)
         strCurUser = Trim(txtCurUser.Text)
         strNotes = Trim(txtNotes.Text)
-        strOSType = GetCMBShortValue(ComboType.OSType, cmbOSType.SelectedIndex)
-        strEQType = GetCMBShortValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
+        strOSType = GetDBValue(ComboType.OSType, cmbOSType.SelectedIndex)
+        strEQType = GetDBValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
         'strPO =
         'strOSVersion =
     End Sub

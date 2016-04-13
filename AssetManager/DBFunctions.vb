@@ -11,6 +11,20 @@ Public Module DBFunctions
         Public strShort As String
         Public strID As String
     End Structure
+    Public Structure Device_Info
+        Public strAssetTag As String
+        Public strDescription As String
+        Public strEqType As String
+        Public strSerial As String
+        Public strLocation As String
+        Public strCurrentUser As String
+        Public dtPurchaseDate As String
+        Public strReplaceYear As String
+        Public strOSVersion As String
+        Public strGUID As String
+        Public strPO As String
+    End Structure
+    Public CurrentDevice As Device_Info
     Public Locations() As Combo_Data
     Public ChangeType() As Combo_Data
     Public EquipType() As Combo_Data
@@ -50,6 +64,21 @@ Public Module DBFunctions
             Debug.Print(i & " - " & Locations(i).strLong)
         Next
     End Sub
+    Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String)
+        With CurrentDevice
+            .strGUID = UID
+            .strDescription = Description
+            .strLocation = Location
+            .strCurrentUser = CurrentUser
+            .strSerial = Serial
+            .strAssetTag = AssetTag
+            .dtPurchaseDate = PurchaseDate
+            .strReplaceYear = ReplaceYear
+            .strPO = PO
+            .strOSVersion = OSVersion
+            .strEqType = EQType
+        End With
+    End Sub
     Public Function GetShortLocation(ByVal index As Integer) As String
         On Error GoTo errs
         Return Locations(index).strShort
@@ -70,7 +99,7 @@ errs:
         End With
         cn_global2.Close()
     End Function
-    Public Function GetCMBShortValue(ByVal IndexType As String, ByVal index As Integer) As String
+    Public Function GetDBValue(ByVal IndexType As String, ByVal index As Integer) As String
         On Error GoTo errs
         Select Case IndexType
             Case ComboType.Location
