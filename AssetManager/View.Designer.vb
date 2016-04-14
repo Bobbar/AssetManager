@@ -204,7 +204,7 @@ Partial Class View
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ActionsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(983, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(923, 24)
         Me.MenuStrip1.TabIndex = 36
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -292,13 +292,14 @@ Partial Class View
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.ClientSize = New System.Drawing.Size(983, 541)
+        Me.ClientSize = New System.Drawing.Size(923, 535)
         Me.Controls.Add(Me.DataGridHistory)
         Me.Controls.Add(Me.pnlViewControls)
         Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
+        Me.MaximizeBox = False
         Me.Name = "View"
         Me.Text = "View"
         Me.MenuStrip1.ResumeLayout(False)
@@ -308,6 +309,7 @@ Partial Class View
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents Label14 As Label
     Friend WithEvents Label13 As Label

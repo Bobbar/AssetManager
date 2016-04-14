@@ -59,12 +59,12 @@ Public Class View
         Next
         cmdUpdate.Visible = False
     End Sub
-    Public Sub ViewDevice(ByVal strAssetTag As String)
+    Public Sub ViewDevice(ByVal DeviceUID As String)
         AssetManager.RefreshCombos()
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         cn_global.Open()
-        Dim strQry = "Select * FROM devices, historical WHERE dev_UID = hist_dev_UID And dev_asset_tag = '" & strAssetTag & "' ORDER BY hist_action_datetime DESC"
+        Dim strQry = "Select * FROM devices, historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC"
         Debug.Print(strQry)
         Dim cmd As New MySqlCommand(strQry, cn_global)
         reader = cmd.ExecuteReader
@@ -138,7 +138,20 @@ Public Class View
     Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
     End Sub
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
-        View_Entry.ViewEntry(DataGridHistory.Item(8, DataGridHistory.CurrentRow.Index).Value)
-        View_Entry.Show()
+        'View_Entry.ViewEntry(DataGridHistory.Item(8, DataGridHistory.CurrentRow.Index).Value)
+        'View_Entry.Show()
+        NewEntryView(DataGridHistory.Item(8, DataGridHistory.CurrentRow.Index).Value)
+    End Sub
+    Private Sub NewEntryView(GUID As String)
+
+        Dim NewEntry As New View_Entry
+
+        NewEntry.ViewEntry(GUID)
+        NewEntry.Text = NewEntry.Text + " - " & CurrentDevice.strAssetTag
+        NewEntry.Show()
+
+
+
+
     End Sub
 End Class

@@ -109,6 +109,7 @@
       <DependentUpon>AssetManager.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="DataImport.vb" />
     <Compile Include="DBFunctions.vb" />
     <Compile Include="UpdateDevice.Designer.vb">
       <DependentUpon>UpdateDevice.vb</DependentUpon>

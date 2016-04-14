@@ -18,7 +18,7 @@ Public Module DBFunctions
         Public strSerial As String
         Public strLocation As String
         Public strCurrentUser As String
-        Public dtPurchaseDate As String
+        Public dtPurchaseDate ' As String
         Public strReplaceYear As String
         Public strOSVersion As String
         Public strGUID As String
@@ -29,6 +29,16 @@ Public Module DBFunctions
     Public ChangeType() As Combo_Data
     Public EquipType() As Combo_Data
     Public OSType() As Combo_Data
+    Public SearchResults() As Device_Info
+    Public Sub AddToResults(Info As Device_Info)
+
+        ReDim Preserve SearchResults(UBound(SearchResults) + 1)
+        SearchResults(UBound(SearchResults)) = Info
+
+
+
+    End Sub
+
     Public NotInheritable Class ComboType
         Public Const Location As String = "LOCATION"
         Public Const ChangeType As String = "CHANGETYPE"

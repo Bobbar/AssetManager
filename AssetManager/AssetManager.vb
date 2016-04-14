@@ -12,6 +12,8 @@ Public Class AssetManager
         BuildEquipTypeIndex()
         BuildOSTypeIndex()
         Clear_All()
+        ViewFormIndex = 0
+
         'View.Show()
     End Sub
     Private Sub Clear_All()
@@ -38,24 +40,55 @@ Public Class AssetManager
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         cn_global.Open()
-        GetSearchDBValues()
+        'GetSearchDBValues()
         Dim strQry = "SELECT * FROM devices"
         Dim cmd As New MySqlCommand(strQry, cn_global)
+        Dim Results As Device_Info
+
         reader = cmd.ExecuteReader
+        'table.Columns.Add("User", GetType(String))
+        'table.Columns.Add("Asset ID", GetType(String))
+        'table.Columns.Add("Serial", GetType(String))
+        'table.Columns.Add("Description", GetType(String))
+        'table.Columns.Add("Location", GetType(String))
+        'table.Columns.Add("Purchase Date", GetType(String))
+        'table.Columns.Add("Device UID", GetType(String))
+        With reader
+            Do While .Read()
+
+                'table.Rows.Add(!dev_cur_user,!dev_asset_tag,!dev_serial,!dev_description,!dev_location,!dev_purchase_date,!dev_UID)
+                Results.strCurrentUser = !dev_
+
+
+
+            Loop
+        End With
+        'ResultGrid.DataSource = table
+        cn_global.Close()
+    End Sub
+    Private Sub SendToGrid(ByRef Grid As DataGridView, Data() As Device_Info)
+        Dim table As New DataTable
+        Dim i As Integer
+
         table.Columns.Add("User", GetType(String))
         table.Columns.Add("Asset ID", GetType(String))
         table.Columns.Add("Serial", GetType(String))
         table.Columns.Add("Description", GetType(String))
         table.Columns.Add("Location", GetType(String))
         table.Columns.Add("Purchase Date", GetType(String))
-        With reader
-            Do While .Read()
-                Debug.Print(!dev_description)
-                table.Rows.Add(!dev_cur_user,!dev_asset_tag,!dev_serial,!dev_description,!dev_location,!dev_purchase_date)
-            Loop
-        End With
-        ResultGrid.DataSource = table
-        cn_global.Close()
+        table.Columns.Add("Device UID", GetType(String))
+
+        For i = 0 To UBound(Data)
+
+            table.Rows.Add(Data(i).strCurrentUser, Data(i).strAssetTag, Data(i).strSerial, Data(i).strDescription, Data(i).strLocation, Data(i).dtPurchaseDate, Data(i).strGUID)
+
+
+
+        Next
+        Grid.DataSource = table
+
+
+
     End Sub
     Private Sub GetSearchDBValues() 'cleanup user input for db
         strSerial = Trim(txtSerial.Text)
@@ -73,6 +106,12 @@ Public Class AssetManager
     End Sub
     Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
     End Sub
+
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
+        StartImport()
+
+    End Sub
+
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
         Clear_All()
     End Sub
@@ -97,10 +136,11 @@ Public Class AssetManager
         table.Columns.Add("Description", GetType(String))
         table.Columns.Add("Location", GetType(String))
         table.Columns.Add("Purchase Date", GetType(String))
+        table.Columns.Add("Device UID", GetType(String))
         With reader
             Do While .Read()
                 Debug.Print(!dev_description)
-                table.Rows.Add(!dev_cur_user,!dev_asset_tag,!dev_serial,!dev_description,!dev_location,!dev_purchase_date)
+                table.Rows.Add(!dev_cur_user,!dev_asset_tag,!dev_serial,!dev_description,!dev_location,!dev_purchase_date,!dev_UID)
             Loop
         End With
         ResultGrid.DataSource = table
@@ -114,10 +154,14 @@ Public Class AssetManager
     End Sub
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
         Debug.Print("Double CLICK!")
-        Debug.Print(ResultGrid.Item(1, ResultGrid.CurrentRow.Index).Value)
-        View.ViewDevice(ResultGrid.Item(1, ResultGrid.CurrentRow.Index).Value)
+        'Debug.Print(ResultGrid.Item(6, ResultGrid.CurrentRow.Index).Value)
+        View.ViewDevice(ResultGrid.Item(6, ResultGrid.CurrentRow.Index).Value)
+
         View.Show()
     End Sub
+
+
+
     Public Sub RefreshCombos()
         FillEquipTypeCombo()
         FillLocationCombo()

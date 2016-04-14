@@ -90,13 +90,13 @@ Partial Class View_Entry
         Me.GroupBox1.Controls.Add(Me.txtChangeType)
         Me.GroupBox1.Location = New System.Drawing.Point(13, 14)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(784, 396)
+        Me.GroupBox1.Size = New System.Drawing.Size(742, 335)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         '
         'cmdClose
         '
-        Me.cmdClose.Location = New System.Drawing.Point(313, 356)
+        Me.cmdClose.Location = New System.Drawing.Point(306, 291)
         Me.cmdClose.Name = "cmdClose"
         Me.cmdClose.Size = New System.Drawing.Size(128, 28)
         Me.cmdClose.TabIndex = 30
@@ -106,7 +106,7 @@ Partial Class View_Entry
         'Label15
         '
         Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(139, 272)
+        Me.Label15.Location = New System.Drawing.Point(129, 229)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(35, 13)
         Me.Label15.TabIndex = 29
@@ -115,10 +115,10 @@ Partial Class View_Entry
         'txtNotes
         '
         Me.txtNotes.Enabled = False
-        Me.txtNotes.Location = New System.Drawing.Point(180, 229)
+        Me.txtNotes.Location = New System.Drawing.Point(170, 208)
         Me.txtNotes.Multiline = True
         Me.txtNotes.Name = "txtNotes"
-        Me.txtNotes.Size = New System.Drawing.Size(369, 106)
+        Me.txtNotes.Size = New System.Drawing.Size(391, 56)
         Me.txtNotes.TabIndex = 28
         '
         'Label14
@@ -152,7 +152,7 @@ Partial Class View_Entry
         Me.txtEntryTime.Enabled = False
         Me.txtEntryTime.Location = New System.Drawing.Point(17, 47)
         Me.txtEntryTime.Name = "txtEntryTime"
-        Me.txtEntryTime.Size = New System.Drawing.Size(108, 20)
+        Me.txtEntryTime.Size = New System.Drawing.Size(136, 20)
         Me.txtEntryTime.TabIndex = 24
         '
         'Label12
@@ -363,7 +363,7 @@ Partial Class View_Entry
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(802, 420)
+        Me.ClientSize = New System.Drawing.Size(767, 359)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -373,6 +373,7 @@ Partial Class View_Entry
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label2 As Label
