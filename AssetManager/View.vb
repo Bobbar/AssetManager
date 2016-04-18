@@ -44,6 +44,8 @@ Public Class View
             .strReplaceYear = Trim(txtReplacementYear_View.Text)
             .strOSVersion = GetDBValue(ComboType.OSType, cmbOSVersion.SelectedIndex)
             .strStatus = GetDBValue(ComboType.StatusType, cmbStatus.SelectedIndex)
+            .strNote = UpdateDev.strNewNote
+
         End With
     End Sub
     Private Sub EnableControls()
@@ -96,24 +98,30 @@ Public Class View
         cn_global.Close()
         DataGridHistory.DataSource = table
         DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
+        DataGridHistory.AutoResizeColumns()
+
         DisableControls()
     End Sub
     Private Sub ModifyDevice()
         GetCurrentValues()
+        UpdateDev.Show()
         EnableControls()
     End Sub
     Public Sub UpdateDevice()
-        Dim strNote As String = Trim(UpdateDev.txtUpdate_Note.Text)
+        GetNewValues()
+
         cn_global.Open()
         Dim strSQLQry1 = "UPDATE devices set dev_description='" & NewData.strDescription & "', dev_location='" & NewData.strLocation & "', dev_cur_user='" & NewData.strCurrentUser & "', dev_serial='" & NewData.strSerial & "', dev_asset_tag='" & NewData.strAssetTag & "', dev_purchase_date='" & NewData.dtPurchaseDate & "', dev_replacement_year='" & NewData.strReplaceYear & "', dev_osversion='" & NewData.strOSVersion & "', dev_eq_type='" & NewData.strEqType & "', dev_status='" & NewData.strStatus & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
         Dim cmd As New MySqlCommand
         cmd.Connection = cn_global
         cmd.CommandText = strSQLQry1
         cmd.ExecuteNonQuery()
-        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & strNote & "','" & NewData.strSerial & "','" & NewData.strDescription & "','" & NewData.strLocation & "','" & NewData.strCurrentUser & "','" & NewData.strAssetTag & "','" & NewData.dtPurchaseDate & "','" & NewData.strReplaceYear & "','" & NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & NewData.strEqType & "','" & NewData.strStatus & "')"
+        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & NewData.strNote & "','" & NewData.strSerial & "','" & NewData.strDescription & "','" & NewData.strLocation & "','" & NewData.strCurrentUser & "','" & NewData.strAssetTag & "','" & NewData.dtPurchaseDate & "','" & NewData.strReplaceYear & "','" & NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & NewData.strEqType & "','" & NewData.strStatus & "')"
         cmd.CommandText = strSqlQry2
         cmd.ExecuteNonQuery()
         cn_global.Close()
+        UpdateDev.strNewNote = Nothing
+
         Dim blah
         blah = MsgBox("Update Added", vbOKOnly, "Complete")
         ViewDevice(CurrentDevice.strGUID)
@@ -128,8 +136,8 @@ Public Class View
         ModifyDevice()
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
-        GetNewValues()
-        UpdateDev.Show()
+
+        UpdateDevice()
     End Sub
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Me.Hide()

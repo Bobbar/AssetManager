@@ -97,10 +97,12 @@ Partial Class UpdateDev
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "UpdateDev"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Update Device"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label1 As Label

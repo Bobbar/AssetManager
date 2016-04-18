@@ -72,6 +72,8 @@ Public Class AssetManager
         Next
         Grid.DataSource = table
         Grid.Columns("User").DefaultCellStyle.Font = New Font(Grid.Font, FontStyle.Bold)
+        Grid.AutoResizeColumns()
+
         ReDim SearchResults(0)
     End Sub
     Private Sub GetSearchDBValues() 'cleanup user input for db
@@ -100,16 +102,28 @@ Public Class AssetManager
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         Dim reader As MySqlDataReader
         Dim table As New DataTable
-        cn_global.Open()
+        Dim ds As DataSet
+
         GetSearchDBValues()
-        Dim strQry = "SELECT * FROM devices WHERE " & (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
+
+        Dim strStartQry = "SELECT * FROM devices WHERE " '& (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
+        Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
+
+        If strDynaQry = "" Then
+            Dim blah = MsgBox("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing")
+            Exit Sub
+        End If
+        Dim strQry = strStartQry & strDynaQry
+
         If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
         Debug.Print(strQry)
+        cn_global.Open()
         Dim cmd As New MySqlCommand(strQry, cn_global)
         reader = cmd.ExecuteReader
         With reader
+
             Do While .Read()
                 Dim Results As Device_Info
                 Results.strCurrentUser = !dev_cur_user
@@ -121,6 +135,7 @@ Public Class AssetManager
                 Results.strGUID = !dev_UID
                 AddToResults(Results)
             Loop
+
         End With
         SendToGrid(ResultGrid, SearchResults)
         cn_global.Close()

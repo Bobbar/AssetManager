@@ -21,6 +21,8 @@ Partial Class View_Entry
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View_Entry))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.txtStatus = New System.Windows.Forms.TextBox()
         Me.cmdClose = New System.Windows.Forms.Button()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.txtNotes = New System.Windows.Forms.TextBox()
@@ -52,8 +54,6 @@ Partial Class View_Entry
         Me.txtCurrentUser = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtChangeType = New System.Windows.Forms.TextBox()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.txtStatus = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -97,6 +97,23 @@ Partial Class View_Entry
         Me.GroupBox1.Size = New System.Drawing.Size(742, 335)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(584, 78)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(37, 13)
+        Me.Label16.TabIndex = 32
+        Me.Label16.Text = "Status"
+        '
+        'txtStatus
+        '
+        Me.txtStatus.Enabled = False
+        Me.txtStatus.Location = New System.Drawing.Point(587, 94)
+        Me.txtStatus.Name = "txtStatus"
+        Me.txtStatus.Size = New System.Drawing.Size(108, 20)
+        Me.txtStatus.TabIndex = 31
         '
         'cmdClose
         '
@@ -363,23 +380,6 @@ Partial Class View_Entry
         Me.txtChangeType.Size = New System.Drawing.Size(110, 20)
         Me.txtChangeType.TabIndex = 0
         '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(584, 78)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(37, 13)
-        Me.Label16.TabIndex = 32
-        Me.Label16.Text = "Status"
-        '
-        'txtStatus
-        '
-        Me.txtStatus.Enabled = False
-        Me.txtStatus.Location = New System.Drawing.Point(587, 94)
-        Me.txtStatus.Name = "txtStatus"
-        Me.txtStatus.Size = New System.Drawing.Size(108, 20)
-        Me.txtStatus.TabIndex = 31
-        '
         'View_Entry
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -390,10 +390,12 @@ Partial Class View_Entry
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "View_Entry"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View Entry"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label2 As Label

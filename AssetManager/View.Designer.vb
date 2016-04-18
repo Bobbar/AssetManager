@@ -41,12 +41,12 @@ Partial Class View
         Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.pnlViewControls = New System.Windows.Forms.Panel()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.cmbOSVersion = New System.Windows.Forms.ComboBox()
         Me.cmdUpdate = New System.Windows.Forms.Button()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.MenuStrip1.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -220,8 +220,8 @@ Partial Class View
         'EditToolStripMenuItem
         '
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(94, 22)
-        Me.EditToolStripMenuItem.Text = "Edit"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(167, 22)
+        Me.EditToolStripMenuItem.Text = "Add Modification"
         '
         'pnlViewControls
         '
@@ -251,6 +251,24 @@ Partial Class View
         Me.pnlViewControls.Size = New System.Drawing.Size(861, 181)
         Me.pnlViewControls.TabIndex = 37
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(681, 29)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(40, 13)
+        Me.Label9.TabIndex = 39
+        Me.Label9.Text = "Status:"
+        '
+        'cmbStatus
+        '
+        Me.cmbStatus.Enabled = False
+        Me.cmbStatus.FormattingEnabled = True
+        Me.cmbStatus.Location = New System.Drawing.Point(684, 45)
+        Me.cmbStatus.Name = "cmbStatus"
+        Me.cmbStatus.Size = New System.Drawing.Size(156, 21)
+        Me.cmbStatus.TabIndex = 38
+        '
         'Label8
         '
         Me.Label8.AutoSize = True
@@ -270,17 +288,19 @@ Partial Class View
         '
         'cmdUpdate
         '
-        Me.cmdUpdate.Location = New System.Drawing.Point(721, 121)
+        Me.cmdUpdate.BackColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(191, Byte), Integer))
+        Me.cmdUpdate.Location = New System.Drawing.Point(656, 112)
         Me.cmdUpdate.Name = "cmdUpdate"
         Me.cmdUpdate.Size = New System.Drawing.Size(119, 47)
         Me.cmdUpdate.TabIndex = 35
-        Me.cmdUpdate.Text = "Update"
-        Me.cmdUpdate.UseVisualStyleBackColor = True
+        Me.cmdUpdate.Text = "Confirm Modification"
+        Me.cmdUpdate.UseVisualStyleBackColor = False
         '
         'DataGridHistory
         '
         Me.DataGridHistory.AllowUserToAddRows = False
         Me.DataGridHistory.AllowUserToDeleteRows = False
+        Me.DataGridHistory.AllowUserToResizeRows = False
         Me.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridHistory.Location = New System.Drawing.Point(29, 235)
@@ -288,26 +308,10 @@ Partial Class View
         Me.DataGridHistory.Name = "DataGridHistory"
         Me.DataGridHistory.ReadOnly = True
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DataGridHistory.ShowCellToolTips = False
+        Me.DataGridHistory.ShowEditingIcon = False
         Me.DataGridHistory.Size = New System.Drawing.Size(861, 238)
         Me.DataGridHistory.TabIndex = 38
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(681, 29)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(40, 13)
-        Me.Label9.TabIndex = 39
-        Me.Label9.Text = "Status:"
-        '
-        'cmbStatus
-        '
-        Me.cmbStatus.Enabled = False
-        Me.cmbStatus.FormattingEnabled = True
-        Me.cmbStatus.Location = New System.Drawing.Point(684, 45)
-        Me.cmbStatus.Name = "cmbStatus"
-        Me.cmbStatus.Size = New System.Drawing.Size(156, 21)
-        Me.cmbStatus.TabIndex = 38
         '
         'View
         '
@@ -323,6 +327,7 @@ Partial Class View
         Me.MainMenuStrip = Me.MenuStrip1
         Me.MaximizeBox = False
         Me.Name = "View"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
@@ -331,6 +336,7 @@ Partial Class View
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents Label14 As Label
     Friend WithEvents Label13 As Label

@@ -1,4 +1,5 @@
 ﻿Public Class UpdateDev
+    Public strNewNote As String
     Private Sub cmbUpdate_ChangeType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbUpdate_ChangeType.SelectedIndexChanged
     End Sub
     Private Sub cmdSubmit_Click(sender As Object, e As EventArgs) Handles cmdSubmit.Click
@@ -6,9 +7,11 @@
             Dim blah = MsgBox("Please select a change type.", vbOKOnly + vbExclamation, "Missing Field")
             Exit Sub
         End If
-        Me.Hide()
-        View.UpdateDevice()
+        strNewNote = Trim(txtUpdate_Note.Text)
+
         txtUpdate_Note.Text = ""
+        Me.Hide()
+
     End Sub
     Private Function CheckFields() As Boolean
         If cmbUpdate_ChangeType.SelectedIndex = -1 Then

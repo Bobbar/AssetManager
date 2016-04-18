@@ -24,6 +24,8 @@ Public Module DBFunctions
         Public strGUID As String
         Public strPO As String
         Public strStatus As String
+        Public strNote As String
+
     End Structure
     Public CurrentDevice As Device_Info
     Public Locations() As Combo_Data
