@@ -24,6 +24,9 @@ Partial Class AssetManager
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BlahToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.cmbShowAll = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.cmbLocation = New System.Windows.Forms.ComboBox()
@@ -38,7 +41,6 @@ Partial Class AssetManager
         Me.cmdSearch = New System.Windows.Forms.Button()
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.txtSerial = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -68,6 +70,8 @@ Partial Class AssetManager
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Label1)
+        Me.GroupBox1.Controls.Add(Me.cmbStatus)
         Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.cmbShowAll)
         Me.GroupBox1.Controls.Add(Me.Label12)
@@ -88,6 +92,33 @@ Partial Class AssetManager
         Me.GroupBox1.Size = New System.Drawing.Size(1140, 629)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(360, 83)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(40, 13)
+        Me.Label1.TabIndex = 30
+        Me.Label1.Text = "Status:"
+        '
+        'cmbStatus
+        '
+        Me.cmbStatus.FormattingEnabled = True
+        Me.cmbStatus.Location = New System.Drawing.Point(363, 99)
+        Me.cmbStatus.Name = "cmbStatus"
+        Me.cmbStatus.Size = New System.Drawing.Size(182, 21)
+        Me.cmbStatus.TabIndex = 29
+        '
+        'Button1
+        '
+        Me.Button1.Enabled = False
+        Me.Button1.Location = New System.Drawing.Point(767, 93)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(106, 36)
+        Me.Button1.TabIndex = 28
+        Me.Button1.Text = "Start Import"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'cmbShowAll
         '
@@ -180,6 +211,8 @@ Partial Class AssetManager
         Me.ResultGrid.AllowUserToAddRows = False
         Me.ResultGrid.AllowUserToDeleteRows = False
         Me.ResultGrid.AllowUserToResizeRows = False
+        Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.ResultGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.ResultGrid.Location = New System.Drawing.Point(6, 165)
@@ -187,6 +220,7 @@ Partial Class AssetManager
         Me.ResultGrid.Name = "ResultGrid"
         Me.ResultGrid.ReadOnly = True
         Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
         Me.ResultGrid.Size = New System.Drawing.Size(1106, 442)
         Me.ResultGrid.TabIndex = 17
@@ -216,16 +250,6 @@ Partial Class AssetManager
         Me.txtSerial.TabIndex = 14
         Me.txtSerial.Text = "%SERIAL%"
         '
-        'Button1
-        '
-        Me.Button1.Enabled = False
-        Me.Button1.Location = New System.Drawing.Point(767, 93)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(106, 36)
-        Me.Button1.TabIndex = 28
-        Me.Button1.Text = "Start Import"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'AssetManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -244,7 +268,6 @@ Partial Class AssetManager
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
@@ -265,4 +288,6 @@ Partial Class AssetManager
     Friend WithEvents txtAssetTag As TextBox
     Friend WithEvents txtSerial As TextBox
     Friend WithEvents Button1 As Button
+    Friend WithEvents Label1 As Label
+    Friend WithEvents cmbStatus As ComboBox
 End Class

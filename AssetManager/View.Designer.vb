@@ -45,6 +45,8 @@ Partial Class View
         Me.cmbOSVersion = New System.Windows.Forms.ComboBox()
         Me.cmdUpdate = New System.Windows.Forms.Button()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.MenuStrip1.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -53,7 +55,7 @@ Partial Class View
         'Label14
         '
         Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(26, 250)
+        Me.Label14.Location = New System.Drawing.Point(22, 212)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(39, 13)
         Me.Label14.TabIndex = 35
@@ -62,7 +64,7 @@ Partial Class View
         'Label13
         '
         Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(660, 26)
+        Me.Label13.Location = New System.Drawing.Point(501, 28)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(87, 13)
         Me.Label13.TabIndex = 34
@@ -72,7 +74,7 @@ Partial Class View
         '
         Me.cmbEquipType_View.Enabled = False
         Me.cmbEquipType_View.FormattingEnabled = True
-        Me.cmbEquipType_View.Location = New System.Drawing.Point(663, 42)
+        Me.cmbEquipType_View.Location = New System.Drawing.Point(504, 44)
         Me.cmbEquipType_View.Name = "cmbEquipType_View"
         Me.cmbEquipType_View.Size = New System.Drawing.Size(156, 21)
         Me.cmbEquipType_View.TabIndex = 33
@@ -80,7 +82,7 @@ Partial Class View
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(436, 129)
+        Me.Label7.Location = New System.Drawing.Point(387, 129)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(98, 13)
         Me.Label7.TabIndex = 32
@@ -89,7 +91,7 @@ Partial Class View
         'txtReplacementYear_View
         '
         Me.txtReplacementYear_View.Enabled = False
-        Me.txtReplacementYear_View.Location = New System.Drawing.Point(449, 145)
+        Me.txtReplacementYear_View.Location = New System.Drawing.Point(400, 145)
         Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
         Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 20)
         Me.txtReplacementYear_View.TabIndex = 31
@@ -97,7 +99,7 @@ Partial Class View
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(229, 129)
+        Me.Label6.Location = New System.Drawing.Point(180, 129)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(81, 13)
         Me.Label6.TabIndex = 30
@@ -108,7 +110,7 @@ Partial Class View
         Me.dtPurchaseDate_View.CustomFormat = "yyyy-MM-dd"
         Me.dtPurchaseDate_View.Enabled = False
         Me.dtPurchaseDate_View.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtPurchaseDate_View.Location = New System.Drawing.Point(232, 145)
+        Me.dtPurchaseDate_View.Location = New System.Drawing.Point(183, 145)
         Me.dtPurchaseDate_View.Name = "dtPurchaseDate_View"
         Me.dtPurchaseDate_View.Size = New System.Drawing.Size(182, 20)
         Me.dtPurchaseDate_View.TabIndex = 29
@@ -116,7 +118,7 @@ Partial Class View
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(229, 79)
+        Me.Label5.Location = New System.Drawing.Point(180, 79)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(51, 13)
         Me.Label5.TabIndex = 28
@@ -126,7 +128,7 @@ Partial Class View
         '
         Me.cmbLocation_View.Enabled = False
         Me.cmbLocation_View.FormattingEnabled = True
-        Me.cmbLocation_View.Location = New System.Drawing.Point(230, 95)
+        Me.cmbLocation_View.Location = New System.Drawing.Point(181, 95)
         Me.cmbLocation_View.Name = "cmbLocation_View"
         Me.cmbLocation_View.Size = New System.Drawing.Size(168, 21)
         Me.cmbLocation_View.TabIndex = 27
@@ -134,7 +136,7 @@ Partial Class View
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(229, 29)
+        Me.Label4.Location = New System.Drawing.Point(180, 29)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(63, 13)
         Me.Label4.TabIndex = 26
@@ -143,7 +145,7 @@ Partial Class View
         'txtDescription_View
         '
         Me.txtDescription_View.Enabled = False
-        Me.txtDescription_View.Location = New System.Drawing.Point(230, 45)
+        Me.txtDescription_View.Location = New System.Drawing.Point(181, 45)
         Me.txtDescription_View.Name = "txtDescription_View"
         Me.txtDescription_View.Size = New System.Drawing.Size(304, 20)
         Me.txtDescription_View.TabIndex = 25
@@ -223,6 +225,8 @@ Partial Class View
         '
         'pnlViewControls
         '
+        Me.pnlViewControls.Controls.Add(Me.Label9)
+        Me.pnlViewControls.Controls.Add(Me.cmbStatus)
         Me.pnlViewControls.Controls.Add(Me.Label8)
         Me.pnlViewControls.Controls.Add(Me.cmbOSVersion)
         Me.pnlViewControls.Controls.Add(Me.cmdUpdate)
@@ -244,13 +248,13 @@ Partial Class View
         Me.pnlViewControls.Controls.Add(Me.txtAssetTag_View)
         Me.pnlViewControls.Location = New System.Drawing.Point(29, 27)
         Me.pnlViewControls.Name = "pnlViewControls"
-        Me.pnlViewControls.Size = New System.Drawing.Size(841, 199)
+        Me.pnlViewControls.Size = New System.Drawing.Size(861, 181)
         Me.pnlViewControls.TabIndex = 37
         '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(472, 75)
+        Me.Label8.Location = New System.Drawing.Point(387, 79)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(63, 13)
         Me.Label8.TabIndex = 37
@@ -259,14 +263,14 @@ Partial Class View
         'cmbOSVersion
         '
         Me.cmbOSVersion.FormattingEnabled = True
-        Me.cmbOSVersion.Location = New System.Drawing.Point(475, 91)
+        Me.cmbOSVersion.Location = New System.Drawing.Point(390, 95)
         Me.cmbOSVersion.Name = "cmbOSVersion"
         Me.cmbOSVersion.Size = New System.Drawing.Size(138, 21)
         Me.cmbOSVersion.TabIndex = 36
         '
         'cmdUpdate
         '
-        Me.cmdUpdate.Location = New System.Drawing.Point(688, 118)
+        Me.cmdUpdate.Location = New System.Drawing.Point(721, 121)
         Me.cmdUpdate.Name = "cmdUpdate"
         Me.cmdUpdate.Size = New System.Drawing.Size(119, 47)
         Me.cmdUpdate.TabIndex = 35
@@ -279,7 +283,7 @@ Partial Class View
         Me.DataGridHistory.AllowUserToDeleteRows = False
         Me.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.DataGridHistory.Location = New System.Drawing.Point(33, 273)
+        Me.DataGridHistory.Location = New System.Drawing.Point(29, 235)
         Me.DataGridHistory.MultiSelect = False
         Me.DataGridHistory.Name = "DataGridHistory"
         Me.DataGridHistory.ReadOnly = True
@@ -287,12 +291,30 @@ Partial Class View
         Me.DataGridHistory.Size = New System.Drawing.Size(861, 238)
         Me.DataGridHistory.TabIndex = 38
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(681, 29)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(40, 13)
+        Me.Label9.TabIndex = 39
+        Me.Label9.Text = "Status:"
+        '
+        'cmbStatus
+        '
+        Me.cmbStatus.Enabled = False
+        Me.cmbStatus.FormattingEnabled = True
+        Me.cmbStatus.Location = New System.Drawing.Point(684, 45)
+        Me.cmbStatus.Name = "cmbStatus"
+        Me.cmbStatus.Size = New System.Drawing.Size(156, 21)
+        Me.cmbStatus.TabIndex = 38
+        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.ClientSize = New System.Drawing.Size(923, 535)
+        Me.ClientSize = New System.Drawing.Size(923, 490)
         Me.Controls.Add(Me.DataGridHistory)
         Me.Controls.Add(Me.pnlViewControls)
         Me.Controls.Add(Me.Label14)
@@ -309,7 +331,6 @@ Partial Class View
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents Label14 As Label
     Friend WithEvents Label13 As Label
@@ -336,4 +357,6 @@ Partial Class View
     Friend WithEvents cmbOSVersion As ComboBox
     Friend WithEvents Label8 As Label
     Friend WithEvents DataGridHistory As DataGridView
+    Friend WithEvents Label9 As Label
+    Friend WithEvents cmbStatus As ComboBox
 End Class

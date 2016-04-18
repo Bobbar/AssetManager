@@ -23,58 +23,27 @@ Public Module DBFunctions
         Public strOSVersion As String
         Public strGUID As String
         Public strPO As String
+        Public strStatus As String
     End Structure
     Public CurrentDevice As Device_Info
     Public Locations() As Combo_Data
     Public ChangeType() As Combo_Data
     Public EquipType() As Combo_Data
     Public OSType() As Combo_Data
+    Public StatusType() As Combo_Data
     Public SearchResults() As Device_Info
     Public Sub AddToResults(Info As Device_Info)
-
         ReDim Preserve SearchResults(UBound(SearchResults) + 1)
         SearchResults(UBound(SearchResults)) = Info
-
-
-
     End Sub
-
     Public NotInheritable Class ComboType
         Public Const Location As String = "LOCATION"
         Public Const ChangeType As String = "CHANGETYPE"
         Public Const EquipType As String = "EQ_TYPE"
         Public Const OSType As String = "OS_TYPE"
+        Public Const StatusType As String = "STATUS_TYPE"
     End Class
-    Public Function DBConnect()
-        Debug.Print("DBState: " & cn_global.State)
-        'cn_global.Open()
-        Debug.Print("DBState: " & cn_global.State)
-    End Function
-    Public Sub BuildLocationIndex()
-        Dim reader As MySqlDataReader
-        cn_global.Open()
-        Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='LOCATION' ORDER BY combo_data_human"
-        Dim cmd As New MySqlCommand(strGetDevices, cn_global)
-        Dim row As Integer
-        reader = cmd.ExecuteReader
-        ReDim Locations(0)
-        row = -1
-        With reader
-            Do While .Read()
-                row = row + 1
-                ReDim Preserve Locations(row)
-                Locations(row).strID = !combo_ID
-                Locations(row).strLong = !combo_data_human
-                Locations(row).strShort = !combo_data_db
-            Loop
-        End With
-        cn_global.Close()
-        Dim i
-        For i = 0 To UBound(Locations)
-            Debug.Print(i & " - " & Locations(i).strLong)
-        Next
-    End Sub
-    Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String)
+    Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String, ByVal Status As String)
         With CurrentDevice
             .strGUID = UID
             .strDescription = Description
@@ -87,6 +56,7 @@ Public Module DBFunctions
             .strPO = PO
             .strOSVersion = OSVersion
             .strEqType = EQType
+            .strStatus = Status
         End With
     End Sub
     Public Function GetShortLocation(ByVal index As Integer) As String
@@ -120,6 +90,8 @@ errs:
                 Return EquipType(index).strShort
             Case ComboType.OSType
                 Return OSType(index).strShort
+            Case ComboType.StatusType
+                Return StatusType(index).strShort
             Case Else
                 Return ""
         End Select
@@ -145,6 +117,8 @@ errs:
                 GetSearchIndex = EquipType
             Case ComboType.OSType
                 GetSearchIndex = OSType
+            Case ComboType.StatusType
+                GetSearchIndex = StatusType
             Case Else
         End Select
     End Function
@@ -156,11 +130,31 @@ errs:
             If SearchIndex(i).strShort = ShortVal Then Return i
         Next
     End Function
+    Public Sub BuildLocationIndex()
+        Dim reader As MySqlDataReader
+        cn_global.Open()
+        Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
+        Dim cmd As New MySqlCommand(strQRY, cn_global)
+        Dim row As Integer
+        reader = cmd.ExecuteReader
+        ReDim Locations(0)
+        row = -1
+        With reader
+            Do While .Read()
+                row = row + 1
+                ReDim Preserve Locations(row)
+                Locations(row).strID = !combo_ID
+                Locations(row).strLong = !combo_data_human
+                Locations(row).strShort = !combo_data_db
+            Loop
+        End With
+        cn_global.Close()
+    End Sub
     Public Sub BuildChangeTypeIndex()
         Dim reader As MySqlDataReader
         cn_global.Open()
-        Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='CHANGETYPE' ORDER BY combo_data_human"
-        Dim cmd As New MySqlCommand(strGetDevices, cn_global)
+        Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
+        Dim cmd As New MySqlCommand(strQRY, cn_global)
         Dim row As Integer
         reader = cmd.ExecuteReader
         ReDim ChangeType(0)
@@ -175,16 +169,12 @@ errs:
             Loop
         End With
         cn_global.Close()
-        Dim i
-        For i = 0 To UBound(ChangeType)
-            Debug.Print(i & " - " & ChangeType(i).strLong)
-        Next
     End Sub
     Public Sub BuildEquipTypeIndex()
         Dim reader As MySqlDataReader
         cn_global.Open()
-        Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='EQ_TYPE' ORDER BY combo_data_human"
-        Dim cmd As New MySqlCommand(strGetDevices, cn_global)
+        Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
+        Dim cmd As New MySqlCommand(strQRY, cn_global)
         Dim row As Integer
         reader = cmd.ExecuteReader
         ReDim EquipType(0)
@@ -199,16 +189,12 @@ errs:
             Loop
         End With
         cn_global.Close()
-        Dim i
-        For i = 0 To UBound(EquipType)
-            Debug.Print(i & " - " & EquipType(i).strLong)
-        Next
     End Sub
     Public Sub BuildOSTypeIndex()
         Dim reader As MySqlDataReader
         cn_global.Open()
-        Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='OS_TYPE' ORDER BY combo_data_human"
-        Dim cmd As New MySqlCommand(strGetDevices, cn_global)
+        Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
+        Dim cmd As New MySqlCommand(strQRY, cn_global)
         Dim row As Integer
         reader = cmd.ExecuteReader
         ReDim OSType(0)
@@ -223,10 +209,26 @@ errs:
             Loop
         End With
         cn_global.Close()
-        Dim i
-        For i = 0 To UBound(OSType)
-            Debug.Print(i & " - " & OSType(i).strLong)
-        Next
+    End Sub
+    Public Sub BuildStatusTypeIndex()
+        Dim reader As MySqlDataReader
+        cn_global.Open()
+        Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
+        Dim cmd As New MySqlCommand(strGetDevices, cn_global)
+        Dim row As Integer
+        reader = cmd.ExecuteReader
+        ReDim StatusType(0)
+        row = -1
+        With reader
+            Do While .Read()
+                row = row + 1
+                ReDim Preserve StatusType(row)
+                StatusType(row).strID = !combo_ID
+                StatusType(row).strLong = !combo_data_human
+                StatusType(row).strShort = !combo_data_db
+            Loop
+        End With
+        cn_global.Close()
     End Sub
     Public Function GetShortEquipType(ByVal index As Integer) As String
         On Error GoTo errs

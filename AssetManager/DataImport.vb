@@ -1,20 +1,13 @@
 ﻿Option Explicit On
 Imports MySql.Data.MySqlClient
-
-
 Module DataImport
     Private Device() As Device_Info
     Public Sub StartImport()
         ParseDevices()
-
-
         Dim i As Integer
-
         For i = 0 To UBound(Device)
-
-
             cn_global.Open()
-            Dim strSqlQry1 = "INSERT INTO devices (dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_replacement_year,dev_eq_type,dev_osversion,dev_lastmod_user) VALUES ('" & Device(i).strDescription & "','" & Device(i).strLocation & "','" & Device(i).strCurrentUser & "','" & Device(i).strSerial & "','" & Device(i).strAssetTag & "','" & Device(i).dtPurchaseDate & "','" & Device(i).strReplaceYear & "','" & Device(i).strEqType & "','" & Device(i).strOSVersion & "','" & strLocalUser & "')"
+            Dim strSqlQry1 = "INSERT INTO devices (dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_replacement_year,dev_eq_type,dev_osversion,dev_lastmod_user,dev_status) VALUES ('" & Device(i).strDescription & "','" & Device(i).strLocation & "','" & Device(i).strCurrentUser & "','" & Device(i).strSerial & "','" & Device(i).strAssetTag & "','" & Device(i).dtPurchaseDate & "','" & Device(i).strReplaceYear & "','" & Device(i).strEqType & "','" & Device(i).strOSVersion & "','" & strLocalUser & "','" & Device(i).strStatus & "')"
             'Debug.Print(strSqlQry1)
             Dim cmd As New MySqlCommand
             cmd.Connection = cn_global
@@ -24,66 +17,46 @@ Module DataImport
             'cmd.CommandText = strSqlQry2
             'cmd.ExecuteNonQuery()
             cn_global.Close()
-
             Debug.Print(i & " - " & Device(i).strCurrentUser)
         Next
-
         MsgBox("Done?! Did it work?")
-
     End Sub
-
-
-
-
     Private Sub ParseDevices()
-
         Dim row As Integer
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         cn_global.Open()
-
         Dim strQry = "SELECT * FROM device_import"
         Dim cmd As New MySqlCommand(strQry, cn_global)
         reader = cmd.ExecuteReader
-
         ReDim Device(0)
         row = -1
-
         With reader
             Do While .Read()
                 row = row + 1
                 ReDim Preserve Device(row)
-
                 If IsDBNull(reader("current_user")) Then
                     Device(row).strCurrentUser = ""
                 Else
                     Device(row).strCurrentUser = Trim(!current_user)
                 End If
-
-
                 'Device(row).strAssetTag = IIf(Not IsDBNull(reader("asset_tag")), Trim(!asset_tag), "")
                 If IsDBNull(reader("asset_tag")) Then
                     Device(row).strAssetTag = ""
                 Else
                     Device(row).strAssetTag = !asset_tag
-
                 End If
-
                 If IsDBNull(reader("serial")) Then
                     Device(row).strSerial = ""
                 Else
                     Device(row).strSerial = Trim(!serial)
                 End If
-
-
                 If IsDBNull(reader("description")) Then
                     Device(row).strDescription = ""
                 Else
                     Device(row).strDescription = Trim(!description)
                 End If
-
                 Dim tmpDesc As String = UCase(Device(row).strDescription)
-
                 Select Case True
                     Case tmpDesc.Contains("OPTI")
                         Device(row).strEqType = "DESK"
@@ -101,15 +74,7 @@ Module DataImport
                         Device(row).strEqType = "TAB"
                     Case Else
                         Device(row).strEqType = "OTHRD"
-
-
-
                 End Select
-
-
-
-
-
                 Dim Location As String = Trim(!location)
                 Select Case Location
                     Case "Opportunity Center"
@@ -127,7 +92,6 @@ Module DataImport
                     Case "Art & Clay"
                         Device(row).strLocation = "ANC"
                 End Select
-
                 Dim PurDate As Date
                 If IsDBNull(reader("purchase_date")) Then
                     Device(row).dtPurchaseDate = "1900-01-01"
@@ -136,28 +100,16 @@ Module DataImport
                 Else
                     PurDate = reader("purchase_date")
                     Device(row).dtPurchaseDate = PurDate.ToString(strDBDateFormat)
-
                 End If
-
-
                 'Device(row).dtPurchaseDate = PurDate.ToString(strDBDateFormat)
                 Debug.Print(Device(row).dtPurchaseDate)
-
-
                 Dim os = reader("osversion")
-
                 If IsDBNull(os) Then
                     Device(row).strOSVersion = ""
-
-
-
                 ElseIf os.Contains("iOS") Then
                     Device(row).strOSVersion = "IOSO"
                 Else
-
-
                     Select Case os
-
                         Case "Windows"
                             Device(row).strOSVersion = "WINO"
                         Case "Windows 7"
@@ -172,41 +124,17 @@ Module DataImport
                             Device(row).strOSVersion = "WINX"
                         Case Else
                             Device(row).strOSVersion = "OTHR"
-
                     End Select
-
                 End If
-
                 If IsDBNull(reader("replace_year")) Then
                     Device(row).strReplaceYear = ""
                 Else
                     Device(row).strReplaceYear = Trim(!replace_year)
                 End If
-
-
-
-
+                Device(row).strStatus = "INSRV"
             Loop
         End With
-
         cn_global.Close()
-
-
-
-
         Debug.Print(Device(UBound(Device)).strDescription)
-
-
-
-
-
-
     End Sub
-
-
-
-
-
-
-
 End Module

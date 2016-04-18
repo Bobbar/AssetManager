@@ -27,6 +27,7 @@ Public Class View_Entry
                 txtReplaceYear.Text = !hist_replacement_year
                 txtEQType.Text = GetHumanValue(ComboType.EquipType,!hist_eq_type)
                 txtNotes.Text = !hist_notes
+                txtStatus.Text = GetHumanValue(ComboType.StatusType,!hist_status)
             Loop
         End With
         cn_global.Close()
