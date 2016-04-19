@@ -54,11 +54,15 @@ Partial Class View_Entry
         Me.txtCurrentUser = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtChangeType = New System.Windows.Forms.TextBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.txtEntryGUID = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Label17)
+        Me.GroupBox1.Controls.Add(Me.txtEntryGUID)
         Me.GroupBox1.Controls.Add(Me.Label16)
         Me.GroupBox1.Controls.Add(Me.txtStatus)
         Me.GroupBox1.Controls.Add(Me.cmdClose)
@@ -94,14 +98,14 @@ Partial Class View_Entry
         Me.GroupBox1.Controls.Add(Me.txtChangeType)
         Me.GroupBox1.Location = New System.Drawing.Point(13, 14)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(742, 335)
+        Me.GroupBox1.Size = New System.Drawing.Size(821, 335)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         '
         'Label16
         '
         Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(584, 78)
+        Me.Label16.Location = New System.Drawing.Point(611, 122)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(37, 13)
         Me.Label16.TabIndex = 32
@@ -109,15 +113,16 @@ Partial Class View_Entry
         '
         'txtStatus
         '
-        Me.txtStatus.Enabled = False
-        Me.txtStatus.Location = New System.Drawing.Point(587, 94)
+        Me.txtStatus.BackColor = System.Drawing.SystemColors.Window
+        Me.txtStatus.Location = New System.Drawing.Point(614, 138)
         Me.txtStatus.Name = "txtStatus"
+        Me.txtStatus.ReadOnly = True
         Me.txtStatus.Size = New System.Drawing.Size(108, 20)
         Me.txtStatus.TabIndex = 31
         '
         'cmdClose
         '
-        Me.cmdClose.Location = New System.Drawing.Point(306, 291)
+        Me.cmdClose.Location = New System.Drawing.Point(339, 291)
         Me.cmdClose.Name = "cmdClose"
         Me.cmdClose.Size = New System.Drawing.Size(128, 28)
         Me.cmdClose.TabIndex = 30
@@ -127,7 +132,7 @@ Partial Class View_Entry
         'Label15
         '
         Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(129, 229)
+        Me.Label15.Location = New System.Drawing.Point(153, 242)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(35, 13)
         Me.Label15.TabIndex = 29
@@ -135,10 +140,11 @@ Partial Class View_Entry
         '
         'txtNotes
         '
-        Me.txtNotes.Enabled = False
-        Me.txtNotes.Location = New System.Drawing.Point(170, 208)
+        Me.txtNotes.BackColor = System.Drawing.SystemColors.Window
+        Me.txtNotes.Location = New System.Drawing.Point(194, 224)
         Me.txtNotes.Multiline = True
         Me.txtNotes.Name = "txtNotes"
+        Me.txtNotes.ReadOnly = True
         Me.txtNotes.Size = New System.Drawing.Size(391, 56)
         Me.txtNotes.TabIndex = 28
         '
@@ -153,9 +159,10 @@ Partial Class View_Entry
         '
         'txtActionUser
         '
-        Me.txtActionUser.Enabled = False
+        Me.txtActionUser.BackColor = System.Drawing.SystemColors.Window
         Me.txtActionUser.Location = New System.Drawing.Point(17, 94)
         Me.txtActionUser.Name = "txtActionUser"
+        Me.txtActionUser.ReadOnly = True
         Me.txtActionUser.Size = New System.Drawing.Size(108, 20)
         Me.txtActionUser.TabIndex = 26
         '
@@ -170,16 +177,17 @@ Partial Class View_Entry
         '
         'txtEntryTime
         '
-        Me.txtEntryTime.Enabled = False
+        Me.txtEntryTime.BackColor = System.Drawing.SystemColors.Window
         Me.txtEntryTime.Location = New System.Drawing.Point(17, 47)
         Me.txtEntryTime.Name = "txtEntryTime"
-        Me.txtEntryTime.Size = New System.Drawing.Size(136, 20)
+        Me.txtEntryTime.ReadOnly = True
+        Me.txtEntryTime.Size = New System.Drawing.Size(155, 20)
         Me.txtEntryTime.TabIndex = 24
         '
         'Label12
         '
         Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(538, 31)
+        Me.Label12.Location = New System.Drawing.Point(560, 31)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(63, 13)
         Me.Label12.TabIndex = 23
@@ -187,10 +195,11 @@ Partial Class View_Entry
         '
         'txtGUID
         '
-        Me.txtGUID.Enabled = False
-        Me.txtGUID.Location = New System.Drawing.Point(541, 47)
+        Me.txtGUID.BackColor = System.Drawing.SystemColors.Window
+        Me.txtGUID.Location = New System.Drawing.Point(563, 47)
         Me.txtGUID.Name = "txtGUID"
-        Me.txtGUID.Size = New System.Drawing.Size(192, 20)
+        Me.txtGUID.ReadOnly = True
+        Me.txtGUID.Size = New System.Drawing.Size(228, 20)
         Me.txtGUID.TabIndex = 22
         '
         'Label11
@@ -204,9 +213,10 @@ Partial Class View_Entry
         '
         'txtEQType
         '
-        Me.txtEQType.Enabled = False
+        Me.txtEQType.BackColor = System.Drawing.SystemColors.Window
         Me.txtEQType.Location = New System.Drawing.Point(441, 181)
         Me.txtEQType.Name = "txtEQType"
+        Me.txtEQType.ReadOnly = True
         Me.txtEQType.Size = New System.Drawing.Size(108, 20)
         Me.txtEQType.TabIndex = 20
         '
@@ -221,9 +231,10 @@ Partial Class View_Entry
         '
         'txtOSVersion
         '
-        Me.txtOSVersion.Enabled = False
+        Me.txtOSVersion.BackColor = System.Drawing.SystemColors.Window
         Me.txtOSVersion.Location = New System.Drawing.Point(441, 138)
         Me.txtOSVersion.Name = "txtOSVersion"
+        Me.txtOSVersion.ReadOnly = True
         Me.txtOSVersion.Size = New System.Drawing.Size(108, 20)
         Me.txtOSVersion.TabIndex = 18
         '
@@ -238,16 +249,17 @@ Partial Class View_Entry
         '
         'txtPONumber
         '
-        Me.txtPONumber.Enabled = False
+        Me.txtPONumber.BackColor = System.Drawing.SystemColors.Window
         Me.txtPONumber.Location = New System.Drawing.Point(441, 94)
         Me.txtPONumber.Name = "txtPONumber"
+        Me.txtPONumber.ReadOnly = True
         Me.txtPONumber.Size = New System.Drawing.Size(108, 20)
         Me.txtPONumber.TabIndex = 16
         '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(294, 165)
+        Me.Label8.Location = New System.Drawing.Point(317, 165)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(95, 13)
         Me.Label8.TabIndex = 15
@@ -255,16 +267,17 @@ Partial Class View_Entry
         '
         'txtReplaceYear
         '
-        Me.txtReplaceYear.Enabled = False
-        Me.txtReplaceYear.Location = New System.Drawing.Point(297, 181)
+        Me.txtReplaceYear.BackColor = System.Drawing.SystemColors.Window
+        Me.txtReplaceYear.Location = New System.Drawing.Point(320, 181)
         Me.txtReplaceYear.Name = "txtReplaceYear"
+        Me.txtReplaceYear.ReadOnly = True
         Me.txtReplaceYear.Size = New System.Drawing.Size(108, 20)
         Me.txtReplaceYear.TabIndex = 14
         '
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(294, 122)
+        Me.Label7.Location = New System.Drawing.Point(317, 122)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(78, 13)
         Me.Label7.TabIndex = 13
@@ -272,16 +285,17 @@ Partial Class View_Entry
         '
         'txtPurchaseDate
         '
-        Me.txtPurchaseDate.Enabled = False
-        Me.txtPurchaseDate.Location = New System.Drawing.Point(297, 138)
+        Me.txtPurchaseDate.BackColor = System.Drawing.SystemColors.Window
+        Me.txtPurchaseDate.Location = New System.Drawing.Point(320, 138)
         Me.txtPurchaseDate.Name = "txtPurchaseDate"
+        Me.txtPurchaseDate.ReadOnly = True
         Me.txtPurchaseDate.Size = New System.Drawing.Size(108, 20)
         Me.txtPurchaseDate.TabIndex = 12
         '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(294, 78)
+        Me.Label6.Location = New System.Drawing.Point(317, 78)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(48, 13)
         Me.Label6.TabIndex = 11
@@ -289,16 +303,17 @@ Partial Class View_Entry
         '
         'txtLocation
         '
-        Me.txtLocation.Enabled = False
-        Me.txtLocation.Location = New System.Drawing.Point(297, 94)
+        Me.txtLocation.BackColor = System.Drawing.SystemColors.Window
+        Me.txtLocation.Location = New System.Drawing.Point(320, 94)
         Me.txtLocation.Name = "txtLocation"
+        Me.txtLocation.ReadOnly = True
         Me.txtLocation.Size = New System.Drawing.Size(108, 20)
         Me.txtLocation.TabIndex = 10
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(294, 31)
+        Me.Label5.Location = New System.Drawing.Point(327, 31)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(60, 13)
         Me.Label5.TabIndex = 9
@@ -306,16 +321,17 @@ Partial Class View_Entry
         '
         'txtDescription
         '
-        Me.txtDescription.Enabled = False
-        Me.txtDescription.Location = New System.Drawing.Point(297, 47)
+        Me.txtDescription.BackColor = System.Drawing.SystemColors.Window
+        Me.txtDescription.Location = New System.Drawing.Point(320, 47)
         Me.txtDescription.Name = "txtDescription"
-        Me.txtDescription.Size = New System.Drawing.Size(207, 20)
+        Me.txtDescription.ReadOnly = True
+        Me.txtDescription.Size = New System.Drawing.Size(229, 20)
         Me.txtDescription.TabIndex = 8
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(158, 165)
+        Me.Label4.Location = New System.Drawing.Point(191, 165)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(33, 13)
         Me.Label4.TabIndex = 7
@@ -323,16 +339,17 @@ Partial Class View_Entry
         '
         'txtSerial
         '
-        Me.txtSerial.Enabled = False
-        Me.txtSerial.Location = New System.Drawing.Point(161, 181)
+        Me.txtSerial.BackColor = System.Drawing.SystemColors.Window
+        Me.txtSerial.Location = New System.Drawing.Point(194, 181)
         Me.txtSerial.Name = "txtSerial"
+        Me.txtSerial.ReadOnly = True
         Me.txtSerial.Size = New System.Drawing.Size(108, 20)
         Me.txtSerial.TabIndex = 6
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(158, 122)
+        Me.Label3.Location = New System.Drawing.Point(191, 122)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(55, 13)
         Me.Label3.TabIndex = 5
@@ -340,16 +357,17 @@ Partial Class View_Entry
         '
         'txtAssetTag
         '
-        Me.txtAssetTag.Enabled = False
-        Me.txtAssetTag.Location = New System.Drawing.Point(161, 138)
+        Me.txtAssetTag.BackColor = System.Drawing.SystemColors.Window
+        Me.txtAssetTag.Location = New System.Drawing.Point(194, 138)
         Me.txtAssetTag.Name = "txtAssetTag"
+        Me.txtAssetTag.ReadOnly = True
         Me.txtAssetTag.Size = New System.Drawing.Size(108, 20)
         Me.txtAssetTag.TabIndex = 4
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(156, 78)
+        Me.Label2.Location = New System.Drawing.Point(189, 78)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(29, 13)
         Me.Label2.TabIndex = 3
@@ -357,16 +375,17 @@ Partial Class View_Entry
         '
         'txtCurrentUser
         '
-        Me.txtCurrentUser.Enabled = False
-        Me.txtCurrentUser.Location = New System.Drawing.Point(159, 94)
+        Me.txtCurrentUser.BackColor = System.Drawing.SystemColors.Window
+        Me.txtCurrentUser.Location = New System.Drawing.Point(192, 94)
         Me.txtCurrentUser.Name = "txtCurrentUser"
+        Me.txtCurrentUser.ReadOnly = True
         Me.txtCurrentUser.Size = New System.Drawing.Size(108, 20)
         Me.txtCurrentUser.TabIndex = 2
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(156, 31)
+        Me.Label1.Location = New System.Drawing.Point(189, 31)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(71, 13)
         Me.Label1.TabIndex = 1
@@ -374,17 +393,36 @@ Partial Class View_Entry
         '
         'txtChangeType
         '
-        Me.txtChangeType.Enabled = False
-        Me.txtChangeType.Location = New System.Drawing.Point(159, 47)
+        Me.txtChangeType.BackColor = System.Drawing.SystemColors.Window
+        Me.txtChangeType.Location = New System.Drawing.Point(192, 47)
         Me.txtChangeType.Name = "txtChangeType"
+        Me.txtChangeType.ReadOnly = True
         Me.txtChangeType.Size = New System.Drawing.Size(110, 20)
         Me.txtChangeType.TabIndex = 0
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Location = New System.Drawing.Point(560, 78)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(53, 13)
+        Me.Label17.TabIndex = 34
+        Me.Label17.Text = "Entry UID"
+        '
+        'txtEntryGUID
+        '
+        Me.txtEntryGUID.BackColor = System.Drawing.SystemColors.Window
+        Me.txtEntryGUID.Location = New System.Drawing.Point(563, 94)
+        Me.txtEntryGUID.Name = "txtEntryGUID"
+        Me.txtEntryGUID.ReadOnly = True
+        Me.txtEntryGUID.Size = New System.Drawing.Size(228, 20)
+        Me.txtEntryGUID.TabIndex = 33
         '
         'View_Entry
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(767, 359)
+        Me.ClientSize = New System.Drawing.Size(846, 359)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -395,7 +433,6 @@ Partial Class View_Entry
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label2 As Label
@@ -431,4 +468,6 @@ Partial Class View_Entry
     Friend WithEvents cmdClose As Button
     Friend WithEvents Label16 As Label
     Friend WithEvents txtStatus As TextBox
+    Friend WithEvents Label17 As Label
+    Friend WithEvents txtEntryGUID As TextBox
 End Class

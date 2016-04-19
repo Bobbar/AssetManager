@@ -44,11 +44,17 @@ Partial Class AddNew
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.txtSerial = New System.Windows.Forms.TextBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
+        Me.cmdClear = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.cmdClear)
+        Me.GroupBox1.Controls.Add(Me.Label11)
+        Me.GroupBox1.Controls.Add(Me.cmbStatus)
         Me.GroupBox1.Controls.Add(Me.Label10)
         Me.GroupBox1.Controls.Add(Me.cmbOSType)
         Me.GroupBox1.Controls.Add(Me.Label9)
@@ -74,7 +80,7 @@ Partial Class AddNew
         Me.GroupBox1.Controls.Add(Me.txtSerial)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(924, 253)
+        Me.GroupBox1.Size = New System.Drawing.Size(965, 253)
         Me.GroupBox1.TabIndex = 23
         Me.GroupBox1.TabStop = False
         '
@@ -114,7 +120,7 @@ Partial Class AddNew
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(662, 21)
+        Me.Label8.Location = New System.Drawing.Point(625, 21)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(84, 13)
         Me.Label8.TabIndex = 41
@@ -123,7 +129,7 @@ Partial Class AddNew
         'cmbEquipType
         '
         Me.cmbEquipType.FormattingEnabled = True
-        Me.cmbEquipType.Location = New System.Drawing.Point(665, 40)
+        Me.cmbEquipType.Location = New System.Drawing.Point(628, 40)
         Me.cmbEquipType.Name = "cmbEquipType"
         Me.cmbEquipType.Size = New System.Drawing.Size(144, 21)
         Me.cmbEquipType.TabIndex = 40
@@ -158,7 +164,7 @@ Partial Class AddNew
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(530, 19)
+        Me.Label6.Location = New System.Drawing.Point(511, 16)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(72, 13)
         Me.Label6.TabIndex = 36
@@ -166,7 +172,7 @@ Partial Class AddNew
         '
         'txtReplaceYear
         '
-        Me.txtReplaceYear.Location = New System.Drawing.Point(533, 40)
+        Me.txtReplaceYear.Location = New System.Drawing.Point(514, 40)
         Me.txtReplaceYear.Name = "txtReplaceYear"
         Me.txtReplaceYear.Size = New System.Drawing.Size(88, 20)
         Me.txtReplaceYear.TabIndex = 35
@@ -277,11 +283,37 @@ Partial Class AddNew
         Me.txtSerial.TabIndex = 23
         Me.txtSerial.Text = "txtSerial"
         '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(786, 19)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(74, 13)
+        Me.Label11.TabIndex = 47
+        Me.Label11.Text = "Device Status"
+        '
+        'cmbStatus
+        '
+        Me.cmbStatus.FormattingEnabled = True
+        Me.cmbStatus.Location = New System.Drawing.Point(789, 38)
+        Me.cmbStatus.Name = "cmbStatus"
+        Me.cmbStatus.Size = New System.Drawing.Size(144, 21)
+        Me.cmbStatus.TabIndex = 46
+        '
+        'cmdClear
+        '
+        Me.cmdClear.Location = New System.Drawing.Point(836, 202)
+        Me.cmdClear.Name = "cmdClear"
+        Me.cmdClear.Size = New System.Drawing.Size(97, 23)
+        Me.cmdClear.TabIndex = 48
+        Me.cmdClear.Text = "Clear"
+        Me.cmdClear.UseVisualStyleBackColor = True
+        '
         'AddNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(951, 276)
+        Me.ClientSize = New System.Drawing.Size(991, 272)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -316,4 +348,7 @@ Partial Class AddNew
     Friend WithEvents Label1 As Label
     Friend WithEvents txtAssetTag As TextBox
     Friend WithEvents txtSerial As TextBox
+    Friend WithEvents Label11 As Label
+    Friend WithEvents cmbStatus As ComboBox
+    Friend WithEvents cmdClear As Button
 End Class

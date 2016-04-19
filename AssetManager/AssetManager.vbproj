@@ -111,6 +111,7 @@
     </Compile>
     <Compile Include="DataImport.vb" />
     <Compile Include="DBFunctions.vb" />
+    <Compile Include="ExtendedMethods.vb" />
     <Compile Include="UpdateDevice.Designer.vb">
       <DependentUpon>UpdateDevice.vb</DependentUpon>
     </Compile>
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>

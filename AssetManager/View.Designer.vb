@@ -20,7 +20,17 @@ Partial Class View
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
-        Me.Label14 = New System.Windows.Forms.Label()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.pnlViewControls = New System.Windows.Forms.Panel()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.cmbOSVersion = New System.Windows.Forms.ComboBox()
+        Me.cmdUpdate = New System.Windows.Forms.Button()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.cmbEquipType_View = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -37,182 +47,30 @@ Partial Class View
         Me.txtSerial_View = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag_View = New System.Windows.Forms.TextBox()
-        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.pnlViewControls = New System.Windows.Forms.Panel()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.cmbStatus = New System.Windows.Forms.ComboBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.cmbOSVersion = New System.Windows.Forms.ComboBox()
-        Me.cmdUpdate = New System.Windows.Forms.Button()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.txtGUID = New System.Windows.Forms.TextBox()
         Me.MenuStrip1.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(22, 212)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(39, 13)
-        Me.Label14.TabIndex = 35
-        Me.Label14.Text = "History"
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(501, 28)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(87, 13)
-        Me.Label13.TabIndex = 34
-        Me.Label13.Text = "Equipment Type:"
-        '
-        'cmbEquipType_View
-        '
-        Me.cmbEquipType_View.Enabled = False
-        Me.cmbEquipType_View.FormattingEnabled = True
-        Me.cmbEquipType_View.Location = New System.Drawing.Point(504, 44)
-        Me.cmbEquipType_View.Name = "cmbEquipType_View"
-        Me.cmbEquipType_View.Size = New System.Drawing.Size(156, 21)
-        Me.cmbEquipType_View.TabIndex = 33
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(387, 129)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(98, 13)
-        Me.Label7.TabIndex = 32
-        Me.Label7.Text = "Replacement Year:"
-        '
-        'txtReplacementYear_View
-        '
-        Me.txtReplacementYear_View.Enabled = False
-        Me.txtReplacementYear_View.Location = New System.Drawing.Point(400, 145)
-        Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
-        Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 20)
-        Me.txtReplacementYear_View.TabIndex = 31
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(180, 129)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(81, 13)
-        Me.Label6.TabIndex = 30
-        Me.Label6.Text = "Purchase Date:"
-        '
-        'dtPurchaseDate_View
-        '
-        Me.dtPurchaseDate_View.CustomFormat = "yyyy-MM-dd"
-        Me.dtPurchaseDate_View.Enabled = False
-        Me.dtPurchaseDate_View.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtPurchaseDate_View.Location = New System.Drawing.Point(183, 145)
-        Me.dtPurchaseDate_View.Name = "dtPurchaseDate_View"
-        Me.dtPurchaseDate_View.Size = New System.Drawing.Size(182, 20)
-        Me.dtPurchaseDate_View.TabIndex = 29
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(180, 79)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(51, 13)
-        Me.Label5.TabIndex = 28
-        Me.Label5.Text = "Location:"
-        '
-        'cmbLocation_View
-        '
-        Me.cmbLocation_View.Enabled = False
-        Me.cmbLocation_View.FormattingEnabled = True
-        Me.cmbLocation_View.Location = New System.Drawing.Point(181, 95)
-        Me.cmbLocation_View.Name = "cmbLocation_View"
-        Me.cmbLocation_View.Size = New System.Drawing.Size(168, 21)
-        Me.cmbLocation_View.TabIndex = 27
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(180, 29)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(63, 13)
-        Me.Label4.TabIndex = 26
-        Me.Label4.Text = "Description:"
-        '
-        'txtDescription_View
-        '
-        Me.txtDescription_View.Enabled = False
-        Me.txtDescription_View.Location = New System.Drawing.Point(181, 45)
-        Me.txtDescription_View.Name = "txtDescription_View"
-        Me.txtDescription_View.Size = New System.Drawing.Size(304, 20)
-        Me.txtDescription_View.TabIndex = 25
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(26, 132)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(69, 13)
-        Me.Label3.TabIndex = 24
-        Me.Label3.Text = "Current User:"
-        '
-        'txtCurUser_View
-        '
-        Me.txtCurUser_View.Enabled = False
-        Me.txtCurUser_View.Location = New System.Drawing.Point(29, 148)
-        Me.txtCurUser_View.Name = "txtCurUser_View"
-        Me.txtCurUser_View.Size = New System.Drawing.Size(132, 20)
-        Me.txtCurUser_View.TabIndex = 23
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(26, 80)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(36, 13)
-        Me.Label2.TabIndex = 22
-        Me.Label2.Text = "Serial:"
-        '
-        'txtSerial_View
-        '
-        Me.txtSerial_View.Enabled = False
-        Me.txtSerial_View.Location = New System.Drawing.Point(29, 96)
-        Me.txtSerial_View.Name = "txtSerial_View"
-        Me.txtSerial_View.Size = New System.Drawing.Size(133, 20)
-        Me.txtSerial_View.TabIndex = 21
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(26, 29)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(58, 13)
-        Me.Label1.TabIndex = 20
-        Me.Label1.Text = "Asset Tag:"
-        '
-        'txtAssetTag_View
-        '
-        Me.txtAssetTag_View.Enabled = False
-        Me.txtAssetTag_View.Location = New System.Drawing.Point(29, 45)
-        Me.txtAssetTag_View.Name = "txtAssetTag_View"
-        Me.txtAssetTag_View.Size = New System.Drawing.Size(134, 20)
-        Me.txtAssetTag_View.TabIndex = 19
-        '
         'MenuStrip1
         '
+        Me.MenuStrip1.BackColor = System.Drawing.SystemColors.Control
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ActionsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(923, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(995, 24)
         Me.MenuStrip1.TabIndex = 36
         Me.MenuStrip1.Text = "MenuStrip1"
         '
         'ActionsToolStripMenuItem
         '
-        Me.ActionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem})
+        Me.ActionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem, Me.AddNoteToolStripMenuItem})
         Me.ActionsToolStripMenuItem.Name = "ActionsToolStripMenuItem"
         Me.ActionsToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
         Me.ActionsToolStripMenuItem.Text = "Actions"
@@ -220,11 +78,29 @@ Partial Class View
         'EditToolStripMenuItem
         '
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(167, 22)
-        Me.EditToolStripMenuItem.Text = "Add Modification"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(150, 22)
+        Me.EditToolStripMenuItem.Text = "Modify Device"
+        '
+        'AddNoteToolStripMenuItem
+        '
+        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
+        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(150, 22)
+        Me.AddNoteToolStripMenuItem.Text = "Add Note"
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.pnlViewControls)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 27)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(965, 209)
+        Me.GroupBox1.TabIndex = 39
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Current Info"
         '
         'pnlViewControls
         '
+        Me.pnlViewControls.Controls.Add(Me.Label10)
+        Me.pnlViewControls.Controls.Add(Me.txtGUID)
         Me.pnlViewControls.Controls.Add(Me.Label9)
         Me.pnlViewControls.Controls.Add(Me.cmbStatus)
         Me.pnlViewControls.Controls.Add(Me.Label8)
@@ -246,15 +122,15 @@ Partial Class View
         Me.pnlViewControls.Controls.Add(Me.txtSerial_View)
         Me.pnlViewControls.Controls.Add(Me.Label1)
         Me.pnlViewControls.Controls.Add(Me.txtAssetTag_View)
-        Me.pnlViewControls.Location = New System.Drawing.Point(29, 27)
+        Me.pnlViewControls.Location = New System.Drawing.Point(13, 23)
         Me.pnlViewControls.Name = "pnlViewControls"
-        Me.pnlViewControls.Size = New System.Drawing.Size(861, 181)
-        Me.pnlViewControls.TabIndex = 37
+        Me.pnlViewControls.Size = New System.Drawing.Size(932, 180)
+        Me.pnlViewControls.TabIndex = 38
         '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(681, 29)
+        Me.Label9.Location = New System.Drawing.Point(489, 50)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(40, 13)
         Me.Label9.TabIndex = 39
@@ -262,17 +138,16 @@ Partial Class View
         '
         'cmbStatus
         '
-        Me.cmbStatus.Enabled = False
         Me.cmbStatus.FormattingEnabled = True
-        Me.cmbStatus.Location = New System.Drawing.Point(684, 45)
+        Me.cmbStatus.Location = New System.Drawing.Point(492, 66)
         Me.cmbStatus.Name = "cmbStatus"
-        Me.cmbStatus.Size = New System.Drawing.Size(156, 21)
+        Me.cmbStatus.Size = New System.Drawing.Size(124, 21)
         Me.cmbStatus.TabIndex = 38
         '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(387, 79)
+        Me.Label8.Location = New System.Drawing.Point(349, 50)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(63, 13)
         Me.Label8.TabIndex = 37
@@ -281,64 +156,239 @@ Partial Class View
         'cmbOSVersion
         '
         Me.cmbOSVersion.FormattingEnabled = True
-        Me.cmbOSVersion.Location = New System.Drawing.Point(390, 95)
+        Me.cmbOSVersion.Location = New System.Drawing.Point(352, 66)
         Me.cmbOSVersion.Name = "cmbOSVersion"
-        Me.cmbOSVersion.Size = New System.Drawing.Size(138, 21)
+        Me.cmbOSVersion.Size = New System.Drawing.Size(120, 21)
         Me.cmbOSVersion.TabIndex = 36
         '
         'cmdUpdate
         '
         Me.cmdUpdate.BackColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(191, Byte), Integer))
-        Me.cmdUpdate.Location = New System.Drawing.Point(656, 112)
+        Me.cmdUpdate.Location = New System.Drawing.Point(810, 130)
         Me.cmdUpdate.Name = "cmdUpdate"
         Me.cmdUpdate.Size = New System.Drawing.Size(119, 47)
         Me.cmdUpdate.TabIndex = 35
         Me.cmdUpdate.Text = "Confirm Modification"
         Me.cmdUpdate.UseVisualStyleBackColor = False
         '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(478, -1)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(87, 13)
+        Me.Label13.TabIndex = 34
+        Me.Label13.Text = "Equipment Type:"
+        '
+        'cmbEquipType_View
+        '
+        Me.cmbEquipType_View.FormattingEnabled = True
+        Me.cmbEquipType_View.Location = New System.Drawing.Point(481, 15)
+        Me.cmbEquipType_View.Name = "cmbEquipType_View"
+        Me.cmbEquipType_View.Size = New System.Drawing.Size(156, 21)
+        Me.cmbEquipType_View.TabIndex = 33
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(364, 106)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(98, 13)
+        Me.Label7.TabIndex = 32
+        Me.Label7.Text = "Replacement Year:"
+        '
+        'txtReplacementYear_View
+        '
+        Me.txtReplacementYear_View.Location = New System.Drawing.Point(376, 122)
+        Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
+        Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 20)
+        Me.txtReplacementYear_View.TabIndex = 31
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(157, 103)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(81, 13)
+        Me.Label6.TabIndex = 30
+        Me.Label6.Text = "Purchase Date:"
+        '
+        'dtPurchaseDate_View
+        '
+        Me.dtPurchaseDate_View.CustomFormat = "yyyy-MM-dd"
+        Me.dtPurchaseDate_View.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtPurchaseDate_View.Location = New System.Drawing.Point(160, 119)
+        Me.dtPurchaseDate_View.Name = "dtPurchaseDate_View"
+        Me.dtPurchaseDate_View.Size = New System.Drawing.Size(182, 20)
+        Me.dtPurchaseDate_View.TabIndex = 29
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(157, 50)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(51, 13)
+        Me.Label5.TabIndex = 28
+        Me.Label5.Text = "Location:"
+        '
+        'cmbLocation_View
+        '
+        Me.cmbLocation_View.FormattingEnabled = True
+        Me.cmbLocation_View.Location = New System.Drawing.Point(158, 66)
+        Me.cmbLocation_View.Name = "cmbLocation_View"
+        Me.cmbLocation_View.Size = New System.Drawing.Size(168, 21)
+        Me.cmbLocation_View.TabIndex = 27
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(157, 0)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(63, 13)
+        Me.Label4.TabIndex = 26
+        Me.Label4.Text = "Description:"
+        '
+        'txtDescription_View
+        '
+        Me.txtDescription_View.Location = New System.Drawing.Point(158, 16)
+        Me.txtDescription_View.Name = "txtDescription_View"
+        Me.txtDescription_View.Size = New System.Drawing.Size(304, 20)
+        Me.txtDescription_View.TabIndex = 25
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(3, 103)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(69, 13)
+        Me.Label3.TabIndex = 24
+        Me.Label3.Text = "Current User:"
+        '
+        'txtCurUser_View
+        '
+        Me.txtCurUser_View.Location = New System.Drawing.Point(6, 119)
+        Me.txtCurUser_View.Name = "txtCurUser_View"
+        Me.txtCurUser_View.Size = New System.Drawing.Size(132, 20)
+        Me.txtCurUser_View.TabIndex = 23
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(3, 51)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(36, 13)
+        Me.Label2.TabIndex = 22
+        Me.Label2.Text = "Serial:"
+        '
+        'txtSerial_View
+        '
+        Me.txtSerial_View.Location = New System.Drawing.Point(6, 67)
+        Me.txtSerial_View.Name = "txtSerial_View"
+        Me.txtSerial_View.Size = New System.Drawing.Size(133, 20)
+        Me.txtSerial_View.TabIndex = 21
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(3, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(58, 13)
+        Me.Label1.TabIndex = 20
+        Me.Label1.Text = "Asset Tag:"
+        '
+        'txtAssetTag_View
+        '
+        Me.txtAssetTag_View.Location = New System.Drawing.Point(6, 16)
+        Me.txtAssetTag_View.Name = "txtAssetTag_View"
+        Me.txtAssetTag_View.Size = New System.Drawing.Size(134, 20)
+        Me.txtAssetTag_View.TabIndex = 19
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.GroupBox2.Controls.Add(Me.DataGridHistory)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 242)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(965, 301)
+        Me.GroupBox2.TabIndex = 40
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "History"
+        '
         'DataGridHistory
         '
         Me.DataGridHistory.AllowUserToAddRows = False
         Me.DataGridHistory.AllowUserToDeleteRows = False
         Me.DataGridHistory.AllowUserToResizeRows = False
-        Me.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridHistory.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DataGridHistory.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
+        Me.DataGridHistory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.DataGridHistory.Location = New System.Drawing.Point(29, 235)
+        Me.DataGridHistory.Location = New System.Drawing.Point(8, 28)
         Me.DataGridHistory.MultiSelect = False
         Me.DataGridHistory.Name = "DataGridHistory"
         Me.DataGridHistory.ReadOnly = True
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(861, 238)
-        Me.DataGridHistory.TabIndex = 38
+        Me.DataGridHistory.Size = New System.Drawing.Size(938, 260)
+        Me.DataGridHistory.TabIndex = 39
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(658, -1)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(74, 13)
+        Me.Label10.TabIndex = 41
+        Me.Label10.Text = "Device GUID:"
+        '
+        'txtGUID
+        '
+        Me.txtGUID.Location = New System.Drawing.Point(661, 15)
+        Me.txtGUID.Name = "txtGUID"
+        Me.txtGUID.ReadOnly = True
+        Me.txtGUID.Size = New System.Drawing.Size(268, 20)
+        Me.txtGUID.TabIndex = 40
         '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.ClientSize = New System.Drawing.Size(923, 490)
-        Me.Controls.Add(Me.DataGridHistory)
-        Me.Controls.Add(Me.pnlViewControls)
-        Me.Controls.Add(Me.Label14)
+        Me.ClientSize = New System.Drawing.Size(995, 555)
+        Me.Controls.Add(Me.GroupBox2)
+        Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.MaximizeBox = False
         Me.Name = "View"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
         Me.pnlViewControls.ResumeLayout(False)
         Me.pnlViewControls.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
-    Friend WithEvents Label14 As Label
+    Friend WithEvents MenuStrip1 As MenuStrip
+    Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AddNoteToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents pnlViewControls As Panel
+    Friend WithEvents Label9 As Label
+    Friend WithEvents cmbStatus As ComboBox
+    Friend WithEvents Label8 As Label
+    Friend WithEvents cmbOSVersion As ComboBox
+    Friend WithEvents cmdUpdate As Button
     Friend WithEvents Label13 As Label
     Friend WithEvents cmbEquipType_View As ComboBox
     Friend WithEvents Label7 As Label
@@ -355,14 +405,8 @@ Partial Class View
     Friend WithEvents txtSerial_View As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents txtAssetTag_View As TextBox
-    Friend WithEvents MenuStrip1 As MenuStrip
-    Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents pnlViewControls As Panel
-    Friend WithEvents cmdUpdate As Button
-    Friend WithEvents cmbOSVersion As ComboBox
-    Friend WithEvents Label8 As Label
+    Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents DataGridHistory As DataGridView
-    Friend WithEvents Label9 As Label
-    Friend WithEvents cmbStatus As ComboBox
+    Friend WithEvents Label10 As Label
+    Friend WithEvents txtGUID As TextBox
 End Class

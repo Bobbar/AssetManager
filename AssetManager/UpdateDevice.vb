@@ -1,4 +1,5 @@
-﻿Public Class UpdateDev
+﻿Imports System.ComponentModel
+Public Class UpdateDev
     Public strNewNote As String
     Private Sub cmbUpdate_ChangeType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbUpdate_ChangeType.SelectedIndexChanged
     End Sub
@@ -8,10 +9,15 @@
             Exit Sub
         End If
         strNewNote = Trim(txtUpdate_Note.Text)
-
         txtUpdate_Note.Text = ""
+        View.GetNewValues()
+        UpdateDevice()
         Me.Hide()
-
+        cmbUpdate_ChangeType.Enabled = True
+    End Sub
+    Private Sub UpdateDev_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        e.Cancel = True
+        Me.Hide()
     End Sub
     Private Function CheckFields() As Boolean
         If cmbUpdate_ChangeType.SelectedIndex = -1 Then

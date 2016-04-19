@@ -5,7 +5,7 @@ Imports System.DirectoryServices.AccountManagement
 Public Class AssetManager
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim userFullName As String = UserPrincipal.Current.DisplayName
-        Debug.Print(userFullName)
+        ExtendedMethods.DoubleBuffered(ResultGrid, True)
         BuildIndexes()
         Clear_All()
         ViewFormIndex = 0
@@ -51,6 +51,7 @@ Public Class AssetManager
                 Results.strLocation = !dev_location
                 Results.dtPurchaseDate = !dev_purchase_date
                 Results.strGUID = !dev_UID
+                Results.strEqType = !dev_eq_type
                 AddToResults(Results)
             Loop
         End With
@@ -63,17 +64,17 @@ Public Class AssetManager
         table.Columns.Add("User", GetType(String))
         table.Columns.Add("Asset ID", GetType(String))
         table.Columns.Add("Serial", GetType(String))
+        table.Columns.Add("Device Type", GetType(String))
         table.Columns.Add("Description", GetType(String))
         table.Columns.Add("Location", GetType(String))
         table.Columns.Add("Purchase Date", GetType(String))
         table.Columns.Add("Device UID", GetType(String))
         For i = 1 To UBound(Data)
-            table.Rows.Add(Data(i).strCurrentUser, Data(i).strAssetTag, Data(i).strSerial, Data(i).strDescription, GetHumanValue(ComboType.Location, Data(i).strLocation), Data(i).dtPurchaseDate, Data(i).strGUID)
+            table.Rows.Add(Data(i).strCurrentUser, Data(i).strAssetTag, Data(i).strSerial, GetHumanValue(ComboType.EquipType, Data(i).strEqType), Data(i).strDescription, GetHumanValue(ComboType.Location, Data(i).strLocation), Data(i).dtPurchaseDate, Data(i).strGUID)
         Next
         Grid.DataSource = table
         Grid.Columns("User").DefaultCellStyle.Font = New Font(Grid.Font, FontStyle.Bold)
         Grid.AutoResizeColumns()
-
         ReDim SearchResults(0)
     End Sub
     Private Sub GetSearchDBValues() 'cleanup user input for db
@@ -103,18 +104,14 @@ Public Class AssetManager
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim ds As DataSet
-
         GetSearchDBValues()
-
         Dim strStartQry = "SELECT * FROM devices WHERE " '& (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
         Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
-
         If strDynaQry = "" Then
             Dim blah = MsgBox("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing")
             Exit Sub
         End If
         Dim strQry = strStartQry & strDynaQry
-
         If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
@@ -123,7 +120,6 @@ Public Class AssetManager
         Dim cmd As New MySqlCommand(strQry, cn_global)
         reader = cmd.ExecuteReader
         With reader
-
             Do While .Read()
                 Dim Results As Device_Info
                 Results.strCurrentUser = !dev_cur_user
@@ -133,9 +129,9 @@ Public Class AssetManager
                 Results.strLocation = !dev_location
                 Results.dtPurchaseDate = !dev_purchase_date
                 Results.strGUID = !dev_UID
+                Results.strEqType = !dev_eq_type
                 AddToResults(Results)
             Loop
-
         End With
         SendToGrid(ResultGrid, SearchResults)
         cn_global.Close()
@@ -147,7 +143,7 @@ Public Class AssetManager
         AddNew.Show()
     End Sub
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
-        View.ViewDevice(ResultGrid.Item(6, ResultGrid.CurrentRow.Index).Value)
+        View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
         View.Show()
     End Sub
     Public Sub RefreshCombos()
@@ -199,11 +195,14 @@ Public Class AssetManager
         Dim i As Integer
         View.cmbStatus.Items.Clear()
         View.cmbStatus.Text = ""
+        AddNew.cmbStatus.Items.Clear()
+        AddNew.cmbStatus.Text = ""
         cmbStatus.Items.Clear()
         cmbStatus.Text = ""
         For i = 0 To UBound(StatusType)
             View.cmbStatus.Items.Insert(i, StatusType(i).strLong)
             cmbStatus.Items.Insert(i, StatusType(i).strLong)
+            AddNew.cmbStatus.Items.Insert(i, StatusType(i).strLong)
         Next
     End Sub
 End Class

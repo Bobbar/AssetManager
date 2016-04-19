@@ -15,7 +15,7 @@ Public Class View
         Public strOSVersion As String
     End Structure
     Private OldData As Device_Info
-    Private NewData As Device_Info
+    Public NewData As Device_Info
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     End Sub
     Private Sub GetCurrentValues()
@@ -32,7 +32,7 @@ Public Class View
             .strStatus = GetDBValue(ComboType.StatusType, cmbStatus.SelectedIndex)
         End With
     End Sub
-    Private Sub GetNewValues()
+    Public Sub GetNewValues()
         With NewData
             .strAssetTag = Trim(txtAssetTag_View.Text)
             .strDescription = Trim(txtDescription_View.Text)
@@ -45,20 +45,43 @@ Public Class View
             .strOSVersion = GetDBValue(ComboType.OSType, cmbOSVersion.SelectedIndex)
             .strStatus = GetDBValue(ComboType.StatusType, cmbStatus.SelectedIndex)
             .strNote = UpdateDev.strNewNote
-
         End With
     End Sub
     Private Sub EnableControls()
         Dim c As Control
         For Each c In pnlViewControls.Controls
-            If TypeOf c IsNot Label Then c.Enabled = True
+            Select Case True
+                Case TypeOf c Is TextBox
+                    Dim txt As TextBox = c
+                    txt.ReadOnly = False
+                Case TypeOf c Is ComboBox
+                    Dim cmb As ComboBox = c
+                    cmb.Enabled = True
+                Case TypeOf c Is DateTimePicker
+                    Dim dtp As DateTimePicker = c
+                    dtp.Enabled = True
+                Case TypeOf c Is Label
+                    'do nut-zing
+            End Select
         Next
         cmdUpdate.Visible = True
     End Sub
     Private Sub DisableControls()
         Dim c As Control
         For Each c In pnlViewControls.Controls
-            If TypeOf c IsNot Label Then c.Enabled = False
+            Select Case True
+                Case TypeOf c Is TextBox
+                    Dim txt As TextBox = c
+                    txt.ReadOnly = True
+                Case TypeOf c Is ComboBox
+                    Dim cmb As ComboBox = c
+                    cmb.Enabled = False
+                Case TypeOf c Is DateTimePicker
+                    Dim dtp As DateTimePicker = c
+                    dtp.Enabled = False
+                Case TypeOf c Is Label
+                    'do nut-zing
+            End Select
         Next
         cmdUpdate.Visible = False
     End Sub
@@ -92,39 +115,20 @@ Public Class View
                 txtReplacementYear_View.Text = !dev_replacement_year
                 cmbOSVersion.SelectedIndex = GetComboIndexFromShort(ComboType.OSType,!dev_osversion)
                 cmbStatus.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
+                txtGUID.Text = !dev_UID
                 table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description,!hist_location,!hist_purchase_date,!hist_uid)
             Loop
         End With
         cn_global.Close()
         DataGridHistory.DataSource = table
         DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
-        DataGridHistory.AutoResizeColumns()
-
         DisableControls()
+        DataGridHistory.AutoResizeColumns()
     End Sub
     Private Sub ModifyDevice()
         GetCurrentValues()
-        UpdateDev.Show()
+        'UpdateDev.Show()
         EnableControls()
-    End Sub
-    Public Sub UpdateDevice()
-        GetNewValues()
-
-        cn_global.Open()
-        Dim strSQLQry1 = "UPDATE devices set dev_description='" & NewData.strDescription & "', dev_location='" & NewData.strLocation & "', dev_cur_user='" & NewData.strCurrentUser & "', dev_serial='" & NewData.strSerial & "', dev_asset_tag='" & NewData.strAssetTag & "', dev_purchase_date='" & NewData.dtPurchaseDate & "', dev_replacement_year='" & NewData.strReplaceYear & "', dev_osversion='" & NewData.strOSVersion & "', dev_eq_type='" & NewData.strEqType & "', dev_status='" & NewData.strStatus & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
-        Dim cmd As New MySqlCommand
-        cmd.Connection = cn_global
-        cmd.CommandText = strSQLQry1
-        cmd.ExecuteNonQuery()
-        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & NewData.strNote & "','" & NewData.strSerial & "','" & NewData.strDescription & "','" & NewData.strLocation & "','" & NewData.strCurrentUser & "','" & NewData.strAssetTag & "','" & NewData.dtPurchaseDate & "','" & NewData.strReplaceYear & "','" & NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & NewData.strEqType & "','" & NewData.strStatus & "')"
-        cmd.CommandText = strSqlQry2
-        cmd.ExecuteNonQuery()
-        cn_global.Close()
-        UpdateDev.strNewNote = Nothing
-
-        Dim blah
-        blah = MsgBox("Update Added", vbOKOnly, "Complete")
-        ViewDevice(CurrentDevice.strGUID)
     End Sub
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         EnableControls()
@@ -136,13 +140,14 @@ Public Class View
         ModifyDevice()
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
-
-        UpdateDevice()
+        UpdateDev.cmbUpdate_ChangeType.SelectedIndex = -1
+        UpdateDev.cmbUpdate_ChangeType.Enabled = True
+        UpdateDev.Show()
     End Sub
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Me.Hide()
     End Sub
-    Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
+    Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs)
     End Sub
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
         NewEntryView(DataGridHistory.Item(8, DataGridHistory.CurrentRow.Index).Value)
@@ -150,7 +155,13 @@ Public Class View
     Private Sub NewEntryView(GUID As String)
         Dim NewEntry As New View_Entry
         NewEntry.ViewEntry(GUID)
-        NewEntry.Text = NewEntry.Text + " - " & CurrentDevice.strAssetTag
+        'NewEntry.Text = NewEntry.Text + " - " & CurrentDevice.strAssetTag
         NewEntry.Show()
+    End Sub
+    Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddNoteToolStripMenuItem.Click
+        'AssetManager.RefreshCombos()
+        UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
+        UpdateDev.cmbUpdate_ChangeType.Enabled = False
+        UpdateDev.Show()
     End Sub
 End Class

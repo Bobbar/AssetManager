@@ -25,7 +25,6 @@ Public Module DBFunctions
         Public strPO As String
         Public strStatus As String
         Public strNote As String
-
     End Structure
     Public CurrentDevice As Device_Info
     Public Locations() As Combo_Data
@@ -239,4 +238,20 @@ errs:
 errs:
         Return ""
     End Function
+    Public Sub UpdateDevice()
+        cn_global.Open()
+        Dim strSQLQry1 = "UPDATE devices set dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
+        Dim cmd As New MySqlCommand
+        cmd.Connection = cn_global
+        cmd.CommandText = strSQLQry1
+        cmd.ExecuteNonQuery()
+        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & View.NewData.strNote & "','" & View.NewData.strSerial & "','" & View.NewData.strDescription & "','" & View.NewData.strLocation & "','" & View.NewData.strCurrentUser & "','" & View.NewData.strAssetTag & "','" & View.NewData.dtPurchaseDate & "','" & View.NewData.strReplaceYear & "','" & View.NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & View.NewData.strEqType & "','" & View.NewData.strStatus & "')"
+        cmd.CommandText = strSqlQry2
+        cmd.ExecuteNonQuery()
+        cn_global.Close()
+        UpdateDev.strNewNote = Nothing
+        Dim blah
+        blah = MsgBox("Update Added", vbOKOnly, "Complete")
+        View.ViewDevice(CurrentDevice.strGUID)
+    End Sub
 End Module

@@ -1,0 +1,4 @@
+CREATE DEFINER=`root`@`localhost` TRIGGER `asset_manager`.`devices_AFTER_INSERT` AFTER INSERT ON `devices` FOR EACH ROW
+BEGIN
+insert into historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_po,hist_osversion,hist_action_user,hist_eq_type,hist_dev_UID,hist_status) VALUES ('NEWD','IMPORTED',new.dev_serial,new.dev_description,new.dev_location,new.dev_cur_user,new.dev_asset_tag,new.dev_purchase_date,new.dev_replacement_year,new.dev_po,new.dev_osversion,new.dev_lastmod_user,new.dev_eq_type,new.dev_UID,new.dev_status);
+END
