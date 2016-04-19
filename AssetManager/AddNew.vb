@@ -34,7 +34,7 @@ Public Class AddNew
         Device.strOSVersion = GetDBValue(ComboType.OSType, cmbOSType.SelectedIndex)
         Device.strEqType = GetDBValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
         Device.strStatus = GetDBValue(ComboType.StatusType, cmbStatus.SelectedIndex)
-        'strPO =
+
         'strOSVersion =
     End Sub
     Private Sub cmbLocation_SelectedIndexChanged(sender As Object, e As EventArgs)
@@ -48,6 +48,7 @@ Public Class AddNew
         FillOSTypeCombo()
         FillStatusTypeCombo()
         ClearFields()
+        cmbStatus.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType, "INSRV")
     End Sub
     Private Sub ClearFields()
         Dim c As Control

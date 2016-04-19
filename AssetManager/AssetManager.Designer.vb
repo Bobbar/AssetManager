@@ -19,16 +19,12 @@ Partial Class AssetManager
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AssetManager))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BlahToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.cmbShowAll = New System.Windows.Forms.Button()
-        Me.cmdClear = New System.Windows.Forms.Button()
-        Me.ResultGrid = New System.Windows.Forms.DataGridView()
-        Me.cmdSearch = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
@@ -42,10 +38,15 @@ Partial Class AssetManager
         Me.Label8 = New System.Windows.Forms.Label()
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.txtSerial = New System.Windows.Forms.TextBox()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.cmbShowAll = New System.Windows.Forms.Button()
+        Me.cmdClear = New System.Windows.Forms.Button()
+        Me.ResultGrid = New System.Windows.Forms.DataGridView()
+        Me.cmdSearch = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
-        CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
+        CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -53,7 +54,7 @@ Partial Class AssetManager
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1162, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(885, 24)
         Me.MenuStrip1.TabIndex = 3
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -67,7 +68,7 @@ Partial Class AssetManager
         'BlahToolStripMenuItem
         '
         Me.BlahToolStripMenuItem.Name = "BlahToolStripMenuItem"
-        Me.BlahToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.BlahToolStripMenuItem.Size = New System.Drawing.Size(98, 22)
         Me.BlahToolStripMenuItem.Text = "New"
         '
         'GroupBox1
@@ -84,73 +85,9 @@ Partial Class AssetManager
         Me.GroupBox1.Controls.Add(Me.cmdSearch)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 29)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1133, 629)
+        Me.GroupBox1.Size = New System.Drawing.Size(856, 524)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
-        '
-        'Button1
-        '
-        Me.Button1.Enabled = False
-        Me.Button1.Location = New System.Drawing.Point(767, 93)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(106, 36)
-        Me.Button1.TabIndex = 28
-        Me.Button1.Text = "Start Import"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'cmbShowAll
-        '
-        Me.cmbShowAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmbShowAll.Location = New System.Drawing.Point(1002, 15)
-        Me.cmbShowAll.Name = "cmbShowAll"
-        Me.cmbShowAll.Size = New System.Drawing.Size(109, 31)
-        Me.cmbShowAll.TabIndex = 27
-        Me.cmbShowAll.Text = "Show All"
-        Me.cmbShowAll.UseVisualStyleBackColor = True
-        '
-        'cmdClear
-        '
-        Me.cmdClear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdClear.Location = New System.Drawing.Point(1002, 116)
-        Me.cmdClear.Name = "cmdClear"
-        Me.cmdClear.Size = New System.Drawing.Size(110, 32)
-        Me.cmdClear.TabIndex = 18
-        Me.cmdClear.Text = "Clear"
-        Me.cmdClear.UseVisualStyleBackColor = True
-        '
-        'ResultGrid
-        '
-        Me.ResultGrid.AllowUserToAddRows = False
-        Me.ResultGrid.AllowUserToDeleteRows = False
-        Me.ResultGrid.AllowUserToResizeRows = False
-        Me.ResultGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ResultGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
-        Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        Me.ResultGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.ResultGrid.Location = New System.Drawing.Point(15, 174)
-        Me.ResultGrid.MultiSelect = False
-        Me.ResultGrid.Name = "ResultGrid"
-        Me.ResultGrid.ReadOnly = True
-        Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.ResultGrid.ShowCellToolTips = False
-        Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1106, 443)
-        Me.ResultGrid.TabIndex = 17
-        '
-        'cmdSearch
-        '
-        Me.cmdSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdSearch.Location = New System.Drawing.Point(1002, 52)
-        Me.cmdSearch.Name = "cmdSearch"
-        Me.cmdSearch.Size = New System.Drawing.Size(110, 56)
-        Me.cmdSearch.TabIndex = 16
-        Me.cmdSearch.Text = "Search"
-        Me.cmdSearch.UseVisualStyleBackColor = True
         '
         'GroupBox2
         '
@@ -275,11 +212,85 @@ Partial Class AssetManager
         Me.txtSerial.TabIndex = 31
         Me.txtSerial.Text = "%SERIAL%"
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(604, 41)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(106, 36)
+        Me.Button1.TabIndex = 28
+        Me.Button1.Text = "Start Import"
+        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
+        '
+        'cmbShowAll
+        '
+        Me.cmbShowAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbShowAll.Location = New System.Drawing.Point(725, 15)
+        Me.cmbShowAll.Name = "cmbShowAll"
+        Me.cmbShowAll.Size = New System.Drawing.Size(109, 31)
+        Me.cmbShowAll.TabIndex = 27
+        Me.cmbShowAll.Text = "Show All"
+        Me.cmbShowAll.UseVisualStyleBackColor = True
+        '
+        'cmdClear
+        '
+        Me.cmdClear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdClear.Location = New System.Drawing.Point(725, 116)
+        Me.cmdClear.Name = "cmdClear"
+        Me.cmdClear.Size = New System.Drawing.Size(110, 32)
+        Me.cmdClear.TabIndex = 18
+        Me.cmdClear.Text = "Clear"
+        Me.cmdClear.UseVisualStyleBackColor = True
+        '
+        'ResultGrid
+        '
+        Me.ResultGrid.AllowUserToAddRows = False
+        Me.ResultGrid.AllowUserToDeleteRows = False
+        Me.ResultGrid.AllowUserToResizeRows = False
+        Me.ResultGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ResultGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
+        Me.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        Me.ResultGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(6, Byte), Integer), CType(CType(159, Byte), Integer), CType(CType(217, Byte), Integer))
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle1
+        Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
+        Me.ResultGrid.Location = New System.Drawing.Point(15, 174)
+        Me.ResultGrid.MultiSelect = False
+        Me.ResultGrid.Name = "ResultGrid"
+        Me.ResultGrid.ReadOnly = True
+        Me.ResultGrid.RowHeadersVisible = False
+        Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.ResultGrid.ShowCellToolTips = False
+        Me.ResultGrid.ShowEditingIcon = False
+        Me.ResultGrid.Size = New System.Drawing.Size(829, 338)
+        Me.ResultGrid.TabIndex = 17
+        '
+        'cmdSearch
+        '
+        Me.cmdSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdSearch.Location = New System.Drawing.Point(725, 52)
+        Me.cmdSearch.Name = "cmdSearch"
+        Me.cmdSearch.Size = New System.Drawing.Size(110, 56)
+        Me.cmdSearch.TabIndex = 16
+        Me.cmdSearch.Text = "Search"
+        Me.cmdSearch.UseVisualStyleBackColor = True
+        '
         'AssetManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1162, 669)
+        Me.ClientSize = New System.Drawing.Size(885, 564)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -290,11 +301,12 @@ Partial Class AssetManager
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
-        CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem

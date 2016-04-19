@@ -2,13 +2,30 @@
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.DirectoryServices.AccountManagement
+Imports System.Threading
 Public Class AssetManager
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        SplashScreen1.Show()
+
         Dim userFullName As String = UserPrincipal.Current.DisplayName
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         BuildIndexes()
         Clear_All()
+        CopyDefaultCellStyles()
         ViewFormIndex = 0
+        ShowAll()
+
+        Thread.Sleep(4000)
+
+        SplashScreen1.Hide()
+        Me.Show()
+
+    End Sub
+    Public Sub CopyDefaultCellStyles()
+        View.DataGridHistory.DefaultCellStyle = ResultGrid.DefaultCellStyle
+        View.DataGridHistory.BackgroundColor = ResultGrid.BackgroundColor
+
+
     End Sub
     Private Sub BuildIndexes()
         BuildLocationIndex()
@@ -35,6 +52,10 @@ Public Class AssetManager
         AddNew.Show()
     End Sub
     Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click
+        ShowAll()
+
+    End Sub
+    Private Sub ShowAll()
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         cn_global.Open()

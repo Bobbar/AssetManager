@@ -17,6 +17,10 @@ Public Class View
     Private OldData As Device_Info
     Public NewData As Device_Info
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ExtendedMethods.DoubleBuffered(DataGridHistory, True)
+        AssetManager.CopyDefaultCellStyles()
+
+
     End Sub
     Private Sub GetCurrentValues()
         With OldData
