@@ -33,6 +33,13 @@ Public Module DBFunctions
     Public OSType() As Combo_Data
     Public StatusType() As Combo_Data
     Public SearchResults() As Device_Info
+    Public Structure User_Info
+        Public strUsername As String
+        Public strFullname As String
+        Public bolIsAdmin As Boolean
+        Public strUID As String
+    End Structure
+    Public UserAccess As User_Info
     Public Sub AddToResults(Info As Device_Info)
         ReDim Preserve SearchResults(UBound(SearchResults) + 1)
         SearchResults(UBound(SearchResults)) = Info
@@ -60,6 +67,33 @@ Public Module DBFunctions
             .strStatus = Status
         End With
     End Sub
+    Public Sub GetUserAccess()
+        Dim reader As MySqlDataReader
+        cn_global.Open()
+        Dim strQRY = "SELECT * FROM users WHERE usr_username='" & strLocalUser & "'"
+        Dim cmd As New MySqlCommand(strQRY, cn_global)
+        reader = cmd.ExecuteReader
+        With reader
+            Do While .Read()
+                UserAccess.strUsername = !usr_username
+                UserAccess.strFullname = !usr_fullname
+                UserAccess.bolIsAdmin = Convert.ToBoolean(reader("usr_isadmin"))
+                UserAccess.strUID = !usr_UID
+            Loop
+        End With
+        cn_global.Close()
+    End Sub
+    Public Function IsAdmin() As Boolean
+        Return UserAccess.bolIsAdmin
+    End Function
+    Public Function CheckForAdmin() As Boolean
+        If Not UserAccess.bolIsAdmin Then
+            Dim blah = MsgBox("Administrator rights required for this function.", vbOKOnly + vbExclamation, "Access Denied")
+            Return False
+        Else
+            Return True
+        End If
+    End Function
     Public Function GetShortLocation(ByVal index As Integer) As String
         On Error GoTo errs
         Return Locations(index).strShort

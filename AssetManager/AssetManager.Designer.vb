@@ -54,22 +54,23 @@ Partial Class AssetManager
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(885, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1074, 24)
         Me.MenuStrip1.TabIndex = 3
         Me.MenuStrip1.Text = "MenuStrip1"
         '
         'EditToolStripMenuItem
         '
         Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BlahToolStripMenuItem})
+        Me.EditToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
         Me.EditToolStripMenuItem.Text = "Actions"
         '
         'BlahToolStripMenuItem
         '
         Me.BlahToolStripMenuItem.Name = "BlahToolStripMenuItem"
-        Me.BlahToolStripMenuItem.Size = New System.Drawing.Size(98, 22)
-        Me.BlahToolStripMenuItem.Text = "New"
+        Me.BlahToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.BlahToolStripMenuItem.Text = "New Device"
         '
         'GroupBox1
         '
@@ -85,7 +86,7 @@ Partial Class AssetManager
         Me.GroupBox1.Controls.Add(Me.cmdSearch)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 29)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(856, 524)
+        Me.GroupBox1.Size = New System.Drawing.Size(1045, 548)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         '
@@ -106,7 +107,7 @@ Partial Class AssetManager
         Me.GroupBox2.Controls.Add(Me.txtSerial)
         Me.GroupBox2.Location = New System.Drawing.Point(15, 19)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(567, 149)
+        Me.GroupBox2.Size = New System.Drawing.Size(561, 129)
         Me.GroupBox2.TabIndex = 31
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Search Filters"
@@ -114,106 +115,119 @@ Partial Class AssetManager
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(362, 81)
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(352, 75)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(40, 13)
+        Me.Label1.Size = New System.Drawing.Size(48, 16)
         Me.Label1.TabIndex = 42
         Me.Label1.Text = "Status:"
         '
         'cmbStatus
         '
+        Me.cmbStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbStatus.FormattingEnabled = True
-        Me.cmbStatus.Location = New System.Drawing.Point(365, 97)
+        Me.cmbStatus.Location = New System.Drawing.Point(355, 94)
         Me.cmbStatus.Name = "cmbStatus"
-        Me.cmbStatus.Size = New System.Drawing.Size(182, 21)
+        Me.cmbStatus.Size = New System.Drawing.Size(182, 24)
         Me.cmbStatus.TabIndex = 41
         '
         'Label12
         '
         Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(362, 32)
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(352, 26)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(51, 13)
+        Me.Label12.Size = New System.Drawing.Size(62, 16)
         Me.Label12.TabIndex = 40
         Me.Label12.Text = "Location:"
         '
         'cmbLocation
         '
+        Me.cmbLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbLocation.FormattingEnabled = True
-        Me.cmbLocation.Location = New System.Drawing.Point(365, 51)
+        Me.cmbLocation.Location = New System.Drawing.Point(355, 48)
         Me.cmbLocation.Name = "cmbLocation"
-        Me.cmbLocation.Size = New System.Drawing.Size(182, 21)
+        Me.cmbLocation.Size = New System.Drawing.Size(182, 24)
         Me.cmbLocation.TabIndex = 39
         '
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(171, 82)
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Location = New System.Drawing.Point(161, 76)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(69, 13)
+        Me.Label11.Size = New System.Drawing.Size(85, 16)
         Me.Label11.TabIndex = 38
         Me.Label11.Text = "Current User:"
         '
         'txtCurUser
         '
-        Me.txtCurUser.Location = New System.Drawing.Point(174, 98)
+        Me.txtCurUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCurUser.Location = New System.Drawing.Point(164, 95)
         Me.txtCurUser.Name = "txtCurUser"
-        Me.txtCurUser.Size = New System.Drawing.Size(159, 20)
+        Me.txtCurUser.Size = New System.Drawing.Size(159, 22)
         Me.txtCurUser.TabIndex = 37
         '
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(171, 34)
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Location = New System.Drawing.Point(161, 28)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(87, 13)
+        Me.Label10.Size = New System.Drawing.Size(110, 16)
         Me.Label10.TabIndex = 36
         Me.Label10.Text = "Equipment Type:"
         '
         'cmbEquipType
         '
+        Me.cmbEquipType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbEquipType.FormattingEnabled = True
-        Me.cmbEquipType.Location = New System.Drawing.Point(174, 50)
+        Me.cmbEquipType.Location = New System.Drawing.Point(164, 47)
         Me.cmbEquipType.Name = "cmbEquipType"
-        Me.cmbEquipType.Size = New System.Drawing.Size(159, 21)
+        Me.cmbEquipType.Size = New System.Drawing.Size(159, 24)
         Me.cmbEquipType.TabIndex = 35
         '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(16, 82)
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(6, 76)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(36, 13)
+        Me.Label9.Size = New System.Drawing.Size(46, 16)
         Me.Label9.TabIndex = 34
         Me.Label9.Text = "Serial:"
         '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(16, 35)
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(6, 29)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(58, 13)
+        Me.Label8.Size = New System.Drawing.Size(73, 16)
         Me.Label8.TabIndex = 33
         Me.Label8.Text = "Asset Tag:"
         '
         'txtAssetTag
         '
-        Me.txtAssetTag.Location = New System.Drawing.Point(19, 51)
+        Me.txtAssetTag.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTag.Location = New System.Drawing.Point(9, 48)
         Me.txtAssetTag.Name = "txtAssetTag"
-        Me.txtAssetTag.Size = New System.Drawing.Size(117, 20)
+        Me.txtAssetTag.Size = New System.Drawing.Size(117, 22)
         Me.txtAssetTag.TabIndex = 32
         Me.txtAssetTag.Text = "%ASSET_TAG%"
         '
         'txtSerial
         '
-        Me.txtSerial.Location = New System.Drawing.Point(19, 98)
+        Me.txtSerial.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerial.Location = New System.Drawing.Point(9, 95)
         Me.txtSerial.Name = "txtSerial"
-        Me.txtSerial.Size = New System.Drawing.Size(117, 20)
+        Me.txtSerial.Size = New System.Drawing.Size(117, 22)
         Me.txtSerial.TabIndex = 31
         Me.txtSerial.Text = "%SERIAL%"
         '
         'Button1
         '
+        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button1.Location = New System.Drawing.Point(604, 41)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(106, 36)
@@ -224,7 +238,7 @@ Partial Class AssetManager
         '
         'cmbShowAll
         '
-        Me.cmbShowAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbShowAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbShowAll.Location = New System.Drawing.Point(725, 15)
         Me.cmbShowAll.Name = "cmbShowAll"
         Me.cmbShowAll.Size = New System.Drawing.Size(109, 31)
@@ -234,7 +248,7 @@ Partial Class AssetManager
         '
         'cmdClear
         '
-        Me.cmdClear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdClear.Location = New System.Drawing.Point(725, 116)
         Me.cmdClear.Name = "cmdClear"
         Me.cmdClear.Size = New System.Drawing.Size(110, 32)
@@ -273,12 +287,12 @@ Partial Class AssetManager
         Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(829, 338)
+        Me.ResultGrid.Size = New System.Drawing.Size(1018, 362)
         Me.ResultGrid.TabIndex = 17
         '
         'cmdSearch
         '
-        Me.cmdSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdSearch.Location = New System.Drawing.Point(725, 52)
         Me.cmdSearch.Name = "cmdSearch"
         Me.cmdSearch.Size = New System.Drawing.Size(110, 56)
@@ -290,7 +304,7 @@ Partial Class AssetManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(885, 564)
+        Me.ClientSize = New System.Drawing.Size(1074, 588)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -306,6 +320,7 @@ Partial Class AssetManager
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem

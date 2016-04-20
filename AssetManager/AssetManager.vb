@@ -9,6 +9,7 @@ Public Class AssetManager
         Dim userFullName As String = UserPrincipal.Current.DisplayName
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         BuildIndexes()
+        GetUserAccess()
         Clear_All()
         CopyDefaultCellStyles()
         ViewFormIndex = 0
@@ -43,6 +44,7 @@ Public Class AssetManager
     End Sub
     Private SearchValues As Device_Info
     Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BlahToolStripMenuItem.Click
+        If Not CheckForAdmin() Then Exit Sub
         AddNew.Show()
     End Sub
     Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click

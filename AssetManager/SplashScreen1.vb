@@ -23,15 +23,10 @@ Public NotInheritable Class SplashScreen1
         Version.Text = My.Application.Info.Version.ToString 'System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.MajorRevision, My.Application.Info.Version.Minor)
         'Copyright info
         Copyright.Text = My.Application.Info.Copyright
+
+
     End Sub
     Private Sub SplashScreen1_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
-        Dim big_font As New Font("Consolas", 60,
-        FontStyle.Bold, GraphicsUnit.Pixel)
-        e.Graphics.DrawString("Antialiasing Off",
-            big_font, Brushes.Black, 10, 10)
-        e.Graphics.TextRenderingHint =
-            TextRenderingHint.AntiAliasGridFit
-        e.Graphics.DrawString("Antialiasing On",
-            big_font, Brushes.Black, 10, 80)
+
     End Sub
 End Class
