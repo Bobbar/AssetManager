@@ -67,18 +67,31 @@ Public Module DBFunctions
 errs:
         Return ""
     End Function
-    Public Function GetDeviceUID(ByVal AssetTag As String) As String
+    Public Function DeleteDevice(ByVal GUID As String) As Integer
+        Dim cmd As New MySqlCommand
+        Dim rows
+        Dim strSQLQry As String = "DELETE FROM devices WHERE dev_UID='" & GUID & "'"
+        cn_global.Open()
+        cmd.Connection = cn_global
+        cmd.CommandText = strSQLQry
+        rows = cmd.ExecuteNonQuery()
+        cn_global.Close()
+        Return rows
+    End Function
+    Public Function GetDeviceUID(ByVal AssetTag As String, ByVal Serial As String) As String
         Dim reader As MySqlDataReader
-        Dim strQry = "SELECT dev_UID from devices WHERE dev_asset_tag = '" & AssetTag & "'"
+        Dim strQry = "SELECT dev_UID from devices WHERE dev_asset_tag = '" & AssetTag & "' AND dev_serial = '" & Serial & "' ORDER BY dev_input_datetime"
+        Dim devUID As String
         cn_global2.Open()
         Dim cmd As New MySqlCommand(strQry, cn_global2)
         reader = cmd.ExecuteReader
         With reader
             Do While .Read()
-                Return (!dev_UID)
+                devUID = (!dev_UID)
             Loop
         End With
         cn_global2.Close()
+        Return devUID
     End Function
     Public Function GetDBValue(ByVal IndexType As String, ByVal index As Integer) As String
         On Error GoTo errs

@@ -19,8 +19,6 @@ Public Class View
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         AssetManager.CopyDefaultCellStyles()
-
-
     End Sub
     Private Sub GetCurrentValues()
         With OldData
@@ -90,7 +88,7 @@ Public Class View
         cmdUpdate.Visible = False
     End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
-        AssetManager.RefreshCombos()
+        RefreshCombos()
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         cn_global.Open()
@@ -120,7 +118,7 @@ Public Class View
                 cmbOSVersion.SelectedIndex = GetComboIndexFromShort(ComboType.OSType,!dev_osversion)
                 cmbStatus.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
                 txtGUID.Text = !dev_UID
-                table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description,!hist_location,!hist_purchase_date,!hist_uid)
+                table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
             Loop
         End With
         cn_global.Close()
@@ -131,7 +129,6 @@ Public Class View
     End Sub
     Private Sub ModifyDevice()
         GetCurrentValues()
-        'UpdateDev.Show()
         EnableControls()
     End Sub
     Private Sub Button1_Click(sender As Object, e As EventArgs)
@@ -159,13 +156,58 @@ Public Class View
     Private Sub NewEntryView(GUID As String)
         Dim NewEntry As New View_Entry
         NewEntry.ViewEntry(GUID)
-        'NewEntry.Text = NewEntry.Text + " - " & CurrentDevice.strAssetTag
         NewEntry.Show()
     End Sub
     Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddNoteToolStripMenuItem.Click
-        'AssetManager.RefreshCombos()
         UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
         UpdateDev.cmbUpdate_ChangeType.Enabled = False
         UpdateDev.Show()
+    End Sub
+    Private Sub RefreshCombos()
+        FillEquipTypeCombo()
+        FillLocationCombo()
+        FillOSTypeCombo()
+        FillStatusTypeCombo()
+    End Sub
+    Private Sub FillEquipTypeCombo()
+        Dim i As Integer
+        cmbEquipType_View.Items.Clear()
+        cmbEquipType_View.Text = ""
+        For i = 0 To UBound(EquipType)
+            cmbEquipType_View.Items.Insert(i, EquipType(i).strLong)
+        Next
+    End Sub
+    Private Sub FillLocationCombo()
+        Dim i As Integer
+        cmbLocation_View.Items.Clear()
+        cmbLocation_View.Text = ""
+        For i = 0 To UBound(Locations)
+            cmbLocation_View.Items.Insert(i, Locations(i).strLong)
+        Next
+    End Sub
+    Private Sub FillOSTypeCombo()
+        Dim i As Integer
+        cmbOSVersion.Items.Clear()
+        cmbOSVersion.Text = ""
+        For i = 0 To UBound(OSType)
+            cmbOSVersion.Items.Insert(i, OSType(i).strLong)
+        Next
+    End Sub
+    Private Sub FillStatusTypeCombo()
+        Dim i As Integer
+        cmbStatus.Items.Clear()
+        cmbStatus.Text = ""
+        For i = 0 To UBound(StatusType)
+            cmbStatus.Items.Insert(i, StatusType(i).strLong)
+        Next
+    End Sub
+    Private Sub DeleteDeviceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteDeviceToolStripMenuItem.Click
+        Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbCritical, "WARNING")
+        If blah = vbYes Then
+            Dim blah2 = MsgBox(DeleteDevice(CurrentDevice.strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
+            Me.Hide()
+        Else
+            Exit Sub
+        End If
     End Sub
 End Class

@@ -11,7 +11,7 @@ Public Class AddNew
         cmd.Connection = cn_global
         cmd.CommandText = strSqlQry1
         cmd.ExecuteNonQuery()
-        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status) VALUES ('NEWD','" & Device.strNote & "','" & Device.strSerial & "','" & Device.strDescription & "','" & Device.strLocation & "','" & Device.strCurrentUser & "','" & Device.strAssetTag & "','" & Device.dtPurchaseDate & "','" & Device.strReplaceYear & "','" & Device.strPO & "','" & Device.strOSVersion & "','" & GetDeviceUID(Device.strAssetTag) & "','" & strLocalUser & "','" & Device.strEqType & "','" & Device.strStatus & "')"
+        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status) VALUES ('NEWD','" & Device.strNote & "','" & Device.strSerial & "','" & Device.strDescription & "','" & Device.strLocation & "','" & Device.strCurrentUser & "','" & Device.strAssetTag & "','" & Device.dtPurchaseDate & "','" & Device.strReplaceYear & "','" & Device.strPO & "','" & Device.strOSVersion & "','" & GetDeviceUID(Device.strAssetTag, Device.strSerial) & "','" & strLocalUser & "','" & Device.strEqType & "','" & Device.strStatus & "')"
         cmd.CommandText = strSqlQry2
         cmd.ExecuteNonQuery()
         cn_global.Close()
@@ -34,7 +34,6 @@ Public Class AddNew
         Device.strOSVersion = GetDBValue(ComboType.OSType, cmbOSType.SelectedIndex)
         Device.strEqType = GetDBValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
         Device.strStatus = GetDBValue(ComboType.StatusType, cmbStatus.SelectedIndex)
-
         'strOSVersion =
     End Sub
     Private Sub cmbLocation_SelectedIndexChanged(sender As Object, e As EventArgs)
@@ -43,7 +42,7 @@ Public Class AddNew
         ClearAll()
     End Sub
     Private Sub ClearAll()
-        LoadCombos()
+        FillLocationCombo()
         FillEquipTypeCombo()
         FillOSTypeCombo()
         FillStatusTypeCombo()
@@ -63,7 +62,7 @@ Public Class AddNew
             End If
         Next
     End Sub
-    Private Sub LoadCombos()
+    Private Sub FillLocationCombo()
         Dim i As Integer
         cmbLocation.Items.Clear()
         cmbLocation.Text = ""

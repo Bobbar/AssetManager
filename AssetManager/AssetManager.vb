@@ -6,7 +6,6 @@ Imports System.Threading
 Public Class AssetManager
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         SplashScreen1.Show()
-
         Dim userFullName As String = UserPrincipal.Current.DisplayName
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         BuildIndexes()
@@ -14,18 +13,13 @@ Public Class AssetManager
         CopyDefaultCellStyles()
         ViewFormIndex = 0
         ShowAll()
-
-        Thread.Sleep(4000)
-
+        Thread.Sleep(2000)
         SplashScreen1.Hide()
         Me.Show()
-
     End Sub
     Public Sub CopyDefaultCellStyles()
         View.DataGridHistory.DefaultCellStyle = ResultGrid.DefaultCellStyle
         View.DataGridHistory.BackgroundColor = ResultGrid.BackgroundColor
-
-
     End Sub
     Private Sub BuildIndexes()
         BuildLocationIndex()
@@ -53,13 +47,12 @@ Public Class AssetManager
     End Sub
     Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click
         ShowAll()
-
     End Sub
     Private Sub ShowAll()
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         cn_global.Open()
-        Dim strQry = "SELECT * FROM devices"
+        Dim strQry = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
         Dim cmd As New MySqlCommand(strQry, cn_global)
         reader = cmd.ExecuteReader
         With reader
@@ -113,8 +106,6 @@ Public Class AssetManager
         'strPO =
         'strOSVersion =
     End Sub
-    Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
-    End Sub
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
         StartImport()
     End Sub
@@ -124,7 +115,6 @@ Public Class AssetManager
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         Dim reader As MySqlDataReader
         Dim table As New DataTable
-        Dim ds As DataSet
         GetSearchDBValues()
         Dim strStartQry = "SELECT * FROM devices WHERE " '& (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
         Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
@@ -167,33 +157,26 @@ Public Class AssetManager
         View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
         View.Show()
     End Sub
-    Public Sub RefreshCombos()
+    Private Sub RefreshCombos()
         FillEquipTypeCombo()
         FillLocationCombo()
         FillChangeTypeCombo()
-        FillOSTypeCombo()
         FillStatusTypeCombo()
     End Sub
     Private Sub FillEquipTypeCombo()
         Dim i As Integer
-        View.cmbEquipType_View.Items.Clear()
         cmbEquipType.Items.Clear()
-        View.cmbEquipType_View.Text = ""
         cmbEquipType.Text = ""
         For i = 0 To UBound(EquipType)
-            View.cmbEquipType_View.Items.Insert(i, EquipType(i).strLong)
             cmbEquipType.Items.Insert(i, EquipType(i).strLong)
         Next
     End Sub
     Private Sub FillLocationCombo()
         Dim i As Integer
         cmbLocation.Items.Clear()
-        View.cmbLocation_View.Items.Clear()
         cmbLocation.Text = ""
-        View.cmbLocation_View.Text = ""
         For i = 0 To UBound(Locations)
             cmbLocation.Items.Insert(i, Locations(i).strLong)
-            View.cmbLocation_View.Items.Insert(i, Locations(i).strLong)
         Next
     End Sub
     Private Sub FillChangeTypeCombo()
@@ -204,24 +187,13 @@ Public Class AssetManager
             UpdateDev.cmbUpdate_ChangeType.Items.Insert(i, ChangeType(i).strLong)
         Next
     End Sub
-    Private Sub FillOSTypeCombo()
-        Dim i As Integer
-        View.cmbOSVersion.Items.Clear()
-        View.cmbOSVersion.Text = ""
-        For i = 0 To UBound(OSType)
-            View.cmbOSVersion.Items.Insert(i, OSType(i).strLong)
-        Next
-    End Sub
     Private Sub FillStatusTypeCombo()
         Dim i As Integer
-        View.cmbStatus.Items.Clear()
-        View.cmbStatus.Text = ""
         AddNew.cmbStatus.Items.Clear()
         AddNew.cmbStatus.Text = ""
         cmbStatus.Items.Clear()
         cmbStatus.Text = ""
         For i = 0 To UBound(StatusType)
-            View.cmbStatus.Items.Insert(i, StatusType(i).strLong)
             cmbStatus.Items.Insert(i, StatusType(i).strLong)
             AddNew.cmbStatus.Items.Insert(i, StatusType(i).strLong)
         Next

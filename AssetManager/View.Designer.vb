@@ -26,6 +26,8 @@ Partial Class View
         Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.pnlViewControls = New System.Windows.Forms.Panel()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.txtGUID = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -49,8 +51,7 @@ Partial Class View
         Me.txtAssetTag_View = New System.Windows.Forms.TextBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.txtGUID = New System.Windows.Forms.TextBox()
+        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
@@ -70,7 +71,7 @@ Partial Class View
         '
         'ActionsToolStripMenuItem
         '
-        Me.ActionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem, Me.AddNoteToolStripMenuItem})
+        Me.ActionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem, Me.AddNoteToolStripMenuItem, Me.DeleteDeviceToolStripMenuItem})
         Me.ActionsToolStripMenuItem.Name = "ActionsToolStripMenuItem"
         Me.ActionsToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
         Me.ActionsToolStripMenuItem.Text = "Actions"
@@ -78,13 +79,13 @@ Partial Class View
         'EditToolStripMenuItem
         '
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(150, 22)
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.EditToolStripMenuItem.Text = "Modify Device"
         '
         'AddNoteToolStripMenuItem
         '
         Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
-        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(150, 22)
+        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.AddNoteToolStripMenuItem.Text = "Add Note"
         '
         'GroupBox1
@@ -126,6 +127,23 @@ Partial Class View
         Me.pnlViewControls.Name = "pnlViewControls"
         Me.pnlViewControls.Size = New System.Drawing.Size(932, 180)
         Me.pnlViewControls.TabIndex = 38
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(658, -1)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(74, 13)
+        Me.Label10.TabIndex = 41
+        Me.Label10.Text = "Device GUID:"
+        '
+        'txtGUID
+        '
+        Me.txtGUID.Location = New System.Drawing.Point(661, 15)
+        Me.txtGUID.Name = "txtGUID"
+        Me.txtGUID.ReadOnly = True
+        Me.txtGUID.Size = New System.Drawing.Size(268, 20)
+        Me.txtGUID.TabIndex = 40
         '
         'Label9
         '
@@ -338,22 +356,11 @@ Partial Class View
         Me.DataGridHistory.Size = New System.Drawing.Size(938, 260)
         Me.DataGridHistory.TabIndex = 39
         '
-        'Label10
+        'DeleteDeviceToolStripMenuItem
         '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(658, -1)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(74, 13)
-        Me.Label10.TabIndex = 41
-        Me.Label10.Text = "Device GUID:"
-        '
-        'txtGUID
-        '
-        Me.txtGUID.Location = New System.Drawing.Point(661, 15)
-        Me.txtGUID.Name = "txtGUID"
-        Me.txtGUID.ReadOnly = True
-        Me.txtGUID.Size = New System.Drawing.Size(268, 20)
-        Me.txtGUID.TabIndex = 40
+        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
+        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
         '
         'View
         '
@@ -409,4 +416,5 @@ Partial Class View
     Friend WithEvents DataGridHistory As DataGridView
     Friend WithEvents Label10 As Label
     Friend WithEvents txtGUID As TextBox
+    Friend WithEvents DeleteDeviceToolStripMenuItem As ToolStripMenuItem
 End Class
