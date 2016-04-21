@@ -2,8 +2,9 @@
 Imports MySql.Data.MySqlClient
 Public Module DBFunctions
     Public ReadOnly Property strLocalUser As String = Environment.UserName
-    Public cn_global As New MySqlConnection("server=localhost;uid=root;pwd=SQLR00tP455W0rd;database=asset_manager")
-    Public cn_global2 As New MySqlConnection("server=localhost;uid=root;pwd=SQLR00tP455W0rd;database=asset_manager")
+    Private MySQLConnectString As String = "server=df8xlbs1;port=3306;uid=asset_manager_user;pwd=A553tP455;database=asset_manager"
+    Public cn_global As New MySqlConnection(MySQLConnectString)
+    Public cn_global2 As New MySqlConnection(MySQLConnectString)
     Public Const strDBDateTimeFormat As String = "YYYY-MM-DD hh:mm:ss"
     Public Const strDBDateFormat As String = "yyyy-MM-dd"
     Public Structure Combo_Data

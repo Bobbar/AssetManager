@@ -200,4 +200,18 @@ Public Class AssetManager
             AddNew.cmbStatus.Items.Insert(i, StatusType(i).strLong)
         Next
     End Sub
+
+    Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
+
+    End Sub
+
+    Private Sub ViewSelectedToolStripMenuItem_Click(sender As Object, e As EventArgs)
+        View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
+        View.Show()
+    End Sub
+
+    Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
+        View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
+        View.Show()
+    End Sub
 End Class
