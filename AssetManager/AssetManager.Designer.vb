@@ -43,9 +43,9 @@ Partial Class AssetManager
         Me.cmbShowAll = New System.Windows.Forms.Button()
         Me.cmdClear = New System.Windows.Forms.Button()
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
-        Me.cmdSearch = New System.Windows.Forms.Button()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmdSearch = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -73,7 +73,7 @@ Partial Class AssetManager
         'BlahToolStripMenuItem
         '
         Me.BlahToolStripMenuItem.Name = "BlahToolStripMenuItem"
-        Me.BlahToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.BlahToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
         Me.BlahToolStripMenuItem.Text = "New Device"
         '
         'GroupBox1
@@ -294,16 +294,6 @@ Partial Class AssetManager
         Me.ResultGrid.Size = New System.Drawing.Size(1018, 362)
         Me.ResultGrid.TabIndex = 17
         '
-        'cmdSearch
-        '
-        Me.cmdSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdSearch.Location = New System.Drawing.Point(725, 52)
-        Me.cmdSearch.Name = "cmdSearch"
-        Me.cmdSearch.Size = New System.Drawing.Size(110, 56)
-        Me.cmdSearch.TabIndex = 16
-        Me.cmdSearch.Text = "Search"
-        Me.cmdSearch.UseVisualStyleBackColor = True
-        '
         'ContextMenuStrip1
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem})
@@ -315,6 +305,16 @@ Partial Class AssetManager
         Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
         Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(99, 22)
         Me.ViewToolStripMenuItem.Text = "View"
+        '
+        'cmdSearch
+        '
+        Me.cmdSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdSearch.Location = New System.Drawing.Point(725, 52)
+        Me.cmdSearch.Name = "cmdSearch"
+        Me.cmdSearch.Size = New System.Drawing.Size(110, 56)
+        Me.cmdSearch.TabIndex = 16
+        Me.cmdSearch.Text = "Search"
+        Me.cmdSearch.UseVisualStyleBackColor = True
         '
         'AssetManager
         '

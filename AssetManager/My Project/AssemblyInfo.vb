@@ -7,9 +7,9 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 <Assembly: AssemblyTitle("AssetManager")>
 <Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("Microsoft")>
+<Assembly: AssemblyCompany("Fairfield County Board of DD")>
 <Assembly: AssemblyProduct("AssetManager")>
-<Assembly: AssemblyCopyright("Copyright © Microsoft 2016")>
+<Assembly: AssemblyCopyright("Copyright © FCBDD 2016")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: ComVisible(False)>
 'The following GUID is for the ID of the typelib if this project is exposed to COM
@@ -24,5 +24,5 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
-<Assembly: AssemblyVersion("5956.4.2016.70")>
-<Assembly: AssemblyFileVersion("4.2016.5956.69")>
+<Assembly: AssemblyVersion("5957.4.2016.112")>
+<Assembly: AssemblyFileVersion("4.2016.5957.111")>

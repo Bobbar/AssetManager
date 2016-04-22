@@ -5,18 +5,29 @@ Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
 Public Class AssetManager
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        SplashScreen1.Show()
+        Status("Loading...")
+        SplashScreen.Show()
         Dim userFullName As String = UserPrincipal.Current.DisplayName
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
+        Status("Loading Indexes...")
         BuildIndexes()
+        Status("Checking Access Level...")
         GetUserAccess()
         Clear_All()
         CopyDefaultCellStyles()
         ViewFormIndex = 0
+        Status("Loading devices...")
         ShowAll()
+        Status("Ready!")
         Thread.Sleep(2000)
-        SplashScreen1.Hide()
+        SplashScreen.Hide()
+
         Me.Show()
+    End Sub
+    Public Sub Status(Text As String)
+        SplashScreen.lblStatus.Text = Text
+        SplashScreen.Refresh()
+
     End Sub
     Public Sub CopyDefaultCellStyles()
         View.DataGridHistory.DefaultCellStyle = ResultGrid.DefaultCellStyle
@@ -48,7 +59,11 @@ Public Class AssetManager
         AddNew.Show()
     End Sub
     Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click
+        Waiting()
         ShowAll()
+        DoneWaiting()
+
+
     End Sub
     Private Sub ShowAll()
         Dim reader As MySqlDataReader
@@ -57,8 +72,10 @@ Public Class AssetManager
         Dim strQry = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
         Dim cmd As New MySqlCommand(strQry, cn_global)
         reader = cmd.ExecuteReader
+
         With reader
             Do While .Read()
+
                 Dim Results As Device_Info
                 Results.strCurrentUser = !dev_cur_user
                 Results.strAssetTag = !dev_asset_tag
@@ -69,6 +86,7 @@ Public Class AssetManager
                 Results.strGUID = !dev_UID
                 Results.strEqType = !dev_eq_type
                 AddToResults(Results)
+
             Loop
         End With
         SendToGrid(ResultGrid, SearchResults)
@@ -115,10 +133,16 @@ Public Class AssetManager
         Clear_All()
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
+        Waiting()
+        DynamicSearch()
+        DoneWaiting()
+
+    End Sub
+    Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         GetSearchDBValues()
-        Dim strStartQry = "SELECT * FROM devices WHERE " '& (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
+        Dim strStartQry = "SELECT * FROM devices WHERE "
         Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
         If strDynaQry = "" Then
             Dim blah = MsgBox("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing")
@@ -148,6 +172,7 @@ Public Class AssetManager
         End With
         SendToGrid(ResultGrid, SearchResults)
         cn_global.Close()
+
     End Sub
     Private Sub Button2_Click(sender As Object, e As EventArgs)
         Clear_All()
@@ -156,8 +181,12 @@ Public Class AssetManager
         AddNew.Show()
     End Sub
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
+
+        Waiting()
         View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
         View.Show()
+        DoneWaiting()
+
     End Sub
     Private Sub RefreshCombos()
         FillEquipTypeCombo()
@@ -213,5 +242,15 @@ Public Class AssetManager
     Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
         View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
         View.Show()
+    End Sub
+    Public Sub Waiting()
+        Me.Cursor = Cursors.WaitCursor
+
+
+
+    End Sub
+    Public Sub DoneWaiting()
+        Me.Cursor = Cursors.Default
+
     End Sub
 End Class
