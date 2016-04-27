@@ -30,28 +30,29 @@ Partial Class View
         Me.Label10 = New System.Windows.Forms.Label()
         Me.txtGUID = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
-        Me.cmbStatus = New System.Windows.Forms.ComboBox()
+        Me.cmbStatus_REQ = New System.Windows.Forms.ComboBox()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.cmbOSVersion = New System.Windows.Forms.ComboBox()
+        Me.cmbOSVersion_REQ = New System.Windows.Forms.ComboBox()
         Me.cmdUpdate = New System.Windows.Forms.Button()
         Me.Label13 = New System.Windows.Forms.Label()
-        Me.cmbEquipType_View = New System.Windows.Forms.ComboBox()
+        Me.cmbEquipType_View_REQ = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.dtPurchaseDate_View = New System.Windows.Forms.DateTimePicker()
+        Me.dtPurchaseDate_View_REQ = New System.Windows.Forms.DateTimePicker()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.cmbLocation_View = New System.Windows.Forms.ComboBox()
+        Me.cmbLocation_View_REQ = New System.Windows.Forms.ComboBox()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.txtDescription_View = New System.Windows.Forms.TextBox()
+        Me.txtDescription_View_REQ = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.txtCurUser_View = New System.Windows.Forms.TextBox()
+        Me.txtCurUser_View_REQ = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.txtSerial_View = New System.Windows.Forms.TextBox()
+        Me.txtSerial_View_REQ = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.txtAssetTag_View = New System.Windows.Forms.TextBox()
+        Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
+        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
@@ -79,18 +80,21 @@ Partial Class View
         '
         'EditToolStripMenuItem
         '
+        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
         Me.EditToolStripMenuItem.Text = "Modify Device"
         '
         'AddNoteToolStripMenuItem
         '
+        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
         Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
         Me.AddNoteToolStripMenuItem.Text = "Add Note"
         '
         'DeleteDeviceToolStripMenuItem
         '
+        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
         Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
         Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
         Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
@@ -107,29 +111,30 @@ Partial Class View
         '
         'pnlViewControls
         '
+        Me.pnlViewControls.Controls.Add(Me.cmdCancel)
         Me.pnlViewControls.Controls.Add(Me.Label10)
         Me.pnlViewControls.Controls.Add(Me.txtGUID)
         Me.pnlViewControls.Controls.Add(Me.Label9)
-        Me.pnlViewControls.Controls.Add(Me.cmbStatus)
+        Me.pnlViewControls.Controls.Add(Me.cmbStatus_REQ)
         Me.pnlViewControls.Controls.Add(Me.Label8)
-        Me.pnlViewControls.Controls.Add(Me.cmbOSVersion)
+        Me.pnlViewControls.Controls.Add(Me.cmbOSVersion_REQ)
         Me.pnlViewControls.Controls.Add(Me.cmdUpdate)
         Me.pnlViewControls.Controls.Add(Me.Label13)
-        Me.pnlViewControls.Controls.Add(Me.cmbEquipType_View)
+        Me.pnlViewControls.Controls.Add(Me.cmbEquipType_View_REQ)
         Me.pnlViewControls.Controls.Add(Me.Label7)
         Me.pnlViewControls.Controls.Add(Me.txtReplacementYear_View)
         Me.pnlViewControls.Controls.Add(Me.Label6)
-        Me.pnlViewControls.Controls.Add(Me.dtPurchaseDate_View)
+        Me.pnlViewControls.Controls.Add(Me.dtPurchaseDate_View_REQ)
         Me.pnlViewControls.Controls.Add(Me.Label5)
-        Me.pnlViewControls.Controls.Add(Me.cmbLocation_View)
+        Me.pnlViewControls.Controls.Add(Me.cmbLocation_View_REQ)
         Me.pnlViewControls.Controls.Add(Me.Label4)
-        Me.pnlViewControls.Controls.Add(Me.txtDescription_View)
+        Me.pnlViewControls.Controls.Add(Me.txtDescription_View_REQ)
         Me.pnlViewControls.Controls.Add(Me.Label3)
-        Me.pnlViewControls.Controls.Add(Me.txtCurUser_View)
+        Me.pnlViewControls.Controls.Add(Me.txtCurUser_View_REQ)
         Me.pnlViewControls.Controls.Add(Me.Label2)
-        Me.pnlViewControls.Controls.Add(Me.txtSerial_View)
+        Me.pnlViewControls.Controls.Add(Me.txtSerial_View_REQ)
         Me.pnlViewControls.Controls.Add(Me.Label1)
-        Me.pnlViewControls.Controls.Add(Me.txtAssetTag_View)
+        Me.pnlViewControls.Controls.Add(Me.txtAssetTag_View_REQ)
         Me.pnlViewControls.Location = New System.Drawing.Point(13, 23)
         Me.pnlViewControls.Name = "pnlViewControls"
         Me.pnlViewControls.Size = New System.Drawing.Size(932, 180)
@@ -164,14 +169,14 @@ Partial Class View
         Me.Label9.TabIndex = 39
         Me.Label9.Text = "Status:"
         '
-        'cmbStatus
+        'cmbStatus_REQ
         '
-        Me.cmbStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbStatus.FormattingEnabled = True
-        Me.cmbStatus.Location = New System.Drawing.Point(492, 75)
-        Me.cmbStatus.Name = "cmbStatus"
-        Me.cmbStatus.Size = New System.Drawing.Size(124, 24)
-        Me.cmbStatus.TabIndex = 38
+        Me.cmbStatus_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbStatus_REQ.FormattingEnabled = True
+        Me.cmbStatus_REQ.Location = New System.Drawing.Point(492, 75)
+        Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
+        Me.cmbStatus_REQ.Size = New System.Drawing.Size(124, 24)
+        Me.cmbStatus_REQ.TabIndex = 38
         '
         'Label8
         '
@@ -183,20 +188,20 @@ Partial Class View
         Me.Label8.TabIndex = 37
         Me.Label8.Text = "OS Version:"
         '
-        'cmbOSVersion
+        'cmbOSVersion_REQ
         '
-        Me.cmbOSVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbOSVersion.FormattingEnabled = True
-        Me.cmbOSVersion.Location = New System.Drawing.Point(352, 75)
-        Me.cmbOSVersion.Name = "cmbOSVersion"
-        Me.cmbOSVersion.Size = New System.Drawing.Size(120, 24)
-        Me.cmbOSVersion.TabIndex = 36
+        Me.cmbOSVersion_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbOSVersion_REQ.FormattingEnabled = True
+        Me.cmbOSVersion_REQ.Location = New System.Drawing.Point(352, 75)
+        Me.cmbOSVersion_REQ.Name = "cmbOSVersion_REQ"
+        Me.cmbOSVersion_REQ.Size = New System.Drawing.Size(120, 24)
+        Me.cmbOSVersion_REQ.TabIndex = 36
         '
         'cmdUpdate
         '
         Me.cmdUpdate.BackColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(191, Byte), Integer))
         Me.cmdUpdate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdUpdate.Location = New System.Drawing.Point(755, 130)
+        Me.cmdUpdate.Location = New System.Drawing.Point(755, 81)
         Me.cmdUpdate.Name = "cmdUpdate"
         Me.cmdUpdate.Size = New System.Drawing.Size(174, 47)
         Me.cmdUpdate.TabIndex = 35
@@ -213,14 +218,14 @@ Partial Class View
         Me.Label13.TabIndex = 34
         Me.Label13.Text = "Equipment Type:"
         '
-        'cmbEquipType_View
+        'cmbEquipType_View_REQ
         '
-        Me.cmbEquipType_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbEquipType_View.FormattingEnabled = True
-        Me.cmbEquipType_View.Location = New System.Drawing.Point(481, 24)
-        Me.cmbEquipType_View.Name = "cmbEquipType_View"
-        Me.cmbEquipType_View.Size = New System.Drawing.Size(156, 24)
-        Me.cmbEquipType_View.TabIndex = 33
+        Me.cmbEquipType_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbEquipType_View_REQ.FormattingEnabled = True
+        Me.cmbEquipType_View_REQ.Location = New System.Drawing.Point(481, 24)
+        Me.cmbEquipType_View_REQ.Name = "cmbEquipType_View_REQ"
+        Me.cmbEquipType_View_REQ.Size = New System.Drawing.Size(156, 24)
+        Me.cmbEquipType_View_REQ.TabIndex = 33
         '
         'Label7
         '
@@ -250,15 +255,15 @@ Partial Class View
         Me.Label6.TabIndex = 30
         Me.Label6.Text = "Purchase Date:"
         '
-        'dtPurchaseDate_View
+        'dtPurchaseDate_View_REQ
         '
-        Me.dtPurchaseDate_View.CustomFormat = "yyyy-MM-dd"
-        Me.dtPurchaseDate_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dtPurchaseDate_View.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtPurchaseDate_View.Location = New System.Drawing.Point(160, 128)
-        Me.dtPurchaseDate_View.Name = "dtPurchaseDate_View"
-        Me.dtPurchaseDate_View.Size = New System.Drawing.Size(182, 22)
-        Me.dtPurchaseDate_View.TabIndex = 29
+        Me.dtPurchaseDate_View_REQ.CustomFormat = "yyyy-MM-dd"
+        Me.dtPurchaseDate_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dtPurchaseDate_View_REQ.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtPurchaseDate_View_REQ.Location = New System.Drawing.Point(160, 128)
+        Me.dtPurchaseDate_View_REQ.Name = "dtPurchaseDate_View_REQ"
+        Me.dtPurchaseDate_View_REQ.Size = New System.Drawing.Size(182, 22)
+        Me.dtPurchaseDate_View_REQ.TabIndex = 29
         '
         'Label5
         '
@@ -270,14 +275,14 @@ Partial Class View
         Me.Label5.TabIndex = 28
         Me.Label5.Text = "Location:"
         '
-        'cmbLocation_View
+        'cmbLocation_View_REQ
         '
-        Me.cmbLocation_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbLocation_View.FormattingEnabled = True
-        Me.cmbLocation_View.Location = New System.Drawing.Point(158, 75)
-        Me.cmbLocation_View.Name = "cmbLocation_View"
-        Me.cmbLocation_View.Size = New System.Drawing.Size(168, 24)
-        Me.cmbLocation_View.TabIndex = 27
+        Me.cmbLocation_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbLocation_View_REQ.FormattingEnabled = True
+        Me.cmbLocation_View_REQ.Location = New System.Drawing.Point(158, 75)
+        Me.cmbLocation_View_REQ.Name = "cmbLocation_View_REQ"
+        Me.cmbLocation_View_REQ.Size = New System.Drawing.Size(168, 24)
+        Me.cmbLocation_View_REQ.TabIndex = 27
         '
         'Label4
         '
@@ -289,13 +294,13 @@ Partial Class View
         Me.Label4.TabIndex = 26
         Me.Label4.Text = "Description:"
         '
-        'txtDescription_View
+        'txtDescription_View_REQ
         '
-        Me.txtDescription_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDescription_View.Location = New System.Drawing.Point(158, 25)
-        Me.txtDescription_View.Name = "txtDescription_View"
-        Me.txtDescription_View.Size = New System.Drawing.Size(304, 22)
-        Me.txtDescription_View.TabIndex = 25
+        Me.txtDescription_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDescription_View_REQ.Location = New System.Drawing.Point(158, 25)
+        Me.txtDescription_View_REQ.Name = "txtDescription_View_REQ"
+        Me.txtDescription_View_REQ.Size = New System.Drawing.Size(304, 22)
+        Me.txtDescription_View_REQ.TabIndex = 25
         '
         'Label3
         '
@@ -307,13 +312,13 @@ Partial Class View
         Me.Label3.TabIndex = 24
         Me.Label3.Text = "Current User:"
         '
-        'txtCurUser_View
+        'txtCurUser_View_REQ
         '
-        Me.txtCurUser_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCurUser_View.Location = New System.Drawing.Point(6, 128)
-        Me.txtCurUser_View.Name = "txtCurUser_View"
-        Me.txtCurUser_View.Size = New System.Drawing.Size(132, 22)
-        Me.txtCurUser_View.TabIndex = 23
+        Me.txtCurUser_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(6, 128)
+        Me.txtCurUser_View_REQ.Name = "txtCurUser_View_REQ"
+        Me.txtCurUser_View_REQ.Size = New System.Drawing.Size(132, 22)
+        Me.txtCurUser_View_REQ.TabIndex = 23
         '
         'Label2
         '
@@ -325,13 +330,13 @@ Partial Class View
         Me.Label2.TabIndex = 22
         Me.Label2.Text = "Serial:"
         '
-        'txtSerial_View
+        'txtSerial_View_REQ
         '
-        Me.txtSerial_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSerial_View.Location = New System.Drawing.Point(6, 76)
-        Me.txtSerial_View.Name = "txtSerial_View"
-        Me.txtSerial_View.Size = New System.Drawing.Size(133, 22)
-        Me.txtSerial_View.TabIndex = 21
+        Me.txtSerial_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerial_View_REQ.Location = New System.Drawing.Point(6, 76)
+        Me.txtSerial_View_REQ.Name = "txtSerial_View_REQ"
+        Me.txtSerial_View_REQ.Size = New System.Drawing.Size(133, 22)
+        Me.txtSerial_View_REQ.TabIndex = 21
         '
         'Label1
         '
@@ -343,13 +348,13 @@ Partial Class View
         Me.Label1.TabIndex = 20
         Me.Label1.Text = "Asset Tag:"
         '
-        'txtAssetTag_View
+        'txtAssetTag_View_REQ
         '
-        Me.txtAssetTag_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTag_View.Location = New System.Drawing.Point(6, 25)
-        Me.txtAssetTag_View.Name = "txtAssetTag_View"
-        Me.txtAssetTag_View.Size = New System.Drawing.Size(134, 22)
-        Me.txtAssetTag_View.TabIndex = 19
+        Me.txtAssetTag_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTag_View_REQ.Location = New System.Drawing.Point(6, 25)
+        Me.txtAssetTag_View_REQ.Name = "txtAssetTag_View_REQ"
+        Me.txtAssetTag_View_REQ.Size = New System.Drawing.Size(134, 22)
+        Me.txtAssetTag_View_REQ.TabIndex = 19
         '
         'GroupBox2
         '
@@ -386,6 +391,15 @@ Partial Class View
         Me.DataGridHistory.Size = New System.Drawing.Size(938, 260)
         Me.DataGridHistory.TabIndex = 39
         '
+        'cmdCancel
+        '
+        Me.cmdCancel.Location = New System.Drawing.Point(759, 142)
+        Me.cmdCancel.Name = "cmdCancel"
+        Me.cmdCancel.Size = New System.Drawing.Size(169, 24)
+        Me.cmdCancel.TabIndex = 42
+        Me.cmdCancel.Text = "Cancel"
+        Me.cmdCancel.UseVisualStyleBackColor = True
+        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -417,29 +431,30 @@ Partial Class View
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents pnlViewControls As Panel
     Friend WithEvents Label9 As Label
-    Friend WithEvents cmbStatus As ComboBox
+    Friend WithEvents cmbStatus_REQ As ComboBox
     Friend WithEvents Label8 As Label
-    Friend WithEvents cmbOSVersion As ComboBox
+    Friend WithEvents cmbOSVersion_REQ As ComboBox
     Friend WithEvents cmdUpdate As Button
     Friend WithEvents Label13 As Label
-    Friend WithEvents cmbEquipType_View As ComboBox
+    Friend WithEvents cmbEquipType_View_REQ As ComboBox
     Friend WithEvents Label7 As Label
     Friend WithEvents txtReplacementYear_View As TextBox
     Friend WithEvents Label6 As Label
-    Friend WithEvents dtPurchaseDate_View As DateTimePicker
+    Friend WithEvents dtPurchaseDate_View_REQ As DateTimePicker
     Friend WithEvents Label5 As Label
-    Friend WithEvents cmbLocation_View As ComboBox
+    Friend WithEvents cmbLocation_View_REQ As ComboBox
     Friend WithEvents Label4 As Label
-    Friend WithEvents txtDescription_View As TextBox
+    Friend WithEvents txtDescription_View_REQ As TextBox
     Friend WithEvents Label3 As Label
-    Friend WithEvents txtCurUser_View As TextBox
+    Friend WithEvents txtCurUser_View_REQ As TextBox
     Friend WithEvents Label2 As Label
-    Friend WithEvents txtSerial_View As TextBox
+    Friend WithEvents txtSerial_View_REQ As TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents txtAssetTag_View As TextBox
+    Friend WithEvents txtAssetTag_View_REQ As TextBox
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents DataGridHistory As DataGridView
     Friend WithEvents Label10 As Label
     Friend WithEvents txtGUID As TextBox
     Friend WithEvents DeleteDeviceToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents cmdCancel As Button
 End Class

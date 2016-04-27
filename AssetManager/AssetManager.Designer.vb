@@ -24,7 +24,6 @@ Partial Class AssetManager
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AssetManager))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BlahToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -64,17 +63,11 @@ Partial Class AssetManager
         '
         'EditToolStripMenuItem
         '
-        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BlahToolStripMenuItem})
         Me.EditToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
-        Me.EditToolStripMenuItem.Text = "Actions"
-        '
-        'BlahToolStripMenuItem
-        '
-        Me.BlahToolStripMenuItem.Name = "BlahToolStripMenuItem"
-        Me.BlahToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
-        Me.BlahToolStripMenuItem.Text = "New Device"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(86, 20)
+        Me.EditToolStripMenuItem.Text = "Add New"
         '
         'GroupBox1
         '
@@ -341,7 +334,6 @@ Partial Class AssetManager
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents BlahToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmbShowAll As Button
     Friend WithEvents cmdClear As Button

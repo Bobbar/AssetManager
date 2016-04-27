@@ -5,11 +5,15 @@ Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
 Public Class AssetManager
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Logger("Starting AssetManager...")
         Status("Loading...")
         SplashScreen.Show()
         Dim userFullName As String = UserPrincipal.Current.DisplayName
+        Logger("Enabling Double-Buffered DataGrid...")
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         Status("Loading Indexes...")
+
         BuildIndexes()
         Status("Checking Access Level...")
         GetUserAccess()
@@ -34,11 +38,13 @@ Public Class AssetManager
         View.DataGridHistory.BackgroundColor = ResultGrid.BackgroundColor
     End Sub
     Private Sub BuildIndexes()
+        Logger("Building Indexes...")
         BuildLocationIndex()
         BuildChangeTypeIndex()
         BuildEquipTypeIndex()
         BuildOSTypeIndex()
         BuildStatusTypeIndex()
+        Logger("Building Indexes Done...")
     End Sub
     Private Sub Clear_All()
         txtAssetTag.Clear()
@@ -54,9 +60,8 @@ Public Class AssetManager
         cn_global.Close()
     End Sub
     Private SearchValues As Device_Info
-    Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BlahToolStripMenuItem.Click
-        If Not CheckForAdmin() Then Exit Sub
-        AddNew.Show()
+    Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs)
+
     End Sub
     Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click
         Waiting()
@@ -220,13 +225,13 @@ Public Class AssetManager
     End Sub
     Private Sub FillStatusTypeCombo()
         Dim i As Integer
-        AddNew.cmbStatus.Items.Clear()
-        AddNew.cmbStatus.Text = ""
+        AddNew.cmbStatus_REQ.Items.Clear()
+        AddNew.cmbStatus_REQ.Text = ""
         cmbStatus.Items.Clear()
         cmbStatus.Text = ""
         For i = 0 To UBound(StatusType)
             cmbStatus.Items.Insert(i, StatusType(i).strLong)
-            AddNew.cmbStatus.Items.Insert(i, StatusType(i).strLong)
+            AddNew.cmbStatus_REQ.Items.Insert(i, StatusType(i).strLong)
         Next
     End Sub
 
@@ -252,5 +257,10 @@ Public Class AssetManager
     Public Sub DoneWaiting()
         Me.Cursor = Cursors.Default
 
+    End Sub
+
+    Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditToolStripMenuItem.Click
+        If Not CheckForAdmin() Then Exit Sub
+        AddNew.Show()
     End Sub
 End Class

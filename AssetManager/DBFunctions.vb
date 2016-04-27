@@ -128,7 +128,7 @@ errs:
         cn_global2.Close()
         Return devUID
     End Function
-    Public Function GetDBValue(ByVal IndexType As String, ByVal index As Integer) As String
+    Public Function GetDBValue(ByVal IndexType As String, ByVal index As Integer) As Object
         On Error GoTo errs
         Select Case IndexType
             Case ComboType.Location
@@ -142,11 +142,11 @@ errs:
             Case ComboType.StatusType
                 Return StatusType(index).strShort
             Case Else
-                Return ""
+                Return Nothing
         End Select
         Exit Function
 errs:
-        Return ""
+        Return Nothing
     End Function
     Public Function GetHumanValue(ByVal Type As String, ByVal ShortVal As String) As String
         Dim SearchIndex() As Combo_Data
