@@ -21,7 +21,6 @@ Public Class View
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         AssetManager.CopyDefaultCellStyles()
         'ClearFields()
-
     End Sub
     Private Sub GetCurrentValues()
         With OldData
@@ -73,7 +72,6 @@ Public Class View
         Next
         cmdUpdate.Visible = True
         cmdCancel.Visible = True
-
     End Sub
     Private Sub DisableControls()
         Dim c As Control
@@ -94,11 +92,9 @@ Public Class View
         Next
         cmdUpdate.Visible = False
         cmdCancel.Visible = False
-
     End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
         ClearFields()
-
         RefreshCombos()
         Dim reader As MySqlDataReader
         Dim table As New DataTable
@@ -159,7 +155,6 @@ Public Class View
         Dim bolMissingField As Boolean
         bolMissingField = False
         Dim c As Control
-        Dim colMissingField As Color = ColorTranslator.FromHtml("#75E6FF")
         For Each c In pnlViewControls.Controls
             Select Case True
                 Case TypeOf c Is TextBox
@@ -276,7 +271,6 @@ Public Class View
     End Sub
     Private Sub DeleteDeviceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteDeviceToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub
-
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
             Dim blah2 = MsgBox(DeleteDevice(CurrentDevice.strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
@@ -285,43 +279,33 @@ Public Class View
             Exit Sub
         End If
     End Sub
-
     Private Sub txtAssetTag_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag_View_REQ.TextChanged
         If bolCheckFields Then CheckFields()
     End Sub
-
     Private Sub txtDescription_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtDescription_View_REQ.TextChanged
         If bolCheckFields Then CheckFields()
     End Sub
-
     Private Sub cmbEquipType_View_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbEquipType_View_REQ.SelectedIndexChanged
         If bolCheckFields Then CheckFields()
     End Sub
-
     Private Sub txtSerial_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtSerial_View_REQ.TextChanged
         If bolCheckFields Then CheckFields()
     End Sub
-
     Private Sub cmbLocation_View_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbLocation_View_REQ.SelectedIndexChanged
         If bolCheckFields Then CheckFields()
     End Sub
-
     Private Sub cmbOSVersion_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbOSVersion_REQ.SelectedIndexChanged
         If bolCheckFields Then CheckFields()
     End Sub
-
     Private Sub cmbStatus_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbStatus_REQ.SelectedIndexChanged
         If bolCheckFields Then CheckFields()
     End Sub
-
     Private Sub txtCurUser_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser_View_REQ.TextChanged
         If bolCheckFields Then CheckFields()
     End Sub
-
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
         If bolCheckFields Then CheckFields()
     End Sub
-
     Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
         bolCheckFields = False
         ClearFields()

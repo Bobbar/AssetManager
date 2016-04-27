@@ -1,10 +1,6 @@
 ﻿Imports System.Drawing.Text
 Public NotInheritable Class SplashScreen
-
     Private Sub SplashScreen1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-
-
-
         Me.FormBorderStyle = FormBorderStyle.None
         'Me.Height = 300
         'Me.Width = 400
@@ -20,21 +16,11 @@ Public NotInheritable Class SplashScreen
         p.CloseFigure()
         Me.Region = New Region(p)
         ' Me.BackColor = Color.Red
-
-
-
-
-
-
-
         '    Version.Text = System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.Minor, My.Application.Info.Version.Build, My.Application.Info.Version.Revision)
         Version.Text = My.Application.Info.Version.ToString 'System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.MajorRevision, My.Application.Info.Version.Minor)
         'Copyright info
         Copyright.Text = My.Application.Info.Copyright
-
-
     End Sub
     Private Sub SplashScreen1_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
-
     End Sub
 End Class

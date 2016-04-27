@@ -36,9 +36,10 @@ Partial Class UpdateDev
         Me.GroupBox1.Controls.Add(Me.txtUpdate_Note)
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Controls.Add(Me.cmbUpdate_ChangeType)
+        Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(514, 275)
+        Me.GroupBox1.Size = New System.Drawing.Size(495, 275)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "More Info."
@@ -55,9 +56,9 @@ Partial Class UpdateDev
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(34, 91)
+        Me.Label2.Location = New System.Drawing.Point(34, 88)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(38, 13)
+        Me.Label2.Size = New System.Drawing.Size(47, 16)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Notes:"
         '
@@ -73,25 +74,25 @@ Partial Class UpdateDev
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(116, 43)
+        Me.Label1.Location = New System.Drawing.Point(116, 50)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(71, 13)
+        Me.Label1.Size = New System.Drawing.Size(90, 16)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Change Type"
         '
         'cmbUpdate_ChangeType
         '
         Me.cmbUpdate_ChangeType.FormattingEnabled = True
-        Me.cmbUpdate_ChangeType.Location = New System.Drawing.Point(193, 40)
+        Me.cmbUpdate_ChangeType.Location = New System.Drawing.Point(212, 47)
         Me.cmbUpdate_ChangeType.Name = "cmbUpdate_ChangeType"
-        Me.cmbUpdate_ChangeType.Size = New System.Drawing.Size(144, 21)
+        Me.cmbUpdate_ChangeType.Size = New System.Drawing.Size(144, 24)
         Me.cmbUpdate_ChangeType.TabIndex = 0
         '
         'UpdateDev
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(538, 296)
+        Me.ClientSize = New System.Drawing.Size(519, 299)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

@@ -5,7 +5,6 @@ Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
 Public Class AssetManager
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
         Logger("Starting AssetManager...")
         Status("Loading...")
         SplashScreen.Show()
@@ -13,7 +12,6 @@ Public Class AssetManager
         Logger("Enabling Double-Buffered DataGrid...")
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         Status("Loading Indexes...")
-
         BuildIndexes()
         Status("Checking Access Level...")
         GetUserAccess()
@@ -25,13 +23,11 @@ Public Class AssetManager
         Status("Ready!")
         Thread.Sleep(2000)
         SplashScreen.Hide()
-
         Me.Show()
     End Sub
     Public Sub Status(Text As String)
         SplashScreen.lblStatus.Text = Text
         SplashScreen.Refresh()
-
     End Sub
     Public Sub CopyDefaultCellStyles()
         View.DataGridHistory.DefaultCellStyle = ResultGrid.DefaultCellStyle
@@ -57,18 +53,15 @@ Public Class AssetManager
         ResultGrid.DataSource = Nothing
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        cn_global.Close()
+        EndProgram()
     End Sub
     Private SearchValues As Device_Info
     Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs)
-
     End Sub
     Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click
         Waiting()
         ShowAll()
         DoneWaiting()
-
-
     End Sub
     Private Sub ShowAll()
         Dim reader As MySqlDataReader
@@ -77,10 +70,8 @@ Public Class AssetManager
         Dim strQry = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
         Dim cmd As New MySqlCommand(strQry, cn_global)
         reader = cmd.ExecuteReader
-
         With reader
             Do While .Read()
-
                 Dim Results As Device_Info
                 Results.strCurrentUser = !dev_cur_user
                 Results.strAssetTag = !dev_asset_tag
@@ -91,7 +82,6 @@ Public Class AssetManager
                 Results.strGUID = !dev_UID
                 Results.strEqType = !dev_eq_type
                 AddToResults(Results)
-
             Loop
         End With
         SendToGrid(ResultGrid, SearchResults)
@@ -141,7 +131,6 @@ Public Class AssetManager
         Waiting()
         DynamicSearch()
         DoneWaiting()
-
     End Sub
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         Dim reader As MySqlDataReader
@@ -177,7 +166,6 @@ Public Class AssetManager
         End With
         SendToGrid(ResultGrid, SearchResults)
         cn_global.Close()
-
     End Sub
     Private Sub Button2_Click(sender As Object, e As EventArgs)
         Clear_All()
@@ -186,12 +174,10 @@ Public Class AssetManager
         AddNew.Show()
     End Sub
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
-
         Waiting()
         View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
         View.Show()
         DoneWaiting()
-
     End Sub
     Private Sub RefreshCombos()
         FillEquipTypeCombo()
@@ -234,31 +220,22 @@ Public Class AssetManager
             AddNew.cmbStatus_REQ.Items.Insert(i, StatusType(i).strLong)
         Next
     End Sub
-
     Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
-
     End Sub
-
     Private Sub ViewSelectedToolStripMenuItem_Click(sender As Object, e As EventArgs)
         View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
         View.Show()
     End Sub
-
     Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
         View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
         View.Show()
     End Sub
     Public Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
-
-
-
     End Sub
     Public Sub DoneWaiting()
         Me.Cursor = Cursors.Default
-
     End Sub
-
     Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub
         AddNew.Show()

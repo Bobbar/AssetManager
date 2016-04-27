@@ -17,7 +17,6 @@ Public Class AddNew
         GetDBValues()
         cn_global.Open()
         Dim strSqlQry1 = "INSERT INTO devices (dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user) VALUES ('" & Device.strDescription & "','" & Device.strLocation & "','" & Device.strCurrentUser & "','" & Device.strSerial & "','" & Device.strAssetTag & "','" & Device.dtPurchaseDate & "','" & Device.strReplaceYear & "','" & Device.strEqType & "','" & Device.strOSVersion & "','" & Device.strStatus & "','" & strLocalUser & "')"
-        'Debug.Print(strSqlQry1)
         Dim cmd As New MySqlCommand
         cmd.Connection = cn_global
         cmd.CommandText = strSqlQry1
@@ -44,7 +43,6 @@ errs:
         Dim bolMissingField As Boolean
         bolMissingField = False
         Dim c As Control
-
         For Each c In GroupBox1.Controls
             Select Case True
                 Case TypeOf c Is TextBox

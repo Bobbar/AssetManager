@@ -422,7 +422,6 @@ Partial Class View
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem

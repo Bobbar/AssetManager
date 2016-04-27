@@ -18,7 +18,6 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\zh-Hans\Microsoft.SqlServer.Type
 C:\GitHub\AssetManager\AssetManager\bin\Release\zh-Hant\Microsoft.SqlServer.Types.resources.dll
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AssetManager.resources
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreen1.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.UpdateDev.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Resources.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View.resources
@@ -27,3 +26,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbproj.GenerateReso
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreen.resources

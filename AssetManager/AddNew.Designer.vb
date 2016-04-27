@@ -90,7 +90,7 @@ Partial Class AddNew
         Me.cmdClear.Location = New System.Drawing.Point(814, 253)
         Me.cmdClear.Name = "cmdClear"
         Me.cmdClear.Size = New System.Drawing.Size(97, 23)
-        Me.cmdClear.TabIndex = 48
+        Me.cmdClear.TabIndex = 13
         Me.cmdClear.Text = "Clear"
         Me.cmdClear.UseVisualStyleBackColor = True
         '
@@ -111,7 +111,7 @@ Partial Class AddNew
         Me.cmbStatus_REQ.Location = New System.Drawing.Point(789, 39)
         Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
         Me.cmbStatus_REQ.Size = New System.Drawing.Size(144, 24)
-        Me.cmbStatus_REQ.TabIndex = 46
+        Me.cmbStatus_REQ.TabIndex = 5
         '
         'Label10
         '
@@ -130,7 +130,7 @@ Partial Class AddNew
         Me.cmbOSType_REQ.Location = New System.Drawing.Point(628, 95)
         Me.cmbOSType_REQ.Name = "cmbOSType_REQ"
         Me.cmbOSType_REQ.Size = New System.Drawing.Size(144, 24)
-        Me.cmbOSType_REQ.TabIndex = 44
+        Me.cmbOSType_REQ.TabIndex = 9
         '
         'Label9
         '
@@ -148,7 +148,7 @@ Partial Class AddNew
         Me.txtPO.Location = New System.Drawing.Point(789, 97)
         Me.txtPO.Name = "txtPO"
         Me.txtPO.Size = New System.Drawing.Size(122, 22)
-        Me.txtPO.TabIndex = 42
+        Me.txtPO.TabIndex = 10
         '
         'Label8
         '
@@ -167,7 +167,7 @@ Partial Class AddNew
         Me.cmbEquipType_REQ.Location = New System.Drawing.Point(628, 39)
         Me.cmbEquipType_REQ.Name = "cmbEquipType_REQ"
         Me.cmbEquipType_REQ.Size = New System.Drawing.Size(144, 24)
-        Me.cmbEquipType_REQ.TabIndex = 40
+        Me.cmbEquipType_REQ.TabIndex = 4
         '
         'Label7
         '
@@ -187,7 +187,7 @@ Partial Class AddNew
         Me.txtNotes.Multiline = True
         Me.txtNotes.Name = "txtNotes"
         Me.txtNotes.Size = New System.Drawing.Size(330, 69)
-        Me.txtNotes.TabIndex = 38
+        Me.txtNotes.TabIndex = 11
         '
         'cmdAdd
         '
@@ -195,7 +195,7 @@ Partial Class AddNew
         Me.cmdAdd.Location = New System.Drawing.Point(419, 232)
         Me.cmdAdd.Name = "cmdAdd"
         Me.cmdAdd.Size = New System.Drawing.Size(97, 44)
-        Me.cmdAdd.TabIndex = 37
+        Me.cmdAdd.TabIndex = 12
         Me.cmdAdd.Text = "Add"
         Me.cmdAdd.UseVisualStyleBackColor = True
         '
@@ -215,7 +215,7 @@ Partial Class AddNew
         Me.txtReplaceYear.Location = New System.Drawing.Point(516, 39)
         Me.txtReplaceYear.Name = "txtReplaceYear"
         Me.txtReplaceYear.Size = New System.Drawing.Size(88, 22)
-        Me.txtReplaceYear.TabIndex = 35
+        Me.txtReplaceYear.TabIndex = 3
         Me.txtReplaceYear.Text = "txtReplaceYear"
         '
         'lbPurchaseDate
@@ -236,7 +236,7 @@ Partial Class AddNew
         Me.dtPurchaseDate_REQ.Location = New System.Drawing.Point(435, 97)
         Me.dtPurchaseDate_REQ.Name = "dtPurchaseDate_REQ"
         Me.dtPurchaseDate_REQ.Size = New System.Drawing.Size(169, 22)
-        Me.dtPurchaseDate_REQ.TabIndex = 33
+        Me.dtPurchaseDate_REQ.TabIndex = 8
         Me.dtPurchaseDate_REQ.Value = New Date(2016, 4, 14, 0, 0, 0, 0)
         '
         'Label5
@@ -256,7 +256,7 @@ Partial Class AddNew
         Me.cmbLocation_REQ.Location = New System.Drawing.Point(321, 39)
         Me.cmbLocation_REQ.Name = "cmbLocation_REQ"
         Me.cmbLocation_REQ.Size = New System.Drawing.Size(171, 24)
-        Me.cmbLocation_REQ.TabIndex = 31
+        Me.cmbLocation_REQ.TabIndex = 2
         Me.cmbLocation_REQ.Text = "cmbLocation"
         '
         'Label4
@@ -285,7 +285,7 @@ Partial Class AddNew
         Me.txtDescription_REQ.Location = New System.Drawing.Point(156, 97)
         Me.txtDescription_REQ.Name = "txtDescription_REQ"
         Me.txtDescription_REQ.Size = New System.Drawing.Size(251, 22)
-        Me.txtDescription_REQ.TabIndex = 28
+        Me.txtDescription_REQ.TabIndex = 7
         Me.txtDescription_REQ.Text = "Description"
         '
         'txtCurUser_REQ
@@ -294,7 +294,7 @@ Partial Class AddNew
         Me.txtCurUser_REQ.Location = New System.Drawing.Point(156, 39)
         Me.txtCurUser_REQ.Name = "txtCurUser_REQ"
         Me.txtCurUser_REQ.Size = New System.Drawing.Size(142, 22)
-        Me.txtCurUser_REQ.TabIndex = 27
+        Me.txtCurUser_REQ.TabIndex = 1
         Me.txtCurUser_REQ.Text = "txtCurUser"
         '
         'Label2
@@ -323,7 +323,7 @@ Partial Class AddNew
         Me.txtAssetTag_REQ.Location = New System.Drawing.Point(12, 99)
         Me.txtAssetTag_REQ.Name = "txtAssetTag_REQ"
         Me.txtAssetTag_REQ.Size = New System.Drawing.Size(114, 22)
-        Me.txtAssetTag_REQ.TabIndex = 24
+        Me.txtAssetTag_REQ.TabIndex = 6
         Me.txtAssetTag_REQ.Text = "txtAssetTag"
         '
         'txtSerial_REQ
@@ -332,7 +332,7 @@ Partial Class AddNew
         Me.txtSerial_REQ.Location = New System.Drawing.Point(12, 39)
         Me.txtSerial_REQ.Name = "txtSerial_REQ"
         Me.txtSerial_REQ.Size = New System.Drawing.Size(115, 22)
-        Me.txtSerial_REQ.TabIndex = 23
+        Me.txtSerial_REQ.TabIndex = 0
         Me.txtSerial_REQ.Text = "txtSerial"
         '
         'AddNew
@@ -345,11 +345,11 @@ Partial Class AddNew
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "AddNew"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Add New Device"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label10 As Label

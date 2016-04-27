@@ -104,9 +104,7 @@ Partial Class SplashScreen
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
-
     Friend WithEvents ApplicationTitle As Label
     Friend WithEvents Version As Label
     Friend WithEvents Copyright As Label
