@@ -2,7 +2,8 @@
 Imports MySql.Data.MySqlClient
 Public Module DBFunctions
     Public ReadOnly Property strLocalUser As String = Environment.UserName
-    Private MySQLConnectString As String = "server=df8xlbs1;port=3306;uid=asset_manager_user;pwd=A553tP455;database=asset_manager"
+    'Private MySQLConnectString As String = "server=df8xlbs1;port=3306;uid=asset_manager_user;pwd=A553tP455;database=asset_manager"
+    Private MySQLConnectString As String = "server=10.10.80.232;uid=asset_mgr_usr;pwd=A553tP455;database=asset_manager" 'centos test
     Public cn_global As New MySqlConnection(MySQLConnectString)
     Public cn_global2 As New MySqlConnection(MySQLConnectString)
     Public Const strDBDateTimeFormat As String = "YYYY-MM-DD hh:mm:ss"
@@ -130,20 +131,22 @@ errs:
     End Function
     Public Function GetDBValue(ByVal IndexType As String, ByVal index As Integer) As Object
         On Error GoTo errs
-        Select Case IndexType
-            Case ComboType.Location
-                Return Locations(index).strShort
-            Case ComboType.ChangeType
-                Return ChangeType(index).strShort
-            Case ComboType.EquipType
-                Return EquipType(index).strShort
-            Case ComboType.OSType
-                Return OSType(index).strShort
-            Case ComboType.StatusType
-                Return StatusType(index).strShort
-            Case Else
-                Return Nothing
-        End Select
+        If index > -1 Then
+            Select Case IndexType
+                Case ComboType.Location
+                    Return Locations(index).strShort
+                Case ComboType.ChangeType
+                    Return ChangeType(index).strShort
+                Case ComboType.EquipType
+                    Return EquipType(index).strShort
+                Case ComboType.OSType
+                    Return OSType(index).strShort
+                Case ComboType.StatusType
+                    Return StatusType(index).strShort
+                Case Else
+                    Return Nothing
+            End Select
+        End If
         Exit Function
 errs:
         Return Nothing
@@ -180,6 +183,7 @@ errs:
         Next
     End Function
     Public Sub BuildLocationIndex()
+        On Error GoTo errs
         Dim reader As MySqlDataReader
         cn_global.Open()
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
@@ -198,8 +202,16 @@ errs:
             Loop
         End With
         cn_global.Close()
+        Exit Sub
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Sub
     Public Sub BuildChangeTypeIndex()
+        On Error GoTo errs
         Dim reader As MySqlDataReader
         cn_global.Open()
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
@@ -218,8 +230,16 @@ errs:
             Loop
         End With
         cn_global.Close()
+        Exit Sub
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Sub
     Public Sub BuildEquipTypeIndex()
+        On Error GoTo errs
         Dim reader As MySqlDataReader
         cn_global.Open()
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
@@ -238,8 +258,16 @@ errs:
             Loop
         End With
         cn_global.Close()
+        Exit Sub
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Sub
     Public Sub BuildOSTypeIndex()
+        On Error GoTo errs
         Dim reader As MySqlDataReader
         cn_global.Open()
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
@@ -258,8 +286,16 @@ errs:
             Loop
         End With
         cn_global.Close()
+        Exit Sub
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Sub
     Public Sub BuildStatusTypeIndex()
+        On Error GoTo errs
         Dim reader As MySqlDataReader
         cn_global.Open()
         Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
@@ -278,6 +314,13 @@ errs:
             Loop
         End With
         cn_global.Close()
+        Exit Sub
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Sub
     Public Function GetShortEquipType(ByVal index As Integer) As String
         On Error GoTo errs
@@ -286,11 +329,32 @@ errs:
 errs:
         Return ""
     End Function
+    Public Function CheckConnection() As Boolean
+        On Error GoTo errs
+        Dim ds As New DataSet
+        Dim conn As MySqlConnection = cn_global
+        Dim da As New MySqlDataAdapter
+        Dim rows As Integer
+        conn.Open()
+        da.SelectCommand = New MySqlCommand("SHOW STATUS")
+        da.SelectCommand.Connection = conn
+        da.Fill(ds)
+        conn.Close()
+        rows = ds.Tables(0).Rows.Count
+        If rows > 0 Then
+            Return True
+        Else
+            Return False
+        End If
+        Exit Function
+errs:
+        Return False
+    End Function
     Public Sub UpdateDevice()
         On Error GoTo errs
         Dim rows As Integer
         cn_global.Open()
-        Dim strSQLQry1 = "UPDATE devices set dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
+        Dim strSQLQry1 = "UPDATE devices Set dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
         Dim cmd As New MySqlCommand
         cmd.Connection = cn_global
         cmd.CommandText = strSQLQry1

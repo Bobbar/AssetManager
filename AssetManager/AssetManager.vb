@@ -8,6 +8,13 @@ Public Class AssetManager
         Logger("Starting AssetManager...")
         Status("Loading...")
         SplashScreen.Show()
+        Status("Checking Server Connection...")
+        If CheckConnection() Then
+            'do nut-zing
+        Else
+            Dim blah = MsgBox("Error connecting to server!", vbOKOnly + vbCritical, "Could not connect")
+            EndProgram()
+        End If
         Dim userFullName As String = UserPrincipal.Current.DisplayName
         Logger("Enabling Double-Buffered DataGrid...")
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
@@ -64,6 +71,7 @@ Public Class AssetManager
         DoneWaiting()
     End Sub
     Private Sub ShowAll()
+        On Error GoTo errs
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         cn_global.Open()
@@ -86,6 +94,13 @@ Public Class AssetManager
         End With
         SendToGrid(ResultGrid, SearchResults)
         cn_global.Close()
+        Exit Sub
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Sub
     Private Sub SendToGrid(ByRef Grid As DataGridView, Data() As Device_Info)
         Dim table As New DataTable
@@ -133,6 +148,7 @@ Public Class AssetManager
         DoneWaiting()
     End Sub
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
+        On Error GoTo errs
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         GetSearchDBValues()
@@ -146,7 +162,6 @@ Public Class AssetManager
         If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
-        Debug.Print(strQry)
         cn_global.Open()
         Dim cmd As New MySqlCommand(strQry, cn_global)
         reader = cmd.ExecuteReader
@@ -166,6 +181,13 @@ Public Class AssetManager
         End With
         SendToGrid(ResultGrid, SearchResults)
         cn_global.Close()
+        Exit Sub
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Sub
     Private Sub Button2_Click(sender As Object, e As EventArgs)
         Clear_All()
@@ -177,6 +199,7 @@ Public Class AssetManager
         Waiting()
         View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
         View.Show()
+        View.Activate()
         DoneWaiting()
     End Sub
     Private Sub RefreshCombos()

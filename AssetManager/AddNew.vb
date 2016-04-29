@@ -28,7 +28,7 @@ Public Class AddNew
         If rows = 2 Then 'ExecuteQuery returns the number of rows affected. We can check this to make sure the qry completed successfully.
             Dim blah = MsgBox("New Device Added", vbOKOnly + vbInformation, "Complete")
         Else
-            Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
+            Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
         End If
         ClearAll()
         Exit Sub

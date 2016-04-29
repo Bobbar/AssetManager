@@ -24,10 +24,12 @@ Module OtherFunctions
     Public Function ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
         Dim strErrMsg As String
         strErrMsg = "ERROR:  MethodName=" & strOrigSub & " - " & lngErrNum & " - " & strErrDescription
+        Logger(strErrMsg)
         Select Case lngErrNum
-            Case 0
+            Case 5
+                Return True
             Case Else 'unhandled errors
-                Logger(strErrMsg)
+
                 Dim blah = MsgBox("An unhandled error has occurred!" & vbCrLf & vbCrLf & "Message:" & vbCrLf & strErrMsg, vbOKOnly + vbCritical, "Yikes!")
                 Return False
         End Select

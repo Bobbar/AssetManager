@@ -8,7 +8,6 @@ Public Class View_Entry
         Dim table As New DataTable
         cn_global.Open()
         Dim strQry = "Select * FROM historical WHERE  hist_UID = '" & EntryUID & "'"
-        Debug.Print(strQry)
         Dim cmd As New MySqlCommand(strQry, cn_global)
         reader = cmd.ExecuteReader
         With reader

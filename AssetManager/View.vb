@@ -94,6 +94,7 @@ Public Class View
         cmdCancel.Visible = False
     End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
+        On Error GoTo errs
         ClearFields()
         RefreshCombos()
         Dim reader As MySqlDataReader
@@ -133,6 +134,13 @@ Public Class View
         DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
         DisableControls()
         DataGridHistory.AutoResizeColumns()
+        Exit Sub
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Sub
     Private Sub ModifyDevice()
         GetCurrentValues()
