@@ -27,6 +27,7 @@ Partial Class View
         Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.pnlViewControls = New System.Windows.Forms.Panel()
+        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.txtGUID = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -52,7 +53,6 @@ Partial Class View
         Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
-        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
@@ -139,6 +139,15 @@ Partial Class View
         Me.pnlViewControls.Name = "pnlViewControls"
         Me.pnlViewControls.Size = New System.Drawing.Size(932, 180)
         Me.pnlViewControls.TabIndex = 38
+        '
+        'cmdCancel
+        '
+        Me.cmdCancel.Location = New System.Drawing.Point(759, 142)
+        Me.cmdCancel.Name = "cmdCancel"
+        Me.cmdCancel.Size = New System.Drawing.Size(169, 24)
+        Me.cmdCancel.TabIndex = 42
+        Me.cmdCancel.Text = "Cancel"
+        Me.cmdCancel.UseVisualStyleBackColor = True
         '
         'Label10
         '
@@ -391,15 +400,6 @@ Partial Class View
         Me.DataGridHistory.Size = New System.Drawing.Size(938, 260)
         Me.DataGridHistory.TabIndex = 39
         '
-        'cmdCancel
-        '
-        Me.cmdCancel.Location = New System.Drawing.Point(759, 142)
-        Me.cmdCancel.Name = "cmdCancel"
-        Me.cmdCancel.Size = New System.Drawing.Size(169, 24)
-        Me.cmdCancel.TabIndex = 42
-        Me.cmdCancel.Text = "Cancel"
-        Me.cmdCancel.UseVisualStyleBackColor = True
-        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -422,6 +422,7 @@ Partial Class View
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem

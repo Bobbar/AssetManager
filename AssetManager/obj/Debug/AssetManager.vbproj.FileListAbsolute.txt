@@ -53,4 +53,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AssetManager.resource
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.UpdateDev.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Entry.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.SplashScreen.resources
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.ReportView.resources

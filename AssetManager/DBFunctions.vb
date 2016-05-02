@@ -8,6 +8,8 @@ Public Module DBFunctions
     Public Const strDBDateFormat As String = "yyyy-MM-dd"
     Public Const strCommMessage As String = "Communicating..."
     Public Const strLoadingGridMessage As String = "Building Grid..."
+    Public strLastQry As String
+
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String

@@ -21,6 +21,7 @@ Public Class View
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         AssetManager.CopyDefaultCellStyles()
         'ClearFields()
+
     End Sub
     Private Sub GetCurrentValues()
         With OldData

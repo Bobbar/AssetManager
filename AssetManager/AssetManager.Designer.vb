@@ -47,6 +47,10 @@ Partial Class AssetManager
         Me.cmdSearch = New System.Windows.Forms.Button()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.YearsSincePurchaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -66,11 +70,11 @@ Partial Class AssetManager
         '
         'EditToolStripMenuItem
         '
+        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.ReportsToolStripMenuItem})
         Me.EditToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(86, 20)
-        Me.EditToolStripMenuItem.Text = "Add New"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
+        Me.EditToolStripMenuItem.Text = "Actions"
         '
         'GroupBox1
         '
@@ -78,6 +82,7 @@ Partial Class AssetManager
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.GroupBox2)
         Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.cmbShowAll)
@@ -327,6 +332,36 @@ Partial Class AssetManager
         Me.StatusLabel.Size = New System.Drawing.Size(87, 17)
         Me.StatusLabel.Text = "%StatusLabel%"
         '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(886, 82)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(91, 25)
+        Me.Button2.TabIndex = 32
+        Me.Button2.Text = "Button2"
+        Me.Button2.UseVisualStyleBackColor = True
+        Me.Button2.Visible = False
+        '
+        'NewToolStripMenuItem
+        '
+        Me.NewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.NewToolStripMenuItem.Text = "New Device"
+        '
+        'ReportsToolStripMenuItem
+        '
+        Me.ReportsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.YearsSincePurchaseToolStripMenuItem})
+        Me.ReportsToolStripMenuItem.Name = "ReportsToolStripMenuItem"
+        Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ReportsToolStripMenuItem.Text = "Reports"
+        '
+        'YearsSincePurchaseToolStripMenuItem
+        '
+        Me.YearsSincePurchaseToolStripMenuItem.Name = "YearsSincePurchaseToolStripMenuItem"
+        Me.YearsSincePurchaseToolStripMenuItem.Size = New System.Drawing.Size(190, 22)
+        Me.YearsSincePurchaseToolStripMenuItem.Text = "Years Since Purchase"
+        '
         'AssetManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -378,4 +413,8 @@ Partial Class AssetManager
     Friend WithEvents ViewToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
+    Friend WithEvents Button2 As Button
+    Friend WithEvents NewToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ReportsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents YearsSincePurchaseToolStripMenuItem As ToolStripMenuItem
 End Class

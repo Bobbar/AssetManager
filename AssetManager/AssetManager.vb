@@ -76,6 +76,7 @@ Public Class AssetManager
         Dim table As New DataTable
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim strQry = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
+        strLastQry = strQry
         Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
         With reader
@@ -165,6 +166,8 @@ errs:
         If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
+        strLastQry = strQry
+
         Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
         With reader
@@ -263,8 +266,7 @@ errs:
         Me.Cursor = Cursors.Default
     End Sub
     Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditToolStripMenuItem.Click
-        If Not CheckForAdmin() Then Exit Sub
-        AddNew.Show()
+
     End Sub
     Private Sub Button2_Click_1(sender As Object, e As EventArgs)
         Debug.Print(vbCrLf)
@@ -272,5 +274,20 @@ errs:
         For i = 0 To UBound(CurrentConnections)
             Debug.Print(i & " - " & CurrentConnections(i).ConnectionID & " = " & CurrentConnections(i).DBConnection.State)
         Next
+    End Sub
+
+    Private Sub Button2_Click_2(sender As Object, e As EventArgs) Handles Button2.Click
+
+        ReportView.Show()
+
+    End Sub
+
+    Private Sub YearsSincePurchaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles YearsSincePurchaseToolStripMenuItem.Click
+        ReportView.Show()
+    End Sub
+
+    Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewToolStripMenuItem.Click
+        If Not CheckForAdmin() Then Exit Sub
+        AddNew.Show()
     End Sub
 End Class
