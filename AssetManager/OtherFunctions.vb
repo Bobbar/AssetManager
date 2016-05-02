@@ -27,9 +27,11 @@ Module OtherFunctions
         Logger(strErrMsg)
         Select Case lngErrNum
             Case 5
+                StatusBar("Connection Lost!")
+                Dim blah = MsgBox("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbCritical, "Connection Lost")
                 Return True
             Case Else 'unhandled errors
-
+                StatusBar("ERROR")
                 Dim blah = MsgBox("An unhandled error has occurred!" & vbCrLf & vbCrLf & "Message:" & vbCrLf & strErrMsg, vbOKOnly + vbCritical, "Yikes!")
                 Return False
         End Select
@@ -37,7 +39,7 @@ Module OtherFunctions
     End Function
     Public Sub EndProgram() 'I will add more stuff to this later.
         Logger("Ending Program...")
-        cn_global.Close()
+        'cn_global.Close()
         End
     End Sub
 End Module

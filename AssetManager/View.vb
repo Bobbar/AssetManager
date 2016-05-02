@@ -97,11 +97,11 @@ Public Class View
         On Error GoTo errs
         ClearFields()
         RefreshCombos()
+        Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
-        cn_global.Open()
         Dim strQry = "Select * FROM devices, historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC"
-        Dim cmd As New MySqlCommand(strQry, cn_global)
+        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
         table.Columns.Add("Date", GetType(String))
         table.Columns.Add("Action Type", GetType(String))
@@ -129,7 +129,7 @@ Public Class View
                 table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
             Loop
         End With
-        cn_global.Close()
+        CloseConnection(ConnID)
         DataGridHistory.DataSource = table
         DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
         DisableControls()

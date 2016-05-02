@@ -74,11 +74,12 @@ Public Class AssetManager
         On Error GoTo errs
         Dim reader As MySqlDataReader
         Dim table As New DataTable
-        cn_global.Open()
+        Dim ConnID As String = Guid.NewGuid.ToString
         Dim strQry = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
-        Dim cmd As New MySqlCommand(strQry, cn_global)
+        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
         With reader
+            StatusBar(strCommMessage)
             Do While .Read()
                 Dim Results As Device_Info
                 Results.strCurrentUser = !dev_cur_user
@@ -93,7 +94,7 @@ Public Class AssetManager
             Loop
         End With
         SendToGrid(ResultGrid, SearchResults)
-        cn_global.Close()
+        CloseConnection(ConnID)
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -103,6 +104,7 @@ errs:
         End If
     End Sub
     Private Sub SendToGrid(ByRef Grid As DataGridView, Data() As Device_Info)
+        StatusBar(strLoadingGridMessage)
         Dim table As New DataTable
         Dim i As Integer
         table.Columns.Add("User", GetType(String))
@@ -151,6 +153,7 @@ errs:
         On Error GoTo errs
         Dim reader As MySqlDataReader
         Dim table As New DataTable
+        Dim ConnID As String = Guid.NewGuid.ToString
         GetSearchDBValues()
         Dim strStartQry = "SELECT * FROM devices WHERE "
         Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
@@ -162,10 +165,10 @@ errs:
         If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
-        cn_global.Open()
-        Dim cmd As New MySqlCommand(strQry, cn_global)
+        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
         With reader
+            StatusBar(strCommMessage)
             Do While .Read()
                 Dim Results As Device_Info
                 Results.strCurrentUser = !dev_cur_user
@@ -180,11 +183,11 @@ errs:
             Loop
         End With
         SendToGrid(ResultGrid, SearchResults)
-        cn_global.Close()
+        CloseConnection(ConnID)
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
+            Exit Sub
         Else
             EndProgram()
         End If
@@ -262,5 +265,12 @@ errs:
     Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub
         AddNew.Show()
+    End Sub
+    Private Sub Button2_Click_1(sender As Object, e As EventArgs)
+        Debug.Print(vbCrLf)
+        Dim i As Integer
+        For i = 0 To UBound(CurrentConnections)
+            Debug.Print(i & " - " & CurrentConnections(i).ConnectionID & " = " & CurrentConnections(i).DBConnection.State)
+        Next
     End Sub
 End Class
