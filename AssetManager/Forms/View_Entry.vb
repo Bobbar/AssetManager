@@ -29,6 +29,7 @@ Public Class View_Entry
                 txtNotes.Text = !hist_notes
                 txtStatus.Text = GetHumanValue(ComboType.StatusType,!hist_status)
                 txtEntryGUID.Text = !hist_uid
+                chkTrackable.Checked = CBool(!hist_trackable)
                 Me.Text = Me.Text + " - " &!hist_action_datetime
             Loop
         End With

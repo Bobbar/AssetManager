@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>5974.5.2016.295</AssemblyVersion>
+    <AssemblyVersion>5974.5.2016.315</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -107,16 +107,16 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddNew.Designer.vb">
+    <Compile Include="Forms\AddNew.Designer.vb">
       <DependentUpon>AddNew.vb</DependentUpon>
     </Compile>
-    <Compile Include="AddNew.vb">
+    <Compile Include="Forms\AddNew.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AssetManager.vb">
+    <Compile Include="Forms\AssetManager.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AssetManager.Designer.vb">
+    <Compile Include="Forms\AssetManager.Designer.vb">
       <DependentUpon>AssetManager.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
@@ -125,30 +125,30 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>asset_managerDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="DataImport.vb" />
-    <Compile Include="DBFunctions.vb" />
-    <Compile Include="ExtendedMethods.vb" />
+    <Compile Include="Modules\DataImport.vb" />
+    <Compile Include="Modules\DBFunctions.vb" />
+    <Compile Include="Modules\ExtendedMethods.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ReportView.Designer.vb">
+    <Compile Include="Forms\ReportView.Designer.vb">
       <DependentUpon>ReportView.vb</DependentUpon>
     </Compile>
-    <Compile Include="ReportView.vb">
+    <Compile Include="Forms\ReportView.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SplashScreen1.Designer.vb">
+    <Compile Include="Forms\SplashScreen1.Designer.vb">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
     </Compile>
-    <Compile Include="SplashScreen1.vb">
+    <Compile Include="Forms\SplashScreen1.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UpdateDevice.Designer.vb">
+    <Compile Include="Forms\UpdateDevice.Designer.vb">
       <DependentUpon>UpdateDevice.vb</DependentUpon>
     </Compile>
-    <Compile Include="UpdateDevice.vb">
+    <Compile Include="Forms\UpdateDevice.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -161,35 +161,35 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="OtherFunctions.vb" />
-    <Compile Include="View.Designer.vb">
+    <Compile Include="Modules\OtherFunctions.vb" />
+    <Compile Include="Forms\View.Designer.vb">
       <DependentUpon>View.vb</DependentUpon>
     </Compile>
-    <Compile Include="View.vb">
+    <Compile Include="Forms\View.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View_Entry.Designer.vb">
+    <Compile Include="Forms\View_Entry.Designer.vb">
       <DependentUpon>View_Entry.vb</DependentUpon>
     </Compile>
-    <Compile Include="View_Entry.vb">
+    <Compile Include="Forms\View_Entry.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AddNew.resx">
+    <EmbeddedResource Include="Forms\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AssetManager.resx">
+    <EmbeddedResource Include="Forms\AssetManager.resx">
       <DependentUpon>AssetManager.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Report1.rdlc" />
-    <EmbeddedResource Include="ReportView.resx">
+    <EmbeddedResource Include="Forms\ReportView.resx">
       <DependentUpon>ReportView.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SplashScreen1.resx">
+    <EmbeddedResource Include="Forms\SplashScreen1.resx">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UpdateDevice.resx">
+    <EmbeddedResource Include="Forms\UpdateDevice.resx">
       <DependentUpon>UpdateDevice.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -198,10 +198,10 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="View.resx">
+    <EmbeddedResource Include="Forms\View.resx">
       <DependentUpon>View.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View_Entry.resx">
+    <EmbeddedResource Include="Forms\View_Entry.resx">
       <DependentUpon>View_Entry.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YearsSincePurchase.rdlc" />
@@ -245,6 +245,7 @@
   <ItemGroup>
     <Content Include="AssetManager.ico" />
     <Content Include="Resources\Add.png" />
+    <None Include="Resources\check-out.png" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <Content Include="Resources\inventory-small.fw.png" />

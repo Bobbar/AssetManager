@@ -33,7 +33,7 @@ Module OtherFunctions
         strErrMsg = "ERROR:  MethodName=" & strOrigSub & " - " & lngErrNum & " - " & strErrDescription
         Logger(strErrMsg)
         Select Case lngErrNum
-            Case 5
+            Case 1042
                 StatusBar("Connection Lost!")
                 Dim blah = MsgBox("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbCritical, "Connection Lost")
                 Return True

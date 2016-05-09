@@ -33,6 +33,7 @@ Public Module DBFunctions
         Public strPO As String
         Public strStatus As String
         Public strNote As String
+        Public bolTrackable As Boolean
         Public Historical As Hist_Info
     End Structure
     Public Structure Hist_Info
@@ -67,7 +68,7 @@ Public Module DBFunctions
         Public Const OSType As String = "OS_TYPE"
         Public Const StatusType As String = "STATUS_TYPE"
     End Class
-    Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String, ByVal Status As String)
+    Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String, ByVal Status As String, ByVal Trackable As Boolean)
         With CurrentDevice
             .strGUID = UID
             .strDescription = Description
@@ -81,34 +82,41 @@ Public Module DBFunctions
             .strOSVersion = OSVersion
             .strEqType = EQType
             .strStatus = Status
+            .bolTrackable = Trackable
         End With
     End Sub
     Public Function GetConnection(strGUID As String) As ConnectionData 'dynamically create new DB connections as needed
-        StatusBar("Connecting...")
-        Dim i As Integer
-        If CurrentConnections Is Nothing Then 'first connection since start. Make a new connection
-            ReDim CurrentConnections(0)
-            CurrentConnections(0).ConnectionID = strGUID
-            CurrentConnections(0).DBConnection = New MySqlConnection(MySQLConnectString)
-            CurrentConnections(0).DBConnection.Open()
-            Return CurrentConnections(0)
-        Else 'after first connection create more if needed. Reuse previously closed connections first
-            For i = 0 To UBound(CurrentConnections)
-                If CurrentConnections(i).DBConnection.State = 0 Then 'if we find a closed connection, reuse it
-                    CurrentConnections(i).ConnectionID = strGUID
-                    CurrentConnections(i).DBConnection.Open()
-                    Return CurrentConnections(i)
-                    Exit Function   'i'm pretty sure this is redundant. But I'm paranoid.
-                End If
-            Next
-            'if no unused connection were found, create a new one and return that one.
-            'might need to add more work here to cycle through the connections and choose the correct option. Instead of counting on a return to prevent the next step from occuring.
-            ReDim Preserve CurrentConnections(UBound(CurrentConnections) + 1)
-            CurrentConnections(UBound(CurrentConnections)).ConnectionID = strGUID
-            CurrentConnections(UBound(CurrentConnections)).DBConnection = New MySqlConnection(MySQLConnectString)
-            CurrentConnections(UBound(CurrentConnections)).DBConnection.Open()
-            Return CurrentConnections(UBound(CurrentConnections))
-        End If
+        Try
+            StatusBar("Connecting...")
+            Dim i As Integer
+            If CurrentConnections Is Nothing Then 'first connection since start. Make a new connection
+                ReDim CurrentConnections(0)
+                CurrentConnections(0).ConnectionID = strGUID
+                CurrentConnections(0).DBConnection = New MySqlConnection(MySQLConnectString)
+                CurrentConnections(0).DBConnection.Open()
+                Return CurrentConnections(0)
+            Else 'after first connection create more if needed. Reuse previously closed connections first
+                For i = 0 To UBound(CurrentConnections)
+                    If CurrentConnections(i).DBConnection.State = 0 Then 'if we find a closed connection, reuse it
+                        CurrentConnections(i).ConnectionID = strGUID
+                        CurrentConnections(i).DBConnection.Open()
+                        Return CurrentConnections(i)
+                        Exit Function   'i'm pretty sure this is redundant. But I'm paranoid.
+                    End If
+                Next
+                'if no unused connection were found, create a new one and return that one.
+                'might need to add more work here to cycle through the connections and choose the correct option. Instead of counting on a return to prevent the next step from occuring.
+                ReDim Preserve CurrentConnections(UBound(CurrentConnections) + 1)
+                CurrentConnections(UBound(CurrentConnections)).ConnectionID = strGUID
+                CurrentConnections(UBound(CurrentConnections)).DBConnection = New MySqlConnection(MySQLConnectString)
+                CurrentConnections(UBound(CurrentConnections)).DBConnection.Open()
+                Return CurrentConnections(UBound(CurrentConnections))
+            End If
+        Catch exError As MySqlException
+            ErrHandle(exError.Number, exError.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
+
+        End Try
     End Function
     Public Sub CloseConnection(strUID As String)
         StatusBar("Idle...")
@@ -453,12 +461,12 @@ errs:
         On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim rows As Integer
-        Dim strSQLQry1 = "UPDATE devices Set dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
+        Dim strSQLQry1 = "UPDATE devices Set dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(View.NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
         Dim cmd As New MySqlCommand
         cmd.Connection = GetConnection(ConnID).DBConnection
         cmd.CommandText = strSQLQry1
         rows = rows + cmd.ExecuteNonQuery()
-        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & View.NewData.strNote & "','" & View.NewData.strSerial & "','" & View.NewData.strDescription & "','" & View.NewData.strLocation & "','" & View.NewData.strCurrentUser & "','" & View.NewData.strAssetTag & "','" & View.NewData.dtPurchaseDate & "','" & View.NewData.strReplaceYear & "','" & View.NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & View.NewData.strEqType & "','" & View.NewData.strStatus & "')"
+        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & View.NewData.strNote & "','" & View.NewData.strSerial & "','" & View.NewData.strDescription & "','" & View.NewData.strLocation & "','" & View.NewData.strCurrentUser & "','" & View.NewData.strAssetTag & "','" & View.NewData.dtPurchaseDate & "','" & View.NewData.strReplaceYear & "','" & View.NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & View.NewData.strEqType & "','" & View.NewData.strStatus & "','" & Convert.ToInt32(View.NewData.bolTrackable) & "')"
         cmd.CommandText = strSqlQry2
         rows = rows + cmd.ExecuteNonQuery()
         CloseConnection(ConnID)

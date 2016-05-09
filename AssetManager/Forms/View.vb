@@ -34,6 +34,7 @@ Public Class View
             .strReplaceYear = Trim(txtReplacementYear_View.Text)
             .strOSVersion = GetDBValue(ComboType.OSType, cmbOSVersion_REQ.SelectedIndex)
             .strStatus = GetDBValue(ComboType.StatusType, cmbStatus_REQ.SelectedIndex)
+            .bolTrackable = chkTrackable.Checked
         End With
     End Sub
     Public Sub GetNewValues()
@@ -49,6 +50,7 @@ Public Class View
             .strOSVersion = GetDBValue(ComboType.OSType, cmbOSVersion_REQ.SelectedIndex)
             .strStatus = GetDBValue(ComboType.StatusType, cmbStatus_REQ.SelectedIndex)
             .strNote = UpdateDev.strNewNote
+            .bolTrackable = chkTrackable.Checked
         End With
     End Sub
     Private Sub EnableControls()
@@ -66,6 +68,8 @@ Public Class View
                 Case TypeOf c Is DateTimePicker
                     Dim dtp As DateTimePicker = c
                     dtp.Enabled = True
+                Case TypeOf c Is CheckBox
+                    c.Enabled = True
                 Case TypeOf c Is Label
                     'do nut-zing
             End Select
@@ -86,6 +90,8 @@ Public Class View
                 Case TypeOf c Is DateTimePicker
                     Dim dtp As DateTimePicker = c
                     dtp.Enabled = False
+                Case TypeOf c Is CheckBox
+                    c.Enabled = False
                 Case TypeOf c Is Label
                     'do nut-zing
             End Select
@@ -115,7 +121,7 @@ Public Class View
         table.Columns.Add("GUID", GetType(String))
         With reader
             Do While .Read()
-                CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status)
+                CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable))
                 txtAssetTag_View_REQ.Text = !dev_asset_tag
                 txtDescription_View_REQ.Text = !dev_description
                 cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType,!dev_eq_type)
@@ -127,6 +133,8 @@ Public Class View
                 cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.OSType,!dev_osversion)
                 cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
                 txtGUID.Text = !dev_UID
+                chkTrackable.Checked = CBool(!dev_trackable)
+                SetTracking(CBool(!dev_trackable))
                 table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_action_user,!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
             Loop
         End With
@@ -142,6 +150,31 @@ errs:
         Else
             EndProgram()
         End If
+    End Sub
+    Public Sub SetTracking(bolEnabled As Boolean)
+        If bolEnabled Then
+            'TrackingTab.Visible = True
+            'TrackingTab.Enabled = True
+            TrackingToolStripMenuItem.Visible = True
+            TabControl1.TabPages.Insert(1, TrackingTab)
+
+
+
+
+
+        Else
+            'TrackingTab.Enabled = False
+            'TrackingTab.Visible = False
+            TrackingToolStripMenuItem.Visible = False
+            TabControl1.TabPages.Remove(TrackingTab)
+
+
+
+        End If
+
+
+
+
     End Sub
     Private Sub ModifyDevice()
         GetCurrentValues()
@@ -226,7 +259,7 @@ errs:
     End Sub
     Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs)
     End Sub
-    Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
+    Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs)
         NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
     End Sub
     Private Sub NewEntryView(GUID As String)
@@ -321,7 +354,7 @@ errs:
         DisableControls()
         ViewDevice(CurrentDevice.strGUID)
     End Sub
-    Private Sub DataGridHistory_CellContentClick_1(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
+    Private Sub DataGridHistory_CellContentClick_1(sender As Object, e As DataGridViewCellEventArgs)
     End Sub
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub
@@ -337,9 +370,13 @@ errs:
         End If
         'DeleteEntry(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
     End Sub
-    Private Sub DataGridHistory_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridHistory.CellMouseDown
+    Private Sub DataGridHistory_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs)
         If e.Button = MouseButtons.Right Then
             DataGridHistory.CurrentCell = DataGridHistory(e.ColumnIndex, e.RowIndex) 'DataGridHistory.RowIndex
         End If
+    End Sub
+
+    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs)
+
     End Sub
 End Class

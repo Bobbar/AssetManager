@@ -23,9 +23,6 @@ Partial Class View
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.pnlViewControls = New System.Windows.Forms.Panel()
         Me.cmdCancel = New System.Windows.Forms.Button()
@@ -52,16 +49,30 @@ Partial Class View
         Me.txtSerial_View_REQ = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.DataGridHistory = New System.Windows.Forms.DataGridView()
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.chkTrackable = New System.Windows.Forms.CheckBox()
+        Me.CheckInToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckOutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.HistoryTab = New System.Windows.Forms.TabPage()
+        Me.TrackingTab = New System.Windows.Forms.TabPage()
+        Me.DataGridHistory = New System.Windows.Forms.DataGridView()
+        Me.TrackingGrid = New System.Windows.Forms.DataGridView()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
-        CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RightClickMenu.SuspendLayout()
+        Me.TabControl1.SuspendLayout()
+        Me.HistoryTab.SuspendLayout()
+        Me.TrackingTab.SuspendLayout()
+        CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -70,38 +81,17 @@ Partial Class View
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ActionsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(995, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1008, 24)
         Me.MenuStrip1.TabIndex = 36
         Me.MenuStrip1.Text = "MenuStrip1"
         '
         'ActionsToolStripMenuItem
         '
-        Me.ActionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem, Me.AddNoteToolStripMenuItem, Me.DeleteDeviceToolStripMenuItem})
+        Me.ActionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem, Me.AddNoteToolStripMenuItem, Me.DeleteDeviceToolStripMenuItem, Me.ToolStripMenuItem1, Me.TrackingToolStripMenuItem})
         Me.ActionsToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ActionsToolStripMenuItem.Name = "ActionsToolStripMenuItem"
         Me.ActionsToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
         Me.ActionsToolStripMenuItem.Text = "Actions"
-        '
-        'EditToolStripMenuItem
-        '
-        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
-        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.EditToolStripMenuItem.Text = "Modify Device"
-        '
-        'AddNoteToolStripMenuItem
-        '
-        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
-        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.AddNoteToolStripMenuItem.Text = "Add Note"
-        '
-        'DeleteDeviceToolStripMenuItem
-        '
-        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
-        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
-        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
         '
         'GroupBox1
         '
@@ -115,6 +105,7 @@ Partial Class View
         '
         'pnlViewControls
         '
+        Me.pnlViewControls.Controls.Add(Me.chkTrackable)
         Me.pnlViewControls.Controls.Add(Me.cmdCancel)
         Me.pnlViewControls.Controls.Add(Me.Label10)
         Me.pnlViewControls.Controls.Add(Me.txtGUID)
@@ -369,19 +360,112 @@ Partial Class View
         Me.txtAssetTag_View_REQ.Size = New System.Drawing.Size(134, 22)
         Me.txtAssetTag_View_REQ.TabIndex = 19
         '
-        'GroupBox2
+        'RightClickMenu
         '
-        Me.GroupBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteEntryToolStripMenuItem})
+        Me.RightClickMenu.Name = "RightClickMenu"
+        Me.RightClickMenu.Size = New System.Drawing.Size(138, 26)
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(152, 6)
+        '
+        'DeleteEntryToolStripMenuItem
+        '
+        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
+        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
+        '
+        'EditToolStripMenuItem
+        '
+        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
+        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.EditToolStripMenuItem.Text = "Modify Device"
+        '
+        'AddNoteToolStripMenuItem
+        '
+        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
+        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.AddNoteToolStripMenuItem.Text = "Add Note"
+        '
+        'DeleteDeviceToolStripMenuItem
+        '
+        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
+        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
+        '
+        'TrackingToolStripMenuItem
+        '
+        Me.TrackingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckInToolStripMenuItem, Me.CheckOutToolStripMenuItem})
+        Me.TrackingToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.check_out
+        Me.TrackingToolStripMenuItem.Name = "TrackingToolStripMenuItem"
+        Me.TrackingToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.TrackingToolStripMenuItem.Text = "Tracking"
+        '
+        'chkTrackable
+        '
+        Me.chkTrackable.AutoSize = True
+        Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkTrackable.Location = New System.Drawing.Point(516, 122)
+        Me.chkTrackable.Name = "chkTrackable"
+        Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
+        Me.chkTrackable.TabIndex = 45
+        Me.chkTrackable.Text = "Trackable"
+        Me.chkTrackable.UseVisualStyleBackColor = True
+        '
+        'CheckInToolStripMenuItem
+        '
+        Me.CheckInToolStripMenuItem.Name = "CheckInToolStripMenuItem"
+        Me.CheckInToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CheckInToolStripMenuItem.Text = "Check In"
+        '
+        'CheckOutToolStripMenuItem
+        '
+        Me.CheckOutToolStripMenuItem.Name = "CheckOutToolStripMenuItem"
+        Me.CheckOutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CheckOutToolStripMenuItem.Text = "Check Out"
+        '
+        'TabControl1
+        '
+        Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.GroupBox2.Controls.Add(Me.DataGridHistory)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 242)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(965, 301)
-        Me.GroupBox2.TabIndex = 40
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "History"
+        Me.TabControl1.Controls.Add(Me.HistoryTab)
+        Me.TabControl1.Controls.Add(Me.TrackingTab)
+        Me.TabControl1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TabControl1.ItemSize = New System.Drawing.Size(61, 21)
+        Me.TabControl1.Location = New System.Drawing.Point(12, 242)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(983, 464)
+        Me.TabControl1.TabIndex = 40
+        '
+        'HistoryTab
+        '
+        Me.HistoryTab.Controls.Add(Me.DataGridHistory)
+        Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
+        Me.HistoryTab.Name = "HistoryTab"
+        Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.HistoryTab.Size = New System.Drawing.Size(975, 435)
+        Me.HistoryTab.TabIndex = 0
+        Me.HistoryTab.Text = "History"
+        Me.HistoryTab.UseVisualStyleBackColor = True
+        '
+        'TrackingTab
+        '
+        Me.TrackingTab.Controls.Add(Me.TrackingGrid)
+        Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
+        Me.TrackingTab.Name = "TrackingTab"
+        Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.TrackingTab.Size = New System.Drawing.Size(975, 435)
+        Me.TrackingTab.TabIndex = 1
+        Me.TrackingTab.Text = "Tracking"
+        Me.TrackingTab.UseVisualStyleBackColor = True
         '
         'DataGridHistory
         '
@@ -395,35 +479,44 @@ Partial Class View
         Me.DataGridHistory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.DataGridHistory.ContextMenuStrip = Me.RightClickMenu
         Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.DataGridHistory.Location = New System.Drawing.Point(8, 28)
+        Me.DataGridHistory.Location = New System.Drawing.Point(6, 6)
         Me.DataGridHistory.MultiSelect = False
         Me.DataGridHistory.Name = "DataGridHistory"
         Me.DataGridHistory.ReadOnly = True
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(938, 260)
-        Me.DataGridHistory.TabIndex = 39
+        Me.DataGridHistory.Size = New System.Drawing.Size(963, 423)
+        Me.DataGridHistory.TabIndex = 40
         '
-        'RightClickMenu
+        'TrackingGrid
         '
-        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteEntryToolStripMenuItem})
-        Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(153, 48)
-        '
-        'DeleteEntryToolStripMenuItem
-        '
-        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
-        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
-        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
+        Me.TrackingGrid.AllowUserToAddRows = False
+        Me.TrackingGrid.AllowUserToDeleteRows = False
+        Me.TrackingGrid.AllowUserToResizeRows = False
+        Me.TrackingGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TrackingGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
+        Me.TrackingGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        Me.TrackingGrid.ContextMenuStrip = Me.RightClickMenu
+        Me.TrackingGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
+        Me.TrackingGrid.Location = New System.Drawing.Point(6, 6)
+        Me.TrackingGrid.MultiSelect = False
+        Me.TrackingGrid.Name = "TrackingGrid"
+        Me.TrackingGrid.ReadOnly = True
+        Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.TrackingGrid.ShowCellToolTips = False
+        Me.TrackingGrid.ShowEditingIcon = False
+        Me.TrackingGrid.Size = New System.Drawing.Size(963, 423)
+        Me.TrackingGrid.TabIndex = 41
         '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(995, 555)
-        Me.Controls.Add(Me.GroupBox2)
+        Me.ClientSize = New System.Drawing.Size(1008, 715)
+        Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -436,11 +529,15 @@ Partial Class View
         Me.GroupBox1.ResumeLayout(False)
         Me.pnlViewControls.ResumeLayout(False)
         Me.pnlViewControls.PerformLayout()
-        Me.GroupBox2.ResumeLayout(False)
-        CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RightClickMenu.ResumeLayout(False)
+        Me.TabControl1.ResumeLayout(False)
+        Me.HistoryTab.ResumeLayout(False)
+        Me.TrackingTab.ResumeLayout(False)
+        CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem
@@ -469,12 +566,20 @@ Partial Class View
     Friend WithEvents txtSerial_View_REQ As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents txtAssetTag_View_REQ As TextBox
-    Friend WithEvents GroupBox2 As GroupBox
-    Friend WithEvents DataGridHistory As DataGridView
     Friend WithEvents Label10 As Label
     Friend WithEvents txtGUID As TextBox
     Friend WithEvents DeleteDeviceToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmdCancel As Button
     Friend WithEvents RightClickMenu As ContextMenuStrip
     Friend WithEvents DeleteEntryToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem1 As ToolStripSeparator
+    Friend WithEvents TrackingToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents chkTrackable As CheckBox
+    Friend WithEvents CheckInToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents CheckOutToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TabControl1 As TabControl
+    Friend WithEvents HistoryTab As TabPage
+    Friend WithEvents DataGridHistory As DataGridView
+    Friend WithEvents TrackingTab As TabPage
+    Friend WithEvents TrackingGrid As DataGridView
 End Class

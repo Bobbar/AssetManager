@@ -74,7 +74,7 @@ Public Class AssetManager
         DoneWaiting()
     End Sub
     Private Sub ShowAll()
-        'On Error GoTo errs
+        On Error GoTo errs
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim ConnID As String = Guid.NewGuid.ToString
