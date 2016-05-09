@@ -67,11 +67,14 @@ Public Class AssetManager
     End Sub
     Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click
         Waiting()
+        CheckForIllegalCrossThreadCalls = False
+        'Dim Thread1 As New Thread(AddressOf ShowAll)
+        'Thread1.Start()
         ShowAll()
         DoneWaiting()
     End Sub
     Private Sub ShowAll()
-        On Error GoTo errs
+        'On Error GoTo errs
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -115,12 +118,17 @@ errs:
         table.Columns.Add("Description", GetType(String))
         table.Columns.Add("Location", GetType(String))
         table.Columns.Add("Purchase Date", GetType(String))
-        table.Columns.Add("Device UID", GetType(String))
+        table.Columns.Add("GUID", GetType(String))
         For i = 1 To UBound(Data)
             table.Rows.Add(Data(i).strCurrentUser, Data(i).strAssetTag, Data(i).strSerial, GetHumanValue(ComboType.EquipType, Data(i).strEqType), Data(i).strDescription, GetHumanValue(ComboType.Location, Data(i).strLocation), Data(i).dtPurchaseDate, Data(i).strGUID)
         Next
         Grid.DataSource = table
-        Grid.Columns("User").DefaultCellStyle.Font = New Font(Grid.Font, FontStyle.Bold)
+        'For i = 0 To Grid.Rows.Count - 1
+        '    If Grid.Rows(i).Cells(GetColIndex(Grid, "Device Type")).Value = "Desktop" Then
+        '        Grid.Rows(i).Cells(GetColIndex(Grid, "Device Type")).Style.BackColor = Color.Blue
+        '    End If
+        'Next
+        'Grid.Columns("User").DefaultCellStyle.Font = New Font(Grid.Font, FontStyle.Bold)
         Grid.AutoResizeColumns()
         ReDim SearchResults(0)
     End Sub
@@ -167,7 +175,6 @@ errs:
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
         strLastQry = strQry
-
         Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
         With reader
@@ -202,8 +209,16 @@ errs:
         AddNew.Show()
     End Sub
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
+        'Waiting()
+        'View.ViewDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
+        'View.Show()
+        'View.Activate()
+        'DoneWaiting()
+        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
+    End Sub
+    Private Sub LoadDevice(ByVal strGUID As String)
         Waiting()
-        View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
+        View.ViewDevice(strGUID)
         View.Show()
         View.Activate()
         DoneWaiting()
@@ -252,12 +267,10 @@ errs:
     Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
     End Sub
     Private Sub ViewSelectedToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
-        View.Show()
+        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
     End Sub
     Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
-        View.ViewDevice(ResultGrid.Item(7, ResultGrid.CurrentRow.Index).Value)
-        View.Show()
+        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
     End Sub
     Public Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
@@ -266,7 +279,6 @@ errs:
         Me.Cursor = Cursors.Default
     End Sub
     Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditToolStripMenuItem.Click
-
     End Sub
     Private Sub Button2_Click_1(sender As Object, e As EventArgs)
         Debug.Print(vbCrLf)
@@ -275,19 +287,27 @@ errs:
             Debug.Print(i & " - " & CurrentConnections(i).ConnectionID & " = " & CurrentConnections(i).DBConnection.State)
         Next
     End Sub
-
     Private Sub Button2_Click_2(sender As Object, e As EventArgs) Handles Button2.Click
-
-        ReportView.Show()
-
+        For i As Integer = 0 To UBound(CurrentConnections)
+            Debug.Print(CurrentConnections(i).ConnectionID & " - " & CurrentConnections(i).DBConnection.State)
+        Next
     End Sub
-
     Private Sub YearsSincePurchaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles YearsSincePurchaseToolStripMenuItem.Click
         ReportView.Show()
     End Sub
-
     Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub
         AddNew.Show()
+    End Sub
+    Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
+    End Sub
+    Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles QueryWorker.DoWork
+    End Sub
+    Private Sub ResultGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ResultGrid.CellMouseDown
+        If e.Button = MouseButtons.Right Then
+            ResultGrid.CurrentCell = ResultGrid(e.ColumnIndex, e.RowIndex)
+        End If
+    End Sub
+    Private Sub ContextMenuStrip1_Opening(sender As Object, e As CancelEventArgs) Handles ContextMenuStrip1.Opening
     End Sub
 End Class

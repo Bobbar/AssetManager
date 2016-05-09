@@ -21,7 +21,6 @@ Public Class View
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         AssetManager.CopyDefaultCellStyles()
         'ClearFields()
-
     End Sub
     Private Sub GetCurrentValues()
         With OldData
@@ -106,6 +105,7 @@ Public Class View
         reader = cmd.ExecuteReader
         table.Columns.Add("Date", GetType(String))
         table.Columns.Add("Action Type", GetType(String))
+        table.Columns.Add("Action User", GetType(String))
         table.Columns.Add("User", GetType(String))
         table.Columns.Add("Asset ID", GetType(String))
         table.Columns.Add("Serial", GetType(String))
@@ -127,7 +127,7 @@ Public Class View
                 cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.OSType,!dev_osversion)
                 cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
                 txtGUID.Text = !dev_UID
-                table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
+                table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_action_user,!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
             Loop
         End With
         CloseConnection(ConnID)
@@ -227,7 +227,7 @@ errs:
     Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs)
     End Sub
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
-        NewEntryView(DataGridHistory.Item(8, DataGridHistory.CurrentRow.Index).Value)
+        NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
     End Sub
     Private Sub NewEntryView(GUID As String)
         Dim NewEntry As New View_Entry
@@ -320,5 +320,26 @@ errs:
         ClearFields()
         DisableControls()
         ViewDevice(CurrentDevice.strGUID)
+    End Sub
+    Private Sub DataGridHistory_CellContentClick_1(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
+    End Sub
+    Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
+        If Not CheckForAdmin() Then Exit Sub
+        Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value
+        Dim Info As Device_Info = GetEntryInfo(strGUID)
+        Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbCritical, "WARNING")
+        If blah = vbYes Then
+            Dim blah2 = MsgBox(DeleteEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
+            ViewDevice(CurrentDevice.strGUID)
+            'Me.Hide()
+        Else
+            Exit Sub
+        End If
+        'DeleteEntry(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
+    End Sub
+    Private Sub DataGridHistory_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridHistory.CellMouseDown
+        If e.Button = MouseButtons.Right Then
+            DataGridHistory.CurrentCell = DataGridHistory(e.ColumnIndex, e.RowIndex) 'DataGridHistory.RowIndex
+        End If
     End Sub
 End Class

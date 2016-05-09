@@ -24,7 +24,11 @@ Partial Class AssetManager
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AssetManager))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.YearsSincePurchaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
@@ -47,10 +51,7 @@ Partial Class AssetManager
         Me.cmdSearch = New System.Windows.Forms.Button()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.YearsSincePurchaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.QueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -76,6 +77,26 @@ Partial Class AssetManager
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
         Me.EditToolStripMenuItem.Text = "Actions"
         '
+        'NewToolStripMenuItem
+        '
+        Me.NewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.NewToolStripMenuItem.Text = "New Device"
+        '
+        'ReportsToolStripMenuItem
+        '
+        Me.ReportsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.YearsSincePurchaseToolStripMenuItem})
+        Me.ReportsToolStripMenuItem.Name = "ReportsToolStripMenuItem"
+        Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ReportsToolStripMenuItem.Text = "Reports"
+        '
+        'YearsSincePurchaseToolStripMenuItem
+        '
+        Me.YearsSincePurchaseToolStripMenuItem.Name = "YearsSincePurchaseToolStripMenuItem"
+        Me.YearsSincePurchaseToolStripMenuItem.Size = New System.Drawing.Size(190, 22)
+        Me.YearsSincePurchaseToolStripMenuItem.Text = "Years Since Purchase"
+        '
         'GroupBox1
         '
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -95,6 +116,15 @@ Partial Class AssetManager
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(886, 82)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(91, 25)
+        Me.Button2.TabIndex = 32
+        Me.Button2.Text = "Button2"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'GroupBox2
         '
         Me.GroupBox2.BackColor = System.Drawing.SystemColors.Control
@@ -112,7 +142,7 @@ Partial Class AssetManager
         Me.GroupBox2.Controls.Add(Me.txtSerial)
         Me.GroupBox2.Location = New System.Drawing.Point(15, 19)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(561, 129)
+        Me.GroupBox2.Size = New System.Drawing.Size(561, 149)
         Me.GroupBox2.TabIndex = 31
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Search Filters"
@@ -187,7 +217,7 @@ Partial Class AssetManager
         '
         Me.cmbEquipType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbEquipType.FormattingEnabled = True
-        Me.cmbEquipType.Location = New System.Drawing.Point(164, 47)
+        Me.cmbEquipType.Location = New System.Drawing.Point(164, 50)
         Me.cmbEquipType.Name = "cmbEquipType"
         Me.cmbEquipType.Size = New System.Drawing.Size(159, 24)
         Me.cmbEquipType.TabIndex = 35
@@ -299,12 +329,14 @@ Partial Class AssetManager
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(100, 26)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(106, 26)
         '
         'ViewToolStripMenuItem
         '
+        Me.ViewToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ViewToolStripMenuItem.Image = CType(resources.GetObject("ViewToolStripMenuItem.Image"), System.Drawing.Image)
         Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
-        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(99, 22)
+        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(105, 22)
         Me.ViewToolStripMenuItem.Text = "View"
         '
         'cmdSearch
@@ -332,35 +364,8 @@ Partial Class AssetManager
         Me.StatusLabel.Size = New System.Drawing.Size(87, 17)
         Me.StatusLabel.Text = "%StatusLabel%"
         '
-        'Button2
+        'QueryWorker
         '
-        Me.Button2.Location = New System.Drawing.Point(886, 82)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(91, 25)
-        Me.Button2.TabIndex = 32
-        Me.Button2.Text = "Button2"
-        Me.Button2.UseVisualStyleBackColor = True
-        Me.Button2.Visible = False
-        '
-        'NewToolStripMenuItem
-        '
-        Me.NewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.NewToolStripMenuItem.Text = "New Device"
-        '
-        'ReportsToolStripMenuItem
-        '
-        Me.ReportsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.YearsSincePurchaseToolStripMenuItem})
-        Me.ReportsToolStripMenuItem.Name = "ReportsToolStripMenuItem"
-        Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.ReportsToolStripMenuItem.Text = "Reports"
-        '
-        'YearsSincePurchaseToolStripMenuItem
-        '
-        Me.YearsSincePurchaseToolStripMenuItem.Name = "YearsSincePurchaseToolStripMenuItem"
-        Me.YearsSincePurchaseToolStripMenuItem.Size = New System.Drawing.Size(190, 22)
-        Me.YearsSincePurchaseToolStripMenuItem.Text = "Years Since Purchase"
         '
         'AssetManager
         '
@@ -386,7 +391,6 @@ Partial Class AssetManager
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
@@ -417,4 +421,5 @@ Partial Class AssetManager
     Friend WithEvents NewToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ReportsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents YearsSincePurchaseToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents QueryWorker As System.ComponentModel.BackgroundWorker
 End Class

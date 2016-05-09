@@ -9,7 +9,6 @@ Public Module DBFunctions
     Public Const strCommMessage As String = "Communicating..."
     Public Const strLoadingGridMessage As String = "Building Grid..."
     Public strLastQry As String
-
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
@@ -34,6 +33,14 @@ Public Module DBFunctions
         Public strPO As String
         Public strStatus As String
         Public strNote As String
+        Public Historical As Hist_Info
+    End Structure
+    Public Structure Hist_Info
+        Public strChangeType As String
+        Public strHistUID As String
+        Public strNote As String
+        Public strActionUser As String
+        Public dtActionDateTime As Date
     End Structure
     Public CurrentDevice As Device_Info
     Public Locations() As Combo_Data
@@ -94,8 +101,8 @@ Public Module DBFunctions
                     Exit Function   'i'm pretty sure this is redundant. But I'm paranoid.
                 End If
             Next
-            'if an unused connection was found and returned with open status, create a new one and return that one.
-            'might need to add more work here to cycle through the connections and choose the correct option. Instead of counting a return to prevent the next step from occuring.
+            'if no unused connection were found, create a new one and return that one.
+            'might need to add more work here to cycle through the connections and choose the correct option. Instead of counting on a return to prevent the next step from occuring.
             ReDim Preserve CurrentConnections(UBound(CurrentConnections) + 1)
             CurrentConnections(UBound(CurrentConnections)).ConnectionID = strGUID
             CurrentConnections(UBound(CurrentConnections)).DBConnection = New MySqlConnection(MySQLConnectString)
@@ -151,6 +158,17 @@ Public Module DBFunctions
 errs:
         Return ""
     End Function
+    Public Function DeleteEntry(ByVal strGUID As String) As Integer
+        Dim ConnID As String = Guid.NewGuid.ToString
+        Dim cmd As New MySqlCommand
+        Dim rows
+        Dim strSQLQry As String = "DELETE FROM historical WHERE hist_uid='" & strGUID & "'"
+        cmd.Connection = GetConnection(ConnID).DBConnection
+        cmd.CommandText = strSQLQry
+        rows = cmd.ExecuteNonQuery()
+        CloseConnection(ConnID)
+        Return rows
+    End Function
     Public Function DeleteDevice(ByVal strGUID As String) As Integer
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim cmd As New MySqlCommand
@@ -161,6 +179,36 @@ errs:
         rows = cmd.ExecuteNonQuery()
         CloseConnection(ConnID)
         Return rows
+    End Function
+    Public Function GetEntryInfo(ByVal strGUID As String) As Device_Info
+        On Error GoTo errs
+        Dim tmpInfo As Device_Info
+        Dim ConnID As String = Guid.NewGuid.ToString
+        Dim reader As MySqlDataReader
+        Dim UID As String
+        Dim strQry = "SELECT * FROM historical WHERE hist_uid='" & strGUID & "'"
+        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        reader = cmd.ExecuteReader
+        With reader
+            Do While .Read()
+                tmpInfo.Historical.strChangeType = GetHumanValue(ComboType.ChangeType,!hist_change_type)
+                tmpInfo.strAssetTag = !hist_asset_tag
+                tmpInfo.strCurrentUser = !hist_cur_user
+                tmpInfo.strSerial = !hist_serial
+                tmpInfo.strDescription = !hist_description
+                tmpInfo.Historical.dtActionDateTime = !hist_action_datetime
+                tmpInfo.Historical.strActionUser = !hist_action_user
+            Loop
+        End With
+        CloseConnection(ConnID)
+        Return tmpInfo
+        Exit Function
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Function
     Public Function GetDeviceUID(ByVal AssetTag As String, ByVal Serial As String) As String
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -235,7 +283,7 @@ errs:
         Return Nothing
     End Function
     Public Sub BuildLocationIndex()
-        On Error GoTo errs
+        ' On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
@@ -263,7 +311,7 @@ errs:
         End If
     End Sub
     Public Sub BuildChangeTypeIndex()
-        On Error GoTo errs
+        ' On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
@@ -291,7 +339,7 @@ errs:
         End If
     End Sub
     Public Sub BuildEquipTypeIndex()
-        On Error GoTo errs
+        'On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
@@ -319,7 +367,7 @@ errs:
         End If
     End Sub
     Public Sub BuildOSTypeIndex()
-        On Error GoTo errs
+        ' On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
@@ -347,7 +395,7 @@ errs:
         End If
     End Sub
     Public Sub BuildStatusTypeIndex()
-        On Error GoTo errs
+        'On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"

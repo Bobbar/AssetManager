@@ -19,6 +19,7 @@ Partial Class View
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -53,11 +54,14 @@ Partial Class View
         Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
+        Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.RightClickMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -389,6 +393,7 @@ Partial Class View
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridHistory.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.DataGridHistory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        Me.DataGridHistory.ContextMenuStrip = Me.RightClickMenu
         Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridHistory.Location = New System.Drawing.Point(8, 28)
         Me.DataGridHistory.MultiSelect = False
@@ -399,6 +404,19 @@ Partial Class View
         Me.DataGridHistory.ShowEditingIcon = False
         Me.DataGridHistory.Size = New System.Drawing.Size(938, 260)
         Me.DataGridHistory.TabIndex = 39
+        '
+        'RightClickMenu
+        '
+        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteEntryToolStripMenuItem})
+        Me.RightClickMenu.Name = "RightClickMenu"
+        Me.RightClickMenu.Size = New System.Drawing.Size(153, 48)
+        '
+        'DeleteEntryToolStripMenuItem
+        '
+        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
+        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
         '
         'View
         '
@@ -420,9 +438,9 @@ Partial Class View
         Me.pnlViewControls.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.RightClickMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem
@@ -457,4 +475,6 @@ Partial Class View
     Friend WithEvents txtGUID As TextBox
     Friend WithEvents DeleteDeviceToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmdCancel As Button
+    Friend WithEvents RightClickMenu As ContextMenuStrip
+    Friend WithEvents DeleteEntryToolStripMenuItem As ToolStripMenuItem
 End Class

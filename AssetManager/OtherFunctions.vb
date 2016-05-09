@@ -21,6 +21,13 @@ Module OtherFunctions
             End Using
         End If
     End Sub
+    Public Function GetColIndex(ByVal Grid As DataGridView, ByVal strColName As String) As Integer
+        Try
+            Return Grid.Columns.Item(strColName).Index
+        Catch ex As Exception
+            Return -1
+        End Try
+    End Function
     Public Function ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
         Dim strErrMsg As String
         strErrMsg = "ERROR:  MethodName=" & strOrigSub & " - " & lngErrNum & " - " & strErrDescription
