@@ -4,6 +4,10 @@ Imports MySql.Data.MySqlClient
 Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
 Public Class AssetManager
+    Private strSearchString As String
+    'Private SearchResults() As String
+    Private CurrentControl As Control
+    Dim dtResults As New DataTable
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Logger("Starting AssetManager...")
         Status("Loading...")
@@ -50,6 +54,8 @@ Public Class AssetManager
         Logger("Building Indexes Done...")
     End Sub
     Private Sub Clear_All()
+        LiveBox.Items.Clear()
+        LiveBox.Visible = False
         txtAssetTag.Clear()
         txtSerial.Clear()
         cmbEquipType.Items.Clear()
@@ -155,6 +161,7 @@ errs:
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         Waiting()
+        HideLiveBox()
         DynamicSearch()
         DoneWaiting()
     End Sub
@@ -215,6 +222,10 @@ errs:
         'View.Activate()
         'DoneWaiting()
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
+    End Sub
+    Private Sub HideLiveBox()
+        LiveBox.Visible = False
+        LiveBox.Items.Clear()
     End Sub
     Private Sub LoadDevice(ByVal strGUID As String)
         Waiting()
@@ -301,7 +312,24 @@ errs:
     End Sub
     Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
     End Sub
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles QueryWorker.DoWork
+    Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles LiveQueryWorker.DoWork
+        Dim ConnID As String = Guid.NewGuid.ToString
+        Dim ds As New DataSet
+        Dim da As New MySqlDataAdapter
+        Dim strQryRow As String
+        Select Case CurrentControl.Name
+            Case "txtAssetTag"
+                strQryRow = "dev_asset_tag"
+            Case "txtSerial"
+                strQryRow = "dev_serial"
+            Case "txtCurUser"
+                strQryRow = "dev_cur_user"
+        End Select
+        da.SelectCommand = New MySqlCommand("SELECT * FROM devices WHERE " & strQryRow & " LIKE '" & strSearchString & "%' ORDER BY " & strQryRow & " LIMIT 10")
+        da.SelectCommand.Connection = GetConnection(ConnID).DBConnection
+        da.Fill(ds)
+        CloseConnection(ConnID)
+        dtResults = ds.Tables(0)
     End Sub
     Private Sub ResultGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ResultGrid.CellMouseDown
         If e.Button = MouseButtons.Right Then
@@ -309,5 +337,63 @@ errs:
         End If
     End Sub
     Private Sub ContextMenuStrip1_Opening(sender As Object, e As CancelEventArgs) Handles ContextMenuStrip1.Opening
+    End Sub
+    Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
+        CurrentControl = txtAssetTag
+        strSearchString = txtAssetTag.Text
+        StartLiveSearch()
+    End Sub
+    Private Sub DrawLiveBox()
+        Dim dr As DataRow
+        LiveBox.Items.Clear()
+        Dim strQryRow As String
+        Select Case CurrentControl.Name
+            Case "txtAssetTag"
+                strQryRow = "dev_asset_tag"
+            Case "txtSerial"
+                strQryRow = "dev_serial"
+            Case "txtCurUser"
+                strQryRow = "dev_cur_user"
+        End Select
+        With dr
+            For Each dr In dtResults.Rows
+                LiveBox.Items.Add(dr.Item(strQryRow))
+            Next
+        End With
+        LiveBox.Left = CurrentControl.Left + GroupBox2.Left
+        LiveBox.Top = CurrentControl.Top + CurrentControl.Height + GroupBox2.Top
+        LiveBox.Width = CurrentControl.Width
+        LiveBox.AutoSize = True
+        LiveBox.Height = LiveBox.PreferredHeight
+        If dtResults.Rows.Count > 0 Then
+            LiveBox.Visible = True
+        Else
+            LiveBox.Visible = False
+        End If
+    End Sub
+    Private Sub QueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LiveQueryWorker.RunWorkerCompleted
+        DrawLiveBox()
+    End Sub
+    Private Sub txtSerial_TextChanged(sender As Object, e As EventArgs) Handles txtSerial.TextChanged
+        CurrentControl = txtSerial
+        strSearchString = txtSerial.Text
+        StartLiveSearch()
+    End Sub
+    Private Sub txtCurUser_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser.TextChanged
+        CurrentControl = txtCurUser
+        strSearchString = txtCurUser.Text
+        StartLiveSearch()
+    End Sub
+    Private Sub StartLiveSearch()
+        If Trim(strSearchString) <> "" Then
+            If Not LiveQueryWorker.IsBusy Then LiveQueryWorker.RunWorkerAsync()
+        Else
+            HideLiveBox()
+        End If
+    End Sub
+    Private Sub LiveBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LiveBox.SelectedIndexChanged
+        Debug.Print(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
+        LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
+        HideLiveBox()
     End Sub
 End Class

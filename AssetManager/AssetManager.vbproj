@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>5974.5.2016.315</AssemblyVersion>
+    <AssemblyVersion>5975.5.2016.345</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -125,6 +125,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>asset_managerDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Tracking.Designer.vb">
+      <DependentUpon>Tracking.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tracking.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Modules\DataImport.vb" />
     <Compile Include="Modules\DBFunctions.vb" />
     <Compile Include="Modules\ExtendedMethods.vb" />
@@ -181,6 +187,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AssetManager.resx">
       <DependentUpon>AssetManager.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Tracking.resx">
+      <DependentUpon>Tracking.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Report1.rdlc" />
     <EmbeddedResource Include="Forms\ReportView.resx">

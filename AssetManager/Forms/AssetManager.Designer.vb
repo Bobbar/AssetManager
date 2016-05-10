@@ -20,7 +20,7 @@ Partial Class AssetManager
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AssetManager))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -28,6 +28,7 @@ Partial Class AssetManager
         Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.YearsSincePurchaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.LiveBox = New System.Windows.Forms.ListBox()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -51,7 +52,7 @@ Partial Class AssetManager
         Me.cmdSearch = New System.Windows.Forms.Button()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.QueryWorker = New System.ComponentModel.BackgroundWorker()
+        Me.LiveQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -81,14 +82,14 @@ Partial Class AssetManager
         '
         Me.NewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
         Me.NewToolStripMenuItem.Text = "New Device"
         '
         'ReportsToolStripMenuItem
         '
         Me.ReportsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.YearsSincePurchaseToolStripMenuItem})
         Me.ReportsToolStripMenuItem.Name = "ReportsToolStripMenuItem"
-        Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
         Me.ReportsToolStripMenuItem.Text = "Reports"
         '
         'YearsSincePurchaseToolStripMenuItem
@@ -103,6 +104,7 @@ Partial Class AssetManager
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.GroupBox1.Controls.Add(Me.LiveBox)
         Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.GroupBox2)
         Me.GroupBox1.Controls.Add(Me.Button1)
@@ -115,6 +117,16 @@ Partial Class AssetManager
         Me.GroupBox1.Size = New System.Drawing.Size(1045, 548)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
+        '
+        'LiveBox
+        '
+        Me.LiveBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LiveBox.FormattingEnabled = True
+        Me.LiveBox.ItemHeight = 16
+        Me.LiveBox.Location = New System.Drawing.Point(869, 28)
+        Me.LiveBox.Name = "LiveBox"
+        Me.LiveBox.Size = New System.Drawing.Size(134, 16)
+        Me.LiveBox.TabIndex = 33
         '
         'Button2
         '
@@ -180,7 +192,7 @@ Partial Class AssetManager
         '
         Me.cmbLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbLocation.FormattingEnabled = True
-        Me.cmbLocation.Location = New System.Drawing.Point(355, 48)
+        Me.cmbLocation.Location = New System.Drawing.Point(355, 45)
         Me.cmbLocation.Name = "cmbLocation"
         Me.cmbLocation.Size = New System.Drawing.Size(182, 24)
         Me.cmbLocation.TabIndex = 39
@@ -217,7 +229,7 @@ Partial Class AssetManager
         '
         Me.cmbEquipType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbEquipType.FormattingEnabled = True
-        Me.cmbEquipType.Location = New System.Drawing.Point(164, 50)
+        Me.cmbEquipType.Location = New System.Drawing.Point(164, 46)
         Me.cmbEquipType.Name = "cmbEquipType"
         Me.cmbEquipType.Size = New System.Drawing.Size(159, 24)
         Me.cmbEquipType.TabIndex = 35
@@ -247,18 +259,16 @@ Partial Class AssetManager
         Me.txtAssetTag.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtAssetTag.Location = New System.Drawing.Point(9, 48)
         Me.txtAssetTag.Name = "txtAssetTag"
-        Me.txtAssetTag.Size = New System.Drawing.Size(117, 22)
+        Me.txtAssetTag.Size = New System.Drawing.Size(135, 22)
         Me.txtAssetTag.TabIndex = 32
-        Me.txtAssetTag.Text = "%ASSET_TAG%"
         '
         'txtSerial
         '
         Me.txtSerial.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSerial.Location = New System.Drawing.Point(9, 95)
         Me.txtSerial.Name = "txtSerial"
-        Me.txtSerial.Size = New System.Drawing.Size(117, 22)
+        Me.txtSerial.Size = New System.Drawing.Size(135, 22)
         Me.txtSerial.TabIndex = 31
-        Me.txtSerial.Text = "%SERIAL%"
         '
         'Button1
         '
@@ -306,14 +316,14 @@ Partial Class AssetManager
         Me.ResultGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.ResultGrid.ContextMenuStrip = Me.ContextMenuStrip1
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(6, Byte), Integer), CType(CType(159, Byte), Integer), CType(CType(217, Byte), Integer))
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(6, Byte), Integer), CType(CType(159, Byte), Integer), CType(CType(217, Byte), Integer))
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle2
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.ResultGrid.Location = New System.Drawing.Point(15, 174)
         Me.ResultGrid.MultiSelect = False
@@ -364,7 +374,7 @@ Partial Class AssetManager
         Me.StatusLabel.Size = New System.Drawing.Size(87, 17)
         Me.StatusLabel.Text = "%StatusLabel%"
         '
-        'QueryWorker
+        'LiveQueryWorker
         '
         '
         'AssetManager
@@ -421,5 +431,6 @@ Partial Class AssetManager
     Friend WithEvents NewToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ReportsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents YearsSincePurchaseToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents QueryWorker As System.ComponentModel.BackgroundWorker
+    Friend WithEvents LiveQueryWorker As System.ComponentModel.BackgroundWorker
+    Friend WithEvents LiveBox As ListBox
 End Class

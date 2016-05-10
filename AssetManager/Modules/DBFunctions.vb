@@ -115,7 +115,6 @@ Public Module DBFunctions
         Catch exError As MySqlException
             ErrHandle(exError.Number, exError.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return Nothing
-
         End Try
     End Function
     Public Sub CloseConnection(strUID As String)

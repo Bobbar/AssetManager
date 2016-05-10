@@ -157,24 +157,12 @@ errs:
             'TrackingTab.Enabled = True
             TrackingToolStripMenuItem.Visible = True
             TabControl1.TabPages.Insert(1, TrackingTab)
-
-
-
-
-
         Else
             'TrackingTab.Enabled = False
             'TrackingTab.Visible = False
             TrackingToolStripMenuItem.Visible = False
             TabControl1.TabPages.Remove(TrackingTab)
-
-
-
         End If
-
-
-
-
     End Sub
     Private Sub ModifyDevice()
         GetCurrentValues()
@@ -375,8 +363,6 @@ errs:
             DataGridHistory.CurrentCell = DataGridHistory(e.ColumnIndex, e.RowIndex) 'DataGridHistory.RowIndex
         End If
     End Sub
-
     Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs)
-
     End Sub
 End Class
