@@ -32,7 +32,7 @@ Public Class AssetManager
         Status("Loading devices...")
         ShowAll()
         Status("Ready!")
-        Thread.Sleep(2000)
+        Thread.Sleep(1000)
         SplashScreen.Hide()
         Me.Show()
     End Sub
@@ -57,13 +57,16 @@ Public Class AssetManager
         LiveBox.Items.Clear()
         LiveBox.Visible = False
         txtAssetTag.Clear()
+        txtAssetTagSearch.Clear()
         txtSerial.Clear()
+        txtSerialSearch.Clear()
         cmbEquipType.Items.Clear()
         cmbLocation.Items.Clear()
         txtCurUser.Clear()
+        txtDescription.Clear()
         RefreshCombos()
         ReDim SearchResults(0)
-        ResultGrid.DataSource = Nothing
+        '  ResultGrid.DataSource = Nothing
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         EndProgram()
@@ -72,15 +75,14 @@ Public Class AssetManager
     Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs)
     End Sub
     Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click
-        Waiting()
-        CheckForIllegalCrossThreadCalls = False
+        'CheckForIllegalCrossThreadCalls = False
         'Dim Thread1 As New Thread(AddressOf ShowAll)
         'Thread1.Start()
         ShowAll()
-        DoneWaiting()
     End Sub
     Private Sub ShowAll()
         On Error GoTo errs
+        Waiting()
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -105,8 +107,10 @@ Public Class AssetManager
         End With
         SendToGrid(ResultGrid, SearchResults)
         CloseConnection(ConnID)
+        DoneWaiting()
         Exit Sub
 errs:
+        DoneWaiting()
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Resume Next
         Else
@@ -139,11 +143,12 @@ errs:
         ReDim SearchResults(0)
     End Sub
     Private Sub GetSearchDBValues() 'cleanup user input for db
-        SearchValues.strSerial = Trim(txtSerial.Text)
+        SearchValues.strSerial = Trim(txtSerialSearch.Text)
         'strDescription = Trim(txtDescription.Text)
-        SearchValues.strAssetTag = Trim(txtAssetTag.Text)
+        SearchValues.strAssetTag = Trim(txtAssetTagSearch.Text)
         'strPurchaseDate = Format(dtPurchaseDate.Text, strDBDateFormat)
         'strPurchaseDate = dtPurchaseDate.Text
+        SearchValues.strDescription = Trim(txtDescription.Text)
         SearchValues.strEqType = GetDBValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
         'strReplacementYear = Trim(txtReplaceYear.Text)
         SearchValues.strLocation = GetDBValue(ComboType.Location, cmbLocation.SelectedIndex)
@@ -160,19 +165,18 @@ errs:
         Clear_All()
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
-        Waiting()
         HideLiveBox()
         DynamicSearch()
-        DoneWaiting()
     End Sub
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         On Error GoTo errs
+        Waiting()
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim ConnID As String = Guid.NewGuid.ToString
         GetSearchDBValues()
         Dim strStartQry = "SELECT * FROM devices WHERE "
-        Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", ""))
+        Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", "")) & (IIf(SearchValues.strDescription <> "", " dev_description LIKE '%" & SearchValues.strDescription & "%' AND", ""))
         If strDynaQry = "" Then
             Dim blah = MsgBox("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing")
             Exit Sub
@@ -201,8 +205,10 @@ errs:
         End With
         SendToGrid(ResultGrid, SearchResults)
         CloseConnection(ConnID)
+        DoneWaiting()
         Exit Sub
 errs:
+        DoneWaiting()
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Exit Sub
         Else
@@ -224,8 +230,13 @@ errs:
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
     End Sub
     Private Sub HideLiveBox()
+        On Error GoTo errs
         LiveBox.Visible = False
         LiveBox.Items.Clear()
+        If CurrentControl.Parent.Name = "InstantGroup" Then
+            CurrentControl.Text = ""
+        End If
+errs:
     End Sub
     Private Sub LoadDevice(ByVal strGUID As String)
         Waiting()
@@ -324,8 +335,10 @@ errs:
                 strQryRow = "dev_serial"
             Case "txtCurUser"
                 strQryRow = "dev_cur_user"
+            Case "txtDescription"
+                strQryRow = "dev_description"
         End Select
-        da.SelectCommand = New MySqlCommand("SELECT * FROM devices WHERE " & strQryRow & " LIKE '" & strSearchString & "%' ORDER BY " & strQryRow & " LIMIT 10")
+        da.SelectCommand = New MySqlCommand("SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT 10")
         da.SelectCommand.Connection = GetConnection(ConnID).DBConnection
         da.Fill(ds)
         CloseConnection(ConnID)
@@ -347,6 +360,8 @@ errs:
         Dim dr As DataRow
         LiveBox.Items.Clear()
         Dim strQryRow As String
+        Dim CntGroup As GroupBox
+        CntGroup = CurrentControl.Parent
         Select Case CurrentControl.Name
             Case "txtAssetTag"
                 strQryRow = "dev_asset_tag"
@@ -354,14 +369,16 @@ errs:
                 strQryRow = "dev_serial"
             Case "txtCurUser"
                 strQryRow = "dev_cur_user"
+            Case "txtDescription"
+                strQryRow = "dev_description"
         End Select
         With dr
             For Each dr In dtResults.Rows
                 LiveBox.Items.Add(dr.Item(strQryRow))
             Next
         End With
-        LiveBox.Left = CurrentControl.Left + GroupBox2.Left
-        LiveBox.Top = CurrentControl.Top + CurrentControl.Height + GroupBox2.Top
+        LiveBox.Left = CurrentControl.Left + CntGroup.Left ' + SearchGroup.Left
+        LiveBox.Top = CurrentControl.Top + CurrentControl.Height + CntGroup.Top ' + SearchGroup.Top
         LiveBox.Width = CurrentControl.Width
         LiveBox.AutoSize = True
         LiveBox.Height = LiveBox.PreferredHeight
@@ -380,9 +397,6 @@ errs:
         StartLiveSearch()
     End Sub
     Private Sub txtCurUser_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser.TextChanged
-        CurrentControl = txtCurUser
-        strSearchString = txtCurUser.Text
-        StartLiveSearch()
     End Sub
     Private Sub StartLiveSearch()
         If Trim(strSearchString) <> "" Then
@@ -393,7 +407,41 @@ errs:
     End Sub
     Private Sub LiveBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LiveBox.SelectedIndexChanged
         Debug.Print(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
-        LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
+        Select Case CurrentControl.Name
+            Case "txtDescription"
+                CurrentControl.Text = LiveBox.Text
+                DynamicSearch()
+            Case "txtCurUser"
+                CurrentControl.Text = LiveBox.Text
+                DynamicSearch()
+            Case Else
+                LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
+        End Select
+        'If CurrentControl.Name <> "txtDescription" Or CurrentControl.Name <> "txtCurUser" Then
+        '    LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
+        'Else
+        '    CurrentControl.Text = LiveBox.Text
+        'End If
         HideLiveBox()
+    End Sub
+    Private Sub txtDescription_TextChanged(sender As Object, e As EventArgs) Handles txtDescription.TextChanged
+    End Sub
+    Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
+    End Sub
+    Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
+        CurrentControl = txtDescription
+        strSearchString = txtDescription.Text
+        StartLiveSearch()
+    End Sub
+    Private Sub txtDescription_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtDescription.KeyPress
+    End Sub
+    Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
+        CurrentControl = txtCurUser
+        strSearchString = txtCurUser.Text
+        StartLiveSearch()
+    End Sub
+    Private Sub txtAssetTagSearch_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTagSearch.TextChanged
+    End Sub
+    Private Sub txtSerialSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSerialSearch.TextChanged
     End Sub
 End Class

@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>5975.5.2016.345</AssemblyVersion>
+    <AssemblyVersion>5975.5.2016.386</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -258,6 +258,8 @@
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <Content Include="Resources\inventory-small.fw.png" />
+    <None Include="Resources\report.png" />
+    <None Include="Resources\presentation-512.png" />
     <Content Include="Resources\view.png" />
     <Content Include="Resources\View_Details.png" />
   </ItemGroup>

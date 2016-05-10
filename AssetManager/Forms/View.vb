@@ -247,7 +247,7 @@ errs:
     End Sub
     Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs)
     End Sub
-    Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs)
+    Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
         NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
     End Sub
     Private Sub NewEntryView(GUID As String)
@@ -342,8 +342,6 @@ errs:
         DisableControls()
         ViewDevice(CurrentDevice.strGUID)
     End Sub
-    Private Sub DataGridHistory_CellContentClick_1(sender As Object, e As DataGridViewCellEventArgs)
-    End Sub
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value
@@ -358,11 +356,9 @@ errs:
         End If
         'DeleteEntry(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
     End Sub
-    Private Sub DataGridHistory_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs)
+    Private Sub DataGridHistory_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridHistory.CellMouseDown
         If e.Button = MouseButtons.Right Then
             DataGridHistory.CurrentCell = DataGridHistory(e.ColumnIndex, e.RowIndex) 'DataGridHistory.RowIndex
         End If
-    End Sub
-    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs)
     End Sub
 End Class

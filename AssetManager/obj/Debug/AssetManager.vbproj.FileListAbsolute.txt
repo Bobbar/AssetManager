@@ -42,7 +42,6 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\pt\Microsoft.SqlServer.Types.resou
 C:\GitHub\AssetManager\AssetManager\bin\Debug\ru\Microsoft.SqlServer.Types.resources.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\zh-Hans\Microsoft.SqlServer.Types.resources.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\zh-Hant\Microsoft.SqlServer.Types.resources.dll
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AssetManager.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.ReportView.resources

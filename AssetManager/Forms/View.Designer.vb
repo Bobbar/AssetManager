@@ -23,8 +23,16 @@ Partial Class View
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckInToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckOutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.pnlViewControls = New System.Windows.Forms.Panel()
+        Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.cmdCancel = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.txtGUID = New System.Windows.Forms.TextBox()
@@ -50,19 +58,11 @@ Partial Class View
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.chkTrackable = New System.Windows.Forms.CheckBox()
-        Me.CheckInToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckOutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.HistoryTab = New System.Windows.Forms.TabPage()
-        Me.TrackingTab = New System.Windows.Forms.TabPage()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
+        Me.TrackingTab = New System.Windows.Forms.TabPage()
         Me.TrackingGrid = New System.Windows.Forms.DataGridView()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -70,8 +70,8 @@ Partial Class View
         Me.RightClickMenu.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.HistoryTab.SuspendLayout()
-        Me.TrackingTab.SuspendLayout()
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TrackingTab.SuspendLayout()
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -81,7 +81,7 @@ Partial Class View
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ActionsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1008, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(992, 24)
         Me.MenuStrip1.TabIndex = 36
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -92,6 +92,52 @@ Partial Class View
         Me.ActionsToolStripMenuItem.Name = "ActionsToolStripMenuItem"
         Me.ActionsToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
         Me.ActionsToolStripMenuItem.Text = "Actions"
+        '
+        'EditToolStripMenuItem
+        '
+        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
+        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.EditToolStripMenuItem.Text = "Modify Device"
+        '
+        'AddNoteToolStripMenuItem
+        '
+        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
+        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.AddNoteToolStripMenuItem.Text = "Add Note"
+        '
+        'DeleteDeviceToolStripMenuItem
+        '
+        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
+        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(152, 6)
+        '
+        'TrackingToolStripMenuItem
+        '
+        Me.TrackingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckInToolStripMenuItem, Me.CheckOutToolStripMenuItem})
+        Me.TrackingToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.check_out
+        Me.TrackingToolStripMenuItem.Name = "TrackingToolStripMenuItem"
+        Me.TrackingToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.TrackingToolStripMenuItem.Text = "Tracking"
+        '
+        'CheckInToolStripMenuItem
+        '
+        Me.CheckInToolStripMenuItem.Name = "CheckInToolStripMenuItem"
+        Me.CheckInToolStripMenuItem.Size = New System.Drawing.Size(132, 22)
+        Me.CheckInToolStripMenuItem.Text = "Check In"
+        '
+        'CheckOutToolStripMenuItem
+        '
+        Me.CheckOutToolStripMenuItem.Name = "CheckOutToolStripMenuItem"
+        Me.CheckOutToolStripMenuItem.Size = New System.Drawing.Size(132, 22)
+        Me.CheckOutToolStripMenuItem.Text = "Check Out"
         '
         'GroupBox1
         '
@@ -134,6 +180,17 @@ Partial Class View
         Me.pnlViewControls.Name = "pnlViewControls"
         Me.pnlViewControls.Size = New System.Drawing.Size(932, 180)
         Me.pnlViewControls.TabIndex = 38
+        '
+        'chkTrackable
+        '
+        Me.chkTrackable.AutoSize = True
+        Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkTrackable.Location = New System.Drawing.Point(516, 122)
+        Me.chkTrackable.Name = "chkTrackable"
+        Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
+        Me.chkTrackable.TabIndex = 45
+        Me.chkTrackable.Text = "Trackable"
+        Me.chkTrackable.UseVisualStyleBackColor = True
         '
         'cmdCancel
         '
@@ -366,69 +423,12 @@ Partial Class View
         Me.RightClickMenu.Name = "RightClickMenu"
         Me.RightClickMenu.Size = New System.Drawing.Size(138, 26)
         '
-        'ToolStripMenuItem1
-        '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(152, 6)
-        '
         'DeleteEntryToolStripMenuItem
         '
         Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
         Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
         Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
         Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
-        '
-        'EditToolStripMenuItem
-        '
-        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
-        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.EditToolStripMenuItem.Text = "Modify Device"
-        '
-        'AddNoteToolStripMenuItem
-        '
-        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
-        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.AddNoteToolStripMenuItem.Text = "Add Note"
-        '
-        'DeleteDeviceToolStripMenuItem
-        '
-        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
-        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
-        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
-        '
-        'TrackingToolStripMenuItem
-        '
-        Me.TrackingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckInToolStripMenuItem, Me.CheckOutToolStripMenuItem})
-        Me.TrackingToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.check_out
-        Me.TrackingToolStripMenuItem.Name = "TrackingToolStripMenuItem"
-        Me.TrackingToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.TrackingToolStripMenuItem.Text = "Tracking"
-        '
-        'chkTrackable
-        '
-        Me.chkTrackable.AutoSize = True
-        Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(516, 122)
-        Me.chkTrackable.Name = "chkTrackable"
-        Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
-        Me.chkTrackable.TabIndex = 45
-        Me.chkTrackable.Text = "Trackable"
-        Me.chkTrackable.UseVisualStyleBackColor = True
-        '
-        'CheckInToolStripMenuItem
-        '
-        Me.CheckInToolStripMenuItem.Name = "CheckInToolStripMenuItem"
-        Me.CheckInToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.CheckInToolStripMenuItem.Text = "Check In"
-        '
-        'CheckOutToolStripMenuItem
-        '
-        Me.CheckOutToolStripMenuItem.Name = "CheckOutToolStripMenuItem"
-        Me.CheckOutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.CheckOutToolStripMenuItem.Text = "Check Out"
         '
         'TabControl1
         '
@@ -442,7 +442,7 @@ Partial Class View
         Me.TabControl1.Location = New System.Drawing.Point(12, 242)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(983, 464)
+        Me.TabControl1.Size = New System.Drawing.Size(967, 296)
         Me.TabControl1.TabIndex = 40
         '
         'HistoryTab
@@ -451,21 +451,10 @@ Partial Class View
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(975, 435)
+        Me.HistoryTab.Size = New System.Drawing.Size(959, 267)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
-        '
-        'TrackingTab
-        '
-        Me.TrackingTab.Controls.Add(Me.TrackingGrid)
-        Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
-        Me.TrackingTab.Name = "TrackingTab"
-        Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(975, 435)
-        Me.TrackingTab.TabIndex = 1
-        Me.TrackingTab.Text = "Tracking"
-        Me.TrackingTab.UseVisualStyleBackColor = True
         '
         'DataGridHistory
         '
@@ -486,8 +475,19 @@ Partial Class View
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(963, 423)
+        Me.DataGridHistory.Size = New System.Drawing.Size(947, 255)
         Me.DataGridHistory.TabIndex = 40
+        '
+        'TrackingTab
+        '
+        Me.TrackingTab.Controls.Add(Me.TrackingGrid)
+        Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
+        Me.TrackingTab.Name = "TrackingTab"
+        Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.TrackingTab.Size = New System.Drawing.Size(975, 435)
+        Me.TrackingTab.TabIndex = 1
+        Me.TrackingTab.Text = "Tracking"
+        Me.TrackingTab.UseVisualStyleBackColor = True
         '
         'TrackingGrid
         '
@@ -515,12 +515,13 @@ Partial Class View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1008, 715)
+        Me.ClientSize = New System.Drawing.Size(992, 547)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
+        Me.MinimumSize = New System.Drawing.Size(1008, 400)
         Me.Name = "View"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View"
@@ -532,8 +533,8 @@ Partial Class View
         Me.RightClickMenu.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.HistoryTab.ResumeLayout(False)
-        Me.TrackingTab.ResumeLayout(False)
         CType(Me.DataGridHistory, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TrackingTab.ResumeLayout(False)
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
