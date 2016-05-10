@@ -60,9 +60,11 @@ Public Class View
                 Case TypeOf c Is TextBox
                     Dim txt As TextBox = c
                     If txt.Name <> "txtGUID" Then
+
                         txt.ReadOnly = False
+
                     End If
-                Case TypeOf c Is ComboBox
+                        Case TypeOf c Is ComboBox
                     Dim cmb As ComboBox = c
                     cmb.Enabled = True
                 Case TypeOf c Is DateTimePicker
@@ -121,7 +123,7 @@ Public Class View
         table.Columns.Add("GUID", GetType(String))
         With reader
             Do While .Read()
-                CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable))
+                CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
                 txtAssetTag_View_REQ.Text = !dev_asset_tag
                 txtDescription_View_REQ.Text = !dev_description
                 cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType,!dev_eq_type)
@@ -134,7 +136,8 @@ Public Class View
                 cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
                 txtGUID.Text = !dev_UID
                 chkTrackable.Checked = CBool(!dev_trackable)
-                SetTracking(CBool(!dev_trackable))
+                SetTracking(CBool(!dev_trackable), CBool(!dev_checkedout))
+                txtCheckOut.Text = IIf(CBool(!dev_checkedout), "Checked Out", "Checked In")
                 table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_action_user,!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
             Loop
         End With
@@ -143,6 +146,7 @@ Public Class View
         DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
         DisableControls()
         DataGridHistory.AutoResizeColumns()
+        ViewTracking(CurrentDevice.strGUID)
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -151,17 +155,90 @@ errs:
             EndProgram()
         End If
     End Sub
-    Public Sub SetTracking(bolEnabled As Boolean)
+    Private Sub ViewTracking(strGUID As String)
+        On Error GoTo errs
+        'ClearFields()
+        'RefreshCombos()
+        Dim ConnID As String = Guid.NewGuid.ToString
+        Dim reader As MySqlDataReader
+        Dim table As New DataTable
+        Dim strQry = "Select * FROM trackable, devices WHERE track_UID = dev_UID And track_UID = '" & strGUID & "' ORDER BY track_datestamp DESC"
+        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        reader = cmd.ExecuteReader
+        table.Columns.Add("Date", GetType(String))
+        table.Columns.Add("Check Type", GetType(String))
+        table.Columns.Add("Check User", GetType(String))
+        'table.Columns.Add("Check Time", GetType(String))
+        table.Columns.Add("Location", GetType(String))
+        'table.Columns.Add("Serial", GetType(String))
+        'table.Columns.Add("Description", GetType(String))
+        'table.Columns.Add("Location", GetType(String))
+        'table.Columns.Add("Purchase Date", GetType(String))
+        table.Columns.Add("GUID", GetType(String))
+        With reader
+            Do While .Read()
+                'CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
+                txtCheckLocation.Text = !track_out_location
+                txtCheckTime.Text = !track_checkout_time
+                txtCheckUser.Text = !track_checkout_user
+                txtDueBack.Text = !track_dueback_date
+
+
+
+                'txtAssetTag_View_REQ.Text = !dev_asset_tag
+                'txtDescription_View_REQ.Text = !dev_description
+                'cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType,!dev_eq_type)
+                'txtSerial_View_REQ.Text = !dev_serial
+                'cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.Location,!dev_location)
+                'txtCurUser_View_REQ.Text = !dev_cur_user
+                'dtPurchaseDate_View_REQ.Value = !dev_purchase_date
+                'txtReplacementYear_View.Text = !dev_replacement_year
+                'cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.OSType,!dev_osversion)
+                'cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
+                'txtGUID.Text = !dev_UID
+                'chkTrackable.Checked = CBool(!dev_trackable)
+                'SetTracking(CBool(!dev_trackable))
+                'txtCheckOut.Text = UCase(Convert.ToString(CBool(!dev_checkedout)))
+                table.Rows.Add(!track_datestamp,!track_check_type,!track_checkout_user,!track_use_location,!track_uid)
+            Loop
+        End With
+        CloseConnection(ConnID)
+        TrackingGrid.DataSource = table
+        'DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
+        'DisableControls()
+        DataGridHistory.AutoResizeColumns()
+        Exit Sub
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
+
+
+
+
+
+    End Sub
+    Public Sub SetTracking(bolEnabled As Boolean, bolCheckedOut As Boolean)
         If bolEnabled Then
             'TrackingTab.Visible = True
             'TrackingTab.Enabled = True
             TrackingToolStripMenuItem.Visible = True
-            TabControl1.TabPages.Insert(1, TrackingTab)
-        Else
-            'TrackingTab.Enabled = False
-            'TrackingTab.Visible = False
-            TrackingToolStripMenuItem.Visible = False
+            If Not TabControl1.TabPages.Contains(TrackingTab) Then TabControl1.TabPages.Insert(1, TrackingTab)
+
+            TrackingBox.Visible = True
+                CheckOutMenu.Visible = Not bolCheckedOut
+                CheckInMenu.Visible = bolCheckedOut
+
+
+            Else
+                'TrackingTab.Enabled = False
+                'TrackingTab.Visible = False
+                TrackingToolStripMenuItem.Visible = False
             TabControl1.TabPages.Remove(TrackingTab)
+            TrackingBox.Visible = False
+
         End If
     End Sub
     Private Sub ModifyDevice()

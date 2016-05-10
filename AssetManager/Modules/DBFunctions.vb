@@ -34,6 +34,7 @@ Public Module DBFunctions
         Public strStatus As String
         Public strNote As String
         Public bolTrackable As Boolean
+        Public bolCheckedOut As Boolean
         Public Historical As Hist_Info
     End Structure
     Public Structure Hist_Info
@@ -68,7 +69,24 @@ Public Module DBFunctions
         Public Const OSType As String = "OS_TYPE"
         Public Const StatusType As String = "STATUS_TYPE"
     End Class
-    Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String, ByVal Status As String, ByVal Trackable As Boolean)
+    'Public Function GetCheckOutStatus(strGUID As String) As Boolean
+    '    Dim ConnID As String = Guid.NewGuid.ToString
+    '    Dim reader As MySqlDataReader
+    '    Dim UID As String
+    '    Dim strQry = "SELECT track_ from trackable WHERE dev_asset_tag = '" & AssetTag & "' AND dev_serial = '" & Serial & "' ORDER BY dev_input_datetime"
+    '    Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+    '    reader = cmd.ExecuteReader
+    '    With reader
+    '        Do While .Read()
+    '            UID = (!dev_UID)
+    '        Loop
+    '    End With
+    '    CloseConnection(ConnID)
+    '    Return UID
+
+
+    'End Function
+    Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String, ByVal Status As String, ByVal Trackable As Boolean, ByVal CheckedOut As Boolean)
         With CurrentDevice
             .strGUID = UID
             .strDescription = Description
@@ -83,6 +101,7 @@ Public Module DBFunctions
             .strEqType = EQType
             .strStatus = Status
             .bolTrackable = Trackable
+            .bolCheckedOut = CheckedOut
         End With
     End Sub
     Public Function GetConnection(strGUID As String) As ConnectionData 'dynamically create new DB connections as needed
