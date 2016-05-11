@@ -36,7 +36,7 @@ Public Module DBFunctions
         Public strStatus As String
         Public strNote As String
         Public bolTrackable As Boolean
-        Public Trackable As Track_Info
+        Public Tracking As Track_Info
         Public Historical As Hist_Info
     End Structure
     Public Structure Hist_Info
@@ -111,7 +111,7 @@ Public Module DBFunctions
             .strEqType = EQType
             .strStatus = Status
             .bolTrackable = Trackable
-            .Trackable.bolCheckedOut = CheckedOut
+            .Tracking.bolCheckedOut = CheckedOut
         End With
     End Sub
     Public Function GetConnection(strGUID As String) As ConnectionData 'dynamically create new DB connections as needed
@@ -146,6 +146,33 @@ Public Module DBFunctions
             Return Nothing
         End Try
     End Function
+    Public Sub GetCurrentTracking(strGUID As String)
+        Dim ConnID As String = Guid.NewGuid.ToString
+        Dim ds As New DataSet
+        Dim da As New MySqlDataAdapter
+        Dim dt As DataTable
+        Dim dr As DataRow
+        'Dim strQryRow As String
+        da.SelectCommand = New MySqlCommand("SELECT * FROM trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1")
+        da.SelectCommand.Connection = GetConnection(ConnID).DBConnection
+        da.Fill(ds)
+        CloseConnection(ConnID)
+        dt = ds.Tables(0)
+        Debug.Print(dt.Rows.Count)
+        If dt.Rows.Count > 0 Then
+            For Each dr In dt.Rows
+                With dr
+                    CurrentDevice.Tracking.strCheckOutTime = .Item("track_checkout_time").ToString
+                    CurrentDevice.Tracking.strCheckInTime = .Item("track_checkin_time").ToString
+                    CurrentDevice.Tracking.strUseLocation = .Item("track_use_location").ToString
+                    CurrentDevice.Tracking.strCheckOutUser = .Item("track_checkout_user").ToString
+                    CurrentDevice.Tracking.strCheckInUser = .Item("track_checkin_user").ToString
+                    CurrentDevice.Tracking.strDueBackTime = .Item("track_dueback_date").ToString
+                    CurrentDevice.Tracking.strUseReason = .Item("track_notes").ToString
+                End With
+            Next
+        End If
+    End Sub
     Public Sub CloseConnection(strUID As String)
         StatusBar("Idle...")
         Dim i As Integer

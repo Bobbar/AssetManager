@@ -7,6 +7,8 @@ Module OtherFunctions
     Public strLogPath As String = strLogDir & strLogName
     Public colCurrentEntry As Color = ColorTranslator.FromHtml("#7AD1FF") '"#7AD1FF"
     Public colMissingField As Color = ColorTranslator.FromHtml("#75BAFF")
+    Public colCheckIn As Color = ColorTranslator.FromHtml("#B6FCC0")
+    Public colCheckOut As Color = ColorTranslator.FromHtml("#FCB6B6")
     Public ViewFormIndex As Integer
     Public Sub Logger(Message As String)
         Dim DateStamp As String = DateTime.Now

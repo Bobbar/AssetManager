@@ -14,7 +14,7 @@ Public Class Tracking
     Private CheckData As CheckStruct
     Private Function GetCheckData() As Boolean
         'Dim bolEmptyFields As Boolean = False
-        If Not CurrentDevice.Trackable.bolCheckedOut Then
+        If Not CurrentDevice.Tracking.bolCheckedOut Then
             Dim c As Control
             For Each c In CheckOutBox.Controls
                 If TypeOf c Is TextBox Then
@@ -50,34 +50,9 @@ Public Class Tracking
         End With
         Return True
     End Function
-    Private Sub GetCurrentTracking(strGUID As String)
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim ds As New DataSet
-        Dim da As New MySqlDataAdapter
-        Dim dt As DataTable
-        Dim dr As DataRow
-        'Dim strQryRow As String
-        da.SelectCommand = New MySqlCommand("SELECT * FROM trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1")
-        da.SelectCommand.Connection = GetConnection(ConnID).DBConnection
-        da.Fill(ds)
-        CloseConnection(ConnID)
-        dt = ds.Tables(0)
-        Debug.Print(dt.Rows.Count)
-        If dt.Rows.Count > 0 Then
-            For Each dr In dt.Rows
-                With dr
-                    CurrentDevice.Trackable.strCheckOutTime = .Item("track_checkout_time").ToString
-                    CurrentDevice.Trackable.strCheckInTime = .Item("track_checkin_time").ToString
-                    CurrentDevice.Trackable.strUseLocation = .Item("track_use_location").ToString
-                    CurrentDevice.Trackable.strCheckOutUser = .Item("track_checkout_user").ToString
-                    CurrentDevice.Trackable.strCheckInUser = .Item("track_checkin_user").ToString
-                    CurrentDevice.Trackable.strDueBackTime = .Item("track_dueback_date").ToString
-                    CurrentDevice.Trackable.strUseReason = .Item("track_notes").ToString
-                End With
-            Next
-        End If
-    End Sub
     Private Sub Tracking_Load(sender As Object, e As EventArgs) Handles Me.Load
+    End Sub
+    Public Sub SetupTracking()
         ClearAll()
         SetDates()
         SetGroups()
@@ -89,11 +64,11 @@ Public Class Tracking
         txtDescription.Text = CurrentDevice.strDescription
         txtSerial.Text = CurrentDevice.strSerial
         txtDeviceType.Text = GetHumanValue(ComboType.EquipType, CurrentDevice.strEqType)
-        If CurrentDevice.Trackable.bolCheckedOut Then
-            dtCheckOut.Value = CurrentDevice.Trackable.strCheckOutTime
-            dtDueBack.Value = CurrentDevice.Trackable.strDueBackTime
-            txtUseLocation.Text = CurrentDevice.Trackable.strUseLocation
-            txtUseReason.Text = CurrentDevice.Trackable.strUseReason
+        If CurrentDevice.Tracking.bolCheckedOut Then
+            dtCheckOut.Value = CurrentDevice.Tracking.strCheckOutTime
+            dtDueBack.Value = CurrentDevice.Tracking.strDueBackTime
+            txtUseLocation.Text = CurrentDevice.Tracking.strUseLocation
+            txtUseReason.Text = CurrentDevice.Tracking.strUseReason
         End If
     End Sub
     Private Sub ClearAll()
@@ -113,8 +88,8 @@ Public Class Tracking
         Debug.Print(dtCheckOut.Value.ToString(strDBDateTimeFormat))
     End Sub
     Private Sub SetGroups()
-        CheckInBox.Enabled = CurrentDevice.Trackable.bolCheckedOut
-        CheckOutBox.Enabled = Not CurrentDevice.Trackable.bolCheckedOut
+        CheckInBox.Enabled = CurrentDevice.Tracking.bolCheckedOut
+        CheckOutBox.Enabled = Not CurrentDevice.Tracking.bolCheckedOut
     End Sub
     Private Sub CheckOut()
         'On Error GoTo errs
@@ -136,6 +111,7 @@ Public Class Tracking
         Else
             Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
         End If
+        GetCurrentTracking(CurrentDevice.strGUID)
         View.ViewTracking(CurrentDevice.strGUID)
         View.ViewDevice(CurrentDevice.strGUID)
         Me.Hide()
@@ -167,6 +143,7 @@ errs:
         Else
             Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
         End If
+        GetCurrentTracking(CurrentDevice.strGUID)
         View.ViewTracking(CurrentDevice.strGUID)
         View.ViewDevice(CurrentDevice.strGUID)
         Me.Hide()

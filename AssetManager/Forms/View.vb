@@ -19,7 +19,7 @@ Public Class View
     Public NewData As Device_Info
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
-        AssetManager.CopyDefaultCellStyles()
+        'AssetManager.CopyDefaultCellStyles()
         'ClearFields()
     End Sub
     Private Sub GetCurrentValues()
@@ -134,8 +134,7 @@ Public Class View
                 cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
                 txtGUID.Text = !dev_UID
                 chkTrackable.Checked = CBool(!dev_trackable)
-                SetTracking(CBool(!dev_trackable), CBool(!dev_checkedout))
-                txtCheckOut.Text = IIf(CBool(!dev_checkedout), "Checked Out", "Checked In")
+                ' SetTracking(CBool(!dev_trackable), CBool(!dev_checkedout))
                 table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_action_user,!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
             Loop
         End With
@@ -166,10 +165,13 @@ errs:
         reader = cmd.ExecuteReader
         table.Columns.Add("Date", GetType(String))
         table.Columns.Add("Check Type", GetType(String))
-        table.Columns.Add("Check User", GetType(String))
+        table.Columns.Add("Check Out User", GetType(String))
+        table.Columns.Add("Check In User", GetType(String))
+        table.Columns.Add("Check Out", GetType(String))
+        table.Columns.Add("Check In", GetType(String))
+        table.Columns.Add("Due Back", GetType(String))
         'table.Columns.Add("Check Time", GetType(String))
         table.Columns.Add("Location", GetType(String))
-        table.Columns.Add("Due Back", GetType(String))
         'table.Columns.Add("Serial", GetType(String))
         'table.Columns.Add("Description", GetType(String))
         'table.Columns.Add("Location", GetType(String))
@@ -178,10 +180,6 @@ errs:
         With reader
             Do While .Read()
                 'CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
-                txtCheckLocation.Text = !track_use_location
-                txtCheckTime.Text = !track_checkout_time
-                txtCheckUser.Text = !track_checkout_user
-                txtDueBack.Text = !track_dueback_date
                 'CurrentDevice.Trackable.strCheckOutTime = !track_checkout_time
                 'CurrentDevice.Trackable.strCheckInTime = !track_checkin_time
                 'CurrentDevice.Trackable.strUseLocation = !track_use_location
@@ -202,14 +200,17 @@ errs:
                 'chkTrackable.Checked = CBool(!dev_trackable)
                 'SetTracking(CBool(!dev_trackable))
                 'txtCheckOut.Text = UCase(Convert.ToString(CBool(!dev_checkedout)))
-                table.Rows.Add(!track_datestamp,!track_check_type,!track_checkout_user,!track_use_location,!track_dueback_date,!track_uid)
+                table.Rows.Add(!track_datestamp,!track_check_type,!track_checkout_user,!track_checkin_user,!track_checkout_time,!track_checkin_time,!track_dueback_date,!track_use_location,!track_uid)
             Loop
         End With
         CloseConnection(ConnID)
         TrackingGrid.DataSource = table
-        'DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
         'DisableControls()
-        DataGridHistory.AutoResizeColumns()
+        TrackingGrid.AutoResizeColumns()
+        'HighlighRows(TrackingGrid)
+        GetCurrentTracking(CurrentDevice.strGUID)
+        SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
+        FillTrackingBox()
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -217,6 +218,37 @@ errs:
         Else
             EndProgram()
         End If
+    End Sub
+    Private Sub FillTrackingBox()
+        If CBool(CurrentDevice.Tracking.bolCheckedOut) Then
+            txtCheckOut.BackColor = colCheckOut
+            txtCheckLocation.Text = CurrentDevice.Tracking.strUseLocation
+            lblCheckTime.Text = "CheckOut Time:"
+            txtCheckTime.Text = CurrentDevice.Tracking.strCheckOutTime
+            lblCheckUser.Text = "CheckOut User:"
+            txtCheckUser.Text = CurrentDevice.Tracking.strCheckOutUser
+            lblDueBack.Visible = True
+            txtDueBack.Visible = True
+            txtDueBack.Text = CurrentDevice.Tracking.strDueBackTime
+        Else
+            txtCheckOut.BackColor = colCheckIn
+            txtCheckLocation.Text = GetHumanValue(ComboType.Location, CurrentDevice.strLocation)
+            lblCheckTime.Text = "CheckIn Time:"
+            txtCheckTime.Text = CurrentDevice.Tracking.strCheckInTime
+            lblCheckUser.Text = "CheckIn User:"
+            txtCheckUser.Text = CurrentDevice.Tracking.strCheckInUser
+            lblDueBack.Visible = False
+            txtDueBack.Visible = False
+        End If
+        txtCheckOut.Text = IIf(CurrentDevice.Tracking.bolCheckedOut, "Checked Out", "Checked In")
+    End Sub
+    Private Sub HighlighRows(Grid As DataGridView)
+        For i As Integer = 0 To Grid.Rows.Count - 1
+            If Grid.Rows(i).Cells(GetColIndex(Grid, "Check Type")).Value = strCheckIn Then
+                Grid.Rows(i).Cells(GetColIndex(Grid, "Check Type")).Style.BackColor = Color.Blue
+                Grid.Rows(i).DefaultCellStyle.BackColor = Color.Blue
+            End If
+        Next
     End Sub
     Public Sub SetTracking(bolEnabled As Boolean, bolCheckedOut As Boolean)
         If bolEnabled Then
@@ -433,9 +465,22 @@ errs:
         End If
     End Sub
     Private Sub CheckInMenu_Click(sender As Object, e As EventArgs) Handles CheckInMenu.Click
+        Tracking.SetupTracking()
         Tracking.Show()
     End Sub
     Private Sub CheckOutMenu_Click(sender As Object, e As EventArgs) Handles CheckOutMenu.Click
+        Tracking.SetupTracking()
         Tracking.Show()
+    End Sub
+    Private Sub TrackingGrid_RowPrePaint(sender As Object, e As DataGridViewRowPrePaintEventArgs) Handles TrackingGrid.RowPrePaint
+        TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
+        TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+        If TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckIn Then
+            'TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.BackColor = Color.Blue
+            TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckIn
+            'TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Padding = New Padding(30, 0, 0, 0)
+        ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckOut Then
+            TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
+        End If
     End Sub
 End Class

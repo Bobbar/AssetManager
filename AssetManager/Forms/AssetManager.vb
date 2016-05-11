@@ -324,8 +324,6 @@ errs:
         If Not CheckForAdmin() Then Exit Sub
         AddNew.Show()
     End Sub
-    Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
-    End Sub
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles LiveQueryWorker.DoWork
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim ds As New DataSet
