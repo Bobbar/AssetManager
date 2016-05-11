@@ -35,6 +35,7 @@ Public Class AssetManager
         Thread.Sleep(1000)
         SplashScreen.Hide()
         Me.Show()
+        'Tracking.Show()
     End Sub
     Public Sub Status(Text As String)
         SplashScreen.lblStatus.Text = Text
@@ -43,6 +44,8 @@ Public Class AssetManager
     Public Sub CopyDefaultCellStyles()
         View.DataGridHistory.DefaultCellStyle = ResultGrid.DefaultCellStyle
         View.DataGridHistory.BackgroundColor = ResultGrid.BackgroundColor
+        View.TrackingGrid.DefaultCellStyle = ResultGrid.DefaultCellStyle
+        View.TrackingGrid.BackgroundColor = ResultGrid.BackgroundColor
     End Sub
     Private Sub BuildIndexes()
         Logger("Building Indexes...")

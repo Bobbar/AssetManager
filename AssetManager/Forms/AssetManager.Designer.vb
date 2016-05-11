@@ -495,7 +495,6 @@ Partial Class AssetManager
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem

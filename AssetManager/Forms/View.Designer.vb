@@ -65,16 +65,16 @@ Partial Class View
         Me.TrackingTab = New System.Windows.Forms.TabPage()
         Me.TrackingGrid = New System.Windows.Forms.DataGridView()
         Me.TrackingBox = New System.Windows.Forms.GroupBox()
-        Me.txtCheckOut = New System.Windows.Forms.TextBox()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.txtCheckTime = New System.Windows.Forms.TextBox()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.txtCheckUser = New System.Windows.Forms.TextBox()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.txtDueBack = New System.Windows.Forms.TextBox()
-        Me.Label15 = New System.Windows.Forms.Label()
         Me.txtCheckLocation = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
+        Me.txtDueBack = New System.Windows.Forms.TextBox()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.txtCheckUser = New System.Windows.Forms.TextBox()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.txtCheckTime = New System.Windows.Forms.TextBox()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.txtCheckOut = New System.Windows.Forms.TextBox()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
@@ -544,68 +544,26 @@ Partial Class View
         Me.TrackingBox.Text = "Tracking Info"
         Me.TrackingBox.Visible = False
         '
-        'txtCheckOut
+        'txtCheckLocation
         '
-        Me.txtCheckOut.BackColor = System.Drawing.SystemColors.Window
-        Me.txtCheckOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCheckOut.Location = New System.Drawing.Point(13, 42)
-        Me.txtCheckOut.Name = "txtCheckOut"
-        Me.txtCheckOut.ReadOnly = True
-        Me.txtCheckOut.Size = New System.Drawing.Size(102, 22)
-        Me.txtCheckOut.TabIndex = 49
-        Me.txtCheckOut.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.txtCheckLocation.BackColor = System.Drawing.SystemColors.Window
+        Me.txtCheckLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCheckLocation.Location = New System.Drawing.Point(153, 42)
+        Me.txtCheckLocation.Name = "txtCheckLocation"
+        Me.txtCheckLocation.ReadOnly = True
+        Me.txtCheckLocation.Size = New System.Drawing.Size(134, 22)
+        Me.txtCheckLocation.TabIndex = 57
+        Me.txtCheckLocation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'Label11
+        'Label16
         '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(10, 23)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(48, 16)
-        Me.Label11.TabIndex = 48
-        Me.Label11.Text = "Status:"
-        '
-        'txtCheckTime
-        '
-        Me.txtCheckTime.BackColor = System.Drawing.SystemColors.Window
-        Me.txtCheckTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCheckTime.Location = New System.Drawing.Point(13, 92)
-        Me.txtCheckTime.Name = "txtCheckTime"
-        Me.txtCheckTime.ReadOnly = True
-        Me.txtCheckTime.Size = New System.Drawing.Size(134, 22)
-        Me.txtCheckTime.TabIndex = 51
-        Me.txtCheckTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(10, 73)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(103, 16)
-        Me.Label12.TabIndex = 50
-        Me.Label12.Text = "CheckOut Time:"
-        '
-        'txtCheckUser
-        '
-        Me.txtCheckUser.BackColor = System.Drawing.SystemColors.Window
-        Me.txtCheckUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCheckUser.Location = New System.Drawing.Point(13, 142)
-        Me.txtCheckUser.Name = "txtCheckUser"
-        Me.txtCheckUser.ReadOnly = True
-        Me.txtCheckUser.Size = New System.Drawing.Size(134, 22)
-        Me.txtCheckUser.TabIndex = 53
-        Me.txtCheckUser.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.Location = New System.Drawing.Point(10, 123)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(101, 16)
-        Me.Label14.TabIndex = 52
-        Me.Label14.Text = "CheckOut User:"
+        Me.Label16.AutoSize = True
+        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.Location = New System.Drawing.Point(150, 23)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(62, 16)
+        Me.Label16.TabIndex = 56
+        Me.Label16.Text = "Location:"
         '
         'txtDueBack
         '
@@ -628,26 +586,68 @@ Partial Class View
         Me.Label15.TabIndex = 54
         Me.Label15.Text = "Due Back:"
         '
-        'txtCheckLocation
+        'txtCheckUser
         '
-        Me.txtCheckLocation.BackColor = System.Drawing.SystemColors.Window
-        Me.txtCheckLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCheckLocation.Location = New System.Drawing.Point(153, 42)
-        Me.txtCheckLocation.Name = "txtCheckLocation"
-        Me.txtCheckLocation.ReadOnly = True
-        Me.txtCheckLocation.Size = New System.Drawing.Size(134, 22)
-        Me.txtCheckLocation.TabIndex = 57
-        Me.txtCheckLocation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.txtCheckUser.BackColor = System.Drawing.SystemColors.Window
+        Me.txtCheckUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCheckUser.Location = New System.Drawing.Point(13, 142)
+        Me.txtCheckUser.Name = "txtCheckUser"
+        Me.txtCheckUser.ReadOnly = True
+        Me.txtCheckUser.Size = New System.Drawing.Size(134, 22)
+        Me.txtCheckUser.TabIndex = 53
+        Me.txtCheckUser.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'Label16
+        'Label14
         '
-        Me.Label16.AutoSize = True
-        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label16.Location = New System.Drawing.Point(150, 23)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(62, 16)
-        Me.Label16.TabIndex = 56
-        Me.Label16.Text = "Location:"
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Location = New System.Drawing.Point(10, 123)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(101, 16)
+        Me.Label14.TabIndex = 52
+        Me.Label14.Text = "CheckOut User:"
+        '
+        'txtCheckTime
+        '
+        Me.txtCheckTime.BackColor = System.Drawing.SystemColors.Window
+        Me.txtCheckTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCheckTime.Location = New System.Drawing.Point(13, 92)
+        Me.txtCheckTime.Name = "txtCheckTime"
+        Me.txtCheckTime.ReadOnly = True
+        Me.txtCheckTime.Size = New System.Drawing.Size(134, 22)
+        Me.txtCheckTime.TabIndex = 51
+        Me.txtCheckTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(10, 73)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(103, 16)
+        Me.Label12.TabIndex = 50
+        Me.Label12.Text = "CheckOut Time:"
+        '
+        'txtCheckOut
+        '
+        Me.txtCheckOut.BackColor = System.Drawing.SystemColors.Window
+        Me.txtCheckOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCheckOut.Location = New System.Drawing.Point(13, 42)
+        Me.txtCheckOut.Name = "txtCheckOut"
+        Me.txtCheckOut.ReadOnly = True
+        Me.txtCheckOut.Size = New System.Drawing.Size(102, 22)
+        Me.txtCheckOut.TabIndex = 49
+        Me.txtCheckOut.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Location = New System.Drawing.Point(10, 23)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(48, 16)
+        Me.Label11.TabIndex = 48
+        Me.Label11.Text = "Status:"
         '
         'View
         '
@@ -679,7 +679,6 @@ Partial Class View
         Me.TrackingBox.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem

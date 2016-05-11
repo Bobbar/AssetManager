@@ -4,10 +4,12 @@ Public Module DBFunctions
     Public ReadOnly Property strLocalUser As String = Environment.UserName
     'Private MySQLConnectString As String = "server=df8xlbs1;port=3306;uid=asset_manager_user;pwd=A553tP455;database=asset_manager"
     Private MySQLConnectString As String = "server=10.10.80.232;uid=asset_mgr_usr;pwd=A553tP455;database=asset_manager" 'centos test
-    Public Const strDBDateTimeFormat As String = "YYYY-MM-DD hh:mm:ss"
+    Public Const strDBDateTimeFormat As String = "yyyy-MM-dd HH:mm:ss"
     Public Const strDBDateFormat As String = "yyyy-MM-dd"
     Public Const strCommMessage As String = "Communicating..."
     Public Const strLoadingGridMessage As String = "Building Grid..."
+    Public Const strCheckOut As String = "OUT"
+    Public Const strCheckIn As String = "IN"
     Public strLastQry As String
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
@@ -34,7 +36,7 @@ Public Module DBFunctions
         Public strStatus As String
         Public strNote As String
         Public bolTrackable As Boolean
-        Public bolCheckedOut As Boolean
+        Public Trackable As Track_Info
         Public Historical As Hist_Info
     End Structure
     Public Structure Hist_Info
@@ -43,6 +45,16 @@ Public Module DBFunctions
         Public strNote As String
         Public strActionUser As String
         Public dtActionDateTime As Date
+    End Structure
+    Public Structure Track_Info
+        Public strCheckOutTime As String
+        Public strDueBackTime As String
+        Public strCheckInTime As String
+        Public strCheckOutUser As String
+        Public strCheckInUser As String
+        Public strUseLocation As String
+        Public strUseReason As String
+        Public bolCheckedOut As Boolean
     End Structure
     Public CurrentDevice As Device_Info
     Public Locations() As Combo_Data
@@ -83,8 +95,6 @@ Public Module DBFunctions
     '    End With
     '    CloseConnection(ConnID)
     '    Return UID
-
-
     'End Function
     Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String, ByVal Status As String, ByVal Trackable As Boolean, ByVal CheckedOut As Boolean)
         With CurrentDevice
@@ -101,7 +111,7 @@ Public Module DBFunctions
             .strEqType = EQType
             .strStatus = Status
             .bolTrackable = Trackable
-            .bolCheckedOut = CheckedOut
+            .Trackable.bolCheckedOut = CheckedOut
         End With
     End Sub
     Public Function GetConnection(strGUID As String) As ConnectionData 'dynamically create new DB connections as needed

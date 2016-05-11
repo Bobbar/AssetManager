@@ -60,11 +60,9 @@ Public Class View
                 Case TypeOf c Is TextBox
                     Dim txt As TextBox = c
                     If txt.Name <> "txtGUID" Then
-
                         txt.ReadOnly = False
-
                     End If
-                        Case TypeOf c Is ComboBox
+                Case TypeOf c Is ComboBox
                     Dim cmb As ComboBox = c
                     cmb.Enabled = True
                 Case TypeOf c Is DateTimePicker
@@ -102,7 +100,7 @@ Public Class View
         cmdCancel.Visible = False
     End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
-        On Error GoTo errs
+        'On Error GoTo errs
         ClearFields()
         RefreshCombos()
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -155,14 +153,15 @@ errs:
             EndProgram()
         End If
     End Sub
-    Private Sub ViewTracking(strGUID As String)
-        On Error GoTo errs
+    Public Sub ViewTracking(strGUID As String)
+        'On Error GoTo errs
         'ClearFields()
         'RefreshCombos()
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
-        Dim strQry = "Select * FROM trackable, devices WHERE track_UID = dev_UID And track_UID = '" & strGUID & "' ORDER BY track_datestamp DESC"
+        Dim strQry = "Select * FROM trackable, devices WHERE track_device_uid = dev_UID And track_device_uid = '" & strGUID & "' ORDER BY track_datestamp DESC"
+        Debug.Print(strQry)
         Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
         table.Columns.Add("Date", GetType(String))
@@ -170,6 +169,7 @@ errs:
         table.Columns.Add("Check User", GetType(String))
         'table.Columns.Add("Check Time", GetType(String))
         table.Columns.Add("Location", GetType(String))
+        table.Columns.Add("Due Back", GetType(String))
         'table.Columns.Add("Serial", GetType(String))
         'table.Columns.Add("Description", GetType(String))
         'table.Columns.Add("Location", GetType(String))
@@ -178,13 +178,16 @@ errs:
         With reader
             Do While .Read()
                 'CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
-                txtCheckLocation.Text = !track_out_location
+                txtCheckLocation.Text = !track_use_location
                 txtCheckTime.Text = !track_checkout_time
                 txtCheckUser.Text = !track_checkout_user
                 txtDueBack.Text = !track_dueback_date
-
-
-
+                'CurrentDevice.Trackable.strCheckOutTime = !track_checkout_time
+                'CurrentDevice.Trackable.strCheckInTime = !track_checkin_time
+                'CurrentDevice.Trackable.strUseLocation = !track_use_location
+                'CurrentDevice.Trackable.strCheckOutUser = !track_checkout_user
+                'CurrentDevice.Trackable.strCheckInUser = !track_checkin_user
+                'CurrentDevice.Trackable.strDueBackTime = !track_dueback_date
                 'txtAssetTag_View_REQ.Text = !dev_asset_tag
                 'txtDescription_View_REQ.Text = !dev_description
                 'cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType,!dev_eq_type)
@@ -199,7 +202,7 @@ errs:
                 'chkTrackable.Checked = CBool(!dev_trackable)
                 'SetTracking(CBool(!dev_trackable))
                 'txtCheckOut.Text = UCase(Convert.ToString(CBool(!dev_checkedout)))
-                table.Rows.Add(!track_datestamp,!track_check_type,!track_checkout_user,!track_use_location,!track_uid)
+                table.Rows.Add(!track_datestamp,!track_check_type,!track_checkout_user,!track_use_location,!track_dueback_date,!track_uid)
             Loop
         End With
         CloseConnection(ConnID)
@@ -214,11 +217,6 @@ errs:
         Else
             EndProgram()
         End If
-
-
-
-
-
     End Sub
     Public Sub SetTracking(bolEnabled As Boolean, bolCheckedOut As Boolean)
         If bolEnabled Then
@@ -226,19 +224,15 @@ errs:
             'TrackingTab.Enabled = True
             TrackingToolStripMenuItem.Visible = True
             If Not TabControl1.TabPages.Contains(TrackingTab) Then TabControl1.TabPages.Insert(1, TrackingTab)
-
             TrackingBox.Visible = True
-                CheckOutMenu.Visible = Not bolCheckedOut
-                CheckInMenu.Visible = bolCheckedOut
-
-
-            Else
-                'TrackingTab.Enabled = False
-                'TrackingTab.Visible = False
-                TrackingToolStripMenuItem.Visible = False
+            CheckOutMenu.Visible = Not bolCheckedOut
+            CheckInMenu.Visible = bolCheckedOut
+        Else
+            'TrackingTab.Enabled = False
+            'TrackingTab.Visible = False
+            TrackingToolStripMenuItem.Visible = False
             TabControl1.TabPages.Remove(TrackingTab)
             TrackingBox.Visible = False
-
         End If
     End Sub
     Private Sub ModifyDevice()
@@ -437,5 +431,11 @@ errs:
         If e.Button = MouseButtons.Right Then
             DataGridHistory.CurrentCell = DataGridHistory(e.ColumnIndex, e.RowIndex) 'DataGridHistory.RowIndex
         End If
+    End Sub
+    Private Sub CheckInMenu_Click(sender As Object, e As EventArgs) Handles CheckInMenu.Click
+        Tracking.Show()
+    End Sub
+    Private Sub CheckOutMenu_Click(sender As Object, e As EventArgs) Handles CheckOutMenu.Click
+        Tracking.Show()
     End Sub
 End Class
