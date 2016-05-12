@@ -11,8 +11,8 @@ Public Class UpdateDev
         strNewNote = Trim(txtUpdate_Note.Text)
         txtUpdate_Note.Text = ""
         View.GetNewValues()
-        UpdateDevice()
         Me.Hide()
+        UpdateDevice()
         cmbUpdate_ChangeType.Enabled = True
     End Sub
     Private Sub UpdateDev_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing

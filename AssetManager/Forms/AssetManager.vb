@@ -4,7 +4,7 @@ Imports MySql.Data.MySqlClient
 Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
 Public Class AssetManager
-    Private strSearchString As String
+    Private strSearchString As String, strPrevSearchString As String
     'Private SearchResults() As String
     Private CurrentControl As Control
     Dim dtResults As New DataTable
@@ -315,10 +315,10 @@ errs:
     Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
     End Sub
-    Public Sub Waiting()
+    Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
     End Sub
-    Public Sub DoneWaiting()
+    Private Sub DoneWaiting()
         Me.Cursor = Cursors.Default
     End Sub
     Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditToolStripMenuItem.Click
@@ -343,6 +343,7 @@ errs:
         AddNew.Show()
     End Sub
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles LiveQueryWorker.DoWork
+        strPrevSearchString = strSearchString
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim ds As New DataSet
         Dim da As New MySqlDataAdapter
@@ -406,6 +407,7 @@ errs:
         Else
             LiveBox.Visible = False
         End If
+        If strPrevSearchString <> CurrentControl.Text Then StartLiveSearch() 'if search string has changed since last completetion, run again.
     End Sub
     Private Sub QueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LiveQueryWorker.RunWorkerCompleted
         DrawLiveBox()

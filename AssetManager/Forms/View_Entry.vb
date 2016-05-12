@@ -3,7 +3,14 @@ Public Class View_Entry
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
     End Sub
+    Private Sub Waiting()
+        Me.Cursor = Cursors.WaitCursor
+    End Sub
+    Private Sub DoneWaiting()
+        Me.Cursor = Cursors.Default
+    End Sub
     Public Sub ViewEntry(ByVal EntryUID As String)
+        Waiting()
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
@@ -34,6 +41,7 @@ Public Class View_Entry
             Loop
         End With
         CloseConnection(ConnID)
+        DoneWaiting()
     End Sub
     Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
     End Sub

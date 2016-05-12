@@ -97,6 +97,7 @@ Public Class Tracking
     Private Sub CheckOut()
         'On Error GoTo errs
         If Not GetCheckData() Then Exit Sub
+        Waiting()
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim rows As Integer
         Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='1' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
@@ -114,21 +115,30 @@ Public Class Tracking
         Else
             Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
         End If
-        GetCurrentTracking(CurrentDevice.strGUID)
-        View.ViewTracking(CurrentDevice.strGUID)
-        View.ViewDevice(CurrentDevice.strGUID)
         Me.Hide()
+        'GetCurrentTracking(CurrentDevice.strGUID)
+        'View.ViewTracking(CurrentDevice.strGUID)
+        View.ViewDevice(CurrentDevice.strGUID)
+        DoneWaiting()
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            DoneWaiting()
             Resume Next
         Else
             EndProgram()
         End If
     End Sub
+    Private Sub Waiting()
+        Me.Cursor = Cursors.WaitCursor
+    End Sub
+    Private Sub DoneWaiting()
+        Me.Cursor = Cursors.Default
+    End Sub
     Private Sub CheckIn()
         'On Error GoTo errs
         If Not GetCheckData() Then Exit Sub
+        Waiting()
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim rows As Integer
         Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='0' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
@@ -146,13 +156,15 @@ errs:
         Else
             Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
         End If
-        GetCurrentTracking(CurrentDevice.strGUID)
-        View.ViewTracking(CurrentDevice.strGUID)
-        View.ViewDevice(CurrentDevice.strGUID)
         Me.Hide()
+        'GetCurrentTracking(CurrentDevice.strGUID)
+        'View.ViewTracking(CurrentDevice.strGUID)
+        View.ViewDevice(CurrentDevice.strGUID)
+        DoneWaiting()
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            DoneWaiting()
             Resume Next
         Else
             EndProgram()

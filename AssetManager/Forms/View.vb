@@ -101,7 +101,8 @@ Public Class View
         cmdCancel.Visible = False
     End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
-        'On Error GoTo errs
+        On Error GoTo errs
+        Waiting()
         ClearFields()
         RefreshCombos()
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -145,16 +146,25 @@ Public Class View
         DisableControls()
         DataGridHistory.AutoResizeColumns()
         ViewTracking(CurrentDevice.strGUID)
+        DoneWaiting()
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            DoneWaiting()
             Resume Next
         Else
             EndProgram()
         End If
     End Sub
+    Private Sub Waiting()
+        Me.Cursor = Cursors.WaitCursor
+    End Sub
+    Private Sub DoneWaiting()
+        Me.Cursor = Cursors.Default
+    End Sub
     Public Sub ViewTracking(strGUID As String)
         On Error GoTo errs
+        Waiting()
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
@@ -183,9 +193,11 @@ errs:
         FillTrackingBox()
         SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
         TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
+        DoneWaiting()
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            DoneWaiting()
             Resume Next
         Else
             EndProgram()
@@ -335,8 +347,10 @@ errs:
     End Sub
     Private Sub NewEntryView(GUID As String)
         Dim NewEntry As New View_Entry
+        Waiting()
         NewEntry.ViewEntry(GUID)
         NewEntry.Show()
+        DoneWaiting()
     End Sub
     Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddNoteToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub
@@ -445,12 +459,16 @@ errs:
         End If
     End Sub
     Private Sub CheckInMenu_Click(sender As Object, e As EventArgs) Handles CheckInMenu.Click
+        Waiting()
         Tracking.SetupTracking()
         Tracking.Show()
+        DoneWaiting()
     End Sub
     Private Sub CheckOutMenu_Click(sender As Object, e As EventArgs) Handles CheckOutMenu.Click
+        Waiting()
         Tracking.SetupTracking()
         Tracking.Show()
+        DoneWaiting()
     End Sub
     Private Sub TrackingGrid_RowPrePaint(sender As Object, e As DataGridViewRowPrePaintEventArgs) Handles TrackingGrid.RowPrePaint
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
@@ -466,5 +484,7 @@ errs:
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
         TrackingGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnMode.ColumnHeader
         TrackingGrid.AutoResizeColumns()
+    End Sub
+    Private Sub DataGridHistory_CellContentClick_1(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
     End Sub
 End Class
