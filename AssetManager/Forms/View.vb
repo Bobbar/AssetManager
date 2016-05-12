@@ -481,7 +481,7 @@ errs:
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
         End If
     End Sub
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs) 
         TrackingGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnMode.ColumnHeader
         TrackingGrid.AutoResizeColumns()
     End Sub

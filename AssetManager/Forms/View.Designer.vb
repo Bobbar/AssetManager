@@ -33,7 +33,6 @@ Partial Class View
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.pnlViewControls = New System.Windows.Forms.Panel()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.cmdCancel = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -165,7 +164,6 @@ Partial Class View
         '
         'pnlViewControls
         '
-        Me.pnlViewControls.Controls.Add(Me.Button1)
         Me.pnlViewControls.Controls.Add(Me.chkTrackable)
         Me.pnlViewControls.Controls.Add(Me.cmdCancel)
         Me.pnlViewControls.Controls.Add(Me.Label10)
@@ -195,15 +193,6 @@ Partial Class View
         Me.pnlViewControls.Name = "pnlViewControls"
         Me.pnlViewControls.Size = New System.Drawing.Size(760, 209)
         Me.pnlViewControls.TabIndex = 38
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(703, 29)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(35, 27)
-        Me.Button1.TabIndex = 59
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
         '
         'chkTrackable
         '
@@ -703,6 +692,7 @@ Partial Class View
         Me.TrackingBox.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem
@@ -758,5 +748,4 @@ Partial Class View
     Friend WithEvents Label16 As Label
     Friend WithEvents txtDueBack As TextBox
     Friend WithEvents lblDueBack As Label
-    Friend WithEvents Button1 As Button
 End Class

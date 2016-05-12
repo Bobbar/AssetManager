@@ -95,10 +95,16 @@ Public Class AssetManager
     Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs)
     End Sub
     Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click
-        'CheckForIllegalCrossThreadCalls = False
-        'Dim Thread1 As New Thread(AddressOf ShowAll)
-        'Thread1.Start()
-        ShowAll()
+
+        'ShowAll()
+
+        If Not BigQueryWorker.IsBusy Then
+            StatusBar("Request sent to background...")
+            'picRunning.Visible = True
+            StripSpinner.Visible = True
+            BigQueryWorker.RunWorkerAsync()
+        End If
+
     End Sub
     Private Sub ShowAll()
         On Error GoTo errs
@@ -221,6 +227,7 @@ errs:
                 Results.strGUID = !dev_UID
                 Results.strEqType = !dev_eq_type
                 AddToResults(Results)
+
             Loop
         End With
         SendToGrid(ResultGrid, SearchResults)
@@ -330,11 +337,7 @@ errs:
             Debug.Print(i & " - " & CurrentConnections(i).ConnectionID & " = " & CurrentConnections(i).DBConnection.State)
         Next
     End Sub
-    Private Sub Button2_Click_2(sender As Object, e As EventArgs) Handles Button2.Click
-        For i As Integer = 0 To UBound(CurrentConnections)
-            Debug.Print(CurrentConnections(i).ConnectionID & " - " & CurrentConnections(i).DBConnection.State)
-        Next
-    End Sub
+
     Private Sub YearsSincePurchaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles YearsSincePurchaseToolStripMenuItem.Click
         ReportView.Show()
     End Sub
@@ -407,7 +410,10 @@ errs:
         Else
             LiveBox.Visible = False
         End If
-        If strPrevSearchString <> CurrentControl.Text Then StartLiveSearch() 'if search string has changed since last completetion, run again.
+        If strPrevSearchString <> CurrentControl.Text Then
+            strSearchString = CurrentControl.Text
+            StartLiveSearch() 'if search string has changed since last completetion, run again.
+        End If
     End Sub
     Private Sub QueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LiveQueryWorker.RunWorkerCompleted
         DrawLiveBox()
@@ -447,9 +453,52 @@ errs:
         strSearchString = txtDescription.Text
         StartLiveSearch()
     End Sub
+
+    Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
+        Dim i As Integer
+        Dim reader As MySqlDataReader
+        Dim table As New DataTable
+        Dim ConnID As String = Guid.NewGuid.ToString
+        Dim strQry = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
+        strLastQry = strQry
+        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        reader = cmd.ExecuteReader
+        With reader
+            StatusBar(strCommMessage)
+            i += 1
+            BigQueryWorker.ReportProgress(i)
+            Do While .Read()
+                Dim Results As Device_Info
+                Results.strCurrentUser = !dev_cur_user
+                Results.strAssetTag = !dev_asset_tag
+                Results.strSerial = !dev_serial
+                Results.strDescription = !dev_description
+                Results.strLocation = !dev_location
+                Results.dtPurchaseDate = !dev_purchase_date
+                Results.strGUID = !dev_UID
+                Results.strEqType = !dev_eq_type
+                AddToResults(Results)
+
+            Loop
+        End With
+
+        CloseConnection(ConnID)
+    End Sub
+
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
         CurrentControl = txtCurUser
         strSearchString = txtCurUser.Text
         StartLiveSearch()
+    End Sub
+
+    Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
+        SendToGrid(ResultGrid, SearchResults)
+        StatusBar("Idle...")
+        StripSpinner.Visible = False
+        'picRunning.Visible = False
+    End Sub
+
+    Private Sub BigQueryWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BigQueryWorker.ProgressChanged
+        StatusBar("Background query running...")
     End Sub
 End Class

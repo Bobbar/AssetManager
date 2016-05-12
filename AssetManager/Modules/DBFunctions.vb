@@ -12,7 +12,6 @@ Public Module DBFunctions
     Public Const strCheckIn As String = "IN"
     Public strLastQry As String
     Private ConnCount As Integer = 0
-
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
@@ -127,12 +126,14 @@ Public Module DBFunctions
                 CurrentConnections(0).ConnectionID = strGUID
                 CurrentConnections(0).DBConnection = New MySqlConnection(MySQLConnectString)
                 CurrentConnections(0).DBConnection.Open()
+                ListConnections()
                 Return CurrentConnections(0)
             Else 'after first connection create more if needed. Reuse previously closed connections first
                 For i = 0 To UBound(CurrentConnections)
                     If CurrentConnections(i).DBConnection.State = 0 Then 'if we find a closed connection, reuse it
                         CurrentConnections(i).ConnectionID = strGUID
                         CurrentConnections(i).DBConnection.Open()
+                        ListConnections()
                         Return CurrentConnections(i)
                         Exit Function   'i'm pretty sure this is redundant. But I'm paranoid.
                     End If
@@ -143,6 +144,7 @@ Public Module DBFunctions
                 CurrentConnections(UBound(CurrentConnections)).ConnectionID = strGUID
                 CurrentConnections(UBound(CurrentConnections)).DBConnection = New MySqlConnection(MySQLConnectString)
                 CurrentConnections(UBound(CurrentConnections)).DBConnection.Open()
+                ListConnections()
                 Return CurrentConnections(UBound(CurrentConnections))
             End If
         Catch exError As MySqlException
@@ -150,6 +152,13 @@ Public Module DBFunctions
             Return Nothing
         End Try
     End Function
+    Private Sub ListConnections()
+        Debug.Print("")
+        For i As Integer = 0 To UBound(CurrentConnections)
+            Debug.Print(CurrentConnections(i).ConnectionID & " - " & CurrentConnections(i).DBConnection.State)
+        Next
+        Debug.Print("")
+    End Sub
     Public Sub GetCurrentTracking(strGUID As String)
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim ds As New DataSet

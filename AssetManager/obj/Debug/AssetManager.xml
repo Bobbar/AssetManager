@@ -112,6 +112,11 @@ Used to sort self-referenced table's rows
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:AssetManager.My.Resources.Resources.loading">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:AssetManager.My.Resources.Resources.presentation_512">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
