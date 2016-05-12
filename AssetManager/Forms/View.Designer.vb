@@ -20,6 +20,7 @@ Partial Class View
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -32,6 +33,7 @@ Partial Class View
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.pnlViewControls = New System.Windows.Forms.Panel()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.cmdCancel = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -142,13 +144,13 @@ Partial Class View
         'CheckInMenu
         '
         Me.CheckInMenu.Name = "CheckInMenu"
-        Me.CheckInMenu.Size = New System.Drawing.Size(152, 22)
+        Me.CheckInMenu.Size = New System.Drawing.Size(132, 22)
         Me.CheckInMenu.Text = "Check In"
         '
         'CheckOutMenu
         '
         Me.CheckOutMenu.Name = "CheckOutMenu"
-        Me.CheckOutMenu.Size = New System.Drawing.Size(152, 22)
+        Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
         Me.CheckOutMenu.Text = "Check Out"
         '
         'GroupBox1
@@ -163,6 +165,7 @@ Partial Class View
         '
         'pnlViewControls
         '
+        Me.pnlViewControls.Controls.Add(Me.Button1)
         Me.pnlViewControls.Controls.Add(Me.chkTrackable)
         Me.pnlViewControls.Controls.Add(Me.cmdCancel)
         Me.pnlViewControls.Controls.Add(Me.Label10)
@@ -192,6 +195,15 @@ Partial Class View
         Me.pnlViewControls.Name = "pnlViewControls"
         Me.pnlViewControls.Size = New System.Drawing.Size(760, 209)
         Me.pnlViewControls.TabIndex = 38
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(703, 29)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(35, 27)
+        Me.Button1.TabIndex = 59
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'chkTrackable
         '
@@ -450,7 +462,7 @@ Partial Class View
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.Controls.Add(Me.HistoryTab)
         Me.TabControl1.Controls.Add(Me.TrackingTab)
-        Me.TabControl1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TabControl1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TabControl1.ItemSize = New System.Drawing.Size(61, 21)
         Me.TabControl1.Location = New System.Drawing.Point(13, 275)
         Me.TabControl1.Name = "TabControl1"
@@ -507,13 +519,22 @@ Partial Class View
         '
         Me.TrackingGrid.AllowUserToAddRows = False
         Me.TrackingGrid.AllowUserToDeleteRows = False
+        Me.TrackingGrid.AllowUserToResizeColumns = False
         Me.TrackingGrid.AllowUserToResizeRows = False
         Me.TrackingGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TrackingGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.TrackingGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        Me.TrackingGrid.ContextMenuStrip = Me.RightClickMenu
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.TrackingGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        Me.TrackingGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.TrackingGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.TrackingGrid.Location = New System.Drawing.Point(6, 6)
         Me.TrackingGrid.MultiSelect = False
@@ -737,4 +758,5 @@ Partial Class View
     Friend WithEvents Label16 As Label
     Friend WithEvents txtDueBack As TextBox
     Friend WithEvents lblDueBack As Label
+    Friend WithEvents Button1 As Button
 End Class

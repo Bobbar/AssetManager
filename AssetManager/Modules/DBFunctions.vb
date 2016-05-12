@@ -11,6 +11,8 @@ Public Module DBFunctions
     Public Const strCheckOut As String = "OUT"
     Public Const strCheckIn As String = "IN"
     Public strLastQry As String
+    Private ConnCount As Integer = 0
+
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
@@ -115,6 +117,8 @@ Public Module DBFunctions
         End With
     End Sub
     Public Function GetConnection(strGUID As String) As ConnectionData 'dynamically create new DB connections as needed
+        ConnCount += 1
+        Debug.Print("Connection Request: " & ConnCount & " - " & strGUID)
         Try
             StatusBar("Connecting...")
             Dim i As Integer
@@ -158,7 +162,6 @@ Public Module DBFunctions
         da.Fill(ds)
         CloseConnection(ConnID)
         dt = ds.Tables(0)
-        Debug.Print(dt.Rows.Count)
         If dt.Rows.Count > 0 Then
             For Each dr In dt.Rows
                 With dr

@@ -19,6 +19,7 @@ Public Class View
     Public NewData As Device_Info
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
+        ExtendedMethods.DoubleBuffered(TrackingGrid, True)
         'AssetManager.CopyDefaultCellStyles()
         'ClearFields()
     End Sub
@@ -140,7 +141,7 @@ Public Class View
         End With
         CloseConnection(ConnID)
         DataGridHistory.DataSource = table
-        DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
+        'DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
         DisableControls()
         DataGridHistory.AutoResizeColumns()
         ViewTracking(CurrentDevice.strGUID)
@@ -153,14 +154,11 @@ errs:
         End If
     End Sub
     Public Sub ViewTracking(strGUID As String)
-        'On Error GoTo errs
-        'ClearFields()
-        'RefreshCombos()
+        On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim strQry = "Select * FROM trackable, devices WHERE track_device_uid = dev_UID And track_device_uid = '" & strGUID & "' ORDER BY track_datestamp DESC"
-        Debug.Print(strQry)
         Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
         table.Columns.Add("Date", GetType(String))
@@ -170,47 +168,21 @@ errs:
         table.Columns.Add("Check Out", GetType(String))
         table.Columns.Add("Check In", GetType(String))
         table.Columns.Add("Due Back", GetType(String))
-        'table.Columns.Add("Check Time", GetType(String))
         table.Columns.Add("Location", GetType(String))
-        'table.Columns.Add("Serial", GetType(String))
-        'table.Columns.Add("Description", GetType(String))
-        'table.Columns.Add("Location", GetType(String))
-        'table.Columns.Add("Purchase Date", GetType(String))
         table.Columns.Add("GUID", GetType(String))
         With reader
             Do While .Read()
-                'CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
-                'CurrentDevice.Trackable.strCheckOutTime = !track_checkout_time
-                'CurrentDevice.Trackable.strCheckInTime = !track_checkin_time
-                'CurrentDevice.Trackable.strUseLocation = !track_use_location
-                'CurrentDevice.Trackable.strCheckOutUser = !track_checkout_user
-                'CurrentDevice.Trackable.strCheckInUser = !track_checkin_user
-                'CurrentDevice.Trackable.strDueBackTime = !track_dueback_date
-                'txtAssetTag_View_REQ.Text = !dev_asset_tag
-                'txtDescription_View_REQ.Text = !dev_description
-                'cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType,!dev_eq_type)
-                'txtSerial_View_REQ.Text = !dev_serial
-                'cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.Location,!dev_location)
-                'txtCurUser_View_REQ.Text = !dev_cur_user
-                'dtPurchaseDate_View_REQ.Value = !dev_purchase_date
-                'txtReplacementYear_View.Text = !dev_replacement_year
-                'cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.OSType,!dev_osversion)
-                'cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
-                'txtGUID.Text = !dev_UID
-                'chkTrackable.Checked = CBool(!dev_trackable)
-                'SetTracking(CBool(!dev_trackable))
-                'txtCheckOut.Text = UCase(Convert.ToString(CBool(!dev_checkedout)))
                 table.Rows.Add(!track_datestamp,!track_check_type,!track_checkout_user,!track_checkin_user,!track_checkout_time,!track_checkin_time,!track_dueback_date,!track_use_location,!track_uid)
             Loop
         End With
         CloseConnection(ConnID)
         TrackingGrid.DataSource = table
-        'DisableControls()
         TrackingGrid.AutoResizeColumns()
-        'HighlighRows(TrackingGrid)
         GetCurrentTracking(CurrentDevice.strGUID)
-        SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
+        DisableSorting(TrackingGrid)
         FillTrackingBox()
+        SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
+        TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -218,6 +190,12 @@ errs:
         Else
             EndProgram()
         End If
+    End Sub
+    Private Sub DisableSorting(Grid As DataGridView)
+        Dim c As DataGridViewColumn
+        For Each c In Grid.Columns
+            c.SortMode = DataGridViewColumnSortMode.NotSortable
+        Next
     End Sub
     Private Sub FillTrackingBox()
         If CBool(CurrentDevice.Tracking.bolCheckedOut) Then
@@ -256,6 +234,7 @@ errs:
             'TrackingTab.Enabled = True
             TrackingToolStripMenuItem.Visible = True
             If Not TabControl1.TabPages.Contains(TrackingTab) Then TabControl1.TabPages.Insert(1, TrackingTab)
+            AssetManager.CopyDefaultCellStyles()
             TrackingBox.Visible = True
             CheckOutMenu.Visible = Not bolCheckedOut
             CheckInMenu.Visible = bolCheckedOut
@@ -264,6 +243,7 @@ errs:
             'TrackingTab.Visible = False
             TrackingToolStripMenuItem.Visible = False
             TabControl1.TabPages.Remove(TrackingTab)
+            AssetManager.CopyDefaultCellStyles()
             TrackingBox.Visible = False
         End If
     End Sub
@@ -482,5 +462,9 @@ errs:
         ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckOut Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
         End If
+    End Sub
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
+        TrackingGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnMode.ColumnHeader
+        TrackingGrid.AutoResizeColumns()
     End Sub
 End Class

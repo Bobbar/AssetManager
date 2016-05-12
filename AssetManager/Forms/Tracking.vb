@@ -13,7 +13,6 @@ Public Class Tracking
     End Structure
     Private CheckData As CheckStruct
     Private Function GetCheckData() As Boolean
-        'Dim bolEmptyFields As Boolean = False
         If Not CurrentDevice.Tracking.bolCheckedOut Then
             Dim c As Control
             For Each c In CheckOutBox.Controls
@@ -74,9 +73,14 @@ Public Class Tracking
     Private Sub ClearAll()
         Dim c As Control
         For Each c In Me.Controls
-            If TypeOf c Is TextBox Then
-                Dim txt As TextBox = c
-                txt.Text = ""
+            If TypeOf c Is GroupBox Then
+                Dim gc As Control
+                For Each gc In c.Controls
+                    If TypeOf gc Is TextBox Then
+                        Dim txt As TextBox = gc
+                        txt.Text = ""
+                    End If
+                Next
             End If
         Next
     End Sub
@@ -85,7 +89,6 @@ Public Class Tracking
         dtCheckIn.Value = Now
         dtCheckOut.Enabled = False
         dtCheckIn.Enabled = False
-        Debug.Print(dtCheckOut.Value.ToString(strDBDateTimeFormat))
     End Sub
     Private Sub SetGroups()
         CheckInBox.Enabled = CurrentDevice.Tracking.bolCheckedOut

@@ -10,6 +10,8 @@ Module OtherFunctions
     Public colCheckIn As Color = ColorTranslator.FromHtml("#B6FCC0")
     Public colCheckOut As Color = ColorTranslator.FromHtml("#FCB6B6")
     Public ViewFormIndex As Integer
+    Public GridStylez As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
+    Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Public Sub Logger(Message As String)
         Dim DateStamp As String = DateTime.Now
         If Not File.Exists(strLogPath) Then

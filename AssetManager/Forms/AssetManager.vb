@@ -27,6 +27,7 @@ Public Class AssetManager
         Status("Checking Access Level...")
         GetUserAccess()
         Clear_All()
+        GetGridStylez()
         CopyDefaultCellStyles()
         ViewFormIndex = 0
         Status("Loading devices...")
@@ -37,15 +38,31 @@ Public Class AssetManager
         Me.Show()
         'Tracking.Show()
     End Sub
+    Public Sub GetGridStylez()
+        Dim tmpStyle As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        tmpStyle.Alignment = ResultGrid.DefaultCellStyle.Alignment
+        tmpStyle.BackColor = ResultGrid.DefaultCellStyle.BackColor
+        tmpStyle.Font = ResultGrid.DefaultCellStyle.Font
+        tmpStyle.ForeColor = ResultGrid.DefaultCellStyle.ForeColor
+        tmpStyle.SelectionBackColor = ResultGrid.DefaultCellStyle.SelectionBackColor
+        tmpStyle.SelectionForeColor = ResultGrid.DefaultCellStyle.SelectionForeColor
+        tmpStyle.WrapMode = ResultGrid.DefaultCellStyle.WrapMode
+        'Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle2
+        GridStylez = tmpStyle
+    End Sub
     Public Sub Status(Text As String)
         SplashScreen.lblStatus.Text = Text
         SplashScreen.Refresh()
     End Sub
     Public Sub CopyDefaultCellStyles()
-        View.DataGridHistory.DefaultCellStyle = ResultGrid.DefaultCellStyle
+        'View.DataGridHistory.DefaultCellStyle = ResultGrid.DefaultCellStyle
         View.DataGridHistory.BackgroundColor = ResultGrid.BackgroundColor
-        View.TrackingGrid.DefaultCellStyle = ResultGrid.DefaultCellStyle
+        'View.TrackingGrid.DefaultCellStyle = ResultGrid.DefaultCellStyle
         View.TrackingGrid.BackgroundColor = ResultGrid.BackgroundColor
+        View.DataGridHistory.DefaultCellStyle = GridStylez
+        View.DataGridHistory.DefaultCellStyle.Font = GridFont
+        View.TrackingGrid.DefaultCellStyle = GridStylez
+        View.TrackingGrid.DefaultCellStyle.Font = GridFont
     End Sub
     Private Sub BuildIndexes()
         Logger("Building Indexes...")
@@ -245,6 +262,7 @@ errs:
         Waiting()
         View.ViewDevice(strGUID)
         View.Show()
+        ' View.SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
         View.Activate()
         DoneWaiting()
     End Sub
@@ -397,8 +415,6 @@ errs:
         strSearchString = txtSerial.Text
         StartLiveSearch()
     End Sub
-    Private Sub txtCurUser_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser.TextChanged
-    End Sub
     Private Sub StartLiveSearch()
         If Trim(strSearchString) <> "" Then
             If Not LiveQueryWorker.IsBusy Then LiveQueryWorker.RunWorkerAsync()
@@ -407,7 +423,6 @@ errs:
         End If
     End Sub
     Private Sub LiveBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LiveBox.SelectedIndexChanged
-        Debug.Print(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
         Select Case CurrentControl.Name
             Case "txtDescription"
                 CurrentControl.Text = LiveBox.Text
@@ -425,24 +440,14 @@ errs:
         'End If
         HideLiveBox()
     End Sub
-    Private Sub txtDescription_TextChanged(sender As Object, e As EventArgs) Handles txtDescription.TextChanged
-    End Sub
-    Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
-    End Sub
     Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
         CurrentControl = txtDescription
         strSearchString = txtDescription.Text
         StartLiveSearch()
     End Sub
-    Private Sub txtDescription_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtDescription.KeyPress
-    End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
         CurrentControl = txtCurUser
         strSearchString = txtCurUser.Text
         StartLiveSearch()
-    End Sub
-    Private Sub txtAssetTagSearch_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTagSearch.TextChanged
-    End Sub
-    Private Sub txtSerialSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSerialSearch.TextChanged
     End Sub
 End Class

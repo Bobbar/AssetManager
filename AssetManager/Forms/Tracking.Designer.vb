@@ -166,6 +166,7 @@ Partial Class Tracking
         Me.txtUseReason.Name = "txtUseReason"
         Me.txtUseReason.Size = New System.Drawing.Size(256, 68)
         Me.txtUseReason.TabIndex = 9
+        Me.txtUseReason.Text = "test"
         '
         'Label8
         '
