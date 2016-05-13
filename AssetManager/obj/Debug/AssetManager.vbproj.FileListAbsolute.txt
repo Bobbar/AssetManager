@@ -58,5 +58,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Tracking.resources
-C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.CodeAnalysisLog.xml
-C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.lastcodeanalysissucceeded
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache

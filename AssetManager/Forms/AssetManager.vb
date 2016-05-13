@@ -381,6 +381,7 @@ errs:
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim ds As New DataSet
         Dim da As New MySqlDataAdapter
+        Dim RowLimit As Integer = 20
         Dim strQryRow As String
         Select Case CurrentControl.Name
             Case "txtAssetTag"
@@ -392,7 +393,7 @@ errs:
             Case "txtDescription"
                 strQryRow = "dev_description"
         End Select
-        da.SelectCommand = New MySqlCommand("SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT 10")
+        da.SelectCommand = New MySqlCommand("SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit)
         da.SelectCommand.Connection = GetConnection(ConnID).DBConnection
         da.Fill(ds)
         CloseConnection(ConnID)
@@ -411,6 +412,7 @@ errs:
         StartLiveSearch()
     End Sub
     Private Sub DrawLiveBox()
+        On Error GoTo errs
         Dim dr As DataRow
         LiveBox.Items.Clear()
         Dim strQryRow As String
@@ -445,6 +447,12 @@ errs:
             strSearchString = CurrentControl.Text
             StartLiveSearch() 'if search string has changed since last completetion, run again.
         End If
+        Exit Sub
+errs:
+        LiveBox.Visible = False
+
+        LiveBox.Items.Clear()
+
     End Sub
     Private Sub QueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LiveQueryWorker.RunWorkerCompleted
         DrawLiveBox()
@@ -462,22 +470,7 @@ errs:
         End If
     End Sub
     Private Sub LiveBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LiveBox.SelectedIndexChanged
-        Select Case CurrentControl.Name
-            Case "txtDescription"
-                CurrentControl.Text = LiveBox.Text
-                DynamicSearch()
-            Case "txtCurUser"
-                CurrentControl.Text = LiveBox.Text
-                DynamicSearch()
-            Case Else
-                LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
-        End Select
-        'If CurrentControl.Name <> "txtDescription" Or CurrentControl.Name <> "txtCurUser" Then
-        '    LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
-        'Else
-        '    CurrentControl.Text = LiveBox.Text
-        'End If
-        HideLiveBox()
+
     End Sub
     Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
         CurrentControl = txtDescription
@@ -533,4 +526,82 @@ errs:
     Private Sub BigQueryWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BigQueryWorker.ProgressChanged
         StatusBar("Background query running...")
     End Sub
+
+    Private Sub txtAssetTag_KeyDown(sender As Object, e As KeyEventArgs) Handles txtAssetTag.KeyDown
+        If e.KeyCode = Keys.Down Then
+            LiveBox.Focus()
+            LiveBox.SelectedIndex = 0
+        End If
+    End Sub
+
+    Private Sub LiveBox_MouseClick(sender As Object, e As MouseEventArgs) Handles LiveBox.MouseClick
+        LiveBoxSelect()
+    End Sub
+    Private Sub LiveBoxSelect()
+        Select Case CurrentControl.Name
+            Case "txtDescription"
+                CurrentControl.Text = LiveBox.Text
+                DynamicSearch()
+            Case "txtCurUser"
+                CurrentControl.Text = LiveBox.Text
+                DynamicSearch()
+            Case Else
+                LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
+        End Select
+        'If CurrentControl.Name <> "txtDescription" Or CurrentControl.Name <> "txtCurUser" Then
+        '    LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
+        'Else
+        '    CurrentControl.Text = LiveBox.Text
+        'End If
+        HideLiveBox()
+    End Sub
+    Private Sub LiveBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles LiveBox.KeyPress
+
+    End Sub
+
+    Private Sub txtCurUser_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser.TextChanged
+
+    End Sub
+
+    Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs) Handles LiveBox.KeyDown
+        If e.KeyCode = Keys.Enter Then LiveBoxSelect()
+    End Sub
+
+    Private Sub txtDescription_TextChanged(sender As Object, e As EventArgs) Handles txtDescription.TextChanged
+
+    End Sub
+
+    Private Sub txtSerial_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSerial.KeyDown
+        If e.KeyCode = Keys.Down Then
+            LiveBox.Focus()
+            LiveBox.SelectedIndex = 0
+        End If
+    End Sub
+
+    Private Sub txtAssetTagSearch_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTagSearch.TextChanged
+
+    End Sub
+
+    Private Sub txtCurUser_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyDown
+        If e.KeyCode = Keys.Down Then
+            LiveBox.Focus()
+            LiveBox.SelectedIndex = 0
+        End If
+    End Sub
+
+    Private Sub txtSerialSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSerialSearch.TextChanged
+
+    End Sub
+
+    Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
+        If e.KeyCode = Keys.Down Then
+            LiveBox.Focus()
+            LiveBox.SelectedIndex = 0
+        End If
+    End Sub
+
+
+
+
+
 End Class

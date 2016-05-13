@@ -20,8 +20,8 @@ Partial Class AssetManager
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AssetManager))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -41,6 +41,7 @@ Partial Class AssetManager
         Me.txtAssetTagSearch = New System.Windows.Forms.TextBox()
         Me.txtSerialSearch = New System.Windows.Forms.TextBox()
         Me.cmdSearch = New System.Windows.Forms.Button()
+        Me.cmdClear = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -53,7 +54,6 @@ Partial Class AssetManager
         Me.cmbEquipType = New System.Windows.Forms.ComboBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.cmdShowAll = New System.Windows.Forms.Button()
-        Me.cmdClear = New System.Windows.Forms.Button()
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -120,7 +120,6 @@ Partial Class AssetManager
         Me.GroupBox1.Controls.Add(Me.SearchGroup)
         Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.cmdShowAll)
-        Me.GroupBox1.Controls.Add(Me.cmdClear)
         Me.GroupBox1.Controls.Add(Me.ResultGrid)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 29)
         Me.GroupBox1.Name = "GroupBox1"
@@ -201,6 +200,7 @@ Partial Class AssetManager
         Me.SearchGroup.Controls.Add(Me.txtAssetTagSearch)
         Me.SearchGroup.Controls.Add(Me.txtSerialSearch)
         Me.SearchGroup.Controls.Add(Me.cmdSearch)
+        Me.SearchGroup.Controls.Add(Me.cmdClear)
         Me.SearchGroup.Controls.Add(Me.Label2)
         Me.SearchGroup.Controls.Add(Me.txtDescription)
         Me.SearchGroup.Controls.Add(Me.Label1)
@@ -260,12 +260,22 @@ Partial Class AssetManager
         'cmdSearch
         '
         Me.cmdSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdSearch.Location = New System.Drawing.Point(717, 49)
+        Me.cmdSearch.Location = New System.Drawing.Point(718, 20)
         Me.cmdSearch.Name = "cmdSearch"
         Me.cmdSearch.Size = New System.Drawing.Size(88, 56)
         Me.cmdSearch.TabIndex = 45
         Me.cmdSearch.Text = "Search"
         Me.cmdSearch.UseVisualStyleBackColor = True
+        '
+        'cmdClear
+        '
+        Me.cmdClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdClear.Location = New System.Drawing.Point(718, 111)
+        Me.cmdClear.Name = "cmdClear"
+        Me.cmdClear.Size = New System.Drawing.Size(88, 32)
+        Me.cmdClear.TabIndex = 18
+        Me.cmdClear.Text = "Clear"
+        Me.cmdClear.UseVisualStyleBackColor = True
         '
         'Label2
         '
@@ -376,22 +386,12 @@ Partial Class AssetManager
         'cmdShowAll
         '
         Me.cmdShowAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdShowAll.Location = New System.Drawing.Point(1051, 30)
+        Me.cmdShowAll.Location = New System.Drawing.Point(1038, 77)
         Me.cmdShowAll.Name = "cmdShowAll"
-        Me.cmdShowAll.Size = New System.Drawing.Size(109, 31)
+        Me.cmdShowAll.Size = New System.Drawing.Size(134, 35)
         Me.cmdShowAll.TabIndex = 27
         Me.cmdShowAll.Text = "Show All"
         Me.cmdShowAll.UseVisualStyleBackColor = True
-        '
-        'cmdClear
-        '
-        Me.cmdClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdClear.Location = New System.Drawing.Point(1050, 113)
-        Me.cmdClear.Name = "cmdClear"
-        Me.cmdClear.Size = New System.Drawing.Size(110, 32)
-        Me.cmdClear.TabIndex = 18
-        Me.cmdClear.Text = "Clear"
-        Me.cmdClear.UseVisualStyleBackColor = True
         '
         'ResultGrid
         '
@@ -406,24 +406,24 @@ Partial Class AssetManager
         Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.ResultGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ResultGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ResultGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.ResultGrid.ContextMenuStrip = Me.ContextMenuStrip1
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(6, Byte), Integer), CType(CType(159, Byte), Integer), CType(CType(217, Byte), Integer))
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(6, Byte), Integer), CType(CType(159, Byte), Integer), CType(CType(217, Byte), Integer))
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle2
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.ResultGrid.Location = New System.Drawing.Point(15, 174)
         Me.ResultGrid.MultiSelect = False
