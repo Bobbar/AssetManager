@@ -253,6 +253,7 @@ errs:
         Else
             'TrackingTab.Enabled = False
             'TrackingTab.Visible = False
+
             TrackingToolStripMenuItem.Visible = False
             TabControl1.TabPages.Remove(TrackingTab)
             AssetManager.CopyDefaultCellStyles()
@@ -352,6 +353,13 @@ errs:
         NewEntry.Show()
         DoneWaiting()
     End Sub
+    Private Sub NewTrackingView(GUID As String)
+        Dim NewTracking As New View_Tracking
+        Waiting()
+        NewTracking.ViewTrackingEntry(GUID)
+        NewTracking.Show()
+        DoneWaiting()
+    End Sub
     Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddNoteToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub
         UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
@@ -400,10 +408,21 @@ errs:
         If Not CheckForAdmin() Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
-            Dim blah2 = MsgBox(DeleteDevice(CurrentDevice.strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
-            Me.Hide()
+            Dim rows As Integer
+            rows = DeleteDevice(CurrentDevice.strGUID)
+            If rows > 0 Then
+                Dim blah2 = MsgBox("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
+                CurrentDevice = Nothing
+                Me.Hide()
+            Else
+                Logger("*****DELETION ERROR******: " & CurrentDevice.strGUID)
+                Dim blah2 = MsgBox("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
+                CurrentDevice = Nothing
+                Me.Hide()
+            End If
+
         Else
-            Exit Sub
+                Exit Sub
         End If
     End Sub
     Private Sub txtAssetTag_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag_View_REQ.TextChanged
@@ -486,5 +505,17 @@ errs:
         TrackingGrid.AutoResizeColumns()
     End Sub
     Private Sub DataGridHistory_CellContentClick_1(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
+    End Sub
+
+    Private Sub TrackingGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellContentClick
+
+    End Sub
+
+    Private Sub TrackingGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellEnter
+
+    End Sub
+
+    Private Sub TrackingGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellDoubleClick
+        NewTrackingView(TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value)
     End Sub
 End Class

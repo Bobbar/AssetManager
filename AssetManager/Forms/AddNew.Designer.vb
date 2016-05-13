@@ -47,11 +47,13 @@ Partial Class AddNew
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag_REQ = New System.Windows.Forms.TextBox()
         Me.txtSerial_REQ = New System.Windows.Forms.TextBox()
+        Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.chkTrackable)
         Me.GroupBox1.Controls.Add(Me.cmdClear)
         Me.GroupBox1.Controls.Add(Me.Label11)
         Me.GroupBox1.Controls.Add(Me.cmbStatus_REQ)
@@ -335,6 +337,17 @@ Partial Class AddNew
         Me.txtSerial_REQ.TabIndex = 0
         Me.txtSerial_REQ.Text = "txtSerial"
         '
+        'chkTrackable
+        '
+        Me.chkTrackable.AutoSize = True
+        Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkTrackable.Location = New System.Drawing.Point(739, 152)
+        Me.chkTrackable.Name = "chkTrackable"
+        Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
+        Me.chkTrackable.TabIndex = 48
+        Me.chkTrackable.Text = "Trackable"
+        Me.chkTrackable.UseVisualStyleBackColor = True
+        '
         'AddNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -350,6 +363,7 @@ Partial Class AddNew
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label10 As Label
@@ -378,4 +392,5 @@ Partial Class AddNew
     Friend WithEvents Label11 As Label
     Friend WithEvents cmbStatus_REQ As ComboBox
     Friend WithEvents cmdClear As Button
+    Friend WithEvents chkTrackable As CheckBox
 End Class

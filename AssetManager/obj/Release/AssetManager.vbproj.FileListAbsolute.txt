@@ -27,3 +27,8 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreen.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Tracking.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Tracking.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.ReportView.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\RdlCompile.cache
+C:\GitHub\AssetManager\AssetManager\obj\Release\RdlCompile.compiled

@@ -278,11 +278,11 @@ Partial Class Tracking
         '
         'txtDeviceType
         '
-        Me.txtDeviceType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDeviceType.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtDeviceType.Location = New System.Drawing.Point(607, 49)
         Me.txtDeviceType.Name = "txtDeviceType"
         Me.txtDeviceType.ReadOnly = True
-        Me.txtDeviceType.Size = New System.Drawing.Size(139, 22)
+        Me.txtDeviceType.Size = New System.Drawing.Size(139, 23)
         Me.txtDeviceType.TabIndex = 6
         '
         'Label3
@@ -297,11 +297,11 @@ Partial Class Tracking
         '
         'txtDescription
         '
-        Me.txtDescription.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDescription.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtDescription.Location = New System.Drawing.Point(332, 49)
         Me.txtDescription.Name = "txtDescription"
         Me.txtDescription.ReadOnly = True
-        Me.txtDescription.Size = New System.Drawing.Size(244, 22)
+        Me.txtDescription.Size = New System.Drawing.Size(244, 23)
         Me.txtDescription.TabIndex = 4
         '
         'Label2
@@ -316,11 +316,11 @@ Partial Class Tracking
         '
         'txtSerial
         '
-        Me.txtSerial.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerial.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSerial.Location = New System.Drawing.Point(165, 48)
         Me.txtSerial.Name = "txtSerial"
         Me.txtSerial.ReadOnly = True
-        Me.txtSerial.Size = New System.Drawing.Size(139, 22)
+        Me.txtSerial.Size = New System.Drawing.Size(139, 23)
         Me.txtSerial.TabIndex = 2
         '
         'Label1
@@ -335,11 +335,11 @@ Partial Class Tracking
         '
         'txtAssetTag
         '
-        Me.txtAssetTag.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTag.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtAssetTag.Location = New System.Drawing.Point(26, 48)
         Me.txtAssetTag.Name = "txtAssetTag"
         Me.txtAssetTag.ReadOnly = True
-        Me.txtAssetTag.Size = New System.Drawing.Size(114, 22)
+        Me.txtAssetTag.Size = New System.Drawing.Size(114, 23)
         Me.txtAssetTag.TabIndex = 0
         '
         'Tracking
@@ -363,6 +363,7 @@ Partial Class Tracking
         Me.DeviceInfoBox.ResumeLayout(False)
         Me.DeviceInfoBox.PerformLayout()
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents CheckInBox As GroupBox
     Friend WithEvents CheckOutBox As GroupBox

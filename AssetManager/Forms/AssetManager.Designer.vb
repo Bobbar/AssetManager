@@ -20,10 +20,14 @@ Partial Class AssetManager
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AssetManager))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.YearsSincePurchaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.LiveBox = New System.Windows.Forms.ListBox()
         Me.InstantGroup = New System.Windows.Forms.GroupBox()
@@ -31,7 +35,6 @@ Partial Class AssetManager
         Me.Label8 = New System.Windows.Forms.Label()
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.txtSerial = New System.Windows.Forms.TextBox()
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.SearchGroup = New System.Windows.Forms.GroupBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -49,19 +52,16 @@ Partial Class AssetManager
         Me.Label10 = New System.Windows.Forms.Label()
         Me.cmbEquipType = New System.Windows.Forms.ComboBox()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.cmbShowAll = New System.Windows.Forms.Button()
+        Me.cmdShowAll = New System.Windows.Forms.Button()
         Me.cmdClear = New System.Windows.Forms.Button()
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.StripSpinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.LiveQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
-        Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.YearsSincePurchaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.StripSpinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.InstantGroup.SuspendLayout()
@@ -88,6 +88,27 @@ Partial Class AssetManager
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
         Me.EditToolStripMenuItem.Text = "Actions"
         '
+        'NewToolStripMenuItem
+        '
+        Me.NewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
+        Me.NewToolStripMenuItem.Text = "New Device"
+        '
+        'ReportsToolStripMenuItem
+        '
+        Me.ReportsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.YearsSincePurchaseToolStripMenuItem})
+        Me.ReportsToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.presentation_512
+        Me.ReportsToolStripMenuItem.Name = "ReportsToolStripMenuItem"
+        Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
+        Me.ReportsToolStripMenuItem.Text = "Reports"
+        '
+        'YearsSincePurchaseToolStripMenuItem
+        '
+        Me.YearsSincePurchaseToolStripMenuItem.Name = "YearsSincePurchaseToolStripMenuItem"
+        Me.YearsSincePurchaseToolStripMenuItem.Size = New System.Drawing.Size(190, 22)
+        Me.YearsSincePurchaseToolStripMenuItem.Text = "Years Since Purchase"
+        '
         'GroupBox1
         '
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -96,10 +117,9 @@ Partial Class AssetManager
         Me.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.GroupBox1.Controls.Add(Me.LiveBox)
         Me.GroupBox1.Controls.Add(Me.InstantGroup)
-        Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.SearchGroup)
         Me.GroupBox1.Controls.Add(Me.Button1)
-        Me.GroupBox1.Controls.Add(Me.cmbShowAll)
+        Me.GroupBox1.Controls.Add(Me.cmdShowAll)
         Me.GroupBox1.Controls.Add(Me.cmdClear)
         Me.GroupBox1.Controls.Add(Me.ResultGrid)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 29)
@@ -127,13 +147,13 @@ Partial Class AssetManager
         Me.InstantGroup.Controls.Add(Me.Label8)
         Me.InstantGroup.Controls.Add(Me.txtAssetTag)
         Me.InstantGroup.Controls.Add(Me.txtSerial)
-        Me.InstantGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.InstantGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InstantGroup.Location = New System.Drawing.Point(15, 19)
         Me.InstantGroup.Name = "InstantGroup"
         Me.InstantGroup.Size = New System.Drawing.Size(177, 149)
         Me.InstantGroup.TabIndex = 34
         Me.InstantGroup.TabStop = False
-        Me.InstantGroup.Text = "Instant View"
+        Me.InstantGroup.Text = "Instant Lookup"
         '
         'Label9
         '
@@ -173,16 +193,6 @@ Partial Class AssetManager
         Me.txtSerial.Size = New System.Drawing.Size(135, 22)
         Me.txtSerial.TabIndex = 35
         '
-        'Button2
-        '
-        Me.Button2.Location = New System.Drawing.Point(1178, 84)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(41, 25)
-        Me.Button2.TabIndex = 32
-        Me.Button2.Text = "Button2"
-        Me.Button2.UseVisualStyleBackColor = True
-        Me.Button2.Visible = False
-        '
         'SearchGroup
         '
         Me.SearchGroup.BackColor = System.Drawing.SystemColors.Control
@@ -201,7 +211,7 @@ Partial Class AssetManager
         Me.SearchGroup.Controls.Add(Me.txtCurUser)
         Me.SearchGroup.Controls.Add(Me.Label10)
         Me.SearchGroup.Controls.Add(Me.cmbEquipType)
-        Me.SearchGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SearchGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SearchGroup.Location = New System.Drawing.Point(198, 19)
         Me.SearchGroup.Name = "SearchGroup"
         Me.SearchGroup.Size = New System.Drawing.Size(823, 149)
@@ -273,7 +283,7 @@ Partial Class AssetManager
         Me.txtDescription.Location = New System.Drawing.Point(181, 92)
         Me.txtDescription.MaxLength = 200
         Me.txtDescription.Name = "txtDescription"
-        Me.txtDescription.Size = New System.Drawing.Size(317, 22)
+        Me.txtDescription.Size = New System.Drawing.Size(330, 22)
         Me.txtDescription.TabIndex = 43
         '
         'Label1
@@ -363,15 +373,15 @@ Partial Class AssetManager
         Me.Button1.UseVisualStyleBackColor = True
         Me.Button1.Visible = False
         '
-        'cmbShowAll
+        'cmdShowAll
         '
-        Me.cmbShowAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbShowAll.Location = New System.Drawing.Point(1051, 30)
-        Me.cmbShowAll.Name = "cmbShowAll"
-        Me.cmbShowAll.Size = New System.Drawing.Size(109, 31)
-        Me.cmbShowAll.TabIndex = 27
-        Me.cmbShowAll.Text = "Show All"
-        Me.cmbShowAll.UseVisualStyleBackColor = True
+        Me.cmdShowAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdShowAll.Location = New System.Drawing.Point(1051, 30)
+        Me.cmdShowAll.Name = "cmdShowAll"
+        Me.cmdShowAll.Size = New System.Drawing.Size(109, 31)
+        Me.cmdShowAll.TabIndex = 27
+        Me.cmdShowAll.Text = "Show All"
+        Me.cmdShowAll.UseVisualStyleBackColor = True
         '
         'cmdClear
         '
@@ -396,16 +406,24 @@ Partial Class AssetManager
         Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.ResultGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ResultGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.ResultGrid.ContextMenuStrip = Me.ContextMenuStrip1
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(6, Byte), Integer), CType(CType(159, Byte), Integer), CType(CType(217, Byte), Integer))
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(6, Byte), Integer), CType(CType(159, Byte), Integer), CType(CType(217, Byte), Integer))
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle4
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.ResultGrid.Location = New System.Drawing.Point(15, 174)
         Me.ResultGrid.MultiSelect = False
@@ -423,8 +441,17 @@ Partial Class AssetManager
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.Size = New System.Drawing.Size(106, 26)
         '
+        'ViewToolStripMenuItem
+        '
+        Me.ViewToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ViewToolStripMenuItem.Image = CType(resources.GetObject("ViewToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
+        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(105, 22)
+        Me.ViewToolStripMenuItem.Text = "View"
+        '
         'StatusStrip1
         '
+        Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 563)
         Me.StatusStrip1.Name = "StatusStrip1"
@@ -435,44 +462,8 @@ Partial Class AssetManager
         'StatusLabel
         '
         Me.StatusLabel.Name = "StatusLabel"
-        Me.StatusLabel.Size = New System.Drawing.Size(87, 17)
+        Me.StatusLabel.Size = New System.Drawing.Size(101, 17)
         Me.StatusLabel.Text = "%StatusLabel%"
-        '
-        'LiveQueryWorker
-        '
-        '
-        'BigQueryWorker
-        '
-        Me.BigQueryWorker.WorkerReportsProgress = True
-        '
-        'ViewToolStripMenuItem
-        '
-        Me.ViewToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ViewToolStripMenuItem.Image = CType(resources.GetObject("ViewToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
-        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(105, 22)
-        Me.ViewToolStripMenuItem.Text = "View"
-        '
-        'NewToolStripMenuItem
-        '
-        Me.NewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
-        Me.NewToolStripMenuItem.Text = "New Device"
-        '
-        'ReportsToolStripMenuItem
-        '
-        Me.ReportsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.YearsSincePurchaseToolStripMenuItem})
-        Me.ReportsToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.presentation_512
-        Me.ReportsToolStripMenuItem.Name = "ReportsToolStripMenuItem"
-        Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
-        Me.ReportsToolStripMenuItem.Text = "Reports"
-        '
-        'YearsSincePurchaseToolStripMenuItem
-        '
-        Me.YearsSincePurchaseToolStripMenuItem.Name = "YearsSincePurchaseToolStripMenuItem"
-        Me.YearsSincePurchaseToolStripMenuItem.Size = New System.Drawing.Size(190, 22)
-        Me.YearsSincePurchaseToolStripMenuItem.Text = "Years Since Purchase"
         '
         'StripSpinner
         '
@@ -480,6 +471,13 @@ Partial Class AssetManager
         Me.StripSpinner.Name = "StripSpinner"
         Me.StripSpinner.Size = New System.Drawing.Size(16, 17)
         Me.StripSpinner.Visible = False
+        '
+        'LiveQueryWorker
+        '
+        '
+        'BigQueryWorker
+        '
+        Me.BigQueryWorker.WorkerReportsProgress = True
         '
         'AssetManager
         '
@@ -513,7 +511,7 @@ Partial Class AssetManager
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents cmbShowAll As Button
+    Friend WithEvents cmdShowAll As Button
     Friend WithEvents cmdClear As Button
     Friend WithEvents ResultGrid As DataGridView
     Friend WithEvents cmdSearch As Button
@@ -531,7 +529,6 @@ Partial Class AssetManager
     Friend WithEvents ViewToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
-    Friend WithEvents Button2 As Button
     Friend WithEvents NewToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ReportsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents YearsSincePurchaseToolStripMenuItem As ToolStripMenuItem

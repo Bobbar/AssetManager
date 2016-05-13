@@ -12,6 +12,8 @@ Public Module DBFunctions
     Public Const strCheckIn As String = "IN"
     Public strLastQry As String
     Private ConnCount As Integer = 0
+
+
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
@@ -116,8 +118,8 @@ Public Module DBFunctions
         End With
     End Sub
     Public Function GetConnection(strGUID As String) As ConnectionData 'dynamically create new DB connections as needed
-        ConnCount += 1
-        Debug.Print("Connection Request: " & ConnCount & " - " & strGUID)
+        'ConnCount += 1
+        'Debug.Print("Connection Request: " & ConnCount & " - " & strGUID)
         Try
             StatusBar("Connecting...")
             Dim i As Integer
@@ -126,14 +128,16 @@ Public Module DBFunctions
                 CurrentConnections(0).ConnectionID = strGUID
                 CurrentConnections(0).DBConnection = New MySqlConnection(MySQLConnectString)
                 CurrentConnections(0).DBConnection.Open()
-                ListConnections()
+                'ListConnections(ConnCount)
+
                 Return CurrentConnections(0)
             Else 'after first connection create more if needed. Reuse previously closed connections first
                 For i = 0 To UBound(CurrentConnections)
                     If CurrentConnections(i).DBConnection.State = 0 Then 'if we find a closed connection, reuse it
                         CurrentConnections(i).ConnectionID = strGUID
                         CurrentConnections(i).DBConnection.Open()
-                        ListConnections()
+                        'ListConnections(ConnCount)
+
                         Return CurrentConnections(i)
                         Exit Function   'i'm pretty sure this is redundant. But I'm paranoid.
                     End If
@@ -144,7 +148,8 @@ Public Module DBFunctions
                 CurrentConnections(UBound(CurrentConnections)).ConnectionID = strGUID
                 CurrentConnections(UBound(CurrentConnections)).DBConnection = New MySqlConnection(MySQLConnectString)
                 CurrentConnections(UBound(CurrentConnections)).DBConnection.Open()
-                ListConnections()
+                ' ListConnections(ConnCount)
+
                 Return CurrentConnections(UBound(CurrentConnections))
             End If
         Catch exError As MySqlException
@@ -152,10 +157,10 @@ Public Module DBFunctions
             Return Nothing
         End Try
     End Function
-    Private Sub ListConnections()
+    Private Sub ListConnections(num As Integer)
         Debug.Print("")
         For i As Integer = 0 To UBound(CurrentConnections)
-            Debug.Print(CurrentConnections(i).ConnectionID & " - " & CurrentConnections(i).DBConnection.State)
+            Debug.Print(i & " => " & num & " - " & CurrentConnections(i).ConnectionID & " - " & CurrentConnections(i).DBConnection.State)
         Next
         Debug.Print("")
     End Sub
@@ -234,6 +239,7 @@ errs:
         Return ""
     End Function
     Public Function DeleteEntry(ByVal strGUID As String) As Integer
+        On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim cmd As New MySqlCommand
         Dim rows
@@ -243,8 +249,16 @@ errs:
         rows = cmd.ExecuteNonQuery()
         CloseConnection(ConnID)
         Return rows
+        Exit Function
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Function
     Public Function DeleteDevice(ByVal strGUID As String) As Integer
+        On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim cmd As New MySqlCommand
         Dim rows
@@ -254,6 +268,13 @@ errs:
         rows = cmd.ExecuteNonQuery()
         CloseConnection(ConnID)
         Return rows
+        Exit Function
+errs:
+        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Resume Next
+        Else
+            EndProgram()
+        End If
     End Function
     Public Function GetEntryInfo(ByVal strGUID As String) As Device_Info
         On Error GoTo errs
@@ -363,6 +384,7 @@ errs:
         Dim reader As MySqlDataReader
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
         Dim cmd As New MySqlCommand(strQRY, GetConnection(ConnID).DBConnection)
+
         Dim row As Integer
         reader = cmd.ExecuteReader
         ReDim Locations(0)
@@ -377,6 +399,7 @@ errs:
             Loop
         End With
         CloseConnection(ConnID)
+
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -391,6 +414,7 @@ errs:
         Dim reader As MySqlDataReader
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
         Dim cmd As New MySqlCommand(strQRY, GetConnection(ConnID).DBConnection)
+
         Dim row As Integer
         reader = cmd.ExecuteReader
         ReDim ChangeType(0)
@@ -405,6 +429,7 @@ errs:
             Loop
         End With
         CloseConnection(ConnID)
+
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -414,11 +439,12 @@ errs:
         End If
     End Sub
     Public Sub BuildEquipTypeIndex()
-        'On Error GoTo errs
+        On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
         Dim cmd As New MySqlCommand(strQRY, GetConnection(ConnID).DBConnection)
+
         Dim row As Integer
         reader = cmd.ExecuteReader
         ReDim EquipType(0)
@@ -433,6 +459,8 @@ errs:
             Loop
         End With
         CloseConnection(ConnID)
+
+
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -442,11 +470,12 @@ errs:
         End If
     End Sub
     Public Sub BuildOSTypeIndex()
-        ' On Error GoTo errs
+        On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
         Dim cmd As New MySqlCommand(strQRY, GetConnection(ConnID).DBConnection)
+
         Dim row As Integer
         reader = cmd.ExecuteReader
         ReDim OSType(0)
@@ -461,6 +490,7 @@ errs:
             Loop
         End With
         CloseConnection(ConnID)
+
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -470,11 +500,12 @@ errs:
         End If
     End Sub
     Public Sub BuildStatusTypeIndex()
-        'On Error GoTo errs
+        On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
         Dim cmd As New MySqlCommand(strGetDevices, GetConnection(ConnID).DBConnection)
+
         Dim row As Integer
         reader = cmd.ExecuteReader
         ReDim StatusType(0)
@@ -489,6 +520,7 @@ errs:
             Loop
         End With
         CloseConnection(ConnID)
+
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then

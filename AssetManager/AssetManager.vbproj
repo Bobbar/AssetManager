@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>5977.5.2016.569</AssemblyVersion>
+    <AssemblyVersion>5978.5.2016.612</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -131,6 +131,12 @@
     <Compile Include="Forms\Tracking.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\View_Tracking.Designer.vb">
+      <DependentUpon>View_Tracking.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\View_Tracking.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Modules\DataImport.vb" />
     <Compile Include="Modules\DBFunctions.vb" />
     <Compile Include="Modules\ExtendedMethods.vb" />
@@ -190,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Tracking.resx">
       <DependentUpon>Tracking.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\View_Tracking.resx">
+      <DependentUpon>View_Tracking.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Report1.rdlc" />
     <EmbeddedResource Include="Forms\ReportView.resx">

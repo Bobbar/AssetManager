@@ -31,7 +31,7 @@ Partial Class View
         Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
         Me.pnlViewControls = New System.Windows.Forms.Panel()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.cmdCancel = New System.Windows.Forms.Button()
@@ -77,7 +77,7 @@ Partial Class View
         Me.txtCheckOut = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
+        Me.DeviceInfoBox.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
         Me.TabControl1.SuspendLayout()
@@ -152,15 +152,15 @@ Partial Class View
         Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
         Me.CheckOutMenu.Text = "Check Out"
         '
-        'GroupBox1
+        'DeviceInfoBox
         '
-        Me.GroupBox1.Controls.Add(Me.pnlViewControls)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 27)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(782, 242)
-        Me.GroupBox1.TabIndex = 39
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Current Info"
+        Me.DeviceInfoBox.Controls.Add(Me.pnlViewControls)
+        Me.DeviceInfoBox.Location = New System.Drawing.Point(12, 27)
+        Me.DeviceInfoBox.Name = "DeviceInfoBox"
+        Me.DeviceInfoBox.Size = New System.Drawing.Size(782, 242)
+        Me.DeviceInfoBox.TabIndex = 39
+        Me.DeviceInfoBox.TabStop = False
+        Me.DeviceInfoBox.Text = "Current Info"
         '
         'pnlViewControls
         '
@@ -474,12 +474,14 @@ Partial Class View
         '
         Me.DataGridHistory.AllowUserToAddRows = False
         Me.DataGridHistory.AllowUserToDeleteRows = False
+        Me.DataGridHistory.AllowUserToResizeColumns = False
         Me.DataGridHistory.AllowUserToResizeRows = False
         Me.DataGridHistory.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridHistory.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.DataGridHistory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        Me.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridHistory.ContextMenuStrip = Me.RightClickMenu
         Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridHistory.Location = New System.Drawing.Point(6, 6)
@@ -669,7 +671,7 @@ Partial Class View
         Me.ClientSize = New System.Drawing.Size(1130, 641)
         Me.Controls.Add(Me.TrackingBox)
         Me.Controls.Add(Me.TabControl1)
-        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.DeviceInfoBox)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
@@ -679,7 +681,7 @@ Partial Class View
         Me.Text = "View"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
+        Me.DeviceInfoBox.ResumeLayout(False)
         Me.pnlViewControls.ResumeLayout(False)
         Me.pnlViewControls.PerformLayout()
         Me.RightClickMenu.ResumeLayout(False)
@@ -698,7 +700,7 @@ Partial Class View
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AddNoteToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents DeviceInfoBox As GroupBox
     Friend WithEvents pnlViewControls As Panel
     Friend WithEvents Label9 As Label
     Friend WithEvents cmbStatus_REQ As ComboBox

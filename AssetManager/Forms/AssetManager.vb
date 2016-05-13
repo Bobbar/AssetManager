@@ -7,6 +7,9 @@ Public Class AssetManager
     Private strSearchString As String, strPrevSearchString As String
     'Private SearchResults() As String
     Private CurrentControl As Control
+    Private strWorkerQry As String
+    Private Const strShowAllQry As String = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
+    Private ClickedButton As Control, ClickedButtonPrevText As String
     Dim dtResults As New DataTable
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Logger("Starting AssetManager...")
@@ -31,7 +34,8 @@ Public Class AssetManager
         CopyDefaultCellStyles()
         ViewFormIndex = 0
         Status("Loading devices...")
-        ShowAll()
+        StartBigQuery(strShowAllQry)
+        'ShowAll()
         Status("Ready!")
         Thread.Sleep(1000)
         SplashScreen.Hide()
@@ -66,11 +70,13 @@ Public Class AssetManager
     End Sub
     Private Sub BuildIndexes()
         Logger("Building Indexes...")
+
         BuildLocationIndex()
         BuildChangeTypeIndex()
         BuildEquipTypeIndex()
         BuildOSTypeIndex()
         BuildStatusTypeIndex()
+
         Logger("Building Indexes Done...")
     End Sub
     Private Sub Clear_All()
@@ -94,17 +100,39 @@ Public Class AssetManager
     Private SearchValues As Device_Info
     Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs)
     End Sub
-    Private Sub cmbShowAll_Click(sender As Object, e As EventArgs) Handles cmbShowAll.Click
-
+    Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
+        ClickedButton = cmdShowAll
         'ShowAll()
+        StartBigQuery(strShowAllQry)
 
+    End Sub
+    Private Sub StartBigQuery(strQry As String)
         If Not BigQueryWorker.IsBusy Then
+            strWorkerQry = strQry
+            If ClickedButton IsNot Nothing Then
+                ClickedButtonPrevText = ClickedButton.Text
+                ClickedButton.Enabled = False
+                ClickedButton.Text = "Working..."
+            End If
             StatusBar("Request sent to background...")
-            'picRunning.Visible = True
-            StripSpinner.Visible = True
-            BigQueryWorker.RunWorkerAsync()
+                'picRunning.Visible = True
+                StripSpinner.Visible = True
+                BigQueryWorker.RunWorkerAsync()
+            End If
+
+    End Sub
+    Private Sub BigQueryDone()
+        SendToGrid(ResultGrid, SearchResults)
+        StripSpinner.Visible = False
+        If ClickedButton IsNot Nothing Then
+            ClickedButton.Enabled = True
+            ClickedButton.Text = ClickedButtonPrevText
+            ClickedButton = Nothing
         End If
 
+        StatusBar("Idle...")
+
+        'picRunning.Visible = False
     End Sub
     Private Sub ShowAll()
         On Error GoTo errs
@@ -191,12 +219,13 @@ errs:
         Clear_All()
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
+        ClickedButton = cmdSearch
         HideLiveBox()
         DynamicSearch()
     End Sub
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
-        On Error GoTo errs
-        Waiting()
+        ' On Error GoTo errs
+        ' Waiting()
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -212,35 +241,37 @@ errs:
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
         strLastQry = strQry
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
-        reader = cmd.ExecuteReader
-        With reader
-            StatusBar(strCommMessage)
-            Do While .Read()
-                Dim Results As Device_Info
-                Results.strCurrentUser = !dev_cur_user
-                Results.strAssetTag = !dev_asset_tag
-                Results.strSerial = !dev_serial
-                Results.strDescription = !dev_description
-                Results.strLocation = !dev_location
-                Results.dtPurchaseDate = !dev_purchase_date
-                Results.strGUID = !dev_UID
-                Results.strEqType = !dev_eq_type
-                AddToResults(Results)
+        StartBigQuery(strQry)
 
-            Loop
-        End With
-        SendToGrid(ResultGrid, SearchResults)
-        CloseConnection(ConnID)
-        DoneWaiting()
-        Exit Sub
-errs:
-        DoneWaiting()
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Exit Sub
-        Else
-            EndProgram()
-        End If
+        '        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        '        reader = cmd.ExecuteReader
+        '        With reader
+        '            StatusBar(strCommMessage)
+        '            Do While .Read()
+        '                Dim Results As Device_Info
+        '                Results.strCurrentUser = !dev_cur_user
+        '                Results.strAssetTag = !dev_asset_tag
+        '                Results.strSerial = !dev_serial
+        '                Results.strDescription = !dev_description
+        '                Results.strLocation = !dev_location
+        '                Results.dtPurchaseDate = !dev_purchase_date
+        '                Results.strGUID = !dev_UID
+        '                Results.strEqType = !dev_eq_type
+        '                AddToResults(Results)
+
+        '            Loop
+        '        End With
+        '        SendToGrid(ResultGrid, SearchResults)
+        '        CloseConnection(ConnID)
+        '        DoneWaiting()
+        '        Exit Sub
+        'errs:
+        '        DoneWaiting()
+        '        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+        '            Exit Sub
+        '        Else
+        '            EndProgram()
+        '        End If
     End Sub
     Private Sub Button2_Click(sender As Object, e As EventArgs)
         Clear_All()
@@ -459,7 +490,7 @@ errs:
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim ConnID As String = Guid.NewGuid.ToString
-        Dim strQry = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
+        Dim strQry = strWorkerQry '"SELECT * FROM devices ORDER BY dev_input_datetime DESC"
         strLastQry = strQry
         Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
@@ -491,11 +522,12 @@ errs:
         StartLiveSearch()
     End Sub
 
+    Private Sub Button2_Click_2(sender As Object, e As EventArgs)
+
+    End Sub
+
     Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
-        SendToGrid(ResultGrid, SearchResults)
-        StatusBar("Idle...")
-        StripSpinner.Visible = False
-        'picRunning.Visible = False
+        BigQueryDone()
     End Sub
 
     Private Sub BigQueryWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BigQueryWorker.ProgressChanged
