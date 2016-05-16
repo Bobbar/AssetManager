@@ -574,5 +574,8 @@ errs:
         DoneWaiting()
     End Sub
 
+    Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
+        Attachments.Show()
 
+    End Sub
 End Class

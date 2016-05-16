@@ -86,6 +86,7 @@ Partial Class View
         Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
@@ -641,7 +642,7 @@ Partial Class View
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripSeparator1, Me.TrackingTool})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripSeparator1, Me.TrackingTool, Me.AttachmentTool})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
@@ -698,7 +699,7 @@ Partial Class View
         Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_red
         Me.CheckOutTool.Name = "CheckOutTool"
-        Me.CheckOutTool.Size = New System.Drawing.Size(161, 32)
+        Me.CheckOutTool.Size = New System.Drawing.Size(142, 32)
         Me.CheckOutTool.Text = "Check Out"
         '
         'CheckInTool
@@ -706,7 +707,7 @@ Partial Class View
         Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_green
         Me.CheckInTool.Name = "CheckInTool"
-        Me.CheckInTool.Size = New System.Drawing.Size(161, 32)
+        Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
         Me.CheckInTool.Text = "Check In"
         '
         'DeleteEntryToolStripMenuItem
@@ -756,6 +757,14 @@ Partial Class View
         Me.CheckOutMenu.Name = "CheckOutMenu"
         Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
         Me.CheckOutMenu.Text = "Check Out"
+        '
+        'AttachmentTool
+        '
+        Me.AttachmentTool.Image = CType(resources.GetObject("AttachmentTool.Image"), System.Drawing.Image)
+        Me.AttachmentTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.AttachmentTool.Name = "AttachmentTool"
+        Me.AttachmentTool.Size = New System.Drawing.Size(108, 29)
+        Me.AttachmentTool.Text = "Attachments"
         '
         'View
         '
@@ -857,4 +866,5 @@ Partial Class View
     Friend WithEvents TrackingTool As ToolStripDropDownButton
     Friend WithEvents CheckOutTool As ToolStripMenuItem
     Friend WithEvents CheckInTool As ToolStripMenuItem
+    Friend WithEvents AttachmentTool As ToolStripButton
 End Class
