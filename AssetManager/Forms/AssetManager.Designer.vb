@@ -23,11 +23,6 @@ Partial Class AssetManager
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AssetManager))
-        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.YearsSincePurchaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.LiveBox = New System.Windows.Forms.ListBox()
         Me.InstantGroup = New System.Windows.Forms.GroupBox()
@@ -62,52 +57,20 @@ Partial Class AssetManager
         Me.StripSpinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.LiveQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
-        Me.MenuStrip1.SuspendLayout()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.AddDeviceTool = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.YearsSincePurchaseToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.GroupBox1.SuspendLayout()
         Me.InstantGroup.SuspendLayout()
         Me.SearchGroup.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
+        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'MenuStrip1
-        '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem})
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1230, 24)
-        Me.MenuStrip1.TabIndex = 3
-        Me.MenuStrip1.Text = "MenuStrip1"
-        '
-        'EditToolStripMenuItem
-        '
-        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.ReportsToolStripMenuItem})
-        Me.EditToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
-        Me.EditToolStripMenuItem.Text = "Actions"
-        '
-        'NewToolStripMenuItem
-        '
-        Me.NewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
-        Me.NewToolStripMenuItem.Text = "New Device"
-        '
-        'ReportsToolStripMenuItem
-        '
-        Me.ReportsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.YearsSincePurchaseToolStripMenuItem})
-        Me.ReportsToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.presentation_512
-        Me.ReportsToolStripMenuItem.Name = "ReportsToolStripMenuItem"
-        Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
-        Me.ReportsToolStripMenuItem.Text = "Reports"
-        '
-        'YearsSincePurchaseToolStripMenuItem
-        '
-        Me.YearsSincePurchaseToolStripMenuItem.Name = "YearsSincePurchaseToolStripMenuItem"
-        Me.YearsSincePurchaseToolStripMenuItem.Size = New System.Drawing.Size(190, 22)
-        Me.YearsSincePurchaseToolStripMenuItem.Text = "Years Since Purchase"
         '
         'GroupBox1
         '
@@ -121,9 +84,9 @@ Partial Class AssetManager
         Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.cmdShowAll)
         Me.GroupBox1.Controls.Add(Me.ResultGrid)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 29)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 35)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1201, 531)
+        Me.GroupBox1.Size = New System.Drawing.Size(1201, 545)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         '
@@ -176,7 +139,7 @@ Partial Class AssetManager
         '
         'txtAssetTag
         '
-        Me.txtAssetTag.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTag.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtAssetTag.Location = New System.Drawing.Point(22, 47)
         Me.txtAssetTag.MaxLength = 45
         Me.txtAssetTag.Name = "txtAssetTag"
@@ -185,7 +148,7 @@ Partial Class AssetManager
         '
         'txtSerial
         '
-        Me.txtSerial.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerial.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSerial.Location = New System.Drawing.Point(22, 96)
         Me.txtSerial.MaxLength = 45
         Me.txtSerial.Name = "txtSerial"
@@ -241,7 +204,7 @@ Partial Class AssetManager
         '
         'txtAssetTagSearch
         '
-        Me.txtAssetTagSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTagSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtAssetTagSearch.Location = New System.Drawing.Point(20, 43)
         Me.txtAssetTagSearch.MaxLength = 45
         Me.txtAssetTagSearch.Name = "txtAssetTagSearch"
@@ -250,7 +213,7 @@ Partial Class AssetManager
         '
         'txtSerialSearch
         '
-        Me.txtSerialSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerialSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSerialSearch.Location = New System.Drawing.Point(20, 92)
         Me.txtSerialSearch.MaxLength = 45
         Me.txtSerialSearch.Name = "txtSerialSearch"
@@ -289,7 +252,7 @@ Partial Class AssetManager
         '
         'txtDescription
         '
-        Me.txtDescription.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDescription.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtDescription.Location = New System.Drawing.Point(181, 92)
         Me.txtDescription.MaxLength = 200
         Me.txtDescription.Name = "txtDescription"
@@ -308,7 +271,7 @@ Partial Class AssetManager
         '
         'cmbStatus
         '
-        Me.cmbStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbStatus.FormattingEnabled = True
         Me.cmbStatus.Location = New System.Drawing.Point(532, 93)
         Me.cmbStatus.Name = "cmbStatus"
@@ -327,7 +290,7 @@ Partial Class AssetManager
         '
         'cmbLocation
         '
-        Me.cmbLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbLocation.FormattingEnabled = True
         Me.cmbLocation.Location = New System.Drawing.Point(532, 44)
         Me.cmbLocation.Name = "cmbLocation"
@@ -346,7 +309,7 @@ Partial Class AssetManager
         '
         'txtCurUser
         '
-        Me.txtCurUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCurUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCurUser.Location = New System.Drawing.Point(181, 44)
         Me.txtCurUser.MaxLength = 45
         Me.txtCurUser.Name = "txtCurUser"
@@ -365,7 +328,7 @@ Partial Class AssetManager
         '
         'cmbEquipType
         '
-        Me.cmbEquipType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbEquipType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbEquipType.FormattingEnabled = True
         Me.cmbEquipType.Location = New System.Drawing.Point(352, 43)
         Me.cmbEquipType.Name = "cmbEquipType"
@@ -432,7 +395,7 @@ Partial Class AssetManager
         Me.ResultGrid.RowHeadersVisible = False
         Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1174, 343)
+        Me.ResultGrid.Size = New System.Drawing.Size(1174, 357)
         Me.ResultGrid.TabIndex = 17
         '
         'ContextMenuStrip1
@@ -453,7 +416,7 @@ Partial Class AssetManager
         '
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 563)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 583)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1230, 22)
         Me.StatusStrip1.TabIndex = 5
@@ -479,22 +442,66 @@ Partial Class AssetManager
         '
         Me.BigQueryWorker.WorkerReportsProgress = True
         '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.AddDeviceTool, Me.ToolStripSeparator1, Me.ToolStripDropDownButton1})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(1230, 32)
+        Me.ToolStrip1.Stretch = True
+        Me.ToolStrip1.TabIndex = 6
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'AddDeviceTool
+        '
+        Me.AddDeviceTool.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.AddDeviceTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.AddDeviceTool.Name = "AddDeviceTool"
+        Me.AddDeviceTool.Size = New System.Drawing.Size(103, 29)
+        Me.AddDeviceTool.Text = "Add Device"
+        '
+        'ToolStripDropDownButton1
+        '
+        Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.YearsSincePurchaseToolStripMenuItem1})
+        Me.ToolStripDropDownButton1.Image = Global.AssetManager.My.Resources.Resources.presentation_512
+        Me.ToolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
+        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(92, 29)
+        Me.ToolStripDropDownButton1.Text = "Reports"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
+        '
+        'YearsSincePurchaseToolStripMenuItem1
+        '
+        Me.YearsSincePurchaseToolStripMenuItem1.Name = "YearsSincePurchaseToolStripMenuItem1"
+        Me.YearsSincePurchaseToolStripMenuItem1.Size = New System.Drawing.Size(198, 22)
+        Me.YearsSincePurchaseToolStripMenuItem1.Text = "Years Since Purchase"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
+        '
         'AssetManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1230, 585)
+        Me.ClientSize = New System.Drawing.Size(1230, 605)
+        Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MainMenuStrip = Me.MenuStrip1
         Me.MinimumSize = New System.Drawing.Size(1222, 397)
         Me.Name = "AssetManager"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Asset Manager"
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.InstantGroup.ResumeLayout(False)
         Me.InstantGroup.PerformLayout()
@@ -504,12 +511,12 @@ Partial Class AssetManager
         Me.ContextMenuStrip1.ResumeLayout(False)
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents MenuStrip1 As MenuStrip
-    Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button
     Friend WithEvents cmdClear As Button
@@ -529,9 +536,6 @@ Partial Class AssetManager
     Friend WithEvents ViewToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
-    Friend WithEvents NewToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ReportsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents YearsSincePurchaseToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents LiveQueryWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents LiveBox As ListBox
     Friend WithEvents Label2 As Label
@@ -547,4 +551,10 @@ Partial Class AssetManager
     Friend WithEvents txtSerialSearch As TextBox
     Friend WithEvents BigQueryWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents StripSpinner As ToolStripStatusLabel
+    Friend WithEvents ToolStrip1 As ToolStrip
+    Friend WithEvents AddDeviceTool As ToolStripButton
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ToolStripDropDownButton1 As ToolStripDropDownButton
+    Friend WithEvents YearsSincePurchaseToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
 End Class

@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>5978.5.2016.622</AssemblyVersion>
+    <AssemblyVersion>5981.5.2016.647</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -264,6 +264,11 @@
     <Content Include="AssetManager.ico" />
     <Content Include="Resources\Add.png" />
     <None Include="Resources\check-out.png" />
+    <None Include="Resources\delete-icon-red.png" />
+    <None Include="Resources\check_alt-128.png" />
+    <None Include="Resources\checked_checkbox.png" />
+    <None Include="Resources\checked_checkbox-red.png" />
+    <None Include="Resources\checked_checkbox-green.png" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <Content Include="Resources\inventory-small.fw.png" />

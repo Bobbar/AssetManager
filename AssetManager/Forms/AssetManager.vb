@@ -101,9 +101,11 @@ Public Class AssetManager
     Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs)
     End Sub
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
-        ClickedButton = cmdShowAll
-        'ShowAll()
-        StartBigQuery(strShowAllQry)
+        If Not BigQueryWorker.IsBusy Then
+            ClickedButton = cmdShowAll
+            'ShowAll()
+            StartBigQuery(strShowAllQry)
+        End If
 
     End Sub
     Private Sub StartBigQuery(strQry As String)
@@ -219,9 +221,12 @@ errs:
         Clear_All()
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
-        ClickedButton = cmdSearch
-        HideLiveBox()
-        DynamicSearch()
+        If Not BigQueryWorker.IsBusy Then
+            ClickedButton = cmdSearch
+            HideLiveBox()
+            DynamicSearch()
+        End If
+
     End Sub
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         ' On Error GoTo errs
@@ -359,7 +364,7 @@ errs:
     Private Sub DoneWaiting()
         Me.Cursor = Cursors.Default
     End Sub
-    Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditToolStripMenuItem.Click
+    Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs)
     End Sub
     Private Sub Button2_Click_1(sender As Object, e As EventArgs)
         Debug.Print(vbCrLf)
@@ -369,10 +374,10 @@ errs:
         Next
     End Sub
 
-    Private Sub YearsSincePurchaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles YearsSincePurchaseToolStripMenuItem.Click
+    Private Sub YearsSincePurchaseToolStripMenuItem_Click(sender As Object, e As EventArgs)
         ReportView.Show()
     End Sub
-    Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewToolStripMenuItem.Click
+    Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs)
         If Not CheckForAdmin() Then Exit Sub
         AddNew.Show()
     End Sub
@@ -381,7 +386,7 @@ errs:
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim ds As New DataSet
         Dim da As New MySqlDataAdapter
-        Dim RowLimit As Integer = 20
+        Dim RowLimit As Integer = 15
         Dim strQryRow As String
         Select Case CurrentControl.Name
             Case "txtAssetTag"
@@ -587,6 +592,15 @@ errs:
             LiveBox.Focus()
             LiveBox.SelectedIndex = 0
         End If
+    End Sub
+
+    Private Sub AddDeviceTool_Click(sender As Object, e As EventArgs) Handles AddDeviceTool.Click
+        If Not CheckForAdmin() Then Exit Sub
+        AddNew.Show()
+    End Sub
+
+    Private Sub YearsSincePurchaseToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles YearsSincePurchaseToolStripMenuItem1.Click
+        ReportView.Show()
     End Sub
 
     Private Sub txtSerialSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSerialSearch.TextChanged

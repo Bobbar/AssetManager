@@ -44,6 +44,8 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\zh-Hans\Microsoft.SqlServer.Types.
 C:\GitHub\AssetManager\AssetManager\bin\Debug\zh-Hant\Microsoft.SqlServer.Types.resources.dll
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AssetManager.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Tracking.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.ReportView.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.SplashScreen.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.UpdateDev.resources
@@ -56,6 +58,3 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\RdlCompile.compiled
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Tracking.resources
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Tracking.resources
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
