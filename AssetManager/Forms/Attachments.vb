@@ -2,6 +2,13 @@
 Imports MySql.Data.MySqlClient
 
 Class Attachments
+    Private Structure Attach_Struct
+        Public strFilename As String
+        Public FileSize As Int32
+        Public strFileUID As String
+
+    End Structure
+    Private AttachIndex() As Attach_Struct
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Dim fd As OpenFileDialog = New OpenFileDialog()
         Dim strFileName As String
@@ -17,6 +24,7 @@ Class Attachments
         End If
         Debug.Print(fd.FileName)
         UploadFile(fd.FileName)
+        ListAttachments(CurrentDevice.strGUID)
     End Sub
 
     Private Sub UploadFile(FilePath As String)
@@ -92,15 +100,21 @@ Class Attachments
         reader = cmd.ExecuteReader
         ListBox1.Items.Clear()
         Dim strFilename As String, strFileType As String, strFullName As String
-
+        Dim row As Integer
 
 
 
         With reader
             Do While .Read()
+
                 strFullName = !attach_file_name +!attach_file_type
 
                 ListBox1.Items.Add(strFullName)
+                ReDim Preserve AttachIndex(row)
+                AttachIndex(row).strFilename = !attach_file_name
+                AttachIndex(row).FileSize = !attach_file_size
+                AttachIndex(row).strFileUID = !UID
+                row += 1
             Loop
         End With
         CloseConnection(ConnID)
@@ -118,14 +132,102 @@ errs:
 
 
     End Sub
+    Private Function GetUIDFromIndex(Index As Integer) As String
+        Return AttachIndex(Index).strFileUID
 
+
+    End Function
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
 
     End Sub
     Private Sub OpenAttachment(AttachUID As String)
 
+        Dim ConnID As String = Guid.NewGuid.ToString
+        Dim reader As MySqlDataReader
+        Dim table As New DataTable
+        Dim strQry = "Select * FROM attachments WHERE UID='" & AttachUID & "'"
+        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        reader = cmd.ExecuteReader
 
 
+
+        Dim conn As New MySqlConnection
+        conn = GetConnection(ConnID).DBConnection
+        'Dim cmd As New MySqlCommand
+
+        'Dim SQL As String
+
+        Dim FileSize As UInt32
+
+
+
+        'conn.ConnectionString = "server=127.0.0.1;" _
+        '    & "uid=root;" _
+        '    & "pwd=12345;" _
+        '    & "database=test"
+
+        '  Try
+        'fs = New FileStream(FilePath, FileMode.Open, FileAccess.Read)
+        'FileSize = fs.Length
+        'Dim strFilename As String = Path.GetFileNameWithoutExtension(FilePath)
+        'Dim strFileType As String = Path.GetExtension(FilePath)
+        'rawData = New Byte(FileSize) {}
+        'fs.Read(rawData, 0, FileSize)
+        'fs.Close()
+
+        'conn.Open()
+        '
+        Dim strFilename As String, strFiletype As String, strTempPath As String = strLogDir & "temp\", strFullPath As String
+        Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
+        Dim rawData() As Byte
+        'Dim dblFileSize As Double
+
+        'Debug.Print()
+        With reader
+                While .Read()
+                strFilename = !attach_file_name
+                strFiletype = !attach_file_type
+                strFullPath = strTempPath & strFilename & strFiletype
+
+
+                Debug.Print(strFullPath)
+                FileSize = !attach_file_size
+                    rawData = New Byte(FileSize) {}
+                    'rawData = reader("attach_file_binary")
+                    .GetBytes(.GetOrdinal("attach_file_binary"), 0, rawData, 0, FileSize)
+
+
+                End While
+            End With
+            CloseConnection(ConnID)
+
+
+        Dim fs As FileStream = New FileStream(strFullPath, FileMode.Create)
+        fs.Write(rawData, 0, FileSize)
+            fs.Close()
+
+
+        Process.Start(strFullPath)
+        'cmd.ExecuteNonQuery()
+
+        'MessageBox.Show("File Inserted into database successfully!",
+        '"Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+
+        'conn.Close()
+        ' Catch ex As Exception
+        'MessageBox.Show("There was an error: " & ex.Message, "Error",
+        '        MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '  End Try
+
+
+    End Sub
+
+    Private Sub ListBox1_DoubleClick(sender As Object, e As EventArgs) Handles ListBox1.DoubleClick
+        OpenAttachment(GetUIDFromIndex(ListBox1.SelectedIndex))
+    End Sub
+
+    Private Sub Attachments_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ListAttachments(CurrentDevice.strGUID)
 
     End Sub
 End Class
