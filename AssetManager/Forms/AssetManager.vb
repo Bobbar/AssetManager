@@ -70,13 +70,11 @@ Public Class AssetManager
     End Sub
     Private Sub BuildIndexes()
         Logger("Building Indexes...")
-
         BuildLocationIndex()
         BuildChangeTypeIndex()
         BuildEquipTypeIndex()
         BuildOSTypeIndex()
         BuildStatusTypeIndex()
-
         Logger("Building Indexes Done...")
     End Sub
     Private Sub Clear_All()
@@ -106,7 +104,6 @@ Public Class AssetManager
             'ShowAll()
             StartBigQuery(strShowAllQry)
         End If
-
     End Sub
     Private Sub StartBigQuery(strQry As String)
         If Not BigQueryWorker.IsBusy Then
@@ -117,11 +114,10 @@ Public Class AssetManager
                 ClickedButton.Text = "Working..."
             End If
             StatusBar("Request sent to background...")
-                'picRunning.Visible = True
-                StripSpinner.Visible = True
-                BigQueryWorker.RunWorkerAsync()
-            End If
-
+            'picRunning.Visible = True
+            StripSpinner.Visible = True
+            BigQueryWorker.RunWorkerAsync()
+        End If
     End Sub
     Private Sub BigQueryDone()
         SendToGrid(ResultGrid, SearchResults)
@@ -131,9 +127,7 @@ Public Class AssetManager
             ClickedButton.Text = ClickedButtonPrevText
             ClickedButton = Nothing
         End If
-
         StatusBar("Idle...")
-
         'picRunning.Visible = False
     End Sub
     Private Sub ShowAll()
@@ -226,7 +220,6 @@ errs:
             HideLiveBox()
             DynamicSearch()
         End If
-
     End Sub
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         ' On Error GoTo errs
@@ -247,7 +240,6 @@ errs:
         End If
         strLastQry = strQry
         StartBigQuery(strQry)
-
         '        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         '        reader = cmd.ExecuteReader
         '        With reader
@@ -263,7 +255,6 @@ errs:
         '                Results.strGUID = !dev_UID
         '                Results.strEqType = !dev_eq_type
         '                AddToResults(Results)
-
         '            Loop
         '        End With
         '        SendToGrid(ResultGrid, SearchResults)
@@ -373,7 +364,6 @@ errs:
             Debug.Print(i & " - " & CurrentConnections(i).ConnectionID & " = " & CurrentConnections(i).DBConnection.State)
         Next
     End Sub
-
     Private Sub YearsSincePurchaseToolStripMenuItem_Click(sender As Object, e As EventArgs)
         ReportView.Show()
     End Sub
@@ -455,9 +445,7 @@ errs:
         Exit Sub
 errs:
         LiveBox.Visible = False
-
         LiveBox.Items.Clear()
-
     End Sub
     Private Sub QueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LiveQueryWorker.RunWorkerCompleted
         DrawLiveBox()
@@ -475,14 +463,12 @@ errs:
         End If
     End Sub
     Private Sub LiveBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LiveBox.SelectedIndexChanged
-
     End Sub
     Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
         CurrentControl = txtDescription
         strSearchString = txtDescription.Text
         StartLiveSearch()
     End Sub
-
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Dim i As Integer
         Dim reader As MySqlDataReader
@@ -507,38 +493,29 @@ errs:
                 Results.strGUID = !dev_UID
                 Results.strEqType = !dev_eq_type
                 AddToResults(Results)
-
             Loop
         End With
-
         CloseConnection(ConnID)
     End Sub
-
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
         CurrentControl = txtCurUser
         strSearchString = txtCurUser.Text
         StartLiveSearch()
     End Sub
-
     Private Sub Button2_Click_2(sender As Object, e As EventArgs)
-
     End Sub
-
     Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
         BigQueryDone()
     End Sub
-
     Private Sub BigQueryWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BigQueryWorker.ProgressChanged
         StatusBar("Background query running...")
     End Sub
-
     Private Sub txtAssetTag_KeyDown(sender As Object, e As KeyEventArgs) Handles txtAssetTag.KeyDown
         If e.KeyCode = Keys.Down Then
             LiveBox.Focus()
             LiveBox.SelectedIndex = 0
         End If
     End Sub
-
     Private Sub LiveBox_MouseClick(sender As Object, e As MouseEventArgs) Handles LiveBox.MouseClick
         LiveBoxSelect()
     End Sub
@@ -561,61 +538,41 @@ errs:
         HideLiveBox()
     End Sub
     Private Sub LiveBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles LiveBox.KeyPress
-
     End Sub
-
     Private Sub txtCurUser_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser.TextChanged
-
     End Sub
-
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs) Handles LiveBox.KeyDown
         If e.KeyCode = Keys.Enter Then LiveBoxSelect()
     End Sub
-
     Private Sub txtDescription_TextChanged(sender As Object, e As EventArgs) Handles txtDescription.TextChanged
-
     End Sub
-
     Private Sub txtSerial_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSerial.KeyDown
         If e.KeyCode = Keys.Down Then
             LiveBox.Focus()
             LiveBox.SelectedIndex = 0
         End If
     End Sub
-
     Private Sub txtAssetTagSearch_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTagSearch.TextChanged
-
     End Sub
-
     Private Sub txtCurUser_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyDown
         If e.KeyCode = Keys.Down Then
             LiveBox.Focus()
             LiveBox.SelectedIndex = 0
         End If
     End Sub
-
     Private Sub AddDeviceTool_Click(sender As Object, e As EventArgs) Handles AddDeviceTool.Click
         If Not CheckForAdmin() Then Exit Sub
         AddNew.Show()
     End Sub
-
     Private Sub YearsSincePurchaseToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles YearsSincePurchaseToolStripMenuItem1.Click
         ReportView.Show()
     End Sub
-
     Private Sub txtSerialSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSerialSearch.TextChanged
-
     End Sub
-
     Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
         If e.KeyCode = Keys.Down Then
             LiveBox.Focus()
             LiveBox.SelectedIndex = 0
         End If
     End Sub
-
-
-
-
-
 End Class

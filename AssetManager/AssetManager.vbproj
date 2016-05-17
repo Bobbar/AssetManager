@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>5982.5.2016.665</AssemblyVersion>
+    <AssemblyVersion>5982.5.2016.708</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -278,6 +278,7 @@
     <None Include="Resources\checked_checkbox.png" />
     <None Include="Resources\checked_checkbox-red.png" />
     <None Include="Resources\checked_checkbox-green.png" />
+    <None Include="Resources\clip-512.png" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <Content Include="Resources\inventory-small.fw.png" />

@@ -79,6 +79,7 @@ Partial Class View
         Me.TrackingTool = New System.Windows.Forms.ToolStripDropDownButton()
         Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
         Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -86,7 +87,6 @@ Partial Class View
         Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
@@ -642,7 +642,7 @@ Partial Class View
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripSeparator1, Me.TrackingTool, Me.AttachmentTool})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.AttachmentTool, Me.ToolStripSeparator1, Me.TrackingTool})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
@@ -710,6 +710,14 @@ Partial Class View
         Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
         Me.CheckInTool.Text = "Check In"
         '
+        'AttachmentTool
+        '
+        Me.AttachmentTool.Image = Global.AssetManager.My.Resources.Resources.clip_512
+        Me.AttachmentTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.AttachmentTool.Name = "AttachmentTool"
+        Me.AttachmentTool.Size = New System.Drawing.Size(108, 29)
+        Me.AttachmentTool.Text = "Attachments"
+        '
         'DeleteEntryToolStripMenuItem
         '
         Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
@@ -758,14 +766,6 @@ Partial Class View
         Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
         Me.CheckOutMenu.Text = "Check Out"
         '
-        'AttachmentTool
-        '
-        Me.AttachmentTool.Image = CType(resources.GetObject("AttachmentTool.Image"), System.Drawing.Image)
-        Me.AttachmentTool.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.AttachmentTool.Name = "AttachmentTool"
-        Me.AttachmentTool.Size = New System.Drawing.Size(108, 29)
-        Me.AttachmentTool.Text = "Attachments"
-        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -800,7 +800,6 @@ Partial Class View
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem

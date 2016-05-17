@@ -95,6 +95,7 @@ Partial Class SplashScreen
         Me.Controls.Add(Me.Version)
         Me.Controls.Add(Me.Copyright)
         Me.Controls.Add(Me.PictureBox1)
+        Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.MinimizeBox = False

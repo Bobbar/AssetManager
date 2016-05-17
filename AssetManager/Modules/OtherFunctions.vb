@@ -5,6 +5,7 @@ Module OtherFunctions
     Public strLogDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
     Public strLogName As String = "log.log"
     Public strLogPath As String = strLogDir & strLogName
+    Public strTempPath As String = strLogDir & "temp\"
     Public colCurrentEntry As Color = ColorTranslator.FromHtml("#7AD1FF") '"#7AD1FF"
     Public colMissingField As Color = ColorTranslator.FromHtml("#75BAFF")
     Public colCheckIn As Color = ColorTranslator.FromHtml("#B6FCC0")
@@ -50,7 +51,11 @@ Module OtherFunctions
     End Function
     Public Sub EndProgram() 'I will add more stuff to this later.
         Logger("Ending Program...")
+        PurgeTempDir()
         'cn_global.Close()
         End
+    End Sub
+    Public Sub PurgeTempDir()
+        Directory.Delete(strTempPath, True)
     End Sub
 End Module

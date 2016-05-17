@@ -1,7 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class Attachments
     Inherits System.Windows.Forms.Form
-
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()> _
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -13,51 +12,225 @@ Partial Class Attachments
             MyBase.Dispose(disposing)
         End Try
     End Sub
-
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
-
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"Test", "Testing"}, -1)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Attachments))
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.cmdUpload = New System.Windows.Forms.Button()
+        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DeleteAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmdDelete = New System.Windows.Forms.Button()
+        Me.cmdOpen = New System.Windows.Forms.Button()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.txtAssetTag = New System.Windows.Forms.TextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtSerial = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.txtDescription = New System.Windows.Forms.TextBox()
+        Me.RightClickMenu.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Button1
+        'cmdUpload
         '
-        Me.Button1.Location = New System.Drawing.Point(46, 41)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(92, 46)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.cmdUpload.Location = New System.Drawing.Point(23, 29)
+        Me.cmdUpload.Name = "cmdUpload"
+        Me.cmdUpload.Size = New System.Drawing.Size(92, 46)
+        Me.cmdUpload.TabIndex = 0
+        Me.cmdUpload.Text = "Upload"
+        Me.cmdUpload.UseVisualStyleBackColor = True
         '
-        'ListBox1
+        'ListView1
         '
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(159, 107)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(346, 225)
-        Me.ListBox1.TabIndex = 1
+        Me.ListView1.Activation = System.Windows.Forms.ItemActivation.TwoClick
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3})
+        Me.ListView1.ContextMenuStrip = Me.RightClickMenu
+        Me.ListView1.FullRowSelect = True
+        Me.ListView1.GridLines = True
+        Me.ListView1.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
+        Me.ListView1.Location = New System.Drawing.Point(135, 29)
+        Me.ListView1.MultiSelect = False
+        Me.ListView1.Name = "ListView1"
+        Me.ListView1.Size = New System.Drawing.Size(455, 348)
+        Me.ListView1.TabIndex = 2
+        Me.ListView1.UseCompatibleStateImageBehavior = False
+        Me.ListView1.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Filename"
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Size"
+        '
+        'ColumnHeader3
+        '
+        Me.ColumnHeader3.Text = "Date"
+        Me.ColumnHeader3.Width = 113
+        '
+        'RightClickMenu
+        '
+        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteAttachmentToolStripMenuItem})
+        Me.RightClickMenu.Name = "RightClickMenu"
+        Me.RightClickMenu.Size = New System.Drawing.Size(174, 26)
+        '
+        'DeleteAttachmentToolStripMenuItem
+        '
+        Me.DeleteAttachmentToolStripMenuItem.Name = "DeleteAttachmentToolStripMenuItem"
+        Me.DeleteAttachmentToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.DeleteAttachmentToolStripMenuItem.Text = "Delete Attachment"
+        '
+        'cmdDelete
+        '
+        Me.cmdDelete.Location = New System.Drawing.Point(23, 144)
+        Me.cmdDelete.Name = "cmdDelete"
+        Me.cmdDelete.Size = New System.Drawing.Size(92, 23)
+        Me.cmdDelete.TabIndex = 4
+        Me.cmdDelete.Text = "Delete"
+        Me.cmdDelete.UseVisualStyleBackColor = True
+        '
+        'cmdOpen
+        '
+        Me.cmdOpen.Location = New System.Drawing.Point(23, 81)
+        Me.cmdOpen.Name = "cmdOpen"
+        Me.cmdOpen.Size = New System.Drawing.Size(92, 23)
+        Me.cmdOpen.TabIndex = 5
+        Me.cmdOpen.Text = "Open"
+        Me.cmdOpen.UseVisualStyleBackColor = True
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.cmdOpen)
+        Me.GroupBox1.Controls.Add(Me.cmdDelete)
+        Me.GroupBox1.Controls.Add(Me.ListView1)
+        Me.GroupBox1.Controls.Add(Me.cmdUpload)
+        Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 113)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(628, 405)
+        Me.GroupBox1.TabIndex = 6
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Manage Attachments"
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.Label3)
+        Me.GroupBox2.Controls.Add(Me.txtDescription)
+        Me.GroupBox2.Controls.Add(Me.Label2)
+        Me.GroupBox2.Controls.Add(Me.txtSerial)
+        Me.GroupBox2.Controls.Add(Me.Label1)
+        Me.GroupBox2.Controls.Add(Me.txtAssetTag)
+        Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 12)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(628, 95)
+        Me.GroupBox2.TabIndex = 7
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Device Info"
+        '
+        'txtAssetTag
+        '
+        Me.txtAssetTag.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTag.Location = New System.Drawing.Point(23, 49)
+        Me.txtAssetTag.Name = "txtAssetTag"
+        Me.txtAssetTag.ReadOnly = True
+        Me.txtAssetTag.Size = New System.Drawing.Size(105, 23)
+        Me.txtAssetTag.TabIndex = 0
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(24, 29)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(70, 16)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Asset Tag"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(169, 29)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(43, 16)
+        Me.Label2.TabIndex = 3
+        Me.Label2.Text = "Serial"
+        '
+        'txtSerial
+        '
+        Me.txtSerial.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerial.Location = New System.Drawing.Point(168, 49)
+        Me.txtSerial.Name = "txtSerial"
+        Me.txtSerial.ReadOnly = True
+        Me.txtSerial.Size = New System.Drawing.Size(105, 23)
+        Me.txtSerial.TabIndex = 2
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(325, 29)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(76, 16)
+        Me.Label3.TabIndex = 5
+        Me.Label3.Text = "Description"
+        '
+        'txtDescription
+        '
+        Me.txtDescription.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDescription.Location = New System.Drawing.Point(324, 49)
+        Me.txtDescription.Name = "txtDescription"
+        Me.txtDescription.ReadOnly = True
+        Me.txtDescription.Size = New System.Drawing.Size(259, 23)
+        Me.txtDescription.TabIndex = 4
         '
         'Attachments
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(762, 497)
-        Me.Controls.Add(Me.ListBox1)
-        Me.Controls.Add(Me.Button1)
+        Me.ClientSize = New System.Drawing.Size(657, 532)
+        Me.Controls.Add(Me.GroupBox2)
+        Me.Controls.Add(Me.GroupBox1)
+        Me.DoubleBuffered = True
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
         Me.Name = "Attachments"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Attachments"
+        Me.RightClickMenu.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
         Me.ResumeLayout(False)
-
     End Sub
-
-    Friend WithEvents Button1 As Button
-    Friend WithEvents ListBox1 As ListBox
+    Friend WithEvents cmdUpload As Button
+    Friend WithEvents ListView1 As ListView
+    Friend WithEvents ColumnHeader1 As ColumnHeader
+    Friend WithEvents ColumnHeader2 As ColumnHeader
+    Friend WithEvents ColumnHeader3 As ColumnHeader
+    Friend WithEvents RightClickMenu As ContextMenuStrip
+    Friend WithEvents DeleteAttachmentToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents cmdDelete As Button
+    Friend WithEvents cmdOpen As Button
+    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents Label3 As Label
+    Friend WithEvents txtDescription As TextBox
+    Friend WithEvents Label2 As Label
+    Friend WithEvents txtSerial As TextBox
+    Friend WithEvents Label1 As Label
+    Friend WithEvents txtAssetTag As TextBox
 End Class

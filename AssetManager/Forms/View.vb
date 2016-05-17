@@ -250,12 +250,9 @@ errs:
             TrackingBox.Visible = True
             CheckOutMenu.Visible = Not bolCheckedOut
             CheckInMenu.Visible = bolCheckedOut
-
             TrackingTool.Visible = bolEnabled
             CheckOutTool.Visible = Not bolCheckedOut
             CheckInTool.Visible = bolCheckedOut
-
-
         Else
             'TrackingTab.Enabled = False
             'TrackingTab.Visible = False
@@ -426,7 +423,6 @@ errs:
                 CurrentDevice = Nothing
                 Me.Hide()
             End If
-
         Else
                 Exit Sub
         End If
@@ -513,31 +509,23 @@ errs:
     End Sub
     Private Sub DataGridHistory_CellContentClick_1(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
     End Sub
-
     Private Sub TrackingGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellContentClick
-
     End Sub
-
     Private Sub TrackingGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellEnter
-
     End Sub
-
     Private Sub TrackingGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellDoubleClick
         NewTrackingView(TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value)
     End Sub
-
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
         If Not CheckForAdmin() Then Exit Sub
         ModifyDevice()
     End Sub
-
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
         If Not CheckForAdmin() Then Exit Sub
         UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
         UpdateDev.cmbUpdate_ChangeType.Enabled = False
         UpdateDev.Show()
     End Sub
-
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
         If Not CheckForAdmin() Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbCritical, "WARNING")
@@ -554,28 +542,23 @@ errs:
                 CurrentDevice = Nothing
                 Me.Hide()
             End If
-
         Else
             Exit Sub
         End If
     End Sub
-
     Private Sub CheckInTool_Click(sender As Object, e As EventArgs) Handles CheckInTool.Click
         Waiting()
         Tracking.SetupTracking()
         Tracking.Show()
         DoneWaiting()
     End Sub
-
     Private Sub CheckOutTool_Click(sender As Object, e As EventArgs) Handles CheckOutTool.Click
         Waiting()
         Tracking.SetupTracking()
         Tracking.Show()
         DoneWaiting()
     End Sub
-
     Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
         Attachments.Show()
-
     End Sub
 End Class
