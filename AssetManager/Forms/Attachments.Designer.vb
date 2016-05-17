@@ -1,8 +1,8 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Attachments
     Inherits System.Windows.Forms.Form
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -17,7 +17,7 @@ Partial Class Attachments
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"Test", "Testing"}, -1)
@@ -33,15 +33,21 @@ Partial Class Attachments
         Me.cmdOpen = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.txtAssetTag = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.txtSerial = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtDescription = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtSerial = New System.Windows.Forms.TextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.txtAssetTag = New System.Windows.Forms.TextBox()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.Spinner = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
+        Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmdUpload
@@ -56,6 +62,9 @@ Partial Class Attachments
         'ListView1
         '
         Me.ListView1.Activation = System.Windows.Forms.ItemActivation.TwoClick
+        Me.ListView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3})
         Me.ListView1.ContextMenuStrip = Me.RightClickMenu
         Me.ListView1.FullRowSelect = True
@@ -64,7 +73,7 @@ Partial Class Attachments
         Me.ListView1.Location = New System.Drawing.Point(135, 29)
         Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(455, 348)
+        Me.ListView1.Size = New System.Drawing.Size(487, 366)
         Me.ListView1.TabIndex = 2
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -114,6 +123,10 @@ Partial Class Attachments
         '
         'GroupBox1
         '
+        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.GroupBox1.Controls.Add(Me.cmdOpen)
         Me.GroupBox1.Controls.Add(Me.cmdDelete)
         Me.GroupBox1.Controls.Add(Me.ListView1)
@@ -121,7 +134,7 @@ Partial Class Attachments
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 113)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(628, 405)
+        Me.GroupBox1.Size = New System.Drawing.Size(628, 401)
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Manage Attachments"
@@ -142,46 +155,10 @@ Partial Class Attachments
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Device Info"
         '
-        'txtAssetTag
-        '
-        Me.txtAssetTag.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTag.Location = New System.Drawing.Point(23, 49)
-        Me.txtAssetTag.Name = "txtAssetTag"
-        Me.txtAssetTag.ReadOnly = True
-        Me.txtAssetTag.Size = New System.Drawing.Size(105, 23)
-        Me.txtAssetTag.TabIndex = 0
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(24, 29)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(70, 16)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Asset Tag"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(169, 29)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(43, 16)
-        Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Serial"
-        '
-        'txtSerial
-        '
-        Me.txtSerial.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSerial.Location = New System.Drawing.Point(168, 49)
-        Me.txtSerial.Name = "txtSerial"
-        Me.txtSerial.ReadOnly = True
-        Me.txtSerial.Size = New System.Drawing.Size(105, 23)
-        Me.txtSerial.TabIndex = 2
-        '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(325, 29)
+        Me.Label3.Location = New System.Drawing.Point(335, 29)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(76, 16)
         Me.Label3.TabIndex = 5
@@ -189,24 +166,91 @@ Partial Class Attachments
         '
         'txtDescription
         '
-        Me.txtDescription.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDescription.Location = New System.Drawing.Point(324, 49)
+        Me.txtDescription.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDescription.Location = New System.Drawing.Point(334, 49)
         Me.txtDescription.Name = "txtDescription"
         Me.txtDescription.ReadOnly = True
-        Me.txtDescription.Size = New System.Drawing.Size(259, 23)
+        Me.txtDescription.Size = New System.Drawing.Size(259, 25)
         Me.txtDescription.TabIndex = 4
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(179, 29)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(43, 16)
+        Me.Label2.TabIndex = 3
+        Me.Label2.Text = "Serial"
+        '
+        'txtSerial
+        '
+        Me.txtSerial.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerial.Location = New System.Drawing.Point(178, 49)
+        Me.txtSerial.Name = "txtSerial"
+        Me.txtSerial.ReadOnly = True
+        Me.txtSerial.Size = New System.Drawing.Size(105, 25)
+        Me.txtSerial.TabIndex = 2
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(34, 29)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(70, 16)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Asset Tag"
+        '
+        'txtAssetTag
+        '
+        Me.txtAssetTag.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTag.Location = New System.Drawing.Point(33, 49)
+        Me.txtAssetTag.Name = "txtAssetTag"
+        Me.txtAssetTag.ReadOnly = True
+        Me.txtAssetTag.Size = New System.Drawing.Size(105, 25)
+        Me.txtAssetTag.TabIndex = 0
+        '
+        'StatusStrip1
+        '
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.Spinner})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 525)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Size = New System.Drawing.Size(657, 22)
+        Me.StatusStrip1.TabIndex = 8
+        Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'StatusLabel
+        '
+        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StatusLabel.Name = "StatusLabel"
+        Me.StatusLabel.Size = New System.Drawing.Size(78, 17)
+        Me.StatusLabel.Text = "%STATUS%"
+        '
+        'Spinner
+        '
+        Me.Spinner.Image = Global.AssetManager.My.Resources.Resources.loading
+        Me.Spinner.Name = "Spinner"
+        Me.Spinner.Size = New System.Drawing.Size(16, 17)
+        Me.Spinner.Visible = False
+        '
+        'UploadWorker
+        '
+        '
+        'DownloadWorker
+        '
         '
         'Attachments
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(657, 532)
+        Me.ClientSize = New System.Drawing.Size(657, 547)
+        Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(673, 585)
         Me.Name = "Attachments"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Attachments"
@@ -214,7 +258,10 @@ Partial Class Attachments
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        Me.StatusStrip1.ResumeLayout(False)
+        Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
     End Sub
     Friend WithEvents cmdUpload As Button
     Friend WithEvents ListView1 As ListView
@@ -233,4 +280,9 @@ Partial Class Attachments
     Friend WithEvents txtSerial As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents txtAssetTag As TextBox
+    Friend WithEvents StatusStrip1 As StatusStrip
+    Friend WithEvents StatusLabel As ToolStripStatusLabel
+    Friend WithEvents Spinner As ToolStripStatusLabel
+    Friend WithEvents UploadWorker As System.ComponentModel.BackgroundWorker
+    Friend WithEvents DownloadWorker As System.ComponentModel.BackgroundWorker
 End Class

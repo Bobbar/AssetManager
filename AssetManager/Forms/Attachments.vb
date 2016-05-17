@@ -1,6 +1,8 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.IO
 Imports MySql.Data.MySqlClient
 Class Attachments
+    Private Const FileSizeMBLimit As Long = 30
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -21,43 +23,21 @@ Class Attachments
         Else
             Exit Sub
         End If
-        UploadFile(fd.FileName)
-        ListAttachments(CurrentDevice.strGUID)
+        UploadFile(strFileName)
+    End Sub
+    Private Sub Status(Message As String)
+        StatusLabel.Text = Message
+        'Me.Refresh()
     End Sub
     Private Sub UploadFile(FilePath As String)
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim table As New DataTable
-        Dim cmd As New MySqlCommand
-        Dim conn As New MySqlConnection
-        conn = GetConnection(ConnID).DBConnection
-        Dim SQL As String
-        Dim FileSize As UInt32
-        Dim rawData() As Byte
-        Dim fs As FileStream
-        Try
-            fs = New FileStream(FilePath, FileMode.Open, FileAccess.Read)
-            FileSize = fs.Length
-            Dim strFilename As String = Path.GetFileNameWithoutExtension(FilePath)
-            Dim strFileType As String = Path.GetExtension(FilePath)
-            rawData = New Byte(FileSize) {}
-            fs.Read(rawData, 0, FileSize)
-            fs.Close()
-            SQL = "INSERT INTO attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_binary`, `attach_file_size`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_binary, @attach_file_size)"
-            cmd.Connection = conn
-            cmd.CommandText = SQL
-            cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentDevice.strGUID)
-            cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
-            cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
-            cmd.Parameters.AddWithValue("@attach_file_binary", rawData)
-            cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
-            cmd.ExecuteNonQuery()
-            MessageBox.Show("File Inserted into database successfully!",
-            "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
-            conn.Close()
-        Catch ex As Exception
-            MessageBox.Show("There was an error: " & ex.Message, "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        If Not UploadWorker.IsBusy Then
+            Waiting()
+            Status("Starting Upload...")
+            Spinner.Visible = True
+            Me.Refresh()
+            UploadWorker.RunWorkerAsync(FilePath)
+            DoneWaiting()
+        End If
     End Sub
     Private Sub ListAttachments(DeviceUID As String)
         Waiting()
@@ -106,42 +86,13 @@ errs:
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs)
     End Sub
     Private Sub OpenAttachment(AttachUID As String)
-        Waiting()
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim reader As MySqlDataReader
-        Dim table As New DataTable
-        Dim strQry = "Select * FROM attachments WHERE UID='" & AttachUID & "'"
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
-        reader = cmd.ExecuteReader
-        Try
-            Dim conn As New MySqlConnection
-            conn = GetConnection(ConnID).DBConnection
-            Dim FileSize As UInt32
-            Dim strFilename As String, strFiletype As String, strFullPath As String
-            Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
-            Dim rawData() As Byte
-            With reader
-                While .Read()
-                    strFilename = !attach_file_name
-                    strFiletype = !attach_file_type
-                    strFullPath = strTempPath & strFilename & strFiletype
-                    Debug.Print(strFullPath)
-                    FileSize = !attach_file_size
-                    rawData = New Byte(FileSize) {}
-                    .GetBytes(.GetOrdinal("attach_file_binary"), 0, rawData, 0, FileSize)
-                End While
-            End With
-            CloseConnection(ConnID)
-            Dim fs As FileStream = New FileStream(strFullPath, FileMode.Create)
-            fs.Write(rawData, 0, FileSize)
-            fs.Close()
-            Process.Start(strFullPath)
+        If Not DownloadWorker.IsBusy Then
+            Waiting()
+            Status("Starting Download...")
+            Spinner.Visible = True
+            DownloadWorker.RunWorkerAsync(AttachUID)
             DoneWaiting()
-        Catch ex As Exception
-            DoneWaiting()
-            MessageBox.Show("There was an error: " & ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        End If
     End Sub
     Private Function DeleteAttachment(AttachUID As String) As Integer
         Try
@@ -174,6 +125,7 @@ errs:
         Me.Cursor = Cursors.Default
     End Sub
     Private Sub Attachments_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Status("Idle...")
         Waiting()
         FillDeviceInfo()
         ListAttachments(CurrentDevice.strGUID)
@@ -219,5 +171,100 @@ errs:
         If ListView1.FocusedItem IsNot Nothing Then
             OpenAttachment(GetUIDFromIndex(ListView1.FocusedItem.Index))
         End If
+    End Sub
+    Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
+        Dim ConnID As String = Guid.NewGuid.ToString
+        Dim table As New DataTable
+        Dim cmd As New MySqlCommand
+        Dim conn As New MySqlConnection
+        Status("Connecting...")
+        conn = GetConnection(ConnID).DBConnection
+        Dim SQL As String
+        Dim FileSize As Long
+        Dim FileSizeMB As Long
+        Dim rawData() As Byte
+        Dim fs As FileStream
+        Dim FilePath As String = DirectCast(e.Argument, String)
+        Try
+            fs = New FileStream(FilePath, FileMode.Open, FileAccess.Read)
+            FileSize = fs.Length
+            FileSizeMB = FileSize / (1024 * 1024)
+            If FileSizeMB > FileSizeMBLimit Then Throw New Exception("File is too large!")
+            Dim strFilename As String = Path.GetFileNameWithoutExtension(FilePath)
+            Dim strFileType As String = Path.GetExtension(FilePath)
+            rawData = New Byte(FileSize) {}
+            fs.Read(rawData, 0, FileSize)
+            fs.Close()
+            SQL = "INSERT INTO attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_binary`, `attach_file_size`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_binary, @attach_file_size)"
+            cmd.Connection = conn
+            cmd.CommandText = SQL
+            cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentDevice.strGUID)
+            cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
+            cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
+            cmd.Parameters.AddWithValue("@attach_file_binary", rawData)
+            cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
+            Status("Uploading...")
+            cmd.ExecuteNonQuery()
+            Spinner.Visible = False
+            Status("Idle...")
+            MessageBox.Show("File uploaded successfully!",
+            "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+            conn.Close()
+        Catch ex As Exception
+            Spinner.Visible = False
+            Status("Idle...")
+            MessageBox.Show("There was an error: " & ex.Message, "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
+        DoneWaiting()
+        Status("Idle...")
+        Spinner.Visible = False
+        ListAttachments(CurrentDevice.strGUID)
+    End Sub
+    Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
+        Dim ConnID As String = Guid.NewGuid.ToString
+        Dim reader As MySqlDataReader
+        Dim table As New DataTable
+        Dim AttachUID As String = DirectCast(e.Argument, String)
+        Dim strQry = "Select * FROM attachments WHERE UID='" & AttachUID & "'"
+        Status("Connecting...")
+        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        Try
+            Dim conn As New MySqlConnection
+            Dim FileSize As UInt32
+            Dim strFilename As String, strFiletype As String, strFullPath As String
+            Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
+            Dim rawData() As Byte
+            Status("Downloading...")
+            reader = cmd.ExecuteReader
+            With reader
+                While .Read()
+                    strFilename = !attach_file_name
+                    strFiletype = !attach_file_type
+                    strFullPath = strTempPath & strFilename & strFiletype
+                    FileSize = !attach_file_size
+                    rawData = New Byte(FileSize) {}
+                    .GetBytes(.GetOrdinal("attach_file_binary"), 0, rawData, 0, FileSize)
+                End While
+            End With
+            CloseConnection(ConnID)
+            Dim fs As FileStream = New FileStream(strFullPath, FileMode.Create)
+            fs.Write(rawData, 0, FileSize)
+            fs.Close()
+            Status("Idle...")
+            Spinner.Visible = False
+            Process.Start(strFullPath)
+        Catch ex As Exception
+            Status("Idle...")
+            Spinner.Visible = False
+            MessageBox.Show("There was an error: " & ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    Private Sub DownloadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles DownloadWorker.RunWorkerCompleted
+        Status("Idle...")
+        Spinner.Visible = False
     End Sub
 End Class

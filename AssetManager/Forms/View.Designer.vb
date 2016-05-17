@@ -24,7 +24,13 @@ Partial Class View
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
         Me.pnlViewControls = New System.Windows.Forms.Panel()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
@@ -53,6 +59,7 @@ Partial Class View
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.HistoryTab = New System.Windows.Forms.TabPage()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
@@ -72,21 +79,15 @@ Partial Class View
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
+        Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.TrackingTool = New System.Windows.Forms.ToolStripDropDownButton()
         Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
-        Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
@@ -120,10 +121,51 @@ Partial Class View
         Me.ActionsToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
         Me.ActionsToolStripMenuItem.Text = "Actions"
         '
+        'EditToolStripMenuItem
+        '
+        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
+        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.EditToolStripMenuItem.Text = "Modify Device"
+        '
+        'AddNoteToolStripMenuItem
+        '
+        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
+        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.AddNoteToolStripMenuItem.Text = "Add Note"
+        '
+        'DeleteDeviceToolStripMenuItem
+        '
+        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
+        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
+        '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
         Me.ToolStripMenuItem1.Size = New System.Drawing.Size(152, 6)
+        '
+        'TrackingToolStripMenuItem
+        '
+        Me.TrackingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckInMenu, Me.CheckOutMenu})
+        Me.TrackingToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.check_out
+        Me.TrackingToolStripMenuItem.Name = "TrackingToolStripMenuItem"
+        Me.TrackingToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.TrackingToolStripMenuItem.Text = "Tracking"
+        '
+        'CheckInMenu
+        '
+        Me.CheckInMenu.Name = "CheckInMenu"
+        Me.CheckInMenu.Size = New System.Drawing.Size(132, 22)
+        Me.CheckInMenu.Text = "Check In"
+        '
+        'CheckOutMenu
+        '
+        Me.CheckOutMenu.Name = "CheckOutMenu"
+        Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
+        Me.CheckOutMenu.Text = "Check Out"
         '
         'DeviceInfoBox
         '
@@ -411,6 +453,13 @@ Partial Class View
         Me.RightClickMenu.Name = "RightClickMenu"
         Me.RightClickMenu.Size = New System.Drawing.Size(138, 26)
         '
+        'DeleteEntryToolStripMenuItem
+        '
+        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
+        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
+        '
         'TabControl1
         '
         Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -642,7 +691,7 @@ Partial Class View
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.AttachmentTool, Me.ToolStripSeparator1, Me.TrackingTool})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripSeparator3, Me.AttachmentTool, Me.ToolStripSeparator1, Me.TrackingTool})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
@@ -655,11 +704,6 @@ Partial Class View
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
         '
         'ToolStripButton1
         '
@@ -684,6 +728,19 @@ Partial Class View
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(116, 29)
         Me.ToolStripButton3.Text = "Delete Device"
+        '
+        'AttachmentTool
+        '
+        Me.AttachmentTool.Image = Global.AssetManager.My.Resources.Resources.clip_512
+        Me.AttachmentTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.AttachmentTool.Name = "AttachmentTool"
+        Me.AttachmentTool.Size = New System.Drawing.Size(108, 29)
+        Me.AttachmentTool.Text = "Attachments"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
         '
         'TrackingTool
         '
@@ -710,61 +767,10 @@ Partial Class View
         Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
         Me.CheckInTool.Text = "Check In"
         '
-        'AttachmentTool
+        'ToolStripSeparator3
         '
-        Me.AttachmentTool.Image = Global.AssetManager.My.Resources.Resources.clip_512
-        Me.AttachmentTool.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.AttachmentTool.Name = "AttachmentTool"
-        Me.AttachmentTool.Size = New System.Drawing.Size(108, 29)
-        Me.AttachmentTool.Text = "Attachments"
-        '
-        'DeleteEntryToolStripMenuItem
-        '
-        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
-        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
-        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
-        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
-        '
-        'EditToolStripMenuItem
-        '
-        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
-        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.EditToolStripMenuItem.Text = "Modify Device"
-        '
-        'AddNoteToolStripMenuItem
-        '
-        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
-        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.AddNoteToolStripMenuItem.Text = "Add Note"
-        '
-        'DeleteDeviceToolStripMenuItem
-        '
-        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
-        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
-        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
-        '
-        'TrackingToolStripMenuItem
-        '
-        Me.TrackingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckInMenu, Me.CheckOutMenu})
-        Me.TrackingToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.check_out
-        Me.TrackingToolStripMenuItem.Name = "TrackingToolStripMenuItem"
-        Me.TrackingToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.TrackingToolStripMenuItem.Text = "Tracking"
-        '
-        'CheckInMenu
-        '
-        Me.CheckInMenu.Name = "CheckInMenu"
-        Me.CheckInMenu.Size = New System.Drawing.Size(132, 22)
-        Me.CheckInMenu.Text = "Check In"
-        '
-        'CheckOutMenu
-        '
-        Me.CheckOutMenu.Name = "CheckOutMenu"
-        Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
-        Me.CheckOutMenu.Text = "Check Out"
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
         '
         'View
         '
@@ -866,4 +872,5 @@ Partial Class View
     Friend WithEvents CheckOutTool As ToolStripMenuItem
     Friend WithEvents CheckInTool As ToolStripMenuItem
     Friend WithEvents AttachmentTool As ToolStripButton
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
 End Class

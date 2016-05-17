@@ -197,6 +197,8 @@ Public Module DBFunctions
     End Sub
     Public Sub StatusBar(Text As String)
         AssetManager.StatusLabel.Text = Text
+        'Attachments.StatusLabel.Text = Text
+        'Attachments.Refresh()
         AssetManager.Refresh()
     End Sub
     Public Sub GetUserAccess()

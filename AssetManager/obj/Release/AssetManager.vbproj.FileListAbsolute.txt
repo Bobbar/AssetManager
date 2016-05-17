@@ -18,6 +18,7 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\zh-Hans\Microsoft.SqlServer.Type
 C:\GitHub\AssetManager\AssetManager\bin\Release\zh-Hant\Microsoft.SqlServer.Types.resources.dll
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AssetManager.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Attachments.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.ReportView.resources

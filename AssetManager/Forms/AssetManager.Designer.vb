@@ -63,6 +63,8 @@ Partial Class AssetManager
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
         Me.YearsSincePurchaseToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.StripConns = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.GroupBox1.SuspendLayout()
         Me.InstantGroup.SuspendLayout()
         Me.SearchGroup.SuspendLayout()
@@ -415,7 +417,7 @@ Partial Class AssetManager
         'StatusStrip1
         '
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.StripConns})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 583)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1230, 22)
@@ -489,6 +491,17 @@ Partial Class AssetManager
         Me.YearsSincePurchaseToolStripMenuItem1.Size = New System.Drawing.Size(198, 22)
         Me.YearsSincePurchaseToolStripMenuItem1.Text = "Years Since Purchase"
         '
+        'StripConns
+        '
+        Me.StripConns.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.StripConns.Name = "StripConns"
+        Me.StripConns.Padding = New System.Windows.Forms.Padding(300, 0, 0, 0)
+        Me.StripConns.Size = New System.Drawing.Size(300, 17)
+        Me.StripConns.Visible = False
+        '
+        'Timer1
+        '
+        '
         'AssetManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -557,4 +570,6 @@ Partial Class AssetManager
     Friend WithEvents ToolStripDropDownButton1 As ToolStripDropDownButton
     Friend WithEvents YearsSincePurchaseToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents StripConns As ToolStripStatusLabel
+    Friend WithEvents Timer1 As Timer
 End Class
