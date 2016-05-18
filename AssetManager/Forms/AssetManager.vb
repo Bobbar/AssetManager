@@ -11,7 +11,11 @@ Public Class AssetManager
     Private Const strShowAllQry As String = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
     Private ClickedButton As Control, ClickedButtonPrevText As String
     Dim dtResults As New DataTable
+    Private DefGridBC As Color, DefGridSelCol As Color
+    Private intPrevRow As Integer
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' ResultGrid.RowHeadersDefaultCellStyle.BackColor = Color.Green
         Logger("Starting AssetManager...")
         Status("Loading...")
         SplashScreen.Show()
@@ -43,6 +47,8 @@ Public Class AssetManager
         'Tracking.Show()
     End Sub
     Public Sub GetGridStylez()
+        DefGridBC = ResultGrid.DefaultCellStyle.BackColor
+        DefGridSelCol = ResultGrid.DefaultCellStyle.SelectionBackColor
         Dim tmpStyle As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         tmpStyle.Alignment = ResultGrid.DefaultCellStyle.Alignment
         tmpStyle.BackColor = ResultGrid.DefaultCellStyle.BackColor
@@ -394,11 +400,7 @@ errs:
         CloseConnection(ConnID)
         dtResults = ds.Tables(0)
     End Sub
-    Private Sub ResultGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ResultGrid.CellMouseDown
-        If e.Button = MouseButtons.Right Then
-            ResultGrid.CurrentCell = ResultGrid(e.ColumnIndex, e.RowIndex)
-        End If
-    End Sub
+
     Private Sub ContextMenuStrip1_Opening(sender As Object, e As CancelEventArgs) Handles ContextMenuStrip1.Opening
     End Sub
     Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
@@ -581,9 +583,103 @@ errs:
             LiveBox.SelectedIndex = 0
         End If
     End Sub
+
+    Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
+        Clipboard.SetDataObject(Me.ResultGrid.GetClipboardContent())
+
+    End Sub
+
     Private Sub AssetManager_Leave(sender As Object, e As EventArgs) Handles Me.Leave
     End Sub
     Private Sub LiveBox_MouseMove(sender As Object, e As MouseEventArgs) Handles LiveBox.MouseMove
         LiveBox.SelectedIndex = LiveBox.IndexFromPoint(e.Location)
+    End Sub
+
+
+
+    Private Sub ResultGrid_RowLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.RowLeave
+
+
+    End Sub
+
+
+
+
+    Private Sub ResultGrid_SelectionChanged(sender As Object, e As EventArgs) Handles ResultGrid.SelectionChanged
+        HighlightCurrentRow()
+    End Sub
+    Private Sub HighlightCurrentRow()
+        On Error Resume Next
+        Dim BackColor As Color = DefGridBC
+        Dim SelectColor As Color = DefGridSelCol
+        Dim Mod1 As Integer = 3
+        Dim Mod2 As Integer = 4
+        Dim Mod3 As Single = 0.7 '0.75
+
+        If ResultGrid.CurrentRow.Index > 0 Then
+
+
+            For Each cell As DataGridViewCell In ResultGrid.Rows(ResultGrid.CurrentRow.Index).Cells
+
+
+                If cell.Selected Then
+                    'cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod1 / Mod2, SelectColor.G * Mod1 / Mod2, SelectColor.B * Mod1 / Mod2)
+                    cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
+                ElseIf Not cell.Selected Then
+                    'cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod1 / Mod2, BackColor.G * Mod1 / Mod2, BackColor.B * Mod1 / Mod2)
+                    cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
+
+
+                End If
+
+
+
+            Next
+
+        End If
+    End Sub
+
+    Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
+        ' Debug.Print("old Cell: " & e.RowIndex)
+        Dim BackColor As Color = DefGridBC
+        Dim SelectColor As Color = DefGridSelCol
+        If e.RowIndex > 0 Then
+            For Each cell As DataGridViewCell In ResultGrid.Rows(e.RowIndex).Cells
+
+
+                cell.Style.SelectionBackColor = SelectColor
+
+                ' Debug.Print("old Cell: " & cell.Style.BackColor.ToString)
+                cell.Style.BackColor = BackColor
+                'Debug.Print("New Cell: " & cell.Style.BackColor.ToString)
+
+
+            Next
+        End If
+
+
+        ' Debug.Print("FIRE")
+    End Sub
+    Private Sub ResultGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ResultGrid.CellMouseDown
+
+        On Error Resume Next
+        If e.Button = MouseButtons.Right And Not ResultGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
+            ResultGrid.Rows(e.RowIndex).Selected = True
+            ResultGrid.CurrentCell = ResultGrid(e.ColumnIndex, e.RowIndex)
+
+            HighlightCurrentRow()
+            'ResultGrid.Update()
+        End If
+    End Sub
+    Private ii As Long
+    Private Sub ResultGrid_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles ResultGrid.CellPainting
+        ' Dim i As Long
+
+    End Sub
+
+    Private Sub ResultGrid_Paint(sender As Object, e As PaintEventArgs) Handles ResultGrid.Paint
+        ii += 1
+
+        Debug.Print("Paint " & ii)
     End Sub
 End Class

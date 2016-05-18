@@ -33,3 +33,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\RdlCompile.compiled
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache

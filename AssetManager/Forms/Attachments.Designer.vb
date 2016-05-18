@@ -28,6 +28,8 @@ Partial Class Attachments
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.OpenTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmdDelete = New System.Windows.Forms.Button()
         Me.cmdOpen = New System.Windows.Forms.Button()
@@ -41,11 +43,9 @@ Partial Class Attachments
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.Spinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
-        Me.OpenTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Spinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -101,7 +101,18 @@ Partial Class Attachments
         '
         Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(174, 76)
+        Me.RightClickMenu.Size = New System.Drawing.Size(174, 54)
+        '
+        'OpenTool
+        '
+        Me.OpenTool.Name = "OpenTool"
+        Me.OpenTool.Size = New System.Drawing.Size(173, 22)
+        Me.OpenTool.Text = "Open"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(170, 6)
         '
         'DeleteAttachmentToolStripMenuItem
         '
@@ -234,29 +245,18 @@ Partial Class Attachments
         Me.StatusLabel.Size = New System.Drawing.Size(78, 17)
         Me.StatusLabel.Text = "%STATUS%"
         '
-        'Spinner
-        '
-        Me.Spinner.Image = Global.AssetManager.My.Resources.Resources.loading
-        Me.Spinner.Name = "Spinner"
-        Me.Spinner.Size = New System.Drawing.Size(16, 17)
-        Me.Spinner.Visible = False
-        '
         'UploadWorker
         '
         '
         'DownloadWorker
         '
         '
-        'OpenTool
+        'Spinner
         '
-        Me.OpenTool.Name = "OpenTool"
-        Me.OpenTool.Size = New System.Drawing.Size(173, 22)
-        Me.OpenTool.Text = "Open"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(170, 6)
+        Me.Spinner.Image = Global.AssetManager.My.Resources.Resources.loading
+        Me.Spinner.Name = "Spinner"
+        Me.Spinner.Size = New System.Drawing.Size(16, 17)
+        Me.Spinner.Visible = False
         '
         'Attachments
         '
@@ -281,6 +281,7 @@ Partial Class Attachments
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents cmdUpload As Button
     Friend WithEvents ListView1 As ListView
