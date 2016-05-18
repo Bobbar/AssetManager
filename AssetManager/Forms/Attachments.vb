@@ -31,12 +31,12 @@ Class Attachments
     End Sub
     Private Sub UploadFile(FilePath As String)
         If Not UploadWorker.IsBusy Then
-            Waiting()
+            'Waiting()
+            Me.Cursor = Cursors.AppStarting
             Status("Starting Upload...")
             Spinner.Visible = True
             Me.Refresh()
             UploadWorker.RunWorkerAsync(FilePath)
-            DoneWaiting()
         End If
     End Sub
     Private Sub ListAttachments(DeviceUID As String)
@@ -45,7 +45,7 @@ Class Attachments
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
-        Dim strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date FROM attachments WHERE attach_dev_UID='" & DeviceUID & "'"
+        Dim strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date FROM attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
         Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
         Dim strFullFilename As String
@@ -69,7 +69,9 @@ Class Attachments
             Loop
         End With
         CloseConnection(ConnID)
-        ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+        If ListView1.Items.Count > 0 Then
+            ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+        End If
         DoneWaiting()
         Exit Sub
 errs:
@@ -87,11 +89,11 @@ errs:
     End Sub
     Private Sub OpenAttachment(AttachUID As String)
         If Not DownloadWorker.IsBusy Then
-            Waiting()
+            'Waiting()
+            Me.Cursor = Cursors.AppStarting
             Status("Starting Download...")
             Spinner.Visible = True
             DownloadWorker.RunWorkerAsync(AttachUID)
-            DoneWaiting()
         End If
     End Sub
     Private Function DeleteAttachment(AttachUID As String) As Integer
@@ -120,11 +122,13 @@ errs:
     End Function
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
+        Me.Refresh()
     End Sub
     Private Sub DoneWaiting()
         Me.Cursor = Cursors.Default
     End Sub
     Private Sub Attachments_Load(sender As Object, e As EventArgs) Handles Me.Load
+        DoubleBufferedListView(ListView1, True)
         Status("Idle...")
         Waiting()
         FillDeviceInfo()
@@ -213,8 +217,8 @@ errs:
         Catch ex As Exception
             Spinner.Visible = False
             Status("Idle...")
-            MessageBox.Show("There was an error: " & ex.Message, "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            'MessageBox.Show("There was an error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
@@ -256,15 +260,23 @@ errs:
             Status("Idle...")
             Spinner.Visible = False
             Process.Start(strFullPath)
-        Catch ex As Exception
+        Catch ex As MySqlException
             Status("Idle...")
             Spinner.Visible = False
-            MessageBox.Show("There was an error: " & ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            'MessageBox.Show("There was an error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
     Private Sub DownloadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles DownloadWorker.RunWorkerCompleted
         Status("Idle...")
         Spinner.Visible = False
+        DoneWaiting()
+    End Sub
+    Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
+        If ListView1.FocusedItem IsNot Nothing Then
+            OpenAttachment(GetUIDFromIndex(ListView1.FocusedItem.Index))
+        End If
+    End Sub
+    Private Sub DownloadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles DownloadWorker.ProgressChanged
     End Sub
 End Class

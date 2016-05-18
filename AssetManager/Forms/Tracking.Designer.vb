@@ -54,12 +54,13 @@ Partial Class Tracking
         '
         'CheckInBox
         '
+        Me.CheckInBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.CheckInBox.Controls.Add(Me.cmdCheckIn)
         Me.CheckInBox.Controls.Add(Me.Label11)
         Me.CheckInBox.Controls.Add(Me.txtCheckInNotes)
         Me.CheckInBox.Controls.Add(Me.Label10)
         Me.CheckInBox.Controls.Add(Me.dtCheckIn)
-        Me.CheckInBox.Location = New System.Drawing.Point(12, 345)
+        Me.CheckInBox.Location = New System.Drawing.Point(12, 307)
         Me.CheckInBox.Name = "CheckInBox"
         Me.CheckInBox.Size = New System.Drawing.Size(794, 152)
         Me.CheckInBox.TabIndex = 0
@@ -119,6 +120,7 @@ Partial Class Tracking
         '
         'CheckOutBox
         '
+        Me.CheckOutBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.CheckOutBox.Controls.Add(Me.cmdCheckOut)
         Me.CheckOutBox.Controls.Add(Me.Label9)
         Me.CheckOutBox.Controls.Add(Me.txtUseReason)
@@ -132,7 +134,7 @@ Partial Class Tracking
         Me.CheckOutBox.Controls.Add(Me.dtCheckOut)
         Me.CheckOutBox.Location = New System.Drawing.Point(12, 120)
         Me.CheckOutBox.Name = "CheckOutBox"
-        Me.CheckOutBox.Size = New System.Drawing.Size(794, 207)
+        Me.CheckOutBox.Size = New System.Drawing.Size(794, 181)
         Me.CheckOutBox.TabIndex = 1
         Me.CheckOutBox.TabStop = False
         Me.CheckOutBox.Text = "Check Out"
@@ -140,7 +142,7 @@ Partial Class Tracking
         'cmdCheckOut
         '
         Me.cmdCheckOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCheckOut.Location = New System.Drawing.Point(601, 125)
+        Me.cmdCheckOut.Location = New System.Drawing.Point(601, 109)
         Me.cmdCheckOut.Name = "cmdCheckOut"
         Me.cmdCheckOut.Size = New System.Drawing.Size(160, 51)
         Me.cmdCheckOut.TabIndex = 11
@@ -151,7 +153,7 @@ Partial Class Tracking
         '
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(353, 90)
+        Me.Label9.Location = New System.Drawing.Point(353, 74)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(84, 16)
         Me.Label9.TabIndex = 10
@@ -160,7 +162,7 @@ Partial Class Tracking
         'txtUseReason
         '
         Me.txtUseReason.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtUseReason.Location = New System.Drawing.Point(270, 109)
+        Me.txtUseReason.Location = New System.Drawing.Point(270, 93)
         Me.txtUseReason.MaxLength = 200
         Me.txtUseReason.Multiline = True
         Me.txtUseReason.Name = "txtUseReason"
@@ -172,7 +174,7 @@ Partial Class Tracking
         '
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(17, 132)
+        Me.Label8.Location = New System.Drawing.Point(17, 116)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(37, 16)
         Me.Label8.TabIndex = 8
@@ -182,7 +184,7 @@ Partial Class Tracking
         'txtUser
         '
         Me.txtUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtUser.Location = New System.Drawing.Point(15, 154)
+        Me.txtUser.Location = New System.Drawing.Point(15, 138)
         Me.txtUser.Name = "txtUser"
         Me.txtUser.ReadOnly = True
         Me.txtUser.Size = New System.Drawing.Size(175, 22)
@@ -193,7 +195,7 @@ Partial Class Tracking
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(494, 32)
+        Me.Label7.Location = New System.Drawing.Point(494, 16)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(87, 16)
         Me.Label7.TabIndex = 6
@@ -202,7 +204,7 @@ Partial Class Tracking
         'txtUseLocation
         '
         Me.txtUseLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtUseLocation.Location = New System.Drawing.Point(492, 54)
+        Me.txtUseLocation.Location = New System.Drawing.Point(492, 38)
         Me.txtUseLocation.Name = "txtUseLocation"
         Me.txtUseLocation.Size = New System.Drawing.Size(184, 22)
         Me.txtUseLocation.TabIndex = 5
@@ -211,7 +213,7 @@ Partial Class Tracking
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(305, 32)
+        Me.Label6.Location = New System.Drawing.Point(305, 16)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(99, 16)
         Me.Label6.TabIndex = 4
@@ -223,7 +225,7 @@ Partial Class Tracking
         Me.dtDueBack.CustomFormat = "MM-dd-yyyy hh:mm tt"
         Me.dtDueBack.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtDueBack.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtDueBack.Location = New System.Drawing.Point(308, 54)
+        Me.dtDueBack.Location = New System.Drawing.Point(308, 38)
         Me.dtDueBack.Name = "dtDueBack"
         Me.dtDueBack.Size = New System.Drawing.Size(167, 22)
         Me.dtDueBack.TabIndex = 3
@@ -232,7 +234,7 @@ Partial Class Tracking
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(128, 32)
+        Me.Label5.Location = New System.Drawing.Point(128, 16)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(101, 16)
         Me.Label5.TabIndex = 2
@@ -244,13 +246,14 @@ Partial Class Tracking
         Me.dtCheckOut.CustomFormat = "MM-dd-yyyy hh:mm tt"
         Me.dtCheckOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtCheckOut.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtCheckOut.Location = New System.Drawing.Point(131, 54)
+        Me.dtCheckOut.Location = New System.Drawing.Point(131, 38)
         Me.dtCheckOut.Name = "dtCheckOut"
         Me.dtCheckOut.Size = New System.Drawing.Size(164, 22)
         Me.dtCheckOut.TabIndex = 0
         '
         'DeviceInfoBox
         '
+        Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.DeviceInfoBox.Controls.Add(Me.Label4)
         Me.DeviceInfoBox.Controls.Add(Me.txtDeviceType)
         Me.DeviceInfoBox.Controls.Add(Me.Label3)
@@ -346,7 +349,8 @@ Partial Class Tracking
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(816, 511)
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.ClientSize = New System.Drawing.Size(816, 470)
         Me.Controls.Add(Me.DeviceInfoBox)
         Me.Controls.Add(Me.CheckOutBox)
         Me.Controls.Add(Me.CheckInBox)

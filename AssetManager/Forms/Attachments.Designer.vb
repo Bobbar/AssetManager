@@ -44,6 +44,8 @@ Partial Class Attachments
         Me.Spinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
+        Me.OpenTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -65,10 +67,12 @@ Partial Class Attachments
         Me.ListView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListView1.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3})
         Me.ListView1.ContextMenuStrip = Me.RightClickMenu
+        Me.ListView1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ListView1.ForeColor = System.Drawing.Color.White
         Me.ListView1.FullRowSelect = True
-        Me.ListView1.GridLines = True
         Me.ListView1.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
         Me.ListView1.Location = New System.Drawing.Point(135, 29)
         Me.ListView1.MultiSelect = False
@@ -81,21 +85,23 @@ Partial Class Attachments
         'ColumnHeader1
         '
         Me.ColumnHeader1.Text = "Filename"
+        Me.ColumnHeader1.Width = 127
         '
         'ColumnHeader2
         '
         Me.ColumnHeader2.Text = "Size"
+        Me.ColumnHeader2.Width = 93
         '
         'ColumnHeader3
         '
         Me.ColumnHeader3.Text = "Date"
-        Me.ColumnHeader3.Width = 113
+        Me.ColumnHeader3.Width = 202
         '
         'RightClickMenu
         '
-        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteAttachmentToolStripMenuItem})
+        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(174, 26)
+        Me.RightClickMenu.Size = New System.Drawing.Size(174, 76)
         '
         'DeleteAttachmentToolStripMenuItem
         '
@@ -105,9 +111,10 @@ Partial Class Attachments
         '
         'cmdDelete
         '
+        Me.cmdDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.cmdDelete.Location = New System.Drawing.Point(23, 144)
         Me.cmdDelete.Name = "cmdDelete"
-        Me.cmdDelete.Size = New System.Drawing.Size(92, 23)
+        Me.cmdDelete.Size = New System.Drawing.Size(92, 25)
         Me.cmdDelete.TabIndex = 4
         Me.cmdDelete.Text = "Delete"
         Me.cmdDelete.UseVisualStyleBackColor = True
@@ -127,6 +134,7 @@ Partial Class Attachments
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.GroupBox1.Controls.Add(Me.cmdOpen)
         Me.GroupBox1.Controls.Add(Me.cmdDelete)
         Me.GroupBox1.Controls.Add(Me.ListView1)
@@ -141,6 +149,7 @@ Partial Class Attachments
         '
         'GroupBox2
         '
+        Me.GroupBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Controls.Add(Me.txtDescription)
         Me.GroupBox2.Controls.Add(Me.Label2)
@@ -238,18 +247,28 @@ Partial Class Attachments
         'DownloadWorker
         '
         '
+        'OpenTool
+        '
+        Me.OpenTool.Name = "OpenTool"
+        Me.OpenTool.Size = New System.Drawing.Size(173, 22)
+        Me.OpenTool.Text = "Open"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(170, 6)
+        '
         'Attachments
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(657, 547)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.DoubleBuffered = True
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
         Me.MinimumSize = New System.Drawing.Size(673, 585)
         Me.Name = "Attachments"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -285,4 +304,6 @@ Partial Class Attachments
     Friend WithEvents Spinner As ToolStripStatusLabel
     Friend WithEvents UploadWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents DownloadWorker As System.ComponentModel.BackgroundWorker
+    Friend WithEvents OpenTool As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
 End Class

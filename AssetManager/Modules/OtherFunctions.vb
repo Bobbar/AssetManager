@@ -7,7 +7,7 @@ Module OtherFunctions
     Public strLogPath As String = strLogDir & strLogName
     Public strTempPath As String = strLogDir & "temp\"
     Public colCurrentEntry As Color = ColorTranslator.FromHtml("#7AD1FF") '"#7AD1FF"
-    Public colMissingField As Color = ColorTranslator.FromHtml("#75BAFF")
+    Public colMissingField As Color = ColorTranslator.FromHtml("#FF9827") '"#75BAFF")
     Public colCheckIn As Color = ColorTranslator.FromHtml("#B6FCC0")
     Public colCheckOut As Color = ColorTranslator.FromHtml("#FCB6B6")
     Public ViewFormIndex As Integer
@@ -38,6 +38,11 @@ Module OtherFunctions
         strErrMsg = "ERROR:  MethodName=" & strOrigSub & " - " & lngErrNum & " - " & strErrDescription
         Logger(strErrMsg)
         Select Case lngErrNum
+            Case -2147467259
+                Dim blah = MsgBox("The query was taking too long and was cancelled. Please check connection and try again.", vbOKOnly + vbExclamation, "Connection Timeout")
+                Return True
+            Case 13 'null value from DB, ok to continue
+                Return True
             Case 1042
                 StatusBar("Connection Lost!")
                 Dim blah = MsgBox("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbCritical, "Connection Lost")
@@ -56,6 +61,7 @@ Module OtherFunctions
         End
     End Sub
     Public Sub PurgeTempDir()
+        On Error Resume Next
         Directory.Delete(strTempPath, True)
     End Sub
 End Module

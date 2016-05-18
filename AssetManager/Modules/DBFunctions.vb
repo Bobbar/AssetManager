@@ -125,6 +125,7 @@ Public Module DBFunctions
                 ReDim CurrentConnections(0)
                 CurrentConnections(0).ConnectionID = strGUID
                 CurrentConnections(0).DBConnection = New MySqlConnection(MySQLConnectString)
+                'CurrentConnections(0).DBConnection.UseCompression = True
                 CurrentConnections(0).DBConnection.Open()
                 'ListConnections(ConnCount)
                 Return CurrentConnections(0)

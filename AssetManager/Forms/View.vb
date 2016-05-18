@@ -180,15 +180,27 @@ errs:
         table.Columns.Add("Due Back", GetType(String))
         table.Columns.Add("Location", GetType(String))
         table.Columns.Add("GUID", GetType(String))
+        Dim i As Integer
+        i = 0
         With reader
             Do While .Read()
+                If i < 1 Then 'collect most current info
+                    CurrentDevice.Tracking.strCheckOutTime = !track_checkout_time
+                    CurrentDevice.Tracking.strCheckInTime = !track_checkin_time
+                    CurrentDevice.Tracking.strUseLocation = !track_use_location
+                    CurrentDevice.Tracking.strCheckOutUser = !track_checkout_user
+                    CurrentDevice.Tracking.strCheckInUser = !track_checkin_user
+                    CurrentDevice.Tracking.strDueBackTime = !track_dueback_date
+                    CurrentDevice.Tracking.strUseReason = !track_notes
+                End If
                 table.Rows.Add(!track_datestamp,!track_check_type,!track_checkout_user,!track_checkin_user,!track_checkout_time,!track_checkin_time,!track_dueback_date,!track_use_location,!track_uid)
+                i += 1
             Loop
         End With
         CloseConnection(ConnID)
         TrackingGrid.DataSource = table
         TrackingGrid.AutoResizeColumns()
-        GetCurrentTracking(CurrentDevice.strGUID)
+        'GetCurrentTracking(CurrentDevice.strGUID)
         DisableSorting(TrackingGrid)
         FillTrackingBox()
         SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
@@ -424,7 +436,7 @@ errs:
                 Me.Hide()
             End If
         Else
-                Exit Sub
+            Exit Sub
         End If
     End Sub
     Private Sub txtAssetTag_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag_View_REQ.TextChanged
@@ -503,7 +515,7 @@ errs:
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
         End If
     End Sub
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs) 
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs)
         TrackingGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnMode.ColumnHeader
         TrackingGrid.AutoResizeColumns()
     End Sub
@@ -559,6 +571,8 @@ errs:
         DoneWaiting()
     End Sub
     Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
+        If Not CheckForAdmin() Then Exit Sub
         Attachments.Show()
+        Attachments.Activate()
     End Sub
 End Class

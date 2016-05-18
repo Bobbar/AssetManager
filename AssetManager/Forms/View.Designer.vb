@@ -82,12 +82,12 @@ Partial Class View
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.TrackingTool = New System.Windows.Forms.ToolStripDropDownButton()
         Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlViewControls.SuspendLayout()
@@ -169,11 +169,12 @@ Partial Class View
         '
         'DeviceInfoBox
         '
+        Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.DeviceInfoBox.Controls.Add(Me.pnlViewControls)
         Me.DeviceInfoBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DeviceInfoBox.Location = New System.Drawing.Point(12, 35)
+        Me.DeviceInfoBox.Location = New System.Drawing.Point(12, 46)
         Me.DeviceInfoBox.Name = "DeviceInfoBox"
-        Me.DeviceInfoBox.Size = New System.Drawing.Size(765, 242)
+        Me.DeviceInfoBox.Size = New System.Drawing.Size(730, 242)
         Me.DeviceInfoBox.TabIndex = 39
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
@@ -207,14 +208,14 @@ Partial Class View
         Me.pnlViewControls.Controls.Add(Me.txtAssetTag_View_REQ)
         Me.pnlViewControls.Location = New System.Drawing.Point(13, 23)
         Me.pnlViewControls.Name = "pnlViewControls"
-        Me.pnlViewControls.Size = New System.Drawing.Size(744, 209)
+        Me.pnlViewControls.Size = New System.Drawing.Size(703, 209)
         Me.pnlViewControls.TabIndex = 38
         '
         'chkTrackable
         '
         Me.chkTrackable.AutoSize = True
         Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(503, 171)
+        Me.chkTrackable.Location = New System.Drawing.Point(499, 122)
         Me.chkTrackable.Name = "chkTrackable"
         Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
         Me.chkTrackable.TabIndex = 45
@@ -223,7 +224,7 @@ Partial Class View
         '
         'cmdCancel
         '
-        Me.cmdCancel.Location = New System.Drawing.Point(639, 168)
+        Me.cmdCancel.Location = New System.Drawing.Point(594, 178)
         Me.cmdCancel.Name = "cmdCancel"
         Me.cmdCancel.Size = New System.Drawing.Size(99, 24)
         Me.cmdCancel.TabIndex = 42
@@ -234,7 +235,7 @@ Partial Class View
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(7, 0)
+        Me.Label10.Location = New System.Drawing.Point(3, 159)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(90, 16)
         Me.Label10.TabIndex = 41
@@ -243,7 +244,7 @@ Partial Class View
         'txtGUID
         '
         Me.txtGUID.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGUID.Location = New System.Drawing.Point(10, 19)
+        Me.txtGUID.Location = New System.Drawing.Point(6, 178)
         Me.txtGUID.Name = "txtGUID"
         Me.txtGUID.ReadOnly = True
         Me.txtGUID.Size = New System.Drawing.Size(268, 22)
@@ -254,7 +255,7 @@ Partial Class View
         '
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(493, 99)
+        Me.Label9.Location = New System.Drawing.Point(489, 50)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(48, 16)
         Me.Label9.TabIndex = 39
@@ -264,7 +265,7 @@ Partial Class View
         '
         Me.cmbStatus_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbStatus_REQ.FormattingEnabled = True
-        Me.cmbStatus_REQ.Location = New System.Drawing.Point(496, 118)
+        Me.cmbStatus_REQ.Location = New System.Drawing.Point(492, 69)
         Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
         Me.cmbStatus_REQ.Size = New System.Drawing.Size(124, 24)
         Me.cmbStatus_REQ.TabIndex = 38
@@ -273,7 +274,7 @@ Partial Class View
         '
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(353, 99)
+        Me.Label8.Location = New System.Drawing.Point(349, 50)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(79, 16)
         Me.Label8.TabIndex = 37
@@ -283,7 +284,7 @@ Partial Class View
         '
         Me.cmbOSVersion_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbOSVersion_REQ.FormattingEnabled = True
-        Me.cmbOSVersion_REQ.Location = New System.Drawing.Point(356, 118)
+        Me.cmbOSVersion_REQ.Location = New System.Drawing.Point(352, 69)
         Me.cmbOSVersion_REQ.Name = "cmbOSVersion_REQ"
         Me.cmbOSVersion_REQ.Size = New System.Drawing.Size(120, 24)
         Me.cmbOSVersion_REQ.TabIndex = 36
@@ -292,7 +293,7 @@ Partial Class View
         '
         Me.cmdUpdate.BackColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(191, Byte), Integer))
         Me.cmdUpdate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdUpdate.Location = New System.Drawing.Point(639, 118)
+        Me.cmdUpdate.Location = New System.Drawing.Point(594, 128)
         Me.cmdUpdate.Name = "cmdUpdate"
         Me.cmdUpdate.Size = New System.Drawing.Size(99, 47)
         Me.cmdUpdate.TabIndex = 35
@@ -303,7 +304,7 @@ Partial Class View
         '
         Me.Label13.AutoSize = True
         Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.Location = New System.Drawing.Point(482, 48)
+        Me.Label13.Location = New System.Drawing.Point(478, -1)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(110, 16)
         Me.Label13.TabIndex = 34
@@ -313,7 +314,7 @@ Partial Class View
         '
         Me.cmbEquipType_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbEquipType_View_REQ.FormattingEnabled = True
-        Me.cmbEquipType_View_REQ.Location = New System.Drawing.Point(485, 67)
+        Me.cmbEquipType_View_REQ.Location = New System.Drawing.Point(481, 18)
         Me.cmbEquipType_View_REQ.Name = "cmbEquipType_View_REQ"
         Me.cmbEquipType_View_REQ.Size = New System.Drawing.Size(156, 24)
         Me.cmbEquipType_View_REQ.TabIndex = 33
@@ -322,7 +323,7 @@ Partial Class View
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(367, 155)
+        Me.Label7.Location = New System.Drawing.Point(363, 106)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(124, 16)
         Me.Label7.TabIndex = 32
@@ -331,7 +332,7 @@ Partial Class View
         'txtReplacementYear_View
         '
         Me.txtReplacementYear_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtReplacementYear_View.Location = New System.Drawing.Point(380, 174)
+        Me.txtReplacementYear_View.Location = New System.Drawing.Point(376, 125)
         Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
         Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 22)
         Me.txtReplacementYear_View.TabIndex = 31
@@ -340,7 +341,7 @@ Partial Class View
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(160, 152)
+        Me.Label6.Location = New System.Drawing.Point(156, 103)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(100, 16)
         Me.Label6.TabIndex = 30
@@ -351,7 +352,7 @@ Partial Class View
         Me.dtPurchaseDate_View_REQ.CustomFormat = "yyyy-MM-dd"
         Me.dtPurchaseDate_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtPurchaseDate_View_REQ.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtPurchaseDate_View_REQ.Location = New System.Drawing.Point(164, 171)
+        Me.dtPurchaseDate_View_REQ.Location = New System.Drawing.Point(160, 122)
         Me.dtPurchaseDate_View_REQ.Name = "dtPurchaseDate_View_REQ"
         Me.dtPurchaseDate_View_REQ.Size = New System.Drawing.Size(182, 22)
         Me.dtPurchaseDate_View_REQ.TabIndex = 29
@@ -360,7 +361,7 @@ Partial Class View
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(161, 99)
+        Me.Label5.Location = New System.Drawing.Point(157, 50)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(62, 16)
         Me.Label5.TabIndex = 28
@@ -370,7 +371,7 @@ Partial Class View
         '
         Me.cmbLocation_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbLocation_View_REQ.FormattingEnabled = True
-        Me.cmbLocation_View_REQ.Location = New System.Drawing.Point(162, 118)
+        Me.cmbLocation_View_REQ.Location = New System.Drawing.Point(158, 69)
         Me.cmbLocation_View_REQ.Name = "cmbLocation_View_REQ"
         Me.cmbLocation_View_REQ.Size = New System.Drawing.Size(168, 24)
         Me.cmbLocation_View_REQ.TabIndex = 27
@@ -379,7 +380,7 @@ Partial Class View
         '
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(161, 49)
+        Me.Label4.Location = New System.Drawing.Point(157, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(79, 16)
         Me.Label4.TabIndex = 26
@@ -388,7 +389,7 @@ Partial Class View
         'txtDescription_View_REQ
         '
         Me.txtDescription_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDescription_View_REQ.Location = New System.Drawing.Point(162, 68)
+        Me.txtDescription_View_REQ.Location = New System.Drawing.Point(158, 19)
         Me.txtDescription_View_REQ.Name = "txtDescription_View_REQ"
         Me.txtDescription_View_REQ.Size = New System.Drawing.Size(304, 22)
         Me.txtDescription_View_REQ.TabIndex = 25
@@ -397,7 +398,7 @@ Partial Class View
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(6, 152)
+        Me.Label3.Location = New System.Drawing.Point(2, 103)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(85, 16)
         Me.Label3.TabIndex = 24
@@ -406,7 +407,7 @@ Partial Class View
         'txtCurUser_View_REQ
         '
         Me.txtCurUser_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(10, 171)
+        Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(6, 122)
         Me.txtCurUser_View_REQ.Name = "txtCurUser_View_REQ"
         Me.txtCurUser_View_REQ.Size = New System.Drawing.Size(132, 22)
         Me.txtCurUser_View_REQ.TabIndex = 23
@@ -415,7 +416,7 @@ Partial Class View
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(7, 100)
+        Me.Label2.Location = New System.Drawing.Point(3, 51)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(46, 16)
         Me.Label2.TabIndex = 22
@@ -424,7 +425,7 @@ Partial Class View
         'txtSerial_View_REQ
         '
         Me.txtSerial_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSerial_View_REQ.Location = New System.Drawing.Point(10, 119)
+        Me.txtSerial_View_REQ.Location = New System.Drawing.Point(6, 70)
         Me.txtSerial_View_REQ.Name = "txtSerial_View_REQ"
         Me.txtSerial_View_REQ.Size = New System.Drawing.Size(133, 22)
         Me.txtSerial_View_REQ.TabIndex = 21
@@ -433,7 +434,7 @@ Partial Class View
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(7, 49)
+        Me.Label1.Location = New System.Drawing.Point(3, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(73, 16)
         Me.Label1.TabIndex = 20
@@ -442,7 +443,7 @@ Partial Class View
         'txtAssetTag_View_REQ
         '
         Me.txtAssetTag_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTag_View_REQ.Location = New System.Drawing.Point(10, 68)
+        Me.txtAssetTag_View_REQ.Location = New System.Drawing.Point(6, 19)
         Me.txtAssetTag_View_REQ.Name = "txtAssetTag_View_REQ"
         Me.txtAssetTag_View_REQ.Size = New System.Drawing.Size(134, 22)
         Me.txtAssetTag_View_REQ.TabIndex = 19
@@ -469,10 +470,10 @@ Partial Class View
         Me.TabControl1.Controls.Add(Me.TrackingTab)
         Me.TabControl1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TabControl1.ItemSize = New System.Drawing.Size(61, 21)
-        Me.TabControl1.Location = New System.Drawing.Point(12, 283)
+        Me.TabControl1.Location = New System.Drawing.Point(11, 304)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1207, 346)
+        Me.TabControl1.Size = New System.Drawing.Size(1053, 325)
         Me.TabControl1.TabIndex = 40
         '
         'HistoryTab
@@ -481,7 +482,7 @@ Partial Class View
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1199, 317)
+        Me.HistoryTab.Size = New System.Drawing.Size(1045, 296)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -508,7 +509,7 @@ Partial Class View
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1187, 305)
+        Me.DataGridHistory.Size = New System.Drawing.Size(1033, 284)
         Me.DataGridHistory.TabIndex = 40
         '
         'TrackingTab
@@ -517,7 +518,7 @@ Partial Class View
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1199, 317)
+        Me.TrackingTab.Size = New System.Drawing.Size(1045, 350)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -551,11 +552,12 @@ Partial Class View
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1186, 305)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1032, 338)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
         '
+        Me.TrackingBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.TrackingBox.Controls.Add(Me.txtCheckLocation)
         Me.TrackingBox.Controls.Add(Me.Label16)
         Me.TrackingBox.Controls.Add(Me.txtDueBack)
@@ -567,7 +569,7 @@ Partial Class View
         Me.TrackingBox.Controls.Add(Me.txtCheckOut)
         Me.TrackingBox.Controls.Add(Me.Label11)
         Me.TrackingBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TrackingBox.Location = New System.Drawing.Point(783, 35)
+        Me.TrackingBox.Location = New System.Drawing.Point(748, 46)
         Me.TrackingBox.Name = "TrackingBox"
         Me.TrackingBox.Size = New System.Drawing.Size(316, 242)
         Me.TrackingBox.TabIndex = 41
@@ -687,7 +689,7 @@ Partial Class View
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(206, Byte), Integer), CType(CType(206, Byte), Integer), CType(CType(206, Byte), Integer))
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
@@ -695,7 +697,7 @@ Partial Class View
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(1232, 32)
+        Me.ToolStrip1.Size = New System.Drawing.Size(1073, 32)
         Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 44
         Me.ToolStrip1.Text = "ToolStrip1"
@@ -729,6 +731,11 @@ Partial Class View
         Me.ToolStripButton3.Size = New System.Drawing.Size(116, 29)
         Me.ToolStripButton3.Text = "Delete Device"
         '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
+        '
         'AttachmentTool
         '
         Me.AttachmentTool.Image = Global.AssetManager.My.Resources.Resources.clip_512
@@ -756,7 +763,7 @@ Partial Class View
         Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_red
         Me.CheckOutTool.Name = "CheckOutTool"
-        Me.CheckOutTool.Size = New System.Drawing.Size(142, 32)
+        Me.CheckOutTool.Size = New System.Drawing.Size(161, 32)
         Me.CheckOutTool.Text = "Check Out"
         '
         'CheckInTool
@@ -764,20 +771,15 @@ Partial Class View
         Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_green
         Me.CheckInTool.Name = "CheckInTool"
-        Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
+        Me.CheckInTool.Size = New System.Drawing.Size(161, 32)
         Me.CheckInTool.Text = "Check In"
-        '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
         '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(1232, 641)
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.ClientSize = New System.Drawing.Size(1073, 641)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.TrackingBox)
         Me.Controls.Add(Me.TabControl1)
@@ -785,7 +787,7 @@ Partial Class View
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.MinimumSize = New System.Drawing.Size(1146, 679)
+        Me.MinimumSize = New System.Drawing.Size(1089, 679)
         Me.Name = "View"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View"

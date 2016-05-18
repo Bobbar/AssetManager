@@ -31,6 +31,7 @@ Partial Class UpdateDev
         '
         'GroupBox1
         '
+        Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.GroupBox1.Controls.Add(Me.cmdSubmit)
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.txtUpdate_Note)
@@ -39,14 +40,14 @@ Partial Class UpdateDev
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(495, 275)
+        Me.GroupBox1.Size = New System.Drawing.Size(495, 232)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "More Info."
         '
         'cmdSubmit
         '
-        Me.cmdSubmit.Location = New System.Drawing.Point(193, 229)
+        Me.cmdSubmit.Location = New System.Drawing.Point(188, 187)
         Me.cmdSubmit.Name = "cmdSubmit"
         Me.cmdSubmit.Size = New System.Drawing.Size(115, 32)
         Me.cmdSubmit.TabIndex = 4
@@ -56,7 +57,7 @@ Partial Class UpdateDev
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(34, 88)
+        Me.Label2.Location = New System.Drawing.Point(37, 66)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(47, 16)
         Me.Label2.TabIndex = 3
@@ -64,17 +65,18 @@ Partial Class UpdateDev
         '
         'txtUpdate_Note
         '
-        Me.txtUpdate_Note.Location = New System.Drawing.Point(37, 107)
+        Me.txtUpdate_Note.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtUpdate_Note.Location = New System.Drawing.Point(40, 85)
         Me.txtUpdate_Note.MaxLength = 200
         Me.txtUpdate_Note.Multiline = True
         Me.txtUpdate_Note.Name = "txtUpdate_Note"
-        Me.txtUpdate_Note.Size = New System.Drawing.Size(409, 116)
+        Me.txtUpdate_Note.Size = New System.Drawing.Size(409, 84)
         Me.txtUpdate_Note.TabIndex = 2
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(116, 50)
+        Me.Label1.Location = New System.Drawing.Point(119, 30)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(90, 16)
         Me.Label1.TabIndex = 1
@@ -82,8 +84,9 @@ Partial Class UpdateDev
         '
         'cmbUpdate_ChangeType
         '
+        Me.cmbUpdate_ChangeType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbUpdate_ChangeType.FormattingEnabled = True
-        Me.cmbUpdate_ChangeType.Location = New System.Drawing.Point(212, 47)
+        Me.cmbUpdate_ChangeType.Location = New System.Drawing.Point(215, 27)
         Me.cmbUpdate_ChangeType.Name = "cmbUpdate_ChangeType"
         Me.cmbUpdate_ChangeType.Size = New System.Drawing.Size(144, 24)
         Me.cmbUpdate_ChangeType.TabIndex = 0
@@ -92,7 +95,8 @@ Partial Class UpdateDev
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(519, 299)
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.ClientSize = New System.Drawing.Size(519, 257)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

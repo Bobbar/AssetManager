@@ -512,8 +512,7 @@ errs:
     End Sub
     Private Sub txtAssetTag_KeyDown(sender As Object, e As KeyEventArgs) Handles txtAssetTag.KeyDown
         If e.KeyCode = Keys.Down Then
-            LiveBox.Focus()
-            LiveBox.SelectedIndex = 0
+            GiveLiveBoxFocus()
         End If
     End Sub
     Private Sub LiveBox_MouseClick(sender As Object, e As MouseEventArgs) Handles LiveBox.MouseClick
@@ -548,16 +547,14 @@ errs:
     End Sub
     Private Sub txtSerial_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSerial.KeyDown
         If e.KeyCode = Keys.Down Then
-            LiveBox.Focus()
-            LiveBox.SelectedIndex = 0
+            GiveLiveBoxFocus()
         End If
     End Sub
     Private Sub txtAssetTagSearch_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTagSearch.TextChanged
     End Sub
     Private Sub txtCurUser_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyDown
         If e.KeyCode = Keys.Down Then
-            LiveBox.Focus()
-            LiveBox.SelectedIndex = 0
+            GiveLiveBoxFocus()
         End If
     End Sub
     Private Sub AddDeviceTool_Click(sender As Object, e As EventArgs) Handles AddDeviceTool.Click
@@ -575,8 +572,18 @@ errs:
     End Sub
     Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
         If e.KeyCode = Keys.Down Then
-            LiveBox.Focus()
+            GiveLiveBoxFocus()
+        End If
+    End Sub
+    Private Sub GiveLiveBoxFocus()
+        LiveBox.Focus()
+        If LiveBox.SelectedIndex = -1 Then
             LiveBox.SelectedIndex = 0
         End If
+    End Sub
+    Private Sub AssetManager_Leave(sender As Object, e As EventArgs) Handles Me.Leave
+    End Sub
+    Private Sub LiveBox_MouseMove(sender As Object, e As MouseEventArgs) Handles LiveBox.MouseMove
+        LiveBox.SelectedIndex = LiveBox.IndexFromPoint(e.Location)
     End Sub
 End Class
