@@ -7,9 +7,12 @@ Module OtherFunctions
     Public strLogPath As String = strLogDir & strLogName
     Public strTempPath As String = strLogDir & "temp\"
     Public colCurrentEntry As Color = ColorTranslator.FromHtml("#7AD1FF") '"#7AD1FF"
-    Public colMissingField As Color = ColorTranslator.FromHtml("#FF9827") '"#75BAFF")
+    Public colMissingField As Color = ColorTranslator.FromHtml("#D4EA08") '"#FF9827") '"#75BAFF")
     Public colCheckIn As Color = ColorTranslator.FromHtml("#B6FCC0")
     Public colCheckOut As Color = ColorTranslator.FromHtml("#FCB6B6")
+    Public colHighlightOrange As Color = ColorTranslator.FromHtml("#FF9A26") '"#FF9827")
+    Public colHighlightBlue As Color = ColorTranslator.FromHtml("#8BCEE8")
+    Public colEditColor As Color = ColorTranslator.FromHtml("#81EAAA")
     Public ViewFormIndex As Integer
     Public GridStylez As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))

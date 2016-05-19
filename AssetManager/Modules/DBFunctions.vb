@@ -125,7 +125,6 @@ Public Module DBFunctions
                 ReDim CurrentConnections(0)
                 CurrentConnections(0).ConnectionID = strGUID
                 CurrentConnections(0).DBConnection = New MySqlConnection(MySQLConnectString)
-                'CurrentConnections(0).DBConnection.UseCompression = True
                 CurrentConnections(0).DBConnection.Open()
                 'ListConnections(ConnCount)
                 Return CurrentConnections(0)
@@ -405,7 +404,7 @@ errs:
         End If
     End Sub
     Public Sub BuildChangeTypeIndex()
-        ' On Error GoTo errs
+        On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"

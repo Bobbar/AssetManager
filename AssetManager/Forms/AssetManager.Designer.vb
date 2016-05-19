@@ -91,20 +91,21 @@ Partial Class AssetManager
         Me.GroupBox1.Controls.Add(Me.ResultGrid)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 35)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1201, 545)
+        Me.GroupBox1.Size = New System.Drawing.Size(1201, 546)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         '
         'LiveBox
         '
         Me.LiveBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(206, Byte), Integer), CType(CType(206, Byte), Integer), CType(CType(206, Byte), Integer))
+        Me.LiveBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.LiveBox.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LiveBox.ForeColor = System.Drawing.SystemColors.WindowText
         Me.LiveBox.FormattingEnabled = True
         Me.LiveBox.ItemHeight = 18
         Me.LiveBox.Location = New System.Drawing.Point(1038, 148)
         Me.LiveBox.Name = "LiveBox"
-        Me.LiveBox.Size = New System.Drawing.Size(134, 22)
+        Me.LiveBox.Size = New System.Drawing.Size(134, 20)
         Me.LiveBox.TabIndex = 33
         '
         'InstantGroup
@@ -394,7 +395,7 @@ Partial Class AssetManager
         Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle2
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.ResultGrid.EnableHeadersVisualStyles = False
-        Me.ResultGrid.Location = New System.Drawing.Point(15, 174)
+        Me.ResultGrid.Location = New System.Drawing.Point(15, 185)
         Me.ResultGrid.Name = "ResultGrid"
         Me.ResultGrid.ReadOnly = True
         Me.ResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
@@ -411,7 +412,7 @@ Partial Class AssetManager
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1174, 357)
+        Me.ResultGrid.Size = New System.Drawing.Size(1174, 346)
         Me.ResultGrid.TabIndex = 17
         '
         'ContextMenuStrip1
@@ -444,7 +445,7 @@ Partial Class AssetManager
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.StripConns})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 583)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 584)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1230, 22)
         Me.StatusStrip1.TabIndex = 5
@@ -533,7 +534,7 @@ Partial Class AssetManager
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1230, 605)
+        Me.ClientSize = New System.Drawing.Size(1230, 606)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.GroupBox1)
@@ -556,7 +557,6 @@ Partial Class AssetManager
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button

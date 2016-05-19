@@ -56,7 +56,7 @@ Public Class View
     End Sub
     Private Sub EnableControls()
         Dim c As Control
-        For Each c In pnlViewControls.Controls
+        For Each c In DeviceInfoBox.Controls
             Select Case True
                 Case TypeOf c Is TextBox
                     Dim txt As TextBox = c
@@ -77,10 +77,11 @@ Public Class View
         Next
         cmdUpdate.Visible = True
         cmdCancel.Visible = True
+        'DeviceInfoBox.BackColor = colEditColor
     End Sub
     Private Sub DisableControls()
         Dim c As Control
-        For Each c In pnlViewControls.Controls
+        For Each c In DeviceInfoBox.Controls
             Select Case True
                 Case TypeOf c Is TextBox
                     Dim txt As TextBox = c
@@ -99,6 +100,7 @@ Public Class View
         Next
         cmdUpdate.Visible = False
         cmdCancel.Visible = False
+        'DeviceInfoBox.BackColor = TrackingBox.BackColor
     End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
         On Error GoTo errs
@@ -122,6 +124,7 @@ Public Class View
         table.Columns.Add("Purchase Date", GetType(String))
         table.Columns.Add("GUID", GetType(String))
         With reader
+            ' Dim r As Boolean = Await .ReadAsync
             Do While .Read()
                 CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
                 txtAssetTag_View_REQ.Text = !dev_asset_tag
@@ -185,11 +188,11 @@ errs:
         With reader
             Do While .Read()
                 If i < 1 Then 'collect most current info
-                    CurrentDevice.Tracking.strCheckOutTime = !track_checkout_time
-                    CurrentDevice.Tracking.strCheckInTime = !track_checkin_time
+                    CurrentDevice.Tracking.strCheckOutTime = IIf(IsDBNull(!track_checkout_time), "",!track_checkout_time)
+                    CurrentDevice.Tracking.strCheckInTime = IIf(IsDBNull(!track_checkin_time), "",!track_checkin_time)
                     CurrentDevice.Tracking.strUseLocation = !track_use_location
                     CurrentDevice.Tracking.strCheckOutUser = !track_checkout_user
-                    CurrentDevice.Tracking.strCheckInUser = !track_checkin_user
+                    CurrentDevice.Tracking.strCheckInUser = IIf(IsDBNull(!track_checkin_user), "",!track_checkin_user)
                     CurrentDevice.Tracking.strDueBackTime = !track_dueback_date
                     CurrentDevice.Tracking.strUseReason = !track_notes
                 End If
@@ -281,7 +284,7 @@ errs:
     End Sub
     Private Sub ClearFields()
         Dim c As Control
-        For Each c In pnlViewControls.Controls
+        For Each c In DeviceInfoBox.Controls
             If TypeOf c Is TextBox Then
                 Dim txt As TextBox = c
                 txt.Text = ""
@@ -296,7 +299,7 @@ errs:
         Dim bolMissingField As Boolean
         bolMissingField = False
         Dim c As Control
-        For Each c In pnlViewControls.Controls
+        For Each c In DeviceInfoBox.Controls
             Select Case True
                 Case TypeOf c Is TextBox
                     If c.Name.Contains("REQ") Then
@@ -323,7 +326,7 @@ errs:
     End Function
     Private Sub ResetBackColors()
         Dim c As Control
-        For Each c In pnlViewControls.Controls
+        For Each c In DeviceInfoBox.Controls
             ' c.BackColor = Color.Empty
             Select Case True
                 Case TypeOf c Is TextBox
@@ -355,8 +358,6 @@ errs:
     End Sub
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Me.Hide()
-    End Sub
-    Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs)
     End Sub
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
         NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
@@ -468,9 +469,10 @@ errs:
     End Sub
     Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
         bolCheckFields = False
-        ResetBackColors()
-        ClearFields()
         DisableControls()
+        ResetBackColors()
+        'ClearFields()
+        Me.Refresh()
         ViewDevice(CurrentDevice.strGUID)
     End Sub
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
@@ -505,25 +507,27 @@ errs:
         DoneWaiting()
     End Sub
     Private Sub TrackingGrid_RowPrePaint(sender As Object, e As DataGridViewRowPrePaintEventArgs) Handles TrackingGrid.RowPrePaint
+        Dim Mod3 As Single = 0.75
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
         TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
         If TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckIn Then
             'TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.BackColor = Color.Blue
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckIn
+            For Each cell As DataGridViewCell In TrackingGrid.Rows(e.RowIndex).Cells
+                cell.Style.SelectionBackColor = Color.FromArgb(colCheckIn.R * Mod3, colCheckIn.G * Mod3, colCheckIn.B * Mod3)
+                'cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
+            Next
             'TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Padding = New Padding(30, 0, 0, 0)
         ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckOut Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
+            For Each cell As DataGridViewCell In TrackingGrid.Rows(e.RowIndex).Cells
+                cell.Style.SelectionBackColor = Color.FromArgb(colCheckOut.R * Mod3, colCheckOut.G * Mod3, colCheckOut.B * Mod3)
+            Next
         End If
     End Sub
     Private Sub Button1_Click_1(sender As Object, e As EventArgs)
         TrackingGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnMode.ColumnHeader
         TrackingGrid.AutoResizeColumns()
-    End Sub
-    Private Sub DataGridHistory_CellContentClick_1(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
-    End Sub
-    Private Sub TrackingGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellContentClick
-    End Sub
-    Private Sub TrackingGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellEnter
     End Sub
     Private Sub TrackingGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellDoubleClick
         NewTrackingView(TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value)
@@ -574,5 +578,24 @@ errs:
         If Not CheckForAdmin() Then Exit Sub
         Attachments.Show()
         Attachments.Activate()
+    End Sub
+    Private DefGridBC As Color, DefGridSelCol As Color, bolGridFilling As Boolean = False
+    Private Sub HighlightCurrentRow(Row As Integer)
+        On Error Resume Next
+        If Not bolGridFilling Then
+            DefGridBC = TrackingGrid.Rows(Row).DefaultCellStyle.BackColor
+            DefGridSelCol = TrackingGrid.Rows(Row).DefaultCellStyle.SelectionBackColor
+            Dim BackColor As Color = DefGridBC
+            Dim SelectColor As Color = DefGridSelCol
+            Dim Mod1 As Integer = 3
+            Dim Mod2 As Integer = 4
+            Dim Mod3 As Single = 0.6 '0.75
+            If Row > -1 Then
+                For Each cell As DataGridViewCell In TrackingGrid.Rows(Row).Cells
+                    cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
+                    cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
+                Next
+            End If
+        End If
     End Sub
 End Class

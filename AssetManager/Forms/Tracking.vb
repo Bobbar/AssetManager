@@ -95,7 +95,7 @@ Public Class Tracking
         CheckOutBox.Enabled = Not CurrentDevice.Tracking.bolCheckedOut
     End Sub
     Private Sub CheckOut()
-        'On Error GoTo errs
+        On Error GoTo errs
         If Not GetCheckData() Then Exit Sub
         Waiting()
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -136,7 +136,7 @@ errs:
         Me.Cursor = Cursors.Default
     End Sub
     Private Sub CheckIn()
-        'On Error GoTo errs
+        On Error GoTo errs
         If Not GetCheckData() Then Exit Sub
         Waiting()
         Dim ConnID As String = Guid.NewGuid.ToString

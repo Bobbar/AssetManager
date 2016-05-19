@@ -13,7 +13,7 @@ Class Attachments
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
         Dim fd As OpenFileDialog = New OpenFileDialog()
         Dim strFileName As String
-        fd.Title = "Open File Dialog"
+        fd.Title = "Select File To Upload - " & FileSizeMBLimit & "MB Limit"
         fd.InitialDirectory = "C:\"
         fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*"
         fd.FilterIndex = 2
@@ -178,7 +178,7 @@ errs:
     End Sub
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
         Dim ConnID As String = Guid.NewGuid.ToString
-        Dim table As New DataTable
+        'Dim table As New DataTable
         Dim cmd As New MySqlCommand
         Dim conn As New MySqlConnection
         Status("Connecting...")
@@ -193,7 +193,12 @@ errs:
             fs = New FileStream(FilePath, FileMode.Open, FileAccess.Read)
             FileSize = fs.Length
             FileSizeMB = FileSize / (1024 * 1024)
-            If FileSizeMB > FileSizeMBLimit Then Throw New Exception("File is too large!")
+            If FileSizeMB > FileSizeMBLimit Then
+                Dim blah = MsgBox("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Too Large")
+                fs.Close()
+                fs = Nothing
+                Exit Sub
+            End If
             Dim strFilename As String = Path.GetFileNameWithoutExtension(FilePath)
             Dim strFileType As String = Path.GetExtension(FilePath)
             rawData = New Byte(FileSize) {}
@@ -209,15 +214,21 @@ errs:
             cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
             Status("Uploading...")
             cmd.ExecuteNonQuery()
+            conn.Close()
+            rawData = Nothing
+            cmd = Nothing
             Spinner.Visible = False
             Status("Idle...")
             MessageBox.Show("File uploaded successfully!",
             "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
-            conn.Close()
         Catch ex As Exception
+            rawData = Nothing
+            conn.Close()
+            fs.Close()
+            fs = Nothing
             Spinner.Visible = False
             Status("Idle...")
-            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
             'MessageBox.Show("There was an error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
