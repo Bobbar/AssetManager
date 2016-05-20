@@ -3,7 +3,7 @@ Imports MySql.Data.MySqlClient
 Public Module DBFunctions
     Public ReadOnly Property strLocalUser As String = Environment.UserName
     'Private MySQLConnectString As String = "server=df8xlbs1;port=3306;uid=asset_manager_user;pwd=A553tP455;database=asset_manager"
-    Private MySQLConnectString As String = "server=10.10.80.232;uid=asset_mgr_usr;pwd=A553tP455;database=asset_manager" 'centos test
+    Public MySQLConnectString As String = "server=10.10.80.232;uid=asset_mgr_usr;pwd=A553tP455;database=asset_manager" 'centos test
     Public Const strDBDateTimeFormat As String = "yyyy-MM-dd HH:mm:ss"
     Public Const strDBDateFormat As String = "yyyy-MM-dd"
     Public Const strCommMessage As String = "Communicating..."

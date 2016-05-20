@@ -378,12 +378,15 @@ errs:
         AddNew.Show()
     End Sub
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles LiveQueryWorker.DoWork
+        On Error Resume Next
         strPrevSearchString = strSearchString
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim ds As New DataSet
         Dim da As New MySqlDataAdapter
+        Dim conn As New MySqlConnection(MySQLConnectString)
         Dim RowLimit As Integer = 15
         Dim strQryRow As String
+        Dim strQry As String
         Select Case CurrentControl.Name
             Case "txtAssetTag"
                 strQryRow = "dev_asset_tag"
@@ -394,10 +397,12 @@ errs:
             Case "txtDescription"
                 strQryRow = "dev_description"
         End Select
-        da.SelectCommand = New MySqlCommand("SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit)
-        da.SelectCommand.Connection = GetConnection(ConnID).DBConnection
+        strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
+        da.SelectCommand = New MySqlCommand(strQry)
+        Debug.Print(strQry)
+        da.SelectCommand.Connection = conn
         da.Fill(ds)
-        CloseConnection(ConnID)
+        conn.Close()
         dtResults = ds.Tables(0)
     End Sub
     Private Sub ContextMenuStrip1_Opening(sender As Object, e As CancelEventArgs) Handles ContextMenuStrip1.Opening
@@ -477,7 +482,9 @@ errs:
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim strQry = strWorkerQry '"SELECT * FROM devices ORDER BY dev_input_datetime DESC"
         strLastQry = strQry
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        Dim conn As New MySqlConnection(MySQLConnectString)
+        Dim cmd As New MySqlCommand(strQry, conn)
+        conn.Open()
         reader = cmd.ExecuteReader
         With reader
             StatusBar(strCommMessage)
@@ -496,7 +503,7 @@ errs:
                 AddToResults(Results)
             Loop
         End With
-        CloseConnection(ConnID)
+        conn.Close()
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
         CurrentControl = txtCurUser

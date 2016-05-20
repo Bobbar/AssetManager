@@ -544,7 +544,7 @@ errs:
     End Sub
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
         If Not CheckForAdmin() Then Exit Sub
-        Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbCritical, "WARNING")
+        Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
             Dim rows As Integer
             rows = DeleteDevice(CurrentDevice.strGUID)

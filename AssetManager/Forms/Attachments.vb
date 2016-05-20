@@ -179,10 +179,9 @@ errs:
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
         Dim ConnID As String = Guid.NewGuid.ToString
         'Dim table As New DataTable
-        Dim cmd As New MySqlCommand
-        Dim conn As New MySqlConnection
+        Dim conn As New MySqlConnection(MySQLConnectString)
+        Dim cmd As New MySqlCommand '(strQry, conn)
         Status("Connecting...")
-        conn = GetConnection(ConnID).DBConnection
         Dim SQL As String
         Dim FileSize As Long
         Dim FileSizeMB As Long
@@ -190,6 +189,7 @@ errs:
         Dim fs As FileStream
         Dim FilePath As String = DirectCast(e.Argument, String)
         Try
+
             fs = New FileStream(FilePath, FileMode.Open, FileAccess.Read)
             FileSize = fs.Length
             FileSizeMB = FileSize / (1024 * 1024)
@@ -205,6 +205,7 @@ errs:
             fs.Read(rawData, 0, FileSize)
             fs.Close()
             SQL = "INSERT INTO attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_binary`, `attach_file_size`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_binary, @attach_file_size)"
+            conn.Open()
             cmd.Connection = conn
             cmd.CommandText = SQL
             cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentDevice.strGUID)
@@ -245,9 +246,10 @@ errs:
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry = "Select * FROM attachments WHERE UID='" & AttachUID & "'"
         Status("Connecting...")
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        Dim conn As New MySqlConnection(MySQLConnectString)
+        Dim cmd As New MySqlCommand(strQry, conn)
         Try
-            Dim conn As New MySqlConnection
+            conn.Open()
             Dim FileSize As UInt32
             Dim strFilename As String, strFiletype As String, strFullPath As String
             Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
@@ -264,7 +266,7 @@ errs:
                     .GetBytes(.GetOrdinal("attach_file_binary"), 0, rawData, 0, FileSize)
                 End While
             End With
-            CloseConnection(ConnID)
+            conn.Close()
             Dim fs As FileStream = New FileStream(strFullPath, FileMode.Create)
             fs.Write(rawData, 0, FileSize)
             fs.Close()
@@ -272,6 +274,7 @@ errs:
             Spinner.Visible = False
             Process.Start(strFullPath)
         Catch ex As MySqlException
+            conn.Close()
             Status("Idle...")
             Spinner.Visible = False
             ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
