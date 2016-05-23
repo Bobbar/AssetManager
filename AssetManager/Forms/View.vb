@@ -103,7 +103,12 @@ Public Class View
         'DeviceInfoBox.BackColor = TrackingBox.BackColor
     End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
-        On Error GoTo errs
+
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        'On Error GoTo errs
         Waiting()
         ClearFields()
         RefreshCombos()
@@ -112,52 +117,65 @@ Public Class View
         Dim table As New DataTable
         Dim strQry = "Select * FROM devices, historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC"
         Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
-        reader = cmd.ExecuteReader
-        table.Columns.Add("Date", GetType(String))
-        table.Columns.Add("Action Type", GetType(String))
-        table.Columns.Add("Action User", GetType(String))
-        table.Columns.Add("User", GetType(String))
-        table.Columns.Add("Asset ID", GetType(String))
-        table.Columns.Add("Serial", GetType(String))
-        table.Columns.Add("Description", GetType(String))
-        table.Columns.Add("Location", GetType(String))
-        table.Columns.Add("Purchase Date", GetType(String))
-        table.Columns.Add("GUID", GetType(String))
-        With reader
-            ' Dim r As Boolean = Await .ReadAsync
-            Do While .Read()
-                CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
-                txtAssetTag_View_REQ.Text = !dev_asset_tag
-                txtDescription_View_REQ.Text = !dev_description
-                cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType,!dev_eq_type)
-                txtSerial_View_REQ.Text = !dev_serial
-                cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.Location,!dev_location)
-                txtCurUser_View_REQ.Text = !dev_cur_user
-                dtPurchaseDate_View_REQ.Value = !dev_purchase_date
-                txtReplacementYear_View.Text = !dev_replacement_year
-                cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.OSType,!dev_osversion)
-                cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
-                txtGUID.Text = !dev_UID
-                chkTrackable.Checked = CBool(!dev_trackable)
-                ' SetTracking(CBool(!dev_trackable), CBool(!dev_checkedout))
-                table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_action_user,!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
-            Loop
-        End With
-        CloseConnection(ConnID)
-        DataGridHistory.DataSource = table
-        'DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
-        DisableControls()
-        DataGridHistory.AutoResizeColumns()
-        ViewTracking(CurrentDevice.strGUID)
-        DoneWaiting()
-        Exit Sub
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+        Try
+            reader = cmd.ExecuteReader
+            table.Columns.Add("Date", GetType(String))
+            table.Columns.Add("Action Type", GetType(String))
+            table.Columns.Add("Action User", GetType(String))
+            table.Columns.Add("User", GetType(String))
+            table.Columns.Add("Asset ID", GetType(String))
+            table.Columns.Add("Serial", GetType(String))
+            table.Columns.Add("Description", GetType(String))
+            table.Columns.Add("Location", GetType(String))
+            table.Columns.Add("Purchase Date", GetType(String))
+            table.Columns.Add("GUID", GetType(String))
+
+            With reader
+                ' Dim r As Boolean = Await .ReadAsync
+
+                Do While .Read()
+                    CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
+                    txtAssetTag_View_REQ.Text = !dev_asset_tag
+                    txtDescription_View_REQ.Text = !dev_description
+                    cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType,!dev_eq_type)
+                    txtSerial_View_REQ.Text = !dev_serial
+                    cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.Location,!dev_location)
+                    txtCurUser_View_REQ.Text = !dev_cur_user
+                    dtPurchaseDate_View_REQ.Value = !dev_purchase_date
+                    txtReplacementYear_View.Text = !dev_replacement_year
+                    cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.OSType,!dev_osversion)
+                    cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
+                    txtGUID.Text = !dev_UID
+                    chkTrackable.Checked = CBool(!dev_trackable)
+                    ' SetTracking(CBool(!dev_trackable), CBool(!dev_checkedout))
+                    table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_action_user,!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
+                Loop
+            End With
+            reader.Close()
+            CloseConnection(ConnID)
+
+
+            DataGridHistory.DataSource = table
+            'DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
+            DisableControls()
+            DataGridHistory.AutoResizeColumns()
+            ViewTracking(CurrentDevice.strGUID)
             DoneWaiting()
-            Resume Next
-        Else
-            EndProgram()
-        End If
+            Me.Show()
+        Catch ex As MySqlException
+            'reader.Close()
+            DoneWaiting()
+            ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Exit Sub
+        End Try
+        '        Exit Sub
+        'errs:
+        '        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+        '            DoneWaiting()
+        '            'Resume Next
+        '        Else
+        '            EndProgram()
+        '        End If
     End Sub
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
@@ -167,6 +185,10 @@ errs:
     End Sub
     Public Sub ViewTracking(strGUID As String)
         On Error GoTo errs
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         Waiting()
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
@@ -200,6 +222,8 @@ errs:
                 i += 1
             Loop
         End With
+        reader.Close()
+
         CloseConnection(ConnID)
         TrackingGrid.DataSource = table
         TrackingGrid.AutoResizeColumns()
@@ -347,6 +371,10 @@ errs:
         ModifyDevice()
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         If Not CheckFields() Then
             Dim blah = MsgBox("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
             bolCheckFields = True
@@ -533,6 +561,10 @@ errs:
         NewTrackingView(TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value)
     End Sub
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         If Not CheckForAdmin() Then Exit Sub
         ModifyDevice()
     End Sub
@@ -563,18 +595,30 @@ errs:
         End If
     End Sub
     Private Sub CheckInTool_Click(sender As Object, e As EventArgs) Handles CheckInTool.Click
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         Waiting()
         Tracking.SetupTracking()
         Tracking.Show()
         DoneWaiting()
     End Sub
     Private Sub CheckOutTool_Click(sender As Object, e As EventArgs) Handles CheckOutTool.Click
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         Waiting()
         Tracking.SetupTracking()
         Tracking.Show()
         DoneWaiting()
     End Sub
     Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         If Not CheckForAdmin() Then Exit Sub
         Attachments.Show()
         Attachments.Activate()

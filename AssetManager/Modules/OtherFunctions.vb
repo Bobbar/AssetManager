@@ -16,6 +16,18 @@ Module OtherFunctions
     Public ViewFormIndex As Integer
     Public GridStylez As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Public stpw As New Stopwatch
+    Public Sub StartTimer()
+        stpw.Stop()
+        stpw.Reset()
+        stpw.Start()
+
+    End Sub
+    Public Sub StopTimer()
+        stpw.Stop()
+        Debug.Print(stpw.ElapsedMilliseconds)
+
+    End Sub
     Public Sub Logger(Message As String)
         Dim DateStamp As String = DateTime.Now
         If Not File.Exists(strLogPath) Then
@@ -36,13 +48,20 @@ Module OtherFunctions
             Return -1
         End Try
     End Function
+    Public Sub ConnectionNotReady()
+        Dim blah = MsgBox("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
+
+
+
+
+    End Sub
     Public Function ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
         Dim strErrMsg As String
         strErrMsg = "ERROR:  MethodName=" & strOrigSub & " - " & lngErrNum & " - " & strErrDescription
         Logger(strErrMsg)
         Select Case lngErrNum
             Case -2147467259
-                Dim blah = MsgBox("The query was taking too long and was cancelled. Please check connection and try again.", vbOKOnly + vbExclamation, "Connection Timeout")
+                Dim blah = MsgBox("There was an error while connecting." & vbCrLf & "Message: " & strErrDescription, vbOKOnly + vbExclamation, "Connection Error")
                 Return True
             Case 13 'null value from DB, ok to continue
                 Return True
@@ -52,7 +71,7 @@ Module OtherFunctions
                 Return True
             Case Else 'unhandled errors
                 StatusBar("ERROR")
-                Dim blah = MsgBox("An unhandled error has occurred!" & vbCrLf & vbCrLf & "Message:" & vbCrLf & strErrMsg, vbOKOnly + vbCritical, "Yikes!")
+                Dim blah = MsgBox("An unhandled error has occurred!" & vbCrLf & vbCrLf & "Message: " & vbCrLf & strErrMsg, vbOKOnly + vbCritical, "Yikes!")
                 Return False
         End Select
         Return False
@@ -60,11 +79,25 @@ Module OtherFunctions
     Public Sub EndProgram() 'I will add more stuff to this later.
         Logger("Ending Program...")
         PurgeTempDir()
-        'cn_global.Close()
+        GlobalConn.Close()
+        Liveconn.Close()
         End
     End Sub
     Public Sub PurgeTempDir()
         On Error Resume Next
         Directory.Delete(strTempPath, True)
+    End Sub
+    Public Sub ConnectStatus(Message As String, FColor As Color)
+        AssetManager.ConnStatusLabel.Text = Message
+        AssetManager.ConnStatusLabel.ForeColor = FColor
+        AssetManager.Refresh()
+
+
+    End Sub
+    Public Sub StatusBar(Text As String)
+        AssetManager.StatusLabel.Text = Text
+        'Attachments.StatusLabel.Text = Text
+        'Attachments.Refresh()
+        AssetManager.Refresh()
     End Sub
 End Module

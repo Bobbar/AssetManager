@@ -47,6 +47,7 @@ Public Class View_Tracking
                 Me.Text = Me.Text + " - " &!track_datestamp
             Loop
         End With
+        reader.Close()
         CloseConnection(ConnID)
         DoneWaiting()
         Exit Sub

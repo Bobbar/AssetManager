@@ -30,6 +30,10 @@ Class Attachments
         'Me.Refresh()
     End Sub
     Private Sub UploadFile(FilePath As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         If Not UploadWorker.IsBusy Then
             'Waiting()
             Me.Cursor = Cursors.AppStarting
@@ -68,6 +72,7 @@ Class Attachments
                 row += 1
             Loop
         End With
+        reader.Close()
         CloseConnection(ConnID)
         If ListView1.Items.Count > 0 Then
             ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
@@ -88,6 +93,10 @@ errs:
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs)
     End Sub
     Private Sub OpenAttachment(AttachUID As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         If Not DownloadWorker.IsBusy Then
             'Waiting()
             Me.Cursor = Cursors.AppStarting
@@ -97,6 +106,10 @@ errs:
         End If
     End Sub
     Private Function DeleteAttachment(AttachUID As String) As Integer
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Function
+        End If
         Try
             Waiting()
             Dim ConnID As String = Guid.NewGuid.ToString
@@ -266,6 +279,7 @@ errs:
                     .GetBytes(.GetOrdinal("attach_file_binary"), 0, rawData, 0, FileSize)
                 End While
             End With
+            reader.Close()
             conn.Close()
             Dim fs As FileStream = New FileStream(strFullPath, FileMode.Create)
             fs.Write(rawData, 0, FileSize)

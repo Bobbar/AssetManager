@@ -10,6 +10,7 @@ Public Class View_Entry
         Me.Cursor = Cursors.Default
     End Sub
     Public Sub ViewEntry(ByVal EntryUID As String)
+        If Not ConnectionReady() Then Exit Sub
         Waiting()
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
@@ -40,6 +41,7 @@ Public Class View_Entry
                 Me.Text = Me.Text + " - " &!hist_action_datetime
             Loop
         End With
+        reader.Close()
         CloseConnection(ConnID)
         DoneWaiting()
     End Sub
