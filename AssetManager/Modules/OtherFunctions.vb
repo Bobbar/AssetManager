@@ -21,12 +21,10 @@ Module OtherFunctions
         stpw.Stop()
         stpw.Reset()
         stpw.Start()
-
     End Sub
     Public Sub StopTimer()
         stpw.Stop()
         Debug.Print(stpw.ElapsedMilliseconds)
-
     End Sub
     Public Sub Logger(Message As String)
         Dim DateStamp As String = DateTime.Now
@@ -50,10 +48,6 @@ Module OtherFunctions
     End Function
     Public Sub ConnectionNotReady()
         Dim blah = MsgBox("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
-
-
-
-
     End Sub
     Public Function ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
         Dim strErrMsg As String
@@ -62,6 +56,7 @@ Module OtherFunctions
         Select Case lngErrNum
             Case -2147467259
                 Dim blah = MsgBox("There was an error while connecting." & vbCrLf & "Message: " & strErrDescription, vbOKOnly + vbExclamation, "Connection Error")
+                ConnectionReady()
                 Return True
             Case 13 'null value from DB, ok to continue
                 Return True
@@ -91,8 +86,6 @@ Module OtherFunctions
         AssetManager.ConnStatusLabel.Text = Message
         AssetManager.ConnStatusLabel.ForeColor = FColor
         AssetManager.Refresh()
-
-
     End Sub
     Public Sub StatusBar(Text As String)
         AssetManager.StatusLabel.Text = Text

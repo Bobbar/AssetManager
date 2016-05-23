@@ -44,48 +44,48 @@ Class Attachments
         End If
     End Sub
     Private Sub ListAttachments(DeviceUID As String)
+        If Not ConnectionReady() Then
+            Exit Sub
+        End If
         Waiting()
-        On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim reader As MySqlDataReader
-        Dim table As New DataTable
-        Dim strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date FROM attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
-        reader = cmd.ExecuteReader
-        Dim strFullFilename As String
-        Dim row As Integer
-        Dim NewLine As ListViewItem
-        ListView1.Items.Clear()
-        ReDim AttachIndex(0)
-        With reader
-            Do While .Read()
-                Dim strFileSizeHuman As String = Math.Round((!attach_file_size / 1024), 1) & " KB"
-                strFullFilename = !attach_file_name &!attach_file_type
-                ListView1.Items.Add(strFullFilename)
-                ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(strFileSizeHuman)
-                ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(!attach_upload_date)
-                ReDim Preserve AttachIndex(row)
-                AttachIndex(row).strFilename = !attach_file_name
-                AttachIndex(row).strFileType = !attach_file_type
-                AttachIndex(row).FileSize = !attach_file_size
-                AttachIndex(row).strFileUID = !UID
-                row += 1
-            Loop
-        End With
-        reader.Close()
-        CloseConnection(ConnID)
-        If ListView1.Items.Count > 0 Then
-            ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-        End If
-        DoneWaiting()
-        Exit Sub
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+        Try
+            Dim ConnID As String = Guid.NewGuid.ToString
+            Dim reader As MySqlDataReader
+            Dim table As New DataTable
+            Dim strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date FROM attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
+            Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+            reader = cmd.ExecuteReader
+            Dim strFullFilename As String
+            Dim row As Integer
+            ListView1.Items.Clear()
+            ReDim AttachIndex(0)
+            With reader
+                Do While .Read()
+                    Dim strFileSizeHuman As String = Math.Round((!attach_file_size / 1024), 1) & " KB"
+                    strFullFilename = !attach_file_name &!attach_file_type
+                    ListView1.Items.Add(strFullFilename)
+                    ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(strFileSizeHuman)
+                    ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(!attach_upload_date)
+                    ReDim Preserve AttachIndex(row)
+                    AttachIndex(row).strFilename = !attach_file_name
+                    AttachIndex(row).strFileType = !attach_file_type
+                    AttachIndex(row).FileSize = !attach_file_size
+                    AttachIndex(row).strFileUID = !UID
+                    row += 1
+                Loop
+            End With
+            reader.Close()
+            CloseConnection(ConnID)
+            If ListView1.Items.Count > 0 Then
+                ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+            End If
             DoneWaiting()
-            Resume Next
-        Else
-            EndProgram()
-        End If
+            Exit Sub
+        Catch ex As MySqlException
+            DoneWaiting()
+            ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Exit Sub
+        End Try
     End Sub
     Private Function GetUIDFromIndex(Index As Integer) As String
         Return AttachIndex(Index).strFileUID
@@ -202,7 +202,6 @@ errs:
         Dim fs As FileStream
         Dim FilePath As String = DirectCast(e.Argument, String)
         Try
-
             fs = New FileStream(FilePath, FileMode.Open, FileAccess.Read)
             FileSize = fs.Length
             FileSizeMB = FileSize / (1024 * 1024)
@@ -231,7 +230,8 @@ errs:
             conn.Close()
             rawData = Nothing
             cmd = Nothing
-            Spinner.Visible = False
+            'ProgressIndicator1.Visible = False
+            'Spinner.Visible = False
             Status("Idle...")
             MessageBox.Show("File uploaded successfully!",
             "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
@@ -240,7 +240,8 @@ errs:
             conn.Close()
             fs.Close()
             fs = Nothing
-            Spinner.Visible = False
+            ' ProgressIndicator1.Visible = False
+            'Spinner.Visible = False
             Status("Idle...")
             If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
             'MessageBox.Show("There was an error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -285,11 +286,13 @@ errs:
             fs.Write(rawData, 0, FileSize)
             fs.Close()
             Status("Idle...")
+            ' ProgressIndicator1.Visible = False
             Spinner.Visible = False
             Process.Start(strFullPath)
         Catch ex As MySqlException
             conn.Close()
             Status("Idle...")
+            'ProgressIndicator1.Visible = False
             Spinner.Visible = False
             ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             'MessageBox.Show("There was an error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)

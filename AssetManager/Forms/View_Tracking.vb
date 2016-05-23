@@ -11,12 +11,16 @@ Public Class View_Tracking
     End Sub
     Public Sub ViewTrackingEntry(ByVal EntryUID As String)
         On Error GoTo errs
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         Waiting()
-        Dim ConnID As String = Guid.NewGuid.ToString
+        'Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim strQry = "Select * FROM trackable WHERE  track_uid = '" & EntryUID & "'"
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        Dim cmd As New MySqlCommand(strQry, GlobalConn) 'GetConnection(ConnID).DBConnection)
         reader = cmd.ExecuteReader
         With reader
             Do While .Read()
@@ -48,7 +52,7 @@ Public Class View_Tracking
             Loop
         End With
         reader.Close()
-        CloseConnection(ConnID)
+        'CloseConnection(ConnID)
         DoneWaiting()
         Exit Sub
 errs:

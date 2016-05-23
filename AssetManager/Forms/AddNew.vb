@@ -27,7 +27,9 @@ Public Class AddNew
         rows = rows + cmd.ExecuteNonQuery()
         CloseConnection(ConnID)
         If rows = 2 Then 'ExecuteQuery returns the number of rows affected. We can check this to make sure the qry completed successfully.
-            Dim blah = MsgBox("New Device Added", vbOKOnly + vbInformation, "Complete")
+            Dim blah = MsgBox("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
+            ClearAll()
+            If blah = vbNo Then Me.Hide()
         Else
             Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
         End If

@@ -24,17 +24,16 @@ Public Class AssetManager
         Status("Checking Server Connection...")
         If OpenConnection() Then 'CheckConnection() Then
             ConnectionReady()
+            Liveconn.Open()
             'do nut-zing
         Else
             Dim blah = MsgBox("Error connecting to server!", vbOKOnly + vbCritical, "Could not connect")
             EndProgram()
         End If
-
-        Liveconn.Open()
-        'Buildconn.Open()
         Dim userFullName As String = UserPrincipal.Current.DisplayName
-        Logger("Enabling Double-Buffered DataGrid...")
+        Logger("Enabling Double-Buffered Controls...")
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
+        ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
         Status("Loading Indexes...")
         BuildIndexes()
         Status("Checking Access Level...")
@@ -150,7 +149,6 @@ Public Class AssetManager
     End Sub
     Private Sub ShowAll()
         On Error GoTo errs
-
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
@@ -180,7 +178,6 @@ Public Class AssetManager
         End With
         reader.Close()
         SendToGrid(ResultGrid, SearchResults)
-
         CloseConnection(ConnID)
         DoneWaiting()
         Exit Sub
@@ -210,12 +207,6 @@ errs:
         bolGridFilling = True
         Grid.DataSource = table
         bolGridFilling = False
-        'For i = 0 To Grid.Rows.Count - 1
-        '    If Grid.Rows(i).Cells(GetColIndex(Grid, "Device Type")).Value = "Desktop" Then
-        '        Grid.Rows(i).Cells(GetColIndex(Grid, "Device Type")).Style.BackColor = Color.Blue
-        '    End If
-        'Next
-        'Grid.Columns("User").DefaultCellStyle.Font = New Font(Grid.Font, FontStyle.Bold)
         Grid.AutoResizeColumns()
         ReDim SearchResults(0)
     End Sub
@@ -249,9 +240,7 @@ errs:
         End If
     End Sub
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
-
         Dim table As New DataTable
-
         GetSearchDBValues()
         Dim strStartQry = "SELECT * FROM devices WHERE "
         Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", "")) & (IIf(SearchValues.strDescription <> "", " dev_description LIKE '%" & SearchValues.strDescription & "%' AND", ""))
@@ -265,7 +254,6 @@ errs:
         End If
         strLastQry = strQry
         StartBigQuery(strQry)
-
     End Sub
     Private Sub Button2_Click(sender As Object, e As EventArgs)
         Clear_All()
@@ -274,11 +262,6 @@ errs:
         AddNew.Show()
     End Sub
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
-        'Waiting()
-        'View.ViewDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
-        'View.Show()
-        'View.Activate()
-        'DoneWaiting()
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
     End Sub
     Private Sub HideLiveBox()
@@ -297,7 +280,6 @@ errs:
         End If
         Waiting()
         View.ViewDevice(strGUID)
-        View.Show()
         View.Activate()
         DoneWaiting()
     End Sub
@@ -350,9 +332,11 @@ errs:
     End Sub
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
+        StatusBar("Processing...")
     End Sub
     Private Sub DoneWaiting()
         Me.Cursor = Cursors.Default
+        StatusBar("Idle...")
     End Sub
     Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs)
     End Sub
@@ -373,10 +357,8 @@ errs:
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles LiveQueryWorker.DoWork
         On Error Resume Next
         strPrevSearchString = strSearchString
-        'Dim ConnID As String = Guid.NewGuid.ToString
         Dim ds As New DataSet
         Dim da As New MySqlDataAdapter
-        'Dim conn As New MySqlConnection(MySQLConnectString)
         Dim RowLimit As Integer = 15
         Dim strQryRow As String
         Dim strQry As String
@@ -395,10 +377,8 @@ errs:
         'Debug.Print(strQry)
         da.SelectCommand.Connection = Liveconn
         da.Fill(ds)
-
-
         'conn.Close()
-
+        dtResults = Nothing
         dtResults = ds.Tables(0)
     End Sub
     Private Sub ContextMenuStrip1_Opening(sender As Object, e As CancelEventArgs) Handles ContextMenuStrip1.Opening
@@ -410,8 +390,11 @@ errs:
     End Sub
     Private Sub DrawLiveBox()
         On Error GoTo errs
+        If dtResults.Rows.Count < 1 Then
+            LiveBox.Visible = False
+            Exit Sub
+        End If
         Dim dr As DataRow
-        LiveBox.Items.Clear()
         Dim strQryRow As String
         Dim CntGroup As GroupBox
         CntGroup = CurrentControl.Parent
@@ -425,6 +408,7 @@ errs:
             Case "txtDescription"
                 strQryRow = "dev_description"
         End Select
+        LiveBox.Items.Clear()
         With dr
             For Each dr In dtResults.Rows
                 LiveBox.Items.Add(dr.Item(strQryRow))
@@ -433,7 +417,7 @@ errs:
         LiveBox.Left = CurrentControl.Left + CntGroup.Left ' + SearchGroup.Left
         LiveBox.Top = CurrentControl.Top + CurrentControl.Height + CntGroup.Top ' + SearchGroup.Top
         LiveBox.Width = CurrentControl.Width
-        LiveBox.AutoSize = True
+        'LiveBox.AutoSize = True
         LiveBox.Height = LiveBox.PreferredHeight
         If dtResults.Rows.Count > 0 Then
             LiveBox.Visible = True
@@ -475,7 +459,7 @@ errs:
         Dim i As Integer
         Dim reader As MySqlDataReader
         Dim table As New DataTable
-        Dim ConnID As String = Guid.NewGuid.ToString
+        'Dim ConnID As String = Guid.NewGuid.ToString
         Dim strQry = strWorkerQry '"SELECT * FROM devices ORDER BY dev_input_datetime DESC"
         strLastQry = strQry
         Dim conn As New MySqlConnection(MySQLConnectString)
@@ -501,6 +485,8 @@ errs:
         End With
         reader.Close()
         conn.Close()
+        conn = Nothing
+        reader = Nothing
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
         CurrentControl = txtCurUser
@@ -534,11 +520,6 @@ errs:
             Case Else
                 LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
         End Select
-        'If CurrentControl.Name <> "txtDescription" Or CurrentControl.Name <> "txtCurUser" Then
-        '    LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
-        'Else
-        '    CurrentControl.Text = LiveBox.Text
-        'End If
         HideLiveBox()
     End Sub
     Private Sub LiveBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles LiveBox.KeyPress
@@ -577,7 +558,7 @@ errs:
         End If
         ReportView.Show()
     End Sub
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs)
         StripConns.Visible = True
         StripConns.Text = UBound(CurrentConnections)
     End Sub
@@ -623,49 +604,29 @@ errs:
     End Sub
     Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
     End Sub
-
     Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatchDog.Tick
-
         Select Case GlobalConn.State
             Case ConnectionState.Closed
                 ConnectStatus("Disconnected:", Color.Red)
+                ConnectionReady()
             Case ConnectionState.Open
                 ConnectStatus("Connected:", Color.Green)
             Case ConnectionState.Connecting
                 ConnectStatus("Connecting:", Color.DarkOrange)
             Case Else
                 ConnectStatus("Disconnected:", Color.Red)
-
-
+                ConnectionReady()
         End Select
-
-
-
-        'ConnectionReady()
-
     End Sub
-
     Public Sub ReconnectThread_DoWork(sender As Object, e As DoWorkEventArgs) Handles ReconnectThread.DoWork
         ConnectAttempts = 0
         Do Until GlobalConn.State = ConnectionState.Open 'ConnectionReady()
             ConnectAttempts += 1
             ReconnectThread.ReportProgress(ConnectAttempts)
-
-            Thread.Sleep(1000)
-
-
             If OpenConnection() Then StatusBar("Connected!")
-
-
-
-
-
-
+            Thread.Sleep(5000)
         Loop
-        Debug.Print("BG Done. " & ConnectAttempts & "  " & ConnectionReady().ToString)
-
     End Sub
-
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
         Dim BackColor As Color = DefGridBC
         Dim SelectColor As Color = DefGridSelCol
@@ -683,19 +644,14 @@ errs:
             ResultGrid.CurrentCell = ResultGrid(e.ColumnIndex, e.RowIndex)
         End If
     End Sub
-
     Private Sub ToolStripDropDownButton1_Click(sender As Object, e As EventArgs) Handles ToolStripDropDownButton1.Click
-
     End Sub
-
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
     End Sub
-
     Private Sub ReconnectThread_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles ReconnectThread.ProgressChanged
-        StatusBar("Trying to connect... " & ConnectAttempts)
+        StatusBar("Trying to reconnect... " & ConnectAttempts)
     End Sub
-
     Private Sub ReconnectThread_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles ReconnectThread.RunWorkerCompleted
         ConnectionReady()
         StatusBar("Connected!")

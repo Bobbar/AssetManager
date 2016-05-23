@@ -43,9 +43,9 @@ Partial Class Attachments
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.Spinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
-        Me.Spinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -231,6 +231,7 @@ Partial Class Attachments
         '
         'StatusStrip1
         '
+        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.Spinner})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 525)
         Me.StatusStrip1.Name = "StatusStrip1"
@@ -245,18 +246,18 @@ Partial Class Attachments
         Me.StatusLabel.Size = New System.Drawing.Size(78, 17)
         Me.StatusLabel.Text = "%STATUS%"
         '
-        'UploadWorker
-        '
-        '
-        'DownloadWorker
-        '
-        '
         'Spinner
         '
         Me.Spinner.Image = Global.AssetManager.My.Resources.Resources.loading
         Me.Spinner.Name = "Spinner"
         Me.Spinner.Size = New System.Drawing.Size(16, 17)
         Me.Spinner.Visible = False
+        '
+        'UploadWorker
+        '
+        '
+        'DownloadWorker
+        '
         '
         'Attachments
         '

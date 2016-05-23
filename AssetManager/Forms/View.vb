@@ -103,20 +103,17 @@ Public Class View
         'DeviceInfoBox.BackColor = TrackingBox.BackColor
     End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
-
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
         End If
-        'On Error GoTo errs
         Waiting()
         ClearFields()
         RefreshCombos()
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim strQry = "Select * FROM devices, historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC"
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        Dim cmd As New MySqlCommand(strQry, GlobalConn)
         Try
             reader = cmd.ExecuteReader
             table.Columns.Add("Date", GetType(String))
@@ -129,10 +126,8 @@ Public Class View
             table.Columns.Add("Location", GetType(String))
             table.Columns.Add("Purchase Date", GetType(String))
             table.Columns.Add("GUID", GetType(String))
-
             With reader
                 ' Dim r As Boolean = Await .ReadAsync
-
                 Do While .Read()
                     CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
                     txtAssetTag_View_REQ.Text = !dev_asset_tag
@@ -152,9 +147,6 @@ Public Class View
                 Loop
             End With
             reader.Close()
-            CloseConnection(ConnID)
-
-
             DataGridHistory.DataSource = table
             'DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
             DisableControls()
@@ -163,19 +155,10 @@ Public Class View
             DoneWaiting()
             Me.Show()
         Catch ex As MySqlException
-            'reader.Close()
             DoneWaiting()
             ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Exit Sub
         End Try
-        '        Exit Sub
-        'errs:
-        '        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-        '            DoneWaiting()
-        '            'Resume Next
-        '        Else
-        '            EndProgram()
-        '        End If
     End Sub
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
@@ -190,11 +173,11 @@ Public Class View
             Exit Sub
         End If
         Waiting()
-        Dim ConnID As String = Guid.NewGuid.ToString
+        'Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim strQry = "Select * FROM trackable, devices WHERE track_device_uid = dev_UID And track_device_uid = '" & strGUID & "' ORDER BY track_datestamp DESC"
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        Dim cmd As New MySqlCommand(strQry, GlobalConn)
         reader = cmd.ExecuteReader
         table.Columns.Add("Date", GetType(String))
         table.Columns.Add("Check Type", GetType(String))
@@ -223,8 +206,7 @@ Public Class View
             Loop
         End With
         reader.Close()
-
-        CloseConnection(ConnID)
+        'CloseConnection(ConnID)
         TrackingGrid.DataSource = table
         TrackingGrid.AutoResizeColumns()
         'GetCurrentTracking(CurrentDevice.strGUID)
@@ -624,6 +606,8 @@ errs:
         Attachments.Activate()
     End Sub
     Private DefGridBC As Color, DefGridSelCol As Color, bolGridFilling As Boolean = False
+    Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
+    End Sub
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
         If Not bolGridFilling Then

@@ -33,30 +33,30 @@ Partial Class View
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
-        Me.cmdCancel = New System.Windows.Forms.Button()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.txtGUID = New System.Windows.Forms.TextBox()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.cmbStatus_REQ = New System.Windows.Forms.ComboBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.cmbOSVersion_REQ = New System.Windows.Forms.ComboBox()
-        Me.cmdUpdate = New System.Windows.Forms.Button()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.cmbEquipType_View_REQ = New System.Windows.Forms.ComboBox()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.dtPurchaseDate_View_REQ = New System.Windows.Forms.DateTimePicker()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.cmbLocation_View_REQ = New System.Windows.Forms.ComboBox()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.txtDescription_View_REQ = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.txtCurUser_View_REQ = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.txtSerial_View_REQ = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.txtSerial_View_REQ = New System.Windows.Forms.TextBox()
+        Me.txtGUID = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.txtCurUser_View_REQ = New System.Windows.Forms.TextBox()
+        Me.cmbStatus_REQ = New System.Windows.Forms.ComboBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.txtDescription_View_REQ = New System.Windows.Forms.TextBox()
+        Me.cmbOSVersion_REQ = New System.Windows.Forms.ComboBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.cmdUpdate = New System.Windows.Forms.Button()
+        Me.cmbLocation_View_REQ = New System.Windows.Forms.ComboBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.cmbEquipType_View_REQ = New System.Windows.Forms.ComboBox()
+        Me.dtPurchaseDate_View_REQ = New System.Windows.Forms.DateTimePicker()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -212,6 +212,16 @@ Partial Class View
         Me.chkTrackable.Text = "Trackable"
         Me.chkTrackable.UseVisualStyleBackColor = True
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(17, 23)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(73, 16)
+        Me.Label1.TabIndex = 20
+        Me.Label1.Text = "Asset Tag:"
+        '
         'cmdCancel
         '
         Me.cmdCancel.Location = New System.Drawing.Point(608, 201)
@@ -220,6 +230,14 @@ Partial Class View
         Me.cmdCancel.TabIndex = 42
         Me.cmdCancel.Text = "Cancel"
         Me.cmdCancel.UseVisualStyleBackColor = True
+        '
+        'txtAssetTag_View_REQ
+        '
+        Me.txtAssetTag_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTag_View_REQ.Location = New System.Drawing.Point(20, 42)
+        Me.txtAssetTag_View_REQ.Name = "txtAssetTag_View_REQ"
+        Me.txtAssetTag_View_REQ.Size = New System.Drawing.Size(134, 22)
+        Me.txtAssetTag_View_REQ.TabIndex = 19
         '
         'Label10
         '
@@ -231,6 +249,14 @@ Partial Class View
         Me.Label10.TabIndex = 41
         Me.Label10.Text = "Device GUID:"
         '
+        'txtSerial_View_REQ
+        '
+        Me.txtSerial_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerial_View_REQ.Location = New System.Drawing.Point(20, 93)
+        Me.txtSerial_View_REQ.Name = "txtSerial_View_REQ"
+        Me.txtSerial_View_REQ.Size = New System.Drawing.Size(133, 22)
+        Me.txtSerial_View_REQ.TabIndex = 21
+        '
         'txtGUID
         '
         Me.txtGUID.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -240,6 +266,16 @@ Partial Class View
         Me.txtGUID.Size = New System.Drawing.Size(268, 22)
         Me.txtGUID.TabIndex = 40
         Me.txtGUID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(17, 74)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(46, 16)
+        Me.Label2.TabIndex = 22
+        Me.Label2.Text = "Serial:"
         '
         'Label9
         '
@@ -251,6 +287,14 @@ Partial Class View
         Me.Label9.TabIndex = 39
         Me.Label9.Text = "Status:"
         '
+        'txtCurUser_View_REQ
+        '
+        Me.txtCurUser_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(20, 145)
+        Me.txtCurUser_View_REQ.Name = "txtCurUser_View_REQ"
+        Me.txtCurUser_View_REQ.Size = New System.Drawing.Size(132, 22)
+        Me.txtCurUser_View_REQ.TabIndex = 23
+        '
         'cmbStatus_REQ
         '
         Me.cmbStatus_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -259,6 +303,16 @@ Partial Class View
         Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
         Me.cmbStatus_REQ.Size = New System.Drawing.Size(124, 24)
         Me.cmbStatus_REQ.TabIndex = 38
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(16, 126)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(85, 16)
+        Me.Label3.TabIndex = 24
+        Me.Label3.Text = "Current User:"
         '
         'Label8
         '
@@ -270,6 +324,14 @@ Partial Class View
         Me.Label8.TabIndex = 37
         Me.Label8.Text = "OS Version:"
         '
+        'txtDescription_View_REQ
+        '
+        Me.txtDescription_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDescription_View_REQ.Location = New System.Drawing.Point(172, 42)
+        Me.txtDescription_View_REQ.Name = "txtDescription_View_REQ"
+        Me.txtDescription_View_REQ.Size = New System.Drawing.Size(304, 22)
+        Me.txtDescription_View_REQ.TabIndex = 25
+        '
         'cmbOSVersion_REQ
         '
         Me.cmbOSVersion_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -278,6 +340,16 @@ Partial Class View
         Me.cmbOSVersion_REQ.Name = "cmbOSVersion_REQ"
         Me.cmbOSVersion_REQ.Size = New System.Drawing.Size(120, 24)
         Me.cmbOSVersion_REQ.TabIndex = 36
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(171, 23)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(79, 16)
+        Me.Label4.TabIndex = 26
+        Me.Label4.Text = "Description:"
         '
         'cmdUpdate
         '
@@ -290,6 +362,15 @@ Partial Class View
         Me.cmdUpdate.Text = "Confirm"
         Me.cmdUpdate.UseVisualStyleBackColor = False
         '
+        'cmbLocation_View_REQ
+        '
+        Me.cmbLocation_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbLocation_View_REQ.FormattingEnabled = True
+        Me.cmbLocation_View_REQ.Location = New System.Drawing.Point(172, 92)
+        Me.cmbLocation_View_REQ.Name = "cmbLocation_View_REQ"
+        Me.cmbLocation_View_REQ.Size = New System.Drawing.Size(168, 24)
+        Me.cmbLocation_View_REQ.TabIndex = 27
+        '
         'Label13
         '
         Me.Label13.AutoSize = True
@@ -299,53 +380,6 @@ Partial Class View
         Me.Label13.Size = New System.Drawing.Size(110, 16)
         Me.Label13.TabIndex = 34
         Me.Label13.Text = "Equipment Type:"
-        '
-        'cmbEquipType_View_REQ
-        '
-        Me.cmbEquipType_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbEquipType_View_REQ.FormattingEnabled = True
-        Me.cmbEquipType_View_REQ.Location = New System.Drawing.Point(495, 41)
-        Me.cmbEquipType_View_REQ.Name = "cmbEquipType_View_REQ"
-        Me.cmbEquipType_View_REQ.Size = New System.Drawing.Size(156, 24)
-        Me.cmbEquipType_View_REQ.TabIndex = 33
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(377, 129)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(124, 16)
-        Me.Label7.TabIndex = 32
-        Me.Label7.Text = "Replacement Year:"
-        '
-        'txtReplacementYear_View
-        '
-        Me.txtReplacementYear_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtReplacementYear_View.Location = New System.Drawing.Point(390, 148)
-        Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
-        Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 22)
-        Me.txtReplacementYear_View.TabIndex = 31
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(170, 126)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(100, 16)
-        Me.Label6.TabIndex = 30
-        Me.Label6.Text = "Purchase Date:"
-        '
-        'dtPurchaseDate_View_REQ
-        '
-        Me.dtPurchaseDate_View_REQ.CustomFormat = "yyyy-MM-dd"
-        Me.dtPurchaseDate_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dtPurchaseDate_View_REQ.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtPurchaseDate_View_REQ.Location = New System.Drawing.Point(174, 145)
-        Me.dtPurchaseDate_View_REQ.Name = "dtPurchaseDate_View_REQ"
-        Me.dtPurchaseDate_View_REQ.Size = New System.Drawing.Size(182, 22)
-        Me.dtPurchaseDate_View_REQ.TabIndex = 29
         '
         'Label5
         '
@@ -357,86 +391,52 @@ Partial Class View
         Me.Label5.TabIndex = 28
         Me.Label5.Text = "Location:"
         '
-        'cmbLocation_View_REQ
+        'cmbEquipType_View_REQ
         '
-        Me.cmbLocation_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbLocation_View_REQ.FormattingEnabled = True
-        Me.cmbLocation_View_REQ.Location = New System.Drawing.Point(172, 92)
-        Me.cmbLocation_View_REQ.Name = "cmbLocation_View_REQ"
-        Me.cmbLocation_View_REQ.Size = New System.Drawing.Size(168, 24)
-        Me.cmbLocation_View_REQ.TabIndex = 27
+        Me.cmbEquipType_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbEquipType_View_REQ.FormattingEnabled = True
+        Me.cmbEquipType_View_REQ.Location = New System.Drawing.Point(495, 41)
+        Me.cmbEquipType_View_REQ.Name = "cmbEquipType_View_REQ"
+        Me.cmbEquipType_View_REQ.Size = New System.Drawing.Size(156, 24)
+        Me.cmbEquipType_View_REQ.TabIndex = 33
         '
-        'Label4
+        'dtPurchaseDate_View_REQ
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(171, 23)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(79, 16)
-        Me.Label4.TabIndex = 26
-        Me.Label4.Text = "Description:"
+        Me.dtPurchaseDate_View_REQ.CustomFormat = "yyyy-MM-dd"
+        Me.dtPurchaseDate_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dtPurchaseDate_View_REQ.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtPurchaseDate_View_REQ.Location = New System.Drawing.Point(174, 145)
+        Me.dtPurchaseDate_View_REQ.Name = "dtPurchaseDate_View_REQ"
+        Me.dtPurchaseDate_View_REQ.Size = New System.Drawing.Size(182, 22)
+        Me.dtPurchaseDate_View_REQ.TabIndex = 29
         '
-        'txtDescription_View_REQ
+        'Label7
         '
-        Me.txtDescription_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDescription_View_REQ.Location = New System.Drawing.Point(172, 42)
-        Me.txtDescription_View_REQ.Name = "txtDescription_View_REQ"
-        Me.txtDescription_View_REQ.Size = New System.Drawing.Size(304, 22)
-        Me.txtDescription_View_REQ.TabIndex = 25
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(377, 129)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(124, 16)
+        Me.Label7.TabIndex = 32
+        Me.Label7.Text = "Replacement Year:"
         '
-        'Label3
+        'Label6
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(16, 126)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(85, 16)
-        Me.Label3.TabIndex = 24
-        Me.Label3.Text = "Current User:"
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(170, 126)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(100, 16)
+        Me.Label6.TabIndex = 30
+        Me.Label6.Text = "Purchase Date:"
         '
-        'txtCurUser_View_REQ
+        'txtReplacementYear_View
         '
-        Me.txtCurUser_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(20, 145)
-        Me.txtCurUser_View_REQ.Name = "txtCurUser_View_REQ"
-        Me.txtCurUser_View_REQ.Size = New System.Drawing.Size(132, 22)
-        Me.txtCurUser_View_REQ.TabIndex = 23
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(17, 74)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(46, 16)
-        Me.Label2.TabIndex = 22
-        Me.Label2.Text = "Serial:"
-        '
-        'txtSerial_View_REQ
-        '
-        Me.txtSerial_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSerial_View_REQ.Location = New System.Drawing.Point(20, 93)
-        Me.txtSerial_View_REQ.Name = "txtSerial_View_REQ"
-        Me.txtSerial_View_REQ.Size = New System.Drawing.Size(133, 22)
-        Me.txtSerial_View_REQ.TabIndex = 21
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(17, 23)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(73, 16)
-        Me.Label1.TabIndex = 20
-        Me.Label1.Text = "Asset Tag:"
-        '
-        'txtAssetTag_View_REQ
-        '
-        Me.txtAssetTag_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTag_View_REQ.Location = New System.Drawing.Point(20, 42)
-        Me.txtAssetTag_View_REQ.Name = "txtAssetTag_View_REQ"
-        Me.txtAssetTag_View_REQ.Size = New System.Drawing.Size(134, 22)
-        Me.txtAssetTag_View_REQ.TabIndex = 19
+        Me.txtReplacementYear_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtReplacementYear_View.Location = New System.Drawing.Point(390, 148)
+        Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
+        Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 22)
+        Me.txtReplacementYear_View.TabIndex = 31
         '
         'RightClickMenu
         '

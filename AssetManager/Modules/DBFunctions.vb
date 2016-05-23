@@ -13,7 +13,6 @@ Public Module DBFunctions
     Public strLastQry As String
     Private ConnCount As Integer = 0
     Public GlobalConn As New MySqlConnection(MySQLConnectString)
-
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
@@ -86,7 +85,6 @@ Public Module DBFunctions
     End Class
     Public Function OpenConnection() As Boolean
         Try
-
             GlobalConn.Open()
             If GlobalConn.State = ConnectionState.Open Then
                 Return True
@@ -95,29 +93,9 @@ Public Module DBFunctions
             End If
         Catch
             'GlobalConn.Close()
-
             Return False
-
-
         End Try
-
-
     End Function
-    'Public Function GetCheckOutStatus(strGUID As String) As Boolean
-    '    Dim ConnID As String = Guid.NewGuid.ToString
-    '    Dim reader As MySqlDataReader
-    '    Dim UID As String
-    '    Dim strQry = "SELECT track_ from trackable WHERE dev_asset_tag = '" & AssetTag & "' AND dev_serial = '" & Serial & "' ORDER BY dev_input_datetime"
-    '    Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
-    '    reader = cmd.ExecuteReader
-    '    With reader
-    '        Do While .Read()
-    '            UID = (!dev_UID)
-    '        Loop
-    '    End With
-    '    CloseConnection(ConnID)
-    '    Return UID
-    'End Function
     Public Liveconn As New MySqlConnection(MySQLConnectString)
     Public Buildconn As New MySqlConnection(MySQLConnectString)
     Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String, ByVal Status As String, ByVal Trackable As Boolean, ByVal CheckedOut As Boolean)
@@ -143,7 +121,6 @@ Public Module DBFunctions
         ReDim CurrentConnections(0)
         CurrentConnections(0).ConnectionID = strGUID
         CurrentConnections(0).DBConnection = GlobalConn
-
         Return CurrentConnections(0)
         'Try
         '    StatusBar("Connecting...")
@@ -153,14 +130,12 @@ Public Module DBFunctions
         '        CurrentConnections(0).ConnectionID = strGUID
         '        CurrentConnections(0).DBConnection = New MySqlConnection(MySQLConnectString)
         '        CurrentConnections(0).DBConnection.Open()
-
         '        Return CurrentConnections(0)
         '    Else 'after first connection create more if needed. Reuse previously closed connections first
         '        For i = 0 To UBound(CurrentConnections)
         '            If CurrentConnections(i).DBConnection.State = 0 Then 'if we find a closed connection, reuse it
         '                CurrentConnections(i).ConnectionID = strGUID
         '                CurrentConnections(i).DBConnection.Open()
-
         '                Return CurrentConnections(i)
         '                Exit Function   'i'm pretty sure this is redundant. But I'm paranoid.
         '            End If
@@ -171,7 +146,6 @@ Public Module DBFunctions
         '        CurrentConnections(UBound(CurrentConnections)).ConnectionID = strGUID
         '        CurrentConnections(UBound(CurrentConnections)).DBConnection = New MySqlConnection(MySQLConnectString)
         '        CurrentConnections(UBound(CurrentConnections)).DBConnection.Open()
-
         '        Return CurrentConnections(UBound(CurrentConnections))
         '    End If
         'Catch exError As MySqlException
@@ -222,7 +196,6 @@ Public Module DBFunctions
         '    End If
         'Next
     End Sub
-
     Public Sub GetUserAccess()
         On Error Resume Next
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -299,7 +272,6 @@ errs:
     End Function
     Public Function GetEntryInfo(ByVal strGUID As String) As Device_Info
         On Error GoTo errs
-
         If Not ConnectionReady() Then
             Exit Function
         End If
@@ -556,45 +528,22 @@ errs:
 errs:
         Return ""
     End Function
-
     Public Function ConnectionReady() As Boolean
         ' Debug.Print(GlobalConn.State.ToString)
-
-
         Select Case GlobalConn.State
             Case ConnectionState.Closed
-
                 If Not AssetManager.ReconnectThread.IsBusy Then AssetManager.ReconnectThread.RunWorkerAsync()
                 Return False
             Case ConnectionState.Open
-
-
                 Return True
             Case ConnectionState.Connecting
-
-
                 Return False
             Case Else
-
                 If Not AssetManager.ReconnectThread.IsBusy Then AssetManager.ReconnectThread.RunWorkerAsync()
                 Return False
-
-
         End Select
-
-
-
-
-
-
-
-
-
     End Function
     Public Function CheckConnection() As Boolean
-
-
-
         On Error GoTo errs
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim ds As New DataSet
