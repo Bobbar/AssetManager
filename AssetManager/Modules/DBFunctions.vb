@@ -2,8 +2,10 @@
 Imports MySql.Data.MySqlClient
 Public Module DBFunctions
     Public ReadOnly Property strLocalUser As String = Environment.UserName
+    'Public Const strServerIP As String = "192.168.1.122"
+    Public Const strServerIP As String = "10.10.80.232"
     'Private MySQLConnectString As String = "server=df8xlbs1;port=3306;uid=asset_manager_user;pwd=A553tP455;database=asset_manager"
-    Public MySQLConnectString As String = "server=10.10.80.232;uid=asset_mgr_usr;pwd=A553tP455;database=asset_manager" 'centos test
+    Public MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=asset_manager" 'centos test
     Public Const strDBDateTimeFormat As String = "yyyy-MM-dd HH:mm:ss"
     Public Const strDBDateFormat As String = "yyyy-MM-dd"
     Public Const strCommMessage As String = "Communicating..."
@@ -13,6 +15,7 @@ Public Module DBFunctions
     Public strLastQry As String
     Private ConnCount As Integer = 0
     Public GlobalConn As New MySqlConnection(MySQLConnectString)
+    Public strServerTime As String
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
@@ -87,6 +90,7 @@ Public Module DBFunctions
         Try
             GlobalConn.Open()
             If GlobalConn.State = ConnectionState.Open Then
+                Liveconn.Open()
                 Return True
             Else
                 Return False
@@ -116,43 +120,6 @@ Public Module DBFunctions
             .Tracking.bolCheckedOut = CheckedOut
         End With
     End Sub
-    Public Function GetConnection(strGUID As String) As ConnectionData 'dynamically create new DB connections as needed
-        StatusBar("Connecting....")
-        ReDim CurrentConnections(0)
-        CurrentConnections(0).ConnectionID = strGUID
-        CurrentConnections(0).DBConnection = GlobalConn
-        Return CurrentConnections(0)
-        'Try
-        '    StatusBar("Connecting...")
-        '    Dim i As Integer
-        '    If CurrentConnections Is Nothing Then 'first connection since start. Make a new connection
-        '        ReDim CurrentConnections(0)
-        '        CurrentConnections(0).ConnectionID = strGUID
-        '        CurrentConnections(0).DBConnection = New MySqlConnection(MySQLConnectString)
-        '        CurrentConnections(0).DBConnection.Open()
-        '        Return CurrentConnections(0)
-        '    Else 'after first connection create more if needed. Reuse previously closed connections first
-        '        For i = 0 To UBound(CurrentConnections)
-        '            If CurrentConnections(i).DBConnection.State = 0 Then 'if we find a closed connection, reuse it
-        '                CurrentConnections(i).ConnectionID = strGUID
-        '                CurrentConnections(i).DBConnection.Open()
-        '                Return CurrentConnections(i)
-        '                Exit Function   'i'm pretty sure this is redundant. But I'm paranoid.
-        '            End If
-        '        Next
-        '        'if no unused connection were found, create a new one and return that one.
-        '        'might need to add more work here to cycle through the connections and choose the correct option. Instead of counting on a return to prevent the next step from occuring.
-        '        ReDim Preserve CurrentConnections(UBound(CurrentConnections) + 1)
-        '        CurrentConnections(UBound(CurrentConnections)).ConnectionID = strGUID
-        '        CurrentConnections(UBound(CurrentConnections)).DBConnection = New MySqlConnection(MySQLConnectString)
-        '        CurrentConnections(UBound(CurrentConnections)).DBConnection.Open()
-        '        Return CurrentConnections(UBound(CurrentConnections))
-        '    End If
-        'Catch exError As MySqlException
-        '    ErrHandle(exError.Number, exError.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        '    Return Nothing
-        'End Try
-    End Function
     Private Sub ListConnections(num As Integer)
         Debug.Print("")
         For i As Integer = 0 To UBound(CurrentConnections)
@@ -161,16 +128,14 @@ Public Module DBFunctions
         Debug.Print("")
     End Sub
     Public Sub GetCurrentTracking(strGUID As String)
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim ds As New DataSet
         Dim da As New MySqlDataAdapter
         Dim dt As DataTable
         Dim dr As DataRow
         'Dim strQryRow As String
         da.SelectCommand = New MySqlCommand("SELECT * FROM trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1")
-        da.SelectCommand.Connection = GetConnection(ConnID).DBConnection
+        da.SelectCommand.Connection = GlobalConn
         da.Fill(ds)
-        CloseConnection(ConnID)
         dt = ds.Tables(0)
         If dt.Rows.Count > 0 Then
             For Each dr In dt.Rows
@@ -186,22 +151,11 @@ Public Module DBFunctions
             Next
         End If
     End Sub
-    Public Sub CloseConnection(strUID As String)
-        StatusBar("Idle...")
-        'Dim i As Integer
-        'For i = 0 To UBound(CurrentConnections)
-        '    If strUID = CurrentConnections(i).ConnectionID Then
-        '        CurrentConnections(i).DBConnection.Close()
-        '        Exit Sub
-        '    End If
-        'Next
-    End Sub
     Public Sub GetUserAccess()
         On Error Resume Next
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim strQRY = "SELECT * FROM users WHERE usr_username='" & strLocalUser & "'"
-        Dim cmd As New MySqlCommand(strQRY, GetConnection(ConnID).DBConnection)
+        Dim cmd As New MySqlCommand(strQRY, GlobalConn)
         reader = cmd.ExecuteReader
         With reader
             Do While .Read()
@@ -212,7 +166,6 @@ Public Module DBFunctions
             Loop
         End With
         reader.Close()
-        CloseConnection(ConnID)
     End Sub
     Public Function IsAdmin() As Boolean
         Return UserAccess.bolIsAdmin
@@ -234,14 +187,12 @@ errs:
     End Function
     Public Function DeleteEntry(ByVal strGUID As String) As Integer
         On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim cmd As New MySqlCommand
         Dim rows
         Dim strSQLQry As String = "DELETE FROM historical WHERE hist_uid='" & strGUID & "'"
-        cmd.Connection = GetConnection(ConnID).DBConnection
+        cmd.Connection = GlobalConn
         cmd.CommandText = strSQLQry
         rows = cmd.ExecuteNonQuery()
-        CloseConnection(ConnID)
         Return rows
         Exit Function
 errs:
@@ -253,14 +204,12 @@ errs:
     End Function
     Public Function DeleteDevice(ByVal strGUID As String) As Integer
         On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim cmd As New MySqlCommand
         Dim rows
         Dim strSQLQry As String = "DELETE FROM devices WHERE dev_UID='" & strGUID & "'"
-        cmd.Connection = GetConnection(ConnID).DBConnection
+        cmd.Connection = GlobalConn
         cmd.CommandText = strSQLQry
         rows = cmd.ExecuteNonQuery()
-        CloseConnection(ConnID)
         Return rows
         Exit Function
 errs:
@@ -276,11 +225,10 @@ errs:
             Exit Function
         End If
         Dim tmpInfo As Device_Info
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim UID As String
         Dim strQry = "SELECT * FROM historical WHERE hist_uid='" & strGUID & "'"
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        Dim cmd As New MySqlCommand(strQry, GlobalConn)
         reader = cmd.ExecuteReader
         With reader
             Do While .Read()
@@ -294,7 +242,6 @@ errs:
             Loop
         End With
         reader.Close()
-        CloseConnection(ConnID)
         Return tmpInfo
         Exit Function
 errs:
@@ -309,7 +256,7 @@ errs:
         Dim reader As MySqlDataReader
         Dim UID As String
         Dim strQry = "SELECT dev_UID from devices WHERE dev_asset_tag = '" & AssetTag & "' AND dev_serial = '" & Serial & "' ORDER BY dev_input_datetime"
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
+        Dim cmd As New MySqlCommand(strQry, GlobalConn)
         reader = cmd.ExecuteReader
         With reader
             Do While .Read()
@@ -317,7 +264,6 @@ errs:
             Loop
         End With
         reader.Close()
-        CloseConnection(ConnID)
         Return UID
     End Function
     Public Function GetDBValue(ByVal IndexType As String, ByVal index As Integer) As Object
@@ -544,38 +490,38 @@ errs:
         End Select
     End Function
     Public Function CheckConnection() As Boolean
-        On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim ds As New DataSet
-        Dim da As New MySqlDataAdapter
-        Dim rows As Integer
-        da.SelectCommand = New MySqlCommand("SHOW STATUS")
-        da.SelectCommand.Connection = GetConnection(ConnID).DBConnection
-        da.Fill(ds)
-        CloseConnection(ConnID)
-        rows = ds.Tables(0).Rows.Count
-        If rows > 0 Then
-            Return True
-        Else
+        Try
+            Dim ds As New DataSet
+            Dim da As New MySqlDataAdapter
+            Dim rows As Integer
+            Dim conn As New MySqlConnection(MySQLConnectString)
+            da.SelectCommand = New MySqlCommand("SELECT NOW()")
+            da.SelectCommand.Connection = GlobalConn
+            da.Fill(ds)
+            rows = ds.Tables(0).Rows.Count
+            'AssetManager.DateTimeLabel.Text = ds.Tables(0).Rows(0).Item(0).ToString
+            If rows > 0 Then
+                Return True
+            Else
+                Return False
+            End If
+            Exit Function
+        Catch ex As MySqlException
+            'ErrHandle(ex, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
-        End If
-        Exit Function
-errs:
-        Return False
+        End Try
     End Function
     Public Sub UpdateDevice()
         On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim rows As Integer
         Dim strSQLQry1 = "UPDATE devices Set dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(View.NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
         Dim cmd As New MySqlCommand
-        cmd.Connection = GetConnection(ConnID).DBConnection
+        cmd.Connection = GlobalConn
         cmd.CommandText = strSQLQry1
         rows = rows + cmd.ExecuteNonQuery()
         Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & View.NewData.strNote & "','" & View.NewData.strSerial & "','" & View.NewData.strDescription & "','" & View.NewData.strLocation & "','" & View.NewData.strCurrentUser & "','" & View.NewData.strAssetTag & "','" & View.NewData.dtPurchaseDate & "','" & View.NewData.strReplaceYear & "','" & View.NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & View.NewData.strEqType & "','" & View.NewData.strStatus & "','" & Convert.ToInt32(View.NewData.bolTrackable) & "')"
         cmd.CommandText = strSqlQry2
         rows = rows + cmd.ExecuteNonQuery()
-        CloseConnection(ConnID)
         UpdateDev.strNewNote = Nothing
         If rows = 2 Then
             Dim blah = MsgBox("Update Added.", vbOKOnly + vbInformation, "Success")

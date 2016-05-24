@@ -24,7 +24,7 @@ Public Class AssetManager
         Status("Checking Server Connection...")
         If OpenConnection() Then 'CheckConnection() Then
             ConnectionReady()
-            Liveconn.Open()
+            'Liveconn.Open()
             'do nut-zing
         Else
             Dim blah = MsgBox("Error connecting to server!", vbOKOnly + vbCritical, "Could not connect")
@@ -35,16 +35,15 @@ Public Class AssetManager
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
         Status("Loading Indexes...")
+        StartBigQuery(strShowAllQry)
         BuildIndexes()
         Status("Checking Access Level...")
         GetUserAccess()
         Clear_All()
         GetGridStylez()
         CopyDefaultCellStyles()
-        ViewFormIndex = 0
-        Status("Loading devices...")
-        StartBigQuery(strShowAllQry)
-        'ShowAll()
+        'Status("Loading devices...")
+        ConnectionWatchDog.RunWorkerAsync()
         Status("Ready!")
         Thread.Sleep(1000)
         SplashScreen.Hide()
@@ -81,13 +80,11 @@ Public Class AssetManager
     End Sub
     Private Sub BuildIndexes()
         Logger("Building Indexes...")
-        StartTimer()
         BuildLocationIndex()
         BuildChangeTypeIndex()
         BuildEquipTypeIndex()
         BuildOSTypeIndex()
         BuildStatusTypeIndex()
-        StopTimer()
         Logger("Building Indexes Done...")
     End Sub
     Private Sub Clear_All()
@@ -146,48 +143,6 @@ Public Class AssetManager
         End If
         StatusBar("Idle...")
         'picRunning.Visible = False
-    End Sub
-    Private Sub ShowAll()
-        On Error GoTo errs
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
-        Waiting()
-        Dim reader As MySqlDataReader
-        Dim table As New DataTable
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim strQry = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
-        strLastQry = strQry
-        Dim cmd As New MySqlCommand(strQry, GetConnection(ConnID).DBConnection)
-        reader = cmd.ExecuteReader
-        With reader
-            StatusBar(strCommMessage)
-            Do While .Read()
-                Dim Results As Device_Info
-                Results.strCurrentUser = !dev_cur_user
-                Results.strAssetTag = !dev_asset_tag
-                Results.strSerial = !dev_serial
-                Results.strDescription = !dev_description
-                Results.strLocation = !dev_location
-                Results.dtPurchaseDate = !dev_purchase_date
-                Results.strGUID = !dev_UID
-                Results.strEqType = !dev_eq_type
-                AddToResults(Results)
-            Loop
-        End With
-        reader.Close()
-        SendToGrid(ResultGrid, SearchResults)
-        CloseConnection(ConnID)
-        DoneWaiting()
-        Exit Sub
-errs:
-        DoneWaiting()
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
     End Sub
     Private Sub SendToGrid(ByRef Grid As DataGridView, Data() As Device_Info)
         StatusBar(strLoadingGridMessage)
@@ -336,9 +291,14 @@ errs:
     End Sub
     Private Sub DoneWaiting()
         Me.Cursor = Cursors.Default
-        StatusBar("Idle...")
+        If ConnectionReady() Then StatusBar("Idle...")
     End Sub
-    Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs)
+    Public Sub StatusBar(Text As String)
+        On Error Resume Next
+        StatusLabel.Text = Text
+        'Attachments.StatusLabel.Text = Text
+        'Attachments.Refresh()
+        Me.Refresh()
     End Sub
     Private Sub Button2_Click_1(sender As Object, e As EventArgs)
         Debug.Print(vbCrLf)
@@ -355,7 +315,7 @@ errs:
         AddNew.Show()
     End Sub
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles LiveQueryWorker.DoWork
-        On Error Resume Next
+        On Error GoTo errs
         strPrevSearchString = strSearchString
         Dim ds As New DataSet
         Dim da As New MySqlDataAdapter
@@ -380,8 +340,9 @@ errs:
         'conn.Close()
         dtResults = Nothing
         dtResults = ds.Tables(0)
-    End Sub
-    Private Sub ContextMenuStrip1_Opening(sender As Object, e As CancelEventArgs) Handles ContextMenuStrip1.Opening
+        Exit Sub
+errs:
+        ConnectionReady()
     End Sub
     Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
         CurrentControl = txtAssetTag
@@ -456,6 +417,7 @@ errs:
         StartLiveSearch()
     End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
+        On Error GoTo errs
         Dim i As Integer
         Dim reader As MySqlDataReader
         Dim table As New DataTable
@@ -467,7 +429,6 @@ errs:
         conn.Open()
         reader = cmd.ExecuteReader
         With reader
-            StatusBar(strCommMessage)
             i += 1
             BigQueryWorker.ReportProgress(i)
             Do While .Read()
@@ -487,6 +448,9 @@ errs:
         conn.Close()
         conn = Nothing
         reader = Nothing
+        Exit Sub
+errs:
+        ConnectionReady()
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
         CurrentControl = txtCurUser
@@ -558,10 +522,6 @@ errs:
         End If
         ReportView.Show()
     End Sub
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs)
-        StripConns.Visible = True
-        StripConns.Text = UBound(CurrentConnections)
-    End Sub
     Private Sub txtSerialSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSerialSearch.TextChanged
     End Sub
     Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
@@ -604,18 +564,11 @@ errs:
     End Sub
     Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
     End Sub
-    Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatchDog.Tick
+    Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatcher.Tick
+        If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
         Select Case GlobalConn.State
-            Case ConnectionState.Closed
-                ConnectStatus("Disconnected:", Color.Red)
-                ConnectionReady()
-            Case ConnectionState.Open
-                ConnectStatus("Connected:", Color.Green)
             Case ConnectionState.Connecting
-                ConnectStatus("Connecting:", Color.DarkOrange)
-            Case Else
-                ConnectStatus("Disconnected:", Color.Red)
-                ConnectionReady()
+                ConnectStatus("Connecting", Color.DarkOrange)
         End Select
     End Sub
     Public Sub ReconnectThread_DoWork(sender As Object, e As DoWorkEventArgs) Handles ReconnectThread.DoWork
@@ -624,8 +577,73 @@ errs:
             ConnectAttempts += 1
             ReconnectThread.ReportProgress(ConnectAttempts)
             If OpenConnection() Then StatusBar("Connected!")
+            Thread.Sleep(200)
+        Loop
+    End Sub
+    Private Sub ConnectionWatchDog_DoWork(sender As Object, e As DoWorkEventArgs) Handles ConnectionWatchDog.DoWork
+        Do Until ProgramEnding
+            If GlobalConn.State = ConnectionState.Open Then 'test connection
+                Try
+                    Dim ds As New DataSet
+                    Dim da As New MySqlDataAdapter
+                    Dim rows As Integer
+                    Dim conn As New MySqlConnection(MySQLConnectString)
+                    da.SelectCommand = New MySqlCommand("SELECT NOW()")
+                    da.SelectCommand.Connection = conn
+                    da.Fill(ds)
+                    rows = ds.Tables(0).Rows.Count
+                    strServerTime = ds.Tables(0).Rows(0).Item(0).ToString
+                    conn.Close()
+                    conn.Dispose()
+                    da.Dispose()
+                    ds.Dispose()
+                Catch ex As MySqlException
+                    If ex.HResult = -2147467259 Then
+                        ConnectionWatchDog.ReportProgress(1, "Connection Problem! Checking...")
+                        ConnectionWatchDog.ReportProgress(2, "Disconnected")
+                        CheckConnection()
+                    End If
+                End Try
+            ElseIf GlobalConn.State <> ConnectionState.Open Then 'connection recovery
+                ConnectAttempts = 0
+                Do Until GlobalConn.State = ConnectionState.Open
+                    ConnectAttempts += 1
+                    ConnectionWatchDog.ReportProgress(1, "Trying to reconnect... " & ConnectAttempts)
+                    ConnectionWatchDog.ReportProgress(5, GlobalConn.State)
+                    If OpenConnection() Then
+                    Else
+                        Thread.Sleep(200)
+                    End If
+                Loop
+                ConnectionWatchDog.ReportProgress(1, "Reconnected!")
+            End If
+            ConnectionWatchDog.ReportProgress(5, GlobalConn.State)
             Thread.Sleep(5000)
         Loop
+    End Sub
+    Private Sub ConnectionWatchDog_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles ConnectionWatchDog.ProgressChanged
+        Select Case e.ProgressPercentage 'hack alert!
+            Case 1 'status message
+                StatusBar(e.UserState)
+            Case 2 'custom connnect state red
+                ConnectStatus(e.UserState, Color.Red)
+                StatusStrip1.BackColor = colStatusBarProblem
+            Case 5 'pass connect state
+                Dim State As ConnectionState = e.UserState
+                Select Case State
+                    Case ConnectionState.Closed
+                        ConnectStatus("Disconnected", Color.Red)
+                    Case ConnectionState.Open
+                        ConnectStatus("Connected", Color.Green)
+                        StatusStrip1.BackColor = colFormBackColor
+                    Case ConnectionState.Connecting
+                        ConnectStatus("Connecting", Color.Black)
+                    Case ConnectionState.Executing
+                        ConnectStatus("Executing", Color.Green)
+                    Case Else
+                        ConnectStatus("Disconnected", Color.Red)
+                End Select
+        End Select
     End Sub
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
         Dim BackColor As Color = DefGridBC

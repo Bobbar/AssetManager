@@ -162,9 +162,17 @@ Public Class View
     End Sub
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
+        StatusBar("Processing...")
     End Sub
     Private Sub DoneWaiting()
         Me.Cursor = Cursors.Default
+        StatusBar("Idle...")
+    End Sub
+    Public Sub StatusBar(Text As String)
+        StatusLabel.Text = Text
+        'Attachments.StatusLabel.Text = Text
+        'Attachments.Refresh()
+        Me.Refresh()
     End Sub
     Public Sub ViewTracking(strGUID As String)
         On Error GoTo errs

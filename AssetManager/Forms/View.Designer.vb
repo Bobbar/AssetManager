@@ -87,6 +87,8 @@ Partial Class View
         Me.TrackingTool = New System.Windows.Forms.ToolStripDropDownButton()
         Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
@@ -97,6 +99,7 @@ Partial Class View
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TrackingBox.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
+        Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -463,7 +466,7 @@ Partial Class View
         Me.TabControl1.Location = New System.Drawing.Point(12, 303)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1054, 344)
+        Me.TabControl1.Size = New System.Drawing.Size(1054, 375)
         Me.TabControl1.TabIndex = 40
         '
         'HistoryTab
@@ -472,7 +475,7 @@ Partial Class View
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1046, 315)
+        Me.HistoryTab.Size = New System.Drawing.Size(1046, 346)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -499,7 +502,7 @@ Partial Class View
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1034, 303)
+        Me.DataGridHistory.Size = New System.Drawing.Size(1034, 334)
         Me.DataGridHistory.TabIndex = 40
         '
         'TrackingTab
@@ -764,12 +767,30 @@ Partial Class View
         Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
         Me.CheckInTool.Text = "Check In"
         '
+        'StatusStrip1
+        '
+        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 681)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Size = New System.Drawing.Size(1074, 22)
+        Me.StatusStrip1.TabIndex = 45
+        Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'StatusLabel
+        '
+        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StatusLabel.Name = "StatusLabel"
+        Me.StatusLabel.Size = New System.Drawing.Size(78, 17)
+        Me.StatusLabel.Text = "%STATUS%"
+        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1074, 659)
+        Me.ClientSize = New System.Drawing.Size(1074, 703)
+        Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.TrackingBox)
         Me.Controls.Add(Me.TabControl1)
@@ -796,6 +817,8 @@ Partial Class View
         Me.TrackingBox.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
+        Me.StatusStrip1.ResumeLayout(False)
+        Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
     End Sub
@@ -864,4 +887,6 @@ Partial Class View
     Friend WithEvents CheckInTool As ToolStripMenuItem
     Friend WithEvents AttachmentTool As ToolStripButton
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents StatusStrip1 As StatusStrip
+    Friend WithEvents StatusLabel As ToolStripStatusLabel
 End Class

@@ -13,10 +13,13 @@ Module OtherFunctions
     Public colHighlightOrange As Color = ColorTranslator.FromHtml("#FF9A26") '"#FF9827")
     Public colHighlightBlue As Color = ColorTranslator.FromHtml("#8BCEE8")
     Public colEditColor As Color = ColorTranslator.FromHtml("#81EAAA")
+    Public colFormBackColor As Color = Color.FromArgb(232, 232, 232)
+    Public colStatusBarProblem As Color = ColorTranslator.FromHtml("#FF9696")
     Public ViewFormIndex As Integer
     Public GridStylez As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Public stpw As New Stopwatch
+    Public ProgramEnding As Boolean = False
     Public Sub StartTimer()
         stpw.Stop()
         stpw.Reset()
@@ -61,17 +64,18 @@ Module OtherFunctions
             Case 13 'null value from DB, ok to continue
                 Return True
             Case 1042
-                StatusBar("Connection Lost!")
+                'StatusBar("Connection Lost!")
                 Dim blah = MsgBox("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbCritical, "Connection Lost")
                 Return True
             Case Else 'unhandled errors
-                StatusBar("ERROR")
+                'StatusBar("ERROR")
                 Dim blah = MsgBox("An unhandled error has occurred!" & vbCrLf & vbCrLf & "Message: " & vbCrLf & strErrMsg, vbOKOnly + vbCritical, "Yikes!")
                 Return False
         End Select
         Return False
     End Function
     Public Sub EndProgram() 'I will add more stuff to this later.
+        ProgramEnding = True
         Logger("Ending Program...")
         PurgeTempDir()
         GlobalConn.Close()
@@ -85,12 +89,6 @@ Module OtherFunctions
     Public Sub ConnectStatus(Message As String, FColor As Color)
         AssetManager.ConnStatusLabel.Text = Message
         AssetManager.ConnStatusLabel.ForeColor = FColor
-        AssetManager.Refresh()
-    End Sub
-    Public Sub StatusBar(Text As String)
-        AssetManager.StatusLabel.Text = Text
-        'Attachments.StatusLabel.Text = Text
-        'Attachments.Refresh()
         AssetManager.Refresh()
     End Sub
 End Module

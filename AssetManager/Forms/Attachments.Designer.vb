@@ -255,9 +255,11 @@ Partial Class Attachments
         '
         'UploadWorker
         '
+        Me.UploadWorker.WorkerReportsProgress = True
         '
         'DownloadWorker
         '
+        Me.DownloadWorker.WorkerReportsProgress = True
         '
         'Attachments
         '

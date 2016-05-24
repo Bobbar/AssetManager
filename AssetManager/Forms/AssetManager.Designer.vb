@@ -59,7 +59,6 @@ Partial Class AssetManager
         Me.ConnStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.StripSpinner = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.StripConns = New System.Windows.Forms.ToolStripStatusLabel()
         Me.LiveQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
@@ -68,8 +67,12 @@ Partial Class AssetManager
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
         Me.YearsSincePurchaseToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ConnectionWatchDog = New System.Windows.Forms.Timer(Me.components)
+        Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
         Me.ReconnectThread = New System.ComponentModel.BackgroundWorker()
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox1.SuspendLayout()
         Me.InstantGroup.SuspendLayout()
         Me.SearchGroup.SuspendLayout()
@@ -446,7 +449,7 @@ Partial Class AssetManager
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConnStatusLabel, Me.StatusLabel, Me.StripSpinner, Me.StripConns})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel2, Me.DateTimeLabel})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 584)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1230, 22)
@@ -457,8 +460,8 @@ Partial Class AssetManager
         '
         Me.ConnStatusLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.ConnStatusLabel.Name = "ConnStatusLabel"
-        Me.ConnStatusLabel.Size = New System.Drawing.Size(77, 17)
-        Me.ConnStatusLabel.Text = "Connected:"
+        Me.ConnStatusLabel.Size = New System.Drawing.Size(73, 17)
+        Me.ConnStatusLabel.Text = "Connected"
         '
         'StatusLabel
         '
@@ -472,14 +475,6 @@ Partial Class AssetManager
         Me.StripSpinner.Name = "StripSpinner"
         Me.StripSpinner.Size = New System.Drawing.Size(16, 17)
         Me.StripSpinner.Visible = False
-        '
-        'StripConns
-        '
-        Me.StripConns.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.StripConns.Name = "StripConns"
-        Me.StripConns.Padding = New System.Windows.Forms.Padding(300, 0, 0, 0)
-        Me.StripConns.Size = New System.Drawing.Size(300, 17)
-        Me.StripConns.Visible = False
         '
         'LiveQueryWorker
         '
@@ -535,14 +530,38 @@ Partial Class AssetManager
         Me.YearsSincePurchaseToolStripMenuItem1.Size = New System.Drawing.Size(198, 22)
         Me.YearsSincePurchaseToolStripMenuItem1.Text = "Years Since Purchase"
         '
-        'ConnectionWatchDog
+        'ConnectionWatcher
         '
-        Me.ConnectionWatchDog.Enabled = True
-        Me.ConnectionWatchDog.Interval = 1000
+        Me.ConnectionWatcher.Enabled = True
+        Me.ConnectionWatcher.Interval = 500
         '
         'ReconnectThread
         '
         Me.ReconnectThread.WorkerReportsProgress = True
+        '
+        'ToolStripStatusLabel1
+        '
+        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(954, 17)
+        Me.ToolStripStatusLabel1.Spring = True
+        '
+        'DateTimeLabel
+        '
+        Me.DateTimeLabel.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DateTimeLabel.Name = "DateTimeLabel"
+        Me.DateTimeLabel.Size = New System.Drawing.Size(75, 17)
+        Me.DateTimeLabel.Text = "ServerTime"
+        '
+        'ToolStripStatusLabel2
+        '
+        Me.ToolStripStatusLabel2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
+        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(12, 17)
+        Me.ToolStripStatusLabel2.Text = "|"
+        '
+        'ConnectionWatchDog
+        '
+        Me.ConnectionWatchDog.WorkerReportsProgress = True
         '
         'AssetManager
         '
@@ -572,7 +591,6 @@ Partial Class AssetManager
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button
@@ -614,10 +632,13 @@ Partial Class AssetManager
     Friend WithEvents ToolStripDropDownButton1 As ToolStripDropDownButton
     Friend WithEvents YearsSincePurchaseToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
-    Friend WithEvents StripConns As ToolStripStatusLabel
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents CopyTool As ToolStripMenuItem
-    Friend WithEvents ConnectionWatchDog As Timer
+    Friend WithEvents ConnectionWatcher As Timer
     Friend WithEvents ConnStatusLabel As ToolStripStatusLabel
     Friend WithEvents ReconnectThread As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
+    Friend WithEvents DateTimeLabel As ToolStripStatusLabel
+    Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
+    Friend WithEvents ConnectionWatchDog As System.ComponentModel.BackgroundWorker
 End Class

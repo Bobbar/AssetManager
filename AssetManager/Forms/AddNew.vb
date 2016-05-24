@@ -8,7 +8,6 @@ Public Class AddNew
     End Sub
     Private Sub AddNewDevice()
         On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim strUID As String = Guid.NewGuid.ToString
         Dim rows As Integer
         If Not CheckFields() Then
@@ -19,13 +18,12 @@ Public Class AddNew
         GetDBValues()
         Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_trackable) VALUES ('" & strUID & "','" & Device.strDescription & "','" & Device.strLocation & "','" & Device.strCurrentUser & "','" & Device.strSerial & "','" & Device.strAssetTag & "','" & Device.dtPurchaseDate & "','" & Device.strReplaceYear & "','" & Device.strEqType & "','" & Device.strOSVersion & "','" & Device.strStatus & "','" & strLocalUser & "','" & Convert.ToInt32(Device.bolTrackable) & "')"
         Dim cmd As New MySqlCommand
-        cmd.Connection = GetConnection(ConnID).DBConnection
+        cmd.Connection = GlobalConn
         cmd.CommandText = strSqlQry1
         rows = rows + cmd.ExecuteNonQuery()
         Dim strSqlQry2 = "INSERT INTO historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES ('NEWD','" & Device.strNote & "','" & Device.strSerial & "','" & Device.strDescription & "','" & Device.strLocation & "','" & Device.strCurrentUser & "','" & Device.strAssetTag & "','" & Device.dtPurchaseDate & "','" & Device.strReplaceYear & "','" & Device.strPO & "','" & Device.strOSVersion & "','" & strUID & "','" & strLocalUser & "','" & Device.strEqType & "','" & Device.strStatus & "','" & Convert.ToInt32(Device.bolTrackable) & "')"
         cmd.CommandText = strSqlQry2
         rows = rows + cmd.ExecuteNonQuery()
-        CloseConnection(ConnID)
         If rows = 2 Then 'ExecuteQuery returns the number of rows affected. We can check this to make sure the qry completed successfully.
             Dim blah = MsgBox("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
             ClearAll()
