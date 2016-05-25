@@ -35,7 +35,6 @@ Public Class AssetManager
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
         Status("Loading Indexes...")
-        StartBigQuery(strShowAllQry)
         BuildIndexes()
         Status("Checking Access Level...")
         GetUserAccess()
@@ -44,6 +43,7 @@ Public Class AssetManager
         CopyDefaultCellStyles()
         'Status("Loading devices...")
         ConnectionWatchDog.RunWorkerAsync()
+        StartBigQuery(strShowAllQry)
         Status("Ready!")
         Thread.Sleep(1000)
         SplashScreen.Hide()
@@ -51,6 +51,8 @@ Public Class AssetManager
         'Tracking.Show()
     End Sub
     Public Sub GetGridStylez()
+        'set colors
+        ResultGrid.DefaultCellStyle.SelectionBackColor = colSelectColor
         DefGridBC = ResultGrid.DefaultCellStyle.BackColor
         DefGridSelCol = ResultGrid.DefaultCellStyle.SelectionBackColor
         Dim tmpStyle As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -554,31 +556,34 @@ errs:
             Dim Mod1 As Integer = 3
             Dim Mod2 As Integer = 4
             Dim Mod3 As Single = 0.6 '0.75
+            Dim c1 As Color = colHighlightColor 'highlight color
             If Row > -1 Then
                 For Each cell As DataGridViewCell In ResultGrid.Rows(Row).Cells
-                    cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
-                    cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
+                    Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
+                    Dim BlendColor As Color
+                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2, 
+                                                (CInt(c1.R) + CInt(c2.R)) / 2, 
+                                                (CInt(c1.G) + CInt(c2.G)) / 2, 
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                    cell.Style.SelectionBackColor = BlendColor
+                    'cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
+                    c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
+                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                    cell.Style.BackColor = BlendColor
+                    'cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
                 Next
             End If
         End If
-    End Sub
-    Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
     End Sub
     Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatcher.Tick
         If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
         Select Case GlobalConn.State
             Case ConnectionState.Connecting
-                ConnectStatus("Connecting", Color.DarkOrange)
+                ConnectStatus("Connecting", Color.Black)
         End Select
-    End Sub
-    Public Sub ReconnectThread_DoWork(sender As Object, e As DoWorkEventArgs) Handles ReconnectThread.DoWork
-        ConnectAttempts = 0
-        Do Until GlobalConn.State = ConnectionState.Open 'ConnectionReady()
-            ConnectAttempts += 1
-            ReconnectThread.ReportProgress(ConnectAttempts)
-            If OpenConnection() Then StatusBar("Connected!")
-            Thread.Sleep(200)
-        Loop
     End Sub
     Private Sub ConnectionWatchDog_DoWork(sender As Object, e As DoWorkEventArgs) Handles ConnectionWatchDog.DoWork
         Do Until ProgramEnding
@@ -612,7 +617,7 @@ errs:
                     ConnectionWatchDog.ReportProgress(5, GlobalConn.State)
                     If OpenConnection() Then
                     Else
-                        Thread.Sleep(200)
+                        Thread.Sleep(5000)
                     End If
                 Loop
                 ConnectionWatchDog.ReportProgress(1, "Reconnected!")
@@ -663,6 +668,14 @@ errs:
         End If
     End Sub
     Private Sub ToolStripDropDownButton1_Click(sender As Object, e As EventArgs) Handles ToolStripDropDownButton1.Click
+    End Sub
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        colHighlightColor = ColorTranslator.FromHtml("#" & Trim(txtHighColor.Text))
+    End Sub
+    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        ResultGrid.DefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#" & Trim(txtSelectColor.Text))
+        GetGridStylez()
+        CopyDefaultCellStyles()
     End Sub
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)

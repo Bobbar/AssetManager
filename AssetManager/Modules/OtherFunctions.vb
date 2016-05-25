@@ -12,6 +12,8 @@ Module OtherFunctions
     Public colCheckOut As Color = ColorTranslator.FromHtml("#FCB6B6")
     Public colHighlightOrange As Color = ColorTranslator.FromHtml("#FF9A26") '"#FF9827")
     Public colHighlightBlue As Color = ColorTranslator.FromHtml("#8BCEE8")
+    Public colHighlightColor As Color = ColorTranslator.FromHtml("#FF6600")
+    Public colSelectColor As Color = ColorTranslator.FromHtml("#FFB917")
     Public colEditColor As Color = ColorTranslator.FromHtml("#81EAAA")
     Public colFormBackColor As Color = Color.FromArgb(232, 232, 232)
     Public colStatusBarProblem As Color = ColorTranslator.FromHtml("#FF9696")

@@ -146,6 +146,11 @@ Class Attachments
         FillDeviceInfo()
         ListAttachments(CurrentDevice.strGUID)
         DoneWaiting()
+        If strLocalUser = "rl12184" Then
+            cmdListAll.Visible = True
+        Else
+            cmdListAll.Visible = False
+        End If
     End Sub
     Private Sub FillDeviceInfo()
         txtAssetTag.Text = CurrentDevice.strAssetTag
@@ -321,5 +326,47 @@ Class Attachments
     End Sub
     Private Sub UploadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles UploadWorker.ProgressChanged
         StatusBar(e.UserState)
+    End Sub
+    Private Sub cmdListAll_Click(sender As Object, e As EventArgs) Handles cmdListAll.Click
+        If Not ConnectionReady() Then
+            Exit Sub
+        End If
+        Waiting()
+        Try
+            Dim reader As MySqlDataReader
+            Dim table As New DataTable
+            Dim strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date FROM attachments ORDER BY attach_upload_date DESC"
+            Dim cmd As New MySqlCommand(strQry, GlobalConn)
+            reader = cmd.ExecuteReader
+            Dim strFullFilename As String
+            Dim row As Integer
+            ListView1.Items.Clear()
+            ReDim AttachIndex(0)
+            With reader
+                Do While .Read()
+                    Dim strFileSizeHuman As String = Math.Round((!attach_file_size / 1024), 1) & " KB"
+                    strFullFilename = !attach_file_name &!attach_file_type
+                    ListView1.Items.Add(strFullFilename)
+                    ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(strFileSizeHuman)
+                    ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(!attach_upload_date)
+                    ReDim Preserve AttachIndex(row)
+                    AttachIndex(row).strFilename = !attach_file_name
+                    AttachIndex(row).strFileType = !attach_file_type
+                    AttachIndex(row).FileSize = !attach_file_size
+                    AttachIndex(row).strFileUID = !UID
+                    row += 1
+                Loop
+            End With
+            reader.Close()
+            If ListView1.Items.Count > 0 Then
+                ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+            End If
+            DoneWaiting()
+            Exit Sub
+        Catch ex As MySqlException
+            DoneWaiting()
+            ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Exit Sub
+        End Try
     End Sub
 End Class

@@ -46,6 +46,7 @@ Partial Class Attachments
         Me.Spinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
+        Me.cmdListAll = New System.Windows.Forms.Button()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -146,6 +147,7 @@ Partial Class Attachments
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.GroupBox1.Controls.Add(Me.cmdListAll)
         Me.GroupBox1.Controls.Add(Me.cmdOpen)
         Me.GroupBox1.Controls.Add(Me.cmdDelete)
         Me.GroupBox1.Controls.Add(Me.ListView1)
@@ -261,6 +263,15 @@ Partial Class Attachments
         '
         Me.DownloadWorker.WorkerReportsProgress = True
         '
+        'cmdListAll
+        '
+        Me.cmdListAll.Location = New System.Drawing.Point(23, 351)
+        Me.cmdListAll.Name = "cmdListAll"
+        Me.cmdListAll.Size = New System.Drawing.Size(87, 22)
+        Me.cmdListAll.TabIndex = 6
+        Me.cmdListAll.Text = "List All"
+        Me.cmdListAll.UseVisualStyleBackColor = True
+        '
         'Attachments
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -309,4 +320,5 @@ Partial Class Attachments
     Friend WithEvents DownloadWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents OpenTool As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents cmdListAll As Button
 End Class

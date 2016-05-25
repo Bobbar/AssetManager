@@ -56,9 +56,12 @@ Partial Class AssetManager
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.ConnStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.StripSpinner = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ConnStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.LiveQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
@@ -67,11 +70,12 @@ Partial Class AssetManager
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
         Me.YearsSincePurchaseToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.txtHighColor = New System.Windows.Forms.ToolStripTextBox()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.txtSelectColor = New System.Windows.Forms.ToolStripTextBox()
+        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
         Me.ReconnectThread = New System.ComponentModel.BackgroundWorker()
-        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox1.SuspendLayout()
         Me.InstantGroup.SuspendLayout()
@@ -102,7 +106,7 @@ Partial Class AssetManager
         '
         'LiveBox
         '
-        Me.LiveBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(206, Byte), Integer), CType(CType(206, Byte), Integer), CType(CType(206, Byte), Integer))
+        Me.LiveBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(208, Byte), Integer), CType(CType(99, Byte), Integer))
         Me.LiveBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.LiveBox.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LiveBox.ForeColor = System.Drawing.SystemColors.WindowText
@@ -379,7 +383,6 @@ Partial Class AssetManager
         Me.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        Me.ResultGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -399,7 +402,6 @@ Partial Class AssetManager
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle2
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.ResultGrid.EnableHeadersVisualStyles = False
         Me.ResultGrid.Location = New System.Drawing.Point(15, 185)
         Me.ResultGrid.Name = "ResultGrid"
         Me.ResultGrid.ReadOnly = True
@@ -412,6 +414,7 @@ Partial Class AssetManager
         DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
+        Me.ResultGrid.RowHeadersVisible = False
         Me.ResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.ResultGrid.ShowCellErrors = False
@@ -456,13 +459,6 @@ Partial Class AssetManager
         Me.StatusStrip1.TabIndex = 5
         Me.StatusStrip1.Text = "StatusStrip1"
         '
-        'ConnStatusLabel
-        '
-        Me.ConnStatusLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.ConnStatusLabel.Name = "ConnStatusLabel"
-        Me.ConnStatusLabel.Size = New System.Drawing.Size(73, 17)
-        Me.ConnStatusLabel.Text = "Connected"
-        '
         'StatusLabel
         '
         Me.StatusLabel.Name = "StatusLabel"
@@ -475,6 +471,33 @@ Partial Class AssetManager
         Me.StripSpinner.Name = "StripSpinner"
         Me.StripSpinner.Size = New System.Drawing.Size(16, 17)
         Me.StripSpinner.Visible = False
+        '
+        'ToolStripStatusLabel1
+        '
+        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(954, 17)
+        Me.ToolStripStatusLabel1.Spring = True
+        '
+        'ConnStatusLabel
+        '
+        Me.ConnStatusLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.ConnStatusLabel.Name = "ConnStatusLabel"
+        Me.ConnStatusLabel.Size = New System.Drawing.Size(73, 17)
+        Me.ConnStatusLabel.Text = "Connected"
+        '
+        'ToolStripStatusLabel2
+        '
+        Me.ToolStripStatusLabel2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
+        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(12, 17)
+        Me.ToolStripStatusLabel2.Text = "|"
+        '
+        'DateTimeLabel
+        '
+        Me.DateTimeLabel.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DateTimeLabel.Name = "DateTimeLabel"
+        Me.DateTimeLabel.Size = New System.Drawing.Size(75, 17)
+        Me.DateTimeLabel.Text = "ServerTime"
         '
         'LiveQueryWorker
         '
@@ -489,7 +512,7 @@ Partial Class AssetManager
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.AddDeviceTool, Me.ToolStripSeparator1, Me.ToolStripDropDownButton1})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.AddDeviceTool, Me.ToolStripSeparator1, Me.ToolStripDropDownButton1, Me.txtHighColor, Me.ToolStripButton1, Me.txtSelectColor, Me.ToolStripButton2})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(1230, 32)
@@ -530,6 +553,38 @@ Partial Class AssetManager
         Me.YearsSincePurchaseToolStripMenuItem1.Size = New System.Drawing.Size(198, 22)
         Me.YearsSincePurchaseToolStripMenuItem1.Text = "Years Since Purchase"
         '
+        'txtHighColor
+        '
+        Me.txtHighColor.Name = "txtHighColor"
+        Me.txtHighColor.Size = New System.Drawing.Size(100, 32)
+        Me.txtHighColor.Visible = False
+        '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
+        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(29, 29)
+        Me.ToolStripButton1.Text = "ToolStripButton1"
+        Me.ToolStripButton1.Visible = False
+        '
+        'txtSelectColor
+        '
+        Me.txtSelectColor.Name = "txtSelectColor"
+        Me.txtSelectColor.Size = New System.Drawing.Size(100, 32)
+        Me.txtSelectColor.Visible = False
+        '
+        'ToolStripButton2
+        '
+        Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
+        Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton2.Name = "ToolStripButton2"
+        Me.ToolStripButton2.Size = New System.Drawing.Size(29, 29)
+        Me.ToolStripButton2.Text = "ToolStripButton1"
+        Me.ToolStripButton2.Visible = False
+        '
         'ConnectionWatcher
         '
         Me.ConnectionWatcher.Enabled = True
@@ -538,26 +593,6 @@ Partial Class AssetManager
         'ReconnectThread
         '
         Me.ReconnectThread.WorkerReportsProgress = True
-        '
-        'ToolStripStatusLabel1
-        '
-        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(954, 17)
-        Me.ToolStripStatusLabel1.Spring = True
-        '
-        'DateTimeLabel
-        '
-        Me.DateTimeLabel.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DateTimeLabel.Name = "DateTimeLabel"
-        Me.DateTimeLabel.Size = New System.Drawing.Size(75, 17)
-        Me.DateTimeLabel.Text = "ServerTime"
-        '
-        'ToolStripStatusLabel2
-        '
-        Me.ToolStripStatusLabel2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
-        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(12, 17)
-        Me.ToolStripStatusLabel2.Text = "|"
         '
         'ConnectionWatchDog
         '
@@ -591,6 +626,7 @@ Partial Class AssetManager
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button
@@ -641,4 +677,8 @@ Partial Class AssetManager
     Friend WithEvents DateTimeLabel As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
     Friend WithEvents ConnectionWatchDog As System.ComponentModel.BackgroundWorker
+    Friend WithEvents txtHighColor As ToolStripTextBox
+    Friend WithEvents ToolStripButton1 As ToolStripButton
+    Friend WithEvents txtSelectColor As ToolStripTextBox
+    Friend WithEvents ToolStripButton2 As ToolStripButton
 End Class

@@ -20,7 +20,6 @@ Partial Class View
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -511,7 +510,7 @@ Partial Class View
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1046, 315)
+        Me.TrackingTab.Size = New System.Drawing.Size(1046, 346)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -527,14 +526,6 @@ Partial Class View
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TrackingGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.TrackingGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.TrackingGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.TrackingGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.TrackingGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.TrackingGrid.Location = New System.Drawing.Point(6, 6)
@@ -545,7 +536,7 @@ Partial Class View
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1034, 303)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1034, 334)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox

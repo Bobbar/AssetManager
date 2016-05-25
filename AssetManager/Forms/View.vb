@@ -381,6 +381,10 @@ errs:
         NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
     End Sub
     Private Sub NewEntryView(GUID As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         Dim NewEntry As New View_Entry
         Waiting()
         NewEntry.ViewEntry(GUID)
@@ -388,6 +392,10 @@ errs:
         DoneWaiting()
     End Sub
     Private Sub NewTrackingView(GUID As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         Dim NewTracking As New View_Tracking
         Waiting()
         NewTracking.ViewTrackingEntry(GUID)
@@ -614,6 +622,8 @@ errs:
         Attachments.Activate()
     End Sub
     Private DefGridBC As Color, DefGridSelCol As Color, bolGridFilling As Boolean = False
+    Private Sub TrackingGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellContentClick
+    End Sub
     Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
     End Sub
     Private Sub HighlightCurrentRow(Row As Integer)

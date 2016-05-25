@@ -3,7 +3,8 @@ Imports MySql.Data.MySqlClient
 Public Module DBFunctions
     Public ReadOnly Property strLocalUser As String = Environment.UserName
     'Public Const strServerIP As String = "192.168.1.122"
-    Public Const strServerIP As String = "10.10.80.232"
+    'Public Const strServerIP As String = "10.10.80.232"
+    Public Const strServerIP As String = "10.10.0.89"
     'Private MySQLConnectString As String = "server=df8xlbs1;port=3306;uid=asset_manager_user;pwd=A553tP455;database=asset_manager"
     Public MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=asset_manager" 'centos test
     Public Const strDBDateTimeFormat As String = "yyyy-MM-dd HH:mm:ss"
