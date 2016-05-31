@@ -22,7 +22,7 @@ Public Class AssetManager
         Status("Loading...")
         SplashScreen.Show()
         Status("Checking Server Connection...")
-        If OpenConnection() Then 'CheckConnection() Then
+        If OpenConnections() Then 'CheckConnection() Then
             ConnectionReady()
             'Liveconn.Open()
             'do nut-zing
@@ -38,6 +38,12 @@ Public Class AssetManager
         BuildIndexes()
         Status("Checking Access Level...")
         GetUserAccess()
+        If IsAdmin() Then
+            AdminDropDown.Visible = True
+        Else
+            AdminDropDown.Visible = False
+            'GetDBs()
+        End If
         Clear_All()
         GetGridStylez()
         CopyDefaultCellStyles()
@@ -337,7 +343,7 @@ errs:
         strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
         da.SelectCommand = New MySqlCommand(strQry)
         'Debug.Print(strQry)
-        da.SelectCommand.Connection = Liveconn
+        da.SelectCommand.Connection = LiveConn
         da.Fill(ds)
         'conn.Close()
         dtResults = Nothing
@@ -427,6 +433,7 @@ errs:
         Dim strQry = strWorkerQry '"SELECT * FROM devices ORDER BY dev_input_datetime DESC"
         strLastQry = strQry
         Dim conn As New MySqlConnection(MySQLConnectString)
+        Debug.Print(MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
         conn.Open()
         reader = cmd.ExecuteReader
@@ -545,6 +552,34 @@ errs:
     Private Sub LiveBox_MouseMove(sender As Object, e As MouseEventArgs) Handles LiveBox.MouseMove
         LiveBox.SelectedIndex = LiveBox.IndexFromPoint(e.Location)
     End Sub
+    Private Sub GetDBs()
+        '        On Error GoTo errs
+        '        Dim ds As New DataSet
+        '        Dim da As New MySqlDataAdapter
+        '        Dim row As DataRow
+        '        Dim conn As New MySqlConnection(MySQLConnectString)
+        '        da.SelectCommand = New MySqlCommand("SHOW DATABASES")
+        '        da.SelectCommand.Connection = GlobalConn
+        '        da.Fill(ds)
+        '        'rows = ds.Tables(0).Rows.Count
+        '        cmbDBs.Items.Clear()
+        '        Dim item As Object
+        '        For Each row In ds.Tables(0).Rows
+        '            For Each col As DataColumn In ds.Tables(0).Columns
+        '                Debug.Print(row(col.ColumnName).ToString)
+        '                cmbDBs.Items.Add(row(col.ColumnName).ToString)
+        '            Next
+        '        Next
+        '        da.Dispose()
+        '        ds.Dispose()
+        '        Exit Sub
+        'errs:
+        '        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+        '            Resume Next
+        '        Else
+        '            EndProgram()
+        '        End If
+    End Sub
     Private Sub ResultGrid_SelectionChanged(sender As Object, e As EventArgs) Handles ResultGrid.SelectionChanged
         'HighlightCurrentRow()
     End Sub
@@ -561,9 +596,9 @@ errs:
                 For Each cell As DataGridViewCell In ResultGrid.Rows(Row).Cells
                     Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
                     Dim BlendColor As Color
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2, 
-                                                (CInt(c1.R) + CInt(c2.R)) / 2, 
-                                                (CInt(c1.G) + CInt(c2.G)) / 2, 
+                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
                                                 (CInt(c1.B) + CInt(c2.B)) / 2)
                     cell.Style.SelectionBackColor = BlendColor
                     'cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
@@ -615,7 +650,7 @@ errs:
                     ConnectAttempts += 1
                     ConnectionWatchDog.ReportProgress(1, "Trying to reconnect... " & ConnectAttempts)
                     ConnectionWatchDog.ReportProgress(5, GlobalConn.State)
-                    If OpenConnection() Then
+                    If OpenConnections() Then
                     Else
                         Thread.Sleep(5000)
                     End If
@@ -677,6 +712,8 @@ errs:
         GetGridStylez()
         CopyDefaultCellStyles()
     End Sub
+    Private Sub cmbDBs_Click(sender As Object, e As EventArgs)
+    End Sub
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
     End Sub
@@ -686,5 +723,47 @@ errs:
     Private Sub ReconnectThread_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles ReconnectThread.RunWorkerCompleted
         ConnectionReady()
         StatusBar("Connected!")
+    End Sub
+    Private Sub cmdChangeDB_Click(sender As Object, e As EventArgs)
+        If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
+            strDatabase = cmbDBs.Text
+            MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=" & strDatabase
+            Debug.Print(strDatabase)
+            Debug.Print(MySQLConnectString)
+            CloseConnections()
+            GlobalConn = New MySqlConnection(MySQLConnectString)
+            LiveConn = New MySqlConnection(MySQLConnectString)
+            OpenConnections()
+        End If
+    End Sub
+    Private Sub ToolStripComboBox1_Click(sender As Object, e As EventArgs) Handles cmbDBs.Click
+    End Sub
+    Private Sub ToolStripDropDownButton2_Click(sender As Object, e As EventArgs) Handles AdminDropDown.Click
+    End Sub
+    Private Sub cmbDBs_SelectedIndexChanged(sender As Object, e As EventArgs)
+    End Sub
+    Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
+        Dim ViewAttachments As New Attachments
+        ViewAttachments.bolAdminMode = IsAdmin()
+        ViewAttachments.ListAttachments()
+        ViewAttachments.Text = ViewAttachments.Text & " - MANAGE ALL ATTACHMENTS"
+        ViewAttachments.GroupBox2.Visible = False
+        ViewAttachments.cmdUpload.Enabled = False
+    End Sub
+    Private Sub cmbDBs_MouseDown(sender As Object, e As MouseEventArgs)
+    End Sub
+    Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
+        If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
+            strDatabase = cmbDBs.Text
+            MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=" & strDatabase
+            Debug.Print(strDatabase)
+            Debug.Print(MySQLConnectString)
+            CloseConnections()
+            GlobalConn = New MySqlConnection(MySQLConnectString)
+            LiveConn = New MySqlConnection(MySQLConnectString)
+            OpenConnections()
+        End If
+    End Sub
+    Private Sub ReconnectThread_DoWork(sender As Object, e As DoWorkEventArgs) Handles ReconnectThread.DoWork
     End Sub
 End Class

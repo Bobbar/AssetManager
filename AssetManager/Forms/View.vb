@@ -618,8 +618,10 @@ errs:
             Exit Sub
         End If
         If Not CheckForAdmin() Then Exit Sub
-        Attachments.Show()
-        Attachments.Activate()
+        Attachments.FillDeviceInfo()
+        Attachments.ListAttachments(CurrentDevice.strGUID)
+        'Attachments.Show()
+        'Attachments.Activate()
     End Sub
     Private DefGridBC As Color, DefGridSelCol As Color, bolGridFilling As Boolean = False
     Private Sub TrackingGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellContentClick

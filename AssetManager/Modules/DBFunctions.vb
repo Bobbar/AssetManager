@@ -5,8 +5,9 @@ Public Module DBFunctions
     'Public Const strServerIP As String = "192.168.1.122"
     'Public Const strServerIP As String = "10.10.80.232"
     Public Const strServerIP As String = "10.10.0.89"
+    Public strDatabase As String = "asset_manager"
     'Private MySQLConnectString As String = "server=df8xlbs1;port=3306;uid=asset_manager_user;pwd=A553tP455;database=asset_manager"
-    Public MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=asset_manager" 'centos test
+    Public MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=" & strDatabase
     Public Const strDBDateTimeFormat As String = "yyyy-MM-dd HH:mm:ss"
     Public Const strDBDateFormat As String = "yyyy-MM-dd"
     Public Const strCommMessage As String = "Communicating..."
@@ -16,6 +17,7 @@ Public Module DBFunctions
     Public strLastQry As String
     Private ConnCount As Integer = 0
     Public GlobalConn As New MySqlConnection(MySQLConnectString)
+    Public LiveConn As New MySqlConnection(MySQLConnectString)
     Public strServerTime As String
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
@@ -87,22 +89,33 @@ Public Module DBFunctions
         Public Const OSType As String = "OS_TYPE"
         Public Const StatusType As String = "STATUS_TYPE"
     End Class
-    Public Function OpenConnection() As Boolean
+    Public Function OpenConnections() As Boolean
         Try
             GlobalConn.Open()
             If GlobalConn.State = ConnectionState.Open Then
-                Liveconn.Open()
+                LiveConn.Open()
                 Return True
             Else
                 Return False
             End If
-        Catch
+        Catch ex As Exception
+            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             'GlobalConn.Close()
             Return False
         End Try
     End Function
-    Public Liveconn As New MySqlConnection(MySQLConnectString)
-    Public Buildconn As New MySqlConnection(MySQLConnectString)
+    Public Function CloseConnections()
+        Try
+            GlobalConn.Close()
+            LiveConn.Close()
+            GlobalConn.Dispose()
+            LiveConn.Dispose()
+        Catch ex As Exception
+            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return False
+        End Try
+        Return True
+    End Function
     Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String, ByVal Status As String, ByVal Trackable As Boolean, ByVal CheckedOut As Boolean)
         With CurrentDevice
             .strGUID = UID

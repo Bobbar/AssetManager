@@ -24,5 +24,5 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
-<Assembly: AssemblyVersion("5990.5.2016.1100")>
-<Assembly: AssemblyFileVersion("5.2016.5990.1099")>
+<Assembly: AssemblyVersion("5996.5.2016.1139")>
+<Assembly: AssemblyFileVersion("5.2016.5996.1138")>

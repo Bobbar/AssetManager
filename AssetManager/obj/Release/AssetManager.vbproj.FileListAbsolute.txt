@@ -6,11 +6,8 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\Microsoft.ReportViewer.WinForms.
 C:\GitHub\AssetManager\AssetManager\bin\Release\Microsoft.VisualBasic.PowerPacks.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.Entity.dll
-C:\GitHub\AssetManager\AssetManager\bin\Release\ProgressControls.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\Microsoft.SqlServer.Types.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\Microsoft.VisualBasic.PowerPacks.xml
-C:\GitHub\AssetManager\AssetManager\bin\Release\ProgressControls.pdb
-C:\GitHub\AssetManager\AssetManager\bin\Release\ProgressControls.xml
 C:\GitHub\AssetManager\AssetManager\bin\Release\de\Microsoft.SqlServer.Types.resources.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\es\Microsoft.SqlServer.Types.resources.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\fr\Microsoft.SqlServer.Types.resources.dll
@@ -38,3 +35,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\RdlCompile.compiled
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache

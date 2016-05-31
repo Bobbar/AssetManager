@@ -2,6 +2,8 @@
 Imports System.IO
 Imports MySql.Data.MySqlClient
 Class Attachments
+    Public bolAdminMode As Boolean = False
+    Private AttachQry As String
     Private Const FileSizeMBLimit As Long = 30
     Private Structure Attach_Struct
         Public strFilename As String
@@ -39,7 +41,7 @@ Class Attachments
             UploadWorker.RunWorkerAsync(FilePath)
         End If
     End Sub
-    Private Sub ListAttachments(DeviceUID As String)
+    Public Sub ListAttachments(Optional DeviceUID As String = Nothing)
         If Not ConnectionReady() Then
             Exit Sub
         End If
@@ -47,7 +49,21 @@ Class Attachments
         Try
             Dim reader As MySqlDataReader
             Dim table As New DataTable
-            Dim strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date FROM attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
+            Dim strQry As String
+            If bolAdminMode Then
+                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,dev_UID,dev_asset_tag FROM attachments,devices WHERE dev_UID = attach_dev_UID ORDER BY attach_upload_date DESC"
+                ListView1.Columns.Clear()
+                ListView1.Columns.Add("Filename")
+                ListView1.Columns.Add("Size")
+                ListView1.Columns.Add("Date")
+                ListView1.Columns.Add("Device")
+            ElseIf Not bolAdminMode Then
+                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date FROM attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
+                ListView1.Columns.Clear()
+                ListView1.Columns.Add("Filename")
+                ListView1.Columns.Add("Size")
+                ListView1.Columns.Add("Date")
+            End If
             Dim cmd As New MySqlCommand(strQry, GlobalConn)
             reader = cmd.ExecuteReader
             Dim strFullFilename As String
@@ -61,6 +77,7 @@ Class Attachments
                     ListView1.Items.Add(strFullFilename)
                     ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(strFileSizeHuman)
                     ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(!attach_upload_date)
+                    If bolAdminMode Then ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(!dev_asset_tag)
                     ReDim Preserve AttachIndex(row)
                     AttachIndex(row).strFilename = !attach_file_name
                     AttachIndex(row).strFileType = !attach_file_type
@@ -74,6 +91,7 @@ Class Attachments
                 ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
             End If
             DoneWaiting()
+            Me.Show()
             Exit Sub
         Catch ex As MySqlException
             DoneWaiting()
@@ -144,15 +162,10 @@ Class Attachments
         StatusBar("Idle...")
         Waiting()
         FillDeviceInfo()
-        ListAttachments(CurrentDevice.strGUID)
+        ' ListAttachments(CurrentDevice.strGUID)
         DoneWaiting()
-        If strLocalUser = "rl12184" Then
-            cmdListAll.Visible = True
-        Else
-            cmdListAll.Visible = False
-        End If
     End Sub
-    Private Sub FillDeviceInfo()
+    Public Sub FillDeviceInfo()
         txtAssetTag.Text = CurrentDevice.strAssetTag
         txtSerial.Text = CurrentDevice.strSerial
         txtDescription.Text = CurrentDevice.strDescription
@@ -199,7 +212,6 @@ Class Attachments
         Dim conn As New MySqlConnection(MySQLConnectString)
         Dim cmd As New MySqlCommand '(strQry, conn)
         UploadWorker.ReportProgress(1, "Connecting...")
-        'StatusBar("Connecting...")
         Dim SQL As String
         Dim FileSize As Long
         Dim FileSizeMB As Long
@@ -231,15 +243,15 @@ Class Attachments
             cmd.Parameters.AddWithValue("@attach_file_binary", rawData)
             cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
             UploadWorker.ReportProgress(1, "Uploading...")
-            'StatusBar("Uploading...")
             cmd.ExecuteNonQuery()
             conn.Close()
+            conn.Dispose()
+            cmd.Dispose()
+            fs.Dispose()
             rawData = Nothing
             cmd = Nothing
-            'ProgressIndicator1.Visible = False
             Spinner.Visible = False
             UploadWorker.ReportProgress(1, "Idle...")
-            'StatusBar("Idle...")
             MessageBox.Show("File uploaded successfully!",
             "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
         Catch ex As Exception
@@ -247,12 +259,9 @@ Class Attachments
             conn.Close()
             fs.Close()
             fs = Nothing
-            ' ProgressIndicator1.Visible = False
             Spinner.Visible = False
             UploadWorker.ReportProgress(1, "Idle...")
-            'StatusBar("Idle...")
             If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
-            'MessageBox.Show("There was an Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
@@ -262,23 +271,22 @@ Class Attachments
         ListAttachments(CurrentDevice.strGUID)
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
+        Dim Success As Boolean = False
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry = "Select * FROM attachments WHERE UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
-        'StatusBar("Connecting...")
         Dim conn As New MySqlConnection(MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
+        Dim FileSize As UInt32
+        Dim strFilename As String, strFiletype As String, strFullPath As String
+        Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
+        Dim rawData() As Byte
         Try
             conn.Open()
-            Dim FileSize As UInt32
-            Dim strFilename As String, strFiletype As String, strFullPath As String
-            Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
-            Dim rawData() As Byte
             DownloadWorker.ReportProgress(1, "Downloading...")
-            'StatusBar("Downloading...")
             reader = cmd.ExecuteReader
             With reader
                 While .Read()
@@ -291,30 +299,41 @@ Class Attachments
                 End While
             End With
             reader.Close()
+            reader.Dispose()
             conn.Close()
+            conn.Dispose()
             Dim fs As FileStream = New FileStream(strFullPath, FileMode.Create)
             DownloadWorker.ReportProgress(1, "Creating File...")
             fs.Write(rawData, 0, FileSize)
             fs.Close()
+            fs.Dispose()
+            rawData = Nothing
+            fs.Dispose()
             DownloadWorker.ReportProgress(1, "Idle...")
-            '  StatusBar("Idle...")
-            ' ProgressIndicator1.Visible = False
             Spinner.Visible = False
             Process.Start(strFullPath)
-        Catch ex As MySqlException
+            Success = True
+            e.Result = Success
+        Catch ex As Exception
+            Success = False
             conn.Close()
+            conn.Dispose()
             DownloadWorker.ReportProgress(1, "Idle...")
-            StatusBar("Idle...")
-            'ProgressIndicator1.Visible = False
             Spinner.Visible = False
-            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            'MessageBox.Show("There was an error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                EndProgram()
+            Else
+                e.Result = Success
+            End If
         End Try
     End Sub
     Private Sub DownloadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles DownloadWorker.RunWorkerCompleted
         StatusBar("Idle...")
         Spinner.Visible = False
         DoneWaiting()
+        If Not e.Result Then 'if did not complete with success, kill the form.
+            Me.Dispose()
+        End If
     End Sub
     Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
         If ListView1.FocusedItem IsNot Nothing Then
@@ -327,7 +346,7 @@ Class Attachments
     Private Sub UploadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles UploadWorker.ProgressChanged
         StatusBar(e.UserState)
     End Sub
-    Private Sub cmdListAll_Click(sender As Object, e As EventArgs) Handles cmdListAll.Click
+    Private Sub cmdListAll_Click(sender As Object, e As EventArgs)
         If Not ConnectionReady() Then
             Exit Sub
         End If
@@ -368,5 +387,7 @@ Class Attachments
             ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Exit Sub
         End Try
+    End Sub
+    Private Sub Attachments_Shown(sender As Object, e As EventArgs) Handles Me.Shown
     End Sub
 End Class

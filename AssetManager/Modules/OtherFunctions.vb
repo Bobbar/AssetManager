@@ -59,6 +59,9 @@ Module OtherFunctions
         strErrMsg = "ERROR:  MethodName=" & strOrigSub & " - " & lngErrNum & " - " & strErrDescription
         Logger(strErrMsg)
         Select Case lngErrNum
+            Case -2147467261
+                Dim blah = MsgBox("There was an error creating the file. It may no longer exist, or may be corrupted.", vbOKOnly + vbExclamation, "File Stream Error")
+                Return True
             Case -2147467259
                 Dim blah = MsgBox("There was an error while connecting." & vbCrLf & "Message: " & strErrDescription, vbOKOnly + vbExclamation, "Connection Error")
                 ConnectionReady()
