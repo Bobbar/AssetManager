@@ -242,6 +242,7 @@ errs:
             Exit Sub
         End If
         Waiting()
+        View.CloseChildren()
         View.ViewDevice(strGUID)
         View.Activate()
         DoneWaiting()
@@ -750,8 +751,6 @@ errs:
         ViewAttachments.GroupBox2.Visible = False
         ViewAttachments.cmdUpload.Enabled = False
     End Sub
-    Private Sub cmbDBs_MouseDown(sender As Object, e As MouseEventArgs)
-    End Sub
     Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
             strDatabase = cmbDBs.Text
@@ -765,5 +764,11 @@ errs:
         End If
     End Sub
     Private Sub ReconnectThread_DoWork(sender As Object, e As DoWorkEventArgs) Handles ReconnectThread.DoWork
+    End Sub
+    Private Sub cmbEquipType_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+    Private Sub cmbLocation_DropDown(sender As Object, e As EventArgs) Handles cmbLocation.DropDown
+        AdjustComboBoxWidth(sender, e)
     End Sub
 End Class

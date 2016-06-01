@@ -3,6 +3,7 @@ Option Strict Off
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class View
+    Private Children(0) As Form
     Private bolCheckFields As Boolean
     Private Structure UserInput
         Public strAssetTag As String
@@ -376,6 +377,11 @@ errs:
     End Sub
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Me.Hide()
+        Attachments.Dispose()
+        Tracking.Dispose()
+        CloseChildren()
+        'Dim f As Form
+        'For Each f In 
     End Sub
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
         NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
@@ -387,6 +393,7 @@ errs:
         End If
         Dim NewEntry As New View_Entry
         Waiting()
+        AddChild(NewEntry)
         NewEntry.ViewEntry(GUID)
         NewEntry.Show()
         DoneWaiting()
@@ -398,9 +405,21 @@ errs:
         End If
         Dim NewTracking As New View_Tracking
         Waiting()
+        AddChild(NewTracking)
         NewTracking.ViewTrackingEntry(GUID)
         NewTracking.Show()
         DoneWaiting()
+    End Sub
+    Private Sub AddChild(form As Form)
+        Children(UBound(Children)) = form
+        ReDim Preserve Children(UBound(Children) + 1)
+    End Sub
+    Public Sub CloseChildren()
+        On Error Resume Next
+        For i As Integer = 0 To UBound(Children)
+            Children(i).Dispose()
+        Next
+        ReDim Children(0)
     End Sub
     Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddNoteToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub
@@ -534,6 +553,7 @@ errs:
     End Sub
     Private Sub TrackingGrid_RowPrePaint(sender As Object, e As DataGridViewRowPrePaintEventArgs) Handles TrackingGrid.RowPrePaint
         Dim Mod3 As Single = 0.75
+        Dim c1 As Color = colHighlightBlue 'highlight color
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
         TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
         If TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckIn Then
@@ -541,13 +561,26 @@ errs:
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckIn
             For Each cell As DataGridViewCell In TrackingGrid.Rows(e.RowIndex).Cells
                 cell.Style.SelectionBackColor = Color.FromArgb(colCheckIn.R * Mod3, colCheckIn.G * Mod3, colCheckIn.B * Mod3)
+                Dim c2 As Color = Color.FromArgb(cell.Style.SelectionBackColor.R, cell.Style.SelectionBackColor.G, cell.Style.SelectionBackColor.B)
+                Dim BlendColor As Color
+                BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                cell.Style.SelectionBackColor = BlendColor
                 'cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
             Next
-            'TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Padding = New Padding(30, 0, 0, 0)
         ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckOut Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
             For Each cell As DataGridViewCell In TrackingGrid.Rows(e.RowIndex).Cells
                 cell.Style.SelectionBackColor = Color.FromArgb(colCheckOut.R * Mod3, colCheckOut.G * Mod3, colCheckOut.B * Mod3)
+                Dim c2 As Color = Color.FromArgb(cell.Style.SelectionBackColor.R, cell.Style.SelectionBackColor.G, cell.Style.SelectionBackColor.B)
+                Dim BlendColor As Color
+                BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                cell.Style.SelectionBackColor = BlendColor
             Next
         End If
     End Sub
@@ -599,6 +632,7 @@ errs:
         End If
         Waiting()
         Tracking.SetupTracking()
+        AddChild(Tracking)
         Tracking.Show()
         DoneWaiting()
     End Sub
@@ -609,6 +643,7 @@ errs:
         End If
         Waiting()
         Tracking.SetupTracking()
+        AddChild(Tracking)
         Tracking.Show()
         DoneWaiting()
     End Sub
@@ -619,15 +654,12 @@ errs:
         End If
         If Not CheckForAdmin() Then Exit Sub
         Attachments.FillDeviceInfo()
+        AddChild(Attachments)
         Attachments.ListAttachments(CurrentDevice.strGUID)
         'Attachments.Show()
         'Attachments.Activate()
     End Sub
     Private DefGridBC As Color, DefGridSelCol As Color, bolGridFilling As Boolean = False
-    Private Sub TrackingGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellContentClick
-    End Sub
-    Private Sub DataGridHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellContentClick
-    End Sub
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
         If Not bolGridFilling Then
@@ -638,12 +670,47 @@ errs:
             Dim Mod1 As Integer = 3
             Dim Mod2 As Integer = 4
             Dim Mod3 As Single = 0.6 '0.75
+            Dim c1 As Color = colHighlightColor 'highlight color
             If Row > -1 Then
                 For Each cell As DataGridViewCell In TrackingGrid.Rows(Row).Cells
-                    cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
-                    cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
+                    'cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
+                    'cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
+                    Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
+                    Dim BlendColor As Color
+                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                    cell.Style.SelectionBackColor = BlendColor
+                    c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
+                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                    cell.Style.BackColor = BlendColor
                 Next
             End If
         End If
+    End Sub
+    Private Sub cmbEquipType_View_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType_View_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+    Private Sub cmbLocation_View_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbLocation_View_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+    Private Sub cmbOSVersion_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbOSVersion_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+    Private Sub cmbStatus_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbStatus_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+    Private Sub TabControl1_Click(sender As Object, e As EventArgs) Handles TabControl1.Click
+    End Sub
+    Private Sub TrackingTool_Click(sender As Object, e As EventArgs) Handles TrackingTool.Click
+    End Sub
+    Private Sub TabControl1_GotFocus(sender As Object, e As EventArgs) Handles TabControl1.GotFocus
+    End Sub
+    Private Sub TabControl1_MouseDown(sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
+        TrackingGrid.Refresh()
     End Sub
 End Class

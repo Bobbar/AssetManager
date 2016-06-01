@@ -120,11 +120,11 @@ Partial Class AddNew
         '
         'cmbStatus_REQ
         '
-        Me.cmbStatus_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbStatus_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbStatus_REQ.FormattingEnabled = True
         Me.cmbStatus_REQ.Location = New System.Drawing.Point(789, 39)
         Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
-        Me.cmbStatus_REQ.Size = New System.Drawing.Size(144, 23)
+        Me.cmbStatus_REQ.Size = New System.Drawing.Size(144, 26)
         Me.cmbStatus_REQ.TabIndex = 5
         '
         'Label10
@@ -139,11 +139,11 @@ Partial Class AddNew
         '
         'cmbOSType_REQ
         '
-        Me.cmbOSType_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbOSType_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbOSType_REQ.FormattingEnabled = True
         Me.cmbOSType_REQ.Location = New System.Drawing.Point(628, 95)
         Me.cmbOSType_REQ.Name = "cmbOSType_REQ"
-        Me.cmbOSType_REQ.Size = New System.Drawing.Size(144, 23)
+        Me.cmbOSType_REQ.Size = New System.Drawing.Size(144, 26)
         Me.cmbOSType_REQ.TabIndex = 9
         '
         'Label9
@@ -158,10 +158,10 @@ Partial Class AddNew
         '
         'txtPO
         '
-        Me.txtPO.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPO.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtPO.Location = New System.Drawing.Point(789, 97)
         Me.txtPO.Name = "txtPO"
-        Me.txtPO.Size = New System.Drawing.Size(122, 23)
+        Me.txtPO.Size = New System.Drawing.Size(122, 25)
         Me.txtPO.TabIndex = 10
         '
         'Label8
@@ -176,11 +176,11 @@ Partial Class AddNew
         '
         'cmbEquipType_REQ
         '
-        Me.cmbEquipType_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbEquipType_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbEquipType_REQ.FormattingEnabled = True
         Me.cmbEquipType_REQ.Location = New System.Drawing.Point(628, 39)
         Me.cmbEquipType_REQ.Name = "cmbEquipType_REQ"
-        Me.cmbEquipType_REQ.Size = New System.Drawing.Size(144, 23)
+        Me.cmbEquipType_REQ.Size = New System.Drawing.Size(144, 26)
         Me.cmbEquipType_REQ.TabIndex = 4
         '
         'Label7
@@ -195,7 +195,7 @@ Partial Class AddNew
         '
         'txtNotes
         '
-        Me.txtNotes.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtNotes.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtNotes.Location = New System.Drawing.Point(304, 139)
         Me.txtNotes.MaxLength = 200
         Me.txtNotes.Multiline = True
@@ -225,10 +225,10 @@ Partial Class AddNew
         '
         'txtReplaceYear
         '
-        Me.txtReplaceYear.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtReplaceYear.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtReplaceYear.Location = New System.Drawing.Point(516, 39)
         Me.txtReplaceYear.Name = "txtReplaceYear"
-        Me.txtReplaceYear.Size = New System.Drawing.Size(88, 23)
+        Me.txtReplaceYear.Size = New System.Drawing.Size(88, 25)
         Me.txtReplaceYear.TabIndex = 3
         Me.txtReplaceYear.Text = "txtReplaceYear"
         '
@@ -245,11 +245,11 @@ Partial Class AddNew
         'dtPurchaseDate_REQ
         '
         Me.dtPurchaseDate_REQ.CustomFormat = "yyyy-MM-dd"
-        Me.dtPurchaseDate_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dtPurchaseDate_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtPurchaseDate_REQ.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.dtPurchaseDate_REQ.Location = New System.Drawing.Point(435, 97)
         Me.dtPurchaseDate_REQ.Name = "dtPurchaseDate_REQ"
-        Me.dtPurchaseDate_REQ.Size = New System.Drawing.Size(169, 23)
+        Me.dtPurchaseDate_REQ.Size = New System.Drawing.Size(169, 25)
         Me.dtPurchaseDate_REQ.TabIndex = 8
         Me.dtPurchaseDate_REQ.Value = New Date(2016, 4, 14, 0, 0, 0, 0)
         '
@@ -265,11 +265,12 @@ Partial Class AddNew
         '
         'cmbLocation_REQ
         '
-        Me.cmbLocation_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbLocation_REQ.DropDownWidth = 171
+        Me.cmbLocation_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbLocation_REQ.FormattingEnabled = True
         Me.cmbLocation_REQ.Location = New System.Drawing.Point(321, 39)
         Me.cmbLocation_REQ.Name = "cmbLocation_REQ"
-        Me.cmbLocation_REQ.Size = New System.Drawing.Size(171, 23)
+        Me.cmbLocation_REQ.Size = New System.Drawing.Size(171, 26)
         Me.cmbLocation_REQ.TabIndex = 2
         Me.cmbLocation_REQ.Text = "cmbLocation"
         '
@@ -295,19 +296,19 @@ Partial Class AddNew
         '
         'txtDescription_REQ
         '
-        Me.txtDescription_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDescription_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtDescription_REQ.Location = New System.Drawing.Point(156, 97)
         Me.txtDescription_REQ.Name = "txtDescription_REQ"
-        Me.txtDescription_REQ.Size = New System.Drawing.Size(251, 23)
+        Me.txtDescription_REQ.Size = New System.Drawing.Size(251, 25)
         Me.txtDescription_REQ.TabIndex = 7
         Me.txtDescription_REQ.Text = "Description"
         '
         'txtCurUser_REQ
         '
-        Me.txtCurUser_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCurUser_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCurUser_REQ.Location = New System.Drawing.Point(156, 39)
         Me.txtCurUser_REQ.Name = "txtCurUser_REQ"
-        Me.txtCurUser_REQ.Size = New System.Drawing.Size(142, 23)
+        Me.txtCurUser_REQ.Size = New System.Drawing.Size(142, 25)
         Me.txtCurUser_REQ.TabIndex = 1
         Me.txtCurUser_REQ.Text = "txtCurUser"
         '
@@ -333,19 +334,19 @@ Partial Class AddNew
         '
         'txtAssetTag_REQ
         '
-        Me.txtAssetTag_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTag_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtAssetTag_REQ.Location = New System.Drawing.Point(12, 99)
         Me.txtAssetTag_REQ.Name = "txtAssetTag_REQ"
-        Me.txtAssetTag_REQ.Size = New System.Drawing.Size(114, 23)
+        Me.txtAssetTag_REQ.Size = New System.Drawing.Size(114, 25)
         Me.txtAssetTag_REQ.TabIndex = 6
         Me.txtAssetTag_REQ.Text = "txtAssetTag"
         '
         'txtSerial_REQ
         '
-        Me.txtSerial_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerial_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSerial_REQ.Location = New System.Drawing.Point(12, 39)
         Me.txtSerial_REQ.Name = "txtSerial_REQ"
-        Me.txtSerial_REQ.Size = New System.Drawing.Size(115, 23)
+        Me.txtSerial_REQ.Size = New System.Drawing.Size(115, 25)
         Me.txtSerial_REQ.TabIndex = 0
         Me.txtSerial_REQ.Text = "txtSerial"
         '

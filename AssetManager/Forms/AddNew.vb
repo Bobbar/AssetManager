@@ -88,8 +88,6 @@ errs:
         Device.bolTrackable = chkTrackable.Checked
         'strOSVersion =
     End Sub
-    Private Sub cmbLocation_SelectedIndexChanged(sender As Object, e As EventArgs)
-    End Sub
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
         ClearAll()
     End Sub
@@ -196,5 +194,17 @@ errs:
     End Sub
     Private Sub cmbOSType_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbOSType_REQ.SelectedIndexChanged
         If bolCheckFields Then CheckFields()
+    End Sub
+    Private Sub cmbLocation_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbLocation_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+    Private Sub cmbOSType_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbOSType_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+    Private Sub cmbStatus_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbStatus_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+    Private Sub cmbEquipType_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
     End Sub
 End Class

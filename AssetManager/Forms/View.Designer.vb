@@ -235,10 +235,10 @@ Partial Class View
         '
         'txtAssetTag_View_REQ
         '
-        Me.txtAssetTag_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTag_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtAssetTag_View_REQ.Location = New System.Drawing.Point(20, 42)
         Me.txtAssetTag_View_REQ.Name = "txtAssetTag_View_REQ"
-        Me.txtAssetTag_View_REQ.Size = New System.Drawing.Size(134, 22)
+        Me.txtAssetTag_View_REQ.Size = New System.Drawing.Size(134, 23)
         Me.txtAssetTag_View_REQ.TabIndex = 19
         '
         'Label10
@@ -253,19 +253,19 @@ Partial Class View
         '
         'txtSerial_View_REQ
         '
-        Me.txtSerial_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerial_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSerial_View_REQ.Location = New System.Drawing.Point(20, 93)
         Me.txtSerial_View_REQ.Name = "txtSerial_View_REQ"
-        Me.txtSerial_View_REQ.Size = New System.Drawing.Size(133, 22)
+        Me.txtSerial_View_REQ.Size = New System.Drawing.Size(133, 23)
         Me.txtSerial_View_REQ.TabIndex = 21
         '
         'txtGUID
         '
-        Me.txtGUID.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtGUID.Location = New System.Drawing.Point(20, 201)
         Me.txtGUID.Name = "txtGUID"
         Me.txtGUID.ReadOnly = True
-        Me.txtGUID.Size = New System.Drawing.Size(268, 22)
+        Me.txtGUID.Size = New System.Drawing.Size(268, 23)
         Me.txtGUID.TabIndex = 40
         Me.txtGUID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -291,19 +291,19 @@ Partial Class View
         '
         'txtCurUser_View_REQ
         '
-        Me.txtCurUser_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCurUser_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(20, 145)
         Me.txtCurUser_View_REQ.Name = "txtCurUser_View_REQ"
-        Me.txtCurUser_View_REQ.Size = New System.Drawing.Size(132, 22)
+        Me.txtCurUser_View_REQ.Size = New System.Drawing.Size(132, 23)
         Me.txtCurUser_View_REQ.TabIndex = 23
         '
         'cmbStatus_REQ
         '
-        Me.cmbStatus_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbStatus_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbStatus_REQ.FormattingEnabled = True
         Me.cmbStatus_REQ.Location = New System.Drawing.Point(506, 92)
         Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
-        Me.cmbStatus_REQ.Size = New System.Drawing.Size(124, 24)
+        Me.cmbStatus_REQ.Size = New System.Drawing.Size(124, 23)
         Me.cmbStatus_REQ.TabIndex = 38
         '
         'Label3
@@ -328,19 +328,19 @@ Partial Class View
         '
         'txtDescription_View_REQ
         '
-        Me.txtDescription_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDescription_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtDescription_View_REQ.Location = New System.Drawing.Point(172, 42)
         Me.txtDescription_View_REQ.Name = "txtDescription_View_REQ"
-        Me.txtDescription_View_REQ.Size = New System.Drawing.Size(304, 22)
+        Me.txtDescription_View_REQ.Size = New System.Drawing.Size(304, 23)
         Me.txtDescription_View_REQ.TabIndex = 25
         '
         'cmbOSVersion_REQ
         '
-        Me.cmbOSVersion_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbOSVersion_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbOSVersion_REQ.FormattingEnabled = True
         Me.cmbOSVersion_REQ.Location = New System.Drawing.Point(366, 92)
         Me.cmbOSVersion_REQ.Name = "cmbOSVersion_REQ"
-        Me.cmbOSVersion_REQ.Size = New System.Drawing.Size(120, 24)
+        Me.cmbOSVersion_REQ.Size = New System.Drawing.Size(120, 23)
         Me.cmbOSVersion_REQ.TabIndex = 36
         '
         'Label4
@@ -366,11 +366,11 @@ Partial Class View
         '
         'cmbLocation_View_REQ
         '
-        Me.cmbLocation_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbLocation_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbLocation_View_REQ.FormattingEnabled = True
         Me.cmbLocation_View_REQ.Location = New System.Drawing.Point(172, 92)
         Me.cmbLocation_View_REQ.Name = "cmbLocation_View_REQ"
-        Me.cmbLocation_View_REQ.Size = New System.Drawing.Size(168, 24)
+        Me.cmbLocation_View_REQ.Size = New System.Drawing.Size(168, 23)
         Me.cmbLocation_View_REQ.TabIndex = 27
         '
         'Label13
@@ -395,21 +395,21 @@ Partial Class View
         '
         'cmbEquipType_View_REQ
         '
-        Me.cmbEquipType_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbEquipType_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbEquipType_View_REQ.FormattingEnabled = True
         Me.cmbEquipType_View_REQ.Location = New System.Drawing.Point(495, 41)
         Me.cmbEquipType_View_REQ.Name = "cmbEquipType_View_REQ"
-        Me.cmbEquipType_View_REQ.Size = New System.Drawing.Size(156, 24)
+        Me.cmbEquipType_View_REQ.Size = New System.Drawing.Size(156, 23)
         Me.cmbEquipType_View_REQ.TabIndex = 33
         '
         'dtPurchaseDate_View_REQ
         '
         Me.dtPurchaseDate_View_REQ.CustomFormat = "yyyy-MM-dd"
-        Me.dtPurchaseDate_View_REQ.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dtPurchaseDate_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtPurchaseDate_View_REQ.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.dtPurchaseDate_View_REQ.Location = New System.Drawing.Point(174, 145)
         Me.dtPurchaseDate_View_REQ.Name = "dtPurchaseDate_View_REQ"
-        Me.dtPurchaseDate_View_REQ.Size = New System.Drawing.Size(182, 22)
+        Me.dtPurchaseDate_View_REQ.Size = New System.Drawing.Size(182, 23)
         Me.dtPurchaseDate_View_REQ.TabIndex = 29
         '
         'Label7
@@ -434,10 +434,10 @@ Partial Class View
         '
         'txtReplacementYear_View
         '
-        Me.txtReplacementYear_View.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtReplacementYear_View.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtReplacementYear_View.Location = New System.Drawing.Point(390, 148)
         Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
-        Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 22)
+        Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 23)
         Me.txtReplacementYear_View.TabIndex = 31
         '
         'RightClickMenu
@@ -673,7 +673,7 @@ Partial Class View
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(206, Byte), Integer), CType(CType(206, Byte), Integer), CType(CType(206, Byte), Integer))
+        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
@@ -747,7 +747,7 @@ Partial Class View
         Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_red
         Me.CheckOutTool.Name = "CheckOutTool"
-        Me.CheckOutTool.Size = New System.Drawing.Size(142, 32)
+        Me.CheckOutTool.Size = New System.Drawing.Size(161, 32)
         Me.CheckOutTool.Text = "Check Out"
         '
         'CheckInTool
@@ -755,7 +755,7 @@ Partial Class View
         Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_green
         Me.CheckInTool.Name = "CheckInTool"
-        Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
+        Me.CheckInTool.Size = New System.Drawing.Size(161, 32)
         Me.CheckInTool.Text = "Check In"
         '
         'StatusStrip1

@@ -7,7 +7,7 @@ Module OtherFunctions
     Public strLogPath As String = strLogDir & strLogName
     Public strTempPath As String = strLogDir & "temp\"
     Public colCurrentEntry As Color = ColorTranslator.FromHtml("#7AD1FF") '"#7AD1FF"
-    Public colMissingField As Color = ColorTranslator.FromHtml("#D4EA08") '"#FF9827") '"#75BAFF")
+    Public colMissingField As Color = ColorTranslator.FromHtml("#82C1FF") '"#FF9827") '"#75BAFF")
     Public colCheckIn As Color = ColorTranslator.FromHtml("#B6FCC0")
     Public colCheckOut As Color = ColorTranslator.FromHtml("#FCB6B6")
     Public colHighlightOrange As Color = ColorTranslator.FromHtml("#FF9A26") '"#FF9827")
@@ -22,6 +22,22 @@ Module OtherFunctions
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Public stpw As New Stopwatch
     Public ProgramEnding As Boolean = False
+    Public Function AdjustComboBoxWidth(ByVal sender As Object, ByVal e As EventArgs)
+        Dim senderComboBox = DirectCast(sender, ComboBox)
+        Dim width As Integer = senderComboBox.DropDownWidth
+        Dim g As Graphics = senderComboBox.CreateGraphics()
+        Dim font As Font = senderComboBox.Font
+        Dim vertScrollBarWidth As Integer = If((senderComboBox.Items.Count > senderComboBox.MaxDropDownItems), SystemInformation.VerticalScrollBarWidth, 0)
+        Dim newWidth As Integer
+        For Each s As String In DirectCast(sender, ComboBox).Items
+            newWidth = CInt(g.MeasureString(s, font).Width) + vertScrollBarWidth
+            If width < newWidth Then
+                width = newWidth
+            End If
+        Next
+        senderComboBox.DropDownWidth = width
+        Return False
+    End Function
     Public Sub StartTimer()
         stpw.Stop()
         stpw.Reset()
