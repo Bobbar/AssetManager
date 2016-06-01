@@ -384,10 +384,16 @@ errs:
                 LiveBox.Items.Add(dr.Item(strQryRow))
             Next
         End With
-        LiveBox.Left = CurrentControl.Left + CntGroup.Left ' + SearchGroup.Left
-        LiveBox.Top = CurrentControl.Top + CurrentControl.Height + CntGroup.Top ' + SearchGroup.Top
+
+
+
+        Dim ScreenPos As Point = Me.PointToClient(CurrentControl.Parent.PointToScreen(CurrentControl.Location))
+        ScreenPos.Y = ScreenPos.Y + CurrentControl.Height
+        LiveBox.Location = ScreenPos
+
         LiveBox.Width = CurrentControl.Width
-        'LiveBox.AutoSize = True
+
+
         LiveBox.Height = LiveBox.PreferredHeight
         If dtResults.Rows.Count > 0 Then
             LiveBox.Visible = True
@@ -499,6 +505,7 @@ errs:
     Private Sub LiveBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles LiveBox.KeyPress
     End Sub
     Private Sub txtCurUser_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser.TextChanged
+
     End Sub
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs) Handles LiveBox.KeyDown
         If e.KeyCode = Keys.Enter Then LiveBoxSelect()
@@ -751,6 +758,11 @@ errs:
         ViewAttachments.GroupBox2.Visible = False
         ViewAttachments.cmdUpload.Enabled = False
     End Sub
+
+    Private Sub GroupBox1_Enter(sender As Object, e As EventArgs) Handles GroupBox1.Enter
+
+    End Sub
+
     Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
             strDatabase = cmbDBs.Text
@@ -763,8 +775,9 @@ errs:
             OpenConnections()
         End If
     End Sub
-    Private Sub ReconnectThread_DoWork(sender As Object, e As DoWorkEventArgs) Handles ReconnectThread.DoWork
-    End Sub
+
+
+
     Private Sub cmbEquipType_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub

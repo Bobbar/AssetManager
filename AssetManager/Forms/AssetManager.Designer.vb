@@ -20,11 +20,18 @@ Partial Class AssetManager
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AssetManager))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.ResultGrid = New System.Windows.Forms.DataGridView()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CopyTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.LiveBox = New System.Windows.Forms.ListBox()
         Me.InstantGroup = New System.Windows.Forms.GroupBox()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -48,13 +55,7 @@ Partial Class AssetManager
         Me.txtCurUser = New System.Windows.Forms.TextBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.cmbEquipType = New System.Windows.Forms.ComboBox()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.cmdShowAll = New System.Windows.Forms.Button()
-        Me.ResultGrid = New System.Windows.Forms.DataGridView()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.CopyTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.StripSpinner = New System.Windows.Forms.ToolStripStatusLabel()
@@ -80,13 +81,15 @@ Partial Class AssetManager
         Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
         Me.ReconnectThread = New System.ComponentModel.BackgroundWorker()
         Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.GroupBox1.SuspendLayout()
-        Me.InstantGroup.SuspendLayout()
-        Me.SearchGroup.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
+        Me.InstantGroup.SuspendLayout()
+        Me.SearchGroup.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -95,17 +98,110 @@ Partial Class AssetManager
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.GroupBox1.Controls.Add(Me.LiveBox)
-        Me.GroupBox1.Controls.Add(Me.InstantGroup)
-        Me.GroupBox1.Controls.Add(Me.SearchGroup)
         Me.GroupBox1.Controls.Add(Me.Button1)
-        Me.GroupBox1.Controls.Add(Me.cmdShowAll)
         Me.GroupBox1.Controls.Add(Me.ResultGrid)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 35)
+        Me.GroupBox1.Controls.Add(Me.MenuStrip1)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 226)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1201, 546)
+        Me.GroupBox1.Size = New System.Drawing.Size(1201, 484)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
+        '
+        'Button1
+        '
+        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.Location = New System.Drawing.Point(1136, 0)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(106, 36)
+        Me.Button1.TabIndex = 28
+        Me.Button1.Text = "Start Import"
+        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
+        '
+        'ResultGrid
+        '
+        Me.ResultGrid.AllowUserToAddRows = False
+        Me.ResultGrid.AllowUserToDeleteRows = False
+        Me.ResultGrid.AllowUserToResizeRows = False
+        Me.ResultGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ResultGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
+        Me.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ResultGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
+        Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.ResultGrid.ContextMenuStrip = Me.ContextMenuStrip1
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle5
+        Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
+        Me.ResultGrid.Location = New System.Drawing.Point(15, 19)
+        Me.ResultGrid.Name = "ResultGrid"
+        Me.ResultGrid.ReadOnly = True
+        Me.ResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
+        Me.ResultGrid.RowHeadersVisible = False
+        Me.ResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.ResultGrid.ShowCellErrors = False
+        Me.ResultGrid.ShowCellToolTips = False
+        Me.ResultGrid.ShowEditingIcon = False
+        Me.ResultGrid.Size = New System.Drawing.Size(1174, 450)
+        Me.ResultGrid.TabIndex = 17
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.ToolStripSeparator3, Me.CopyTool})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(128, 54)
+        '
+        'ViewToolStripMenuItem
+        '
+        Me.ViewToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ViewToolStripMenuItem.Image = CType(resources.GetObject("ViewToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
+        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(127, 22)
+        Me.ViewToolStripMenuItem.Text = "View"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(124, 6)
+        '
+        'CopyTool
+        '
+        Me.CopyTool.Name = "CopyTool"
+        Me.CopyTool.Size = New System.Drawing.Size(127, 22)
+        Me.CopyTool.Text = "Copy Text"
+        '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.Location = New System.Drawing.Point(3, 16)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(1195, 24)
+        Me.MenuStrip1.TabIndex = 34
+        Me.MenuStrip1.Text = "MenuStrip1"
         '
         'LiveBox
         '
@@ -115,7 +211,7 @@ Partial Class AssetManager
         Me.LiveBox.ForeColor = System.Drawing.SystemColors.WindowText
         Me.LiveBox.FormattingEnabled = True
         Me.LiveBox.ItemHeight = 18
-        Me.LiveBox.Location = New System.Drawing.Point(1038, 148)
+        Me.LiveBox.Location = New System.Drawing.Point(1120, 219)
         Me.LiveBox.Name = "LiveBox"
         Me.LiveBox.Size = New System.Drawing.Size(134, 20)
         Me.LiveBox.TabIndex = 33
@@ -128,7 +224,7 @@ Partial Class AssetManager
         Me.InstantGroup.Controls.Add(Me.txtAssetTag)
         Me.InstantGroup.Controls.Add(Me.txtSerial)
         Me.InstantGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.InstantGroup.Location = New System.Drawing.Point(15, 19)
+        Me.InstantGroup.Location = New System.Drawing.Point(9, 19)
         Me.InstantGroup.Name = "InstantGroup"
         Me.InstantGroup.Size = New System.Drawing.Size(177, 149)
         Me.InstantGroup.TabIndex = 34
@@ -193,7 +289,7 @@ Partial Class AssetManager
         Me.SearchGroup.Controls.Add(Me.Label10)
         Me.SearchGroup.Controls.Add(Me.cmbEquipType)
         Me.SearchGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SearchGroup.Location = New System.Drawing.Point(198, 19)
+        Me.SearchGroup.Location = New System.Drawing.Point(192, 19)
         Me.SearchGroup.Name = "SearchGroup"
         Me.SearchGroup.Size = New System.Drawing.Size(823, 149)
         Me.SearchGroup.TabIndex = 31
@@ -353,110 +449,22 @@ Partial Class AssetManager
         Me.cmbEquipType.Size = New System.Drawing.Size(159, 23)
         Me.cmbEquipType.TabIndex = 35
         '
-        'Button1
-        '
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(1136, 0)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(106, 36)
-        Me.Button1.TabIndex = 28
-        Me.Button1.Text = "Start Import"
-        Me.Button1.UseVisualStyleBackColor = True
-        Me.Button1.Visible = False
-        '
         'cmdShowAll
         '
         Me.cmdShowAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdShowAll.Location = New System.Drawing.Point(1038, 77)
+        Me.cmdShowAll.Location = New System.Drawing.Point(1038, 83)
         Me.cmdShowAll.Name = "cmdShowAll"
         Me.cmdShowAll.Size = New System.Drawing.Size(134, 35)
         Me.cmdShowAll.TabIndex = 27
         Me.cmdShowAll.Text = "Show All"
         Me.cmdShowAll.UseVisualStyleBackColor = True
         '
-        'ResultGrid
-        '
-        Me.ResultGrid.AllowUserToAddRows = False
-        Me.ResultGrid.AllowUserToDeleteRows = False
-        Me.ResultGrid.AllowUserToResizeRows = False
-        Me.ResultGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ResultGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
-        Me.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ResultGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
-        Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.ResultGrid.ContextMenuStrip = Me.ContextMenuStrip1
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.ResultGrid.Location = New System.Drawing.Point(15, 185)
-        Me.ResultGrid.Name = "ResultGrid"
-        Me.ResultGrid.ReadOnly = True
-        Me.ResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
-        Me.ResultGrid.RowHeadersVisible = False
-        Me.ResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.ResultGrid.ShowCellErrors = False
-        Me.ResultGrid.ShowCellToolTips = False
-        Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1174, 346)
-        Me.ResultGrid.TabIndex = 17
-        '
-        'ContextMenuStrip1
-        '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.ToolStripSeparator3, Me.CopyTool})
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(128, 54)
-        '
-        'ViewToolStripMenuItem
-        '
-        Me.ViewToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ViewToolStripMenuItem.Image = CType(resources.GetObject("ViewToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
-        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(127, 22)
-        Me.ViewToolStripMenuItem.Text = "View"
-        '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(124, 6)
-        '
-        'CopyTool
-        '
-        Me.CopyTool.Name = "CopyTool"
-        Me.CopyTool.Size = New System.Drawing.Size(127, 22)
-        Me.CopyTool.Text = "Copy Text"
-        '
         'StatusStrip1
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel2, Me.DateTimeLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 584)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 713)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1230, 22)
         Me.StatusStrip1.TabIndex = 5
@@ -625,32 +633,48 @@ Partial Class AssetManager
         '
         Me.ConnectionWatchDog.WorkerReportsProgress = True
         '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.SearchGroup)
+        Me.GroupBox2.Controls.Add(Me.InstantGroup)
+        Me.GroupBox2.Controls.Add(Me.cmdShowAll)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 35)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(1206, 185)
+        Me.GroupBox2.TabIndex = 7
+        Me.GroupBox2.TabStop = False
+        '
         'AssetManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1230, 606)
+        Me.ClientSize = New System.Drawing.Size(1230, 735)
+        Me.Controls.Add(Me.LiveBox)
+        Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.GroupBox1)
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.MinimumSize = New System.Drawing.Size(1222, 397)
         Me.Name = "AssetManager"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Asset Manager"
         Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.InstantGroup.ResumeLayout(False)
         Me.InstantGroup.PerformLayout()
         Me.SearchGroup.ResumeLayout(False)
         Me.SearchGroup.PerformLayout()
-        CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -711,4 +735,6 @@ Partial Class AssetManager
     Friend WithEvents AdminDropDown As ToolStripDropDownButton
     Friend WithEvents cmbDBs As ToolStripComboBox
     Friend WithEvents ManageAttachmentsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents MenuStrip1 As MenuStrip
 End Class
