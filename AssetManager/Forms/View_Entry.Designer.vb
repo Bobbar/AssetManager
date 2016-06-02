@@ -21,6 +21,7 @@ Partial Class View_Entry
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View_Entry))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.txtEntryGUID = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
@@ -56,12 +57,12 @@ Partial Class View_Entry
         Me.txtCurrentUser = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtChangeType = New System.Windows.Forms.TextBox()
-        Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
+        Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.GroupBox1.Controls.Add(Me.chkTrackable)
         Me.GroupBox1.Controls.Add(Me.Label17)
         Me.GroupBox1.Controls.Add(Me.txtEntryGUID)
@@ -104,6 +105,18 @@ Partial Class View_Entry
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Device Info Snapshot"
+        '
+        'chkTrackable
+        '
+        Me.chkTrackable.AutoSize = True
+        Me.chkTrackable.Enabled = False
+        Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkTrackable.Location = New System.Drawing.Point(617, 181)
+        Me.chkTrackable.Name = "chkTrackable"
+        Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
+        Me.chkTrackable.TabIndex = 35
+        Me.chkTrackable.Text = "Trackable"
+        Me.chkTrackable.UseVisualStyleBackColor = True
         '
         'Label17
         '
@@ -455,22 +468,11 @@ Partial Class View_Entry
         Me.txtChangeType.Size = New System.Drawing.Size(110, 22)
         Me.txtChangeType.TabIndex = 0
         '
-        'chkTrackable
-        '
-        Me.chkTrackable.AutoSize = True
-        Me.chkTrackable.Enabled = False
-        Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(617, 181)
-        Me.chkTrackable.Name = "chkTrackable"
-        Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
-        Me.chkTrackable.TabIndex = 35
-        Me.chkTrackable.Text = "Trackable"
-        Me.chkTrackable.UseVisualStyleBackColor = True
-        '
         'View_Entry
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(846, 359)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle

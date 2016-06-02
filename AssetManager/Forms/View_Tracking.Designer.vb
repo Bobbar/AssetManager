@@ -21,6 +21,8 @@ Partial Class View_Tracking
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View_Tracking))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.txtCheckInUser = New System.Windows.Forms.TextBox()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.txtEntryGUID = New System.Windows.Forms.TextBox()
         Me.cmdClose = New System.Windows.Forms.Button()
@@ -50,13 +52,12 @@ Partial Class View_Tracking
         Me.txtCheckOutUser = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtCheckType = New System.Windows.Forms.TextBox()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.txtCheckInUser = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
+        Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.GroupBox1.Controls.Add(Me.Label9)
         Me.GroupBox1.Controls.Add(Me.txtCheckInUser)
         Me.GroupBox1.Controls.Add(Me.Label17)
@@ -94,6 +95,26 @@ Partial Class View_Tracking
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Tracking Entry"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(492, 214)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(91, 16)
+        Me.Label9.TabIndex = 36
+        Me.Label9.Text = "Check In User"
+        '
+        'txtCheckInUser
+        '
+        Me.txtCheckInUser.BackColor = System.Drawing.Color.Silver
+        Me.txtCheckInUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCheckInUser.Location = New System.Drawing.Point(495, 233)
+        Me.txtCheckInUser.Name = "txtCheckInUser"
+        Me.txtCheckInUser.ReadOnly = True
+        Me.txtCheckInUser.Size = New System.Drawing.Size(142, 22)
+        Me.txtCheckInUser.TabIndex = 35
         '
         'Label17
         '
@@ -389,30 +410,11 @@ Partial Class View_Tracking
         Me.txtCheckType.TabStop = False
         Me.txtCheckType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(492, 214)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(91, 16)
-        Me.Label9.TabIndex = 36
-        Me.Label9.Text = "Check In User"
-        '
-        'txtCheckInUser
-        '
-        Me.txtCheckInUser.BackColor = System.Drawing.Color.Silver
-        Me.txtCheckInUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCheckInUser.Location = New System.Drawing.Point(495, 233)
-        Me.txtCheckInUser.Name = "txtCheckInUser"
-        Me.txtCheckInUser.ReadOnly = True
-        Me.txtCheckInUser.Size = New System.Drawing.Size(142, 22)
-        Me.txtCheckInUser.TabIndex = 35
-        '
         'View_Tracking
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(846, 415)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -424,7 +426,6 @@ Partial Class View_Tracking
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label2 As Label

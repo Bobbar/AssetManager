@@ -122,6 +122,21 @@ Used to sort self-referenced table's rows
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:AssetManager.My.Resources.Resources.clip_512">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:AssetManager.My.Resources.Resources.connected_256">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:AssetManager.My.Resources.Resources.delete_icon">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
