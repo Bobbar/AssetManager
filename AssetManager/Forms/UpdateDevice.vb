@@ -16,6 +16,7 @@ Public Class UpdateDev
         cmbUpdate_ChangeType.Enabled = True
     End Sub
     Private Sub UpdateDev_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        View.CancelModify()
         e.Cancel = True
         Me.Hide()
     End Sub

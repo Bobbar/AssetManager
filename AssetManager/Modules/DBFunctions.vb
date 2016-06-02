@@ -442,7 +442,6 @@ errs:
                 OSType(row).strShort = !combo_data_db
             Loop
         End With
-        'CloseConnection(ConnID)
         reader.Close()
         Exit Sub
 errs:
@@ -471,7 +470,6 @@ errs:
                 StatusType(row).strShort = !combo_data_db
             Loop
         End With
-        'CloseConnection(ConnID)
         reader.Close()
         Exit Sub
 errs:
@@ -489,7 +487,6 @@ errs:
         Return ""
     End Function
     Public Function ConnectionReady() As Boolean
-        ' Debug.Print(GlobalConn.State.ToString)
         Select Case GlobalConn.State
             Case ConnectionState.Closed
                 If Not AssetManager.ReconnectThread.IsBusy Then AssetManager.ReconnectThread.RunWorkerAsync()
@@ -528,7 +525,7 @@ errs:
     Public Sub UpdateDevice()
         On Error GoTo errs
         Dim rows As Integer
-        Dim strSQLQry1 = "UPDATE devices Set dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(View.NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
+        Dim strSQLQry1 = "UPDATE devices SET dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(View.NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
         Dim cmd As New MySqlCommand
         cmd.Connection = GlobalConn
         cmd.CommandText = strSQLQry1
@@ -538,11 +535,11 @@ errs:
         rows = rows + cmd.ExecuteNonQuery()
         UpdateDev.strNewNote = Nothing
         If rows = 2 Then
+            View.ViewDevice(CurrentDevice.strGUID)
             Dim blah = MsgBox("Update Added.", vbOKOnly + vbInformation, "Success")
         Else
             Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
         End If
-        View.ViewDevice(CurrentDevice.strGUID)
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then

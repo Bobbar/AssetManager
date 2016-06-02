@@ -65,7 +65,7 @@ Partial Class UpdateDev
         '
         'txtUpdate_Note
         '
-        Me.txtUpdate_Note.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtUpdate_Note.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtUpdate_Note.Location = New System.Drawing.Point(40, 85)
         Me.txtUpdate_Note.MaxLength = 200
         Me.txtUpdate_Note.Multiline = True
@@ -76,7 +76,7 @@ Partial Class UpdateDev
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(119, 30)
+        Me.Label1.Location = New System.Drawing.Point(92, 37)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(90, 16)
         Me.Label1.TabIndex = 1
@@ -84,11 +84,11 @@ Partial Class UpdateDev
         '
         'cmbUpdate_ChangeType
         '
-        Me.cmbUpdate_ChangeType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbUpdate_ChangeType.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbUpdate_ChangeType.FormattingEnabled = True
-        Me.cmbUpdate_ChangeType.Location = New System.Drawing.Point(215, 27)
+        Me.cmbUpdate_ChangeType.Location = New System.Drawing.Point(188, 34)
         Me.cmbUpdate_ChangeType.Name = "cmbUpdate_ChangeType"
-        Me.cmbUpdate_ChangeType.Size = New System.Drawing.Size(144, 24)
+        Me.cmbUpdate_ChangeType.Size = New System.Drawing.Size(178, 23)
         Me.cmbUpdate_ChangeType.TabIndex = 0
         '
         'UpdateDev

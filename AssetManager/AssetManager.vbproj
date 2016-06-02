@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>5997.6.2016.1208</AssemblyVersion>
+    <AssemblyVersion>5998.6.2016.1254</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -281,6 +281,8 @@
     <None Include="Resources\checked_checkbox-green.png" />
     <None Include="Resources\clip-512.png" />
     <None Include="Resources\connected-256.png" />
+    <None Include="Resources\cancel.png" />
+    <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <Content Include="Resources\inventory-small.fw.png" />

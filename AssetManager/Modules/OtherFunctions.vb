@@ -17,6 +17,8 @@ Module OtherFunctions
     Public colEditColor As Color = ColorTranslator.FromHtml("#81EAAA")
     Public colFormBackColor As Color = Color.FromArgb(232, 232, 232)
     Public colStatusBarProblem As Color = ColorTranslator.FromHtml("#FF9696")
+    'Public colToolBarColor As Color = Color.FromArgb(122, 197, 241)
+    Public colToolBarColor As Color = Color.FromArgb(249, 226, 166)
     Public ViewFormIndex As Integer
     Public GridStylez As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))

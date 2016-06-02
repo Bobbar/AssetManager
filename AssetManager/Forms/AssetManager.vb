@@ -15,9 +15,13 @@ Public Class AssetManager
     Private intPrevRow As Integer
     Private bolGridFilling As Boolean = False
     Private ConnectAttempts As Integer = 0
+    Private SearchValues As Device_Info
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' ResultGrid.RowHeadersDefaultCellStyle.BackColor = Color.Green
         ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
+        ToolStrip1.BackColor = colToolBarColor
+        View.ToolStrip1.BackColor = colToolBarColor
+        'View.StatusStrip1.BackColor = colToolBarColor
         Logger("Starting AssetManager...")
         Status("Loading...")
         SplashScreen.Show()
@@ -106,6 +110,7 @@ Public Class AssetManager
         cmbLocation.Items.Clear()
         txtCurUser.Clear()
         txtDescription.Clear()
+        chkTrackables.Checked = False
         RefreshCombos()
         ReDim SearchResults(0)
         '  ResultGrid.DataSource = Nothing
@@ -113,7 +118,6 @@ Public Class AssetManager
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         EndProgram()
     End Sub
-    Private SearchValues As Device_Info
     Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs)
     End Sub
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
@@ -185,6 +189,7 @@ Public Class AssetManager
         SearchValues.strLocation = GetDBValue(ComboType.Location, cmbLocation.SelectedIndex)
         SearchValues.strCurrentUser = Trim(txtCurUser.Text)
         SearchValues.strStatus = GetDBValue(ComboType.StatusType, cmbStatus.SelectedIndex)
+        SearchValues.bolTrackable = chkTrackables.Checked
         'strNotes = Trim(txtNotes.Text)
         'strPO =
         'strOSVersion =
@@ -206,7 +211,7 @@ Public Class AssetManager
         Dim table As New DataTable
         GetSearchDBValues()
         Dim strStartQry = "SELECT * FROM devices WHERE "
-        Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", "")) & (IIf(SearchValues.strDescription <> "", " dev_description LIKE '%" & SearchValues.strDescription & "%' AND", ""))
+        Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.bolTrackable, " dev_trackable = '" & Convert.ToInt32(SearchValues.bolTrackable) & "' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", "")) & (IIf(SearchValues.strDescription <> "", " dev_description LIKE '%" & SearchValues.strDescription & "%' AND", ""))
         If strDynaQry = "" Then
             Dim blah = MsgBox("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing")
             Exit Sub
@@ -305,16 +310,7 @@ errs:
     Public Sub StatusBar(Text As String)
         On Error Resume Next
         StatusLabel.Text = Text
-        'Attachments.StatusLabel.Text = Text
-        'Attachments.Refresh()
         Me.Refresh()
-    End Sub
-    Private Sub Button2_Click_1(sender As Object, e As EventArgs)
-        Debug.Print(vbCrLf)
-        Dim i As Integer
-        For i = 0 To UBound(CurrentConnections)
-            Debug.Print(i & " - " & CurrentConnections(i).ConnectionID & " = " & CurrentConnections(i).DBConnection.State)
-        Next
     End Sub
     Private Sub YearsSincePurchaseToolStripMenuItem_Click(sender As Object, e As EventArgs)
         ReportView.Show()
@@ -384,16 +380,10 @@ errs:
                 LiveBox.Items.Add(dr.Item(strQryRow))
             Next
         End With
-
-
-
         Dim ScreenPos As Point = Me.PointToClient(CurrentControl.Parent.PointToScreen(CurrentControl.Location))
         ScreenPos.Y = ScreenPos.Y + CurrentControl.Height
         LiveBox.Location = ScreenPos
-
         LiveBox.Width = CurrentControl.Width
-
-
         LiveBox.Height = LiveBox.PreferredHeight
         If dtResults.Rows.Count > 0 Then
             LiveBox.Visible = True
@@ -440,7 +430,6 @@ errs:
         Dim strQry = strWorkerQry '"SELECT * FROM devices ORDER BY dev_input_datetime DESC"
         strLastQry = strQry
         Dim conn As New MySqlConnection(MySQLConnectString)
-        Debug.Print(MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
         conn.Open()
         reader = cmd.ExecuteReader
@@ -505,7 +494,6 @@ errs:
     Private Sub LiveBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles LiveBox.KeyPress
     End Sub
     Private Sub txtCurUser_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser.TextChanged
-
     End Sub
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs) Handles LiveBox.KeyDown
         If e.KeyCode = Keys.Enter Then LiveBoxSelect()
@@ -736,8 +724,6 @@ errs:
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
             strDatabase = cmbDBs.Text
             MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=" & strDatabase
-            Debug.Print(strDatabase)
-            Debug.Print(MySQLConnectString)
             CloseConnections()
             GlobalConn = New MySqlConnection(MySQLConnectString)
             LiveConn = New MySqlConnection(MySQLConnectString)
@@ -758,26 +744,18 @@ errs:
         ViewAttachments.GroupBox2.Visible = False
         ViewAttachments.cmdUpload.Enabled = False
     End Sub
-
     Private Sub GroupBox1_Enter(sender As Object, e As EventArgs) Handles GroupBox1.Enter
-
     End Sub
-
     Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
             strDatabase = cmbDBs.Text
             MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=" & strDatabase
-            Debug.Print(strDatabase)
-            Debug.Print(MySQLConnectString)
             CloseConnections()
             GlobalConn = New MySqlConnection(MySQLConnectString)
             LiveConn = New MySqlConnection(MySQLConnectString)
             OpenConnections()
         End If
     End Sub
-
-
-
     Private Sub cmbEquipType_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub

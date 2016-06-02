@@ -23,17 +23,10 @@ Partial Class View
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.txtSerial_View_REQ = New System.Windows.Forms.TextBox()
@@ -47,7 +40,6 @@ Partial Class View
         Me.txtDescription_View_REQ = New System.Windows.Forms.TextBox()
         Me.cmbOSVersion_REQ = New System.Windows.Forms.ComboBox()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.cmdUpdate = New System.Windows.Forms.Button()
         Me.cmbLocation_View_REQ = New System.Windows.Forms.ComboBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -57,7 +49,6 @@ Partial Class View
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.HistoryTab = New System.Windows.Forms.TabPage()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
@@ -77,17 +68,26 @@ Partial Class View
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.TrackingTool = New System.Windows.Forms.ToolStripDropDownButton()
         Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
+        Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmdAccept_Tool = New System.Windows.Forms.ToolStripButton()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
@@ -121,58 +121,16 @@ Partial Class View
         Me.ActionsToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
         Me.ActionsToolStripMenuItem.Text = "Actions"
         '
-        'EditToolStripMenuItem
-        '
-        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
-        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.EditToolStripMenuItem.Text = "Modify Device"
-        '
-        'AddNoteToolStripMenuItem
-        '
-        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
-        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.AddNoteToolStripMenuItem.Text = "Add Note"
-        '
-        'DeleteDeviceToolStripMenuItem
-        '
-        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
-        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
-        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
-        '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
         Me.ToolStripMenuItem1.Size = New System.Drawing.Size(152, 6)
-        '
-        'TrackingToolStripMenuItem
-        '
-        Me.TrackingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckInMenu, Me.CheckOutMenu})
-        Me.TrackingToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.check_out
-        Me.TrackingToolStripMenuItem.Name = "TrackingToolStripMenuItem"
-        Me.TrackingToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.TrackingToolStripMenuItem.Text = "Tracking"
-        '
-        'CheckInMenu
-        '
-        Me.CheckInMenu.Name = "CheckInMenu"
-        Me.CheckInMenu.Size = New System.Drawing.Size(132, 22)
-        Me.CheckInMenu.Text = "Check In"
-        '
-        'CheckOutMenu
-        '
-        Me.CheckOutMenu.Name = "CheckOutMenu"
-        Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
-        Me.CheckOutMenu.Text = "Check Out"
         '
         'DeviceInfoBox
         '
         Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.DeviceInfoBox.Controls.Add(Me.chkTrackable)
         Me.DeviceInfoBox.Controls.Add(Me.Label1)
-        Me.DeviceInfoBox.Controls.Add(Me.cmdCancel)
         Me.DeviceInfoBox.Controls.Add(Me.txtAssetTag_View_REQ)
         Me.DeviceInfoBox.Controls.Add(Me.Label10)
         Me.DeviceInfoBox.Controls.Add(Me.txtSerial_View_REQ)
@@ -186,7 +144,6 @@ Partial Class View
         Me.DeviceInfoBox.Controls.Add(Me.txtDescription_View_REQ)
         Me.DeviceInfoBox.Controls.Add(Me.cmbOSVersion_REQ)
         Me.DeviceInfoBox.Controls.Add(Me.Label4)
-        Me.DeviceInfoBox.Controls.Add(Me.cmdUpdate)
         Me.DeviceInfoBox.Controls.Add(Me.cmbLocation_View_REQ)
         Me.DeviceInfoBox.Controls.Add(Me.Label13)
         Me.DeviceInfoBox.Controls.Add(Me.Label5)
@@ -198,7 +155,7 @@ Partial Class View
         Me.DeviceInfoBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DeviceInfoBox.Location = New System.Drawing.Point(12, 46)
         Me.DeviceInfoBox.Name = "DeviceInfoBox"
-        Me.DeviceInfoBox.Size = New System.Drawing.Size(724, 242)
+        Me.DeviceInfoBox.Size = New System.Drawing.Size(669, 242)
         Me.DeviceInfoBox.TabIndex = 39
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
@@ -207,7 +164,7 @@ Partial Class View
         '
         Me.chkTrackable.AutoSize = True
         Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(513, 145)
+        Me.chkTrackable.Location = New System.Drawing.Point(528, 145)
         Me.chkTrackable.Name = "chkTrackable"
         Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
         Me.chkTrackable.TabIndex = 45
@@ -223,15 +180,6 @@ Partial Class View
         Me.Label1.Size = New System.Drawing.Size(73, 16)
         Me.Label1.TabIndex = 20
         Me.Label1.Text = "Asset Tag:"
-        '
-        'cmdCancel
-        '
-        Me.cmdCancel.Location = New System.Drawing.Point(608, 201)
-        Me.cmdCancel.Name = "cmdCancel"
-        Me.cmdCancel.Size = New System.Drawing.Size(99, 24)
-        Me.cmdCancel.TabIndex = 42
-        Me.cmdCancel.Text = "Cancel"
-        Me.cmdCancel.UseVisualStyleBackColor = True
         '
         'txtAssetTag_View_REQ
         '
@@ -353,17 +301,6 @@ Partial Class View
         Me.Label4.TabIndex = 26
         Me.Label4.Text = "Description:"
         '
-        'cmdUpdate
-        '
-        Me.cmdUpdate.BackColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(191, Byte), Integer))
-        Me.cmdUpdate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdUpdate.Location = New System.Drawing.Point(608, 151)
-        Me.cmdUpdate.Name = "cmdUpdate"
-        Me.cmdUpdate.Size = New System.Drawing.Size(99, 47)
-        Me.cmdUpdate.TabIndex = 35
-        Me.cmdUpdate.Text = "Confirm"
-        Me.cmdUpdate.UseVisualStyleBackColor = False
-        '
         'cmbLocation_View_REQ
         '
         Me.cmbLocation_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -435,7 +372,7 @@ Partial Class View
         'txtReplacementYear_View
         '
         Me.txtReplacementYear_View.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtReplacementYear_View.Location = New System.Drawing.Point(390, 148)
+        Me.txtReplacementYear_View.Location = New System.Drawing.Point(410, 148)
         Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
         Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 23)
         Me.txtReplacementYear_View.TabIndex = 31
@@ -445,13 +382,6 @@ Partial Class View
         Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteEntryToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
         Me.RightClickMenu.Size = New System.Drawing.Size(138, 26)
-        '
-        'DeleteEntryToolStripMenuItem
-        '
-        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
-        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
-        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
-        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
         '
         'TabControl1
         '
@@ -465,7 +395,7 @@ Partial Class View
         Me.TabControl1.Location = New System.Drawing.Point(12, 303)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1054, 375)
+        Me.TabControl1.Size = New System.Drawing.Size(991, 363)
         Me.TabControl1.TabIndex = 40
         '
         'HistoryTab
@@ -474,7 +404,7 @@ Partial Class View
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1046, 346)
+        Me.HistoryTab.Size = New System.Drawing.Size(983, 334)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -501,7 +431,7 @@ Partial Class View
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1034, 334)
+        Me.DataGridHistory.Size = New System.Drawing.Size(971, 322)
         Me.DataGridHistory.TabIndex = 40
         '
         'TrackingTab
@@ -510,7 +440,7 @@ Partial Class View
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1046, 346)
+        Me.TrackingTab.Size = New System.Drawing.Size(983, 334)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -536,7 +466,7 @@ Partial Class View
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1034, 334)
+        Me.TrackingGrid.Size = New System.Drawing.Size(971, 322)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
@@ -553,7 +483,7 @@ Partial Class View
         Me.TrackingBox.Controls.Add(Me.txtCheckOut)
         Me.TrackingBox.Controls.Add(Me.Label11)
         Me.TrackingBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TrackingBox.Location = New System.Drawing.Point(751, 46)
+        Me.TrackingBox.Location = New System.Drawing.Point(687, 46)
         Me.TrackingBox.Name = "TrackingBox"
         Me.TrackingBox.Size = New System.Drawing.Size(316, 242)
         Me.TrackingBox.TabIndex = 41
@@ -607,7 +537,7 @@ Partial Class View
         '
         Me.txtCheckUser.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.txtCheckUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCheckUser.Location = New System.Drawing.Point(176, 132)
+        Me.txtCheckUser.Location = New System.Drawing.Point(169, 132)
         Me.txtCheckUser.Name = "txtCheckUser"
         Me.txtCheckUser.ReadOnly = True
         Me.txtCheckUser.Size = New System.Drawing.Size(134, 22)
@@ -618,7 +548,7 @@ Partial Class View
         '
         Me.lblCheckUser.AutoSize = True
         Me.lblCheckUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCheckUser.Location = New System.Drawing.Point(173, 113)
+        Me.lblCheckUser.Location = New System.Drawing.Point(166, 113)
         Me.lblCheckUser.Name = "lblCheckUser"
         Me.lblCheckUser.Size = New System.Drawing.Size(101, 16)
         Me.lblCheckUser.TabIndex = 52
@@ -677,11 +607,12 @@ Partial Class View
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripSeparator3, Me.AttachmentTool, Me.ToolStripSeparator1, Me.TrackingTool})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripSeparator3, Me.AttachmentTool, Me.ToolStripSeparator1, Me.TrackingTool, Me.cmdAccept_Tool, Me.cmdCancel_Tool})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(1074, 32)
+        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
+        Me.ToolStrip1.Size = New System.Drawing.Size(1012, 32)
         Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 44
         Me.ToolStrip1.Text = "ToolStrip1"
@@ -690,6 +621,33 @@ Partial Class View
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
+        '
+        'StatusStrip1
+        '
+        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 669)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Size = New System.Drawing.Size(1012, 22)
+        Me.StatusStrip1.TabIndex = 45
+        Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'StatusLabel
+        '
+        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StatusLabel.Name = "StatusLabel"
+        Me.StatusLabel.Size = New System.Drawing.Size(78, 17)
+        Me.StatusLabel.Text = "%STATUS%"
         '
         'ToolStripButton1
         '
@@ -715,11 +673,6 @@ Partial Class View
         Me.ToolStripButton3.Size = New System.Drawing.Size(116, 29)
         Me.ToolStripButton3.Text = "Delete Device"
         '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
-        '
         'AttachmentTool
         '
         Me.AttachmentTool.Image = Global.AssetManager.My.Resources.Resources.clip_512
@@ -727,11 +680,6 @@ Partial Class View
         Me.AttachmentTool.Name = "AttachmentTool"
         Me.AttachmentTool.Size = New System.Drawing.Size(108, 29)
         Me.AttachmentTool.Text = "Attachments"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
         '
         'TrackingTool
         '
@@ -758,29 +706,80 @@ Partial Class View
         Me.CheckInTool.Size = New System.Drawing.Size(161, 32)
         Me.CheckInTool.Text = "Check In"
         '
-        'StatusStrip1
+        'cmdCancel_Tool
         '
-        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 681)
-        Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1074, 22)
-        Me.StatusStrip1.TabIndex = 45
-        Me.StatusStrip1.Text = "StatusStrip1"
+        Me.cmdCancel_Tool.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdCancel_Tool.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
+        Me.cmdCancel_Tool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdCancel_Tool.Name = "cmdCancel_Tool"
+        Me.cmdCancel_Tool.Size = New System.Drawing.Size(77, 29)
+        Me.cmdCancel_Tool.Text = "Cancel"
+        Me.cmdCancel_Tool.Visible = False
         '
-        'StatusLabel
+        'DeleteEntryToolStripMenuItem
         '
-        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StatusLabel.Name = "StatusLabel"
-        Me.StatusLabel.Size = New System.Drawing.Size(78, 17)
-        Me.StatusLabel.Text = "%STATUS%"
+        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
+        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
+        '
+        'EditToolStripMenuItem
+        '
+        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
+        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.EditToolStripMenuItem.Text = "Modify Device"
+        '
+        'AddNoteToolStripMenuItem
+        '
+        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
+        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.AddNoteToolStripMenuItem.Text = "Add Note"
+        '
+        'DeleteDeviceToolStripMenuItem
+        '
+        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
+        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
+        '
+        'TrackingToolStripMenuItem
+        '
+        Me.TrackingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckInMenu, Me.CheckOutMenu})
+        Me.TrackingToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.check_out
+        Me.TrackingToolStripMenuItem.Name = "TrackingToolStripMenuItem"
+        Me.TrackingToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.TrackingToolStripMenuItem.Text = "Tracking"
+        '
+        'CheckInMenu
+        '
+        Me.CheckInMenu.Name = "CheckInMenu"
+        Me.CheckInMenu.Size = New System.Drawing.Size(132, 22)
+        Me.CheckInMenu.Text = "Check In"
+        '
+        'CheckOutMenu
+        '
+        Me.CheckOutMenu.Name = "CheckOutMenu"
+        Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
+        Me.CheckOutMenu.Text = "Check Out"
+        '
+        'cmdAccept_Tool
+        '
+        Me.cmdAccept_Tool.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdAccept_Tool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox
+        Me.cmdAccept_Tool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdAccept_Tool.Name = "cmdAccept_Tool"
+        Me.cmdAccept_Tool.Size = New System.Drawing.Size(78, 29)
+        Me.cmdAccept_Tool.Text = "Accept"
+        Me.cmdAccept_Tool.Visible = False
         '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1074, 703)
+        Me.ClientSize = New System.Drawing.Size(1012, 691)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.TrackingBox)
@@ -790,7 +789,7 @@ Partial Class View
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.MinimumSize = New System.Drawing.Size(1089, 679)
+        Me.MinimumSize = New System.Drawing.Size(1028, 500)
         Me.Name = "View"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View"
@@ -822,7 +821,6 @@ Partial Class View
     Friend WithEvents cmbStatus_REQ As ComboBox
     Friend WithEvents Label8 As Label
     Friend WithEvents cmbOSVersion_REQ As ComboBox
-    Friend WithEvents cmdUpdate As Button
     Friend WithEvents Label13 As Label
     Friend WithEvents cmbEquipType_View_REQ As ComboBox
     Friend WithEvents Label7 As Label
@@ -842,7 +840,6 @@ Partial Class View
     Friend WithEvents Label10 As Label
     Friend WithEvents txtGUID As TextBox
     Friend WithEvents DeleteDeviceToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents cmdCancel As Button
     Friend WithEvents RightClickMenu As ContextMenuStrip
     Friend WithEvents DeleteEntryToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem1 As ToolStripSeparator
@@ -880,4 +877,6 @@ Partial Class View
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
+    Friend WithEvents cmdCancel_Tool As ToolStripButton
+    Friend WithEvents cmdAccept_Tool As ToolStripButton
 End Class

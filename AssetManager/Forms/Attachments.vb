@@ -187,8 +187,8 @@ Class Attachments
         blah = MsgBox("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             If DeleteAttachment(GetUIDFromIndex(ListView1.FocusedItem.Index)) > 0 Then
-                blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
                 ListAttachments(CurrentDevice.strGUID)
+                blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
             Else
                 blah = MsgBox("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results")
             End If
@@ -223,7 +223,9 @@ Class Attachments
             FileSize = fs.Length
             FileSizeMB = FileSize / (1024 * 1024)
             If FileSizeMB > FileSizeMBLimit Then
-                Dim blah = MsgBox("The file Is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Too Large")
+                e.Result = False
+                UploadWorker.ReportProgress(1, "Error!")
+                Dim blah = MsgBox("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
                 fs.Close()
                 fs = Nothing
                 Exit Sub
@@ -250,16 +252,14 @@ Class Attachments
             fs.Dispose()
             rawData = Nothing
             cmd = Nothing
-            Spinner.Visible = False
             UploadWorker.ReportProgress(1, "Idle...")
-            MessageBox.Show("File uploaded successfully!",
-            "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+            e.Result = True
         Catch ex As Exception
+            e.Result = False
             rawData = Nothing
             conn.Close()
             fs.Close()
             fs = Nothing
-            Spinner.Visible = False
             UploadWorker.ReportProgress(1, "Idle...")
             If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
@@ -269,6 +269,13 @@ Class Attachments
         StatusBar("Idle...")
         Spinner.Visible = False
         ListAttachments(CurrentDevice.strGUID)
+        If e.Result Then
+            MessageBox.Show("File uploaded successfully!",
+          "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+        Else
+            MessageBox.Show("File upload failed.",
+         "Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+        End If
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
         Dim Success As Boolean = False

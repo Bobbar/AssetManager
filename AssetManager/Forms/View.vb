@@ -19,6 +19,7 @@ Public Class View
     Private OldData As Device_Info
     Public NewData As Device_Info
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ToolStrip1.BackColor = colToolBarColor
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
         'AssetManager.CopyDefaultCellStyles()
@@ -76,9 +77,13 @@ Public Class View
                     'do nut-zing
             End Select
         Next
-        cmdUpdate.Visible = True
-        cmdCancel.Visible = True
-        'DeviceInfoBox.BackColor = colEditColor
+        Me.Text = "*View - MODIFYING*"
+        ToolStrip1.BackColor = colEditColor
+        For Each t As ToolStripItem In ToolStrip1.Items
+            t.Visible = False
+        Next
+        cmdAccept_Tool.Visible = True
+        cmdCancel_Tool.Visible = True
     End Sub
     Private Sub DisableControls()
         Dim c As Control
@@ -99,9 +104,13 @@ Public Class View
                     'do nut-zing
             End Select
         Next
-        cmdUpdate.Visible = False
-        cmdCancel.Visible = False
-        'DeviceInfoBox.BackColor = TrackingBox.BackColor
+        Me.Text = "View"
+        ToolStrip1.BackColor = colToolBarColor
+        For Each t As ToolStripItem In ToolStrip1.Items
+            t.Visible = True
+        Next
+        cmdAccept_Tool.Visible = False
+        cmdCancel_Tool.Visible = False
     End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
         If Not ConnectionReady() Then
@@ -262,14 +271,6 @@ errs:
         End If
         txtCheckOut.Text = IIf(CurrentDevice.Tracking.bolCheckedOut, "Checked Out", "Checked In")
     End Sub
-    Private Sub HighlighRows(Grid As DataGridView)
-        For i As Integer = 0 To Grid.Rows.Count - 1
-            If Grid.Rows(i).Cells(GetColIndex(Grid, "Check Type")).Value = strCheckIn Then
-                Grid.Rows(i).Cells(GetColIndex(Grid, "Check Type")).Style.BackColor = Color.Blue
-                Grid.Rows(i).DefaultCellStyle.BackColor = Color.Blue
-            End If
-        Next
-    End Sub
     Public Sub SetTracking(bolEnabled As Boolean, bolCheckedOut As Boolean)
         If bolEnabled Then
             'TrackingTab.Visible = True
@@ -361,7 +362,7 @@ errs:
         If Not CheckForAdmin() Then Exit Sub
         ModifyDevice()
     End Sub
-    Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
+    Private Sub cmdUpdate_Click(sender As Object, e As EventArgs)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
@@ -512,7 +513,7 @@ errs:
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
         If bolCheckFields Then CheckFields()
     End Sub
-    Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
+    Private Sub cmdCancel_Click(sender As Object, e As EventArgs)
         bolCheckFields = False
         DisableControls()
         ResetBackColors()
@@ -557,31 +558,23 @@ errs:
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
         TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
         If TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckIn Then
-            'TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.BackColor = Color.Blue
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckIn
-            For Each cell As DataGridViewCell In TrackingGrid.Rows(e.RowIndex).Cells
-                cell.Style.SelectionBackColor = Color.FromArgb(colCheckIn.R * Mod3, colCheckIn.G * Mod3, colCheckIn.B * Mod3)
-                Dim c2 As Color = Color.FromArgb(cell.Style.SelectionBackColor.R, cell.Style.SelectionBackColor.G, cell.Style.SelectionBackColor.B)
-                Dim BlendColor As Color
-                BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+            Dim c2 As Color = Color.FromArgb(colCheckIn.R, colCheckIn.G, colCheckIn.B)
+            Dim BlendColor As Color
+            BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
                                                 (CInt(c1.R) + CInt(c2.R)) / 2,
                                                 (CInt(c1.G) + CInt(c2.G)) / 2,
                                                 (CInt(c1.B) + CInt(c2.B)) / 2)
-                cell.Style.SelectionBackColor = BlendColor
-                'cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
-            Next
+            TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = BlendColor
         ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckOut Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
-            For Each cell As DataGridViewCell In TrackingGrid.Rows(e.RowIndex).Cells
-                cell.Style.SelectionBackColor = Color.FromArgb(colCheckOut.R * Mod3, colCheckOut.G * Mod3, colCheckOut.B * Mod3)
-                Dim c2 As Color = Color.FromArgb(cell.Style.SelectionBackColor.R, cell.Style.SelectionBackColor.G, cell.Style.SelectionBackColor.B)
-                Dim BlendColor As Color
-                BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+            Dim c2 As Color = Color.FromArgb(colCheckOut.R, colCheckOut.G, colCheckOut.B)
+            Dim BlendColor As Color
+            BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
                                                 (CInt(c1.R) + CInt(c2.R)) / 2,
                                                 (CInt(c1.G) + CInt(c2.G)) / 2,
                                                 (CInt(c1.B) + CInt(c2.B)) / 2)
-                cell.Style.SelectionBackColor = BlendColor
-            Next
+            TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = BlendColor
         End If
     End Sub
     Private Sub Button1_Click_1(sender As Object, e As EventArgs)
@@ -692,6 +685,14 @@ errs:
             End If
         End If
     End Sub
+    Public Sub CancelModify()
+        bolCheckFields = False
+        DisableControls()
+        ResetBackColors()
+        'ClearFields()
+        Me.Refresh()
+        ViewDevice(CurrentDevice.strGUID)
+    End Sub
     Private Sub cmbEquipType_View_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType_View_REQ.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub
@@ -707,6 +708,25 @@ errs:
     Private Sub TabControl1_Click(sender As Object, e As EventArgs) Handles TabControl1.Click
     End Sub
     Private Sub TrackingTool_Click(sender As Object, e As EventArgs) Handles TrackingTool.Click
+    End Sub
+    Private Sub cmdAccept_Tool_Click(sender As Object, e As EventArgs) Handles cmdAccept_Tool.Click
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        If Not CheckFields() Then
+            Dim blah = MsgBox("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
+            bolCheckFields = True
+            Exit Sub
+        End If
+        DisableControls()
+        UpdateDev.cmbUpdate_ChangeType.SelectedIndex = -1
+        UpdateDev.cmbUpdate_ChangeType.Enabled = True
+        UpdateDev.txtUpdate_Note.Clear()
+        UpdateDev.Show()
+    End Sub
+    Private Sub cmdCancel_Tool_Click(sender As Object, e As EventArgs) Handles cmdCancel_Tool.Click
+        CancelModify()
     End Sub
     Private Sub TabControl1_GotFocus(sender As Object, e As EventArgs) Handles TabControl1.GotFocus
     End Sub
