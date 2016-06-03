@@ -505,7 +505,6 @@ errs:
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
             Dim rows As Integer
-            Dim conn As New MySqlConnection(MySQLConnectString)
             da.SelectCommand = New MySqlCommand("SELECT NOW()")
             da.SelectCommand.Connection = GlobalConn
             da.Fill(ds)

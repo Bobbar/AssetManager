@@ -126,6 +126,15 @@ Public Class View
         Dim cmd As New MySqlCommand(strQry, GlobalConn)
         Try
             reader = cmd.ExecuteReader
+            If Not reader.HasRows Then
+                reader.Close()
+                table.Dispose()
+                cmd.Dispose()
+                reader.Dispose()
+                CurrentDevice = Nothing
+                Dim blah = MsgBox("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
+                Exit Sub
+            End If
             table.Columns.Add("Date", GetType(String))
             table.Columns.Add("Action Type", GetType(String))
             table.Columns.Add("Action User", GetType(String))
@@ -137,7 +146,6 @@ Public Class View
             table.Columns.Add("Purchase Date", GetType(String))
             table.Columns.Add("GUID", GetType(String))
             With reader
-                ' Dim r As Boolean = Await .ReadAsync
                 Do While .Read()
                     CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
                     txtAssetTag_View_REQ.Text = !dev_asset_tag
@@ -152,13 +160,14 @@ Public Class View
                     cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
                     txtGUID.Text = !dev_UID
                     chkTrackable.Checked = CBool(!dev_trackable)
-                    ' SetTracking(CBool(!dev_trackable), CBool(!dev_checkedout))
                     table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_action_user,!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
                 Loop
             End With
             reader.Close()
+            reader.Dispose()
             DataGridHistory.DataSource = table
-            'DataGridHistory.Columns("Action Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
+            table.Dispose()
+            cmd.Dispose()
             DisableControls()
             DataGridHistory.AutoResizeColumns()
             ViewTracking(CurrentDevice.strGUID)
@@ -167,6 +176,10 @@ Public Class View
         Catch ex As MySqlException
             DoneWaiting()
             ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            reader.Close()
+            reader.Dispose()
+            table.Dispose()
+            cmd.Dispose()
             Exit Sub
         End Try
     End Sub

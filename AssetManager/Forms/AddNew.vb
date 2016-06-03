@@ -26,12 +26,11 @@ Public Class AddNew
         rows = rows + cmd.ExecuteNonQuery()
         If rows = 2 Then 'ExecuteQuery returns the number of rows affected. We can check this to make sure the qry completed successfully.
             Dim blah = MsgBox("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
-            ClearAll()
+            If Not chkNoClear.Checked Then ClearAll()
             If blah = vbNo Then Me.Hide()
         Else
             Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
         End If
-        ClearAll()
         Exit Sub
 errs:
         If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -100,6 +99,7 @@ errs:
         cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType, "INSRV")
         ResetBackColors()
         chkTrackable.Checked = False
+        chkNoClear.Checked = False
         bolCheckFields = False
     End Sub
     Private Sub ResetBackColors()
@@ -158,12 +158,6 @@ errs:
         For i = 0 To UBound(StatusType)
             cmbStatus_REQ.Items.Insert(i, StatusType(i).strLong)
         Next
-    End Sub
-    Private Sub AddNew_Activated(sender As Object, e As EventArgs) Handles Me.Activated
-    End Sub
-    Private Sub AddNew_HelpRequested(sender As Object, hlpevent As HelpEventArgs) Handles Me.HelpRequested
-    End Sub
-    Private Sub Label7_Click(sender As Object, e As EventArgs) Handles Label7.Click
     End Sub
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         If Not CheckFields() Then Dim blah = MsgBox("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")

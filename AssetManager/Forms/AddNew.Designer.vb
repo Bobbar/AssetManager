@@ -48,12 +48,14 @@ Partial Class AddNew
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag_REQ = New System.Windows.Forms.TextBox()
         Me.txtSerial_REQ = New System.Windows.Forms.TextBox()
+        Me.chkNoClear = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
         Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.GroupBox1.Controls.Add(Me.chkNoClear)
         Me.GroupBox1.Controls.Add(Me.chkTrackable)
         Me.GroupBox1.Controls.Add(Me.cmdClear)
         Me.GroupBox1.Controls.Add(Me.Label11)
@@ -350,6 +352,17 @@ Partial Class AddNew
         Me.txtSerial_REQ.TabIndex = 0
         Me.txtSerial_REQ.Text = "txtSerial"
         '
+        'chkNoClear
+        '
+        Me.chkNoClear.AutoSize = True
+        Me.chkNoClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkNoClear.Location = New System.Drawing.Point(543, 245)
+        Me.chkNoClear.Name = "chkNoClear"
+        Me.chkNoClear.Size = New System.Drawing.Size(91, 20)
+        Me.chkNoClear.TabIndex = 49
+        Me.chkNoClear.Text = "Don't clear"
+        Me.chkNoClear.UseVisualStyleBackColor = True
+        '
         'AddNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -395,4 +408,5 @@ Partial Class AddNew
     Friend WithEvents cmbStatus_REQ As ComboBox
     Friend WithEvents cmdClear As Button
     Friend WithEvents chkTrackable As CheckBox
+    Friend WithEvents chkNoClear As CheckBox
 End Class
