@@ -96,6 +96,7 @@ errs:
         FillOSTypeCombo()
         FillStatusTypeCombo()
         ClearFields()
+        dtPurchaseDate_REQ.Value = Now
         cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType, "INSRV")
         ResetBackColors()
         chkTrackable.Checked = False

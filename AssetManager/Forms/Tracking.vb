@@ -113,7 +113,7 @@ Public Class Tracking
         Else
             Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
         End If
-        Me.Hide()
+        Me.Dispose()
         'GetCurrentTracking(CurrentDevice.strGUID)
         'View.ViewTracking(CurrentDevice.strGUID)
         View.ViewDevice(CurrentDevice.strGUID)
@@ -152,7 +152,7 @@ errs:
         Else
             Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
         End If
-        Me.Hide()
+        Me.Dispose()
         'GetCurrentTracking(CurrentDevice.strGUID)
         'View.ViewTracking(CurrentDevice.strGUID)
         View.ViewDevice(CurrentDevice.strGUID)
