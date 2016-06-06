@@ -23,7 +23,13 @@ Partial Class View
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -49,6 +55,7 @@ Partial Class View
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.HistoryTab = New System.Windows.Forms.TabPage()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
@@ -67,11 +74,6 @@ Partial Class View
         Me.Label11 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
@@ -79,15 +81,13 @@ Partial Class View
         Me.TrackingTool = New System.Windows.Forms.ToolStripDropDownButton()
         Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
-        Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAccept_Tool = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
@@ -121,10 +121,51 @@ Partial Class View
         Me.ActionsToolStripMenuItem.Size = New System.Drawing.Size(60, 20)
         Me.ActionsToolStripMenuItem.Text = "Actions"
         '
+        'EditToolStripMenuItem
+        '
+        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
+        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.EditToolStripMenuItem.Text = "Modify Device"
+        '
+        'AddNoteToolStripMenuItem
+        '
+        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
+        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.AddNoteToolStripMenuItem.Text = "Add Note"
+        '
+        'DeleteDeviceToolStripMenuItem
+        '
+        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
+        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
+        '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
         Me.ToolStripMenuItem1.Size = New System.Drawing.Size(152, 6)
+        '
+        'TrackingToolStripMenuItem
+        '
+        Me.TrackingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckInMenu, Me.CheckOutMenu})
+        Me.TrackingToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.check_out
+        Me.TrackingToolStripMenuItem.Name = "TrackingToolStripMenuItem"
+        Me.TrackingToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.TrackingToolStripMenuItem.Text = "Tracking"
+        '
+        'CheckInMenu
+        '
+        Me.CheckInMenu.Name = "CheckInMenu"
+        Me.CheckInMenu.Size = New System.Drawing.Size(132, 22)
+        Me.CheckInMenu.Text = "Check In"
+        '
+        'CheckOutMenu
+        '
+        Me.CheckOutMenu.Name = "CheckOutMenu"
+        Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
+        Me.CheckOutMenu.Text = "Check Out"
         '
         'DeviceInfoBox
         '
@@ -383,6 +424,13 @@ Partial Class View
         Me.RightClickMenu.Name = "RightClickMenu"
         Me.RightClickMenu.Size = New System.Drawing.Size(138, 26)
         '
+        'DeleteEntryToolStripMenuItem
+        '
+        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
+        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
+        '
         'TabControl1
         '
         Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -607,7 +655,7 @@ Partial Class View
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripSeparator3, Me.AttachmentTool, Me.ToolStripSeparator1, Me.TrackingTool, Me.cmdAccept_Tool, Me.cmdCancel_Tool})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.AttachmentTool, Me.TrackingTool, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
@@ -617,20 +665,114 @@ Partial Class View
         Me.ToolStrip1.TabIndex = 44
         Me.ToolStrip1.Text = "ToolStrip1"
         '
-        'ToolStripSeparator2
+        'ToolStripButton1
         '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.Edit
+        Me.ToolStripButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
+        Me.ToolStripButton1.Size = New System.Drawing.Size(98, 29)
+        Me.ToolStripButton1.Text = "Modify"
         '
-        'ToolStripSeparator3
+        'ToolStripButton2
         '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripButton2.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.ToolStripButton2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton2.Name = "ToolStripButton2"
+        Me.ToolStripButton2.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
+        Me.ToolStripButton2.Size = New System.Drawing.Size(114, 29)
+        Me.ToolStripButton2.Text = "Add Note"
+        '
+        'ToolStripButton3
+        '
+        Me.ToolStripButton3.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
+        Me.ToolStripButton3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton3.Name = "ToolStripButton3"
+        Me.ToolStripButton3.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
+        Me.ToolStripButton3.Size = New System.Drawing.Size(126, 29)
+        Me.ToolStripButton3.Text = "Delete Device"
+        '
+        'AttachmentTool
+        '
+        Me.AttachmentTool.Image = Global.AssetManager.My.Resources.Resources.clip_512
+        Me.AttachmentTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.AttachmentTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.AttachmentTool.Name = "AttachmentTool"
+        Me.AttachmentTool.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
+        Me.AttachmentTool.Size = New System.Drawing.Size(118, 29)
+        Me.AttachmentTool.Text = "Attachments"
+        '
+        'TrackingTool
+        '
+        Me.TrackingTool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckOutTool, Me.CheckInTool})
+        Me.TrackingTool.Image = Global.AssetManager.My.Resources.Resources.check_out
+        Me.TrackingTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.TrackingTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TrackingTool.Name = "TrackingTool"
+        Me.TrackingTool.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
+        Me.TrackingTool.Size = New System.Drawing.Size(105, 29)
+        Me.TrackingTool.Text = "Tracking"
+        '
+        'CheckOutTool
+        '
+        Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_red
+        Me.CheckOutTool.Name = "CheckOutTool"
+        Me.CheckOutTool.Size = New System.Drawing.Size(142, 32)
+        Me.CheckOutTool.Text = "Check Out"
+        '
+        'CheckInTool
+        '
+        Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_green
+        Me.CheckInTool.Name = "CheckInTool"
+        Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
+        Me.CheckInTool.Text = "Check In"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator1.Visible = False
+        '
+        'cmdAccept_Tool
+        '
+        Me.cmdAccept_Tool.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdAccept_Tool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox
+        Me.cmdAccept_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.cmdAccept_Tool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdAccept_Tool.Name = "cmdAccept_Tool"
+        Me.cmdAccept_Tool.Padding = New System.Windows.Forms.Padding(100, 0, 0, 0)
+        Me.cmdAccept_Tool.Size = New System.Drawing.Size(178, 29)
+        Me.cmdAccept_Tool.Text = "Accept"
+        Me.cmdAccept_Tool.Visible = False
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator3.Visible = False
+        '
+        'cmdCancel_Tool
+        '
+        Me.cmdCancel_Tool.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdCancel_Tool.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
+        Me.cmdCancel_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.cmdCancel_Tool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdCancel_Tool.Name = "cmdCancel_Tool"
+        Me.cmdCancel_Tool.Padding = New System.Windows.Forms.Padding(50, 0, 0, 0)
+        Me.cmdCancel_Tool.Size = New System.Drawing.Size(126, 29)
+        Me.cmdCancel_Tool.Text = "Cancel"
+        Me.cmdCancel_Tool.Visible = False
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator2.Visible = False
         '
         'StatusStrip1
         '
@@ -648,131 +790,6 @@ Partial Class View
         Me.StatusLabel.Name = "StatusLabel"
         Me.StatusLabel.Size = New System.Drawing.Size(78, 17)
         Me.StatusLabel.Text = "%STATUS%"
-        '
-        'ToolStripButton1
-        '
-        Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.Edit
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(78, 29)
-        Me.ToolStripButton1.Text = "Modify"
-        '
-        'ToolStripButton2
-        '
-        Me.ToolStripButton2.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton2.Name = "ToolStripButton2"
-        Me.ToolStripButton2.Size = New System.Drawing.Size(94, 29)
-        Me.ToolStripButton2.Text = "Add Note"
-        '
-        'ToolStripButton3
-        '
-        Me.ToolStripButton3.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
-        Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton3.Name = "ToolStripButton3"
-        Me.ToolStripButton3.Size = New System.Drawing.Size(116, 29)
-        Me.ToolStripButton3.Text = "Delete Device"
-        '
-        'AttachmentTool
-        '
-        Me.AttachmentTool.Image = Global.AssetManager.My.Resources.Resources.clip_512
-        Me.AttachmentTool.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.AttachmentTool.Name = "AttachmentTool"
-        Me.AttachmentTool.Size = New System.Drawing.Size(108, 29)
-        Me.AttachmentTool.Text = "Attachments"
-        '
-        'TrackingTool
-        '
-        Me.TrackingTool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckOutTool, Me.CheckInTool})
-        Me.TrackingTool.Image = Global.AssetManager.My.Resources.Resources.check_out
-        Me.TrackingTool.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TrackingTool.Name = "TrackingTool"
-        Me.TrackingTool.Size = New System.Drawing.Size(95, 29)
-        Me.TrackingTool.Text = "Tracking"
-        '
-        'CheckOutTool
-        '
-        Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_red
-        Me.CheckOutTool.Name = "CheckOutTool"
-        Me.CheckOutTool.Size = New System.Drawing.Size(161, 32)
-        Me.CheckOutTool.Text = "Check Out"
-        '
-        'CheckInTool
-        '
-        Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_green
-        Me.CheckInTool.Name = "CheckInTool"
-        Me.CheckInTool.Size = New System.Drawing.Size(161, 32)
-        Me.CheckInTool.Text = "Check In"
-        '
-        'cmdCancel_Tool
-        '
-        Me.cmdCancel_Tool.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCancel_Tool.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
-        Me.cmdCancel_Tool.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.cmdCancel_Tool.Name = "cmdCancel_Tool"
-        Me.cmdCancel_Tool.Size = New System.Drawing.Size(77, 29)
-        Me.cmdCancel_Tool.Text = "Cancel"
-        Me.cmdCancel_Tool.Visible = False
-        '
-        'DeleteEntryToolStripMenuItem
-        '
-        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
-        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
-        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
-        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
-        '
-        'EditToolStripMenuItem
-        '
-        Me.EditToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Edit
-        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.EditToolStripMenuItem.Text = "Modify Device"
-        '
-        'AddNoteToolStripMenuItem
-        '
-        Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
-        Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.AddNoteToolStripMenuItem.Text = "Add Note"
-        '
-        'DeleteDeviceToolStripMenuItem
-        '
-        Me.DeleteDeviceToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
-        Me.DeleteDeviceToolStripMenuItem.Name = "DeleteDeviceToolStripMenuItem"
-        Me.DeleteDeviceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.DeleteDeviceToolStripMenuItem.Text = "Delete Device"
-        '
-        'TrackingToolStripMenuItem
-        '
-        Me.TrackingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckInMenu, Me.CheckOutMenu})
-        Me.TrackingToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.check_out
-        Me.TrackingToolStripMenuItem.Name = "TrackingToolStripMenuItem"
-        Me.TrackingToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
-        Me.TrackingToolStripMenuItem.Text = "Tracking"
-        '
-        'CheckInMenu
-        '
-        Me.CheckInMenu.Name = "CheckInMenu"
-        Me.CheckInMenu.Size = New System.Drawing.Size(132, 22)
-        Me.CheckInMenu.Text = "Check In"
-        '
-        'CheckOutMenu
-        '
-        Me.CheckOutMenu.Name = "CheckOutMenu"
-        Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
-        Me.CheckOutMenu.Text = "Check Out"
-        '
-        'cmdAccept_Tool
-        '
-        Me.cmdAccept_Tool.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAccept_Tool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox
-        Me.cmdAccept_Tool.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.cmdAccept_Tool.Name = "cmdAccept_Tool"
-        Me.cmdAccept_Tool.Size = New System.Drawing.Size(78, 29)
-        Me.cmdAccept_Tool.Text = "Accept"
-        Me.cmdAccept_Tool.Visible = False
         '
         'View
         '
@@ -865,11 +882,9 @@ Partial Class View
     Friend WithEvents lblDueBack As Label
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents ToolStrip1 As ToolStrip
-    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents ToolStripButton1 As ToolStripButton
     Friend WithEvents ToolStripButton2 As ToolStripButton
     Friend WithEvents ToolStripButton3 As ToolStripButton
-    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents TrackingTool As ToolStripDropDownButton
     Friend WithEvents CheckOutTool As ToolStripMenuItem
     Friend WithEvents CheckInTool As ToolStripMenuItem
@@ -879,4 +894,6 @@ Partial Class View
     Friend WithEvents StatusLabel As ToolStripStatusLabel
     Friend WithEvents cmdCancel_Tool As ToolStripButton
     Friend WithEvents cmdAccept_Tool As ToolStripButton
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
 End Class

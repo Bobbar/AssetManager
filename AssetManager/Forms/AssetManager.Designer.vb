@@ -20,9 +20,9 @@ Partial Class AssetManager
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AssetManager))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -72,10 +72,7 @@ Partial Class AssetManager
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
         Me.YearsSincePurchaseToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.txtHighColor = New System.Windows.Forms.ToolStripTextBox()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.txtSelectColor = New System.Windows.Forms.ToolStripTextBox()
-        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.AdminDropDown = New System.Windows.Forms.ToolStripDropDownButton()
         Me.cmbDBs = New System.Windows.Forms.ToolStripComboBox()
         Me.ManageAttachmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -131,37 +128,37 @@ Partial Class AssetManager
         Me.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ResultGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ResultGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.ResultGrid.ContextMenuStrip = Me.ContextMenuStrip1
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle5
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.ResultGrid.Location = New System.Drawing.Point(15, 19)
         Me.ResultGrid.Name = "ResultGrid"
         Me.ResultGrid.ReadOnly = True
         Me.ResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
         Me.ResultGrid.RowHeadersVisible = False
         Me.ResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
@@ -536,7 +533,7 @@ Partial Class AssetManager
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.AddDeviceTool, Me.ToolStripSeparator1, Me.ToolStripDropDownButton1, Me.txtHighColor, Me.ToolStripButton1, Me.txtSelectColor, Me.ToolStripButton2, Me.AdminDropDown})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.AddDeviceTool, Me.ToolStripSeparator1, Me.ToolStripDropDownButton1, Me.ToolStripSeparator4, Me.AdminDropDown})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -553,9 +550,11 @@ Partial Class AssetManager
         'AddDeviceTool
         '
         Me.AddDeviceTool.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.AddDeviceTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AddDeviceTool.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.AddDeviceTool.Name = "AddDeviceTool"
-        Me.AddDeviceTool.Size = New System.Drawing.Size(103, 29)
+        Me.AddDeviceTool.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
+        Me.AddDeviceTool.Size = New System.Drawing.Size(123, 29)
         Me.AddDeviceTool.Text = "Add Device"
         '
         'ToolStripSeparator1
@@ -567,9 +566,11 @@ Partial Class AssetManager
         '
         Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.YearsSincePurchaseToolStripMenuItem1})
         Me.ToolStripDropDownButton1.Image = Global.AssetManager.My.Resources.Resources.presentation_512
+        Me.ToolStripDropDownButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ToolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
-        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(92, 29)
+        Me.ToolStripDropDownButton1.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
+        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(112, 29)
         Me.ToolStripDropDownButton1.Text = "Reports"
         '
         'YearsSincePurchaseToolStripMenuItem1
@@ -578,46 +579,21 @@ Partial Class AssetManager
         Me.YearsSincePurchaseToolStripMenuItem1.Size = New System.Drawing.Size(198, 22)
         Me.YearsSincePurchaseToolStripMenuItem1.Text = "Years Since Purchase"
         '
-        'txtHighColor
+        'ToolStripSeparator4
         '
-        Me.txtHighColor.Name = "txtHighColor"
-        Me.txtHighColor.Size = New System.Drawing.Size(100, 32)
-        Me.txtHighColor.Visible = False
-        '
-        'ToolStripButton1
-        '
-        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(29, 29)
-        Me.ToolStripButton1.Text = "ToolStripButton1"
-        Me.ToolStripButton1.Visible = False
-        '
-        'txtSelectColor
-        '
-        Me.txtSelectColor.Name = "txtSelectColor"
-        Me.txtSelectColor.Size = New System.Drawing.Size(100, 32)
-        Me.txtSelectColor.Visible = False
-        '
-        'ToolStripButton2
-        '
-        Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
-        Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton2.Name = "ToolStripButton2"
-        Me.ToolStripButton2.Size = New System.Drawing.Size(29, 29)
-        Me.ToolStripButton2.Text = "ToolStripButton1"
-        Me.ToolStripButton2.Visible = False
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 32)
         '
         'AdminDropDown
         '
         Me.AdminDropDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
         Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem})
         Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
+        Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.AdminDropDown.Name = "AdminDropDown"
-        Me.AdminDropDown.Size = New System.Drawing.Size(88, 29)
+        Me.AdminDropDown.Padding = New System.Windows.Forms.Padding(50, 0, 0, 0)
+        Me.AdminDropDown.Size = New System.Drawing.Size(138, 29)
         Me.AdminDropDown.Text = "Admin Stuff"
         '
         'cmbDBs
@@ -741,14 +717,11 @@ Partial Class AssetManager
     Friend WithEvents DateTimeLabel As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
     Friend WithEvents ConnectionWatchDog As System.ComponentModel.BackgroundWorker
-    Friend WithEvents txtHighColor As ToolStripTextBox
-    Friend WithEvents ToolStripButton1 As ToolStripButton
-    Friend WithEvents txtSelectColor As ToolStripTextBox
-    Friend WithEvents ToolStripButton2 As ToolStripButton
     Friend WithEvents AdminDropDown As ToolStripDropDownButton
     Friend WithEvents cmbDBs As ToolStripComboBox
     Friend WithEvents ManageAttachmentsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents chkTrackables As CheckBox
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
 End Class

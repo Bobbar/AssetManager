@@ -41,7 +41,12 @@ Public Class AssetManager
         Status("Loading Indexes...")
         BuildIndexes()
         Status("Checking Access Level...")
+        GetAccessLevels()
         GetUserAccess()
+        If Not CanAccess("can_run") Then
+            MsgBox("You do not have permission to run this software.", vbOKOnly + vbCritical, "Access Denied")
+            EndProgram()
+        End If
         If IsAdmin() Then
             AdminDropDown.Visible = True
         Else
@@ -517,7 +522,8 @@ errs:
             ConnectionNotReady()
             Exit Sub
         End If
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess("add") Then Exit Sub
+        'If Not CheckForAdmin() Then Exit Sub
         AddNew.Show()
     End Sub
     Private Sub YearsSincePurchaseToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles YearsSincePurchaseToolStripMenuItem1.Click
@@ -698,18 +704,6 @@ errs:
             ResultGrid.CurrentCell = ResultGrid(e.ColumnIndex, e.RowIndex)
         End If
     End Sub
-    Private Sub ToolStripDropDownButton1_Click(sender As Object, e As EventArgs) Handles ToolStripDropDownButton1.Click
-    End Sub
-    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-        colHighlightColor = ColorTranslator.FromHtml("#" & Trim(txtHighColor.Text))
-    End Sub
-    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
-        ResultGrid.DefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#" & Trim(txtSelectColor.Text))
-        GetGridStylez()
-        CopyDefaultCellStyles()
-    End Sub
-    Private Sub cmbDBs_Click(sender As Object, e As EventArgs)
-    End Sub
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
     End Sub
@@ -745,6 +739,9 @@ errs:
         ViewAttachments.cmdUpload.Enabled = False
     End Sub
     Private Sub GroupBox1_Enter(sender As Object, e As EventArgs) Handles GroupBox1.Enter
+    End Sub
+    Private Sub Button2_Click_1(sender As Object, e As EventArgs)
+        Debug.Print(CanAccess("can_run"))
     End Sub
     Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then

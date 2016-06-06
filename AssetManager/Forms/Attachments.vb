@@ -161,6 +161,13 @@ Class Attachments
         DoubleBufferedListView(ListView1, True)
         StatusBar("Idle...")
         Waiting()
+        If CanAccess("manage_attach") Then
+            cmdUpload.Enabled = True
+            cmdDelete.Enabled = True
+        Else
+            cmdUpload.Enabled = False
+            cmdDelete.Enabled = False
+        End If
         FillDeviceInfo()
         ' ListAttachments(CurrentDevice.strGUID)
         DoneWaiting()

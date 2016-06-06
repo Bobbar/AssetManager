@@ -80,7 +80,11 @@ Public Class View
         Me.Text = "*View - MODIFYING*"
         ToolStrip1.BackColor = colEditColor
         For Each t As ToolStripItem In ToolStrip1.Items
-            t.Visible = False
+            If TypeOf t IsNot ToolStripSeparator Then
+                t.Visible = False
+            Else
+                t.Visible = True
+            End If
         Next
         cmdAccept_Tool.Visible = True
         cmdCancel_Tool.Visible = True
@@ -107,7 +111,11 @@ Public Class View
         Me.Text = "View"
         ToolStrip1.BackColor = colToolBarColor
         For Each t As ToolStripItem In ToolStrip1.Items
-            t.Visible = True
+            If TypeOf t IsNot ToolStripSeparator Then
+                t.Visible = True
+            Else
+                t.Visible = False
+            End If
         Next
         cmdAccept_Tool.Visible = False
         cmdCancel_Tool.Visible = False
@@ -602,17 +610,20 @@ errs:
             ConnectionNotReady()
             Exit Sub
         End If
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess("modify") Then Exit Sub
+        'If Not CheckForAdmin() Then Exit Sub
         ModifyDevice()
     End Sub
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess("modify") Then Exit Sub
+        'If Not CheckForAdmin() Then Exit Sub
         UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
         UpdateDev.cmbUpdate_ChangeType.Enabled = False
         UpdateDev.Show()
     End Sub
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess("delete") Then Exit Sub
+        'If Not CheckForAdmin() Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
             Dim rows As Integer
@@ -636,6 +647,7 @@ errs:
             ConnectionNotReady()
             Exit Sub
         End If
+        If Not CheckForAccess("track") Then Exit Sub
         Waiting()
         Tracking.SetupTracking()
         AddChild(Tracking)
@@ -647,6 +659,7 @@ errs:
             ConnectionNotReady()
             Exit Sub
         End If
+        If Not CheckForAccess("track") Then Exit Sub
         Waiting()
         Tracking.SetupTracking()
         AddChild(Tracking)
@@ -658,7 +671,8 @@ errs:
             ConnectionNotReady()
             Exit Sub
         End If
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess("view_attach") Then Exit Sub
+        'If Not CheckForAdmin() Then Exit Sub
         Attachments.FillDeviceInfo()
         AddChild(Attachments)
         Attachments.ListAttachments(CurrentDevice.strGUID)
