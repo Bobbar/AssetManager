@@ -46,6 +46,8 @@ Partial Class Attachments
         Me.Spinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
+        Me.ProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
+        Me.ProgTimer = New System.Windows.Forms.Timer(Me.components)
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -232,7 +234,7 @@ Partial Class Attachments
         'StatusStrip1
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.Spinner})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.Spinner, Me.ProgressBar1})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 525)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(657, 22)
@@ -261,6 +263,16 @@ Partial Class Attachments
         '
         Me.DownloadWorker.WorkerReportsProgress = True
         '
+        'ProgressBar1
+        '
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(100, 16)
+        Me.ProgressBar1.Visible = False
+        '
+        'ProgTimer
+        '
+        Me.ProgTimer.Interval = 50
+        '
         'Attachments
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -284,6 +296,7 @@ Partial Class Attachments
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents cmdUpload As Button
     Friend WithEvents ListView1 As ListView
@@ -309,4 +322,6 @@ Partial Class Attachments
     Friend WithEvents DownloadWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents OpenTool As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ProgressBar1 As ToolStripProgressBar
+    Friend WithEvents ProgTimer As Timer
 End Class

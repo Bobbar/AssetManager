@@ -19,6 +19,9 @@ Public Module DBFunctions
     Public GlobalConn As New MySqlConnection(MySQLConnectString)
     Public LiveConn As New MySqlConnection(MySQLConnectString)
     Public strServerTime As String
+    Public Const strFTPUser As String = "asset_manager"
+    Public Const strFTPPass As String = "DogWallFarmTree"
+
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
