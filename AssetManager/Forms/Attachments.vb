@@ -47,6 +47,7 @@ Class Attachments
         End If
     End Sub
     Public Sub ListAttachments(Optional DeviceUID As String = Nothing)
+
         If Not ConnectionReady() Then
             Exit Sub
         End If
@@ -56,14 +57,14 @@ Class Attachments
             Dim table As New DataTable
             Dim strQry As String
             If bolAdminMode Then
-                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,dev_UID,dev_asset_tag FROM attachments,devices WHERE dev_UID = attach_dev_UID ORDER BY attach_upload_date DESC"
+                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,dev_UID,dev_asset_tag FROM attachments,devices WHERE dev_UID = attach_dev_UID ORDER BY attach_upload_date DESC"
                 ListView1.Columns.Clear()
                 ListView1.Columns.Add("Filename")
                 ListView1.Columns.Add("Size")
                 ListView1.Columns.Add("Date")
                 ListView1.Columns.Add("Device")
             ElseIf Not bolAdminMode Then
-                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date FROM attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
+                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID FROM attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
                 ListView1.Columns.Clear()
                 ListView1.Columns.Add("Filename")
                 ListView1.Columns.Add("Size")
@@ -87,7 +88,7 @@ Class Attachments
                     AttachIndex(row).strFilename = !attach_file_name
                     AttachIndex(row).strFileType = !attach_file_type
                     AttachIndex(row).FileSize = !attach_file_size
-                    AttachIndex(row).strFileUID = !UID
+                    AttachIndex(row).strFileUID = IIf(IsDBNull(!attach_file_UID), "",!attach_file_UID) '!UID
                     row += 1
                 Loop
             End With
@@ -220,6 +221,8 @@ Class Attachments
     End Sub
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
         'file stuff
+        Dim Foldername As String = CurrentDevice.strGUID
+        Dim strFileGuid As String = Guid.NewGuid.ToString
         Dim FilePath As String = DirectCast(e.Argument, String)
         Dim strFilename As String = Path.GetFileNameWithoutExtension(FilePath)
         Dim strFileType As String = Path.GetExtension(FilePath)
@@ -237,17 +240,35 @@ Class Attachments
         End If
         'ftp stuff
         UploadWorker.ReportProgress(1, "Connecting...")
-        Dim clsRequest As Net.FtpWebRequest = DirectCast(Net.WebRequest.Create("ftp://" & strServerIP & "/" & strFullFilename), System.Net.FtpWebRequest)
-        clsRequest.Credentials = New Net.NetworkCredential(strFTPUser, strFTPPass)
-        clsRequest.Method = Net.WebRequestMethods.Ftp.UploadFile
-        Dim clsStream As IO.Stream = clsRequest.GetRequestStream()
-        clsStream.Write(File, 0, File.Length)
         'sql stuff
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim conn As New MySqlConnection(MySQLConnectString)
         Dim cmd As New MySqlCommand '(strQry, conn)
         Dim SQL As String
         Try
+            Dim creds As Net.NetworkCredential = New Net.NetworkCredential(strFTPUser, strFTPPass)
+            Dim resp As Net.FtpWebResponse = Nothing
+            Dim request As Net.FtpWebRequest = Net.FtpWebRequest.Create("ftp://" & strServerIP & "/attachments")
+            request.Credentials = creds
+            request.Method = Net.WebRequestMethods.Ftp.ListDirectoryDetails
+            request.KeepAlive = True
+            Using resp
+                resp = request.GetResponse
+                Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
+                Dim s As String = sr.ReadToEnd()
+                If Not s.Contains(Foldername) Then
+                    request = Net.FtpWebRequest.Create("ftp://" & strServerIP & "/attachments/" & Foldername)
+                    request.Credentials = creds
+                    request.Method = Net.WebRequestMethods.Ftp.MakeDirectory
+                    resp = request.GetResponse()
+                    Debug.Print(resp.StatusCode)
+                End If
+            End Using
+            request = Net.FtpWebRequest.Create("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid)
+            'Dim clsRequest As Net.FtpWebRequest = DirectCast(Net.WebRequest.Create("ftp://" & strServerIP & "/" & strFullFilename), System.Net.FtpWebRequest)
+            request.Credentials = creds 'New Net.NetworkCredential(strFTPUser, strFTPPass)
+            request.Method = Net.WebRequestMethods.Ftp.UploadFile
+            Dim clsStream As IO.Stream = request.GetRequestStream()
+            clsStream.Write(File, 0, File.Length)
             'ftp upload
             UploadWorker.ReportProgress(1, "Uploading...")
             For offset As Integer = 0 To File.Length Step 1024
@@ -259,7 +280,7 @@ Class Attachments
             clsStream.Close()
             clsStream.Dispose()
             'update sql table
-            SQL = "INSERT INTO attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size)"
+            SQL = "INSERT INTO attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID)"
             conn.Open()
             cmd.Connection = conn
             cmd.CommandText = SQL
@@ -267,6 +288,7 @@ Class Attachments
             cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
             cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
             cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
+            cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
             cmd.ExecuteNonQuery()
             conn.Close()
             conn.Dispose()
@@ -277,8 +299,8 @@ Class Attachments
             e.Result = False
             conn.Close()
             conn.Dispose()
-            clsStream.Close()
-            clsStream.Dispose()
+            'clsStream.Close()
+            'clsStream.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
             If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
@@ -304,16 +326,16 @@ Class Attachments
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim AttachUID As String = DirectCast(e.Argument, String)
-        Dim strQry = "Select * FROM attachments WHERE UID='" & AttachUID & "'"
+        Dim strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_file_UID FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
         Dim conn As New MySqlConnection(MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
         Dim FileSize As UInt32
         Dim strFilename As String, strFiletype As String, strFullPath As String
         Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
-        Dim rawData() As Byte
-        Try
-            conn.Open()
+        'Dim rawData() As Byte
+        'Try
+        conn.Open()
             DownloadWorker.ReportProgress(1, "Downloading...")
             reader = cmd.ExecuteReader
             With reader
@@ -322,8 +344,8 @@ Class Attachments
                     strFiletype = !attach_file_type
                     strFullPath = strTempPath & strFilename & strFiletype
                     FileSize = !attach_file_size
-                    rawData = New Byte(FileSize) {}
-                    .GetBytes(.GetOrdinal("attach_file_binary"), 0, rawData, 0, FileSize)
+                    'rawData = New Byte(FileSize) {}
+                    ' .GetBytes(.GetOrdinal("attach_file_binary"), 0, rawData, 0, FileSize)
                 End While
             End With
             reader.Close()
@@ -332,29 +354,137 @@ Class Attachments
             conn.Dispose()
             Dim fs As FileStream = New FileStream(strFullPath, FileMode.Create)
             DownloadWorker.ReportProgress(1, "Creating File...")
-            fs.Write(rawData, 0, FileSize)
+        'fs.Write(rawData, 0, FileSize)
+        ' fs.Close()
+        'fs.Dispose()
+        ' rawData = Nothing
+        'fs.Dispose()
+        Dim Foldername As String = CurrentDevice.strGUID
+        Dim File() As Byte ' = IO.File.WriteAllBytes(strFullPath)
+            'Dim diskFile() As Byte = IO.File.WriteAllBytes(strFullPath, bufFile)
+            Dim creds As Net.NetworkCredential = New Net.NetworkCredential(strFTPUser, strFTPPass)
+        Dim resp As Net.FtpWebResponse = Nothing
+
+        Dim request As Net.FtpWebRequest = Net.FtpWebRequest.Create("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID)
+        request.Credentials = creds
+            request.Method = Net.WebRequestMethods.Ftp.DownloadFile
+
+        resp = request.GetResponse
+        Dim respStream As IO.Stream = resp.GetResponseStream
+
+        'Dim clsStream As IO.Stream = request.GetResponse()
+
+        'resp.GetResponseStream.Read(File, 0, File.Length)
+
+        'clsStream.Read(File, 0, File.Length)
+        'ftp download
+
+        DownloadWorker.ReportProgress(1, "Downloading...")
+        For offset As Integer = 0 To FileSize Step 1024
+            lngProgress = CType(offset + ProgressBar1.Maximum / FileSize, Integer)
+            Dim chunkSize As Integer = FileSize - offset - 1
+            If chunkSize > 1024 Then chunkSize = 1024
+            'fs.Write(File, offset, chunkSize)
+            'clsStream.Read(File, offset, chunkSize)
+            respStream.Read(File, offset, chunkSize)
+        Next
+        fs.Write(File, 0, FileSize)
             fs.Close()
             fs.Dispose()
-            rawData = Nothing
-            fs.Dispose()
-            DownloadWorker.ReportProgress(1, "Idle...")
+        resp.Close()
+        resp.Dispose()
+
+        'clsStream.Close()
+        'clsStream.Dispose()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        DownloadWorker.ReportProgress(1, "Idle...")
             Spinner.Visible = False
-            Process.Start(strFullPath)
-            Success = True
+        'Process.Start(strFullPath)
+        Success = True
             e.Result = Success
-        Catch ex As Exception
-            Success = False
-            conn.Close()
-            conn.Dispose()
-            DownloadWorker.ReportProgress(1, "Idle...")
-            Spinner.Visible = False
-            If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                EndProgram()
-            Else
-                e.Result = Success
-            End If
-        End Try
+        'Catch ex As Exception
+        '    Success = False
+        '    conn.Close()
+        '    conn.Dispose()
+        '    DownloadWorker.ReportProgress(1, "Idle...")
+        '    Spinner.Visible = False
+        '    If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+        '        EndProgram()
+        '    Else
+        '        e.Result = Success
+        '    End If
+        'End Try
     End Sub
+    'Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
+    '    Dim Success As Boolean = False
+    '    Dim ConnID As String = Guid.NewGuid.ToString
+    '    Dim reader As MySqlDataReader
+    '    Dim table As New DataTable
+    '    Dim AttachUID As String = DirectCast(e.Argument, String)
+    '    Dim strQry = "Select * FROM attachments WHERE UID='" & AttachUID & "'"
+    '    DownloadWorker.ReportProgress(1, "Connecting...")
+    '    Dim conn As New MySqlConnection(MySQLConnectString)
+    '    Dim cmd As New MySqlCommand(strQry, conn)
+    '    Dim FileSize As UInt32
+    '    Dim strFilename As String, strFiletype As String, strFullPath As String
+    '    Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
+    '    Dim rawData() As Byte
+    '    Try
+    '        conn.Open()
+    '        DownloadWorker.ReportProgress(1, "Downloading...")
+    '        reader = cmd.ExecuteReader
+    '        With reader
+    '            While .Read()
+    '                strFilename = !attach_file_name
+    '                strFiletype = !attach_file_type
+    '                strFullPath = strTempPath & strFilename & strFiletype
+    '                FileSize = !attach_file_size
+    '                rawData = New Byte(FileSize) {}
+    '                .GetBytes(.GetOrdinal("attach_file_binary"), 0, rawData, 0, FileSize)
+    '            End While
+    '        End With
+    '        reader.Close()
+    '        reader.Dispose()
+    '        conn.Close()
+    '        conn.Dispose()
+    '        Dim fs As FileStream = New FileStream(strFullPath, FileMode.Create)
+    '        DownloadWorker.ReportProgress(1, "Creating File...")
+    '        fs.Write(rawData, 0, FileSize)
+    '        fs.Close()
+    '        fs.Dispose()
+    '        rawData = Nothing
+    '        fs.Dispose()
+    '        DownloadWorker.ReportProgress(1, "Idle...")
+    '        Spinner.Visible = False
+    '        Process.Start(strFullPath)
+    '        Success = True
+    '        e.Result = Success
+    '    Catch ex As Exception
+    '        Success = False
+    '        conn.Close()
+    '        conn.Dispose()
+    '        DownloadWorker.ReportProgress(1, "Idle...")
+    '        Spinner.Visible = False
+    '        If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+    '            EndProgram()
+    '        Else
+    '            e.Result = Success
+    '        End If
+    '    End Try
+    'End Sub
     Private Sub DownloadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles DownloadWorker.RunWorkerCompleted
         StatusBar("Idle...")
         Spinner.Visible = False
