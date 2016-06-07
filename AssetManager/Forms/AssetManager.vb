@@ -18,6 +18,7 @@ Public Class AssetManager
     Private SearchValues As Device_Info
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' ResultGrid.RowHeadersDefaultCellStyle.BackColor = Color.Green
+        DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
         ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
         ToolStrip1.BackColor = colToolBarColor
         View.ToolStrip1.BackColor = colToolBarColor
@@ -743,6 +744,11 @@ errs:
     Private Sub Button2_Click_1(sender As Object, e As EventArgs)
         Debug.Print(CanAccess("can_run"))
     End Sub
+
+    Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
+        MsgBox(My.Application.Info.Version.ToString)
+    End Sub
+
     Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
             strDatabase = cmbDBs.Text
