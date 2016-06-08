@@ -744,11 +744,9 @@ errs:
     Private Sub Button2_Click_1(sender As Object, e As EventArgs)
         Debug.Print(CanAccess("can_run"))
     End Sub
-
     Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
         MsgBox(My.Application.Info.Version.ToString)
     End Sub
-
     Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
             strDatabase = cmbDBs.Text
