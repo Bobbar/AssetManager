@@ -5,7 +5,9 @@ Class Attachments
     Public bolAdminMode As Boolean = False
     Private AttachQry As String
     Private Const FileSizeMBLimit As Long = 150
-    Private lngProgress As Long
+    Private lngProgress As Integer
+    Private lngBytesMoved As Long
+    Private stpSpeed As New Stopwatch
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -238,11 +240,13 @@ Class Attachments
             Dim ftpstream As System.IO.FileStream = infoFilepath.OpenRead()
             Dim flLength As Long = ftpstream.Length
             Dim reqfile As System.IO.Stream = ReturnFTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+            stpSpeed.Start()
             Do Until bytesIn < 1
                 bytesIn = ftpstream.Read(buffer, 0, 1024)
                 If bytesIn > 0 Then
                     reqfile.Write(buffer, 0, bytesIn)
                     totalBytesIn += bytesIn
+                    lngBytesMoved = totalBytesIn
                     If flLength > 0 Then
                         Dim perc As Integer = (totalBytesIn / flLength) * 100
                         lngProgress = perc
@@ -278,7 +282,10 @@ Class Attachments
         End Try
     End Sub
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
-        ProgressBar1.Value = 100
+        On Error Resume Next
+        stpSpeed.Stop()
+        stpSpeed.Reset()
+        statMBPS.Text = Nothing
         ProgressBar1.Visible = False
         ProgressBar1.Value = 0
         ProgTimer.Enabled = False
@@ -343,11 +350,13 @@ Class Attachments
             DownloadWorker.ReportProgress(1, "Downloading...")
             output = IO.File.Create(strFullPath)
             bytesIn = 1
+            stpSpeed.Start()
             Do Until bytesIn < 1
                 bytesIn = respStream.Read(buffer, 0, 1024)
                 If bytesIn > 0 Then
                     output.Write(buffer, 0, bytesIn)
                     totalBytesIn += bytesIn 'downloaded bytes
+                    lngBytesMoved = totalBytesIn
                     If flLength > 0 Then
                         Dim perc As Integer = (totalBytesIn / flLength) * 100
                         'report progress
@@ -375,6 +384,10 @@ Class Attachments
         End Try
     End Sub
     Private Sub DownloadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles DownloadWorker.RunWorkerCompleted
+        On Error Resume Next
+        stpSpeed.Stop()
+        stpSpeed.Reset()
+        statMBPS.Text = Nothing
         ProgressBar1.Visible = False
         ProgressBar1.Value = 0
         ProgTimer.Enabled = False
@@ -445,6 +458,9 @@ Class Attachments
     End Sub
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
         'Debug.Print(lngProgress)
+        Dim BytesPerSecond As Single
+        If lngBytesMoved > 0 Then BytesPerSecond = Math.Round((lngBytesMoved / stpSpeed.ElapsedMilliseconds) / 1000, 2)
+        statMBPS.Text = BytesPerSecond & " MB/s"
         ProgressBar1.Value = lngProgress
         If lngProgress > 1 Then ProgressBar1.Value = ProgressBar1.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
         ProgressBar1.Value = lngProgress
