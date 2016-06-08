@@ -44,10 +44,12 @@ Partial Class Attachments
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.Spinner = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
-        Me.ProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
         Me.ProgTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -234,7 +236,7 @@ Partial Class Attachments
         'StatusStrip1
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.Spinner, Me.ProgressBar1})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.ProgressBar1, Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel2, Me.Spinner})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 525)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(657, 22)
@@ -245,8 +247,10 @@ Partial Class Attachments
         '
         Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusLabel.Name = "StatusLabel"
-        Me.StatusLabel.Size = New System.Drawing.Size(78, 17)
+        Me.StatusLabel.Padding = New System.Windows.Forms.Padding(0, 0, 10, 0)
+        Me.StatusLabel.Size = New System.Drawing.Size(88, 17)
         Me.StatusLabel.Text = "%STATUS%"
+        Me.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Spinner
         '
@@ -254,6 +258,12 @@ Partial Class Attachments
         Me.Spinner.Name = "Spinner"
         Me.Spinner.Size = New System.Drawing.Size(16, 17)
         Me.Spinner.Visible = False
+        '
+        'ProgressBar1
+        '
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(100, 16)
+        Me.ProgressBar1.Visible = False
         '
         'UploadWorker
         '
@@ -263,15 +273,20 @@ Partial Class Attachments
         '
         Me.DownloadWorker.WorkerReportsProgress = True
         '
-        'ProgressBar1
-        '
-        Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(100, 16)
-        Me.ProgressBar1.Visible = False
-        '
         'ProgTimer
         '
         Me.ProgTimer.Interval = 50
+        '
+        'ToolStripStatusLabel1
+        '
+        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(0, 17)
+        '
+        'ToolStripStatusLabel2
+        '
+        Me.ToolStripStatusLabel2.AutoSize = False
+        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
+        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(10, 17)
         '
         'Attachments
         '
@@ -324,4 +339,6 @@ Partial Class Attachments
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ProgressBar1 As ToolStripProgressBar
     Friend WithEvents ProgTimer As Timer
+    Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
+    Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
 End Class

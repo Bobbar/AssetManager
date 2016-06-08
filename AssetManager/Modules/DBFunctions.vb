@@ -175,6 +175,31 @@ Public Module DBFunctions
             Next
         End If
     End Sub
+    'Public Function GetDeviceFromAttachUID(AttachUID As String) As String
+    '    On Error Resume Next
+    '    Dim reader As MySqlDataReader
+    '    Dim strQRY = "SELECT  FROM security ORDER BY sec_access_level" ' WHERE usr_username='" & strLocalUser & "'"
+    '    Dim cmd As New MySqlCommand(strQRY, GlobalConn)
+    '    Dim rows As Integer
+    '    reader = cmd.ExecuteReader
+    '    ReDim AccessLevels(0)
+    '    rows = -1
+    '    With reader
+    '        Do While .Read()
+    '            rows += 1
+    '            ReDim Preserve AccessLevels(rows)
+    '            AccessLevels(rows).intLevel = !sec_access_level
+    '            AccessLevels(rows).strModule = !sec_module
+    '            AccessLevels(rows).strDesc = !sec_desc
+    '        Loop
+    '    End With
+    '    reader.Close()
+
+
+
+
+
+    'End Function
     Public Function CanAccess(recModule As String) As Boolean 'bitwise access levels
         Dim mask As UInteger = 1
         Dim calc_level As UInteger
