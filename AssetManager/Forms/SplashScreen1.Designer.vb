@@ -100,7 +100,7 @@ Partial Class SplashScreen
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "SplashScreen"
-        Me.Opacity = 0.7R
+        Me.Opacity = 0.8R
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()

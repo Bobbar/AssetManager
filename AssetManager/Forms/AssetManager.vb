@@ -747,11 +747,8 @@ errs:
     Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
         MsgBox(My.Application.Info.Version.ToString)
     End Sub
-
     Private Sub txtGUID_Click(sender As Object, e As EventArgs) Handles txtGUID.Click
-
     End Sub
-
     Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
             strDatabase = cmbDBs.Text
@@ -768,19 +765,14 @@ errs:
     Private Sub cmbLocation_DropDown(sender As Object, e As EventArgs) Handles cmbLocation.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub
-
     Private Sub txtGUID_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtGUID.KeyPress
-
     End Sub
-
     Private Sub txtGUID_KeyDown(sender As Object, e As KeyEventArgs) Handles txtGUID.KeyDown
         If e.KeyCode = Keys.Return Then
             LoadDevice(Trim(txtGUID.Text))
             txtGUID.Clear()
         End If
     End Sub
-
     Private Sub txtGUID_RightToLeftChanged(sender As Object, e As EventArgs) Handles txtGUID.RightToLeftChanged
-
     End Sub
 End Class

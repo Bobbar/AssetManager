@@ -159,8 +159,6 @@ Class Attachments
         txtSerial.Text = CurrentDevice.strSerial
         txtDescription.Text = CurrentDevice.strDescription
     End Sub
-    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
-    End Sub
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
         OpenAttachment(GetUIDFromIndex(ListView1.FocusedItem.Index))
     End Sub
