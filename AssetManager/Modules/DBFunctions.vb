@@ -19,6 +19,8 @@ Public Module DBFunctions
     Public GlobalConn As New MySqlConnection(MySQLConnectString)
     Public LiveConn As New MySqlConnection(MySQLConnectString)
     Public strServerTime As String
+    Public Const strFTPUser As String = "asset_manager"
+    Public Const strFTPPass As String = "DogWallFarmTree"
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
@@ -172,6 +174,45 @@ Public Module DBFunctions
             Next
         End If
     End Sub
+    Public Function DeleteAttachment(AttachUID As String) As Integer
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Function
+        End If
+        Try
+            Dim cmd As New MySqlCommand
+            Dim rows
+            Dim reader As MySqlDataReader
+            Dim strDeviceID As String
+            Dim strSQLDevIDQry As String = "SELECT attach_dev_UID FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
+            cmd.Connection = GlobalConn
+            cmd.CommandText = strSQLDevIDQry
+            reader = cmd.ExecuteReader
+            With reader
+                Do While .Read()
+                    strDeviceID = !attach_dev_UID
+                Loop
+            End With
+            reader.Close()
+            'Delete FTP Attachment
+            If DeleteFTPAttachment(AttachUID, strDeviceID) = Net.FtpStatusCode.FileActionOK Then
+                'delete SQL entry
+                Dim strSQLDelQry As String = "DELETE FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
+                cmd.Connection = GlobalConn
+                cmd.CommandText = strSQLDelQry
+                rows = cmd.ExecuteNonQuery()
+                Return rows
+            End If
+            Exit Function
+        Catch ex As Exception
+            If ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
+        Return -1
+    End Function
     Public Function CanAccess(recModule As String) As Boolean 'bitwise access levels
         Dim mask As UInteger = 1
         Dim calc_level As UInteger
@@ -291,7 +332,14 @@ errs:
             EndProgram()
         End If
     End Function
-    Public Function DeleteDevice(ByVal strGUID As String) As Integer
+    Public Function DeleteDevice(ByVal strGUID As String) As Boolean
+        Try
+            If DeleteFTPDeviceFolder(strGUID) Then Return DeleteSQLDevice(strGUID) ' if ftp directory deleted successfully, then delete the sql record.
+        Catch ex As Exception
+            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Function
+    Public Function DeleteSQLDevice(ByVal strGUID As String) As Integer
         On Error GoTo errs
         Dim cmd As New MySqlCommand
         Dim rows

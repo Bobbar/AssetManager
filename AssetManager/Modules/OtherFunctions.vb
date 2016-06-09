@@ -47,8 +47,8 @@ Module OtherFunctions
     End Sub
     Public Sub StopTimer()
         stpw.Stop()
-        'Debug.Print(stpw.ElapsedMilliseconds)
-        Debug.Print(stpw.ElapsedTicks)
+        Debug.Print("Stopwatch: MS:" & stpw.ElapsedMilliseconds & " Ticks: " & stpw.ElapsedTicks)
+        'Debug.Print(stpw.ElapsedTicks)
     End Sub
     Public Sub Logger(Message As String)
         Dim DateStamp As String = DateTime.Now

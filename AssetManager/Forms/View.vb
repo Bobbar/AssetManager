@@ -626,9 +626,9 @@ errs:
         'If Not CheckForAdmin() Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
-            Dim rows As Integer
-            rows = DeleteDevice(CurrentDevice.strGUID)
-            If rows > 0 Then
+            ' Dim rows As Integer
+            'rows = DeleteDevice(CurrentDevice.strGUID)
+            If DeleteDevice(CurrentDevice.strGUID) Then
                 Dim blah2 = MsgBox("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentDevice = Nothing
                 Me.Hide()

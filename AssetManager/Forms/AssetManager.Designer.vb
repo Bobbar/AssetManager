@@ -76,6 +76,7 @@ Partial Class AssetManager
         Me.AdminDropDown = New System.Windows.Forms.ToolStripDropDownButton()
         Me.cmbDBs = New System.Windows.Forms.ToolStripComboBox()
         Me.ManageAttachmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.txtGUID = New System.Windows.Forms.ToolStripTextBox()
         Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
         Me.ReconnectThread = New System.ComponentModel.BackgroundWorker()
         Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
@@ -496,7 +497,7 @@ Partial Class AssetManager
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(907, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(954, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ConnStatusLabel
@@ -587,7 +588,7 @@ Partial Class AssetManager
         'AdminDropDown
         '
         Me.AdminDropDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem})
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID})
         Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.ImageTransparentColor = System.Drawing.Color.Magenta
@@ -609,6 +610,14 @@ Partial Class AssetManager
         Me.ManageAttachmentsToolStripMenuItem.Name = "ManageAttachmentsToolStripMenuItem"
         Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.ManageAttachmentsToolStripMenuItem.Text = "Manage Attachments"
+        Me.ManageAttachmentsToolStripMenuItem.ToolTipText = "Manage ALL Attachments"
+        '
+        'txtGUID
+        '
+        Me.txtGUID.AutoSize = False
+        Me.txtGUID.Name = "txtGUID"
+        Me.txtGUID.Size = New System.Drawing.Size(150, 23)
+        Me.txtGUID.ToolTipText = "GUID Lookup. (Press Enter)"
         '
         'ConnectionWatcher
         '
@@ -667,7 +676,6 @@ Partial Class AssetManager
         Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button
@@ -725,4 +733,5 @@ Partial Class AssetManager
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents chkTrackables As CheckBox
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents txtGUID As ToolStripTextBox
 End Class
