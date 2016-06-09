@@ -460,7 +460,7 @@ Class Attachments
         'Debug.Print(lngProgress)
         Dim BytesPerSecond As Single
         If lngBytesMoved > 0 Then BytesPerSecond = Math.Round((lngBytesMoved / stpSpeed.ElapsedMilliseconds) / 1000, 2)
-        statMBPS.Text = BytesPerSecond & " MB/s"
+        statMBPS.Text = BytesPerSecond.ToString("0.00") & " MB/s"
         ProgressBar1.Value = lngProgress
         If lngProgress > 1 Then ProgressBar1.Value = ProgressBar1.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
         ProgressBar1.Value = lngProgress
