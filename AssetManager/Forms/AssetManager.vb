@@ -27,16 +27,14 @@ Public Class AssetManager
         Status("Loading...")
         SplashScreen.Show()
         Status("Checking Server Connection...")
-        If OpenConnections() Then 'CheckConnection() Then
+        If OpenConnections() Then
             ConnectionReady()
-            'Liveconn.Open()
-            'do nut-zing
         Else
             Dim blah = MsgBox("Error connecting to server!", vbOKOnly + vbCritical, "Could not connect")
             EndProgram()
         End If
         Dim userFullName As String = UserPrincipal.Current.DisplayName
-        Logger("Enabling Double-Buffered Controls...")
+        'Logger("Enabling Double-Buffered Controls...")
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
         Status("Loading Indexes...")
@@ -180,7 +178,6 @@ Public Class AssetManager
         bolGridFilling = True
         Grid.DataSource = table
         bolGridFilling = False
-        Grid.AutoResizeColumns()
         ReDim SearchResults(0)
     End Sub
     Private Sub GetSearchDBValues() 'cleanup user input for db

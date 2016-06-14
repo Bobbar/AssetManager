@@ -1,12 +1,16 @@
 ﻿Module FTPFunctions
     Public FTPcreds As Net.NetworkCredential = New Net.NetworkCredential(strFTPUser, strFTPPass)
     Public Function DeleteFTPAttachment(AttachUID As String, DeviceUID As String) As Object
+        Dim resp As Net.FtpWebResponse = Nothing
         Try
-            Dim resp As Net.FtpWebResponse = Nothing
             resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/" & AttachUID, Net.WebRequestMethods.Ftp.DeleteFile)
             Return resp.StatusCode
-        Catch ex As Exception
-            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        Catch ex As Net.WebException
+            If ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                If ex.HResult = -2146233079 Then
+                    Return 550  ' file not found result.
+                End If
+            End If
         End Try
     End Function
     Public Function DeleteFTPDeviceFolder(DeviceUID As String) As Boolean
@@ -41,8 +45,8 @@
         End Try
     End Function
     Public Function ReturnFTPResponse(strUri As String, Method As String) As Net.WebResponse
+        Dim request As Net.FtpWebRequest = Net.FtpWebRequest.Create(strUri)
         Try
-            Dim request As Net.FtpWebRequest = Net.FtpWebRequest.Create(strUri)
             With request
                 '.KeepAlive = True
                 .Proxy = New Net.WebProxy() 'set proxy to nothing to bypass .NET auto-detect process. This speeds up the initial connection greatly.
@@ -51,7 +55,8 @@
                 Return .GetResponse
             End With
         Catch ex As Exception
-            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            'ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return request.GetResponse
         End Try
     End Function
     Public Function ReturnFTPRequestStream(strUri As String, Method As String) As IO.Stream

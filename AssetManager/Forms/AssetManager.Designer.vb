@@ -168,6 +168,7 @@ Partial Class AssetManager
         Me.ResultGrid.ShowEditingIcon = False
         Me.ResultGrid.Size = New System.Drawing.Size(1179, 445)
         Me.ResultGrid.TabIndex = 17
+        Me.ResultGrid.VirtualMode = True
         '
         'ContextMenuStrip1
         '
@@ -608,7 +609,7 @@ Partial Class AssetManager
         'ManageAttachmentsToolStripMenuItem
         '
         Me.ManageAttachmentsToolStripMenuItem.Name = "ManageAttachmentsToolStripMenuItem"
-        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
         Me.ManageAttachmentsToolStripMenuItem.Text = "Manage Attachments"
         Me.ManageAttachmentsToolStripMenuItem.ToolTipText = "Manage ALL Attachments"
         '

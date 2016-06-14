@@ -177,7 +177,7 @@ Public Class View
             table.Dispose()
             cmd.Dispose()
             DisableControls()
-            DataGridHistory.AutoResizeColumns()
+            'DataGridHistory.AutoResizeColumns()
             ViewTracking(CurrentDevice.strGUID)
             DoneWaiting()
             Me.Show()
@@ -247,7 +247,7 @@ Public Class View
         reader.Close()
         'CloseConnection(ConnID)
         TrackingGrid.DataSource = table
-        TrackingGrid.AutoResizeColumns()
+        'TrackingGrid.AutoResizeColumns()
         'GetCurrentTracking(CurrentDevice.strGUID)
         DisableSorting(TrackingGrid)
         FillTrackingBox()

@@ -91,6 +91,9 @@ Module OtherFunctions
                 'StatusBar("Connection Lost!")
                 Dim blah = MsgBox("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbCritical, "Connection Lost")
                 Return True
+            Case -2146233079 'FTP File not found error. Continue to complete DB entry removal
+                Dim blah = MsgBox("File was not found, or access was denied.", vbOKOnly + vbCritical, "Cannot Access File")
+                Return True
             Case Else 'unhandled errors
                 'StatusBar("ERROR")
                 Dim blah = MsgBox("An unhandled error has occurred!" & vbCrLf & vbCrLf & "Message: " & vbCrLf & strErrMsg, vbOKOnly + vbCritical, "Yikes!")
