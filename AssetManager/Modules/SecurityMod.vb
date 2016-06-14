@@ -1,5 +1,49 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.IO
+Imports System.Security.Cryptography
+Imports System.Security
+Imports System.Text
 Module SecurityMod
+    Public Function GetHashOfFile(Path As String) As String
+        Dim hash ' As MD5
+        hash = MD5.Create
+        Dim hashValue() As Byte
+        Dim fileStream As FileStream = File.OpenRead(Path)
+        fileStream.Position = 0
+        hashValue = hash.ComputeHash(fileStream)
+        Dim sBuilder As New StringBuilder
+        Dim i As Integer
+        For i = 0 To hashValue.Length - 1
+            sBuilder.Append(hashValue(i).ToString("x2"))
+        Next
+        fileStream.Close()
+        Return sBuilder.ToString
+    End Function
+
+    Public Function GetHashOfStream(MemStream As IO.FileStream) As String
+        Dim md5Hash As MD5 = MD5.Create
+
+
+
+        MemStream.Position = 0
+        Dim hash As Byte() = md5Hash.ComputeHash(MemStream)
+
+        Dim sBuilder As New StringBuilder
+        Dim i As Integer
+        For i = 0 To hash.Length - 1
+            sBuilder.Append(hash(i).ToString("x2"))
+        Next
+
+        Return sBuilder.ToString
+
+
+
+        'Return BitConverter.ToString(hash).ToString("x2")
+
+
+
+
+    End Function
     Public Sub GetAccessLevels()
         On Error Resume Next
         Dim reader As MySqlDataReader

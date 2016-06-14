@@ -236,6 +236,8 @@ Class Attachments
             Dim totalBytesIn As Long
             Dim infoFilepath As System.IO.FileInfo = New System.IO.FileInfo(FilePath)
             Dim ftpstream As System.IO.FileStream = infoFilepath.OpenRead()
+            Dim FileHash As String = GetHashOfFile(infoFilepath.ToString)
+            Debug.Print(GetHashOfFile(infoFilepath.ToString))
             Dim flLength As Long = ftpstream.Length
             Dim reqfile As System.IO.Stream = ReturnFTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
             stpSpeed.Start()
@@ -256,7 +258,7 @@ Class Attachments
             ftpstream.Close()
             ftpstream.Dispose()
             'update sql table
-            SQL = "INSERT INTO attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID)"
+            SQL = "INSERT INTO attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`, `attach_file_hash`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash)"
             conn.Open()
             cmd.Connection = conn
             cmd.CommandText = SQL
@@ -265,6 +267,7 @@ Class Attachments
             cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
             cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
             cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
+            cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
             cmd.ExecuteNonQuery()
             conn.Close()
             conn.Dispose()
@@ -301,12 +304,14 @@ Class Attachments
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
         Dim Foldername As String
+        Dim FileHash As String
+        Dim FileUID As String
         Dim Success As Boolean = False
         Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim AttachUID As String = DirectCast(e.Argument, String)
-        Dim strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_file_UID,attach_dev_UID FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
+        Dim strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_file_UID,attach_dev_UID,attach_file_hash FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
         Dim conn As New MySqlConnection(MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
@@ -323,13 +328,16 @@ Class Attachments
                     strFullPath = strTempPath & strFilename & strFiletype
                     'FileSize = !attach_file_size
                     Foldername = !attach_dev_UID
+                    FileHash = !attach_file_hash
+                    FileUID = !attach_file_UID
                 End While
             End With
             reader.Close()
             reader.Dispose()
             conn.Close()
             conn.Dispose()
-        Catch
+        Catch ex As Exception
+            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
         Try 'FTP STUFF
             Dim buffer(1023) As Byte
@@ -368,8 +376,15 @@ Class Attachments
             respStream.Dispose()
             resp.Close()
             resp.Dispose()
-            DownloadWorker.ReportProgress(1, "Idle...")
-            Process.Start(strFullPath)
+            DownloadWorker.ReportProgress(1, "Verifying...")
+            If GetHashOfFile(strFullPath) = FileHash Then
+                Process.Start(strFullPath)
+            Else
+                Dim blah = MsgBox("File varification failed!  The file on the database is corrupt or there was a problem writing the data do the disk.  Local and Database copyies of the attachment will now be deleted for saftey.", vbOKOnly + vbExclamation, "Hash value mismatch")
+                PurgeTempDir()
+                DeleteAttachment(FileUID)
+                'something is very wrong
+            End If
             e.Result = True
         Catch ex As Exception
             e.Result = False
