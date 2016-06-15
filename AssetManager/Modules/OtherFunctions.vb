@@ -96,10 +96,6 @@ Module OtherFunctions
         Dim blah = MsgBox("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
     End Sub
     Public Function ErrHandleNew(ex As Exception, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
-        'Dim strErrMsg As String
-        'strErrMsg = "ERROR:  MethodName=" & strOrigSub & " - " & ex.HResult & ex.Message
-        'Logger(strErrMsg)
-        Debug.Print(TypeName(ex))
         Select Case TypeName(ex)
             Case "WebException"
                 Dim handEx As Net.WebException = ex
@@ -107,7 +103,7 @@ Module OtherFunctions
                 Dim handResponse As Net.FtpWebResponse = handEx.Response
                 Select Case handResponse.StatusCode
                     Case Net.FtpStatusCode.ActionNotTakenFileUnavailable
-                        Dim blah = MsgBox("File was not found, or access was denied.", vbOKOnly + vbCritical, "Cannot Access File")
+                        Dim blah = MsgBox("FTP File was not found, or access was denied.", vbOKOnly + vbCritical, "Cannot Access FTP File")
                         Return True
                 End Select
             Case "IndexOutOfRangeException"
@@ -117,7 +113,6 @@ Module OtherFunctions
             Case "MySqlException"
                 Dim handEx As MySqlException = ex
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.Number & "  Message:" & handEx.Message)
-                Debug.Print(handEx.Number)
                 Select Case handEx.Number
                     Case 1042
                         ConnectionReady()
@@ -130,35 +125,14 @@ Module OtherFunctions
                         Dim blah = MsgBox("Something went wrong with the SQL command. See log for details.  Log= " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
                         Return True
                 End Select
+            Case "InvalidCastException"
+                Dim handEx As InvalidCastException = ex
+                Select Case handEx.HResult
+                    Case -2147467262 'DBNull to String type error. These are pretty ubiquitous and not a big deal. Move along.
+                        Return True
+                End Select
             Case Else
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                Return False
-        End Select
-    End Function
-    Public Function ErrHandleOld(lngErrNum As String, strErrDescription As String, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
-        Dim strErrMsg As String
-        strErrMsg = "ERROR:  MethodName=" & strOrigSub & " - " & lngErrNum & " - " & strErrDescription
-        Logger(strErrMsg)
-        Select Case lngErrNum
-            Case -2147467261
-                Dim blah = MsgBox("There was an error creating the file. It may no longer exist, or may be corrupted.", vbOKOnly + vbExclamation, "File Stream Error")
-                Return True
-            Case -2147467259
-                'Dim blah = MsgBox("There was an error while connecting." & vbCrLf & "Message: " & strErrDescription, vbOKOnly + vbExclamation, "Connection Error")
-                ConnectionReady()
-                Return True
-            Case 13 'null value from DB, ok to continue
-                Return True
-            Case 1042
-                'StatusBar("Connection Lost!")
-                Dim blah = MsgBox("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbCritical, "Connection Lost")
-                Return True
-            Case Net.FtpStatusCode.ActionNotTakenFileUnavailable '-2146233079 'FTP File not found error. Continue to complete DB entry removal
-                Dim blah = MsgBox("File was not found, or access was denied.", vbOKOnly + vbCritical, "Cannot Access File")
-                Return True
-            Case Else 'unhandled errors
-                'StatusBar("ERROR")
-                Dim blah = MsgBox("An unhandled error has occurred!" & vbCrLf & vbCrLf & "Message: " & vbCrLf & strErrMsg, vbOKOnly + vbCritical, "Yikes!")
                 Return False
         End Select
         Return False
@@ -180,4 +154,7 @@ Module OtherFunctions
         AssetManager.ConnStatusLabel.ForeColor = FColor
         AssetManager.Refresh()
     End Sub
+    Public Function NoNull(DBVal As Object) As String
+        Return IIf(IsDBNull(DBVal), "", DBVal.ToString)
+    End Function
 End Module

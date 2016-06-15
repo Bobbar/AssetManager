@@ -109,7 +109,6 @@ Class Attachments
         Catch ex As Exception
             DoneWaiting()
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            ' ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Exit Sub
         End Try
     End Sub
@@ -252,7 +251,6 @@ Class Attachments
             Dim infoFilepath As System.IO.FileInfo = New System.IO.FileInfo(FilePath)
             Dim ftpstream As System.IO.FileStream = infoFilepath.OpenRead()
             Dim FileHash As String = GetHashOfFile(infoFilepath.ToString)
-            Debug.Print(GetHashOfFile(infoFilepath.ToString))
             Dim flLength As Long = ftpstream.Length
             Dim reqfile As System.IO.Stream = ReturnFTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
             stpSpeed.Start()
@@ -352,7 +350,6 @@ Class Attachments
             reader.Dispose()
             conn.Close()
             conn.Dispose()
-
             'FTP STUFF
             Dim buffer(1023) As Byte
             Dim bytesIn As Integer
@@ -403,14 +400,12 @@ Class Attachments
                 DeleteAttachment(FileUID)
                 e.Result = False
             End If
-
         Catch ex As Exception
             'Dim exResp As Net.FtpWebResponse = ex.Response
             'ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             e.Result = False
             DownloadWorker.ReportProgress(2, "ERROR!")
             Logger("DOWNLOAD ERROR: " & "Device: " & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID)
-
             If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 EndProgram()
             Else

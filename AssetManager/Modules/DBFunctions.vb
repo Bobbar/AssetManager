@@ -108,9 +108,6 @@ Public Module DBFunctions
                 Return False
             End If
         Catch ex As Exception
-            ' ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            'ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            'GlobalConn.Close()
             Return False
         End Try
     End Function
@@ -196,24 +193,22 @@ Public Module DBFunctions
             End With
             reader.Close()
             'Delete FTP Attachment
-            Dim DelResult As Net.FtpStatusCode = DeleteFTPAttachment(AttachUID, strDeviceID)
-            If DelResult = Net.FtpStatusCode.FileActionOK Then
+            If DeleteFTPAttachment(AttachUID, strDeviceID) Then
                 'delete SQL entry
                 Dim strSQLDelQry As String = "DELETE FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
                 cmd.Connection = GlobalConn
                 cmd.CommandText = strSQLDelQry
                 rows = cmd.ExecuteNonQuery()
                 Return rows
-            ElseIf DelResult = Net.FtpStatusCode.ActionNotTakenFileUnavailable Then 'if file not found then we might as well remove the DB record.
-                Dim strSQLDelQry As String = "DELETE FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
-                cmd.Connection = GlobalConn
-                cmd.CommandText = strSQLDelQry
-                rows = cmd.ExecuteNonQuery()
-                Return rows
+                'Else  'if file not found then we might as well remove the DB record.
+                '    Dim strSQLDelQry As String = "DELETE FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
+                '    cmd.Connection = GlobalConn
+                '    cmd.CommandText = strSQLDelQry
+                '    rows = cmd.ExecuteNonQuery()
+                '    Return rows
             End If
             Exit Function
         Catch ex As Exception
-            'ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 Exit Try
             Else
@@ -241,7 +236,6 @@ Public Module DBFunctions
             Exit Function
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-
             Else
                 EndProgram()
             End If
@@ -251,8 +245,7 @@ Public Module DBFunctions
         Try
             If DeleteFTPDeviceFolder(strGUID) Then Return DeleteSQLDevice(strGUID) ' if ftp directory deleted successfully, then delete the sql record.
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            'ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
     Public Function DeleteSQLDevice(ByVal strGUID As String) As Integer
@@ -267,12 +260,10 @@ Public Module DBFunctions
             Exit Function
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-
             Else
                 EndProgram()
             End If
         End Try
-
     End Function
     Public Function GetEntryInfo(ByVal strGUID As String) As Device_Info
         Try
@@ -306,7 +297,6 @@ Public Module DBFunctions
                 EndProgram()
             End If
         End Try
-
     End Function
     Public Function GetDeviceUID(ByVal AssetTag As String, ByVal Serial As String) As String
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -345,7 +335,6 @@ Public Module DBFunctions
         Catch
             Return Nothing
         End Try
-
     End Function
     Public Function GetHumanValue(ByVal Type As String, ByVal ShortVal As String) As String
         Dim SearchIndex() As Combo_Data
@@ -409,7 +398,6 @@ Public Module DBFunctions
                 EndProgram()
             End If
         End Try
-
     End Sub
     Public Sub BuildChangeTypeIndex()
         Try
@@ -528,7 +516,6 @@ Public Module DBFunctions
                 EndProgram()
             End If
         End Try
-
     End Sub
     Public Function GetShortEquipType(ByVal index As Integer) As String
         Try
@@ -536,19 +523,16 @@ Public Module DBFunctions
         Catch
             Return ""
         End Try
-
     End Function
     Public Function ConnectionReady() As Boolean
         Select Case GlobalConn.State
             Case ConnectionState.Closed
-
                 Return False
             Case ConnectionState.Open
                 Return True
             Case ConnectionState.Connecting
                 Return False
             Case Else
-
                 Return False
         End Select
     End Function
@@ -561,7 +545,6 @@ Public Module DBFunctions
             da.SelectCommand.Connection = GlobalConn
             da.Fill(ds)
             rows = ds.Tables(0).Rows.Count
-            'AssetManager.DateTimeLabel.Text = ds.Tables(0).Rows(0).Item(0).ToString
             If rows > 0 Then
                 Return True
             Else
@@ -570,7 +553,6 @@ Public Module DBFunctions
             Exit Function
         Catch ex As MySqlException
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            'ErrHandle(ex, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
         End Try
     End Function
@@ -590,12 +572,14 @@ Public Module DBFunctions
                 View.ViewDevice(CurrentDevice.strGUID)
                 Dim blah = MsgBox("Update Added.", vbOKOnly + vbInformation, "Success")
             Else
+                View.ViewDevice(CurrentDevice.strGUID)
                 Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
             End If
             Exit Sub
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                Exit Try
+                View.ViewDevice(CurrentDevice.strGUID)
+                Exit Sub
             Else
                 EndProgram()
             End If

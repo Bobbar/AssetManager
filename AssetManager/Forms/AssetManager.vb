@@ -124,8 +124,6 @@ Public Class AssetManager
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         EndProgram()
     End Sub
-    Private Sub BlahToolStripMenuItem_Click(sender As Object, e As EventArgs)
-    End Sub
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         If Not BigQueryWorker.IsBusy Then
             ClickedButton = cmdShowAll
@@ -345,10 +343,8 @@ Public Class AssetManager
             End Select
             strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
             da.SelectCommand = New MySqlCommand(strQry)
-            'Debug.Print(strQry)
             da.SelectCommand.Connection = LiveConn
             da.Fill(ds)
-            'conn.Close()
             dtResults = Nothing
             dtResults = ds.Tables(0)
             Exit Sub
@@ -406,7 +402,6 @@ Public Class AssetManager
             LiveBox.Visible = False
             LiveBox.Items.Clear()
         End Try
-
     End Sub
     Private Sub QueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LiveQueryWorker.RunWorkerCompleted
         DrawLiveBox()
@@ -467,14 +462,11 @@ Public Class AssetManager
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             ConnectionReady()
         End Try
-
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
         CurrentControl = txtCurUser
         strSearchString = txtCurUser.Text
         StartLiveSearch()
-    End Sub
-    Private Sub Button2_Click_2(sender As Object, e As EventArgs)
     End Sub
     Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
         BigQueryDone()
@@ -503,21 +495,13 @@ Public Class AssetManager
         End Select
         HideLiveBox()
     End Sub
-    Private Sub LiveBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles LiveBox.KeyPress
-    End Sub
-    Private Sub txtCurUser_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser.TextChanged
-    End Sub
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs) Handles LiveBox.KeyDown
         If e.KeyCode = Keys.Enter Then LiveBoxSelect()
-    End Sub
-    Private Sub txtDescription_TextChanged(sender As Object, e As EventArgs) Handles txtDescription.TextChanged
     End Sub
     Private Sub txtSerial_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSerial.KeyDown
         If e.KeyCode = Keys.Down Then
             GiveLiveBoxFocus()
         End If
-    End Sub
-    Private Sub txtAssetTagSearch_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTagSearch.TextChanged
     End Sub
     Private Sub txtCurUser_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyDown
         If e.KeyCode = Keys.Down Then
@@ -540,8 +524,6 @@ Public Class AssetManager
         End If
         ReportView.Show()
     End Sub
-    Private Sub txtSerialSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSerialSearch.TextChanged
-    End Sub
     Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
         If e.KeyCode = Keys.Down Then
             GiveLiveBoxFocus()
@@ -556,41 +538,8 @@ Public Class AssetManager
     Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
         Clipboard.SetDataObject(Me.ResultGrid.GetClipboardContent())
     End Sub
-    Private Sub AssetManager_Leave(sender As Object, e As EventArgs) Handles Me.Leave
-    End Sub
     Private Sub LiveBox_MouseMove(sender As Object, e As MouseEventArgs) Handles LiveBox.MouseMove
         LiveBox.SelectedIndex = LiveBox.IndexFromPoint(e.Location)
-    End Sub
-    Private Sub GetDBs()
-        '        On Error GoTo errs
-        '        Dim ds As New DataSet
-        '        Dim da As New MySqlDataAdapter
-        '        Dim row As DataRow
-        '        Dim conn As New MySqlConnection(MySQLConnectString)
-        '        da.SelectCommand = New MySqlCommand("SHOW DATABASES")
-        '        da.SelectCommand.Connection = GlobalConn
-        '        da.Fill(ds)
-        '        'rows = ds.Tables(0).Rows.Count
-        '        cmbDBs.Items.Clear()
-        '        Dim item As Object
-        '        For Each row In ds.Tables(0).Rows
-        '            For Each col As DataColumn In ds.Tables(0).Columns
-        '                Debug.Print(row(col.ColumnName).ToString)
-        '                cmbDBs.Items.Add(row(col.ColumnName).ToString)
-        '            Next
-        '        Next
-        '        da.Dispose()
-        '        ds.Dispose()
-        '        Exit Sub
-        'errs:
-        '        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-        '            Resume Next
-        '        Else
-        '            EndProgram()
-        '        End If
-    End Sub
-    Private Sub ResultGrid_SelectionChanged(sender As Object, e As EventArgs) Handles ResultGrid.SelectionChanged
-        'HighlightCurrentRow()
     End Sub
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
@@ -731,12 +680,6 @@ Public Class AssetManager
             OpenConnections()
         End If
     End Sub
-    Private Sub ToolStripComboBox1_Click(sender As Object, e As EventArgs) Handles cmbDBs.Click
-    End Sub
-    Private Sub ToolStripDropDownButton2_Click(sender As Object, e As EventArgs) Handles AdminDropDown.Click
-    End Sub
-    Private Sub cmbDBs_SelectedIndexChanged(sender As Object, e As EventArgs)
-    End Sub
     Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
         Dim ViewAttachments As New Attachments
         ViewAttachments.bolAdminMode = IsAdmin()
@@ -745,15 +688,8 @@ Public Class AssetManager
         ViewAttachments.GroupBox2.Visible = False
         ViewAttachments.cmdUpload.Enabled = False
     End Sub
-    Private Sub GroupBox1_Enter(sender As Object, e As EventArgs) Handles GroupBox1.Enter
-    End Sub
-    Private Sub Button2_Click_1(sender As Object, e As EventArgs)
-        Debug.Print(CanAccess("can_run"))
-    End Sub
     Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
         MsgBox(My.Application.Info.Version.ToString)
-    End Sub
-    Private Sub txtGUID_Click(sender As Object, e As EventArgs) Handles txtGUID.Click
     End Sub
     Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
@@ -771,14 +707,10 @@ Public Class AssetManager
     Private Sub cmbLocation_DropDown(sender As Object, e As EventArgs) Handles cmbLocation.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub
-    Private Sub txtGUID_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtGUID.KeyPress
-    End Sub
     Private Sub txtGUID_KeyDown(sender As Object, e As KeyEventArgs) Handles txtGUID.KeyDown
         If e.KeyCode = Keys.Return Then
             LoadDevice(Trim(txtGUID.Text))
             txtGUID.Clear()
         End If
-    End Sub
-    Private Sub txtGUID_RightToLeftChanged(sender As Object, e As EventArgs) Handles txtGUID.RightToLeftChanged
     End Sub
 End Class

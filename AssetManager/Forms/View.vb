@@ -184,12 +184,10 @@ Public Class View
         Catch ex As Exception
             DoneWaiting()
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            'ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             If reader IsNot Nothing Then
                 reader.Close()
                 reader.Dispose()
             End If
-
             table.Dispose()
             cmd.Dispose()
             Exit Sub
@@ -249,10 +247,7 @@ Public Class View
                 Loop
             End With
             reader.Close()
-            'CloseConnection(ConnID)
             TrackingGrid.DataSource = table
-            'TrackingGrid.AutoResizeColumns()
-            'GetCurrentTracking(CurrentDevice.strGUID)
             DisableSorting(TrackingGrid)
             FillTrackingBox()
             SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
@@ -260,7 +255,6 @@ Public Class View
             DoneWaiting()
             Exit Sub
         Catch ex As Exception
-
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 DoneWaiting()
                 'Resume Next
@@ -268,7 +262,6 @@ Public Class View
                 EndProgram()
             End If
         End Try
-
     End Sub
     Private Sub DisableSorting(Grid As DataGridView)
         Dim c As DataGridViewColumn
@@ -684,7 +677,7 @@ Public Class View
         AddChild(Attachments)
         Attachments.ListAttachments(CurrentDevice.strGUID)
         'Attachments.Show()
-        'Attachments.Activate()
+        Attachments.Activate()
     End Sub
     Private DefGridBC As Color, DefGridSelCol As Color, bolGridFilling As Boolean = False
     Private Sub HighlightCurrentRow(Row As Integer)

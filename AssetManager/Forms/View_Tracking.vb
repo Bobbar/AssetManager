@@ -16,16 +16,14 @@ Public Class View_Tracking
                 Exit Sub
             End If
             Waiting()
-            'Dim ConnID As String = Guid.NewGuid.ToString
             Dim reader As MySqlDataReader
             Dim table As New DataTable
             Dim strQry = "Select * FROM trackable WHERE  track_uid = '" & EntryUID & "'"
-            Dim cmd As New MySqlCommand(strQry, GlobalConn) 'GetConnection(ConnID).DBConnection)
+            Dim cmd As New MySqlCommand(strQry, GlobalConn)
             reader = cmd.ExecuteReader
             With reader
                 Do While .Read()
                     txtTimeStamp.Text = !track_datestamp
-                    'txtCheckUser.Text = !track_
                     txtCheckType.Text = !track_check_type
                     If txtCheckType.Text = "IN" Then
                         txtCheckType.BackColor = colCheckIn
@@ -33,22 +31,18 @@ Public Class View_Tracking
                         txtCheckType.BackColor = colCheckOut
                     End If
                     txtDescription.Text = CurrentDevice.strDescription
-                    txtGUID.Text = !track_device_uid
-                    txtCheckOutUser.Text = !track_checkout_user
-                    txtCheckInUser.Text = !track_checkin_user
-                    txtLocation.Text = !track_use_location
-                    'txtPONumber.Text = !hist_po
+                    txtGUID.Text = NoNull(!track_device_uid)
+                    txtCheckOutUser.Text = NoNull(!track_checkout_user)
+                    txtCheckInUser.Text = NoNull(!track_checkin_user)
+                    txtLocation.Text = NoNull(!track_use_location)
                     txtAssetTag.Text = CurrentDevice.strAssetTag
-                    txtCheckOutTime.Text = !track_checkout_time
-                    txtDueBack.Text = !track_dueback_date
+                    txtCheckOutTime.Text = NoNull(!track_checkout_time)
+                    txtDueBack.Text = NoNull(!track_dueback_date)
                     txtSerial.Text = CurrentDevice.strSerial
-                    txtCheckInTime.Text = !track_checkin_time
-                    'txtEQType.Text = GetHumanValue(ComboType.EquipType,!hist_eq_type)
-                    txtNotes.Text = !track_notes
-                    'txtStatus.Text = GetHumanValue(ComboType.StatusType,!hist_status)
-                    txtEntryGUID.Text = !track_uid
-                    'chkTrackable.Checked = CBool(!hist_trackable)
-                    Me.Text = Me.Text + " - " &!track_datestamp
+                    txtCheckInTime.Text = NoNull(!track_checkin_time)
+                    txtNotes.Text = NoNull(!track_notes)
+                    txtEntryGUID.Text = NoNull(!track_uid)
+                    Me.Text = Me.Text + " - " & NoNull(!track_datestamp)
                 Loop
             End With
             reader.Close()
@@ -56,10 +50,12 @@ Public Class View_Tracking
             DoneWaiting()
             Exit Sub
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Else
+                Exit Sub
+            End If
             'If Err.Number = 13 Then Resume Next
         End Try
-
     End Sub
     Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
     End Sub
