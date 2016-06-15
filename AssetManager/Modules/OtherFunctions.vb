@@ -1,5 +1,7 @@
-﻿Imports System.Environment
+﻿Option Explicit On
+Imports System.Environment
 Imports System.IO
+Imports MySql.Data.MySqlClient
 Module OtherFunctions
     Public strLogDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
     Public strLogName As String = "log.log"
@@ -93,7 +95,47 @@ Module OtherFunctions
     Public Sub ConnectionNotReady()
         Dim blah = MsgBox("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
     End Sub
-    Public Function ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
+    Public Function ErrHandleNew(ex As Exception, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
+        'Dim strErrMsg As String
+        'strErrMsg = "ERROR:  MethodName=" & strOrigSub & " - " & ex.HResult & ex.Message
+        'Logger(strErrMsg)
+        Debug.Print(TypeName(ex))
+        Select Case TypeName(ex)
+            Case "WebException"
+                Dim handEx As Net.WebException = ex
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.Status & "  Message:" & handEx.Message)
+                Dim handResponse As Net.FtpWebResponse = handEx.Response
+                Select Case handResponse.StatusCode
+                    Case Net.FtpStatusCode.ActionNotTakenFileUnavailable
+                        Dim blah = MsgBox("File was not found, or access was denied.", vbOKOnly + vbCritical, "Cannot Access File")
+                        Return True
+                End Select
+            Case "IndexOutOfRangeException"
+                Dim handEx As IndexOutOfRangeException = ex
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.HResult & "  Message:" & handEx.Message)
+                Return True
+            Case "MySqlException"
+                Dim handEx As MySqlException = ex
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.Number & "  Message:" & handEx.Message)
+                Debug.Print(handEx.Number)
+                Select Case handEx.Number
+                    Case 1042
+                        ConnectionReady()
+                        Dim blah = MsgBox("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbCritical, "Connection Lost")
+                        Return True
+                    Case 1064
+                        Dim blah = MsgBox("Something went wrong with the SQL command. See log for details.  Log= " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
+                        Return True
+                    Case 1292
+                        Dim blah = MsgBox("Something went wrong with the SQL command. See log for details.  Log= " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
+                        Return True
+                End Select
+            Case Else
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Return False
+        End Select
+    End Function
+    Public Function ErrHandleOld(lngErrNum As String, strErrDescription As String, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
         Dim strErrMsg As String
         strErrMsg = "ERROR:  MethodName=" & strOrigSub & " - " & lngErrNum & " - " & strErrDescription
         Logger(strErrMsg)
@@ -102,7 +144,7 @@ Module OtherFunctions
                 Dim blah = MsgBox("There was an error creating the file. It may no longer exist, or may be corrupted.", vbOKOnly + vbExclamation, "File Stream Error")
                 Return True
             Case -2147467259
-                Dim blah = MsgBox("There was an error while connecting." & vbCrLf & "Message: " & strErrDescription, vbOKOnly + vbExclamation, "Connection Error")
+                'Dim blah = MsgBox("There was an error while connecting." & vbCrLf & "Message: " & strErrDescription, vbOKOnly + vbExclamation, "Connection Error")
                 ConnectionReady()
                 Return True
             Case 13 'null value from DB, ok to continue
@@ -111,7 +153,7 @@ Module OtherFunctions
                 'StatusBar("Connection Lost!")
                 Dim blah = MsgBox("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbCritical, "Connection Lost")
                 Return True
-            Case -2146233079 'FTP File not found error. Continue to complete DB entry removal
+            Case Net.FtpStatusCode.ActionNotTakenFileUnavailable '-2146233079 'FTP File not found error. Continue to complete DB entry removal
                 Dim blah = MsgBox("File was not found, or access was denied.", vbOKOnly + vbCritical, "Cannot Access File")
                 Return True
             Case Else 'unhandled errors

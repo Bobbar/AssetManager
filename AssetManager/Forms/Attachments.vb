@@ -106,9 +106,10 @@ Class Attachments
             Me.Show()
             bolGridFilling = False
             Exit Sub
-        Catch ex As MySqlException
+        Catch ex As Exception
             DoneWaiting()
-            ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ' ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Exit Sub
         End Try
     End Sub
@@ -194,6 +195,7 @@ Class Attachments
                 DoneWaiting()
                 blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
             Else
+                DoneWaiting()
                 blah = MsgBox("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results")
             End If
         End If
@@ -292,7 +294,8 @@ Class Attachments
             conn.Close()
             conn.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
-            If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
+            'ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
     End Sub
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
@@ -349,10 +352,8 @@ Class Attachments
             reader.Dispose()
             conn.Close()
             conn.Dispose()
-        Catch ex As Exception
-            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
-        Try 'FTP STUFF
+
+            'FTP STUFF
             Dim buffer(1023) As Byte
             Dim bytesIn As Integer
             Dim totalBytesIn As Integer
@@ -404,13 +405,16 @@ Class Attachments
             End If
 
         Catch ex As Exception
+            'Dim exResp As Net.FtpWebResponse = ex.Response
+            'ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             e.Result = False
             DownloadWorker.ReportProgress(2, "ERROR!")
             Logger("DOWNLOAD ERROR: " & "Device: " & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID)
-            If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+
+            If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 EndProgram()
             Else
-                e.Result = Success
+                e.Result = False
             End If
         End Try
     End Sub

@@ -181,11 +181,15 @@ Public Class View
             ViewTracking(CurrentDevice.strGUID)
             DoneWaiting()
             Me.Show()
-        Catch ex As MySqlException
+        Catch ex As Exception
             DoneWaiting()
-            ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            reader.Close()
-            reader.Dispose()
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            'ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            If reader IsNot Nothing Then
+                reader.Close()
+                reader.Dispose()
+            End If
+
             table.Dispose()
             cmd.Dispose()
             Exit Sub
@@ -206,62 +210,65 @@ Public Class View
         Me.Refresh()
     End Sub
     Public Sub ViewTracking(strGUID As String)
-        On Error GoTo errs
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
-        Waiting()
-        'Dim ConnID As String = Guid.NewGuid.ToString
-        Dim reader As MySqlDataReader
-        Dim table As New DataTable
-        Dim strQry = "Select * FROM trackable, devices WHERE track_device_uid = dev_UID And track_device_uid = '" & strGUID & "' ORDER BY track_datestamp DESC"
-        Dim cmd As New MySqlCommand(strQry, GlobalConn)
-        reader = cmd.ExecuteReader
-        table.Columns.Add("Date", GetType(String))
-        table.Columns.Add("Check Type", GetType(String))
-        table.Columns.Add("Check Out User", GetType(String))
-        table.Columns.Add("Check In User", GetType(String))
-        table.Columns.Add("Check Out", GetType(String))
-        table.Columns.Add("Check In", GetType(String))
-        table.Columns.Add("Due Back", GetType(String))
-        table.Columns.Add("Location", GetType(String))
-        table.Columns.Add("GUID", GetType(String))
-        Dim i As Integer
-        i = 0
-        With reader
-            Do While .Read()
-                If i < 1 Then 'collect most current info
-                    CurrentDevice.Tracking.strCheckOutTime = IIf(IsDBNull(!track_checkout_time), "",!track_checkout_time)
-                    CurrentDevice.Tracking.strCheckInTime = IIf(IsDBNull(!track_checkin_time), "",!track_checkin_time)
-                    CurrentDevice.Tracking.strUseLocation = !track_use_location
-                    CurrentDevice.Tracking.strCheckOutUser = !track_checkout_user
-                    CurrentDevice.Tracking.strCheckInUser = IIf(IsDBNull(!track_checkin_user), "",!track_checkin_user)
-                    CurrentDevice.Tracking.strDueBackTime = !track_dueback_date
-                    CurrentDevice.Tracking.strUseReason = !track_notes
-                End If
-                table.Rows.Add(!track_datestamp,!track_check_type,!track_checkout_user,!track_checkin_user,!track_checkout_time,!track_checkin_time,!track_dueback_date,!track_use_location,!track_uid)
-                i += 1
-            Loop
-        End With
-        reader.Close()
-        'CloseConnection(ConnID)
-        TrackingGrid.DataSource = table
-        'TrackingGrid.AutoResizeColumns()
-        'GetCurrentTracking(CurrentDevice.strGUID)
-        DisableSorting(TrackingGrid)
-        FillTrackingBox()
-        SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
-        TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
-        DoneWaiting()
-        Exit Sub
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+        Try
+            If Not ConnectionReady() Then
+                ConnectionNotReady()
+                Exit Sub
+            End If
+            Waiting()
+            'Dim ConnID As String = Guid.NewGuid.ToString
+            Dim reader As MySqlDataReader
+            Dim table As New DataTable
+            Dim strQry = "Select * FROM trackable, devices WHERE track_device_uid = dev_UID And track_device_uid = '" & strGUID & "' ORDER BY track_datestamp DESC"
+            Dim cmd As New MySqlCommand(strQry, GlobalConn)
+            reader = cmd.ExecuteReader
+            table.Columns.Add("Date", GetType(String))
+            table.Columns.Add("Check Type", GetType(String))
+            table.Columns.Add("Check Out User", GetType(String))
+            table.Columns.Add("Check In User", GetType(String))
+            table.Columns.Add("Check Out", GetType(String))
+            table.Columns.Add("Check In", GetType(String))
+            table.Columns.Add("Due Back", GetType(String))
+            table.Columns.Add("Location", GetType(String))
+            table.Columns.Add("GUID", GetType(String))
+            Dim i As Integer
+            i = 0
+            With reader
+                Do While .Read()
+                    If i < 1 Then 'collect most current info
+                        CurrentDevice.Tracking.strCheckOutTime = IIf(IsDBNull(!track_checkout_time), "",!track_checkout_time)
+                        CurrentDevice.Tracking.strCheckInTime = IIf(IsDBNull(!track_checkin_time), "",!track_checkin_time)
+                        CurrentDevice.Tracking.strUseLocation = !track_use_location
+                        CurrentDevice.Tracking.strCheckOutUser = !track_checkout_user
+                        CurrentDevice.Tracking.strCheckInUser = IIf(IsDBNull(!track_checkin_user), "",!track_checkin_user)
+                        CurrentDevice.Tracking.strDueBackTime = !track_dueback_date
+                        CurrentDevice.Tracking.strUseReason = !track_notes
+                    End If
+                    table.Rows.Add(!track_datestamp,!track_check_type,!track_checkout_user,!track_checkin_user,!track_checkout_time,!track_checkin_time,!track_dueback_date,!track_use_location,!track_uid)
+                    i += 1
+                Loop
+            End With
+            reader.Close()
+            'CloseConnection(ConnID)
+            TrackingGrid.DataSource = table
+            'TrackingGrid.AutoResizeColumns()
+            'GetCurrentTracking(CurrentDevice.strGUID)
+            DisableSorting(TrackingGrid)
+            FillTrackingBox()
+            SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
+            TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
             DoneWaiting()
-            Resume Next
-        Else
-            EndProgram()
-        End If
+            Exit Sub
+        Catch ex As Exception
+
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                DoneWaiting()
+                'Resume Next
+            Else
+                EndProgram()
+            End If
+        End Try
+
     End Sub
     Private Sub DisableSorting(Grid As DataGridView)
         Dim c As DataGridViewColumn

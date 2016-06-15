@@ -108,7 +108,8 @@ Public Module DBFunctions
                 Return False
             End If
         Catch ex As Exception
-            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ' ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            'ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             'GlobalConn.Close()
             Return False
         End Try
@@ -120,7 +121,7 @@ Public Module DBFunctions
             GlobalConn.Dispose()
             LiveConn.Dispose()
         Catch ex As Exception
-            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
         End Try
         Return True
@@ -195,7 +196,7 @@ Public Module DBFunctions
             End With
             reader.Close()
             'Delete FTP Attachment
-            Dim DelResult As Object = DeleteFTPAttachment(AttachUID, strDeviceID)
+            Dim DelResult As Net.FtpStatusCode = DeleteFTPAttachment(AttachUID, strDeviceID)
             If DelResult = Net.FtpStatusCode.FileActionOK Then
                 'delete SQL entry
                 Dim strSQLDelQry As String = "DELETE FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
@@ -203,7 +204,7 @@ Public Module DBFunctions
                 cmd.CommandText = strSQLDelQry
                 rows = cmd.ExecuteNonQuery()
                 Return rows
-            ElseIf DelResult = 550 Then 'if file not found then we might as well remove the DB record.
+            ElseIf DelResult = Net.FtpStatusCode.ActionNotTakenFileUnavailable Then 'if file not found then we might as well remove the DB record.
                 Dim strSQLDelQry As String = "DELETE FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
                 cmd.Connection = GlobalConn
                 cmd.CommandText = strSQLDelQry
@@ -212,7 +213,8 @@ Public Module DBFunctions
             End If
             Exit Function
         Catch ex As Exception
-            If ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            'ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 Exit Try
             Else
                 EndProgram()
@@ -221,102 +223,90 @@ Public Module DBFunctions
         Return -1
     End Function
     Public Function GetShortLocation(ByVal index As Integer) As String
-        On Error GoTo errs
-        Return Locations(index).strShort
-        Exit Function
-errs:
-        Return ""
+        Try
+            Return Locations(index).strShort
+        Catch
+            Return ""
+        End Try
     End Function
     Public Function DeleteEntry(ByVal strGUID As String) As Integer
-        On Error GoTo errs
-        Dim cmd As New MySqlCommand
-        Dim rows
-        Dim strSQLQry As String = "DELETE FROM historical WHERE hist_uid='" & strGUID & "'"
-        cmd.Connection = GlobalConn
-        cmd.CommandText = strSQLQry
-        rows = cmd.ExecuteNonQuery()
-        Return rows
-        Exit Function
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
-    End Function
-    Public Function LockEntry(ByVal strGUID As String) As Integer
-        On Error GoTo errs
-        Dim cmd As New MySqlCommand
-        Dim rows
-        Dim strSQLQry As String = "SELECT * FROM devices WHERE dev_UID='" & strGUID & "' FOR UPDATE OF *"
-        Debug.Print(strSQLQry)
-        cmd.Connection = GlobalConn
-        cmd.CommandText = strSQLQry
-        rows = cmd.ExecuteNonQuery
-        Return rows
-        Exit Function
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
+        Try
+            Dim cmd As New MySqlCommand
+            Dim rows
+            Dim strSQLQry As String = "DELETE FROM historical WHERE hist_uid='" & strGUID & "'"
+            cmd.Connection = GlobalConn
+            cmd.CommandText = strSQLQry
+            rows = cmd.ExecuteNonQuery()
+            Return rows
+            Exit Function
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+
+            Else
+                EndProgram()
+            End If
+        End Try
     End Function
     Public Function DeleteDevice(ByVal strGUID As String) As Boolean
         Try
             If DeleteFTPDeviceFolder(strGUID) Then Return DeleteSQLDevice(strGUID) ' if ftp directory deleted successfully, then delete the sql record.
         Catch ex As Exception
-            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            'ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
     Public Function DeleteSQLDevice(ByVal strGUID As String) As Integer
-        On Error GoTo errs
-        Dim cmd As New MySqlCommand
-        Dim rows
-        Dim strSQLQry As String = "DELETE FROM devices WHERE dev_UID='" & strGUID & "'"
-        cmd.Connection = GlobalConn
-        cmd.CommandText = strSQLQry
-        rows = cmd.ExecuteNonQuery()
-        Return rows
-        Exit Function
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
+        Try
+            Dim cmd As New MySqlCommand
+            Dim rows
+            Dim strSQLQry As String = "DELETE FROM devices WHERE dev_UID='" & strGUID & "'"
+            cmd.Connection = GlobalConn
+            cmd.CommandText = strSQLQry
+            rows = cmd.ExecuteNonQuery()
+            Return rows
+            Exit Function
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+
+            Else
+                EndProgram()
+            End If
+        End Try
+
     End Function
     Public Function GetEntryInfo(ByVal strGUID As String) As Device_Info
-        On Error GoTo errs
-        If Not ConnectionReady() Then
+        Try
+            If Not ConnectionReady() Then
+                Exit Function
+            End If
+            Dim tmpInfo As Device_Info
+            Dim reader As MySqlDataReader
+            Dim UID As String
+            Dim strQry = "SELECT * FROM historical WHERE hist_uid='" & strGUID & "'"
+            Dim cmd As New MySqlCommand(strQry, GlobalConn)
+            reader = cmd.ExecuteReader
+            With reader
+                Do While .Read()
+                    tmpInfo.Historical.strChangeType = GetHumanValue(ComboType.ChangeType,!hist_change_type)
+                    tmpInfo.strAssetTag = !hist_asset_tag
+                    tmpInfo.strCurrentUser = !hist_cur_user
+                    tmpInfo.strSerial = !hist_serial
+                    tmpInfo.strDescription = !hist_description
+                    tmpInfo.Historical.dtActionDateTime = !hist_action_datetime
+                    tmpInfo.Historical.strActionUser = !hist_action_user
+                Loop
+            End With
+            reader.Close()
+            Return tmpInfo
             Exit Function
-        End If
-        Dim tmpInfo As Device_Info
-        Dim reader As MySqlDataReader
-        Dim UID As String
-        Dim strQry = "SELECT * FROM historical WHERE hist_uid='" & strGUID & "'"
-        Dim cmd As New MySqlCommand(strQry, GlobalConn)
-        reader = cmd.ExecuteReader
-        With reader
-            Do While .Read()
-                tmpInfo.Historical.strChangeType = GetHumanValue(ComboType.ChangeType,!hist_change_type)
-                tmpInfo.strAssetTag = !hist_asset_tag
-                tmpInfo.strCurrentUser = !hist_cur_user
-                tmpInfo.strSerial = !hist_serial
-                tmpInfo.strDescription = !hist_description
-                tmpInfo.Historical.dtActionDateTime = !hist_action_datetime
-                tmpInfo.Historical.strActionUser = !hist_action_user
-            Loop
-        End With
-        reader.Close()
-        Return tmpInfo
-        Exit Function
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
+
     End Function
     Public Function GetDeviceUID(ByVal AssetTag As String, ByVal Serial As String) As String
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -334,27 +324,28 @@ errs:
         Return UID
     End Function
     Public Function GetDBValue(ByVal IndexType As String, ByVal index As Integer) As Object
-        On Error GoTo errs
-        If index > -1 Then
-            Select Case IndexType
-                Case ComboType.Location
-                    Return Locations(index).strShort
-                Case ComboType.ChangeType
-                    Return ChangeType(index).strShort
-                Case ComboType.EquipType
-                    Return EquipType(index).strShort
-                Case ComboType.OSType
-                    Return OSType(index).strShort
-                Case ComboType.StatusType
-                    Return StatusType(index).strShort
-                Case Else
-                    Return Nothing
-            End Select
-        End If
-        Return Nothing
-        Exit Function
-errs:
-        Return Nothing
+        Try
+            If index > -1 Then
+                Select Case IndexType
+                    Case ComboType.Location
+                        Return Locations(index).strShort
+                    Case ComboType.ChangeType
+                        Return ChangeType(index).strShort
+                    Case ComboType.EquipType
+                        Return EquipType(index).strShort
+                    Case ComboType.OSType
+                        Return OSType(index).strShort
+                    Case ComboType.StatusType
+                        Return StatusType(index).strShort
+                    Case Else
+                        Return Nothing
+                End Select
+            End If
+            Return Nothing
+        Catch
+            Return Nothing
+        End Try
+
     End Function
     Public Function GetHumanValue(ByVal Type As String, ByVal ShortVal As String) As String
         Dim SearchIndex() As Combo_Data
@@ -391,165 +382,173 @@ errs:
         Return Nothing
     End Function
     Public Sub BuildLocationIndex()
-        On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim reader As MySqlDataReader
-        Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
-        Dim cmd As New MySqlCommand(strQRY, GlobalConn)
-        Dim row As Integer
-        reader = cmd.ExecuteReader
-        ReDim Locations(0)
-        row = -1
-        With reader
-            Do While .Read()
-                row = row + 1
-                ReDim Preserve Locations(row)
-                Locations(row).strID = !combo_ID
-                Locations(row).strLong = !combo_data_human
-                Locations(row).strShort = !combo_data_db
-            Loop
-        End With
-        reader.Close()
-        Exit Sub
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
+        Try
+            Dim ConnID As String = Guid.NewGuid.ToString
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
+            Dim cmd As New MySqlCommand(strQRY, GlobalConn)
+            Dim row As Integer
+            reader = cmd.ExecuteReader
+            ReDim Locations(0)
+            row = -1
+            With reader
+                Do While .Read()
+                    row = row + 1
+                    ReDim Preserve Locations(row)
+                    Locations(row).strID = !combo_ID
+                    Locations(row).strLong = !combo_data_human
+                    Locations(row).strShort = !combo_data_db
+                Loop
+            End With
+            reader.Close()
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
+
     End Sub
     Public Sub BuildChangeTypeIndex()
-        On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim reader As MySqlDataReader
-        Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
-        Dim cmd As New MySqlCommand(strQRY, GlobalConn)
-        Dim row As Integer
-        reader = cmd.ExecuteReader
-        ReDim ChangeType(0)
-        row = -1
-        With reader
-            Do While .Read()
-                row = row + 1
-                ReDim Preserve ChangeType(row)
-                ChangeType(row).strID = !combo_ID
-                ChangeType(row).strLong = !combo_data_human
-                ChangeType(row).strShort = !combo_data_db
-            Loop
-        End With
-        'CloseConnection(ConnID)
-        reader.Close()
-        Exit Sub
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
+        Try
+            Dim ConnID As String = Guid.NewGuid.ToString
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
+            Dim cmd As New MySqlCommand(strQRY, GlobalConn)
+            Dim row As Integer
+            reader = cmd.ExecuteReader
+            ReDim ChangeType(0)
+            row = -1
+            With reader
+                Do While .Read()
+                    row = row + 1
+                    ReDim Preserve ChangeType(row)
+                    ChangeType(row).strID = !combo_ID
+                    ChangeType(row).strLong = !combo_data_human
+                    ChangeType(row).strShort = !combo_data_db
+                Loop
+            End With
+            'CloseConnection(ConnID)
+            reader.Close()
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
     End Sub
     Public Sub BuildEquipTypeIndex()
-        On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim reader As MySqlDataReader
-        Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
-        Dim cmd As New MySqlCommand(strQRY, GlobalConn)
-        Dim row As Integer
-        reader = cmd.ExecuteReader
-        ReDim EquipType(0)
-        row = -1
-        With reader
-            Do While .Read()
-                row = row + 1
-                ReDim Preserve EquipType(row)
-                EquipType(row).strID = !combo_ID
-                EquipType(row).strLong = !combo_data_human
-                EquipType(row).strShort = !combo_data_db
-            Loop
-        End With
-        'CloseConnection(ConnID)
-        reader.Close()
-        Exit Sub
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
+        Try
+            Dim ConnID As String = Guid.NewGuid.ToString
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
+            Dim cmd As New MySqlCommand(strQRY, GlobalConn)
+            Dim row As Integer
+            reader = cmd.ExecuteReader
+            ReDim EquipType(0)
+            row = -1
+            With reader
+                Do While .Read()
+                    row = row + 1
+                    ReDim Preserve EquipType(row)
+                    EquipType(row).strID = !combo_ID
+                    EquipType(row).strLong = !combo_data_human
+                    EquipType(row).strShort = !combo_data_db
+                Loop
+            End With
+            'CloseConnection(ConnID)
+            reader.Close()
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
     End Sub
     Public Sub BuildOSTypeIndex()
-        On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim reader As MySqlDataReader
-        Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
-        Dim cmd As New MySqlCommand(strQRY, GlobalConn)
-        Dim row As Integer
-        reader = cmd.ExecuteReader
-        ReDim OSType(0)
-        row = -1
-        With reader
-            Do While .Read()
-                row = row + 1
-                ReDim Preserve OSType(row)
-                OSType(row).strID = !combo_ID
-                OSType(row).strLong = !combo_data_human
-                OSType(row).strShort = !combo_data_db
-            Loop
-        End With
-        reader.Close()
-        Exit Sub
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
+        Try
+            Dim ConnID As String = Guid.NewGuid.ToString
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
+            Dim cmd As New MySqlCommand(strQRY, GlobalConn)
+            Dim row As Integer
+            reader = cmd.ExecuteReader
+            ReDim OSType(0)
+            row = -1
+            With reader
+                Do While .Read()
+                    row = row + 1
+                    ReDim Preserve OSType(row)
+                    OSType(row).strID = !combo_ID
+                    OSType(row).strLong = !combo_data_human
+                    OSType(row).strShort = !combo_data_db
+                Loop
+            End With
+            reader.Close()
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
     End Sub
     Public Sub BuildStatusTypeIndex()
-        On Error GoTo errs
-        Dim ConnID As String = Guid.NewGuid.ToString
-        Dim reader As MySqlDataReader
-        Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
-        Dim cmd As New MySqlCommand(strGetDevices, GlobalConn)
-        Dim row As Integer
-        reader = cmd.ExecuteReader
-        ReDim StatusType(0)
-        row = -1
-        With reader
-            Do While .Read()
-                row = row + 1
-                ReDim Preserve StatusType(row)
-                StatusType(row).strID = !combo_ID
-                StatusType(row).strLong = !combo_data_human
-                StatusType(row).strShort = !combo_data_db
-            Loop
-        End With
-        reader.Close()
-        Exit Sub
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
+        Try
+            Dim ConnID As String = Guid.NewGuid.ToString
+            Dim reader As MySqlDataReader
+            Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
+            Dim cmd As New MySqlCommand(strGetDevices, GlobalConn)
+            Dim row As Integer
+            reader = cmd.ExecuteReader
+            ReDim StatusType(0)
+            row = -1
+            With reader
+                Do While .Read()
+                    row = row + 1
+                    ReDim Preserve StatusType(row)
+                    StatusType(row).strID = !combo_ID
+                    StatusType(row).strLong = !combo_data_human
+                    StatusType(row).strShort = !combo_data_db
+                Loop
+            End With
+            reader.Close()
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
+
     End Sub
     Public Function GetShortEquipType(ByVal index As Integer) As String
-        On Error GoTo errs
-        Return EquipType(index).strShort
-        Exit Function
-errs:
-        Return ""
+        Try
+            Return EquipType(index).strShort
+        Catch
+            Return ""
+        End Try
+
     End Function
     Public Function ConnectionReady() As Boolean
         Select Case GlobalConn.State
             Case ConnectionState.Closed
-                If Not AssetManager.ReconnectThread.IsBusy Then AssetManager.ReconnectThread.RunWorkerAsync()
+
                 Return False
             Case ConnectionState.Open
                 Return True
             Case ConnectionState.Connecting
                 Return False
             Case Else
-                If Not AssetManager.ReconnectThread.IsBusy Then AssetManager.ReconnectThread.RunWorkerAsync()
+
                 Return False
         End Select
     End Function
@@ -570,34 +569,36 @@ errs:
             End If
             Exit Function
         Catch ex As MySqlException
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             'ErrHandle(ex, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
         End Try
     End Function
     Public Sub UpdateDevice()
-        On Error GoTo errs
-        Dim rows As Integer
-        Dim strSQLQry1 = "UPDATE devices SET dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(View.NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
-        Dim cmd As New MySqlCommand
-        cmd.Connection = GlobalConn
-        cmd.CommandText = strSQLQry1
-        rows = rows + cmd.ExecuteNonQuery()
-        Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & View.NewData.strNote & "','" & View.NewData.strSerial & "','" & View.NewData.strDescription & "','" & View.NewData.strLocation & "','" & View.NewData.strCurrentUser & "','" & View.NewData.strAssetTag & "','" & View.NewData.dtPurchaseDate & "','" & View.NewData.strReplaceYear & "','" & View.NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & View.NewData.strEqType & "','" & View.NewData.strStatus & "','" & Convert.ToInt32(View.NewData.bolTrackable) & "')"
-        cmd.CommandText = strSqlQry2
-        rows = rows + cmd.ExecuteNonQuery()
-        UpdateDev.strNewNote = Nothing
-        If rows = 2 Then
-            View.ViewDevice(CurrentDevice.strGUID)
-            Dim blah = MsgBox("Update Added.", vbOKOnly + vbInformation, "Success")
-        Else
-            Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
-        End If
-        Exit Sub
-errs:
-        If ErrHandle(Err.Number, Err.Description, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Resume Next
-        Else
-            EndProgram()
-        End If
+        Try
+            Dim rows As Integer
+            Dim strSQLQry1 = "UPDATE devices SET dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(View.NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
+            Dim cmd As New MySqlCommand
+            cmd.Connection = GlobalConn
+            cmd.CommandText = strSQLQry1
+            rows = rows + cmd.ExecuteNonQuery()
+            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & View.NewData.strNote & "','" & View.NewData.strSerial & "','" & View.NewData.strDescription & "','" & View.NewData.strLocation & "','" & View.NewData.strCurrentUser & "','" & View.NewData.strAssetTag & "','" & View.NewData.dtPurchaseDate & "','" & View.NewData.strReplaceYear & "','" & View.NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & View.NewData.strEqType & "','" & View.NewData.strStatus & "','" & Convert.ToInt32(View.NewData.bolTrackable) & "')"
+            cmd.CommandText = strSqlQry2
+            rows = rows + cmd.ExecuteNonQuery()
+            UpdateDev.strNewNote = Nothing
+            If rows = 2 Then
+                View.ViewDevice(CurrentDevice.strGUID)
+                Dim blah = MsgBox("Update Added.", vbOKOnly + vbInformation, "Success")
+            Else
+                Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
+            End If
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
     End Sub
 End Module

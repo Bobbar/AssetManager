@@ -1,16 +1,17 @@
 ﻿Module FTPFunctions
     Public FTPcreds As Net.NetworkCredential = New Net.NetworkCredential(strFTPUser, strFTPPass)
-    Public Function DeleteFTPAttachment(AttachUID As String, DeviceUID As String) As Object
+    Public Function DeleteFTPAttachment(AttachUID As String, DeviceUID As String) As Net.FtpStatusCode
         Dim resp As Net.FtpWebResponse = Nothing
         Try
             resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/" & AttachUID, Net.WebRequestMethods.Ftp.DeleteFile)
             Return resp.StatusCode
-        Catch ex As Net.WebException
-            If ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                If ex.HResult = -2146233079 Then
-                    Return 550  ' file not found result.
-                End If
-            End If
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return resp.StatusCode
+            'If ex.HResult = -2146233079 Then
+            '    Return 550  ' file not found result.
+            'End If
+
         End Try
     End Function
     Public Function DeleteFTPDeviceFolder(DeviceUID As String) As Boolean
@@ -40,7 +41,7 @@
                 Return False
             End If
         Catch ex As Exception
-            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
         End Try
     End Function
@@ -55,6 +56,7 @@
                 Return .GetResponse
             End With
         Catch ex As Exception
+            'ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             'ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return request.GetResponse
         End Try
@@ -70,7 +72,7 @@
                 Return .GetRequestStream
             End With
         Catch ex As Exception
-            ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
 End Module

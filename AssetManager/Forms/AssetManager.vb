@@ -238,13 +238,14 @@ Public Class AssetManager
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
     End Sub
     Private Sub HideLiveBox()
-        On Error GoTo errs
-        LiveBox.Visible = False
-        LiveBox.Items.Clear()
-        If CurrentControl.Parent.Name = "InstantGroup" Then
-            CurrentControl.Text = ""
-        End If
-errs:
+        Try
+            LiveBox.Visible = False
+            LiveBox.Items.Clear()
+            If CurrentControl.Parent.Name = "InstantGroup" Then
+                CurrentControl.Text = ""
+            End If
+        Catch
+        End Try
     End Sub
     Private Sub LoadDevice(ByVal strGUID As String)
         If Not ConnectionReady() Then
@@ -325,34 +326,35 @@ errs:
         AddNew.Show()
     End Sub
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles LiveQueryWorker.DoWork
-        On Error GoTo errs
-        strPrevSearchString = strSearchString
-        Dim ds As New DataSet
-        Dim da As New MySqlDataAdapter
-        Dim RowLimit As Integer = 15
-        Dim strQryRow As String
-        Dim strQry As String
-        Select Case CurrentControl.Name
-            Case "txtAssetTag"
-                strQryRow = "dev_asset_tag"
-            Case "txtSerial"
-                strQryRow = "dev_serial"
-            Case "txtCurUser"
-                strQryRow = "dev_cur_user"
-            Case "txtDescription"
-                strQryRow = "dev_description"
-        End Select
-        strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
-        da.SelectCommand = New MySqlCommand(strQry)
-        'Debug.Print(strQry)
-        da.SelectCommand.Connection = LiveConn
-        da.Fill(ds)
-        'conn.Close()
-        dtResults = Nothing
-        dtResults = ds.Tables(0)
-        Exit Sub
-errs:
-        ConnectionReady()
+        Try
+            strPrevSearchString = strSearchString
+            Dim ds As New DataSet
+            Dim da As New MySqlDataAdapter
+            Dim RowLimit As Integer = 15
+            Dim strQryRow As String
+            Dim strQry As String
+            Select Case CurrentControl.Name
+                Case "txtAssetTag"
+                    strQryRow = "dev_asset_tag"
+                Case "txtSerial"
+                    strQryRow = "dev_serial"
+                Case "txtCurUser"
+                    strQryRow = "dev_cur_user"
+                Case "txtDescription"
+                    strQryRow = "dev_description"
+            End Select
+            strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
+            da.SelectCommand = New MySqlCommand(strQry)
+            'Debug.Print(strQry)
+            da.SelectCommand.Connection = LiveConn
+            da.Fill(ds)
+            'conn.Close()
+            dtResults = Nothing
+            dtResults = ds.Tables(0)
+            Exit Sub
+        Catch
+            ConnectionReady()
+        End Try
     End Sub
     Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
         CurrentControl = txtAssetTag
@@ -360,49 +362,51 @@ errs:
         StartLiveSearch()
     End Sub
     Private Sub DrawLiveBox()
-        On Error GoTo errs
-        If dtResults.Rows.Count < 1 Then
-            LiveBox.Visible = False
+        Try
+            If dtResults.Rows.Count < 1 Then
+                LiveBox.Visible = False
+                Exit Sub
+            End If
+            Dim dr As DataRow
+            Dim strQryRow As String
+            Dim CntGroup As GroupBox
+            CntGroup = CurrentControl.Parent
+            Select Case CurrentControl.Name
+                Case "txtAssetTag"
+                    strQryRow = "dev_asset_tag"
+                Case "txtSerial"
+                    strQryRow = "dev_serial"
+                Case "txtCurUser"
+                    strQryRow = "dev_cur_user"
+                Case "txtDescription"
+                    strQryRow = "dev_description"
+            End Select
+            LiveBox.Items.Clear()
+            With dr
+                For Each dr In dtResults.Rows
+                    LiveBox.Items.Add(dr.Item(strQryRow))
+                Next
+            End With
+            Dim ScreenPos As Point = Me.PointToClient(CurrentControl.Parent.PointToScreen(CurrentControl.Location))
+            ScreenPos.Y = ScreenPos.Y + CurrentControl.Height
+            LiveBox.Location = ScreenPos
+            LiveBox.Width = CurrentControl.Width
+            LiveBox.Height = LiveBox.PreferredHeight
+            If dtResults.Rows.Count > 0 Then
+                LiveBox.Visible = True
+            Else
+                LiveBox.Visible = False
+            End If
+            If strPrevSearchString <> CurrentControl.Text Then
+                strSearchString = CurrentControl.Text
+                StartLiveSearch() 'if search string has changed since last completetion, run again.
+            End If
             Exit Sub
-        End If
-        Dim dr As DataRow
-        Dim strQryRow As String
-        Dim CntGroup As GroupBox
-        CntGroup = CurrentControl.Parent
-        Select Case CurrentControl.Name
-            Case "txtAssetTag"
-                strQryRow = "dev_asset_tag"
-            Case "txtSerial"
-                strQryRow = "dev_serial"
-            Case "txtCurUser"
-                strQryRow = "dev_cur_user"
-            Case "txtDescription"
-                strQryRow = "dev_description"
-        End Select
-        LiveBox.Items.Clear()
-        With dr
-            For Each dr In dtResults.Rows
-                LiveBox.Items.Add(dr.Item(strQryRow))
-            Next
-        End With
-        Dim ScreenPos As Point = Me.PointToClient(CurrentControl.Parent.PointToScreen(CurrentControl.Location))
-        ScreenPos.Y = ScreenPos.Y + CurrentControl.Height
-        LiveBox.Location = ScreenPos
-        LiveBox.Width = CurrentControl.Width
-        LiveBox.Height = LiveBox.PreferredHeight
-        If dtResults.Rows.Count > 0 Then
-            LiveBox.Visible = True
-        Else
+        Catch
             LiveBox.Visible = False
-        End If
-        If strPrevSearchString <> CurrentControl.Text Then
-            strSearchString = CurrentControl.Text
-            StartLiveSearch() 'if search string has changed since last completetion, run again.
-        End If
-        Exit Sub
-errs:
-        LiveBox.Visible = False
-        LiveBox.Items.Clear()
+            LiveBox.Items.Clear()
+        End Try
+
     End Sub
     Private Sub QueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LiveQueryWorker.RunWorkerCompleted
         DrawLiveBox()
@@ -427,40 +431,43 @@ errs:
         StartLiveSearch()
     End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
-        On Error GoTo errs
-        Dim i As Integer
-        Dim reader As MySqlDataReader
-        Dim table As New DataTable
-        'Dim ConnID As String = Guid.NewGuid.ToString
-        Dim strQry = strWorkerQry '"SELECT * FROM devices ORDER BY dev_input_datetime DESC"
-        strLastQry = strQry
-        Dim conn As New MySqlConnection(MySQLConnectString)
-        Dim cmd As New MySqlCommand(strQry, conn)
-        conn.Open()
-        reader = cmd.ExecuteReader
-        With reader
-            i += 1
-            BigQueryWorker.ReportProgress(i)
-            Do While .Read()
-                Dim Results As Device_Info
-                Results.strCurrentUser = !dev_cur_user
-                Results.strAssetTag = !dev_asset_tag
-                Results.strSerial = !dev_serial
-                Results.strDescription = !dev_description
-                Results.strLocation = !dev_location
-                Results.dtPurchaseDate = !dev_purchase_date
-                Results.strGUID = !dev_UID
-                Results.strEqType = !dev_eq_type
-                AddToResults(Results)
-            Loop
-        End With
-        reader.Close()
-        conn.Close()
-        conn = Nothing
-        reader = Nothing
-        Exit Sub
-errs:
-        ConnectionReady()
+        Try
+            Dim i As Integer
+            Dim reader As MySqlDataReader
+            Dim table As New DataTable
+            'Dim ConnID As String = Guid.NewGuid.ToString
+            Dim strQry = strWorkerQry '"SELECT * FROM devices ORDER BY dev_input_datetime DESC"
+            strLastQry = strQry
+            Dim conn As New MySqlConnection(MySQLConnectString)
+            Dim cmd As New MySqlCommand(strQry, conn)
+            conn.Open()
+            reader = cmd.ExecuteReader
+            With reader
+                i += 1
+                BigQueryWorker.ReportProgress(i)
+                Do While .Read()
+                    Dim Results As Device_Info
+                    Results.strCurrentUser = !dev_cur_user
+                    Results.strAssetTag = !dev_asset_tag
+                    Results.strSerial = !dev_serial
+                    Results.strDescription = !dev_description
+                    Results.strLocation = !dev_location
+                    Results.dtPurchaseDate = !dev_purchase_date
+                    Results.strGUID = !dev_UID
+                    Results.strEqType = !dev_eq_type
+                    AddToResults(Results)
+                Loop
+            End With
+            reader.Close()
+            conn.Close()
+            conn = Nothing
+            reader = Nothing
+            Exit Sub
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ConnectionReady()
+        End Try
+
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
         CurrentControl = txtCurUser
@@ -707,10 +714,10 @@ errs:
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
     End Sub
-    Private Sub ReconnectThread_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles ReconnectThread.ProgressChanged
+    Private Sub ReconnectThread_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
         StatusBar("Trying to reconnect... " & ConnectAttempts)
     End Sub
-    Private Sub ReconnectThread_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles ReconnectThread.RunWorkerCompleted
+    Private Sub ReconnectThread_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
         ConnectionReady()
         StatusBar("Connected!")
     End Sub

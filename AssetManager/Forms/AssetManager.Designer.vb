@@ -78,7 +78,6 @@ Partial Class AssetManager
         Me.ManageAttachmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.txtGUID = New System.Windows.Forms.ToolStripTextBox()
         Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
-        Me.ReconnectThread = New System.ComponentModel.BackgroundWorker()
         Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.GroupBox1.SuspendLayout()
@@ -625,10 +624,6 @@ Partial Class AssetManager
         Me.ConnectionWatcher.Enabled = True
         Me.ConnectionWatcher.Interval = 500
         '
-        'ReconnectThread
-        '
-        Me.ReconnectThread.WorkerReportsProgress = True
-        '
         'ConnectionWatchDog
         '
         Me.ConnectionWatchDog.WorkerReportsProgress = True
@@ -677,6 +672,7 @@ Partial Class AssetManager
         Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button
@@ -722,7 +718,6 @@ Partial Class AssetManager
     Friend WithEvents CopyTool As ToolStripMenuItem
     Friend WithEvents ConnectionWatcher As Timer
     Friend WithEvents ConnStatusLabel As ToolStripStatusLabel
-    Friend WithEvents ReconnectThread As System.ComponentModel.BackgroundWorker
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents DateTimeLabel As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
