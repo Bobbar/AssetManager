@@ -8,6 +8,7 @@ Class Attachments
     Private lngProgress As Integer
     Private lngBytesMoved As Long
     Private stpSpeed As New Stopwatch
+    Private bolGridFilling As Boolean
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -56,33 +57,35 @@ Class Attachments
             Dim table As New DataTable
             Dim strQry As String
             If bolAdminMode Then
-                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,dev_UID,dev_asset_tag FROM attachments,devices WHERE dev_UID = attach_dev_UID ORDER BY attach_upload_date DESC"
-                ListView1.Columns.Clear()
-                ListView1.Columns.Add("Filename")
-                ListView1.Columns.Add("Size")
-                ListView1.Columns.Add("Date")
-                ListView1.Columns.Add("Device")
+                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash,dev_UID,dev_asset_tag FROM attachments,devices WHERE dev_UID = attach_dev_UID ORDER BY attach_upload_date DESC"
+                table.Columns.Add("Filename", GetType(String))
+                table.Columns.Add("Size", GetType(String))
+                table.Columns.Add("Date", GetType(String))
+                table.Columns.Add("Device", GetType(String))
+                table.Columns.Add("AttachUID", GetType(String))
+                table.Columns.Add("MD5", GetType(String))
             ElseIf Not bolAdminMode Then
-                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID FROM attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
-                ListView1.Columns.Clear()
-                ListView1.Columns.Add("Filename")
-                ListView1.Columns.Add("Size")
-                ListView1.Columns.Add("Date")
+                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash FROM attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
+                table.Columns.Add("Filename", GetType(String))
+                table.Columns.Add("Size", GetType(String))
+                table.Columns.Add("Date", GetType(String))
+                table.Columns.Add("AttachUID", GetType(String))
+                table.Columns.Add("MD5", GetType(String))
             End If
             Dim cmd As New MySqlCommand(strQry, GlobalConn)
             reader = cmd.ExecuteReader
             Dim strFullFilename As String
             Dim row As Integer
-            ListView1.Items.Clear()
             ReDim AttachIndex(0)
             With reader
                 Do While .Read()
                     Dim strFileSizeHuman As String = Math.Round((!attach_file_size / 1024), 1) & " KB"
                     strFullFilename = !attach_file_name &!attach_file_type
-                    ListView1.Items.Add(strFullFilename)
-                    ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(strFileSizeHuman)
-                    ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(!attach_upload_date)
-                    If bolAdminMode Then ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(!dev_asset_tag)
+                    If bolAdminMode Then
+                        table.Rows.Add(strFullFilename, strFileSizeHuman,!attach_upload_date,!dev_asset_tag,!attach_file_UID,!attach_file_hash)
+                    Else
+                        table.Rows.Add(strFullFilename, strFileSizeHuman,!attach_upload_date,!attach_file_UID,!attach_file_hash)
+                    End If
                     ReDim Preserve AttachIndex(row)
                     AttachIndex(row).strFilename = !attach_file_name
                     AttachIndex(row).strFileType = !attach_file_type
@@ -92,11 +95,16 @@ Class Attachments
                 Loop
             End With
             reader.Close()
-            If ListView1.Items.Count > 0 Then
-                ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-            End If
+            bolGridFilling = True
+            AttachGrid.DataSource = table
+            AttachGrid.Columns("Filename").DefaultCellStyle.Font = New Font("Consolas", 9.75, FontStyle.Bold)
+            table.Dispose()
+            'If ListView1.Items.Count > 0 Then
+            '    ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+            'End If
             DoneWaiting()
             Me.Show()
+            bolGridFilling = False
             Exit Sub
         Catch ex As MySqlException
             DoneWaiting()
@@ -106,6 +114,12 @@ Class Attachments
     End Sub
     Private Function GetUIDFromIndex(Index As Integer) As String
         Return AttachIndex(Index).strFileUID
+    End Function
+    Private Function GetIndexFromUID(UID As String) As Integer
+        For i As Integer = 0 To AttachIndex.Count
+            If AttachIndex(i).strFileUID = UID Then Return i
+        Next
+        Return -1
     End Function
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs)
     End Sub
@@ -140,7 +154,7 @@ Class Attachments
         Me.Refresh()
     End Sub
     Private Sub Attachments_Load(sender As Object, e As EventArgs) Handles Me.Load
-        DoubleBufferedListView(ListView1, True)
+        ExtendedMethods.DoubleBuffered(AttachGrid, True)
         StatusBar("Idle...")
         Waiting()
         If CanAccess("manage_attach") Then
@@ -159,22 +173,23 @@ Class Attachments
         txtSerial.Text = CurrentDevice.strSerial
         txtDescription.Text = CurrentDevice.strDescription
     End Sub
-    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
-        OpenAttachment(GetUIDFromIndex(ListView1.FocusedItem.Index))
+    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs)
+        OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
     End Sub
     Private Sub DeleteAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteAttachmentToolStripMenuItem.Click
-        If ListView1.FocusedItem IsNot Nothing Then
-            StartAttachDelete()
+        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
+            StartAttachDelete(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
         End If
     End Sub
-    Private Sub StartAttachDelete()
+    Private Sub StartAttachDelete(AttachUID As String)
         Dim strFilename As String
-        strFilename = AttachIndex(ListView1.FocusedItem.Index).strFilename & AttachIndex(ListView1.FocusedItem.Index).strFileType
+        Dim i As Integer = GetIndexFromUID(AttachUID)
+        strFilename = AttachIndex(i).strFilename & AttachIndex(i).strFileType
         Dim blah
         blah = MsgBox("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             Waiting()
-            If DeleteAttachment(GetUIDFromIndex(ListView1.FocusedItem.Index)) > 0 Then
+            If DeleteAttachment(AttachIndex(i).strFileUID) > 0 Then
                 ListAttachments(CurrentDevice.strGUID)
                 DoneWaiting()
                 blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
@@ -183,16 +198,14 @@ Class Attachments
             End If
         End If
     End Sub
-    Private Sub RightClickMenu_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles RightClickMenu.Opening
-    End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
-        If ListView1.FocusedItem IsNot Nothing Then
-            StartAttachDelete()
+        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
+            StartAttachDelete(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
         End If
     End Sub
     Private Sub cmdOpen_Click(sender As Object, e As EventArgs) Handles cmdOpen.Click
-        If ListView1.FocusedItem IsNot Nothing Then
-            OpenAttachment(GetUIDFromIndex(ListView1.FocusedItem.Index))
+        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
+            OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
         End If
     End Sub
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
@@ -304,7 +317,7 @@ Class Attachments
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
         Dim Foldername As String
-        Dim FileHash As String
+        Dim FileExpectedHash As String
         Dim FileUID As String
         Dim Success As Boolean = False
         Dim ConnID As String = Guid.NewGuid.ToString
@@ -328,7 +341,7 @@ Class Attachments
                     strFullPath = strTempPath & strFilename & strFiletype
                     'FileSize = !attach_file_size
                     Foldername = !attach_dev_UID
-                    FileHash = !attach_file_hash
+                    FileExpectedHash = !attach_file_hash
                     FileUID = !attach_file_UID
                 End While
             End With
@@ -376,19 +389,24 @@ Class Attachments
             respStream.Dispose()
             resp.Close()
             resp.Dispose()
-            DownloadWorker.ReportProgress(1, "Verifying...")
-            If GetHashOfFile(strFullPath) = FileHash Then
+            DownloadWorker.ReportProgress(2, "Verifying file...")
+            Dim FileResultHash As String = GetHashOfFile(strFullPath)
+            If FileResultHash = FileExpectedHash Then
                 Process.Start(strFullPath)
+                e.Result = True
             Else
-                Dim blah = MsgBox("File varification failed!  The file on the database is corrupt or there was a problem writing the data do the disk.  Local and Database copyies of the attachment will now be deleted for saftey.", vbOKOnly + vbExclamation, "Hash value mismatch")
+                'something is very wrong
+                Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
+                Dim blah = MsgBox("File varification failed! The file on the database is corrupt or there was a problem writing the data do the disk.  Local and Database copies of the attachment will now be deleted for saftey.", vbOKOnly + vbExclamation, "Hash Value Mismatch")
                 PurgeTempDir()
                 DeleteAttachment(FileUID)
-                'something is very wrong
+                e.Result = False
             End If
-            e.Result = True
+
         Catch ex As Exception
             e.Result = False
-            DownloadWorker.ReportProgress(1, "Idle...")
+            DownloadWorker.ReportProgress(2, "ERROR!")
+            Logger("DOWNLOAD ERROR: " & "Device: " & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID)
             If Not ErrHandle(ex.HResult, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 EndProgram()
             Else
@@ -412,62 +430,28 @@ Class Attachments
         End If
     End Sub
     Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
-        If ListView1.FocusedItem IsNot Nothing Then
-            OpenAttachment(GetUIDFromIndex(ListView1.FocusedItem.Index))
+        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
+            OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
         End If
     End Sub
     Private Sub DownloadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles DownloadWorker.ProgressChanged
-        ' ProgressBar1.Value = e.ProgressPercentage
-        StatusBar(e.UserState)
+        Select Case e.ProgressPercentage
+            Case 1
+                StatusBar(e.UserState)
+            Case 2
+                stpSpeed.Stop()
+                stpSpeed.Reset()
+                statMBPS.Text = Nothing
+                ProgressBar1.Visible = False
+                ProgressBar1.Value = 0
+                ProgTimer.Enabled = False
+                Spinner.Visible = False
+                StatusBar(e.UserState)
+                Me.Refresh()
+        End Select
     End Sub
     Private Sub UploadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles UploadWorker.ProgressChanged
-        'Debug.Print(e.ProgressPercentage)
-        'ProgressBar1.Value = e.ProgressPercentage
         StatusBar(e.UserState)
-    End Sub
-    Private Sub cmdListAll_Click(sender As Object, e As EventArgs)
-        If Not ConnectionReady() Then
-            Exit Sub
-        End If
-        Waiting()
-        Try
-            Dim reader As MySqlDataReader
-            Dim table As New DataTable
-            Dim strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date FROM attachments ORDER BY attach_upload_date DESC"
-            Dim cmd As New MySqlCommand(strQry, GlobalConn)
-            reader = cmd.ExecuteReader
-            Dim strFullFilename As String
-            Dim row As Integer
-            ListView1.Items.Clear()
-            ReDim AttachIndex(0)
-            With reader
-                Do While .Read()
-                    Dim strFileSizeHuman As String = Math.Round((!attach_file_size / 1024), 1) & " KB"
-                    strFullFilename = !attach_file_name &!attach_file_type
-                    ListView1.Items.Add(strFullFilename)
-                    ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(strFileSizeHuman)
-                    ListView1.Items(ListView1.Items.Count - 1).SubItems.Add(!attach_upload_date)
-                    ReDim Preserve AttachIndex(row)
-                    AttachIndex(row).strFilename = !attach_file_name
-                    AttachIndex(row).strFileType = !attach_file_type
-                    AttachIndex(row).FileSize = !attach_file_size
-                    AttachIndex(row).strFileUID = !UID
-                    row += 1
-                Loop
-            End With
-            reader.Close()
-            If ListView1.Items.Count > 0 Then
-                ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-            End If
-            DoneWaiting()
-            Exit Sub
-        Catch ex As MySqlException
-            DoneWaiting()
-            ErrHandle(ex.ErrorCode, ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            Exit Sub
-        End Try
-    End Sub
-    Private Sub Attachments_Shown(sender As Object, e As EventArgs) Handles Me.Shown
     End Sub
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
         'Debug.Print(lngProgress)
@@ -481,5 +465,63 @@ Class Attachments
     Private Sub Button1_Click_1(sender As Object, e As EventArgs)
         DeleteFTPDeviceFolder(CurrentDevice.strGUID)
         ListAttachments(CurrentDevice.strGUID)
+    End Sub
+    Private Sub HighlightCurrentRow(Row As Integer)
+        On Error Resume Next
+        If Not bolGridFilling Then
+            Dim BackColor As Color = DefGridBC
+            Dim SelectColor As Color = DefGridSelCol
+            Dim Mod1 As Integer = 3
+            Dim Mod2 As Integer = 4
+            Dim Mod3 As Single = 0.6 '0.75
+            Dim c1 As Color = colHighlightColor 'highlight color
+            If Row > -1 Then
+                For Each cell As DataGridViewCell In AttachGrid.Rows(Row).Cells
+                    Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
+                    Dim BlendColor As Color
+                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                    cell.Style.SelectionBackColor = BlendColor
+                    'cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
+                    c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
+                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                    cell.Style.BackColor = BlendColor
+                    'cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
+                Next
+            End If
+        End If
+    End Sub
+    Private Sub AttachGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellContentClick
+    End Sub
+    Private Sub AttachGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellLeave
+        Dim BackColor As Color = DefGridBC
+        Dim SelectColor As Color = DefGridSelCol
+        If e.RowIndex > -1 Then
+            For Each cell As DataGridViewCell In AttachGrid.Rows(e.RowIndex).Cells
+                cell.Style.SelectionBackColor = SelectColor
+                cell.Style.BackColor = BackColor
+            Next
+        End If
+    End Sub
+    Private Sub AttachGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseDown
+        On Error Resume Next
+        If e.Button = MouseButtons.Right And Not AttachGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
+            AttachGrid.Rows(e.RowIndex).Selected = True
+            AttachGrid.CurrentCell = AttachGrid(e.ColumnIndex, e.RowIndex)
+        End If
+    End Sub
+    Private Sub AttachGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellDoubleClick
+        OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+    End Sub
+    Private Sub CopyTextTool_Click(sender As Object, e As EventArgs) Handles CopyTextTool.Click
+        Clipboard.SetDataObject(Me.AttachGrid.GetClipboardContent())
+    End Sub
+    Private Sub AttachGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellEnter
+        HighlightCurrentRow(e.RowIndex)
     End Sub
 End Class

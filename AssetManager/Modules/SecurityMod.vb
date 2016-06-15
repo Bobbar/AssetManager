@@ -19,30 +19,17 @@ Module SecurityMod
         fileStream.Close()
         Return sBuilder.ToString
     End Function
-
     Public Function GetHashOfStream(MemStream As IO.FileStream) As String
         Dim md5Hash As MD5 = MD5.Create
-
-
-
         MemStream.Position = 0
         Dim hash As Byte() = md5Hash.ComputeHash(MemStream)
-
         Dim sBuilder As New StringBuilder
         Dim i As Integer
         For i = 0 To hash.Length - 1
             sBuilder.Append(hash(i).ToString("x2"))
         Next
-
         Return sBuilder.ToString
-
-
-
         'Return BitConverter.ToString(hash).ToString("x2")
-
-
-
-
     End Function
     Public Sub GetAccessLevels()
         On Error Resume Next

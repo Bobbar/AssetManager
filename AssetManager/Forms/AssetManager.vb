@@ -11,7 +11,6 @@ Public Class AssetManager
     Private Const strShowAllQry As String = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
     Private ClickedButton As Control, ClickedButtonPrevText As String
     Dim dtResults As New DataTable
-    Private DefGridBC As Color, DefGridSelCol As Color
     Private intPrevRow As Integer
     Private bolGridFilling As Boolean = False
     Private ConnectAttempts As Integer = 0
@@ -93,6 +92,9 @@ Public Class AssetManager
         View.DataGridHistory.DefaultCellStyle.Font = GridFont
         View.TrackingGrid.DefaultCellStyle = GridStylez
         View.TrackingGrid.DefaultCellStyle.Font = GridFont
+        'Attachments.AttachGrid.DefaultCellStyle = GridStylez
+        'Attachments.AttachGrid.DefaultCellStyle.Font = GridFont
+        'Attachments.AttachGrid.ColumnHeadersDefaultCellStyle.Font = GridFont
     End Sub
     Private Sub BuildIndexes()
         Logger("Building Indexes...")

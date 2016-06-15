@@ -1,5 +1,4 @@
 ﻿Imports System.Environment
-Imports System
 Imports System.IO
 Module OtherFunctions
     Public strLogDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
@@ -19,6 +18,7 @@ Module OtherFunctions
     Public colStatusBarProblem As Color = ColorTranslator.FromHtml("#FF9696")
     'Public colToolBarColor As Color = Color.FromArgb(122, 197, 241)
     Public colToolBarColor As Color = Color.FromArgb(249, 226, 166)
+    Public DefGridBC As Color, DefGridSelCol As Color
     Public ViewFormIndex As Integer
     Public GridStylez As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -48,21 +48,41 @@ Module OtherFunctions
     Public Sub StopTimer()
         stpw.Stop()
         Debug.Print("Stopwatch: MS:" & stpw.ElapsedMilliseconds & " Ticks: " & stpw.ElapsedTicks)
-        'Debug.Print(stpw.ElapsedTicks)
     End Sub
     Public Sub Logger(Message As String)
+        Dim MaxLogSizeKiloBytes As Long = 100
         Dim DateStamp As String = DateTime.Now
+        Dim infoReader As FileInfo
+        infoReader = My.Computer.FileSystem.GetFileInfo(strLogPath)
         If Not File.Exists(strLogPath) Then
             Dim di As DirectoryInfo = Directory.CreateDirectory(strLogDir)
             Using sw As StreamWriter = File.CreateText(strLogPath)
                 sw.WriteLine(DateStamp & ": Log Created...")
-            End Using
-        Else
-            Using sw As StreamWriter = File.AppendText(strLogPath)
                 sw.WriteLine(DateStamp & ": " & Message)
             End Using
+        Else
+            If (infoReader.Length / 1000) < MaxLogSizeKiloBytes Then
+                Using sw As StreamWriter = File.AppendText(strLogPath)
+                    sw.WriteLine(DateStamp & ": " & Message)
+                End Using
+            Else
+                If RotateLogs() Then
+                    Using sw As StreamWriter = File.AppendText(strLogPath)
+                        sw.WriteLine(DateStamp & ": " & Message)
+                    End Using
+                End If
+            End If
         End If
     End Sub
+    Private Function RotateLogs() As Boolean
+        Try
+            File.Copy(strLogPath, strLogPath + ".old", True)
+            File.Delete(strLogPath)
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
     Public Function GetColIndex(ByVal Grid As DataGridView, ByVal strColName As String) As Integer
         Try
             Return Grid.Columns.Item(strColName).Index
