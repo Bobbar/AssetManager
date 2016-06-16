@@ -3,10 +3,9 @@ Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
-Public Class AssetManager
+Public Class MainFrom
     Private strSearchString As String, strPrevSearchString As String
-    'Private SearchResults() As String
-    Private CurrentControl As Control
+    Private StartingControl As Control
     Private strWorkerQry As String
     Private Const strShowAllQry As String = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
     Private ClickedButton As Control, ClickedButtonPrevText As String
@@ -113,12 +112,13 @@ Public Class AssetManager
         txtSerial.Clear()
         txtSerialSearch.Clear()
         cmbEquipType.Items.Clear()
+        cmbOSType.Items.Clear()
         cmbLocation.Items.Clear()
         txtCurUser.Clear()
         txtDescription.Clear()
+        txtReplaceYear.Clear()
         chkTrackables.Checked = False
         RefreshCombos()
-        ReDim SearchResults(0)
         '  ResultGrid.DataSource = Nothing
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -127,7 +127,7 @@ Public Class AssetManager
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         If Not BigQueryWorker.IsBusy Then
             ClickedButton = cmdShowAll
-            'ShowAll()
+            'ShowAll()         
             StartBigQuery(strShowAllQry)
         End If
     End Sub
@@ -149,8 +149,8 @@ Public Class AssetManager
             BigQueryWorker.RunWorkerAsync()
         End If
     End Sub
-    Private Sub BigQueryDone()
-        SendToGrid(ResultGrid, SearchResults)
+    Private Sub BigQueryDone(Results As DataTable)
+        SendToGrid(Results)
         StripSpinner.Visible = False
         If ClickedButton IsNot Nothing Then
             ClickedButton.Enabled = True
@@ -160,25 +160,27 @@ Public Class AssetManager
         StatusBar("Idle...")
         'picRunning.Visible = False
     End Sub
-    Private Sub SendToGrid(ByRef Grid As DataGridView, Data() As Device_Info)
+    Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         StatusBar(strLoadingGridMessage)
         Dim table As New DataTable
-        Dim i As Integer
         table.Columns.Add("User", GetType(String))
         table.Columns.Add("Asset ID", GetType(String))
         table.Columns.Add("Serial", GetType(String))
         table.Columns.Add("Device Type", GetType(String))
         table.Columns.Add("Description", GetType(String))
+        table.Columns.Add("OS Version", GetType(String))
         table.Columns.Add("Location", GetType(String))
         table.Columns.Add("Purchase Date", GetType(String))
+        table.Columns.Add("Replace Year", GetType(String))
         table.Columns.Add("GUID", GetType(String))
-        For i = 1 To UBound(Data)
-            table.Rows.Add(Data(i).strCurrentUser, Data(i).strAssetTag, Data(i).strSerial, GetHumanValue(ComboType.EquipType, Data(i).strEqType), Data(i).strDescription, GetHumanValue(ComboType.Location, Data(i).strLocation), Data(i).dtPurchaseDate, Data(i).strGUID)
+        For Each r As DataRow In Results.Rows
+            table.Rows.Add(r.Item("dev_cur_user"), r.Item("dev_asset_tag"), r.Item("dev_serial"), GetHumanValue(ComboType.EquipType, r.Item("dev_eq_type")), r.Item("dev_description"), GetHumanValue(ComboType.OSType, r.Item("dev_osversion")), GetHumanValue(ComboType.Location, r.Item("dev_location")), r.Item("dev_purchase_date"), r.Item("dev_replacement_year"), r.Item("dev_UID"))
         Next
         bolGridFilling = True
-        Grid.DataSource = table
+        ResultGrid.DataSource = table
+        ResultGrid.ClearSelection()
         bolGridFilling = False
-        ReDim SearchResults(0)
+        table.Dispose()
     End Sub
     Private Sub GetSearchDBValues() 'cleanup user input for db
         SearchValues.strSerial = Trim(txtSerialSearch.Text)
@@ -188,7 +190,8 @@ Public Class AssetManager
         'strPurchaseDate = dtPurchaseDate.Text
         SearchValues.strDescription = Trim(txtDescription.Text)
         SearchValues.strEqType = GetDBValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
-        'strReplacementYear = Trim(txtReplaceYear.Text)
+        SearchValues.strReplaceYear = Trim(txtReplaceYear.Text)
+        SearchValues.strOSVersion = GetDBValue(ComboType.OSType, cmbOSType.SelectedIndex)
         SearchValues.strLocation = GetDBValue(ComboType.Location, cmbLocation.SelectedIndex)
         SearchValues.strCurrentUser = Trim(txtCurUser.Text)
         SearchValues.strStatus = GetDBValue(ComboType.StatusType, cmbStatus.SelectedIndex)
@@ -197,7 +200,7 @@ Public Class AssetManager
         'strPO =
         'strOSVersion =
     End Sub
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs)
         StartImport()
     End Sub
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
@@ -214,7 +217,7 @@ Public Class AssetManager
         Dim table As New DataTable
         GetSearchDBValues()
         Dim strStartQry = "SELECT * FROM devices WHERE "
-        Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.bolTrackable, " dev_trackable = '" & Convert.ToInt32(SearchValues.bolTrackable) & "' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", "")) & (IIf(SearchValues.strDescription <> "", " dev_description LIKE '%" & SearchValues.strDescription & "%' AND", ""))
+        Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strReplaceYear <> "", " dev_replacement_year LIKE '%" & SearchValues.strReplaceYear & "%' AND", "")) & (IIf(SearchValues.strOSVersion <> "", " dev_osversion LIKE '%" & SearchValues.strOSVersion & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.bolTrackable, " dev_trackable = '" & Convert.ToInt32(SearchValues.bolTrackable) & "' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", "")) & (IIf(SearchValues.strDescription <> "", " dev_description LIKE '%" & SearchValues.strDescription & "%' AND", ""))
         If strDynaQry = "" Then
             Dim blah = MsgBox("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing")
             Exit Sub
@@ -235,16 +238,6 @@ Public Class AssetManager
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
     End Sub
-    Private Sub HideLiveBox()
-        Try
-            LiveBox.Visible = False
-            LiveBox.Items.Clear()
-            If CurrentControl.Parent.Name = "InstantGroup" Then
-                CurrentControl.Text = ""
-            End If
-        Catch
-        End Try
-    End Sub
     Private Sub LoadDevice(ByVal strGUID As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
@@ -261,6 +254,15 @@ Public Class AssetManager
         FillLocationCombo()
         FillChangeTypeCombo()
         FillStatusTypeCombo()
+        FillOSTypeCombo()
+    End Sub
+    Private Sub FillOSTypeCombo()
+        Dim i As Integer
+        cmbOSType.Items.Clear()
+        cmbOSType.Text = ""
+        For i = 0 To UBound(OSType)
+            cmbOSType.Items.Insert(i, OSType(i).strLong)
+        Next
     End Sub
     Private Sub FillEquipTypeCombo()
         Dim i As Integer
@@ -331,7 +333,7 @@ Public Class AssetManager
             Dim RowLimit As Integer = 15
             Dim strQryRow As String
             Dim strQry As String
-            Select Case CurrentControl.Name
+            Select Case ActiveControl.Name
                 Case "txtAssetTag"
                     strQryRow = "dev_asset_tag"
                 Case "txtSerial"
@@ -340,61 +342,69 @@ Public Class AssetManager
                     strQryRow = "dev_cur_user"
                 Case "txtDescription"
                     strQryRow = "dev_description"
+                Case "txtReplaceYear"
+                    strQryRow = "dev_replacement_year"
             End Select
             strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
             da.SelectCommand = New MySqlCommand(strQry)
             da.SelectCommand.Connection = LiveConn
             da.Fill(ds)
-            dtResults = Nothing
             dtResults = ds.Tables(0)
-            Exit Sub
-        Catch
+            da.Dispose()
+            ds.Dispose()
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             ConnectionReady()
         End Try
     End Sub
-    Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
-        CurrentControl = txtAssetTag
-        strSearchString = txtAssetTag.Text
-        StartLiveSearch()
-    End Sub
-    Private Sub DrawLiveBox()
+    Private Sub DrawLiveBox(Optional PositionOnly As Boolean = False)
         Try
-            If dtResults.Rows.Count < 1 Then
-                LiveBox.Visible = False
-                Exit Sub
-            End If
             Dim dr As DataRow
             Dim strQryRow As String
-            Dim CntGroup As GroupBox
-            CntGroup = CurrentControl.Parent
-            Select Case CurrentControl.Name
-                Case "txtAssetTag"
-                    strQryRow = "dev_asset_tag"
-                Case "txtSerial"
-                    strQryRow = "dev_serial"
-                Case "txtCurUser"
-                    strQryRow = "dev_cur_user"
-                Case "txtDescription"
-                    strQryRow = "dev_description"
+            Select Case TypeName(ActiveControl.Parent)
+                Case "GroupBox"
+                    Dim CntGroup As GroupBox
+                    CntGroup = ActiveControl.Parent
+                Case "Panel"
+                    Dim CntGroup As Panel
+                    CntGroup = ActiveControl.Parent
             End Select
-            LiveBox.Items.Clear()
-            With dr
-                For Each dr In dtResults.Rows
-                    LiveBox.Items.Add(dr.Item(strQryRow))
-                Next
-            End With
-            Dim ScreenPos As Point = Me.PointToClient(CurrentControl.Parent.PointToScreen(CurrentControl.Location))
-            ScreenPos.Y = ScreenPos.Y + CurrentControl.Height
+            If Not PositionOnly Then
+                If dtResults.Rows.Count < 1 Then
+                    LiveBox.Visible = False
+                    Exit Sub
+                End If
+                Select Case ActiveControl.Name
+                    Case "txtAssetTag"
+                        strQryRow = "dev_asset_tag"
+                    Case "txtSerial"
+                        strQryRow = "dev_serial"
+                    Case "txtCurUser"
+                        strQryRow = "dev_cur_user"
+                    Case "txtDescription"
+                        strQryRow = "dev_description"
+                    Case "txtReplaceYear"
+                        strQryRow = "dev_replacement_year"
+                End Select
+                LiveBox.Items.Clear()
+                With dr
+                    For Each dr In dtResults.Rows
+                        LiveBox.Items.Add(dr.Item(strQryRow))
+                    Next
+                End With
+            End If
+            Dim ScreenPos As Point = Me.PointToClient(ActiveControl.Parent.PointToScreen(ActiveControl.Location))
+            ScreenPos.Y = ScreenPos.Y + ActiveControl.Height
             LiveBox.Location = ScreenPos
-            LiveBox.Width = CurrentControl.Width
+            LiveBox.Width = ActiveControl.Width
             LiveBox.Height = LiveBox.PreferredHeight
             If dtResults.Rows.Count > 0 Then
                 LiveBox.Visible = True
             Else
                 LiveBox.Visible = False
             End If
-            If strPrevSearchString <> CurrentControl.Text Then
-                strSearchString = CurrentControl.Text
+            If strPrevSearchString <> ActiveControl.Text Then
+                strSearchString = ActiveControl.Text
                 StartLiveSearch() 'if search string has changed since last completetion, run again.
             End If
             Exit Sub
@@ -407,11 +417,27 @@ Public Class AssetManager
         DrawLiveBox()
     End Sub
     Private Sub txtSerial_TextChanged(sender As Object, e As EventArgs) Handles txtSerial.TextChanged
-        CurrentControl = txtSerial
+        'CurrentControl = txtSerial
         strSearchString = txtSerial.Text
         StartLiveSearch()
     End Sub
+    Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
+        ' CurrentControl = txtAssetTag
+        strSearchString = txtAssetTag.Text
+        StartLiveSearch()
+    End Sub
+    Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
+        ' CurrentControl = txtDescription
+        strSearchString = txtDescription.Text
+        StartLiveSearch()
+    End Sub
+    Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
+        'CurrentControl = txtCurUser
+        strSearchString = txtCurUser.Text
+        StartLiveSearch()
+    End Sub
     Private Sub StartLiveSearch()
+        StartingControl = ActiveControl
         If Trim(strSearchString) <> "" Then
             If Not LiveQueryWorker.IsBusy And ConnectionReady() Then LiveQueryWorker.RunWorkerAsync()
         Else
@@ -420,56 +446,28 @@ Public Class AssetManager
     End Sub
     Private Sub LiveBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LiveBox.SelectedIndexChanged
     End Sub
-    Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
-        CurrentControl = txtDescription
-        strSearchString = txtDescription.Text
-        StartLiveSearch()
-    End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
-            Dim i As Integer
-            Dim reader As MySqlDataReader
-            Dim table As New DataTable
-            'Dim ConnID As String = Guid.NewGuid.ToString
-            Dim strQry = strWorkerQry '"SELECT * FROM devices ORDER BY dev_input_datetime DESC"
+            Dim ds As New DataSet
+            Dim da As New MySqlDataAdapter
+            Dim strQry = strWorkerQry
             strLastQry = strQry
             Dim conn As New MySqlConnection(MySQLConnectString)
-            Dim cmd As New MySqlCommand(strQry, conn)
             conn.Open()
-            reader = cmd.ExecuteReader
-            With reader
-                i += 1
-                BigQueryWorker.ReportProgress(i)
-                Do While .Read()
-                    Dim Results As Device_Info
-                    Results.strCurrentUser = !dev_cur_user
-                    Results.strAssetTag = !dev_asset_tag
-                    Results.strSerial = !dev_serial
-                    Results.strDescription = !dev_description
-                    Results.strLocation = !dev_location
-                    Results.dtPurchaseDate = !dev_purchase_date
-                    Results.strGUID = !dev_UID
-                    Results.strEqType = !dev_eq_type
-                    AddToResults(Results)
-                Loop
-            End With
-            reader.Close()
+            BigQueryWorker.ReportProgress(1)
+            da.SelectCommand = New MySqlCommand(strQry, conn)
+            da.Fill(ds)
+            da.Dispose()
+            e.Result = ds.Tables(0)
+            ds.Dispose()
             conn.Close()
-            conn = Nothing
-            reader = Nothing
-            Exit Sub
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             ConnectionReady()
         End Try
     End Sub
-    Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
-        CurrentControl = txtCurUser
-        strSearchString = txtCurUser.Text
-        StartLiveSearch()
-    End Sub
     Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
-        BigQueryDone()
+        BigQueryDone(e.Result)
     End Sub
     Private Sub BigQueryWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BigQueryWorker.ProgressChanged
         StatusBar("Background query running...")
@@ -483,17 +481,30 @@ Public Class AssetManager
         LiveBoxSelect()
     End Sub
     Private Sub LiveBoxSelect()
-        Select Case CurrentControl.Name
+        Select Case StartingControl.Name
             Case "txtDescription"
-                CurrentControl.Text = LiveBox.Text
+                StartingControl.Text = LiveBox.Text
                 DynamicSearch()
             Case "txtCurUser"
-                CurrentControl.Text = LiveBox.Text
+                StartingControl.Text = LiveBox.Text
+                DynamicSearch()
+            Case "txtReplaceYear"
+                StartingControl.Text = LiveBox.Text
                 DynamicSearch()
             Case Else
                 LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
         End Select
         HideLiveBox()
+    End Sub
+    Private Sub HideLiveBox()
+        Try
+            LiveBox.Visible = False
+            LiveBox.Items.Clear()
+            If ActiveControl.Parent.Name = "InstantGroup" Then
+                ActiveControl.Text = ""
+            End If
+        Catch
+        End Try
     End Sub
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs) Handles LiveBox.KeyDown
         If e.KeyCode = Keys.Enter Then LiveBoxSelect()
@@ -711,6 +722,33 @@ Public Class AssetManager
         If e.KeyCode = Keys.Return Then
             LoadDevice(Trim(txtGUID.Text))
             txtGUID.Clear()
+        End If
+    End Sub
+    Private Sub Panel1_Scroll(sender As Object, e As ScrollEventArgs)
+        'If LiveBox.Visible Then DrawLiveBox(True)
+        HideLiveBox()
+    End Sub
+    Private Sub Panel1_MouseWheel(sender As Object, e As MouseEventArgs)
+        HideLiveBox()
+    End Sub
+    Private Sub txtDescription_TextChanged(sender As Object, e As EventArgs)
+    End Sub
+    Private Sub cmbOSType_DropDown(sender As Object, e As EventArgs) Handles cmbOSType.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+    Private Sub txtGUIDSearch_KeyUp(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyUp
+        strSearchString = txtReplaceYear.Text
+        StartLiveSearch()
+    End Sub
+    Private Sub PanelNoScrollOnFocus1_Scroll(sender As Object, e As ScrollEventArgs) Handles PanelNoScrollOnFocus1.Scroll
+        HideLiveBox()
+    End Sub
+    Private Sub PanelNoScrollOnFocus1_MouseWheel(sender As Object, e As MouseEventArgs) Handles PanelNoScrollOnFocus1.MouseWheel
+        HideLiveBox()
+    End Sub
+    Private Sub txtReplaceYear_KeyDown(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyDown
+        If e.KeyCode = Keys.Down Then
+            GiveLiveBoxFocus()
         End If
     End Sub
 End Class

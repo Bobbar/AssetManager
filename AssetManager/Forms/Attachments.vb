@@ -461,9 +461,6 @@ Class Attachments
                 StatusBar(e.UserState)
                 Me.Refresh()
         End Select
-
-
-
     End Sub
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
         'Debug.Print(lngProgress)

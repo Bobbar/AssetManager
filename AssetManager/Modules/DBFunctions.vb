@@ -78,7 +78,6 @@ Public Module DBFunctions
     Public EquipType() As Combo_Data
     Public OSType() As Combo_Data
     Public StatusType() As Combo_Data
-    Public SearchResults() As Device_Info
     Public Structure User_Info
         Public strUsername As String
         Public strFullname As String
@@ -87,10 +86,6 @@ Public Module DBFunctions
         Public strUID As String
     End Structure
     Public UserAccess As User_Info
-    Public Sub AddToResults(Info As Device_Info)
-        ReDim Preserve SearchResults(UBound(SearchResults) + 1)
-        SearchResults(UBound(SearchResults)) = Info
-    End Sub
     Public NotInheritable Class ComboType
         Public Const Location As String = "LOCATION"
         Public Const ChangeType As String = "CHANGETYPE"

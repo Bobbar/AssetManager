@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>6012.6.2016.1594</AssemblyVersion>
+    <AssemblyVersion>6012.6.2016.1669</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -114,11 +114,11 @@
     <Compile Include="Forms\AddNew.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AssetManager.vb">
+    <Compile Include="Forms\MainFrom.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AssetManager.Designer.vb">
-      <DependentUpon>AssetManager.vb</DependentUpon>
+    <Compile Include="Forms\MainFrom.Designer.vb">
+      <DependentUpon>MainFrom.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="asset_managerDataSet.Designer.vb">
@@ -195,13 +195,20 @@
     <Compile Include="Forms\View_Entry.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PanelNoScrollOnFocus.Designer.vb">
+      <DependentUpon>PanelNoScrollOnFocus.vb</DependentUpon>
+    </Compile>
+    <Compile Include="PanelNoScrollOnFocus.vb">
+      <SubType>Component</SubType>
+      <CustomToolNamespace>NoScrollPanel</CustomToolNamespace>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\AssetManager.resx">
-      <DependentUpon>AssetManager.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\MainFrom.resx">
+      <DependentUpon>MainFrom.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Attachments.resx">
       <DependentUpon>Attachments.vb</DependentUpon>
@@ -248,6 +255,7 @@
     <None Include="asset_managerDataSet.xss">
       <DependentUpon>asset_managerDataSet.xsd</DependentUpon>
     </None>
+    <None Include="ClassDiagram1.cd" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>

@@ -26,7 +26,7 @@ Namespace My
         End Sub
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.AssetManager.AssetManager
+            Me.MainForm = Global.AssetManager.MainFrom
         End Sub
     End Class
 End Namespace

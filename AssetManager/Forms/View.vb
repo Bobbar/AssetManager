@@ -298,7 +298,7 @@ Public Class View
             'TrackingTab.Enabled = True
             TrackingToolStripMenuItem.Visible = True
             If Not TabControl1.TabPages.Contains(TrackingTab) Then TabControl1.TabPages.Insert(1, TrackingTab)
-            AssetManager.CopyDefaultCellStyles()
+            MainFrom.CopyDefaultCellStyles()
             TrackingBox.Visible = True
             CheckOutMenu.Visible = Not bolCheckedOut
             CheckInMenu.Visible = bolCheckedOut
@@ -311,7 +311,7 @@ Public Class View
             TrackingTool.Visible = bolEnabled
             TrackingToolStripMenuItem.Visible = False
             TabControl1.TabPages.Remove(TrackingTab)
-            AssetManager.CopyDefaultCellStyles()
+            MainFrom.CopyDefaultCellStyles()
             TrackingBox.Visible = False
         End If
     End Sub

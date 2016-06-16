@@ -150,9 +150,9 @@ Module OtherFunctions
         Directory.Delete(strTempPath, True)
     End Sub
     Public Sub ConnectStatus(Message As String, FColor As Color)
-        AssetManager.ConnStatusLabel.Text = Message
-        AssetManager.ConnStatusLabel.ForeColor = FColor
-        AssetManager.Refresh()
+        MainFrom.ConnStatusLabel.Text = Message
+        MainFrom.ConnStatusLabel.ForeColor = FColor
+        MainFrom.Refresh()
     End Sub
     Public Function NoNull(DBVal As Object) As String
         Return IIf(IsDBNull(DBVal), "", DBVal.ToString)

@@ -60,6 +60,7 @@ Partial Class Attachments
         '
         'cmdUpload
         '
+        Me.cmdUpload.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdUpload.Location = New System.Drawing.Point(23, 29)
         Me.cmdUpload.Name = "cmdUpload"
         Me.cmdUpload.Size = New System.Drawing.Size(92, 46)
@@ -98,6 +99,7 @@ Partial Class Attachments
         '
         'cmdDelete
         '
+        Me.cmdDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.cmdDelete.Location = New System.Drawing.Point(23, 144)
         Me.cmdDelete.Name = "cmdDelete"
@@ -108,6 +110,7 @@ Partial Class Attachments
         '
         'cmdOpen
         '
+        Me.cmdOpen.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdOpen.Location = New System.Drawing.Point(23, 81)
         Me.cmdOpen.Name = "cmdOpen"
         Me.cmdOpen.Size = New System.Drawing.Size(92, 23)
@@ -126,7 +129,7 @@ Partial Class Attachments
         Me.GroupBox1.Controls.Add(Me.cmdOpen)
         Me.GroupBox1.Controls.Add(Me.cmdDelete)
         Me.GroupBox1.Controls.Add(Me.cmdUpload)
-        Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 113)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(913, 409)
@@ -171,7 +174,7 @@ Partial Class Attachments
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.AttachGrid.DefaultCellStyle = DataGridViewCellStyle1
         Me.AttachGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.AttachGrid.Location = New System.Drawing.Point(3, 3)
+        Me.AttachGrid.Location = New System.Drawing.Point(3, 8)
         Me.AttachGrid.Name = "AttachGrid"
         Me.AttachGrid.ReadOnly = True
         Me.AttachGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
@@ -189,7 +192,7 @@ Partial Class Attachments
         Me.AttachGrid.ShowCellErrors = False
         Me.AttachGrid.ShowCellToolTips = False
         Me.AttachGrid.ShowEditingIcon = False
-        Me.AttachGrid.Size = New System.Drawing.Size(751, 384)
+        Me.AttachGrid.Size = New System.Drawing.Size(751, 379)
         Me.AttachGrid.TabIndex = 18
         Me.AttachGrid.VirtualMode = True
         '
@@ -202,7 +205,7 @@ Partial Class Attachments
         Me.GroupBox2.Controls.Add(Me.txtSerial)
         Me.GroupBox2.Controls.Add(Me.Label1)
         Me.GroupBox2.Controls.Add(Me.txtAssetTag)
-        Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox2.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(633, 95)
@@ -213,6 +216,7 @@ Partial Class Attachments
         'Label3
         '
         Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(335, 29)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(76, 16)
@@ -231,6 +235,7 @@ Partial Class Attachments
         'Label2
         '
         Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(179, 29)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(43, 16)
@@ -249,6 +254,7 @@ Partial Class Attachments
         'Label1
         '
         Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(34, 29)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(70, 16)
