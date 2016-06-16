@@ -99,9 +99,6 @@ Class Attachments
             AttachGrid.DataSource = table
             AttachGrid.Columns("Filename").DefaultCellStyle.Font = New Font("Consolas", 9.75, FontStyle.Bold)
             table.Dispose()
-            'If ListView1.Items.Count > 0 Then
-            '    ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-            'End If
             DoneWaiting()
             Me.Show()
             bolGridFilling = False
@@ -149,8 +146,6 @@ Class Attachments
     End Sub
     Public Sub StatusBar(Text As String)
         StatusLabel.Text = Text
-        'Attachments.StatusLabel.Text = Text
-        'Attachments.Refresh()
         Me.Refresh()
     End Sub
     Private Sub Attachments_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -165,7 +160,6 @@ Class Attachments
             cmdDelete.Enabled = False
         End If
         FillDeviceInfo()
-        ' ListAttachments(CurrentDevice.strGUID)
         DoneWaiting()
     End Sub
     Public Sub FillDeviceInfo()
@@ -217,17 +211,18 @@ Class Attachments
         Dim strFilename As String = Path.GetFileNameWithoutExtension(FilePath)
         Dim strFileType As String = Path.GetExtension(FilePath)
         Dim strFullFilename As String = Path.GetFileName(FilePath)
-        Dim File() As Byte = IO.File.ReadAllBytes(FilePath)
+        Dim myFileInfo As New FileInfo(FilePath)
         Dim FileSize As Long
         Dim FileSizeMB As Long
-        FileSize = File.Length
+        FileSize = myFileInfo.Length
         FileSizeMB = FileSize / (1024 * 1024)
         If FileSizeMB > FileSizeMBLimit Then
             e.Result = False
-            UploadWorker.ReportProgress(1, "Error!")
+            UploadWorker.ReportProgress(2, "Error!")
             Dim blah = MsgBox("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
             Exit Sub
         End If
+        Dim File() As Byte = IO.File.ReadAllBytes(FilePath) 'once we know the file is within size limits, load it into memory for streaming
         UploadWorker.ReportProgress(1, "Connecting...")
         'sql stuff
         Dim conn As New MySqlConnection(MySQLConnectString)
@@ -285,10 +280,12 @@ Class Attachments
             conn.Close()
             conn.Dispose()
             cmd.Dispose()
+            File = Nothing
             UploadWorker.ReportProgress(1, "Idle...")
             e.Result = True
         Catch ex As Exception
             e.Result = False
+            File = Nothing
             conn.Close()
             conn.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
@@ -450,7 +447,23 @@ Class Attachments
         End Select
     End Sub
     Private Sub UploadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles UploadWorker.ProgressChanged
-        StatusBar(e.UserState)
+        Select Case e.ProgressPercentage
+            Case 1
+                StatusBar(e.UserState)
+            Case 2
+                stpSpeed.Stop()
+                stpSpeed.Reset()
+                statMBPS.Text = Nothing
+                ProgressBar1.Visible = False
+                ProgressBar1.Value = 0
+                ProgTimer.Enabled = False
+                Spinner.Visible = False
+                StatusBar(e.UserState)
+                Me.Refresh()
+        End Select
+
+
+
     End Sub
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
         'Debug.Print(lngProgress)
