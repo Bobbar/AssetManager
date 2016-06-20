@@ -22,7 +22,6 @@ Public Class View
         ToolStrip1.BackColor = colToolBarColor
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
-
     End Sub
     Private Sub GetCurrentValues()
         With OldData

@@ -37,14 +37,35 @@ Class Attachments
             Exit Sub
         End If
         If Not UploadWorker.IsBusy Then
-            'Waiting()
-            Me.Cursor = Cursors.AppStarting
             StatusBar("Starting Upload...")
-            ProgressBar1.Visible = True
-            Spinner.Visible = True
-            Me.Refresh()
-            ProgTimer.Enabled = True
+            WorkerFeedback(True)
             UploadWorker.RunWorkerAsync(FilePath)
+        End If
+    End Sub
+    Private Sub WorkerFeedback(WorkerRunning As Boolean)
+        If WorkerRunning Then
+            Me.Cursor = Cursors.AppStarting
+            lngProgress = 0
+            ProgressBar1.Value = 0
+            ProgressBar1.Visible = True
+            cmdCancel.Visible = True
+            Spinner.Visible = True
+            ProgTimer.Enabled = True
+            Me.Refresh()
+        Else
+            Me.Cursor = Cursors.Default
+            stpSpeed.Stop()
+            stpSpeed.Reset()
+            lngProgress = 0
+            ProgressBar1.Value = 0
+            ProgressBar1.Visible = False
+            cmdCancel.Visible = False
+            Spinner.Visible = False
+            ProgTimer.Enabled = False
+            statMBPS.Text = Nothing
+            StatusBar("Idle...")
+            DoneWaiting()
+            Me.Refresh()
         End If
     End Sub
     Public Sub ListAttachments(Optional DeviceUID As String = Nothing)
@@ -126,13 +147,8 @@ Class Attachments
             Exit Sub
         End If
         If Not DownloadWorker.IsBusy Then
-            'Waiting()
-            Me.Cursor = Cursors.AppStarting
             StatusBar("Starting Download...")
-            ProgTimer.Enabled = True
-            Spinner.Visible = True
-            ProgressBar1.Visible = True
-            ProgressBar1.Maximum = 100
+            WorkerFeedback(True)
             DownloadWorker.RunWorkerAsync(AttachUID)
         End If
     End Sub
@@ -249,7 +265,7 @@ Class Attachments
             Dim flLength As Long = ftpstream.Length
             Dim reqfile As System.IO.Stream = ReturnFTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
             stpSpeed.Start()
-            Do Until bytesIn < 1
+            Do Until bytesIn < 1 Or UploadWorker.CancellationPending
                 bytesIn = ftpstream.Read(buffer, 0, 1024)
                 If bytesIn > 0 Then
                     reqfile.Write(buffer, 0, bytesIn)
@@ -265,24 +281,32 @@ Class Attachments
             reqfile.Dispose()
             ftpstream.Close()
             ftpstream.Dispose()
+            If UploadWorker.CancellationPending Then
+                e.Cancel = True
+                DeleteFTPAttachment(strFileGuid, Foldername)
+            End If
             'update sql table
-            SQL = "INSERT INTO attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`, `attach_file_hash`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash)"
-            conn.Open()
-            cmd.Connection = conn
-            cmd.CommandText = SQL
-            cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentDevice.strGUID)
-            cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
-            cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
-            cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
-            cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
-            cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
-            cmd.ExecuteNonQuery()
-            conn.Close()
-            conn.Dispose()
-            cmd.Dispose()
-            File = Nothing
+            If Not UploadWorker.CancellationPending Then
+                SQL = "INSERT INTO attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`, `attach_file_hash`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash)"
+                conn.Open()
+                cmd.Connection = conn
+                cmd.CommandText = SQL
+                cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentDevice.strGUID)
+                cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
+                cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
+                cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
+                cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
+                cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
+                cmd.ExecuteNonQuery()
+                conn.Close()
+                conn.Dispose()
+                cmd.Dispose()
+                File = Nothing
+                e.Result = True
+            Else
+                e.Result = False
+            End If
             UploadWorker.ReportProgress(1, "Idle...")
-            e.Result = True
         Catch ex As Exception
             e.Result = False
             File = Nothing
@@ -294,24 +318,24 @@ Class Attachments
         End Try
     End Sub
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
-        On Error Resume Next
-        stpSpeed.Stop()
-        stpSpeed.Reset()
-        statMBPS.Text = Nothing
-        ProgressBar1.Visible = False
-        ProgressBar1.Value = 0
-        ProgTimer.Enabled = False
-        DoneWaiting()
-        StatusBar("Idle...")
-        Spinner.Visible = False
-        ListAttachments(CurrentDevice.strGUID)
-        If e.Result Then
-            MessageBox.Show("File uploaded successfully!",
-          "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
-        Else
-            MessageBox.Show("File upload failed.",
+        Try
+            WorkerFeedback(False)
+            ListAttachments(CurrentDevice.strGUID)
+            If Not e.Cancelled Then
+                If e.Result Then
+                    MessageBox.Show("File uploaded successfully!",
+              "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                Else
+                    MessageBox.Show("File upload failed.",
          "Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
-        End If
+                End If
+            Else
+                MessageBox.Show("The upload was cancelled.",
+     "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
         Dim Foldername As String
@@ -365,7 +389,7 @@ Class Attachments
             output = IO.File.Create(strFullPath)
             bytesIn = 1
             stpSpeed.Start()
-            Do Until bytesIn < 1
+            Do Until bytesIn < 1 Or DownloadWorker.CancellationPending
                 bytesIn = respStream.Read(buffer, 0, 1024)
                 If bytesIn > 0 Then
                     output.Write(buffer, 0, bytesIn)
@@ -384,22 +408,25 @@ Class Attachments
             respStream.Dispose()
             resp.Close()
             resp.Dispose()
-            DownloadWorker.ReportProgress(2, "Verifying file...")
-            Dim FileResultHash As String = GetHashOfFile(strFullPath)
-            If FileResultHash = FileExpectedHash Then
-                Process.Start(strFullPath)
-                e.Result = True
+            e.Cancel = DownloadWorker.CancellationPending
+            If Not e.Cancel Then
+                DownloadWorker.ReportProgress(2, "Verifying file...")
+                Dim FileResultHash As String = GetHashOfFile(strFullPath)
+                If FileResultHash = FileExpectedHash Then
+                    Process.Start(strFullPath)
+                    e.Result = True
+                Else
+                    'something is very wrong
+                    Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
+                    Dim blah = MsgBox("File varification failed! The file on the database is corrupt or there was a problem writing the data do the disk.   The local copy of the attachment will now be deleted for saftey.   Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch")
+                    PurgeTempDir()
+                    'DeleteAttachment(FileUID)
+                    e.Result = False
+                End If
             Else
-                'something is very wrong
-                Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
-                Dim blah = MsgBox("File varification failed! The file on the database is corrupt or there was a problem writing the data do the disk.  Local and Database copies of the attachment will now be deleted for saftey.", vbOKOnly + vbExclamation, "Hash Value Mismatch")
                 PurgeTempDir()
-                DeleteAttachment(FileUID)
-                e.Result = False
             End If
         Catch ex As Exception
-            'Dim exResp As Net.FtpWebResponse = ex.Response
-            'ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             e.Result = False
             DownloadWorker.ReportProgress(2, "ERROR!")
             Logger("DOWNLOAD ERROR: " & "Device: " & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID)
@@ -411,19 +438,18 @@ Class Attachments
         End Try
     End Sub
     Private Sub DownloadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles DownloadWorker.RunWorkerCompleted
-        On Error Resume Next
-        stpSpeed.Stop()
-        stpSpeed.Reset()
-        statMBPS.Text = Nothing
-        ProgressBar1.Visible = False
-        ProgressBar1.Value = 0
-        ProgTimer.Enabled = False
-        StatusBar("Idle...")
-        Spinner.Visible = False
-        DoneWaiting()
-        If Not e.Result Then 'if did not complete with success, kill the form.
-            Me.Dispose()
-        End If
+        Try
+            WorkerFeedback(False)
+            If Not e.Cancelled Then
+                If Not e.Result Then 'if did not complete with success, kill the form.
+                    Me.Dispose()
+                End If
+            Else
+                MessageBox.Show("The download was cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            End If
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
         If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
@@ -532,5 +558,19 @@ Class Attachments
     End Sub
     Private Sub AttachGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
+    End Sub
+    Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        If UploadWorker.IsBusy Or DownloadWorker.IsBusy Then
+            e.Cancel = True
+            Dim blah = MsgBox("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
+            If blah = vbYes Then
+                If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
+                If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
+            End If
+        End If
+    End Sub
+    Private Sub ToolStripDropDownButton1_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
+        If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
+        If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
     End Sub
 End Class
