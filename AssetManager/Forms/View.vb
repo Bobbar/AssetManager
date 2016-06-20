@@ -22,8 +22,7 @@ Public Class View
         ToolStrip1.BackColor = colToolBarColor
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
-        'AssetManager.CopyDefaultCellStyles()
-        'ClearFields()
+
     End Sub
     Private Sub GetCurrentValues()
         With OldData
@@ -402,8 +401,6 @@ Public Class View
         Attachments.Dispose()
         Tracking.Dispose()
         CloseChildren()
-        'Dim f As Form
-        'For Each f In 
     End Sub
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
         NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
@@ -433,15 +430,16 @@ Public Class View
         DoneWaiting()
     End Sub
     Private Sub AddChild(form As Form)
-        Children(UBound(Children)) = form
         ReDim Preserve Children(UBound(Children) + 1)
+        Children(UBound(Children)) = form
     End Sub
     Public Sub CloseChildren()
-        On Error Resume Next
-        For i As Integer = 0 To UBound(Children)
-            Children(i).Dispose()
-        Next
-        ReDim Children(0)
+        If UBound(Children) > 0 Then
+            For i As Integer = 1 To UBound(Children)
+                Children(i).Dispose()
+            Next
+            ReDim Children(0)
+        End If
     End Sub
     Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddNoteToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub
