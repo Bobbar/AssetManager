@@ -12,7 +12,7 @@ Public Class UpdateDev
         txtUpdate_Note.Text = ""
         View.GetNewValues()
         Me.Hide()
-        UpdateDevice()
+        View.UpdateDevice()
         cmbUpdate_ChangeType.Enabled = True
     End Sub
     Private Sub UpdateDev_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing

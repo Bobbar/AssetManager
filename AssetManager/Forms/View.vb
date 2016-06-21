@@ -121,13 +121,40 @@ Public Class View
     Public Sub UpdateDevice()
         Try
             Dim rows As Integer
-            Dim strSQLQry1 = "UPDATE devices SET dev_description='" & NewData.strDescription & "', dev_location='" & NewData.strLocation & "', dev_cur_user='" & NewData.strCurrentUser & "', dev_serial='" & NewData.strSerial & "', dev_asset_tag='" & NewData.strAssetTag & "', dev_purchase_date='" & NewData.dtPurchaseDate & "', dev_replacement_year='" & NewData.strReplaceYear & "', dev_osversion='" & NewData.strOSVersion & "', dev_eq_type='" & NewData.strEqType & "', dev_status='" & NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
+            Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable WHERE dev_UID='" & CurrentDevice.strGUID & "'"
+            '"UPDATE devices SET dev_description='" & NewData.strDescription & "', dev_location='" & NewData.strLocation & "', dev_cur_user='" & NewData.strCurrentUser & "', dev_serial='" & NewData.strSerial & "', dev_asset_tag='" & NewData.strAssetTag & "', dev_purchase_date='" & NewData.dtPurchaseDate & "', dev_replacement_year='" & NewData.strReplaceYear & "', dev_osversion='" & NewData.strOSVersion & "', dev_eq_type='" & NewData.strEqType & "', dev_status='" & NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
             Dim cmd As New MySqlCommand
             cmd.Connection = GlobalConn
             cmd.CommandText = strSQLQry1
+            cmd.Parameters.AddWithValue("@dev_description", NewData.strDescription)
+            cmd.Parameters.AddWithValue("@dev_location", NewData.strLocation)
+            cmd.Parameters.AddWithValue("@dev_cur_user", NewData.strCurrentUser)
+            cmd.Parameters.AddWithValue("@dev_serial", NewData.strSerial)
+            cmd.Parameters.AddWithValue("@dev_asset_tag", NewData.strAssetTag)
+            cmd.Parameters.AddWithValue("@dev_purchase_date", NewData.dtPurchaseDate)
+            cmd.Parameters.AddWithValue("@dev_replacement_year", NewData.strReplaceYear)
+            cmd.Parameters.AddWithValue("@dev_osversion", NewData.strOSVersion)
+            cmd.Parameters.AddWithValue("@dev_eq_type", NewData.strEqType)
+            cmd.Parameters.AddWithValue("@dev_status", NewData.strStatus)
+            cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(NewData.bolTrackable))
             rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & NewData.strNote & "','" & NewData.strSerial & "','" & NewData.strDescription & "','" & NewData.strLocation & "','" & NewData.strCurrentUser & "','" & NewData.strAssetTag & "','" & NewData.dtPurchaseDate & "','" & NewData.strReplaceYear & "','" & NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & NewData.strEqType & "','" & NewData.strStatus & "','" & Convert.ToInt32(NewData.bolTrackable) & "')"
+            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable) VALUES (@hist_change_type,@hist_notes,@hist_serial,@hist_description,@hist_location,@hist_cur_user,@hist_asset_tag,@hist_purchase_date,@hist_replacement_year,@hist_osversion,@hist_dev_UID,@hist_action_user,@hist_eq_type,@hist_status,@hist_trackable)"
             cmd.CommandText = strSqlQry2
+            cmd.Parameters.AddWithValue("@hist_change_type", GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
+            cmd.Parameters.AddWithValue("@hist_notes", NewData.strNote)
+            cmd.Parameters.AddWithValue("@hist_serial", NewData.strSerial)
+            cmd.Parameters.AddWithValue("@hist_description", NewData.strDescription)
+            cmd.Parameters.AddWithValue("@hist_location", NewData.strLocation)
+            cmd.Parameters.AddWithValue("@hist_cur_user", NewData.strCurrentUser)
+            cmd.Parameters.AddWithValue("@hist_asset_tag", NewData.strAssetTag)
+            cmd.Parameters.AddWithValue("@hist_purchase_date", NewData.dtPurchaseDate)
+            cmd.Parameters.AddWithValue("@hist_replacement_year", NewData.strReplaceYear)
+            cmd.Parameters.AddWithValue("@hist_osversion", NewData.strOSVersion)
+            cmd.Parameters.AddWithValue("@hist_dev_UID", CurrentDevice.strGUID)
+            cmd.Parameters.AddWithValue("@hist_action_user", strLocalUser)
+            cmd.Parameters.AddWithValue("@hist_eq_type", NewData.strEqType)
+            cmd.Parameters.AddWithValue("@hist_status", NewData.strStatus)
+            cmd.Parameters.AddWithValue("@hist_trackable", Convert.ToInt32(NewData.bolTrackable))
             rows = rows + cmd.ExecuteNonQuery()
             UpdateDev.strNewNote = Nothing
             If rows = 2 Then
