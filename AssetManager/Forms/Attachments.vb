@@ -512,9 +512,6 @@ Class Attachments
         If Not bolGridFilling Then
             Dim BackColor As Color = DefGridBC
             Dim SelectColor As Color = DefGridSelCol
-            Dim Mod1 As Integer = 3
-            Dim Mod2 As Integer = 4
-            Dim Mod3 As Single = 0.6 '0.75
             Dim c1 As Color = colHighlightColor 'highlight color
             If Row > -1 Then
                 For Each cell As DataGridViewCell In AttachGrid.Rows(Row).Cells
@@ -525,14 +522,12 @@ Class Attachments
                                                 (CInt(c1.G) + CInt(c2.G)) / 2,
                                                 (CInt(c1.B) + CInt(c2.B)) / 2)
                     cell.Style.SelectionBackColor = BlendColor
-                    'cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
                     c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
                     BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
                                                 (CInt(c1.R) + CInt(c2.R)) / 2,
                                                 (CInt(c1.G) + CInt(c2.G)) / 2,
                                                 (CInt(c1.B) + CInt(c2.B)) / 2)
                     cell.Style.BackColor = BlendColor
-                    'cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
                 Next
             End If
         End If

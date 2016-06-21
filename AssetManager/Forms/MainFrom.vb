@@ -171,26 +171,30 @@ Public Class MainFrom
         'picRunning.Visible = False
     End Sub
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
-        StatusBar(strLoadingGridMessage)
-        Dim table As New DataTable
-        table.Columns.Add("User", GetType(String))
-        table.Columns.Add("Asset ID", GetType(String))
-        table.Columns.Add("Serial", GetType(String))
-        table.Columns.Add("Device Type", GetType(String))
-        table.Columns.Add("Description", GetType(String))
-        table.Columns.Add("OS Version", GetType(String))
-        table.Columns.Add("Location", GetType(String))
-        table.Columns.Add("Purchase Date", GetType(String))
-        table.Columns.Add("Replace Year", GetType(String))
-        table.Columns.Add("GUID", GetType(String))
-        For Each r As DataRow In Results.Rows
-            table.Rows.Add(r.Item("dev_cur_user"), r.Item("dev_asset_tag"), r.Item("dev_serial"), GetHumanValue(ComboType.EquipType, r.Item("dev_eq_type")), r.Item("dev_description"), GetHumanValue(ComboType.OSType, r.Item("dev_osversion")), GetHumanValue(ComboType.Location, r.Item("dev_location")), r.Item("dev_purchase_date"), r.Item("dev_replacement_year"), r.Item("dev_UID"))
-        Next
-        bolGridFilling = True
-        ResultGrid.DataSource = table
-        ResultGrid.ClearSelection()
-        bolGridFilling = False
-        table.Dispose()
+        Try
+            StatusBar(strLoadingGridMessage)
+            Dim table As New DataTable
+            table.Columns.Add("User", GetType(String))
+            table.Columns.Add("Asset ID", GetType(String))
+            table.Columns.Add("Serial", GetType(String))
+            table.Columns.Add("Device Type", GetType(String))
+            table.Columns.Add("Description", GetType(String))
+            table.Columns.Add("OS Version", GetType(String))
+            table.Columns.Add("Location", GetType(String))
+            table.Columns.Add("Purchase Date", GetType(String))
+            table.Columns.Add("Replace Year", GetType(String))
+            table.Columns.Add("GUID", GetType(String))
+            For Each r As DataRow In Results.Rows
+                table.Rows.Add(r.Item("dev_cur_user"), r.Item("dev_asset_tag"), r.Item("dev_serial"), GetHumanValue(ComboType.EquipType, r.Item("dev_eq_type")), r.Item("dev_description"), GetHumanValue(ComboType.OSType, r.Item("dev_osversion")), GetHumanValue(ComboType.Location, r.Item("dev_location")), r.Item("dev_purchase_date"), r.Item("dev_replacement_year"), r.Item("dev_UID"))
+            Next
+            bolGridFilling = True
+            ResultGrid.DataSource = table
+            ResultGrid.ClearSelection()
+            bolGridFilling = False
+            table.Dispose()
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Private Sub GetSearchDBValues() 'cleanup user input for db
         SearchValues.strSerial = Trim(txtSerialSearch.Text)

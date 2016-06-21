@@ -118,6 +118,35 @@ Public Class View
         cmdAccept_Tool.Visible = False
         cmdCancel_Tool.Visible = False
     End Sub
+    Public Sub UpdateDevice()
+        Try
+            Dim rows As Integer
+            Dim strSQLQry1 = "UPDATE devices SET dev_description='" & NewData.strDescription & "', dev_location='" & NewData.strLocation & "', dev_cur_user='" & NewData.strCurrentUser & "', dev_serial='" & NewData.strSerial & "', dev_asset_tag='" & NewData.strAssetTag & "', dev_purchase_date='" & NewData.dtPurchaseDate & "', dev_replacement_year='" & NewData.strReplaceYear & "', dev_osversion='" & NewData.strOSVersion & "', dev_eq_type='" & NewData.strEqType & "', dev_status='" & NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
+            Dim cmd As New MySqlCommand
+            cmd.Connection = GlobalConn
+            cmd.CommandText = strSQLQry1
+            rows = rows + cmd.ExecuteNonQuery()
+            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & NewData.strNote & "','" & NewData.strSerial & "','" & NewData.strDescription & "','" & NewData.strLocation & "','" & NewData.strCurrentUser & "','" & NewData.strAssetTag & "','" & NewData.dtPurchaseDate & "','" & NewData.strReplaceYear & "','" & NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & NewData.strEqType & "','" & NewData.strStatus & "','" & Convert.ToInt32(NewData.bolTrackable) & "')"
+            cmd.CommandText = strSqlQry2
+            rows = rows + cmd.ExecuteNonQuery()
+            UpdateDev.strNewNote = Nothing
+            If rows = 2 Then
+                ViewDevice(CurrentDevice.strGUID)
+                Dim blah = MsgBox("Update Added.", vbOKOnly + vbInformation, "Success")
+            Else
+                ViewDevice(CurrentDevice.strGUID)
+                Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
+            End If
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                ViewDevice(CurrentDevice.strGUID)
+                Exit Sub
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
@@ -153,18 +182,18 @@ Public Class View
             table.Columns.Add("GUID", GetType(String))
             With reader
                 Do While .Read()
-                    CollectDeviceInfo(!dev_UID,!dev_description,!dev_location,!dev_cur_user,!dev_serial,!dev_asset_tag,!dev_purchase_date,!dev_replacement_year,!dev_po,!dev_osversion,!dev_eq_type,!dev_status, CBool(!dev_trackable), CBool(!dev_checkedout))
-                    txtAssetTag_View_REQ.Text = !dev_asset_tag
-                    txtDescription_View_REQ.Text = !dev_description
+                    CollectDeviceInfo(NoNull(!dev_UID), NoNull(!dev_description), NoNull(!dev_location), NoNull(!dev_cur_user), NoNull(!dev_serial), NoNull(!dev_asset_tag), NoNull(!dev_purchase_date), NoNull(!dev_replacement_year), NoNull(!dev_po), NoNull(!dev_osversion), NoNull(!dev_eq_type), NoNull(!dev_status), CBool(!dev_trackable), CBool(!dev_checkedout))
+                    txtAssetTag_View_REQ.Text = NoNull(!dev_asset_tag)
+                    txtDescription_View_REQ.Text = NoNull(!dev_description)
                     cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType,!dev_eq_type)
-                    txtSerial_View_REQ.Text = !dev_serial
+                    txtSerial_View_REQ.Text = NoNull(!dev_serial)
                     cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.Location,!dev_location)
-                    txtCurUser_View_REQ.Text = !dev_cur_user
-                    dtPurchaseDate_View_REQ.Value = !dev_purchase_date
-                    txtReplacementYear_View.Text = !dev_replacement_year
+                    txtCurUser_View_REQ.Text = NoNull(!dev_cur_user)
+                    dtPurchaseDate_View_REQ.Value = NoNull(!dev_purchase_date)
+                    txtReplacementYear_View.Text = NoNull(!dev_replacement_year)
                     cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.OSType,!dev_osversion)
                     cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
-                    txtGUID.Text = !dev_UID
+                    txtGUID.Text = NoNull(!dev_UID)
                     chkTrackable.Checked = CBool(!dev_trackable)
                     table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_action_user,!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
                 Loop

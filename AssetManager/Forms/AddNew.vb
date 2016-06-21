@@ -16,12 +16,42 @@ Public Class AddNew
                 Exit Sub
             End If
             GetDBValues()
-            Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_trackable) VALUES ('" & strUID & "','" & Device.strDescription & "','" & Device.strLocation & "','" & Device.strCurrentUser & "','" & Device.strSerial & "','" & Device.strAssetTag & "','" & Device.dtPurchaseDate & "','" & Device.strReplaceYear & "','" & Device.strEqType & "','" & Device.strOSVersion & "','" & Device.strStatus & "','" & strLocalUser & "','" & Convert.ToInt32(Device.bolTrackable) & "')"
+            Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_po,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_trackable) VALUES(@dev_UID,@dev_description,@dev_location,@dev_cur_user,@dev_serial,@dev_asset_tag,@dev_purchase_date,@dev_po,@dev_replacement_year,@dev_eq_type,@dev_osversion,@dev_status,@dev_lastmod_user,@dev_trackable)"
             Dim cmd As New MySqlCommand
+            cmd.Parameters.AddWithValue("@dev_UID", strUID)
+            cmd.Parameters.AddWithValue("@dev_description", Device.strDescription)
+            cmd.Parameters.AddWithValue("@dev_location", Device.strLocation)
+            cmd.Parameters.AddWithValue("@dev_cur_user", Device.strCurrentUser)
+            cmd.Parameters.AddWithValue("@dev_serial", Device.strSerial)
+            cmd.Parameters.AddWithValue("@dev_asset_tag", Device.strAssetTag)
+            cmd.Parameters.AddWithValue("@dev_purchase_date", Device.dtPurchaseDate)
+            cmd.Parameters.AddWithValue("@dev_po", Device.strPO)
+            cmd.Parameters.AddWithValue("@dev_replacement_year", Device.strReplaceYear)
+            cmd.Parameters.AddWithValue("@dev_eq_type", Device.strEqType)
+            cmd.Parameters.AddWithValue("@dev_osversion", Device.strOSVersion)
+            cmd.Parameters.AddWithValue("@dev_status", Device.strStatus)
+            cmd.Parameters.AddWithValue("@dev_lastmod_user", strLocalUser)
+            cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(Device.bolTrackable))
             cmd.Connection = GlobalConn
             cmd.CommandText = strSqlQry1
             rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES ('NEWD','" & Device.strNote & "','" & Device.strSerial & "','" & Device.strDescription & "','" & Device.strLocation & "','" & Device.strCurrentUser & "','" & Device.strAssetTag & "','" & Device.dtPurchaseDate & "','" & Device.strReplaceYear & "','" & Device.strPO & "','" & Device.strOSVersion & "','" & strUID & "','" & strLocalUser & "','" & Device.strEqType & "','" & Device.strStatus & "','" & Convert.ToInt32(Device.bolTrackable) & "')"
+            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES(@hist_change_type, @hist_notes, @hist_serial, @hist_description, @hist_location, @hist_cur_user, @hist_asset_tag, @hist_purchase_date, @hist_replacement_year, @hist_po, @hist_osversion, @hist_dev_UID, @hist_action_user, @hist_eq_type, @hist_status, @hist_trackable)"
+            cmd.Parameters.AddWithValue("@hist_change_type", "NEWD")
+            cmd.Parameters.AddWithValue("@hist_notes", Device.strNote)
+            cmd.Parameters.AddWithValue("@hist_serial", Device.strSerial)
+            cmd.Parameters.AddWithValue("@hist_description", Device.strDescription)
+            cmd.Parameters.AddWithValue("@hist_location", Device.strLocation)
+            cmd.Parameters.AddWithValue("@hist_cur_user", Device.strCurrentUser)
+            cmd.Parameters.AddWithValue("@hist_asset_tag", Device.strAssetTag)
+            cmd.Parameters.AddWithValue("@hist_purchase_date", Device.dtPurchaseDate)
+            cmd.Parameters.AddWithValue("@hist_replacement_year", Device.strReplaceYear)
+            cmd.Parameters.AddWithValue("@hist_po", Device.strPO)
+            cmd.Parameters.AddWithValue("@hist_osversion", Device.strOSVersion)
+            cmd.Parameters.AddWithValue("@hist_dev_UID", strUID)
+            cmd.Parameters.AddWithValue("@hist_action_user", strLocalUser)
+            cmd.Parameters.AddWithValue("@hist_eq_type", Device.strEqType)
+            cmd.Parameters.AddWithValue("@hist_status", Device.strStatus)
+            cmd.Parameters.AddWithValue("@hist_trackable", Convert.ToInt32(Device.bolTrackable))
             cmd.CommandText = strSqlQry2
             rows = rows + cmd.ExecuteNonQuery()
             If rows = 2 Then 'ExecuteQuery returns the number of rows affected. We can check this to make sure the qry completed successfully.
@@ -86,6 +116,8 @@ Public Class AddNew
         Device.strEqType = GetDBValue(ComboType.EquipType, cmbEquipType_REQ.SelectedIndex)
         Device.strStatus = GetDBValue(ComboType.StatusType, cmbStatus_REQ.SelectedIndex)
         Device.bolTrackable = chkTrackable.Checked
+        Device.strPO = Trim(txtPO.Text)
+
         'strOSVersion =
     End Sub
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load

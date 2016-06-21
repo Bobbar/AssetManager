@@ -155,6 +155,11 @@ Module OtherFunctions
         MainFrom.Refresh()
     End Sub
     Public Function NoNull(DBVal As Object) As String
-        Return IIf(IsDBNull(DBVal), "", DBVal.ToString)
+        Try
+            Return IIf(IsDBNull(DBVal), "", DBVal.ToString)
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return ""
+        End Try
     End Function
 End Module

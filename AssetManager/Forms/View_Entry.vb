@@ -23,25 +23,25 @@ Public Class View_Entry
         reader = cmd.ExecuteReader
         With reader
             Do While .Read()
-                txtEntryTime.Text = !hist_action_datetime
-                txtActionUser.Text = !hist_action_user
+                txtEntryTime.Text = NoNull(!hist_action_datetime)
+                txtActionUser.Text = NoNull(!hist_action_user)
                 txtChangeType.Text = GetHumanValue(ComboType.ChangeType,!hist_change_type)
-                txtDescription.Text = !hist_description
-                txtGUID.Text = !hist_dev_UID
-                txtCurrentUser.Text = !hist_cur_user
+                txtDescription.Text = NoNull(!hist_description)
+                txtGUID.Text = NoNull(!hist_dev_UID)
+                txtCurrentUser.Text = NoNull(!hist_cur_user)
                 txtLocation.Text = GetHumanValue(ComboType.Location,!hist_location)
-                txtPONumber.Text = !hist_po
-                txtAssetTag.Text = !hist_asset_tag
-                txtPurchaseDate.Text = !hist_purchase_date
+                txtPONumber.Text = NoNull(!hist_po)
+                txtAssetTag.Text = NoNull(!hist_asset_tag)
+                txtPurchaseDate.Text = NoNull(!hist_purchase_date)
                 txtOSVersion.Text = GetHumanValue(ComboType.OSType,!hist_osversion)
-                txtSerial.Text = !hist_serial
-                txtReplaceYear.Text = !hist_replacement_year
+                txtSerial.Text = NoNull(!hist_serial)
+                txtReplaceYear.Text = NoNull(!hist_replacement_year)
                 txtEQType.Text = GetHumanValue(ComboType.EquipType,!hist_eq_type)
-                txtNotes.Text = !hist_notes
+                txtNotes.Text = NoNull(!hist_notes)
                 txtStatus.Text = GetHumanValue(ComboType.StatusType,!hist_status)
-                txtEntryGUID.Text = !hist_uid
+                txtEntryGUID.Text = NoNull(!hist_uid)
                 chkTrackable.Checked = CBool(!hist_trackable)
-                Me.Text = Me.Text + " - " &!hist_action_datetime
+                Me.Text = Me.Text + " - " & NoNull(!hist_action_datetime)
             Loop
         End With
         reader.Close()

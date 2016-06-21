@@ -119,22 +119,26 @@ Public Module DBFunctions
         Return True
     End Function
     Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String, ByVal Status As String, ByVal Trackable As Boolean, ByVal CheckedOut As Boolean)
-        With CurrentDevice
-            .strGUID = UID
-            .strDescription = Description
-            .strLocation = Location
-            .strCurrentUser = CurrentUser
-            .strSerial = Serial
-            .strAssetTag = AssetTag
-            .dtPurchaseDate = PurchaseDate
-            .strReplaceYear = ReplaceYear
-            .strPO = PO
-            .strOSVersion = OSVersion
-            .strEqType = EQType
-            .strStatus = Status
-            .bolTrackable = Trackable
-            .Tracking.bolCheckedOut = CheckedOut
-        End With
+        Try
+            With CurrentDevice
+                .strGUID = UID
+                .strDescription = Description
+                .strLocation = Location
+                .strCurrentUser = CurrentUser
+                .strSerial = Serial
+                .strAssetTag = AssetTag
+                .dtPurchaseDate = PurchaseDate
+                .strReplaceYear = ReplaceYear
+                .strPO = PO
+                .strOSVersion = OSVersion
+                .strEqType = EQType
+                .strStatus = Status
+                .bolTrackable = Trackable
+                .Tracking.bolCheckedOut = CheckedOut
+            End With
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Private Sub ListConnections(num As Integer)
         Debug.Print("")
@@ -551,33 +555,5 @@ Public Module DBFunctions
             Return False
         End Try
     End Function
-    Public Sub UpdateDevice()
-        Try
-            Dim rows As Integer
-            Dim strSQLQry1 = "UPDATE devices SET dev_description='" & View.NewData.strDescription & "', dev_location='" & View.NewData.strLocation & "', dev_cur_user='" & View.NewData.strCurrentUser & "', dev_serial='" & View.NewData.strSerial & "', dev_asset_tag='" & View.NewData.strAssetTag & "', dev_purchase_date='" & View.NewData.dtPurchaseDate & "', dev_replacement_year='" & View.NewData.strReplaceYear & "', dev_osversion='" & View.NewData.strOSVersion & "', dev_eq_type='" & View.NewData.strEqType & "', dev_status='" & View.NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(View.NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
-            Dim cmd As New MySqlCommand
-            cmd.Connection = GlobalConn
-            cmd.CommandText = strSQLQry1
-            rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable) VALUES ('" & GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex) & "','" & View.NewData.strNote & "','" & View.NewData.strSerial & "','" & View.NewData.strDescription & "','" & View.NewData.strLocation & "','" & View.NewData.strCurrentUser & "','" & View.NewData.strAssetTag & "','" & View.NewData.dtPurchaseDate & "','" & View.NewData.strReplaceYear & "','" & View.NewData.strOSVersion & "','" & CurrentDevice.strGUID & "','" & strLocalUser & "','" & View.NewData.strEqType & "','" & View.NewData.strStatus & "','" & Convert.ToInt32(View.NewData.bolTrackable) & "')"
-            cmd.CommandText = strSqlQry2
-            rows = rows + cmd.ExecuteNonQuery()
-            UpdateDev.strNewNote = Nothing
-            If rows = 2 Then
-                View.ViewDevice(CurrentDevice.strGUID)
-                Dim blah = MsgBox("Update Added.", vbOKOnly + vbInformation, "Success")
-            Else
-                View.ViewDevice(CurrentDevice.strGUID)
-                Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
-            End If
-            Exit Sub
-        Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                View.ViewDevice(CurrentDevice.strGUID)
-                Exit Sub
-            Else
-                EndProgram()
-            End If
-        End Try
-    End Sub
+
 End Module
