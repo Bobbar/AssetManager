@@ -126,13 +126,13 @@ Public Class MainFrom
             EndProgram()
         Else
             e.Cancel = True
+            Attachments.Activate()
             Dim blah = MsgBox("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
             If blah = vbYes Then
                 If Attachments.UploadWorker.IsBusy Then Attachments.UploadWorker.CancelAsync()
                 If Attachments.DownloadWorker.IsBusy Then Attachments.DownloadWorker.CancelAsync()
             End If
         End If
-
     End Sub
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         If Not BigQueryWorker.IsBusy Then

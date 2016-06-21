@@ -699,7 +699,7 @@ Partial Class MainFrom
         Me.Controls.Add(Me.GroupBox1)
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MinimumSize = New System.Drawing.Size(1246, 443)
+        Me.MinimumSize = New System.Drawing.Size(1256, 443)
         Me.Name = "MainFrom"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Asset Manager"
@@ -718,6 +718,7 @@ Partial Class MainFrom
         Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button

@@ -1,12 +1,14 @@
-﻿Imports System.ComponentModel
+﻿Option Explicit On
+Option Compare Binary
+Imports System.ComponentModel
 Imports System.IO
 Imports MySql.Data.MySqlClient
 Class Attachments
     Public bolAdminMode As Boolean = False
     Private AttachQry As String
-    Private Const FileSizeMBLimit As Long = 150
-    Private lngProgress As Integer
-    Private lngBytesMoved As Long
+    Private Const FileSizeMBLimit As Short = 150
+    Private intProgress As Short
+    Private lngBytesMoved As Integer
     Private stpSpeed As New Stopwatch
     Private bolGridFilling As Boolean
     Private Structure Attach_Struct
@@ -45,7 +47,7 @@ Class Attachments
     Private Sub WorkerFeedback(WorkerRunning As Boolean)
         If WorkerRunning Then
             Me.Cursor = Cursors.AppStarting
-            lngProgress = 0
+            intProgress = 0
             ProgressBar1.Value = 0
             ProgressBar1.Visible = True
             cmdCancel.Visible = True
@@ -53,10 +55,11 @@ Class Attachments
             ProgTimer.Enabled = True
             Me.Refresh()
         Else
+            lngBytesMoved = 0
             Me.Cursor = Cursors.Default
             stpSpeed.Stop()
             stpSpeed.Reset()
-            lngProgress = 0
+            intProgress = 0
             ProgressBar1.Value = 0
             ProgressBar1.Visible = False
             cmdCancel.Visible = False
@@ -229,7 +232,7 @@ Class Attachments
         Dim strFullFilename As String = Path.GetFileName(FilePath)
         Dim myFileInfo As New FileInfo(FilePath)
         Dim FileSize As Long
-        Dim FileSizeMB As Long
+        Dim FileSizeMB As Integer
         FileSize = myFileInfo.Length
         FileSizeMB = FileSize / (1024 * 1024)
         If FileSizeMB > FileSizeMBLimit Then
@@ -255,16 +258,16 @@ Class Attachments
                 End If
             End Using
             'ftp upload
-            UploadWorker.ReportProgress(1, "Uploading...")
             Dim buffer(1023) As Byte
-            Dim bytesIn As Long = 1
-            Dim totalBytesIn As Long
-            Dim infoFilepath As System.IO.FileInfo = New System.IO.FileInfo(FilePath)
-            Dim ftpstream As System.IO.FileStream = infoFilepath.OpenRead()
-            Dim FileHash As String = GetHashOfFile(infoFilepath.ToString)
-            Dim flLength As Long = ftpstream.Length
+            Dim bytesIn As Integer = 1
+            Dim totalBytesIn As Integer
+            Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
+            Dim FileHash As String = GetHashOfStream(ftpStream)
+            Dim flLength As Integer = ftpstream.Length
             Dim reqfile As System.IO.Stream = ReturnFTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+            Dim perc As Short
             stpSpeed.Start()
+            UploadWorker.ReportProgress(1, "Uploading...")
             Do Until bytesIn < 1 Or UploadWorker.CancellationPending
                 bytesIn = ftpstream.Read(buffer, 0, 1024)
                 If bytesIn > 0 Then
@@ -272,8 +275,8 @@ Class Attachments
                     totalBytesIn += bytesIn
                     lngBytesMoved = totalBytesIn
                     If flLength > 0 Then
-                        Dim perc As Integer = (totalBytesIn / flLength) * 100
-                        lngProgress = perc
+                        perc = (totalBytesIn / flLength) * 100
+                        intProgress = perc
                     End If
                 End If
             Loop
@@ -313,7 +316,6 @@ Class Attachments
             conn.Close()
             conn.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
-            'ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
     End Sub
@@ -379,7 +381,7 @@ Class Attachments
             Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID
             Dim resp As Net.FtpWebResponse = Nothing
             'get file size
-            Dim flLength As Integer = CInt(ReturnFTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
+            Dim flLength As Int64 = CInt(ReturnFTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
             'setup download
             resp = ReturnFTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
             Dim respStream As IO.Stream = resp.GetResponseStream
@@ -388,6 +390,7 @@ Class Attachments
             DownloadWorker.ReportProgress(1, "Downloading...")
             output = IO.File.Create(strFullPath)
             bytesIn = 1
+            Dim perc As Integer = 0
             stpSpeed.Start()
             Do Until bytesIn < 1 Or DownloadWorker.CancellationPending
                 bytesIn = respStream.Read(buffer, 0, 1024)
@@ -396,9 +399,9 @@ Class Attachments
                     totalBytesIn += bytesIn 'downloaded bytes
                     lngBytesMoved = totalBytesIn
                     If flLength > 0 Then
-                        Dim perc As Integer = (totalBytesIn / flLength) * 100
+                        perc = (totalBytesIn / flLength) * 100
                         'report progress
-                        lngProgress = perc
+                        intProgress = perc
                     End If
                 End If
             Loop
@@ -489,13 +492,16 @@ Class Attachments
         End Select
     End Sub
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
-        'Debug.Print(lngProgress)
         Dim BytesPerSecond As Single
-        If lngBytesMoved > 0 Then BytesPerSecond = Math.Round((lngBytesMoved / stpSpeed.ElapsedMilliseconds) / 1000, 2)
-        statMBPS.Text = BytesPerSecond.ToString("0.00") & " MB/s"
-        ProgressBar1.Value = lngProgress
-        If lngProgress > 1 Then ProgressBar1.Value = ProgressBar1.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
-        ProgressBar1.Value = lngProgress
+        If lngBytesMoved > 0 Then
+            BytesPerSecond = Math.Round((lngBytesMoved / stpSpeed.ElapsedMilliseconds) / 1000, 2)
+            statMBPS.Text = BytesPerSecond.ToString("0.00") & " MB/s"
+        Else
+            statMBPS.Text = Nothing
+        End If
+        ProgressBar1.Value = intProgress
+        If intProgress > 1 Then ProgressBar1.Value = ProgressBar1.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
+        ProgressBar1.Value = intProgress
     End Sub
     Private Sub Button1_Click_1(sender As Object, e As EventArgs)
         DeleteFTPDeviceFolder(CurrentDevice.strGUID)
