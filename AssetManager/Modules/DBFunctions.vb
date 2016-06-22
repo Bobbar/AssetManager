@@ -242,9 +242,30 @@ Public Module DBFunctions
     End Function
     Public Function DeleteDevice(ByVal strGUID As String) As Boolean
         Try
-            If DeleteFTPDeviceFolder(strGUID) Then Return DeleteSQLDevice(strGUID) ' if ftp directory deleted successfully, then delete the sql record.
+            If HasAttachments(strGUID) Then
+                If DeleteFTPDeviceFolder(strGUID) Then Return DeleteSQLDevice(strGUID) ' if has attachments, delete ftp directory, then delete the sql records.
+            Else
+                Return DeleteSQLDevice(strGUID) 'delete sql records
+            End If
         Catch ex As Exception
             Return ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Function
+    Public Function HasAttachments(strGUID As String) As Boolean
+        Try
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT attach_dev_UID FROM attachments WHERE attach_dev_UID='" & strGUID & "'"
+            Dim cmd As New MySqlCommand(strQRY, GlobalConn)
+            reader = cmd.ExecuteReader
+            Dim bolHasRows As Boolean = reader.HasRows
+            reader.Close()
+            Return bolHasRows
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Else
+                EndProgram()
+            End If
+            Return Nothing
         End Try
     End Function
     Public Function DeleteSQLDevice(ByVal strGUID As String) As Integer
@@ -371,7 +392,6 @@ Public Module DBFunctions
     End Function
     Public Sub BuildLocationIndex()
         Try
-            Dim ConnID As String = Guid.NewGuid.ToString
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
             Dim cmd As New MySqlCommand(strQRY, GlobalConn)
@@ -400,7 +420,6 @@ Public Module DBFunctions
     End Sub
     Public Sub BuildChangeTypeIndex()
         Try
-            Dim ConnID As String = Guid.NewGuid.ToString
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
             Dim cmd As New MySqlCommand(strQRY, GlobalConn)
@@ -417,7 +436,6 @@ Public Module DBFunctions
                     ChangeType(row).strShort = !combo_data_db
                 Loop
             End With
-            'CloseConnection(ConnID)
             reader.Close()
             Exit Sub
         Catch ex As Exception
@@ -430,7 +448,6 @@ Public Module DBFunctions
     End Sub
     Public Sub BuildEquipTypeIndex()
         Try
-            Dim ConnID As String = Guid.NewGuid.ToString
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
             Dim cmd As New MySqlCommand(strQRY, GlobalConn)
@@ -447,7 +464,6 @@ Public Module DBFunctions
                     EquipType(row).strShort = !combo_data_db
                 Loop
             End With
-            'CloseConnection(ConnID)
             reader.Close()
             Exit Sub
         Catch ex As Exception
@@ -460,7 +476,6 @@ Public Module DBFunctions
     End Sub
     Public Sub BuildOSTypeIndex()
         Try
-            Dim ConnID As String = Guid.NewGuid.ToString
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
             Dim cmd As New MySqlCommand(strQRY, GlobalConn)
@@ -489,7 +504,6 @@ Public Module DBFunctions
     End Sub
     Public Sub BuildStatusTypeIndex()
         Try
-            Dim ConnID As String = Guid.NewGuid.ToString
             Dim reader As MySqlDataReader
             Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
             Dim cmd As New MySqlCommand(strGetDevices, GlobalConn)
