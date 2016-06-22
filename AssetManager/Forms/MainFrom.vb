@@ -13,7 +13,6 @@ Public Class MainFrom
     Private intPrevRow As Integer
     Private bolGridFilling As Boolean = False
     Private ConnectAttempts As Integer = 0
-    Private SearchValues As Device_Info
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' ResultGrid.RowHeadersDefaultCellStyle.BackColor = Color.Green
         DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
@@ -32,7 +31,6 @@ Public Class MainFrom
             EndProgram()
         End If
         Dim userFullName As String = UserPrincipal.Current.DisplayName
-        'Logger("Enabling Double-Buffered Controls...")
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
         Status("Loading Indexes...")
@@ -48,19 +46,16 @@ Public Class MainFrom
             AdminDropDown.Visible = True
         Else
             AdminDropDown.Visible = False
-            'GetDBs()
         End If
         Clear_All()
         GetGridStylez()
         CopyDefaultCellStyles()
-        'Status("Loading devices...")
         ConnectionWatchDog.RunWorkerAsync()
-        StartBigQuery(strShowAllQry)
+        ShowAll()
         Status("Ready!")
         Thread.Sleep(1000)
         SplashScreen.Hide()
         Me.Show()
-        'Tracking.Show()
     End Sub
     Public Sub GetGridStylez()
         'set colors
@@ -137,26 +132,28 @@ Public Class MainFrom
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         If Not BigQueryWorker.IsBusy Then
             ClickedButton = cmdShowAll
-            'ShowAll()         
-            StartBigQuery(strShowAllQry)
+            ShowAll()
         End If
     End Sub
-    Private Sub StartBigQuery(strQry As String)
+    Private Sub ShowAll()
+        Dim cmd As New MySqlCommand
+        cmd.CommandText = strShowAllQry
+        StartBigQuery(cmd)
+    End Sub
+    Private Sub StartBigQuery(QryCommand As Object)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
         End If
         If Not BigQueryWorker.IsBusy Then
-            strWorkerQry = strQry
             If ClickedButton IsNot Nothing Then
                 ClickedButtonPrevText = ClickedButton.Text
                 ClickedButton.Enabled = False
                 ClickedButton.Text = "Working..."
             End If
             StatusBar("Request sent to background...")
-            'picRunning.Visible = True
             StripSpinner.Visible = True
-            BigQueryWorker.RunWorkerAsync()
+            BigQueryWorker.RunWorkerAsync(QryCommand)
         End If
     End Sub
     Private Sub BigQueryDone(Results As DataTable)
@@ -196,24 +193,21 @@ Public Class MainFrom
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Private Sub GetSearchDBValues() 'cleanup user input for db
-        SearchValues.strSerial = Trim(txtSerialSearch.Text)
-        'strDescription = Trim(txtDescription.Text)
-        SearchValues.strAssetTag = Trim(txtAssetTagSearch.Text)
-        'strPurchaseDate = Format(dtPurchaseDate.Text, strDBDateFormat)
-        'strPurchaseDate = dtPurchaseDate.Text
-        SearchValues.strDescription = Trim(txtDescription.Text)
-        SearchValues.strEqType = GetDBValue(ComboType.EquipType, cmbEquipType.SelectedIndex)
-        SearchValues.strReplaceYear = Trim(txtReplaceYear.Text)
-        SearchValues.strOSVersion = GetDBValue(ComboType.OSType, cmbOSType.SelectedIndex)
-        SearchValues.strLocation = GetDBValue(ComboType.Location, cmbLocation.SelectedIndex)
-        SearchValues.strCurrentUser = Trim(txtCurUser.Text)
-        SearchValues.strStatus = GetDBValue(ComboType.StatusType, cmbStatus.SelectedIndex)
-        SearchValues.bolTrackable = chkTrackables.Checked
-        'strNotes = Trim(txtNotes.Text)
-        'strPO =
-        'strOSVersion =
-    End Sub
+    Function BuildSearchList() As IEnumerable(Of SearchVal)
+        Return New List(Of SearchVal) From
+            {
+            New SearchVal("dev_serial", Trim(txtSerialSearch.Text)),
+            New SearchVal("dev_asset_tag", Trim(txtAssetTagSearch.Text)),
+            New SearchVal("dev_description", Trim(txtDescription.Text)),
+            New SearchVal("dev_eq_type", GetDBValue(ComboType.EquipType, cmbEquipType.SelectedIndex)),
+            New SearchVal("dev_replacement_year", Trim(txtReplaceYear.Text)),
+            New SearchVal("dev_osversion", GetDBValue(ComboType.OSType, cmbOSType.SelectedIndex)),
+            New SearchVal("dev_location", GetDBValue(ComboType.Location, cmbLocation.SelectedIndex)),
+            New SearchVal("dev_cur_user", Trim(txtCurUser.Text)),
+            New SearchVal("dev_status", GetDBValue(ComboType.StatusType, cmbStatus.SelectedIndex)),
+            New SearchVal("dev_trackable", chkTrackables.Checked)
+            }
+    End Function
     Private Sub Button1_Click_1(sender As Object, e As EventArgs)
         StartImport()
     End Sub
@@ -227,11 +221,35 @@ Public Class MainFrom
             DynamicSearch()
         End If
     End Sub
+    Public Class SearchVal
+        Public Property FieldName As String
+        Public Property Value As Object
+        Public Sub New(ByVal strFieldName As String, ByVal obValue As Object)
+            FieldName = strFieldName
+            Value = obValue
+        End Sub
+    End Class
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         Dim table As New DataTable
-        GetSearchDBValues()
-        Dim strStartQry = "SELECT * FROM devices WHERE "
-        Dim strDynaQry = (IIf(SearchValues.strSerial <> "", " dev_serial Like '" & SearchValues.strSerial & "%' AND", "")) & (IIf(SearchValues.strAssetTag <> "", " dev_asset_tag LIKE '%" & SearchValues.strAssetTag & "%' AND", "")) & (IIf(SearchValues.strEqType <> "", " dev_eq_type LIKE '%" & SearchValues.strEqType & "%' AND", "")) & (IIf(SearchValues.strReplaceYear <> "", " dev_replacement_year LIKE '%" & SearchValues.strReplaceYear & "%' AND", "")) & (IIf(SearchValues.strOSVersion <> "", " dev_osversion LIKE '%" & SearchValues.strOSVersion & "%' AND", "")) & (IIf(SearchValues.strCurrentUser <> "", " dev_cur_user LIKE '%" & SearchValues.strCurrentUser & "%' AND", "")) & (IIf(SearchValues.strLocation <> "", " dev_location LIKE '%" & SearchValues.strLocation & "%' AND", "")) & (IIf(SearchValues.bolTrackable, " dev_trackable = '" & Convert.ToInt32(SearchValues.bolTrackable) & "' AND", "")) & (IIf(SearchValues.strStatus <> "", " dev_status LIKE '%" & SearchValues.strStatus & "%' AND", "")) & (IIf(SearchValues.strDescription <> "", " dev_description LIKE '%" & SearchValues.strDescription & "%' AND", ""))
+        Dim cmd As New MySqlCommand
+        Dim strStartQry As String = "SELECT * FROM devices WHERE "
+        Dim strDynaQry As String
+        Dim SearchValCol As IEnumerable(Of SearchVal) = BuildSearchList()
+        For Each fld As SearchVal In SearchValCol
+            If Not IsNothing(fld.Value) Then
+                If fld.Value.ToString <> "" Then
+                    If TypeOf fld.Value Is Boolean Then  'trackable boolean. if false, dont add it.
+                        If fld.Value <> False Then
+                            strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE CONCAT('%', @" + fld.FieldName + ", '%') AND"
+                            cmd.Parameters.AddWithValue("@" & fld.FieldName, Convert.ToInt32(fld.Value))
+                        End If
+                    Else
+                        strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE CONCAT('%', @" + fld.FieldName + ", '%') AND"
+                        cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                    End If
+                End If
+            End If
+        Next
         If strDynaQry = "" Then
             Dim blah = MsgBox("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing")
             Exit Sub
@@ -241,7 +259,8 @@ Public Class MainFrom
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
         strLastQry = strQry
-        StartBigQuery(strQry)
+        cmd.CommandText = strQry
+        StartBigQuery(cmd)
     End Sub
     Private Sub Button2_Click(sender As Object, e As EventArgs)
         Clear_All()
@@ -344,6 +363,7 @@ Public Class MainFrom
             strPrevSearchString = strSearchString
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
+            Dim cmd As New MySqlCommand
             Dim RowLimit As Integer = 15
             Dim strQryRow As String
             Dim strQry As String
@@ -359,9 +379,11 @@ Public Class MainFrom
                 Case "txtReplaceYear"
                     strQryRow = "dev_replacement_year"
             End Select
-            strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE '%" & strSearchString & "%' GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
-            da.SelectCommand = New MySqlCommand(strQry)
-            da.SelectCommand.Connection = LiveConn
+            strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
+            cmd.Connection = LiveConn
+            cmd.CommandText = strQry
+            cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
+            da.SelectCommand = cmd
             da.Fill(ds)
             dtResults = ds.Tables(0)
             da.Dispose()
@@ -462,14 +484,16 @@ Public Class MainFrom
     End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
+            Dim QryComm As New MySqlCommand
+            QryComm = DirectCast(e.Argument, Object)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
             Dim strQry = strWorkerQry
             strLastQry = strQry
             Dim conn As New MySqlConnection(MySQLConnectString)
-            conn.Open()
+            QryComm.Connection = conn
             BigQueryWorker.ReportProgress(1)
-            da.SelectCommand = New MySqlCommand(strQry, conn)
+            da.SelectCommand = QryComm
             da.Fill(ds)
             da.Dispose()
             e.Result = ds.Tables(0)
@@ -745,14 +769,8 @@ Public Class MainFrom
     Private Sub Panel1_MouseWheel(sender As Object, e As MouseEventArgs)
         HideLiveBox()
     End Sub
-    Private Sub txtDescription_TextChanged(sender As Object, e As EventArgs)
-    End Sub
     Private Sub cmbOSType_DropDown(sender As Object, e As EventArgs) Handles cmbOSType.DropDown
         AdjustComboBoxWidth(sender, e)
-    End Sub
-    Private Sub txtGUIDSearch_KeyUp(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyUp
-        strSearchString = txtReplaceYear.Text
-        StartLiveSearch()
     End Sub
     Private Sub PanelNoScrollOnFocus1_Scroll(sender As Object, e As ScrollEventArgs) Handles PanelNoScrollOnFocus1.Scroll
         HideLiveBox()

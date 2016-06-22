@@ -555,5 +555,4 @@ Public Module DBFunctions
             Return False
         End Try
     End Function
-
 End Module

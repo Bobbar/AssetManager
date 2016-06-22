@@ -3,10 +3,12 @@ Imports System.Environment
 Imports System.IO
 Imports MySql.Data.MySqlClient
 Module OtherFunctions
+    'paths
     Public strLogDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
     Public strLogName As String = "log.log"
     Public strLogPath As String = strLogDir & strLogName
     Public strTempPath As String = strLogDir & "temp\"
+    'colors
     Public colCurrentEntry As Color = ColorTranslator.FromHtml("#7AD1FF") '"#7AD1FF"
     Public colMissingField As Color = ColorTranslator.FromHtml("#82C1FF") '"#FF9827") '"#75BAFF")
     Public colCheckIn As Color = ColorTranslator.FromHtml("#B6FCC0")
@@ -18,10 +20,9 @@ Module OtherFunctions
     Public colEditColor As Color = ColorTranslator.FromHtml("#81EAAA")
     Public colFormBackColor As Color = Color.FromArgb(232, 232, 232)
     Public colStatusBarProblem As Color = ColorTranslator.FromHtml("#FF9696")
-    'Public colToolBarColor As Color = Color.FromArgb(122, 197, 241)
     Public colToolBarColor As Color = Color.FromArgb(249, 226, 166)
     Public DefGridBC As Color, DefGridSelCol As Color
-    Public ViewFormIndex As Integer
+    'misc
     Public GridStylez As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Public stpw As New Stopwatch
@@ -52,7 +53,7 @@ Module OtherFunctions
         Debug.Print("Stopwatch: MS:" & stpw.ElapsedMilliseconds & " Ticks: " & stpw.ElapsedTicks)
     End Sub
     Public Sub Logger(Message As String)
-        Dim MaxLogSizeKiloBytes As Long = 100
+        Dim MaxLogSizeKiloBytes As Short = 100
         Dim DateStamp As String = DateTime.Now
         Dim infoReader As FileInfo
         infoReader = My.Computer.FileSystem.GetFileInfo(strLogPath)

@@ -117,7 +117,6 @@ Public Class AddNew
         Device.strStatus = GetDBValue(ComboType.StatusType, cmbStatus_REQ.SelectedIndex)
         Device.bolTrackable = chkTrackable.Checked
         Device.strPO = Trim(txtPO.Text)
-
         'strOSVersion =
     End Sub
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load

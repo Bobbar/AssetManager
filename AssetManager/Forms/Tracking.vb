@@ -104,18 +104,64 @@ Public Class Tracking
             cmd.Connection = GlobalConn
             cmd.CommandText = strSQLQry1
             rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkout_user, track_use_location, track_notes, track_device_uid) VALUES ('" & strCheckOut & "','" & CheckData.strCheckOutTime & "','" & CheckData.strDueDate & "','" & CheckData.strCheckOutUser & "','" & CheckData.strUseLocation & "','" & CheckData.strUseReason & "','" & CheckData.strDeviceUID & "')"
+            Dim strSqlQry2 = "INSERT INTO trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkout_user, track_use_location, track_notes, track_device_uid) VALUES(@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkout_user, @track_use_location, @track_notes, @track_device_uid)"
             cmd.CommandText = strSqlQry2
+            cmd.Parameters.AddWithValue("@track_check_type", strCheckOut)
+            cmd.Parameters.AddWithValue("@track_checkout_time", CheckData.strCheckOutTime)
+            cmd.Parameters.AddWithValue("@track_dueback_date", CheckData.strDueDate)
+            cmd.Parameters.AddWithValue("@track_checkout_user", CheckData.strCheckOutUser)
+            cmd.Parameters.AddWithValue("@track_use_location", CheckData.strUseLocation)
+            cmd.Parameters.AddWithValue("@track_notes", CheckData.strUseReason)
+            cmd.Parameters.AddWithValue("@track_device_uid", CheckData.strDeviceUID)
             rows = rows + cmd.ExecuteNonQuery()
             UpdateDev.strNewNote = Nothing
             If rows = 2 Then
                 Dim blah = MsgBox("Device Checked Out!", vbOKOnly + vbInformation, "Success")
             Else
+                Dim blah = MsgBox("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result")
+            End If
+            Me.Dispose()
+            View.ViewDevice(CurrentDevice.strGUID)
+            DoneWaiting()
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                DoneWaiting()
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Sub
+    Private Sub CheckIn()
+        Try
+            If Not GetCheckData() Then Exit Sub
+            Waiting()
+            Dim rows As Integer
+            Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='0' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
+            Dim cmd As New MySqlCommand
+            cmd.Connection = GlobalConn
+            cmd.CommandText = strSQLQry1
+            rows = rows + cmd.ExecuteNonQuery()
+            Dim strSqlQry2 = "INSERT INTO trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkin_time, track_checkout_user, track_checkin_user, track_use_location, track_notes, track_device_uid) VALUES (@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkin_time, @track_checkout_user, @track_checkin_user, @track_use_location, @track_notes, @track_device_uid)"
+            cmd.CommandText = strSqlQry2
+            cmd.Parameters.AddWithValue("@track_check_type", strCheckIn)
+            cmd.Parameters.AddWithValue("@track_checkout_time", CheckData.strCheckOutTime)
+            cmd.Parameters.AddWithValue("@track_dueback_date", CheckData.strDueDate)
+            cmd.Parameters.AddWithValue("@track_checkin_time", CheckData.strCheckInTime)
+            cmd.Parameters.AddWithValue("@track_checkout_user", CheckData.strCheckOutUser)
+            cmd.Parameters.AddWithValue("@track_checkin_user", CheckData.strCheckInUser)
+            cmd.Parameters.AddWithValue("@track_use_location", CheckData.strUseLocation)
+            cmd.Parameters.AddWithValue("@track_notes", CheckData.strCheckInNotes)
+            cmd.Parameters.AddWithValue("@track_device_uid", CheckData.strDeviceUID)
+            rows = rows + cmd.ExecuteNonQuery()
+            UpdateDev.strNewNote = Nothing
+            If rows = 2 Then
+                Dim blah = MsgBox("Device Checked In!", vbOKOnly + vbInformation, "Success")
+            Else
                 Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
             End If
             Me.Dispose()
-            'GetCurrentTracking(CurrentDevice.strGUID)
-            'View.ViewTracking(CurrentDevice.strGUID)
             View.ViewDevice(CurrentDevice.strGUID)
             DoneWaiting()
             Exit Sub
@@ -134,57 +180,17 @@ Public Class Tracking
     Private Sub DoneWaiting()
         Me.Cursor = Cursors.Default
     End Sub
-    Private Sub CheckIn()
-        Try
-            If Not GetCheckData() Then Exit Sub
-            Waiting()
-            Dim rows As Integer
-            Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='0' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
-            Dim cmd As New MySqlCommand
-            cmd.Connection = GlobalConn
-            cmd.CommandText = strSQLQry1
-            rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkin_time, track_checkout_user, track_checkin_user, track_use_location, track_notes, track_device_uid) VALUES ('" & strCheckIn & "','" & CheckData.strCheckOutTime & "','" & CheckData.strDueDate & "','" & CheckData.strCheckInTime & "','" & CheckData.strCheckOutUser & "','" & CheckData.strCheckInUser & "','" & CheckData.strUseLocation & "','" & CheckData.strCheckInNotes & "','" & CheckData.strDeviceUID & "')"
-            cmd.CommandText = strSqlQry2
-            rows = rows + cmd.ExecuteNonQuery()
-            UpdateDev.strNewNote = Nothing
-            If rows = 2 Then
-                Dim blah = MsgBox("Device Checked In!", vbOKOnly + vbInformation, "Success")
-            Else
-                Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
-            End If
-            Me.Dispose()
-            'GetCurrentTracking(CurrentDevice.strGUID)
-            'View.ViewTracking(CurrentDevice.strGUID)
-            View.ViewDevice(CurrentDevice.strGUID)
-            DoneWaiting()
-            Exit Sub
-        Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                DoneWaiting()
-                Exit Try
-            Else
-                EndProgram()
-            End If
-        End Try
-    End Sub
     Private Sub cmdCheckOut_Click(sender As Object, e As EventArgs) Handles cmdCheckOut.Click
         CheckOut()
     End Sub
     Private Sub cmdCheckIn_Click(sender As Object, e As EventArgs) Handles cmdCheckIn.Click
         CheckIn()
     End Sub
-    Private Sub txtUseLocation_TextChanged(sender As Object, e As EventArgs) Handles txtUseLocation.TextChanged
-    End Sub
     Private Sub txtUseLocation_LostFocus(sender As Object, e As EventArgs) Handles txtUseLocation.LostFocus
         txtUseLocation.Text = UCase(Trim(txtUseLocation.Text))
     End Sub
-    Private Sub txtUseReason_TextChanged(sender As Object, e As EventArgs) Handles txtUseReason.TextChanged
-    End Sub
     Private Sub txtUseReason_LostFocus(sender As Object, e As EventArgs) Handles txtUseReason.LostFocus
         txtUseReason.Text = UCase(Trim(txtUseReason.Text))
-    End Sub
-    Private Sub txtCheckInNotes_TextChanged(sender As Object, e As EventArgs) Handles txtCheckInNotes.TextChanged
     End Sub
     Private Sub txtCheckInNotes_LostFocus(sender As Object, e As EventArgs) Handles txtCheckInNotes.LostFocus
         txtCheckInNotes.Text = UCase(Trim(txtCheckInNotes.Text))
