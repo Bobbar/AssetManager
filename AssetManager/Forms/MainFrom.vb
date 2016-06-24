@@ -489,8 +489,6 @@ Public Class MainFrom
             HideLiveBox()
         End If
     End Sub
-    Private Sub LiveBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LiveBox.SelectedIndexChanged
-    End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
             Dim QryComm As New MySqlCommand

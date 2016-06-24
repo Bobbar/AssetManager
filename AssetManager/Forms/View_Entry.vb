@@ -15,12 +15,10 @@ Public Class View_Entry
             Exit Sub
         End If
         Waiting()
-        'Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
-        Dim table As New DataTable
         Dim strQry = "Select * FROM historical WHERE  hist_UID = '" & EntryUID & "'"
         Dim cmd As New MySqlCommand(strQry, GlobalConn)
-        reader = cmd.ExecuteReader
+        reader = ReturnSQLReader(strQry)
         With reader
             Do While .Read()
                 txtEntryTime.Text = NoNull(!hist_action_datetime)
@@ -45,7 +43,6 @@ Public Class View_Entry
             Loop
         End With
         reader.Close()
-        'CloseConnection(ConnID)
         DoneWaiting()
     End Sub
     Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click

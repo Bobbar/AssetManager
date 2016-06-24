@@ -32,46 +32,50 @@ Module SecurityMod
         Return sBuilder.ToString
     End Function
     Public Sub GetAccessLevels()
-        On Error Resume Next
-        Dim reader As MySqlDataReader
-        Dim strQRY = "SELECT * FROM security ORDER BY sec_access_level" ' WHERE usr_username='" & strLocalUser & "'"
-        Dim cmd As New MySqlCommand(strQRY, GlobalConn)
-        Dim rows As Integer
-        reader = cmd.ExecuteReader
-        ReDim AccessLevels(0)
-        rows = -1
-        With reader
-            Do While .Read()
-                rows += 1
-                ReDim Preserve AccessLevels(rows)
-                AccessLevels(rows).intLevel = !sec_access_level
-                AccessLevels(rows).strModule = !sec_module
-                AccessLevels(rows).strDesc = !sec_desc
-            Loop
-        End With
-        reader.Close()
+        Try
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT * FROM security ORDER BY sec_access_level" ' WHERE usr_username='" & strLocalUser & "'"
+            Dim rows As Integer
+            reader = ReturnSQLReader(strQRY)
+            ReDim AccessLevels(0)
+            rows = -1
+            With reader
+                Do While .Read()
+                    rows += 1
+                    ReDim Preserve AccessLevels(rows)
+                    AccessLevels(rows).intLevel = !sec_access_level
+                    AccessLevels(rows).strModule = !sec_module
+                    AccessLevels(rows).strDesc = !sec_desc
+                Loop
+            End With
+            reader.Close()
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Public Sub GetUserAccess()
-        On Error Resume Next
-        Dim reader As MySqlDataReader
-        Dim strQRY = "SELECT * FROM users WHERE usr_username='" & strLocalUser & "'"
-        Dim cmd As New MySqlCommand(strQRY, GlobalConn)
-        reader = cmd.ExecuteReader
-        With reader
-            If .HasRows Then
-                Do While .Read()
-                    UserAccess.strUsername = !usr_username
-                    UserAccess.strFullname = !usr_fullname
-                    UserAccess.bolIsAdmin = Convert.ToBoolean(reader("usr_isadmin"))
-                    UserAccess.intAccessLevel = !usr_access_level
-                    UserAccess.strUID = !usr_UID
-                Loop
-            Else
-                UserAccess.intAccessLevel = 0
-                UserAccess.bolIsAdmin = False
-            End If
-        End With
-        reader.Close()
+        Try
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT * FROM users WHERE usr_username='" & strLocalUser & "'"
+            reader = ReturnSQLReader(strQRY)
+            With reader
+                If .HasRows Then
+                    Do While .Read()
+                        UserAccess.strUsername = !usr_username
+                        UserAccess.strFullname = !usr_fullname
+                        UserAccess.bolIsAdmin = Convert.ToBoolean(reader("usr_isadmin"))
+                        UserAccess.intAccessLevel = !usr_access_level
+                        UserAccess.strUID = !usr_UID
+                    Loop
+                Else
+                    UserAccess.intAccessLevel = 0
+                    UserAccess.bolIsAdmin = False
+                End If
+            End With
+            reader.Close()
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Public Function IsAdmin() As Boolean
         Return UserAccess.bolIsAdmin

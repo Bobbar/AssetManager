@@ -122,10 +122,7 @@ Public Class View
         Try
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable WHERE dev_UID='" & CurrentDevice.strGUID & "'"
-            '"UPDATE devices SET dev_description='" & NewData.strDescription & "', dev_location='" & NewData.strLocation & "', dev_cur_user='" & NewData.strCurrentUser & "', dev_serial='" & NewData.strSerial & "', dev_asset_tag='" & NewData.strAssetTag & "', dev_purchase_date='" & NewData.dtPurchaseDate & "', dev_replacement_year='" & NewData.strReplaceYear & "', dev_osversion='" & NewData.strOSVersion & "', dev_eq_type='" & NewData.strEqType & "', dev_status='" & NewData.strStatus & "', dev_trackable='" & Convert.ToInt32(NewData.bolTrackable) & "' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
-            Dim cmd As New MySqlCommand
-            cmd.Connection = GlobalConn
-            cmd.CommandText = strSQLQry1
+            Dim cmd As MySqlCommand = ReturnSQLCommand(strSQLQry1)
             cmd.Parameters.AddWithValue("@dev_description", NewData.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", NewData.strLocation)
             cmd.Parameters.AddWithValue("@dev_cur_user", NewData.strCurrentUser)
@@ -157,6 +154,7 @@ Public Class View
             cmd.Parameters.AddWithValue("@hist_trackable", Convert.ToInt32(NewData.bolTrackable))
             rows = rows + cmd.ExecuteNonQuery()
             UpdateDev.strNewNote = Nothing
+            cmd.Dispose()
             If rows = 2 Then
                 ViewDevice(CurrentDevice.strGUID)
                 Dim blah = MsgBox("Update Added.", vbOKOnly + vbInformation, "Success")
@@ -298,12 +296,14 @@ Public Class View
             End If
             Waiting()
             Results = ReturnSQLTable(strQry)
-            CollectCurrentTracking(Results)
-            SendToTrackGrid(TrackingGrid, Results)
-            DisableSorting(TrackingGrid)
+            If Results.Rows.Count > 0 Then
+                CollectCurrentTracking(Results)
+                SendToTrackGrid(TrackingGrid, Results)
+                TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
+                DisableSorting(TrackingGrid)
+            End If
             FillTrackingBox()
             SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
-            TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
             Results.Dispose()
             DoneWaiting()
             Exit Sub

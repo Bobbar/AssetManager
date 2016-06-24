@@ -166,6 +166,7 @@ Public Module DBFunctions
         End If
     End Sub
     Public Function ReturnSQLTable(strSQLQry As String) As DataTable
+        'Debug.Print("Table Hit " & Date.Now.Ticks)
         Dim ds As New DataSet
         Dim da As New MySqlDataAdapter
         Try
@@ -182,10 +183,16 @@ Public Module DBFunctions
         End Try
     End Function
     Public Function ReturnSQLReader(strSQLQry As String) As MySqlDataReader
+        'Debug.Print("Reader Hit " & Date.Now.Ticks)
         Dim cmd As New MySqlCommand(strSQLQry, GlobalConn)
         Return cmd.ExecuteReader
-
-
+    End Function
+    Public Function ReturnSQLCommand(strSQLQry As String) As MySqlCommand
+        'Debug.Print("Command Hit " & Date.Now.Ticks)
+        Dim cmd As New MySqlCommand
+        cmd.Connection = GlobalConn
+        cmd.CommandText = strSQLQry
+        Return cmd
     End Function
     Public Function DeleteAttachment(AttachUID As String) As Integer
         If Not ConnectionReady() Then
@@ -193,14 +200,11 @@ Public Module DBFunctions
             Exit Function
         End If
         Try
-            Dim cmd As New MySqlCommand
             Dim rows
             Dim reader As MySqlDataReader
             Dim strDeviceID As String
             Dim strSQLDevIDQry As String = "SELECT attach_dev_UID FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
-            cmd.Connection = GlobalConn
-            cmd.CommandText = strSQLDevIDQry
-            reader = cmd.ExecuteReader
+            reader = ReturnSQLReader(strSQLDevIDQry)
             With reader
                 Do While .Read()
                     strDeviceID = !attach_dev_UID
@@ -211,9 +215,7 @@ Public Module DBFunctions
             If DeleteFTPAttachment(AttachUID, strDeviceID) Then
                 'delete SQL entry
                 Dim strSQLDelQry As String = "DELETE FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
-                cmd.Connection = GlobalConn
-                cmd.CommandText = strSQLDelQry
-                rows = cmd.ExecuteNonQuery()
+                rows = ReturnSQLCommand(strSQLDelQry).ExecuteNonQuery
                 Return rows
                 'Else  'if file not found then we might as well remove the DB record.
                 '    Dim strSQLDelQry As String = "DELETE FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
@@ -241,12 +243,9 @@ Public Module DBFunctions
     End Function
     Public Function DeleteEntry(ByVal strGUID As String) As Integer
         Try
-            Dim cmd As New MySqlCommand
             Dim rows
             Dim strSQLQry As String = "DELETE FROM historical WHERE hist_uid='" & strGUID & "'"
-            cmd.Connection = GlobalConn
-            cmd.CommandText = strSQLQry
-            rows = cmd.ExecuteNonQuery()
+            rows = ReturnSQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function
         Catch ex As Exception
@@ -271,8 +270,7 @@ Public Module DBFunctions
         Try
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT attach_dev_UID FROM attachments WHERE attach_dev_UID='" & strGUID & "'"
-            Dim cmd As New MySqlCommand(strQRY, GlobalConn)
-            reader = cmd.ExecuteReader
+            reader = ReturnSQLReader(strQRY)
             Dim bolHasRows As Boolean = reader.HasRows
             reader.Close()
             Return bolHasRows
@@ -286,12 +284,9 @@ Public Module DBFunctions
     End Function
     Public Function DeleteSQLDevice(ByVal strGUID As String) As Integer
         Try
-            Dim cmd As New MySqlCommand
             Dim rows
             Dim strSQLQry As String = "DELETE FROM devices WHERE dev_UID='" & strGUID & "'"
-            cmd.Connection = GlobalConn
-            cmd.CommandText = strSQLQry
-            rows = cmd.ExecuteNonQuery()
+            rows = ReturnSQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function
         Catch ex As Exception
@@ -308,10 +303,8 @@ Public Module DBFunctions
             End If
             Dim tmpInfo As Device_Info
             Dim reader As MySqlDataReader
-            Dim UID As String
             Dim strQry = "SELECT * FROM historical WHERE hist_uid='" & strGUID & "'"
-            Dim cmd As New MySqlCommand(strQry, GlobalConn)
-            reader = cmd.ExecuteReader
+            reader = ReturnSQLReader(strQry)
             With reader
                 Do While .Read()
                     tmpInfo.Historical.strChangeType = GetHumanValue(ComboType.ChangeType,!hist_change_type)
@@ -335,12 +328,10 @@ Public Module DBFunctions
         End Try
     End Function
     Public Function GetDeviceUID(ByVal AssetTag As String, ByVal Serial As String) As String
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim UID As String
         Dim strQry = "SELECT dev_UID from devices WHERE dev_asset_tag = '" & AssetTag & "' AND dev_serial = '" & Serial & "' ORDER BY dev_input_datetime"
-        Dim cmd As New MySqlCommand(strQry, GlobalConn)
-        reader = cmd.ExecuteReader
+        reader = ReturnSQLReader(strQry)
         With reader
             Do While .Read()
                 UID = (!dev_UID)
@@ -410,9 +401,8 @@ Public Module DBFunctions
         Try
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
-            Dim cmd As New MySqlCommand(strQRY, GlobalConn)
             Dim row As Integer
-            reader = cmd.ExecuteReader
+            reader = ReturnSQLReader(strQRY)
             ReDim Locations(0)
             row = -1
             With reader
@@ -438,9 +428,8 @@ Public Module DBFunctions
         Try
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
-            Dim cmd As New MySqlCommand(strQRY, GlobalConn)
             Dim row As Integer
-            reader = cmd.ExecuteReader
+            reader = ReturnSQLReader(strQRY)
             ReDim ChangeType(0)
             row = -1
             With reader
@@ -466,9 +455,8 @@ Public Module DBFunctions
         Try
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
-            Dim cmd As New MySqlCommand(strQRY, GlobalConn)
             Dim row As Integer
-            reader = cmd.ExecuteReader
+            reader = ReturnSQLReader(strQRY)
             ReDim EquipType(0)
             row = -1
             With reader
@@ -494,9 +482,8 @@ Public Module DBFunctions
         Try
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
-            Dim cmd As New MySqlCommand(strQRY, GlobalConn)
             Dim row As Integer
-            reader = cmd.ExecuteReader
+            reader = ReturnSQLReader(strQRY)
             ReDim OSType(0)
             row = -1
             With reader
@@ -522,9 +509,8 @@ Public Module DBFunctions
         Try
             Dim reader As MySqlDataReader
             Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
-            Dim cmd As New MySqlCommand(strGetDevices, GlobalConn)
             Dim row As Integer
-            reader = cmd.ExecuteReader
+            reader = ReturnSQLReader(strGetDevices)
             ReDim StatusType(0)
             row = -1
             With reader

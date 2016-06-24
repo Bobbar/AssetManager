@@ -96,8 +96,7 @@ Class Attachments
                 table.Columns.Add("AttachUID", GetType(String))
                 table.Columns.Add("MD5", GetType(String))
             End If
-            Dim cmd As New MySqlCommand(strQry, GlobalConn)
-            reader = cmd.ExecuteReader
+            reader = ReturnSQLReader(strQry)
             Dim strFullFilename As String
             Dim row As Integer
             ReDim AttachIndex(0)
