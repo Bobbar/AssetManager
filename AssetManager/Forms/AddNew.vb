@@ -105,7 +105,6 @@ Public Class AddNew
         Device.strSerial = Trim(txtSerial_REQ.Text)
         Device.strDescription = Trim(txtDescription_REQ.Text)
         Device.strAssetTag = Trim(txtAssetTag_REQ.Text)
-        'strPurchaseDate = Format(dtPurchaseDate.Text, strDBDateFormat)
         Device.dtPurchaseDate = dtPurchaseDate_REQ.Text
         Device.strReplaceYear = Trim(txtReplaceYear.Text)
         Device.strLocation = GetDBValue(ComboType.Location, cmbLocation_REQ.SelectedIndex)
@@ -116,7 +115,6 @@ Public Class AddNew
         Device.strStatus = GetDBValue(ComboType.StatusType, cmbStatus_REQ.SelectedIndex)
         Device.bolTrackable = chkTrackable.Checked
         Device.strPO = Trim(txtPO.Text)
-        'strOSVersion =
     End Sub
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
         ClearAll()
@@ -137,7 +135,6 @@ Public Class AddNew
     Private Sub ResetBackColors()
         Dim c As Control
         For Each c In GroupBox1.Controls
-            ' c.BackColor = Color.Empty
             Select Case True
                 Case TypeOf c Is TextBox
                     c.BackColor = Color.Empty

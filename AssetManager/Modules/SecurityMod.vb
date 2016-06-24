@@ -1,4 +1,5 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Option Explicit On
+Imports MySql.Data.MySqlClient
 Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Security

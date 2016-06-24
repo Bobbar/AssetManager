@@ -253,7 +253,7 @@ Public Class MainFrom
                             cmd.Parameters.AddWithValue("@" & fld.FieldName, Convert.ToInt32(fld.Value))
                         End If
                     Else
-                        Select Case fld.FieldName
+                        Select Case fld.FieldName 'use the fixed fields with EQUALS operator instead of LIKE
                             Case "dev_osversion"
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
@@ -477,22 +477,18 @@ Public Class MainFrom
         DrawLiveBox()
     End Sub
     Private Sub txtSerial_TextChanged(sender As Object, e As EventArgs) Handles txtSerial.TextChanged
-        'CurrentControl = txtSerial
         strSearchString = txtSerial.Text
         StartLiveSearch()
     End Sub
     Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
-        ' CurrentControl = txtAssetTag
         strSearchString = txtAssetTag.Text
         StartLiveSearch()
     End Sub
     Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
-        ' CurrentControl = txtDescription
         strSearchString = txtDescription.Text
         StartLiveSearch()
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
-        'CurrentControl = txtCurUser
         strSearchString = txtCurUser.Text
         StartLiveSearch()
     End Sub
@@ -585,7 +581,6 @@ Public Class MainFrom
             Exit Sub
         End If
         If Not CheckForAccess("add") Then Exit Sub
-        'If Not CheckForAdmin() Then Exit Sub
         AddNew.Show()
     End Sub
     Private Sub YearsSincePurchaseToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles YearsSincePurchaseToolStripMenuItem1.Click
@@ -617,9 +612,6 @@ Public Class MainFrom
         If Not bolGridFilling Then
             Dim BackColor As Color = DefGridBC
             Dim SelectColor As Color = DefGridSelCol
-            Dim Mod1 As Integer = 3
-            Dim Mod2 As Integer = 4
-            Dim Mod3 As Single = 0.6 '0.75
             Dim c1 As Color = colHighlightColor 'highlight color
             If Row > -1 Then
                 For Each cell As DataGridViewCell In ResultGrid.Rows(Row).Cells
@@ -630,14 +622,12 @@ Public Class MainFrom
                                                 (CInt(c1.G) + CInt(c2.G)) / 2,
                                                 (CInt(c1.B) + CInt(c2.B)) / 2)
                     cell.Style.SelectionBackColor = BlendColor
-                    'cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
                     c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
                     BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
                                                 (CInt(c1.R) + CInt(c2.R)) / 2,
                                                 (CInt(c1.G) + CInt(c2.G)) / 2,
                                                 (CInt(c1.B) + CInt(c2.B)) / 2)
                     cell.Style.BackColor = BlendColor
-                    'cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
                 Next
             End If
         End If
@@ -785,7 +775,6 @@ Public Class MainFrom
         End If
     End Sub
     Private Sub Panel1_Scroll(sender As Object, e As ScrollEventArgs)
-        'If LiveBox.Visible Then DrawLiveBox(True)
         HideLiveBox()
     End Sub
     Private Sub Panel1_MouseWheel(sender As Object, e As MouseEventArgs)

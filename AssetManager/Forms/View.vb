@@ -1,5 +1,4 @@
 ﻿Option Explicit On
-Option Strict Off
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class View
@@ -282,8 +281,6 @@ Public Class View
     End Sub
     Public Sub StatusBar(Text As String)
         StatusLabel.Text = Text
-        'Attachments.StatusLabel.Text = Text
-        'Attachments.Refresh()
         Me.Refresh()
     End Sub
     Public Sub ViewTracking(strGUID As String)
@@ -356,8 +353,6 @@ Public Class View
     End Sub
     Public Sub SetTracking(bolEnabled As Boolean, bolCheckedOut As Boolean)
         If bolEnabled Then
-            'TrackingTab.Visible = True
-            'TrackingTab.Enabled = True
             TrackingToolStripMenuItem.Visible = True
             If Not TabControl1.TabPages.Contains(TrackingTab) Then TabControl1.TabPages.Insert(1, TrackingTab)
             MainFrom.CopyDefaultCellStyles()
@@ -368,8 +363,6 @@ Public Class View
             CheckOutTool.Visible = Not bolCheckedOut
             CheckInTool.Visible = bolCheckedOut
         Else
-            'TrackingTab.Enabled = False
-            'TrackingTab.Visible = False
             TrackingTool.Visible = bolEnabled
             TrackingToolStripMenuItem.Visible = False
             TabControl1.TabPages.Remove(TrackingTab)
@@ -426,7 +419,6 @@ Public Class View
     Private Sub ResetBackColors()
         Dim c As Control
         For Each c In DeviceInfoBox.Controls
-            ' c.BackColor = Color.Empty
             Select Case True
                 Case TypeOf c Is TextBox
                     c.BackColor = Color.Empty
@@ -599,7 +591,6 @@ Public Class View
         bolCheckFields = False
         DisableControls()
         ResetBackColors()
-        'ClearFields()
         Me.Refresh()
         ViewDevice(CurrentDevice.strGUID)
     End Sub
@@ -611,15 +602,13 @@ Public Class View
         If blah = vbYes Then
             Dim blah2 = MsgBox(DeleteEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
             ViewDevice(CurrentDevice.strGUID)
-            'Me.Hide()
         Else
             Exit Sub
         End If
-        'DeleteEntry(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
     End Sub
     Private Sub DataGridHistory_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridHistory.CellMouseDown
         If e.Button = MouseButtons.Right Then
-            DataGridHistory.CurrentCell = DataGridHistory(e.ColumnIndex, e.RowIndex) 'DataGridHistory.RowIndex
+            DataGridHistory.CurrentCell = DataGridHistory(e.ColumnIndex, e.RowIndex)
         End If
     End Sub
     Private Sub CheckInMenu_Click(sender As Object, e As EventArgs) Handles CheckInMenu.Click
@@ -635,7 +624,7 @@ Public Class View
         DoneWaiting()
     End Sub
     Private Sub TrackingGrid_RowPrePaint(sender As Object, e As DataGridViewRowPrePaintEventArgs) Handles TrackingGrid.RowPrePaint
-        Dim Mod3 As Single = 0.75
+        'Dim Mod3 As Single = 0.75
         Dim c1 As Color = colHighlightBlue 'highlight color
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
         TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -748,14 +737,9 @@ Public Class View
             DefGridSelCol = TrackingGrid.Rows(Row).DefaultCellStyle.SelectionBackColor
             Dim BackColor As Color = DefGridBC
             Dim SelectColor As Color = DefGridSelCol
-            Dim Mod1 As Integer = 3
-            Dim Mod2 As Integer = 4
-            Dim Mod3 As Single = 0.6 '0.75
             Dim c1 As Color = colHighlightColor 'highlight color
             If Row > -1 Then
                 For Each cell As DataGridViewCell In TrackingGrid.Rows(Row).Cells
-                    'cell.Style.SelectionBackColor = Color.FromArgb(SelectColor.R * Mod3, SelectColor.G * Mod3, SelectColor.B * Mod3)
-                    'cell.Style.BackColor = Color.FromArgb(BackColor.R * Mod3, BackColor.G * Mod3, BackColor.B * Mod3)
                     Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
                     Dim BlendColor As Color
                     BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
@@ -777,7 +761,6 @@ Public Class View
         bolCheckFields = False
         DisableControls()
         ResetBackColors()
-        'ClearFields()
         Me.Refresh()
         ViewDevice(CurrentDevice.strGUID)
     End Sub

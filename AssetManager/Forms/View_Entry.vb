@@ -1,4 +1,5 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Option Explicit On
+Imports MySql.Data.MySqlClient
 Public Class View_Entry
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged

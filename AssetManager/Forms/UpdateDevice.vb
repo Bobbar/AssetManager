@@ -1,4 +1,5 @@
-﻿Imports System.ComponentModel
+﻿Option Explicit On
+Imports System.ComponentModel
 Public Class UpdateDev
     Public strNewNote As String
     Private Sub cmbUpdate_ChangeType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbUpdate_ChangeType.SelectedIndexChanged

@@ -1,4 +1,5 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Option Explicit On
+Imports MySql.Data.MySqlClient
 Public Class Tracking
     Private Structure CheckStruct
         Public strCheckOutTime As String
