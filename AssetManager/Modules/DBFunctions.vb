@@ -118,23 +118,23 @@ Public Module DBFunctions
         End Try
         Return True
     End Function
-    Public Sub CollectDeviceInfo(ByVal UID As String, ByVal Description As String, ByVal Location As String, ByVal CurrentUser As String, ByVal Serial As String, ByVal AssetTag As String, ByVal PurchaseDate As String, ByVal ReplaceYear As String, ByVal PO As String, ByVal OSVersion As String, ByVal EQType As String, ByVal Status As String, ByVal Trackable As Boolean, ByVal CheckedOut As Boolean)
+    Public Sub CollectDeviceInfo(DeviceTable As DataTable)
         Try
             With CurrentDevice
-                .strGUID = UID
-                .strDescription = Description
-                .strLocation = Location
-                .strCurrentUser = CurrentUser
-                .strSerial = Serial
-                .strAssetTag = AssetTag
-                .dtPurchaseDate = PurchaseDate
-                .strReplaceYear = ReplaceYear
-                .strPO = PO
-                .strOSVersion = OSVersion
-                .strEqType = EQType
-                .strStatus = Status
-                .bolTrackable = Trackable
-                .Tracking.bolCheckedOut = CheckedOut
+                .strGUID = NoNull(DeviceTable.Rows(0).Item("dev_UID"))
+                .strDescription = NoNull(DeviceTable.Rows(0).Item("dev_description"))
+                .strLocation = NoNull(DeviceTable.Rows(0).Item("dev_location"))
+                .strCurrentUser = NoNull(DeviceTable.Rows(0).Item("dev_cur_user"))
+                .strSerial = NoNull(DeviceTable.Rows(0).Item("dev_serial"))
+                .strAssetTag = NoNull(DeviceTable.Rows(0).Item("dev_asset_tag"))
+                .dtPurchaseDate = NoNull(DeviceTable.Rows(0).Item("dev_purchase_date"))
+                .strReplaceYear = NoNull(DeviceTable.Rows(0).Item("dev_replacement_year"))
+                .strPO = NoNull(DeviceTable.Rows(0).Item("dev_po"))
+                .strOSVersion = NoNull(DeviceTable.Rows(0).Item("dev_osversion"))
+                .strEqType = NoNull(DeviceTable.Rows(0).Item("dev_eq_type"))
+                .strStatus = NoNull(DeviceTable.Rows(0).Item("dev_status"))
+                .bolTrackable = CBool(DeviceTable.Rows(0).Item("dev_trackable"))
+                .Tracking.bolCheckedOut = CBool(DeviceTable.Rows(0).Item("dev_checkedout"))
             End With
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -148,15 +148,9 @@ Public Module DBFunctions
         Debug.Print("")
     End Sub
     Public Sub GetCurrentTracking(strGUID As String)
-        'Dim ds As New DataSet
-        'Dim da As New MySqlDataAdapter
         Dim dt As DataTable
         Dim dr As DataRow
-        'Dim strQryRow As String
-        'da.SelectCommand = New MySqlCommand("SELECT * FROM trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1")
-        ' da.SelectCommand.Connection = GlobalConn
-        ' da.Fill(ds)
-        dt = ReturnTable("SELECT * FROM trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1") 'ds.Tables(0)
+        dt = ReturnSQLTable("SELECT * FROM trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1") 'ds.Tables(0)
         If dt.Rows.Count > 0 Then
             For Each dr In dt.Rows
                 With dr
@@ -171,18 +165,27 @@ Public Module DBFunctions
             Next
         End If
     End Sub
-    Public Function ReturnTable(strSQLQry As String) As DataTable
+    Public Function ReturnSQLTable(strSQLQry As String) As DataTable
+        Dim ds As New DataSet
+        Dim da As New MySqlDataAdapter
         Try
-            Dim ds As New DataSet
-            Dim da As New MySqlDataAdapter
             da.SelectCommand = New MySqlCommand(strSQLQry)
             da.SelectCommand.Connection = GlobalConn
             da.Fill(ds)
+            da.Dispose()
             Return ds.Tables(0)
         Catch ex As Exception
+            da.Dispose()
+            ds.Dispose()
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return Nothing
         End Try
+    End Function
+    Public Function ReturnSQLReader(strSQLQry As String) As MySqlDataReader
+        Dim cmd As New MySqlCommand(strSQLQry, GlobalConn)
+        Return cmd.ExecuteReader
+
+
     End Function
     Public Function DeleteAttachment(AttachUID As String) As Integer
         If Not ConnectionReady() Then

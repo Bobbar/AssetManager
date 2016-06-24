@@ -182,7 +182,16 @@ Public Class MainFrom
             table.Columns.Add("Replace Year", GetType(String))
             table.Columns.Add("GUID", GetType(String))
             For Each r As DataRow In Results.Rows
-                table.Rows.Add(r.Item("dev_cur_user"), r.Item("dev_asset_tag"), r.Item("dev_serial"), GetHumanValue(ComboType.EquipType, r.Item("dev_eq_type")), r.Item("dev_description"), GetHumanValue(ComboType.OSType, r.Item("dev_osversion")), GetHumanValue(ComboType.Location, r.Item("dev_location")), r.Item("dev_purchase_date"), r.Item("dev_replacement_year"), r.Item("dev_UID"))
+                table.Rows.Add(r.Item("dev_cur_user"),
+                               r.Item("dev_asset_tag"),
+                               r.Item("dev_serial"),
+                               GetHumanValue(ComboType.EquipType, r.Item("dev_eq_type")),
+                               r.Item("dev_description"),
+                               GetHumanValue(ComboType.OSType, r.Item("dev_osversion")),
+                               GetHumanValue(ComboType.Location, r.Item("dev_location")),
+                               r.Item("dev_purchase_date"),
+                               r.Item("dev_replacement_year"),
+                               r.Item("dev_UID"))
             Next
             bolGridFilling = True
             ResultGrid.DataSource = table

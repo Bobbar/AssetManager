@@ -182,70 +182,97 @@ Public Class View
         Waiting()
         ClearFields()
         RefreshCombos()
-        Dim reader As MySqlDataReader
-        Dim table As New DataTable
-        Dim strQry = "Select * FROM devices, historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC"
-        Dim cmd As New MySqlCommand(strQry, GlobalConn)
+        Dim table, Results As New DataTable
         Try
-            reader = cmd.ExecuteReader
-            If Not reader.HasRows Then
-                reader.Close()
-                table.Dispose()
-                cmd.Dispose()
-                reader.Dispose()
+            Results = ReturnSQLTable("Select * FROM devices, historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
+            If Results.Rows.Count < 1 Then
+                Results.Dispose()
                 CurrentDevice = Nothing
                 Dim blah = MsgBox("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
                 Exit Sub
             End If
-            table.Columns.Add("Date", GetType(String))
-            table.Columns.Add("Action Type", GetType(String))
-            table.Columns.Add("Action User", GetType(String))
-            table.Columns.Add("User", GetType(String))
-            table.Columns.Add("Asset ID", GetType(String))
-            table.Columns.Add("Serial", GetType(String))
-            table.Columns.Add("Description", GetType(String))
-            table.Columns.Add("Location", GetType(String))
-            table.Columns.Add("Purchase Date", GetType(String))
-            table.Columns.Add("GUID", GetType(String))
-            With reader
-                Do While .Read()
-                    CollectDeviceInfo(NoNull(!dev_UID), NoNull(!dev_description), NoNull(!dev_location), NoNull(!dev_cur_user), NoNull(!dev_serial), NoNull(!dev_asset_tag), NoNull(!dev_purchase_date), NoNull(!dev_replacement_year), NoNull(!dev_po), NoNull(!dev_osversion), NoNull(!dev_eq_type), NoNull(!dev_status), CBool(!dev_trackable), CBool(!dev_checkedout))
-                    txtAssetTag_View_REQ.Text = NoNull(!dev_asset_tag)
-                    txtDescription_View_REQ.Text = NoNull(!dev_description)
-                    cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType,!dev_eq_type)
-                    txtSerial_View_REQ.Text = NoNull(!dev_serial)
-                    cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.Location,!dev_location)
-                    txtCurUser_View_REQ.Text = NoNull(!dev_cur_user)
-                    dtPurchaseDate_View_REQ.Value = NoNull(!dev_purchase_date)
-                    txtReplacementYear_View.Text = NoNull(!dev_replacement_year)
-                    cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.OSType,!dev_osversion)
-                    cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType,!dev_status)
-                    txtGUID.Text = NoNull(!dev_UID)
-                    chkTrackable.Checked = CBool(!dev_trackable)
-                    table.Rows.Add(!hist_action_datetime, GetHumanValue(ComboType.ChangeType,!hist_change_type),!hist_action_user,!hist_cur_user,!hist_asset_tag,!hist_serial,!hist_description, GetHumanValue(ComboType.Location,!hist_location),!hist_purchase_date,!hist_uid)
-                Loop
-            End With
-            reader.Close()
-            reader.Dispose()
-            DataGridHistory.DataSource = table
-            table.Dispose()
-            cmd.Dispose()
+            CollectDeviceInfo(Results)
+            FillDeviceInfo()
+            SendToHistGrid(DataGridHistory, Results)
+            Results.Dispose()
             DisableControls()
-            'DataGridHistory.AutoResizeColumns()
             ViewTracking(CurrentDevice.strGUID)
             DoneWaiting()
             Me.Show()
         Catch ex As Exception
             DoneWaiting()
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            If reader IsNot Nothing Then
-                reader.Close()
-                reader.Dispose()
-            End If
-            table.Dispose()
-            cmd.Dispose()
+            Results.Dispose()
             Exit Sub
         End Try
+    End Sub
+    Private Sub FillDeviceInfo()
+        With CurrentDevice
+            txtAssetTag_View_REQ.Text = .strAssetTag
+            txtDescription_View_REQ.Text = .strDescription
+            cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType, .strEqType)
+            txtSerial_View_REQ.Text = .strSerial
+            cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.Location, .strLocation)
+            txtCurUser_View_REQ.Text = .strCurrentUser
+            dtPurchaseDate_View_REQ.Value = .dtPurchaseDate
+            txtReplacementYear_View.Text = .strReplaceYear
+            cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.OSType, .strOSVersion)
+            cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType, .strStatus)
+            txtGUID.Text = .strGUID
+            chkTrackable.Checked = CBool(.bolTrackable)
+        End With
+    End Sub
+    Private Sub SendToHistGrid(Grid As DataGridView, tblResults As DataTable)
+        Dim table As New DataTable
+        table.Columns.Add("Date", GetType(String))
+        table.Columns.Add("Action Type", GetType(String))
+        table.Columns.Add("Action User", GetType(String))
+        table.Columns.Add("User", GetType(String))
+        table.Columns.Add("Asset ID", GetType(String))
+        table.Columns.Add("Serial", GetType(String))
+        table.Columns.Add("Description", GetType(String))
+        table.Columns.Add("Location", GetType(String))
+        table.Columns.Add("Purchase Date", GetType(String))
+        table.Columns.Add("GUID", GetType(String))
+        For Each r As DataRow In tblResults.Rows
+            table.Rows.Add(r.Item("hist_action_datetime"),
+                           GetHumanValue(ComboType.ChangeType, r.Item("hist_change_type")),
+                           r.Item("hist_action_user"),
+                           r.Item("hist_cur_user"),
+                           r.Item("hist_asset_tag"),
+                           r.Item("hist_serial"),
+                           r.Item("hist_description"),
+                           GetHumanValue(ComboType.Location, r.Item("hist_location")),
+                           r.Item("hist_purchase_date"),
+                           r.Item("hist_uid"))
+        Next
+        Grid.DataSource = table
+        table.Dispose()
+    End Sub
+    Private Sub SendToTrackGrid(Grid As DataGridView, tblResults As DataTable)
+        Dim table As New DataTable
+        table.Columns.Add("Date", GetType(String))
+        table.Columns.Add("Check Type", GetType(String))
+        table.Columns.Add("Check Out User", GetType(String))
+        table.Columns.Add("Check In User", GetType(String))
+        table.Columns.Add("Check Out", GetType(String))
+        table.Columns.Add("Check In", GetType(String))
+        table.Columns.Add("Due Back", GetType(String))
+        table.Columns.Add("Location", GetType(String))
+        table.Columns.Add("GUID", GetType(String))
+        For Each r As DataRow In tblResults.Rows
+            table.Rows.Add(r.Item("track_datestamp"),
+                           r.Item("track_check_type"),
+                           r.Item("track_checkout_user"),
+                           r.Item("track_checkin_user"),
+                           r.Item("track_checkout_time"),
+                           r.Item("track_checkin_time"),
+                           r.Item("track_dueback_date"),
+                           r.Item("track_use_location"),
+                           r.Item("track_uid"))
+        Next
+        Grid.DataSource = table
+        table.Dispose()
     End Sub
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
@@ -262,60 +289,41 @@ Public Class View
         Me.Refresh()
     End Sub
     Public Sub ViewTracking(strGUID As String)
+        Dim Results As New DataTable
+        Dim strQry = "Select * FROM trackable, devices WHERE track_device_uid = dev_UID And track_device_uid = '" & strGUID & "' ORDER BY track_datestamp DESC"
         Try
             If Not ConnectionReady() Then
                 ConnectionNotReady()
                 Exit Sub
             End If
             Waiting()
-            'Dim ConnID As String = Guid.NewGuid.ToString
-            Dim reader As MySqlDataReader
-            Dim table As New DataTable
-            Dim strQry = "Select * FROM trackable, devices WHERE track_device_uid = dev_UID And track_device_uid = '" & strGUID & "' ORDER BY track_datestamp DESC"
-            Dim cmd As New MySqlCommand(strQry, GlobalConn)
-            reader = cmd.ExecuteReader
-            table.Columns.Add("Date", GetType(String))
-            table.Columns.Add("Check Type", GetType(String))
-            table.Columns.Add("Check Out User", GetType(String))
-            table.Columns.Add("Check In User", GetType(String))
-            table.Columns.Add("Check Out", GetType(String))
-            table.Columns.Add("Check In", GetType(String))
-            table.Columns.Add("Due Back", GetType(String))
-            table.Columns.Add("Location", GetType(String))
-            table.Columns.Add("GUID", GetType(String))
-            Dim i As Integer
-            i = 0
-            With reader
-                Do While .Read()
-                    If i < 1 Then 'collect most current info
-                        CurrentDevice.Tracking.strCheckOutTime = IIf(IsDBNull(!track_checkout_time), "",!track_checkout_time)
-                        CurrentDevice.Tracking.strCheckInTime = IIf(IsDBNull(!track_checkin_time), "",!track_checkin_time)
-                        CurrentDevice.Tracking.strUseLocation = !track_use_location
-                        CurrentDevice.Tracking.strCheckOutUser = !track_checkout_user
-                        CurrentDevice.Tracking.strCheckInUser = IIf(IsDBNull(!track_checkin_user), "",!track_checkin_user)
-                        CurrentDevice.Tracking.strDueBackTime = !track_dueback_date
-                        CurrentDevice.Tracking.strUseReason = !track_notes
-                    End If
-                    table.Rows.Add(!track_datestamp,!track_check_type,!track_checkout_user,!track_checkin_user,!track_checkout_time,!track_checkin_time,!track_dueback_date,!track_use_location,!track_uid)
-                    i += 1
-                Loop
-            End With
-            reader.Close()
-            TrackingGrid.DataSource = table
+            Results = ReturnSQLTable(strQry)
+            CollectCurrentTracking(Results)
+            SendToTrackGrid(TrackingGrid, Results)
             DisableSorting(TrackingGrid)
             FillTrackingBox()
             SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
             TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
+            Results.Dispose()
             DoneWaiting()
             Exit Sub
         Catch ex As Exception
+            Results.Dispose()
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 DoneWaiting()
-                'Resume Next
             Else
                 EndProgram()
             End If
         End Try
+    End Sub
+    Private Sub CollectCurrentTracking(Results As DataTable)
+        CurrentDevice.Tracking.strCheckOutTime = NoNull(Results.Rows(0).Item("track_checkout_time"))
+        CurrentDevice.Tracking.strCheckInTime = NoNull(Results.Rows(0).Item("track_checkin_time"))
+        CurrentDevice.Tracking.strUseLocation = NoNull(Results.Rows(0).Item("track_use_location"))
+        CurrentDevice.Tracking.strCheckOutUser = NoNull(Results.Rows(0).Item("track_checkout_user"))
+        CurrentDevice.Tracking.strCheckInUser = NoNull(Results.Rows(0).Item("track_checkin_user"))
+        CurrentDevice.Tracking.strDueBackTime = NoNull(Results.Rows(0).Item("track_dueback_date"))
+        CurrentDevice.Tracking.strUseReason = NoNull(Results.Rows(0).Item("track_notes"))
     End Sub
     Private Sub DisableSorting(Grid As DataGridView)
         Dim c As DataGridViewColumn
