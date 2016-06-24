@@ -17,10 +17,8 @@ Public Class View_Tracking
             End If
             Waiting()
             Dim reader As MySqlDataReader
-            Dim table As New DataTable
             Dim strQry = "Select * FROM trackable WHERE  track_uid = '" & EntryUID & "'"
-            Dim cmd As New MySqlCommand(strQry, GlobalConn)
-            reader = cmd.ExecuteReader
+            reader = ReturnSQLReader(strQry)
             With reader
                 Do While .Read()
                     txtTimeStamp.Text = !track_datestamp
@@ -46,7 +44,6 @@ Public Class View_Tracking
                 Loop
             End With
             reader.Close()
-            'CloseConnection(ConnID)
             DoneWaiting()
             Exit Sub
         Catch ex As Exception
@@ -54,7 +51,6 @@ Public Class View_Tracking
             Else
                 Exit Sub
             End If
-            'If Err.Number = 13 Then Resume Next
         End Try
     End Sub
     Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click

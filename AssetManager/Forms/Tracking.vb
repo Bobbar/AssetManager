@@ -100,9 +100,7 @@ Public Class Tracking
             Waiting()
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='1' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
-            Dim cmd As New MySqlCommand
-            cmd.Connection = GlobalConn
-            cmd.CommandText = strSQLQry1
+            Dim cmd As MySqlCommand = ReturnSQLCommand(strSQLQry1)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkout_user, track_use_location, track_notes, track_device_uid) VALUES(@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkout_user, @track_use_location, @track_notes, @track_device_uid)"
             cmd.CommandText = strSqlQry2
@@ -122,6 +120,7 @@ Public Class Tracking
             End If
             Me.Dispose()
             View.ViewDevice(CurrentDevice.strGUID)
+            cmd.Dispose()
             DoneWaiting()
             Exit Sub
         Catch ex As Exception
@@ -139,9 +138,7 @@ Public Class Tracking
             Waiting()
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='0' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
-            Dim cmd As New MySqlCommand
-            cmd.Connection = GlobalConn
-            cmd.CommandText = strSQLQry1
+            Dim cmd As MySqlCommand = ReturnSQLCommand(strSQLQry1)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkin_time, track_checkout_user, track_checkin_user, track_use_location, track_notes, track_device_uid) VALUES (@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkin_time, @track_checkout_user, @track_checkin_user, @track_use_location, @track_notes, @track_device_uid)"
             cmd.CommandText = strSqlQry2
@@ -162,6 +159,7 @@ Public Class Tracking
                 Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
             End If
             Me.Dispose()
+            cmd.Dispose()
             View.ViewDevice(CurrentDevice.strGUID)
             DoneWaiting()
             Exit Sub

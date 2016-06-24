@@ -17,7 +17,7 @@ Public Class AddNew
             End If
             GetDBValues()
             Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_po,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_trackable) VALUES(@dev_UID,@dev_description,@dev_location,@dev_cur_user,@dev_serial,@dev_asset_tag,@dev_purchase_date,@dev_po,@dev_replacement_year,@dev_eq_type,@dev_osversion,@dev_status,@dev_lastmod_user,@dev_trackable)"
-            Dim cmd As New MySqlCommand
+            Dim cmd As MySqlCommand = ReturnSQLCommand(strSqlQry1)
             cmd.Parameters.AddWithValue("@dev_UID", strUID)
             cmd.Parameters.AddWithValue("@dev_description", Device.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", Device.strLocation)
@@ -32,8 +32,6 @@ Public Class AddNew
             cmd.Parameters.AddWithValue("@dev_status", Device.strStatus)
             cmd.Parameters.AddWithValue("@dev_lastmod_user", strLocalUser)
             cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(Device.bolTrackable))
-            cmd.Connection = GlobalConn
-            cmd.CommandText = strSqlQry1
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES(@hist_change_type, @hist_notes, @hist_serial, @hist_description, @hist_location, @hist_cur_user, @hist_asset_tag, @hist_purchase_date, @hist_replacement_year, @hist_po, @hist_osversion, @hist_dev_UID, @hist_action_user, @hist_eq_type, @hist_status, @hist_trackable)"
             cmd.Parameters.AddWithValue("@hist_change_type", "NEWD")
@@ -61,6 +59,7 @@ Public Class AddNew
             Else
                 Dim blah = MsgBox("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
             End If
+            cmd.Dispose()
             Exit Sub
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then

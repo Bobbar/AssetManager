@@ -182,7 +182,16 @@ Public Class MainFrom
             table.Columns.Add("Replace Year", GetType(String))
             table.Columns.Add("GUID", GetType(String))
             For Each r As DataRow In Results.Rows
-                table.Rows.Add(r.Item("dev_cur_user"), r.Item("dev_asset_tag"), r.Item("dev_serial"), GetHumanValue(ComboType.EquipType, r.Item("dev_eq_type")), r.Item("dev_description"), GetHumanValue(ComboType.OSType, r.Item("dev_osversion")), GetHumanValue(ComboType.Location, r.Item("dev_location")), r.Item("dev_purchase_date"), r.Item("dev_replacement_year"), r.Item("dev_UID"))
+                table.Rows.Add(r.Item("dev_cur_user"),
+                               r.Item("dev_asset_tag"),
+                               r.Item("dev_serial"),
+                               GetHumanValue(ComboType.EquipType, r.Item("dev_eq_type")),
+                               r.Item("dev_description"),
+                               GetHumanValue(ComboType.OSType, r.Item("dev_osversion")),
+                               GetHumanValue(ComboType.Location, r.Item("dev_location")),
+                               r.Item("dev_purchase_date"),
+                               r.Item("dev_replacement_year"),
+                               r.Item("dev_UID"))
             Next
             bolGridFilling = True
             ResultGrid.DataSource = table
@@ -244,8 +253,23 @@ Public Class MainFrom
                             cmd.Parameters.AddWithValue("@" & fld.FieldName, Convert.ToInt32(fld.Value))
                         End If
                     Else
-                        strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE CONCAT('%', @" + fld.FieldName + ", '%') AND"
-                        cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                        Select Case fld.FieldName
+                            Case "dev_osversion"
+                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                            Case "dev_eq_type"
+                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                            Case "dev_location"
+                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                            Case "dev_status"
+                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                            Case Else
+                                strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE CONCAT('%', @" + fld.FieldName + ", '%') AND"
+                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                        End Select
                     End If
                 End If
             End If
@@ -479,8 +503,6 @@ Public Class MainFrom
         Else
             HideLiveBox()
         End If
-    End Sub
-    Private Sub LiveBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LiveBox.SelectedIndexChanged
     End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
