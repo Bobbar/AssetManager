@@ -45,3 +45,8 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+/AssetManager/bin/Debug/AssetManager.vshost.exe.manifest
+*.cache
+AssetManager/obj/Debug/DesignTimeResolveAssemblyReferences.cache
+*.cache
+*.suo
