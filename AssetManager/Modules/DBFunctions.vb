@@ -148,15 +148,15 @@ Public Module DBFunctions
         Debug.Print("")
     End Sub
     Public Sub GetCurrentTracking(strGUID As String)
-        Dim ds As New DataSet
-        Dim da As New MySqlDataAdapter
+        'Dim ds As New DataSet
+        'Dim da As New MySqlDataAdapter
         Dim dt As DataTable
         Dim dr As DataRow
         'Dim strQryRow As String
-        da.SelectCommand = New MySqlCommand("SELECT * FROM trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1")
-        da.SelectCommand.Connection = GlobalConn
-        da.Fill(ds)
-        dt = ds.Tables(0)
+        'da.SelectCommand = New MySqlCommand("SELECT * FROM trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1")
+        ' da.SelectCommand.Connection = GlobalConn
+        ' da.Fill(ds)
+        dt = ReturnTable("SELECT * FROM trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1") 'ds.Tables(0)
         If dt.Rows.Count > 0 Then
             For Each dr In dt.Rows
                 With dr
@@ -171,6 +171,19 @@ Public Module DBFunctions
             Next
         End If
     End Sub
+    Public Function ReturnTable(strSQLQry As String) As DataTable
+        Try
+            Dim ds As New DataSet
+            Dim da As New MySqlDataAdapter
+            da.SelectCommand = New MySqlCommand(strSQLQry)
+            da.SelectCommand.Connection = GlobalConn
+            da.Fill(ds)
+            Return ds.Tables(0)
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
+        End Try
+    End Function
     Public Function DeleteAttachment(AttachUID As String) As Integer
         If Not ConnectionReady() Then
             ConnectionNotReady()
