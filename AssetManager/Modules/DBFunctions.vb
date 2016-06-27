@@ -25,7 +25,6 @@ Public Module DBFunctions
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
     End Structure
-    Public CurrentConnections() As ConnectionData
     Public Structure Combo_Data
         Public strLong As String
         Public strShort As String
@@ -140,13 +139,6 @@ Public Module DBFunctions
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Private Sub ListConnections(num As Integer)
-        Debug.Print("")
-        For i As Integer = 0 To UBound(CurrentConnections)
-            Debug.Print(i & " => " & num & " - " & CurrentConnections(i).ConnectionID & " - " & CurrentConnections(i).DBConnection.State)
-        Next
-        Debug.Print("")
-    End Sub
     Public Sub GetCurrentTracking(strGUID As String)
         Dim dt As DataTable
         Dim dr As DataRow
@@ -184,15 +176,25 @@ Public Module DBFunctions
     End Function
     Public Function ReturnSQLReader(strSQLQry As String) As MySqlDataReader
         'Debug.Print("Reader Hit " & Date.Now.Ticks)
-        Dim cmd As New MySqlCommand(strSQLQry, GlobalConn)
-        Return cmd.ExecuteReader
+        Try
+            Dim cmd As New MySqlCommand(strSQLQry, GlobalConn)
+            Return cmd.ExecuteReader
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
+        End Try
     End Function
     Public Function ReturnSQLCommand(strSQLQry As String) As MySqlCommand
         'Debug.Print("Command Hit " & Date.Now.Ticks)
-        Dim cmd As New MySqlCommand
-        cmd.Connection = GlobalConn
-        cmd.CommandText = strSQLQry
-        Return cmd
+        Try
+            Dim cmd As New MySqlCommand
+            cmd.Connection = GlobalConn
+            cmd.CommandText = strSQLQry
+            Return cmd
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
+        End Try
     End Function
     Public Function DeleteAttachment(AttachUID As String) As Integer
         If Not ConnectionReady() Then

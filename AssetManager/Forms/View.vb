@@ -176,33 +176,45 @@ Public Class View
             ConnectionNotReady()
             Exit Sub
         End If
-        Waiting()
-        ClearFields()
-        RefreshCombos()
+        Try
+            Waiting()
+            ClearFields()
+            RefreshCombos()
+            If ViewHistory(DeviceUID) Then
+                ViewTracking(CurrentDevice.strGUID)
+                DoneWaiting()
+                Me.Show()
+            End If
+        Catch ex As Exception
+            DoneWaiting()
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
+    Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
         Dim table, Results As New DataTable
         Try
             Results = ReturnSQLTable("Select * FROM devices, historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
             If Results.Rows.Count < 1 Then
+                CloseChildren()
                 Results.Dispose()
                 CurrentDevice = Nothing
+                Me.Dispose()
                 Dim blah = MsgBox("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
-                Exit Sub
+                Return False
             End If
             CollectDeviceInfo(Results)
             FillDeviceInfo()
             SendToHistGrid(DataGridHistory, Results)
             Results.Dispose()
             DisableControls()
-            ViewTracking(CurrentDevice.strGUID)
-            DoneWaiting()
-            Me.Show()
+            Return True
         Catch ex As Exception
             DoneWaiting()
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Results.Dispose()
-            Exit Sub
+            Return False
         End Try
-    End Sub
+    End Function
     Private Sub FillDeviceInfo()
         With CurrentDevice
             txtAssetTag_View_REQ.Text = .strAssetTag
@@ -221,18 +233,20 @@ Public Class View
     End Sub
     Private Sub SendToHistGrid(Grid As DataGridView, tblResults As DataTable)
         Dim table As New DataTable
-        table.Columns.Add("Date", GetType(String))
-        table.Columns.Add("Action Type", GetType(String))
-        table.Columns.Add("Action User", GetType(String))
-        table.Columns.Add("User", GetType(String))
-        table.Columns.Add("Asset ID", GetType(String))
-        table.Columns.Add("Serial", GetType(String))
-        table.Columns.Add("Description", GetType(String))
-        table.Columns.Add("Location", GetType(String))
-        table.Columns.Add("Purchase Date", GetType(String))
-        table.Columns.Add("GUID", GetType(String))
-        For Each r As DataRow In tblResults.Rows
-            table.Rows.Add(r.Item("hist_action_datetime"),
+        Try
+            If tblResults.Rows.Count > 0 Then
+                table.Columns.Add("Date", GetType(String))
+                table.Columns.Add("Action Type", GetType(String))
+                table.Columns.Add("Action User", GetType(String))
+                table.Columns.Add("User", GetType(String))
+                table.Columns.Add("Asset ID", GetType(String))
+                table.Columns.Add("Serial", GetType(String))
+                table.Columns.Add("Description", GetType(String))
+                table.Columns.Add("Location", GetType(String))
+                table.Columns.Add("Purchase Date", GetType(String))
+                table.Columns.Add("GUID", GetType(String))
+                For Each r As DataRow In tblResults.Rows
+                    table.Rows.Add(r.Item("hist_action_datetime"),
                            GetHumanValue(ComboType.ChangeType, r.Item("hist_change_type")),
                            r.Item("hist_action_user"),
                            r.Item("hist_cur_user"),
@@ -242,23 +256,33 @@ Public Class View
                            GetHumanValue(ComboType.Location, r.Item("hist_location")),
                            r.Item("hist_purchase_date"),
                            r.Item("hist_uid"))
-        Next
-        Grid.DataSource = table
-        table.Dispose()
+                Next
+                Grid.DataSource = table
+                table.Dispose()
+            Else
+                table.Dispose()
+                Grid.DataSource = Nothing
+            End If
+        Catch ex As Exception
+            table.Dispose()
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Private Sub SendToTrackGrid(Grid As DataGridView, tblResults As DataTable)
         Dim table As New DataTable
-        table.Columns.Add("Date", GetType(String))
-        table.Columns.Add("Check Type", GetType(String))
-        table.Columns.Add("Check Out User", GetType(String))
-        table.Columns.Add("Check In User", GetType(String))
-        table.Columns.Add("Check Out", GetType(String))
-        table.Columns.Add("Check In", GetType(String))
-        table.Columns.Add("Due Back", GetType(String))
-        table.Columns.Add("Location", GetType(String))
-        table.Columns.Add("GUID", GetType(String))
-        For Each r As DataRow In tblResults.Rows
-            table.Rows.Add(r.Item("track_datestamp"),
+        Try
+            If tblResults.Rows.Count > 0 Then
+                table.Columns.Add("Date", GetType(String))
+                table.Columns.Add("Check Type", GetType(String))
+                table.Columns.Add("Check Out User", GetType(String))
+                table.Columns.Add("Check In User", GetType(String))
+                table.Columns.Add("Check Out", GetType(String))
+                table.Columns.Add("Check In", GetType(String))
+                table.Columns.Add("Due Back", GetType(String))
+                table.Columns.Add("Location", GetType(String))
+                table.Columns.Add("GUID", GetType(String))
+                For Each r As DataRow In tblResults.Rows
+                    table.Rows.Add(r.Item("track_datestamp"),
                            r.Item("track_check_type"),
                            r.Item("track_checkout_user"),
                            r.Item("track_checkin_user"),
@@ -267,9 +291,17 @@ Public Class View
                            r.Item("track_dueback_date"),
                            r.Item("track_use_location"),
                            r.Item("track_uid"))
-        Next
-        Grid.DataSource = table
-        table.Dispose()
+                Next
+                Grid.DataSource = table
+                table.Dispose()
+            Else
+                table.Dispose()
+                Grid.DataSource = Nothing
+            End If
+        Catch ex As Exception
+            table.Dispose()
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
@@ -296,8 +328,10 @@ Public Class View
             If Results.Rows.Count > 0 Then
                 CollectCurrentTracking(Results)
                 SendToTrackGrid(TrackingGrid, Results)
-                TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(DataGridHistory.Font, FontStyle.Bold)
                 DisableSorting(TrackingGrid)
+            Else
+                Results.Dispose()
+                TrackingGrid.DataSource = Nothing
             End If
             FillTrackingBox()
             SetTracking(CurrentDevice.bolTrackable, CurrentDevice.Tracking.bolCheckedOut)
@@ -306,11 +340,8 @@ Public Class View
             Exit Sub
         Catch ex As Exception
             Results.Dispose()
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                DoneWaiting()
-            Else
-                EndProgram()
-            End If
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            DoneWaiting()
         End Try
     End Sub
     Private Sub CollectCurrentTracking(Results As DataTable)
@@ -452,7 +483,7 @@ Public Class View
         UpdateDev.Show()
     End Sub
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        Me.Hide()
+        Me.Dispose()
         Attachments.Dispose()
         Tracking.Dispose()
         CloseChildren()
@@ -549,12 +580,12 @@ Public Class View
             If rows > 0 Then
                 Dim blah2 = MsgBox("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentDevice = Nothing
-                Me.Hide()
+                Me.Dispose()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentDevice.strGUID)
                 Dim blah2 = MsgBox("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
                 CurrentDevice = Nothing
-                Me.Hide()
+                Me.Dispose()
             End If
         Else
             Exit Sub
@@ -624,7 +655,6 @@ Public Class View
         DoneWaiting()
     End Sub
     Private Sub TrackingGrid_RowPrePaint(sender As Object, e As DataGridViewRowPrePaintEventArgs) Handles TrackingGrid.RowPrePaint
-        'Dim Mod3 As Single = 0.75
         Dim c1 As Color = colHighlightBlue 'highlight color
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
         TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -661,32 +691,27 @@ Public Class View
             Exit Sub
         End If
         If Not CheckForAccess("modify") Then Exit Sub
-        'If Not CheckForAdmin() Then Exit Sub
         ModifyDevice()
     End Sub
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
         If Not CheckForAccess("modify") Then Exit Sub
-        'If Not CheckForAdmin() Then Exit Sub
         UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
         UpdateDev.cmbUpdate_ChangeType.Enabled = False
         UpdateDev.Show()
     End Sub
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
         If Not CheckForAccess("delete") Then Exit Sub
-        'If Not CheckForAdmin() Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
-            ' Dim rows As Integer
-            'rows = DeleteDevice(CurrentDevice.strGUID)
             If DeleteDevice(CurrentDevice.strGUID) Then
                 Dim blah2 = MsgBox("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentDevice = Nothing
-                Me.Hide()
+                Me.Dispose()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentDevice.strGUID)
                 Dim blah2 = MsgBox("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
                 CurrentDevice = Nothing
-                Me.Hide()
+                Me.Dispose()
             End If
         Else
             Exit Sub
@@ -722,11 +747,9 @@ Public Class View
             Exit Sub
         End If
         If Not CheckForAccess("view_attach") Then Exit Sub
-        'If Not CheckForAdmin() Then Exit Sub
         Attachments.FillDeviceInfo()
         AddChild(Attachments)
         Attachments.ListAttachments(CurrentDevice.strGUID)
-        'Attachments.Show()
         Attachments.Activate()
     End Sub
     Private DefGridBC As Color, DefGridSelCol As Color, bolGridFilling As Boolean = False
@@ -776,10 +799,6 @@ Public Class View
     Private Sub cmbStatus_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbStatus_REQ.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub
-    Private Sub TabControl1_Click(sender As Object, e As EventArgs) Handles TabControl1.Click
-    End Sub
-    Private Sub TrackingTool_Click(sender As Object, e As EventArgs) Handles TrackingTool.Click
-    End Sub
     Private Sub cmdAccept_Tool_Click(sender As Object, e As EventArgs) Handles cmdAccept_Tool.Click
         If Not ConnectionReady() Then
             ConnectionNotReady()
@@ -799,9 +818,13 @@ Public Class View
     Private Sub cmdCancel_Tool_Click(sender As Object, e As EventArgs) Handles cmdCancel_Tool.Click
         CancelModify()
     End Sub
-    Private Sub TabControl1_GotFocus(sender As Object, e As EventArgs) Handles TabControl1.GotFocus
-    End Sub
     Private Sub TabControl1_MouseDown(sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
         TrackingGrid.Refresh()
+    End Sub
+    Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        CloseChildren()
+    End Sub
+    Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint
+        TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
     End Sub
 End Class

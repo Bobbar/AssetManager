@@ -11,6 +11,7 @@ Class Attachments
     Private lngBytesMoved As Integer
     Private stpSpeed As New Stopwatch
     Private bolGridFilling As Boolean
+    Private progIts As Integer = 0
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -272,7 +273,7 @@ Class Attachments
                 If bytesIn > 0 Then
                     reqfile.Write(buffer, 0, bytesIn)
                     totalBytesIn += bytesIn
-                    lngBytesMoved = totalBytesIn
+                    lngBytesMoved += bytesIn
                     If flLength > 0 Then
                         perc = (totalBytesIn / flLength) * 100
                         intProgress = perc
@@ -396,7 +397,7 @@ Class Attachments
                 If bytesIn > 0 Then
                     output.Write(buffer, 0, bytesIn)
                     totalBytesIn += bytesIn 'downloaded bytes
-                    lngBytesMoved = totalBytesIn
+                    lngBytesMoved += bytesIn
                     If flLength > 0 Then
                         perc = (totalBytesIn / flLength) * 100
                         'report progress
@@ -492,9 +493,16 @@ Class Attachments
     End Sub
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
         Dim BytesPerSecond As Single
+        Dim ResetCounter As Integer = 40
         If lngBytesMoved > 0 Then
+            progIts += 1
             BytesPerSecond = Math.Round((lngBytesMoved / stpSpeed.ElapsedMilliseconds) / 1000, 2)
             statMBPS.Text = BytesPerSecond.ToString("0.00") & " MB/s"
+            If progIts > ResetCounter Then
+                progIts = 0
+                stpSpeed.Restart()
+                lngBytesMoved = 0
+            End If
         Else
             statMBPS.Text = Nothing
         End If

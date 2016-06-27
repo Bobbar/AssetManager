@@ -1,5 +1,6 @@
 ﻿Module FTPFunctions
     Public FTPcreds As Net.NetworkCredential = New Net.NetworkCredential(strFTPUser, strFTPPass)
+    Private intSocketTimeout As Integer = 30000 'timeout for FTP comms in MS
     Public Function DeleteFTPAttachment(AttachUID As String, DeviceUID As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Try
@@ -51,6 +52,7 @@
                 .Proxy = New Net.WebProxy() 'set proxy to nothing to bypass .NET auto-detect process. This speeds up the initial connection greatly.
                 .Credentials = FTPcreds
                 .Method = Method
+                .ReadWriteTimeout = intSocketTimeout
                 Return .GetResponse
             End With
         Catch ex As Exception
@@ -65,10 +67,12 @@
                 .Proxy = New Net.WebProxy() 'set proxy to nothing to bypass .NET auto-detect process. This speeds up the initial connection greatly.
                 .Credentials = FTPcreds
                 .Method = Method
+                .ReadWriteTimeout = intSocketTimeout
                 Return .GetRequestStream
             End With
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
         End Try
     End Function
 End Module
