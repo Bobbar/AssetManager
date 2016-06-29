@@ -32,6 +32,7 @@ Partial Class MainFrom
         Me.CopyTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.LiveBox = New System.Windows.Forms.ListBox()
         Me.InstantGroup = New System.Windows.Forms.GroupBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
@@ -87,6 +88,7 @@ Partial Class MainFrom
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.InstantGroup.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SearchGroup.SuspendLayout()
         Me.PanelNoScrollOnFocus1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
@@ -103,7 +105,7 @@ Partial Class MainFrom
         Me.GroupBox1.Controls.Add(Me.ResultGrid)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 222)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1215, 347)
+        Me.GroupBox1.Size = New System.Drawing.Size(1215, 403)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         '
@@ -156,7 +158,7 @@ Partial Class MainFrom
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1188, 313)
+        Me.ResultGrid.Size = New System.Drawing.Size(1188, 369)
         Me.ResultGrid.TabIndex = 17
         Me.ResultGrid.VirtualMode = True
         '
@@ -201,10 +203,7 @@ Partial Class MainFrom
         'InstantGroup
         '
         Me.InstantGroup.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.InstantGroup.Controls.Add(Me.Label9)
-        Me.InstantGroup.Controls.Add(Me.Label8)
-        Me.InstantGroup.Controls.Add(Me.txtAssetTag)
-        Me.InstantGroup.Controls.Add(Me.txtSerial)
+        Me.InstantGroup.Controls.Add(Me.Panel1)
         Me.InstantGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InstantGroup.Location = New System.Drawing.Point(9, 19)
         Me.InstantGroup.Name = "InstantGroup"
@@ -213,11 +212,25 @@ Partial Class MainFrom
         Me.InstantGroup.TabStop = False
         Me.InstantGroup.Text = "Instant Lookup"
         '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(202, Byte), Integer), CType(CType(202, Byte), Integer), CType(CType(202, Byte), Integer))
+        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Panel1.Controls.Add(Me.Label9)
+        Me.Panel1.Controls.Add(Me.Label8)
+        Me.Panel1.Controls.Add(Me.txtAssetTag)
+        Me.Panel1.Controls.Add(Me.txtSerial)
+        Me.Panel1.Location = New System.Drawing.Point(6, 20)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(165, 116)
+        Me.Panel1.TabIndex = 39
+        '
         'Label9
         '
+        Me.Label9.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(19, 77)
+        Me.Label9.Location = New System.Drawing.Point(11, 51)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(46, 16)
         Me.Label9.TabIndex = 38
@@ -225,9 +238,10 @@ Partial Class MainFrom
         '
         'Label8
         '
+        Me.Label8.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(19, 30)
+        Me.Label8.Location = New System.Drawing.Point(11, 4)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(73, 16)
         Me.Label8.TabIndex = 37
@@ -235,8 +249,9 @@ Partial Class MainFrom
         '
         'txtAssetTag
         '
+        Me.txtAssetTag.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txtAssetTag.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTag.Location = New System.Drawing.Point(22, 47)
+        Me.txtAssetTag.Location = New System.Drawing.Point(14, 21)
         Me.txtAssetTag.MaxLength = 45
         Me.txtAssetTag.Name = "txtAssetTag"
         Me.txtAssetTag.Size = New System.Drawing.Size(135, 23)
@@ -244,8 +259,9 @@ Partial Class MainFrom
         '
         'txtSerial
         '
+        Me.txtSerial.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txtSerial.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSerial.Location = New System.Drawing.Point(22, 96)
+        Me.txtSerial.Location = New System.Drawing.Point(14, 70)
         Me.txtSerial.MaxLength = 45
         Me.txtSerial.Name = "txtSerial"
         Me.txtSerial.Size = New System.Drawing.Size(135, 23)
@@ -271,6 +287,7 @@ Partial Class MainFrom
         '
         Me.PanelNoScrollOnFocus1.AutoScroll = True
         Me.PanelNoScrollOnFocus1.AutoScrollMargin = New System.Drawing.Size(10, 20)
+        Me.PanelNoScrollOnFocus1.BackColor = System.Drawing.Color.FromArgb(CType(CType(202, Byte), Integer), CType(CType(202, Byte), Integer), CType(CType(202, Byte), Integer))
         Me.PanelNoScrollOnFocus1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label6)
         Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label4)
@@ -522,7 +539,7 @@ Partial Class MainFrom
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel2, Me.DateTimeLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 576)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 632)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1240, 22)
         Me.StatusStrip1.TabIndex = 5
@@ -691,7 +708,7 @@ Partial Class MainFrom
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1240, 598)
+        Me.ClientSize = New System.Drawing.Size(1240, 654)
         Me.Controls.Add(Me.LiveBox)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.ToolStrip1)
@@ -707,7 +724,8 @@ Partial Class MainFrom
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ContextMenuStrip1.ResumeLayout(False)
         Me.InstantGroup.ResumeLayout(False)
-        Me.InstantGroup.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.SearchGroup.ResumeLayout(False)
         Me.PanelNoScrollOnFocus1.ResumeLayout(False)
         Me.PanelNoScrollOnFocus1.PerformLayout()
@@ -718,6 +736,7 @@ Partial Class MainFrom
         Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button
@@ -778,4 +797,5 @@ Partial Class MainFrom
     Friend WithEvents Label6 As Label
     Friend WithEvents txtReplaceYear As TextBox
     Friend WithEvents PanelNoScrollOnFocus1 As AssetManager.PanelNoScrollOnFocus
+    Friend WithEvents Panel1 As Panel
 End Class

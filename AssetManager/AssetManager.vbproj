@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>6023.6.2016.1818</AssemblyVersion>
+    <AssemblyVersion>6025.6.2016.1854</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -121,11 +121,6 @@
       <DependentUpon>MainFrom.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="asset_managerDataSet.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>asset_managerDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Forms\Attachments.Designer.vb">
       <DependentUpon>Attachments.vb</DependentUpon>
     </Compile>
@@ -146,6 +141,7 @@
     </Compile>
     <Compile Include="Modules\DataImport.vb" />
     <Compile Include="Modules\DBFunctions.vb" />
+    <Compile Include="Modules\ErrorHandling.vb" />
     <Compile Include="Modules\ExtendedMethods.vb" />
     <Compile Include="Modules\FTPFunctions.vb" />
     <Compile Include="Modules\SecurityMod.vb" />
@@ -244,18 +240,6 @@
     <EmbeddedResource Include="YearsSincePurchase.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="asset_managerDataSet.xsc">
-      <DependentUpon>asset_managerDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="asset_managerDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>asset_managerDataSet.Designer.vb</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="asset_managerDataSet.xss">
-      <DependentUpon>asset_managerDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="ClassDiagram1.cd" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>

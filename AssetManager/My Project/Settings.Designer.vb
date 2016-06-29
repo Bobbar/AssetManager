@@ -7,19 +7,27 @@
 '     the code is regenerated.
 ' </auto-generated>
 '------------------------------------------------------------------------------
+
 Option Strict On
 Option Explicit On
+
+
 Namespace My
+    
     <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
      Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0"),  _
      Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
     Partial Friend NotInheritable Class MySettings
         Inherits Global.System.Configuration.ApplicationSettingsBase
+        
         Private Shared defaultInstance As MySettings = CType(Global.System.Configuration.ApplicationSettingsBase.Synchronized(New MySettings()),MySettings)
+        
 #Region "My.Settings Auto-Save Functionality"
 #If _MyType = "WindowsForms" Then
     Private Shared addedHandler As Boolean
+
     Private Shared addedHandlerLockObject As New Object
+
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)> _
     Private Shared Sub AutoSaveSettings(ByVal sender As Global.System.Object, ByVal e As Global.System.EventArgs)
         If My.Application.SaveMySettingsOnExit Then
@@ -28,8 +36,10 @@ Namespace My
     End Sub
 #End If
 #End Region
+        
         Public Shared ReadOnly Property [Default]() As MySettings
             Get
+                
 #If _MyType = "WindowsForms" Then
                If Not addedHandler Then
                     SyncLock addedHandlerLockObject
@@ -43,23 +53,16 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("user id=asset_mgr_usr;password=A553tP455;persistsecurityinfo=True;server=10.10.80"& _ 
-            ".232;database=asset_manager;allowuservariables=True")>  _
-        Public ReadOnly Property asset_managerConnectionString() As String
-            Get
-                Return CType(Me("asset_managerConnectionString"),String)
-            End Get
-        End Property
     End Class
 End Namespace
+
 Namespace My
+    
     <Global.Microsoft.VisualBasic.HideModuleNameAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute()>  _
     Friend Module MySettingsProperty
+        
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
         Friend ReadOnly Property Settings() As Global.AssetManager.My.MySettings
             Get

@@ -825,6 +825,7 @@ Public Class View
         CloseChildren()
     End Sub
     Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint
+        On Error Resume Next
         TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
     End Sub
 End Class

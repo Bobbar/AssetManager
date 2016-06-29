@@ -1,7 +1,6 @@
 ﻿Option Explicit On
 Imports System.Environment
 Imports System.IO
-Imports MySql.Data.MySqlClient
 Module OtherFunctions
     'paths
     Public strLogDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
@@ -96,79 +95,6 @@ Module OtherFunctions
     Public Sub ConnectionNotReady()
         Dim blah = MsgBox("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
     End Sub
-    Public Function ErrHandleNew(ex As Exception, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
-        If Not IsNothing(ex.InnerException) Then
-            Debug.Print("InnerEx: " & TypeName(ex.InnerException))
-        End If
-        Select Case TypeName(ex)
-            Case "WebException"
-                Dim handEx As Net.WebException = ex
-                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.Status & "  Message:" & handEx.Message)
-                Dim handResponse As Net.FtpWebResponse = handEx.Response
-                Select Case handResponse.StatusCode
-                    Case Net.FtpStatusCode.ActionNotTakenFileUnavailable
-                        Dim blah = MsgBox("FTP File was not found, or access was denied.", vbOKOnly + vbCritical, "Cannot Access FTP File")
-                        Return True
-                End Select
-            Case "IndexOutOfRangeException"
-                Dim handEx As IndexOutOfRangeException = ex
-                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.HResult & "  Message:" & handEx.Message)
-                Return True
-            Case "MySqlException"
-                Dim handEx As MySqlException = ex
-                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.Number & "  Message:" & handEx.Message)
-                Select Case handEx.Number
-                    Case 1042
-                        ConnectionReady()
-                        Dim blah = MsgBox("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbCritical, "Connection Lost")
-                        Return True
-                    Case 1064
-                        Dim blah = MsgBox("Something went wrong with the SQL command. See log for details.  Log= " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
-                        Return True
-                    Case 1292
-                        Dim blah = MsgBox("Something went wrong with the SQL command. See log for details.  Log= " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
-                        Return True
-                End Select
-            Case "InvalidCastException"
-                Dim handEx As InvalidCastException = ex
-                Select Case handEx.HResult
-                    Case -2147467262 'DBNull to String type error. These are pretty ubiquitous and not a big deal. Move along.
-                        Return True
-                End Select
-            Case "IOException"
-                Dim handEx As IOException = ex
-                If Not IsNothing(handEx.InnerException) Then
-                    Select Case TypeName(handEx.InnerException)
-                        Case "SocketException"
-                            Dim innerEx As System.Net.Sockets.SocketException = handEx.InnerException
-                            Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(innerEx) & "  #:" & innerEx.SocketErrorCode & "  Message:" & innerEx.Message)
-                            Select Case innerEx.SocketErrorCode
-                                'FTPSocket timeout
-                                Case 10060
-                                    Dim blah = MsgBox("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Timeout")
-                                    Return True
-                                Case Else
-                                    Return False
-                            End Select
-                        Case Else
-                            Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(handEx.InnerException) & "  #:" & handEx.InnerException.HResult & "  Message:" & handEx.InnerException.Message)
-                    End Select
-                Else
-                End If
-            Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                'Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                Return False
-        End Select
-        If Not IsNothing(ex.InnerException) Then
-            Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex.InnerException) & "  #:" & ex.InnerException.HResult & "  Message:" & ex.InnerException.Message)
-            'Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex.InnerException) & "  #:" & ex.InnerException.HResult & "  Message:" & ex.InnerException.Message, vbOKOnly + vbCritical, "ERROR")
-        Else
-            Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-            'Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-        End If
-        Return False
-    End Function
     Public Sub EndProgram()
         ProgramEnding = True
         Logger("Ending Program...")

@@ -6,8 +6,7 @@ Public Module DBFunctions
     'Public Const strServerIP As String = "10.10.80.232"
     Public Const strServerIP As String = "10.10.0.89"
     Public strDatabase As String = "asset_manager"
-    'Private MySQLConnectString As String = "server=df8xlbs1;port=3306;uid=asset_manager_user;pwd=A553tP455;database=asset_manager"
-    Public MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=" & strDatabase
+    Public MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
     Public Const strDBDateTimeFormat As String = "yyyy-MM-dd HH:mm:ss"
     Public Const strDBDateFormat As String = "yyyy-MM-dd"
     Public Const strCommMessage As String = "Communicating..."
@@ -20,7 +19,7 @@ Public Module DBFunctions
     Public LiveConn As New MySqlConnection(MySQLConnectString)
     Public strServerTime As String
     Public Const strFTPUser As String = "asset_manager"
-    Public Const strFTPPass As String = "DogWallFarmTree"
+    Public strFTPPass As String = DecodePassword(EncFTPUserPass)
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
@@ -101,7 +100,8 @@ Public Module DBFunctions
             Else
                 Return False
             End If
-        Catch ex As Exception
+        Catch ex As MySqlException
+            Logger("ERROR:  MethodName=" & System.Reflection.MethodInfo.GetCurrentMethod().Name & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
             Return False
         End Try
     End Function

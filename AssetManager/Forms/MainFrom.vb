@@ -14,12 +14,10 @@ Public Class MainFrom
     Private bolGridFilling As Boolean = False
     Private ConnectAttempts As Integer = 0
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' ResultGrid.RowHeadersDefaultCellStyle.BackColor = Color.Green
         DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
         ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
         ToolStrip1.BackColor = colToolBarColor
         View.ToolStrip1.BackColor = colToolBarColor
-        'View.StatusStrip1.BackColor = colToolBarColor
         Logger("Starting AssetManager...")
         Status("Loading...")
         SplashScreen.Show()
@@ -734,7 +732,7 @@ Public Class MainFrom
     Private Sub cmdChangeDB_Click(sender As Object, e As EventArgs)
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
             strDatabase = cmbDBs.Text
-            MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=" & strDatabase
+            MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
             CloseConnections()
             GlobalConn = New MySqlConnection(MySQLConnectString)
             LiveConn = New MySqlConnection(MySQLConnectString)
@@ -755,7 +753,7 @@ Public Class MainFrom
     Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
         If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
             strDatabase = cmbDBs.Text
-            MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=A553tP455;database=" & strDatabase
+            MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
             CloseConnections()
             GlobalConn = New MySqlConnection(MySQLConnectString)
             LiveConn = New MySqlConnection(MySQLConnectString)
