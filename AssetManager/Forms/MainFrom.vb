@@ -301,7 +301,7 @@ Public Class MainFrom
         Waiting()
         View.CloseChildren()
         View.ViewDevice(strGUID)
-        'View.Activate()
+        View.Activate()
         DoneWaiting()
     End Sub
     Private Sub RefreshCombos()

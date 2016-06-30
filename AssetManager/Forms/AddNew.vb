@@ -176,7 +176,7 @@ Public Class AddNew
         Dim i As Integer
         cmbOSType_REQ.Items.Clear()
         cmbOSType_REQ.Text = ""
-        For i = 0 To UBound(EquipType)
+        For i = 0 To UBound(OSType)
             cmbOSType_REQ.Items.Insert(i, OSType(i).strLong)
         Next
     End Sub
