@@ -3,9 +3,9 @@ Imports System.IO
 Imports System.Net.Sockets
 Module ErrorHandling
     Public Function ErrHandleNew(ex As Exception, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
-        If Not IsNothing(ex.InnerException) Then
-            Debug.Print("InnerEx: " & TypeName(ex.InnerException))
-        End If
+        'If Not IsNothing(ex.InnerException) Then
+        '    Debug.Print("InnerEx: " & TypeName(ex.InnerException))
+        'End If
         Select Case TypeName(ex)
             Case "WebException"
                 Return handleWebException(ex, strOrigSub)
