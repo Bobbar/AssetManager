@@ -821,6 +821,21 @@ Public Class View
     Private Sub TabControl1_MouseDown(sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
         TrackingGrid.Refresh()
     End Sub
+
+    Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
+        Dim MunisTable As DataTable
+
+        MunisTable = ReturnMSSQLTable("SELECT TOP 10 * FROM famaster WHERE fama_serial='" & CurrentDevice.strSerial & "'")
+
+        Dim r As DataRow
+        For Each r In MunisTable.Rows
+            Debug.Print(r.Item("fama_asset"))
+        Next
+        View_Munis.LoadMunisGrid(MunisTable)
+        View_Munis.Show()
+
+    End Sub
+
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         CloseChildren()
     End Sub

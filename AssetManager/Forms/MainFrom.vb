@@ -84,6 +84,7 @@ Public Class MainFrom
         View.DataGridHistory.DefaultCellStyle.Font = GridFont
         View.TrackingGrid.DefaultCellStyle = GridStylez
         View.TrackingGrid.DefaultCellStyle.Font = GridFont
+        View_Munis.DataGridMunis.DefaultCellStyle = GridStylez
         'Attachments.AttachGrid.DefaultCellStyle = GridStylez
         'Attachments.AttachGrid.DefaultCellStyle.Font = GridFont
         'Attachments.AttachGrid.ColumnHeadersDefaultCellStyle.Font = GridFont
