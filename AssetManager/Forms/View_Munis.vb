@@ -1,6 +1,6 @@
 ﻿Public Class View_Munis
     Public Sub LoadMunisGrid(results As DataTable)
-        MainFrom.CopyDefaultCellStyles()
+        MainForm.CopyDefaultCellStyles()
 
         DataGridMunis.DataSource = results
 
