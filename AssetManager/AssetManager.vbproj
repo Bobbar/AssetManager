@@ -116,11 +116,11 @@
     <Compile Include="Forms\AddNew.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MainFrom.vb">
+    <Compile Include="Forms\MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MainFrom.Designer.vb">
-      <DependentUpon>MainFrom.vb</DependentUpon>
+    <Compile Include="Forms\MainForm.Designer.vb">
+      <DependentUpon>MainForm.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Attachments.Designer.vb">
@@ -212,8 +212,8 @@
     <EmbeddedResource Include="Forms\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MainFrom.resx">
-      <DependentUpon>MainFrom.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Attachments.resx">
       <DependentUpon>Attachments.vb</DependentUpon>
