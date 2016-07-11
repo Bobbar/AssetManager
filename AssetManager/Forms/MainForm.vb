@@ -3,7 +3,7 @@ Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
-Public Class MainFrom
+Public Class MainForm
     Private strSearchString As String, strPrevSearchString As String
     Private StartingControl As Control
     Private strWorkerQry As String

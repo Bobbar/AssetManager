@@ -108,9 +108,9 @@ Module OtherFunctions
         Directory.Delete(strTempPath, True)
     End Sub
     Public Sub ConnectStatus(Message As String, FColor As Color)
-        MainFrom.ConnStatusLabel.Text = Message
-        MainFrom.ConnStatusLabel.ForeColor = FColor
-        MainFrom.Refresh()
+        MainForm.ConnStatusLabel.Text = Message
+        MainForm.ConnStatusLabel.ForeColor = FColor
+        MainForm.Refresh()
     End Sub
     Public Function NoNull(DBVal As Object) As String
         Try
