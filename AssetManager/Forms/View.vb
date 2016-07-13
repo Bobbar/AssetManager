@@ -18,9 +18,11 @@ Public Class View
     Private OldData As Device_Info
     Public NewData As Device_Info
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        cmdRDP.Visible = False
         ToolStrip1.BackColor = colToolBarColor
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
+        CheckRDP()
     End Sub
     Private Sub GetCurrentValues()
         With OldData
@@ -821,11 +823,42 @@ Public Class View
     Private Sub TabControl1_MouseDown(sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
         TrackingGrid.Refresh()
     End Sub
+    Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
+        Try
+            e.Result = My.Computer.Network.Ping("D" & CurrentDevice.strSerial)
+        Catch ex As Exception
+            e.Result = ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
+    Private Sub PingWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles PingWorker.RunWorkerCompleted
+        If e.Result Then
+            SetupRDP()
+        Else
+            cmdRDP.Visible = False
+        End If
+    End Sub
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         CloseChildren()
     End Sub
     Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint
         On Error Resume Next
         TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
+    End Sub
+    Private Sub SetupRDP()
+        cmdRDP.Visible = True
+    End Sub
+    Private Sub CheckRDP()
+        If CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
+            PingWorker.RunWorkerAsync()
+        End If
+    End Sub
+    Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
+        LaunchRDP()
+    End Sub
+    Private Sub LaunchRDP()
+        Dim StartInfo As New ProcessStartInfo
+        StartInfo.FileName = "mstsc.exe"
+        StartInfo.Arguments = "/v:D" & CurrentDevice.strSerial
+        Process.Start(StartInfo)
     End Sub
 End Class
