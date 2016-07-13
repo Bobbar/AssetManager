@@ -31,6 +31,7 @@ Partial Class View
         Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
+        Me.cmdRDP = New System.Windows.Forms.Button()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
@@ -88,6 +89,8 @@ Partial Class View
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.PingWorker = New System.ComponentModel.BackgroundWorker()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
@@ -106,9 +109,9 @@ Partial Class View
         Me.MenuStrip1.BackColor = System.Drawing.SystemColors.Control
         Me.MenuStrip1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ActionsToolStripMenuItem})
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 707)
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 667)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1232, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1012, 24)
         Me.MenuStrip1.TabIndex = 36
         Me.MenuStrip1.Text = "MenuStrip1"
         Me.MenuStrip1.Visible = False
@@ -170,6 +173,7 @@ Partial Class View
         'DeviceInfoBox
         '
         Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.DeviceInfoBox.Controls.Add(Me.cmdRDP)
         Me.DeviceInfoBox.Controls.Add(Me.chkTrackable)
         Me.DeviceInfoBox.Controls.Add(Me.Label1)
         Me.DeviceInfoBox.Controls.Add(Me.txtAssetTag_View_REQ)
@@ -200,6 +204,17 @@ Partial Class View
         Me.DeviceInfoBox.TabIndex = 39
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
+        '
+        'cmdRDP
+        '
+        Me.cmdRDP.Location = New System.Drawing.Point(338, 195)
+        Me.cmdRDP.Name = "cmdRDP"
+        Me.cmdRDP.Size = New System.Drawing.Size(49, 29)
+        Me.cmdRDP.TabIndex = 46
+        Me.cmdRDP.Text = "RDP"
+        Me.ToolTip1.SetToolTip(Me.cmdRDP, "Remote Desktop")
+        Me.cmdRDP.UseVisualStyleBackColor = True
+        Me.cmdRDP.Visible = False
         '
         'chkTrackable
         '
@@ -713,7 +728,7 @@ Partial Class View
         Me.TrackingTool.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.TrackingTool.Name = "TrackingTool"
         Me.TrackingTool.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.TrackingTool.Size = New System.Drawing.Size(105, 29)
+        Me.TrackingTool.Size = New System.Drawing.Size(104, 29)
         Me.TrackingTool.Text = "Tracking"
         '
         'CheckOutTool
@@ -788,8 +803,13 @@ Partial Class View
         '
         Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusLabel.Name = "StatusLabel"
-        Me.StatusLabel.Size = New System.Drawing.Size(78, 17)
+        Me.StatusLabel.Size = New System.Drawing.Size(76, 17)
         Me.StatusLabel.Text = "%STATUS%"
+        '
+        'PingWorker
+        '
+        Me.PingWorker.WorkerReportsProgress = True
+        Me.PingWorker.WorkerSupportsCancellation = True
         '
         'View
         '
@@ -828,6 +848,7 @@ Partial Class View
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem
@@ -896,4 +917,7 @@ Partial Class View
     Friend WithEvents cmdAccept_Tool As ToolStripButton
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents PingWorker As System.ComponentModel.BackgroundWorker
+    Friend WithEvents cmdRDP As Button
+    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
 End Class
