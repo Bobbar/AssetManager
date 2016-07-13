@@ -23,6 +23,8 @@ Module ErrorHandling
                 End Select
             Case "IOException"
                 Return handleIOException(ex, strOrigSub)
+            Case "PingException"
+                Return handlePingException(ex, strOrigSub)
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
                 'Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
@@ -57,6 +59,14 @@ Module ErrorHandling
         End Select
         Return False
     End Function
+    Private Function handlePingException(ex As Net.NetworkInformation.PingException, strOrigSub As String) As Boolean
+        If Not IsNothing(ex.InnerException) Then
+            Select Case TypeName(ex.InnerException)
+                Case "SocketException"
+                    Return handleSocketException(ex.InnerException, strOrigSub)
+            End Select
+        End If
+    End Function
     Private Function handleWebException(ex As Net.WebException, strOrigSub As String) As Boolean
         Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Status & "  Message:" & ex.Message)
         Dim handResponse As Net.FtpWebResponse = ex.Response
@@ -90,6 +100,8 @@ Module ErrorHandling
             Case 10053
                 Dim blah = MsgBox("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Disconnected")
                 Return True
+            Case 11001 'host not found.
+                Return False
             Case Else
                 Return False
         End Select
