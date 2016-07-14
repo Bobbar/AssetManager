@@ -166,25 +166,25 @@ Partial Class MainForm
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.ToolStripSeparator3, Me.CopyTool})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(128, 54)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(127, 54)
         '
         'ViewToolStripMenuItem
         '
         Me.ViewToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ViewToolStripMenuItem.Image = CType(resources.GetObject("ViewToolStripMenuItem.Image"), System.Drawing.Image)
         Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
-        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(127, 22)
+        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(126, 22)
         Me.ViewToolStripMenuItem.Text = "View"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(124, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(123, 6)
         '
         'CopyTool
         '
         Me.CopyTool.Name = "CopyTool"
-        Me.CopyTool.Size = New System.Drawing.Size(127, 22)
+        Me.CopyTool.Size = New System.Drawing.Size(126, 22)
         Me.CopyTool.Text = "Copy Text"
         '
         'LiveBox
@@ -561,7 +561,7 @@ Partial Class MainForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(964, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(963, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ConnStatusLabel
@@ -582,7 +582,7 @@ Partial Class MainForm
         '
         Me.DateTimeLabel.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DateTimeLabel.Name = "DateTimeLabel"
-        Me.DateTimeLabel.Size = New System.Drawing.Size(75, 17)
+        Me.DateTimeLabel.Size = New System.Drawing.Size(76, 17)
         Me.DateTimeLabel.Text = "ServerTime"
         '
         'LiveQueryWorker
@@ -641,7 +641,7 @@ Partial Class MainForm
         'YearsSincePurchaseToolStripMenuItem1
         '
         Me.YearsSincePurchaseToolStripMenuItem1.Name = "YearsSincePurchaseToolStripMenuItem1"
-        Me.YearsSincePurchaseToolStripMenuItem1.Size = New System.Drawing.Size(198, 22)
+        Me.YearsSincePurchaseToolStripMenuItem1.Size = New System.Drawing.Size(197, 22)
         Me.YearsSincePurchaseToolStripMenuItem1.Text = "Years Since Purchase"
         '
         'ToolStripSeparator4
@@ -703,7 +703,7 @@ Partial Class MainForm
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
         '
-        'MainFrom
+        'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -717,7 +717,7 @@ Partial Class MainForm
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(1256, 443)
-        Me.Name = "MainFrom"
+        Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Asset Manager"
         Me.GroupBox1.ResumeLayout(False)
@@ -736,6 +736,7 @@ Partial Class MainForm
         Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button

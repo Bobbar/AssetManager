@@ -793,4 +793,10 @@ Public Class MainForm
             GiveLiveBoxFocus()
         End If
     End Sub
+    Private Sub ResultGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles ResultGrid.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
+            e.SuppressKeyPress = True
+        End If
+    End Sub
 End Class
