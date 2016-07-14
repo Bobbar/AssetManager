@@ -83,7 +83,6 @@ Partial Class View
         Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmdAccept_Tool = New System.Windows.Forms.ToolStripButton()
         Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
-<<<<<<< HEAD
         Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddNoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -91,13 +90,11 @@ Partial Class View
         Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
-=======
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+
+
+
         Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
->>>>>>> refs/remotes/origin/master
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
@@ -139,11 +136,11 @@ Partial Class View
         'DeviceInfoBox
         '
         Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-<<<<<<< HEAD
+
         Me.DeviceInfoBox.Controls.Add(Me.cmdMunisInfo)
-=======
+
         Me.DeviceInfoBox.Controls.Add(Me.cmdRDP)
->>>>>>> refs/remotes/origin/master
+
         Me.DeviceInfoBox.Controls.Add(Me.chkTrackable)
         Me.DeviceInfoBox.Controls.Add(Me.Label1)
         Me.DeviceInfoBox.Controls.Add(Me.txtAssetTag_View_REQ)
@@ -794,7 +791,7 @@ Partial Class View
         '
         'AddNoteToolStripMenuItem
         '
-<<<<<<< HEAD
+
         Me.AddNoteToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.AddNoteToolStripMenuItem.Name = "AddNoteToolStripMenuItem"
         Me.AddNoteToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
@@ -826,12 +823,12 @@ Partial Class View
         Me.CheckOutMenu.Name = "CheckOutMenu"
         Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
         Me.CheckOutMenu.Text = "Check Out"
-=======
+
         Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusLabel.Name = "StatusLabel"
         Me.StatusLabel.Size = New System.Drawing.Size(76, 17)
         Me.StatusLabel.Text = "%STATUS%"
->>>>>>> refs/remotes/origin/master
+
         '
         'PingWorker
         '
@@ -944,11 +941,11 @@ Partial Class View
     Friend WithEvents cmdAccept_Tool As ToolStripButton
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
-<<<<<<< HEAD
+
     Friend WithEvents cmdMunisInfo As Button
-=======
+
     Friend WithEvents PingWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents cmdRDP As Button
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
->>>>>>> refs/remotes/origin/master
+
 End Class

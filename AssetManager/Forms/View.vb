@@ -823,8 +823,6 @@ Public Class View
     Private Sub TabControl1_MouseDown(sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
         TrackingGrid.Refresh()
     End Sub
-<<<<<<< HEAD
-
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
         Dim MunisTable As DataTable
 
@@ -839,7 +837,6 @@ Public Class View
 
     End Sub
 
-=======
     Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
         Try
             e.Result = My.Computer.Network.Ping("D" & CurrentDevice.strSerial)
@@ -854,7 +851,7 @@ Public Class View
             cmdRDP.Visible = False
         End If
     End Sub
->>>>>>> refs/remotes/origin/master
+
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         CloseChildren()
     End Sub
