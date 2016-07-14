@@ -867,6 +867,11 @@ Public Class View
             PingWorker.RunWorkerAsync()
         End If
     End Sub
+
+    Private Sub tmrRDPRefresh_Tick(sender As Object, e As EventArgs) Handles tmrRDPRefresh.Tick
+        CheckRDP()
+    End Sub
+
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub
