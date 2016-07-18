@@ -1,7 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class View_Munis
     Inherits System.Windows.Forms.Form
-
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()> _
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -13,10 +12,8 @@ Partial Class View_Munis
             MyBase.Dispose(disposing)
         End Try
     End Sub
-
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
-
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
@@ -31,13 +28,13 @@ Partial Class View_Munis
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.DataGridViewMunis_Requisition = New System.Windows.Forms.DataGridView()
+        Me.DataGridMunis_Requisition = New System.Windows.Forms.DataGridView()
         Me.Label3 = New System.Windows.Forms.Label()
         CType(Me.DataGridMunis_Inventory, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
-        CType(Me.DataGridViewMunis_Requisition, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataGridMunis_Requisition, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'DataGridMunis_Inventory
@@ -127,35 +124,35 @@ Partial Class View_Munis
         Me.Panel3.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel3.Controls.Add(Me.DataGridViewMunis_Requisition)
+        Me.Panel3.Controls.Add(Me.DataGridMunis_Requisition)
         Me.Panel3.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel3.Location = New System.Drawing.Point(12, 198)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(929, 347)
         Me.Panel3.TabIndex = 48
         '
-        'DataGridViewMunis_Requisition
+        'DataGridMunis_Requisition
         '
-        Me.DataGridViewMunis_Requisition.AllowUserToAddRows = False
-        Me.DataGridViewMunis_Requisition.AllowUserToDeleteRows = False
-        Me.DataGridViewMunis_Requisition.AllowUserToResizeRows = False
-        Me.DataGridViewMunis_Requisition.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.DataGridMunis_Requisition.AllowUserToAddRows = False
+        Me.DataGridMunis_Requisition.AllowUserToDeleteRows = False
+        Me.DataGridMunis_Requisition.AllowUserToResizeRows = False
+        Me.DataGridMunis_Requisition.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DataGridViewMunis_Requisition.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells
-        Me.DataGridViewMunis_Requisition.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.DataGridViewMunis_Requisition.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        Me.DataGridViewMunis_Requisition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridViewMunis_Requisition.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.DataGridViewMunis_Requisition.Location = New System.Drawing.Point(3, 3)
-        Me.DataGridViewMunis_Requisition.Name = "DataGridViewMunis_Requisition"
-        Me.DataGridViewMunis_Requisition.ReadOnly = True
-        Me.DataGridViewMunis_Requisition.RowHeadersVisible = False
-        Me.DataGridViewMunis_Requisition.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.DataGridViewMunis_Requisition.ShowCellToolTips = False
-        Me.DataGridViewMunis_Requisition.ShowEditingIcon = False
-        Me.DataGridViewMunis_Requisition.Size = New System.Drawing.Size(923, 338)
-        Me.DataGridViewMunis_Requisition.TabIndex = 41
+        Me.DataGridMunis_Requisition.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells
+        Me.DataGridMunis_Requisition.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.DataGridMunis_Requisition.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        Me.DataGridMunis_Requisition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridMunis_Requisition.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
+        Me.DataGridMunis_Requisition.Location = New System.Drawing.Point(3, 3)
+        Me.DataGridMunis_Requisition.Name = "DataGridMunis_Requisition"
+        Me.DataGridMunis_Requisition.ReadOnly = True
+        Me.DataGridMunis_Requisition.RowHeadersVisible = False
+        Me.DataGridMunis_Requisition.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.DataGridMunis_Requisition.ShowCellToolTips = False
+        Me.DataGridMunis_Requisition.ShowEditingIcon = False
+        Me.DataGridMunis_Requisition.Size = New System.Drawing.Size(923, 338)
+        Me.DataGridMunis_Requisition.TabIndex = 41
         '
         'Label3
         '
@@ -185,12 +182,10 @@ Partial Class View_Munis
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.Panel3.ResumeLayout(False)
-        CType(Me.DataGridViewMunis_Requisition, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataGridMunis_Requisition, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
-
     Friend WithEvents DataGridMunis_Inventory As DataGridView
     Friend WithEvents Panel1 As Panel
     Friend WithEvents txtSerial As TextBox
@@ -199,6 +194,6 @@ Partial Class View_Munis
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Label2 As Label
     Friend WithEvents Panel3 As Panel
-    Friend WithEvents DataGridViewMunis_Requisition As DataGridView
+    Friend WithEvents DataGridMunis_Requisition As DataGridView
     Friend WithEvents Label3 As Label
 End Class

@@ -830,19 +830,14 @@ Public Class View
     End Sub
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
         Dim MunisTable As DataTable
-
         MunisTable = ReturnMSSQLTable("SELECT TOP 10 * FROM famaster WHERE fama_serial='" & CurrentDevice.strSerial & "'")
-
         Dim r As DataRow
         For Each r In MunisTable.Rows
             Debug.Print(r.Item("fama_asset"))
         Next
         View_Munis.LoadMunisInventoryGrid(MunisTable)
-
         View_Munis.Show()
-
     End Sub
-
     Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
         Try
             e.Result = My.Computer.Network.Ping("D" & CurrentDevice.strSerial)
@@ -857,7 +852,6 @@ Public Class View
             cmdRDP.Visible = False
         End If
     End Sub
-
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         CloseChildren()
     End Sub
@@ -873,11 +867,9 @@ Public Class View
             PingWorker.RunWorkerAsync()
         End If
     End Sub
-
     Private Sub tmrRDPRefresh_Tick(sender As Object, e As EventArgs) Handles tmrRDPRefresh.Tick
         CheckRDP()
     End Sub
-
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub

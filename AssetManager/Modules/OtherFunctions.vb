@@ -120,4 +120,7 @@ Module OtherFunctions
             Return ""
         End Try
     End Function
+    Public Function YearFromDate(dtDate As Date) As String
+        Return dtDate.Year.ToString
+    End Function
 End Module

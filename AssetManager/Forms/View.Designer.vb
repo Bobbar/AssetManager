@@ -886,7 +886,6 @@ Partial Class View
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem
@@ -955,9 +954,7 @@ Partial Class View
     Friend WithEvents cmdAccept_Tool As ToolStripButton
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
-
     Friend WithEvents cmdMunisInfo As Button
-
     Friend WithEvents PingWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents cmdRDP As Button
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker

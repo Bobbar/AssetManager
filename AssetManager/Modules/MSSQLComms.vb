@@ -19,13 +19,17 @@ Module MSSQLComms
         End Try
     End Function
     Public Function ReturnMSSQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
-        Dim results As DataTable
-        'Dim sqlQRY As String = "SELECT TOP 10 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
-        Debug.Print("SELECT TOP 10 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'")
-        results = ReturnMSSQLTable("SELECT TOP 10 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'")
-
-
-
-
+        Dim sqlQRY As String = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
+        Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)
+        Try
+            Dim cmd As New SqlCommand
+            cmd.Connection = conn
+            cmd.CommandText = sqlQRY
+            conn.Open()
+            Return Convert.ToString(cmd.ExecuteScalar)
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
+        End Try
     End Function
 End Module
