@@ -1,15 +1,23 @@
 ﻿Public Class View_Munis
-    Public Sub LoadMunisGrid(results As DataTable)
+    Public Sub LoadMunisInventoryGrid(results As DataTable)
         MainForm.CopyDefaultCellStyles()
 
-        DataGridMunis.DataSource = results
+        DataGridMunis_Inventory.DataSource = results
 
+        LoadMunisRequisitionGrid()
+
+    End Sub
+    Public Sub LoadMunisRequisitionGrid()
+
+
+        Debug.Print(GetReqNumberFromPO(CurrentDevice.strPO))
 
 
     End Sub
 
+
     Private Sub View_Munis_Load(sender As Object, e As EventArgs) Handles Me.Load
-        ExtendedMethods.DoubleBuffered(DataGridMunis, True)
+        ExtendedMethods.DoubleBuffered(DataGridMunis_Inventory, True)
     End Sub
 
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
@@ -21,7 +29,7 @@
         For Each r In MunisTable.Rows
             Debug.Print(r.Item("fama_asset"))
         Next
-        LoadMunisGrid(MunisTable)
+        LoadMunisInventoryGrid(MunisTable)
 
     End Sub
 End Class

@@ -832,7 +832,8 @@ Public Class View
         For Each r In MunisTable.Rows
             Debug.Print(r.Item("fama_asset"))
         Next
-        View_Munis.LoadMunisGrid(MunisTable)
+        View_Munis.LoadMunisInventoryGrid(MunisTable)
+
         View_Munis.Show()
 
     End Sub

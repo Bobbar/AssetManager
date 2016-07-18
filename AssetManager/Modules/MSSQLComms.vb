@@ -18,4 +18,14 @@ Module MSSQLComms
             Return Nothing
         End Try
     End Function
+    Public Function ReturnMSSQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
+        Dim results As DataTable
+        'Dim sqlQRY As String = "SELECT TOP 10 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
+        Debug.Print("SELECT TOP 10 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'")
+        results = ReturnMSSQLTable("SELECT TOP 10 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'")
+
+
+
+
+    End Function
 End Module
