@@ -93,6 +93,8 @@ Partial Class View
         Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.tmrRDPRefresh = New System.Windows.Forms.Timer(Me.components)
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.txtPONumber = New System.Windows.Forms.TextBox()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
@@ -176,6 +178,8 @@ Partial Class View
         '
         Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.DeviceInfoBox.Controls.Add(Me.cmdMunisInfo)
+        Me.DeviceInfoBox.Controls.Add(Me.Label12)
+        Me.DeviceInfoBox.Controls.Add(Me.txtPONumber)
         Me.DeviceInfoBox.Controls.Add(Me.cmdRDP)
         Me.DeviceInfoBox.Controls.Add(Me.chkTrackable)
         Me.DeviceInfoBox.Controls.Add(Me.Label1)
@@ -232,7 +236,7 @@ Partial Class View
         '
         Me.chkTrackable.AutoSize = True
         Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(528, 145)
+        Me.chkTrackable.Location = New System.Drawing.Point(462, 204)
         Me.chkTrackable.Name = "chkTrackable"
         Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
         Me.chkTrackable.TabIndex = 45
@@ -423,9 +427,9 @@ Partial Class View
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(377, 129)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(124, 16)
+        Me.Label7.Size = New System.Drawing.Size(95, 16)
         Me.Label7.TabIndex = 32
-        Me.Label7.Text = "Replacement Year:"
+        Me.Label7.Text = "Replace Year:"
         '
         'Label6
         '
@@ -440,7 +444,7 @@ Partial Class View
         'txtReplacementYear_View
         '
         Me.txtReplacementYear_View.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtReplacementYear_View.Location = New System.Drawing.Point(410, 148)
+        Me.txtReplacementYear_View.Location = New System.Drawing.Point(391, 148)
         Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
         Me.txtReplacementYear_View.Size = New System.Drawing.Size(66, 23)
         Me.txtReplacementYear_View.TabIndex = 31
@@ -827,6 +831,23 @@ Partial Class View
         '
         Me.tmrRDPRefresh.Enabled = True
         Me.tmrRDPRefresh.Interval = 5000
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(503, 129)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(81, 16)
+        Me.Label12.TabIndex = 48
+        Me.Label12.Text = "PO Number:"
+        '
+        'txtPONumber
+        '
+        Me.txtPONumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPONumber.Location = New System.Drawing.Point(506, 148)
+        Me.txtPONumber.Name = "txtPONumber"
+        Me.txtPONumber.Size = New System.Drawing.Size(124, 23)
+        Me.txtPONumber.TabIndex = 47
         '
         'View
         '
@@ -941,4 +962,6 @@ Partial Class View
     Friend WithEvents cmdRDP As Button
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents tmrRDPRefresh As Timer
+    Friend WithEvents Label12 As Label
+    Friend WithEvents txtPONumber As TextBox
 End Class
