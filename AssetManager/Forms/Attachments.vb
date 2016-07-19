@@ -82,7 +82,7 @@ Class Attachments
             Dim table As New DataTable
             Dim strQry As String
             If bolAdminMode Then
-                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash,dev_UID,dev_asset_tag FROM attachments,devices WHERE dev_UID = attach_dev_UID ORDER BY attach_upload_date DESC"
+                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash,dev_UID,dev_asset_tag FROM dev_attachments,devices WHERE dev_UID = attach_dev_UID ORDER BY attach_upload_date DESC"
                 table.Columns.Add("Filename", GetType(String))
                 table.Columns.Add("Size", GetType(String))
                 table.Columns.Add("Date", GetType(String))
@@ -90,7 +90,7 @@ Class Attachments
                 table.Columns.Add("AttachUID", GetType(String))
                 table.Columns.Add("MD5", GetType(String))
             ElseIf Not bolAdminMode Then
-                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash FROM attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
+                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash FROM dev_attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
                 table.Columns.Add("Filename", GetType(String))
                 table.Columns.Add("Size", GetType(String))
                 table.Columns.Add("Date", GetType(String))
@@ -290,7 +290,7 @@ Class Attachments
             End If
             'update sql table
             If Not UploadWorker.CancellationPending Then
-                SQL = "INSERT INTO attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`, `attach_file_hash`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash)"
+                SQL = "INSERT INTO dev_attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`, `attach_file_hash`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash)"
                 conn.Open()
                 cmd.Connection = conn
                 cmd.CommandText = SQL
@@ -348,7 +348,7 @@ Class Attachments
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim AttachUID As String = DirectCast(e.Argument, String)
-        Dim strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_file_UID,attach_dev_UID,attach_file_hash FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
+        Dim strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_file_UID,attach_dev_UID,attach_file_hash FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
         Dim conn As New MySqlConnection(MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)

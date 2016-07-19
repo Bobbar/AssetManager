@@ -205,7 +205,7 @@ Public Module DBFunctions
             Dim rows
             Dim reader As MySqlDataReader
             Dim strDeviceID As String
-            Dim strSQLDevIDQry As String = "SELECT attach_dev_UID FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
+            Dim strSQLDevIDQry As String = "SELECT attach_dev_UID FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
             reader = ReturnSQLReader(strSQLDevIDQry)
             With reader
                 Do While .Read()
@@ -216,11 +216,11 @@ Public Module DBFunctions
             'Delete FTP Attachment
             If DeleteFTPAttachment(AttachUID, strDeviceID) Then
                 'delete SQL entry
-                Dim strSQLDelQry As String = "DELETE FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
+                Dim strSQLDelQry As String = "DELETE FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
                 rows = ReturnSQLCommand(strSQLDelQry).ExecuteNonQuery
                 Return rows
                 'Else  'if file not found then we might as well remove the DB record.
-                '    Dim strSQLDelQry As String = "DELETE FROM attachments WHERE attach_file_UID='" & AttachUID & "'"
+                '    Dim strSQLDelQry As String = "DELETE FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
                 '    cmd.Connection = GlobalConn
                 '    cmd.CommandText = strSQLDelQry
                 '    rows = cmd.ExecuteNonQuery()
@@ -271,7 +271,7 @@ Public Module DBFunctions
     Public Function HasAttachments(strGUID As String) As Boolean
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT attach_dev_UID FROM attachments WHERE attach_dev_UID='" & strGUID & "'"
+            Dim strQRY = "SELECT attach_dev_UID FROM dev_attachments WHERE attach_dev_UID='" & strGUID & "'"
             reader = ReturnSQLReader(strQRY)
             Dim bolHasRows As Boolean = reader.HasRows
             reader.Close()
@@ -402,7 +402,7 @@ Public Module DBFunctions
     Public Sub BuildLocationIndex()
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
+            Dim strQRY = "SELECT * FROM dev_combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
             Dim row As Integer
             reader = ReturnSQLReader(strQRY)
             ReDim Locations(0)
@@ -429,7 +429,7 @@ Public Module DBFunctions
     Public Sub BuildChangeTypeIndex()
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
+            Dim strQRY = "SELECT * FROM dev_combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
             Dim row As Integer
             reader = ReturnSQLReader(strQRY)
             ReDim ChangeType(0)
@@ -456,7 +456,7 @@ Public Module DBFunctions
     Public Sub BuildEquipTypeIndex()
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
+            Dim strQRY = "SELECT * FROM dev_combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
             Dim row As Integer
             reader = ReturnSQLReader(strQRY)
             ReDim EquipType(0)
@@ -483,7 +483,7 @@ Public Module DBFunctions
     Public Sub BuildOSTypeIndex()
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
+            Dim strQRY = "SELECT * FROM dev_combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
             Dim row As Integer
             reader = ReturnSQLReader(strQRY)
             ReDim OSType(0)
@@ -510,7 +510,7 @@ Public Module DBFunctions
     Public Sub BuildStatusTypeIndex()
         Try
             Dim reader As MySqlDataReader
-            Dim strGetDevices = "SELECT * FROM combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
+            Dim strGetDevices = "SELECT * FROM dev_combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
             Dim row As Integer
             reader = ReturnSQLReader(strGetDevices)
             ReDim StatusType(0)
