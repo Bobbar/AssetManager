@@ -829,14 +829,18 @@ Public Class View
         TrackingGrid.Refresh()
     End Sub
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
-        Dim MunisTable As DataTable
-        MunisTable = ReturnMSSQLTable("SELECT TOP 10 * FROM famaster WHERE fama_serial='" & CurrentDevice.strSerial & "'")
-        Dim r As DataRow
-        For Each r In MunisTable.Rows
-            Debug.Print(r.Item("fama_asset"))
-        Next
-        View_Munis.LoadMunisInventoryGrid(MunisTable)
         View_Munis.Show()
+        Dim MunisTable As DataTable
+        MunisTable = ReturnMSSQLTable("SELECT TOP 1 * FROM famaster WHERE fama_serial='" & CurrentDevice.strSerial & "'")
+        'Dim r As DataRow
+        'For Each r In MunisTable.Rows
+        '    Debug.Print(r.Item("fama_asset"))
+        'Next
+
+        View_Munis.LoadMunisInfo(CurrentDevice)
+
+
+
     End Sub
     Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
         Try
@@ -864,7 +868,7 @@ Public Class View
     End Sub
     Private Sub CheckRDP()
         If CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
-            PingWorker.RunWorkerAsync()
+            If Not PingWorker.IsBusy Then PingWorker.RunWorkerAsync()
         End If
     End Sub
     Private Sub tmrRDPRefresh_Tick(sender As Object, e As EventArgs) Handles tmrRDPRefresh.Tick

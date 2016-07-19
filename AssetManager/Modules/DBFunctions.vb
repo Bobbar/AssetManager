@@ -37,6 +37,7 @@ Public Module DBFunctions
         Public strLocation As String
         Public strCurrentUser As String
         Public dtPurchaseDate ' As String
+        Public strFiscalYear As String
         Public strReplaceYear As String
         Public strOSVersion As String
         Public strGUID As String

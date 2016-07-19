@@ -141,18 +141,23 @@ Partial Class View_Munis
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridMunis_Requisition.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells
         Me.DataGridMunis_Requisition.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.DataGridMunis_Requisition.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.DataGridMunis_Requisition.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        Me.DataGridMunis_Requisition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridMunis_Requisition.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        Me.DataGridMunis_Requisition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.DataGridMunis_Requisition.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
+        Me.DataGridMunis_Requisition.EnableHeadersVisualStyles = False
         Me.DataGridMunis_Requisition.Location = New System.Drawing.Point(3, 3)
         Me.DataGridMunis_Requisition.Name = "DataGridMunis_Requisition"
         Me.DataGridMunis_Requisition.ReadOnly = True
         Me.DataGridMunis_Requisition.RowHeadersVisible = False
+        Me.DataGridMunis_Requisition.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.DataGridMunis_Requisition.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridMunis_Requisition.ShowCellToolTips = False
         Me.DataGridMunis_Requisition.ShowEditingIcon = False
         Me.DataGridMunis_Requisition.Size = New System.Drawing.Size(923, 338)
         Me.DataGridMunis_Requisition.TabIndex = 41
+        Me.DataGridMunis_Requisition.VirtualMode = True
         '
         'Label3
         '
@@ -185,6 +190,7 @@ Partial Class View_Munis
         CType(Me.DataGridMunis_Requisition, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents DataGridMunis_Inventory As DataGridView
     Friend WithEvents Panel1 As Panel
