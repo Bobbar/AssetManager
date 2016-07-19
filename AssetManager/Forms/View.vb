@@ -854,9 +854,13 @@ Public Class View
     End Sub
     Private Sub CheckRDP()
         If CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
-            PingWorker.RunWorkerAsync()
+            If Not PingWorker.IsBusy Then PingWorker.RunWorkerAsync()
         End If
     End Sub
+    Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
+        CheckRDP()
+    End Sub
+
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub
