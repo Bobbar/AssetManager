@@ -37,6 +37,7 @@ Public Class View
             .strOSVersion = GetDBValue(ComboType.OSType, cmbOSVersion_REQ.SelectedIndex)
             .strStatus = GetDBValue(ComboType.StatusType, cmbStatus_REQ.SelectedIndex)
             .bolTrackable = chkTrackable.Checked
+            .strPO = Trim(txtPONumber.Text)
         End With
     End Sub
     Public Sub GetNewValues()
@@ -53,6 +54,7 @@ Public Class View
             .strStatus = GetDBValue(ComboType.StatusType, cmbStatus_REQ.SelectedIndex)
             .strNote = UpdateDev.strNewNote
             .bolTrackable = chkTrackable.Checked
+            .strPO = Trim(txtPONumber.Text)
         End With
     End Sub
     Private Sub EnableControls()
@@ -122,7 +124,7 @@ Public Class View
     Public Sub UpdateDevice()
         Try
             Dim rows As Integer
-            Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable WHERE dev_UID='" & CurrentDevice.strGUID & "'"
+            Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable, dev_po=@dev_po WHERE dev_UID='" & CurrentDevice.strGUID & "'"
             Dim cmd As MySqlCommand = ReturnSQLCommand(strSQLQry1)
             cmd.Parameters.AddWithValue("@dev_description", NewData.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", NewData.strLocation)
@@ -135,8 +137,9 @@ Public Class View
             cmd.Parameters.AddWithValue("@dev_eq_type", NewData.strEqType)
             cmd.Parameters.AddWithValue("@dev_status", NewData.strStatus)
             cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(NewData.bolTrackable))
+            cmd.Parameters.AddWithValue("@dev_po", NewData.strPO)
             rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable) VALUES (@hist_change_type,@hist_notes,@hist_serial,@hist_description,@hist_location,@hist_cur_user,@hist_asset_tag,@hist_purchase_date,@hist_replacement_year,@hist_osversion,@hist_dev_UID,@hist_action_user,@hist_eq_type,@hist_status,@hist_trackable)"
+            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable,hist_po) VALUES (@hist_change_type,@hist_notes,@hist_serial,@hist_description,@hist_location,@hist_cur_user,@hist_asset_tag,@hist_purchase_date,@hist_replacement_year,@hist_osversion,@hist_dev_UID,@hist_action_user,@hist_eq_type,@hist_status,@hist_trackable,@hist_po)"
             cmd.CommandText = strSqlQry2
             cmd.Parameters.AddWithValue("@hist_change_type", GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
             cmd.Parameters.AddWithValue("@hist_notes", NewData.strNote)
@@ -153,6 +156,7 @@ Public Class View
             cmd.Parameters.AddWithValue("@hist_eq_type", NewData.strEqType)
             cmd.Parameters.AddWithValue("@hist_status", NewData.strStatus)
             cmd.Parameters.AddWithValue("@hist_trackable", Convert.ToInt32(NewData.bolTrackable))
+            cmd.Parameters.AddWithValue("@hist_po", NewData.strPO)
             rows = rows + cmd.ExecuteNonQuery()
             UpdateDev.strNewNote = Nothing
             cmd.Dispose()
@@ -231,6 +235,7 @@ Public Class View
             cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType, .strStatus)
             txtGUID.Text = .strGUID
             chkTrackable.Checked = CBool(.bolTrackable)
+            txtPONumber.Text = .strPO
         End With
     End Sub
     Private Sub SendToHistGrid(Grid As DataGridView, tblResults As DataTable)
@@ -823,6 +828,12 @@ Public Class View
     Private Sub TabControl1_MouseDown(sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
         TrackingGrid.Refresh()
     End Sub
+    Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
+        View_Munis.Show()
+        Dim MunisTable As DataTable
+        MunisTable = ReturnMSSQLTable("SELECT TOP 1 * FROM famaster WHERE fama_serial='" & CurrentDevice.strSerial & "'")
+        View_Munis.LoadMunisInfo(CurrentDevice)
+    End Sub
     Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
         Try
             e.Result = My.Computer.Network.Ping("D" & CurrentDevice.strSerial)
@@ -849,8 +860,11 @@ Public Class View
     End Sub
     Private Sub CheckRDP()
         If CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
-            PingWorker.RunWorkerAsync()
+            If Not PingWorker.IsBusy Then PingWorker.RunWorkerAsync()
         End If
+    End Sub
+    Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
+        CheckRDP()
     End Sub
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()

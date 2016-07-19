@@ -141,6 +141,12 @@
     <Compile Include="Forms\Tracking.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\View_Munis.Designer.vb">
+      <DependentUpon>View_Munis.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\View_Munis.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\View_Tracking.Designer.vb">
       <DependentUpon>View_Tracking.vb</DependentUpon>
     </Compile>
@@ -152,6 +158,8 @@
     <Compile Include="Modules\ErrorHandling.vb" />
     <Compile Include="Modules\ExtendedMethods.vb" />
     <Compile Include="Modules\FTPFunctions.vb" />
+    <Compile Include="Modules\MSSQLComms.vb" />
+    <Compile Include="Modules\MunisFunctions.vb" />
     <Compile Include="Modules\SecurityMod.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -222,6 +230,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Tracking.resx">
       <DependentUpon>Tracking.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\View_Munis.resx">
+      <DependentUpon>View_Munis.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\View_Tracking.resx">
       <DependentUpon>View_Tracking.vb</DependentUpon>
