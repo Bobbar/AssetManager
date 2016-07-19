@@ -247,7 +247,7 @@ Public Module DBFunctions
     Public Function DeleteEntry(ByVal strGUID As String) As Integer
         Try
             Dim rows
-            Dim strSQLQry As String = "DELETE FROM historical WHERE hist_uid='" & strGUID & "'"
+            Dim strSQLQry As String = "DELETE FROM dev_historical WHERE hist_uid='" & strGUID & "'"
             rows = ReturnSQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function
@@ -306,7 +306,7 @@ Public Module DBFunctions
             End If
             Dim tmpInfo As Device_Info
             Dim reader As MySqlDataReader
-            Dim strQry = "SELECT * FROM historical WHERE hist_uid='" & strGUID & "'"
+            Dim strQry = "SELECT * FROM dev_historical WHERE hist_uid='" & strGUID & "'"
             reader = ReturnSQLReader(strQry)
             With reader
                 Do While .Read()
