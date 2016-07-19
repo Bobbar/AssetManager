@@ -91,18 +91,20 @@ Module ErrorHandling
         Return False
     End Function
     Private Function handleSocketException(ex As SocketException, strOrigSub As String) As Boolean
-        Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
         Select Case ex.SocketErrorCode
                                 'FTPSocket timeout
             Case 10060
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
                 Dim blah = MsgBox("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Timeout")
                 Return True
             Case 10053
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
                 Dim blah = MsgBox("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Disconnected")
                 Return True
             Case 11001 'host not found.
                 Return False
             Case Else
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
                 Return False
         End Select
     End Function
