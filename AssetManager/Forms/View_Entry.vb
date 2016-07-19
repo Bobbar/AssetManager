@@ -16,7 +16,7 @@ Public Class View_Entry
         Waiting()
         Dim reader As MySqlDataReader
         Try
-            Dim strQry = "Select * FROM historical WHERE  hist_UID = '" & EntryUID & "'"
+            Dim strQry = "Select * FROM dev_historical WHERE  hist_UID = '" & EntryUID & "'"
             reader = ReturnSQLReader(strQry)
             With reader
                 Do While .Read()
