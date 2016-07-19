@@ -32,6 +32,8 @@ Partial Class View
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
         Me.cmdMunisInfo = New System.Windows.Forms.Button()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.txtPONumber = New System.Windows.Forms.TextBox()
         Me.cmdRDP = New System.Windows.Forms.Button()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -92,9 +94,9 @@ Partial Class View
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
-        Me.tmrRDPRefresh = New System.Windows.Forms.Timer(Me.components)
         Me.Label12 = New System.Windows.Forms.Label()
         Me.txtPONumber = New System.Windows.Forms.TextBox()
+        Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
@@ -212,6 +214,7 @@ Partial Class View
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
         '
+
         'cmdMunisInfo
         '
         Me.cmdMunisInfo.Location = New System.Drawing.Point(580, 190)
@@ -220,6 +223,23 @@ Partial Class View
         Me.cmdMunisInfo.TabIndex = 46
         Me.cmdMunisInfo.Text = "MUNIS Info"
         Me.cmdMunisInfo.UseVisualStyleBackColor = True
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(503, 129)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(81, 16)
+        Me.Label12.TabIndex = 48
+        Me.Label12.Text = "PO Number:"
+        '
+        'txtPONumber
+        '
+        Me.txtPONumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPONumber.Location = New System.Drawing.Point(506, 148)
+        Me.txtPONumber.Name = "txtPONumber"
+        Me.txtPONumber.Size = New System.Drawing.Size(124, 23)
+        Me.txtPONumber.TabIndex = 47
         '
         'cmdRDP
         '
@@ -827,27 +847,13 @@ Partial Class View
         Me.PingWorker.WorkerReportsProgress = True
         Me.PingWorker.WorkerSupportsCancellation = True
         '
-        'tmrRDPRefresh
-        '
-        Me.tmrRDPRefresh.Enabled = True
-        Me.tmrRDPRefresh.Interval = 5000
+
         'Label12
+
+        'tmr_RDPRefresher
         '
-        Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(503, 129)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(81, 16)
-        Me.Label12.TabIndex = 48
-        Me.Label12.Text = "PO Number:"
-        '
-        'txtPONumber
-        '
-        Me.txtPONumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPONumber.Location = New System.Drawing.Point(506, 148)
-        Me.txtPONumber.Name = "txtPONumber"
-        Me.txtPONumber.Size = New System.Drawing.Size(124, 23)
-        Me.txtPONumber.TabIndex = 47
+        Me.tmr_RDPRefresher.Enabled = True
+        Me.tmr_RDPRefresher.Interval = 10000
         '
         'View
         '
@@ -961,4 +967,5 @@ Partial Class View
     Friend WithEvents tmrRDPRefresh As Timer
     Friend WithEvents Label12 As Label
     Friend WithEvents txtPONumber As TextBox
+    Friend WithEvents tmr_RDPRefresher As Timer
 End Class

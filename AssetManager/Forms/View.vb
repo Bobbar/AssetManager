@@ -871,7 +871,7 @@ Public Class View
             If Not PingWorker.IsBusy Then PingWorker.RunWorkerAsync()
         End If
     End Sub
-    Private Sub tmrRDPRefresh_Tick(sender As Object, e As EventArgs) Handles tmrRDPRefresh.Tick
+    Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
         CheckRDP()
     End Sub
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
