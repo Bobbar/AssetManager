@@ -33,7 +33,7 @@ Public Class AddNew
             cmd.Parameters.AddWithValue("@dev_lastmod_user", strLocalUser)
             cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(Device.bolTrackable))
             rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES(@hist_change_type, @hist_notes, @hist_serial, @hist_description, @hist_location, @hist_cur_user, @hist_asset_tag, @hist_purchase_date, @hist_replacement_year, @hist_po, @hist_osversion, @hist_dev_UID, @hist_action_user, @hist_eq_type, @hist_status, @hist_trackable)"
+            Dim strSqlQry2 = "INSERT INTO dev_historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES(@hist_change_type, @hist_notes, @hist_serial, @hist_description, @hist_location, @hist_cur_user, @hist_asset_tag, @hist_purchase_date, @hist_replacement_year, @hist_po, @hist_osversion, @hist_dev_UID, @hist_action_user, @hist_eq_type, @hist_status, @hist_trackable)"
             cmd.Parameters.AddWithValue("@hist_change_type", "NEWD")
             cmd.Parameters.AddWithValue("@hist_notes", Device.strNote)
             cmd.Parameters.AddWithValue("@hist_serial", Device.strSerial)

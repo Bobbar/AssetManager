@@ -139,7 +139,7 @@ Public Class View
             cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(NewData.bolTrackable))
             cmd.Parameters.AddWithValue("@dev_po", NewData.strPO)
             rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable,hist_po) VALUES (@hist_change_type,@hist_notes,@hist_serial,@hist_description,@hist_location,@hist_cur_user,@hist_asset_tag,@hist_purchase_date,@hist_replacement_year,@hist_osversion,@hist_dev_UID,@hist_action_user,@hist_eq_type,@hist_status,@hist_trackable,@hist_po)"
+            Dim strSqlQry2 = "INSERT INTO dev_historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable,hist_po) VALUES (@hist_change_type,@hist_notes,@hist_serial,@hist_description,@hist_location,@hist_cur_user,@hist_asset_tag,@hist_purchase_date,@hist_replacement_year,@hist_osversion,@hist_dev_UID,@hist_action_user,@hist_eq_type,@hist_status,@hist_trackable,@hist_po)"
             cmd.CommandText = strSqlQry2
             cmd.Parameters.AddWithValue("@hist_change_type", GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
             cmd.Parameters.AddWithValue("@hist_notes", NewData.strNote)
@@ -199,7 +199,7 @@ Public Class View
     Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
         Dim table, Results As New DataTable
         Try
-            Results = ReturnSQLTable("Select * FROM devices, historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
+            Results = ReturnSQLTable("Select * FROM devices, dev_historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
             If Results.Rows.Count < 1 Then
                 CloseChildren()
                 Results.Dispose()
