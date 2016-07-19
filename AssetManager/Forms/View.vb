@@ -832,15 +832,7 @@ Public Class View
         View_Munis.Show()
         Dim MunisTable As DataTable
         MunisTable = ReturnMSSQLTable("SELECT TOP 1 * FROM famaster WHERE fama_serial='" & CurrentDevice.strSerial & "'")
-        'Dim r As DataRow
-        'For Each r In MunisTable.Rows
-        '    Debug.Print(r.Item("fama_asset"))
-        'Next
-
         View_Munis.LoadMunisInfo(CurrentDevice)
-
-
-
     End Sub
     Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
         Try
