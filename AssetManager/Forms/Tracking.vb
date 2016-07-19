@@ -103,7 +103,7 @@ Public Class Tracking
             Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='1' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
             Dim cmd As MySqlCommand = ReturnSQLCommand(strSQLQry1)
             rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkout_user, track_use_location, track_notes, track_device_uid) VALUES(@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkout_user, @track_use_location, @track_notes, @track_device_uid)"
+            Dim strSqlQry2 = "INSERT INTO dev_trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkout_user, track_use_location, track_notes, track_device_uid) VALUES(@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkout_user, @track_use_location, @track_notes, @track_device_uid)"
             cmd.CommandText = strSqlQry2
             cmd.Parameters.AddWithValue("@track_check_type", strCheckOut)
             cmd.Parameters.AddWithValue("@track_checkout_time", CheckData.strCheckOutTime)
@@ -141,7 +141,7 @@ Public Class Tracking
             Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='0' WHERE dev_UID='" & CurrentDevice.strGUID & "'"
             Dim cmd As MySqlCommand = ReturnSQLCommand(strSQLQry1)
             rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkin_time, track_checkout_user, track_checkin_user, track_use_location, track_notes, track_device_uid) VALUES (@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkin_time, @track_checkout_user, @track_checkin_user, @track_use_location, @track_notes, @track_device_uid)"
+            Dim strSqlQry2 = "INSERT INTO dev_trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkin_time, track_checkout_user, track_checkin_user, track_use_location, track_notes, track_device_uid) VALUES (@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkin_time, @track_checkout_user, @track_checkin_user, @track_use_location, @track_notes, @track_device_uid)"
             cmd.CommandText = strSqlQry2
             cmd.Parameters.AddWithValue("@track_check_type", strCheckIn)
             cmd.Parameters.AddWithValue("@track_checkout_time", CheckData.strCheckOutTime)
