@@ -324,7 +324,7 @@ Public Class View
     End Sub
     Public Sub ViewTracking(strGUID As String)
         Dim Results As New DataTable
-        Dim strQry = "Select * FROM trackable, devices WHERE track_device_uid = dev_UID And track_device_uid = '" & strGUID & "' ORDER BY track_datestamp DESC"
+        Dim strQry = "Select * FROM dev_trackable, devices WHERE track_device_uid = dev_UID And track_device_uid = '" & strGUID & "' ORDER BY track_datestamp DESC"
         Try
             If Not ConnectionReady() Then
                 ConnectionNotReady()
