@@ -94,8 +94,6 @@ Partial Class View
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.txtPONumber = New System.Windows.Forms.TextBox()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
