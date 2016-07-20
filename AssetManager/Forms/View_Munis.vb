@@ -53,6 +53,7 @@
             End If
             LoadMunisInventoryGrid(Device)
             LoadMunisRequisitionGrid(Device)
+            Me.Show()
         End If
     End Sub
     Private Function NeededInfo(Device As Device_Info) As Boolean

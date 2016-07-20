@@ -829,9 +829,6 @@ Public Class View
         TrackingGrid.Refresh()
     End Sub
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
-        View_Munis.Show()
-        Dim MunisTable As DataTable
-        MunisTable = ReturnMSSQLTable("SELECT TOP 1 * FROM famaster WHERE fama_serial='" & CurrentDevice.strSerial & "'")
         View_Munis.LoadMunisInfo(CurrentDevice)
     End Sub
     Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
