@@ -1,8 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class AddNew
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+Partial Class frmNewRequest
     Inherits System.Windows.Forms.Form
+
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()>
+    <System.Diagnostics.DebuggerNonUserCode()> _
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -12,401 +13,276 @@ Partial Class AddNew
             MyBase.Dispose(disposing)
         End Try
     End Sub
+
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
+
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()>
+    <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AddNew))
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmNewRequest))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.chkTrackable = New System.Windows.Forms.CheckBox()
-        Me.cmdClear = New System.Windows.Forms.Button()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.cmbStatus_REQ = New System.Windows.Forms.ComboBox()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.cmbOSType_REQ = New System.Windows.Forms.ComboBox()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.txtPO = New System.Windows.Forms.TextBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.cmbEquipType_REQ = New System.Windows.Forms.ComboBox()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.txtNotes = New System.Windows.Forms.TextBox()
-        Me.cmdAdd = New System.Windows.Forms.Button()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.txtReplaceYear = New System.Windows.Forms.TextBox()
-        Me.lbPurchaseDate = New System.Windows.Forms.Label()
-        Me.dtPurchaseDate_REQ = New System.Windows.Forms.DateTimePicker()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.cmbLocation_REQ = New System.Windows.Forms.ComboBox()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.txtDescription_REQ = New System.Windows.Forms.TextBox()
-        Me.txtCurUser_REQ = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.txtAssetTag_REQ = New System.Windows.Forms.TextBox()
-        Me.txtSerial_REQ = New System.Windows.Forms.TextBox()
-        Me.chkNoClear = New System.Windows.Forms.CheckBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtUser = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.dtNeedBy = New System.Windows.Forms.DateTimePicker()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.cmbType = New System.Windows.Forms.ComboBox()
+        Me.chkPlanned = New System.Windows.Forms.CheckBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.txtPO = New System.Windows.Forms.TextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.txtReqNumber = New System.Windows.Forms.TextBox()
+        Me.cmdAddNew = New System.Windows.Forms.Button()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
-        Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.GroupBox1.Controls.Add(Me.chkNoClear)
-        Me.GroupBox1.Controls.Add(Me.chkTrackable)
-        Me.GroupBox1.Controls.Add(Me.cmdClear)
-        Me.GroupBox1.Controls.Add(Me.Label11)
-        Me.GroupBox1.Controls.Add(Me.cmbStatus_REQ)
-        Me.GroupBox1.Controls.Add(Me.Label10)
-        Me.GroupBox1.Controls.Add(Me.cmbOSType_REQ)
-        Me.GroupBox1.Controls.Add(Me.Label9)
-        Me.GroupBox1.Controls.Add(Me.txtPO)
-        Me.GroupBox1.Controls.Add(Me.Label8)
-        Me.GroupBox1.Controls.Add(Me.cmbEquipType_REQ)
-        Me.GroupBox1.Controls.Add(Me.Label7)
-        Me.GroupBox1.Controls.Add(Me.txtNotes)
-        Me.GroupBox1.Controls.Add(Me.cmdAdd)
-        Me.GroupBox1.Controls.Add(Me.Label6)
-        Me.GroupBox1.Controls.Add(Me.txtReplaceYear)
-        Me.GroupBox1.Controls.Add(Me.lbPurchaseDate)
-        Me.GroupBox1.Controls.Add(Me.dtPurchaseDate_REQ)
-        Me.GroupBox1.Controls.Add(Me.Label5)
-        Me.GroupBox1.Controls.Add(Me.cmbLocation_REQ)
+        Me.GroupBox1.Controls.Add(Me.cmdAddNew)
+        Me.GroupBox1.Controls.Add(Me.GroupBox2)
+        Me.GroupBox1.Controls.Add(Me.chkPlanned)
+        Me.GroupBox1.Controls.Add(Me.cmbType)
         Me.GroupBox1.Controls.Add(Me.Label4)
+        Me.GroupBox1.Controls.Add(Me.dtNeedBy)
         Me.GroupBox1.Controls.Add(Me.Label3)
-        Me.GroupBox1.Controls.Add(Me.txtDescription_REQ)
-        Me.GroupBox1.Controls.Add(Me.txtCurUser_REQ)
         Me.GroupBox1.Controls.Add(Me.Label2)
+        Me.GroupBox1.Controls.Add(Me.txtUser)
         Me.GroupBox1.Controls.Add(Me.Label1)
-        Me.GroupBox1.Controls.Add(Me.txtAssetTag_REQ)
-        Me.GroupBox1.Controls.Add(Me.txtSerial_REQ)
+        Me.GroupBox1.Controls.Add(Me.txtDescription)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(944, 299)
-        Me.GroupBox1.TabIndex = 23
+        Me.GroupBox1.Size = New System.Drawing.Size(648, 207)
+        Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Request Info"
         '
-        'chkTrackable
+        'txtDescription
         '
-        Me.chkTrackable.AutoSize = True
-        Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(739, 152)
-        Me.chkTrackable.Name = "chkTrackable"
-        Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
-        Me.chkTrackable.TabIndex = 48
-        Me.chkTrackable.Text = "Trackable"
-        Me.chkTrackable.UseVisualStyleBackColor = True
-        '
-        'cmdClear
-        '
-        Me.cmdClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdClear.Location = New System.Drawing.Point(814, 253)
-        Me.cmdClear.Name = "cmdClear"
-        Me.cmdClear.Size = New System.Drawing.Size(97, 23)
-        Me.cmdClear.TabIndex = 13
-        Me.cmdClear.Text = "Clear"
-        Me.cmdClear.UseVisualStyleBackColor = True
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(786, 20)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(91, 16)
-        Me.Label11.TabIndex = 47
-        Me.Label11.Text = "Device Status"
-        '
-        'cmbStatus_REQ
-        '
-        Me.cmbStatus_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbStatus_REQ.FormattingEnabled = True
-        Me.cmbStatus_REQ.Location = New System.Drawing.Point(789, 39)
-        Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
-        Me.cmbStatus_REQ.Size = New System.Drawing.Size(144, 26)
-        Me.cmbStatus_REQ.TabIndex = 5
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(625, 76)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(115, 16)
-        Me.Label10.TabIndex = 45
-        Me.Label10.Text = "Operating System"
-        '
-        'cmbOSType_REQ
-        '
-        Me.cmbOSType_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbOSType_REQ.FormattingEnabled = True
-        Me.cmbOSType_REQ.Location = New System.Drawing.Point(628, 95)
-        Me.cmbOSType_REQ.Name = "cmbOSType_REQ"
-        Me.cmbOSType_REQ.Size = New System.Drawing.Size(144, 26)
-        Me.cmbOSType_REQ.TabIndex = 9
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(786, 75)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(78, 16)
-        Me.Label9.TabIndex = 43
-        Me.Label9.Text = "PO Number"
-        '
-        'txtPO
-        '
-        Me.txtPO.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPO.Location = New System.Drawing.Point(789, 97)
-        Me.txtPO.Name = "txtPO"
-        Me.txtPO.Size = New System.Drawing.Size(122, 25)
-        Me.txtPO.TabIndex = 10
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(625, 22)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(107, 16)
-        Me.Label8.TabIndex = 41
-        Me.Label8.Text = "Equipment Type"
-        '
-        'cmbEquipType_REQ
-        '
-        Me.cmbEquipType_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbEquipType_REQ.FormattingEnabled = True
-        Me.cmbEquipType_REQ.Location = New System.Drawing.Point(628, 39)
-        Me.cmbEquipType_REQ.Name = "cmbEquipType_REQ"
-        Me.cmbEquipType_REQ.Size = New System.Drawing.Size(144, 26)
-        Me.cmbEquipType_REQ.TabIndex = 4
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(251, 168)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(47, 16)
-        Me.Label7.TabIndex = 39
-        Me.Label7.Text = "Notes:"
-        '
-        'txtNotes
-        '
-        Me.txtNotes.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtNotes.Location = New System.Drawing.Point(304, 139)
-        Me.txtNotes.MaxLength = 200
-        Me.txtNotes.Multiline = True
-        Me.txtNotes.Name = "txtNotes"
-        Me.txtNotes.Size = New System.Drawing.Size(330, 69)
-        Me.txtNotes.TabIndex = 11
-        '
-        'cmdAdd
-        '
-        Me.cmdAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAdd.Location = New System.Drawing.Point(419, 232)
-        Me.cmdAdd.Name = "cmdAdd"
-        Me.cmdAdd.Size = New System.Drawing.Size(97, 44)
-        Me.cmdAdd.TabIndex = 12
-        Me.cmdAdd.Text = "Add"
-        Me.cmdAdd.UseVisualStyleBackColor = True
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(512, 20)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(92, 16)
-        Me.Label6.TabIndex = 36
-        Me.Label6.Text = "Replace Year"
-        '
-        'txtReplaceYear
-        '
-        Me.txtReplaceYear.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtReplaceYear.Location = New System.Drawing.Point(516, 39)
-        Me.txtReplaceYear.Name = "txtReplaceYear"
-        Me.txtReplaceYear.Size = New System.Drawing.Size(88, 25)
-        Me.txtReplaceYear.TabIndex = 3
-        Me.txtReplaceYear.Text = "txtReplaceYear"
-        '
-        'lbPurchaseDate
-        '
-        Me.lbPurchaseDate.AutoSize = True
-        Me.lbPurchaseDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbPurchaseDate.Location = New System.Drawing.Point(432, 78)
-        Me.lbPurchaseDate.Name = "lbPurchaseDate"
-        Me.lbPurchaseDate.Size = New System.Drawing.Size(97, 16)
-        Me.lbPurchaseDate.TabIndex = 34
-        Me.lbPurchaseDate.Text = "Purchase Date"
-        '
-        'dtPurchaseDate_REQ
-        '
-        Me.dtPurchaseDate_REQ.CustomFormat = "yyyy-MM-dd"
-        Me.dtPurchaseDate_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dtPurchaseDate_REQ.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtPurchaseDate_REQ.Location = New System.Drawing.Point(435, 97)
-        Me.dtPurchaseDate_REQ.Name = "dtPurchaseDate_REQ"
-        Me.dtPurchaseDate_REQ.Size = New System.Drawing.Size(169, 25)
-        Me.dtPurchaseDate_REQ.TabIndex = 8
-        Me.dtPurchaseDate_REQ.Value = New Date(2016, 4, 14, 0, 0, 0, 0)
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(318, 22)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(59, 16)
-        Me.Label5.TabIndex = 32
-        Me.Label5.Text = "Location"
-        '
-        'cmbLocation_REQ
-        '
-        Me.cmbLocation_REQ.DropDownWidth = 171
-        Me.cmbLocation_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbLocation_REQ.FormattingEnabled = True
-        Me.cmbLocation_REQ.Location = New System.Drawing.Point(321, 39)
-        Me.cmbLocation_REQ.Name = "cmbLocation_REQ"
-        Me.cmbLocation_REQ.Size = New System.Drawing.Size(171, 26)
-        Me.cmbLocation_REQ.TabIndex = 2
-        Me.cmbLocation_REQ.Text = "cmbLocation"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(153, 78)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(76, 16)
-        Me.Label4.TabIndex = 30
-        Me.Label4.Text = "Description"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(153, 20)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(37, 16)
-        Me.Label3.TabIndex = 29
-        Me.Label3.Text = "User"
-        '
-        'txtDescription_REQ
-        '
-        Me.txtDescription_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDescription_REQ.Location = New System.Drawing.Point(156, 97)
-        Me.txtDescription_REQ.Name = "txtDescription_REQ"
-        Me.txtDescription_REQ.Size = New System.Drawing.Size(251, 25)
-        Me.txtDescription_REQ.TabIndex = 7
-        Me.txtDescription_REQ.Text = "Description"
-        '
-        'txtCurUser_REQ
-        '
-        Me.txtCurUser_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCurUser_REQ.Location = New System.Drawing.Point(156, 39)
-        Me.txtCurUser_REQ.Name = "txtCurUser_REQ"
-        Me.txtCurUser_REQ.Size = New System.Drawing.Size(142, 25)
-        Me.txtCurUser_REQ.TabIndex = 1
-        Me.txtCurUser_REQ.Text = "txtCurUser"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(9, 80)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(70, 16)
-        Me.Label2.TabIndex = 26
-        Me.Label2.Text = "Asset Tag"
+        Me.txtDescription.Location = New System.Drawing.Point(15, 44)
+        Me.txtDescription.Name = "txtDescription"
+        Me.txtDescription.Size = New System.Drawing.Size(382, 20)
+        Me.txtDescription.TabIndex = 0
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(8, 20)
+        Me.Label1.Location = New System.Drawing.Point(12, 28)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(43, 16)
-        Me.Label1.TabIndex = 25
-        Me.Label1.Text = "Serial"
+        Me.Label1.Size = New System.Drawing.Size(106, 13)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Request Description:"
         '
-        'txtAssetTag_REQ
+        'Label2
         '
-        Me.txtAssetTag_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTag_REQ.Location = New System.Drawing.Point(12, 99)
-        Me.txtAssetTag_REQ.Name = "txtAssetTag_REQ"
-        Me.txtAssetTag_REQ.Size = New System.Drawing.Size(114, 25)
-        Me.txtAssetTag_REQ.TabIndex = 6
-        Me.txtAssetTag_REQ.Text = "txtAssetTag"
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(12, 67)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(75, 13)
+        Me.Label2.TabIndex = 3
+        Me.Label2.Text = "Request User:"
         '
-        'txtSerial_REQ
+        'txtUser
         '
-        Me.txtSerial_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSerial_REQ.Location = New System.Drawing.Point(12, 39)
-        Me.txtSerial_REQ.Name = "txtSerial_REQ"
-        Me.txtSerial_REQ.Size = New System.Drawing.Size(115, 25)
-        Me.txtSerial_REQ.TabIndex = 0
-        Me.txtSerial_REQ.Text = "txtSerial"
+        Me.txtUser.Location = New System.Drawing.Point(15, 83)
+        Me.txtUser.Name = "txtUser"
+        Me.txtUser.Size = New System.Drawing.Size(137, 20)
+        Me.txtUser.TabIndex = 2
         '
-        'chkNoClear
+        'Label3
         '
-        Me.chkNoClear.AutoSize = True
-        Me.chkNoClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkNoClear.Location = New System.Drawing.Point(543, 245)
-        Me.chkNoClear.Name = "chkNoClear"
-        Me.chkNoClear.Size = New System.Drawing.Size(91, 20)
-        Me.chkNoClear.TabIndex = 49
-        Me.chkNoClear.Text = "Don't clear"
-        Me.chkNoClear.UseVisualStyleBackColor = True
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(12, 146)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(51, 13)
+        Me.Label3.TabIndex = 5
+        Me.Label3.Text = "Need By:"
         '
-        'AddNew
+        'dtNeedBy
+        '
+        Me.dtNeedBy.Location = New System.Drawing.Point(15, 162)
+        Me.dtNeedBy.Name = "dtNeedBy"
+        Me.dtNeedBy.Size = New System.Drawing.Size(180, 20)
+        Me.dtNeedBy.TabIndex = 6
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(12, 106)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(34, 13)
+        Me.Label4.TabIndex = 8
+        Me.Label4.Text = "Type:"
+        '
+        'cmbType
+        '
+        Me.cmbType.FormattingEnabled = True
+        Me.cmbType.Location = New System.Drawing.Point(15, 122)
+        Me.cmbType.Name = "cmbType"
+        Me.cmbType.Size = New System.Drawing.Size(137, 21)
+        Me.cmbType.TabIndex = 9
+        '
+        'chkPlanned
+        '
+        Me.chkPlanned.AutoSize = True
+        Me.chkPlanned.Location = New System.Drawing.Point(172, 124)
+        Me.chkPlanned.Name = "chkPlanned"
+        Me.chkPlanned.Size = New System.Drawing.Size(71, 17)
+        Me.chkPlanned.TabIndex = 10
+        Me.chkPlanned.Text = "Planned?"
+        Me.chkPlanned.UseVisualStyleBackColor = True
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.Label6)
+        Me.GroupBox2.Controls.Add(Me.txtReqNumber)
+        Me.GroupBox2.Controls.Add(Me.Label5)
+        Me.GroupBox2.Controls.Add(Me.txtPO)
+        Me.GroupBox2.Location = New System.Drawing.Point(450, 44)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(175, 140)
+        Me.GroupBox2.TabIndex = 11
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Add'l Info"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(17, 25)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(65, 13)
+        Me.Label5.TabIndex = 5
+        Me.Label5.Text = "PO Number:"
+        '
+        'txtPO
+        '
+        Me.txtPO.Location = New System.Drawing.Point(20, 41)
+        Me.txtPO.Name = "txtPO"
+        Me.txtPO.Size = New System.Drawing.Size(137, 20)
+        Me.txtPO.TabIndex = 4
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(17, 64)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(72, 13)
+        Me.Label6.TabIndex = 7
+        Me.Label6.Text = "Requisition #:"
+        '
+        'txtReqNumber
+        '
+        Me.txtReqNumber.Location = New System.Drawing.Point(20, 80)
+        Me.txtReqNumber.Name = "txtReqNumber"
+        Me.txtReqNumber.Size = New System.Drawing.Size(137, 20)
+        Me.txtReqNumber.TabIndex = 6
+        '
+        'cmdAddNew
+        '
+        Me.cmdAddNew.Location = New System.Drawing.Point(278, 143)
+        Me.cmdAddNew.Name = "cmdAddNew"
+        Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
+        Me.cmdAddNew.TabIndex = 12
+        Me.cmdAddNew.Text = "Create Request"
+        Me.cmdAddNew.UseVisualStyleBackColor = True
+        '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.RequestItemsGrid)
+        Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Panel1.Location = New System.Drawing.Point(12, 249)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(843, 428)
+        Me.Panel1.TabIndex = 1
+        '
+        'RequestItemsGrid
+        '
+        Me.RequestItemsGrid.AllowUserToResizeRows = False
+        Me.RequestItemsGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RequestItemsGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.RequestItemsGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.RequestItemsGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        Me.RequestItemsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.RequestItemsGrid.DefaultCellStyle = DataGridViewCellStyle1
+        Me.RequestItemsGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
+        Me.RequestItemsGrid.Location = New System.Drawing.Point(3, 3)
+        Me.RequestItemsGrid.Name = "RequestItemsGrid"
+        Me.RequestItemsGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.RequestItemsGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle2
+        Me.RequestItemsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.RequestItemsGrid.ShowCellErrors = False
+        Me.RequestItemsGrid.ShowCellToolTips = False
+        Me.RequestItemsGrid.Size = New System.Drawing.Size(837, 422)
+        Me.RequestItemsGrid.TabIndex = 18
+        '
+        'frmNewRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(971, 326)
+        Me.ClientSize = New System.Drawing.Size(867, 689)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.GroupBox1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.Name = "AddNew"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Add New Device"
+        Me.Name = "frmNewRequest"
+        Me.Text = "New Request"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+
     End Sub
+
     Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents Label10 As Label
-    Friend WithEvents cmbOSType_REQ As ComboBox
-    Friend WithEvents Label9 As Label
-    Friend WithEvents txtPO As TextBox
-    Friend WithEvents Label8 As Label
-    Friend WithEvents cmbEquipType_REQ As ComboBox
-    Friend WithEvents Label7 As Label
-    Friend WithEvents txtNotes As TextBox
-    Friend WithEvents cmdAdd As Button
-    Friend WithEvents Label6 As Label
-    Friend WithEvents txtReplaceYear As TextBox
-    Friend WithEvents lbPurchaseDate As Label
-    Friend WithEvents dtPurchaseDate_REQ As DateTimePicker
-    Friend WithEvents Label5 As Label
-    Friend WithEvents cmbLocation_REQ As ComboBox
+    Friend WithEvents chkPlanned As CheckBox
+    Friend WithEvents cmbType As ComboBox
     Friend WithEvents Label4 As Label
+    Friend WithEvents dtNeedBy As DateTimePicker
     Friend WithEvents Label3 As Label
-    Friend WithEvents txtDescription_REQ As TextBox
-    Friend WithEvents txtCurUser_REQ As TextBox
     Friend WithEvents Label2 As Label
+    Friend WithEvents txtUser As TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents txtAssetTag_REQ As TextBox
-    Friend WithEvents txtSerial_REQ As TextBox
-    Friend WithEvents Label11 As Label
-    Friend WithEvents cmbStatus_REQ As ComboBox
-    Friend WithEvents cmdClear As Button
-    Friend WithEvents chkTrackable As CheckBox
-    Friend WithEvents chkNoClear As CheckBox
+    Friend WithEvents txtDescription As TextBox
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents Label6 As Label
+    Friend WithEvents txtReqNumber As TextBox
+    Friend WithEvents Label5 As Label
+    Friend WithEvents txtPO As TextBox
+    Friend WithEvents cmdAddNew As Button
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents RequestItemsGrid As DataGridView
 End Class
