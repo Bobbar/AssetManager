@@ -88,15 +88,6 @@ Public Class MainForm
         'Attachments.AttachGrid.DefaultCellStyle.Font = GridFont
         'Attachments.AttachGrid.ColumnHeadersDefaultCellStyle.Font = GridFont
     End Sub
-    Private Sub BuildIndexes()
-        Logger("Building Indexes...")
-        BuildLocationIndex()
-        BuildChangeTypeIndex()
-        BuildEquipTypeIndex()
-        BuildOSTypeIndex()
-        BuildStatusTypeIndex()
-        Logger("Building Indexes Done...")
-    End Sub
     Private Sub Clear_All()
         LiveBox.Items.Clear()
         LiveBox.Visible = False
