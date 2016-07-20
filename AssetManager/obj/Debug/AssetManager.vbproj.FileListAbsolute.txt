@@ -51,3 +51,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Munis.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MainForm.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmSibiMain.resources

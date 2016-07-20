@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>7.2016.6045.1858</AssemblyVersion>
+    <AssemblyVersion>7.2016.6046.1864</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -114,6 +114,12 @@
       <DependentUpon>AddNew.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\AddNew.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmNewRequest.Designer.vb">
+      <DependentUpon>frmNewRequest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmNewRequest.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Sibi\frmSibiMain.Designer.vb">
@@ -218,6 +224,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sibi\frmNewRequest.resx">
+      <DependentUpon>frmNewRequest.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Sibi\frmSibiMain.resx">
       <DependentUpon>frmSibiMain.vb</DependentUpon>

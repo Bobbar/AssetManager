@@ -48,6 +48,23 @@ Public Module DBFunctions
         Public Tracking As Track_Info
         Public Historical As Hist_Info
     End Structure
+    Public Structure Request_Info
+        Public strUID As String
+        Public strUser As String
+        Public strDescription As String
+        Public dtDateStamp As Object
+        Public dtNeedBy As Object
+        Public strStatus As String
+        Public strType As String
+        Public strPO As String
+        Public strReqNUmber As String
+        Public strReplaceAsset As String
+        Public strReplaceSerial As String
+
+
+
+    End Structure
+
     Public Structure Hist_Info
         Public strChangeType As String
         Public strHistUID As String
@@ -77,6 +94,11 @@ Public Module DBFunctions
     Public EquipType() As Combo_Data
     Public OSType() As Combo_Data
     Public StatusType() As Combo_Data
+    'sibi
+    Public RequestData As Request_Info
+    Public Sibi_StatusType As Combo_Data
+    Public Sibi_ItemStatusType As Combo_Data
+
     Public Structure User_Info
         Public strUsername As String
         Public strFullname As String
