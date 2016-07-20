@@ -422,6 +422,15 @@ Public Module DBFunctions
         Next
         Return Nothing
     End Function
+    Public Sub BuildIndexes()
+        Logger("Building Indexes...")
+        BuildLocationIndex()
+        BuildChangeTypeIndex()
+        BuildEquipTypeIndex()
+        BuildOSTypeIndex()
+        BuildStatusTypeIndex()
+        Logger("Building Indexes Done...")
+    End Sub
     Public Sub BuildLocationIndex()
         Try
             Dim reader As MySqlDataReader
