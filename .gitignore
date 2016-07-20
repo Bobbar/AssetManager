@@ -307,3 +307,5 @@ paket-files/
 AssetManager/Forms/View.resx
 AssetManager/Forms/View.resx
 AssetManager/obj/Debug/AssetManager.exe
+*.pdb
+*.exe
