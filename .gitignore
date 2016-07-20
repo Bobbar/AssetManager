@@ -311,3 +311,11 @@ AssetManager/bin/Debug/AssetManager.exe
 AssetManager/obj/Debug/AssetManager.exe
 *.pdb
 AssetManager/obj/Debug/DesignTimeResolveAssemblyReferences.cache
+*.exe
+AssetManager/obj/Debug/AssetManager.exe
+*.exe
+AssetManager/obj/Release/AssetManager.pdb
+AssetManager/obj/Release/AssetManager.vbproj.GenerateResource.Cache
+.vs/AssetManager/v14/.suo
+*.suo
+.vs/
