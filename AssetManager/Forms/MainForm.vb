@@ -298,54 +298,12 @@ Public Class MainForm
         DoneWaiting()
     End Sub
     Private Sub RefreshCombos()
-        FillEquipTypeCombo()
-        FillLocationCombo()
-        FillChangeTypeCombo()
-        FillStatusTypeCombo()
-        FillOSTypeCombo()
-    End Sub
-    Private Sub FillOSTypeCombo()
-        Dim i As Integer
-        cmbOSType.Items.Clear()
-        cmbOSType.Text = ""
-        For i = 0 To UBound(OSType)
-            cmbOSType.Items.Insert(i, OSType(i).strLong)
-        Next
-    End Sub
-    Private Sub FillEquipTypeCombo()
-        Dim i As Integer
-        cmbEquipType.Items.Clear()
-        cmbEquipType.Text = ""
-        For i = 0 To UBound(EquipType)
-            cmbEquipType.Items.Insert(i, EquipType(i).strLong)
-        Next
-    End Sub
-    Private Sub FillLocationCombo()
-        Dim i As Integer
-        cmbLocation.Items.Clear()
-        cmbLocation.Text = ""
-        For i = 0 To UBound(Locations)
-            cmbLocation.Items.Insert(i, Locations(i).strLong)
-        Next
-    End Sub
-    Private Sub FillChangeTypeCombo()
-        Dim i As Integer
-        UpdateDev.cmbUpdate_ChangeType.Items.Clear()
-        UpdateDev.cmbUpdate_ChangeType.Text = ""
-        For i = 0 To UBound(ChangeType)
-            UpdateDev.cmbUpdate_ChangeType.Items.Insert(i, ChangeType(i).strLong)
-        Next
-    End Sub
-    Private Sub FillStatusTypeCombo()
-        Dim i As Integer
-        AddNew.cmbStatus_REQ.Items.Clear()
-        AddNew.cmbStatus_REQ.Text = ""
-        cmbStatus.Items.Clear()
-        cmbStatus.Text = ""
-        For i = 0 To UBound(StatusType)
-            cmbStatus.Items.Insert(i, StatusType(i).strLong)
-            AddNew.cmbStatus_REQ.Items.Insert(i, StatusType(i).strLong)
-        Next
+        FillComboBox(EquipType, cmbEquipType)
+        FillComboBox(Locations, cmbLocation)
+        FillComboBox(ChangeType, UpdateDev.cmbUpdate_ChangeType)
+        FillComboBox(StatusType, AddNew.cmbStatus_REQ)
+        FillComboBox(StatusType, cmbStatus)
+        FillComboBox(OSType, cmbOSType)
     End Sub
     Private Sub ViewSelectedToolStripMenuItem_Click(sender As Object, e As EventArgs)
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
