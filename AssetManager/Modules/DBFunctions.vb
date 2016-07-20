@@ -91,6 +91,10 @@ Public Module DBFunctions
         Public Const OSType As String = "OS_TYPE"
         Public Const StatusType As String = "STATUS_TYPE"
     End Class
+    Public NotInheritable Class CodeType
+        Public Const Sibi As String = "sibi_codes"
+        Public Const Device As String = "dev_codes"
+    End Class
     Public Function OpenConnections() As Boolean
         Try
             GlobalConn.Open()
@@ -401,148 +405,41 @@ Public Module DBFunctions
     End Function
     Public Sub BuildIndexes()
         Logger("Building Indexes...")
-        BuildLocationIndex()
-        BuildChangeTypeIndex()
-        BuildEquipTypeIndex()
-        BuildOSTypeIndex()
-        BuildStatusTypeIndex()
+        Locations = BuildIndex(CodeType.Device, ComboType.Location)
+        ChangeType = BuildIndex(CodeType.Device, ComboType.ChangeType)
+        EquipType = BuildIndex(CodeType.Device, ComboType.EquipType)
+        OSType = BuildIndex(CodeType.Device, ComboType.OSType)
+        StatusType = BuildIndex(CodeType.Device, ComboType.StatusType)
         Logger("Building Indexes Done...")
     End Sub
-    Public Sub BuildLocationIndex()
+    Private Function BuildIndex(CodeType As String, TypeName As String) As Combo_Data()
         Try
+            Dim tmpArray() As Combo_Data
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM dev_codes WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
+            Dim strQRY = "SELECT * FROM " & CodeType & " WHERE type_name ='" & TypeName & "' ORDER BY human_value"
             Dim row As Integer
             reader = ReturnSQLReader(strQRY)
-            ReDim Locations(0)
+            ReDim tmpArray(0)
             row = -1
             With reader
                 Do While .Read()
                     row = row + 1
-                    ReDim Preserve Locations(row)
-                    Locations(row).strID = !combo_ID
-                    Locations(row).strLong = !combo_data_human
-                    Locations(row).strShort = !combo_data_db
+                    ReDim Preserve tmpArray(row)
+                    tmpArray(row).strID = !id
+                    tmpArray(row).strLong = !human_value
+                    tmpArray(row).strShort = !db_value
                 Loop
             End With
             reader.Close()
-            Exit Sub
+            Return tmpArray
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                Exit Try
+                Return Nothing
             Else
                 EndProgram()
             End If
         End Try
-    End Sub
-    Public Sub BuildChangeTypeIndex()
-        Try
-            Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM dev_codes WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
-            Dim row As Integer
-            reader = ReturnSQLReader(strQRY)
-            ReDim ChangeType(0)
-            row = -1
-            With reader
-                Do While .Read()
-                    row = row + 1
-                    ReDim Preserve ChangeType(row)
-                    ChangeType(row).strID = !combo_ID
-                    ChangeType(row).strLong = !combo_data_human
-                    ChangeType(row).strShort = !combo_data_db
-                Loop
-            End With
-            reader.Close()
-            Exit Sub
-        Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                Exit Try
-            Else
-                EndProgram()
-            End If
-        End Try
-    End Sub
-    Public Sub BuildEquipTypeIndex()
-        Try
-            Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM dev_codes WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
-            Dim row As Integer
-            reader = ReturnSQLReader(strQRY)
-            ReDim EquipType(0)
-            row = -1
-            With reader
-                Do While .Read()
-                    row = row + 1
-                    ReDim Preserve EquipType(row)
-                    EquipType(row).strID = !combo_ID
-                    EquipType(row).strLong = !combo_data_human
-                    EquipType(row).strShort = !combo_data_db
-                Loop
-            End With
-            reader.Close()
-            Exit Sub
-        Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                Exit Try
-            Else
-                EndProgram()
-            End If
-        End Try
-    End Sub
-    Public Sub BuildOSTypeIndex()
-        Try
-            Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM dev_codes WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
-            Dim row As Integer
-            reader = ReturnSQLReader(strQRY)
-            ReDim OSType(0)
-            row = -1
-            With reader
-                Do While .Read()
-                    row = row + 1
-                    ReDim Preserve OSType(row)
-                    OSType(row).strID = !combo_ID
-                    OSType(row).strLong = !combo_data_human
-                    OSType(row).strShort = !combo_data_db
-                Loop
-            End With
-            reader.Close()
-            Exit Sub
-        Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                Exit Try
-            Else
-                EndProgram()
-            End If
-        End Try
-    End Sub
-    Public Sub BuildStatusTypeIndex()
-        Try
-            Dim reader As MySqlDataReader
-            Dim strGetDevices = "SELECT * FROM dev_codes WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
-            Dim row As Integer
-            reader = ReturnSQLReader(strGetDevices)
-            ReDim StatusType(0)
-            row = -1
-            With reader
-                Do While .Read()
-                    row = row + 1
-                    ReDim Preserve StatusType(row)
-                    StatusType(row).strID = !combo_ID
-                    StatusType(row).strLong = !combo_data_human
-                    StatusType(row).strShort = !combo_data_db
-                Loop
-            End With
-            reader.Close()
-            Exit Sub
-        Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                Exit Try
-            Else
-                EndProgram()
-            End If
-        End Try
-    End Sub
+    End Function
     Public Function GetShortEquipType(ByVal index As Integer) As String
         Try
             Return EquipType(index).strShort
