@@ -26,6 +26,8 @@ Partial Class frmNewRequest
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmNewRequest))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.cmdAddNew = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -43,8 +45,6 @@ Partial Class frmNewRequest
         Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
-        Me.cmbStatus = New System.Windows.Forms.ComboBox()
-        Me.Label7 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -73,9 +73,26 @@ Partial Class frmNewRequest
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Request Info"
         '
+        'cmbStatus
+        '
+        Me.cmbStatus.FormattingEnabled = True
+        Me.cmbStatus.Location = New System.Drawing.Point(15, 201)
+        Me.cmbStatus.Name = "cmbStatus"
+        Me.cmbStatus.Size = New System.Drawing.Size(137, 21)
+        Me.cmbStatus.TabIndex = 14
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(12, 185)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(40, 13)
+        Me.Label7.TabIndex = 13
+        Me.Label7.Text = "Status:"
+        '
         'cmdAddNew
         '
-        Me.cmdAddNew.Location = New System.Drawing.Point(278, 143)
+        Me.cmdAddNew.Location = New System.Drawing.Point(278, 181)
         Me.cmdAddNew.Name = "cmdAddNew"
         Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
         Me.cmdAddNew.TabIndex = 12
@@ -220,6 +237,7 @@ Partial Class frmNewRequest
         Me.RequestItemsGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RequestItemsGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.RequestItemsGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.RequestItemsGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.RequestItemsGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
@@ -250,23 +268,6 @@ Partial Class frmNewRequest
         Me.RequestItemsGrid.ShowCellToolTips = False
         Me.RequestItemsGrid.Size = New System.Drawing.Size(837, 374)
         Me.RequestItemsGrid.TabIndex = 18
-        '
-        'cmbStatus
-        '
-        Me.cmbStatus.FormattingEnabled = True
-        Me.cmbStatus.Location = New System.Drawing.Point(15, 201)
-        Me.cmbStatus.Name = "cmbStatus"
-        Me.cmbStatus.Size = New System.Drawing.Size(137, 21)
-        Me.cmbStatus.TabIndex = 14
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(12, 185)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(40, 13)
-        Me.Label7.TabIndex = 13
-        Me.Label7.Text = "Status:"
         '
         'frmNewRequest
         '
