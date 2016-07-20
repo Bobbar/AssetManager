@@ -307,3 +307,7 @@ paket-files/
 AssetManager/Forms/View.resx
 AssetManager/Forms/View.resx
 AssetManager/obj/Debug/AssetManager.exe
+AssetManager/bin/Debug/AssetManager.exe
+AssetManager/obj/Debug/AssetManager.exe
+*.pdb
+AssetManager/obj/Debug/DesignTimeResolveAssemblyReferences.cache

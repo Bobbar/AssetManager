@@ -18,7 +18,7 @@ Public Class View_Tracking
             End If
             Waiting()
             Dim reader As MySqlDataReader
-            Dim strQry = "Select * FROM trackable WHERE  track_uid = '" & EntryUID & "'"
+            Dim strQry = "Select * FROM dev_trackable WHERE  track_uid = '" & EntryUID & "'"
             reader = ReturnSQLReader(strQry)
             With reader
                 Do While .Read()

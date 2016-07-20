@@ -143,7 +143,7 @@ Public Module DBFunctions
     Public Sub GetCurrentTracking(strGUID As String)
         Dim dt As DataTable
         Dim dr As DataRow
-        dt = ReturnSQLTable("SELECT * FROM trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1") 'ds.Tables(0)
+        dt = ReturnSQLTable("SELECT * FROM dev_trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1") 'ds.Tables(0)
         If dt.Rows.Count > 0 Then
             For Each dr In dt.Rows
                 With dr
@@ -403,7 +403,7 @@ Public Module DBFunctions
     Public Sub BuildLocationIndex()
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM dev_combo_data WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
+            Dim strQRY = "SELECT * FROM dev_codes WHERE combo_type ='" & ComboType.Location & "' ORDER BY combo_data_human"
             Dim row As Integer
             reader = ReturnSQLReader(strQRY)
             ReDim Locations(0)
@@ -430,7 +430,7 @@ Public Module DBFunctions
     Public Sub BuildChangeTypeIndex()
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM dev_combo_data WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
+            Dim strQRY = "SELECT * FROM dev_codes WHERE combo_type ='" & ComboType.ChangeType & "' ORDER BY combo_data_human"
             Dim row As Integer
             reader = ReturnSQLReader(strQRY)
             ReDim ChangeType(0)
@@ -457,7 +457,7 @@ Public Module DBFunctions
     Public Sub BuildEquipTypeIndex()
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM dev_combo_data WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
+            Dim strQRY = "SELECT * FROM dev_codes WHERE combo_type ='" & ComboType.EquipType & "' ORDER BY combo_data_human"
             Dim row As Integer
             reader = ReturnSQLReader(strQRY)
             ReDim EquipType(0)
@@ -484,7 +484,7 @@ Public Module DBFunctions
     Public Sub BuildOSTypeIndex()
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM dev_combo_data WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
+            Dim strQRY = "SELECT * FROM dev_codes WHERE combo_type ='" & ComboType.OSType & "' ORDER BY combo_data_human"
             Dim row As Integer
             reader = ReturnSQLReader(strQRY)
             ReDim OSType(0)
@@ -511,7 +511,7 @@ Public Module DBFunctions
     Public Sub BuildStatusTypeIndex()
         Try
             Dim reader As MySqlDataReader
-            Dim strGetDevices = "SELECT * FROM dev_combo_data WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
+            Dim strGetDevices = "SELECT * FROM dev_codes WHERE combo_type ='" & ComboType.StatusType & "' ORDER BY combo_data_human"
             Dim row As Integer
             reader = ReturnSQLReader(strGetDevices)
             ReDim StatusType(0)
