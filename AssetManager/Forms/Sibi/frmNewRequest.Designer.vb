@@ -26,23 +26,25 @@ Partial Class frmNewRequest
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmNewRequest))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.txtDescription = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.txtUser = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.dtNeedBy = New System.Windows.Forms.DateTimePicker()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.cmbType = New System.Windows.Forms.ComboBox()
-        Me.chkPlanned = New System.Windows.Forms.CheckBox()
+        Me.cmdAddNew = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.txtPO = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReqNumber = New System.Windows.Forms.TextBox()
-        Me.cmdAddNew = New System.Windows.Forms.Button()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.txtPO = New System.Windows.Forms.TextBox()
+        Me.chkPlanned = New System.Windows.Forms.CheckBox()
+        Me.cmbType = New System.Windows.Forms.ComboBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.dtNeedBy = New System.Windows.Forms.DateTimePicker()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtUser = New System.Windows.Forms.TextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -51,6 +53,8 @@ Partial Class frmNewRequest
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.cmbStatus)
+        Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.cmdAddNew)
         Me.GroupBox1.Controls.Add(Me.GroupBox2)
         Me.GroupBox1.Controls.Add(Me.chkPlanned)
@@ -64,85 +68,19 @@ Partial Class frmNewRequest
         Me.GroupBox1.Controls.Add(Me.txtDescription)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(648, 207)
+        Me.GroupBox1.Size = New System.Drawing.Size(648, 250)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Request Info"
         '
-        'txtDescription
+        'cmdAddNew
         '
-        Me.txtDescription.Location = New System.Drawing.Point(15, 44)
-        Me.txtDescription.Name = "txtDescription"
-        Me.txtDescription.Size = New System.Drawing.Size(382, 20)
-        Me.txtDescription.TabIndex = 0
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 28)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(106, 13)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Request Description:"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 67)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(75, 13)
-        Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Request User:"
-        '
-        'txtUser
-        '
-        Me.txtUser.Location = New System.Drawing.Point(15, 83)
-        Me.txtUser.Name = "txtUser"
-        Me.txtUser.Size = New System.Drawing.Size(137, 20)
-        Me.txtUser.TabIndex = 2
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(12, 146)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(51, 13)
-        Me.Label3.TabIndex = 5
-        Me.Label3.Text = "Need By:"
-        '
-        'dtNeedBy
-        '
-        Me.dtNeedBy.Location = New System.Drawing.Point(15, 162)
-        Me.dtNeedBy.Name = "dtNeedBy"
-        Me.dtNeedBy.Size = New System.Drawing.Size(180, 20)
-        Me.dtNeedBy.TabIndex = 6
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(12, 106)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(34, 13)
-        Me.Label4.TabIndex = 8
-        Me.Label4.Text = "Type:"
-        '
-        'cmbType
-        '
-        Me.cmbType.FormattingEnabled = True
-        Me.cmbType.Location = New System.Drawing.Point(15, 122)
-        Me.cmbType.Name = "cmbType"
-        Me.cmbType.Size = New System.Drawing.Size(137, 21)
-        Me.cmbType.TabIndex = 9
-        '
-        'chkPlanned
-        '
-        Me.chkPlanned.AutoSize = True
-        Me.chkPlanned.Location = New System.Drawing.Point(172, 124)
-        Me.chkPlanned.Name = "chkPlanned"
-        Me.chkPlanned.Size = New System.Drawing.Size(71, 17)
-        Me.chkPlanned.TabIndex = 10
-        Me.chkPlanned.Text = "Planned?"
-        Me.chkPlanned.UseVisualStyleBackColor = True
+        Me.cmdAddNew.Location = New System.Drawing.Point(278, 143)
+        Me.cmdAddNew.Name = "cmdAddNew"
+        Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
+        Me.cmdAddNew.TabIndex = 12
+        Me.cmdAddNew.Text = "Create Request"
+        Me.cmdAddNew.UseVisualStyleBackColor = True
         '
         'GroupBox2
         '
@@ -156,22 +94,6 @@ Partial Class frmNewRequest
         Me.GroupBox2.TabIndex = 11
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Add'l Info"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(17, 25)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(65, 13)
-        Me.Label5.TabIndex = 5
-        Me.Label5.Text = "PO Number:"
-        '
-        'txtPO
-        '
-        Me.txtPO.Location = New System.Drawing.Point(20, 41)
-        Me.txtPO.Name = "txtPO"
-        Me.txtPO.Size = New System.Drawing.Size(137, 20)
-        Me.txtPO.TabIndex = 4
         '
         'Label6
         '
@@ -189,14 +111,96 @@ Partial Class frmNewRequest
         Me.txtReqNumber.Size = New System.Drawing.Size(137, 20)
         Me.txtReqNumber.TabIndex = 6
         '
-        'cmdAddNew
+        'Label5
         '
-        Me.cmdAddNew.Location = New System.Drawing.Point(278, 143)
-        Me.cmdAddNew.Name = "cmdAddNew"
-        Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
-        Me.cmdAddNew.TabIndex = 12
-        Me.cmdAddNew.Text = "Create Request"
-        Me.cmdAddNew.UseVisualStyleBackColor = True
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(17, 25)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(65, 13)
+        Me.Label5.TabIndex = 5
+        Me.Label5.Text = "PO Number:"
+        '
+        'txtPO
+        '
+        Me.txtPO.Location = New System.Drawing.Point(20, 41)
+        Me.txtPO.Name = "txtPO"
+        Me.txtPO.Size = New System.Drawing.Size(137, 20)
+        Me.txtPO.TabIndex = 4
+        '
+        'chkPlanned
+        '
+        Me.chkPlanned.AutoSize = True
+        Me.chkPlanned.Location = New System.Drawing.Point(172, 124)
+        Me.chkPlanned.Name = "chkPlanned"
+        Me.chkPlanned.Size = New System.Drawing.Size(71, 17)
+        Me.chkPlanned.TabIndex = 10
+        Me.chkPlanned.Text = "Planned?"
+        Me.chkPlanned.UseVisualStyleBackColor = True
+        '
+        'cmbType
+        '
+        Me.cmbType.FormattingEnabled = True
+        Me.cmbType.Location = New System.Drawing.Point(15, 122)
+        Me.cmbType.Name = "cmbType"
+        Me.cmbType.Size = New System.Drawing.Size(137, 21)
+        Me.cmbType.TabIndex = 9
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(12, 106)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(34, 13)
+        Me.Label4.TabIndex = 8
+        Me.Label4.Text = "Type:"
+        '
+        'dtNeedBy
+        '
+        Me.dtNeedBy.Location = New System.Drawing.Point(15, 162)
+        Me.dtNeedBy.Name = "dtNeedBy"
+        Me.dtNeedBy.Size = New System.Drawing.Size(180, 20)
+        Me.dtNeedBy.TabIndex = 6
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(12, 146)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(51, 13)
+        Me.Label3.TabIndex = 5
+        Me.Label3.Text = "Need By:"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(12, 67)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(75, 13)
+        Me.Label2.TabIndex = 3
+        Me.Label2.Text = "Request User:"
+        '
+        'txtUser
+        '
+        Me.txtUser.Location = New System.Drawing.Point(15, 83)
+        Me.txtUser.Name = "txtUser"
+        Me.txtUser.Size = New System.Drawing.Size(137, 20)
+        Me.txtUser.TabIndex = 2
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(12, 28)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(106, 13)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Request Description:"
+        '
+        'txtDescription
+        '
+        Me.txtDescription.Location = New System.Drawing.Point(15, 44)
+        Me.txtDescription.Name = "txtDescription"
+        Me.txtDescription.Size = New System.Drawing.Size(382, 20)
+        Me.txtDescription.TabIndex = 0
         '
         'Panel1
         '
@@ -205,9 +209,9 @@ Partial Class frmNewRequest
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Controls.Add(Me.RequestItemsGrid)
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel1.Location = New System.Drawing.Point(12, 249)
+        Me.Panel1.Location = New System.Drawing.Point(12, 297)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(843, 428)
+        Me.Panel1.Size = New System.Drawing.Size(843, 380)
         Me.Panel1.TabIndex = 1
         '
         'RequestItemsGrid
@@ -244,8 +248,25 @@ Partial Class frmNewRequest
         Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.RequestItemsGrid.ShowCellErrors = False
         Me.RequestItemsGrid.ShowCellToolTips = False
-        Me.RequestItemsGrid.Size = New System.Drawing.Size(837, 422)
+        Me.RequestItemsGrid.Size = New System.Drawing.Size(837, 374)
         Me.RequestItemsGrid.TabIndex = 18
+        '
+        'cmbStatus
+        '
+        Me.cmbStatus.FormattingEnabled = True
+        Me.cmbStatus.Location = New System.Drawing.Point(15, 201)
+        Me.cmbStatus.Name = "cmbStatus"
+        Me.cmbStatus.Size = New System.Drawing.Size(137, 21)
+        Me.cmbStatus.TabIndex = 14
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(12, 185)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(40, 13)
+        Me.Label7.TabIndex = 13
+        Me.Label7.Text = "Status:"
         '
         'frmNewRequest
         '
@@ -285,4 +306,6 @@ Partial Class frmNewRequest
     Friend WithEvents cmdAddNew As Button
     Friend WithEvents Panel1 As Panel
     Friend WithEvents RequestItemsGrid As DataGridView
+    Friend WithEvents cmbStatus As ComboBox
+    Friend WithEvents Label7 As Label
 End Class

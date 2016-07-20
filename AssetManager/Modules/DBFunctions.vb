@@ -96,8 +96,9 @@ Public Module DBFunctions
     Public StatusType() As Combo_Data
     'sibi
     Public RequestData As Request_Info
-    Public Sibi_StatusType As Combo_Data
-    Public Sibi_ItemStatusType As Combo_Data
+    Public Sibi_StatusType() As Combo_Data
+    Public Sibi_ItemStatusType() As Combo_Data
+    Public Sibi_RequestType() As Combo_Data
 
     Public Structure User_Info
         Public strUsername As String
@@ -113,6 +114,9 @@ Public Module DBFunctions
         Public Const EquipType As String = "EQ_TYPE"
         Public Const OSType As String = "OS_TYPE"
         Public Const StatusType As String = "STATUS_TYPE"
+        Public Const SibiStatusType As String = "STATUS"
+        Public Const SibiItemStatusType As String = "ITEM_STATUS"
+        Public Const SibiRequestType As String = "REQ_TYPE"
     End Class
     Public Function OpenConnections() As Boolean
         Try
@@ -429,6 +433,9 @@ Public Module DBFunctions
         BuildEquipTypeIndex()
         BuildOSTypeIndex()
         BuildStatusTypeIndex()
+
+
+
         Logger("Building Indexes Done...")
     End Sub
     Public Sub BuildLocationIndex()
@@ -554,6 +561,87 @@ Public Module DBFunctions
                     StatusType(row).strID = !combo_ID
                     StatusType(row).strLong = !combo_data_human
                     StatusType(row).strShort = !combo_data_db
+                Loop
+            End With
+            reader.Close()
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Sub
+    Public Sub BuildSibiStatusIndex()
+        Try
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT * FROM sibi_codes WHERE Type ='" & ComboType.SibiStatusType & "' ORDER BY Human"
+            Dim row As Integer
+            reader = ReturnSQLReader(strQRY)
+            ReDim Sibi_StatusType(0)
+            row = -1
+            With reader
+                Do While .Read()
+                    row = row + 1
+                    ReDim Preserve Sibi_StatusType(row)
+                    Sibi_StatusType(row).strID = !ID
+                    Sibi_StatusType(row).strLong = !Human
+                    Sibi_StatusType(row).strShort = !DB
+                Loop
+            End With
+            reader.Close()
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Sub
+    Public Sub BuildSibiItemStatusIndex()
+        Try
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT * FROM sibi_codes WHERE Type ='" & ComboType.SibiItemStatusType & "' ORDER BY Human"
+            Dim row As Integer
+            reader = ReturnSQLReader(strQRY)
+            ReDim Sibi_ItemStatusType(0)
+            row = -1
+            With reader
+                Do While .Read()
+                    row = row + 1
+                    ReDim Preserve Sibi_ItemStatusType(row)
+                    Sibi_ItemStatusType(row).strID = !ID
+                    Sibi_ItemStatusType(row).strLong = !Human
+                    Sibi_ItemStatusType(row).strShort = !DB
+                Loop
+            End With
+            reader.Close()
+            Exit Sub
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Sub
+    Public Sub BuildSibiRequestTypeIndex()
+        Try
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT * FROM sibi_codes WHERE Type ='" & ComboType.SibiRequestType & "' ORDER BY Human"
+            Dim row As Integer
+            reader = ReturnSQLReader(strQRY)
+            ReDim Sibi_RequestType(0)
+            row = -1
+            With reader
+                Do While .Read()
+                    row = row + 1
+                    ReDim Preserve Sibi_RequestType(row)
+                    Sibi_RequestType(row).strID = !ID
+                    Sibi_RequestType(row).strLong = !Human
+                    Sibi_RequestType(row).strShort = !DB
                 Loop
             End With
             reader.Close()
