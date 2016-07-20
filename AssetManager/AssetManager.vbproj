@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>7.2016.6046.1862</AssemblyVersion>
+    <AssemblyVersion>7.2016.6046.1865</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>

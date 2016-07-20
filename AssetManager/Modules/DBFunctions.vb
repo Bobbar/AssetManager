@@ -440,6 +440,15 @@ Public Module DBFunctions
             End If
         End Try
     End Function
+    Public Sub FillComboBox(IndexType() As Combo_Data, ByRef cmb As ComboBox)
+        cmb.Items.Clear()
+        cmb.Text = ""
+        Dim i As Integer = 0
+        For Each ComboItem As Combo_Data In IndexType
+            cmb.Items.Insert(i, ComboItem.strLong)
+            i += 1
+        Next
+    End Sub
     Public Function GetShortEquipType(ByVal index As Integer) As String
         Try
             Return EquipType(index).strShort

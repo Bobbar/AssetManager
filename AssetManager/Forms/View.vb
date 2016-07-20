@@ -541,42 +541,10 @@ Public Class View
         UpdateDev.Show()
     End Sub
     Private Sub RefreshCombos()
-        FillEquipTypeCombo()
-        FillLocationCombo()
-        FillOSTypeCombo()
-        FillStatusTypeCombo()
-    End Sub
-    Private Sub FillEquipTypeCombo()
-        Dim i As Integer
-        cmbEquipType_View_REQ.Items.Clear()
-        cmbEquipType_View_REQ.Text = ""
-        For i = 0 To UBound(EquipType)
-            cmbEquipType_View_REQ.Items.Insert(i, EquipType(i).strLong)
-        Next
-    End Sub
-    Private Sub FillLocationCombo()
-        Dim i As Integer
-        cmbLocation_View_REQ.Items.Clear()
-        cmbLocation_View_REQ.Text = ""
-        For i = 0 To UBound(Locations)
-            cmbLocation_View_REQ.Items.Insert(i, Locations(i).strLong)
-        Next
-    End Sub
-    Private Sub FillOSTypeCombo()
-        Dim i As Integer
-        cmbOSVersion_REQ.Items.Clear()
-        cmbOSVersion_REQ.Text = ""
-        For i = 0 To UBound(OSType)
-            cmbOSVersion_REQ.Items.Insert(i, OSType(i).strLong)
-        Next
-    End Sub
-    Private Sub FillStatusTypeCombo()
-        Dim i As Integer
-        cmbStatus_REQ.Items.Clear()
-        cmbStatus_REQ.Text = ""
-        For i = 0 To UBound(StatusType)
-            cmbStatus_REQ.Items.Insert(i, StatusType(i).strLong)
-        Next
+        FillComboBox(EquipType, cmbEquipType_View_REQ)
+        FillComboBox(Locations, cmbLocation_View_REQ)
+        FillComboBox(OSType, cmbOSVersion_REQ)
+        FillComboBox(StatusType, cmbStatus_REQ)
     End Sub
     Private Sub DeleteDeviceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteDeviceToolStripMenuItem.Click
         If Not CheckForAdmin() Then Exit Sub

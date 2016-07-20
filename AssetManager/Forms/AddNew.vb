@@ -120,10 +120,7 @@ Public Class AddNew
         ClearAll()
     End Sub
     Private Sub ClearAll()
-        FillLocationCombo()
-        FillEquipTypeCombo()
-        FillOSTypeCombo()
-        FillStatusTypeCombo()
+        RefreshCombos()
         ClearFields()
         dtPurchaseDate_REQ.Value = Now
         cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType, "INSRV")
@@ -131,6 +128,12 @@ Public Class AddNew
         chkTrackable.Checked = False
         chkNoClear.Checked = False
         bolCheckFields = False
+    End Sub
+    Private Sub RefreshCombos()
+        FillComboBox(Locations, cmbLocation_REQ)
+        FillComboBox(EquipType, cmbEquipType_REQ)
+        FillComboBox(OSType, cmbOSType_REQ)
+        FillComboBox(StatusType, cmbStatus_REQ)
     End Sub
     Private Sub ResetBackColors()
         Dim c As Control
@@ -154,38 +157,6 @@ Public Class AddNew
                 Dim cmb As ComboBox = c
                 cmb.SelectedIndex = -1
             End If
-        Next
-    End Sub
-    Private Sub FillLocationCombo()
-        Dim i As Integer
-        cmbLocation_REQ.Items.Clear()
-        cmbLocation_REQ.Text = ""
-        For i = 0 To UBound(Locations)
-            cmbLocation_REQ.Items.Insert(i, Locations(i).strLong)
-        Next
-    End Sub
-    Private Sub FillEquipTypeCombo()
-        Dim i As Integer
-        cmbEquipType_REQ.Items.Clear()
-        cmbEquipType_REQ.Text = ""
-        For i = 0 To UBound(EquipType)
-            cmbEquipType_REQ.Items.Insert(i, EquipType(i).strLong)
-        Next
-    End Sub
-    Private Sub FillOSTypeCombo()
-        Dim i As Integer
-        cmbOSType_REQ.Items.Clear()
-        cmbOSType_REQ.Text = ""
-        For i = 0 To UBound(OSType)
-            cmbOSType_REQ.Items.Insert(i, OSType(i).strLong)
-        Next
-    End Sub
-    Private Sub FillStatusTypeCombo()
-        Dim i As Integer
-        cmbStatus_REQ.Items.Clear()
-        cmbStatus_REQ.Text = ""
-        For i = 0 To UBound(StatusType)
-            cmbStatus_REQ.Items.Insert(i, StatusType(i).strLong)
         Next
     End Sub
     Private Sub Button1_Click(sender As Object, e As EventArgs)
