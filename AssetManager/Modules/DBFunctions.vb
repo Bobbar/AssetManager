@@ -437,6 +437,9 @@ Public Module DBFunctions
         EquipType = BuildIndex(CodeType.Device, ComboType.EquipType)
         OSType = BuildIndex(CodeType.Device, ComboType.OSType)
         StatusType = BuildIndex(CodeType.Device, ComboType.StatusType)
+        Sibi_StatusType = BuildIndex(CodeType.Sibi, ComboType.SibiStatusType)
+        Sibi_ItemStatusType = BuildIndex(CodeType.Sibi, ComboType.SibiItemStatusType)
+        Sibi_RequestType = BuildIndex(CodeType.Sibi, ComboType.SibiRequestType)
         Logger("Building Indexes Done...")
     End Sub
     Private Function BuildIndex(CodeType As String, TypeName As String) As Combo_Data()
