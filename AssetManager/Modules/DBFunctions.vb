@@ -61,7 +61,7 @@ Public Module DBFunctions
         Public strReplaceAsset As String
         Public strReplaceSerial As String
         Public intRequestNumber As Integer
-
+        Public RequstItems As DataTable
 
     End Structure
 

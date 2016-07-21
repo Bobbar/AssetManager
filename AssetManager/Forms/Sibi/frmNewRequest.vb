@@ -5,7 +5,7 @@
         SetupGrid()
     End Sub
     Private Sub SetupGrid()
-        ' Dim table As New DataTable
+        Dim table As New DataTable
 
 
         'Dim cmb As New DataGridViewComboBoxColumn
@@ -18,7 +18,7 @@
         'cmb.Items.Add("That Other Place")
 
 
-
+        RequestItemsGrid.DataSource = table
         With RequestItemsGrid.Columns
             .Add("User", "User")
             .Add("Description", "Description")
@@ -32,7 +32,7 @@
 
         End With
 
-        'RequestItemsGrid.DataSource = table
+
         'table.Dispose()
 
 
@@ -57,24 +57,37 @@
         Next
         Return tmpCombo
     End Function
+    Private Sub AddNewRequest()
+
+
+
+    End Sub
     Private Function CollectData() As Request_Info
         Dim info As Request_Info
+        Dim GridTable = TryCast(RequestItemsGrid.DataSource, DataTable)
         With info
             .strDescription = Trim(txtDescription.Text)
             .strUser = Trim(txtUser.Text)
-
-
-
-
-
-
+            .strType = GetDBValue(Sibi_RequestType, cmbType.SelectedIndex)
+            .dtNeedBy = dtNeedBy.Value.ToString(strDBDateFormat)
+            .strStatus = GetDBValue(Sibi_StatusType, cmbStatus.SelectedIndex)
+            .strPO = Trim(txtPO.Text)
+            .strRequisitionNumber = Trim(txtReqNumber.Text)
+            .RequstItems = GridTable
 
 
         End With
 
+        Dim r As DataRow
+        For Each r In info.RequstItems.Rows
+            Debug.Print(r.Item("Description").ToString)
+        Next
 
 
-
-
+        Return info
     End Function
+
+    Private Sub cmdAddNew_Click(sender As Object, e As EventArgs) Handles cmdAddNew.Click
+        CollectData()
+    End Sub
 End Class
