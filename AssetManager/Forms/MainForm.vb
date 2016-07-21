@@ -36,7 +36,7 @@ Public Class MainForm
         Status("Checking Access Level...")
         GetAccessLevels()
         GetUserAccess()
-        If Not CanAccess("can_run") Then
+        If Not CanAccess(AccessGroup.CanRun) Then
             MsgBox("You do not have permission to run this software.", vbOKOnly + vbCritical, "Access Denied")
             EndProgram()
         End If
@@ -527,7 +527,7 @@ Public Class MainForm
             ConnectionNotReady()
             Exit Sub
         End If
-        If Not CheckForAccess("add") Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Add) Then Exit Sub
         AddNew.Show()
     End Sub
     Private Sub YearsSincePurchaseToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles YearsSincePurchaseToolStripMenuItem1.Click

@@ -22,6 +22,7 @@ Class Attachments
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
         Dim fd As OpenFileDialog = New OpenFileDialog()
         Dim strFileName As String
+        fd.ShowHelp = True
         fd.Title = "Select File To Upload - " & FileSizeMBLimit & "MB Limit"
         fd.InitialDirectory = "C:\"
         fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*"
@@ -171,7 +172,7 @@ Class Attachments
         ExtendedMethods.DoubleBuffered(AttachGrid, True)
         StatusBar("Idle...")
         Waiting()
-        If CanAccess("manage_attach") Then
+        If CanAccess(AccessGroup.ManageAttachment) Then
             cmdUpload.Enabled = True
             cmdDelete.Enabled = True
         Else
@@ -241,7 +242,6 @@ Class Attachments
             Dim blah = MsgBox("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
             Exit Sub
         End If
-        Dim File() As Byte = IO.File.ReadAllBytes(FilePath) 'once we know the file is within size limits, load it into memory for streaming
         UploadWorker.ReportProgress(1, "Connecting...")
         'sql stuff
         Dim conn As New MySqlConnection(MySQLConnectString)
@@ -304,7 +304,6 @@ Class Attachments
                 conn.Close()
                 conn.Dispose()
                 cmd.Dispose()
-                File = Nothing
                 e.Result = True
             Else
                 e.Result = False
@@ -312,7 +311,6 @@ Class Attachments
             UploadWorker.ReportProgress(1, "Idle...")
         Catch ex As Exception
             e.Result = False
-            File = Nothing
             conn.Close()
             conn.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
