@@ -57,10 +57,10 @@ Public Module DBFunctions
         Public strStatus As String
         Public strType As String
         Public strPO As String
-        Public strReqNUmber As String
+        Public strRequisitionNumber As String
         Public strReplaceAsset As String
         Public strReplaceSerial As String
-
+        Public intRequestNumber As Integer
 
 
     End Structure

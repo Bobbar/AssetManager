@@ -71,7 +71,7 @@ Partial Class frmNewRequest
         Me.GroupBox1.Controls.Add(Me.txtUser)
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Controls.Add(Me.txtDescription)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 114)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 44)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(648, 250)
         Me.GroupBox1.TabIndex = 0
@@ -231,7 +231,7 @@ Partial Class frmNewRequest
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Controls.Add(Me.RequestItemsGrid)
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel1.Location = New System.Drawing.Point(12, 386)
+        Me.Panel1.Location = New System.Drawing.Point(12, 300)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(843, 291)
         Me.Panel1.TabIndex = 1

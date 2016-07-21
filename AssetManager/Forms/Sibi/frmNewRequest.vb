@@ -57,4 +57,24 @@
         Next
         Return tmpCombo
     End Function
+    Private Function CollectData() As Request_Info
+        Dim info As Request_Info
+        With info
+            .strDescription = Trim(txtDescription.Text)
+            .strUser = Trim(txtUser.Text)
+
+
+
+
+
+
+
+
+        End With
+
+
+
+
+
+    End Function
 End Class

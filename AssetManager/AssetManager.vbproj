@@ -116,6 +116,12 @@
     <Compile Include="Forms\AddNew.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Sibi\frmSibiAttachments.Designer.vb">
+      <DependentUpon>frmSibiAttachments.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmSibiAttachments.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Sibi\frmNewRequest.Designer.vb">
       <DependentUpon>frmNewRequest.vb</DependentUpon>
     </Compile>
@@ -224,6 +230,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sibi\frmSibiAttachments.resx">
+      <DependentUpon>frmSibiAttachments.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Sibi\frmNewRequest.resx">
       <DependentUpon>frmNewRequest.vb</DependentUpon>
