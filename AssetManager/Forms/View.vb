@@ -665,17 +665,17 @@ Public Class View
             ConnectionNotReady()
             Exit Sub
         End If
-        If Not CheckForAccess("modify") Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         ModifyDevice()
     End Sub
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
-        If Not CheckForAccess("modify") Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
         UpdateDev.cmbUpdate_ChangeType.Enabled = False
         UpdateDev.Show()
     End Sub
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
-        If Not CheckForAccess("delete") Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
             If DeleteDevice(CurrentDevice.strGUID) Then
@@ -697,7 +697,7 @@ Public Class View
             ConnectionNotReady()
             Exit Sub
         End If
-        If Not CheckForAccess("track") Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Tracking) Then Exit Sub
         Waiting()
         Tracking.SetupTracking()
         AddChild(Tracking)
@@ -709,7 +709,7 @@ Public Class View
             ConnectionNotReady()
             Exit Sub
         End If
-        If Not CheckForAccess("track") Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Tracking) Then Exit Sub
         Waiting()
         Tracking.SetupTracking()
         AddChild(Tracking)
@@ -721,7 +721,7 @@ Public Class View
             ConnectionNotReady()
             Exit Sub
         End If
-        If Not CheckForAccess("view_attach") Then Exit Sub
+        If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         Attachments.FillDeviceInfo()
         AddChild(Attachments)
         Attachments.ListAttachments(CurrentDevice.strGUID)

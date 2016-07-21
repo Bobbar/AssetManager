@@ -61,6 +61,15 @@ Public NotInheritable Class Simple3Des
     End Function
 End Class
 Module SecurityMod
+    Public NotInheritable Class AccessGroup
+        Public Const Add As String = "add"
+        Public Const CanRun As String = "can_run"
+        Public Const Delete As String = "delete"
+        Public Const ManageAttachment As String = "manage_attach"
+        Public Const Modify As String = "modify"
+        Public Const Tracking As String = "track"
+        Public Const ViewAttachment As String = "view_attach"
+    End Class
     Public Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
     Public Const EncFTPUserPass As String = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ="
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
