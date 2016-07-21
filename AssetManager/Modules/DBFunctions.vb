@@ -373,23 +373,10 @@ Public Module DBFunctions
         reader.Close()
         Return UID
     End Function
-    Public Function GetDBValue(ByVal IndexType As String, ByVal index As Integer) As Object
+    Public Function GetDBValue(ByVal CodeIndex() As Combo_Data, ByVal index As Integer) As Object
         Try
             If index > -1 Then
-                Select Case IndexType
-                    Case ComboType.Location
-                        Return Locations(index).strShort
-                    Case ComboType.ChangeType
-                        Return ChangeType(index).strShort
-                    Case ComboType.EquipType
-                        Return EquipType(index).strShort
-                    Case ComboType.OSType
-                        Return OSType(index).strShort
-                    Case ComboType.StatusType
-                        Return StatusType(index).strShort
-                    Case Else
-                        Return Nothing
-                End Select
+                Return CodeIndex(index).strShort
             End If
             Return Nothing
         Catch

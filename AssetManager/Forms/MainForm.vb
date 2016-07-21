@@ -199,12 +199,12 @@ Public Class MainForm
             New SearchVal("dev_serial", Trim(txtSerialSearch.Text)),
             New SearchVal("dev_asset_tag", Trim(txtAssetTagSearch.Text)),
             New SearchVal("dev_description", Trim(txtDescription.Text)),
-            New SearchVal("dev_eq_type", GetDBValue(ComboType.EquipType, cmbEquipType.SelectedIndex)),
+            New SearchVal("dev_eq_type", GetDBValue(EquipType, cmbEquipType.SelectedIndex)),
             New SearchVal("dev_replacement_year", Trim(txtReplaceYear.Text)),
-            New SearchVal("dev_osversion", GetDBValue(ComboType.OSType, cmbOSType.SelectedIndex)),
-            New SearchVal("dev_location", GetDBValue(ComboType.Location, cmbLocation.SelectedIndex)),
+            New SearchVal("dev_osversion", GetDBValue(OSType, cmbOSType.SelectedIndex)),
+            New SearchVal("dev_location", GetDBValue(Locations, cmbLocation.SelectedIndex)),
             New SearchVal("dev_cur_user", Trim(txtCurUser.Text)),
-            New SearchVal("dev_status", GetDBValue(ComboType.StatusType, cmbStatus.SelectedIndex)),
+            New SearchVal("dev_status", GetDBValue(StatusType, cmbStatus.SelectedIndex)),
             New SearchVal("dev_trackable", chkTrackables.Checked)
             }
     End Function
