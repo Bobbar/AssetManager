@@ -28,14 +28,14 @@ Public Class View
         With OldData
             .strAssetTag = Trim(txtAssetTag_View_REQ.Text)
             .strDescription = Trim(txtDescription_View_REQ.Text)
-            .strEqType = GetDBValue(ComboType.EquipType, cmbEquipType_View_REQ.SelectedIndex)
+            .strEqType = GetDBValue(EquipType, cmbEquipType_View_REQ.SelectedIndex)
             .strSerial = Trim(txtSerial_View_REQ.Text)
-            .strLocation = GetDBValue(ComboType.Location, cmbLocation_View_REQ.SelectedIndex)
+            .strLocation = GetDBValue(Locations, cmbLocation_View_REQ.SelectedIndex)
             .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
             .dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
             .strReplaceYear = Trim(txtReplacementYear_View.Text)
-            .strOSVersion = GetDBValue(ComboType.OSType, cmbOSVersion_REQ.SelectedIndex)
-            .strStatus = GetDBValue(ComboType.StatusType, cmbStatus_REQ.SelectedIndex)
+            .strOSVersion = GetDBValue(OSType, cmbOSVersion_REQ.SelectedIndex)
+            .strStatus = GetDBValue(StatusType, cmbStatus_REQ.SelectedIndex)
             .bolTrackable = chkTrackable.Checked
             .strPO = Trim(txtPONumber.Text)
         End With
@@ -44,14 +44,14 @@ Public Class View
         With NewData
             .strAssetTag = Trim(txtAssetTag_View_REQ.Text)
             .strDescription = Trim(txtDescription_View_REQ.Text)
-            .strEqType = GetDBValue(ComboType.EquipType, cmbEquipType_View_REQ.SelectedIndex)
+            .strEqType = GetDBValue(EquipType, cmbEquipType_View_REQ.SelectedIndex)
             .strSerial = Trim(txtSerial_View_REQ.Text)
-            .strLocation = GetDBValue(ComboType.Location, cmbLocation_View_REQ.SelectedIndex)
+            .strLocation = GetDBValue(Locations, cmbLocation_View_REQ.SelectedIndex)
             .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
             .dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
             .strReplaceYear = Trim(txtReplacementYear_View.Text)
-            .strOSVersion = GetDBValue(ComboType.OSType, cmbOSVersion_REQ.SelectedIndex)
-            .strStatus = GetDBValue(ComboType.StatusType, cmbStatus_REQ.SelectedIndex)
+            .strOSVersion = GetDBValue(OSType, cmbOSVersion_REQ.SelectedIndex)
+            .strStatus = GetDBValue(StatusType, cmbStatus_REQ.SelectedIndex)
             .strNote = UpdateDev.strNewNote
             .bolTrackable = chkTrackable.Checked
             .strPO = Trim(txtPONumber.Text)
@@ -141,7 +141,7 @@ Public Class View
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO dev_historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable,hist_po) VALUES (@hist_change_type,@hist_notes,@hist_serial,@hist_description,@hist_location,@hist_cur_user,@hist_asset_tag,@hist_purchase_date,@hist_replacement_year,@hist_osversion,@hist_dev_UID,@hist_action_user,@hist_eq_type,@hist_status,@hist_trackable,@hist_po)"
             cmd.CommandText = strSqlQry2
-            cmd.Parameters.AddWithValue("@hist_change_type", GetDBValue(ComboType.ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
+            cmd.Parameters.AddWithValue("@hist_change_type", GetDBValue(ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
             cmd.Parameters.AddWithValue("@hist_notes", NewData.strNote)
             cmd.Parameters.AddWithValue("@hist_serial", NewData.strSerial)
             cmd.Parameters.AddWithValue("@hist_description", NewData.strDescription)

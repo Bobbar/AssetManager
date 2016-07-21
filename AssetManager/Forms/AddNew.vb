@@ -107,12 +107,12 @@ Public Class AddNew
         Device.strAssetTag = Trim(txtAssetTag_REQ.Text)
         Device.dtPurchaseDate = dtPurchaseDate_REQ.Text
         Device.strReplaceYear = Trim(txtReplaceYear.Text)
-        Device.strLocation = GetDBValue(ComboType.Location, cmbLocation_REQ.SelectedIndex)
+        Device.strLocation = GetDBValue(Locations, cmbLocation_REQ.SelectedIndex)
         Device.strCurrentUser = Trim(txtCurUser_REQ.Text)
         Device.strNote = Trim(txtNotes.Text)
-        Device.strOSVersion = GetDBValue(ComboType.OSType, cmbOSType_REQ.SelectedIndex)
-        Device.strEqType = GetDBValue(ComboType.EquipType, cmbEquipType_REQ.SelectedIndex)
-        Device.strStatus = GetDBValue(ComboType.StatusType, cmbStatus_REQ.SelectedIndex)
+        Device.strOSVersion = GetDBValue(OSType, cmbOSType_REQ.SelectedIndex)
+        Device.strEqType = GetDBValue(EquipType, cmbEquipType_REQ.SelectedIndex)
+        Device.strStatus = GetDBValue(StatusType, cmbStatus_REQ.SelectedIndex)
         Device.bolTrackable = chkTrackable.Checked
         Device.strPO = Trim(txtPO.Text)
     End Sub
