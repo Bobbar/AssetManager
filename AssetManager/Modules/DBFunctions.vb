@@ -413,6 +413,10 @@ Public Module DBFunctions
                 Return StatusType
             Case ComboType.SibiItemStatusType
                 Return Sibi_ItemStatusType
+            Case ComboType.SibiRequestType
+                Return Sibi_RequestType
+            Case ComboType.SibiStatusType
+                Return Sibi_StatusType
             Case Else
                 Return Nothing
         End Select

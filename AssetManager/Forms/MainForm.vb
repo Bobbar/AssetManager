@@ -740,8 +740,8 @@ Public Class MainForm
     End Sub
 
     Private Sub cmdSibi_Click(sender As Object, e As EventArgs) Handles cmdSibi.Click
-        frmNewRequest.Show()
-
+        ' frmNewRequest.Show()
+        frmSibiMain.Show()
     End Sub
 
     Private Sub txtReplaceYear_KeyDown(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyDown

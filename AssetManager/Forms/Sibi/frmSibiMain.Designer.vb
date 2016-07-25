@@ -27,6 +27,7 @@ Partial Class frmSibiMain
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmSibiMain))
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
+        Me.cmdShowAll = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -87,11 +88,21 @@ Partial Class frmSibiMain
         Me.ResultGrid.TabIndex = 18
         Me.ResultGrid.VirtualMode = True
         '
+        'cmdShowAll
+        '
+        Me.cmdShowAll.Location = New System.Drawing.Point(874, 114)
+        Me.cmdShowAll.Name = "cmdShowAll"
+        Me.cmdShowAll.Size = New System.Drawing.Size(106, 30)
+        Me.cmdShowAll.TabIndex = 1
+        Me.cmdShowAll.Text = "Show All"
+        Me.cmdShowAll.UseVisualStyleBackColor = True
+        '
         'frmSibiMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1098, 621)
+        Me.Controls.Add(Me.cmdShowAll)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmSibiMain"
@@ -104,4 +115,5 @@ Partial Class frmSibiMain
 
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ResultGrid As DataGridView
+    Friend WithEvents cmdShowAll As Button
 End Class
