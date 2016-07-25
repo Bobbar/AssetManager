@@ -392,6 +392,13 @@ Public Module DBFunctions
         Next
         Return Nothing
     End Function
+    Public Function GetDBValueFromHuman(ByVal Type As String, ByVal LongVal As String) As String
+        Dim SearchIndex() As Combo_Data = GetSearchIndex(Type)
+        For Each i As Combo_Data In SearchIndex
+            If i.strLong = LongVal Then Return i.strShort
+        Next
+        Return Nothing
+    End Function
     Private Function GetSearchIndex(ByVal Type As String) As Combo_Data()
         Select Case Type
             Case ComboType.Location
@@ -404,6 +411,8 @@ Public Module DBFunctions
                 Return OSType
             Case ComboType.StatusType
                 Return StatusType
+            Case ComboType.SibiItemStatusType
+                Return Sibi_ItemStatusType
             Case Else
                 Return Nothing
         End Select
