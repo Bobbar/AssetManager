@@ -1,23 +1,120 @@
 ﻿Option Explicit On
 Imports System.Collections
 Imports MySql.Data.MySqlClient
-Public Class frmNewRequest
-
-    Public table As New DataTable
+Public Class frmManageRequest
+    ' Public table As New DataTable
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
-        FillCombos()
+        'FillCombos()
+        '   SetupGrid()
+    End Sub
+    Private Sub ClearAll()
+        ClearControls(Me)
+
+
         SetupGrid()
+        FillCombos()
+        EnableControls(Me)
+    End Sub
+    Private Sub ClearTextBoxes(ByVal control As Control)
+        If TypeOf control Is TextBox Then
+            Dim txt As TextBox = control
+            txt.Clear()
+        End If
+    End Sub
+    Private Sub ClearCombos(ByVal control As Control)
+        If TypeOf control Is ComboBox Then
+            Dim cmb As ComboBox = control
+            cmb.SelectedIndex = -1
+            cmb.Text = Nothing
+        End If
+    End Sub
+    Private Sub ClearDTPicker(ByVal control As Control)
+        If TypeOf control Is DateTimePicker Then
+            Dim dtp As DateTimePicker = control
+            dtp.Value = Now
+        End If
+    End Sub
+    Private Sub ClearCheckBox(ByVal control As Control)
+        If TypeOf control Is CheckBox Then
+            Dim chk As CheckBox = control
+            chk.Checked = False
+        End If
+    End Sub
+    Private Sub ClearControls(ByVal control As Control)
+        For Each c As Control In control.Controls
+            ClearTextBoxes(c)
+            ClearCombos(c)
+            ClearDTPicker(c)
+            ClearCheckBox(c)
+            If c.HasChildren Then
+                ClearControls(c)
+            End If
+        Next
+    End Sub
+    Private Sub DisableControls(ByVal control As Control)
+        For Each c As Control In control.Controls
+            Select Case True
+                Case TypeOf c Is TextBox
+                    Dim txt As TextBox = c
+                    txt.ReadOnly = True
+                Case TypeOf c Is ComboBox
+                    Dim cmb As ComboBox = c
+                    cmb.Enabled = False
+                Case TypeOf c Is DateTimePicker
+                    Dim dtp As DateTimePicker = c
+                    dtp.Enabled = False
+                Case TypeOf c Is CheckBox
+                    c.Enabled = False
+                Case TypeOf c Is Label
+                    'do nut-zing
+            End Select
+            If c.HasChildren Then
+                DisableControls(c)
+            End If
+        Next
+        DisableGrid()
+    End Sub
+    Private Sub EnableControls(ByVal control As Control)
+        For Each c As Control In control.Controls
+            Select Case True
+                Case TypeOf c Is TextBox
+                    Dim txt As TextBox = c
+                    If txt.Name <> "txtRequestNum" Then
+                        txt.ReadOnly = False
+                    End If
+                Case TypeOf c Is ComboBox
+                    Dim cmb As ComboBox = c
+                    cmb.Enabled = True
+                Case TypeOf c Is DateTimePicker
+                    Dim dtp As DateTimePicker = c
+                    dtp.Enabled = True
+                Case TypeOf c Is CheckBox
+                    c.Enabled = True
+                Case TypeOf c Is Label
+                    'do nut-zing
+            End Select
+            If c.HasChildren Then
+                EnableControls(c)
+            End If
+        Next
+        EnableGrid()
+    End Sub
+
+    Private Sub DisableGrid()
+        RequestItemsGrid.EditMode = DataGridViewEditMode.EditProgrammatically
+        RequestItemsGrid.AllowUserToAddRows = False
+    End Sub
+    Private Sub EnableGrid()
+        RequestItemsGrid.EditMode = DataGridViewEditMode.EditOnEnter
+        RequestItemsGrid.AllowUserToAddRows = True
     End Sub
     Private Sub SetupGrid()
-        'Dim cmb As New DataGridViewComboBoxColumn
-        'cmb.HeaderText = "Location"
-        'cmb.Name = "cmb"
-        'cmb.Items.Add("Here")
-        'cmb.Items.Add("There")
-        'cmb.Items.Add("That One Place")
-        'cmb.Items.Add("That Other Place")
-        RequestItemsGrid.DataSource = table
+
+        RequestItemsGrid.DataSource = Nothing
+        RequestItemsGrid.Rows.Clear()
+        RequestItemsGrid.Columns.Clear()
+
         With RequestItemsGrid.Columns
             .Add("User", "User")
             .Add("Description", "Description")
@@ -93,16 +190,13 @@ Public Class frmNewRequest
     Private Sub AddNewRequest()
         Dim RequestData As Request_Info = CollectData()
         Dim strRequestUID As String = Guid.NewGuid.ToString
-
         Try
-
             Dim rows As Integer
             'If Not CheckFields() Then
             '    Dim blah = MsgBox("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
             '    bolCheckFields = True
             '    Exit Sub
             'End If
-
             Dim strSqlQry1 = "INSERT INTO `asset_manager`.`sibi_requests`
 (`sibi_uid`,
 `sibi_request_user`,
@@ -138,9 +232,7 @@ VALUES
             cmd.Parameters.AddWithValue("@sibi_replace_serial", RequestData.strReplaceSerial)
             rows = rows + cmd.ExecuteNonQuery()
             cmd.Parameters.Clear()
-
             For Each row As DataRow In RequestData.RequstItems.Rows
-
                 Dim strItemUID As String = Guid.NewGuid.ToString
                 Debug.Print(strItemUID)
                 Dim strSqlQry2 = "INSERT INTO `asset_manager`.`sibi_request_items`
@@ -170,22 +262,11 @@ VALUES
                 cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
                 cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
                 cmd.CommandText = strSqlQry2
-            rows = rows + cmd.ExecuteNonQuery()
+                rows = rows + cmd.ExecuteNonQuery()
                 cmd.Parameters.Clear()
-
             Next
-
-
-
             Debug.Print("Rows: " & rows)
-
-
-
             cmd.Dispose()
-
-
-
-
             'If rows = 2 Then 'ExecuteQuery returns the number of rows affected. We can check this to make sure the qry completed successfully.
             '    Dim blah = MsgBox("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
             '    If Not chkNoClear.Checked Then ClearAll()
@@ -195,6 +276,7 @@ VALUES
             'End If
             'cmd.Dispose()
             'Exit Sub
+            OpenRequest(strRequestUID)
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 Exit Sub
@@ -202,9 +284,80 @@ VALUES
                 EndProgram()
             End If
         End Try
+    End Sub
+    Public Sub OpenRequest(RequestUID As String)
+        Dim strRequestQRY As String = "SELECT * FROM sibi_requests WHERE sibi_uid='" & RequestUID & "'"
+        Dim strRequestItemsQRY As String = "SELECT * FROM sibi_request_items WHERE sibi_items_request_uid='" & RequestUID & "'"
+        Dim Results As DataTable = ReturnSQLTable(strRequestQRY)
+        ClearAll()
+        With Results.Rows(0)
+            txtDescription.Text = .Item("sibi_description")
+            txtUser.Text = .Item("sibi_request_user")
+            cmbType.SelectedIndex = GetComboIndexFromShort(ComboType.SibiRequestType, .Item("sibi_type"))
+            dtNeedBy.Value = .Item("sibi_need_by")
+            cmbStatus.SelectedIndex = GetComboIndexFromShort(ComboType.SibiStatusType, .Item("sibi_status"))
+            txtPO.Text = .Item("sibi_PO")
+            txtReqNumber.Text = .Item("sibi_requisition_number")
+            txtRequestNum.Text = .Item("sibi_request_number")
+        End With
+
+        SendToGrid(ReturnSQLTable(strRequestItemsQRY))
+        'RequestItemsGrid.ReadOnly = True
+        DisableControls(Me)
+
+        Me.Show()
+    End Sub
+
+    Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
+        'Try
+        'StatusBar(strLoadingGridMessage)
+        '   Dim table As New DataTable
+        'table.Columns.Add("Request #", GetType(String))
+        'table.Columns.Add("Status", GetType(String))
+        'table.Columns.Add("Description", GetType(String))
+        'table.Columns.Add("Request User", GetType(String))
+        'table.Columns.Add("Request Type", GetType(String))
+        'table.Columns.Add("Need By", GetType(String))
+        'table.Columns.Add("PO Number", GetType(String))
+        'table.Columns.Add("Req. Number", GetType(String))
+        'table.Columns.Add("UID", GetType(String))
+        'table.Columns.Add("Location", GetType(String))
+        'table.Columns.Add("Purchase Date", GetType(String))
+        'table.Columns.Add("Replace Year", GetType(String))
+        'table.Columns.Add("GUID", GetType(String))
+        'RequestItemsGrid.Rows.Add(,)
+        SetupGrid()
+
+        For Each r As DataRow In Results.Rows
+            With RequestItemsGrid.Rows
+                .Add(r.Item("sibi_items_user"),
+                    r.Item("sibi_items_description"),
+                    GetHumanValue(ComboType.Location, r.Item("sibi_items_location")),
+                         GetHumanValue(ComboType.SibiItemStatusType, r.Item("sibi_items_status")),
+                         r.Item("sibi_items_replace_asset"),
+                         r.Item("sibi_items_replace_serial"))
 
 
 
+            End With
 
+        Next
+        'bolGridFilling = True
+        ' RequestItemsGrid.DataSource = table
+        RequestItemsGrid.ClearSelection()
+        'bolGridFilling = False
+        'table.Dispose()
+        ' Catch ex As Exception
+        ' ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        '  End Try
+    End Sub
+
+    Private Sub cmdClearAll_Click(sender As Object, e As EventArgs) Handles cmdClearAll.Click
+        ClearAll()
+    End Sub
+
+    Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
+        EnableControls(Me)
     End Sub
 End Class
+

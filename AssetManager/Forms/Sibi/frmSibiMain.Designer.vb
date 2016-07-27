@@ -28,8 +28,11 @@ Partial Class frmSibiMain
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
         Me.cmdShowAll = New System.Windows.Forms.Button()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.cmdManage = New System.Windows.Forms.ToolStripButton()
         Me.Panel1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Panel1
@@ -97,11 +100,30 @@ Partial Class frmSibiMain
         Me.cmdShowAll.Text = "Show All"
         Me.cmdShowAll.UseVisualStyleBackColor = True
         '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdManage})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(1098, 25)
+        Me.ToolStrip1.TabIndex = 2
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'cmdManage
+        '
+        Me.cmdManage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.cmdManage.Image = CType(resources.GetObject("cmdManage.Image"), System.Drawing.Image)
+        Me.cmdManage.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdManage.Name = "cmdManage"
+        Me.cmdManage.Size = New System.Drawing.Size(99, 22)
+        Me.cmdManage.Text = "Manage Request"
+        '
         'frmSibiMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1098, 621)
+        Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.cmdShowAll)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -109,11 +131,16 @@ Partial Class frmSibiMain
         Me.Text = "Sibi - Acqusition Manager"
         Me.Panel1.ResumeLayout(False)
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ResultGrid As DataGridView
     Friend WithEvents cmdShowAll As Button
+    Friend WithEvents ToolStrip1 As ToolStrip
+    Friend WithEvents cmdManage As ToolStripButton
 End Class

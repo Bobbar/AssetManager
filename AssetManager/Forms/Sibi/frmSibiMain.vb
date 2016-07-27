@@ -49,4 +49,16 @@
         SendToGrid(ReturnSQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
 
     End Sub
+
+    Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
+        frmManageRequest.Show()
+    End Sub
+
+    Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
+
+    End Sub
+
+    Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
+        frmManageRequest.OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
+    End Sub
 End Class

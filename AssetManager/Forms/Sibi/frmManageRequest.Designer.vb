@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class frmNewRequest
+Partial Class frmManageRequest
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -24,8 +24,10 @@ Partial Class frmNewRequest
     Private Sub InitializeComponent()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmNewRequest))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.txtRequestNum = New System.Windows.Forms.TextBox()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.cmdAddNew = New System.Windows.Forms.Button()
@@ -48,7 +50,10 @@ Partial Class frmNewRequest
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
+        Me.cmdClearAll = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -58,6 +63,8 @@ Partial Class frmNewRequest
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Label8)
+        Me.GroupBox1.Controls.Add(Me.txtRequestNum)
         Me.GroupBox1.Controls.Add(Me.cmbStatus)
         Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.cmdAddNew)
@@ -77,6 +84,23 @@ Partial Class frmNewRequest
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Request Info"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(535, 28)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(60, 13)
+        Me.Label8.TabIndex = 16
+        Me.Label8.Text = "Request #:"
+        '
+        'txtRequestNum
+        '
+        Me.txtRequestNum.Location = New System.Drawing.Point(538, 44)
+        Me.txtRequestNum.Name = "txtRequestNum"
+        Me.txtRequestNum.ReadOnly = True
+        Me.txtRequestNum.Size = New System.Drawing.Size(86, 20)
+        Me.txtRequestNum.TabIndex = 15
         '
         'cmbStatus
         '
@@ -110,7 +134,7 @@ Partial Class frmNewRequest
         Me.GroupBox2.Controls.Add(Me.txtReqNumber)
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Controls.Add(Me.txtPO)
-        Me.GroupBox2.Location = New System.Drawing.Point(450, 44)
+        Me.GroupBox2.Location = New System.Drawing.Point(467, 100)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(175, 140)
         Me.GroupBox2.TabIndex = 11
@@ -233,7 +257,7 @@ Partial Class frmNewRequest
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(12, 300)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(843, 291)
+        Me.Panel1.Size = New System.Drawing.Size(843, 348)
         Me.Panel1.TabIndex = 1
         '
         'RequestItemsGrid
@@ -271,13 +295,14 @@ Partial Class frmNewRequest
         Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.RequestItemsGrid.ShowCellErrors = False
         Me.RequestItemsGrid.ShowCellToolTips = False
-        Me.RequestItemsGrid.Size = New System.Drawing.Size(837, 285)
+        Me.RequestItemsGrid.Size = New System.Drawing.Size(837, 342)
         Me.RequestItemsGrid.TabIndex = 18
         '
         'ToolStrip1
         '
+        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.ToolStripSeparator1, Me.cmdAttachments})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.ToolStripSeparator1, Me.cmdUpdate, Me.ToolStripSeparator2, Me.cmdAttachments})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -287,37 +312,58 @@ Partial Class frmNewRequest
         '
         'cmdCreate
         '
-        Me.cmdCreate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.cmdCreate.Image = CType(resources.GetObject("cmdCreate.Image"), System.Drawing.Image)
+        Me.cmdCreate.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.cmdCreate.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdCreate.Name = "cmdCreate"
-        Me.cmdCreate.Size = New System.Drawing.Size(119, 25)
-        Me.cmdCreate.Text = "Create Request"
+        Me.cmdCreate.Size = New System.Drawing.Size(122, 25)
+        Me.cmdCreate.Text = "New Request"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 28)
         '
+        'cmdUpdate
+        '
+        Me.cmdUpdate.Image = Global.AssetManager.My.Resources.Resources.Edit
+        Me.cmdUpdate.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdUpdate.Name = "cmdUpdate"
+        Me.cmdUpdate.Size = New System.Drawing.Size(80, 25)
+        Me.cmdUpdate.Text = "Update"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 28)
+        '
         'cmdAttachments
         '
-        Me.cmdAttachments.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.cmdAttachments.Image = CType(resources.GetObject("cmdAttachments.Image"), System.Drawing.Image)
+        Me.cmdAttachments.Image = Global.AssetManager.My.Resources.Resources.clip_512
         Me.cmdAttachments.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdAttachments.Name = "cmdAttachments"
-        Me.cmdAttachments.Size = New System.Drawing.Size(101, 25)
+        Me.cmdAttachments.Size = New System.Drawing.Size(117, 25)
         Me.cmdAttachments.Text = "Attachments"
         '
-        'frmNewRequest
+        'cmdClearAll
+        '
+        Me.cmdClearAll.Location = New System.Drawing.Point(720, 243)
+        Me.cmdClearAll.Name = "cmdClearAll"
+        Me.cmdClearAll.Size = New System.Drawing.Size(112, 41)
+        Me.cmdClearAll.TabIndex = 3
+        Me.cmdClearAll.Text = "Clear All"
+        Me.cmdClearAll.UseVisualStyleBackColor = True
+        '
+        'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(867, 689)
+        Me.ClientSize = New System.Drawing.Size(867, 660)
+        Me.Controls.Add(Me.cmdClearAll)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "frmNewRequest"
+        Me.Name = "frmManageRequest"
         Me.Text = "New Request"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
@@ -356,4 +402,9 @@ Partial Class frmNewRequest
     Friend WithEvents cmdCreate As ToolStripButton
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents cmdAttachments As ToolStripButton
+    Friend WithEvents cmdUpdate As ToolStripButton
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents cmdClearAll As Button
+    Friend WithEvents Label8 As Label
+    Friend WithEvents txtRequestNum As TextBox
 End Class
