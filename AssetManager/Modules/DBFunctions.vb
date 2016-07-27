@@ -99,6 +99,7 @@ Public Module DBFunctions
     Public Sibi_StatusType() As Combo_Data
     Public Sibi_ItemStatusType() As Combo_Data
     Public Sibi_RequestType() As Combo_Data
+    Public CurrentRequest As Request_Info
 
     Public Structure User_Info
         Public strUsername As String
@@ -121,6 +122,10 @@ Public Module DBFunctions
     Public NotInheritable Class CodeType
         Public Const Sibi As String = "sibi_codes"
         Public Const Device As String = "dev_codes"
+    End Class
+    Public NotInheritable Class AttachmentType
+        Public Const Sibi As String = "sibi_"
+        Public Const Device As String = "dev_"
     End Class
     Public Function OpenConnections() As Boolean
         Try
@@ -165,6 +170,27 @@ Public Module DBFunctions
                 .strStatus = NoNull(DeviceTable.Rows(0).Item("dev_status"))
                 .bolTrackable = CBool(DeviceTable.Rows(0).Item("dev_trackable"))
                 .Tracking.bolCheckedOut = CBool(DeviceTable.Rows(0).Item("dev_checkedout"))
+            End With
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
+    Public Sub CollectRequestInfo(RequestResults As DataTable, RequestItemsResults As DataTable)
+        Try
+            With CurrentRequest
+                .strUID = NoNull(RequestResults.Rows(0).Item("sibi_UID"))
+                .strUser = NoNull(RequestResults.Rows(0).Item("sibi_request_user"))
+                .strDescription = NoNull(RequestResults.Rows(0).Item("sibi_description"))
+                .dtDateStamp = NoNull(RequestResults.Rows(0).Item("sibi_datestamp"))
+                .dtNeedBy = NoNull(RequestResults.Rows(0).Item("sibi_need_by"))
+                .strStatus = NoNull(RequestResults.Rows(0).Item("sibi_status"))
+                .strType = NoNull(RequestResults.Rows(0).Item("sibi_type"))
+                .strPO = NoNull(RequestResults.Rows(0).Item("sibi_PO")) '
+                .strRequisitionNumber = NoNull(RequestResults.Rows(0).Item("sibi_requisition_number"))
+                .strReplaceAsset = NoNull(RequestResults.Rows(0).Item("sibi_replace_asset"))
+                .strReplaceSerial = NoNull(RequestResults.Rows(0).Item("sibi_replace_serial"))
+                .intRequestNumber = NoNull(RequestResults.Rows(0).Item("sibi_request_number"))
+                .RequstItems = RequestItemsResults
             End With
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -227,46 +253,7 @@ Public Module DBFunctions
             Return Nothing
         End Try
     End Function
-    Public Function DeleteAttachment(AttachUID As String) As Integer
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Function
-        End If
-        Try
-            Dim rows
-            Dim reader As MySqlDataReader
-            Dim strDeviceID As String
-            Dim strSQLDevIDQry As String = "SELECT attach_dev_UID FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
-            reader = ReturnSQLReader(strSQLDevIDQry)
-            With reader
-                Do While .Read()
-                    strDeviceID = !attach_dev_UID
-                Loop
-            End With
-            reader.Close()
-            'Delete FTP Attachment
-            If DeleteFTPAttachment(AttachUID, strDeviceID) Then
-                'delete SQL entry
-                Dim strSQLDelQry As String = "DELETE FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
-                rows = ReturnSQLCommand(strSQLDelQry).ExecuteNonQuery
-                Return rows
-                'Else  'if file not found then we might as well remove the DB record.
-                '    Dim strSQLDelQry As String = "DELETE FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
-                '    cmd.Connection = GlobalConn
-                '    cmd.CommandText = strSQLDelQry
-                '    rows = cmd.ExecuteNonQuery()
-                '    Return rows
-            End If
-            Exit Function
-        Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                Exit Try
-            Else
-                EndProgram()
-            End If
-        End Try
-        Return -1
-    End Function
+
     Public Function GetShortLocation(ByVal index As Integer) As String
         Try
             Return Locations(index).strShort
@@ -288,16 +275,71 @@ Public Module DBFunctions
             End If
         End Try
     End Function
-    Public Function DeleteDevice(ByVal strGUID As String) As Boolean
+    Public Function DeleteDevice(ByVal strGUID As String, Type As String) As Boolean
         Try
             If HasAttachments(strGUID) Then
-                If DeleteFTPDeviceFolder(strGUID) Then Return DeleteSQLDevice(strGUID) ' if has attachments, delete ftp directory, then delete the sql records.
+                If DeleteFTPDeviceFolder(strGUID, Type) Then Return DeleteSQLDevice(strGUID) ' if has attachments, delete ftp directory, then delete the sql records.
             Else
                 Return DeleteSQLDevice(strGUID) 'delete sql records
             End If
         Catch ex As Exception
             Return ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
+    End Function
+    Public Function DeleteAttachment(AttachUID As String, Type As String) As Integer
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Function
+        End If
+        Try
+            Dim rows
+            Dim reader As MySqlDataReader
+            Dim strDeviceID As String
+            Dim strSQLIDQry As String
+            If Type = AttachmentType.Device Then
+                strSQLIDQry = "SELECT attach_dev_UID FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
+            ElseIf Type = AttachmentType.Sibi Then
+                strSQLIDQry = "SELECT sibi_attach_uid FROM sibi_attachments WHERE sibi_attach_file_UID='" & AttachUID & "'"
+            End If
+            reader = ReturnSQLReader(strSQLIDQry)
+            With reader
+                Do While .Read()
+                    If Type = AttachmentType.Device Then
+                        strDeviceID = !attach_dev_UID
+                    ElseIf Type = AttachmentType.Sibi Then
+                        strDeviceID = !sibi_attach_UID
+                    End If
+
+                Loop
+            End With
+            reader.Close()
+            'Delete FTP Attachment
+            If DeleteFTPAttachment(AttachUID, strDeviceID) Then
+                'delete SQL entry
+                Dim strSQLDelQry As String
+                If Type = AttachmentType.Device Then
+                    strSQLDelQry = "DELETE FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
+                ElseIf Type = AttachmentType.Sibi Then
+                    strSQLDelQry = "DELETE FROM sibi_attachments WHERE sibi_attach_file_UID='" & AttachUID & "'"
+                End If
+                rows = ReturnSQLCommand(strSQLDelQry).ExecuteNonQuery
+                Return rows
+                'Else  'if file not found then we might as well remove the DB record.
+                '    Dim strSQLDelQry As String = "DELETE FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
+                '    cmd.Connection = GlobalConn
+                '    cmd.CommandText = strSQLDelQry
+                '    rows = cmd.ExecuteNonQuery()
+                '    Return rows
+            End If
+            Exit Function
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Try
+            Else
+                EndProgram()
+            End If
+        End Try
+        Return -1
     End Function
     Public Function HasAttachments(strGUID As String) As Boolean
         Try

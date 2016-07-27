@@ -14,7 +14,7 @@
             Return ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
-    Public Function DeleteFTPDeviceFolder(DeviceUID As String) As Boolean
+    Public Function DeleteFTPDeviceFolder(DeviceUID As String, Type As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Dim files As List(Of String)
         Try
@@ -29,7 +29,7 @@
             responseStream.Dispose()
             Dim i As Integer = 0
             For Each file In files  'delete each file counting for successes
-                i += DeleteAttachment(file)
+                i += DeleteAttachment(file, Type)
             Next
             If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
                 resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID, Net.WebRequestMethods.Ftp.RemoveDirectory)

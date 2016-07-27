@@ -288,9 +288,11 @@ VALUES
     Public Sub OpenRequest(RequestUID As String)
         Dim strRequestQRY As String = "SELECT * FROM sibi_requests WHERE sibi_uid='" & RequestUID & "'"
         Dim strRequestItemsQRY As String = "SELECT * FROM sibi_request_items WHERE sibi_items_request_uid='" & RequestUID & "'"
-        Dim Results As DataTable = ReturnSQLTable(strRequestQRY)
+        Dim RequestResults As DataTable = ReturnSQLTable(strRequestQRY)
+        Dim RequestItemsResults As DataTable = ReturnSQLTable(strRequestItemsQRY)
+        CollectRequestInfo(RequestResults, RequestItemsResults)
         ClearAll()
-        With Results.Rows(0)
+        With RequestResults.Rows(0)
             txtDescription.Text = .Item("sibi_description")
             txtUser.Text = .Item("sibi_request_user")
             cmbType.SelectedIndex = GetComboIndexFromShort(ComboType.SibiRequestType, .Item("sibi_type"))
@@ -301,7 +303,7 @@ VALUES
             txtRequestNum.Text = .Item("sibi_request_number")
         End With
 
-        SendToGrid(ReturnSQLTable(strRequestItemsQRY))
+        SendToGrid(RequestItemsResults)
         'RequestItemsGrid.ReadOnly = True
         DisableControls(Me)
 
@@ -358,6 +360,12 @@ VALUES
 
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
         EnableControls(Me)
+    End Sub
+
+    Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
+        frmSibiAttachments.ListAttachments(CurrentRequest.strUID)
+        frmSibiAttachments.Activate()
+        frmSibiAttachments.Show()
     End Sub
 End Class
 

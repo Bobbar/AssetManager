@@ -105,17 +105,17 @@ Class Attachments
             With reader
                 Do While .Read()
                     Dim strFileSizeHuman As String = Math.Round((!attach_file_size / 1024), 1) & " KB"
-                    strFullFilename = !attach_file_name &!attach_file_type
+                    strFullFilename = !attach_file_name & !attach_file_type
                     If bolAdminMode Then
-                        table.Rows.Add(strFullFilename, strFileSizeHuman,!attach_upload_date,!dev_asset_tag,!attach_file_UID,!attach_file_hash)
+                        table.Rows.Add(strFullFilename, strFileSizeHuman, !attach_upload_date, !dev_asset_tag, !attach_file_UID, !attach_file_hash)
                     Else
-                        table.Rows.Add(strFullFilename, strFileSizeHuman,!attach_upload_date,!attach_file_UID,!attach_file_hash)
+                        table.Rows.Add(strFullFilename, strFileSizeHuman, !attach_upload_date, !attach_file_UID, !attach_file_hash)
                     End If
                     ReDim Preserve AttachIndex(row)
                     AttachIndex(row).strFilename = !attach_file_name
                     AttachIndex(row).strFileType = !attach_file_type
                     AttachIndex(row).FileSize = !attach_file_size
-                    AttachIndex(row).strFileUID = IIf(IsDBNull(!attach_file_UID), "",!attach_file_UID) '!UID
+                    AttachIndex(row).strFileUID = IIf(IsDBNull(!attach_file_UID), "", !attach_file_UID) '!UID
                     row += 1
                 Loop
             End With
@@ -203,7 +203,7 @@ Class Attachments
         blah = MsgBox("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             Waiting()
-            If DeleteAttachment(AttachIndex(i).strFileUID) > 0 Then
+            If DeleteAttachment(AttachIndex(i).strFileUID, AttachmentType.Device) > 0 Then
                 ListAttachments(CurrentDevice.strGUID)
                 DoneWaiting()
                 blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
@@ -509,7 +509,7 @@ Class Attachments
         ProgressBar1.Value = intProgress
     End Sub
     Private Sub Button1_Click_1(sender As Object, e As EventArgs)
-        DeleteFTPDeviceFolder(CurrentDevice.strGUID)
+        DeleteFTPDeviceFolder(CurrentDevice.strGUID, AttachmentType.Device)
         ListAttachments(CurrentDevice.strGUID)
     End Sub
     Private Sub HighlightCurrentRow(Row As Integer)

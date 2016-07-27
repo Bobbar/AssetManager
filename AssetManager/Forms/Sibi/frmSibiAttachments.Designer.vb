@@ -38,9 +38,9 @@ Partial Class frmSibiAttachments
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.txtSerial = New System.Windows.Forms.TextBox()
+        Me.txtRequestNum = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.txtAssetTag = New System.Windows.Forms.TextBox()
+        Me.txtNeedBy = New System.Windows.Forms.TextBox()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
@@ -204,9 +204,9 @@ Partial Class frmSibiAttachments
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Controls.Add(Me.txtDescription)
         Me.GroupBox2.Controls.Add(Me.Label2)
-        Me.GroupBox2.Controls.Add(Me.txtSerial)
+        Me.GroupBox2.Controls.Add(Me.txtRequestNum)
         Me.GroupBox2.Controls.Add(Me.Label1)
-        Me.GroupBox2.Controls.Add(Me.txtAssetTag)
+        Me.GroupBox2.Controls.Add(Me.txtNeedBy)
         Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox2.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox2.Name = "GroupBox2"
@@ -240,18 +240,18 @@ Partial Class frmSibiAttachments
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(321, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(43, 16)
+        Me.Label2.Size = New System.Drawing.Size(69, 16)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Serial"
+        Me.Label2.Text = "Request #"
         '
-        'txtSerial
+        'txtRequestNum
         '
-        Me.txtSerial.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSerial.Location = New System.Drawing.Point(320, 49)
-        Me.txtSerial.Name = "txtSerial"
-        Me.txtSerial.ReadOnly = True
-        Me.txtSerial.Size = New System.Drawing.Size(105, 25)
-        Me.txtSerial.TabIndex = 2
+        Me.txtRequestNum.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtRequestNum.Location = New System.Drawing.Point(320, 49)
+        Me.txtRequestNum.Name = "txtRequestNum"
+        Me.txtRequestNum.ReadOnly = True
+        Me.txtRequestNum.Size = New System.Drawing.Size(105, 25)
+        Me.txtRequestNum.TabIndex = 2
         '
         'Label1
         '
@@ -259,18 +259,18 @@ Partial Class frmSibiAttachments
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(460, 29)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(70, 16)
+        Me.Label1.Size = New System.Drawing.Size(61, 16)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Asset Tag"
+        Me.Label1.Text = "Need By"
         '
-        'txtAssetTag
+        'txtNeedBy
         '
-        Me.txtAssetTag.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTag.Location = New System.Drawing.Point(459, 49)
-        Me.txtAssetTag.Name = "txtAssetTag"
-        Me.txtAssetTag.ReadOnly = True
-        Me.txtAssetTag.Size = New System.Drawing.Size(105, 25)
-        Me.txtAssetTag.TabIndex = 0
+        Me.txtNeedBy.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtNeedBy.Location = New System.Drawing.Point(459, 49)
+        Me.txtNeedBy.Name = "txtNeedBy"
+        Me.txtNeedBy.ReadOnly = True
+        Me.txtNeedBy.Size = New System.Drawing.Size(105, 25)
+        Me.txtNeedBy.TabIndex = 0
         '
         'StatusStrip1
         '
@@ -388,9 +388,9 @@ Partial Class frmSibiAttachments
     Friend WithEvents Label3 As Label
     Friend WithEvents txtDescription As TextBox
     Friend WithEvents Label2 As Label
-    Friend WithEvents txtSerial As TextBox
+    Friend WithEvents txtRequestNum As TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents txtAssetTag As TextBox
+    Friend WithEvents txtNeedBy As TextBox
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
     Friend WithEvents Spinner As ToolStripStatusLabel

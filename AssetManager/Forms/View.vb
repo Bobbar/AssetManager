@@ -551,7 +551,7 @@ Public Class View
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
             Dim rows As Integer
-            rows = DeleteDevice(CurrentDevice.strGUID)
+            rows = DeleteDevice(CurrentDevice.strGUID, AttachmentType.Device)
             If rows > 0 Then
                 Dim blah2 = MsgBox("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentDevice = Nothing
@@ -678,7 +678,7 @@ Public Class View
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
-            If DeleteDevice(CurrentDevice.strGUID) Then
+            If DeleteDevice(CurrentDevice.strGUID, AttachmentType.Device) Then
                 Dim blah2 = MsgBox("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentDevice = Nothing
                 Me.Dispose()
