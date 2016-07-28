@@ -51,6 +51,7 @@
     End Sub
 
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
+        frmManageRequest.ClearAll()
         frmManageRequest.Show()
     End Sub
 

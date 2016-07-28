@@ -47,18 +47,20 @@ Partial Class frmManageRequest
         Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStrip = New System.Windows.Forms.ToolStrip()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.cmdClearAll = New System.Windows.Forms.Button()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.txtRTNumber = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ToolStrip1.SuspendLayout()
+        Me.ToolStrip.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -121,7 +123,7 @@ Partial Class frmManageRequest
         '
         'cmdAddNew
         '
-        Me.cmdAddNew.Location = New System.Drawing.Point(278, 181)
+        Me.cmdAddNew.Location = New System.Drawing.Point(310, 181)
         Me.cmdAddNew.Name = "cmdAddNew"
         Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
         Me.cmdAddNew.TabIndex = 12
@@ -130,13 +132,15 @@ Partial Class frmManageRequest
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.Label9)
+        Me.GroupBox2.Controls.Add(Me.txtRTNumber)
         Me.GroupBox2.Controls.Add(Me.Label6)
         Me.GroupBox2.Controls.Add(Me.txtReqNumber)
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Controls.Add(Me.txtPO)
-        Me.GroupBox2.Location = New System.Drawing.Point(467, 100)
+        Me.GroupBox2.Location = New System.Drawing.Point(467, 83)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(175, 140)
+        Me.GroupBox2.Size = New System.Drawing.Size(175, 157)
         Me.GroupBox2.TabIndex = 11
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Add'l Info"
@@ -144,7 +148,7 @@ Partial Class frmManageRequest
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(17, 64)
+        Me.Label6.Location = New System.Drawing.Point(17, 63)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(72, 13)
         Me.Label6.TabIndex = 7
@@ -152,7 +156,7 @@ Partial Class frmManageRequest
         '
         'txtReqNumber
         '
-        Me.txtReqNumber.Location = New System.Drawing.Point(20, 80)
+        Me.txtReqNumber.Location = New System.Drawing.Point(20, 79)
         Me.txtReqNumber.Name = "txtReqNumber"
         Me.txtReqNumber.Size = New System.Drawing.Size(137, 20)
         Me.txtReqNumber.TabIndex = 6
@@ -298,17 +302,17 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.Size = New System.Drawing.Size(837, 342)
         Me.RequestItemsGrid.TabIndex = 18
         '
-        'ToolStrip1
+        'ToolStrip
         '
-        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
-        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.ToolStripSeparator1, Me.cmdUpdate, Me.ToolStripSeparator2, Me.cmdAttachments})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip1.Size = New System.Drawing.Size(867, 28)
-        Me.ToolStrip1.TabIndex = 2
-        Me.ToolStrip1.Text = "ToolStrip1"
+        Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
+        Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.ToolStripSeparator1, Me.cmdUpdate, Me.ToolStripSeparator2, Me.cmdAttachments})
+        Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip.Name = "ToolStrip"
+        Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
+        Me.ToolStrip.Size = New System.Drawing.Size(867, 28)
+        Me.ToolStrip.TabIndex = 2
+        Me.ToolStrip.Text = "ToolStrip1"
         '
         'cmdCreate
         '
@@ -353,13 +357,29 @@ Partial Class frmManageRequest
         Me.cmdClearAll.Text = "Clear All"
         Me.cmdClearAll.UseVisualStyleBackColor = True
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(17, 103)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(35, 13)
+        Me.Label9.TabIndex = 9
+        Me.Label9.Text = "RT #:"
+        '
+        'txtRTNumber
+        '
+        Me.txtRTNumber.Location = New System.Drawing.Point(20, 119)
+        Me.txtRTNumber.Name = "txtRTNumber"
+        Me.txtRTNumber.Size = New System.Drawing.Size(137, 20)
+        Me.txtRTNumber.TabIndex = 8
+        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(867, 660)
         Me.Controls.Add(Me.cmdClearAll)
-        Me.Controls.Add(Me.ToolStrip1)
+        Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -371,8 +391,8 @@ Partial Class frmManageRequest
         Me.GroupBox2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
+        Me.ToolStrip.ResumeLayout(False)
+        Me.ToolStrip.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -398,7 +418,7 @@ Partial Class frmManageRequest
     Friend WithEvents RequestItemsGrid As DataGridView
     Friend WithEvents cmbStatus As ComboBox
     Friend WithEvents Label7 As Label
-    Friend WithEvents ToolStrip1 As ToolStrip
+    Friend WithEvents ToolStrip As ToolStrip
     Friend WithEvents cmdCreate As ToolStripButton
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents cmdAttachments As ToolStripButton
@@ -407,4 +427,6 @@ Partial Class frmManageRequest
     Friend WithEvents cmdClearAll As Button
     Friend WithEvents Label8 As Label
     Friend WithEvents txtRequestNum As TextBox
+    Friend WithEvents Label9 As Label
+    Friend WithEvents txtRTNumber As TextBox
 End Class

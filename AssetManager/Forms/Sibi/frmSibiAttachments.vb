@@ -184,7 +184,7 @@ Class frmSibiAttachments
     End Sub
     Public Sub FillInfo()
         txtNeedBy.Text = CurrentRequest.dtNeedBy.ToString
-        txtRequestNum.Text = CurrentRequest.intRequestNumber
+        txtRequestNum.Text = CurrentRequest.strRequestNumber
         txtDescription.Text = CurrentRequest.strDescription
     End Sub
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs)

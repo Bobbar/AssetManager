@@ -60,7 +60,8 @@ Public Module DBFunctions
         Public strRequisitionNumber As String
         Public strReplaceAsset As String
         Public strReplaceSerial As String
-        Public intRequestNumber As Integer
+        Public strRequestNumber As String
+        Public strRTNumber As String
         Public RequstItems As DataTable
 
     End Structure
@@ -189,7 +190,7 @@ Public Module DBFunctions
                 .strRequisitionNumber = NoNull(RequestResults.Rows(0).Item("sibi_requisition_number"))
                 .strReplaceAsset = NoNull(RequestResults.Rows(0).Item("sibi_replace_asset"))
                 .strReplaceSerial = NoNull(RequestResults.Rows(0).Item("sibi_replace_serial"))
-                .intRequestNumber = NoNull(RequestResults.Rows(0).Item("sibi_request_number"))
+                .strRequestNumber = NoNull(RequestResults.Rows(0).Item("sibi_request_number"))
                 .RequstItems = RequestItemsResults
             End With
         Catch ex As Exception

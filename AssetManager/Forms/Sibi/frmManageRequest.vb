@@ -2,13 +2,14 @@
 Imports System.Collections
 Imports MySql.Data.MySqlClient
 Public Class frmManageRequest
+    Public bolUpdating As Boolean = False
     ' Public table As New DataTable
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
         'FillCombos()
         '   SetupGrid()
     End Sub
-    Private Sub ClearAll()
+    Public Sub ClearAll()
         ClearControls(Me)
 
 
@@ -122,7 +123,9 @@ Public Class frmManageRequest
             .Add(DataGridCombo(Sibi_ItemStatusType, "Status", ComboType.SibiItemStatusType))
             .Add("Replace Asset", "Replace Asset")
             .Add("Replace Serial", "Replace Serial")
+            .Add("Item UID", "Item UID")
         End With
+        RequestItemsGrid.Columns.Item("Item UID").ReadOnly = True
         'table.Dispose()
     End Sub
     Private Sub FillCombos()
@@ -158,6 +161,7 @@ Public Class frmManageRequest
             .strStatus = GetDBValue(Sibi_StatusType, cmbStatus.SelectedIndex)
             .strPO = Trim(txtPO.Text)
             .strRequisitionNumber = Trim(txtReqNumber.Text)
+            .strRTNumber = Trim(txtRTNumber.Text)
             '   .RequstItems = dt 'GridTable
         End With
         Dim DBTable As New DataTable
@@ -285,6 +289,111 @@ VALUES
             End If
         End Try
     End Sub
+    Private Sub UpdateRequest()
+        Dim RequestData As Request_Info = CollectData()
+        Dim rows As Integer
+        Dim strRequestQRY As String = "UPDATE sibi_requests
+SET
+sibi_request_user = @sibi_request_user ,
+sibi_description = @sibi_description ,
+sibi_need_by = @sibi_need_by ,
+sibi_status = @sibi_status ,
+sibi_type = @sibi_type ,
+sibi_PO = @sibi_PO ,
+sibi_requisition_number = @sibi_requisition_number ,
+sibi_replace_asset = @sibi_replace_asset ,
+sibi_replace_serial = @sibi_replace_serial ,
+sibi_RT_number = @sibi_RT_number 
+WHERE sibi_uid ='" & CurrentRequest.strUID & "'"
+        Dim cmd As MySqlCommand = ReturnSQLCommand(strRequestQRY)
+        cmd.Parameters.AddWithValue("@sibi_request_user", RequestData.strUser)
+        cmd.Parameters.AddWithValue("@sibi_description", RequestData.strDescription)
+        cmd.Parameters.AddWithValue("@sibi_need_by", RequestData.dtNeedBy)
+        cmd.Parameters.AddWithValue("@sibi_status", RequestData.strStatus)
+        cmd.Parameters.AddWithValue("@sibi_type", RequestData.strType)
+        cmd.Parameters.AddWithValue("@sibi_PO", RequestData.strPO)
+        cmd.Parameters.AddWithValue("@sibi_requisition_number", RequestData.strRequisitionNumber)
+        cmd.Parameters.AddWithValue("@sibi_replace_asset", RequestData.strReplaceAsset)
+        cmd.Parameters.AddWithValue("@sibi_replace_serial", RequestData.strReplaceSerial)
+        cmd.Parameters.AddWithValue("@sibi_RT_number", RequestData.strRTNumber)
+        rows += cmd.ExecuteNonQuery()
+        cmd.Parameters.Clear()
+
+        Dim strRequestItemsQry As String
+        For Each row As DataRow In RequestData.RequstItems.Rows
+
+            If row.Item("Item UID") <> "" Then
+
+                strRequestItemsQry = "UPDATE sibi_request_items
+SET
+sibi_items_user = @sibi_items_user ,
+sibi_items_description = @sibi_items_description ,
+sibi_items_location = @sibi_items_location ,
+sibi_items_status = @sibi_items_status ,
+sibi_items_replace_asset = @sibi_items_replace_asset ,
+sibi_items_replace_serial = @sibi_items_replace_serial 
+WHERE sibi_items_uid ='" & row.Item("Item UID") & "'"
+
+                cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
+                cmd.Parameters.AddWithValue("@sibi_items_description", row.Item("Description"))
+                cmd.Parameters.AddWithValue("@sibi_items_location", row.Item(ComboType.Location))
+                cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
+                cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
+                cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
+                cmd.CommandText = strRequestItemsQry
+                cmd.ExecuteNonQuery()
+                cmd.Parameters.Clear()
+
+            Else
+                Dim strItemUID As String = Guid.NewGuid.ToString
+                strRequestItemsQry = "INSERT INTO `asset_manager`.`sibi_request_items`
+(`sibi_items_uid`,
+`sibi_items_request_uid`,
+`sibi_items_user`,
+`sibi_items_description`,
+`sibi_items_location`,
+`sibi_items_status`,
+`sibi_items_replace_asset`,
+`sibi_items_replace_serial`)
+VALUES
+(@sibi_items_uid,
+@sibi_items_request_uid,
+@sibi_items_user,
+@sibi_items_description,
+@sibi_items_location,
+@sibi_items_status,
+@sibi_items_replace_asset,
+@sibi_items_replace_serial)"
+                cmd.Parameters.AddWithValue("@sibi_items_uid", strItemUID)
+                cmd.Parameters.AddWithValue("@sibi_items_request_uid", CurrentRequest.strUID)
+                cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
+                cmd.Parameters.AddWithValue("@sibi_items_description", row.Item("Description"))
+                cmd.Parameters.AddWithValue("@sibi_items_location", row.Item(ComboType.Location))
+                cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
+                cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
+                cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
+                cmd.CommandText = strRequestItemsQry
+                rows += cmd.ExecuteNonQuery()
+                cmd.Parameters.Clear()
+
+
+
+
+            End If
+
+
+
+
+
+        Next
+        cmd.Dispose()
+        Debug.Print(rows)
+        If rows = RequestData.RequstItems.Rows.Count + 1 Then
+            MsgBox("Success!")
+        End If
+        OpenRequest(CurrentRequest.strUID)
+
+    End Sub
     Public Sub OpenRequest(RequestUID As String)
         Dim strRequestQRY As String = "SELECT * FROM sibi_requests WHERE sibi_uid='" & RequestUID & "'"
         Dim strRequestItemsQRY As String = "SELECT * FROM sibi_request_items WHERE sibi_items_request_uid='" & RequestUID & "'"
@@ -293,14 +402,15 @@ VALUES
         CollectRequestInfo(RequestResults, RequestItemsResults)
         ClearAll()
         With RequestResults.Rows(0)
-            txtDescription.Text = .Item("sibi_description")
-            txtUser.Text = .Item("sibi_request_user")
+            txtDescription.Text = NoNull(.Item("sibi_description"))
+            txtUser.Text = NoNull(.Item("sibi_request_user"))
             cmbType.SelectedIndex = GetComboIndexFromShort(ComboType.SibiRequestType, .Item("sibi_type"))
-            dtNeedBy.Value = .Item("sibi_need_by")
+            dtNeedBy.Value = NoNull(.Item("sibi_need_by"))
             cmbStatus.SelectedIndex = GetComboIndexFromShort(ComboType.SibiStatusType, .Item("sibi_status"))
-            txtPO.Text = .Item("sibi_PO")
-            txtReqNumber.Text = .Item("sibi_requisition_number")
-            txtRequestNum.Text = .Item("sibi_request_number")
+            txtPO.Text = NoNull(.Item("sibi_PO"))
+            txtReqNumber.Text = NoNull(.Item("sibi_requisition_number"))
+            txtRequestNum.Text = NoNull(.Item("sibi_request_number"))
+            txtRTNumber.Text = NoNull(.Item("sibi_RT_number"))
         End With
 
         SendToGrid(RequestItemsResults)
@@ -309,7 +419,11 @@ VALUES
 
         Me.Show()
     End Sub
+    Private Function ItemExists(ItemUID As String) As Boolean
+        Dim table As DataTable = ReturnSQLTable("SELECT * FROM sibi_request_items WHERE sibi_")
 
+
+    End Function
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         'Try
         'StatusBar(strLoadingGridMessage)
@@ -337,7 +451,8 @@ VALUES
                     GetHumanValue(ComboType.Location, r.Item("sibi_items_location")),
                          GetHumanValue(ComboType.SibiItemStatusType, r.Item("sibi_items_status")),
                          r.Item("sibi_items_replace_asset"),
-                         r.Item("sibi_items_replace_serial"))
+                         r.Item("sibi_items_replace_serial"),
+                     r.Item("sibi_items_uid"))
 
 
 
@@ -359,7 +474,35 @@ VALUES
     End Sub
 
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
-        EnableControls(Me)
+        UpdateMode(bolUpdating)
+    End Sub
+    Private Sub UpdateMode(Enable As Boolean)
+        If Not Enable Then
+            EnableControls(Me)
+            ToolStrip.BackColor = colEditColor
+            cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Bold)
+            cmdUpdate.Text = "*Accept Changes*"
+            bolUpdating = True
+
+
+
+
+
+
+        Else
+            DisableControls(Me)
+            ToolStrip.BackColor = colToolBarColor
+            cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
+            cmdUpdate.Text = "Update"
+            UpdateRequest()
+            bolUpdating = False
+
+
+
+        End If
+
+
+
     End Sub
 
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
