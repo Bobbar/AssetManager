@@ -22,6 +22,7 @@ Partial Class frmManageRequest
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
@@ -32,6 +33,8 @@ Partial Class frmManageRequest
         Me.Label7 = New System.Windows.Forms.Label()
         Me.cmdAddNew = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.txtRTNumber = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReqNumber = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -47,6 +50,8 @@ Partial Class frmManageRequest
         Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
+        Me.PopupMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStrip = New System.Windows.Forms.ToolStrip()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -54,12 +59,12 @@ Partial Class frmManageRequest
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.cmdClearAll = New System.Windows.Forms.Button()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.txtRTNumber = New System.Windows.Forms.TextBox()
+        Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PopupMenu.SuspendLayout()
         Me.ToolStrip.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -123,12 +128,14 @@ Partial Class frmManageRequest
         '
         'cmdAddNew
         '
-        Me.cmdAddNew.Location = New System.Drawing.Point(310, 181)
+        Me.cmdAddNew.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdAddNew.Location = New System.Drawing.Point(278, 181)
         Me.cmdAddNew.Name = "cmdAddNew"
         Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
         Me.cmdAddNew.TabIndex = 12
         Me.cmdAddNew.Text = "Create Request"
         Me.cmdAddNew.UseVisualStyleBackColor = True
+        Me.cmdAddNew.Visible = False
         '
         'GroupBox2
         '
@@ -145,6 +152,24 @@ Partial Class frmManageRequest
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Add'l Info"
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(17, 103)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(35, 13)
+        Me.Label9.TabIndex = 9
+        Me.Label9.Text = "RT #:"
+        '
+        'txtRTNumber
+        '
+        Me.txtRTNumber.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.txtRTNumber.Location = New System.Drawing.Point(20, 119)
+        Me.txtRTNumber.Name = "txtRTNumber"
+        Me.txtRTNumber.Size = New System.Drawing.Size(137, 20)
+        Me.txtRTNumber.TabIndex = 8
+        Me.ToolTip.SetToolTip(Me.txtRTNumber, "Click to open RT Ticket.")
+        '
         'Label6
         '
         Me.Label6.AutoSize = True
@@ -156,6 +181,7 @@ Partial Class frmManageRequest
         '
         'txtReqNumber
         '
+        Me.txtReqNumber.Cursor = System.Windows.Forms.Cursors.Hand
         Me.txtReqNumber.Location = New System.Drawing.Point(20, 79)
         Me.txtReqNumber.Name = "txtReqNumber"
         Me.txtReqNumber.Size = New System.Drawing.Size(137, 20)
@@ -172,6 +198,7 @@ Partial Class frmManageRequest
         '
         'txtPO
         '
+        Me.txtPO.Cursor = System.Windows.Forms.Cursors.Hand
         Me.txtPO.Location = New System.Drawing.Point(20, 41)
         Me.txtPO.Name = "txtPO"
         Me.txtPO.Size = New System.Drawing.Size(137, 20)
@@ -261,7 +288,7 @@ Partial Class frmManageRequest
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(12, 300)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(843, 348)
+        Me.Panel1.Size = New System.Drawing.Size(1039, 348)
         Me.Panel1.TabIndex = 1
         '
         'RequestItemsGrid
@@ -275,6 +302,7 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.RequestItemsGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.RequestItemsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.RequestItemsGrid.ContextMenuStrip = Me.PopupMenu
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -299,8 +327,20 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.RequestItemsGrid.ShowCellErrors = False
         Me.RequestItemsGrid.ShowCellToolTips = False
-        Me.RequestItemsGrid.Size = New System.Drawing.Size(837, 342)
+        Me.RequestItemsGrid.Size = New System.Drawing.Size(1033, 342)
         Me.RequestItemsGrid.TabIndex = 18
+        '
+        'PopupMenu
+        '
+        Me.PopupMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmDeleteItem})
+        Me.PopupMenu.Name = "PopupMenu"
+        Me.PopupMenu.Size = New System.Drawing.Size(135, 26)
+        '
+        'tsmDeleteItem
+        '
+        Me.tsmDeleteItem.Name = "tsmDeleteItem"
+        Me.tsmDeleteItem.Size = New System.Drawing.Size(134, 22)
+        Me.tsmDeleteItem.Text = "Delete Item"
         '
         'ToolStrip
         '
@@ -310,7 +350,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip.Size = New System.Drawing.Size(867, 28)
+        Me.ToolStrip.Size = New System.Drawing.Size(1063, 28)
         Me.ToolStrip.TabIndex = 2
         Me.ToolStrip.Text = "ToolStrip1"
         '
@@ -357,33 +397,26 @@ Partial Class frmManageRequest
         Me.cmdClearAll.Text = "Clear All"
         Me.cmdClearAll.UseVisualStyleBackColor = True
         '
-        'Label9
+        'ToolTip
         '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(17, 103)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(35, 13)
-        Me.Label9.TabIndex = 9
-        Me.Label9.Text = "RT #:"
-        '
-        'txtRTNumber
-        '
-        Me.txtRTNumber.Location = New System.Drawing.Point(20, 119)
-        Me.txtRTNumber.Name = "txtRTNumber"
-        Me.txtRTNumber.Size = New System.Drawing.Size(137, 20)
-        Me.txtRTNumber.TabIndex = 8
+        Me.ToolTip.AutomaticDelay = 0
+        Me.ToolTip.AutoPopDelay = 5500
+        Me.ToolTip.InitialDelay = 0
+        Me.ToolTip.IsBalloon = True
+        Me.ToolTip.ReshowDelay = 110
         '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(867, 660)
+        Me.ClientSize = New System.Drawing.Size(1063, 660)
         Me.Controls.Add(Me.cmdClearAll)
         Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmManageRequest"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "New Request"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
@@ -391,6 +424,7 @@ Partial Class frmManageRequest
         Me.GroupBox2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PopupMenu.ResumeLayout(False)
         Me.ToolStrip.ResumeLayout(False)
         Me.ToolStrip.PerformLayout()
         Me.ResumeLayout(False)
@@ -429,4 +463,7 @@ Partial Class frmManageRequest
     Friend WithEvents txtRequestNum As TextBox
     Friend WithEvents Label9 As Label
     Friend WithEvents txtRTNumber As TextBox
+    Friend WithEvents PopupMenu As ContextMenuStrip
+    Friend WithEvents tsmDeleteItem As ToolStripMenuItem
+    Friend WithEvents ToolTip As ToolTip
 End Class

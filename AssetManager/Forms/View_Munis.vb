@@ -29,7 +29,19 @@
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Sub LoadMunisInfo(Device As Device_Info)
+    Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String)
+        Try
+            Dim strColumns As String = "rg_fiscal_year,a_requisition_no,rg_line_number,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,rqdt_des_ln,rqdt_sug_vn,rqdt_pur_no,rqdt_pur_dt"
+            Dim strQRY As String = "SELECT " & strColumns & " FROM rq_gl_info, rqdetail WHERE a_requisition_no='" & ReqNumber & "' AND rg_fiscal_year='" & FiscalYr & "' AND rg_line_number = rqdt_lin_no AND a_requisition_no = rqdt_req_no AND rg_fiscal_year = rqdt_fsc_yr"
+            Debug.Print(strQRY)
+            Dim results As DataTable
+            results = ReturnMSSQLTable(strQRY)
+            DataGridMunis_Requisition.DataSource = results
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
+    Public Sub LoadMunisInfoByDevice(Device As Device_Info)
         If Device.strPO <> "" And YearFromDate(Device.dtPurchaseDate) <> "" Then 'if PO and Fiscal yr on record > load data using our records
             Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             LoadMunisInventoryGrid(Device)
@@ -65,7 +77,7 @@
     Private Sub View_Munis_Load(sender As Object, e As EventArgs) Handles Me.Load
         ExtendedMethods.DoubleBuffered(DataGridMunis_Inventory, True)
         ExtendedMethods.DoubleBuffered(DataGridMunis_Requisition, True)
-        MainForm.CopyDefaultCellStyles()
+        ' MainForm.CopyDefaultCellStyles()
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         Dim MunisTable As DataTable

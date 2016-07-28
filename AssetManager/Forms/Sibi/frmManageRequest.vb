@@ -1,5 +1,6 @@
 ﻿Option Explicit On
 Imports System.Collections
+Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class frmManageRequest
     Public bolUpdating As Boolean = False
@@ -16,6 +17,8 @@ Public Class frmManageRequest
         SetupGrid()
         FillCombos()
         EnableControls(Me)
+        cmdAddNew.Visible = False
+        CurrentRequest = Nothing
     End Sub
     Private Sub ClearTextBoxes(ByVal control As Control)
         If TypeOf control Is TextBox Then
@@ -189,6 +192,7 @@ Public Class frmManageRequest
     End Function
     Private Sub cmdAddNew_Click(sender As Object, e As EventArgs) Handles cmdAddNew.Click
         'CollectData()
+        cmdAddNew.Visible = False
         AddNewRequest()
     End Sub
     Private Sub AddNewRequest()
@@ -399,8 +403,8 @@ VALUES
         Dim strRequestItemsQRY As String = "SELECT * FROM sibi_request_items WHERE sibi_items_request_uid='" & RequestUID & "'"
         Dim RequestResults As DataTable = ReturnSQLTable(strRequestQRY)
         Dim RequestItemsResults As DataTable = ReturnSQLTable(strRequestItemsQRY)
-        CollectRequestInfo(RequestResults, RequestItemsResults)
         ClearAll()
+        CollectRequestInfo(RequestResults, RequestItemsResults)
         With RequestResults.Rows(0)
             txtDescription.Text = NoNull(.Item("sibi_description"))
             txtUser.Text = NoNull(.Item("sibi_request_user"))
@@ -419,10 +423,19 @@ VALUES
 
         Me.Show()
     End Sub
-    Private Function ItemExists(ItemUID As String) As Boolean
-        Dim table As DataTable = ReturnSQLTable("SELECT * FROM sibi_request_items WHERE sibi_")
-
-
+    Private Function DeleteItem(ItemUID As String) As Integer
+        Try
+            Dim rows
+            Dim strSQLQry As String = "DELETE FROM sibi_request_items WHERE sibi_items_uid='" & ItemUID & "'"
+            rows = ReturnSQLCommand(strSQLQry).ExecuteNonQuery
+            Return rows
+            Exit Function
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Else
+                EndProgram()
+            End If
+        End Try
     End Function
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         'Try
@@ -471,6 +484,8 @@ VALUES
 
     Private Sub cmdClearAll_Click(sender As Object, e As EventArgs) Handles cmdClearAll.Click
         ClearAll()
+        CurrentRequest = Nothing
+
     End Sub
 
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
@@ -506,9 +521,67 @@ VALUES
     End Sub
 
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
-        frmSibiAttachments.ListAttachments(CurrentRequest.strUID)
-        frmSibiAttachments.Activate()
-        frmSibiAttachments.Show()
+        If CurrentRequest.strUID <> "" Then
+
+            frmSibiAttachments.ListAttachments(CurrentRequest.strUID)
+            frmSibiAttachments.Activate()
+            frmSibiAttachments.Show()
+
+        End If
+    End Sub
+
+    Private Sub cmdCreate_Click(sender As Object, e As EventArgs) Handles cmdCreate.Click
+        ClearAll()
+        cmdAddNew.Visible = True
+
+    End Sub
+
+    Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        CurrentRequest = Nothing
+
+    End Sub
+
+    Private Sub PopupMenu_Opening(sender As Object, e As CancelEventArgs) Handles PopupMenu.Opening
+
+    End Sub
+
+    Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
+        Dim blah = MsgBox(DeleteItem(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+        OpenRequest(CurrentRequest.strUID)
+    End Sub
+
+    Private Sub txtRTNumber_TextChanged(sender As Object, e As EventArgs) Handles txtRTNumber.TextChanged
+
+    End Sub
+
+    Private Sub txtRTNumber_Click(sender As Object, e As EventArgs) Handles txtRTNumber.Click
+        Dim RTNum As String = Trim(txtRTNumber.Text)
+        If Not bolUpdating And RTNum <> "" Then
+            Process.Start("http://rt.co.fairfield.oh.us/rt/Ticket/Display.html?id=" & RTNum)
+        End If
+    End Sub
+
+    Private Sub txtReqNumber_TextChanged(sender As Object, e As EventArgs) Handles txtReqNumber.TextChanged
+
+    End Sub
+    Private Sub NewMunisView(ReqNum As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        Dim NewMunis As New View_Munis
+        'Waiting()
+        'AddChild(NewMunis)
+        NewMunis.LoadMunisRequisitionGridByReqNo(ReqNum, YearFromDate(CurrentRequest.dtDateStamp))
+        ' NewMunis.ViewEntry(GUID)
+        NewMunis.Show()
+        ' DoneWaiting()
+    End Sub
+    Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
+        Dim ReqNum As String = Trim(txtReqNumber.Text)
+        If Not bolUpdating And ReqNum <> "" Then
+            NewMunisView(ReqNum)
+        End If
     End Sub
 End Class
 

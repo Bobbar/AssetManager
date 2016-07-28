@@ -510,6 +510,19 @@ Public Class View
         NewEntry.Show()
         DoneWaiting()
     End Sub
+    Private Sub NewMunisView(Device As Device_Info)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        Dim NewMunis As New View_Munis
+        Waiting()
+        AddChild(NewMunis)
+        NewMunis.LoadMunisInfoByDevice(Device)
+        ' NewMunis.ViewEntry(GUID)
+        NewMunis.Show()
+        DoneWaiting()
+    End Sub
     Private Sub NewTrackingView(GUID As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
@@ -797,7 +810,7 @@ Public Class View
         TrackingGrid.Refresh()
     End Sub
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
-        View_Munis.LoadMunisInfo(CurrentDevice)
+        NewMunisView(CurrentDevice)
     End Sub
     Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
         Try
