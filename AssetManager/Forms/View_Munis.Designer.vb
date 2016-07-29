@@ -21,20 +21,22 @@ Partial Class View_Munis
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View_Munis))
         Me.DataGridMunis_Inventory = New System.Windows.Forms.DataGridView()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.pnlFixedAsset = New System.Windows.Forms.Panel()
         Me.txtSerial = New System.Windows.Forms.TextBox()
         Me.cmdSearch = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.pnlRequisition = New System.Windows.Forms.Panel()
         Me.DataGridMunis_Requisition = New System.Windows.Forms.DataGridView()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.pnlMaster = New System.Windows.Forms.Panel()
         CType(Me.DataGridMunis_Inventory, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel1.SuspendLayout()
+        Me.pnlFixedAsset.SuspendLayout()
         Me.Panel2.SuspendLayout()
-        Me.Panel3.SuspendLayout()
+        Me.pnlRequisition.SuspendLayout()
         CType(Me.DataGridMunis_Requisition, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlMaster.SuspendLayout()
         Me.SuspendLayout()
         '
         'DataGridMunis_Inventory
@@ -50,26 +52,27 @@ Partial Class View_Munis
         Me.DataGridMunis_Inventory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.DataGridMunis_Inventory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridMunis_Inventory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.DataGridMunis_Inventory.Location = New System.Drawing.Point(3, 3)
+        Me.DataGridMunis_Inventory.Location = New System.Drawing.Point(3, 19)
         Me.DataGridMunis_Inventory.Name = "DataGridMunis_Inventory"
         Me.DataGridMunis_Inventory.ReadOnly = True
         Me.DataGridMunis_Inventory.RowHeadersVisible = False
         Me.DataGridMunis_Inventory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridMunis_Inventory.ShowCellToolTips = False
         Me.DataGridMunis_Inventory.ShowEditingIcon = False
-        Me.DataGridMunis_Inventory.Size = New System.Drawing.Size(923, 106)
+        Me.DataGridMunis_Inventory.Size = New System.Drawing.Size(842, 134)
         Me.DataGridMunis_Inventory.TabIndex = 41
         '
-        'Panel1
+        'pnlFixedAsset
         '
-        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.pnlFixedAsset.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Controls.Add(Me.DataGridMunis_Inventory)
-        Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel1.Location = New System.Drawing.Point(12, 45)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(929, 115)
-        Me.Panel1.TabIndex = 42
+        Me.pnlFixedAsset.Controls.Add(Me.DataGridMunis_Inventory)
+        Me.pnlFixedAsset.Controls.Add(Me.Label2)
+        Me.pnlFixedAsset.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.pnlFixedAsset.Location = New System.Drawing.Point(0, 12)
+        Me.pnlFixedAsset.Name = "pnlFixedAsset"
+        Me.pnlFixedAsset.Size = New System.Drawing.Size(848, 159)
+        Me.pnlFixedAsset.TabIndex = 42
         '
         'txtSerial
         '
@@ -104,7 +107,7 @@ Partial Class View_Munis
         Me.Panel2.Controls.Add(Me.cmdSearch)
         Me.Panel2.Controls.Add(Me.Label1)
         Me.Panel2.Controls.Add(Me.txtSerial)
-        Me.Panel2.Location = New System.Drawing.Point(740, 12)
+        Me.Panel2.Location = New System.Drawing.Point(969, 12)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(227, 72)
         Me.Panel2.TabIndex = 46
@@ -114,23 +117,24 @@ Partial Class View_Munis
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(12, 29)
+        Me.Label2.Location = New System.Drawing.Point(0, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(122, 16)
         Me.Label2.TabIndex = 47
         Me.Label2.Text = "Fixed Asset Info:"
         '
-        'Panel3
+        'pnlRequisition
         '
-        Me.Panel3.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.pnlRequisition.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel3.Controls.Add(Me.DataGridMunis_Requisition)
-        Me.Panel3.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel3.Location = New System.Drawing.Point(12, 198)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(929, 347)
-        Me.Panel3.TabIndex = 48
+        Me.pnlRequisition.Controls.Add(Me.Label3)
+        Me.pnlRequisition.Controls.Add(Me.DataGridMunis_Requisition)
+        Me.pnlRequisition.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.pnlRequisition.Location = New System.Drawing.Point(0, 177)
+        Me.pnlRequisition.Name = "pnlRequisition"
+        Me.pnlRequisition.Size = New System.Drawing.Size(851, 394)
+        Me.pnlRequisition.TabIndex = 48
         '
         'DataGridMunis_Requisition
         '
@@ -147,7 +151,7 @@ Partial Class View_Munis
         Me.DataGridMunis_Requisition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.DataGridMunis_Requisition.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridMunis_Requisition.EnableHeadersVisualStyles = False
-        Me.DataGridMunis_Requisition.Location = New System.Drawing.Point(3, 3)
+        Me.DataGridMunis_Requisition.Location = New System.Drawing.Point(3, 19)
         Me.DataGridMunis_Requisition.Name = "DataGridMunis_Requisition"
         Me.DataGridMunis_Requisition.ReadOnly = True
         Me.DataGridMunis_Requisition.RowHeadersVisible = False
@@ -155,7 +159,7 @@ Partial Class View_Munis
         Me.DataGridMunis_Requisition.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridMunis_Requisition.ShowCellToolTips = False
         Me.DataGridMunis_Requisition.ShowEditingIcon = False
-        Me.DataGridMunis_Requisition.Size = New System.Drawing.Size(923, 338)
+        Me.DataGridMunis_Requisition.Size = New System.Drawing.Size(845, 372)
         Me.DataGridMunis_Requisition.TabIndex = 41
         Me.DataGridMunis_Requisition.VirtualMode = True
         '
@@ -163,44 +167,56 @@ Partial Class View_Munis
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(12, 182)
+        Me.Label3.Location = New System.Drawing.Point(0, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(119, 16)
         Me.Label3.TabIndex = 49
         Me.Label3.Text = "Requisition Info:"
         '
+        'pnlMaster
+        '
+        Me.pnlMaster.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pnlMaster.Controls.Add(Me.pnlRequisition)
+        Me.pnlMaster.Controls.Add(Me.pnlFixedAsset)
+        Me.pnlMaster.Location = New System.Drawing.Point(12, 3)
+        Me.pnlMaster.Name = "pnlMaster"
+        Me.pnlMaster.Size = New System.Drawing.Size(854, 574)
+        Me.pnlMaster.TabIndex = 49
+        '
         'View_Munis
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(953, 557)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Panel3)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Panel1)
+        Me.ClientSize = New System.Drawing.Size(880, 589)
+        Me.Controls.Add(Me.pnlMaster)
         Me.Controls.Add(Me.Panel2)
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "View_Munis"
         Me.Text = "Munis Info"
         CType(Me.DataGridMunis_Inventory, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel1.ResumeLayout(False)
+        Me.pnlFixedAsset.ResumeLayout(False)
+        Me.pnlFixedAsset.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
-        Me.Panel3.ResumeLayout(False)
+        Me.pnlRequisition.ResumeLayout(False)
+        Me.pnlRequisition.PerformLayout()
         CType(Me.DataGridMunis_Requisition, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlMaster.ResumeLayout(False)
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents DataGridMunis_Inventory As DataGridView
-    Friend WithEvents Panel1 As Panel
+    Friend WithEvents pnlFixedAsset As Panel
     Friend WithEvents txtSerial As TextBox
     Friend WithEvents cmdSearch As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Label2 As Label
-    Friend WithEvents Panel3 As Panel
+    Friend WithEvents pnlRequisition As Panel
     Friend WithEvents DataGridMunis_Requisition As DataGridView
     Friend WithEvents Label3 As Label
+    Friend WithEvents pnlMaster As Panel
 End Class

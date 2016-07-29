@@ -77,7 +77,8 @@
     Private Sub View_Munis_Load(sender As Object, e As EventArgs) Handles Me.Load
         ExtendedMethods.DoubleBuffered(DataGridMunis_Inventory, True)
         ExtendedMethods.DoubleBuffered(DataGridMunis_Requisition, True)
-        ' MainForm.CopyDefaultCellStyles()
+        DataGridMunis_Inventory.DefaultCellStyle = GridStylez
+        DataGridMunis_Requisition.DefaultCellStyle = GridStylez
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         Dim MunisTable As DataTable
@@ -87,5 +88,11 @@
             Debug.Print(r.Item("fama_asset"))
         Next
         DataGridMunis_Inventory.DataSource = MunisTable
+    End Sub
+    Public Sub HideFixedAssetGrid()
+        pnlFixedAsset.Visible = False
+        pnlRequisition.Top = pnlMaster.Top
+        pnlRequisition.Height = pnlMaster.Height
+
     End Sub
 End Class

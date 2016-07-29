@@ -287,6 +287,17 @@ Public Module DBFunctions
             Return ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
+    Public Function DeleteSibiRequest(ByVal strGUID As String, Type As String) As Boolean
+        Try
+            If HasSibiAttachments(strGUID) Then
+                If DeleteFTPDeviceFolder(strGUID, Type) Then Return DeleteSQLSibiRequest(strGUID) ' if has attachments, delete ftp directory, then delete the sql records.
+            Else
+                Return DeleteSQLSibiRequest(strGUID) 'delete sql records
+            End If
+        Catch ex As Exception
+            Return ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Function
     Public Function DeleteAttachment(AttachUID As String, Type As String) As Integer
         If Not ConnectionReady() Then
             ConnectionNotReady()
@@ -358,10 +369,40 @@ Public Module DBFunctions
             Return Nothing
         End Try
     End Function
+    Public Function HasSibiAttachments(strGUID As String) As Boolean
+        Try
+            Dim reader As MySqlDataReader
+            Dim strQRY = "SELECT sibi_attach_uid FROM sibi_attachments WHERE sibi_attach_uid='" & strGUID & "'"
+            reader = ReturnSQLReader(strQRY)
+            Dim bolHasRows As Boolean = reader.HasRows
+            reader.Close()
+            Return bolHasRows
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Else
+                EndProgram()
+            End If
+            Return Nothing
+        End Try
+    End Function
     Public Function DeleteSQLDevice(ByVal strGUID As String) As Integer
         Try
             Dim rows
             Dim strSQLQry As String = "DELETE FROM devices WHERE dev_UID='" & strGUID & "'"
+            rows = ReturnSQLCommand(strSQLQry).ExecuteNonQuery
+            Return rows
+            Exit Function
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Function
+    Public Function DeleteSQLSibiRequest(ByVal strGUID As String) As Integer
+        Try
+            Dim rows
+            Dim strSQLQry As String = "DELETE FROM sibi_requests WHERE sibi_uid='" & strGUID & "'"
             rows = ReturnSQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function

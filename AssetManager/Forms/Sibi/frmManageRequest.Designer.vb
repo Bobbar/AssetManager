@@ -60,6 +60,9 @@ Partial Class frmManageRequest
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.cmdClearAll = New System.Windows.Forms.Button()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
+        Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -346,7 +349,7 @@ Partial Class frmManageRequest
         '
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.ToolStripSeparator1, Me.cmdUpdate, Me.ToolStripSeparator2, Me.cmdAttachments})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdDelete, Me.ToolStripSeparator4, Me.cmdCreate, Me.ToolStripSeparator1, Me.cmdUpdate, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -404,6 +407,25 @@ Partial Class frmManageRequest
         Me.ToolTip.InitialDelay = 0
         Me.ToolTip.IsBalloon = True
         Me.ToolTip.ReshowDelay = 110
+        '
+        'cmdDelete
+        '
+        Me.cmdDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.cmdDelete.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
+        Me.cmdDelete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdDelete.Name = "cmdDelete"
+        Me.cmdDelete.Size = New System.Drawing.Size(23, 25)
+        Me.cmdDelete.Text = "Delete"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 28)
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 28)
         '
         'frmManageRequest
         '
@@ -466,4 +488,7 @@ Partial Class frmManageRequest
     Friend WithEvents PopupMenu As ContextMenuStrip
     Friend WithEvents tsmDeleteItem As ToolStripMenuItem
     Friend WithEvents ToolTip As ToolTip
+    Friend WithEvents cmdDelete As ToolStripButton
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
 End Class

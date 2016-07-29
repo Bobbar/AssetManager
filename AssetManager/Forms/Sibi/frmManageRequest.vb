@@ -550,10 +550,6 @@ VALUES
         OpenRequest(CurrentRequest.strUID)
     End Sub
 
-    Private Sub txtRTNumber_TextChanged(sender As Object, e As EventArgs) Handles txtRTNumber.TextChanged
-
-    End Sub
-
     Private Sub txtRTNumber_Click(sender As Object, e As EventArgs) Handles txtRTNumber.Click
         Dim RTNum As String = Trim(txtRTNumber.Text)
         If Not bolUpdating And RTNum <> "" Then
@@ -561,9 +557,6 @@ VALUES
         End If
     End Sub
 
-    Private Sub txtReqNumber_TextChanged(sender As Object, e As EventArgs) Handles txtReqNumber.TextChanged
-
-    End Sub
     Private Sub NewMunisView(ReqNum As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
@@ -572,6 +565,7 @@ VALUES
         Dim NewMunis As New View_Munis
         'Waiting()
         'AddChild(NewMunis)
+        NewMunis.HideFixedAssetGrid()
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNum, YearFromDate(CurrentRequest.dtDateStamp))
         ' NewMunis.ViewEntry(GUID)
         NewMunis.Show()
@@ -581,6 +575,25 @@ VALUES
         Dim ReqNum As String = Trim(txtReqNumber.Text)
         If Not bolUpdating And ReqNum <> "" Then
             NewMunisView(ReqNum)
+        End If
+    End Sub
+
+    Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
+        If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
+        Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbCritical, "WARNING")
+        If blah = vbYes Then
+            If DeleteSibiRequest(CurrentRequest.strUID, AttachmentType.Sibi) Then
+                Dim blah2 = MsgBox("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
+                CurrentRequest = Nothing
+                Me.Dispose()
+            Else
+                Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)
+                Dim blah2 = MsgBox("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
+                CurrentRequest = Nothing
+                Me.Dispose()
+            End If
+        Else
+            Exit Sub
         End If
     End Sub
 End Class
