@@ -12,6 +12,7 @@ Class frmSibiAttachments
     Private stpSpeed As New Stopwatch
     Private bolGridFilling As Boolean
     Private progIts As Integer = 0
+    Private strSelectedFolder As String
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -97,16 +98,10 @@ Class frmSibiAttachments
                 Case Else
                     strQry = "Select * FROM sibi_attachments WHERE sibi_attach_folder='" & GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex) & "' AND sibi_attach_UID ='" & RequestUID & "' ORDER BY sibi_attach_timestamp DESC"
             End Select
-
-            Debug.Print(strQry)
-
-
-
-
-
             table.Columns.Add("Filename", GetType(String))
             table.Columns.Add("Size", GetType(String))
             table.Columns.Add("Date", GetType(String))
+            table.Columns.Add("Folder", GetType(String))
             table.Columns.Add("AttachUID", GetType(String))
             table.Columns.Add("MD5", GetType(String))
             ' End If
@@ -121,7 +116,7 @@ Class frmSibiAttachments
                     ' If bolAdminMode Then
                     ' table.Rows.Add(strFullFilename, strFileSizeHuman,!attach_upload_date,!dev_asset_tag,!attach_file_UID,!attach_file_hash)
                     ' Else
-                    table.Rows.Add(strFullFilename, strFileSizeHuman, !sibi_attach_timestamp, !sibi_attach_file_UID, !sibi_attach_file_hash)
+                    table.Rows.Add(strFullFilename, strFileSizeHuman, !sibi_attach_timestamp, GetHumanValue(ComboType.SibiAttachFolder, !sibi_attach_folder), !sibi_attach_file_UID, !sibi_attach_file_hash)
                     ' End If
                     ReDim Preserve AttachIndex(row)
                     AttachIndex(row).strFilename = !sibi_attach_file_name
@@ -318,7 +313,7 @@ Class frmSibiAttachments
                 cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
                 cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
                 cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
-                cmd.Parameters.AddWithValue("@sibi_attach_folder", GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex))
+                cmd.Parameters.AddWithValue("@sibi_attach_folder", strSelectedFolder)
                 cmd.ExecuteNonQuery()
                 conn.Close()
                 conn.Dispose()
@@ -356,8 +351,8 @@ Class frmSibiAttachments
             ListAttachments(CurrentRequest.strUID)
             If Not e.Cancelled Then
                 If e.Result Then
-                    MessageBox.Show("File uploaded successfully!",
-              "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                    ' MessageBox.Show("File uploaded successfully!",
+                    '"Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
                 Else
                     MessageBox.Show("File upload failed.",
          "Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
@@ -622,6 +617,7 @@ Class frmSibiAttachments
 
     Private Sub cmbFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFolder.SelectedIndexChanged
         ListAttachments(CurrentRequest.strUID)
+        strSelectedFolder = GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex)
     End Sub
 
     Private Sub cmbMoveFolder_Validated(sender As Object, e As EventArgs) Handles cmbMoveFolder.Validated
@@ -630,5 +626,9 @@ Class frmSibiAttachments
 
     Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
         If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, GetDBValue(Sibi_AttachFolder, cmbMoveFolder.SelectedIndex))
+    End Sub
+
+    Private Sub cmbMoveFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbMoveFolder.SelectedIndexChanged
+
     End Sub
 End Class

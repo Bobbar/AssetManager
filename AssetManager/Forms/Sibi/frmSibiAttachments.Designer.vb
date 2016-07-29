@@ -55,6 +55,7 @@ Partial Class frmSibiAttachments
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
         Me.ProgTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -161,6 +162,7 @@ Partial Class frmSibiAttachments
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.Label4)
         Me.Panel1.Controls.Add(Me.cmbFolder)
         Me.Panel1.Controls.Add(Me.AttachGrid)
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -379,6 +381,15 @@ Partial Class frmSibiAttachments
         '
         Me.ProgTimer.Interval = 50
         '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(152, 8)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(49, 15)
+        Me.Label4.TabIndex = 20
+        Me.Label4.Text = "Folder"
+        '
         'frmSibiAttachments
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -397,6 +408,7 @@ Partial Class frmSibiAttachments
         Me.RightClickMenu.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         CType(Me.AttachGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
@@ -438,4 +450,5 @@ Partial Class frmSibiAttachments
     Friend WithEvents cmbFolder As ComboBox
     Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents cmbMoveFolder As ToolStripComboBox
+    Friend WithEvents Label4 As Label
 End Class

@@ -421,13 +421,13 @@ VALUES
         Dim strPullNotesQry As String = "SELECT * FROM sibi_notes WHERE sibi_request_uid='" & RequestUID & "' ORDER BY sibi_datestamp DESC"
         Dim Results As DataTable = ReturnSQLTable(strPullNotesQry)
         Dim table As New DataTable
-        Dim PreviewChars As Integer = 50
+        Dim intPreviewChars As Integer = 50
         table.Columns.Add("Date Stamp")
         table.Columns.Add("Preview")
         table.Columns.Add("UID")
         For Each r As DataRow In Results.Rows
             table.Rows.Add(r.Item("sibi_datestamp"),
-                           Strings.Left(r.Item("sibi_note"), PreviewChars) & "...",
+                           IIf(Len(r.Item("sibi_note")) > intPreviewChars, Strings.Left(r.Item("sibi_note"), intPreviewChars) & "...", r.Item("sibi_note")),
                            r.Item("sibi_note_uid"))
         Next
         dgvNotes.DataSource = table
