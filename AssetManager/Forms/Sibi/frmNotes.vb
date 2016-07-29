@@ -2,9 +2,7 @@
 Public Class frmNotes
     Private Sub ClearAll()
         rtbNotes.Clear()
-
     End Sub
-
     Private Sub frmNotes_Load(sender As Object, e As EventArgs) Handles Me.Load
         'ClearAll()
     End Sub
@@ -50,13 +48,10 @@ VALUES
             MsgBox("Failed!")
         End If
     End Sub
-
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click
         Me.Dispose()
     End Sub
-
     Private Sub rtbNotes_LinkClicked(sender As Object, e As LinkClickedEventArgs) Handles rtbNotes.LinkClicked
         Process.Start(e.LinkText)
-
     End Sub
 End Class

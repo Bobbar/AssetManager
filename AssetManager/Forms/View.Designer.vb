@@ -212,7 +212,6 @@ Partial Class View
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
         '
-
         'cmdMunisInfo
         '
         Me.cmdMunisInfo.Location = New System.Drawing.Point(580, 190)
@@ -845,9 +844,7 @@ Partial Class View
         Me.PingWorker.WorkerReportsProgress = True
         Me.PingWorker.WorkerSupportsCancellation = True
         '
-
         'Label12
-
         'tmr_RDPRefresher
         '
         Me.tmr_RDPRefresher.Enabled = True

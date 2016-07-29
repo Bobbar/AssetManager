@@ -751,7 +751,6 @@ Partial Class MainForm
         Me.PanelNoScrollOnFocus1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button

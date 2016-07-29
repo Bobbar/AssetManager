@@ -63,9 +63,7 @@ Public Module DBFunctions
         Public strRequestNumber As String
         Public strRTNumber As String
         Public RequstItems As DataTable
-
     End Structure
-
     Public Structure Hist_Info
         Public strChangeType As String
         Public strHistUID As String
@@ -101,7 +99,6 @@ Public Module DBFunctions
     Public Sibi_ItemStatusType() As Combo_Data
     Public Sibi_RequestType() As Combo_Data
     Public CurrentRequest As Request_Info
-
     Public Structure User_Info
         Public strUsername As String
         Public strFullname As String
@@ -267,7 +264,6 @@ Public Module DBFunctions
             Return Nothing
         End Try
     End Function
-
     Public Function GetShortLocation(ByVal index As Integer) As String
         Try
             Return Locations(index).strShort
@@ -334,7 +330,6 @@ Public Module DBFunctions
                     ElseIf Type = AttachmentType.Sibi Then
                         strDeviceID = !sibi_attach_UID
                     End If
-
                 Loop
             End With
             reader.Close()

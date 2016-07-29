@@ -2,11 +2,9 @@
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         ShowAll()
     End Sub
-
     Private Sub frmSibiMain_Load(sender As Object, e As EventArgs) Handles Me.Load
         ShowAll()
     End Sub
-
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
             'StatusBar(strLoadingGridMessage)
@@ -45,21 +43,15 @@
         End Try
     End Sub
     Private Sub ShowAll()
-
         SendToGrid(ReturnSQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
-
     End Sub
-
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
         frmManageRequest.ClearAll()
         frmManageRequest.Show()
         frmManageRequest.cmdAddNew.Visible = True
     End Sub
-
     Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
-
     End Sub
-
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
         frmManageRequest.OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
     End Sub

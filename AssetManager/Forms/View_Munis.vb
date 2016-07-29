@@ -93,6 +93,5 @@
         pnlFixedAsset.Visible = False
         pnlRequisition.Top = pnlMaster.Top
         pnlRequisition.Height = pnlMaster.Height
-
     End Sub
 End Class

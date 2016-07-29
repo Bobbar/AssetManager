@@ -738,12 +738,11 @@ Public Class MainForm
     Private Sub PanelNoScrollOnFocus1_MouseWheel(sender As Object, e As MouseEventArgs) Handles PanelNoScrollOnFocus1.MouseWheel
         HideLiveBox()
     End Sub
-
     Private Sub cmdSibi_Click(sender As Object, e As EventArgs) Handles cmdSibi.Click
         ' frmNewRequest.Show()
         frmSibiMain.Show()
+        frmSibiMain.Activate()
     End Sub
-
     Private Sub txtReplaceYear_KeyDown(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyDown
         If e.KeyCode = Keys.Down Then
             GiveLiveBoxFocus()
