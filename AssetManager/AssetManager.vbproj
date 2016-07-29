@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>7.2016.6055.2022</AssemblyVersion>
+    <AssemblyVersion>7.2016.6055.2046</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -114,6 +114,12 @@
       <DependentUpon>AddNew.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\AddNew.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmNotes.Designer.vb">
+      <DependentUpon>frmNotes.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmNotes.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Sibi\frmSibiAttachments.Designer.vb">
@@ -230,6 +236,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sibi\frmNotes.resx">
+      <DependentUpon>frmNotes.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Sibi\frmSibiAttachments.resx">
       <DependentUpon>frmSibiAttachments.vb</DependentUpon>

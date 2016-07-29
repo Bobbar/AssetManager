@@ -254,6 +254,19 @@ Public Module DBFunctions
             Return Nothing
         End Try
     End Function
+    Public Function ReturnSQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
+        Dim sqlQRY As String = "SELECT " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
+        Debug.Print(sqlQRY)
+        Try
+            Dim cmd As New MySqlCommand
+            cmd.Connection = GlobalConn
+            cmd.CommandText = sqlQRY
+            Return Convert.ToString(cmd.ExecuteScalar)
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
+        End Try
+    End Function
 
     Public Function GetShortLocation(ByVal index As Integer) As String
         Try

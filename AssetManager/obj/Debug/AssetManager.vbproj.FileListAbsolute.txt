@@ -53,3 +53,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmSibiAttachments.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmManageRequest.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmNotes.resources

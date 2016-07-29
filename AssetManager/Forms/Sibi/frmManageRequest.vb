@@ -13,7 +13,7 @@ Public Class frmManageRequest
     Public Sub ClearAll()
         ClearControls(Me)
 
-
+        dgvNotes.DataSource = Nothing
         SetupGrid()
         FillCombos()
         EnableControls(Me)
@@ -215,7 +215,8 @@ Public Class frmManageRequest
 `sibi_PO`,
 `sibi_requisition_number`,
 `sibi_replace_asset`,
-`sibi_replace_serial`)
+`sibi_replace_serial`,
+`sibi_RT_number`)
 VALUES
 (@sibi_uid,
 @sibi_request_user,
@@ -226,7 +227,8 @@ VALUES
 @sibi_PO,
 @sibi_requisition_number,
 @sibi_replace_asset,
-@sibi_replace_serial)"
+@sibi_replace_serial,
+@sibi_RT_number)"
             Dim cmd As MySqlCommand = ReturnSQLCommand(strSqlQry1)
             cmd.Parameters.AddWithValue("@sibi_uid", strRequestUID)
             cmd.Parameters.AddWithValue("@sibi_request_user", RequestData.strUser)
@@ -238,6 +240,7 @@ VALUES
             cmd.Parameters.AddWithValue("@sibi_requisition_number", RequestData.strRequisitionNumber)
             cmd.Parameters.AddWithValue("@sibi_replace_asset", RequestData.strReplaceAsset)
             cmd.Parameters.AddWithValue("@sibi_replace_serial", RequestData.strReplaceSerial)
+            cmd.Parameters.AddWithValue("@sibi_RT_number", RequestData.strRTNumber)
             rows = rows + cmd.ExecuteNonQuery()
             cmd.Parameters.Clear()
             For Each row As DataRow In RequestData.RequstItems.Rows
@@ -418,15 +421,34 @@ VALUES
         End With
 
         SendToGrid(RequestItemsResults)
+        LoadNotes(CurrentRequest.strUID)
         'RequestItemsGrid.ReadOnly = True
         DisableControls(Me)
 
         Me.Show()
     End Sub
-    Private Function DeleteItem(ItemUID As String) As Integer
+    Private Sub LoadNotes(RequestUID As String)
+        Dim strPullNotesQry As String = "SELECT * FROM sibi_notes WHERE sibi_request_uid='" & RequestUID & "' ORDER BY sibi_datestamp DESC"
+        Dim Results As DataTable = ReturnSQLTable(strPullNotesQry)
+        Dim table As New DataTable
+        Dim PreviewChars As Integer = 50
+        table.Columns.Add("Date Stamp")
+        table.Columns.Add("Note")
+        table.Columns.Add("UID")
+        For Each r As DataRow In Results.Rows
+            table.Rows.Add(r.Item("sibi_datestamp"),
+                           Strings.Left(r.Item("sibi_note"), PreviewChars) & "...",
+                           r.Item("sibi_note_uid"))
+        Next
+        dgvNotes.DataSource = table
+        dgvNotes.ClearSelection()
+        table.Dispose()
+        Results.Dispose()
+    End Sub
+    Private Function DeleteItem(ItemUID As String, ItemColumnName As String, Table As String) As Integer
         Try
             Dim rows
-            Dim strSQLQry As String = "DELETE FROM sibi_request_items WHERE sibi_items_uid='" & ItemUID & "'"
+            Dim strSQLQry As String = "DELETE FROM " & Table & " WHERE " & ItemColumnName & "='" & ItemUID & "'"
             rows = ReturnSQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function
@@ -437,6 +459,7 @@ VALUES
             End If
         End Try
     End Function
+
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         'Try
         'StatusBar(strLoadingGridMessage)
@@ -489,7 +512,7 @@ VALUES
     End Sub
 
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
-        UpdateMode(bolUpdating)
+        If CurrentRequest.strUID <> "" Then UpdateMode(bolUpdating)
     End Sub
     Private Sub UpdateMode(Enable As Boolean)
         If Not Enable Then
@@ -541,12 +564,8 @@ VALUES
 
     End Sub
 
-    Private Sub PopupMenu_Opening(sender As Object, e As CancelEventArgs) Handles PopupMenu.Opening
-
-    End Sub
-
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
-        Dim blah = MsgBox(DeleteItem(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+        Dim blah = MsgBox(DeleteItem(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
         OpenRequest(CurrentRequest.strUID)
     End Sub
 
@@ -595,6 +614,28 @@ VALUES
         Else
             Exit Sub
         End If
+    End Sub
+
+    Private Sub cmdAddNote_Click(sender As Object, e As EventArgs) Handles cmdAddNote.Click
+        If CurrentRequest.strUID <> "" Then
+            frmNotes.Show()
+        End If
+
+    End Sub
+
+    Private Sub dgvNotes_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvNotes.CellDoubleClick
+        frmNotes.ViewNote(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value)
+
+    End Sub
+
+    Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
+        Dim blah = MsgBox(DeleteItem(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value, "sibi_note_uid", "sibi_notes") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+        OpenRequest(CurrentRequest.strUID)
+    End Sub
+
+    Private Sub cmdClearForm_Click(sender As Object, e As EventArgs) Handles cmdClearForm.Click
+        ClearAll()
+        CurrentRequest = Nothing
     End Sub
 End Class
 

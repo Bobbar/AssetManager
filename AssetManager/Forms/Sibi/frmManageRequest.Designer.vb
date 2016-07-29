@@ -23,10 +23,13 @@ Partial Class frmManageRequest
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cmdClearAll = New System.Windows.Forms.Button()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.txtRequestNum = New System.Windows.Forms.TextBox()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
@@ -50,29 +53,41 @@ Partial Class frmManageRequest
         Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
-        Me.PopupMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStrip = New System.Windows.Forms.ToolStrip()
+        Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
-        Me.cmdClearAll = New System.Windows.Forms.Button()
-        Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
-        Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
+        Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.dgvNotes = New System.Windows.Forms.DataGridView()
+        Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmdClearForm = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.PopupMenu.SuspendLayout()
+        Me.PopupMenuItems.SuspendLayout()
         Me.ToolStrip.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
+        Me.Panel2.SuspendLayout()
+        CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PopupMenuNotes.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.cmdClearAll)
         Me.GroupBox1.Controls.Add(Me.Label8)
         Me.GroupBox1.Controls.Add(Me.txtRequestNum)
         Me.GroupBox1.Controls.Add(Me.cmbStatus)
@@ -90,15 +105,26 @@ Partial Class frmManageRequest
         Me.GroupBox1.Controls.Add(Me.txtDescription)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 44)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(648, 250)
+        Me.GroupBox1.Size = New System.Drawing.Size(600, 250)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Request Info"
         '
+        'cmdClearAll
+        '
+        Me.cmdClearAll.Location = New System.Drawing.Point(245, 161)
+        Me.cmdClearAll.Name = "cmdClearAll"
+        Me.cmdClearAll.Size = New System.Drawing.Size(112, 21)
+        Me.cmdClearAll.TabIndex = 17
+        Me.cmdClearAll.Text = "Clear All"
+        Me.cmdClearAll.UseVisualStyleBackColor = True
+        Me.cmdClearAll.Visible = False
+        '
         'Label8
         '
+        Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(535, 28)
+        Me.Label8.Location = New System.Drawing.Point(493, 28)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(60, 13)
         Me.Label8.TabIndex = 16
@@ -106,7 +132,8 @@ Partial Class frmManageRequest
         '
         'txtRequestNum
         '
-        Me.txtRequestNum.Location = New System.Drawing.Point(538, 44)
+        Me.txtRequestNum.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtRequestNum.Location = New System.Drawing.Point(496, 44)
         Me.txtRequestNum.Name = "txtRequestNum"
         Me.txtRequestNum.ReadOnly = True
         Me.txtRequestNum.Size = New System.Drawing.Size(86, 20)
@@ -132,7 +159,7 @@ Partial Class frmManageRequest
         'cmdAddNew
         '
         Me.cmdAddNew.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAddNew.Location = New System.Drawing.Point(278, 181)
+        Me.cmdAddNew.Location = New System.Drawing.Point(278, 191)
         Me.cmdAddNew.Name = "cmdAddNew"
         Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
         Me.cmdAddNew.TabIndex = 12
@@ -142,13 +169,14 @@ Partial Class frmManageRequest
         '
         'GroupBox2
         '
+        Me.GroupBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox2.Controls.Add(Me.Label9)
         Me.GroupBox2.Controls.Add(Me.txtRTNumber)
         Me.GroupBox2.Controls.Add(Me.Label6)
         Me.GroupBox2.Controls.Add(Me.txtReqNumber)
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Controls.Add(Me.txtPO)
-        Me.GroupBox2.Location = New System.Drawing.Point(467, 83)
+        Me.GroupBox2.Location = New System.Drawing.Point(419, 83)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(175, 157)
         Me.GroupBox2.TabIndex = 11
@@ -291,7 +319,7 @@ Partial Class frmManageRequest
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(12, 300)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1039, 348)
+        Me.Panel1.Size = New System.Drawing.Size(1084, 348)
         Me.Panel1.TabIndex = 1
         '
         'RequestItemsGrid
@@ -305,39 +333,39 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.RequestItemsGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.RequestItemsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.RequestItemsGrid.ContextMenuStrip = Me.PopupMenu
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.RequestItemsGrid.DefaultCellStyle = DataGridViewCellStyle1
+        Me.RequestItemsGrid.ContextMenuStrip = Me.PopupMenuItems
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.RequestItemsGrid.DefaultCellStyle = DataGridViewCellStyle3
         Me.RequestItemsGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.RequestItemsGrid.Location = New System.Drawing.Point(3, 3)
         Me.RequestItemsGrid.Name = "RequestItemsGrid"
         Me.RequestItemsGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.RequestItemsGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.RequestItemsGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.RequestItemsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.RequestItemsGrid.ShowCellErrors = False
         Me.RequestItemsGrid.ShowCellToolTips = False
-        Me.RequestItemsGrid.Size = New System.Drawing.Size(1033, 342)
+        Me.RequestItemsGrid.Size = New System.Drawing.Size(1078, 342)
         Me.RequestItemsGrid.TabIndex = 18
         '
-        'PopupMenu
+        'PopupMenuItems
         '
-        Me.PopupMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmDeleteItem})
-        Me.PopupMenu.Name = "PopupMenu"
-        Me.PopupMenu.Size = New System.Drawing.Size(135, 26)
+        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmDeleteItem})
+        Me.PopupMenuItems.Name = "PopupMenu"
+        Me.PopupMenuItems.Size = New System.Drawing.Size(135, 26)
         '
         'tsmDeleteItem
         '
@@ -349,13 +377,27 @@ Partial Class frmManageRequest
         '
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdDelete, Me.ToolStripSeparator4, Me.cmdCreate, Me.ToolStripSeparator1, Me.cmdUpdate, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdDelete, Me.ToolStripSeparator4, Me.cmdCreate, Me.ToolStripSeparator1, Me.cmdUpdate, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.cmdAddNote, Me.ToolStripSeparator5, Me.cmdClearForm})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip.Size = New System.Drawing.Size(1063, 28)
+        Me.ToolStrip.Size = New System.Drawing.Size(1108, 28)
         Me.ToolStrip.TabIndex = 2
         Me.ToolStrip.Text = "ToolStrip1"
+        '
+        'cmdDelete
+        '
+        Me.cmdDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.cmdDelete.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
+        Me.cmdDelete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdDelete.Name = "cmdDelete"
+        Me.cmdDelete.Size = New System.Drawing.Size(23, 25)
+        Me.cmdDelete.Text = "Delete"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 28)
         '
         'cmdCreate
         '
@@ -391,14 +433,19 @@ Partial Class frmManageRequest
         Me.cmdAttachments.Size = New System.Drawing.Size(117, 25)
         Me.cmdAttachments.Text = "Attachments"
         '
-        'cmdClearAll
+        'ToolStripSeparator3
         '
-        Me.cmdClearAll.Location = New System.Drawing.Point(720, 243)
-        Me.cmdClearAll.Name = "cmdClearAll"
-        Me.cmdClearAll.Size = New System.Drawing.Size(112, 41)
-        Me.cmdClearAll.TabIndex = 3
-        Me.cmdClearAll.Text = "Clear All"
-        Me.cmdClearAll.UseVisualStyleBackColor = True
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 28)
+        '
+        'cmdAddNote
+        '
+        Me.cmdAddNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.cmdAddNote.Image = CType(resources.GetObject("cmdAddNote.Image"), System.Drawing.Image)
+        Me.cmdAddNote.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdAddNote.Name = "cmdAddNote"
+        Me.cmdAddNote.Size = New System.Drawing.Size(80, 25)
+        Me.cmdAddNote.Text = "Add Note"
         '
         'ToolTip
         '
@@ -408,31 +455,103 @@ Partial Class frmManageRequest
         Me.ToolTip.IsBalloon = True
         Me.ToolTip.ReshowDelay = 110
         '
-        'cmdDelete
+        'GroupBox3
         '
-        Me.cmdDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.cmdDelete.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
-        Me.cmdDelete.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.cmdDelete.Name = "cmdDelete"
-        Me.cmdDelete.Size = New System.Drawing.Size(23, 25)
-        Me.cmdDelete.Text = "Delete"
+        Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox3.Controls.Add(Me.Panel2)
+        Me.GroupBox3.Location = New System.Drawing.Point(618, 44)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(478, 250)
+        Me.GroupBox3.TabIndex = 4
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "Notes"
         '
-        'ToolStripSeparator3
+        'Panel2
         '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 28)
+        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel2.Controls.Add(Me.dgvNotes)
+        Me.Panel2.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Panel2.Location = New System.Drawing.Point(6, 13)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(467, 231)
+        Me.Panel2.TabIndex = 0
         '
-        'ToolStripSeparator4
+        'dgvNotes
         '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 28)
+        Me.dgvNotes.AllowUserToAddRows = False
+        Me.dgvNotes.AllowUserToDeleteRows = False
+        Me.dgvNotes.AllowUserToResizeRows = False
+        Me.dgvNotes.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvNotes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
+        Me.dgvNotes.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.dgvNotes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.dgvNotes.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        Me.dgvNotes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvNotes.ContextMenuStrip = Me.PopupMenuNotes
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvNotes.DefaultCellStyle = DataGridViewCellStyle5
+        Me.dgvNotes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
+        Me.dgvNotes.Location = New System.Drawing.Point(3, 3)
+        Me.dgvNotes.Name = "dgvNotes"
+        Me.dgvNotes.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvNotes.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
+        Me.dgvNotes.RowHeadersVisible = False
+        Me.dgvNotes.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.dgvNotes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.dgvNotes.ShowCellErrors = False
+        Me.dgvNotes.ShowCellToolTips = False
+        Me.dgvNotes.Size = New System.Drawing.Size(461, 225)
+        Me.dgvNotes.TabIndex = 19
+        '
+        'PopupMenuNotes
+        '
+        Me.PopupMenuNotes.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdDeleteNote})
+        Me.PopupMenuNotes.Name = "PopupMenu"
+        Me.PopupMenuNotes.Size = New System.Drawing.Size(137, 26)
+        '
+        'cmdDeleteNote
+        '
+        Me.cmdDeleteNote.Name = "cmdDeleteNote"
+        Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
+        Me.cmdDeleteNote.Text = "Delete Note"
+        '
+        'cmdClearForm
+        '
+        Me.cmdClearForm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.cmdClearForm.Image = CType(resources.GetObject("cmdClearForm.Image"), System.Drawing.Image)
+        Me.cmdClearForm.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdClearForm.Name = "cmdClearForm"
+        Me.cmdClearForm.Size = New System.Drawing.Size(91, 25)
+        Me.cmdClearForm.Text = "Clear Form"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 28)
         '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1063, 660)
-        Me.Controls.Add(Me.cmdClearAll)
+        Me.ClientSize = New System.Drawing.Size(1108, 660)
+        Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.GroupBox1)
@@ -446,9 +565,13 @@ Partial Class frmManageRequest
         Me.GroupBox2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.PopupMenu.ResumeLayout(False)
+        Me.PopupMenuItems.ResumeLayout(False)
         Me.ToolStrip.ResumeLayout(False)
         Me.ToolStrip.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.Panel2.ResumeLayout(False)
+        CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PopupMenuNotes.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -480,15 +603,23 @@ Partial Class frmManageRequest
     Friend WithEvents cmdAttachments As ToolStripButton
     Friend WithEvents cmdUpdate As ToolStripButton
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
-    Friend WithEvents cmdClearAll As Button
     Friend WithEvents Label8 As Label
     Friend WithEvents txtRequestNum As TextBox
     Friend WithEvents Label9 As Label
     Friend WithEvents txtRTNumber As TextBox
-    Friend WithEvents PopupMenu As ContextMenuStrip
+    Friend WithEvents PopupMenuItems As ContextMenuStrip
     Friend WithEvents tsmDeleteItem As ToolStripMenuItem
     Friend WithEvents ToolTip As ToolTip
     Friend WithEvents cmdDelete As ToolStripButton
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents cmdClearAll As Button
+    Friend WithEvents GroupBox3 As GroupBox
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents dgvNotes As DataGridView
+    Friend WithEvents cmdAddNote As ToolStripButton
+    Friend WithEvents PopupMenuNotes As ContextMenuStrip
+    Friend WithEvents cmdDeleteNote As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
+    Friend WithEvents cmdClearForm As ToolStripButton
 End Class
