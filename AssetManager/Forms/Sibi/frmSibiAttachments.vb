@@ -91,7 +91,19 @@ Class frmSibiAttachments
             '    table.Columns.Add("AttachUID", GetType(String))
             '    table.Columns.Add("MD5", GetType(String))
             'ElseIf Not bolAdminMode Then
-            strQry = "Select sibi_attach_uid,sibi_attach_file_name,sibi_attach_file_type,sibi_attach_file_size,sibi_attach_timestamp,sibi_attach_file_UID,sibi_attach_file_hash FROM sibi_attachments WHERE sibi_attach_UID='" & RequestUID & "' ORDER BY sibi_attach_timestamp DESC"
+            Select Case GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex)
+                Case "ALL"
+                    strQry = "Select * FROM sibi_attachments WHERE sibi_attach_UID='" & RequestUID & "' ORDER BY sibi_attach_timestamp DESC"
+                Case Else
+                    strQry = "Select * FROM sibi_attachments WHERE sibi_attach_folder='" & GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex) & "' AND sibi_attach_UID ='" & RequestUID & "' ORDER BY sibi_attach_timestamp DESC"
+            End Select
+
+            Debug.Print(strQry)
+
+
+
+
+
             table.Columns.Add("Filename", GetType(String))
             table.Columns.Add("Size", GetType(String))
             table.Columns.Add("Date", GetType(String))
@@ -179,13 +191,19 @@ Class frmSibiAttachments
             cmdUpload.Enabled = False
             cmdDelete.Enabled = False
         End If
+        FillFolderCombos()
         FillInfo()
         DoneWaiting()
+    End Sub
+    Private Sub FillFolderCombos()
+        FillComboBox(Sibi_AttachFolder, cmbFolder)
+        FillToolComboBox(Sibi_AttachFolder, cmbMoveFolder)
     End Sub
     Public Sub FillInfo()
         txtNeedBy.Text = CurrentRequest.dtNeedBy.ToString
         txtRequestNum.Text = CurrentRequest.strRequestNumber
         txtDescription.Text = CurrentRequest.strDescription
+        cmbFolder.SelectedIndex = 0
     End Sub
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs)
         OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
@@ -290,7 +308,7 @@ Class frmSibiAttachments
             End If
             'update sql table
             If Not UploadWorker.CancellationPending Then
-                SQL = "INSERT INTO sibi_attachments (`sibi_attach_UID`, `sibi_attach_file_name`, `sibi_attach_file_type`, `sibi_attach_file_size`, `sibi_attach_file_UID`, `sibi_attach_file_hash`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash)"
+                SQL = "INSERT INTO sibi_attachments (`sibi_attach_UID`, `sibi_attach_file_name`, `sibi_attach_file_type`, `sibi_attach_file_size`, `sibi_attach_file_UID`, `sibi_attach_file_hash`, `sibi_attach_folder`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash, @sibi_attach_folder)"
                 conn.Open()
                 cmd.Connection = conn
                 cmd.CommandText = SQL
@@ -300,6 +318,7 @@ Class frmSibiAttachments
                 cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
                 cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
                 cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
+                cmd.Parameters.AddWithValue("@sibi_attach_folder", GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex))
                 cmd.ExecuteNonQuery()
                 conn.Close()
                 conn.Dispose()
@@ -316,6 +335,20 @@ Class frmSibiAttachments
             UploadWorker.ReportProgress(1, "Idle...")
             If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
+    End Sub
+    Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
+        Dim Filename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
+        Dim blah = MsgBox("Move " & Filename & " to " & GetHumanValue(ComboType.SibiAttachFolder, Folder) & "?", vbYesNo + vbQuestion, "Move Attachment")
+        If blah = vbYes Then
+            UpdateSQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
+            ListAttachments(CurrentRequest.strUID)
+        Else
+
+        End If
+
+        cmbMoveFolder.SelectedIndex = -1
+        cmbMoveFolder.Text = "Select a folder"
+        RightClickMenu.Close()
     End Sub
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
         Try
@@ -537,8 +570,7 @@ Class frmSibiAttachments
             End If
         End If
     End Sub
-    Private Sub AttachGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellContentClick
-    End Sub
+
     Private Sub AttachGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellLeave
         Dim BackColor As Color = DefGridBC
         Dim SelectColor As Color = DefGridSelCol
@@ -578,5 +610,25 @@ Class frmSibiAttachments
     Private Sub ToolStripDropDownButton1_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
         If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
         If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
+    End Sub
+
+    Private Sub cmbMoveFolder_Click(sender As Object, e As EventArgs) Handles cmbMoveFolder.Click
+
+    End Sub
+
+    Private Sub cmbMoveFolder_TextChanged(sender As Object, e As EventArgs) Handles cmbMoveFolder.TextChanged
+
+    End Sub
+
+    Private Sub cmbFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFolder.SelectedIndexChanged
+        ListAttachments(CurrentRequest.strUID)
+    End Sub
+
+    Private Sub cmbMoveFolder_Validated(sender As Object, e As EventArgs) Handles cmbMoveFolder.Validated
+
+    End Sub
+
+    Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
+        If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, GetDBValue(Sibi_AttachFolder, cmbMoveFolder.SelectedIndex))
     End Sub
 End Class

@@ -98,6 +98,7 @@ Public Module DBFunctions
     Public Sibi_StatusType() As Combo_Data
     Public Sibi_ItemStatusType() As Combo_Data
     Public Sibi_RequestType() As Combo_Data
+    Public Sibi_AttachFolder() As Combo_Data
     Public CurrentRequest As Request_Info
     Public Structure User_Info
         Public strUsername As String
@@ -116,6 +117,7 @@ Public Module DBFunctions
         Public Const SibiStatusType As String = "STATUS"
         Public Const SibiItemStatusType As String = "ITEM_STATUS"
         Public Const SibiRequestType As String = "REQ_TYPE"
+        Public Const SibiAttachFolder As String = "ATTACH_FOLDER"
     End Class
     Public NotInheritable Class CodeType
         Public Const Sibi As String = "sibi_codes"
@@ -262,6 +264,17 @@ Public Module DBFunctions
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return Nothing
+        End Try
+    End Function
+    Public Function UpdateSQLValue(table As String, fieldIN As String, valueIN As String, idField As String, idValue As String) As Integer
+        Try
+            Dim sqlUpdateQry As String = "UPDATE " & table & " SET " & fieldIN & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"
+            Dim cmd As MySqlCommand = ReturnSQLCommand(sqlUpdateQry)
+            cmd.Parameters.AddWithValue("@ValueIN", valueIN)
+            Return cmd.ExecuteNonQuery()
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        Return Nothing
         End Try
     End Function
     Public Function GetShortLocation(ByVal index As Integer) As String
@@ -509,6 +522,8 @@ Public Module DBFunctions
                 Return Sibi_RequestType
             Case ComboType.SibiStatusType
                 Return Sibi_StatusType
+            Case ComboType.SibiAttachFolder
+                Return Sibi_AttachFolder
             Case Else
                 Return Nothing
         End Select
@@ -532,6 +547,7 @@ Public Module DBFunctions
         Sibi_StatusType = BuildIndex(CodeType.Sibi, ComboType.SibiStatusType)
         Sibi_ItemStatusType = BuildIndex(CodeType.Sibi, ComboType.SibiItemStatusType)
         Sibi_RequestType = BuildIndex(CodeType.Sibi, ComboType.SibiRequestType)
+        Sibi_AttachFolder = BuildIndex(CodeType.Sibi, ComboType.SibiAttachFolder)
         Logger("Building Indexes Done...")
     End Sub
     Private Function BuildIndex(CodeType As String, TypeName As String) As Combo_Data()
@@ -563,6 +579,15 @@ Public Module DBFunctions
         End Try
     End Function
     Public Sub FillComboBox(IndexType() As Combo_Data, ByRef cmb As ComboBox)
+        cmb.Items.Clear()
+        cmb.Text = ""
+        Dim i As Integer = 0
+        For Each ComboItem As Combo_Data In IndexType
+            cmb.Items.Insert(i, ComboItem.strLong)
+            i += 1
+        Next
+    End Sub
+    Public Sub FillToolComboBox(IndexType() As Combo_Data, ByRef cmb As ToolStripComboBox)
         cmb.Items.Clear()
         cmb.Text = ""
         Dim i As Integer = 0

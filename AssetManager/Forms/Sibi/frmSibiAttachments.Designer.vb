@@ -27,12 +27,15 @@ Partial Class frmSibiAttachments
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.OpenTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyTextTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmbMoveFolder = New System.Windows.Forms.ToolStripComboBox()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmdDelete = New System.Windows.Forms.Button()
         Me.cmdOpen = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.cmbFolder = New System.Windows.Forms.ComboBox()
         Me.AttachGrid = New System.Windows.Forms.DataGridView()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -72,9 +75,9 @@ Partial Class frmSibiAttachments
         '
         'RightClickMenu
         '
-        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.CopyTextTool, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
+        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.CopyTextTool, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(174, 76)
+        Me.RightClickMenu.Size = New System.Drawing.Size(174, 98)
         '
         'OpenTool
         '
@@ -87,6 +90,19 @@ Partial Class frmSibiAttachments
         Me.CopyTextTool.Name = "CopyTextTool"
         Me.CopyTextTool.Size = New System.Drawing.Size(173, 22)
         Me.CopyTextTool.Text = "Copy Text"
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbMoveFolder})
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(173, 22)
+        Me.ToolStripMenuItem1.Text = "Move"
+        '
+        'cmbMoveFolder
+        '
+        Me.cmbMoveFolder.Name = "cmbMoveFolder"
+        Me.cmbMoveFolder.Size = New System.Drawing.Size(121, 23)
+        Me.cmbMoveFolder.Text = "Select a folder"
         '
         'ToolStripSeparator1
         '
@@ -103,7 +119,7 @@ Partial Class frmSibiAttachments
         '
         Me.cmdDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdDelete.Location = New System.Drawing.Point(23, 144)
+        Me.cmdDelete.Location = New System.Drawing.Point(23, 143)
         Me.cmdDelete.Name = "cmdDelete"
         Me.cmdDelete.Size = New System.Drawing.Size(92, 25)
         Me.cmdDelete.TabIndex = 4
@@ -144,12 +160,24 @@ Partial Class frmSibiAttachments
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.cmbFolder)
         Me.Panel1.Controls.Add(Me.AttachGrid)
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel1.Location = New System.Drawing.Point(150, 13)
+        Me.Panel1.Location = New System.Drawing.Point(150, 21)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(757, 390)
+        Me.Panel1.Size = New System.Drawing.Size(757, 382)
         Me.Panel1.TabIndex = 19
+        '
+        'cmbFolder
+        '
+        Me.cmbFolder.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbFolder.FormattingEnabled = True
+        Me.cmbFolder.Items.AddRange(New Object() {"Quotes", "POs", "Invoices"})
+        Me.cmbFolder.Location = New System.Drawing.Point(3, 3)
+        Me.cmbFolder.Name = "cmbFolder"
+        Me.cmbFolder.Size = New System.Drawing.Size(144, 23)
+        Me.cmbFolder.TabIndex = 19
         '
         'AttachGrid
         '
@@ -176,7 +204,7 @@ Partial Class frmSibiAttachments
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.AttachGrid.DefaultCellStyle = DataGridViewCellStyle1
         Me.AttachGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.AttachGrid.Location = New System.Drawing.Point(3, 8)
+        Me.AttachGrid.Location = New System.Drawing.Point(3, 32)
         Me.AttachGrid.Name = "AttachGrid"
         Me.AttachGrid.ReadOnly = True
         Me.AttachGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
@@ -194,7 +222,7 @@ Partial Class frmSibiAttachments
         Me.AttachGrid.ShowCellErrors = False
         Me.AttachGrid.ShowCellToolTips = False
         Me.AttachGrid.ShowEditingIcon = False
-        Me.AttachGrid.Size = New System.Drawing.Size(751, 379)
+        Me.AttachGrid.Size = New System.Drawing.Size(749, 345)
         Me.AttachGrid.TabIndex = 18
         Me.AttachGrid.VirtualMode = True
         '
@@ -376,6 +404,7 @@ Partial Class frmSibiAttachments
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents cmdUpload As Button
     Friend WithEvents RightClickMenu As ContextMenuStrip
@@ -406,4 +435,7 @@ Partial Class frmSibiAttachments
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents cmdCancel As ToolStripDropDownButton
+    Friend WithEvents cmbFolder As ComboBox
+    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents cmbMoveFolder As ToolStripComboBox
 End Class
