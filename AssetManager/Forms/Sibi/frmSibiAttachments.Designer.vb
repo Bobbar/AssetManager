@@ -27,7 +27,7 @@ Partial Class frmSibiAttachments
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.OpenTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyTextTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MoveStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmbMoveFolder = New System.Windows.Forms.ToolStripComboBox()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -35,6 +35,7 @@ Partial Class frmSibiAttachments
         Me.cmdOpen = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.cmbFolder = New System.Windows.Forms.ComboBox()
         Me.AttachGrid = New System.Windows.Forms.DataGridView()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -55,7 +56,7 @@ Partial Class frmSibiAttachments
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
         Me.ProgTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.Label4 = New System.Windows.Forms.Label()
+        Me.RenameStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -76,9 +77,9 @@ Partial Class frmSibiAttachments
         '
         'RightClickMenu
         '
-        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.CopyTextTool, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
+        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.CopyTextTool, Me.MoveStripMenuItem, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(174, 98)
+        Me.RightClickMenu.Size = New System.Drawing.Size(174, 142)
         '
         'OpenTool
         '
@@ -92,12 +93,12 @@ Partial Class frmSibiAttachments
         Me.CopyTextTool.Size = New System.Drawing.Size(173, 22)
         Me.CopyTextTool.Text = "Copy Text"
         '
-        'ToolStripMenuItem1
+        'MoveStripMenuItem
         '
-        Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbMoveFolder})
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(173, 22)
-        Me.ToolStripMenuItem1.Text = "Move"
+        Me.MoveStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbMoveFolder})
+        Me.MoveStripMenuItem.Name = "MoveStripMenuItem"
+        Me.MoveStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.MoveStripMenuItem.Text = "Move"
         '
         'cmbMoveFolder
         '
@@ -170,6 +171,15 @@ Partial Class frmSibiAttachments
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(757, 382)
         Me.Panel1.TabIndex = 19
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(152, 8)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(49, 15)
+        Me.Label4.TabIndex = 20
+        Me.Label4.Text = "Folder"
         '
         'cmbFolder
         '
@@ -381,14 +391,11 @@ Partial Class frmSibiAttachments
         '
         Me.ProgTimer.Interval = 50
         '
-        'Label4
+        'RenameStripMenuItem
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(152, 8)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(49, 15)
-        Me.Label4.TabIndex = 20
-        Me.Label4.Text = "Folder"
+        Me.RenameStripMenuItem.Name = "RenameStripMenuItem"
+        Me.RenameStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.RenameStripMenuItem.Text = "Rename"
         '
         'frmSibiAttachments
         '
@@ -448,7 +455,8 @@ Partial Class frmSibiAttachments
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents cmdCancel As ToolStripDropDownButton
     Friend WithEvents cmbFolder As ComboBox
-    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents MoveStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmbMoveFolder As ToolStripComboBox
     Friend WithEvents Label4 As Label
+    Friend WithEvents RenameStripMenuItem As ToolStripMenuItem
 End Class

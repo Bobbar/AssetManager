@@ -150,8 +150,6 @@ Class frmSibiAttachments
         Next
         Return -1
     End Function
-    Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs)
-    End Sub
     Private Sub OpenAttachment(AttachUID As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
@@ -344,6 +342,14 @@ Class frmSibiAttachments
         cmbMoveFolder.SelectedIndex = -1
         cmbMoveFolder.Text = "Select a folder"
         RightClickMenu.Close()
+    End Sub
+    Private Sub RenameAttachement(AttachUID As String, NewFileName As String)
+        Try
+            UpdateSQLValue("sibi_attachments", "sibi_attach_file_name", NewFileName, "sibi_attach_file_UID", AttachUID)
+            ListAttachments(CurrentRequest.strUID)
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
         Try
@@ -606,29 +612,21 @@ Class frmSibiAttachments
         If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
         If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
     End Sub
-
-    Private Sub cmbMoveFolder_Click(sender As Object, e As EventArgs) Handles cmbMoveFolder.Click
-
-    End Sub
-
-    Private Sub cmbMoveFolder_TextChanged(sender As Object, e As EventArgs) Handles cmbMoveFolder.TextChanged
-
-    End Sub
-
     Private Sub cmbFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFolder.SelectedIndexChanged
         ListAttachments(CurrentRequest.strUID)
         strSelectedFolder = GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex)
     End Sub
-
-    Private Sub cmbMoveFolder_Validated(sender As Object, e As EventArgs) Handles cmbMoveFolder.Validated
-
-    End Sub
-
     Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
         If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, GetDBValue(Sibi_AttachFolder, cmbMoveFolder.SelectedIndex))
     End Sub
-
-    Private Sub cmbMoveFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbMoveFolder.SelectedIndexChanged
-
+    Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
+        Dim strCurrentFileName As String = ReturnSQLValue("sibi_attachments", "sibi_attach_file_UID", AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, "sibi_attach_file_name") 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
+        Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value
+        Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
+        If blah Is "" Then
+            blah = strCurrentFileName
+        Else
+            RenameAttachement(strAttachUID, Trim(blah))
+        End If
     End Sub
 End Class
