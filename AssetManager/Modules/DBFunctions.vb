@@ -45,6 +45,7 @@ Public Module DBFunctions
         Public strStatus As String
         Public strNote As String
         Public bolTrackable As Boolean
+        Public strSibiLink As String
         Public Tracking As Track_Info
         Public Historical As Hist_Info
     End Structure
@@ -169,6 +170,7 @@ Public Module DBFunctions
                 .strEqType = NoNull(DeviceTable.Rows(0).Item("dev_eq_type"))
                 .strStatus = NoNull(DeviceTable.Rows(0).Item("dev_status"))
                 .bolTrackable = CBool(DeviceTable.Rows(0).Item("dev_trackable"))
+                .strSibiLink = NoNull(DeviceTable.Rows(0).Item("dev_sibi_link"))
                 .Tracking.bolCheckedOut = CBool(DeviceTable.Rows(0).Item("dev_checkedout"))
             End With
         Catch ex As Exception

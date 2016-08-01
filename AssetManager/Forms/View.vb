@@ -78,6 +78,10 @@ Public Class View
                     'do nut-zing
             End Select
         Next
+        For Each c In pnlOtherFunctions.Controls
+            c.Visible = False
+        Next
+        cmdSetSibi.Visible = True
         Me.Text = "*View - MODIFYING*"
         ToolStrip1.BackColor = colEditColor
         For Each t As ToolStripItem In ToolStrip1.Items
@@ -109,6 +113,10 @@ Public Class View
                     'do nut-zing
             End Select
         Next
+        For Each c In pnlOtherFunctions.Controls
+            c.Visible = True
+        Next
+        cmdSetSibi.Visible = False
         Me.Text = "View"
         ToolStrip1.BackColor = colToolBarColor
         For Each t As ToolStripItem In ToolStrip1.Items
@@ -843,6 +851,32 @@ Public Class View
     End Sub
     Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
         CheckRDP()
+    End Sub
+    Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
+        If CurrentDevice.strSibiLink Is "" Then
+            Dim blah = MsgBox("Sibi Link not set.  Set one now?", vbYesNo + vbQuestion, "Sibi Link")
+            If blah = vbYes Then
+                LinkSibi()
+                ViewDevice(CurrentDevice.strGUID)
+            End If
+        Else
+            OpenSibiLink(CurrentDevice.strSibiLink)
+        End If
+    End Sub
+    Private Sub LinkSibi()
+        Dim f As New frmSibiSelector
+        f.ShowDialog(Me)
+        If f.DialogResult = DialogResult.OK Then
+            UpdateSQLValue("devices", "dev_sibi_link", f.SibiUID, "dev_UID", CurrentDevice.strGUID)
+        End If
+    End Sub
+    Private Sub OpenSibiLink(SibiUID As String)
+        Dim sibiForm As New frmManageRequest
+        AddChild(sibiForm)
+        sibiForm.OpenRequest(SibiUID)
+    End Sub
+    Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
+        LinkSibi()
     End Sub
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()

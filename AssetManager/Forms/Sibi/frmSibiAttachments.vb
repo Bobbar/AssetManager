@@ -130,6 +130,7 @@ Class frmSibiAttachments
             bolGridFilling = True
             AttachGrid.DataSource = table
             AttachGrid.Columns("Filename").DefaultCellStyle.Font = New Font("Consolas", 9.75, FontStyle.Bold)
+            AttachGrid.ClearSelection()
             table.Dispose()
             DoneWaiting()
             Me.Show()

@@ -1,6 +1,7 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class frmSibiMain
+Partial Class frmSibiSelector
     Inherits System.Windows.Forms.Form
+
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()> _
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -12,8 +13,10 @@ Partial Class frmSibiMain
             MyBase.Dispose(disposing)
         End Try
     End Sub
+
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
+
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
@@ -21,16 +24,13 @@ Partial Class frmSibiMain
     Private Sub InitializeComponent()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmSibiMain))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmSibiSelector))
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.cmdShowAll = New System.Windows.Forms.Button()
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.cmdManage = New System.Windows.Forms.ToolStripButton()
         Me.Panel1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Panel1
@@ -42,10 +42,10 @@ Partial Class frmSibiMain
         Me.Panel1.Controls.Add(Me.cmdShowAll)
         Me.Panel1.Controls.Add(Me.ResultGrid)
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel1.Location = New System.Drawing.Point(12, 28)
+        Me.Panel1.Location = New System.Drawing.Point(12, 12)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1022, 393)
-        Me.Panel1.TabIndex = 0
+        Me.Panel1.Size = New System.Drawing.Size(917, 386)
+        Me.Panel1.TabIndex = 1
         '
         'Label1
         '
@@ -60,7 +60,7 @@ Partial Class frmSibiMain
         'cmdShowAll
         '
         Me.cmdShowAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdShowAll.Location = New System.Drawing.Point(919, 4)
+        Me.cmdShowAll.Location = New System.Drawing.Point(814, 4)
         Me.cmdShowAll.Name = "cmdShowAll"
         Me.cmdShowAll.Size = New System.Drawing.Size(100, 30)
         Me.cmdShowAll.TabIndex = 1
@@ -103,56 +103,32 @@ Partial Class frmSibiMain
         Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.ResultGrid.RowHeadersVisible = False
         Me.ResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1016, 338)
+        Me.ResultGrid.Size = New System.Drawing.Size(911, 331)
         Me.ResultGrid.TabIndex = 18
         Me.ResultGrid.VirtualMode = True
         '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdManage})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(1043, 25)
-        Me.ToolStrip1.TabIndex = 2
-        Me.ToolStrip1.Text = "ToolStrip1"
-        '
-        'cmdManage
-        '
-        Me.cmdManage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.cmdManage.Image = CType(resources.GetObject("cmdManage.Image"), System.Drawing.Image)
-        Me.cmdManage.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.cmdManage.Name = "cmdManage"
-        Me.cmdManage.Size = New System.Drawing.Size(80, 22)
-        Me.cmdManage.Text = "New Request"
-        '
-        'frmSibiMain
+        'frmSibiSelector
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1043, 427)
-        Me.Controls.Add(Me.ToolStrip1)
+        Me.ClientSize = New System.Drawing.Size(941, 410)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "frmSibiMain"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Sibi - Acqusition Manager"
+        Me.Name = "frmSibiSelector"
+        Me.Text = "Select Request"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
+
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents ResultGrid As DataGridView
-    Friend WithEvents cmdShowAll As Button
-    Friend WithEvents ToolStrip1 As ToolStrip
-    Friend WithEvents cmdManage As ToolStripButton
     Friend WithEvents Label1 As Label
+    Friend WithEvents cmdShowAll As Button
+    Friend WithEvents ResultGrid As DataGridView
 End Class

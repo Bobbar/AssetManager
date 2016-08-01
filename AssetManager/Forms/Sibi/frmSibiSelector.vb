@@ -1,8 +1,13 @@
-﻿Public Class frmSibiMain
-    Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
-        ShowAll()
-    End Sub
-    Private Sub frmSibiMain_Load(sender As Object, e As EventArgs) Handles Me.Load
+﻿Imports System.ComponentModel
+
+Public Class frmSibiSelector
+    Public ReadOnly Property SibiUID As String
+        Get
+            Return SelectedUID
+        End Get
+    End Property
+    Private SelectedUID As String
+    Private Sub frmSibiSelector_Load(sender As Object, e As EventArgs) Handles Me.Load
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         ShowAll()
     End Sub
@@ -46,16 +51,8 @@
     Private Sub ShowAll()
         SendToGrid(ReturnSQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
     End Sub
-    Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
-        frmManageRequest.ClearAll()
-        frmManageRequest.Show()
-        frmManageRequest.cmdAddNew.Visible = True
-    End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
-        frmManageRequest.OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
-    End Sub
-
-    Private Sub ResultGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellContentClick
-
+        SelectedUID = ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value
+        Me.DialogResult = DialogResult.OK
     End Sub
 End Class

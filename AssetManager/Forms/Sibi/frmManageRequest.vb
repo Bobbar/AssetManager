@@ -4,11 +4,8 @@ Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class frmManageRequest
     Public bolUpdating As Boolean = False
-    ' Public table As New DataTable
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
-        'FillCombos()
-        '   SetupGrid()
     End Sub
     Public Sub ClearAll()
         ClearControls(Me)
@@ -18,6 +15,11 @@ Public Class frmManageRequest
         EnableControls(Me)
         cmdAddNew.Visible = False
         CurrentRequest = Nothing
+        DisableControls(Me)
+        ToolStrip.BackColor = colToolBarColor
+        cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
+        cmdUpdate.Text = "Update"
+        bolUpdating = False
     End Sub
     Private Sub ClearTextBoxes(ByVal control As Control)
         If TypeOf control Is TextBox Then
@@ -410,6 +412,7 @@ VALUES
             'RequestItemsGrid.ReadOnly = True
             DisableControls(Me)
             Me.Show()
+            Me.Activate()
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else
