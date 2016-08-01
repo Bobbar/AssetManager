@@ -69,6 +69,12 @@ Module SecurityMod
         Public Const Modify As String = "modify"
         Public Const Tracking As String = "track"
         Public Const ViewAttachment As String = "view_attach"
+        Public Const Sibi_View As String = "sibi_view"
+        Public Const Sibi_Add As String = "sibi_add"
+        Public Const Sibi_Modify As String = "sibi_modify"
+        Public Const Sibi_Delete As String = "sibi_delete"
+
+
     End Class
     Public Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
     Public Const EncFTPUserPass As String = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ="

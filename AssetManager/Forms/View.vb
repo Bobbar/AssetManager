@@ -216,7 +216,7 @@ Public Class View
                 Dim blah = MsgBox("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
                 Return False
             End If
-            CollectDeviceInfo(Results)
+            CurrentDevice = CollectDeviceInfo(Results)
             FillDeviceInfo()
             SendToHistGrid(DataGridHistory, Results)
             Results.Dispose()
@@ -853,6 +853,7 @@ Public Class View
         CheckRDP()
     End Sub
     Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
+        If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         If CurrentDevice.strSibiLink Is "" Then
             Dim blah = MsgBox("Sibi Link not set.  Set one now?", vbYesNo + vbQuestion, "Sibi Link")
             If blah = vbYes Then

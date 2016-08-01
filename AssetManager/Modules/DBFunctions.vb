@@ -154,9 +154,10 @@ Public Module DBFunctions
         End Try
         Return True
     End Function
-    Public Sub CollectDeviceInfo(DeviceTable As DataTable)
+    Public Function CollectDeviceInfo(DeviceTable As DataTable) As Device_Info
         Try
-            With CurrentDevice
+            Dim newDeviceInfo As Device_Info
+            With newDeviceInfo
                 .strGUID = NoNull(DeviceTable.Rows(0).Item("dev_UID"))
                 .strDescription = NoNull(DeviceTable.Rows(0).Item("dev_description"))
                 .strLocation = NoNull(DeviceTable.Rows(0).Item("dev_location"))
@@ -173,10 +174,12 @@ Public Module DBFunctions
                 .strSibiLink = NoNull(DeviceTable.Rows(0).Item("dev_sibi_link"))
                 .Tracking.bolCheckedOut = CBool(DeviceTable.Rows(0).Item("dev_checkedout"))
             End With
+            Return newDeviceInfo
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
         End Try
-    End Sub
+    End Function
     Public Sub CollectRequestInfo(RequestResults As DataTable, RequestItemsResults As DataTable)
         Try
             With CurrentRequest
@@ -636,5 +639,12 @@ Public Module DBFunctions
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
         End Try
+    End Function
+    Public Function FindDevice(Optional AssetTag As String = "", Optional Serial As String = "") As Device_Info
+        If AssetTag IsNot "" Then
+            Return CollectDeviceInfo(ReturnSQLTable("SELECT * FROM devices WHERE dev_asset_tag='" & AssetTag & "'"))
+        ElseIf Serial IsNot "" Then
+            Return CollectDeviceInfo(ReturnSQLTable("SELECT * FROM devices WHERE dev_serial='" & Serial & "'"))
+        End If
     End Function
 End Module

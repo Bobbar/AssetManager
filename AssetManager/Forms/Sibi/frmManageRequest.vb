@@ -4,6 +4,7 @@ Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class frmManageRequest
     Public bolUpdating As Boolean = False
+    Private bolGridFilling As Boolean = False
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
     End Sub
@@ -194,7 +195,7 @@ Public Class frmManageRequest
         End Try
     End Function
     Private Sub cmdAddNew_Click(sender As Object, e As EventArgs) Handles cmdAddNew.Click
-        'CollectData()
+        If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
         cmdAddNew.Visible = False
         AddNewRequest()
     End Sub
@@ -454,6 +455,7 @@ VALUES
     End Function
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
+            bolGridFilling = True
             SetupGrid()
             For Each r As DataRow In Results.Rows
                 With RequestItemsGrid.Rows
@@ -466,10 +468,10 @@ VALUES
                          r.Item("sibi_items_uid"))
                 End With
             Next
-            'bolGridFilling = True
+
             ' RequestItemsGrid.DataSource = table
             RequestItemsGrid.ClearSelection()
-            'bolGridFilling = False
+            bolGridFilling = False
             'table.Dispose()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -480,6 +482,7 @@ VALUES
         CurrentRequest = Nothing
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
+        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         If CurrentRequest.strUID <> "" Then UpdateMode(bolUpdating)
     End Sub
     Private Sub UpdateMode(Enable As Boolean)
@@ -499,6 +502,7 @@ VALUES
         End If
     End Sub
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
+        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         If CurrentRequest.strUID <> "" Then
             frmSibiAttachments.ListAttachments(CurrentRequest.strUID)
             frmSibiAttachments.Activate()
@@ -506,6 +510,7 @@ VALUES
         End If
     End Sub
     Private Sub cmdCreate_Click(sender As Object, e As EventArgs) Handles cmdCreate.Click
+        If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
         ClearAll()
         cmdAddNew.Visible = True
     End Sub
@@ -513,8 +518,13 @@ VALUES
         CurrentRequest = Nothing
     End Sub
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
-        Dim blah = MsgBox(DeleteItem(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
-        OpenRequest(CurrentRequest.strUID)
+        Dim blah
+        blah = MsgBox("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row")
+        If blah = vbYes Then
+            blah = MsgBox(DeleteItem(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+            OpenRequest(CurrentRequest.strUID)
+        Else
+        End If
     End Sub
     Private Sub txtRTNumber_Click(sender As Object, e As EventArgs) Handles txtRTNumber.Click
         Dim RTNum As String = Trim(txtRTNumber.Text)
@@ -543,7 +553,7 @@ VALUES
         End If
     End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
-        If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Sibi_Delete) Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
             If DeleteSibiRequest(CurrentRequest.strUID, AttachmentType.Sibi) Then
@@ -561,6 +571,7 @@ VALUES
         End If
     End Sub
     Private Sub cmdAddNote_Click(sender As Object, e As EventArgs) Handles cmdAddNote.Click
+        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         If CurrentRequest.strUID <> "" Then
             frmNotes.Show()
         End If
@@ -575,5 +586,73 @@ VALUES
     Private Sub cmdClearForm_Click(sender As Object, e As EventArgs) Handles cmdClearForm.Click
         ClearAll()
         CurrentRequest = Nothing
+    End Sub
+
+    Private Sub RequestItemsGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellContentClick
+
+    End Sub
+
+    Private Sub RequestItemsGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles RequestItemsGrid.CellMouseDown
+        On Error Resume Next
+        If e.Button = MouseButtons.Right And Not RequestItemsGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
+            RequestItemsGrid.Rows(e.RowIndex).Selected = True
+            RequestItemsGrid.CurrentCell = RequestItemsGrid(e.ColumnIndex, e.RowIndex)
+        End If
+
+
+        If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Or RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
+            tsmLookupDevice.Visible = True
+        Else
+            tsmLookupDevice.Visible = False
+        End If
+    End Sub
+    Private Sub HighlightCurrentRow(Row As Integer)
+        On Error Resume Next
+        If Not bolGridFilling Then
+            Dim BackColor As Color = DefGridBC
+            Dim SelectColor As Color = DefGridSelCol
+            Dim c1 As Color = colHighlightColor 'highlight color
+            If Row > -1 Then
+                For Each cell As DataGridViewCell In RequestItemsGrid.Rows(Row).Cells
+                    Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
+                    Dim BlendColor As Color
+                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                    cell.Style.SelectionBackColor = BlendColor
+                    c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
+                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                    cell.Style.BackColor = BlendColor
+                Next
+            End If
+        End If
+    End Sub
+    Private Sub RequestItemsGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellEnter
+        HighlightCurrentRow(e.RowIndex)
+    End Sub
+
+    Private Sub RequestItemsGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellLeave
+        Dim BackColor As Color = DefGridBC
+        Dim SelectColor As Color = DefGridSelCol
+        If e.RowIndex > -1 Then
+            For Each cell As DataGridViewCell In RequestItemsGrid.Rows(e.RowIndex).Cells
+                cell.Style.SelectionBackColor = SelectColor
+                cell.Style.BackColor = BackColor
+            Next
+        End If
+    End Sub
+    Private Sub LookupDevice(Device As Device_Info)
+        View.ViewDevice(Device.strGUID)
+    End Sub
+    Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click
+        If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
+            LookupDevice(FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value))
+        ElseIf RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
+            LookupDevice(FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value))
+        End If
     End Sub
 End Class

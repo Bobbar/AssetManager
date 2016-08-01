@@ -49,9 +49,11 @@ Partial Class frmManageRequest
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
         Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStrip = New System.Windows.Forms.ToolStrip()
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
@@ -70,7 +72,6 @@ Partial Class frmManageRequest
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Label10 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -321,6 +322,16 @@ Partial Class frmManageRequest
         Me.Panel1.Size = New System.Drawing.Size(1084, 348)
         Me.Panel1.TabIndex = 1
         '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Location = New System.Drawing.Point(3, 0)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(49, 15)
+        Me.Label10.TabIndex = 19
+        Me.Label10.Text = "Items:"
+        '
         'RequestItemsGrid
         '
         Me.RequestItemsGrid.AllowUserToResizeRows = False
@@ -362,15 +373,22 @@ Partial Class frmManageRequest
         '
         'PopupMenuItems
         '
-        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmDeleteItem})
+        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmDeleteItem, Me.tsmLookupDevice})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(135, 26)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 70)
         '
         'tsmDeleteItem
         '
         Me.tsmDeleteItem.Name = "tsmDeleteItem"
-        Me.tsmDeleteItem.Size = New System.Drawing.Size(134, 22)
+        Me.tsmDeleteItem.Size = New System.Drawing.Size(152, 22)
         Me.tsmDeleteItem.Text = "Delete Item"
+        '
+        'tsmLookupDevice
+        '
+        Me.tsmLookupDevice.Name = "tsmLookupDevice"
+        Me.tsmLookupDevice.Size = New System.Drawing.Size(152, 22)
+        Me.tsmLookupDevice.Text = "Lookup Device"
+        Me.tsmLookupDevice.Visible = False
         '
         'ToolStrip
         '
@@ -545,16 +563,6 @@ Partial Class frmManageRequest
         Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
         '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(3, 0)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(49, 15)
-        Me.Label10.TabIndex = 19
-        Me.Label10.Text = "Items:"
-        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -584,6 +592,7 @@ Partial Class frmManageRequest
         Me.PopupMenuNotes.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents chkPlanned As CheckBox
@@ -631,4 +640,5 @@ Partial Class frmManageRequest
     Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
     Friend WithEvents cmdClearForm As ToolStripButton
     Friend WithEvents Label10 As Label
+    Friend WithEvents tsmLookupDevice As ToolStripMenuItem
 End Class

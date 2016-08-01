@@ -740,6 +740,7 @@ Public Class MainForm
     End Sub
     Private Sub cmdSibi_Click(sender As Object, e As EventArgs) Handles cmdSibi.Click
         ' frmNewRequest.Show()
+        If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         frmSibiMain.Show()
         frmSibiMain.Activate()
     End Sub
