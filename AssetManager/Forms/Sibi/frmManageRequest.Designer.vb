@@ -22,11 +22,10 @@ Partial Class frmManageRequest
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.cmdClearAll = New System.Windows.Forms.Button()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.txtRequestNum = New System.Windows.Forms.TextBox()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
@@ -56,15 +55,12 @@ Partial Class frmManageRequest
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStrip = New System.Windows.Forms.ToolStrip()
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdClearForm = New System.Windows.Forms.ToolStripButton()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
@@ -72,6 +68,9 @@ Partial Class frmManageRequest
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmdAccept = New System.Windows.Forms.Button()
+        Me.cmdDiscard = New System.Windows.Forms.Button()
+        Me.pnlEditButtons = New System.Windows.Forms.Panel()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -82,11 +81,12 @@ Partial Class frmManageRequest
         Me.Panel2.SuspendLayout()
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PopupMenuNotes.SuspendLayout()
+        Me.pnlEditButtons.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.cmdClearAll)
+        Me.GroupBox1.Controls.Add(Me.pnlEditButtons)
         Me.GroupBox1.Controls.Add(Me.Label8)
         Me.GroupBox1.Controls.Add(Me.txtRequestNum)
         Me.GroupBox1.Controls.Add(Me.cmbStatus)
@@ -108,16 +108,6 @@ Partial Class frmManageRequest
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Request Info"
-        '
-        'cmdClearAll
-        '
-        Me.cmdClearAll.Location = New System.Drawing.Point(245, 161)
-        Me.cmdClearAll.Name = "cmdClearAll"
-        Me.cmdClearAll.Size = New System.Drawing.Size(112, 21)
-        Me.cmdClearAll.TabIndex = 17
-        Me.cmdClearAll.Text = "Clear All"
-        Me.cmdClearAll.UseVisualStyleBackColor = True
-        Me.cmdClearAll.Visible = False
         '
         'Label8
         '
@@ -158,7 +148,7 @@ Partial Class frmManageRequest
         'cmdAddNew
         '
         Me.cmdAddNew.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAddNew.Location = New System.Drawing.Point(278, 191)
+        Me.cmdAddNew.Location = New System.Drawing.Point(264, 190)
         Me.cmdAddNew.Name = "cmdAddNew"
         Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
         Me.cmdAddNew.TabIndex = 12
@@ -375,7 +365,7 @@ Partial Class frmManageRequest
         '
         Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmDeleteItem, Me.tsmLookupDevice})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 70)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 48)
         '
         'tsmDeleteItem
         '
@@ -392,13 +382,16 @@ Partial Class frmManageRequest
         '
         'ToolStrip
         '
+        Me.ToolStrip.AutoSize = False
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdDelete, Me.ToolStripSeparator4, Me.cmdCreate, Me.ToolStripSeparator1, Me.cmdUpdate, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.cmdAddNote, Me.ToolStripSeparator5, Me.cmdClearForm})
+        Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.cmdClearForm})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip.Size = New System.Drawing.Size(1108, 28)
+        Me.ToolStrip.Size = New System.Drawing.Size(1108, 32)
+        Me.ToolStrip.Stretch = True
         Me.ToolStrip.TabIndex = 2
         Me.ToolStrip.Text = "ToolStrip1"
         '
@@ -408,74 +401,66 @@ Partial Class frmManageRequest
         Me.cmdDelete.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
         Me.cmdDelete.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdDelete.Name = "cmdDelete"
-        Me.cmdDelete.Size = New System.Drawing.Size(23, 25)
+        Me.cmdDelete.Padding = New System.Windows.Forms.Padding(5)
+        Me.cmdDelete.Size = New System.Drawing.Size(39, 29)
         Me.cmdDelete.Text = "Delete"
-        '
-        'ToolStripSeparator4
-        '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 28)
         '
         'cmdCreate
         '
+        Me.cmdCreate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.cmdCreate.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.cmdCreate.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdCreate.Name = "cmdCreate"
-        Me.cmdCreate.Size = New System.Drawing.Size(122, 25)
+        Me.cmdCreate.Padding = New System.Windows.Forms.Padding(5)
+        Me.cmdCreate.Size = New System.Drawing.Size(39, 29)
         Me.cmdCreate.Text = "New Request"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 28)
         '
         'cmdUpdate
         '
+        Me.cmdUpdate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.cmdUpdate.Image = Global.AssetManager.My.Resources.Resources.Edit
         Me.cmdUpdate.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdUpdate.Name = "cmdUpdate"
-        Me.cmdUpdate.Size = New System.Drawing.Size(80, 25)
+        Me.cmdUpdate.Padding = New System.Windows.Forms.Padding(5)
+        Me.cmdUpdate.Size = New System.Drawing.Size(39, 29)
         Me.cmdUpdate.Text = "Update"
+        Me.cmdUpdate.ToolTipText = "Modify"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 28)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
         '
         'cmdAttachments
         '
         Me.cmdAttachments.Image = Global.AssetManager.My.Resources.Resources.clip_512
         Me.cmdAttachments.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdAttachments.Name = "cmdAttachments"
-        Me.cmdAttachments.Size = New System.Drawing.Size(117, 25)
+        Me.cmdAttachments.Padding = New System.Windows.Forms.Padding(5)
+        Me.cmdAttachments.Size = New System.Drawing.Size(136, 29)
         Me.cmdAttachments.Text = "Attachments"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 28)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
         '
         'cmdAddNote
         '
-        Me.cmdAddNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.cmdAddNote.Image = CType(resources.GetObject("cmdAddNote.Image"), System.Drawing.Image)
+        Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.View_Details
         Me.cmdAddNote.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdAddNote.Name = "cmdAddNote"
-        Me.cmdAddNote.Size = New System.Drawing.Size(80, 25)
+        Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5)
+        Me.cmdAddNote.Size = New System.Drawing.Size(115, 29)
         Me.cmdAddNote.Text = "Add Note"
-        '
-        'ToolStripSeparator5
-        '
-        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 28)
         '
         'cmdClearForm
         '
-        Me.cmdClearForm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.cmdClearForm.Image = CType(resources.GetObject("cmdClearForm.Image"), System.Drawing.Image)
+        Me.cmdClearForm.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
         Me.cmdClearForm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdClearForm.Name = "cmdClearForm"
-        Me.cmdClearForm.Size = New System.Drawing.Size(91, 25)
+        Me.cmdClearForm.Padding = New System.Windows.Forms.Padding(5)
+        Me.cmdClearForm.Size = New System.Drawing.Size(126, 29)
         Me.cmdClearForm.Text = "Clear Form"
         '
         'ToolTip
@@ -563,6 +548,39 @@ Partial Class frmManageRequest
         Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
         '
+        'cmdAccept
+        '
+        Me.cmdAccept.BackColor = System.Drawing.Color.PaleGreen
+        Me.cmdAccept.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdAccept.Location = New System.Drawing.Point(9, 11)
+        Me.cmdAccept.Name = "cmdAccept"
+        Me.cmdAccept.Size = New System.Drawing.Size(119, 41)
+        Me.cmdAccept.TabIndex = 18
+        Me.cmdAccept.Text = "Accept Changes"
+        Me.cmdAccept.UseVisualStyleBackColor = False
+        Me.cmdAccept.Visible = False
+        '
+        'cmdDiscard
+        '
+        Me.cmdDiscard.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
+        Me.cmdDiscard.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdDiscard.Location = New System.Drawing.Point(9, 58)
+        Me.cmdDiscard.Name = "cmdDiscard"
+        Me.cmdDiscard.Size = New System.Drawing.Size(119, 24)
+        Me.cmdDiscard.TabIndex = 19
+        Me.cmdDiscard.Text = "Discard Changes"
+        Me.cmdDiscard.UseVisualStyleBackColor = False
+        Me.cmdDiscard.Visible = False
+        '
+        'pnlEditButtons
+        '
+        Me.pnlEditButtons.Controls.Add(Me.cmdAccept)
+        Me.pnlEditButtons.Controls.Add(Me.cmdDiscard)
+        Me.pnlEditButtons.Location = New System.Drawing.Point(255, 83)
+        Me.pnlEditButtons.Name = "pnlEditButtons"
+        Me.pnlEditButtons.Size = New System.Drawing.Size(141, 98)
+        Me.pnlEditButtons.TabIndex = 20
+        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -590,8 +608,8 @@ Partial Class frmManageRequest
         Me.Panel2.ResumeLayout(False)
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PopupMenuNotes.ResumeLayout(False)
+        Me.pnlEditButtons.ResumeLayout(False)
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
@@ -616,7 +634,6 @@ Partial Class frmManageRequest
     Friend WithEvents Label7 As Label
     Friend WithEvents ToolStrip As ToolStrip
     Friend WithEvents cmdCreate As ToolStripButton
-    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents cmdAttachments As ToolStripButton
     Friend WithEvents cmdUpdate As ToolStripButton
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
@@ -628,17 +645,17 @@ Partial Class frmManageRequest
     Friend WithEvents tsmDeleteItem As ToolStripMenuItem
     Friend WithEvents ToolTip As ToolTip
     Friend WithEvents cmdDelete As ToolStripButton
-    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
-    Friend WithEvents cmdClearAll As Button
     Friend WithEvents GroupBox3 As GroupBox
     Friend WithEvents Panel2 As Panel
     Friend WithEvents dgvNotes As DataGridView
     Friend WithEvents cmdAddNote As ToolStripButton
     Friend WithEvents PopupMenuNotes As ContextMenuStrip
     Friend WithEvents cmdDeleteNote As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
     Friend WithEvents cmdClearForm As ToolStripButton
     Friend WithEvents Label10 As Label
     Friend WithEvents tsmLookupDevice As ToolStripMenuItem
+    Friend WithEvents cmdAccept As Button
+    Friend WithEvents cmdDiscard As Button
+    Friend WithEvents pnlEditButtons As Panel
 End Class

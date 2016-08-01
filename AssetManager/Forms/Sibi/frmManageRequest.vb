@@ -10,6 +10,7 @@ Public Class frmManageRequest
     End Sub
     Public Sub ClearAll()
         ClearControls(Me)
+        HideEditControls()
         dgvNotes.DataSource = Nothing
         SetupGrid()
         FillCombos()
@@ -105,6 +106,16 @@ Public Class frmManageRequest
             End If
         Next
         EnableGrid()
+    End Sub
+    Private Sub ShowEditControls()
+        For Each c As Control In pnlEditButtons.Controls
+            c.Visible = True
+        Next
+    End Sub
+    Private Sub HideEditControls()
+        For Each c As Control In pnlEditButtons.Controls
+            c.Visible = False
+        Next
     End Sub
     Private Sub DisableGrid()
         RequestItemsGrid.EditMode = DataGridViewEditMode.EditProgrammatically
@@ -477,7 +488,7 @@ VALUES
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Private Sub cmdClearAll_Click(sender As Object, e As EventArgs) Handles cmdClearAll.Click
+    Private Sub cmdClearAll_Click(sender As Object, e As EventArgs)
         ClearAll()
         CurrentRequest = Nothing
     End Sub
@@ -491,12 +502,16 @@ VALUES
             ToolStrip.BackColor = colEditColor
             cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Bold)
             cmdUpdate.Text = "*Accept Changes*"
+            ShowEditControls()
+            ' cmdUpdate.Image = My.Resources.checked_checkbox
             bolUpdating = True
         Else
             DisableControls(Me)
             ToolStrip.BackColor = colToolBarColor
             cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
             cmdUpdate.Text = "Update"
+            HideEditControls()
+            ' cmdUpdate.Image = My.Resources.Edit
             UpdateRequest()
             bolUpdating = False
         End If
@@ -510,8 +525,12 @@ VALUES
         End If
     End Sub
     Private Sub cmdCreate_Click(sender As Object, e As EventArgs) Handles cmdCreate.Click
+        NewRequest()
+    End Sub
+    Public Sub NewRequest()
         If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
         ClearAll()
+        EnableControls(Me)
         cmdAddNew.Visible = True
     End Sub
     Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -654,5 +673,21 @@ VALUES
         ElseIf RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
             LookupDevice(FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value))
         End If
+    End Sub
+
+    Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
+        DisableControls(Me)
+        ToolStrip.BackColor = colToolBarColor
+        cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
+        cmdUpdate.Text = "Update"
+        HideEditControls()
+        ' cmdUpdate.Image = My.Resources.Edit
+        UpdateRequest()
+        bolUpdating = False
+    End Sub
+
+    Private Sub cmdDiscard_Click(sender As Object, e As EventArgs) Handles cmdDiscard.Click
+        HideEditControls()
+        OpenRequest(CurrentRequest.strUID)
     End Sub
 End Class
