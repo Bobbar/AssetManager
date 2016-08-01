@@ -114,7 +114,7 @@ Public Class View
             End Select
         Next
         For Each c In pnlOtherFunctions.Controls
-            c.Visible = True
+            If c.Name IsNot "cmdRDP" Then c.Visible = True
         Next
         cmdSetSibi.Visible = False
         Me.Text = "View"
@@ -858,7 +858,6 @@ Public Class View
             Dim blah = MsgBox("Sibi Link not set.  Set one now?", vbYesNo + vbQuestion, "Sibi Link")
             If blah = vbYes Then
                 LinkSibi()
-                ViewDevice(CurrentDevice.strGUID)
             End If
         Else
             OpenSibiLink(CurrentDevice.strSibiLink)
@@ -869,6 +868,7 @@ Public Class View
         f.ShowDialog(Me)
         If f.DialogResult = DialogResult.OK Then
             UpdateSQLValue("devices", "dev_sibi_link", f.SibiUID, "dev_UID", CurrentDevice.strGUID)
+            ViewDevice(CurrentDevice.strGUID)
         End If
     End Sub
     Private Sub OpenSibiLink(SibiUID As String)
