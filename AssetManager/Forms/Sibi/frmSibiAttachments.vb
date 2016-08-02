@@ -3,6 +3,7 @@ Option Compare Binary
 Imports System.ComponentModel
 Imports System.IO
 Imports MySql.Data.MySqlClient
+Imports System.Threading
 Class frmSibiAttachments
     Public bolAdminMode As Boolean = False
     Private AttachQry As String
@@ -13,6 +14,7 @@ Class frmSibiAttachments
     Private bolGridFilling As Boolean
     Private progIts As Integer = 0
     Private strSelectedFolder As String
+    Private strMultiFileCount As String
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -28,15 +30,17 @@ Class frmSibiAttachments
         fd.InitialDirectory = "C:\"
         fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*"
         fd.FilterIndex = 2
+        fd.Multiselect = True
         fd.RestoreDirectory = True
         If fd.ShowDialog() = DialogResult.OK Then
             strFileName = fd.FileName
         Else
             Exit Sub
         End If
-        UploadFile(strFileName)
+        'strMultiFileCount = i & " of " & fd.FileNames.Count
+        UploadFile(fd.FileNames)
     End Sub
-    Private Sub UploadFile(FilePath As String)
+    Private Sub UploadFile(Files() As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
@@ -44,7 +48,7 @@ Class frmSibiAttachments
         If Not UploadWorker.IsBusy Then
             StatusBar("Starting Upload...")
             WorkerFeedback(True)
-            UploadWorker.RunWorkerAsync(FilePath)
+            UploadWorker.RunWorkerAsync(Files)
         End If
     End Sub
     Private Sub WorkerFeedback(WorkerRunning As Boolean)
@@ -218,7 +222,7 @@ Class frmSibiAttachments
             If DeleteAttachment(AttachIndex(i).strFileUID, AttachmentType.Sibi) > 0 Then
                 ListAttachments(CurrentRequest.strUID)
                 DoneWaiting()
-                blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
+                ' blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
             Else
                 DoneWaiting()
                 blah = MsgBox("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results")
@@ -238,90 +242,105 @@ Class frmSibiAttachments
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
         'file stuff
         Dim Foldername As String = CurrentRequest.strUID
-        Dim strFileGuid As String = Guid.NewGuid.ToString
-        Dim FilePath As String = DirectCast(e.Argument, String)
-        Dim strFilename As String = Path.GetFileNameWithoutExtension(FilePath)
-        Dim strFileType As String = Path.GetExtension(FilePath)
-        Dim strFullFilename As String = Path.GetFileName(FilePath)
-        Dim myFileInfo As New FileInfo(FilePath)
+        Dim strFileGuid As String
+        Dim Files() As String = DirectCast(e.Argument, String())
+        Dim strFilename As String
+        Dim strFileType As String
+        Dim strFullFilename As String
+        Dim myFileInfo As FileInfo
         Dim FileSize As Long
         Dim FileSizeMB As Integer
-        FileSize = myFileInfo.Length
-        FileSizeMB = FileSize / (1024 * 1024)
-        If FileSizeMB > FileSizeMBLimit Then
-            e.Result = False
-            UploadWorker.ReportProgress(2, "Error!")
-            Dim blah = MsgBox("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
-            Exit Sub
-        End If
-        UploadWorker.ReportProgress(1, "Connecting...")
-        'sql stuff
+        Dim FileNumber As Integer = 1
         Dim conn As New MySqlConnection(MySQLConnectString)
         Dim cmd As New MySqlCommand
-        Dim SQL As String
         Try
-            Dim resp As Net.FtpWebResponse = Nothing
-            Using resp 'check if device folder exists. create directory if not.
-                resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
-                Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
-                Dim s As String = sr.ReadToEnd()
-                If Not s.Contains(Foldername) Then
-                    resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
+            For Each file As String In Files
+                strFilename = Path.GetFileNameWithoutExtension(file)
+                strFileType = Path.GetExtension(file)
+                strFullFilename = Path.GetFileName(file)
+                myFileInfo = New FileInfo(file)
+                strFileGuid = Guid.NewGuid.ToString
+                FileSize = myFileInfo.Length
+                FileSizeMB = FileSize / (1024 * 1024)
+                If FileSizeMB > FileSizeMBLimit Then
+                    e.Result = False
+                    UploadWorker.ReportProgress(2, "Error!")
+                    Dim blah = MsgBox("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
+                    Exit Sub
                 End If
-            End Using
-            'ftp upload
-            Dim buffer(1023) As Byte
-            Dim bytesIn As Integer = 1
-            Dim totalBytesIn As Integer
-            Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
-            Dim FileHash As String = GetHashOfStream(ftpStream)
-            Dim flLength As Integer = ftpstream.Length
-            Dim reqfile As System.IO.Stream = ReturnFTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
-            Dim perc As Short
-            stpSpeed.Start()
-            UploadWorker.ReportProgress(1, "Uploading...")
-            Do Until bytesIn < 1 Or UploadWorker.CancellationPending
-                bytesIn = ftpstream.Read(buffer, 0, 1024)
-                If bytesIn > 0 Then
-                    reqfile.Write(buffer, 0, bytesIn)
-                    totalBytesIn += bytesIn
-                    lngBytesMoved += bytesIn
-                    If flLength > 0 Then
-                        perc = (totalBytesIn / flLength) * 100
-                        intProgress = perc
+                UploadWorker.ReportProgress(1, "Connecting...")
+                'sql stuff
+                Dim SQL As String
+                Dim resp As Net.FtpWebResponse = Nothing
+                Using resp 'check if device folder exists. create directory if not.
+                    resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
+                    Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
+                    Dim s As String = sr.ReadToEnd()
+                    If Not s.Contains(Foldername) Then
+                        resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
                     End If
+                End Using
+                'ftp upload
+                Dim buffer(1023) As Byte
+                Dim bytesIn As Integer = 1
+                Dim totalBytesIn As Integer
+                Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
+                Dim FileHash As String = GetHashOfStream(ftpStream)
+                Dim flLength As Integer = ftpStream.Length
+                Dim reqfile As System.IO.Stream = ReturnFTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+                Dim perc As Short = 0
+                stpSpeed.Start()
+                UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
+                lngBytesMoved = 0
+                intProgress = 0
+                totalBytesIn = 0
+                Do Until bytesIn < 1 Or UploadWorker.CancellationPending
+                    bytesIn = ftpStream.Read(buffer, 0, 1024)
+                    If bytesIn > 0 Then
+                        reqfile.Write(buffer, 0, bytesIn)
+                        totalBytesIn += bytesIn
+                        lngBytesMoved += bytesIn
+                        If flLength > 0 Then
+                            perc = (totalBytesIn / flLength) * 100
+                            intProgress = perc
+                        End If
+                    End If
+                Loop
+                reqfile.Close()
+                reqfile.Dispose()
+                ftpStream.Close()
+                ftpStream.Dispose()
+                If UploadWorker.CancellationPending Then
+                    e.Cancel = True
+                    DeleteFTPAttachment(strFileGuid, Foldername)
                 End If
-            Loop
-            reqfile.Close()
-            reqfile.Dispose()
-            ftpstream.Close()
-            ftpstream.Dispose()
-            If UploadWorker.CancellationPending Then
-                e.Cancel = True
-                DeleteFTPAttachment(strFileGuid, Foldername)
-            End If
-            'update sql table
-            If Not UploadWorker.CancellationPending Then
-                SQL = "INSERT INTO sibi_attachments (`sibi_attach_UID`, `sibi_attach_file_name`, `sibi_attach_file_type`, `sibi_attach_file_size`, `sibi_attach_file_UID`, `sibi_attach_file_hash`, `sibi_attach_folder`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash, @sibi_attach_folder)"
-                conn.Open()
-                cmd.Connection = conn
-                cmd.CommandText = SQL
-                cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentRequest.strUID)
-                cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
-                cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
-                cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
-                cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
-                cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
-                cmd.Parameters.AddWithValue("@sibi_attach_folder", strSelectedFolder)
-                cmd.ExecuteNonQuery()
+                'update sql table
+                If Not UploadWorker.CancellationPending Then
+                    SQL = "INSERT INTO sibi_attachments (`sibi_attach_UID`, `sibi_attach_file_name`, `sibi_attach_file_type`, `sibi_attach_file_size`, `sibi_attach_file_UID`, `sibi_attach_file_hash`, `sibi_attach_folder`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash, @sibi_attach_folder)"
+                    conn.Open()
+                    cmd.Connection = conn
+                    cmd.CommandText = SQL
+                    cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentRequest.strUID)
+                    cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
+                    cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
+                    cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
+                    cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
+                    cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
+                    cmd.Parameters.AddWithValue("@sibi_attach_folder", strSelectedFolder)
+                    cmd.ExecuteNonQuery()
+                    cmd.Parameters.Clear()
+                    e.Result = True
+                Else
+                    e.Result = False
+                End If
+                FileNumber += 1
                 conn.Close()
-                conn.Dispose()
-                cmd.Dispose()
-                e.Result = True
-            Else
-                e.Result = False
-            End If
-            UploadWorker.ReportProgress(1, "Idle...")
+                UploadWorker.ReportProgress(3, "Idle...")
+            Next
+            conn.Close()
+            conn.Dispose()
+            cmd.Dispose()
+            UploadWorker.ReportProgress(3, "Idle...")
         Catch ex As Exception
             e.Result = False
             conn.Close()
@@ -337,9 +356,7 @@ Class frmSibiAttachments
             UpdateSQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
             ListAttachments(CurrentRequest.strUID)
         Else
-
         End If
-
         cmbMoveFolder.SelectedIndex = -1
         cmbMoveFolder.Text = "Select a folder"
         RightClickMenu.Close()
@@ -354,6 +371,7 @@ Class frmSibiAttachments
     End Sub
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
         Try
+            strMultiFileCount = ""
             WorkerFeedback(False)
             ListAttachments(CurrentRequest.strUID)
             If Not e.Cancelled Then
@@ -522,6 +540,9 @@ Class frmSibiAttachments
                 Spinner.Visible = False
                 StatusBar(e.UserState)
                 Me.Refresh()
+            Case 3
+                StatusBar(e.UserState)
+                ListAttachments(CurrentRequest.strUID)
         End Select
     End Sub
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
@@ -572,7 +593,6 @@ Class frmSibiAttachments
             End If
         End If
     End Sub
-
     Private Sub AttachGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellLeave
         Dim BackColor As Color = DefGridBC
         Dim SelectColor As Color = DefGridSelCol
@@ -629,5 +649,7 @@ Class frmSibiAttachments
         Else
             RenameAttachement(strAttachUID, Trim(blah))
         End If
+    End Sub
+    Private Sub AttachGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellContentClick
     End Sub
 End Class

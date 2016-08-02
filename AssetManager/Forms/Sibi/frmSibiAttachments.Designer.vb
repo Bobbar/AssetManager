@@ -29,6 +29,7 @@ Partial Class frmSibiAttachments
         Me.CopyTextTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.MoveStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmbMoveFolder = New System.Windows.Forms.ToolStripComboBox()
+        Me.RenameStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmdDelete = New System.Windows.Forms.Button()
@@ -56,7 +57,6 @@ Partial Class frmSibiAttachments
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
         Me.ProgTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.RenameStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -79,7 +79,7 @@ Partial Class frmSibiAttachments
         '
         Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.CopyTextTool, Me.MoveStripMenuItem, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(174, 142)
+        Me.RightClickMenu.Size = New System.Drawing.Size(174, 120)
         '
         'OpenTool
         '
@@ -105,6 +105,12 @@ Partial Class frmSibiAttachments
         Me.cmbMoveFolder.Name = "cmbMoveFolder"
         Me.cmbMoveFolder.Size = New System.Drawing.Size(121, 23)
         Me.cmbMoveFolder.Text = "Select a folder"
+        '
+        'RenameStripMenuItem
+        '
+        Me.RenameStripMenuItem.Name = "RenameStripMenuItem"
+        Me.RenameStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.RenameStripMenuItem.Text = "Rename"
         '
         'ToolStripSeparator1
         '
@@ -391,12 +397,6 @@ Partial Class frmSibiAttachments
         '
         Me.ProgTimer.Interval = 50
         '
-        'RenameStripMenuItem
-        '
-        Me.RenameStripMenuItem.Name = "RenameStripMenuItem"
-        Me.RenameStripMenuItem.Size = New System.Drawing.Size(173, 22)
-        Me.RenameStripMenuItem.Text = "Rename"
-        '
         'frmSibiAttachments
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -423,7 +423,6 @@ Partial Class frmSibiAttachments
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents cmdUpload As Button
     Friend WithEvents RightClickMenu As ContextMenuStrip

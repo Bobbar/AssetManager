@@ -1,5 +1,4 @@
 ﻿Imports System.ComponentModel
-
 Public Class frmSibiSelector
     Public ReadOnly Property SibiUID As String
         Get

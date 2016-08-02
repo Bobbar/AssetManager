@@ -136,6 +136,8 @@ Public Class frmManageRequest
             .Add(DataGridCombo(Sibi_ItemStatusType, "Status", ComboType.SibiItemStatusType))
             .Add("Replace Asset", "Replace Asset")
             .Add("Replace Serial", "Replace Serial")
+            .Add("Org Code", "Org Code")
+            .Add("Object Code", "Object Code")
             .Add("Item UID", "Item UID")
         End With
         RequestItemsGrid.Columns.Item("Item UID").ReadOnly = True
@@ -269,7 +271,10 @@ VALUES
 `sibi_items_location`,
 `sibi_items_status`,
 `sibi_items_replace_asset`,
-`sibi_items_replace_serial`)
+`sibi_items_replace_serial`,
+`sibi_items_org_code`,
+`sibi_items_object_code`
+)
 VALUES
 (@sibi_items_uid,
 @sibi_items_request_uid,
@@ -278,7 +283,9 @@ VALUES
 @sibi_items_location,
 @sibi_items_status,
 @sibi_items_replace_asset,
-@sibi_items_replace_serial)"
+@sibi_items_replace_serial,
+@sibi_items_org_code,
+@sibi_items_object_code)"
                 cmd.Parameters.AddWithValue("@sibi_items_uid", strItemUID)
                 cmd.Parameters.AddWithValue("@sibi_items_request_uid", strRequestUID)
                 cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
@@ -287,6 +294,8 @@ VALUES
                 cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
                 cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
                 cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
+                cmd.Parameters.AddWithValue("@sibi_items_org_code", row.Item("Org Code"))
+                cmd.Parameters.AddWithValue("@sibi_items_object_code", row.Item("Object Code"))
                 cmd.CommandText = strSqlQry2
                 rows = rows + cmd.ExecuteNonQuery()
                 cmd.Parameters.Clear()
@@ -343,7 +352,9 @@ sibi_items_description = @sibi_items_description ,
 sibi_items_location = @sibi_items_location ,
 sibi_items_status = @sibi_items_status ,
 sibi_items_replace_asset = @sibi_items_replace_asset ,
-sibi_items_replace_serial = @sibi_items_replace_serial 
+sibi_items_replace_serial = @sibi_items_replace_serial,
+sibi_items_org_code = @sibi_items_org_code,
+sibi_items_object_code = @sibi_items_object_code
 WHERE sibi_items_uid ='" & row.Item("Item UID") & "'"
                     cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
                     cmd.Parameters.AddWithValue("@sibi_items_description", row.Item("Description"))
@@ -351,6 +362,8 @@ WHERE sibi_items_uid ='" & row.Item("Item UID") & "'"
                     cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
+                    cmd.Parameters.AddWithValue("@sibi_items_org_code", row.Item("Org Code"))
+                    cmd.Parameters.AddWithValue("@sibi_items_object_code", row.Item("Object Code"))
                     cmd.CommandText = strRequestItemsQry
                     cmd.ExecuteNonQuery()
                     cmd.Parameters.Clear()
@@ -364,7 +377,9 @@ WHERE sibi_items_uid ='" & row.Item("Item UID") & "'"
 `sibi_items_location`,
 `sibi_items_status`,
 `sibi_items_replace_asset`,
-`sibi_items_replace_serial`)
+`sibi_items_replace_serial`,
+`sibi_items_org_code`,
+`sibi_items_object_code`)
 VALUES
 (@sibi_items_uid,
 @sibi_items_request_uid,
@@ -373,7 +388,9 @@ VALUES
 @sibi_items_location,
 @sibi_items_status,
 @sibi_items_replace_asset,
-@sibi_items_replace_serial)"
+@sibi_items_replace_serial,
+@sibi_items_org_code,
+@sibi_items_object_code)"
                     cmd.Parameters.AddWithValue("@sibi_items_uid", strItemUID)
                     cmd.Parameters.AddWithValue("@sibi_items_request_uid", CurrentRequest.strUID)
                     cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
@@ -382,6 +399,8 @@ VALUES
                     cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
+                    cmd.Parameters.AddWithValue("@sibi_items_org_code", row.Item("Org Code"))
+                    cmd.Parameters.AddWithValue("@sibi_items_object_code", row.Item("Object Code"))
                     cmd.CommandText = strRequestItemsQry
                     rows += cmd.ExecuteNonQuery()
                     cmd.Parameters.Clear()
@@ -476,10 +495,11 @@ VALUES
                              GetHumanValue(ComboType.SibiItemStatusType, r.Item("sibi_items_status")),
                              r.Item("sibi_items_replace_asset"),
                              r.Item("sibi_items_replace_serial"),
+                         r.Item("sibi_items_org_code"),
+                         r.Item("sibi_items_object_code"),
                          r.Item("sibi_items_uid"))
                 End With
             Next
-
             ' RequestItemsGrid.DataSource = table
             RequestItemsGrid.ClearSelection()
             bolGridFilling = False
@@ -606,19 +626,12 @@ VALUES
         ClearAll()
         CurrentRequest = Nothing
     End Sub
-
-    Private Sub RequestItemsGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellContentClick
-
-    End Sub
-
     Private Sub RequestItemsGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles RequestItemsGrid.CellMouseDown
         On Error Resume Next
         If e.Button = MouseButtons.Right And Not RequestItemsGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
             RequestItemsGrid.Rows(e.RowIndex).Selected = True
             RequestItemsGrid.CurrentCell = RequestItemsGrid(e.ColumnIndex, e.RowIndex)
         End If
-
-
         If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Or RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
             tsmLookupDevice.Visible = True
         Else
@@ -653,7 +666,6 @@ VALUES
     Private Sub RequestItemsGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
     End Sub
-
     Private Sub RequestItemsGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellLeave
         Dim BackColor As Color = DefGridBC
         Dim SelectColor As Color = DefGridSelCol
@@ -674,7 +686,6 @@ VALUES
             LookupDevice(FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value))
         End If
     End Sub
-
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
         DisableControls(Me)
         ToolStrip.BackColor = colToolBarColor
@@ -685,7 +696,6 @@ VALUES
         UpdateRequest()
         bolUpdating = False
     End Sub
-
     Private Sub cmdDiscard_Click(sender As Object, e As EventArgs) Handles cmdDiscard.Click
         HideEditControls()
         OpenRequest(CurrentRequest.strUID)

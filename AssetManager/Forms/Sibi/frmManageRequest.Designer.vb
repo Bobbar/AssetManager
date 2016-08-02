@@ -26,6 +26,9 @@ Partial Class frmManageRequest
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.pnlEditButtons = New System.Windows.Forms.Panel()
+        Me.cmdAccept = New System.Windows.Forms.Button()
+        Me.cmdDiscard = New System.Windows.Forms.Button()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.txtRequestNum = New System.Windows.Forms.TextBox()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
@@ -54,13 +57,13 @@ Partial Class frmManageRequest
         Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStrip = New System.Windows.Forms.ToolStrip()
-        Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
+        Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
+        Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
         Me.cmdClearForm = New System.Windows.Forms.ToolStripButton()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
@@ -68,10 +71,8 @@ Partial Class frmManageRequest
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmdAccept = New System.Windows.Forms.Button()
-        Me.cmdDiscard = New System.Windows.Forms.Button()
-        Me.pnlEditButtons = New System.Windows.Forms.Panel()
         Me.GroupBox1.SuspendLayout()
+        Me.pnlEditButtons.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -81,7 +82,6 @@ Partial Class frmManageRequest
         Me.Panel2.SuspendLayout()
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PopupMenuNotes.SuspendLayout()
-        Me.pnlEditButtons.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -108,6 +108,39 @@ Partial Class frmManageRequest
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Request Info"
+        '
+        'pnlEditButtons
+        '
+        Me.pnlEditButtons.Controls.Add(Me.cmdAccept)
+        Me.pnlEditButtons.Controls.Add(Me.cmdDiscard)
+        Me.pnlEditButtons.Location = New System.Drawing.Point(255, 83)
+        Me.pnlEditButtons.Name = "pnlEditButtons"
+        Me.pnlEditButtons.Size = New System.Drawing.Size(141, 98)
+        Me.pnlEditButtons.TabIndex = 20
+        '
+        'cmdAccept
+        '
+        Me.cmdAccept.BackColor = System.Drawing.Color.PaleGreen
+        Me.cmdAccept.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdAccept.Location = New System.Drawing.Point(9, 11)
+        Me.cmdAccept.Name = "cmdAccept"
+        Me.cmdAccept.Size = New System.Drawing.Size(119, 41)
+        Me.cmdAccept.TabIndex = 18
+        Me.cmdAccept.Text = "Accept Changes"
+        Me.cmdAccept.UseVisualStyleBackColor = False
+        Me.cmdAccept.Visible = False
+        '
+        'cmdDiscard
+        '
+        Me.cmdDiscard.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
+        Me.cmdDiscard.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdDiscard.Location = New System.Drawing.Point(9, 58)
+        Me.cmdDiscard.Name = "cmdDiscard"
+        Me.cmdDiscard.Size = New System.Drawing.Size(119, 24)
+        Me.cmdDiscard.TabIndex = 19
+        Me.cmdDiscard.Text = "Discard Changes"
+        Me.cmdDiscard.UseVisualStyleBackColor = False
+        Me.cmdDiscard.Visible = False
         '
         'Label8
         '
@@ -395,16 +428,6 @@ Partial Class frmManageRequest
         Me.ToolStrip.TabIndex = 2
         Me.ToolStrip.Text = "ToolStrip1"
         '
-        'cmdDelete
-        '
-        Me.cmdDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.cmdDelete.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
-        Me.cmdDelete.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.cmdDelete.Name = "cmdDelete"
-        Me.cmdDelete.Padding = New System.Windows.Forms.Padding(5)
-        Me.cmdDelete.Size = New System.Drawing.Size(39, 29)
-        Me.cmdDelete.Text = "Delete"
-        '
         'cmdCreate
         '
         Me.cmdCreate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -426,6 +449,25 @@ Partial Class frmManageRequest
         Me.cmdUpdate.Text = "Update"
         Me.cmdUpdate.ToolTipText = "Modify"
         '
+        'cmdDelete
+        '
+        Me.cmdDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.cmdDelete.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
+        Me.cmdDelete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdDelete.Name = "cmdDelete"
+        Me.cmdDelete.Padding = New System.Windows.Forms.Padding(5)
+        Me.cmdDelete.Size = New System.Drawing.Size(39, 29)
+        Me.cmdDelete.Text = "Delete"
+        '
+        'cmdAddNote
+        '
+        Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.View_Details
+        Me.cmdAddNote.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdAddNote.Name = "cmdAddNote"
+        Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5)
+        Me.cmdAddNote.Size = New System.Drawing.Size(115, 29)
+        Me.cmdAddNote.Text = "Add Note"
+        '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
@@ -444,15 +486,6 @@ Partial Class frmManageRequest
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
-        '
-        'cmdAddNote
-        '
-        Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.View_Details
-        Me.cmdAddNote.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.cmdAddNote.Name = "cmdAddNote"
-        Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5)
-        Me.cmdAddNote.Size = New System.Drawing.Size(115, 29)
-        Me.cmdAddNote.Text = "Add Note"
         '
         'cmdClearForm
         '
@@ -548,39 +581,6 @@ Partial Class frmManageRequest
         Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
         '
-        'cmdAccept
-        '
-        Me.cmdAccept.BackColor = System.Drawing.Color.PaleGreen
-        Me.cmdAccept.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAccept.Location = New System.Drawing.Point(9, 11)
-        Me.cmdAccept.Name = "cmdAccept"
-        Me.cmdAccept.Size = New System.Drawing.Size(119, 41)
-        Me.cmdAccept.TabIndex = 18
-        Me.cmdAccept.Text = "Accept Changes"
-        Me.cmdAccept.UseVisualStyleBackColor = False
-        Me.cmdAccept.Visible = False
-        '
-        'cmdDiscard
-        '
-        Me.cmdDiscard.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.cmdDiscard.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdDiscard.Location = New System.Drawing.Point(9, 58)
-        Me.cmdDiscard.Name = "cmdDiscard"
-        Me.cmdDiscard.Size = New System.Drawing.Size(119, 24)
-        Me.cmdDiscard.TabIndex = 19
-        Me.cmdDiscard.Text = "Discard Changes"
-        Me.cmdDiscard.UseVisualStyleBackColor = False
-        Me.cmdDiscard.Visible = False
-        '
-        'pnlEditButtons
-        '
-        Me.pnlEditButtons.Controls.Add(Me.cmdAccept)
-        Me.pnlEditButtons.Controls.Add(Me.cmdDiscard)
-        Me.pnlEditButtons.Location = New System.Drawing.Point(255, 83)
-        Me.pnlEditButtons.Name = "pnlEditButtons"
-        Me.pnlEditButtons.Size = New System.Drawing.Size(141, 98)
-        Me.pnlEditButtons.TabIndex = 20
-        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -596,6 +596,7 @@ Partial Class frmManageRequest
         Me.Text = "Manage Request"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.pnlEditButtons.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
@@ -608,9 +609,7 @@ Partial Class frmManageRequest
         Me.Panel2.ResumeLayout(False)
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PopupMenuNotes.ResumeLayout(False)
-        Me.pnlEditButtons.ResumeLayout(False)
         Me.ResumeLayout(False)
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents chkPlanned As CheckBox
