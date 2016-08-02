@@ -198,7 +198,7 @@ Class frmSibiAttachments
         FillToolComboBox(Sibi_AttachFolder, cmbMoveFolder)
     End Sub
     Public Sub FillInfo()
-        txtNeedBy.Text = CurrentRequest.dtNeedBy.ToString
+        txtUID.Text = CurrentRequest.strUID
         txtRequestNum.Text = CurrentRequest.strRequestNumber
         txtDescription.Text = CurrentRequest.strDescription
         cmbFolder.SelectedIndex = 0
@@ -351,12 +351,12 @@ Class frmSibiAttachments
     End Sub
     Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
         Dim Filename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
-        Dim blah = MsgBox("Move " & Filename & " to " & GetHumanValue(ComboType.SibiAttachFolder, Folder) & "?", vbYesNo + vbQuestion, "Move Attachment")
-        If blah = vbYes Then
-            UpdateSQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
-            ListAttachments(CurrentRequest.strUID)
-        Else
-        End If
+        'Dim blah = MsgBox("Move " & Filename & " to " & GetHumanValue(ComboType.SibiAttachFolder, Folder) & "?", vbYesNo + vbQuestion, "Move Attachment")
+        'If blah = vbYes Then
+        UpdateSQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
+        ListAttachments(CurrentRequest.strUID)
+        'Else
+        'End If
         cmbMoveFolder.SelectedIndex = -1
         cmbMoveFolder.Text = "Select a folder"
         RightClickMenu.Close()

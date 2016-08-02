@@ -204,7 +204,7 @@ Public Class frmManageRequest
             Return info
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            Return Nothing
+            EndProgram()
         End Try
     End Function
     Private Sub cmdAddNew_Click(sender As Object, e As EventArgs) Handles cmdAddNew.Click
@@ -315,6 +315,7 @@ VALUES
     Private Sub UpdateRequest()
         Try
             Dim RequestData As Request_Info = CollectData()
+            If RequestData.RequstItems Is Nothing Then Exit Sub
             Dim rows As Integer
             Dim strRequestQRY As String = "UPDATE sibi_requests
 SET
@@ -430,9 +431,9 @@ VALUES
             With RequestResults.Rows(0)
                 txtDescription.Text = NoNull(.Item("sibi_description"))
                 txtUser.Text = NoNull(.Item("sibi_request_user"))
-                cmbType.SelectedIndex = GetComboIndexFromShort(ComboType.SibiRequestType, .Item("sibi_type"))
+                cmbType.SelectedIndex = GetComboIndexFromShort(ComboType.SibiRequestType, NoNull(.Item("sibi_type")))
                 dtNeedBy.Value = NoNull(.Item("sibi_need_by"))
-                cmbStatus.SelectedIndex = GetComboIndexFromShort(ComboType.SibiStatusType, .Item("sibi_status"))
+                cmbStatus.SelectedIndex = GetComboIndexFromShort(ComboType.SibiStatusType, NoNull(.Item("sibi_status")))
                 txtPO.Text = NoNull(.Item("sibi_PO"))
                 txtReqNumber.Text = NoNull(.Item("sibi_requisition_number"))
                 txtRequestNum.Text = NoNull(.Item("sibi_request_number"))
@@ -446,9 +447,9 @@ VALUES
             Me.Activate()
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Else
-                EndProgram()
-            End If
+        Else
+            EndProgram()
+        End If
         End Try
     End Sub
     Private Sub LoadNotes(RequestUID As String)
@@ -489,21 +490,19 @@ VALUES
             SetupGrid()
             For Each r As DataRow In Results.Rows
                 With RequestItemsGrid.Rows
-                    .Add(r.Item("sibi_items_user"),
-                        r.Item("sibi_items_description"),
-                        GetHumanValue(ComboType.Location, r.Item("sibi_items_location")),
-                             GetHumanValue(ComboType.SibiItemStatusType, r.Item("sibi_items_status")),
-                             r.Item("sibi_items_replace_asset"),
-                             r.Item("sibi_items_replace_serial"),
-                         r.Item("sibi_items_org_code"),
-                         r.Item("sibi_items_object_code"),
-                         r.Item("sibi_items_uid"))
+                    .Add(NoNull(r.Item("sibi_items_user")),
+                        NoNull(r.Item("sibi_items_description")),
+                        GetHumanValue(ComboType.Location, NoNull(r.Item("sibi_items_location"))),
+                             GetHumanValue(ComboType.SibiItemStatusType, NoNull(r.Item("sibi_items_status"))),
+                             NoNull(r.Item("sibi_items_replace_asset")),
+                             NoNull(r.Item("sibi_items_replace_serial")),
+                         NoNull(r.Item("sibi_items_org_code")),
+                         NoNull(r.Item("sibi_items_object_code")),
+                         NoNull(r.Item("sibi_items_uid")))
                 End With
             Next
-            ' RequestItemsGrid.DataSource = table
             RequestItemsGrid.ClearSelection()
             bolGridFilling = False
-            'table.Dispose()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try

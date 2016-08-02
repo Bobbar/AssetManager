@@ -101,7 +101,6 @@ Module OtherFunctions
         PurgeTempDir()
         GlobalConn.Close()
         LiveConn.Close()
-        End
     End Sub
     Public Sub PurgeTempDir()
         On Error Resume Next

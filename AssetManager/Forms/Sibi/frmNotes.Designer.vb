@@ -70,6 +70,7 @@ Partial Class frmNotes
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Notes"
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents rtbNotes As RichTextBox
     Friend WithEvents cmdClose As Button

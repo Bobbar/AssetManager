@@ -102,6 +102,7 @@ Partial Class frmManageRequest
         Me.GroupBox1.Controls.Add(Me.txtUser)
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Controls.Add(Me.txtDescription)
+        Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 44)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(600, 250)
@@ -148,7 +149,7 @@ Partial Class frmManageRequest
         Me.Label8.AutoSize = True
         Me.Label8.Location = New System.Drawing.Point(493, 28)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(60, 13)
+        Me.Label8.Size = New System.Drawing.Size(66, 15)
         Me.Label8.TabIndex = 16
         Me.Label8.Text = "Request #:"
         '
@@ -158,7 +159,7 @@ Partial Class frmManageRequest
         Me.txtRequestNum.Location = New System.Drawing.Point(496, 44)
         Me.txtRequestNum.Name = "txtRequestNum"
         Me.txtRequestNum.ReadOnly = True
-        Me.txtRequestNum.Size = New System.Drawing.Size(86, 20)
+        Me.txtRequestNum.Size = New System.Drawing.Size(86, 21)
         Me.txtRequestNum.TabIndex = 15
         '
         'cmbStatus
@@ -166,7 +167,7 @@ Partial Class frmManageRequest
         Me.cmbStatus.FormattingEnabled = True
         Me.cmbStatus.Location = New System.Drawing.Point(15, 201)
         Me.cmbStatus.Name = "cmbStatus"
-        Me.cmbStatus.Size = New System.Drawing.Size(137, 21)
+        Me.cmbStatus.Size = New System.Drawing.Size(137, 23)
         Me.cmbStatus.TabIndex = 14
         '
         'Label7
@@ -174,7 +175,7 @@ Partial Class frmManageRequest
         Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(12, 185)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(40, 13)
+        Me.Label7.Size = New System.Drawing.Size(44, 15)
         Me.Label7.TabIndex = 13
         Me.Label7.Text = "Status:"
         '
@@ -210,7 +211,7 @@ Partial Class frmManageRequest
         Me.Label9.AutoSize = True
         Me.Label9.Location = New System.Drawing.Point(17, 103)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(35, 13)
+        Me.Label9.Size = New System.Drawing.Size(36, 15)
         Me.Label9.TabIndex = 9
         Me.Label9.Text = "RT #:"
         '
@@ -219,7 +220,7 @@ Partial Class frmManageRequest
         Me.txtRTNumber.Cursor = System.Windows.Forms.Cursors.Hand
         Me.txtRTNumber.Location = New System.Drawing.Point(20, 119)
         Me.txtRTNumber.Name = "txtRTNumber"
-        Me.txtRTNumber.Size = New System.Drawing.Size(137, 20)
+        Me.txtRTNumber.Size = New System.Drawing.Size(137, 21)
         Me.txtRTNumber.TabIndex = 8
         Me.ToolTip.SetToolTip(Me.txtRTNumber, "Click to open RT Ticket.")
         '
@@ -228,7 +229,7 @@ Partial Class frmManageRequest
         Me.Label6.AutoSize = True
         Me.Label6.Location = New System.Drawing.Point(17, 63)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(72, 13)
+        Me.Label6.Size = New System.Drawing.Size(82, 15)
         Me.Label6.TabIndex = 7
         Me.Label6.Text = "Requisition #:"
         '
@@ -237,7 +238,7 @@ Partial Class frmManageRequest
         Me.txtReqNumber.Cursor = System.Windows.Forms.Cursors.Hand
         Me.txtReqNumber.Location = New System.Drawing.Point(20, 79)
         Me.txtReqNumber.Name = "txtReqNumber"
-        Me.txtReqNumber.Size = New System.Drawing.Size(137, 20)
+        Me.txtReqNumber.Size = New System.Drawing.Size(137, 21)
         Me.txtReqNumber.TabIndex = 6
         '
         'Label5
@@ -245,7 +246,7 @@ Partial Class frmManageRequest
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(17, 25)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(65, 13)
+        Me.Label5.Size = New System.Drawing.Size(75, 15)
         Me.Label5.TabIndex = 5
         Me.Label5.Text = "PO Number:"
         '
@@ -254,7 +255,7 @@ Partial Class frmManageRequest
         Me.txtPO.Cursor = System.Windows.Forms.Cursors.Hand
         Me.txtPO.Location = New System.Drawing.Point(20, 41)
         Me.txtPO.Name = "txtPO"
-        Me.txtPO.Size = New System.Drawing.Size(137, 20)
+        Me.txtPO.Size = New System.Drawing.Size(137, 21)
         Me.txtPO.TabIndex = 4
         '
         'chkPlanned
@@ -262,7 +263,7 @@ Partial Class frmManageRequest
         Me.chkPlanned.AutoSize = True
         Me.chkPlanned.Location = New System.Drawing.Point(172, 124)
         Me.chkPlanned.Name = "chkPlanned"
-        Me.chkPlanned.Size = New System.Drawing.Size(71, 17)
+        Me.chkPlanned.Size = New System.Drawing.Size(79, 19)
         Me.chkPlanned.TabIndex = 10
         Me.chkPlanned.Text = "Planned?"
         Me.chkPlanned.UseVisualStyleBackColor = True
@@ -272,7 +273,7 @@ Partial Class frmManageRequest
         Me.cmbType.FormattingEnabled = True
         Me.cmbType.Location = New System.Drawing.Point(15, 122)
         Me.cmbType.Name = "cmbType"
-        Me.cmbType.Size = New System.Drawing.Size(137, 21)
+        Me.cmbType.Size = New System.Drawing.Size(137, 23)
         Me.cmbType.TabIndex = 9
         '
         'Label4
@@ -280,7 +281,7 @@ Partial Class frmManageRequest
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(12, 106)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(34, 13)
+        Me.Label4.Size = New System.Drawing.Size(36, 15)
         Me.Label4.TabIndex = 8
         Me.Label4.Text = "Type:"
         '
@@ -288,7 +289,7 @@ Partial Class frmManageRequest
         '
         Me.dtNeedBy.Location = New System.Drawing.Point(15, 162)
         Me.dtNeedBy.Name = "dtNeedBy"
-        Me.dtNeedBy.Size = New System.Drawing.Size(180, 20)
+        Me.dtNeedBy.Size = New System.Drawing.Size(180, 21)
         Me.dtNeedBy.TabIndex = 6
         '
         'Label3
@@ -296,7 +297,7 @@ Partial Class frmManageRequest
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(12, 146)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(51, 13)
+        Me.Label3.Size = New System.Drawing.Size(56, 15)
         Me.Label3.TabIndex = 5
         Me.Label3.Text = "Need By:"
         '
@@ -305,7 +306,7 @@ Partial Class frmManageRequest
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(12, 67)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(75, 13)
+        Me.Label2.Size = New System.Drawing.Size(85, 15)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Request User:"
         '
@@ -313,7 +314,7 @@ Partial Class frmManageRequest
         '
         Me.txtUser.Location = New System.Drawing.Point(15, 83)
         Me.txtUser.Name = "txtUser"
-        Me.txtUser.Size = New System.Drawing.Size(137, 20)
+        Me.txtUser.Size = New System.Drawing.Size(137, 21)
         Me.txtUser.TabIndex = 2
         '
         'Label1
@@ -321,7 +322,7 @@ Partial Class frmManageRequest
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(12, 28)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(106, 13)
+        Me.Label1.Size = New System.Drawing.Size(121, 15)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Request Description:"
         '
@@ -329,7 +330,7 @@ Partial Class frmManageRequest
         '
         Me.txtDescription.Location = New System.Drawing.Point(15, 44)
         Me.txtDescription.Name = "txtDescription"
-        Me.txtDescription.Size = New System.Drawing.Size(382, 20)
+        Me.txtDescription.Size = New System.Drawing.Size(382, 21)
         Me.txtDescription.TabIndex = 0
         '
         'Panel1
@@ -610,6 +611,7 @@ Partial Class frmManageRequest
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PopupMenuNotes.ResumeLayout(False)
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents chkPlanned As CheckBox

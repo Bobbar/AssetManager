@@ -45,7 +45,7 @@ Partial Class frmSibiAttachments
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtRequestNum = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.txtNeedBy = New System.Windows.Forms.TextBox()
+        Me.txtUID = New System.Windows.Forms.TextBox()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
@@ -252,11 +252,11 @@ Partial Class frmSibiAttachments
         Me.GroupBox2.Controls.Add(Me.Label2)
         Me.GroupBox2.Controls.Add(Me.txtRequestNum)
         Me.GroupBox2.Controls.Add(Me.Label1)
-        Me.GroupBox2.Controls.Add(Me.txtNeedBy)
+        Me.GroupBox2.Controls.Add(Me.txtUID)
         Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox2.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(633, 95)
+        Me.GroupBox2.Size = New System.Drawing.Size(793, 95)
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Request Info"
@@ -305,18 +305,18 @@ Partial Class frmSibiAttachments
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(460, 29)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(61, 16)
+        Me.Label1.Size = New System.Drawing.Size(85, 16)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Need By"
+        Me.Label1.Text = "Request UID"
         '
-        'txtNeedBy
+        'txtUID
         '
-        Me.txtNeedBy.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtNeedBy.Location = New System.Drawing.Point(459, 49)
-        Me.txtNeedBy.Name = "txtNeedBy"
-        Me.txtNeedBy.ReadOnly = True
-        Me.txtNeedBy.Size = New System.Drawing.Size(105, 25)
-        Me.txtNeedBy.TabIndex = 0
+        Me.txtUID.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtUID.Location = New System.Drawing.Point(459, 49)
+        Me.txtUID.Name = "txtUID"
+        Me.txtUID.ReadOnly = True
+        Me.txtUID.Size = New System.Drawing.Size(307, 25)
+        Me.txtUID.TabIndex = 0
         '
         'StatusStrip1
         '
@@ -423,6 +423,7 @@ Partial Class frmSibiAttachments
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents cmdUpload As Button
     Friend WithEvents RightClickMenu As ContextMenuStrip
@@ -436,7 +437,7 @@ Partial Class frmSibiAttachments
     Friend WithEvents Label2 As Label
     Friend WithEvents txtRequestNum As TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents txtNeedBy As TextBox
+    Friend WithEvents txtUID As TextBox
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
     Friend WithEvents Spinner As ToolStripStatusLabel
