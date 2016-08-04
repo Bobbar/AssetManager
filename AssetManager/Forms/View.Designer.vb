@@ -98,8 +98,6 @@ Partial Class View
         Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
-        Me.UserRightClick = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
@@ -112,7 +110,6 @@ Partial Class View
         Me.TrackingBox.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
-        Me.UserRightClick.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -366,7 +363,6 @@ Partial Class View
         '
         'txtCurUser_View_REQ
         '
-        Me.txtCurUser_View_REQ.ContextMenuStrip = Me.UserRightClick
         Me.txtCurUser_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(21, 132)
         Me.txtCurUser_View_REQ.Name = "txtCurUser_View_REQ"
@@ -888,19 +884,6 @@ Partial Class View
         Me.tmr_RDPRefresher.Enabled = True
         Me.tmr_RDPRefresher.Interval = 10000
         '
-        'UserRightClick
-        '
-        Me.UserRightClick.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2})
-        Me.UserRightClick.Name = "RightClickMenu"
-        Me.UserRightClick.Size = New System.Drawing.Size(162, 26)
-        '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Image = Global.AssetManager.My.Resources.Resources.View_Details
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(161, 22)
-        Me.ToolStripMenuItem2.Text = "Lookup Org/Obj"
-        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -937,7 +920,6 @@ Partial Class View
         Me.ToolStrip1.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
-        Me.UserRightClick.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1020,6 +1002,4 @@ Partial Class View
     Friend WithEvents cmdSibiLink As Button
     Friend WithEvents cmdSetSibi As Button
     Friend WithEvents pnlOtherFunctions As Panel
-    Friend WithEvents UserRightClick As ContextMenuStrip
-    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
 End Class

@@ -71,6 +71,8 @@ Partial Class frmManageRequest
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.cmdOrgObLookup = New System.Windows.Forms.ToolStripSeparator()
         Me.GroupBox1.SuspendLayout()
         Me.pnlEditButtons.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -420,7 +422,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.cmdClearForm})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.ToolStripButton1, Me.cmdOrgObLookup, Me.cmdClearForm})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -582,6 +584,19 @@ Partial Class frmManageRequest
         Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
         '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.view
+        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(173, 29)
+        Me.ToolStripButton1.Text = "Org/Object Lookup"
+        '
+        'cmdOrgObLookup
+        '
+        Me.cmdOrgObLookup.Name = "cmdOrgObLookup"
+        Me.cmdOrgObLookup.Size = New System.Drawing.Size(6, 32)
+        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -659,4 +674,6 @@ Partial Class frmManageRequest
     Friend WithEvents cmdAccept As Button
     Friend WithEvents cmdDiscard As Button
     Friend WithEvents pnlEditButtons As Panel
+    Friend WithEvents ToolStripButton1 As ToolStripButton
+    Friend WithEvents cmdOrgObLookup As ToolStripSeparator
 End Class

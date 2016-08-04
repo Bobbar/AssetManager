@@ -897,11 +897,6 @@ Public Class View
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
         LinkSibi()
     End Sub
-
-    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
-        NewMunisViewEmp(txtCurUser_View_REQ.Text)
-    End Sub
-
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub

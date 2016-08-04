@@ -79,7 +79,7 @@ Partial Class frmSibiAttachments
         '
         Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.CopyTextTool, Me.MoveStripMenuItem, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(174, 120)
+        Me.RightClickMenu.Size = New System.Drawing.Size(174, 142)
         '
         'OpenTool
         '

@@ -23,6 +23,7 @@ Class frmSibiAttachments
     End Structure
     Private AttachIndex() As Attach_Struct
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
+        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim fd As OpenFileDialog = New OpenFileDialog()
         Dim strFileName As String
         fd.ShowHelp = True
@@ -212,6 +213,7 @@ Class frmSibiAttachments
         End If
     End Sub
     Private Sub StartAttachDelete(AttachUID As String)
+        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim strFilename As String
         Dim i As Integer = GetIndexFromUID(AttachUID)
         strFilename = AttachIndex(i).strFilename & AttachIndex(i).strFileType
@@ -230,6 +232,7 @@ Class frmSibiAttachments
         End If
     End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
+
         If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
             StartAttachDelete(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
         End If
@@ -638,9 +641,11 @@ Class frmSibiAttachments
         strSelectedFolder = GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex)
     End Sub
     Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
+        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, GetDBValue(Sibi_AttachFolder, cmbMoveFolder.SelectedIndex))
     End Sub
     Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
+        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim strCurrentFileName As String = ReturnSQLValue("sibi_attachments", "sibi_attach_file_UID", AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, "sibi_attach_file_name") 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
         Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value
         Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
@@ -649,7 +654,5 @@ Class frmSibiAttachments
         Else
             RenameAttachement(strAttachUID, Trim(blah))
         End If
-    End Sub
-    Private Sub AttachGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellContentClick
     End Sub
 End Class

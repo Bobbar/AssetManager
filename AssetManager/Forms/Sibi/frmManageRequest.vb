@@ -536,7 +536,7 @@ VALUES
         End If
     End Sub
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
-        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         If CurrentRequest.strUID <> "" Then
             frmSibiAttachments.ListAttachments(CurrentRequest.strUID)
             frmSibiAttachments.Activate()
@@ -556,6 +556,7 @@ VALUES
         CurrentRequest = Nothing
     End Sub
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
+        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim blah
         blah = MsgBox("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row")
         If blah = vbYes Then
@@ -583,6 +584,22 @@ VALUES
         ' NewMunis.ViewEntry(GUID)
         NewMunis.Show()
         ' DoneWaiting()
+    End Sub
+    Private Sub NewMunisViewEmp(Name As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        'Dim SplitName() As String = Split(Name, " ")
+        'Dim LastName As String = SplitName(SplitName.Count - 1)
+        Dim NewMunis As New View_Munis
+        'Waiting()
+        'AddChild(NewMunis)
+        NewMunis.HideFixedAssetGrid()
+        NewMunis.LoadMunisEmployeeByLastName(Name)
+        ' NewMunis.ViewEntry(GUID)
+        NewMunis.Show()
+        'DoneWaiting()
     End Sub
 
     Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
@@ -619,6 +636,7 @@ VALUES
         frmNotes.ViewNote(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value)
     End Sub
     Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
+        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim blah = MsgBox(DeleteItem(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value, "sibi_note_uid", "sibi_notes") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
         OpenRequest(CurrentRequest.strUID)
     End Sub
@@ -703,5 +721,16 @@ VALUES
 
     Private Sub txtReqNumber_TextChanged(sender As Object, e As EventArgs) Handles txtReqNumber.TextChanged
 
+    End Sub
+
+    Private Sub PopupMenuNotes_Opening(sender As Object, e As CancelEventArgs) Handles PopupMenuNotes.Opening
+
+    End Sub
+
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        Dim blah As String = InputBox("Enter a full or patial first or last name of the Employee.", "Org/Object Code Search", "")
+        If Trim(blah) IsNot "" Then
+            NewMunisViewEmp(blah)
+        End If
     End Sub
 End Class

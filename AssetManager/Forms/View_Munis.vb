@@ -1,4 +1,5 @@
 ﻿Public Class View_Munis
+    Private intMaxResults As Integer = 50
     Private Sub LoadMunisInventoryGrid(Device As Device_Info)
         Try
             If NeededInfo(Device) Then
@@ -17,7 +18,7 @@
         Try
             If NeededInfo(Device) Then
                 Dim strColumns As String = "rg_fiscal_year,a_requisition_no,LineNumber,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,RequisitionId,Quantity,UnitPrice,NetAmount,ItemDescription,SuggestedVendorId,PurchaseOrderNumber,PurchaseOrderDate"
-                Dim strQRY As String = "SELECT " & strColumns & " FROM rq_gl_info, RequisitionItems WHERE a_requisition_no='" & Munis_GetReqNumberFromPO(Device.strPO) & "' AND rg_fiscal_year='" & Device.strFiscalYear & "' AND  PurchaseOrderNumber='" & Device.strPO & "' AND rg_line_number = LineNumber"
+                Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, RequisitionItems WHERE a_requisition_no='" & Munis_GetReqNumberFromPO(Device.strPO) & "' AND rg_fiscal_year='" & Device.strFiscalYear & "' AND  PurchaseOrderNumber='" & Device.strPO & "' AND rg_line_number = LineNumber"
                 Debug.Print(strQRY)
                 Dim results As DataTable
                 results = ReturnMSSQLTable(strQRY)
@@ -32,7 +33,7 @@
     Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String)
         Try
             Dim strColumns As String = "rg_fiscal_year,a_requisition_no,rg_line_number,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,rqdt_des_ln,rqdt_sug_vn,rqdt_pur_no,rqdt_pur_dt"
-            Dim strQRY As String = "SELECT " & strColumns & " FROM rq_gl_info, rqdetail WHERE a_requisition_no='" & ReqNumber & "' AND rg_fiscal_year='" & FiscalYr & "' AND rg_line_number = rqdt_lin_no AND a_requisition_no = rqdt_req_no AND rg_fiscal_year = rqdt_fsc_yr"
+            Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, rqdetail WHERE a_requisition_no='" & ReqNumber & "' AND rg_fiscal_year='" & FiscalYr & "' AND rg_line_number = rqdt_lin_no AND a_requisition_no = rqdt_req_no AND rg_fiscal_year = rqdt_fsc_yr"
             Debug.Print(strQRY)
             Dim results As DataTable
             results = ReturnMSSQLTable(strQRY)
@@ -41,10 +42,10 @@
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Sub LoadMunisEmployeeByLastName(LastName As String)
+    Public Sub LoadMunisEmployeeByLastName(Name As String)
         Try
             Dim strColumns As String = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short"
-            Dim strQRY As String = "SELECT " & strColumns & " FROM pr_employee_master WHERE a_name_last='" & UCase(LastName) & "'"
+            Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
             Debug.Print(strQRY)
             Dim results As DataTable
             results = ReturnMSSQLTable(strQRY)
