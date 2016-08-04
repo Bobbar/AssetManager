@@ -41,6 +41,18 @@
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
+    Public Sub LoadMunisEmployeeByLastName(LastName As String)
+        Try
+            Dim strColumns As String = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short"
+            Dim strQRY As String = "SELECT " & strColumns & " FROM pr_employee_master WHERE a_name_last='" & UCase(LastName) & "'"
+            Debug.Print(strQRY)
+            Dim results As DataTable
+            results = ReturnMSSQLTable(strQRY)
+            DataGridMunis_Requisition.DataSource = results
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
     Public Sub LoadMunisInfoByDevice(Device As Device_Info)
         If Device.strPO <> "" And YearFromDate(Device.dtPurchaseDate) <> "" Then 'if PO and Fiscal yr on record > load data using our records
             Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
@@ -58,8 +70,12 @@
                 End If
             End If
             If YearFromDate(Device.dtPurchaseDate) = "" Then
-                Dim FY As String = Munis_GetFYFromAsset(Device.strAssetTag)
-                If FY <> "" Then Device.strFiscalYear = FY
+                Dim FY As String = Munis_GetFYFromPO(Device.strPO) 'Munis_GetFYFromAsset(Device.strAssetTag)
+                If FY <> "" Then
+                    Device.strFiscalYear = FY
+                Else
+                    Device.strFiscalYear = Munis_GetFYFromAsset(Device.strAssetTag)
+                End If
             Else
                 Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             End If

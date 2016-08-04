@@ -570,7 +570,7 @@ VALUES
             Process.Start("http://rt.co.fairfield.oh.us/rt/Ticket/Display.html?id=" & RTNum)
         End If
     End Sub
-    Private Sub NewMunisView(ReqNum As String)
+    Private Sub NewMunisViewReq(ReqNum As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
@@ -584,10 +584,11 @@ VALUES
         NewMunis.Show()
         ' DoneWaiting()
     End Sub
+
     Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
         Dim ReqNum As String = Trim(txtReqNumber.Text)
         If Not bolUpdating And ReqNum <> "" Then
-            NewMunisView(ReqNum)
+            NewMunisViewReq(ReqNum)
         End If
     End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
@@ -698,5 +699,9 @@ VALUES
     Private Sub cmdDiscard_Click(sender As Object, e As EventArgs) Handles cmdDiscard.Click
         HideEditControls()
         OpenRequest(CurrentRequest.strUID)
+    End Sub
+
+    Private Sub txtReqNumber_TextChanged(sender As Object, e As EventArgs) Handles txtReqNumber.TextChanged
+
     End Sub
 End Class

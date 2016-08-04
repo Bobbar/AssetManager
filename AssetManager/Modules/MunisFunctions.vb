@@ -11,4 +11,7 @@
     Public Function Munis_GetFYFromAsset(AssetTag As String) As String
         Return Trim(ReturnMSSQLValue("famaster", "fama_tag", AssetTag, "fama_fisc_yr"))
     End Function
+    Public Function Munis_GetFYFromPO(PO As String) As String
+        Return YearFromDate(Trim(ReturnMSSQLValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate")))
+    End Function
 End Module

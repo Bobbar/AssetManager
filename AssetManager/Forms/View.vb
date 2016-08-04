@@ -531,6 +531,24 @@ Public Class View
         NewMunis.Show()
         DoneWaiting()
     End Sub
+    Private Sub NewMunisViewEmp(Name As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        Dim SplitName() As String = Split(Name, " ")
+        Dim LastName As String = SplitName(SplitName.Count - 1)
+
+
+        Dim NewMunis As New View_Munis
+        Waiting()
+        AddChild(NewMunis)
+        NewMunis.HideFixedAssetGrid()
+        NewMunis.LoadMunisEmployeeByLastName(LastName)
+        ' NewMunis.ViewEntry(GUID)
+        NewMunis.Show()
+        DoneWaiting()
+    End Sub
     Private Sub NewTrackingView(GUID As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
@@ -879,6 +897,11 @@ Public Class View
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
         LinkSibi()
     End Sub
+
+    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
+        NewMunisViewEmp(txtCurUser_View_REQ.Text)
+    End Sub
+
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub

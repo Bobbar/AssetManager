@@ -31,11 +31,13 @@ Partial Class View
         Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
-        Me.cmdSibiLink = New System.Windows.Forms.Button()
+        Me.pnlOtherFunctions = New System.Windows.Forms.Panel()
+        Me.cmdRDP = New System.Windows.Forms.Button()
         Me.cmdMunisInfo = New System.Windows.Forms.Button()
+        Me.cmdSibiLink = New System.Windows.Forms.Button()
+        Me.cmdSetSibi = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.txtPONumber = New System.Windows.Forms.TextBox()
-        Me.cmdRDP = New System.Windows.Forms.Button()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
@@ -96,10 +98,11 @@ Partial Class View
         Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
-        Me.cmdSetSibi = New System.Windows.Forms.Button()
-        Me.pnlOtherFunctions = New System.Windows.Forms.Panel()
+        Me.UserRightClick = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
+        Me.pnlOtherFunctions.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.HistoryTab.SuspendLayout()
@@ -109,7 +112,7 @@ Partial Class View
         Me.TrackingBox.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
-        Me.pnlOtherFunctions.SuspendLayout()
+        Me.UserRightClick.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -216,14 +219,28 @@ Partial Class View
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
         '
-        'cmdSibiLink
+        'pnlOtherFunctions
         '
-        Me.cmdSibiLink.Location = New System.Drawing.Point(60, 33)
-        Me.cmdSibiLink.Name = "cmdSibiLink"
-        Me.cmdSibiLink.Size = New System.Drawing.Size(106, 23)
-        Me.cmdSibiLink.TabIndex = 49
-        Me.cmdSibiLink.Text = "Sibi Info"
-        Me.cmdSibiLink.UseVisualStyleBackColor = True
+        Me.pnlOtherFunctions.Controls.Add(Me.cmdRDP)
+        Me.pnlOtherFunctions.Controls.Add(Me.cmdMunisInfo)
+        Me.pnlOtherFunctions.Controls.Add(Me.cmdSibiLink)
+        Me.pnlOtherFunctions.Location = New System.Drawing.Point(495, 175)
+        Me.pnlOtherFunctions.Name = "pnlOtherFunctions"
+        Me.pnlOtherFunctions.Size = New System.Drawing.Size(172, 61)
+        Me.pnlOtherFunctions.TabIndex = 51
+        '
+        'cmdRDP
+        '
+        Me.cmdRDP.BackgroundImage = CType(resources.GetObject("cmdRDP.BackgroundImage"), System.Drawing.Image)
+        Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.cmdRDP.Location = New System.Drawing.Point(4, 7)
+        Me.cmdRDP.Name = "cmdRDP"
+        Me.cmdRDP.Size = New System.Drawing.Size(49, 45)
+        Me.cmdRDP.TabIndex = 46
+        Me.ToolTip1.SetToolTip(Me.cmdRDP, "Launch Remote Desktop")
+        Me.cmdRDP.UseVisualStyleBackColor = True
+        Me.cmdRDP.Visible = False
         '
         'cmdMunisInfo
         '
@@ -233,6 +250,24 @@ Partial Class View
         Me.cmdMunisInfo.TabIndex = 46
         Me.cmdMunisInfo.Text = "MUNIS Info"
         Me.cmdMunisInfo.UseVisualStyleBackColor = True
+        '
+        'cmdSibiLink
+        '
+        Me.cmdSibiLink.Location = New System.Drawing.Point(60, 33)
+        Me.cmdSibiLink.Name = "cmdSibiLink"
+        Me.cmdSibiLink.Size = New System.Drawing.Size(106, 23)
+        Me.cmdSibiLink.TabIndex = 49
+        Me.cmdSibiLink.Text = "Sibi Info"
+        Me.cmdSibiLink.UseVisualStyleBackColor = True
+        '
+        'cmdSetSibi
+        '
+        Me.cmdSetSibi.Location = New System.Drawing.Point(110, 208)
+        Me.cmdSetSibi.Name = "cmdSetSibi"
+        Me.cmdSetSibi.Size = New System.Drawing.Size(106, 23)
+        Me.cmdSetSibi.TabIndex = 50
+        Me.cmdSetSibi.Text = "Set Sibi Link"
+        Me.cmdSetSibi.UseVisualStyleBackColor = True
         '
         'Label12
         '
@@ -251,19 +286,6 @@ Partial Class View
         Me.txtPONumber.Name = "txtPONumber"
         Me.txtPONumber.Size = New System.Drawing.Size(124, 23)
         Me.txtPONumber.TabIndex = 47
-        '
-        'cmdRDP
-        '
-        Me.cmdRDP.BackgroundImage = CType(resources.GetObject("cmdRDP.BackgroundImage"), System.Drawing.Image)
-        Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRDP.Location = New System.Drawing.Point(4, 7)
-        Me.cmdRDP.Name = "cmdRDP"
-        Me.cmdRDP.Size = New System.Drawing.Size(49, 45)
-        Me.cmdRDP.TabIndex = 46
-        Me.ToolTip1.SetToolTip(Me.cmdRDP, "Launch Remote Desktop")
-        Me.cmdRDP.UseVisualStyleBackColor = True
-        Me.cmdRDP.Visible = False
         '
         'chkTrackable
         '
@@ -344,6 +366,7 @@ Partial Class View
         '
         'txtCurUser_View_REQ
         '
+        Me.txtCurUser_View_REQ.ContextMenuStrip = Me.UserRightClick
         Me.txtCurUser_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(21, 132)
         Me.txtCurUser_View_REQ.Name = "txtCurUser_View_REQ"
@@ -865,24 +888,18 @@ Partial Class View
         Me.tmr_RDPRefresher.Enabled = True
         Me.tmr_RDPRefresher.Interval = 10000
         '
-        'cmdSetSibi
+        'UserRightClick
         '
-        Me.cmdSetSibi.Location = New System.Drawing.Point(110, 208)
-        Me.cmdSetSibi.Name = "cmdSetSibi"
-        Me.cmdSetSibi.Size = New System.Drawing.Size(106, 23)
-        Me.cmdSetSibi.TabIndex = 50
-        Me.cmdSetSibi.Text = "Set Sibi Link"
-        Me.cmdSetSibi.UseVisualStyleBackColor = True
+        Me.UserRightClick.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2})
+        Me.UserRightClick.Name = "RightClickMenu"
+        Me.UserRightClick.Size = New System.Drawing.Size(162, 26)
         '
-        'pnlOtherFunctions
+        'ToolStripMenuItem2
         '
-        Me.pnlOtherFunctions.Controls.Add(Me.cmdRDP)
-        Me.pnlOtherFunctions.Controls.Add(Me.cmdMunisInfo)
-        Me.pnlOtherFunctions.Controls.Add(Me.cmdSibiLink)
-        Me.pnlOtherFunctions.Location = New System.Drawing.Point(495, 175)
-        Me.pnlOtherFunctions.Name = "pnlOtherFunctions"
-        Me.pnlOtherFunctions.Size = New System.Drawing.Size(172, 61)
-        Me.pnlOtherFunctions.TabIndex = 51
+        Me.ToolStripMenuItem2.Image = Global.AssetManager.My.Resources.Resources.View_Details
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem2.Text = "Lookup Org/Obj"
         '
         'View
         '
@@ -907,6 +924,7 @@ Partial Class View
         Me.MenuStrip1.PerformLayout()
         Me.DeviceInfoBox.ResumeLayout(False)
         Me.DeviceInfoBox.PerformLayout()
+        Me.pnlOtherFunctions.ResumeLayout(False)
         Me.RightClickMenu.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.HistoryTab.ResumeLayout(False)
@@ -919,9 +937,10 @@ Partial Class View
         Me.ToolStrip1.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
-        Me.pnlOtherFunctions.ResumeLayout(False)
+        Me.UserRightClick.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem
@@ -1001,4 +1020,6 @@ Partial Class View
     Friend WithEvents cmdSibiLink As Button
     Friend WithEvents cmdSetSibi As Button
     Friend WithEvents pnlOtherFunctions As Panel
+    Friend WithEvents UserRightClick As ContextMenuStrip
+    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
 End Class
