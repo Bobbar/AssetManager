@@ -92,6 +92,9 @@ Module OtherFunctions
             Return -1
         End Try
     End Function
+    Public Function GetCellValue(ByVal Grid As DataGridView, ColumnName As String) As String
+        Return Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value
+    End Function
     Public Sub ConnectionNotReady()
         Dim blah = MsgBox("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
     End Sub
@@ -101,6 +104,8 @@ Module OtherFunctions
         PurgeTempDir()
         GlobalConn.Close()
         LiveConn.Close()
+        Application.Exit()
+        End
     End Sub
     Public Sub PurgeTempDir()
         On Error Resume Next
@@ -135,7 +140,7 @@ Module OtherFunctions
         End If
         Dim NewMunis As New View_Munis
         NewMunis.HideFixedAssetGrid()
-        NewMunis.LoadMunisEmployeeByLastName(Name)
         NewMunis.Show()
+        NewMunis.LoadMunisEmployeeByLastName(Name)
     End Sub
 End Module

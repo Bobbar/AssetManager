@@ -41,7 +41,7 @@ VALUES
     End Sub
     Private Sub cmdOK_Click(sender As Object, e As EventArgs) Handles cmdOK.Click
         If AddNewNote(CurrentRequest.strUID, Trim(rtbNotes.Text)) Then
-            MsgBox("Success!")
+            'MsgBox("Success!")
             Me.Dispose()
             frmManageRequest.OpenRequest(CurrentRequest.strUID)
         Else

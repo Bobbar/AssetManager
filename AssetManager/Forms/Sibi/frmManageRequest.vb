@@ -132,6 +132,7 @@ Public Class frmManageRequest
         With RequestItemsGrid.Columns
             .Add("User", "User")
             .Add("Description", "Description")
+            .Add("Qty", "Qty")
             .Add(DataGridCombo(Locations, "Location", ComboType.Location)) '.Add("Location")
             .Add(DataGridCombo(Sibi_ItemStatusType, "Status", ComboType.SibiItemStatusType))
             .Add("Replace Asset", "Replace Asset")
@@ -273,7 +274,8 @@ VALUES
 `sibi_items_replace_asset`,
 `sibi_items_replace_serial`,
 `sibi_items_org_code`,
-`sibi_items_object_code`
+`sibi_items_object_code`,
+`sibi_items_qty`
 )
 VALUES
 (@sibi_items_uid,
@@ -285,7 +287,9 @@ VALUES
 @sibi_items_replace_asset,
 @sibi_items_replace_serial,
 @sibi_items_org_code,
-@sibi_items_object_code)"
+@sibi_items_object_code,
+@sibi_items_qty
+)"
                 cmd.Parameters.AddWithValue("@sibi_items_uid", strItemUID)
                 cmd.Parameters.AddWithValue("@sibi_items_request_uid", strRequestUID)
                 cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
@@ -296,6 +300,7 @@ VALUES
                 cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
                 cmd.Parameters.AddWithValue("@sibi_items_org_code", row.Item("Org Code"))
                 cmd.Parameters.AddWithValue("@sibi_items_object_code", row.Item("Object Code"))
+                cmd.Parameters.AddWithValue("@sibi_items_qty", row.Item("Qty"))
                 cmd.CommandText = strSqlQry2
                 rows = rows + cmd.ExecuteNonQuery()
                 cmd.Parameters.Clear()
@@ -355,7 +360,8 @@ sibi_items_status = @sibi_items_status ,
 sibi_items_replace_asset = @sibi_items_replace_asset ,
 sibi_items_replace_serial = @sibi_items_replace_serial,
 sibi_items_org_code = @sibi_items_org_code,
-sibi_items_object_code = @sibi_items_object_code
+sibi_items_object_code = @sibi_items_object_code,
+sibi_items_qty = @sibi_items_qty
 WHERE sibi_items_uid ='" & row.Item("Item UID") & "'"
                     cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
                     cmd.Parameters.AddWithValue("@sibi_items_description", row.Item("Description"))
@@ -365,6 +371,7 @@ WHERE sibi_items_uid ='" & row.Item("Item UID") & "'"
                     cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
                     cmd.Parameters.AddWithValue("@sibi_items_org_code", row.Item("Org Code"))
                     cmd.Parameters.AddWithValue("@sibi_items_object_code", row.Item("Object Code"))
+                    cmd.Parameters.AddWithValue("@sibi_items_qty", row.Item("Qty"))
                     cmd.CommandText = strRequestItemsQry
                     cmd.ExecuteNonQuery()
                     cmd.Parameters.Clear()
@@ -380,7 +387,9 @@ WHERE sibi_items_uid ='" & row.Item("Item UID") & "'"
 `sibi_items_replace_asset`,
 `sibi_items_replace_serial`,
 `sibi_items_org_code`,
-`sibi_items_object_code`)
+`sibi_items_object_code`,
+`sibi_items_qty`
+)
 VALUES
 (@sibi_items_uid,
 @sibi_items_request_uid,
@@ -391,7 +400,9 @@ VALUES
 @sibi_items_replace_asset,
 @sibi_items_replace_serial,
 @sibi_items_org_code,
-@sibi_items_object_code)"
+@sibi_items_object_code,
+@sibi_items_qty
+)"
                     cmd.Parameters.AddWithValue("@sibi_items_uid", strItemUID)
                     cmd.Parameters.AddWithValue("@sibi_items_request_uid", CurrentRequest.strUID)
                     cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
@@ -402,6 +413,7 @@ VALUES
                     cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
                     cmd.Parameters.AddWithValue("@sibi_items_org_code", row.Item("Org Code"))
                     cmd.Parameters.AddWithValue("@sibi_items_object_code", row.Item("Object Code"))
+                    cmd.Parameters.AddWithValue("@sibi_items_qty", row.Item("Qty"))
                     cmd.CommandText = strRequestItemsQry
                     rows += cmd.ExecuteNonQuery()
                     cmd.Parameters.Clear()
@@ -492,6 +504,7 @@ VALUES
                 With RequestItemsGrid.Rows
                     .Add(NoNull(r.Item("sibi_items_user")),
                         NoNull(r.Item("sibi_items_description")),
+                         NoNull(r.Item("sibi_items_qty")),
                         GetHumanValue(ComboType.Location, NoNull(r.Item("sibi_items_location"))),
                              GetHumanValue(ComboType.SibiItemStatusType, NoNull(r.Item("sibi_items_status"))),
                              NoNull(r.Item("sibi_items_replace_asset")),
@@ -580,9 +593,24 @@ VALUES
         'Waiting()
         'AddChild(NewMunis)
         NewMunis.HideFixedAssetGrid()
+        NewMunis.Show()
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNum, YearFromDate(CurrentRequest.dtDateStamp))
         ' NewMunis.ViewEntry(GUID)
+
+        ' DoneWaiting()
+    End Sub
+    Private Sub NewMunisViewPO(PO As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        Dim NewMunis As New View_Munis
+        'Waiting()
+        'AddChild(NewMunis)
+        NewMunis.HideFixedAssetGrid()
         NewMunis.Show()
+        NewMunis.LoadMunisRequisitionGrid(PO, YearFromDate(CurrentRequest.dtDateStamp))
+        ' NewMunis.ViewEntry(GUID)
         ' DoneWaiting()
     End Sub
 
@@ -704,15 +732,19 @@ VALUES
         OpenRequest(CurrentRequest.strUID)
     End Sub
 
-    Private Sub txtReqNumber_TextChanged(sender As Object, e As EventArgs) Handles txtReqNumber.TextChanged
-
-    End Sub
-
-    Private Sub PopupMenuNotes_Opening(sender As Object, e As CancelEventArgs) Handles PopupMenuNotes.Opening
-
-    End Sub
-
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
         MunisSearch()
+    End Sub
+
+
+    Private Sub txtPO_Click(sender As Object, e As EventArgs) Handles txtPO.Click
+        Dim PO As String = Trim(txtPO.Text)
+        If Not bolUpdating And PO <> "" Then
+            NewMunisViewPO(PO)
+        End If
+    End Sub
+
+    Private Sub txtReqNumber_TextChanged(sender As Object, e As EventArgs) Handles txtReqNumber.TextChanged
+
     End Sub
 End Class

@@ -64,6 +64,8 @@ Partial Class frmManageRequest
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.cmdOrgObLookup = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdClearForm = New System.Windows.Forms.ToolStripButton()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
@@ -71,8 +73,6 @@ Partial Class frmManageRequest
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.cmdOrgObLookup = New System.Windows.Forms.ToolStripSeparator()
         Me.GroupBox1.SuspendLayout()
         Me.pnlEditButtons.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -490,6 +490,19 @@ Partial Class frmManageRequest
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
         '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.view
+        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(173, 29)
+        Me.ToolStripButton1.Text = "Org/Object Lookup"
+        '
+        'cmdOrgObLookup
+        '
+        Me.cmdOrgObLookup.Name = "cmdOrgObLookup"
+        Me.cmdOrgObLookup.Size = New System.Drawing.Size(6, 32)
+        '
         'cmdClearForm
         '
         Me.cmdClearForm.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
@@ -583,19 +596,6 @@ Partial Class frmManageRequest
         Me.cmdDeleteNote.Name = "cmdDeleteNote"
         Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
-        '
-        'ToolStripButton1
-        '
-        Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.view
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(173, 29)
-        Me.ToolStripButton1.Text = "Org/Object Lookup"
-        '
-        'cmdOrgObLookup
-        '
-        Me.cmdOrgObLookup.Name = "cmdOrgObLookup"
-        Me.cmdOrgObLookup.Size = New System.Drawing.Size(6, 32)
         '
         'frmManageRequest
         '

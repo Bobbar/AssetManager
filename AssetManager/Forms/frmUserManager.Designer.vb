@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class frmUserManager
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class frmUserManager
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -31,7 +31,6 @@ Partial Class frmUserManager
         Me.pnlModule = New System.Windows.Forms.Panel()
         Me.clbModules = New System.Windows.Forms.CheckedListBox()
         Me.cmdUpdate = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         CType(Me.UserGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -45,9 +44,9 @@ Partial Class frmUserManager
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Controls.Add(Me.UserGrid)
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel1.Location = New System.Drawing.Point(12, 269)
+        Me.Panel1.Location = New System.Drawing.Point(12, 195)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(779, 246)
+        Me.Panel1.Size = New System.Drawing.Size(779, 190)
         Me.Panel1.TabIndex = 0
         '
         'UserGrid
@@ -73,6 +72,7 @@ Partial Class frmUserManager
         Me.UserGrid.DefaultCellStyle = DataGridViewCellStyle1
         Me.UserGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.UserGrid.Location = New System.Drawing.Point(3, 3)
+        Me.UserGrid.MultiSelect = False
         Me.UserGrid.Name = "UserGrid"
         Me.UserGrid.ReadOnly = True
         Me.UserGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
@@ -90,66 +90,65 @@ Partial Class frmUserManager
         Me.UserGrid.ShowCellErrors = False
         Me.UserGrid.ShowCellToolTips = False
         Me.UserGrid.ShowEditingIcon = False
-        Me.UserGrid.Size = New System.Drawing.Size(773, 240)
+        Me.UserGrid.Size = New System.Drawing.Size(773, 184)
         Me.UserGrid.TabIndex = 18
         Me.UserGrid.VirtualMode = True
         '
         'GroupBox1
         '
         Me.GroupBox1.Controls.Add(Me.pnlModule)
-        Me.GroupBox1.Location = New System.Drawing.Point(11, 12)
+        Me.GroupBox1.Location = New System.Drawing.Point(146, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(403, 241)
+        Me.GroupBox1.Size = New System.Drawing.Size(311, 177)
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Module Access"
         '
         'pnlModule
         '
+        Me.pnlModule.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pnlModule.Controls.Add(Me.clbModules)
         Me.pnlModule.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.pnlModule.Location = New System.Drawing.Point(10, 17)
         Me.pnlModule.Name = "pnlModule"
-        Me.pnlModule.Size = New System.Drawing.Size(379, 214)
+        Me.pnlModule.Size = New System.Drawing.Size(290, 153)
         Me.pnlModule.TabIndex = 0
         '
         'clbModules
         '
+        Me.clbModules.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.clbModules.CheckOnClick = True
         Me.clbModules.FormattingEnabled = True
         Me.clbModules.Location = New System.Drawing.Point(3, 3)
+        Me.clbModules.MultiColumn = True
         Me.clbModules.Name = "clbModules"
-        Me.clbModules.Size = New System.Drawing.Size(373, 208)
+        Me.clbModules.Size = New System.Drawing.Size(284, 140)
         Me.clbModules.TabIndex = 0
         '
         'cmdUpdate
         '
-        Me.cmdUpdate.Location = New System.Drawing.Point(533, 118)
+        Me.cmdUpdate.Location = New System.Drawing.Point(519, 81)
         Me.cmdUpdate.Name = "cmdUpdate"
         Me.cmdUpdate.Size = New System.Drawing.Size(135, 47)
         Me.cmdUpdate.TabIndex = 2
         Me.cmdUpdate.Text = "Update"
         Me.cmdUpdate.UseVisualStyleBackColor = True
         '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(518, 191)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(149, 31)
-        Me.Button1.TabIndex = 3
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'frmUserManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(803, 527)
-        Me.Controls.Add(Me.Button1)
+        Me.ClientSize = New System.Drawing.Size(803, 397)
         Me.Controls.Add(Me.cmdUpdate)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmUserManager"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "User  Manager"
         Me.Panel1.ResumeLayout(False)
         CType(Me.UserGrid, System.ComponentModel.ISupportInitialize).EndInit()
@@ -165,5 +164,4 @@ Partial Class frmUserManager
     Friend WithEvents pnlModule As Panel
     Friend WithEvents clbModules As CheckedListBox
     Friend WithEvents cmdUpdate As Button
-    Friend WithEvents Button1 As Button
 End Class

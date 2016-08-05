@@ -527,9 +527,9 @@ Public Class View
         Dim NewMunis As New View_Munis
         Waiting()
         AddChild(NewMunis)
+        NewMunis.Show()
         NewMunis.LoadMunisInfoByDevice(Device)
         ' NewMunis.ViewEntry(GUID)
-        NewMunis.Show()
         DoneWaiting()
     End Sub
     Private Sub NewMunisViewEmp(Name As String)
@@ -545,9 +545,9 @@ Public Class View
         Waiting()
         AddChild(NewMunis)
         NewMunis.HideFixedAssetGrid()
+        NewMunis.Show()
         NewMunis.LoadMunisEmployeeByLastName(LastName)
         ' NewMunis.ViewEntry(GUID)
-        NewMunis.Show()
         DoneWaiting()
     End Sub
     Private Sub NewTrackingView(GUID As String)

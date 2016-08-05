@@ -161,7 +161,7 @@ Module SecurityMod
         For levels = 0 To UBound(AccessLevels)
             calc_level = UsrLevel And mask
             If calc_level <> 0 Then
-                If AccessLevels(levels + 1).strModule = recModule Then
+                If AccessLevels(levels).strModule = recModule Then
                     Return True
                 End If
             End If

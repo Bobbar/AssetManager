@@ -1,5 +1,13 @@
 ﻿Public Class frmUserManager
     Private ModuleArray() As Access_Info
+
+    Private Structure User_Info
+        Public strUsername As String
+        Public strFullname As String
+        Public intAccessLevel As Integer
+        Public strUID As String
+    End Structure
+    Private CurrentUser As User_Info
     Private Sub frmUserManager_Load(sender As Object, e As EventArgs) Handles Me.Load
         ListUsers()
         BuildModuleArray()
@@ -41,15 +49,7 @@
 
         Next
 
-        'For Each chkBox As CheckBox In clbModules.Items
-
-        '    If CanAccess(chkBox.Name.ToString, intAccessLevel) Then clbModules.SetItemChecked(i, True) 'chkBox.Checked = True
-
-
-
-        '    i += 1
-        'Next
-
+        GetUserInfo()
 
 
     End Sub
@@ -100,18 +100,16 @@
     Private Function CalcAccessLevel() As Integer
         Dim intAccessLevel As Integer = 0
         For i As Integer = 0 To ModuleArray.Count - 1
-
             If clbModules.GetItemCheckState(i) = CheckState.Checked Then
                 intAccessLevel += ModuleArray(i).intLevel
-
             End If
-
         Next
         Return intAccessLevel
-
     End Function
-    Private Sub UserGrid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellContentClick
-
+    Private Sub UpdateUser(User As User_Info)
+        CurrentUser.intAccessLevel = CalcAccessLevel()
+        UpdateSQLValue("users", "usr_access_level", CurrentUser.intAccessLevel, "usr_UID", CurrentUser.strUID)
+        ListUsers()
     End Sub
 
     Private Sub UserGrid_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellContentDoubleClick
@@ -121,8 +119,20 @@
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick
         DisplayAccess(UserGrid.Item(GetColIndex(UserGrid, "Access Level"), UserGrid.CurrentRow.Index).Value)
     End Sub
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub GetUserInfo()
+        With CurrentUser
+            .intAccessLevel = GetCellValue(UserGrid, "Access Level")
+            .strUsername = GetCellValue(UserGrid, "Username")
+            .strUID = GetCellValue(UserGrid, "UID")
+            .strFullname = GetCellValue(UserGrid, "Full Name")
+        End With
+    End Sub
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
         Debug.Print(CalcAccessLevel)
+    End Sub
+
+    Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
+        UpdateUser(CurrentUser)
+        GetUserAccess()
     End Sub
 End Class
