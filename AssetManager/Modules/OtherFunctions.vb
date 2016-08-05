@@ -122,4 +122,20 @@ Module OtherFunctions
     Public Function YearFromDate(dtDate As Date) As String
         Return dtDate.Year.ToString
     End Function
+    Public Sub MunisSearch()
+        Dim blah As String = InputBox("Enter a full or patial first or last name of the Employee.", "Org/Object Code Search", "")
+        If Trim(blah) IsNot "" Then
+            NewMunisViewEmp(blah)
+        End If
+    End Sub
+    Public Sub NewMunisViewEmp(Name As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        Dim NewMunis As New View_Munis
+        NewMunis.HideFixedAssetGrid()
+        NewMunis.LoadMunisEmployeeByLastName(Name)
+        NewMunis.Show()
+    End Sub
 End Module

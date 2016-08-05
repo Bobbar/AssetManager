@@ -73,6 +73,7 @@ Module SecurityMod
         Public Const Sibi_Add As String = "sibi_add"
         Public Const Sibi_Modify As String = "sibi_modify"
         Public Const Sibi_Delete As String = "sibi_delete"
+        Public Const IsAdmin As String = "admin"
     End Class
     Public Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
     Public Const EncFTPUserPass As String = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ="
@@ -140,13 +141,11 @@ Module SecurityMod
                     Do While .Read()
                         UserAccess.strUsername = !usr_username
                         UserAccess.strFullname = !usr_fullname
-                        UserAccess.bolIsAdmin = Convert.ToBoolean(reader("usr_isadmin"))
                         UserAccess.intAccessLevel = !usr_access_level
                         UserAccess.strUID = !usr_UID
                     Loop
                 Else
                     UserAccess.intAccessLevel = 0
-                    UserAccess.bolIsAdmin = False
                 End If
             End With
             reader.Close()
@@ -154,21 +153,10 @@ Module SecurityMod
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Function IsAdmin() As Boolean
-        Return UserAccess.bolIsAdmin
-    End Function
-    Public Function CheckForAdmin() As Boolean
-        If Not UserAccess.bolIsAdmin Then
-            Dim blah = MsgBox("Administrator rights required for this function.", vbOKOnly + vbExclamation, "Access Denied")
-            Return False
-        Else
-            Return True
-        End If
-    End Function
-    Public Function CanAccess(recModule As String) As Boolean 'bitwise access levels
+    Public Function CanAccess(recModule As String, intAccessLevel As Integer) As Boolean 'bitwise access levels
         Dim mask As UInteger = 1
         Dim calc_level As UInteger
-        Dim UsrLevel As UInteger = UserAccess.intAccessLevel
+        Dim UsrLevel As UInteger = intAccessLevel 'UserAccess.intAccessLevel
         Dim levels As Integer
         For levels = 0 To UBound(AccessLevels)
             calc_level = UsrLevel And mask
@@ -182,7 +170,7 @@ Module SecurityMod
         Return False
     End Function
     Public Function CheckForAccess(recModule As String) As Boolean
-        If Not CanAccess(recModule) Then
+        If Not CanAccess(recModule, UserAccess.intAccessLevel) Then
             Dim blah = MsgBox("You do not have the required rights for this function. Must have access to '" & recModule & "'.", vbOKOnly + vbExclamation, "Access Denied")
             Return False
         Else

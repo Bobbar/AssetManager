@@ -55,3 +55,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmUserManager.resources

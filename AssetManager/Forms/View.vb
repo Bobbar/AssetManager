@@ -198,6 +198,7 @@ Public Class View
                 ViewTracking(CurrentDevice.strGUID)
                 DoneWaiting()
                 Me.Show()
+                Me.Activate()
             End If
         Catch ex As Exception
             DoneWaiting()
@@ -480,7 +481,7 @@ Public Class View
         DisableControls()
     End Sub
     Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditToolStripMenuItem.Click
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         ModifyDevice()
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs)
@@ -574,7 +575,7 @@ Public Class View
         End If
     End Sub
     Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddNoteToolStripMenuItem.Click
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
         UpdateDev.cmbUpdate_ChangeType.Enabled = False
         UpdateDev.Show()
@@ -586,7 +587,7 @@ Public Class View
         FillComboBox(StatusType, cmbStatus_REQ)
     End Sub
     Private Sub DeleteDeviceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteDeviceToolStripMenuItem.Click
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
             Dim rows As Integer
@@ -640,7 +641,7 @@ Public Class View
         ViewDevice(CurrentDevice.strGUID)
     End Sub
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value
         Dim Info As Device_Info = GetEntryInfo(strGUID)
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbCritical, "WARNING")

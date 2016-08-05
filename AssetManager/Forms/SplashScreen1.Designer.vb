@@ -76,7 +76,7 @@ Partial Class SplashScreen
         'lblStatus
         '
         Me.lblStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblStatus.Location = New System.Drawing.Point(-2, 256)
+        Me.lblStatus.Location = New System.Drawing.Point(2, 256)
         Me.lblStatus.Name = "lblStatus"
         Me.lblStatus.Size = New System.Drawing.Size(495, 24)
         Me.lblStatus.TabIndex = 7
@@ -100,12 +100,13 @@ Partial Class SplashScreen
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "SplashScreen"
-        Me.Opacity = 0.8R
+        Me.Opacity = 0.9R
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents ApplicationTitle As Label
     Friend WithEvents Version As Label

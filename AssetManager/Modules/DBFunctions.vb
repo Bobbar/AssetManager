@@ -104,7 +104,7 @@ Public Module DBFunctions
     Public Structure User_Info
         Public strUsername As String
         Public strFullname As String
-        Public bolIsAdmin As Boolean
+        'Public bolIsAdmin As Boolean
         Public intAccessLevel As Integer
         Public strUID As String
     End Structure
@@ -566,7 +566,7 @@ Public Module DBFunctions
             row = -1
             With reader
                 Do While .Read()
-                    row = row + 1
+                    row += 1
                     ReDim Preserve tmpArray(row)
                     tmpArray(row).strID = !id
                     tmpArray(row).strLong = !human_value

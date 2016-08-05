@@ -585,22 +585,7 @@ VALUES
         NewMunis.Show()
         ' DoneWaiting()
     End Sub
-    Private Sub NewMunisViewEmp(Name As String)
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
-        'Dim SplitName() As String = Split(Name, " ")
-        'Dim LastName As String = SplitName(SplitName.Count - 1)
-        Dim NewMunis As New View_Munis
-        'Waiting()
-        'AddChild(NewMunis)
-        NewMunis.HideFixedAssetGrid()
-        NewMunis.LoadMunisEmployeeByLastName(Name)
-        ' NewMunis.ViewEntry(GUID)
-        NewMunis.Show()
-        'DoneWaiting()
-    End Sub
+
 
     Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
         Dim ReqNum As String = Trim(txtReqNumber.Text)
@@ -728,9 +713,6 @@ VALUES
     End Sub
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-        Dim blah As String = InputBox("Enter a full or patial first or last name of the Employee.", "Org/Object Code Search", "")
-        If Trim(blah) IsNot "" Then
-            NewMunisViewEmp(blah)
-        End If
+        MunisSearch()
     End Sub
 End Class

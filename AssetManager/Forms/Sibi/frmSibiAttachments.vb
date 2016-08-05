@@ -183,7 +183,7 @@ Class frmSibiAttachments
         ExtendedMethods.DoubleBuffered(AttachGrid, True)
         StatusBar("Idle...")
         Waiting()
-        If CanAccess(AccessGroup.ManageAttachment) Then
+        If CanAccess(AccessGroup.ManageAttachment, UserAccess.intAccessLevel) Then
             cmdUpload.Enabled = True
             cmdDelete.Enabled = True
         Else
