@@ -109,6 +109,11 @@ Module SecurityMod
         MemStream.Position = 0
         Return sBuilder.ToString
     End Function
+    Public Function GetSecGroupValue(SecModule As String) As Integer
+        For Each Group As Access_Info In AccessLevels
+            If Group.strModule = SecModule Then Return Group.intLevel
+        Next
+    End Function
     Public Sub GetAccessLevels()
         Try
             Dim reader As MySqlDataReader

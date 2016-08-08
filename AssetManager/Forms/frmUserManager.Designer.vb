@@ -31,6 +31,7 @@ Partial Class frmUserManager
         Me.pnlModule = New System.Windows.Forms.Panel()
         Me.clbModules = New System.Windows.Forms.CheckedListBox()
         Me.cmdUpdate = New System.Windows.Forms.Button()
+        Me.lblAccessValue = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         CType(Me.UserGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -46,7 +47,7 @@ Partial Class frmUserManager
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(12, 195)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(779, 190)
+        Me.Panel1.Size = New System.Drawing.Size(809, 222)
         Me.Panel1.TabIndex = 0
         '
         'UserGrid
@@ -90,7 +91,7 @@ Partial Class frmUserManager
         Me.UserGrid.ShowCellErrors = False
         Me.UserGrid.ShowCellToolTips = False
         Me.UserGrid.ShowEditingIcon = False
-        Me.UserGrid.Size = New System.Drawing.Size(773, 184)
+        Me.UserGrid.Size = New System.Drawing.Size(803, 216)
         Me.UserGrid.TabIndex = 18
         Me.UserGrid.VirtualMode = True
         '
@@ -99,7 +100,7 @@ Partial Class frmUserManager
         Me.GroupBox1.Controls.Add(Me.pnlModule)
         Me.GroupBox1.Location = New System.Drawing.Point(146, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(311, 177)
+        Me.GroupBox1.Size = New System.Drawing.Size(377, 177)
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Module Access"
@@ -113,7 +114,7 @@ Partial Class frmUserManager
         Me.pnlModule.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.pnlModule.Location = New System.Drawing.Point(10, 17)
         Me.pnlModule.Name = "pnlModule"
-        Me.pnlModule.Size = New System.Drawing.Size(290, 153)
+        Me.pnlModule.Size = New System.Drawing.Size(356, 153)
         Me.pnlModule.TabIndex = 0
         '
         'clbModules
@@ -126,23 +127,34 @@ Partial Class frmUserManager
         Me.clbModules.Location = New System.Drawing.Point(3, 3)
         Me.clbModules.MultiColumn = True
         Me.clbModules.Name = "clbModules"
-        Me.clbModules.Size = New System.Drawing.Size(284, 140)
+        Me.clbModules.Size = New System.Drawing.Size(350, 140)
+        Me.clbModules.Sorted = True
         Me.clbModules.TabIndex = 0
         '
         'cmdUpdate
         '
-        Me.cmdUpdate.Location = New System.Drawing.Point(519, 81)
+        Me.cmdUpdate.Location = New System.Drawing.Point(560, 85)
         Me.cmdUpdate.Name = "cmdUpdate"
         Me.cmdUpdate.Size = New System.Drawing.Size(135, 47)
         Me.cmdUpdate.TabIndex = 2
         Me.cmdUpdate.Text = "Update"
         Me.cmdUpdate.UseVisualStyleBackColor = True
         '
+        'lblAccessValue
+        '
+        Me.lblAccessValue.AutoSize = True
+        Me.lblAccessValue.Location = New System.Drawing.Point(595, 159)
+        Me.lblAccessValue.Name = "lblAccessValue"
+        Me.lblAccessValue.Size = New System.Drawing.Size(75, 13)
+        Me.lblAccessValue.TabIndex = 3
+        Me.lblAccessValue.Text = "Access Value:"
+        '
         'frmUserManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(803, 397)
+        Me.ClientSize = New System.Drawing.Size(833, 429)
+        Me.Controls.Add(Me.lblAccessValue)
         Me.Controls.Add(Me.cmdUpdate)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Panel1)
@@ -155,6 +167,7 @@ Partial Class frmUserManager
         Me.GroupBox1.ResumeLayout(False)
         Me.pnlModule.ResumeLayout(False)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -164,4 +177,5 @@ Partial Class frmUserManager
     Friend WithEvents pnlModule As Panel
     Friend WithEvents clbModules As CheckedListBox
     Friend WithEvents cmdUpdate As Button
+    Friend WithEvents lblAccessValue As Label
 End Class

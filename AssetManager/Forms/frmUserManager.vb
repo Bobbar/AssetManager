@@ -1,6 +1,5 @@
 ﻿Public Class frmUserManager
     Private ModuleArray() As Access_Info
-
     Private Structure User_Info
         Public strUsername As String
         Public strFullname As String
@@ -37,51 +36,35 @@
         End Try
     End Sub
     Private Sub DisplayAccess(intAccessLevel As Integer)
-        Dim i As Integer = 0
-
-        For i = 0 To ModuleArray.Count - 1
-
-            If CanAccess(ModuleArray(i).strModule, intAccessLevel) Then
-                clbModules.SetItemCheckState(i, CheckState.Checked)
+        Dim clbItemStates(clbModules.Items.Count - 1) As CheckState
+        For Each chkBox As CheckBox In clbModules.Items
+            If CanAccess(chkBox.Name, intAccessLevel) Then
+                clbItemStates(clbModules.Items.IndexOf(chkBox)) = CheckState.Checked
             Else
-                clbModules.SetItemCheckState(i, CheckState.Unchecked)
+                clbItemStates(clbModules.Items.IndexOf(chkBox)) = CheckState.Unchecked
             End If
-
         Next
-
+        For i As Integer = 0 To clbItemStates.Count - 1
+            clbModules.SetItemChecked(i, clbItemStates(i))
+        Next
+        UpdateAccessLabel()
         GetUserInfo()
-
-
+        AutoSizeCLBColumns(clbModules)
     End Sub
     Private Sub LoadModuleBoxes()
-        ' Dim chkModuleBox(ModuleArray.Count - 1) As CheckBox
         Dim i As Integer = 0
         Dim intTopOffset As Integer = 0
         Dim chkModuleBox As CheckBox
         For Each ModuleBox As Access_Info In ModuleArray
-
             chkModuleBox = New CheckBox
             With chkModuleBox
-
-                'pnlModule.Controls.Add(chkModuleBox(i))
-                '.Parent = pnlModule.
                 .Text = ModuleBox.strDesc
                 .Name = ModuleBox.strModule
-                '.Top = pnlModule.Location.X + intTopOffset
-
-
-
             End With
-
-            'intTopOffset += 20 'chkModuleBox(i).Height
-            'i += 1
             clbModules.DisplayMember = "Text"
             clbModules.Items.Add(chkModuleBox)
-
-
         Next
-
-
+        AutoSizeCLBColumns(clbModules)
     End Sub
     Private Sub BuildModuleArray()
         Dim ModuleTable As DataTable = ReturnSQLTable("SELECT * FROM security ORDER BY sec_access_level")
@@ -94,14 +77,14 @@
                 .strDesc = row.Item("sec_desc")
             End With
             i += 1
-            ' ReDim Preserve ModuleArray(ModuleArray.Count)
         Next
     End Sub
     Private Function CalcAccessLevel() As Integer
         Dim intAccessLevel As Integer = 0
-        For i As Integer = 0 To ModuleArray.Count - 1
-            If clbModules.GetItemCheckState(i) = CheckState.Checked Then
-                intAccessLevel += ModuleArray(i).intLevel
+        For Each chkBox As CheckBox In clbModules.Items
+            Debug.Print(clbModules.Items.IndexOf(chkBox) & " - " & GetSecGroupValue(chkBox.Name) & " - " & chkBox.Name)
+            If clbModules.GetItemCheckState(clbModules.Items.IndexOf(chkBox)) = CheckState.Checked Then
+                intAccessLevel += GetSecGroupValue(chkBox.Name)
             End If
         Next
         Return intAccessLevel
@@ -111,11 +94,6 @@
         UpdateSQLValue("users", "usr_access_level", CurrentUser.intAccessLevel, "usr_UID", CurrentUser.strUID)
         ListUsers()
     End Sub
-
-    Private Sub UserGrid_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellContentDoubleClick
-        'DisplayAccess(UserGrid.Item(GetColIndex(UserGrid, "Access Level"), UserGrid.CurrentRow.Index).Value)
-    End Sub
-
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick
         DisplayAccess(UserGrid.Item(GetColIndex(UserGrid, "Access Level"), UserGrid.CurrentRow.Index).Value)
     End Sub
@@ -127,12 +105,24 @@
             .strFullname = GetCellValue(UserGrid, "Full Name")
         End With
     End Sub
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-        Debug.Print(CalcAccessLevel)
-    End Sub
-
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
         UpdateUser(CurrentUser)
         GetUserAccess()
+    End Sub
+    Private Sub AutoSizeCLBColumns(CLB As CheckedListBox)
+        Dim intMaxLen As Integer = 0
+        Dim fntCheckBoxFont As Font = CLB.Font
+        Dim intTextSize As Size
+        For Each item As CheckBox In CLB.Items
+            intTextSize = TextRenderer.MeasureText(item.Text, fntCheckBoxFont)
+            If Size.Width > intMaxLen Then intMaxLen = Size.Width
+        Next
+        CLB.ColumnWidth = intMaxLen / 5
+    End Sub
+    Private Sub UpdateAccessLabel()
+        lblAccessValue.Text = "Selected Access Level: " & CalcAccessLevel()
+    End Sub
+    Private Sub clbModules_MouseUp(sender As Object, e As MouseEventArgs) Handles clbModules.MouseUp
+        UpdateAccessLabel()
     End Sub
 End Class

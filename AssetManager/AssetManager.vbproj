@@ -122,12 +122,6 @@
     <Compile Include="Forms\frmUserManager.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Sibi\frmDragDrop.Designer.vb">
-      <DependentUpon>frmDragDrop.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Sibi\frmDragDrop.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\Sibi\frmNotes.Designer.vb">
       <DependentUpon>frmNotes.vb</DependentUpon>
     </Compile>
@@ -257,9 +251,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmUserManager.resx">
       <DependentUpon>frmUserManager.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Sibi\frmDragDrop.resx">
-      <DependentUpon>frmDragDrop.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Sibi\frmNotes.resx">
       <DependentUpon>frmNotes.vb</DependentUpon>
