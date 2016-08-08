@@ -17,7 +17,7 @@
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Sub LoadMunisRequisitionGrid(PO As String, FiscalYr As String)
+    Public Sub LoadMunisRequisitionGridByPO(PO As String, FiscalYr As String)
         Try
             'If NeededInfo(Device) Then
             Dim strColumns As String = "rg_fiscal_year,a_requisition_no,LineNumber,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,RequisitionId,Quantity,UnitPrice,NetAmount,ItemDescription,SuggestedVendorId,PurchaseOrderNumber,PurchaseOrderDate"
@@ -71,7 +71,7 @@
         If Device.strPO <> "" And YearFromDate(Device.dtPurchaseDate) <> "" Then 'if PO and Fiscal yr on record > load data using our records
             Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             LoadMunisInventoryGrid(Device)
-            LoadMunisRequisitionGrid(Device.strPO, Device.strFiscalYear)
+            LoadMunisRequisitionGridByPO(Device.strPO, Device.strFiscalYear)
             Me.Show()
         Else
             If Device.strPO = "" Then
@@ -94,7 +94,7 @@
                 Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             End If
             LoadMunisInventoryGrid(Device)
-            LoadMunisRequisitionGrid(Device.strPO, Device.strFiscalYear)
+            LoadMunisRequisitionGridByPO(Device.strPO, Device.strFiscalYear)
             Me.Show()
         End If
     End Sub

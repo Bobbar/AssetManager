@@ -464,7 +464,7 @@ Partial Class frmManageRequest
         '
         'cmdAddNote
         '
-        Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.View_Details
+        Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.note_icon_27942
         Me.cmdAddNote.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdAddNote.Name = "cmdAddNote"
         Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5)
@@ -492,7 +492,7 @@ Partial Class frmManageRequest
         '
         'ToolStripButton1
         '
-        Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.view
+        Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.Find
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(173, 29)

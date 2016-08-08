@@ -760,7 +760,7 @@ Partial Class View
         '
         'ToolStripButton2
         '
-        Me.ToolStripButton2.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.ToolStripButton2.Image = Global.AssetManager.My.Resources.Resources.note_icon_27942
         Me.ToolStripButton2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"

@@ -346,11 +346,13 @@
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
+    <None Include="Resources\Find.png" />
     <Content Include="Resources\inventory-small.fw.png" />
     <None Include="Resources\report.png" />
     <None Include="Resources\presentation-512.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Resources\loading_circle_fully.gif" />
+    <None Include="Resources\note-icon-27942.png" />
     <Content Include="Resources\view.png" />
     <Content Include="Resources\View_Details.png" />
   </ItemGroup>

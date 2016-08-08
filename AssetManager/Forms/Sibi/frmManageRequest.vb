@@ -609,7 +609,7 @@ VALUES
         'AddChild(NewMunis)
         NewMunis.HideFixedAssetGrid()
         NewMunis.Show()
-        NewMunis.LoadMunisRequisitionGrid(PO, YearFromDate(CurrentRequest.dtDateStamp))
+        NewMunis.LoadMunisRequisitionGridByPO(PO, YearFromDate(CurrentRequest.dtDateStamp))
         ' NewMunis.ViewEntry(GUID)
         ' DoneWaiting()
     End Sub
@@ -733,7 +733,7 @@ VALUES
     End Sub
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-        MunisSearch()
+        Munis_NameSearch()
     End Sub
 
 
