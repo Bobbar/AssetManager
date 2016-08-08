@@ -143,4 +143,7 @@ Module OtherFunctions
         NewMunis.Show()
         NewMunis.LoadMunisEmployeeByLastName(Name)
     End Sub
+    Public Function MouseIsOverControl(ByVal c As Control) As Boolean
+        Return c.ClientRectangle.Contains(c.PointToClient(Control.MousePosition))
+    End Function
 End Module

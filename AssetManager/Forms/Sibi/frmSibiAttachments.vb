@@ -15,6 +15,9 @@ Class frmSibiAttachments
     Private progIts As Integer = 0
     Private strSelectedFolder As String
     Private strMultiFileCount As String
+    Private bolDragging As Boolean = False
+    Private bolAllowDrag As Boolean = False
+    Private strDragFilePath As String
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -398,7 +401,6 @@ Class frmSibiAttachments
         Dim FileExpectedHash As String
         Dim FileUID As String
         Dim Success As Boolean = False
-        Dim ConnID As String = Guid.NewGuid.ToString
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim AttachUID As String = DirectCast(e.Argument, String)
@@ -470,8 +472,13 @@ Class frmSibiAttachments
                 DownloadWorker.ReportProgress(2, "Verifying file...")
                 Dim FileResultHash As String = GetHashOfFile(strFullPath)
                 If FileResultHash = FileExpectedHash Then
-                    Process.Start(strFullPath)
-                    e.Result = True
+                    If bolDragging Then
+                        strDragFilePath = strFullPath
+                        e.Result = True
+                    Else
+                        Process.Start(strFullPath)
+                        e.Result = True
+                    End If
                 Else
                     'something is very wrong
                     Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
@@ -500,6 +507,7 @@ Class frmSibiAttachments
             If Not e.Cancelled Then
                 If Not e.Result Then 'if did not complete with success, kill the form.
                     Me.Dispose()
+                Else
                 End If
             Else
                 MessageBox.Show("The download was cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Stop)
@@ -606,13 +614,7 @@ Class frmSibiAttachments
             Next
         End If
     End Sub
-    Private Sub AttachGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseDown
-        On Error Resume Next
-        If e.Button = MouseButtons.Right And Not AttachGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
-            AttachGrid.Rows(e.RowIndex).Selected = True
-            AttachGrid.CurrentCell = AttachGrid(e.ColumnIndex, e.RowIndex)
-        End If
-    End Sub
+
     Private Sub AttachGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellDoubleClick
         OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
     End Sub
@@ -653,6 +655,66 @@ Class frmSibiAttachments
             blah = strCurrentFileName
         Else
             RenameAttachement(strAttachUID, Trim(blah))
+        End If
+    End Sub
+
+    Private Sub AttachGrid_CellMouseUp(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseUp
+        bolDragging = False
+    End Sub
+    Private Sub chkAllowDrag_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowDrag.CheckedChanged
+        If chkAllowDrag.CheckState = CheckState.Checked Then
+            bolAllowDrag = True
+            AttachGrid.MultiSelect = False
+            AttachGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+
+        Else
+            bolAllowDrag = False
+            AttachGrid.MultiSelect = True
+            AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect
+        End If
+    End Sub
+    Private Sub AttachGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseDown
+        On Error Resume Next
+        If e.Button = MouseButtons.Right And Not AttachGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
+            AttachGrid.Rows(e.RowIndex).Selected = True
+            AttachGrid.CurrentCell = AttachGrid(e.ColumnIndex, e.RowIndex)
+        End If
+    End Sub
+    Private Sub AttachGrid_MouseDown(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseDown
+        If bolAllowDrag Then
+            MouseIsDragging(e.Location)
+        End If
+    End Sub
+    Private MouseStartPos As Point
+    Private Function MouseIsDragging(Optional NewStartPos As Point = Nothing, Optional CurrentPos As Point = Nothing) As Boolean
+        Dim intMouseMoveThreshold As Integer = 100
+        If NewStartPos <> Nothing Then
+            MouseStartPos = NewStartPos
+        Else
+            Dim intDistanceMoved = Math.Sqrt((MouseStartPos.X - CurrentPos.X) ^ 2 + (MouseStartPos.Y - CurrentPos.Y) ^ 2)
+            'Debug.Print(intDistanceMoved)
+            If intDistanceMoved > intMouseMoveThreshold Then
+                Return True
+            Else
+                Return False
+            End If
+        End If
+        Return False
+    End Function
+    Private Sub AttachGrid_MouseMove(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseMove
+        If bolAllowDrag Then
+            If e.Button = MouseButtons.Left Then
+                If MouseIsDragging(, e.Location) And Not DownloadWorker.IsBusy Then
+                    'Debug.Print("Mouse drag")
+                    bolDragging = True
+                    DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+                    Dim fileList As New Collections.Specialized.StringCollection
+                    fileList.Add(strDragFilePath)
+                    Dim dataObj As New DataObject
+                    dataObj.SetFileDropList(fileList)
+                    AttachGrid.DoDragDrop(dataObj, DragDropEffects.All)
+                End If
+            End If
         End If
     End Sub
 End Class

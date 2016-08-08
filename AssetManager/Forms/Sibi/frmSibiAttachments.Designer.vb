@@ -36,6 +36,7 @@ Partial Class frmSibiAttachments
         Me.cmdOpen = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.chkAllowDrag = New System.Windows.Forms.CheckBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.cmbFolder = New System.Windows.Forms.ComboBox()
         Me.AttachGrid = New System.Windows.Forms.DataGridView()
@@ -79,7 +80,7 @@ Partial Class frmSibiAttachments
         '
         Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.CopyTextTool, Me.MoveStripMenuItem, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(174, 142)
+        Me.RightClickMenu.Size = New System.Drawing.Size(174, 120)
         '
         'OpenTool
         '
@@ -158,7 +159,7 @@ Partial Class frmSibiAttachments
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 113)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(913, 409)
+        Me.GroupBox1.Size = New System.Drawing.Size(944, 409)
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Manage Attachments"
@@ -169,14 +170,26 @@ Partial Class frmSibiAttachments
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.chkAllowDrag)
         Me.Panel1.Controls.Add(Me.Label4)
         Me.Panel1.Controls.Add(Me.cmbFolder)
         Me.Panel1.Controls.Add(Me.AttachGrid)
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(150, 21)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(757, 382)
+        Me.Panel1.Size = New System.Drawing.Size(788, 382)
         Me.Panel1.TabIndex = 19
+        '
+        'chkAllowDrag
+        '
+        Me.chkAllowDrag.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkAllowDrag.AutoSize = True
+        Me.chkAllowDrag.Location = New System.Drawing.Point(652, 7)
+        Me.chkAllowDrag.Name = "chkAllowDrag"
+        Me.chkAllowDrag.Size = New System.Drawing.Size(131, 19)
+        Me.chkAllowDrag.TabIndex = 21
+        Me.chkAllowDrag.Text = "Allow Drag-Drop"
+        Me.chkAllowDrag.UseVisualStyleBackColor = True
         '
         'Label4
         '
@@ -199,6 +212,7 @@ Partial Class frmSibiAttachments
         '
         'AttachGrid
         '
+        Me.AttachGrid.AllowDrop = True
         Me.AttachGrid.AllowUserToAddRows = False
         Me.AttachGrid.AllowUserToDeleteRows = False
         Me.AttachGrid.AllowUserToResizeRows = False
@@ -240,7 +254,7 @@ Partial Class frmSibiAttachments
         Me.AttachGrid.ShowCellErrors = False
         Me.AttachGrid.ShowCellToolTips = False
         Me.AttachGrid.ShowEditingIcon = False
-        Me.AttachGrid.Size = New System.Drawing.Size(749, 345)
+        Me.AttachGrid.Size = New System.Drawing.Size(780, 345)
         Me.AttachGrid.TabIndex = 18
         Me.AttachGrid.VirtualMode = True
         '
@@ -324,7 +338,7 @@ Partial Class frmSibiAttachments
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.ProgressBar1, Me.ToolStripStatusLabel2, Me.Spinner, Me.statMBPS, Me.ToolStripStatusLabel1, Me.cmdCancel})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 525)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(937, 22)
+        Me.StatusStrip1.Size = New System.Drawing.Size(968, 22)
         Me.StatusStrip1.TabIndex = 8
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -369,7 +383,7 @@ Partial Class frmSibiAttachments
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(816, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(847, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'cmdCancel
@@ -399,10 +413,11 @@ Partial Class frmSibiAttachments
         '
         'frmSibiAttachments
         '
+        Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(937, 547)
+        Me.ClientSize = New System.Drawing.Size(968, 547)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
@@ -459,4 +474,5 @@ Partial Class frmSibiAttachments
     Friend WithEvents cmbMoveFolder As ToolStripComboBox
     Friend WithEvents Label4 As Label
     Friend WithEvents RenameStripMenuItem As ToolStripMenuItem
+    Friend WithEvents chkAllowDrag As CheckBox
 End Class

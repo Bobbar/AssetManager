@@ -44,7 +44,7 @@
         End Try
     End Sub
     Private Sub ShowAll()
-        SendToGrid(ReturnSQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
+        SendToGrid(ReturnSQLTable("SELECT * FROM sibi_requests ORDER BY sibi_request_number DESC"))
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
         frmManageRequest.ClearAll()
