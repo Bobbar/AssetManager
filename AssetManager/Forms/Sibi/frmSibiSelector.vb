@@ -48,7 +48,7 @@ Public Class frmSibiSelector
         End Try
     End Sub
     Private Sub ShowAll()
-        SendToGrid(ReturnSQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
+        SendToGrid(Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
     End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
         SelectedUID = ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value

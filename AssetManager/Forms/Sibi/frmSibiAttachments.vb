@@ -688,7 +688,6 @@ Class frmSibiAttachments
             MouseStartPos = NewStartPos
         Else
             Dim intDistanceMoved = Math.Sqrt((MouseStartPos.X - CurrentPos.X) ^ 2 + (MouseStartPos.Y - CurrentPos.Y) ^ 2)
-            'Debug.Print(intDistanceMoved)
             If intDistanceMoved > intMouseMoveThreshold Then
                 Return True
             Else
@@ -701,7 +700,6 @@ Class frmSibiAttachments
         If bolAllowDrag Then
             If e.Button = MouseButtons.Left Then
                 If MouseIsDragging(, e.Location) And Not DownloadWorker.IsBusy Then
-                    'Debug.Print("Mouse drag")
                     bolDragging = True
                     DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
                     Dim fileList As New Collections.Specialized.StringCollection

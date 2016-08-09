@@ -263,7 +263,6 @@ VALUES
             cmd.Parameters.Clear()
             For Each row As DataRow In RequestData.RequstItems.Rows
                 Dim strItemUID As String = Guid.NewGuid.ToString
-                Debug.Print(strItemUID)
                 Dim strSqlQry2 = "INSERT INTO `asset_manager`.`sibi_request_items`
 (`sibi_items_uid`,
 `sibi_items_request_uid`,
@@ -305,7 +304,6 @@ VALUES
                 rows = rows + cmd.ExecuteNonQuery()
                 cmd.Parameters.Clear()
             Next
-            Debug.Print("Rows: " & rows)
             cmd.Dispose()
             Dim blah = MsgBox("New Request Added.", vbOKOnly + vbInformation, "Complete")
             OpenRequest(strRequestUID)
@@ -420,7 +418,6 @@ VALUES
                 End If
             Next
             cmd.Dispose()
-            Debug.Print(rows)
             'If rows = RequestData.RequstItems.Rows.Count + 1 Then
             MsgBox("Success!")
             'End If

@@ -13,7 +13,7 @@
         LoadModuleBoxes()
     End Sub
     Private Sub ListUsers()
-        SendToGrid(ReturnSQLTable("SELECT * FROM users"))
+        SendToGrid(Return_SQLTable("SELECT * FROM users"))
     End Sub
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
@@ -67,7 +67,7 @@
         AutoSizeCLBColumns(clbModules)
     End Sub
     Private Sub BuildModuleArray()
-        Dim ModuleTable As DataTable = ReturnSQLTable("SELECT * FROM security ORDER BY sec_access_level")
+        Dim ModuleTable As DataTable = Return_SQLTable("SELECT * FROM security ORDER BY sec_access_level")
         Dim i As Integer = 0
         ReDim ModuleArray(ModuleTable.Rows.Count - 1)
         For Each row As DataRow In ModuleTable.Rows
@@ -82,7 +82,6 @@
     Private Function CalcAccessLevel() As Integer
         Dim intAccessLevel As Integer = 0
         For Each chkBox As CheckBox In clbModules.Items
-            Debug.Print(clbModules.Items.IndexOf(chkBox) & " - " & GetSecGroupValue(chkBox.Name) & " - " & chkBox.Name)
             If clbModules.GetItemCheckState(clbModules.Items.IndexOf(chkBox)) = CheckState.Checked Then
                 intAccessLevel += GetSecGroupValue(chkBox.Name)
             End If
@@ -91,7 +90,7 @@
     End Function
     Private Sub UpdateUser(User As User_Info)
         CurrentUser.intAccessLevel = CalcAccessLevel()
-        UpdateSQLValue("users", "usr_access_level", CurrentUser.intAccessLevel, "usr_UID", CurrentUser.strUID)
+        Update_SQLValue("users", "usr_access_level", CurrentUser.intAccessLevel, "usr_UID", CurrentUser.strUID)
         ListUsers()
     End Sub
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick

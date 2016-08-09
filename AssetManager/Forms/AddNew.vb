@@ -17,7 +17,7 @@ Public Class AddNew
             End If
             GetDBValues()
             Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_po,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_trackable) VALUES(@dev_UID,@dev_description,@dev_location,@dev_cur_user,@dev_serial,@dev_asset_tag,@dev_purchase_date,@dev_po,@dev_replacement_year,@dev_eq_type,@dev_osversion,@dev_status,@dev_lastmod_user,@dev_trackable)"
-            Dim cmd As MySqlCommand = ReturnSQLCommand(strSqlQry1)
+            Dim cmd As MySqlCommand = Return_SQLCommand(strSqlQry1)
             cmd.Parameters.AddWithValue("@dev_UID", strUID)
             cmd.Parameters.AddWithValue("@dev_description", Device.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", Device.strLocation)

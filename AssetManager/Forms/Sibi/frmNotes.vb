@@ -17,7 +17,7 @@ VALUES
 (@sibi_request_uid,
 @sibi_note_uid,
 @sibi_note)"
-            Dim cmd As MySqlCommand = ReturnSQLCommand(strAddNoteQry)
+            Dim cmd As MySqlCommand = Return_SQLCommand(strAddNoteQry)
             cmd.Parameters.AddWithValue("@sibi_request_uid", RequestUID)
             cmd.Parameters.AddWithValue("@sibi_note_uid", strNoteUID)
             cmd.Parameters.AddWithValue("@sibi_note", Note)
@@ -35,7 +35,7 @@ VALUES
     Public Sub ViewNote(NoteUID As String)
         cmdOK.Visible = False
         rtbNotes.Clear()
-        rtbNotes.Text = ReturnSQLValue("sibi_notes", "sibi_note_uid", NoteUID, "sibi_note")
+        rtbNotes.Text = Get_SQLValue("sibi_notes", "sibi_note_uid", NoteUID, "sibi_note")
         rtbNotes.ReadOnly = True
         Me.Show()
     End Sub

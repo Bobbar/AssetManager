@@ -136,7 +136,6 @@ Public Module MySQLComms
     End Function
     Public Function Get_SQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
         Dim sqlQRY As String = "SELECT " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
-        Debug.Print(sqlQRY)
         Try
             Dim cmd As New MySqlCommand
             cmd.Connection = GlobalConn
