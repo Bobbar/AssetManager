@@ -92,6 +92,7 @@ Class Attachments
                 table.Columns.Add("MD5", GetType(String))
             ElseIf Not bolAdminMode Then
                 strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash FROM dev_attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
+                table.Columns.Add(" ", GetType(Image))
                 table.Columns.Add("Filename", GetType(String))
                 table.Columns.Add("Size", GetType(String))
                 table.Columns.Add("Date", GetType(String))
@@ -109,7 +110,7 @@ Class Attachments
                     If bolAdminMode Then
                         table.Rows.Add(strFullFilename, strFileSizeHuman, !attach_upload_date, !dev_asset_tag, !attach_file_UID, !attach_file_hash)
                     Else
-                        table.Rows.Add(strFullFilename, strFileSizeHuman, !attach_upload_date, !attach_file_UID, !attach_file_hash)
+                        table.Rows.Add(GetFileIcon(!attach_file_type), strFullFilename, strFileSizeHuman, !attach_upload_date, !attach_file_UID, !attach_file_hash)
                     End If
                     ReDim Preserve AttachIndex(row)
                     AttachIndex(row).strFilename = !attach_file_name

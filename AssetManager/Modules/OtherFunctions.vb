@@ -1,6 +1,7 @@
 ﻿Option Explicit On
 Imports System.Environment
 Imports System.IO
+Imports System.Runtime.InteropServices
 Module OtherFunctions
     'paths
     Public strLogDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
@@ -26,6 +27,47 @@ Module OtherFunctions
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Public stpw As New Stopwatch
     Public ProgramEnding As Boolean = False
+    Private Const MAX_PATH As Int32 = 260
+    Private Const SHGFI_ICON As Int32 = &H100
+    Private Const SHGFI_USEFILEATTRIBUTES As Int32 = &H10
+    Private Const FILE_ATTRIBUTE_NORMAL As Int32 = &H80
+    Private Structure SHFILEINFO
+        Public hIcon As IntPtr
+        Public iIcon As Int32
+        Public dwAttributes As Int32
+        <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=MAX_PATH)>
+        Public szDisplayName As String
+        <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=80)>
+        Public szTypeName As String
+    End Structure
+
+    Private Enum IconSize
+        SHGFI_LARGEICON = 0
+        SHGFI_SMALLICON = 1
+    End Enum
+    <DllImport("shell32.dll", CharSet:=CharSet.Auto)>
+    Private Function SHGetFileInfo(
+                ByVal pszPath As String,
+                ByVal dwFileAttributes As Int32,
+                ByRef psfi As SHFILEINFO,
+                ByVal cbFileInfo As Int32,
+                ByVal uFlags As Int32) As IntPtr
+    End Function
+
+    <DllImport("user32.dll", SetLastError:=True)>
+    Private Function DestroyIcon(ByVal hIcon As IntPtr) As Boolean
+    End Function
+
+    Public Function GetFileIcon(ByVal fileExt As String) As Bitmap ', Optional ByVal ICOsize As IconSize = IconSize.SHGFI_SMALLICON
+        Dim ICOSize As IconSize = IconSize.SHGFI_SMALLICON
+        Dim shinfo As New SHFILEINFO
+        shinfo.szDisplayName = New String(Chr(0), MAX_PATH)
+        shinfo.szTypeName = New String(Chr(0), 80)
+        SHGetFileInfo(fileExt, FILE_ATTRIBUTE_NORMAL, shinfo, Marshal.SizeOf(shinfo), SHGFI_ICON Or ICOSize Or SHGFI_USEFILEATTRIBUTES)
+        Dim bmp As Bitmap = System.Drawing.Icon.FromHandle(shinfo.hIcon).ToBitmap
+        DestroyIcon(shinfo.hIcon) ' must destroy icon to avoid GDI leak!
+        Return bmp ' return icon as a bitmap
+    End Function
     Public Function AdjustComboBoxWidth(ByVal sender As Object, ByVal e As EventArgs)
         Dim senderComboBox = DirectCast(sender, ComboBox)
         Dim width As Integer = senderComboBox.DropDownWidth
@@ -148,4 +190,5 @@ Module OtherFunctions
             i += 1
         Next
     End Sub
+
 End Module

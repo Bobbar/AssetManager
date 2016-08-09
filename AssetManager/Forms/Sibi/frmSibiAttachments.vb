@@ -3,6 +3,7 @@ Option Compare Binary
 Imports System.ComponentModel
 Imports System.IO
 Imports MySql.Data.MySqlClient
+
 Imports System.Threading
 Class frmSibiAttachments
     Public bolAdminMode As Boolean = False
@@ -25,6 +26,8 @@ Class frmSibiAttachments
         Public strFileUID As String
     End Structure
     Private AttachIndex() As Attach_Struct
+
+
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim fd As OpenFileDialog = New OpenFileDialog()
@@ -106,6 +109,7 @@ Class frmSibiAttachments
                 Case Else
                     strQry = "Select * FROM sibi_attachments WHERE sibi_attach_folder='" & GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex) & "' AND sibi_attach_UID ='" & RequestUID & "' ORDER BY sibi_attach_timestamp DESC"
             End Select
+            table.Columns.Add(" ", GetType(Image))
             table.Columns.Add("Filename", GetType(String))
             table.Columns.Add("Size", GetType(String))
             table.Columns.Add("Date", GetType(String))
@@ -124,7 +128,7 @@ Class frmSibiAttachments
                     ' If bolAdminMode Then
                     ' table.Rows.Add(strFullFilename, strFileSizeHuman,!attach_upload_date,!dev_asset_tag,!attach_file_UID,!attach_file_hash)
                     ' Else
-                    table.Rows.Add(strFullFilename, strFileSizeHuman, !sibi_attach_timestamp, GetHumanValue(ComboType.SibiAttachFolder, !sibi_attach_folder), !sibi_attach_file_UID, !sibi_attach_file_hash)
+                    table.Rows.Add(FileIcon(!sibi_attach_file_type), strFullFilename, strFileSizeHuman, !sibi_attach_timestamp, GetHumanValue(ComboType.SibiAttachFolder, !sibi_attach_folder), !sibi_attach_file_UID, !sibi_attach_file_hash)
                     ' End If
                     ReDim Preserve AttachIndex(row)
                     AttachIndex(row).strFilename = !sibi_attach_file_name
@@ -150,6 +154,9 @@ Class frmSibiAttachments
             Exit Sub
         End Try
     End Sub
+    Private Function FileIcon(strExtension As String) As Image
+        Return GetFileIcon(strExtension) 'Icon.ExtractAssociatedIcon(strExtension)
+    End Function
     Private Function GetUIDFromIndex(Index As Integer) As String
         Return AttachIndex(Index).strFileUID
     End Function
