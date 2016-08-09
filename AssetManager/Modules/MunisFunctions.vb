@@ -58,7 +58,6 @@
         NewMunis.Show()
         NewMunis.LoadMunisRequisitionGridByPO(PO, FY)
     End Sub
-
     Private Sub NewMunisView_ReqSearch(ReqNumber As String, FY As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
@@ -69,8 +68,4 @@
         NewMunis.Show()
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNumber, FY)
     End Sub
-
-
-
-
 End Module

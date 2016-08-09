@@ -922,7 +922,6 @@ Partial Class View
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ActionsToolStripMenuItem As ToolStripMenuItem

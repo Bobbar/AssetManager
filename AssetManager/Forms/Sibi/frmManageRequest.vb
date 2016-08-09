@@ -247,7 +247,7 @@ VALUES
 @sibi_replace_asset,
 @sibi_replace_serial,
 @sibi_RT_number)"
-            Dim cmd As MySqlCommand = ReturnSQLCommand(strSqlQry1)
+            Dim cmd As MySqlCommand = Return_SQLCommand(strSqlQry1)
             cmd.Parameters.AddWithValue("@sibi_uid", strRequestUID)
             cmd.Parameters.AddWithValue("@sibi_request_user", RequestData.strUser)
             cmd.Parameters.AddWithValue("@sibi_description", RequestData.strDescription)
@@ -335,7 +335,7 @@ sibi_replace_asset = @sibi_replace_asset ,
 sibi_replace_serial = @sibi_replace_serial ,
 sibi_RT_number = @sibi_RT_number 
 WHERE sibi_uid ='" & CurrentRequest.strUID & "'"
-            Dim cmd As MySqlCommand = ReturnSQLCommand(strRequestQRY)
+            Dim cmd As MySqlCommand = Return_SQLCommand(strRequestQRY)
             cmd.Parameters.AddWithValue("@sibi_request_user", RequestData.strUser)
             cmd.Parameters.AddWithValue("@sibi_description", RequestData.strDescription)
             cmd.Parameters.AddWithValue("@sibi_need_by", RequestData.dtNeedBy)
@@ -436,8 +436,8 @@ VALUES
         Try
             Dim strRequestQRY As String = "SELECT * FROM sibi_requests WHERE sibi_uid='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT * FROM sibi_request_items WHERE sibi_items_request_uid='" & RequestUID & "'"
-            Dim RequestResults As DataTable = ReturnSQLTable(strRequestQRY)
-            Dim RequestItemsResults As DataTable = ReturnSQLTable(strRequestItemsQRY)
+            Dim RequestResults As DataTable = Return_SQLTable(strRequestQRY)
+            Dim RequestItemsResults As DataTable = Return_SQLTable(strRequestItemsQRY)
             ClearAll()
             CollectRequestInfo(RequestResults, RequestItemsResults)
             With RequestResults.Rows(0)
@@ -466,7 +466,7 @@ VALUES
     End Sub
     Private Sub LoadNotes(RequestUID As String)
         Dim strPullNotesQry As String = "SELECT * FROM sibi_notes WHERE sibi_request_uid='" & RequestUID & "' ORDER BY sibi_datestamp DESC"
-        Dim Results As DataTable = ReturnSQLTable(strPullNotesQry)
+        Dim Results As DataTable = Return_SQLTable(strPullNotesQry)
         Dim table As New DataTable
         Dim intPreviewChars As Integer = 50
         table.Columns.Add("Date Stamp")
@@ -486,7 +486,7 @@ VALUES
         Try
             Dim rows
             Dim strSQLQry As String = "DELETE FROM " & Table & " WHERE " & ItemColumnName & "='" & ItemUID & "'"
-            rows = ReturnSQLCommand(strSQLQry).ExecuteNonQuery
+            rows = Return_SQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function
         Catch ex As Exception
@@ -596,7 +596,6 @@ VALUES
         NewMunis.Show()
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNum, YearFromDate(CurrentRequest.dtDateStamp))
         ' NewMunis.ViewEntry(GUID)
-
         ' DoneWaiting()
     End Sub
     Private Sub NewMunisViewPO(PO As String)
@@ -613,8 +612,6 @@ VALUES
         ' NewMunis.ViewEntry(GUID)
         ' DoneWaiting()
     End Sub
-
-
     Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
         Dim ReqNum As String = Trim(txtReqNumber.Text)
         If Not bolUpdating And ReqNum <> "" Then
@@ -625,7 +622,7 @@ VALUES
         If Not CheckForAccess(AccessGroup.Sibi_Delete) Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
-            If DeleteSibiRequest(CurrentRequest.strUID, AttachmentType.Sibi) Then
+            If DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
                 Dim blah2 = MsgBox("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentRequest = Nothing
                 Me.Dispose()
@@ -731,20 +728,22 @@ VALUES
         HideEditControls()
         OpenRequest(CurrentRequest.strUID)
     End Sub
-
-    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs)
         Munis_NameSearch()
     End Sub
-
-
     Private Sub txtPO_Click(sender As Object, e As EventArgs) Handles txtPO.Click
         Dim PO As String = Trim(txtPO.Text)
         If Not bolUpdating And PO <> "" Then
             NewMunisViewPO(PO)
         End If
     End Sub
-
-    Private Sub txtReqNumber_TextChanged(sender As Object, e As EventArgs) Handles txtReqNumber.TextChanged
-
+    Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
+        Munis_NameSearch()
+    End Sub
+    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
+        Munis_POSearch()
+    End Sub
+    Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem3.Click
+        Munis_ReqSearch()
     End Sub
 End Class

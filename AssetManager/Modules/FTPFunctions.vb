@@ -1,10 +1,12 @@
 ﻿Module FTPFunctions
+    Public Const strFTPUser As String = "asset_manager"
+    Public strFTPPass As String = DecodePassword(EncFTPUserPass)
     Public FTPcreds As Net.NetworkCredential = New Net.NetworkCredential(strFTPUser, strFTPPass)
     Private intSocketTimeout As Integer = 30000 'timeout for FTP comms in MS
     Public Function DeleteFTPAttachment(AttachUID As String, DeviceUID As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Try
-            resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/" & AttachUID, Net.WebRequestMethods.Ftp.DeleteFile)
+            resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/" & AttachUID, Net.WebRequestMethods.Ftp.DeleteFile)
             If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                 Return True
             Else
@@ -14,11 +16,11 @@
             Return ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
-    Public Function DeleteFTPDeviceFolder(DeviceUID As String, Type As String) As Boolean
+    Public Function DeleteFTPFolder(DeviceUID As String, Type As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Dim files As List(Of String)
         Try
-            resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/", Net.WebRequestMethods.Ftp.ListDirectory)
+            resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/", Net.WebRequestMethods.Ftp.ListDirectory)
             Dim responseStream As System.IO.Stream = resp.GetResponseStream
             files = New List(Of String)
             Dim reader As IO.StreamReader = New IO.StreamReader(responseStream)
@@ -32,7 +34,7 @@
                 i += DeleteAttachment(file, Type)
             Next
             If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
-                resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID, Net.WebRequestMethods.Ftp.RemoveDirectory)
+                resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID, Net.WebRequestMethods.Ftp.RemoveDirectory)
             End If
             If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                 Return True
@@ -44,7 +46,7 @@
             Return False
         End Try
     End Function
-    Public Function ReturnFTPResponse(strUri As String, Method As String) As Net.WebResponse
+    Public Function Return_FTPResponse(strUri As String, Method As String) As Net.WebResponse
         Dim request As Net.FtpWebRequest = Net.FtpWebRequest.Create(strUri)
         Try
             With request
@@ -59,7 +61,7 @@
             Return request.GetResponse
         End Try
     End Function
-    Public Function ReturnFTPRequestStream(strUri As String, Method As String) As IO.Stream
+    Public Function Return_FTPRequestStream(strUri As String, Method As String) As IO.Stream
         Try
             Dim request As Net.FtpWebRequest = Net.FtpWebRequest.Create(strUri)
             With request

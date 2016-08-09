@@ -133,7 +133,7 @@ Public Class View
         Try
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable, dev_po=@dev_po WHERE dev_UID='" & CurrentDevice.strGUID & "'"
-            Dim cmd As MySqlCommand = ReturnSQLCommand(strSQLQry1)
+            Dim cmd As MySqlCommand = Return_SQLCommand(strSQLQry1)
             cmd.Parameters.AddWithValue("@dev_description", NewData.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", NewData.strLocation)
             cmd.Parameters.AddWithValue("@dev_cur_user", NewData.strCurrentUser)
@@ -208,7 +208,7 @@ Public Class View
     Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
         Dim table, Results As New DataTable
         Try
-            Results = ReturnSQLTable("Select * FROM devices, dev_historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
+            Results = Return_SQLTable("Select * FROM devices, dev_historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
             If Results.Rows.Count < 1 Then
                 CloseChildren()
                 Results.Dispose()
@@ -340,7 +340,7 @@ Public Class View
                 Exit Sub
             End If
             Waiting()
-            Results = ReturnSQLTable(strQry)
+            Results = Return_SQLTable(strQry)
             If Results.Rows.Count > 0 Then
                 CollectCurrentTracking(Results)
                 SendToTrackGrid(TrackingGrid, Results)
@@ -539,8 +539,6 @@ Public Class View
         End If
         Dim SplitName() As String = Split(Name, " ")
         Dim LastName As String = SplitName(SplitName.Count - 1)
-
-
         Dim NewMunis As New View_Munis
         Waiting()
         AddChild(NewMunis)
@@ -591,7 +589,7 @@ Public Class View
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
             Dim rows As Integer
-            rows = DeleteDevice(CurrentDevice.strGUID, AttachmentType.Device)
+            rows = DeleteMaster(CurrentDevice.strGUID, Entry_Type.Device)
             If rows > 0 Then
                 Dim blah2 = MsgBox("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentDevice = Nothing
@@ -643,15 +641,29 @@ Public Class View
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value
-        Dim Info As Device_Info = GetEntryInfo(strGUID)
+        Dim Info As Device_Info = Get_EntryInfo(strGUID)
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
-            Dim blah2 = MsgBox(DeleteEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
+            Dim blah2 = MsgBox(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
             ViewDevice(CurrentDevice.strGUID)
         Else
             Exit Sub
         End If
     End Sub
+    Private Function DeleteHistoryEntry(ByVal strGUID As String) As Integer
+        Try
+            Dim rows
+            Dim strSQLQry As String = "DELETE FROM dev_historical WHERE hist_uid='" & strGUID & "'"
+            rows = Return_SQLCommand(strSQLQry).ExecuteNonQuery
+            Return rows
+            Exit Function
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Function
     Private Sub DataGridHistory_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridHistory.CellMouseDown
         If e.Button = MouseButtons.Right Then
             DataGridHistory.CurrentCell = DataGridHistory(e.ColumnIndex, e.RowIndex)
@@ -718,7 +730,7 @@ Public Class View
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
-            If DeleteDevice(CurrentDevice.strGUID, AttachmentType.Device) Then
+            If DeleteMaster(CurrentDevice.strGUID, Entry_Type.Device) Then
                 Dim blah2 = MsgBox("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentDevice = Nothing
                 Me.Dispose()
@@ -886,7 +898,7 @@ Public Class View
         Dim f As New frmSibiSelector
         f.ShowDialog(Me)
         If f.DialogResult = DialogResult.OK Then
-            UpdateSQLValue("devices", "dev_sibi_link", f.SibiUID, "dev_UID", CurrentDevice.strGUID)
+            Update_SQLValue("devices", "dev_sibi_link", f.SibiUID, "dev_UID", CurrentDevice.strGUID)
             ViewDevice(CurrentDevice.strGUID)
         End If
     End Sub

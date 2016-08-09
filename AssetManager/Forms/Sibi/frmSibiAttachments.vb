@@ -113,7 +113,7 @@ Class frmSibiAttachments
             table.Columns.Add("AttachUID", GetType(String))
             table.Columns.Add("MD5", GetType(String))
             ' End If
-            reader = ReturnSQLReader(strQry)
+            reader = Return_SQLReader(strQry)
             Dim strFullFilename As String
             Dim row As Integer
             ReDim AttachIndex(0)
@@ -224,7 +224,7 @@ Class frmSibiAttachments
         blah = MsgBox("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             Waiting()
-            If DeleteAttachment(AttachIndex(i).strFileUID, AttachmentType.Sibi) > 0 Then
+            If DeleteAttachment(AttachIndex(i).strFileUID, Entry_Type.Sibi) > 0 Then
                 ListAttachments(CurrentRequest.strUID)
                 DoneWaiting()
                 ' blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
@@ -235,7 +235,6 @@ Class frmSibiAttachments
         End If
     End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
-
         If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
             StartAttachDelete(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
         End If
@@ -279,11 +278,11 @@ Class frmSibiAttachments
                 Dim SQL As String
                 Dim resp As Net.FtpWebResponse = Nothing
                 Using resp 'check if device folder exists. create directory if not.
-                    resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
+                    resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
                     Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
                     Dim s As String = sr.ReadToEnd()
                     If Not s.Contains(Foldername) Then
-                        resp = ReturnFTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
+                        resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
                     End If
                 End Using
                 'ftp upload
@@ -293,7 +292,7 @@ Class frmSibiAttachments
                 Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
                 Dim FileHash As String = GetHashOfStream(ftpStream)
                 Dim flLength As Integer = ftpStream.Length
-                Dim reqfile As System.IO.Stream = ReturnFTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+                Dim reqfile As System.IO.Stream = Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
                 Dim perc As Short = 0
                 stpSpeed.Start()
                 UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
@@ -359,7 +358,7 @@ Class frmSibiAttachments
         Dim Filename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
         'Dim blah = MsgBox("Move " & Filename & " to " & GetHumanValue(ComboType.SibiAttachFolder, Folder) & "?", vbYesNo + vbQuestion, "Move Attachment")
         'If blah = vbYes Then
-        UpdateSQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
+        Update_SQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
         ListAttachments(CurrentRequest.strUID)
         'Else
         'End If
@@ -369,7 +368,7 @@ Class frmSibiAttachments
     End Sub
     Private Sub RenameAttachement(AttachUID As String, NewFileName As String)
         Try
-            UpdateSQLValue("sibi_attachments", "sibi_attach_file_name", NewFileName, "sibi_attach_file_UID", AttachUID)
+            Update_SQLValue("sibi_attachments", "sibi_attach_file_name", NewFileName, "sibi_attach_file_UID", AttachUID)
             ListAttachments(CurrentRequest.strUID)
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -437,9 +436,9 @@ Class frmSibiAttachments
             Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID
             Dim resp As Net.FtpWebResponse = Nothing
             'get file size
-            Dim flLength As Int64 = CInt(ReturnFTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
+            Dim flLength As Int64 = CInt(Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
             'setup download
-            resp = ReturnFTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
+            resp = Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
             Dim respStream As IO.Stream = resp.GetResponseStream
             'ftp download
             ProgTimer.Enabled = True
@@ -614,7 +613,6 @@ Class frmSibiAttachments
             Next
         End If
     End Sub
-
     Private Sub AttachGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellDoubleClick
         OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
     End Sub
@@ -648,7 +646,7 @@ Class frmSibiAttachments
     End Sub
     Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim strCurrentFileName As String = ReturnSQLValue("sibi_attachments", "sibi_attach_file_UID", AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, "sibi_attach_file_name") 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
+        Dim strCurrentFileName As String = Get_SQLValue("sibi_attachments", "sibi_attach_file_UID", AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, "sibi_attach_file_name") 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
         Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value
         Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
         If blah Is "" Then
@@ -657,7 +655,6 @@ Class frmSibiAttachments
             RenameAttachement(strAttachUID, Trim(blah))
         End If
     End Sub
-
     Private Sub AttachGrid_CellMouseUp(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseUp
         bolDragging = False
     End Sub
@@ -666,7 +663,6 @@ Class frmSibiAttachments
             bolAllowDrag = True
             AttachGrid.MultiSelect = False
             AttachGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-
         Else
             bolAllowDrag = False
             AttachGrid.MultiSelect = True

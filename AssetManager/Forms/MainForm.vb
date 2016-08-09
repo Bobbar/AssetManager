@@ -747,22 +747,18 @@ Public Class MainForm
     Private Sub tsmUserManager_Click(sender As Object, e As EventArgs) Handles tsmUserManager.Click
         frmUserManager.Show()
     End Sub
-    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs)
         Munis_NameSearch()
     End Sub
-
     Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
         Munis_NameSearch()
     End Sub
-
     Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
         Munis_POSearch()
     End Sub
-
     Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem3.Click
         Munis_ReqSearch()
     End Sub
-
     Private Sub txtReplaceYear_KeyDown(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyDown
         If e.KeyCode = Keys.Down Then
             GiveLiveBoxFocus()

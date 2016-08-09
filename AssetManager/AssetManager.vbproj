@@ -190,6 +190,7 @@
     <Compile Include="Modules\FTPFunctions.vb" />
     <Compile Include="Modules\MSSQLComms.vb" />
     <Compile Include="Modules\MunisFunctions.vb" />
+    <Compile Include="Modules\MySQLComms.vb" />
     <Compile Include="Modules\SecurityMod.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>

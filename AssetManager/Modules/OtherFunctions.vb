@@ -127,8 +127,25 @@ Module OtherFunctions
     Public Function YearFromDate(dtDate As Date) As String
         Return dtDate.Year.ToString
     End Function
-
     Public Function MouseIsOverControl(ByVal c As Control) As Boolean
         Return c.ClientRectangle.Contains(c.PointToClient(Control.MousePosition))
     End Function
+    Public Sub FillComboBox(IndexType() As Combo_Data, ByRef cmb As ComboBox)
+        cmb.Items.Clear()
+        cmb.Text = ""
+        Dim i As Integer = 0
+        For Each ComboItem As Combo_Data In IndexType
+            cmb.Items.Insert(i, ComboItem.strLong)
+            i += 1
+        Next
+    End Sub
+    Public Sub FillToolComboBox(IndexType() As Combo_Data, ByRef cmb As ToolStripComboBox)
+        cmb.Items.Clear()
+        cmb.Text = ""
+        Dim i As Integer = 0
+        For Each ComboItem As Combo_Data In IndexType
+            cmb.Items.Insert(i, ComboItem.strLong)
+            i += 1
+        Next
+    End Sub
 End Module

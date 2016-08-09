@@ -64,7 +64,6 @@ Partial Class frmManageRequest
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.cmdOrgObLookup = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdClearForm = New System.Windows.Forms.ToolStripButton()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
@@ -73,6 +72,10 @@ Partial Class frmManageRequest
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripDropDownButton2 = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
         Me.pnlEditButtons.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -422,7 +425,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.ToolStripButton1, Me.cmdOrgObLookup, Me.cmdClearForm})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.ToolStripDropDownButton2, Me.cmdOrgObLookup, Me.cmdClearForm})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -489,14 +492,6 @@ Partial Class frmManageRequest
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
-        '
-        'ToolStripButton1
-        '
-        Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.Find
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(173, 29)
-        Me.ToolStripButton1.Text = "Org/Object Lookup"
         '
         'cmdOrgObLookup
         '
@@ -597,6 +592,33 @@ Partial Class frmManageRequest
         Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
         '
+        'ToolStripDropDownButton2
+        '
+        Me.ToolStripDropDownButton2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.ToolStripMenuItem2, Me.ToolStripMenuItem3})
+        Me.ToolStripDropDownButton2.Image = Global.AssetManager.My.Resources.Resources.Find
+        Me.ToolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripDropDownButton2.Name = "ToolStripDropDownButton2"
+        Me.ToolStripDropDownButton2.Size = New System.Drawing.Size(98, 29)
+        Me.ToolStripDropDownButton2.Text = "MUNIS"
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(227, 26)
+        Me.ToolStripMenuItem1.Text = "User Org/Ob Lookup"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(227, 26)
+        Me.ToolStripMenuItem2.Text = "PO Lookup"
+        '
+        'ToolStripMenuItem3
+        '
+        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(227, 26)
+        Me.ToolStripMenuItem3.Text = "Requisition # Lookup"
+        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -626,7 +648,6 @@ Partial Class frmManageRequest
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PopupMenuNotes.ResumeLayout(False)
         Me.ResumeLayout(False)
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents chkPlanned As CheckBox
@@ -674,6 +695,9 @@ Partial Class frmManageRequest
     Friend WithEvents cmdAccept As Button
     Friend WithEvents cmdDiscard As Button
     Friend WithEvents pnlEditButtons As Panel
-    Friend WithEvents ToolStripButton1 As ToolStripButton
     Friend WithEvents cmdOrgObLookup As ToolStripSeparator
+    Friend WithEvents ToolStripDropDownButton2 As ToolStripDropDownButton
+    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
 End Class

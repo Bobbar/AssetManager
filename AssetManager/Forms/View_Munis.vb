@@ -149,7 +149,6 @@
             End If
         End If
     End Sub
-
     Private Sub DataGridMunis_Requisition_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridMunis_Requisition.CellLeave
         Dim BackColor As Color = DefGridBC
         Dim SelectColor As Color = DefGridSelCol
