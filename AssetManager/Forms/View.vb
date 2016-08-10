@@ -17,6 +17,7 @@ Public Class View
     End Structure
     Private OldData As Device_Info
     Public NewData As Device_Info
+    'Private fieldErrorIcon As ErrorProvider = New ErrorProvider
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cmdRDP.Visible = False
         ToolStrip1.BackColor = colToolBarColor
@@ -433,6 +434,7 @@ Public Class View
                 cmb.SelectedIndex = -1
             End If
         Next
+        fieldErrorIcon.Clear()
     End Sub
     Private Function CheckFields() As Boolean
         Dim bolMissingField As Boolean
@@ -445,8 +447,10 @@ Public Class View
                         If Trim(c.Text) = "" Then
                             bolMissingField = True
                             c.BackColor = colMissingField
+                            AddErrorIcon(c)
                         Else
                             c.BackColor = Color.Empty
+                            ClearErrorIcon(c)
                         End If
                     End If
                 Case TypeOf c Is ComboBox
@@ -455,14 +459,26 @@ Public Class View
                         If cmb.SelectedIndex = -1 Then
                             bolMissingField = True
                             cmb.BackColor = colMissingField
+                            AddErrorIcon(cmb)
                         Else
                             cmb.BackColor = Color.Empty
+                            ClearErrorIcon(cmb)
                         End If
                     End If
             End Select
         Next
         Return Not bolMissingField 'if fields are missing return false to trigger a message if needed
     End Function
+    Private Sub AddErrorIcon(ctl As Control)
+        If fieldErrorIcon.GetError(ctl) Is String.Empty Then
+            fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight)
+            fieldErrorIcon.SetIconPadding(ctl, 4)
+            fieldErrorIcon.SetError(ctl, "Required Field")
+        End If
+    End Sub
+    Private Sub ClearErrorIcon(ctl As Control)
+        fieldErrorIcon.SetError(ctl, String.Empty)
+    End Sub
     Private Sub ResetBackColors()
         Dim c As Control
         For Each c In DeviceInfoBox.Controls

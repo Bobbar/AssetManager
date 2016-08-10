@@ -116,7 +116,7 @@
             intTextSize = TextRenderer.MeasureText(item.Text, fntCheckBoxFont)
             If Size.Width > intMaxLen Then intMaxLen = Size.Width
         Next
-        CLB.ColumnWidth = intMaxLen / 5
+        CLB.ColumnWidth = intMaxLen / 4
     End Sub
     Private Sub UpdateAccessLabel()
         lblAccessValue.Text = "Selected Access Level: " & CalcAccessLevel()

@@ -44,7 +44,7 @@ Partial Class frmUserManager
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(12, 195)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(809, 222)
+        Me.Panel1.Size = New System.Drawing.Size(611, 222)
         Me.Panel1.TabIndex = 0
         '
         'UserGrid
@@ -88,14 +88,14 @@ Partial Class frmUserManager
         Me.UserGrid.ShowCellErrors = False
         Me.UserGrid.ShowCellToolTips = False
         Me.UserGrid.ShowEditingIcon = False
-        Me.UserGrid.Size = New System.Drawing.Size(803, 216)
+        Me.UserGrid.Size = New System.Drawing.Size(605, 216)
         Me.UserGrid.TabIndex = 18
         Me.UserGrid.VirtualMode = True
         '
         'GroupBox1
         '
         Me.GroupBox1.Controls.Add(Me.pnlModule)
-        Me.GroupBox1.Location = New System.Drawing.Point(146, 12)
+        Me.GroupBox1.Location = New System.Drawing.Point(15, 12)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(377, 177)
         Me.GroupBox1.TabIndex = 1
@@ -130,7 +130,7 @@ Partial Class frmUserManager
         '
         'cmdUpdate
         '
-        Me.cmdUpdate.Location = New System.Drawing.Point(560, 85)
+        Me.cmdUpdate.Location = New System.Drawing.Point(432, 61)
         Me.cmdUpdate.Name = "cmdUpdate"
         Me.cmdUpdate.Size = New System.Drawing.Size(135, 47)
         Me.cmdUpdate.TabIndex = 2
@@ -140,21 +140,24 @@ Partial Class frmUserManager
         'lblAccessValue
         '
         Me.lblAccessValue.AutoSize = True
-        Me.lblAccessValue.Location = New System.Drawing.Point(595, 159)
+        Me.lblAccessValue.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblAccessValue.Location = New System.Drawing.Point(412, 141)
         Me.lblAccessValue.Name = "lblAccessValue"
-        Me.lblAccessValue.Size = New System.Drawing.Size(75, 13)
+        Me.lblAccessValue.Size = New System.Drawing.Size(142, 13)
         Me.lblAccessValue.TabIndex = 3
-        Me.lblAccessValue.Text = "Access Value:"
+        Me.lblAccessValue.Text = "Selected Access Value:"
+        Me.lblAccessValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'frmUserManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(833, 429)
+        Me.ClientSize = New System.Drawing.Size(635, 429)
         Me.Controls.Add(Me.lblAccessValue)
         Me.Controls.Add(Me.cmdUpdate)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Panel1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmUserManager"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -165,6 +168,7 @@ Partial Class frmUserManager
         Me.pnlModule.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents Panel1 As Panel
     Friend WithEvents UserGrid As DataGridView
