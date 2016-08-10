@@ -116,10 +116,16 @@
     <Compile Include="Forms\AddNew.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmUserManager.Designer.vb">
+    <Compile Include="Forms\AdminTools\frmEncrypter.Designer.vb">
+      <DependentUpon>frmEncrypter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AdminTools\frmEncrypter.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AdminTools\frmUserManager.Designer.vb">
       <DependentUpon>frmUserManager.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmUserManager.vb">
+    <Compile Include="Forms\AdminTools\frmUserManager.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Sibi\frmNotes.Designer.vb">
@@ -250,7 +256,10 @@
     <EmbeddedResource Include="Forms\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmUserManager.resx">
+    <EmbeddedResource Include="Forms\AdminTools\frmEncrypter.resx">
+      <DependentUpon>frmEncrypter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AdminTools\frmUserManager.resx">
       <DependentUpon>frmUserManager.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Sibi\frmNotes.resx">
@@ -309,6 +318,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>

@@ -759,6 +759,12 @@ Public Class MainForm
     Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem3.Click
         Munis_ReqSearch()
     End Sub
+
+    Private Sub TextEnCrypterToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TextEnCrypterToolStripMenuItem.Click
+        frmEncrypter.Show()
+        frmEncrypter.Activate()
+    End Sub
+
     Private Sub txtReplaceYear_KeyDown(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyDown
         If e.KeyCode = Keys.Down Then
             GiveLiveBoxFocus()

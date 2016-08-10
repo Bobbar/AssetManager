@@ -1,7 +1,7 @@
 ﻿Imports System.Data.SqlClient
 Module MSSQLComms
     Private Const MSSQLConnectString As String = "server=svr-munis5.core.co.fairfield.oh.us; database=mu_live; trusted_connection=True;"
-    Public Function ReturnMSSQLTable(strSQLQry As String) As DataTable
+    Public Function Return_MSSQLTable(strSQLQry As String) As DataTable
         Dim ds As New DataSet
         Dim da As New SqlDataAdapter
         Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)
@@ -18,7 +18,7 @@ Module MSSQLComms
             Return Nothing
         End Try
     End Function
-    Public Function ReturnMSSQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
+    Public Function Return_MSSQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
         Dim sqlQRY As String = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
         Debug.Print(sqlQRY)
         Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)

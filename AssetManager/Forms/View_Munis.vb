@@ -6,7 +6,7 @@
             If NeededInfo(Device) Then
                 Dim MunisTable As DataTable
                 Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_loc,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
-                MunisTable = ReturnMSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_serial='" & Device.strSerial & "'")
+                MunisTable = Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_serial='" & Device.strSerial & "'")
                 bolGridFilling = True
                 DataGridMunis_Inventory.DataSource = MunisTable
                 bolGridFilling = False
@@ -24,7 +24,7 @@
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, RequisitionItems WHERE a_requisition_no='" & Munis_GetReqNumberFromPO(PO) & "' AND rg_fiscal_year='" & FiscalYr & "' AND  PurchaseOrderNumber='" & PO & "' AND rg_line_number = LineNumber"
             Debug.Print(strQRY)
             Dim results As DataTable
-            results = ReturnMSSQLTable(strQRY)
+            results = Return_MSSQLTable(strQRY)
             bolGridFilling = True
             DataGridMunis_Requisition.DataSource = results
             DataGridMunis_Requisition.ClearSelection()
@@ -42,7 +42,7 @@
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, rqdetail WHERE a_requisition_no='" & ReqNumber & "' AND rg_fiscal_year='" & FiscalYr & "' AND rg_line_number = rqdt_lin_no AND a_requisition_no = rqdt_req_no AND rg_fiscal_year = rqdt_fsc_yr"
             Debug.Print(strQRY)
             Dim results As DataTable
-            results = ReturnMSSQLTable(strQRY)
+            results = Return_MSSQLTable(strQRY)
             bolGridFilling = True
             DataGridMunis_Requisition.DataSource = results
             DataGridMunis_Requisition.ClearSelection()
@@ -58,7 +58,7 @@
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
             Debug.Print(strQRY)
             Dim results As DataTable
-            results = ReturnMSSQLTable(strQRY)
+            results = Return_MSSQLTable(strQRY)
             bolGridFilling = True
             DataGridMunis_Requisition.DataSource = results
             DataGridMunis_Requisition.ClearSelection()
@@ -112,7 +112,7 @@
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         Dim MunisTable As DataTable
-        MunisTable = ReturnMSSQLTable("SELECT TOP 10 * FROM famaster WHERE fama_serial='" & Trim(txtSerial.Text) & "'")
+        MunisTable = Return_MSSQLTable("SELECT TOP 10 * FROM famaster WHERE fama_serial='" & Trim(txtSerial.Text) & "'")
         Dim r As DataRow
         For Each r In MunisTable.Rows
             Debug.Print(r.Item("fama_asset"))
