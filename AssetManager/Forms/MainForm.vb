@@ -49,6 +49,9 @@ Public Class MainForm
         GetGridStylez()
         CopyDefaultCellStyles()
         ConnectionWatchDog.RunWorkerAsync()
+
+        InitializeLiveBox()
+
         ShowAll()
         Status("Ready!")
         Thread.Sleep(1000)
@@ -229,7 +232,7 @@ Public Class MainForm
             Value = obValue
         End Sub
     End Class
-    Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
+    Public Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         Dim table As New DataTable
         Dim cmd As New MySqlCommand
         Dim strStartQry As String = "SELECT * FROM devices WHERE "
@@ -286,7 +289,7 @@ Public Class MainForm
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
     End Sub
-    Private Sub LoadDevice(ByVal strGUID As String)
+    Public Sub LoadDevice(ByVal strGUID As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
@@ -442,6 +445,7 @@ Public Class MainForm
         StartLiveSearch()
     End Sub
     Private Sub StartLiveSearch()
+
         StartingControl = ActiveControl
         If Trim(strSearchString) <> "" Then
             If Not LiveQueryWorker.IsBusy And ConnectionReady() Then LiveQueryWorker.RunWorkerAsync()
