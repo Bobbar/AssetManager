@@ -19,8 +19,10 @@ Partial Class AddNew
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AddNew))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.chkNoClear = New System.Windows.Forms.CheckBox()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.cmdClear = New System.Windows.Forms.Button()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -48,8 +50,9 @@ Partial Class AddNew
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAssetTag_REQ = New System.Windows.Forms.TextBox()
         Me.txtSerial_REQ = New System.Windows.Forms.TextBox()
-        Me.chkNoClear = New System.Windows.Forms.CheckBox()
+        Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.GroupBox1.SuspendLayout()
+        CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -85,9 +88,20 @@ Partial Class AddNew
         Me.GroupBox1.Controls.Add(Me.txtSerial_REQ)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(944, 299)
+        Me.GroupBox1.Size = New System.Drawing.Size(998, 299)
         Me.GroupBox1.TabIndex = 23
         Me.GroupBox1.TabStop = False
+        '
+        'chkNoClear
+        '
+        Me.chkNoClear.AutoSize = True
+        Me.chkNoClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkNoClear.Location = New System.Drawing.Point(543, 245)
+        Me.chkNoClear.Name = "chkNoClear"
+        Me.chkNoClear.Size = New System.Drawing.Size(91, 20)
+        Me.chkNoClear.TabIndex = 49
+        Me.chkNoClear.Text = "Don't clear"
+        Me.chkNoClear.UseVisualStyleBackColor = True
         '
         'chkTrackable
         '
@@ -103,7 +117,7 @@ Partial Class AddNew
         'cmdClear
         '
         Me.cmdClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdClear.Location = New System.Drawing.Point(814, 253)
+        Me.cmdClear.Location = New System.Drawing.Point(872, 253)
         Me.cmdClear.Name = "cmdClear"
         Me.cmdClear.Size = New System.Drawing.Size(97, 23)
         Me.cmdClear.TabIndex = 13
@@ -114,7 +128,7 @@ Partial Class AddNew
         '
         Me.Label11.AutoSize = True
         Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(786, 20)
+        Me.Label11.Location = New System.Drawing.Point(822, 20)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(91, 16)
         Me.Label11.TabIndex = 47
@@ -124,7 +138,7 @@ Partial Class AddNew
         '
         Me.cmbStatus_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbStatus_REQ.FormattingEnabled = True
-        Me.cmbStatus_REQ.Location = New System.Drawing.Point(789, 39)
+        Me.cmbStatus_REQ.Location = New System.Drawing.Point(825, 39)
         Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
         Me.cmbStatus_REQ.Size = New System.Drawing.Size(144, 26)
         Me.cmbStatus_REQ.TabIndex = 5
@@ -133,7 +147,7 @@ Partial Class AddNew
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(625, 76)
+        Me.Label10.Location = New System.Drawing.Point(639, 80)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(115, 16)
         Me.Label10.TabIndex = 45
@@ -143,7 +157,7 @@ Partial Class AddNew
         '
         Me.cmbOSType_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbOSType_REQ.FormattingEnabled = True
-        Me.cmbOSType_REQ.Location = New System.Drawing.Point(628, 95)
+        Me.cmbOSType_REQ.Location = New System.Drawing.Point(642, 98)
         Me.cmbOSType_REQ.Name = "cmbOSType_REQ"
         Me.cmbOSType_REQ.Size = New System.Drawing.Size(144, 26)
         Me.cmbOSType_REQ.TabIndex = 9
@@ -152,7 +166,7 @@ Partial Class AddNew
         '
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(786, 75)
+        Me.Label9.Location = New System.Drawing.Point(822, 80)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(78, 16)
         Me.Label9.TabIndex = 43
@@ -161,7 +175,7 @@ Partial Class AddNew
         'txtPO
         '
         Me.txtPO.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPO.Location = New System.Drawing.Point(789, 97)
+        Me.txtPO.Location = New System.Drawing.Point(825, 99)
         Me.txtPO.Name = "txtPO"
         Me.txtPO.Size = New System.Drawing.Size(122, 25)
         Me.txtPO.TabIndex = 10
@@ -170,7 +184,7 @@ Partial Class AddNew
         '
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(625, 22)
+        Me.Label8.Location = New System.Drawing.Point(639, 22)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(107, 16)
         Me.Label8.TabIndex = 41
@@ -180,7 +194,7 @@ Partial Class AddNew
         '
         Me.cmbEquipType_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbEquipType_REQ.FormattingEnabled = True
-        Me.cmbEquipType_REQ.Location = New System.Drawing.Point(628, 39)
+        Me.cmbEquipType_REQ.Location = New System.Drawing.Point(642, 39)
         Me.cmbEquipType_REQ.Name = "cmbEquipType_REQ"
         Me.cmbEquipType_REQ.Size = New System.Drawing.Size(144, 26)
         Me.cmbEquipType_REQ.TabIndex = 4
@@ -219,7 +233,7 @@ Partial Class AddNew
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(512, 20)
+        Me.Label6.Location = New System.Drawing.Point(539, 20)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(92, 16)
         Me.Label6.TabIndex = 36
@@ -228,7 +242,7 @@ Partial Class AddNew
         'txtReplaceYear
         '
         Me.txtReplaceYear.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtReplaceYear.Location = New System.Drawing.Point(516, 39)
+        Me.txtReplaceYear.Location = New System.Drawing.Point(543, 39)
         Me.txtReplaceYear.Name = "txtReplaceYear"
         Me.txtReplaceYear.Size = New System.Drawing.Size(88, 25)
         Me.txtReplaceYear.TabIndex = 3
@@ -238,7 +252,7 @@ Partial Class AddNew
         '
         Me.lbPurchaseDate.AutoSize = True
         Me.lbPurchaseDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbPurchaseDate.Location = New System.Drawing.Point(432, 78)
+        Me.lbPurchaseDate.Location = New System.Drawing.Point(436, 80)
         Me.lbPurchaseDate.Name = "lbPurchaseDate"
         Me.lbPurchaseDate.Size = New System.Drawing.Size(97, 16)
         Me.lbPurchaseDate.TabIndex = 34
@@ -249,7 +263,7 @@ Partial Class AddNew
         Me.dtPurchaseDate_REQ.CustomFormat = "yyyy-MM-dd"
         Me.dtPurchaseDate_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtPurchaseDate_REQ.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtPurchaseDate_REQ.Location = New System.Drawing.Point(435, 97)
+        Me.dtPurchaseDate_REQ.Location = New System.Drawing.Point(439, 99)
         Me.dtPurchaseDate_REQ.Name = "dtPurchaseDate_REQ"
         Me.dtPurchaseDate_REQ.Size = New System.Drawing.Size(169, 25)
         Me.dtPurchaseDate_REQ.TabIndex = 8
@@ -259,7 +273,7 @@ Partial Class AddNew
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(318, 22)
+        Me.Label5.Location = New System.Drawing.Point(331, 21)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(59, 16)
         Me.Label5.TabIndex = 32
@@ -270,7 +284,7 @@ Partial Class AddNew
         Me.cmbLocation_REQ.DropDownWidth = 171
         Me.cmbLocation_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbLocation_REQ.FormattingEnabled = True
-        Me.cmbLocation_REQ.Location = New System.Drawing.Point(321, 39)
+        Me.cmbLocation_REQ.Location = New System.Drawing.Point(334, 38)
         Me.cmbLocation_REQ.Name = "cmbLocation_REQ"
         Me.cmbLocation_REQ.Size = New System.Drawing.Size(171, 26)
         Me.cmbLocation_REQ.TabIndex = 2
@@ -280,7 +294,7 @@ Partial Class AddNew
         '
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(153, 78)
+        Me.Label4.Location = New System.Drawing.Point(153, 80)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(76, 16)
         Me.Label4.TabIndex = 30
@@ -299,7 +313,7 @@ Partial Class AddNew
         'txtDescription_REQ
         '
         Me.txtDescription_REQ.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDescription_REQ.Location = New System.Drawing.Point(156, 97)
+        Me.txtDescription_REQ.Location = New System.Drawing.Point(156, 99)
         Me.txtDescription_REQ.Name = "txtDescription_REQ"
         Me.txtDescription_REQ.Size = New System.Drawing.Size(251, 25)
         Me.txtDescription_REQ.TabIndex = 7
@@ -352,23 +366,18 @@ Partial Class AddNew
         Me.txtSerial_REQ.TabIndex = 0
         Me.txtSerial_REQ.Text = "txtSerial"
         '
-        'chkNoClear
+        'fieldErrorIcon
         '
-        Me.chkNoClear.AutoSize = True
-        Me.chkNoClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkNoClear.Location = New System.Drawing.Point(543, 245)
-        Me.chkNoClear.Name = "chkNoClear"
-        Me.chkNoClear.Size = New System.Drawing.Size(91, 20)
-        Me.chkNoClear.TabIndex = 49
-        Me.chkNoClear.Text = "Don't clear"
-        Me.chkNoClear.UseVisualStyleBackColor = True
+        Me.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
+        Me.fieldErrorIcon.ContainerControl = Me
+        Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
         'AddNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(971, 326)
+        Me.ClientSize = New System.Drawing.Size(1022, 326)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -378,7 +387,9 @@ Partial Class AddNew
         Me.Text = "Add New Device"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label10 As Label
@@ -409,4 +420,5 @@ Partial Class AddNew
     Friend WithEvents cmdClear As Button
     Friend WithEvents chkTrackable As CheckBox
     Friend WithEvents chkNoClear As CheckBox
+    Friend WithEvents fieldErrorIcon As ErrorProvider
 End Class
