@@ -587,6 +587,7 @@ Public Class MainForm
             Case ConnectionState.Connecting
                 ConnectStatus("Connecting", Color.Black)
         End Select
+        If Not ConnectionWatchDog.IsBusy Then ConnectionWatchDog.RunWorkerAsync()
     End Sub
     Private Sub ConnectionWatchDog_DoWork(sender As Object, e As DoWorkEventArgs) Handles ConnectionWatchDog.DoWork
         Do Until ProgramEnding

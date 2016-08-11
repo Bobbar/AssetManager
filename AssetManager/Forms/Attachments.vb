@@ -339,6 +339,7 @@ Class Attachments
         End Try
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
+        Dim strTimeStamp As String = Now.ToString("_hhmmss")
         Dim Foldername As String
         Dim FileExpectedHash As String
         Dim FileUID As String
@@ -359,7 +360,7 @@ Class Attachments
             reader = cmd.ExecuteReader
             With reader
                 While .Read()
-                    strFilename = !attach_file_name
+                    strFilename = !attach_file_name & strTimeStamp
                     strFiletype = !attach_file_type
                     strFullPath = strTempPath & strFilename & strFiletype
                     'FileSize = !attach_file_size

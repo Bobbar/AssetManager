@@ -31,8 +31,10 @@ Partial Class View
         Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
-        Me.pnlOtherFunctions = New System.Windows.Forms.Panel()
+        Me.grpNetTools = New System.Windows.Forms.GroupBox()
+        Me.cmdBrowseFiles = New System.Windows.Forms.Button()
         Me.cmdRDP = New System.Windows.Forms.Button()
+        Me.pnlOtherFunctions = New System.Windows.Forms.Panel()
         Me.cmdMunisInfo = New System.Windows.Forms.Button()
         Me.cmdSibiLink = New System.Windows.Forms.Button()
         Me.cmdSetSibi = New System.Windows.Forms.Button()
@@ -101,6 +103,7 @@ Partial Class View
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
+        Me.grpNetTools.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
         Me.TabControl1.SuspendLayout()
@@ -183,6 +186,7 @@ Partial Class View
         'DeviceInfoBox
         '
         Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.DeviceInfoBox.Controls.Add(Me.grpNetTools)
         Me.DeviceInfoBox.Controls.Add(Me.pnlOtherFunctions)
         Me.DeviceInfoBox.Controls.Add(Me.cmdSetSibi)
         Me.DeviceInfoBox.Controls.Add(Me.Label12)
@@ -218,32 +222,58 @@ Partial Class View
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
         '
-        'pnlOtherFunctions
+        'grpNetTools
         '
-        Me.pnlOtherFunctions.Controls.Add(Me.cmdRDP)
-        Me.pnlOtherFunctions.Controls.Add(Me.cmdMunisInfo)
-        Me.pnlOtherFunctions.Controls.Add(Me.cmdSibiLink)
-        Me.pnlOtherFunctions.Location = New System.Drawing.Point(560, 178)
-        Me.pnlOtherFunctions.Name = "pnlOtherFunctions"
-        Me.pnlOtherFunctions.Size = New System.Drawing.Size(172, 61)
-        Me.pnlOtherFunctions.TabIndex = 51
+        Me.grpNetTools.Controls.Add(Me.cmdBrowseFiles)
+        Me.grpNetTools.Controls.Add(Me.cmdRDP)
+        Me.grpNetTools.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.grpNetTools.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.grpNetTools.Location = New System.Drawing.Point(468, 169)
+        Me.grpNetTools.Name = "grpNetTools"
+        Me.grpNetTools.Size = New System.Drawing.Size(101, 67)
+        Me.grpNetTools.TabIndex = 52
+        Me.grpNetTools.TabStop = False
+        Me.grpNetTools.Text = "Remote Mgmt"
+        Me.grpNetTools.Visible = False
+        '
+        'cmdBrowseFiles
+        '
+        Me.cmdBrowseFiles.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdBrowseFiles.BackgroundImage = CType(resources.GetObject("cmdBrowseFiles.BackgroundImage"), System.Drawing.Image)
+        Me.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdBrowseFiles.Location = New System.Drawing.Point(11, 19)
+        Me.cmdBrowseFiles.Name = "cmdBrowseFiles"
+        Me.cmdBrowseFiles.Size = New System.Drawing.Size(40, 40)
+        Me.cmdBrowseFiles.TabIndex = 52
+        Me.ToolTip1.SetToolTip(Me.cmdBrowseFiles, "Browse Files")
+        Me.cmdBrowseFiles.UseVisualStyleBackColor = True
         '
         'cmdRDP
         '
+        Me.cmdRDP.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdRDP.BackgroundImage = CType(resources.GetObject("cmdRDP.BackgroundImage"), System.Drawing.Image)
         Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRDP.Location = New System.Drawing.Point(4, 7)
+        Me.cmdRDP.Location = New System.Drawing.Point(53, 19)
         Me.cmdRDP.Name = "cmdRDP"
-        Me.cmdRDP.Size = New System.Drawing.Size(49, 45)
+        Me.cmdRDP.Size = New System.Drawing.Size(40, 40)
         Me.cmdRDP.TabIndex = 46
         Me.ToolTip1.SetToolTip(Me.cmdRDP, "Launch Remote Desktop")
         Me.cmdRDP.UseVisualStyleBackColor = True
-        Me.cmdRDP.Visible = False
+        '
+        'pnlOtherFunctions
+        '
+        Me.pnlOtherFunctions.Controls.Add(Me.cmdMunisInfo)
+        Me.pnlOtherFunctions.Controls.Add(Me.cmdSibiLink)
+        Me.pnlOtherFunctions.Location = New System.Drawing.Point(616, 178)
+        Me.pnlOtherFunctions.Name = "pnlOtherFunctions"
+        Me.pnlOtherFunctions.Size = New System.Drawing.Size(116, 61)
+        Me.pnlOtherFunctions.TabIndex = 51
         '
         'cmdMunisInfo
         '
-        Me.cmdMunisInfo.Location = New System.Drawing.Point(60, 4)
+        Me.cmdMunisInfo.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdMunisInfo.Location = New System.Drawing.Point(5, 4)
         Me.cmdMunisInfo.Name = "cmdMunisInfo"
         Me.cmdMunisInfo.Size = New System.Drawing.Size(106, 23)
         Me.cmdMunisInfo.TabIndex = 46
@@ -252,7 +282,8 @@ Partial Class View
         '
         'cmdSibiLink
         '
-        Me.cmdSibiLink.Location = New System.Drawing.Point(60, 33)
+        Me.cmdSibiLink.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdSibiLink.Location = New System.Drawing.Point(5, 33)
         Me.cmdSibiLink.Name = "cmdSibiLink"
         Me.cmdSibiLink.Size = New System.Drawing.Size(106, 23)
         Me.cmdSibiLink.TabIndex = 49
@@ -573,7 +604,7 @@ Partial Class View
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(983, 334)
+        Me.TrackingTab.Size = New System.Drawing.Size(1056, 318)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -915,6 +946,7 @@ Partial Class View
         Me.MenuStrip1.PerformLayout()
         Me.DeviceInfoBox.ResumeLayout(False)
         Me.DeviceInfoBox.PerformLayout()
+        Me.grpNetTools.ResumeLayout(False)
         Me.pnlOtherFunctions.ResumeLayout(False)
         Me.RightClickMenu.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
@@ -1012,4 +1044,6 @@ Partial Class View
     Friend WithEvents cmdSetSibi As Button
     Friend WithEvents pnlOtherFunctions As Panel
     Friend WithEvents fieldErrorIcon As ErrorProvider
+    Friend WithEvents cmdBrowseFiles As Button
+    Friend WithEvents grpNetTools As GroupBox
 End Class

@@ -19,7 +19,7 @@ Public Class View
     Public NewData As Device_Info
     'Private fieldErrorIcon As ErrorProvider = New ErrorProvider
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        cmdRDP.Visible = False
+        grpNetTools.Visible = False
         ToolStrip1.BackColor = colToolBarColor
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
@@ -876,9 +876,9 @@ Public Class View
     End Sub
     Private Sub PingWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles PingWorker.RunWorkerCompleted
         If e.Result Then
-            SetupRDP()
+            SetupNetTools()
         Else
-            cmdRDP.Visible = False
+            grpNetTools.Visible = False
         End If
     End Sub
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
@@ -888,11 +888,11 @@ Public Class View
         On Error Resume Next
         TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
     End Sub
-    Private Sub SetupRDP()
-        cmdRDP.Visible = True
+    Private Sub SetupNetTools()
+        grpNetTools.Visible = True
     End Sub
     Private Sub CheckRDP()
-        If CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
+        If InStr(CurrentDevice.strOSVersion, "WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
             If Not PingWorker.IsBusy Then PingWorker.RunWorkerAsync()
         End If
     End Sub
@@ -926,6 +926,11 @@ Public Class View
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
         LinkSibi()
     End Sub
+
+    Private Sub cmdBrowseFiles_Click(sender As Object, e As EventArgs) Handles cmdBrowseFiles.Click
+        Process.Start("\\D" & CurrentDevice.strSerial & "\c$")
+    End Sub
+
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub
@@ -934,5 +939,9 @@ Public Class View
         StartInfo.FileName = "mstsc.exe"
         StartInfo.Arguments = "/v:D" & CurrentDevice.strSerial
         Process.Start(StartInfo)
+    End Sub
+
+    Private Sub tmrRDPRefresh_Tick(sender As Object, e As EventArgs) Handles tmrRDPRefresh.Tick
+
     End Sub
 End Class
