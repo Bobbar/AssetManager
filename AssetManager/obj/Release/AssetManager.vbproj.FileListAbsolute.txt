@@ -1,11 +1,5 @@
-C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.exe.config
-C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.exe
-C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.pdb
-C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.xml
-C:\GitHub\AssetManager\AssetManager\bin\Release\Microsoft.ReportViewer.WinForms.dll
-C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.dll
-C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.Entity.dll
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AddNew.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmEncrypter.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmUserManager.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmNotes.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiAttachments.resources
@@ -26,6 +20,13 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Entry.resource
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbproj.GenerateResource.Cache
 C:\GitHub\AssetManager\AssetManager\obj\Release\RdlCompile.cache
 C:\GitHub\AssetManager\AssetManager\obj\Release\RdlCompile.compiled
+C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.exe.config
+C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.exe
+C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.xml
+C:\GitHub\AssetManager\AssetManager\bin\Release\Microsoft.ReportViewer.WinForms.dll
+C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.dll
+C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.Entity.dll
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
