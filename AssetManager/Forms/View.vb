@@ -436,6 +436,7 @@ Public Class View
             End If
         Next
         fieldErrorIcon.Clear()
+        HideLiveBox()
     End Sub
     Private Function CheckFields() As Boolean
         Dim bolMissingField As Boolean
