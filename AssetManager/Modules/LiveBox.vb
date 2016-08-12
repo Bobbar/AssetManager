@@ -152,7 +152,7 @@ Module LiveBox
             End If
             If strPrevSearchString <> ActiveControl.Text Then
                 'strSearchString = ActiveControl.Text
-                StartLiveSearch(ActiveControl) 'if search string has changed since last completetion, run again.
+                '*******************StartLiveSearch(ActiveControl) 'if search string has changed since last completetion, run again.
             End If
             dtLiveBoxData = dtResults
             Exit Sub

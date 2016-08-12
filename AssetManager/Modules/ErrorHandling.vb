@@ -2,42 +2,37 @@
 Imports System.IO
 Imports System.Net.Sockets
 Module ErrorHandling
-    Public Function ErrHandleNew(ex As Exception, strOrigSub As String) As Boolean 'True = safe to continue. False = PANIC, BAD THINGS, THE SKY IS FALLING!
-        'If Not IsNothing(ex.InnerException) Then
-        '    Debug.Print("InnerEx: " & TypeName(ex.InnerException))
-        'End If
+    Public Function ErrHandleNew(ex As Exception, strOrigSub As String) As Boolean
+        Dim ErrorResult As Boolean
         Select Case TypeName(ex)
             Case "WebException"
-                Return handleWebException(ex, strOrigSub)
+                ErrorResult = handleWebException(ex, strOrigSub)
             Case "IndexOutOfRangeException"
                 Dim handEx As IndexOutOfRangeException = ex
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.HResult & "  Message:" & handEx.Message)
-                Return True
+                ErrorResult = True
             Case "MySqlException"
-                Return handleMySqlException(ex, strOrigSub)
+                ErrorResult = handleMySqlException(ex, strOrigSub)
             Case "InvalidCastException"
                 Dim handEx As InvalidCastException = ex
                 Select Case handEx.HResult
                     Case -2147467262 'DBNull to String type error. These are pretty ubiquitous and not a big deal. Move along.
-                        Return True
+                        ErrorResult = True
                 End Select
             Case "IOException"
-                Return handleIOException(ex, strOrigSub)
+                ErrorResult = handleIOException(ex, strOrigSub)
             Case "PingException"
-                Return handlePingException(ex, strOrigSub)
+                ErrorResult = handlePingException(ex, strOrigSub)
+            Case "SocketException"
+                ErrorResult = handleSocketException(ex, strOrigSub)
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                'Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                Return False
+                Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                ErrorResult = False
+                EndProgram()
         End Select
-        If Not IsNothing(ex.InnerException) Then
-            Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex.InnerException) & "  #:" & ex.InnerException.HResult & "  Message:" & ex.InnerException.Message)
-            'Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex.InnerException) & "  #:" & ex.InnerException.HResult & "  Message:" & ex.InnerException.Message, vbOKOnly + vbCritical, "ERROR")
-        Else
-            Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-            'Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-        End If
-        Return False
+        If Not IsNothing(ex.InnerException) Then ErrHandleNew(ex.InnerException, strOrigSub)
+        Return ErrorResult
     End Function
     Private Function handleMySqlException(ex As MySqlException, strOrigSub As String) As Boolean
         Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
@@ -56,16 +51,22 @@ Module ErrorHandling
             Case 1292
                 Dim blah = MsgBox("Something went wrong with the SQL command. See log for details.  Log= " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
                 Return True
+            Case Else
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                EndProgram()
         End Select
         Return False
     End Function
     Private Function handlePingException(ex As Net.NetworkInformation.PingException, strOrigSub As String) As Boolean
-        If Not IsNothing(ex.InnerException) Then
-            Select Case TypeName(ex.InnerException)
-                Case "SocketException"
-                    Return handleSocketException(ex.InnerException, strOrigSub)
-            End Select
-        End If
+        Select Case ex.HResult
+            Case -2146233079
+                Return True
+            Case Else
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                EndProgram()
+        End Select
     End Function
     Private Function handleWebException(ex As Net.WebException, strOrigSub As String) As Boolean
         Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Status & "  Message:" & ex.Message)
@@ -74,32 +75,28 @@ Module ErrorHandling
             Case Net.FtpStatusCode.ActionNotTakenFileUnavailable
                 Dim blah = MsgBox("FTP File was not found, or access was denied.", vbOKOnly + vbCritical, "Cannot Access FTP File")
                 Return True
+            Case Else
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                EndProgram()
         End Select
         Return False
     End Function
     Private Function handleIOException(ex As IOException, strOrigSub As String) As Boolean
-        If Not IsNothing(ex.InnerException) Then
-            Select Case TypeName(ex.InnerException)
-                Case "SocketException"
-                    Return handleSocketException(ex.InnerException, strOrigSub)
-                Case Else
-                    Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex.InnerException) & "  #:" & ex.InnerException.HResult & "  Message:" & ex.InnerException.Message)
-                    Return False
-            End Select
-        Else
-            Select Case ex.HResult
-                Case -2147024864
-                    Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                    MsgBox("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "IO Error")
-                    Return True
-            End Select
-            Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-        End If
+        Select Case ex.HResult
+            Case -2147024864
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                'MsgBox("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "IO Error")
+                Return True
+            Case Else
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                EndProgram()
+        End Select
         Return False
     End Function
     Private Function handleSocketException(ex As SocketException, strOrigSub As String) As Boolean
-        Select Case ex.SocketErrorCode
-                                'FTPSocket timeout
+        Select Case ex.SocketErrorCode                               'FTPSocket timeout
             Case 10060
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
                 Dim blah = MsgBox("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Timeout")
@@ -111,8 +108,9 @@ Module ErrorHandling
             Case 11001 'host not found.
                 Return False
             Case Else
-                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
-                Return False
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                EndProgram()
         End Select
     End Function
 End Module

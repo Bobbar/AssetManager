@@ -3,7 +3,7 @@ Option Compare Binary
 Imports System.ComponentModel
 Imports System.IO
 Imports MySql.Data.MySqlClient
-
+Imports System.Text
 Imports System.Threading
 Class frmSibiAttachments
     Public bolAdminMode As Boolean = False
@@ -26,8 +26,6 @@ Class frmSibiAttachments
         Public strFileUID As String
     End Structure
     Private AttachIndex() As Attach_Struct
-
-
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim fd As OpenFileDialog = New OpenFileDialog()
@@ -719,4 +717,84 @@ Class frmSibiAttachments
             End If
         End If
     End Sub
+    Private Sub AttachGrid_DragOver(sender As Object, e As DragEventArgs) Handles AttachGrid.DragOver
+        e.Effect = DragDropEffects.Copy
+    End Sub
+    Private Sub AttachGrid_DragDrop(sender As Object, e As DragEventArgs) Handles AttachGrid.DragDrop
+        'Dim formats As String() = e.Data.GetFormats
+        'For Each strFormat As String In formats
+        '    Debug.Print(strFormat)
+        'Next
+        'UploadWorker.RunWorkerAsync(ProcessDrop(e.Data))
+        ProcessDrop(e.Data)
+    End Sub
+    Private Function ProcessDrop(AttachObject As IDataObject) ' As String()
+        Dim File() As String
+        Select Case True
+            Case AttachObject.GetDataPresent("RenPrivateItem")
+                File = CopyAttachement(AttachObject, "RenPrivateItem")
+                UploadWorker.RunWorkerAsync(File)
+            Case AttachObject.GetDataPresent("FileDrop")
+                File = AttachObject.GetData("FileNameW")
+                UploadWorker.RunWorkerAsync(File)
+        End Select
+    End Function
+    Private Function CopyAttachement(AttachObject As IDataObject, DataFormat As String) As String()
+        Try
+            Dim strTimeStamp As String = Now.ToString("_hhmmss")
+            Dim streamFileData As New MemoryStream
+            Dim FileName As String
+            FileName = GetAttachFileName(AttachObject, DataFormat)
+            streamFileData = AttachObject.GetData("FileContents")
+            streamFileData.Position = 0
+            Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
+            Dim output As IO.Stream
+            Dim strFullPath(0) As String
+            strFullPath(0) = strTempPath & FileName ' & strTimeStamp
+            output = IO.File.Create(strFullPath(0))
+            Dim buffer(1023) As Byte
+            Dim bytesIn As Integer = 1
+            Dim totalBytesIn As Integer
+            Dim flLength As Int64 = streamFileData.Length
+            Do Until bytesIn < 1
+                bytesIn = streamFileData.Read(buffer, 0, 1024)
+                If bytesIn > 0 Then
+                    output.Write(buffer, 0, bytesIn)
+                    totalBytesIn += bytesIn 'downloaded bytes
+                End If
+            Loop
+            output.Dispose()
+            Return strFullPath
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Function
+    Private Sub AttachGrid_DragEnter(sender As Object, e As DragEventArgs) Handles AttachGrid.DragEnter
+    End Sub
+    Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
+        Try
+            Dim streamFileName As New MemoryStream
+            'Dim fileNames() As String
+            'Dim fileName As String
+            Select Case DataFormat
+                Case "RenPrivateItem" '"FileGroupDescriptor"
+                    streamFileName = AttachObject.GetData("FileGroupDescriptor")
+                    streamFileName.Position = 0
+                    Dim sr As New StreamReader(streamFileName)
+                    Dim fullString As String = sr.ReadToEnd
+                    fullString = Replace(fullString, vbNullChar, "")
+                    fullString = Replace(fullString, ChrW(1), "")
+                    Return fullString
+                    'Case "FileDrop"
+                    '    fileNames = AttachObject.GetData("FileNameW")
+                    '    For Each file In fileNames
+                    '        fileName = Path.GetFileName(file)
+                    '    Next
+                    '    Return fileName
+            End Select
+        Catch ex As Exception
+            Return Nothing
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Function
 End Class
