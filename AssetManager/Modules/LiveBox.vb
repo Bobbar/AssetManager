@@ -2,7 +2,7 @@
 Imports MySql.Data.MySqlClient
 Module LiveBox
     Private WithEvents LiveWorker As BackgroundWorker
-    Private LiveBox As ListBox = New ListBox
+    Private LiveBox As ListBox ' = New ListBox
     Private CurrentControl As Control
     Private strPrevSearchString As String
     Private dtLiveBoxData As DataTable
@@ -13,20 +13,26 @@ Module LiveBox
         Public Const SelectValue As String = "SELE"
     End Class
     Public Sub InitializeLiveBox()
+        InitializeWorker()
+        InitializeControl()
+    End Sub
+    Private Sub InitializeWorker()
         LiveWorker = New BackgroundWorker
         AddHandler LiveWorker.DoWork, AddressOf LiveWorker_DoWork
         AddHandler LiveWorker.RunWorkerCompleted, AddressOf LiveWorkerr_RunWorkerCompleted
-        AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
-        AddHandler LiveBox.MouseMove, AddressOf LiveBox_MouseMove
-        AddHandler LiveBox.KeyDown, AddressOf LiveBox_KeyDown
-        ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
-        LiveBox.Visible = False
         With LiveWorker
             .WorkerReportsProgress = True
             .WorkerSupportsCancellation = True
         End With
     End Sub
-
+    Private Sub InitializeControl()
+        LiveBox = New ListBox
+        AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
+        AddHandler LiveBox.MouseMove, AddressOf LiveBox_MouseMove
+        AddHandler LiveBox.KeyDown, AddressOf LiveBox_KeyDown
+        ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
+        LiveBox.Visible = False
+    End Sub
     Private Sub LiveBoxSelect(Control As Control, Type As String)
         Select Case Type.ToString
             Case LiveBoxType.DynamicSearch
@@ -143,6 +149,7 @@ Module LiveBox
     Public Sub StartLiveSearch(Control As Control, Type As String)
         CurrentControl = Control
         CurrentLiveBoxType = Type
+        If LiveBox.IsDisposed Then InitializeControl()
         Dim strSearchString As String = CurrentControl.Text
         If Trim(strSearchString) <> "" Then
             If Not LiveWorker.IsBusy And ConnectionReady() Then
