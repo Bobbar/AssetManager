@@ -30,7 +30,6 @@ Public Class MainForm
         End If
         Dim userFullName As String = UserPrincipal.Current.DisplayName
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
-        ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
         Status("Loading Indexes...")
         BuildIndexes()
         Status("Checking Access Level...")
@@ -94,8 +93,7 @@ Public Class MainForm
         'Attachments.AttachGrid.ColumnHeadersDefaultCellStyle.Font = GridFont
     End Sub
     Private Sub Clear_All()
-        LiveBox.Items.Clear()
-        LiveBox.Visible = False
+        HideLiveBox()
         txtAssetTag.Clear()
         txtAssetTagSearch.Clear()
         txtSerial.Clear()
@@ -334,7 +332,7 @@ Public Class MainForm
         If Not CheckForAccess(AccessGroup.Add) Then Exit Sub
         AddNew.Show()
     End Sub
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles LiveQueryWorker.DoWork
+    Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs)
         Try
             strPrevSearchString = strSearchString
             Dim ds As New DataSet
@@ -369,90 +367,24 @@ Public Class MainForm
             ConnectionReady()
         End Try
     End Sub
-    Private Sub DrawLiveBox(Optional PositionOnly As Boolean = False)
-        Try
-            Dim dr As DataRow
-            Dim strQryRow As String
-            Select Case TypeName(ActiveControl.Parent)
-                Case "GroupBox"
-                    Dim CntGroup As GroupBox
-                    CntGroup = ActiveControl.Parent
-                Case "Panel"
-                    Dim CntGroup As Panel
-                    CntGroup = ActiveControl.Parent
-            End Select
-            If Not PositionOnly Then
-                If dtResults.Rows.Count < 1 Then
-                    LiveBox.Visible = False
-                    Exit Sub
-                End If
-                Select Case ActiveControl.Name
-                    Case "txtAssetTag"
-                        strQryRow = "dev_asset_tag"
-                    Case "txtSerial"
-                        strQryRow = "dev_serial"
-                    Case "txtCurUser"
-                        strQryRow = "dev_cur_user"
-                    Case "txtDescription"
-                        strQryRow = "dev_description"
-                    Case "txtReplaceYear"
-                        strQryRow = "dev_replacement_year"
-                End Select
-                LiveBox.Items.Clear()
-                With dr
-                    For Each dr In dtResults.Rows
-                        LiveBox.Items.Add(dr.Item(strQryRow))
-                    Next
-                End With
-            End If
-            Dim ScreenPos As Point = Me.PointToClient(ActiveControl.Parent.PointToScreen(ActiveControl.Location))
-            ScreenPos.Y = ScreenPos.Y + ActiveControl.Height
-            LiveBox.Location = ScreenPos
-            LiveBox.Width = ActiveControl.Width
-            LiveBox.Height = LiveBox.PreferredHeight
-            If dtResults.Rows.Count > 0 Then
-                LiveBox.Visible = True
-            Else
-                LiveBox.Visible = False
-            End If
-            If strPrevSearchString <> ActiveControl.Text Then
-                strSearchString = ActiveControl.Text
-                StartLiveSearch() 'if search string has changed since last completetion, run again.
-            End If
-            Exit Sub
-        Catch
-            LiveBox.Visible = False
-            LiveBox.Items.Clear()
-        End Try
-    End Sub
-    Private Sub QueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LiveQueryWorker.RunWorkerCompleted
-        DrawLiveBox()
-    End Sub
+
     Private Sub txtSerial_TextChanged(sender As Object, e As EventArgs) Handles txtSerial.TextChanged
-        strSearchString = txtSerial.Text
-        StartLiveSearch()
+
+        StartLiveSearch(sender, LiveBoxType.InstaLoad)
     End Sub
     Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
-        strSearchString = txtAssetTag.Text
-        StartLiveSearch()
+
+        StartLiveSearch(sender, LiveBoxType.InstaLoad)
     End Sub
     Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
-        strSearchString = txtDescription.Text
-        StartLiveSearch()
+
+        StartLiveSearch(sender, LiveBoxType.DynamicSearch)
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
-        strSearchString = txtCurUser.Text
-        StartLiveSearch()
-    End Sub
-    Private Sub StartLiveSearch()
 
-        StartingControl = ActiveControl
-        If Trim(strSearchString) <> "" Then
-            If Not LiveQueryWorker.IsBusy And ConnectionReady() Then LiveQueryWorker.RunWorkerAsync()
-        Else
-            HideLiveBox()
-        End If
+        StartLiveSearch(sender, LiveBoxType.DynamicSearch)
     End Sub
+
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
             Dim QryComm As New MySqlCommand
@@ -486,38 +418,7 @@ Public Class MainForm
             GiveLiveBoxFocus()
         End If
     End Sub
-    Private Sub LiveBox_MouseClick(sender As Object, e As MouseEventArgs) Handles LiveBox.MouseClick
-        LiveBoxSelect()
-    End Sub
-    Private Sub LiveBoxSelect()
-        Select Case StartingControl.Name
-            Case "txtDescription"
-                StartingControl.Text = LiveBox.Text
-                DynamicSearch()
-            Case "txtCurUser"
-                StartingControl.Text = LiveBox.Text
-                DynamicSearch()
-            Case "txtReplaceYear"
-                StartingControl.Text = LiveBox.Text
-                DynamicSearch()
-            Case Else
-                LoadDevice(dtResults.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
-        End Select
-        HideLiveBox()
-    End Sub
-    Private Sub HideLiveBox()
-        Try
-            LiveBox.Visible = False
-            LiveBox.Items.Clear()
-            If ActiveControl.Parent.Name = "InstantGroup" Then
-                ActiveControl.Text = ""
-            End If
-        Catch
-        End Try
-    End Sub
-    Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs) Handles LiveBox.KeyDown
-        If e.KeyCode = Keys.Enter Then LiveBoxSelect()
-    End Sub
+
     Private Sub txtSerial_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSerial.KeyDown
         If e.KeyCode = Keys.Down Then
             GiveLiveBoxFocus()
@@ -548,17 +449,8 @@ Public Class MainForm
             GiveLiveBoxFocus()
         End If
     End Sub
-    Private Sub GiveLiveBoxFocus()
-        LiveBox.Focus()
-        If LiveBox.SelectedIndex = -1 Then
-            LiveBox.SelectedIndex = 0
-        End If
-    End Sub
     Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
         Clipboard.SetDataObject(Me.ResultGrid.GetClipboardContent())
-    End Sub
-    Private Sub LiveBox_MouseMove(sender As Object, e As MouseEventArgs) Handles LiveBox.MouseMove
-        LiveBox.SelectedIndex = LiveBox.IndexFromPoint(e.Location)
     End Sub
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next

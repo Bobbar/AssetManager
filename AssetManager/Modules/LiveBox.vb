@@ -1,13 +1,12 @@
 ﻿Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Module LiveBox
-    'Private LiveWorker As BackgroundWorker = New BackgroundWorker
     Private WithEvents LiveWorker As BackgroundWorker
     Private LiveBox As ListBox = New ListBox
-    Private ActiveControl As Control
+    Private CurrentControl As Control
     Private strPrevSearchString As String
     Private dtLiveBoxData As DataTable
-    Private CurrentLiveBoxType As LiveBoxType
+    Private CurrentLiveBoxType As String
     Public Class LiveBoxType
         Public Const DynamicSearch As String = "DYNA"
         Public Const InstaLoad As String = "INSTA"
@@ -18,38 +17,26 @@ Module LiveBox
         AddHandler LiveWorker.DoWork, AddressOf LiveWorker_DoWork
         AddHandler LiveWorker.RunWorkerCompleted, AddressOf LiveWorkerr_RunWorkerCompleted
         AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
+        AddHandler LiveBox.MouseMove, AddressOf LiveBox_MouseMove
+        AddHandler LiveBox.KeyDown, AddressOf LiveBox_KeyDown
+        ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
+        LiveBox.Visible = False
         With LiveWorker
             .WorkerReportsProgress = True
             .WorkerSupportsCancellation = True
         End With
     End Sub
-    Private Sub LiveBox_MouseClick(sender As Object, e As MouseEventArgs)
-        LiveBoxSelect(ActiveControl, CurrentLiveBoxType)
-    End Sub
-    Private Sub LiveBoxSelect(Control As Control, Type As LiveBoxType)
+
+    Private Sub LiveBoxSelect(Control As Control, Type As String)
         Select Case Type.ToString
             Case LiveBoxType.DynamicSearch
                 Control.Text = LiveBox.Text
                 MainForm.DynamicSearch()
             Case LiveBoxType.InstaLoad
                 MainForm.LoadDevice(dtLiveBoxData.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
+                CurrentControl.Text = ""
             Case LiveBoxType.SelectValue
                 Control.Text = LiveBox.Text
-                'HideLiveBox()
-
-
-
-                'Case "txtDescription"
-                '    Control.Text = LiveBox.Text
-                '    MainForm.DynamicSearch()
-                'Case "txtCurUser"
-                '    Control.Text = LiveBox.Text
-                '    MainForm.DynamicSearch()
-                'Case "txtReplaceYear"
-                '    Control.Text = LiveBox.Text
-                '    MainForm.DynamicSearch()
-                'Case Else
-                '    MainForm.LoadDevice(dtLiveBoxData.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
         End Select
         HideLiveBox()
     End Sub
@@ -63,20 +50,7 @@ Module LiveBox
             Dim RowLimit As Integer = 15
             Dim strQryRow As String
             Dim strQry As String
-            Select Case ActiveControl.Name
-                Case "txtAssetTag"
-                    strQryRow = "dev_asset_tag, dev_UID"
-                Case "txtSerial"
-                    strQryRow = "dev_serial, dev_UID"
-                Case "txtCurUser"
-                    strQryRow = "dev_cur_user"
-                Case "txtDescription"
-                    strQryRow = "dev_description"
-                Case "txtReplaceYear"
-                    strQryRow = "dev_replacement_year"
-                Case "txtCurUser_View_REQ"
-                    strQryRow = "dev_cur_user"
-            End Select
+            strQryRow = GetDBColumn(CurrentControl.Name)
             strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
             cmd.Connection = LiveConn
             cmd.CommandText = strQry
@@ -94,38 +68,24 @@ Module LiveBox
     Private Sub LiveWorkerr_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
         DrawLiveBox(e.Result)
     End Sub
-
     Private Sub DrawLiveBox(dtResults As DataTable, Optional PositionOnly As Boolean = False)
         Try
             Dim dr As DataRow
             Dim strQryRow As String
-            Select Case TypeName(ActiveControl.Parent)
+            Select Case TypeName(CurrentControl.Parent)
                 Case "GroupBox"
                     Dim CntGroup As GroupBox
-                    CntGroup = ActiveControl.Parent
+                    CntGroup = CurrentControl.Parent
                 Case "Panel"
                     Dim CntGroup As Panel
-                    CntGroup = ActiveControl.Parent
+                    CntGroup = CurrentControl.Parent
             End Select
             If Not PositionOnly Then
                 If dtResults.Rows.Count < 1 Then
                     LiveBox.Visible = False
                     Exit Sub
                 End If
-                Select Case ActiveControl.Name
-                    Case "txtAssetTag"
-                        strQryRow = "dev_asset_tag"
-                    Case "txtSerial"
-                        strQryRow = "dev_serial"
-                    Case "txtCurUser"
-                        strQryRow = "dev_cur_user"
-                    Case "txtDescription"
-                        strQryRow = "dev_description"
-                    Case "txtReplaceYear"
-                        strQryRow = "dev_replacement_year"
-                    Case "txtCurUser_View_REQ"
-                        strQryRow = "dev_cur_user"
-                End Select
+                strQryRow = GetDBColumn(CurrentControl.Name)
                 LiveBox.Items.Clear()
                 With dr
                     For Each dr In dtResults.Rows
@@ -133,26 +93,22 @@ Module LiveBox
                     Next
                 End With
             End If
-            Dim ParentForm As Form = ActiveControl.FindForm
-            LiveBox.Parent = ParentForm 'ActiveControl.Parent '
+            Dim ParentForm As Form = CurrentControl.FindForm
+            LiveBox.Parent = ParentForm
             LiveBox.BringToFront()
             SetStyle()
-            Dim ScreenPos As Point = ParentForm.PointToClient(ActiveControl.Parent.PointToScreen(ActiveControl.Location))
-            ScreenPos.Y = ScreenPos.Y + ActiveControl.Height
+            Dim ScreenPos As Point = ParentForm.PointToClient(CurrentControl.Parent.PointToScreen(CurrentControl.Location))
+            ScreenPos.Y = ScreenPos.Y + CurrentControl.Height
             LiveBox.Location = ScreenPos
-
-            'LiveBox.Left = ActiveControl.Left
-            'LiveBox.Top = ActiveControl.Top + ActiveControl.Height
-            LiveBox.Width = ActiveControl.Width
+            LiveBox.Width = CurrentControl.Width
             LiveBox.Height = LiveBox.PreferredHeight
             If dtResults.Rows.Count > 0 Then
                 LiveBox.Visible = True
             Else
                 LiveBox.Visible = False
             End If
-            If strPrevSearchString <> ActiveControl.Text Then
-                'strSearchString = ActiveControl.Text
-                '*******************StartLiveSearch(ActiveControl) 'if search string has changed since last completetion, run again.
+            If strPrevSearchString <> CurrentControl.Text Then
+                StartLiveSearch(CurrentControl, CurrentLiveBoxType) 'if search string has changed since last completetion, run again.
             End If
             dtLiveBoxData = dtResults
             Exit Sub
@@ -161,17 +117,33 @@ Module LiveBox
             LiveBox.Items.Clear()
         End Try
     End Sub
-    Private Sub GiveLiveBoxFocus()
+    Private Function GetDBColumn(strControlName As String) As String
+        Select Case strControlName
+            Case "txtAssetTag"
+                Return "dev_asset_tag"
+            Case "txtSerial"
+                Return "dev_serial"
+            Case "txtCurUser"
+                Return "dev_cur_user"
+            Case "txtDescription"
+                Return "dev_description"
+            Case "txtReplaceYear"
+                Return "dev_replacement_year"
+            Case "txtCurUser_View_REQ"
+                Return "dev_cur_user"
+        End Select
+        Return "NOT_FOUND"
+    End Function
+    Public Sub GiveLiveBoxFocus()
         LiveBox.Focus()
         If LiveBox.SelectedIndex = -1 Then
             LiveBox.SelectedIndex = 0
         End If
     End Sub
-    Public Sub StartLiveSearch(Control As Control, ByVal Type As LiveBoxType)
-        'StartingControl = ActiveControl
-        ActiveControl = Control
+    Public Sub StartLiveSearch(Control As Control, Type As String)
+        CurrentControl = Control
         CurrentLiveBoxType = Type
-        Dim strSearchString As String = ActiveControl.Text
+        Dim strSearchString As String = CurrentControl.Text
         If Trim(strSearchString) <> "" Then
             If Not LiveWorker.IsBusy And ConnectionReady() Then
                 LiveWorker.RunWorkerAsync(strSearchString)
@@ -180,27 +152,29 @@ Module LiveBox
             HideLiveBox()
         End If
     End Sub
-    Private Sub HideLiveBox()
+    Public Sub HideLiveBox()
         Try
             LiveBox.Visible = False
             LiveBox.Items.Clear()
-            ' If ActiveControl.Parent.Name = "InstantGroup" Then
-            'ActiveControl.Text = ""
-            '  End If
         Catch
         End Try
     End Sub
+    Private Sub LiveBox_MouseMove(sender As Object, e As MouseEventArgs)
+        LiveBox.SelectedIndex = LiveBox.IndexFromPoint(e.Location)
+    End Sub
+    Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs)
+        If e.KeyCode = Keys.Enter Then LiveBoxSelect(CurrentControl, CurrentLiveBoxType)
+    End Sub
+    Private Sub LiveBox_MouseClick(sender As Object, e As MouseEventArgs)
+        LiveBoxSelect(CurrentControl, CurrentLiveBoxType)
+    End Sub
     Private Sub SetStyle()
         Dim LiveBoxFont As Font = New Font("Consolas", 11.25, FontStyle.Bold)
-
         With LiveBox
             .BackColor = Color.FromArgb(255, 208, 99)
             .BorderStyle = BorderStyle.FixedSingle
             .Font = LiveBoxFont
             .ForeColor = Color.Black
         End With
-
-
-
     End Sub
 End Module

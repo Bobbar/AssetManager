@@ -644,7 +644,9 @@ Public Class View
     End Sub
     Private Sub txtCurUser_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser_View_REQ.TextChanged
         If bolCheckFields Then CheckFields()
-        '***************StartLiveSearch(txtCurUser_View_REQ, )
+    End Sub
+    Private Sub txtCurUser_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_View_REQ.KeyUp
+        StartLiveSearch(sender, LiveBoxType.SelectValue)
     End Sub
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
         If bolCheckFields Then CheckFields()
