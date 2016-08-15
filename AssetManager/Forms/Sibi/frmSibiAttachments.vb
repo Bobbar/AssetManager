@@ -580,10 +580,6 @@ Class frmSibiAttachments
         If intProgress > 1 Then ProgressBar1.Value = ProgressBar1.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
         ProgressBar1.Value = intProgress
     End Sub
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs)
-        ' DeleteFTPDeviceFolder(CurrentDevice.strGUID)
-        ' ListAttachments(CurrentDevice.strGUID)
-    End Sub
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
         If Not bolGridFilling Then
@@ -637,6 +633,7 @@ Class frmSibiAttachments
                 If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
             End If
         End If
+        PurgeTempDir()
     End Sub
     Private Sub ToolStripDropDownButton1_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
         If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
@@ -769,8 +766,6 @@ Class frmSibiAttachments
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
-    Private Sub AttachGrid_DragEnter(sender As Object, e As DragEventArgs) Handles AttachGrid.DragEnter
-    End Sub
     Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
         Try
             Dim streamFileName As New MemoryStream

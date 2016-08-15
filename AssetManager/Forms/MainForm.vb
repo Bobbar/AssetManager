@@ -14,48 +14,50 @@ Public Class MainForm
     Private bolGridFilling As Boolean = False
     Private ConnectAttempts As Integer = 0
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
-        ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
-        ToolStrip1.BackColor = colToolBarColor
-        View.ToolStrip1.BackColor = colToolBarColor
-        Logger("Starting AssetManager...")
-        Status("Loading...")
-        SplashScreen.Show()
-        Status("Checking Server Connection...")
-        If OpenConnections() Then
-            ConnectionReady()
-        Else
-            Dim blah = MsgBox("Error connecting to server!", vbOKOnly + vbCritical, "Could not connect")
-            EndProgram()
-        End If
-        Dim userFullName As String = UserPrincipal.Current.DisplayName
-        ExtendedMethods.DoubleBuffered(ResultGrid, True)
-        Status("Loading Indexes...")
-        BuildIndexes()
-        Status("Checking Access Level...")
-        GetAccessLevels()
-        GetUserAccess()
-        If Not CanAccess(AccessGroup.CanRun, UserAccess.intAccessLevel) Then
-            MsgBox("You do not have permission to run this software.", vbOKOnly + vbCritical, "Access Denied")
-            EndProgram()
-        End If
-        If CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel) Then
-            AdminDropDown.Visible = True
-        Else
-            AdminDropDown.Visible = False
-        End If
-        Clear_All()
-        GetGridStylez()
-        CopyDefaultCellStyles()
-        ConnectionWatchDog.RunWorkerAsync()
-
-        InitializeLiveBox()
-
-        ShowAll()
-        Status("Ready!")
-        Thread.Sleep(1000)
-        SplashScreen.Hide()
-        Me.Show()
+        Try
+            DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
+            ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
+            ToolStrip1.BackColor = colToolBarColor
+            View.ToolStrip1.BackColor = colToolBarColor
+            Logger("Starting AssetManager...")
+            Status("Loading...")
+            SplashScreen.Show()
+            Status("Checking Server Connection...")
+            If OpenConnections() Then
+                ConnectionReady()
+            Else
+                Dim blah = MsgBox("Error connecting to server!", vbOKOnly + vbCritical, "Could not connect")
+                EndProgram()
+            End If
+            Dim userFullName As String = UserPrincipal.Current.DisplayName
+            ExtendedMethods.DoubleBuffered(ResultGrid, True)
+            Status("Loading Indexes...")
+            BuildIndexes()
+            Status("Checking Access Level...")
+            GetAccessLevels()
+            GetUserAccess()
+            If Not CanAccess(AccessGroup.CanRun, UserAccess.intAccessLevel) Then
+                MsgBox("You do not have permission to run this software.", vbOKOnly + vbCritical, "Access Denied")
+                EndProgram()
+            End If
+            If CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel) Then
+                AdminDropDown.Visible = True
+            Else
+                AdminDropDown.Visible = False
+            End If
+            InitializeLiveBox()
+            Clear_All()
+            GetGridStylez()
+            CopyDefaultCellStyles()
+            ConnectionWatchDog.RunWorkerAsync()
+            ShowAll()
+            Status("Ready!")
+            Thread.Sleep(1000)
+            SplashScreen.Hide()
+            Me.Show()
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Public Sub GetGridStylez()
         'set colors
