@@ -10,6 +10,7 @@ Public Class frmManageRequest
     End Sub
     Public Sub ClearAll()
         ClearControls(Me)
+        ResetBackColors(Me)
         HideEditControls()
         dgvNotes.DataSource = Nothing
         SetupGrid()
@@ -22,6 +23,7 @@ Public Class frmManageRequest
         cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
         cmdUpdate.Text = "Update"
         bolUpdating = False
+        fieldErrorIcon.Clear()
     End Sub
     Private Sub ClearTextBoxes(ByVal control As Control)
         If TypeOf control Is TextBox Then
@@ -120,19 +122,33 @@ Public Class frmManageRequest
     Private Sub DisableGrid()
         RequestItemsGrid.EditMode = DataGridViewEditMode.EditProgrammatically
         RequestItemsGrid.AllowUserToAddRows = False
+        RequestItemsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
     End Sub
     Private Sub EnableGrid()
         RequestItemsGrid.EditMode = DataGridViewEditMode.EditOnEnter
         RequestItemsGrid.AllowUserToAddRows = True
+        SetColumnWidths()
+    End Sub
+    Private Sub SetColumnWidths()
+        RequestItemsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
+        RequestItemsGrid.Columns(1).Width = 200
+        RequestItemsGrid.Columns(2).Width = 50
+        RequestItemsGrid.Columns(3).Width = 200
+        RequestItemsGrid.Columns(4).Width = 200
     End Sub
     Private Sub SetupGrid()
         RequestItemsGrid.DataSource = Nothing
         RequestItemsGrid.Rows.Clear()
         RequestItemsGrid.Columns.Clear()
+        Dim intQty As New DataGridViewColumn
+        intQty.Name = "Qty"
+        intQty.HeaderText = "Qty"
+        intQty.ValueType = GetType(Integer)
+        intQty.CellTemplate = New DataGridViewTextBoxCell
         With RequestItemsGrid.Columns
             .Add("User", "User")
             .Add("Description", "Description")
-            .Add("Qty", "Qty")
+            .Add(intQty) '"Qty", "Qty")
             .Add(DataGridCombo(Locations, "Location", ComboType.Location)) '.Add("Location")
             .Add(DataGridCombo(Sibi_ItemStatusType, "Status", ComboType.SibiItemStatusType))
             .Add("Replace Asset", "Replace Asset")
@@ -141,18 +157,112 @@ Public Class frmManageRequest
             .Add("Object Code", "Object Code")
             .Add("Item UID", "Item UID")
         End With
+        SetColumnWidths()
         RequestItemsGrid.Columns.Item("Item UID").ReadOnly = True
-        'table.Dispose()
     End Sub
     Private Sub FillCombos()
         FillComboBox(Sibi_StatusType, cmbStatus)
         FillComboBox(Sibi_RequestType, cmbType)
+    End Sub
+    Private Sub SetFieldTags()
+        txtDescription.Tag = True
+        txtUser.Tag = True
+        cmbType.Tag = True
+        dtNeedBy.Tag = True
+        cmbStatus.Tag = True
+        RequestItemsGrid.Tag = True
+    End Sub
+    Private Function ValidateFields() As Boolean
+        SetFieldTags()
+        bolFieldsValid = True
+        Dim ValidateResults As Boolean = CheckFields(Me, bolFieldsValid)
+        If Not ValidateResults Then
+            Dim blah = MsgBox("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data")
+        End If
+        Return ValidateResults
+    End Function
+    Private bolFieldsValid As Boolean
+    Private Function CheckFields(parent As Control, FieldsValid As Boolean) As Boolean
+        Dim c As Control
+        For Each c In parent.Controls
+            If Not IsNothing(c.Tag) And c.Tag = True Then
+                Select Case True
+                    Case TypeOf c Is TextBox
+                        If Trim(c.Text) = "" Then
+                            bolFieldsValid = False
+                            c.BackColor = colMissingField
+                            AddErrorIcon(c)
+                        Else
+                            c.BackColor = Color.Empty
+                            ClearErrorIcon(c)
+                        End If
+                    Case TypeOf c Is ComboBox
+                        Dim cmb As ComboBox = c
+                        If cmb.SelectedIndex = -1 Then
+                            bolFieldsValid = False
+                            cmb.BackColor = colMissingField
+                            AddErrorIcon(cmb)
+                        Else
+                            cmb.BackColor = Color.Empty
+                            ClearErrorIcon(cmb)
+                        End If
+                    Case TypeOf c Is DataGridView
+                        For Each row As DataGridViewRow In RequestItemsGrid.Rows
+                            If Not row.IsNewRow Then
+                                For Each dcell As DataGridViewCell In row.Cells
+                                    If dcell.OwningColumn.CellType.Name = "DataGridViewComboBoxCell" Then
+                                        If dcell.Value Is Nothing Then
+                                            bolFieldsValid = False
+                                            dcell.ErrorText = "Required Field!"
+                                        Else
+                                            dcell.ErrorText = Nothing
+                                        End If
+                                    End If
+                                    If dcell.OwningColumn.Name = "Qty" Then
+                                        If IsDBNull(dcell.Value) Then
+                                            bolFieldsValid = False
+                                            dcell.ErrorText = "Required Field!"
+                                        Else
+                                            dcell.ErrorText = Nothing
+                                        End If
+                                    End If
+                                Next
+                            End If
+                        Next
+                End Select
+            End If
+            If c.HasChildren Then CheckFields(c, bolFieldsValid)
+        Next
+        Return bolFieldsValid 'if fields are missing return false to trigger a message if needed
+    End Function
+    Private Sub AddErrorIcon(ctl As Control)
+        If fieldErrorIcon.GetError(ctl) Is String.Empty Then
+            fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight)
+            fieldErrorIcon.SetIconPadding(ctl, 4)
+            fieldErrorIcon.SetError(ctl, "Required Field")
+        End If
+    End Sub
+    Private Sub ClearErrorIcon(ctl As Control)
+        fieldErrorIcon.SetError(ctl, String.Empty)
+    End Sub
+    Private Sub ResetBackColors(parent As Control)
+        Dim c As Control
+        For Each c In parent.Controls
+            Select Case True
+                Case TypeOf c Is TextBox
+                    c.BackColor = Color.Empty
+                Case TypeOf c Is ComboBox
+                    c.BackColor = Color.Empty
+            End Select
+            If c.HasChildren Then ResetBackColors(c)
+        Next
     End Sub
     Private Function DataGridCombo(IndexType() As Combo_Data, HeaderText As String, Name As String) As DataGridViewComboBoxColumn
         Dim tmpCombo As New DataGridViewComboBoxColumn
         tmpCombo.Items.Clear()
         tmpCombo.HeaderText = HeaderText
         tmpCombo.Name = Name
+        tmpCombo.Width = 200
         Dim myList As New List(Of String)
         Dim i As Integer = 0
         For Each ComboItem As Combo_Data In IndexType
@@ -214,6 +324,7 @@ Public Class frmManageRequest
         AddNewRequest()
     End Sub
     Private Sub AddNewRequest()
+        If Not ValidateFields() Then Exit Sub
         Dim RequestData As Request_Info = CollectData()
         Dim strRequestUID As String = Guid.NewGuid.ToString
         Try
@@ -712,6 +823,7 @@ VALUES
         End If
     End Sub
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
+        If Not ValidateFields() Then Exit Sub
         DisableControls(Me)
         ToolStrip.BackColor = colToolBarColor
         cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
@@ -742,5 +854,12 @@ VALUES
     End Sub
     Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem3.Click
         Munis_ReqSearch()
+    End Sub
+    Private Sub RequestItemsGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles RequestItemsGrid.DataError
+        Dim blah = MsgBox("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error")
+        ' ErrHandleNew(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+    End Sub
+    Private Sub RequestItemsGrid_DefaultValuesNeeded(sender As Object, e As DataGridViewRowEventArgs) Handles RequestItemsGrid.DefaultValuesNeeded
+        e.Row.Cells("Qty").Value = 1
     End Sub
 End Class

@@ -76,6 +76,7 @@ Partial Class frmManageRequest
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
+        Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.GroupBox1.SuspendLayout()
         Me.pnlEditButtons.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -87,6 +88,7 @@ Partial Class frmManageRequest
         Me.Panel2.SuspendLayout()
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PopupMenuNotes.SuspendLayout()
+        CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -337,6 +339,7 @@ Partial Class frmManageRequest
         Me.txtDescription.Name = "txtDescription"
         Me.txtDescription.Size = New System.Drawing.Size(382, 21)
         Me.txtDescription.TabIndex = 0
+        Me.txtDescription.Tag = ""
         '
         'Panel1
         '
@@ -367,7 +370,6 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.RequestItemsGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.RequestItemsGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.RequestItemsGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.RequestItemsGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
@@ -395,7 +397,6 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.RequestItemsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.RequestItemsGrid.ShowCellErrors = False
         Me.RequestItemsGrid.ShowCellToolTips = False
         Me.RequestItemsGrid.Size = New System.Drawing.Size(1078, 327)
         Me.RequestItemsGrid.TabIndex = 18
@@ -620,6 +621,12 @@ Partial Class frmManageRequest
         Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
         '
+        'fieldErrorIcon
+        '
+        Me.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
+        Me.fieldErrorIcon.ContainerControl = Me
+        Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
+        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -648,6 +655,7 @@ Partial Class frmManageRequest
         Me.Panel2.ResumeLayout(False)
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PopupMenuNotes.ResumeLayout(False)
+        CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -702,4 +710,5 @@ Partial Class frmManageRequest
     Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
+    Friend WithEvents fieldErrorIcon As ErrorProvider
 End Class

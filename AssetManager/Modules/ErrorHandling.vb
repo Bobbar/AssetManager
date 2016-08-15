@@ -25,6 +25,8 @@ Module ErrorHandling
                 ErrorResult = handlePingException(ex, strOrigSub)
             Case "SocketException"
                 ErrorResult = handleSocketException(ex, strOrigSub)
+            Case "FormatException"
+                ErrorResult = handleFormatException(ex, strOrigSub)
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
                 Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
@@ -33,6 +35,19 @@ Module ErrorHandling
         End Select
         If Not IsNothing(ex.InnerException) Then ErrHandleNew(ex.InnerException, strOrigSub)
         Return ErrorResult
+    End Function
+    Private Function handleFormatException(ex As FormatException, strOrigSub As String) As Boolean
+        Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+        Select Case ex.HResult
+            Case -2146233033
+                Return True
+
+            Case Else
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                EndProgram()
+        End Select
+        Return False
     End Function
     Private Function handleMySqlException(ex As MySqlException, strOrigSub As String) As Boolean
         Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
