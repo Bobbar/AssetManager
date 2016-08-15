@@ -726,7 +726,7 @@ Class frmSibiAttachments
         '    Debug.Print(strFormat)
         'Next
         'UploadWorker.RunWorkerAsync(ProcessDrop(e.Data))
-        ProcessDrop(e.Data)
+        If Not bolAllowDrag Then ProcessDrop(e.Data)
     End Sub
     Private Function ProcessDrop(AttachObject As IDataObject) ' As String()
         Dim File() As String
