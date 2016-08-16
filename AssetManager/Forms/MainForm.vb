@@ -372,20 +372,16 @@ Public Class MainForm
     End Sub
 
     Private Sub txtSerial_TextChanged(sender As Object, e As EventArgs) Handles txtSerial.TextChanged
-
-        StartLiveSearch(sender, LiveBoxType.InstaLoad)
+        StartLiveSearch(sender, LiveBoxType.InstaLoad, "dev_serial")
     End Sub
     Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
-
-        StartLiveSearch(sender, LiveBoxType.InstaLoad)
+        StartLiveSearch(sender, LiveBoxType.InstaLoad, "dev_asset_tag")
     End Sub
     Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
-
-        StartLiveSearch(sender, LiveBoxType.DynamicSearch)
+        StartLiveSearch(sender, LiveBoxType.DynamicSearch, "dev_description")
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
-
-        StartLiveSearch(sender, LiveBoxType.DynamicSearch)
+        StartLiveSearch(sender, LiveBoxType.DynamicSearch, "dev_cur_user")
     End Sub
 
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork

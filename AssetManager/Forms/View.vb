@@ -647,7 +647,7 @@ Public Class View
         If bolCheckFields Then CheckFields()
     End Sub
     Private Sub txtCurUser_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_View_REQ.KeyUp
-        StartLiveSearch(sender, LiveBoxType.SelectValue)
+        StartLiveSearch(sender, LiveBoxType.SelectValue, "dev_cur_user")
     End Sub
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
         If bolCheckFields Then CheckFields()

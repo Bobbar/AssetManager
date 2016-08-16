@@ -2,11 +2,15 @@
 Imports MySql.Data.MySqlClient
 Module LiveBox
     Private WithEvents LiveWorker As BackgroundWorker
-    Private LiveBox As ListBox ' = New ListBox
-    Private CurrentControl As Control
+    Private LiveBox As ListBox
     Private strPrevSearchString As String
     Private dtLiveBoxData As DataTable
-    Private CurrentLiveBoxType As String
+    Private Structure LiveBoxArgs
+        Public Control As Control
+        Public Type As String
+        Public DBColumn As String
+    End Structure
+    Private CurrentLiveBoxArgs As LiveBoxArgs
     Public Class LiveBoxType
         Public Const DynamicSearch As String = "DYNA"
         Public Const InstaLoad As String = "INSTA"
@@ -40,7 +44,7 @@ Module LiveBox
                 MainForm.DynamicSearch()
             Case LiveBoxType.InstaLoad
                 MainForm.LoadDevice(dtLiveBoxData.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
-                CurrentControl.Text = ""
+                CurrentLiveBoxArgs.Control.Text = ""
             Case LiveBoxType.SelectValue
                 Control.Text = LiveBox.Text
         End Select
@@ -56,7 +60,7 @@ Module LiveBox
             Dim RowLimit As Integer = 15
             Dim strQryRow As String
             Dim strQry As String
-            strQryRow = GetDBColumn(CurrentControl.Name)
+            strQryRow = CurrentLiveBoxArgs.DBColumn
             strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
             cmd.Connection = LiveConn
             cmd.CommandText = strQry
@@ -78,20 +82,20 @@ Module LiveBox
         Try
             Dim dr As DataRow
             Dim strQryRow As String
-            Select Case TypeName(CurrentControl.Parent)
+            Select Case TypeName(CurrentLiveBoxArgs.Control.Parent)
                 Case "GroupBox"
                     Dim CntGroup As GroupBox
-                    CntGroup = CurrentControl.Parent
+                    CntGroup = CurrentLiveBoxArgs.Control.Parent
                 Case "Panel"
                     Dim CntGroup As Panel
-                    CntGroup = CurrentControl.Parent
+                    CntGroup = CurrentLiveBoxArgs.Control.Parent
             End Select
             If Not PositionOnly Then
                 If dtResults.Rows.Count < 1 Then
                     LiveBox.Visible = False
                     Exit Sub
                 End If
-                strQryRow = GetDBColumn(CurrentControl.Name)
+                strQryRow = CurrentLiveBoxArgs.DBColumn
                 LiveBox.Items.Clear()
                 With dr
                     For Each dr In dtResults.Rows
@@ -99,22 +103,22 @@ Module LiveBox
                     Next
                 End With
             End If
-            Dim ParentForm As Form = CurrentControl.FindForm
+            Dim ParentForm As Form = CurrentLiveBoxArgs.Control.FindForm
             LiveBox.Parent = ParentForm
             LiveBox.BringToFront()
             SetStyle()
-            Dim ScreenPos As Point = ParentForm.PointToClient(CurrentControl.Parent.PointToScreen(CurrentControl.Location))
-            ScreenPos.Y = ScreenPos.Y + CurrentControl.Height
+            Dim ScreenPos As Point = ParentForm.PointToClient(CurrentLiveBoxArgs.Control.Parent.PointToScreen(CurrentLiveBoxArgs.Control.Location))
+            ScreenPos.Y = ScreenPos.Y + CurrentLiveBoxArgs.Control.Height
             LiveBox.Location = ScreenPos
-            LiveBox.Width = CurrentControl.Width
+            LiveBox.Width = CurrentLiveBoxArgs.Control.Width
             LiveBox.Height = LiveBox.PreferredHeight
             If dtResults.Rows.Count > 0 Then
                 LiveBox.Visible = True
             Else
                 LiveBox.Visible = False
             End If
-            If strPrevSearchString <> CurrentControl.Text Then
-                StartLiveSearch(CurrentControl, CurrentLiveBoxType) 'if search string has changed since last completetion, run again.
+            If strPrevSearchString <> CurrentLiveBoxArgs.Control.Text Then
+                StartLiveSearch(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type, CurrentLiveBoxArgs.DBColumn) 'if search string has changed since last completetion, run again.
             End If
             dtLiveBoxData = dtResults
             Exit Sub
@@ -123,34 +127,16 @@ Module LiveBox
             LiveBox.Items.Clear()
         End Try
     End Sub
-    Private Function GetDBColumn(strControlName As String) As String
-        Select Case strControlName
-            Case "txtAssetTag"
-                Return "dev_asset_tag"
-            Case "txtSerial"
-                Return "dev_serial"
-            Case "txtCurUser"
-                Return "dev_cur_user"
-            Case "txtDescription"
-                Return "dev_description"
-            Case "txtReplaceYear"
-                Return "dev_replacement_year"
-            Case "txtCurUser_View_REQ"
-                Return "dev_cur_user"
-        End Select
-        Return "NOT_FOUND"
-    End Function
     Public Sub GiveLiveBoxFocus()
         LiveBox.Focus()
         If LiveBox.SelectedIndex = -1 Then
             LiveBox.SelectedIndex = 0
         End If
     End Sub
-    Public Sub StartLiveSearch(Control As Control, Type As String)
-        CurrentControl = Control
-        CurrentLiveBoxType = Type
+    Public Sub StartLiveSearch(Control As Control, Type As String, DBColumn As String)
+        CollectLiveBoxArgs(Control, Type, DBColumn)
         If LiveBox.IsDisposed Then InitializeControl()
-        Dim strSearchString As String = CurrentControl.Text
+        Dim strSearchString As String = CurrentLiveBoxArgs.Control.Text
         If Trim(strSearchString) <> "" Then
             If Not LiveWorker.IsBusy And ConnectionReady() Then
                 LiveWorker.RunWorkerAsync(strSearchString)
@@ -166,14 +152,21 @@ Module LiveBox
         Catch
         End Try
     End Sub
+    Private Sub CollectLiveBoxArgs(Control As Control, Type As String, DBColumn As String)
+        With CurrentLiveBoxArgs
+            .Control = Control
+            .Type = Type
+            .DBColumn = DBColumn
+        End With
+    End Sub
     Private Sub LiveBox_MouseMove(sender As Object, e As MouseEventArgs)
         LiveBox.SelectedIndex = LiveBox.IndexFromPoint(e.Location)
     End Sub
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs)
-        If e.KeyCode = Keys.Enter Then LiveBoxSelect(CurrentControl, CurrentLiveBoxType)
+        If e.KeyCode = Keys.Enter Then LiveBoxSelect(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type)
     End Sub
     Private Sub LiveBox_MouseClick(sender As Object, e As MouseEventArgs)
-        LiveBoxSelect(CurrentControl, CurrentLiveBoxType)
+        LiveBoxSelect(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type)
     End Sub
     Private Sub SetStyle()
         Dim LiveBoxFont As Font = New Font("Consolas", 11.25, FontStyle.Bold)
