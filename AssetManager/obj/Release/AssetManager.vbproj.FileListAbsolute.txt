@@ -31,3 +31,4 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.exe.manifest
 C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe.manifest
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.application
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache

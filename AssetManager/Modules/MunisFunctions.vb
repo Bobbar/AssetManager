@@ -21,22 +21,28 @@
         End If
     End Sub
     Public Sub Munis_POSearch()
-        Dim blah As String = InputBox("Enter PO # followed by FY separated by a comma.  (Format ########,YYYY", "PO Search", "")
-        If Trim(blah) IsNot "" Then
-            Dim splitValues() As String = Split(blah, ",")
-            Dim PO As String = splitValues(0)
-            Dim FY As String = splitValues(1)
-            NewMunisView_POSearch(PO, FY)
-        End If
+        Try
+            Dim blah As String = InputBox("Enter PO # followed by FY separated by a comma.  (Format ########,YYYY", "PO Search", "")
+            If Trim(blah) IsNot "" Then
+                Dim splitValues() As String = Split(blah, ",")
+                Dim PO As String = splitValues(0)
+                Dim FY As String = splitValues(1)
+                NewMunisView_POSearch(PO, FY)
+            End If
+        Catch
+        End Try
     End Sub
     Public Sub Munis_ReqSearch()
-        Dim blah As String = InputBox("Enter Requisition # followed by FY separated by a comma.  (Format #########,YYYY", "Req Search", "")
-        If Trim(blah) IsNot "" Then
-            Dim splitValues() As String = Split(blah, ",")
-            Dim ReqNumber As String = splitValues(0)
-            Dim FY As String = splitValues(1)
-            NewMunisView_ReqSearch(ReqNumber, FY)
-        End If
+        Try
+            Dim blah As String = InputBox("Enter Requisition # followed by FY separated by a comma.  (Format #########,YYYY", "Req Search", "")
+            If Trim(blah) IsNot "" Then
+                Dim splitValues() As String = Split(blah, ",")
+                Dim ReqNumber As String = splitValues(0)
+                Dim FY As String = splitValues(1)
+                NewMunisView_ReqSearch(ReqNumber, FY)
+            End If
+        Catch
+        End Try
     End Sub
     Private Sub NewMunisView_NameSearch(Name As String)
         If Not ConnectionReady() Then
