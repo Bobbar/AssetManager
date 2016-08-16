@@ -20,7 +20,7 @@ Public Class ReportView
         Next
         With ReportViewer1.LocalReport
             .DataSources.Clear()
-            .ReportPath = Application.StartupPath() & "\Reports\YearsSincePurchase.rdlc"
+            '.ReportPath = My.Resources.YearsSincePurchase 'Application.StartupPath() & "\Reports\YearsSincePurchase.rdlc"
             .DataSources.Add(New Microsoft.Reporting.WinForms.ReportDataSource("DataSet1", dt))
         End With
         Me.ReportViewer1.RefreshReport()

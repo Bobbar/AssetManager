@@ -614,6 +614,7 @@ Partial Class MainForm
         Me.ToolStripDropDownButton1.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
         Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(112, 29)
         Me.ToolStripDropDownButton1.Text = "Reports"
+        Me.ToolStripDropDownButton1.Visible = False
         '
         'YearsSincePurchaseToolStripMenuItem1
         '
