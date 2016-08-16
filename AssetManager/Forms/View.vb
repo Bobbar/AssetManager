@@ -940,6 +940,11 @@ Public Class View
         End Try
     End Sub
 
+    Private Sub Button1_Click_4(sender As Object, e As EventArgs) Handles Button1.Click
+        'ListFieldNames()
+        FillForm()
+    End Sub
+
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub

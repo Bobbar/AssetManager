@@ -58,3 +58,5 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.TrustInfo.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe.manifest
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.application
+C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.xml

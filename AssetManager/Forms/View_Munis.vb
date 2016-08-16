@@ -20,8 +20,17 @@
     Public Sub LoadMunisRequisitionGridByPO(PO As String, FiscalYr As String)
         Try
             'If NeededInfo(Device) Then
-            Dim strColumns As String = "rg_fiscal_year,a_requisition_no,LineNumber,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,RequisitionId,Quantity,UnitPrice,NetAmount,ItemDescription,SuggestedVendorId,PurchaseOrderNumber,PurchaseOrderDate"
-            Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, RequisitionItems WHERE a_requisition_no='" & Munis_GetReqNumberFromPO(PO) & "' AND rg_fiscal_year='" & FiscalYr & "' AND  PurchaseOrderNumber='" & PO & "' AND rg_line_number = LineNumber"
+
+            'Dim strColumns As String = "rg_fiscal_year,a_requisition_no,rg_line_number,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,rqdt_sug_vn,a_vendor_name,rqdt_pur_no,rqdt_pur_dt,rqdt_des_ln"
+            'Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, rqdetail, ap_vendor WHERE a_requisition_no='" & Munis_GetReqNumberFromPO(PO) & "' AND rg_fiscal_year='" & FiscalYr & "' AND rg_line_number = rqdt_lin_no AND a_requisition_no = rqdt_req_no AND rg_fiscal_year = rqdt_fsc_yr AND a_vendor_number = rqdt_sug_vn"
+
+            Dim strQRY As String = "SELECT TOP " & intMaxResults & "dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_line_number, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.rg_dollar_am, dbo.rq_gl_info.a_object_desc, 
+                         dbo.rq_gl_info.a_org_description, dbo.rqdetail.rqdt_sug_vn, dbo.ap_vendor.a_vendor_name, dbo.ap_vendor.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_des_ln
+FROM            dbo.rq_gl_info INNER JOIN
+                         dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr INNER JOIN
+                         dbo.ap_vendor ON dbo.rqdetail.rqdt_sug_vn = dbo.ap_vendor.a_vendor_number
+WHERE        (dbo.rq_gl_info.a_requisition_no = " & Munis_GetReqNumberFromPO(PO) & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ")"
+
             Debug.Print(strQRY)
             Dim results As DataTable
             results = Return_MSSQLTable(strQRY)
@@ -38,8 +47,14 @@
     End Sub
     Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String)
         Try
-            Dim strColumns As String = "rg_fiscal_year,a_requisition_no,rg_line_number,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,rqdt_des_ln,rqdt_sug_vn,rqdt_pur_no,rqdt_pur_dt"
-            Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, rqdetail WHERE a_requisition_no='" & ReqNumber & "' AND rg_fiscal_year='" & FiscalYr & "' AND rg_line_number = rqdt_lin_no AND a_requisition_no = rqdt_req_no AND rg_fiscal_year = rqdt_fsc_yr"
+            'Dim strColumns As String = "rg_fiscal_year,a_requisition_no,rg_line_number,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,rqdt_sug_vn,rqdt_pur_no,rqdt_pur_dt,rqdt_des_ln"
+            'Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, rqdetail WHERE a_requisition_no='" & ReqNumber & "' AND rg_fiscal_year='" & FiscalYr & "' AND rg_line_number = rqdt_lin_no AND a_requisition_no = rqdt_req_no AND rg_fiscal_year = rqdt_fsc_yr"
+            Dim strQRY As String = "SELECT TOP " & intMaxResults & "dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_line_number, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.rg_dollar_am, dbo.rq_gl_info.a_object_desc, 
+                         dbo.rq_gl_info.a_org_description, dbo.rqdetail.rqdt_sug_vn, dbo.ap_vendor.a_vendor_name, dbo.ap_vendor.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_des_ln
+FROM            dbo.rq_gl_info INNER JOIN
+                         dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr INNER JOIN
+                         dbo.ap_vendor ON dbo.rqdetail.rqdt_sug_vn = dbo.ap_vendor.a_vendor_number
+WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ")"
             Debug.Print(strQRY)
             Dim results As DataTable
             results = Return_MSSQLTable(strQRY)
