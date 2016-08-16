@@ -30,7 +30,6 @@ Partial Class MainForm
         Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LiveBox = New System.Windows.Forms.ListBox()
         Me.InstantGroup = New System.Windows.Forms.GroupBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -68,19 +67,23 @@ Partial Class MainForm
         Me.ConnStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.LiveQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.AddDeviceTool = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
         Me.YearsSincePurchaseToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripDropDownButton2 = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdminDropDown = New System.Windows.Forms.ToolStripDropDownButton()
         Me.cmbDBs = New System.Windows.Forms.ToolStripComboBox()
         Me.ManageAttachmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.txtGUID = New System.Windows.Forms.ToolStripTextBox()
+        Me.tsmUserManager = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TextEnCrypterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
         Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
         Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -186,19 +189,6 @@ Partial Class MainForm
         Me.CopyTool.Name = "CopyTool"
         Me.CopyTool.Size = New System.Drawing.Size(126, 22)
         Me.CopyTool.Text = "Copy Text"
-        '
-        'LiveBox
-        '
-        Me.LiveBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(208, Byte), Integer), CType(CType(99, Byte), Integer))
-        Me.LiveBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.LiveBox.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LiveBox.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.LiveBox.FormattingEnabled = True
-        Me.LiveBox.ItemHeight = 18
-        Me.LiveBox.Location = New System.Drawing.Point(-21, 207)
-        Me.LiveBox.Name = "LiveBox"
-        Me.LiveBox.Size = New System.Drawing.Size(134, 20)
-        Me.LiveBox.TabIndex = 33
         '
         'InstantGroup
         '
@@ -585,9 +575,6 @@ Partial Class MainForm
         Me.DateTimeLabel.Size = New System.Drawing.Size(76, 17)
         Me.DateTimeLabel.Text = "ServerTime"
         '
-        'LiveQueryWorker
-        '
-        '
         'BigQueryWorker
         '
         Me.BigQueryWorker.WorkerReportsProgress = True
@@ -598,7 +585,7 @@ Partial Class MainForm
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator2, Me.AddDeviceTool, Me.ToolStripSeparator1, Me.ToolStripDropDownButton1, Me.ToolStripSeparator4, Me.AdminDropDown})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddDeviceTool, Me.ToolStripDropDownButton1, Me.ToolStripDropDownButton2, Me.AdminDropDown, Me.ToolStripSeparator5, Me.cmdSibi})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -606,11 +593,6 @@ Partial Class MainForm
         Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 6
         Me.ToolStrip1.Text = "ToolStrip1"
-        '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
         '
         'AddDeviceTool
         '
@@ -621,11 +603,6 @@ Partial Class MainForm
         Me.AddDeviceTool.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
         Me.AddDeviceTool.Size = New System.Drawing.Size(123, 29)
         Me.AddDeviceTool.Text = "Add Device"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
         '
         'ToolStripDropDownButton1
         '
@@ -644,22 +621,43 @@ Partial Class MainForm
         Me.YearsSincePurchaseToolStripMenuItem1.Size = New System.Drawing.Size(197, 22)
         Me.YearsSincePurchaseToolStripMenuItem1.Text = "Years Since Purchase"
         '
-        'ToolStripSeparator4
+        'ToolStripDropDownButton2
         '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripDropDownButton2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.ToolStripMenuItem2, Me.ToolStripMenuItem3})
+        Me.ToolStripDropDownButton2.Image = Global.AssetManager.My.Resources.Resources.Find
+        Me.ToolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripDropDownButton2.Name = "ToolStripDropDownButton2"
+        Me.ToolStripDropDownButton2.Size = New System.Drawing.Size(87, 29)
+        Me.ToolStripDropDownButton2.Text = "MUNIS"
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(200, 22)
+        Me.ToolStripMenuItem1.Text = "User Org/Ob Lookup"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(200, 22)
+        Me.ToolStripMenuItem2.Text = "PO Lookup"
+        '
+        'ToolStripMenuItem3
+        '
+        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(200, 22)
+        Me.ToolStripMenuItem3.Text = "Requisition # Lookup"
         '
         'AdminDropDown
         '
-        Me.AdminDropDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID})
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem})
         Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.AdminDropDown.Name = "AdminDropDown"
         Me.AdminDropDown.Padding = New System.Windows.Forms.Padding(50, 0, 0, 0)
-        Me.AdminDropDown.Size = New System.Drawing.Size(138, 29)
-        Me.AdminDropDown.Text = "Admin Stuff"
+        Me.AdminDropDown.Size = New System.Drawing.Size(168, 29)
+        Me.AdminDropDown.Text = "Admin Tools"
         '
         'cmbDBs
         '
@@ -668,6 +666,7 @@ Partial Class MainForm
         Me.cmbDBs.Size = New System.Drawing.Size(121, 23)
         Me.cmbDBs.Text = "asset_manager"
         Me.cmbDBs.ToolTipText = "Change DB"
+        Me.cmbDBs.Visible = False
         '
         'ManageAttachmentsToolStripMenuItem
         '
@@ -682,6 +681,33 @@ Partial Class MainForm
         Me.txtGUID.Name = "txtGUID"
         Me.txtGUID.Size = New System.Drawing.Size(150, 23)
         Me.txtGUID.ToolTipText = "GUID Lookup. (Press Enter)"
+        '
+        'tsmUserManager
+        '
+        Me.tsmUserManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.tsmUserManager.Name = "tsmUserManager"
+        Me.tsmUserManager.Size = New System.Drawing.Size(210, 22)
+        Me.tsmUserManager.Text = "User Manager"
+        '
+        'TextEnCrypterToolStripMenuItem
+        '
+        Me.TextEnCrypterToolStripMenuItem.Name = "TextEnCrypterToolStripMenuItem"
+        Me.TextEnCrypterToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.TextEnCrypterToolStripMenuItem.Text = "Text Encrypter"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 32)
+        '
+        'cmdSibi
+        '
+        Me.cmdSibi.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdSibi.Image = CType(resources.GetObject("cmdSibi.Image"), System.Drawing.Image)
+        Me.cmdSibi.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdSibi.Name = "cmdSibi"
+        Me.cmdSibi.Size = New System.Drawing.Size(186, 29)
+        Me.cmdSibi.Text = "Sibi Aquisition Manager"
         '
         'ConnectionWatcher
         '
@@ -709,7 +735,6 @@ Partial Class MainForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1240, 654)
-        Me.Controls.Add(Me.LiveBox)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.StatusStrip1)
@@ -756,8 +781,6 @@ Partial Class MainForm
     Friend WithEvents ViewToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
-    Friend WithEvents LiveQueryWorker As System.ComponentModel.BackgroundWorker
-    Friend WithEvents LiveBox As ListBox
     Friend WithEvents Label2 As Label
     Friend WithEvents txtDescription As TextBox
     Friend WithEvents InstantGroup As GroupBox
@@ -773,10 +796,8 @@ Partial Class MainForm
     Friend WithEvents StripSpinner As ToolStripStatusLabel
     Friend WithEvents ToolStrip1 As ToolStrip
     Friend WithEvents AddDeviceTool As ToolStripButton
-    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolStripDropDownButton1 As ToolStripDropDownButton
     Friend WithEvents YearsSincePurchaseToolStripMenuItem1 As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents CopyTool As ToolStripMenuItem
     Friend WithEvents ConnectionWatcher As Timer
@@ -790,7 +811,6 @@ Partial Class MainForm
     Friend WithEvents ManageAttachmentsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents chkTrackables As CheckBox
-    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
     Friend WithEvents txtGUID As ToolStripTextBox
     Friend WithEvents cmbOSType As ComboBox
     Friend WithEvents Label5 As Label
@@ -798,4 +818,12 @@ Partial Class MainForm
     Friend WithEvents txtReplaceYear As TextBox
     Friend WithEvents PanelNoScrollOnFocus1 As AssetManager.PanelNoScrollOnFocus
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
+    Friend WithEvents cmdSibi As ToolStripButton
+    Friend WithEvents tsmUserManager As ToolStripMenuItem
+    Friend WithEvents ToolStripDropDownButton2 As ToolStripDropDownButton
+    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
+    Friend WithEvents TextEnCrypterToolStripMenuItem As ToolStripMenuItem
 End Class

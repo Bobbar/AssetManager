@@ -5,9 +5,10 @@ Public Class ReportView
         Dim dt As New DataTable
         Dim da As New MySqlDataAdapter
         'Dim rows As Integer
-        da.SelectCommand = New MySqlCommand(strLastQry) '"SELECT * FROM devices")
-        da.SelectCommand.Connection = GlobalConn
-        da.Fill(dt)
+        'da.SelectCommand = Return_SQLCommand(strLastQry) 'New MySqlCommand(strLastQry) '"SELECT * FROM devices")
+        ' da.SelectCommand.Connection = GlobalConn
+        dt = Return_SQLTable(strLastQry)
+        'da.Fill(dt)
         'rows = ds.Tables(0).Rows.Count
         'For Each row As DataTable In dt.Rows
         '    blah = row("dev_eq_type")

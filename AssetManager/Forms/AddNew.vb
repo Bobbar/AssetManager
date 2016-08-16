@@ -17,7 +17,7 @@ Public Class AddNew
             End If
             GetDBValues()
             Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_po,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_trackable) VALUES(@dev_UID,@dev_description,@dev_location,@dev_cur_user,@dev_serial,@dev_asset_tag,@dev_purchase_date,@dev_po,@dev_replacement_year,@dev_eq_type,@dev_osversion,@dev_status,@dev_lastmod_user,@dev_trackable)"
-            Dim cmd As MySqlCommand = ReturnSQLCommand(strSqlQry1)
+            Dim cmd As MySqlCommand = Return_SQLCommand(strSqlQry1)
             cmd.Parameters.AddWithValue("@dev_UID", strUID)
             cmd.Parameters.AddWithValue("@dev_description", Device.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", Device.strLocation)
@@ -80,8 +80,10 @@ Public Class AddNew
                         If Trim(c.Text) = "" Then
                             bolMissingField = True
                             c.BackColor = colMissingField
+                            AddErrorIcon(c)
                         Else
                             c.BackColor = Color.Empty
+                            ClearErrorIcon(c)
                         End If
                     End If
                 Case TypeOf c Is ComboBox
@@ -90,14 +92,26 @@ Public Class AddNew
                         If cmb.SelectedIndex = -1 Then
                             bolMissingField = True
                             cmb.BackColor = colMissingField
+                            AddErrorIcon(cmb)
                         Else
                             cmb.BackColor = Color.Empty
+                            ClearErrorIcon(cmb)
                         End If
                     End If
             End Select
         Next
         Return Not bolMissingField 'if fields are missing return false to trigger a message if needed
     End Function
+    Private Sub AddErrorIcon(ctl As Control)
+        If fieldErrorIcon.GetError(ctl) Is String.Empty Then
+            fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight)
+            fieldErrorIcon.SetIconPadding(ctl, 4)
+            fieldErrorIcon.SetError(ctl, "Required Field")
+        End If
+    End Sub
+    Private Sub ClearErrorIcon(ctl As Control)
+        fieldErrorIcon.SetError(ctl, String.Empty)
+    End Sub
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
         ClearAll()
     End Sub
@@ -128,6 +142,7 @@ Public Class AddNew
         chkTrackable.Checked = False
         chkNoClear.Checked = False
         bolCheckFields = False
+        fieldErrorIcon.Clear()
     End Sub
     Private Sub RefreshCombos()
         FillComboBox(Locations, cmbLocation_REQ)

@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AssemblyVersion>7.2016.6047.1874</AssemblyVersion>
+    <AssemblyVersion>8.2016.6059.2175</AssemblyVersion>
     <PrimaryVersionType>AssemblyFileVersionAttribute</PrimaryVersionType>
     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
@@ -116,6 +116,42 @@
     <Compile Include="Forms\AddNew.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\AdminTools\frmEncrypter.Designer.vb">
+      <DependentUpon>frmEncrypter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AdminTools\frmEncrypter.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AdminTools\frmUserManager.Designer.vb">
+      <DependentUpon>frmUserManager.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AdminTools\frmUserManager.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmNotes.Designer.vb">
+      <DependentUpon>frmNotes.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmNotes.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmSibiAttachments.Designer.vb">
+      <DependentUpon>frmSibiAttachments.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmSibiAttachments.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmManageRequest.Designer.vb">
+      <DependentUpon>frmManageRequest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmManageRequest.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmSibiMain.Designer.vb">
+      <DependentUpon>frmSibiMain.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmSibiMain.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -129,10 +165,22 @@
     <Compile Include="Forms\Attachments.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Sibi\frmSibiSelector.Designer.vb">
+      <DependentUpon>frmSibiSelector.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sibi\frmSibiSelector.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Tracking.Designer.vb">
       <DependentUpon>Tracking.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\Tracking.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\View_Munis.Designer.vb">
+      <DependentUpon>View_Munis.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\View_Munis.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\View_Tracking.Designer.vb">
@@ -146,6 +194,10 @@
     <Compile Include="Modules\ErrorHandling.vb" />
     <Compile Include="Modules\ExtendedMethods.vb" />
     <Compile Include="Modules\FTPFunctions.vb" />
+    <Compile Include="Modules\LiveBox.vb" />
+    <Compile Include="Modules\MSSQLComms.vb" />
+    <Compile Include="Modules\MunisFunctions.vb" />
+    <Compile Include="Modules\MySQLComms.vb" />
     <Compile Include="Modules\SecurityMod.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -205,14 +257,38 @@
     <EmbeddedResource Include="Forms\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AdminTools\frmEncrypter.resx">
+      <DependentUpon>frmEncrypter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AdminTools\frmUserManager.resx">
+      <DependentUpon>frmUserManager.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sibi\frmNotes.resx">
+      <DependentUpon>frmNotes.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sibi\frmSibiAttachments.resx">
+      <DependentUpon>frmSibiAttachments.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sibi\frmManageRequest.resx">
+      <DependentUpon>frmManageRequest.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sibi\frmSibiMain.resx">
+      <DependentUpon>frmSibiMain.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Attachments.resx">
       <DependentUpon>Attachments.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sibi\frmSibiSelector.resx">
+      <DependentUpon>frmSibiSelector.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Tracking.resx">
       <DependentUpon>Tracking.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\View_Munis.resx">
+      <DependentUpon>View_Munis.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\View_Tracking.resx">
       <DependentUpon>View_Tracking.vb</DependentUpon>
@@ -276,16 +352,16 @@
     <None Include="Resources\checked_checkbox-red.png" />
     <None Include="Resources\checked_checkbox-green.png" />
     <None Include="Resources\clip-512.png" />
-    <None Include="Resources\connected-256.png" />
     <None Include="Resources\cancel.png" />
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
+    <None Include="Resources\Find.png" />
     <Content Include="Resources\inventory-small.fw.png" />
     <None Include="Resources\report.png" />
     <None Include="Resources\presentation-512.png" />
     <None Include="Resources\loading.gif" />
-    <None Include="Resources\loading_circle_fully.gif" />
+    <None Include="Resources\note-icon-27942.png" />
     <Content Include="Resources\view.png" />
     <Content Include="Resources\View_Details.png" />
   </ItemGroup>

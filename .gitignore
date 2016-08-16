@@ -304,5 +304,8 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+AssetManager/Forms/View.resx
+AssetManager/Forms/View.resx
+AssetManager/obj/Debug/AssetManager.exe
 *.pdb
 *.exe

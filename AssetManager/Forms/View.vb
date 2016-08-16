@@ -4,6 +4,7 @@ Imports MySql.Data.MySqlClient
 Public Class View
     Private Children(0) As Form
     Private bolCheckFields As Boolean
+
     Private Structure UserInput
         Public strAssetTag As String
         Public strDescription As String
@@ -17,8 +18,9 @@ Public Class View
     End Structure
     Private OldData As Device_Info
     Public NewData As Device_Info
+    'Private fieldErrorIcon As ErrorProvider = New ErrorProvider
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        cmdRDP.Visible = False
+        grpNetTools.Visible = False
         ToolStrip1.BackColor = colToolBarColor
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
@@ -78,6 +80,10 @@ Public Class View
                     'do nut-zing
             End Select
         Next
+        For Each c In pnlOtherFunctions.Controls
+            c.Visible = False
+        Next
+        cmdSetSibi.Visible = True
         Me.Text = "*View - MODIFYING*"
         ToolStrip1.BackColor = colEditColor
         For Each t As ToolStripItem In ToolStrip1.Items
@@ -109,6 +115,10 @@ Public Class View
                     'do nut-zing
             End Select
         Next
+        For Each c In pnlOtherFunctions.Controls
+            If c.Name IsNot "cmdRDP" Then c.Visible = True
+        Next
+        cmdSetSibi.Visible = False
         Me.Text = "View"
         ToolStrip1.BackColor = colToolBarColor
         For Each t As ToolStripItem In ToolStrip1.Items
@@ -125,7 +135,7 @@ Public Class View
         Try
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable, dev_po=@dev_po WHERE dev_UID='" & CurrentDevice.strGUID & "'"
-            Dim cmd As MySqlCommand = ReturnSQLCommand(strSQLQry1)
+            Dim cmd As MySqlCommand = Return_SQLCommand(strSQLQry1)
             cmd.Parameters.AddWithValue("@dev_description", NewData.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", NewData.strLocation)
             cmd.Parameters.AddWithValue("@dev_cur_user", NewData.strCurrentUser)
@@ -190,6 +200,7 @@ Public Class View
                 ViewTracking(CurrentDevice.strGUID)
                 DoneWaiting()
                 Me.Show()
+                Me.Activate()
             End If
         Catch ex As Exception
             DoneWaiting()
@@ -199,7 +210,7 @@ Public Class View
     Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
         Dim table, Results As New DataTable
         Try
-            Results = ReturnSQLTable("Select * FROM devices, dev_historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
+            Results = Return_SQLTable("Select * FROM devices, dev_historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
             If Results.Rows.Count < 1 Then
                 CloseChildren()
                 Results.Dispose()
@@ -208,7 +219,7 @@ Public Class View
                 Dim blah = MsgBox("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
                 Return False
             End If
-            CollectDeviceInfo(Results)
+            CurrentDevice = CollectDeviceInfo(Results)
             FillDeviceInfo()
             SendToHistGrid(DataGridHistory, Results)
             Results.Dispose()
@@ -331,7 +342,7 @@ Public Class View
                 Exit Sub
             End If
             Waiting()
-            Results = ReturnSQLTable(strQry)
+            Results = Return_SQLTable(strQry)
             If Results.Rows.Count > 0 Then
                 CollectCurrentTracking(Results)
                 SendToTrackGrid(TrackingGrid, Results)
@@ -424,6 +435,8 @@ Public Class View
                 cmb.SelectedIndex = -1
             End If
         Next
+        fieldErrorIcon.Clear()
+        HideLiveBox()
     End Sub
     Private Function CheckFields() As Boolean
         Dim bolMissingField As Boolean
@@ -436,8 +449,10 @@ Public Class View
                         If Trim(c.Text) = "" Then
                             bolMissingField = True
                             c.BackColor = colMissingField
+                            AddErrorIcon(c)
                         Else
                             c.BackColor = Color.Empty
+                            ClearErrorIcon(c)
                         End If
                     End If
                 Case TypeOf c Is ComboBox
@@ -446,14 +461,26 @@ Public Class View
                         If cmb.SelectedIndex = -1 Then
                             bolMissingField = True
                             cmb.BackColor = colMissingField
+                            AddErrorIcon(cmb)
                         Else
                             cmb.BackColor = Color.Empty
+                            ClearErrorIcon(cmb)
                         End If
                     End If
             End Select
         Next
         Return Not bolMissingField 'if fields are missing return false to trigger a message if needed
     End Function
+    Private Sub AddErrorIcon(ctl As Control)
+        If fieldErrorIcon.GetError(ctl) Is String.Empty Then
+            fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight)
+            fieldErrorIcon.SetIconPadding(ctl, 4)
+            fieldErrorIcon.SetError(ctl, "Required Field")
+        End If
+    End Sub
+    Private Sub ClearErrorIcon(ctl As Control)
+        fieldErrorIcon.SetError(ctl, String.Empty)
+    End Sub
     Private Sub ResetBackColors()
         Dim c As Control
         For Each c In DeviceInfoBox.Controls
@@ -472,7 +499,7 @@ Public Class View
         DisableControls()
     End Sub
     Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditToolStripMenuItem.Click
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         ModifyDevice()
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs)
@@ -510,6 +537,35 @@ Public Class View
         NewEntry.Show()
         DoneWaiting()
     End Sub
+    Private Sub NewMunisView(Device As Device_Info)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        Dim NewMunis As New View_Munis
+        Waiting()
+        AddChild(NewMunis)
+        NewMunis.Show()
+        NewMunis.LoadMunisInfoByDevice(Device)
+        ' NewMunis.ViewEntry(GUID)
+        DoneWaiting()
+    End Sub
+    Private Sub NewMunisViewEmp(Name As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        Dim SplitName() As String = Split(Name, " ")
+        Dim LastName As String = SplitName(SplitName.Count - 1)
+        Dim NewMunis As New View_Munis
+        Waiting()
+        AddChild(NewMunis)
+        NewMunis.HideFixedAssetGrid()
+        NewMunis.Show()
+        NewMunis.LoadMunisEmployeeByLastName(LastName)
+        ' NewMunis.ViewEntry(GUID)
+        DoneWaiting()
+    End Sub
     Private Sub NewTrackingView(GUID As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
@@ -535,7 +591,7 @@ Public Class View
         End If
     End Sub
     Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddNoteToolStripMenuItem.Click
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
         UpdateDev.cmbUpdate_ChangeType.Enabled = False
         UpdateDev.Show()
@@ -547,11 +603,11 @@ Public Class View
         FillComboBox(StatusType, cmbStatus_REQ)
     End Sub
     Private Sub DeleteDeviceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteDeviceToolStripMenuItem.Click
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
             Dim rows As Integer
-            rows = DeleteDevice(CurrentDevice.strGUID)
+            rows = DeleteMaster(CurrentDevice.strGUID, Entry_Type.Device)
             If rows > 0 Then
                 Dim blah2 = MsgBox("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentDevice = Nothing
@@ -590,6 +646,9 @@ Public Class View
     Private Sub txtCurUser_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser_View_REQ.TextChanged
         If bolCheckFields Then CheckFields()
     End Sub
+    Private Sub txtCurUser_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_View_REQ.KeyUp
+        StartLiveSearch(sender, LiveBoxType.SelectValue)
+    End Sub
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
         If bolCheckFields Then CheckFields()
     End Sub
@@ -601,17 +660,31 @@ Public Class View
         ViewDevice(CurrentDevice.strGUID)
     End Sub
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
-        If Not CheckForAdmin() Then Exit Sub
+        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value
-        Dim Info As Device_Info = GetEntryInfo(strGUID)
+        Dim Info As Device_Info = Get_EntryInfo(strGUID)
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
-            Dim blah2 = MsgBox(DeleteEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
+            Dim blah2 = MsgBox(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
             ViewDevice(CurrentDevice.strGUID)
         Else
             Exit Sub
         End If
     End Sub
+    Private Function DeleteHistoryEntry(ByVal strGUID As String) As Integer
+        Try
+            Dim rows
+            Dim strSQLQry As String = "DELETE FROM dev_historical WHERE hist_uid='" & strGUID & "'"
+            rows = Return_SQLCommand(strSQLQry).ExecuteNonQuery
+            Return rows
+            Exit Function
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Function
     Private Sub DataGridHistory_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridHistory.CellMouseDown
         If e.Button = MouseButtons.Right Then
             DataGridHistory.CurrentCell = DataGridHistory(e.ColumnIndex, e.RowIndex)
@@ -678,7 +751,7 @@ Public Class View
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
-            If DeleteDevice(CurrentDevice.strGUID) Then
+            If DeleteMaster(CurrentDevice.strGUID, Entry_Type.Device) Then
                 Dim blah2 = MsgBox("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentDevice = Nothing
                 Me.Dispose()
@@ -796,6 +869,9 @@ Public Class View
     Private Sub TabControl1_MouseDown(sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
         TrackingGrid.Refresh()
     End Sub
+    Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
+        NewMunisView(CurrentDevice)
+    End Sub
     Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
         Try
             e.Result = My.Computer.Network.Ping("D" & CurrentDevice.strSerial)
@@ -805,9 +881,9 @@ Public Class View
     End Sub
     Private Sub PingWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles PingWorker.RunWorkerCompleted
         If e.Result Then
-            SetupRDP()
+            SetupNetTools()
         Else
-            cmdRDP.Visible = False
+            grpNetTools.Visible = False
         End If
     End Sub
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
@@ -817,16 +893,51 @@ Public Class View
         On Error Resume Next
         TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
     End Sub
-    Private Sub SetupRDP()
-        cmdRDP.Visible = True
+    Private Sub SetupNetTools()
+        grpNetTools.Visible = True
     End Sub
     Private Sub CheckRDP()
-        If CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
+        If InStr(CurrentDevice.strOSVersion, "WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
             If Not PingWorker.IsBusy Then PingWorker.RunWorkerAsync()
         End If
     End Sub
     Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
         CheckRDP()
+    End Sub
+    Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
+        If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
+        If CurrentDevice.strSibiLink Is "" Then
+            Dim blah = MsgBox("Sibi Link not set.  Set one now?", vbYesNo + vbQuestion, "Sibi Link")
+            If blah = vbYes Then
+                LinkSibi()
+            End If
+        Else
+            OpenSibiLink(CurrentDevice.strSibiLink)
+        End If
+    End Sub
+    Private Sub LinkSibi()
+        Dim f As New frmSibiSelector
+        f.ShowDialog(Me)
+        If f.DialogResult = DialogResult.OK Then
+            Update_SQLValue("devices", "dev_sibi_link", f.SibiUID, "dev_UID", CurrentDevice.strGUID)
+            ViewDevice(CurrentDevice.strGUID)
+        End If
+    End Sub
+    Private Sub OpenSibiLink(SibiUID As String)
+        Dim sibiForm As New frmManageRequest
+        AddChild(sibiForm)
+        sibiForm.OpenRequest(SibiUID)
+    End Sub
+    Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
+        LinkSibi()
+    End Sub
+
+    Private Sub cmdBrowseFiles_Click(sender As Object, e As EventArgs) Handles cmdBrowseFiles.Click
+        Try
+            Process.Start("\\D" & CurrentDevice.strSerial & "\c$")
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
 
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click

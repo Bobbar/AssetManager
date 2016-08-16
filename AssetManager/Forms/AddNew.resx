@@ -2,12 +2,16 @@
 <root>
   <!-- 
     Microsoft ResX Schema 
+    
     Version 2.0
+    
     The primary goals of this format is to allow a simple XML format 
     that is mostly human readable. The generation and parsing of the 
     various data types are done through the TypeConverter classes 
     associated with the data types.
+    
     Example:
+    
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -22,27 +26,34 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
+                
     There are any number of "resheader" rows that contain simple 
     name/value pairs.
+    
     Each data row contains a name, and value. The row also contains a 
     type or mimetype. Type corresponds to a .NET class that support 
     text/value conversion through the TypeConverter architecture. 
     Classes that don't support this are serialized and stored with the 
     mimetype set.
+    
     The mimetype is used for serialized objects, and tells the 
     ResXResourceReader how to depersist the object. This is currently not 
     extensible. For a given mimetype the value must be set accordingly:
+    
     Note - application/x-microsoft.net.object.binary.base64 is the format 
     that the ResXResourceWriter will generate, however the reader can 
     read any of the formats listed below.
+    
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
+    
     mimetype: application/x-microsoft.net.object.soap.base64
     value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
+
     mimetype: application/x-microsoft.net.object.bytearray.base64
     value   : The object must be serialized into a byte array 
             : using a System.ComponentModel.TypeConverter
@@ -106,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="fieldErrorIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -967,6 +981,30 @@
         Kf/Qvyn/0L8p/9C/Kf/Qvyn/0L8p/9C/Kf/Qvyn/0L8p/9C/Kf/Qvyn/0L8p/NC/KITTwSsdz74ol9C+
         KcvPvyjOz78ozs+/KM7PvyjOz78ozs+/KM7PvyjOz78ozs+/KM7PvyjO0L4py9C/KZTPxiUbAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+</value>
+  </data>
+  <data name="fieldErrorIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAD/MAAA/5QAAP/WAAD/9AAA//QAAP/YAAD/lAAA/y4AAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAP8IAAD/lgAA//wAAP//AAD//wAA//8AAP//AAD//wAA//8AAP/8AAD/lgAA
+        /wgAAAAAAAAAAAAAAAAAAP8IAAD/ugAA//8AAP//AAD//wAA//wAAP+GAAD/hAAA//wAAP//AAD//wAA
+        //8AAP+8AAD/CAAAAAAAAAAAAAD/lAAA//8AAP//AAD//wAA//8AAP/IAAAAAAAAAAAAAP/IAAD//wAA
+        //8AAP//AAD//wAA/5QAAAAAAAD/KgAA//wAAP//AAD//wAA//8AAP//AAD/9AAA/0IAAP9CAAD/8gAA
+        //8AAP//AAD//wAA//8AAP/8AAD/LAAA/5AAAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA
+        //8AAP//AAD//wAA//8AAP//AAD//wAA/5AAAP/QAAD//wAA//8AAP//AAD//wAA//8AAP/SAAD/DgAA
+        /w4AAP/SAAD//wAA//8AAP//AAD//wAA//8AAP/SAAD/8AAA//8AAP//AAD//wAA//8AAP//AAD/0AAA
+        AAAAAAAAAAD/0AAA//8AAP//AAD//wAA//8AAP//AAD/8gAA//AAAP//AAD//wAA//8AAP//AAD//wAA
+        /9AAAAAAAAAAAAAA/9AAAP//AAD//wAA//8AAP//AAD//wAA//AAAP/OAAD//wAA//8AAP//AAD//wAA
+        //8AAP/QAAAAAAAAAAAAAP/QAAD//wAA//8AAP//AAD//wAA//8AAP/OAAD/igAA//8AAP//AAD//wAA
+        //8AAP//AAD/0AAAAAAAAAAAAAD/0AAA//8AAP//AAD//wAA//8AAP//AAD/igAA/yQAAP/6AAD//wAA
+        //8AAP//AAD//wAA/9AAAAAAAAAAAAAA/9AAAP//AAD//wAA//8AAP//AAD/+gAA/yYAAAAAAAD/iAAA
+        //8AAP//AAD//wAA//8AAP/QAAAAAAAAAAAAAP/QAAD//wAA//8AAP//AAD//wAA/4oAAAAAAAAAAAAA
+        /wQAAP+uAAD//wAA//8AAP//AAD/9gAA/9QAAP/UAAD/9gAA//8AAP//AAD//wAA/64AAP8EAAAAAAAA
+        AAAAAAAAAAD/BAAA/4YAAP/4AAD//wAA//8AAP//AAD//wAA//8AAP//AAD/+gAA/4gAAP8EAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAD/IAAA/4QAAP/IAAD/6AAA/+gAAP/IAAD/hgAA/yIAAAAAAAAAAAAA
+        AAAAAAAA+B8AAOAHAADAAwAAgYEAAIGBAAAAAAAAAYAAAAGAAAABgAAAAYAAAAGAAACBgQAAgYEAAMAD
+        AADgBwAA+B8AAA==
 </value>
   </data>
 </root>
