@@ -933,7 +933,11 @@ Public Class View
     End Sub
 
     Private Sub cmdBrowseFiles_Click(sender As Object, e As EventArgs) Handles cmdBrowseFiles.Click
-        Process.Start("\\D" & CurrentDevice.strSerial & "\c$")
+        Try
+            Process.Start("\\D" & CurrentDevice.strSerial & "\c$")
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
 
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
@@ -944,9 +948,5 @@ Public Class View
         StartInfo.FileName = "mstsc.exe"
         StartInfo.Arguments = "/v:D" & CurrentDevice.strSerial
         Process.Start(StartInfo)
-    End Sub
-
-    Private Sub tmrRDPRefresh_Tick(sender As Object, e As EventArgs) Handles tmrRDPRefresh.Tick
-
     End Sub
 End Class

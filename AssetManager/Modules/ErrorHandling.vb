@@ -1,6 +1,7 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports System.IO
 Imports System.Net.Sockets
+Imports System.ComponentModel
 Module ErrorHandling
     Public Function ErrHandleNew(ex As Exception, strOrigSub As String) As Boolean
         Dim ErrorResult As Boolean
@@ -27,6 +28,8 @@ Module ErrorHandling
                 ErrorResult = handleSocketException(ex, strOrigSub)
             Case "FormatException"
                 ErrorResult = handleFormatException(ex, strOrigSub)
+            Case "Win32Exception"
+                ErrorResult = handleWin32Exception(ex, strOrigSub)
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
                 Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
@@ -35,6 +38,19 @@ Module ErrorHandling
         End Select
         If Not IsNothing(ex.InnerException) Then ErrHandleNew(ex.InnerException, strOrigSub)
         Return ErrorResult
+    End Function
+    Private Function handleWin32Exception(ex As Win32Exception, strOrigSub As String) As Boolean
+        Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+        Select Case ex.HResult
+            Case -2147467259
+                Dim blah = MsgBox("Network path not found.", vbOKOnly + vbExclamation, "Network Error")
+                Return True
+            Case Else
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                EndProgram()
+        End Select
+        Return False
     End Function
     Private Function handleFormatException(ex As FormatException, strOrigSub As String) As Boolean
         Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
@@ -76,7 +92,7 @@ Module ErrorHandling
     Private Function handlePingException(ex As Net.NetworkInformation.PingException, strOrigSub As String) As Boolean
         Select Case ex.HResult
             Case -2146233079
-                Return True
+                Return False
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
                 Dim blah = MsgBox("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")

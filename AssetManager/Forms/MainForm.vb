@@ -132,6 +132,7 @@ Public Class MainForm
     Private Sub ShowAll()
         Dim cmd As New MySqlCommand
         cmd.CommandText = strShowAllQry
+        strLastQry = strShowAllQry
         StartBigQuery(cmd)
     End Sub
     Private Sub StartBigQuery(QryCommand As Object)
@@ -393,8 +394,6 @@ Public Class MainForm
             QryComm = DirectCast(e.Argument, Object)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
-            Dim strQry = strWorkerQry
-            strLastQry = strQry
             Dim conn As New MySqlConnection(MySQLConnectString)
             QryComm.Connection = conn
             BigQueryWorker.ReportProgress(1)
