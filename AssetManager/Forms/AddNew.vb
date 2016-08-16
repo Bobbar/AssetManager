@@ -216,4 +216,10 @@ Public Class AddNew
     Private Sub cmbEquipType_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType_REQ.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub
+    Private Sub txtCurUser_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_REQ.KeyUp
+        StartLiveSearch(sender, LiveBoxType.SelectValue, "dev_cur_user")
+    End Sub
+    Private Sub txtDescription_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription_REQ.KeyUp
+        StartLiveSearch(sender, LiveBoxType.SelectValue, "dev_description")
+    End Sub
 End Class

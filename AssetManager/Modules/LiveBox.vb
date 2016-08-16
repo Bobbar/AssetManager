@@ -31,7 +31,8 @@ Module LiveBox
     End Sub
     Private Sub InitializeControl()
         LiveBox = New ListBox
-        AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
+        'AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
+        AddHandler LiveBox.MouseDown, AddressOf LiveBox_MouseDown
         AddHandler LiveBox.MouseMove, AddressOf LiveBox_MouseMove
         AddHandler LiveBox.KeyDown, AddressOf LiveBox_KeyDown
         ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
@@ -165,8 +166,9 @@ Module LiveBox
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs)
         If e.KeyCode = Keys.Enter Then LiveBoxSelect(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type)
     End Sub
-    Private Sub LiveBox_MouseClick(sender As Object, e As MouseEventArgs)
-        LiveBoxSelect(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type)
+    Private Sub LiveBox_MouseDown(sender As Object, e As MouseEventArgs)
+        If e.Button = MouseButtons.Left Then LiveBoxSelect(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type)
+        If e.Button = MouseButtons.Right Then HideLiveBox()
     End Sub
     Private Sub SetStyle()
         Dim LiveBoxFont As Font = New Font("Consolas", 11.25, FontStyle.Bold)
