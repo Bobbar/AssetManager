@@ -30,5 +30,9 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\RdlCompile.compiled
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
-C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.exe.CodeAnalysisLog.xml
-C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.exe.lastcodeanalysissucceeded
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.TrustInfo.xml
+C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.exe.manifest
+C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.application
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe.manifest
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.application
