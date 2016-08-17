@@ -1,6 +1,7 @@
 ﻿Public Class View_Munis
     Private intMaxResults As Integer = 50
     Private bolGridFilling As Boolean
+    Public bolSelectMod As Boolean = False
     Private Sub LoadMunisInventoryGrid(Device As Device_Info)
         Try
             If NeededInfo(Device) Then
@@ -37,7 +38,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & Munis_GetReqNumberFromPO(PO)
             bolGridFilling = True
             DataGridMunis_Requisition.DataSource = results
             DataGridMunis_Requisition.ClearSelection()
-            bolGridFilling = False
+            'bolGridFilling = False
             'Else
             '    DataGridMunis_Requisition.DataSource = Nothing
             'End If
@@ -62,7 +63,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             DataGridMunis_Requisition.DataSource = results
             DataGridMunis_Requisition.ClearSelection()
             DataGridMunis_Requisition.Refresh()
-            bolGridFilling = False
+            ' bolGridFilling = False
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
@@ -77,7 +78,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             bolGridFilling = True
             DataGridMunis_Requisition.DataSource = results
             DataGridMunis_Requisition.ClearSelection()
-            bolGridFilling = False
+            ' bolGridFilling = False
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
@@ -124,6 +125,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         ExtendedMethods.DoubleBuffered(DataGridMunis_Requisition, True)
         DataGridMunis_Inventory.DefaultCellStyle = GridStylez
         DataGridMunis_Requisition.DefaultCellStyle = GridStylez
+        bolGridFilling = False
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         Dim MunisTable As DataTable
@@ -177,4 +179,15 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
     Private Sub DataGridMunis_Requisition_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridMunis_Requisition.CellEnter
         HighlightCurrentRow(e.RowIndex)
     End Sub
+    Public ReadOnly Property UnitPrice As String
+        Get
+            Return SelectedUnitPrice
+        End Get
+    End Property
+    Private SelectedUnitPrice As String
+    Private Sub DataGridMunis_Requisition_CellMouseDoubleClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridMunis_Requisition.CellMouseDoubleClick
+        SelectedUnitPrice = DataGridMunis_Requisition.Item(GetColIndex(DataGridMunis_Requisition, "rg_dollar_am"), DataGridMunis_Requisition.CurrentRow.Index).Value
+        Me.DialogResult = DialogResult.OK
+    End Sub
+
 End Class

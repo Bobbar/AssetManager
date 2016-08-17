@@ -14,6 +14,18 @@
     Public Function Munis_GetFYFromPO(PO As String) As String
         Return YearFromDate(Trim(Return_MSSQLValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate")))
     End Function
+    Public Function Munis_Get_VendorName_From_PO(PO As String) As String
+        Dim strQRY As String = "SELECT TOP 1       dbo.ap_vendor.a_vendor_number, dbo.ap_vendor.a_vendor_name
+FROM            dbo.ap_vendor INNER JOIN
+                         dbo.rqdetail ON dbo.ap_vendor.a_vendor_number = dbo.rqdetail.rqdt_sug_vn
+WHERE        (dbo.rqdetail.rqdt_req_no = " & Munis_GetReqNumberFromPO(PO) & ") AND (dbo.rqdetail.rqdt_fsc_yr = " & Munis_Get_FY_From_PO(PO) & ")"
+        Dim table As DataTable = Return_MSSQLTable(strQRY)
+        Return table(0).Item("a_vendor_name")
+    End Function
+    Private Function Munis_Get_FY_From_PO(PO As String) As String
+        Dim strFYyy As String = Left(PO, 2)
+        Return "20" + strFYyy
+    End Function
     Public Sub Munis_NameSearch()
         Dim blah As String = InputBox("Enter a full or patial first or last name of the Employee.", "Org/Object Code Search", "")
         If Trim(blah) IsNot "" Then

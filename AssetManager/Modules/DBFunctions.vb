@@ -31,7 +31,7 @@ Public Module DBFunctions
         Public strLocation As String
         Public strCurrentUser As String
         Public strFiscalYear As String
-        Public dtPurchaseDate As Object
+        Public dtPurchaseDate As Date 'As Object
         Public strReplaceYear As String
         Public strOSVersion As String
         Public strGUID As String
@@ -267,6 +267,9 @@ Public Module DBFunctions
             If SearchIndex(i).strShort = ShortVal Then Return i
         Next
         Return Nothing
+    End Function
+    Public Function Get_MunisCode_From_AssetCode(AssetCode As String) As String
+        Return Get_SQLValue("munis_codes", "asset_man_code", AssetCode, "munis_code")
     End Function
     Public Sub BuildIndexes()
         Logger("Building Indexes...")

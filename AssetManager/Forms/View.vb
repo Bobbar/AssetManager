@@ -545,7 +545,7 @@ Public Class View
         Dim NewMunis As New View_Munis
         Waiting()
         AddChild(NewMunis)
-        NewMunis.Show()
+        ' NewMunis.Show()
         NewMunis.LoadMunisInfoByDevice(Device)
         ' NewMunis.ViewEntry(GUID)
         DoneWaiting()
@@ -561,7 +561,7 @@ Public Class View
         Waiting()
         AddChild(NewMunis)
         NewMunis.HideFixedAssetGrid()
-        NewMunis.Show()
+        'NewMunis.Show()
         NewMunis.LoadMunisEmployeeByLastName(LastName)
         ' NewMunis.ViewEntry(GUID)
         DoneWaiting()
@@ -940,8 +940,12 @@ Public Class View
         End Try
     End Sub
 
-    Private Sub Button1_Click_4(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click_4(sender As Object, e As EventArgs)
         'ListFieldNames()
+        FillForm()
+    End Sub
+
+    Private Sub tsmAssetInputForm_Click(sender As Object, e As EventArgs) Handles tsmAssetInputForm.Click
         FillForm()
     End Sub
 

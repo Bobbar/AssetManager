@@ -207,6 +207,7 @@ Partial Class View_Munis
         CType(Me.DataGridMunis_Requisition, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnlMaster.ResumeLayout(False)
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents DataGridMunis_Inventory As DataGridView
     Friend WithEvents pnlFixedAsset As Panel

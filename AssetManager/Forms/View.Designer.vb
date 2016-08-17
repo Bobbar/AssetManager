@@ -90,6 +90,8 @@ Partial Class View
         Me.TrackingTool = New System.Windows.Forms.ToolStripDropDownButton()
         Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsdAssetControl = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.tsmAssetInputForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmdAccept_Tool = New System.Windows.Forms.ToolStripButton()
         Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
         Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -101,7 +103,6 @@ Partial Class View
         Me.TrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckOutMenu = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.DeviceInfoBox.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
@@ -146,7 +147,6 @@ Partial Class View
         'DeviceInfoBox
         '
         Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.DeviceInfoBox.Controls.Add(Me.Button1)
         Me.DeviceInfoBox.Controls.Add(Me.grpNetTools)
         Me.DeviceInfoBox.Controls.Add(Me.pnlOtherFunctions)
         Me.DeviceInfoBox.Controls.Add(Me.cmdSetSibi)
@@ -700,7 +700,7 @@ Partial Class View
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.AttachmentTool, Me.TrackingTool, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
@@ -828,6 +828,22 @@ Partial Class View
         Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
         Me.CheckInTool.Text = "Check In"
         '
+        'tsdAssetControl
+        '
+        Me.tsdAssetControl.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAssetInputForm})
+        Me.tsdAssetControl.Image = Global.AssetManager.My.Resources.Resources.Form2_512
+        Me.tsdAssetControl.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.tsdAssetControl.Name = "tsdAssetControl"
+        Me.tsdAssetControl.Size = New System.Drawing.Size(164, 29)
+        Me.tsdAssetControl.Text = "Asset Control Forms"
+        '
+        'tsmAssetInputForm
+        '
+        Me.tsmAssetInputForm.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.tsmAssetInputForm.Name = "tsmAssetInputForm"
+        Me.tsmAssetInputForm.Size = New System.Drawing.Size(183, 32)
+        Me.tsmAssetInputForm.Text = "Asset Input Form"
+        '
         'cmdAccept_Tool
         '
         Me.cmdAccept_Tool.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -924,15 +940,6 @@ Partial Class View
         Me.CheckOutMenu.Name = "CheckOutMenu"
         Me.CheckOutMenu.Size = New System.Drawing.Size(132, 22)
         Me.CheckOutMenu.Text = "Check Out"
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(405, 191)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(31, 39)
-        Me.Button1.TabIndex = 53
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
         '
         'View
         '
@@ -1057,5 +1064,6 @@ Partial Class View
     Friend WithEvents fieldErrorIcon As ErrorProvider
     Friend WithEvents cmdBrowseFiles As Button
     Friend WithEvents grpNetTools As GroupBox
-    Friend WithEvents Button1 As Button
+    Friend WithEvents tsdAssetControl As ToolStripDropDownButton
+    Friend WithEvents tsmAssetInputForm As ToolStripMenuItem
 End Class

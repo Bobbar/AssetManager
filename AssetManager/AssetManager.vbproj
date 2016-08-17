@@ -382,6 +382,7 @@
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <None Include="Resources\Find.png" />
+    <None Include="Resources\Form2-512.png" />
     <Content Include="Resources\inventory-small.fw.png" />
     <None Include="Resources\report.png" />
     <None Include="Resources\presentation-512.png" />
