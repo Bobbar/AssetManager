@@ -20,7 +20,7 @@ Module PDFFormFilling
         Dim f As New View_Munis
         f.Text = "Double-Click a line item from the requisition."
         f.HideFixedAssetGrid()
-        f.LoadMunisRequisitionGridByPO(CurrentDevice.strPO, Munis_GetFYFromPO(CurrentDevice.strPO))
+        f.LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(CurrentDevice.strPO), Munis_GetFYFromPO(CurrentDevice.strPO))
         f.ShowDialog(View)
         If f.DialogResult = DialogResult.OK Then
             Return f.UnitPrice

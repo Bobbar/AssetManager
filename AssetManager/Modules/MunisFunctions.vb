@@ -74,7 +74,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Munis_GetReqNumberFromPO(PO) & ") A
         Dim NewMunis As New View_Munis
         NewMunis.HideFixedAssetGrid()
         NewMunis.Show()
-        NewMunis.LoadMunisRequisitionGridByPO(PO, FY)
+        NewMunis.LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(PO), Munis_GetFYFromPO(PO)) 'LoadMunisRequisitionGridByPO(PO, FY)
     End Sub
     Private Sub NewMunisView_ReqSearch(ReqNumber As String, FY As String)
         If Not ConnectionReady() Then

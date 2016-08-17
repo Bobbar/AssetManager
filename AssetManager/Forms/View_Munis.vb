@@ -18,41 +18,14 @@
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Sub LoadMunisRequisitionGridByPO(PO As String, FiscalYr As String)
-        Try
-            'If NeededInfo(Device) Then
-
-            'Dim strColumns As String = "rg_fiscal_year,a_requisition_no,rg_line_number,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,rqdt_sug_vn,a_vendor_name,rqdt_pur_no,rqdt_pur_dt,rqdt_des_ln"
-            'Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, rqdetail, ap_vendor WHERE a_requisition_no='" & Munis_GetReqNumberFromPO(PO) & "' AND rg_fiscal_year='" & FiscalYr & "' AND rg_line_number = rqdt_lin_no AND a_requisition_no = rqdt_req_no AND rg_fiscal_year = rqdt_fsc_yr AND a_vendor_number = rqdt_sug_vn"
-
-            Dim strQRY As String = "SELECT TOP " & intMaxResults & "dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_line_number, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.rg_dollar_am, dbo.rq_gl_info.a_object_desc, 
-                         dbo.rq_gl_info.a_org_description, dbo.rqdetail.rqdt_sug_vn, dbo.ap_vendor.a_vendor_name, dbo.ap_vendor.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_des_ln
-FROM            dbo.rq_gl_info INNER JOIN
-                         dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr INNER JOIN
-                         dbo.ap_vendor ON dbo.rqdetail.rqdt_sug_vn = dbo.ap_vendor.a_vendor_number
-WHERE        (dbo.rq_gl_info.a_requisition_no = " & Munis_GetReqNumberFromPO(PO) & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ")"
-
-            Debug.Print(strQRY)
-            Dim results As DataTable
-            results = Return_MSSQLTable(strQRY)
-            bolGridFilling = True
-            DataGridMunis_Requisition.DataSource = results
-            DataGridMunis_Requisition.ClearSelection()
-            'bolGridFilling = False
-            'Else
-            '    DataGridMunis_Requisition.DataSource = Nothing
-            'End If
-        Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
-    End Sub
     Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String)
         Try
             'Dim strColumns As String = "rg_fiscal_year,a_requisition_no,rg_line_number,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,rqdt_sug_vn,rqdt_pur_no,rqdt_pur_dt,rqdt_des_ln"
             'Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, rqdetail WHERE a_requisition_no='" & ReqNumber & "' AND rg_fiscal_year='" & FiscalYr & "' AND rg_line_number = rqdt_lin_no AND a_requisition_no = rqdt_req_no AND rg_fiscal_year = rqdt_fsc_yr"
-            Dim strQRY As String = "SELECT TOP " & intMaxResults & "dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_line_number, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.rg_dollar_am, dbo.rq_gl_info.a_object_desc, 
-                         dbo.rq_gl_info.a_org_description, dbo.rqdetail.rqdt_sug_vn, dbo.ap_vendor.a_vendor_name, dbo.ap_vendor.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_des_ln
-FROM            dbo.rq_gl_info INNER JOIN
+            Dim strQRY As String = "SELECT TOP " & intMaxResults & "dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc, 
+                         dbo.ap_vendor.a_vendor_name, dbo.ap_vendor.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr,
+                         dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln
+            From            dbo.rq_gl_info INNER JOIN
                          dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr INNER JOIN
                          dbo.ap_vendor ON dbo.rqdetail.rqdt_sug_vn = dbo.ap_vendor.a_vendor_number
 WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ")"
@@ -87,7 +60,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         If Device.strPO <> "" And YearFromDate(Device.dtPurchaseDate) <> "" Then 'if PO and Fiscal yr on record > load data using our records
             Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             LoadMunisInventoryGrid(Device)
-            LoadMunisRequisitionGridByPO(Device.strPO, Device.strFiscalYear)
+            LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(Device.strPO), Munis_GetFYFromPO(Device.strPO))
             Me.Show()
         Else
             If Device.strPO = "" Then
@@ -110,7 +83,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
                 Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             End If
             LoadMunisInventoryGrid(Device)
-            LoadMunisRequisitionGridByPO(Device.strPO, Device.strFiscalYear)
+            LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(Device.strPO), Munis_GetFYFromPO(Device.strPO))
             Me.Show()
         End If
     End Sub
@@ -186,8 +159,9 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
     End Property
     Private SelectedUnitPrice As String
     Private Sub DataGridMunis_Requisition_CellMouseDoubleClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridMunis_Requisition.CellMouseDoubleClick
-        SelectedUnitPrice = DataGridMunis_Requisition.Item(GetColIndex(DataGridMunis_Requisition, "rg_dollar_am"), DataGridMunis_Requisition.CurrentRow.Index).Value
+        SelectedUnitPrice = DataGridMunis_Requisition.Item(GetColIndex(DataGridMunis_Requisition, "rqdt_uni_pr"), DataGridMunis_Requisition.CurrentRow.Index).Value
+        Dim decPrice As Decimal = SelectedUnitPrice
+        SelectedUnitPrice = decPrice.ToString("C")
         Me.DialogResult = DialogResult.OK
     End Sub
-
 End Class

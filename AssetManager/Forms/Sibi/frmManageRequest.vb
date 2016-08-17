@@ -716,7 +716,7 @@ VALUES
         'AddChild(NewMunis)
         NewMunis.HideFixedAssetGrid()
         NewMunis.Show()
-        NewMunis.LoadMunisRequisitionGridByPO(PO, YearFromDate(CurrentRequest.dtDateStamp))
+        NewMunis.LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(PO), Munis_GetFYFromPO(PO)) 'YearFromDate(CurrentRequest.dtDateStamp))
         ' NewMunis.ViewEntry(GUID)
         ' DoneWaiting()
     End Sub
