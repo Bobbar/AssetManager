@@ -48,7 +48,7 @@ Public Class MainForm
             InitializeLiveBox()
             Clear_All()
             GetGridStylez()
-            CopyDefaultCellStyles()
+            SetGridStyle(ResultGrid)
             ConnectionWatchDog.RunWorkerAsync()
             ShowAll()
             Status("Ready!")
@@ -78,21 +78,6 @@ Public Class MainForm
     Public Sub Status(Text As String)
         SplashScreen.lblStatus.Text = Text
         SplashScreen.Refresh()
-    End Sub
-    Public Sub CopyDefaultCellStyles()
-        'View.DataGridHistory.DefaultCellStyle = ResultGrid.DefaultCellStyle
-        View.DataGridHistory.BackgroundColor = ResultGrid.BackgroundColor
-        'View.TrackingGrid.DefaultCellStyle = ResultGrid.DefaultCellStyle
-        View.TrackingGrid.BackgroundColor = ResultGrid.BackgroundColor
-        View.DataGridHistory.DefaultCellStyle = GridStylez
-        View.DataGridHistory.DefaultCellStyle.Font = GridFont
-        View.TrackingGrid.DefaultCellStyle = GridStylez
-        View.TrackingGrid.DefaultCellStyle.Font = GridFont
-        View_Munis.DataGridMunis_Inventory.DefaultCellStyle = GridStylez
-        View_Munis.DataGridMunis_Requisition.DefaultCellStyle = GridStylez
-        'Attachments.AttachGrid.DefaultCellStyle = GridStylez
-        'Attachments.AttachGrid.DefaultCellStyle.Font = GridFont
-        'Attachments.AttachGrid.ColumnHeadersDefaultCellStyle.Font = GridFont
     End Sub
     Private Sub Clear_All()
         HideLiveBox()
@@ -296,9 +281,12 @@ Public Class MainForm
             Exit Sub
         End If
         Waiting()
-        View.CloseChildren()
-        View.ViewDevice(strGUID)
-        View.Activate()
+        Dim NewView As New View
+        NewView.ViewDevice(strGUID)
+        If Not NewView.IsDisposed Then
+            NewView.Show()
+            NewView.Activate()
+        End If
         DoneWaiting()
     End Sub
     Private Sub RefreshCombos()

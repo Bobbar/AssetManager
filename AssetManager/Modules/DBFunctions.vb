@@ -81,8 +81,12 @@ Public Module DBFunctions
         Public intLevel As Integer
         Public strDesc As String
     End Structure
+    Public Structure Update_Info
+        Public strNote As String
+        Public strChangeType As String
+    End Structure
     Public AccessLevels() As Access_Info
-    Public CurrentDevice As Device_Info
+
     Public Locations() As Combo_Data
     Public ChangeType() As Combo_Data
     Public EquipType() As Combo_Data

@@ -51,7 +51,6 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbproj.GenerateResour
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmEncrypter.resources
 C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.manifest
 C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.application
@@ -62,3 +61,4 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.xml
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.Entity.dll
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache

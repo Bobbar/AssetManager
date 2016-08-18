@@ -31,6 +31,11 @@ Module OtherFunctions
     Private Const SHGFI_ICON As Int32 = &H100
     Private Const SHGFI_USEFILEATTRIBUTES As Int32 = &H10
     Private Const FILE_ATTRIBUTE_NORMAL As Int32 = &H80
+    Public Sub SetGridStyle(Grid As DataGridView)
+        Grid.BackgroundColor = DefGridBC
+        Grid.DefaultCellStyle = GridStylez
+        Grid.DefaultCellStyle.Font = GridFont
+    End Sub
     Private Structure SHFILEINFO
         Public hIcon As IntPtr
         Public iIcon As Int32

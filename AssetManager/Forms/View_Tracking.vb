@@ -2,6 +2,7 @@
 Imports MySql.Data.MySqlClient
 Public Class View_Tracking
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
+    Private CurrentViewTrackDevice As Device_Info
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
     End Sub
     Private Sub Waiting()
@@ -10,7 +11,7 @@ Public Class View_Tracking
     Private Sub DoneWaiting()
         Me.Cursor = Cursors.Default
     End Sub
-    Public Sub ViewTrackingEntry(ByVal EntryUID As String)
+    Public Sub ViewTrackingEntry(ByVal EntryUID As String, ByRef Device As Device_Info)
         Try
             If Not ConnectionReady() Then
                 ConnectionNotReady()
@@ -29,15 +30,15 @@ Public Class View_Tracking
                     ElseIf txtCheckType.Text = "OUT" Then
                         txtCheckType.BackColor = colCheckOut
                     End If
-                    txtDescription.Text = CurrentDevice.strDescription
+                    txtDescription.Text = Device.strDescription
                     txtGUID.Text = NoNull(!track_device_uid)
                     txtCheckOutUser.Text = NoNull(!track_checkout_user)
                     txtCheckInUser.Text = NoNull(!track_checkin_user)
                     txtLocation.Text = NoNull(!track_use_location)
-                    txtAssetTag.Text = CurrentDevice.strAssetTag
+                    txtAssetTag.Text = Device.strAssetTag
                     txtCheckOutTime.Text = NoNull(!track_checkout_time)
                     txtDueBack.Text = NoNull(!track_dueback_date)
-                    txtSerial.Text = CurrentDevice.strSerial
+                    txtSerial.Text = Device.strSerial
                     txtCheckInTime.Text = NoNull(!track_checkin_time)
                     txtNotes.Text = NoNull(!track_notes)
                     txtEntryGUID.Text = NoNull(!track_uid)

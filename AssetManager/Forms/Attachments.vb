@@ -12,6 +12,7 @@ Class Attachments
     Private stpSpeed As New Stopwatch
     Private bolGridFilling As Boolean
     Private progIts As Integer = 0
+    Private CurrentAttachDevice As Device_Info
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -180,13 +181,19 @@ Class Attachments
             cmdUpload.Enabled = False
             cmdDelete.Enabled = False
         End If
-        FillDeviceInfo()
+        '  FillDeviceInfo()
         DoneWaiting()
     End Sub
-    Public Sub FillDeviceInfo()
-        txtAssetTag.Text = CurrentDevice.strAssetTag
-        txtSerial.Text = CurrentDevice.strSerial
-        txtDescription.Text = CurrentDevice.strDescription
+    Private Sub FillDeviceInfo(Device As Device_Info)
+        txtAssetTag.Text = Device.strAssetTag
+        txtSerial.Text = Device.strSerial
+        txtDescription.Text = Device.strDescription
+    End Sub
+    Public Sub LoadAttachments(Device As Device_Info)
+        CurrentAttachDevice = Device
+        Me.Text = Me.Text + " - " + CurrentAttachDevice.strDescription + " - " + CurrentAttachDevice.strCurrentUser
+        FillDeviceInfo(CurrentAttachDevice)
+        ListAttachments(CurrentAttachDevice.strGUID)
     End Sub
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs)
         OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
@@ -205,7 +212,7 @@ Class Attachments
         If blah = vbYes Then
             Waiting()
             If DeleteAttachment(AttachIndex(i).strFileUID, Entry_Type.Device) > 0 Then
-                ListAttachments(CurrentDevice.strGUID)
+                ListAttachments(CurrentAttachDevice.strGUID)
                 DoneWaiting()
                 blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
             Else
@@ -226,7 +233,7 @@ Class Attachments
     End Sub
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
         'file stuff
-        Dim Foldername As String = CurrentDevice.strGUID
+        Dim Foldername As String = CurrentAttachDevice.strGUID
         Dim strFileGuid As String = Guid.NewGuid.ToString
         Dim FilePath As String = DirectCast(e.Argument, String)
         Dim strFilename As String = Path.GetFileNameWithoutExtension(FilePath)
@@ -295,7 +302,7 @@ Class Attachments
                 conn.Open()
                 cmd.Connection = conn
                 cmd.CommandText = SQL
-                cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentDevice.strGUID)
+                cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentAttachDevice.strGUID)
                 cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
                 cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
                 cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
@@ -321,7 +328,7 @@ Class Attachments
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
         Try
             WorkerFeedback(False)
-            ListAttachments(CurrentDevice.strGUID)
+            ListAttachments(CurrentAttachDevice.strGUID)
             If Not e.Cancelled Then
                 If e.Result Then
                     MessageBox.Show("File uploaded successfully!",
@@ -511,8 +518,8 @@ Class Attachments
         ProgressBar1.Value = intProgress
     End Sub
     Private Sub Button1_Click_1(sender As Object, e As EventArgs)
-        DeleteFTPFolder(CurrentDevice.strGUID, Entry_Type.Device)
-        ListAttachments(CurrentDevice.strGUID)
+        DeleteFTPFolder(CurrentAttachDevice.strGUID, Entry_Type.Device)
+        ListAttachments(CurrentAttachDevice.strGUID)
     End Sub
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
