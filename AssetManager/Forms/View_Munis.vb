@@ -82,9 +82,13 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             Else
                 Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             End If
-            LoadMunisInventoryGrid(Device)
-            LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(Device.strPO), Munis_GetFYFromPO(Device.strPO))
-            Me.Show()
+            If Device.strPO <> "" Then
+                LoadMunisInventoryGrid(Device)
+                LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(Device.strPO), Munis_GetFYFromPO(Device.strPO))
+                Me.Show()
+            Else
+                MsgBox("Could not pull Munis info. No FA info and/or no PO", vbOKOnly + vbInformation, "Nothing Found")
+            End If
         End If
     End Sub
     Private Function NeededInfo(Device As Device_Info) As Boolean
