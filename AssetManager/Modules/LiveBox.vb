@@ -37,6 +37,7 @@ Module LiveBox
         AddHandler LiveBox.KeyDown, AddressOf LiveBox_KeyDown
         ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
         LiveBox.Visible = False
+        SetStyle()
     End Sub
     Private Sub LiveBoxSelect(Control As Control, Type As String)
         Select Case Type.ToString
@@ -104,15 +105,7 @@ Module LiveBox
                     Next
                 End With
             End If
-            Dim ParentForm As Form = CurrentLiveBoxArgs.Control.FindForm
-            LiveBox.Parent = ParentForm
-            LiveBox.BringToFront()
-            SetStyle()
-            Dim ScreenPos As Point = ParentForm.PointToClient(CurrentLiveBoxArgs.Control.Parent.PointToScreen(CurrentLiveBoxArgs.Control.Location))
-            ScreenPos.Y = ScreenPos.Y + CurrentLiveBoxArgs.Control.Height
-            LiveBox.Location = ScreenPos
-            LiveBox.Width = CurrentLiveBoxArgs.Control.Width
-            LiveBox.Height = LiveBox.PreferredHeight
+            PosistionLiveBox()
             If dtResults.Rows.Count > 0 Then
                 LiveBox.Visible = True
             Else
@@ -127,6 +120,22 @@ Module LiveBox
             LiveBox.Visible = False
             LiveBox.Items.Clear()
         End Try
+    End Sub
+    Private Sub PosistionLiveBox()
+        LiveBox.Visible = False
+        Dim ParentForm As Form = CurrentLiveBoxArgs.Control.FindForm
+        LiveBox.Parent = ParentForm
+        LiveBox.BringToFront()
+        Dim ScreenPos As Point = ParentForm.PointToClient(CurrentLiveBoxArgs.Control.Parent.PointToScreen(CurrentLiveBoxArgs.Control.Location))
+        ScreenPos.Y = ScreenPos.Y + CurrentLiveBoxArgs.Control.Height
+        LiveBox.Location = ScreenPos
+        LiveBox.Width = CurrentLiveBoxArgs.Control.Width
+        Dim FormBounds As Rectangle = ParentForm.ClientRectangle
+        If LiveBox.PreferredHeight + LiveBox.Top > FormBounds.Bottom Then
+            LiveBox.Height = FormBounds.Bottom - LiveBox.Top
+        Else
+            LiveBox.Height = LiveBox.PreferredHeight
+        End If
     End Sub
     Public Sub GiveLiveBoxFocus()
         LiveBox.Focus()
