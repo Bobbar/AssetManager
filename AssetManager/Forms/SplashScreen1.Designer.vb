@@ -45,22 +45,24 @@ Partial Class SplashScreen
         Me.Version.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Version.BackColor = System.Drawing.Color.Transparent
         Me.Version.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Version.Location = New System.Drawing.Point(173, 196)
+        Me.Version.Location = New System.Drawing.Point(5, 196)
         Me.Version.Name = "Version"
-        Me.Version.Size = New System.Drawing.Size(241, 20)
+        Me.Version.Size = New System.Drawing.Size(492, 20)
         Me.Version.TabIndex = 4
         Me.Version.Text = "Version {0}.{1:00}"
+        Me.Version.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Copyright
         '
         Me.Copyright.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Copyright.BackColor = System.Drawing.Color.Transparent
         Me.Copyright.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Copyright.Location = New System.Drawing.Point(173, 216)
+        Me.Copyright.Location = New System.Drawing.Point(5, 216)
         Me.Copyright.Name = "Copyright"
-        Me.Copyright.Size = New System.Drawing.Size(241, 22)
+        Me.Copyright.Size = New System.Drawing.Size(492, 22)
         Me.Copyright.TabIndex = 5
         Me.Copyright.Text = "Copyright"
+        Me.Copyright.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'PictureBox1
         '
@@ -106,6 +108,7 @@ Partial Class SplashScreen
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents ApplicationTitle As Label
     Friend WithEvents Version As Label

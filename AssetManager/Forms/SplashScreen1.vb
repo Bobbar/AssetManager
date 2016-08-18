@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing.Text
+Imports System.Deployment.Application
 Public NotInheritable Class SplashScreen
     Private Sub SplashScreen1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.FormBorderStyle = FormBorderStyle.None
@@ -17,7 +18,12 @@ Public NotInheritable Class SplashScreen
         Me.Region = New Region(p)
         ' Me.BackColor = Color.Red
         '    Version.Text = System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.Minor, My.Application.Info.Version.Build, My.Application.Info.Version.Revision)
-        Version.Text = My.Application.Info.Version.ToString 'System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.MajorRevision, My.Application.Info.Version.Minor)
+        If ApplicationDeployment.IsNetworkDeployed Then
+            Version.Text = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
+        Else
+            Version.Text = "Debug"
+        End If
+        ' Version.Text = My.Application.Info.Version.ToString 'System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.MajorRevision, My.Application.Info.Version.Minor)
         'Copyright info
         Copyright.Text = My.Application.Info.Copyright
     End Sub
