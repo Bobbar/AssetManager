@@ -4,7 +4,7 @@ Imports MySql.Data.MySqlClient
 Public Class View
     Private Children(0) As Form
     Private bolCheckFields As Boolean
-    Private CurrentViewDevice As Device_Info
+    Public CurrentViewDevice As Device_Info
     Private Structure UserInput
         Public strAssetTag As String
         Public strDescription As String

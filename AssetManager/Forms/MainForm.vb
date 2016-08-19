@@ -282,14 +282,19 @@ Public Class MainForm
             ConnectionNotReady()
             Exit Sub
         End If
-        Waiting()
-        Dim NewView As New View
-        NewView.ViewDevice(strGUID)
-        If Not NewView.IsDisposed Then
-            NewView.Show()
-            NewView.Activate()
+        If Not DeviceIsOpen(strGUID) Then
+            Waiting()
+            Dim NewView As New View
+            NewView.ViewDevice(strGUID)
+            If Not NewView.IsDisposed Then
+                NewView.Show()
+                NewView.Activate()
+            End If
+            DoneWaiting()
+        Else
+            Dim blah = MsgBox("That device is already open.", vbOKOnly + vbExclamation, "Duplicate Window")
+            ActivateForm(strGUID)
         End If
-        DoneWaiting()
     End Sub
     Private Sub RefreshCombos()
         FillComboBox(EquipType, cmbEquipType)
@@ -648,7 +653,6 @@ Public Class MainForm
         frmEncrypter.Show()
         frmEncrypter.Activate()
     End Sub
-
     Private Sub txtReplaceYear_KeyDown(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyDown
         If e.KeyCode = Keys.Down Then
             GiveLiveBoxFocus()

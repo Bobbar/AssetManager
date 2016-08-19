@@ -198,4 +198,21 @@ Module OtherFunctions
     Public Function FormTitle(Device As Device_Info) As String
         Return " - " + Device.strDescription + " - " + Device.strCurrentUser
     End Function
+    Public Function DeviceIsOpen(strGUID As String) As Boolean
+        For Each frm As Form In My.Application.OpenForms
+            If frm.Name = "View" Then
+                Dim vw As View = frm
+                If vw.CurrentViewDevice.strGUID = strGUID Then Return True
+            End If
+        Next
+        Return False
+    End Function
+    Public Sub ActivateForm(strGUID As String)
+        For Each frm As Form In My.Application.OpenForms
+            If frm.Name = "View" Then
+                Dim vw As View = frm
+                If vw.CurrentViewDevice.strGUID = strGUID Then vw.Activate()
+            End If
+        Next
+    End Sub
 End Module
