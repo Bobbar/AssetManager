@@ -158,6 +158,7 @@ Public Class MainForm
             table.Columns.Add("Description", GetType(String))
             table.Columns.Add("OS Version", GetType(String))
             table.Columns.Add("Location", GetType(String))
+            table.Columns.Add("PO Number", GetType(String))
             table.Columns.Add("Purchase Date", GetType(String))
             table.Columns.Add("Replace Year", GetType(String))
             table.Columns.Add("GUID", GetType(String))
@@ -169,6 +170,7 @@ Public Class MainForm
                                r.Item("dev_description"),
                                GetHumanValue(ComboType.OSType, r.Item("dev_osversion")),
                                GetHumanValue(ComboType.Location, r.Item("dev_location")),
+                               NoNull(r.Item("dev_po")),
                                r.Item("dev_purchase_date"),
                                r.Item("dev_replacement_year"),
                                r.Item("dev_UID"))

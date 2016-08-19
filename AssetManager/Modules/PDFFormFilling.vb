@@ -18,7 +18,7 @@ Module PDFFormFilling
     End Sub
     Private Function GetUnitPrice(Device As Device_Info) As String
         Dim f As New View_Munis
-        f.Text = "Double-Click a line item from the requisition."
+        f.Text = "Select a Line Item"
         f.HideFixedAssetGrid()
         f.LoadDevice(Device)
         f.LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(Device.strPO), Munis_GetFYFromPO(Device.strPO))

@@ -153,6 +153,8 @@ Public Class frmManageRequest
             .Add(DataGridCombo(Sibi_ItemStatusType, "Status", ComboType.SibiItemStatusType))
             .Add("Replace Asset", "Replace Asset")
             .Add("Replace Serial", "Replace Serial")
+            .Add("New Asset", "New Asset")
+            .Add("New Serial", "New Serial")
             .Add("Org Code", "Org Code")
             .Add("Object Code", "Object Code")
             .Add("Item UID", "Item UID")
@@ -383,6 +385,8 @@ VALUES
 `sibi_items_status`,
 `sibi_items_replace_asset`,
 `sibi_items_replace_serial`,
+`sibi_items_new_asset`,
+`sibi_items_new_serial`,
 `sibi_items_org_code`,
 `sibi_items_object_code`,
 `sibi_items_qty`
@@ -396,6 +400,8 @@ VALUES
 @sibi_items_status,
 @sibi_items_replace_asset,
 @sibi_items_replace_serial,
+@sibi_items_new_asset,
+@sibi_items_new_serial,
 @sibi_items_org_code,
 @sibi_items_object_code,
 @sibi_items_qty
@@ -408,6 +414,8 @@ VALUES
                 cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
                 cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
                 cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
+                cmd.Parameters.AddWithValue("@sibi_items_new_asset", row.Item("Replace Asset"))
+                cmd.Parameters.AddWithValue("@sibi_items_new_serial", row.Item("Replace Serial"))
                 cmd.Parameters.AddWithValue("@sibi_items_org_code", row.Item("Org Code"))
                 cmd.Parameters.AddWithValue("@sibi_items_object_code", row.Item("Object Code"))
                 cmd.Parameters.AddWithValue("@sibi_items_qty", row.Item("Qty"))
@@ -468,6 +476,8 @@ sibi_items_location = @sibi_items_location ,
 sibi_items_status = @sibi_items_status ,
 sibi_items_replace_asset = @sibi_items_replace_asset ,
 sibi_items_replace_serial = @sibi_items_replace_serial,
+sibi_items_new_asset = @sibi_items_new_asset ,
+sibi_items_new_serial = @sibi_items_new_serial,
 sibi_items_org_code = @sibi_items_org_code,
 sibi_items_object_code = @sibi_items_object_code,
 sibi_items_qty = @sibi_items_qty
@@ -478,6 +488,8 @@ WHERE sibi_items_uid ='" & row.Item("Item UID") & "'"
                     cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
+                    cmd.Parameters.AddWithValue("@sibi_items_new_asset", row.Item("New Asset"))
+                    cmd.Parameters.AddWithValue("@sibi_items_new_serial", row.Item("New Serial"))
                     cmd.Parameters.AddWithValue("@sibi_items_org_code", row.Item("Org Code"))
                     cmd.Parameters.AddWithValue("@sibi_items_object_code", row.Item("Object Code"))
                     cmd.Parameters.AddWithValue("@sibi_items_qty", row.Item("Qty"))
@@ -495,6 +507,8 @@ WHERE sibi_items_uid ='" & row.Item("Item UID") & "'"
 `sibi_items_status`,
 `sibi_items_replace_asset`,
 `sibi_items_replace_serial`,
+`sibi_items_new_asset`,
+`sibi_items_new_serial`,
 `sibi_items_org_code`,
 `sibi_items_object_code`,
 `sibi_items_qty`
@@ -508,6 +522,8 @@ VALUES
 @sibi_items_status,
 @sibi_items_replace_asset,
 @sibi_items_replace_serial,
+@sibi_items_new_asset,
+@sibi_items_new_serial,
 @sibi_items_org_code,
 @sibi_items_object_code,
 @sibi_items_qty
@@ -520,6 +536,8 @@ VALUES
                     cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
+                    cmd.Parameters.AddWithValue("@sibi_items_new_asset", row.Item("Replace Asset"))
+                    cmd.Parameters.AddWithValue("@sibi_items_new_serial", row.Item("Replace Serial"))
                     cmd.Parameters.AddWithValue("@sibi_items_org_code", row.Item("Org Code"))
                     cmd.Parameters.AddWithValue("@sibi_items_object_code", row.Item("Object Code"))
                     cmd.Parameters.AddWithValue("@sibi_items_qty", row.Item("Qty"))
@@ -617,6 +635,8 @@ VALUES
                              GetHumanValue(ComboType.SibiItemStatusType, NoNull(r.Item("sibi_items_status"))),
                              NoNull(r.Item("sibi_items_replace_asset")),
                              NoNull(r.Item("sibi_items_replace_serial")),
+                         NoNull(r.Item("sibi_items_new_asset")),
+                         NoNull(r.Item("sibi_items_new_serial")),
                          NoNull(r.Item("sibi_items_org_code")),
                          NoNull(r.Item("sibi_items_object_code")),
                          NoNull(r.Item("sibi_items_uid")))
