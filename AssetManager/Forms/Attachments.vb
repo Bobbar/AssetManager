@@ -191,7 +191,7 @@ Class Attachments
     End Sub
     Public Sub LoadAttachments(Device As Device_Info)
         CurrentAttachDevice = Device
-        Me.Text = Me.Text + " - " + CurrentAttachDevice.strDescription + " - " + CurrentAttachDevice.strCurrentUser
+        Me.Text = Me.Text + FormTitle(CurrentAttachDevice)
         FillDeviceInfo(CurrentAttachDevice)
         ListAttachments(CurrentAttachDevice.strGUID)
     End Sub

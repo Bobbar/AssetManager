@@ -2,6 +2,10 @@
     Private intMaxResults As Integer = 50
     Private bolGridFilling As Boolean
     Public bolSelectMod As Boolean = False
+    Private CurrentMunisDevice As Device_Info
+    Public Sub LoadDevice(Device As Device_Info)
+        CurrentMunisDevice = Device
+    End Sub
     Private Sub LoadMunisInventoryGrid(Device As Device_Info)
         Try
             If NeededInfo(Device) Then
@@ -57,6 +61,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         End Try
     End Sub
     Public Sub LoadMunisInfoByDevice(Device As Device_Info)
+        CurrentMunisDevice = Device
         If Device.strPO <> "" And YearFromDate(Device.dtPurchaseDate) <> "" Then 'if PO and Fiscal yr on record > load data using our records
             Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             LoadMunisInventoryGrid(Device)
@@ -102,6 +107,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         ExtendedMethods.DoubleBuffered(DataGridMunis_Requisition, True)
         DataGridMunis_Inventory.DefaultCellStyle = GridStylez
         DataGridMunis_Requisition.DefaultCellStyle = GridStylez
+        Me.Text = Me.Text + FormTitle(CurrentMunisDevice)
         bolGridFilling = False
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click

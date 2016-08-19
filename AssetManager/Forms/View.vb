@@ -198,7 +198,7 @@ Public Class View
             If ViewHistory(DeviceUID) Then
                 ViewTracking(CurrentViewDevice.strGUID)
                 DoneWaiting()
-                Me.Text = Me.Text + " - " + CurrentViewDevice.strDescription + " - " + CurrentViewDevice.strCurrentUser
+                Me.Text = Me.Text + FormTitle(CurrentViewDevice)
                 Me.Show()
                 Me.Activate()
             Else

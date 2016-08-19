@@ -195,5 +195,7 @@ Module OtherFunctions
             i += 1
         Next
     End Sub
-
+    Public Function FormTitle(Device As Device_Info) As String
+        Return " - " + Device.strDescription + " - " + Device.strCurrentUser
+    End Function
 End Module
