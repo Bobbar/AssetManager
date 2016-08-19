@@ -35,7 +35,6 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\Microsoft.ReportViewer.WinForms.dl
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.Entity.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.xml
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmEncrypter.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmUserManager.resources

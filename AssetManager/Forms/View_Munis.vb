@@ -32,7 +32,7 @@
             From            dbo.rq_gl_info INNER JOIN
                          dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr INNER JOIN
                          dbo.ap_vendor ON dbo.rqdetail.rqdt_sug_vn = dbo.ap_vendor.a_vendor_number
-WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ")"
+WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ") AND (dbo.ap_vendor.a_vendor_remit_seq = 1)"
             Debug.Print(strQRY)
             Dim results As DataTable
             results = Return_MSSQLTable(strQRY)
