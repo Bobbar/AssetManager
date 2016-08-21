@@ -45,7 +45,6 @@ Module OtherFunctions
         <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=80)>
         Public szTypeName As String
     End Structure
-
     Private Enum IconSize
         SHGFI_LARGEICON = 0
         SHGFI_SMALLICON = 1
@@ -58,11 +57,9 @@ Module OtherFunctions
                 ByVal cbFileInfo As Int32,
                 ByVal uFlags As Int32) As IntPtr
     End Function
-
     <DllImport("user32.dll", SetLastError:=True)>
     Private Function DestroyIcon(ByVal hIcon As IntPtr) As Boolean
     End Function
-
     Public Function GetFileIcon(ByVal fileExt As String) As Bitmap ', Optional ByVal ICOsize As IconSize = IconSize.SHGFI_SMALLICON
         Dim ICOSize As IconSize = IconSize.SHGFI_SMALLICON
         Dim shinfo As New SHFILEINFO
@@ -149,8 +146,8 @@ Module OtherFunctions
         ProgramEnding = True
         Logger("Ending Program...")
         PurgeTempDir()
-        GlobalConn.Close()
-        LiveConn.Close()
+        MySQLDB.GlobalConn.Close()
+        MySQLDB.LiveConn.Close()
         Application.Exit()
         End
     End Sub

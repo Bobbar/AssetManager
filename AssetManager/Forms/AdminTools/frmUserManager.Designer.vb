@@ -168,7 +168,6 @@ Partial Class frmUserManager
         Me.pnlModule.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents Panel1 As Panel
     Friend WithEvents UserGrid As DataGridView

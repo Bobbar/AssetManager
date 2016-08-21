@@ -352,7 +352,7 @@ Public Class MainForm
                     strQryRow = "dev_replacement_year"
             End Select
             strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
-            cmd.Connection = LiveConn
+            cmd.Connection = MySQLDB.LiveConn
             cmd.CommandText = strQry
             cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
             da.SelectCommand = cmd
@@ -365,7 +365,6 @@ Public Class MainForm
             ConnectionReady()
         End Try
     End Sub
-
     Private Sub txtSerial_TextChanged(sender As Object, e As EventArgs) Handles txtSerial.TextChanged
         StartLiveSearch(sender, LiveBoxType.InstaLoad, "dev_serial")
     End Sub
@@ -378,14 +377,13 @@ Public Class MainForm
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
         StartLiveSearch(sender, LiveBoxType.DynamicSearch, "dev_cur_user")
     End Sub
-
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
             Dim QryComm As New MySqlCommand
             QryComm = DirectCast(e.Argument, Object)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
-            Dim conn As New MySqlConnection(MySQLConnectString)
+            Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
             QryComm.Connection = conn
             BigQueryWorker.ReportProgress(1)
             da.SelectCommand = QryComm
@@ -410,7 +408,6 @@ Public Class MainForm
             GiveLiveBoxFocus()
         End If
     End Sub
-
     Private Sub txtSerial_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSerial.KeyDown
         If e.KeyCode = Keys.Down Then
             GiveLiveBoxFocus()
@@ -471,7 +468,7 @@ Public Class MainForm
     End Sub
     Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatcher.Tick
         If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
-        Select Case GlobalConn.State
+        Select Case MySQLDB.GlobalConn.State
             Case ConnectionState.Connecting
                 ConnectStatus("Connecting", Color.Black)
         End Select
@@ -479,12 +476,12 @@ Public Class MainForm
     End Sub
     Private Sub ConnectionWatchDog_DoWork(sender As Object, e As DoWorkEventArgs) Handles ConnectionWatchDog.DoWork
         Do Until ProgramEnding
-            If GlobalConn.State = ConnectionState.Open Then 'test connection
+            If MySQLDB.GlobalConn.State = ConnectionState.Open Then 'test connection
                 Try
                     Dim ds As New DataSet
                     Dim da As New MySqlDataAdapter
                     Dim rows As Integer
-                    Dim conn As New MySqlConnection(MySQLConnectString)
+                    Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
                     da.SelectCommand = New MySqlCommand("SELECT NOW()")
                     da.SelectCommand.Connection = conn
                     da.Fill(ds)
@@ -498,15 +495,15 @@ Public Class MainForm
                     If ex.HResult = -2147467259 Then
                         ConnectionWatchDog.ReportProgress(1, "Connection Problem! Checking...")
                         ConnectionWatchDog.ReportProgress(2, "Disconnected")
-                        CheckConnection()
+                        MySQLDB.CheckConnection()
                     End If
                 End Try
-            ElseIf GlobalConn.State <> ConnectionState.Open Then 'connection recovery
+            ElseIf MySQLDB.GlobalConn.State <> ConnectionState.Open Then 'connection recovery
                 ConnectAttempts = 0
-                Do Until GlobalConn.State = ConnectionState.Open
+                Do Until MySQLDB.GlobalConn.State = ConnectionState.Open
                     ConnectAttempts += 1
                     ConnectionWatchDog.ReportProgress(1, "Trying to reconnect... " & ConnectAttempts)
-                    ConnectionWatchDog.ReportProgress(5, GlobalConn.State)
+                    ConnectionWatchDog.ReportProgress(5, MySQLDB.GlobalConn.State)
                     If OpenConnections() Then
                     Else
                         Thread.Sleep(5000)
@@ -514,7 +511,7 @@ Public Class MainForm
                 Loop
                 ConnectionWatchDog.ReportProgress(1, "Reconnected!")
             End If
-            ConnectionWatchDog.ReportProgress(5, GlobalConn.State)
+            ConnectionWatchDog.ReportProgress(5, MySQLDB.GlobalConn.State)
             Thread.Sleep(5000)
         Loop
     End Sub
@@ -570,12 +567,12 @@ Public Class MainForm
         StatusBar("Connected!")
     End Sub
     Private Sub cmdChangeDB_Click(sender As Object, e As EventArgs)
-        If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
-            strDatabase = cmbDBs.Text
-            MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
+        If cmbDBs.Text <> "" And cmbDBs.Text <> MySQLDB.strDatabase Then
+            MySQLDB.strDatabase = cmbDBs.Text
+            MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
             CloseConnections()
-            GlobalConn = New MySqlConnection(MySQLConnectString)
-            LiveConn = New MySqlConnection(MySQLConnectString)
+            MySQLDB.GlobalConn = New MySqlConnection(MySQLDB.MySQLConnectString)
+            MySQLDB.LiveConn = New MySqlConnection(MySQLDB.MySQLConnectString)
             OpenConnections()
         End If
     End Sub
@@ -591,12 +588,12 @@ Public Class MainForm
         MsgBox(My.Application.Info.Version.ToString)
     End Sub
     Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
-        If cmbDBs.Text <> "" And cmbDBs.Text <> strDatabase Then
-            strDatabase = cmbDBs.Text
-            MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
+        If cmbDBs.Text <> "" And cmbDBs.Text <> MySQLDB.strDatabase Then
+            MySQLDB.strDatabase = cmbDBs.Text
+            MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
             CloseConnections()
-            GlobalConn = New MySqlConnection(MySQLConnectString)
-            LiveConn = New MySqlConnection(MySQLConnectString)
+            MySQLDB.GlobalConn = New MySqlConnection(MySQLDB.MySQLConnectString)
+            MySQLDB.LiveConn = New MySqlConnection(MySQLDB.MySQLConnectString)
             OpenConnections()
         End If
     End Sub
@@ -637,18 +634,17 @@ Public Class MainForm
         frmUserManager.Show()
     End Sub
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs)
-        Munis_NameSearch()
+        Munis.NameSearch()
     End Sub
     Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
-        Munis_NameSearch()
+        Munis.NameSearch()
     End Sub
     Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
-        Munis_POSearch()
+        Munis.POSearch()
     End Sub
     Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem3.Click
-        Munis_ReqSearch()
+        Munis.ReqSearch()
     End Sub
-
     Private Sub TextEnCrypterToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TextEnCrypterToolStripMenuItem.Click
         frmEncrypter.Show()
         frmEncrypter.Activate()

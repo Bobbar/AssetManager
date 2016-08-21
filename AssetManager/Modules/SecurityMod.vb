@@ -119,7 +119,7 @@ Module SecurityMod
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT * FROM security ORDER BY sec_access_level" ' WHERE usr_username='" & strLocalUser & "'"
             Dim rows As Integer
-            reader = Return_SQLReader(strQRY)
+            reader = MySQLDB.Return_SQLReader(strQRY)
             ReDim AccessLevels(0)
             rows = -1
             With reader
@@ -140,7 +140,7 @@ Module SecurityMod
         Try
             Dim reader As MySqlDataReader
             Dim strQRY = "SELECT * FROM users WHERE usr_username='" & strLocalUser & "'"
-            reader = Return_SQLReader(strQRY)
+            reader = MySQLDB.Return_SQLReader(strQRY)
             With reader
                 If .HasRows Then
                     Do While .Read()

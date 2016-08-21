@@ -1,13 +1,9 @@
 ﻿Imports MySql.Data.MySqlClient
-Public Module MySQLComms
-    Public strDatabase As String = "asset_manager"
-    Public MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
-    Public GlobalConn As New MySqlConnection(MySQLConnectString)
+Public Class MySQL_Comms
+        Public strDatabase As String = "asset_manager"
+        Public MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
+        Public GlobalConn As New MySqlConnection(MySQLConnectString)
     Public LiveConn As New MySqlConnection(MySQLConnectString)
-    Public NotInheritable Class Entry_Type
-        Public Const Sibi As String = "sibi_"
-        Public Const Device As String = "dev_"
-    End Class
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
         'Debug.Print("Table Hit " & Date.Now.Ticks)
         Dim ds As New DataSet
@@ -265,4 +261,4 @@ Public Module MySQLComms
             Return CollectDeviceInfo(Return_SQLTable("SELECT * FROM devices WHERE dev_serial='" & Serial & "'"))
         End If
     End Function
-End Module
+End Class

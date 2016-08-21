@@ -22,7 +22,6 @@ Public Class UpdateDev
         txtUpdate_Note.Text = ""
         cmbUpdate_ChangeType.Enabled = True
         Me.DialogResult = DialogResult.OK
-
     End Sub
     Private Function CheckFields() As Boolean
         If cmbUpdate_ChangeType.SelectedIndex = -1 Then

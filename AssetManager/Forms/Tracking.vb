@@ -64,7 +64,7 @@ Public Class Tracking
     Private Sub GetCurrentTracking(strGUID As String)
         Dim dt As DataTable
         Dim dr As DataRow
-        dt = Return_SQLTable("SELECT * FROM dev_trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1") 'ds.Tables(0)
+        dt = MySQLDB.Return_SQLTable("SELECT * FROM dev_trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1") 'ds.Tables(0)
         If dt.Rows.Count > 0 Then
             For Each dr In dt.Rows
                 With dr
@@ -121,7 +121,7 @@ Public Class Tracking
             Waiting()
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='1' WHERE dev_UID='" & CurrentTrackingDevice.strGUID & "'"
-            Dim cmd As MySqlCommand = Return_SQLCommand(strSQLQry1)
+            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSQLQry1)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO dev_trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkout_user, track_use_location, track_notes, track_device_uid) VALUES(@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkout_user, @track_use_location, @track_notes, @track_device_uid)"
             cmd.CommandText = strSqlQry2
@@ -159,7 +159,7 @@ Public Class Tracking
             Waiting()
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='0' WHERE dev_UID='" & CurrentTrackingDevice.strGUID & "'"
-            Dim cmd As MySqlCommand = Return_SQLCommand(strSQLQry1)
+            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSQLQry1)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO dev_trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkin_time, track_checkout_user, track_checkin_user, track_use_location, track_notes, track_device_uid) VALUES (@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkin_time, @track_checkout_user, @track_checkin_user, @track_use_location, @track_notes, @track_device_uid)"
             cmd.CommandText = strSqlQry2

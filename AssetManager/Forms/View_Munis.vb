@@ -11,7 +11,7 @@
             If NeededInfo(Device) Then
                 Dim MunisTable As DataTable
                 Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_loc,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
-                MunisTable = Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_serial='" & Device.strSerial & "'")
+                MunisTable = MunisComms.Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_serial='" & Device.strSerial & "'")
                 bolGridFilling = True
                 DataGridMunis_Inventory.DataSource = MunisTable
                 bolGridFilling = False
@@ -35,7 +35,7 @@
 WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ") AND (dbo.ap_vendor.a_vendor_remit_seq = 1)"
             Debug.Print(strQRY)
             Dim results As DataTable
-            results = Return_MSSQLTable(strQRY)
+            results = MunisComms.Return_MSSQLTable(strQRY)
             bolGridFilling = True
             DataGridMunis_Requisition.DataSource = results
             DataGridMunis_Requisition.ClearSelection()
@@ -51,7 +51,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
             Debug.Print(strQRY)
             Dim results As DataTable
-            results = Return_MSSQLTable(strQRY)
+            results = MunisComms.Return_MSSQLTable(strQRY)
             bolGridFilling = True
             DataGridMunis_Requisition.DataSource = results
             DataGridMunis_Requisition.ClearSelection()
@@ -65,31 +65,31 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         If Device.strPO <> "" And YearFromDate(Device.dtPurchaseDate) <> "" Then 'if PO and Fiscal yr on record > load data using our records
             Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             LoadMunisInventoryGrid(Device)
-            LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(Device.strPO), Munis_GetFYFromPO(Device.strPO))
+            LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
             Me.Show()
         Else
             If Device.strPO = "" Then
-                Dim PO As String = Munis_GetPOFromAsset(Device.strAssetTag)
+                Dim PO As String = Munis.Get_PO_From_Asset(Device.strAssetTag)
                 If PO <> "" Then
                     Device.strPO = PO 'if some's missing > try to find it by other means
                 Else
-                    PO = Munis_GetPOFromSerial(Device.strSerial)
+                    PO = Munis.Get_PO_From_Serial(Device.strSerial)
                     If PO <> "" Then Device.strPO = PO
                 End If
             End If
             If YearFromDate(Device.dtPurchaseDate) = "" Then
-                Dim FY As String = Munis_GetFYFromPO(Device.strPO) 'Munis_GetFYFromAsset(Device.strAssetTag)
+                Dim FY As String = Munis.Get_FY_From_PO(Device.strPO) 'Munis_GetFYFromAsset(Device.strAssetTag)
                 If FY <> "" Then
                     Device.strFiscalYear = FY
                 Else
-                    Device.strFiscalYear = Munis_GetFYFromAsset(Device.strAssetTag)
+                    Device.strFiscalYear = Munis.Get_FY_From_Asset(Device.strAssetTag)
                 End If
             Else
                 Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             End If
             If Device.strPO <> "" Then
                 LoadMunisInventoryGrid(Device)
-                LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(Device.strPO), Munis_GetFYFromPO(Device.strPO))
+                LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
                 Me.Show()
             Else
                 MsgBox("Could not pull Munis info. No FA info and/or no PO", vbOKOnly + vbInformation, "Nothing Found")
@@ -112,7 +112,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         Dim MunisTable As DataTable
-        MunisTable = Return_MSSQLTable("SELECT TOP 10 * FROM famaster WHERE fama_serial='" & Trim(txtSerial.Text) & "'")
+        MunisTable = MunisComms.Return_MSSQLTable("SELECT TOP 10 * FROM famaster WHERE fama_serial='" & Trim(txtSerial.Text) & "'")
         Dim r As DataRow
         For Each r In MunisTable.Rows
             Debug.Print(r.Item("fama_asset"))

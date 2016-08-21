@@ -33,7 +33,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>7</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>4.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -212,14 +212,14 @@
     <Compile Include="Forms\View_Tracking.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Modules\Munis_Functions.vb" />
+    <Compile Include="Modules\Munis_Comms.vb" />
     <Compile Include="Modules\DataImport.vb" />
     <Compile Include="Modules\DBFunctions.vb" />
     <Compile Include="Modules\ErrorHandling.vb" />
     <Compile Include="Modules\ExtendedMethods.vb" />
     <Compile Include="Modules\FTPFunctions.vb" />
     <Compile Include="Modules\LiveBox.vb" />
-    <Compile Include="Modules\MSSQLComms.vb" />
-    <Compile Include="Modules\MunisFunctions.vb" />
     <Compile Include="Modules\MySQLComms.vb" />
     <Compile Include="Modules\PDFFormFilling.vb" />
     <Compile Include="Modules\SecurityMod.vb" />

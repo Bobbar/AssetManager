@@ -657,7 +657,6 @@ Partial Class frmManageRequest
         Me.PopupMenuNotes.ResumeLayout(False)
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents chkPlanned As CheckBox

@@ -13,7 +13,7 @@
         LoadModuleBoxes()
     End Sub
     Private Sub ListUsers()
-        SendToGrid(Return_SQLTable("SELECT * FROM users"))
+        SendToGrid(MySQLDB.Return_SQLTable("SELECT * FROM users"))
     End Sub
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
@@ -67,7 +67,7 @@
         AutoSizeCLBColumns(clbModules)
     End Sub
     Private Sub BuildModuleArray()
-        Dim ModuleTable As DataTable = Return_SQLTable("SELECT * FROM security ORDER BY sec_access_level")
+        Dim ModuleTable As DataTable = MySQLDB.Return_SQLTable("SELECT * FROM security ORDER BY sec_access_level")
         Dim i As Integer = 0
         ReDim ModuleArray(ModuleTable.Rows.Count - 1)
         For Each row As DataRow In ModuleTable.Rows
@@ -90,7 +90,7 @@
     End Function
     Private Sub UpdateUser(User As User_Info)
         CurrentUser.intAccessLevel = CalcAccessLevel()
-        Update_SQLValue("users", "usr_access_level", CurrentUser.intAccessLevel, "usr_UID", CurrentUser.strUID)
+        MySQLDB.Update_SQLValue("users", "usr_access_level", CurrentUser.intAccessLevel, "usr_UID", CurrentUser.strUID)
         ListUsers()
     End Sub
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick

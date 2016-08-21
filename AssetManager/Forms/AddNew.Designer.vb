@@ -390,7 +390,6 @@ Partial Class AddNew
         Me.GroupBox1.PerformLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label10 As Label

@@ -17,7 +17,7 @@ Public Class View_Entry
         Dim reader As MySqlDataReader
         Try
             Dim strQry = "Select * FROM dev_historical WHERE  hist_UID = '" & EntryUID & "'"
-            reader = Return_SQLReader(strQry)
+            reader = MySQLDB.Return_SQLReader(strQry)
             With reader
                 Do While .Read()
                     txtEntryTime.Text = NoNull(!hist_action_datetime)

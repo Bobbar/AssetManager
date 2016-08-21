@@ -115,7 +115,7 @@ Class frmSibiAttachments
             table.Columns.Add("AttachUID", GetType(String))
             table.Columns.Add("MD5", GetType(String))
             ' End If
-            reader = Return_SQLReader(strQry)
+            reader = MySQLDB.Return_SQLReader(strQry)
             Dim strFullFilename As String
             Dim row As Integer
             ReDim AttachIndex(0)
@@ -229,7 +229,7 @@ Class frmSibiAttachments
         blah = MsgBox("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             Waiting()
-            If DeleteAttachment(AttachIndex(i).strFileUID, Entry_Type.Sibi) > 0 Then
+            If MySQLDB.DeleteAttachment(AttachIndex(i).strFileUID, Entry_Type.Sibi) > 0 Then
                 ListAttachments(CurrentRequest.strUID)
                 DoneWaiting()
                 ' blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
@@ -261,7 +261,7 @@ Class frmSibiAttachments
         Dim FileSize As Long
         Dim FileSizeMB As Integer
         Dim FileNumber As Integer = 1
-        Dim conn As New MySqlConnection(MySQLConnectString)
+        Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
         Dim cmd As New MySqlCommand
         Try
             For Each file As String In Files
@@ -363,7 +363,7 @@ Class frmSibiAttachments
         Dim Filename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
         'Dim blah = MsgBox("Move " & Filename & " to " & GetHumanValue(ComboType.SibiAttachFolder, Folder) & "?", vbYesNo + vbQuestion, "Move Attachment")
         'If blah = vbYes Then
-        Update_SQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
+        MySQLDB.Update_SQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
         ListAttachments(CurrentRequest.strUID)
         'Else
         'End If
@@ -373,7 +373,7 @@ Class frmSibiAttachments
     End Sub
     Private Sub RenameAttachement(AttachUID As String, NewFileName As String)
         Try
-            Update_SQLValue("sibi_attachments", "sibi_attach_file_name", NewFileName, "sibi_attach_file_UID", AttachUID)
+            MySQLDB.Update_SQLValue("sibi_attachments", "sibi_attach_file_name", NewFileName, "sibi_attach_file_UID", AttachUID)
             ListAttachments(CurrentRequest.strUID)
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -411,7 +411,7 @@ Class frmSibiAttachments
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry = "Select * FROM sibi_attachments WHERE sibi_attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
-        Dim conn As New MySqlConnection(MySQLConnectString)
+        Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
         'Dim FileSize As UInt32
         Dim strFilename As String, strFiletype As String, strFullPath As String
@@ -649,7 +649,7 @@ Class frmSibiAttachments
     End Sub
     Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim strCurrentFileName As String = Get_SQLValue("sibi_attachments", "sibi_attach_file_UID", AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, "sibi_attach_file_name") 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
+        Dim strCurrentFileName As String = MySQLDB.Get_SQLValue("sibi_attachments", "sibi_attach_file_UID", AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, "sibi_attach_file_name") 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
         Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value
         Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
         If blah Is "" Then

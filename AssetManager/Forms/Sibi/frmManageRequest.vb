@@ -360,7 +360,7 @@ VALUES
 @sibi_replace_asset,
 @sibi_replace_serial,
 @sibi_RT_number)"
-            Dim cmd As MySqlCommand = Return_SQLCommand(strSqlQry1)
+            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSqlQry1)
             cmd.Parameters.AddWithValue("@sibi_uid", strRequestUID)
             cmd.Parameters.AddWithValue("@sibi_request_user", RequestData.strUser)
             cmd.Parameters.AddWithValue("@sibi_description", RequestData.strDescription)
@@ -452,7 +452,7 @@ sibi_replace_asset = @sibi_replace_asset ,
 sibi_replace_serial = @sibi_replace_serial ,
 sibi_RT_number = @sibi_RT_number 
 WHERE sibi_uid ='" & CurrentRequest.strUID & "'"
-            Dim cmd As MySqlCommand = Return_SQLCommand(strRequestQRY)
+            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strRequestQRY)
             cmd.Parameters.AddWithValue("@sibi_request_user", RequestData.strUser)
             cmd.Parameters.AddWithValue("@sibi_description", RequestData.strDescription)
             cmd.Parameters.AddWithValue("@sibi_need_by", RequestData.dtNeedBy)
@@ -562,8 +562,8 @@ VALUES
         Try
             Dim strRequestQRY As String = "SELECT * FROM sibi_requests WHERE sibi_uid='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT * FROM sibi_request_items WHERE sibi_items_request_uid='" & RequestUID & "'"
-            Dim RequestResults As DataTable = Return_SQLTable(strRequestQRY)
-            Dim RequestItemsResults As DataTable = Return_SQLTable(strRequestItemsQRY)
+            Dim RequestResults As DataTable = MySQLDB.Return_SQLTable(strRequestQRY)
+            Dim RequestItemsResults As DataTable = MySQLDB.Return_SQLTable(strRequestItemsQRY)
             ClearAll()
             CollectRequestInfo(RequestResults, RequestItemsResults)
             With RequestResults.Rows(0)
@@ -592,7 +592,7 @@ VALUES
     End Sub
     Private Sub LoadNotes(RequestUID As String)
         Dim strPullNotesQry As String = "SELECT * FROM sibi_notes WHERE sibi_request_uid='" & RequestUID & "' ORDER BY sibi_datestamp DESC"
-        Dim Results As DataTable = Return_SQLTable(strPullNotesQry)
+        Dim Results As DataTable = MySQLDB.Return_SQLTable(strPullNotesQry)
         Dim table As New DataTable
         Dim intPreviewChars As Integer = 50
         table.Columns.Add("Date Stamp")
@@ -612,7 +612,7 @@ VALUES
         Try
             Dim rows
             Dim strSQLQry As String = "DELETE FROM " & Table & " WHERE " & ItemColumnName & "='" & ItemUID & "'"
-            rows = Return_SQLCommand(strSQLQry).ExecuteNonQuery
+            rows = MySQLDB.Return_SQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function
         Catch ex As Exception
@@ -736,7 +736,7 @@ VALUES
         'AddChild(NewMunis)
         NewMunis.HideFixedAssetGrid()
         NewMunis.Show()
-        NewMunis.LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(PO), Munis_GetFYFromPO(PO)) 'YearFromDate(CurrentRequest.dtDateStamp))
+        NewMunis.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(PO), Munis.Get_FY_From_PO(PO)) 'YearFromDate(CurrentRequest.dtDateStamp))
         ' NewMunis.ViewEntry(GUID)
         ' DoneWaiting()
     End Sub
@@ -837,9 +837,9 @@ VALUES
     End Sub
     Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click
         If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
-            LookupDevice(FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value))
+            LookupDevice(MySQLDB.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value))
         ElseIf RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
-            LookupDevice(FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value))
+            LookupDevice(MySQLDB.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value))
         End If
     End Sub
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
@@ -858,7 +858,7 @@ VALUES
         OpenRequest(CurrentRequest.strUID)
     End Sub
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs)
-        Munis_NameSearch()
+        Munis.NameSearch()
     End Sub
     Private Sub txtPO_Click(sender As Object, e As EventArgs) Handles txtPO.Click
         Dim PO As String = Trim(txtPO.Text)
@@ -867,13 +867,13 @@ VALUES
         End If
     End Sub
     Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
-        Munis_NameSearch()
+        Munis.NameSearch()
     End Sub
     Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
-        Munis_POSearch()
+        Munis.POSearch()
     End Sub
     Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem3.Click
-        Munis_ReqSearch()
+        Munis.ReqSearch()
     End Sub
     Private Sub RequestItemsGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles RequestItemsGrid.DataError
         Dim blah = MsgBox("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error")

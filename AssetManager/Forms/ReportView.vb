@@ -7,7 +7,7 @@ Public Class ReportView
         'Dim rows As Integer
         'da.SelectCommand = Return_SQLCommand(strLastQry) 'New MySqlCommand(strLastQry) '"SELECT * FROM devices")
         ' da.SelectCommand.Connection = GlobalConn
-        dt = Return_SQLTable(strLastQry)
+        dt = MySQLDB.Return_SQLTable(strLastQry)
         'da.Fill(dt)
         'rows = ds.Tables(0).Rows.Count
         'For Each row As DataTable In dt.Rows

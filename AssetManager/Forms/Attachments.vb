@@ -100,7 +100,7 @@ Class Attachments
                 table.Columns.Add("AttachUID", GetType(String))
                 table.Columns.Add("MD5", GetType(String))
             End If
-            reader = Return_SQLReader(strQry)
+            reader = MySQLDB.Return_SQLReader(strQry)
             Dim strFullFilename As String
             Dim row As Integer
             ReDim AttachIndex(0)
@@ -211,7 +211,7 @@ Class Attachments
         blah = MsgBox("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             Waiting()
-            If DeleteAttachment(AttachIndex(i).strFileUID, Entry_Type.Device) > 0 Then
+            If MySQLDB.DeleteAttachment(AttachIndex(i).strFileUID, Entry_Type.Device) > 0 Then
                 ListAttachments(CurrentAttachDevice.strGUID)
                 DoneWaiting()
                 blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
@@ -252,7 +252,7 @@ Class Attachments
         End If
         UploadWorker.ReportProgress(1, "Connecting...")
         'sql stuff
-        Dim conn As New MySqlConnection(MySQLConnectString)
+        Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
         Dim cmd As New MySqlCommand
         Dim SQL As String
         Try
@@ -357,7 +357,7 @@ Class Attachments
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_file_UID,attach_dev_UID,attach_file_hash FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
-        Dim conn As New MySqlConnection(MySQLConnectString)
+        Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
         'Dim FileSize As UInt32
         Dim strFilename As String, strFiletype As String, strFullPath As String

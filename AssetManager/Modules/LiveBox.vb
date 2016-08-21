@@ -64,7 +64,7 @@ Module LiveBox
             Dim strQry As String
             strQryRow = CurrentLiveBoxArgs.DBColumn
             strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
-            cmd.Connection = LiveConn
+            cmd.Connection = MySQLDB.LiveConn
             cmd.CommandText = strQry
             cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
             da.SelectCommand = cmd

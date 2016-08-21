@@ -31,7 +31,7 @@
             responseStream.Dispose()
             Dim i As Integer = 0
             For Each file In files  'delete each file counting for successes
-                i += DeleteAttachment(file, Type)
+                i += MySQLDB.DeleteAttachment(file, Type)
             Next
             If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
                 resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID, Net.WebRequestMethods.Ftp.RemoveDirectory)

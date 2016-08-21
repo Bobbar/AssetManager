@@ -21,7 +21,7 @@ Module PDFFormFilling
         f.Text = "Select a Line Item"
         f.HideFixedAssetGrid()
         f.LoadDevice(Device)
-        f.LoadMunisRequisitionGridByReqNo(Munis_GetReqNumberFromPO(Device.strPO), Munis_GetFYFromPO(Device.strPO))
+        f.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
         f.ShowDialog(View)
         If f.DialogResult = DialogResult.OK Then
             Return f.UnitPrice
@@ -45,7 +45,7 @@ Module PDFFormFilling
             pdfFormFields.SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD")
             ' pdfFormFields.SetField("topmostSubform[0].Page1[0].Asterisked_items_____must_be_completed_by_the_department[0]", CurrentDevice.strAssetTag)
             pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined[0]", Device.strSerial)
-            pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_2[0]", Munis_Get_VendorName_From_PO(Device.strPO))
+            pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_2[0]", Munis.Get_VendorName_From_PO(Device.strPO))
             pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_3[0]", Device.strDescription)
             'pdfFormFields.SetField("topmostSubform[0].Page1[0]._1[0]", "6") 
             ' pdfFormFields.SetField("topmostSubform[0].Page1[0]._2[0]", "7")

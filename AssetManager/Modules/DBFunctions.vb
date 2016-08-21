@@ -86,7 +86,6 @@ Public Module DBFunctions
         Public strChangeType As String
     End Structure
     Public AccessLevels() As Access_Info
-
     Public Locations() As Combo_Data
     Public ChangeType() As Combo_Data
     Public EquipType() As Combo_Data
@@ -99,6 +98,9 @@ Public Module DBFunctions
     Public Sibi_RequestType() As Combo_Data
     Public Sibi_AttachFolder() As Combo_Data
     Public CurrentRequest As Request_Info
+    Public MunisComms As New Munis_Comms
+    Public Munis As New Munis_Functions
+    Public MySQLDB As New MySQL_Comms
     Public Structure User_Info
         Public strUsername As String
         Public strFullname As String
@@ -122,11 +124,15 @@ Public Module DBFunctions
         Public Const Sibi As String = "sibi_codes"
         Public Const Device As String = "dev_codes"
     End Class
+    Public NotInheritable Class Entry_Type
+        Public Const Sibi As String = "sibi_"
+        Public Const Device As String = "dev_"
+    End Class
     Public Function OpenConnections() As Boolean
         Try
-            GlobalConn.Open()
-            If GlobalConn.State = ConnectionState.Open Then
-                LiveConn.Open()
+            MySQLDB.GlobalConn.Open()
+            If MySQLDB.GlobalConn.State = ConnectionState.Open Then
+                MySQLDB.LiveConn.Open()
                 Return True
             Else
                 Return False
@@ -138,10 +144,10 @@ Public Module DBFunctions
     End Function
     Public Function CloseConnections()
         Try
-            GlobalConn.Close()
-            LiveConn.Close()
-            GlobalConn.Dispose()
-            LiveConn.Dispose()
+            MySQLDB.GlobalConn.Close()
+            MySQLDB.LiveConn.Close()
+            MySQLDB.GlobalConn.Dispose()
+            MySQLDB.LiveConn.Dispose()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
@@ -204,10 +210,10 @@ Public Module DBFunctions
     End Function
     Public Function DeleteMaster(ByVal strGUID As String, Type As String) As Boolean
         Try
-            If Has_Attachments(strGUID, Type) Then
-                If DeleteFTPFolder(strGUID, Type) Then Return Delete_SQLMasterEntry(strGUID, Type) ' if has attachments, delete ftp directory, then delete the sql records.
+            If MySQLDB.Has_Attachments(strGUID, Type) Then
+                If DeleteFTPFolder(strGUID, Type) Then Return MySQLDB.Delete_SQLMasterEntry(strGUID, Type) ' if has attachments, delete ftp directory, then delete the sql records.
             Else
-                Return Delete_SQLMasterEntry(strGUID, Type) 'delete sql records
+                Return MySQLDB.Delete_SQLMasterEntry(strGUID, Type) 'delete sql records
             End If
         Catch ex As Exception
             Return ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -273,19 +279,21 @@ Public Module DBFunctions
         Return Nothing
     End Function
     Public Function Get_MunisCode_From_AssetCode(AssetCode As String) As String
-        Return Get_SQLValue("munis_codes", "asset_man_code", AssetCode, "munis_code")
+        Return MySQLDB.Get_SQLValue("munis_codes", "asset_man_code", AssetCode, "munis_code")
     End Function
     Public Sub BuildIndexes()
         Logger("Building Indexes...")
-        Locations = BuildIndex(CodeType.Device, ComboType.Location)
-        ChangeType = BuildIndex(CodeType.Device, ComboType.ChangeType)
-        EquipType = BuildIndex(CodeType.Device, ComboType.EquipType)
-        OSType = BuildIndex(CodeType.Device, ComboType.OSType)
-        StatusType = BuildIndex(CodeType.Device, ComboType.StatusType)
-        Sibi_StatusType = BuildIndex(CodeType.Sibi, ComboType.SibiStatusType)
-        Sibi_ItemStatusType = BuildIndex(CodeType.Sibi, ComboType.SibiItemStatusType)
-        Sibi_RequestType = BuildIndex(CodeType.Sibi, ComboType.SibiRequestType)
-        Sibi_AttachFolder = BuildIndex(CodeType.Sibi, ComboType.SibiAttachFolder)
+        With MySQLDB
+            Locations = .BuildIndex(CodeType.Device, ComboType.Location)
+            ChangeType = .BuildIndex(CodeType.Device, ComboType.ChangeType)
+            EquipType = .BuildIndex(CodeType.Device, ComboType.EquipType)
+            OSType = .BuildIndex(CodeType.Device, ComboType.OSType)
+            StatusType = .BuildIndex(CodeType.Device, ComboType.StatusType)
+            Sibi_StatusType = .BuildIndex(CodeType.Sibi, ComboType.SibiStatusType)
+            Sibi_ItemStatusType = .BuildIndex(CodeType.Sibi, ComboType.SibiItemStatusType)
+            Sibi_RequestType = .BuildIndex(CodeType.Sibi, ComboType.SibiRequestType)
+            Sibi_AttachFolder = .BuildIndex(CodeType.Sibi, ComboType.SibiAttachFolder)
+        End With
         Logger("Building Indexes Done...")
     End Sub
     Public Function GetShortEquipType(ByVal index As Integer) As String
@@ -296,7 +304,7 @@ Public Module DBFunctions
         End Try
     End Function
     Public Function ConnectionReady() As Boolean
-        Select Case GlobalConn.State
+        Select Case MySQLDB.GlobalConn.State
             Case ConnectionState.Closed
                 Return False
             Case ConnectionState.Open
