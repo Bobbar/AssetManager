@@ -128,10 +128,12 @@ Public Module DBFunctions
         Public Const Sibi As String = "sibi_"
         Public Const Device As String = "dev_"
     End Class
+    Public TotConnections As Integer = 0
+    Public GlobalConn As MySqlConnection = MySQLDB.NewConnection()
     Public Function OpenConnections() As Boolean
         Try
-            MySQLDB.GlobalConn.Open()
-            If MySQLDB.GlobalConn.State = ConnectionState.Open Then
+            GlobalConn.Open()
+            If GlobalConn.State = ConnectionState.Open Then
                 Return True
             Else
                 Return False
@@ -143,8 +145,9 @@ Public Module DBFunctions
     End Function
     Public Function CloseConnections()
         Try
-            MySQLDB.GlobalConn.Close()
-            MySQLDB.GlobalConn.Dispose()
+            MySQLDB.CloseConnection(GlobalConn)
+            'GlobalConn.Close()
+            'GlobalConn.Dispose()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
@@ -301,7 +304,7 @@ Public Module DBFunctions
         End Try
     End Function
     Public Function ConnectionReady() As Boolean
-        Select Case MySQLDB.GlobalConn.State
+        Select Case GlobalConn.State
             Case ConnectionState.Closed
                 Return False
             Case ConnectionState.Open

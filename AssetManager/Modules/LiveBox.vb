@@ -5,7 +5,8 @@ Public Class LiveBox
     Private LiveBox As ListBox
     Private strPrevSearchString As String
     Private dtLiveBoxData As DataTable
-    Private LiveConn As New MySqlConnection(MySQLDB.MySQLConnectString)
+    Private MySQLComms As New MySQL_Comms
+    Private LiveConn As MySqlConnection = MySQLComms.NewConnection '(MySQLDB.MySQLConnectString)
     Private Structure LiveBoxArgs
         Public Control As Control
         Public Type As String
@@ -55,6 +56,11 @@ Public Class LiveBox
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
+    Public Sub Unload()
+        HideLiveBox()
+        MySQLDB.CloseConnection(LiveConn)
+        LiveBox.Dispose()
+    End Sub
     Private Sub LiveBoxSelect(Control As Control, Type As String)
         Select Case Type.ToString
             Case LiveBoxType.DynamicSearch

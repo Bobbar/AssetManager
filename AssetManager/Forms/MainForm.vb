@@ -19,7 +19,6 @@ Public Class MainForm
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
             ToolStrip1.BackColor = colToolBarColor
-            View.ToolStrip1.BackColor = colToolBarColor
             Logger("Starting AssetManager...")
             Status("Loading...")
             SplashScreen.Show()
@@ -349,7 +348,7 @@ Public Class MainForm
             QryComm = DirectCast(e.Argument, Object)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
-            Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
+            Dim conn As MySqlConnection = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
             QryComm.Connection = conn
             BigQueryWorker.ReportProgress(1)
             da.SelectCommand = QryComm
@@ -357,7 +356,7 @@ Public Class MainForm
             da.Dispose()
             e.Result = ds.Tables(0)
             ds.Dispose()
-            conn.Close()
+            MySQLDB.CloseConnection(conn) 'conn.Close()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             ConnectionReady()
@@ -434,27 +433,29 @@ Public Class MainForm
     End Sub
     Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatcher.Tick
         If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
-        Select Case MySQLDB.GlobalConn.State
+        Select Case GlobalConn.State
             Case ConnectionState.Connecting
                 ConnectStatus("Connecting", Color.Black)
         End Select
         If Not ConnectionWatchDog.IsBusy Then ConnectionWatchDog.RunWorkerAsync()
+        lblConnections.Text = "Connections: " & TotConnections
     End Sub
     Private Sub ConnectionWatchDog_DoWork(sender As Object, e As DoWorkEventArgs) Handles ConnectionWatchDog.DoWork
         Do Until ProgramEnding
-            If MySQLDB.GlobalConn.State = ConnectionState.Open Then 'test connection
+            If GlobalConn.State = ConnectionState.Open Then 'test connection
                 Try
                     Dim ds As New DataSet
                     Dim da As New MySqlDataAdapter
                     Dim rows As Integer
-                    Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
+                    Dim conn As MySqlConnection = MySQLDB.NewConnection ' (MySQLDB.MySQLConnectString)
                     da.SelectCommand = New MySqlCommand("SELECT NOW()")
                     da.SelectCommand.Connection = conn
                     da.Fill(ds)
                     rows = ds.Tables(0).Rows.Count
                     strServerTime = ds.Tables(0).Rows(0).Item(0).ToString
-                    conn.Close()
-                    conn.Dispose()
+                    MySQLDB.CloseConnection(conn)
+                    'conn.Close()
+                    'conn.Dispose()
                     da.Dispose()
                     ds.Dispose()
                 Catch ex As MySqlException
@@ -464,12 +465,12 @@ Public Class MainForm
                         MySQLDB.CheckConnection()
                     End If
                 End Try
-            ElseIf MySQLDB.GlobalConn.State <> ConnectionState.Open Then 'connection recovery
+            ElseIf GlobalConn.State <> ConnectionState.Open Then 'connection recovery
                 ConnectAttempts = 0
-                Do Until MySQLDB.GlobalConn.State = ConnectionState.Open
+                Do Until GlobalConn.State = ConnectionState.Open
                     ConnectAttempts += 1
                     ConnectionWatchDog.ReportProgress(1, "Trying to reconnect... " & ConnectAttempts)
-                    ConnectionWatchDog.ReportProgress(5, MySQLDB.GlobalConn.State)
+                    ConnectionWatchDog.ReportProgress(5, GlobalConn.State)
                     If OpenConnections() Then
                     Else
                         Thread.Sleep(5000)
@@ -477,7 +478,7 @@ Public Class MainForm
                 Loop
                 ConnectionWatchDog.ReportProgress(1, "Reconnected!")
             End If
-            ConnectionWatchDog.ReportProgress(5, MySQLDB.GlobalConn.State)
+            ConnectionWatchDog.ReportProgress(5, GlobalConn.State)
             Thread.Sleep(5000)
         Loop
     End Sub
@@ -537,7 +538,7 @@ Public Class MainForm
             MySQLDB.strDatabase = cmbDBs.Text
             MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
             CloseConnections()
-            MySQLDB.GlobalConn = New MySqlConnection(MySQLDB.MySQLConnectString)
+            GlobalConn = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
             OpenConnections()
         End If
     End Sub
@@ -557,7 +558,7 @@ Public Class MainForm
             MySQLDB.strDatabase = cmbDBs.Text
             MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
             CloseConnections()
-            MySQLDB.GlobalConn = New MySqlConnection(MySQLDB.MySQLConnectString)
+            GlobalConn = MySQLDB.NewConnection 'New MySqlConnection(MySQLDB.MySQLConnectString)
             OpenConnections()
         End If
     End Sub

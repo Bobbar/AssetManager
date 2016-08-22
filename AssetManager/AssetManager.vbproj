@@ -220,7 +220,7 @@
     <Compile Include="Modules\ExtendedMethods.vb" />
     <Compile Include="Modules\FTPFunctions.vb" />
     <Compile Include="Modules\LiveBox.vb" />
-    <Compile Include="Modules\MySQLComms.vb" />
+    <Compile Include="Modules\MySQL_Comms.vb" />
     <Compile Include="Modules\PDFFormFilling.vb" />
     <Compile Include="Modules\SecurityMod.vb" />
     <Compile Include="My Project\Resources.Designer.vb">

@@ -252,7 +252,7 @@ Class Attachments
         End If
         UploadWorker.ReportProgress(1, "Connecting...")
         'sql stuff
-        Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
+        Dim conn As MySqlConnection = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
         Dim cmd As New MySqlCommand
         Dim SQL As String
         Try
@@ -309,8 +309,9 @@ Class Attachments
                 cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
                 cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
                 cmd.ExecuteNonQuery()
-                conn.Close()
-                conn.Dispose()
+                MySQLDB.CloseConnection(conn)
+                'conn.Close()
+                'conn.Dispose()
                 cmd.Dispose()
                 e.Result = True
             Else
@@ -319,8 +320,9 @@ Class Attachments
             UploadWorker.ReportProgress(1, "Idle...")
         Catch ex As Exception
             e.Result = False
-            conn.Close()
-            conn.Dispose()
+            MySQLDB.CloseConnection(conn)
+            'conn.Close()
+            'conn.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
             If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
@@ -357,7 +359,7 @@ Class Attachments
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_file_UID,attach_dev_UID,attach_file_hash FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
-        Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
+        Dim conn As MySqlConnection = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
         'Dim FileSize As UInt32
         Dim strFilename As String, strFiletype As String, strFullPath As String
@@ -378,8 +380,9 @@ Class Attachments
             End With
             reader.Close()
             reader.Dispose()
-            conn.Close()
-            conn.Dispose()
+            MySQLDB.CloseConnection(conn)
+            'conn.Close()
+            'conn.Dispose()
             'FTP STUFF
             Dim buffer(1023) As Byte
             Dim bytesIn As Integer

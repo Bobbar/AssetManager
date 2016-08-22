@@ -87,6 +87,8 @@ Partial Class MainForm
         Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
         Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.lblConnections = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -528,7 +530,7 @@ Partial Class MainForm
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel2, Me.DateTimeLabel})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel4, Me.lblConnections, Me.ToolStripStatusLabel2, Me.DateTimeLabel})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 632)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1240, 22)
@@ -551,7 +553,7 @@ Partial Class MainForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(963, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(858, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ConnStatusLabel
@@ -730,6 +732,20 @@ Partial Class MainForm
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
         '
+        'lblConnections
+        '
+        Me.lblConnections.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblConnections.Name = "lblConnections"
+        Me.lblConnections.Size = New System.Drawing.Size(93, 17)
+        Me.lblConnections.Text = "Connections: 0"
+        '
+        'ToolStripStatusLabel4
+        '
+        Me.ToolStripStatusLabel4.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripStatusLabel4.Name = "ToolStripStatusLabel4"
+        Me.ToolStripStatusLabel4.Size = New System.Drawing.Size(12, 17)
+        Me.ToolStripStatusLabel4.Text = "|"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -762,6 +778,7 @@ Partial Class MainForm
         Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button
@@ -826,4 +843,6 @@ Partial Class MainForm
     Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
     Friend WithEvents TextEnCrypterToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripStatusLabel4 As ToolStripStatusLabel
+    Friend WithEvents lblConnections As ToolStripStatusLabel
 End Class

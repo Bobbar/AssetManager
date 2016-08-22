@@ -261,7 +261,7 @@ Class frmSibiAttachments
         Dim FileSize As Long
         Dim FileSizeMB As Integer
         Dim FileNumber As Integer = 1
-        Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
+        Dim conn As MySqlConnection = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
         Dim cmd As New MySqlCommand
         Try
             For Each file As String In Files
@@ -344,17 +344,18 @@ Class frmSibiAttachments
                     e.Result = False
                 End If
                 FileNumber += 1
-                conn.Close()
+                MySQLDB.CloseConnection(conn) 'conn.Close()
                 UploadWorker.ReportProgress(3, "Idle...")
             Next
-            conn.Close()
-            conn.Dispose()
+            MySQLDB.CloseConnection(conn) 'conn.Close()
+            'conn.Dispose()
             cmd.Dispose()
             UploadWorker.ReportProgress(3, "Idle...")
         Catch ex As Exception
             e.Result = False
-            conn.Close()
-            conn.Dispose()
+            MySQLDB.CloseConnection(conn)
+            'conn.Close()
+            'conn.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
             If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
@@ -411,7 +412,7 @@ Class frmSibiAttachments
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry = "Select * FROM sibi_attachments WHERE sibi_attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
-        Dim conn As New MySqlConnection(MySQLDB.MySQLConnectString)
+        Dim conn As MySqlConnection = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
         'Dim FileSize As UInt32
         Dim strFilename As String, strFiletype As String, strFullPath As String
@@ -432,8 +433,9 @@ Class frmSibiAttachments
             End With
             reader.Close()
             reader.Dispose()
-            conn.Close()
-            conn.Dispose()
+            MySQLDB.CloseConnection(conn)
+            'conn.Close()
+            'conn.Dispose()
             'FTP STUFF
             Dim buffer(1023) As Byte
             Dim bytesIn As Integer

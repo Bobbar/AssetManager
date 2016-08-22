@@ -520,6 +520,7 @@ Public Class View
         UpdateDev.Show()
     End Sub
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        MyLiveBox.Unload()
         Me.Dispose()
         Attachments.Dispose()
         Tracking.Dispose()
@@ -649,6 +650,9 @@ Public Class View
     End Sub
     Private Sub txtCurUser_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_View_REQ.KeyUp
         MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_cur_user")
+    End Sub
+    Private Sub txtDescription_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription_View_REQ.KeyUp
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_description")
     End Sub
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
         If bolCheckFields Then CheckFields()
