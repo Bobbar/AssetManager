@@ -2,8 +2,7 @@
 Public Class MySQL_Comms
         Public strDatabase As String = "asset_manager"
         Public MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
-        Public GlobalConn As New MySqlConnection(MySQLConnectString)
-    Public LiveConn As New MySqlConnection(MySQLConnectString)
+    Public GlobalConn As New MySqlConnection(MySQLConnectString)
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
         'Debug.Print("Table Hit " & Date.Now.Ticks)
         Dim ds As New DataSet

@@ -147,7 +147,6 @@ Module OtherFunctions
         Logger("Ending Program...")
         PurgeTempDir()
         MySQLDB.GlobalConn.Close()
-        MySQLDB.LiveConn.Close()
         Application.Exit()
         End
     End Sub

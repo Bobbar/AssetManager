@@ -132,7 +132,6 @@ Public Module DBFunctions
         Try
             MySQLDB.GlobalConn.Open()
             If MySQLDB.GlobalConn.State = ConnectionState.Open Then
-                MySQLDB.LiveConn.Open()
                 Return True
             Else
                 Return False
@@ -145,9 +144,7 @@ Public Module DBFunctions
     Public Function CloseConnections()
         Try
             MySQLDB.GlobalConn.Close()
-            MySQLDB.LiveConn.Close()
             MySQLDB.GlobalConn.Dispose()
-            MySQLDB.LiveConn.Dispose()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False

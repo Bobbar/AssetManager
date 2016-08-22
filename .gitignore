@@ -310,3 +310,5 @@ AssetManager/obj/Debug/AssetManager.exe
 *.pdb
 *.exe
 AssetManager/obj/Debug/AssetManager.vbproj.FileListAbsolute.txt
+AssetManager/obj/Debug/TempPE/My Project.Resources.Designer.vb.dll
+*.user

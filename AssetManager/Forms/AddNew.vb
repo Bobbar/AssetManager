@@ -3,6 +3,7 @@ Imports MySql.Data.MySqlClient
 Public Class AddNew
     Private Device As Device_Info
     Private bolCheckFields As Boolean
+    Private MyLiveBox As New LiveBox
     Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
         AddNewDevice()
     End Sub
@@ -131,6 +132,7 @@ Public Class AddNew
         Device.strPO = Trim(txtPO.Text)
     End Sub
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
+        MyLiveBox.InitializeLiveBox()
         ClearAll()
     End Sub
     Private Sub ClearAll()
@@ -217,9 +219,9 @@ Public Class AddNew
         AdjustComboBoxWidth(sender, e)
     End Sub
     Private Sub txtCurUser_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_REQ.KeyUp
-        StartLiveSearch(sender, LiveBoxType.SelectValue, "dev_cur_user")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_cur_user")
     End Sub
     Private Sub txtDescription_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription_REQ.KeyUp
-        StartLiveSearch(sender, LiveBoxType.SelectValue, "dev_description")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_description")
     End Sub
 End Class

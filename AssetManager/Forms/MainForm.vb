@@ -13,6 +13,7 @@ Public Class MainForm
     Private intPrevRow As Integer
     Private bolGridFilling As Boolean = False
     Private ConnectAttempts As Integer = 0
+    Private MyLiveBox As New LiveBox
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
@@ -45,7 +46,7 @@ Public Class MainForm
             Else
                 AdminDropDown.Visible = False
             End If
-            InitializeLiveBox()
+            MyLiveBox.InitializeLiveBox()
             Clear_All()
             GetGridStylez()
             SetGridStyle(ResultGrid)
@@ -80,7 +81,7 @@ Public Class MainForm
         SplashScreen.Refresh()
     End Sub
     Private Sub Clear_All()
-        HideLiveBox()
+        MyLiveBox.HideLiveBox()
         txtAssetTag.Clear()
         txtAssetTagSearch.Clear()
         txtSerial.Clear()
@@ -208,7 +209,7 @@ Public Class MainForm
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         If Not BigQueryWorker.IsBusy Then
             ClickedButton = cmdSearch
-            HideLiveBox()
+            MyLiveBox.HideLiveBox()
             DynamicSearch()
         End If
     End Sub
@@ -330,52 +331,17 @@ Public Class MainForm
         If Not CheckForAccess(AccessGroup.Add) Then Exit Sub
         AddNew.Show()
     End Sub
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs)
-        Try
-            strPrevSearchString = strSearchString
-            Dim ds As New DataSet
-            Dim da As New MySqlDataAdapter
-            Dim cmd As New MySqlCommand
-            Dim RowLimit As Integer = 15
-            Dim strQryRow As String
-            Dim strQry As String
-            Select Case ActiveControl.Name
-                Case "txtAssetTag"
-                    strQryRow = "dev_asset_tag"
-                Case "txtSerial"
-                    strQryRow = "dev_serial"
-                Case "txtCurUser"
-                    strQryRow = "dev_cur_user"
-                Case "txtDescription"
-                    strQryRow = "dev_description"
-                Case "txtReplaceYear"
-                    strQryRow = "dev_replacement_year"
-            End Select
-            strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
-            cmd.Connection = MySQLDB.LiveConn
-            cmd.CommandText = strQry
-            cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
-            da.SelectCommand = cmd
-            da.Fill(ds)
-            dtResults = ds.Tables(0)
-            da.Dispose()
-            ds.Dispose()
-        Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            ConnectionReady()
-        End Try
-    End Sub
     Private Sub txtSerial_TextChanged(sender As Object, e As EventArgs) Handles txtSerial.TextChanged
-        StartLiveSearch(sender, LiveBoxType.InstaLoad, "dev_serial")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.InstaLoad, "dev_serial")
     End Sub
     Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
-        StartLiveSearch(sender, LiveBoxType.InstaLoad, "dev_asset_tag")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.InstaLoad, "dev_asset_tag")
     End Sub
     Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
-        StartLiveSearch(sender, LiveBoxType.DynamicSearch, "dev_description")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.DynamicSearch, "dev_description")
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
-        StartLiveSearch(sender, LiveBoxType.DynamicSearch, "dev_cur_user")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.DynamicSearch, "dev_cur_user")
     End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
@@ -405,17 +371,17 @@ Public Class MainForm
     End Sub
     Private Sub txtAssetTag_KeyDown(sender As Object, e As KeyEventArgs) Handles txtAssetTag.KeyDown
         If e.KeyCode = Keys.Down Then
-            GiveLiveBoxFocus()
+            MyLiveBox.GiveLiveBoxFocus()
         End If
     End Sub
     Private Sub txtSerial_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSerial.KeyDown
         If e.KeyCode = Keys.Down Then
-            GiveLiveBoxFocus()
+            MyLiveBox.GiveLiveBoxFocus()
         End If
     End Sub
     Private Sub txtCurUser_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyDown
         If e.KeyCode = Keys.Down Then
-            GiveLiveBoxFocus()
+            MyLiveBox.GiveLiveBoxFocus()
         End If
     End Sub
     Private Sub AddDeviceTool_Click(sender As Object, e As EventArgs) Handles AddDeviceTool.Click
@@ -435,7 +401,7 @@ Public Class MainForm
     End Sub
     Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
         If e.KeyCode = Keys.Down Then
-            GiveLiveBoxFocus()
+            MyLiveBox.GiveLiveBoxFocus()
         End If
     End Sub
     Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
@@ -572,7 +538,6 @@ Public Class MainForm
             MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
             CloseConnections()
             MySQLDB.GlobalConn = New MySqlConnection(MySQLDB.MySQLConnectString)
-            MySQLDB.LiveConn = New MySqlConnection(MySQLDB.MySQLConnectString)
             OpenConnections()
         End If
     End Sub
@@ -593,7 +558,6 @@ Public Class MainForm
             MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
             CloseConnections()
             MySQLDB.GlobalConn = New MySqlConnection(MySQLDB.MySQLConnectString)
-            MySQLDB.LiveConn = New MySqlConnection(MySQLDB.MySQLConnectString)
             OpenConnections()
         End If
     End Sub
@@ -610,19 +574,19 @@ Public Class MainForm
         End If
     End Sub
     Private Sub Panel1_Scroll(sender As Object, e As ScrollEventArgs)
-        HideLiveBox()
+        MyLiveBox.HideLiveBox()
     End Sub
     Private Sub Panel1_MouseWheel(sender As Object, e As MouseEventArgs)
-        HideLiveBox()
+        MyLiveBox.HideLiveBox()
     End Sub
     Private Sub cmbOSType_DropDown(sender As Object, e As EventArgs) Handles cmbOSType.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub
     Private Sub PanelNoScrollOnFocus1_Scroll(sender As Object, e As ScrollEventArgs) Handles PanelNoScrollOnFocus1.Scroll
-        HideLiveBox()
+        MyLiveBox.HideLiveBox()
     End Sub
     Private Sub PanelNoScrollOnFocus1_MouseWheel(sender As Object, e As MouseEventArgs) Handles PanelNoScrollOnFocus1.MouseWheel
-        HideLiveBox()
+        MyLiveBox.HideLiveBox()
     End Sub
     Private Sub cmdSibi_Click(sender As Object, e As EventArgs) Handles cmdSibi.Click
         ' frmNewRequest.Show()
@@ -651,7 +615,7 @@ Public Class MainForm
     End Sub
     Private Sub txtReplaceYear_KeyDown(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyDown
         If e.KeyCode = Keys.Down Then
-            GiveLiveBoxFocus()
+            MyLiveBox.GiveLiveBoxFocus()
         End If
     End Sub
     Private Sub ResultGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles ResultGrid.KeyDown

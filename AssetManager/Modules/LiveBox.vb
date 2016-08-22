@@ -1,10 +1,11 @@
 ﻿Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
-Module LiveBox
+Public Class LiveBox
     Private WithEvents LiveWorker As BackgroundWorker
     Private LiveBox As ListBox
     Private strPrevSearchString As String
     Private dtLiveBoxData As DataTable
+    Private LiveConn As New MySqlConnection(MySQLDB.MySQLConnectString)
     Private Structure LiveBoxArgs
         Public Control As Control
         Public Type As String
@@ -17,8 +18,10 @@ Module LiveBox
         Public Const SelectValue As String = "SELE"
     End Class
     Public Sub InitializeLiveBox()
-        InitializeWorker()
-        InitializeControl()
+        If OpenConnection() Then
+            InitializeWorker()
+            InitializeControl()
+        End If
     End Sub
     Private Sub InitializeWorker()
         LiveWorker = New BackgroundWorker
@@ -39,6 +42,19 @@ Module LiveBox
         LiveBox.Visible = False
         SetStyle()
     End Sub
+    Private Function OpenConnection() As Boolean
+        Try
+            If LiveConn.State = ConnectionState.Open Then
+                Return True
+            Else
+                LiveConn.Open()
+                Return True
+            End If
+        Catch ex As Exception
+            Return False
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Function
     Private Sub LiveBoxSelect(Control As Control, Type As String)
         Select Case Type.ToString
             Case LiveBoxType.DynamicSearch
@@ -64,7 +80,7 @@ Module LiveBox
             Dim strQry As String
             strQryRow = CurrentLiveBoxArgs.DBColumn
             strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
-            cmd.Connection = MySQLDB.LiveConn
+            cmd.Connection = LiveConn
             cmd.CommandText = strQry
             cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
             da.SelectCommand = cmd
@@ -188,4 +204,4 @@ Module LiveBox
             .ForeColor = Color.Black
         End With
     End Sub
-End Module
+End Class

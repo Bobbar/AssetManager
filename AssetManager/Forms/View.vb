@@ -18,7 +18,9 @@ Public Class View
     End Structure
     Private OldData As Device_Info
     Public NewData As Device_Info
+    Private MyLiveBox As New LiveBox
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        MyLiveBox.InitializeLiveBox()
         grpNetTools.Visible = False
         ToolStrip1.BackColor = colToolBarColor
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
@@ -437,7 +439,7 @@ Public Class View
             End If
         Next
         fieldErrorIcon.Clear()
-        HideLiveBox()
+        MyLiveBox.HideLiveBox()
     End Sub
     Private Function CheckFields() As Boolean
         Dim bolMissingField As Boolean
@@ -646,7 +648,7 @@ Public Class View
         If bolCheckFields Then CheckFields()
     End Sub
     Private Sub txtCurUser_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_View_REQ.KeyUp
-        StartLiveSearch(sender, LiveBoxType.SelectValue, "dev_cur_user")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_cur_user")
     End Sub
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
         If bolCheckFields Then CheckFields()
