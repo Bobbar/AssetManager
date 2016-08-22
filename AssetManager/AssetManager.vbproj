@@ -99,8 +99,6 @@
     <Reference Include="itextsharp">
       <HintPath>..\..\..\Users\rl12184\Downloads\itextsharp-all-5.5.9\itextsharp-dll-core\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
-    <Reference Include="Microsoft.ReportViewer.WinForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualBasic.PowerPacks, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\Program Files (x86)\Microsoft Visual Basic 2005 Power Packs\3.0\Microsoft.VisualBasic.PowerPacks.dll</HintPath>
     </Reference>
@@ -228,12 +226,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ReportView.Designer.vb">
-      <DependentUpon>ReportView.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ReportView.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\SplashScreen1.Designer.vb">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
     </Compile>
@@ -317,9 +309,6 @@
     <EmbeddedResource Include="Forms\View_Tracking.resx">
       <DependentUpon>View_Tracking.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ReportView.resx">
-      <DependentUpon>ReportView.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SplashScreen1.resx">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
     </EmbeddedResource>
@@ -339,7 +328,6 @@
       <DependentUpon>View_Entry.vb</DependentUpon>
     </EmbeddedResource>
     <None Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
-    <None Include="Resources\Reports\YearsSincePurchase.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AssetManager_TemporaryKey.pfx" />

@@ -50,9 +50,9 @@ Public Class MainForm
             GetGridStylez()
             SetGridStyle(ResultGrid)
             ConnectionWatchDog.RunWorkerAsync()
-            ShowAll()
             Status("Ready!")
-            Thread.Sleep(1000)
+            ShowAll()
+            Thread.Sleep(500)
             SplashScreen.Hide()
             Me.Show()
         Catch ex As Exception
@@ -323,9 +323,6 @@ Public Class MainForm
         StatusLabel.Text = Text
         Me.Refresh()
     End Sub
-    Private Sub YearsSincePurchaseToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        ReportView.Show()
-    End Sub
     Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs)
         If Not CheckForAccess(AccessGroup.Add) Then Exit Sub
         AddNew.Show()
@@ -390,13 +387,6 @@ Public Class MainForm
         End If
         If Not CheckForAccess(AccessGroup.Add) Then Exit Sub
         AddNew.Show()
-    End Sub
-    Private Sub YearsSincePurchaseToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles YearsSincePurchaseToolStripMenuItem1.Click
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
-        ReportView.Show()
     End Sub
     Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
         If e.KeyCode = Keys.Down Then

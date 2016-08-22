@@ -48,7 +48,6 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmSibiSelector.resou
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Munis.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Tracking.resources
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.ReportView.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.SplashScreen.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.UpdateDev.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Resources.resources
