@@ -18,6 +18,7 @@
             table.Columns.Add("Need By", GetType(String))
             table.Columns.Add("PO Number", GetType(String))
             table.Columns.Add("Req. Number", GetType(String))
+            table.Columns.Add("RT Number", GetType(String))
             table.Columns.Add("UID", GetType(String))
             'table.Columns.Add("Location", GetType(String))
             'table.Columns.Add("Purchase Date", GetType(String))
@@ -32,6 +33,7 @@
                                NoNull(r.Item("sibi_need_by")),
                                NoNull(r.Item("sibi_PO")),
                                NoNull(r.Item("sibi_requisition_number")),
+                               NoNull(r.Item("sibi_RT_number")),
                                NoNull(r.Item("sibi_uid")))
             Next
             'bolGridFilling = True
