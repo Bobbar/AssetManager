@@ -195,7 +195,7 @@ Public Class View
         End If
         Try
             Waiting()
-            ClearFields()
+            'ClearFields()
             RefreshCombos()
             If ViewHistory(DeviceUID) Then
                 ViewTracking(CurrentViewDevice.strGUID)
@@ -267,16 +267,16 @@ Public Class View
                 table.Columns.Add("Purchase Date", GetType(String))
                 table.Columns.Add("GUID", GetType(String))
                 For Each r As DataRow In tblResults.Rows
-                    table.Rows.Add(r.Item("hist_action_datetime"),
-                           GetHumanValue(ComboType.ChangeType, r.Item("hist_change_type")),
-                           r.Item("hist_action_user"),
-                           r.Item("hist_cur_user"),
-                           r.Item("hist_asset_tag"),
-                           r.Item("hist_serial"),
-                           r.Item("hist_description"),
-                           GetHumanValue(ComboType.Location, r.Item("hist_location")),
-                           r.Item("hist_purchase_date"),
-                           r.Item("hist_uid"))
+                    table.Rows.Add(NoNull(r.Item("hist_action_datetime")),
+                           GetHumanValue(ComboType.ChangeType, NoNull(r.Item("hist_change_type"))),
+                           NoNull(r.Item("hist_action_user")),
+                           NoNull(r.Item("hist_cur_user")),
+                           NoNull(r.Item("hist_asset_tag")),
+                           NoNull(r.Item("hist_serial")),
+                           NoNull(r.Item("hist_description")),
+                           GetHumanValue(ComboType.Location, NoNull(r.Item("hist_location"))),
+                           NoNull(r.Item("hist_purchase_date")),
+                           NoNull(r.Item("hist_uid")))
                 Next
                 Grid.DataSource = table
                 table.Dispose()
@@ -303,15 +303,15 @@ Public Class View
                 table.Columns.Add("Location", GetType(String))
                 table.Columns.Add("GUID", GetType(String))
                 For Each r As DataRow In tblResults.Rows
-                    table.Rows.Add(r.Item("track_datestamp"),
-                           r.Item("track_check_type"),
-                           r.Item("track_checkout_user"),
-                           r.Item("track_checkin_user"),
-                           r.Item("track_checkout_time"),
-                           r.Item("track_checkin_time"),
-                           r.Item("track_dueback_date"),
-                           r.Item("track_use_location"),
-                           r.Item("track_uid"))
+                    table.Rows.Add(NoNull(r.Item("track_datestamp")),
+                           NoNull(r.Item("track_check_type")),
+                           NoNull(r.Item("track_checkout_user")),
+                           NoNull(r.Item("track_checkin_user")),
+                           NoNull(r.Item("track_checkout_time")),
+                           NoNull(r.Item("track_checkin_time")),
+                           NoNull(r.Item("track_dueback_date")),
+                           NoNull(r.Item("track_use_location")),
+                           NoNull(r.Item("track_uid")))
                 Next
                 Grid.DataSource = table
                 table.Dispose()

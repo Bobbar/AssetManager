@@ -324,7 +324,6 @@
     <EmbeddedResource Include="Forms\View_Entry.resx">
       <DependentUpon>View_Entry.vb</DependentUpon>
     </EmbeddedResource>
-    <None Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AssetManager_TemporaryKey.pfx" />
@@ -366,6 +365,7 @@
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
+    <None Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
     <None Include="Resources\Find.png" />
     <None Include="Resources\Form2-512.png" />
     <Content Include="Resources\inventory-small.fw.png" />

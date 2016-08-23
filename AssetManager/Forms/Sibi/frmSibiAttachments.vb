@@ -19,6 +19,7 @@ Class frmSibiAttachments
     Private bolDragging As Boolean = False
     Private bolAllowDrag As Boolean = False
     Private strDragFilePath As String
+    Private AttachRequest As Request_Info
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -83,7 +84,8 @@ Class frmSibiAttachments
             Me.Refresh()
         End If
     End Sub
-    Public Sub ListAttachments(Optional RequestUID As String = Nothing)
+    Public Sub ListAttachments(Request As Request_Info)
+        AttachRequest = Request
         If Not ConnectionReady() Then
             Exit Sub
         End If
@@ -103,9 +105,9 @@ Class frmSibiAttachments
             'ElseIf Not bolAdminMode Then
             Select Case GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex)
                 Case "ALL"
-                    strQry = "Select * FROM sibi_attachments WHERE sibi_attach_UID='" & RequestUID & "' ORDER BY sibi_attach_timestamp DESC"
+                    strQry = "Select * FROM sibi_attachments WHERE sibi_attach_UID='" & AttachRequest.strUID & "' ORDER BY sibi_attach_timestamp DESC"
                 Case Else
-                    strQry = "Select * FROM sibi_attachments WHERE sibi_attach_folder='" & GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex) & "' AND sibi_attach_UID ='" & RequestUID & "' ORDER BY sibi_attach_timestamp DESC"
+                    strQry = "Select * FROM sibi_attachments WHERE sibi_attach_folder='" & GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex) & "' AND sibi_attach_UID ='" & AttachRequest.strUID & "' ORDER BY sibi_attach_timestamp DESC"
             End Select
             table.Columns.Add(" ", GetType(Image))
             table.Columns.Add("Filename", GetType(String))
@@ -207,9 +209,9 @@ Class frmSibiAttachments
         FillToolComboBox(Sibi_AttachFolder, cmbMoveFolder)
     End Sub
     Public Sub FillInfo()
-        txtUID.Text = CurrentRequest.strUID
-        txtRequestNum.Text = CurrentRequest.strRequestNumber
-        txtDescription.Text = CurrentRequest.strDescription
+        txtUID.Text = AttachRequest.strUID
+        txtRequestNum.Text = AttachRequest.strRequestNumber
+        txtDescription.Text = AttachRequest.strDescription
         cmbFolder.SelectedIndex = 0
     End Sub
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs)
@@ -230,7 +232,7 @@ Class frmSibiAttachments
         If blah = vbYes Then
             Waiting()
             If MySQLDB.DeleteAttachment(AttachIndex(i).strFileUID, Entry_Type.Sibi) > 0 Then
-                ListAttachments(CurrentRequest.strUID)
+                ListAttachments(AttachRequest)
                 DoneWaiting()
                 ' blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
             Else
@@ -251,7 +253,7 @@ Class frmSibiAttachments
     End Sub
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
         'file stuff
-        Dim Foldername As String = CurrentRequest.strUID
+        Dim Foldername As String = AttachRequest.strUID
         Dim strFileGuid As String
         Dim Files() As String = DirectCast(e.Argument, String())
         Dim strFilename As String
@@ -330,7 +332,7 @@ Class frmSibiAttachments
                     conn.Open()
                     cmd.Connection = conn
                     cmd.CommandText = SQL
-                    cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentRequest.strUID)
+                    cmd.Parameters.AddWithValue("@attach_dev_UID", AttachRequest.strUID)
                     cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
                     cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
                     cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
@@ -365,7 +367,7 @@ Class frmSibiAttachments
         'Dim blah = MsgBox("Move " & Filename & " to " & GetHumanValue(ComboType.SibiAttachFolder, Folder) & "?", vbYesNo + vbQuestion, "Move Attachment")
         'If blah = vbYes Then
         MySQLDB.Update_SQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
-        ListAttachments(CurrentRequest.strUID)
+        ListAttachments(AttachRequest)
         'Else
         'End If
         cmbMoveFolder.SelectedIndex = -1
@@ -375,7 +377,7 @@ Class frmSibiAttachments
     Private Sub RenameAttachement(AttachUID As String, NewFileName As String)
         Try
             MySQLDB.Update_SQLValue("sibi_attachments", "sibi_attach_file_name", NewFileName, "sibi_attach_file_UID", AttachUID)
-            ListAttachments(CurrentRequest.strUID)
+            ListAttachments(AttachRequest)
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
@@ -384,7 +386,7 @@ Class frmSibiAttachments
         Try
             strMultiFileCount = ""
             WorkerFeedback(False)
-            ListAttachments(CurrentRequest.strUID)
+            ListAttachments(AttachRequest)
             If Not e.Cancelled Then
                 If e.Result Then
                     ' MessageBox.Show("File uploaded successfully!",
@@ -560,7 +562,7 @@ Class frmSibiAttachments
                 Me.Refresh()
             Case 3
                 StatusBar(e.UserState)
-                ListAttachments(CurrentRequest.strUID)
+                ListAttachments(AttachRequest)
         End Select
     End Sub
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
@@ -642,7 +644,7 @@ Class frmSibiAttachments
         If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
     End Sub
     Private Sub cmbFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFolder.SelectedIndexChanged
-        ListAttachments(CurrentRequest.strUID)
+        ListAttachments(AttachRequest)
         strSelectedFolder = GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex)
     End Sub
     Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed

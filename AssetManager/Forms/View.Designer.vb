@@ -900,6 +900,7 @@ Partial Class View
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents DeviceInfoBox As GroupBox
     Friend WithEvents Label9 As Label

@@ -8,7 +8,7 @@ Public Class MainForm
     Private StartingControl As Control
     Private strWorkerQry As String
     Private Const strShowAllQry As String = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
-    Private ClickedButton As Control, ClickedButtonPrevText As String
+    Private ClickedButton As Control
     Dim dtResults As New DataTable
     Private intPrevRow As Integer
     Private bolGridFilling As Boolean = False
@@ -72,7 +72,6 @@ Public Class MainForm
         tmpStyle.SelectionBackColor = ResultGrid.DefaultCellStyle.SelectionBackColor
         tmpStyle.SelectionForeColor = ResultGrid.DefaultCellStyle.SelectionForeColor
         tmpStyle.WrapMode = ResultGrid.DefaultCellStyle.WrapMode
-        'Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle2
         GridStylez = tmpStyle
     End Sub
     Public Sub Status(Text As String)
@@ -93,7 +92,6 @@ Public Class MainForm
         txtReplaceYear.Clear()
         chkTrackables.Checked = False
         RefreshCombos()
-        '  ResultGrid.DataSource = Nothing
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If Not Attachments.UploadWorker.IsBusy And Not Attachments.DownloadWorker.IsBusy Then
@@ -110,7 +108,6 @@ Public Class MainForm
     End Sub
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         If Not BigQueryWorker.IsBusy Then
-            ClickedButton = cmdShowAll
             ShowAll()
         End If
     End Sub
@@ -127,9 +124,7 @@ Public Class MainForm
         End If
         If Not BigQueryWorker.IsBusy Then
             If ClickedButton IsNot Nothing Then
-                ClickedButtonPrevText = ClickedButton.Text
                 ClickedButton.Enabled = False
-                ClickedButton.Text = "Working..."
             End If
             StatusBar("Request sent to background...")
             StripSpinner.Visible = True
@@ -141,11 +136,9 @@ Public Class MainForm
         StripSpinner.Visible = False
         If ClickedButton IsNot Nothing Then
             ClickedButton.Enabled = True
-            ClickedButton.Text = ClickedButtonPrevText
             ClickedButton = Nothing
         End If
         StatusBar("Idle...")
-        'picRunning.Visible = False
     End Sub
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
@@ -292,7 +285,7 @@ Public Class MainForm
             End If
             DoneWaiting()
         Else
-            Dim blah = MsgBox("That device is already open.", vbOKOnly + vbExclamation, "Duplicate Window")
+            ' Dim blah = MsgBox("That device is already open.", vbOKOnly + vbExclamation, "Duplicate Window")
             ActivateForm(strGUID)
         End If
     End Sub
@@ -437,22 +430,20 @@ Public Class MainForm
                     Dim ds As New DataSet
                     Dim da As New MySqlDataAdapter
                     Dim rows As Integer
-                    Dim conn As MySqlConnection = MySQLDB.NewConnection ' (MySQLDB.MySQLConnectString)
+                    Dim conn As MySqlConnection = MySQLDB.NewConnection
                     da.SelectCommand = New MySqlCommand("SELECT NOW()")
                     da.SelectCommand.Connection = conn
                     da.Fill(ds)
                     rows = ds.Tables(0).Rows.Count
                     strServerTime = ds.Tables(0).Rows(0).Item(0).ToString
                     MySQLDB.CloseConnection(conn)
-                    'conn.Close()
-                    'conn.Dispose()
                     da.Dispose()
                     ds.Dispose()
                 Catch ex As MySqlException
                     If ex.HResult = -2147467259 Then
                         ConnectionWatchDog.ReportProgress(1, "Connection Problem! Checking...")
                         ConnectionWatchDog.ReportProgress(2, "Disconnected")
-                        MySQLDB.CheckConnection()
+                        'MySQLDB.CheckConnection()
                     End If
                 End Try
             ElseIf GlobalConn.State <> ConnectionState.Open Then 'connection recovery
@@ -613,6 +604,14 @@ Public Class MainForm
         If e.KeyCode = Keys.Enter Then
             LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
             e.SuppressKeyPress = True
+        End If
+    End Sub
+    Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        Dim f As Form = sender
+        If f.WindowState = FormWindowState.Minimized Then
+            MinimizeAll()
+        ElseIf f.WindowState = FormWindowState.Normal Then
+            RestoreAll()
         End If
     End Sub
 End Class

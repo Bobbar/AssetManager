@@ -207,8 +207,22 @@ Module OtherFunctions
         For Each frm As Form In My.Application.OpenForms
             If frm.Name = "View" Then
                 Dim vw As View = frm
-                If vw.CurrentViewDevice.strGUID = strGUID Then vw.Activate()
+                If vw.CurrentViewDevice.strGUID = strGUID Then
+                    vw.Activate()
+                    vw.WindowState = FormWindowState.Normal
+                    vw.Show()
+                End If
             End If
+        Next
+    End Sub
+    Public Sub MinimizeAll()
+        For Each frm As Form In My.Application.OpenForms
+            frm.WindowState = FormWindowState.Minimized
+        Next
+    End Sub
+    Public Sub RestoreAll()
+        For Each frm As Form In My.Application.OpenForms
+            frm.WindowState = FormWindowState.Normal
         Next
     End Sub
 End Module

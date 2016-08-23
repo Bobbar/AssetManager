@@ -31,7 +31,6 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.dll
-C:\GitHub\AssetManager\AssetManager\bin\Debug\Microsoft.ReportViewer.WinForms.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.Entity.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.xml

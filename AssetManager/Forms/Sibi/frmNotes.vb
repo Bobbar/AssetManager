@@ -1,10 +1,16 @@
 ﻿Imports MySql.Data.MySqlClient
 Public Class frmNotes
+    Private NoteRequest As Request_Info
     Private Sub ClearAll()
         rtbNotes.Clear()
     End Sub
     Private Sub frmNotes_Load(sender As Object, e As EventArgs) Handles Me.Load
+
         'ClearAll()
+    End Sub
+    Public Sub LoadNote(Request As Request_Info)
+        NoteRequest = Request
+        Me.Show()
     End Sub
     Private Function AddNewNote(RequestUID As String, Note As String) As Boolean
         Dim strNoteUID As String = Guid.NewGuid.ToString
@@ -40,10 +46,10 @@ VALUES
         Me.Show()
     End Sub
     Private Sub cmdOK_Click(sender As Object, e As EventArgs) Handles cmdOK.Click
-        If AddNewNote(CurrentRequest.strUID, Trim(rtbNotes.Text)) Then
+        If AddNewNote(NoteRequest.strUID, Trim(rtbNotes.Text)) Then
             'MsgBox("Success!")
             Me.Dispose()
-            frmManageRequest.OpenRequest(CurrentRequest.strUID)
+            frmManageRequest.OpenRequest(NoteRequest.strUID)
         Else
             MsgBox("Failed!")
         End If

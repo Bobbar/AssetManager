@@ -5,6 +5,7 @@ Imports MySql.Data.MySqlClient
 Public Class frmManageRequest
     Public bolUpdating As Boolean = False
     Private bolGridFilling As Boolean = False
+    Private CurrentRequest As Request_Info
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
     End Sub
@@ -679,9 +680,10 @@ VALUES
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         If CurrentRequest.strUID <> "" Then
-            frmSibiAttachments.ListAttachments(CurrentRequest.strUID)
-            frmSibiAttachments.Activate()
-            frmSibiAttachments.Show()
+            Dim NewAttach As New frmSibiAttachments
+            NewAttach.ListAttachments(CurrentRequest)
+            NewAttach.Activate()
+            NewAttach.Show()
         End If
     End Sub
     Private Sub cmdCreate_Click(sender As Object, e As EventArgs) Handles cmdCreate.Click
@@ -767,7 +769,7 @@ VALUES
     Private Sub cmdAddNote_Click(sender As Object, e As EventArgs) Handles cmdAddNote.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         If CurrentRequest.strUID <> "" Then
-            frmNotes.Show()
+            frmNotes.LoadNote(CurrentRequest)
         End If
     End Sub
     Private Sub dgvNotes_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvNotes.CellDoubleClick
@@ -881,5 +883,26 @@ VALUES
     End Sub
     Private Sub RequestItemsGrid_DefaultValuesNeeded(sender As Object, e As DataGridViewRowEventArgs) Handles RequestItemsGrid.DefaultValuesNeeded
         e.Row.Cells("Qty").Value = 1
+    End Sub
+    Private Sub CollectRequestInfo(RequestResults As DataTable, RequestItemsResults As DataTable)
+        Try
+            With CurrentRequest
+                .strUID = NoNull(RequestResults.Rows(0).Item("sibi_UID"))
+                .strUser = NoNull(RequestResults.Rows(0).Item("sibi_request_user"))
+                .strDescription = NoNull(RequestResults.Rows(0).Item("sibi_description"))
+                .dtDateStamp = NoNull(RequestResults.Rows(0).Item("sibi_datestamp"))
+                .dtNeedBy = NoNull(RequestResults.Rows(0).Item("sibi_need_by"))
+                .strStatus = NoNull(RequestResults.Rows(0).Item("sibi_status"))
+                .strType = NoNull(RequestResults.Rows(0).Item("sibi_type"))
+                .strPO = NoNull(RequestResults.Rows(0).Item("sibi_PO")) '
+                .strRequisitionNumber = NoNull(RequestResults.Rows(0).Item("sibi_requisition_number"))
+                .strReplaceAsset = NoNull(RequestResults.Rows(0).Item("sibi_replace_asset"))
+                .strReplaceSerial = NoNull(RequestResults.Rows(0).Item("sibi_replace_serial"))
+                .strRequestNumber = NoNull(RequestResults.Rows(0).Item("sibi_request_number"))
+                .RequstItems = RequestItemsResults
+            End With
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
 End Class

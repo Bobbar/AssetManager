@@ -97,7 +97,7 @@ Public Module DBFunctions
     Public Sibi_ItemStatusType() As Combo_Data
     Public Sibi_RequestType() As Combo_Data
     Public Sibi_AttachFolder() As Combo_Data
-    Public CurrentRequest As Request_Info
+
     Public MunisComms As New Munis_Comms
     Public Munis As New Munis_Functions
     Public MySQLDB As New MySQL_Comms
@@ -132,6 +132,10 @@ Public Module DBFunctions
     Public GlobalConn As MySqlConnection = MySQLDB.NewConnection()
     Public Function OpenConnections() As Boolean
         Try
+            If GlobalConn.State <> ConnectionState.Open Then
+                MySQLDB.CloseConnection(GlobalConn)
+                GlobalConn = MySQLDB.NewConnection
+            End If
             GlobalConn.Open()
             If GlobalConn.State = ConnectionState.Open Then
                 Return True
@@ -180,27 +184,7 @@ Public Module DBFunctions
             Return Nothing
         End Try
     End Function
-    Public Sub CollectRequestInfo(RequestResults As DataTable, RequestItemsResults As DataTable)
-        Try
-            With CurrentRequest
-                .strUID = NoNull(RequestResults.Rows(0).Item("sibi_UID"))
-                .strUser = NoNull(RequestResults.Rows(0).Item("sibi_request_user"))
-                .strDescription = NoNull(RequestResults.Rows(0).Item("sibi_description"))
-                .dtDateStamp = NoNull(RequestResults.Rows(0).Item("sibi_datestamp"))
-                .dtNeedBy = NoNull(RequestResults.Rows(0).Item("sibi_need_by"))
-                .strStatus = NoNull(RequestResults.Rows(0).Item("sibi_status"))
-                .strType = NoNull(RequestResults.Rows(0).Item("sibi_type"))
-                .strPO = NoNull(RequestResults.Rows(0).Item("sibi_PO")) '
-                .strRequisitionNumber = NoNull(RequestResults.Rows(0).Item("sibi_requisition_number"))
-                .strReplaceAsset = NoNull(RequestResults.Rows(0).Item("sibi_replace_asset"))
-                .strReplaceSerial = NoNull(RequestResults.Rows(0).Item("sibi_replace_serial"))
-                .strRequestNumber = NoNull(RequestResults.Rows(0).Item("sibi_request_number"))
-                .RequstItems = RequestItemsResults
-            End With
-        Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
-    End Sub
+
     Public Function GetShortLocation(ByVal index As Integer) As String
         Try
             Return Locations(index).strShort

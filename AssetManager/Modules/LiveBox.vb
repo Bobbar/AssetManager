@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class LiveBox
+    Private RowLimit As Integer = 15
     Private WithEvents LiveWorker As BackgroundWorker
     Private LiveBox As ListBox
     Private strPrevSearchString As String
@@ -81,7 +82,6 @@ Public Class LiveBox
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
             Dim cmd As New MySqlCommand
-            Dim RowLimit As Integer = 15
             Dim strQryRow As String
             Dim strQry As String
             strQryRow = CurrentLiveBoxArgs.DBColumn
@@ -102,7 +102,7 @@ Public Class LiveBox
     Private Sub LiveWorkerr_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
         DrawLiveBox(e.Result)
     End Sub
-    Private Sub DrawLiveBox(dtResults As DataTable, Optional PositionOnly As Boolean = False)
+    Private Sub DrawLiveBox(dtResults As DataTable)
         Try
             Dim dr As DataRow
             Dim strQryRow As String
@@ -114,19 +114,17 @@ Public Class LiveBox
                     Dim CntGroup As Panel
                     CntGroup = CurrentLiveBoxArgs.Control.Parent
             End Select
-            If Not PositionOnly Then
-                If dtResults.Rows.Count < 1 Then
-                    LiveBox.Visible = False
-                    Exit Sub
-                End If
-                strQryRow = CurrentLiveBoxArgs.DBColumn
-                LiveBox.Items.Clear()
-                With dr
-                    For Each dr In dtResults.Rows
-                        LiveBox.Items.Add(dr.Item(strQryRow))
-                    Next
-                End With
+            If dtResults.Rows.Count < 1 Then
+                LiveBox.Visible = False
+                Exit Sub
             End If
+            strQryRow = CurrentLiveBoxArgs.DBColumn
+            LiveBox.Items.Clear()
+            With dr
+                For Each dr In dtResults.Rows
+                    LiveBox.Items.Add(dr.Item(strQryRow))
+                Next
+            End With
             PosistionLiveBox()
             If dtResults.Rows.Count > 0 Then
                 LiveBox.Visible = True
