@@ -64,8 +64,8 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
         End If
         Dim NewMunis As New View_Munis
         NewMunis.HideFixedAssetGrid()
-        NewMunis.Show()
         NewMunis.LoadMunisEmployeeByLastName(Name)
+        NewMunis.Show()
     End Sub
     Private Sub NewMunisView_POSearch(PO As String, FY As String)
         If Not ConnectionReady() Then
@@ -74,8 +74,8 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
         End If
         Dim NewMunis As New View_Munis
         NewMunis.HideFixedAssetGrid()
-        NewMunis.Show()
         NewMunis.LoadMunisRequisitionGridByReqNo(Get_ReqNumber_From_PO(PO), Get_FY_From_PO(PO)) 'LoadMunisRequisitionGridByPO(PO, FY)
+        NewMunis.Show()
     End Sub
     Private Sub NewMunisView_ReqSearch(ReqNumber As String, FY As String)
         If Not ConnectionReady() Then
@@ -84,7 +84,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
         End If
         Dim NewMunis As New View_Munis
         NewMunis.HideFixedAssetGrid()
-        NewMunis.Show()
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNumber, FY)
+        NewMunis.Show()
     End Sub
 End Class

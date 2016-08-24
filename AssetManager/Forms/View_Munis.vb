@@ -169,9 +169,11 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
     End Property
     Private SelectedUnitPrice As String
     Private Sub DataGridMunis_Requisition_CellMouseDoubleClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridMunis_Requisition.CellMouseDoubleClick
-        SelectedUnitPrice = DataGridMunis_Requisition.Item(GetColIndex(DataGridMunis_Requisition, "rqdt_uni_pr"), DataGridMunis_Requisition.CurrentRow.Index).Value
-        Dim decPrice As Decimal = SelectedUnitPrice
-        SelectedUnitPrice = decPrice.ToString("C")
-        Me.DialogResult = DialogResult.OK
+        If Me.Modal Then
+            SelectedUnitPrice = DataGridMunis_Requisition.Item(GetColIndex(DataGridMunis_Requisition, "rqdt_uni_pr"), DataGridMunis_Requisition.CurrentRow.Index).Value
+            Dim decPrice As Decimal = SelectedUnitPrice
+            SelectedUnitPrice = decPrice.ToString("C")
+            Me.DialogResult = DialogResult.OK
+        End If
     End Sub
 End Class
