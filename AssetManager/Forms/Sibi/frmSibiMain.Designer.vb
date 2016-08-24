@@ -148,7 +148,6 @@ Partial Class frmSibiMain
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ResultGrid As DataGridView

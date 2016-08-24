@@ -484,7 +484,6 @@ Partial Class View_Entry
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
-
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label2 As Label

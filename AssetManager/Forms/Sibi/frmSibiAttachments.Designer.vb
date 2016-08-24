@@ -438,7 +438,6 @@ Partial Class frmSibiAttachments
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
     Friend WithEvents cmdUpload As Button
     Friend WithEvents RightClickMenu As ContextMenuStrip

@@ -57,5 +57,4 @@
         Dim ManRequest As New frmManageRequest
         ManRequest.OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
     End Sub
-
 End Class

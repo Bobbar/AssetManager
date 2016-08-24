@@ -71,7 +71,6 @@ Partial Class frmEncrypter
         '
         Me.txtResult.Location = New System.Drawing.Point(34, 175)
         Me.txtResult.Name = "txtResult"
-        Me.txtResult.ReadOnly = True
         Me.txtResult.Size = New System.Drawing.Size(421, 20)
         Me.txtResult.TabIndex = 5
         '

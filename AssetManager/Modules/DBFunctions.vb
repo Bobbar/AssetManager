@@ -97,7 +97,6 @@ Public Module DBFunctions
     Public Sibi_ItemStatusType() As Combo_Data
     Public Sibi_RequestType() As Combo_Data
     Public Sibi_AttachFolder() As Combo_Data
-
     Public MunisComms As New Munis_Comms
     Public Munis As New Munis_Functions
     Public MySQLDB As New MySQL_Comms
@@ -183,7 +182,6 @@ Public Module DBFunctions
             Return Nothing
         End Try
     End Function
-
     Public Function GetShortLocation(ByVal index As Integer) As String
         Try
             Return Locations(index).strShort

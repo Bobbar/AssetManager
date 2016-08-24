@@ -5,7 +5,6 @@ Public Class frmNotes
         rtbNotes.Clear()
     End Sub
     Private Sub frmNotes_Load(sender As Object, e As EventArgs) Handles Me.Load
-
         'ClearAll()
     End Sub
     Public Sub LoadNote(Request As Request_Info)

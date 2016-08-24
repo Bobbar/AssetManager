@@ -225,7 +225,6 @@ Public Class AddNew
     Private Sub txtDescription_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription_REQ.KeyUp
         MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_description")
     End Sub
-
     Private Sub AddNew_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         MyLiveBox.Unload()
     End Sub

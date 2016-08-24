@@ -524,9 +524,7 @@ Public Class View
         UpdateDev.Show()
     End Sub
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-
         Me.Dispose()
-
     End Sub
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
         NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)

@@ -121,7 +121,6 @@ Partial Class frmSibiSelector
         Me.Panel1.PerformLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-
     End Sub
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Label1 As Label
