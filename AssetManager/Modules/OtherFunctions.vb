@@ -225,4 +225,11 @@ Module OtherFunctions
             frm.WindowState = FormWindowState.Normal
         Next
     End Sub
+    Public Function NotePreview(Note As String, Optional CharLimit As Integer = 50) As String
+        If Note <> "" Then
+            Return Strings.Left(Note, CharLimit) & IIf(Len(Note) > CharLimit, "...", "")
+        Else
+            Return ""
+        End If
+    End Function
 End Module

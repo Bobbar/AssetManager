@@ -1,9 +1,7 @@
 ﻿Imports MySql.Data.MySqlClient
 Public Class MySQL_Comms
-        Public strDatabase As String = "asset_manager"
-        Public MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
-
-
+    Private strDatabase As String = "asset_manager"
+    Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
         'Debug.Print("Table Hit " & Date.Now.Ticks)
         Dim ds As New DataSet
@@ -139,7 +137,7 @@ Public Class MySQL_Comms
             Return Convert.ToString(cmd.ExecuteScalar)
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            Return Nothing
+            Return ""
         End Try
     End Function
     Public Function Get_EntryInfo(ByVal strGUID As String) As Device_Info
@@ -255,11 +253,9 @@ Public Class MySQL_Comms
         End Try
     End Function
     Public Function NewConnection() As MySqlConnection
-        TotConnections += 1
         Return New MySqlConnection(MySQLConnectString)
     End Function
     Public Sub CloseConnection(ByRef conn As MySqlConnection)
-        TotConnections -= 1
         conn.Close()
         conn.Dispose()
     End Sub

@@ -30,6 +30,7 @@ Partial Class MainForm
         Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.lblRecords = New System.Windows.Forms.Label()
         Me.InstantGroup = New System.Windows.Forms.GroupBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -66,8 +67,6 @@ Partial Class MainForm
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ConnStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.lblConnections = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
@@ -84,6 +83,7 @@ Partial Class MainForm
         Me.txtGUID = New System.Windows.Forms.ToolStripTextBox()
         Me.tsmUserManager = New System.Windows.Forms.ToolStripMenuItem()
         Me.TextEnCrypterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
         Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
@@ -108,6 +108,7 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.GroupBox1.Controls.Add(Me.ResultGrid)
+        Me.GroupBox1.Controls.Add(Me.lblRecords)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 222)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(1215, 403)
@@ -163,7 +164,7 @@ Partial Class MainForm
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1188, 369)
+        Me.ResultGrid.Size = New System.Drawing.Size(1188, 365)
         Me.ResultGrid.TabIndex = 17
         Me.ResultGrid.VirtualMode = True
         '
@@ -191,6 +192,18 @@ Partial Class MainForm
         Me.CopyTool.Name = "CopyTool"
         Me.CopyTool.Size = New System.Drawing.Size(126, 22)
         Me.CopyTool.Text = "Copy Text"
+        '
+        'lblRecords
+        '
+        Me.lblRecords.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblRecords.ForeColor = System.Drawing.Color.Gray
+        Me.lblRecords.Location = New System.Drawing.Point(15, 387)
+        Me.lblRecords.Name = "lblRecords"
+        Me.lblRecords.Size = New System.Drawing.Size(1188, 13)
+        Me.lblRecords.TabIndex = 18
+        Me.lblRecords.Text = "Records: 0"
+        Me.lblRecords.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'InstantGroup
         '
@@ -530,7 +543,7 @@ Partial Class MainForm
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel4, Me.lblConnections, Me.ToolStripStatusLabel2, Me.DateTimeLabel})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel4, Me.DateTimeLabel})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 632)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1240, 22)
@@ -553,7 +566,7 @@ Partial Class MainForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(858, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(963, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ConnStatusLabel
@@ -569,20 +582,6 @@ Partial Class MainForm
         Me.ToolStripStatusLabel4.Name = "ToolStripStatusLabel4"
         Me.ToolStripStatusLabel4.Size = New System.Drawing.Size(12, 17)
         Me.ToolStripStatusLabel4.Text = "|"
-        '
-        'lblConnections
-        '
-        Me.lblConnections.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblConnections.Name = "lblConnections"
-        Me.lblConnections.Size = New System.Drawing.Size(93, 17)
-        Me.lblConnections.Text = "Connections: 0"
-        '
-        'ToolStripStatusLabel2
-        '
-        Me.ToolStripStatusLabel2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
-        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(12, 17)
-        Me.ToolStripStatusLabel2.Text = "|"
         '
         'DateTimeLabel
         '
@@ -667,7 +666,7 @@ Partial Class MainForm
         '
         'AdminDropDown
         '
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem})
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem})
         Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.ImageTransparentColor = System.Drawing.Color.Magenta
@@ -711,6 +710,12 @@ Partial Class MainForm
         Me.TextEnCrypterToolStripMenuItem.Name = "TextEnCrypterToolStripMenuItem"
         Me.TextEnCrypterToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
         Me.TextEnCrypterToolStripMenuItem.Text = "Text Encrypter"
+        '
+        'ScanAttachmentToolStripMenuItem
+        '
+        Me.ScanAttachmentToolStripMenuItem.Name = "ScanAttachmentToolStripMenuItem"
+        Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.ScanAttachmentToolStripMenuItem.Text = "Scan Attachments"
         '
         'ToolStripSeparator5
         '
@@ -821,7 +826,6 @@ Partial Class MainForm
     Friend WithEvents ConnStatusLabel As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents DateTimeLabel As ToolStripStatusLabel
-    Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
     Friend WithEvents ConnectionWatchDog As System.ComponentModel.BackgroundWorker
     Friend WithEvents AdminDropDown As ToolStripDropDownButton
     Friend WithEvents cmbDBs As ToolStripComboBox
@@ -844,5 +848,6 @@ Partial Class MainForm
     Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
     Friend WithEvents TextEnCrypterToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripStatusLabel4 As ToolStripStatusLabel
-    Friend WithEvents lblConnections As ToolStripStatusLabel
+    Friend WithEvents lblRecords As Label
+    Friend WithEvents ScanAttachmentToolStripMenuItem As ToolStripMenuItem
 End Class

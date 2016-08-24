@@ -128,7 +128,6 @@ Public Module DBFunctions
         Public Const Sibi As String = "sibi_"
         Public Const Device As String = "dev_"
     End Class
-    Public TotConnections As Integer = 0
     Public GlobalConn As MySqlConnection = MySQLDB.NewConnection()
     Public Function OpenConnections() As Boolean
         Try

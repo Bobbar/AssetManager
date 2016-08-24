@@ -133,12 +133,16 @@ Public Class MainForm
     End Sub
     Private Sub BigQueryDone(Results As DataTable)
         SendToGrid(Results)
+        DisplayRecords(Results.Rows.Count)
         StripSpinner.Visible = False
         If ClickedButton IsNot Nothing Then
             ClickedButton.Enabled = True
             ClickedButton = Nothing
         End If
         StatusBar("Idle...")
+    End Sub
+    Private Sub DisplayRecords(NumberOf As Integer)
+        lblRecords.Text = "Records: " & NumberOf
     End Sub
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
@@ -154,19 +158,21 @@ Public Class MainForm
             table.Columns.Add("PO Number", GetType(String))
             table.Columns.Add("Purchase Date", GetType(String))
             table.Columns.Add("Replace Year", GetType(String))
+            table.Columns.Add("Modified", GetType(String))
             table.Columns.Add("GUID", GetType(String))
             For Each r As DataRow In Results.Rows
-                table.Rows.Add(r.Item("dev_cur_user"),
-                               r.Item("dev_asset_tag"),
-                               r.Item("dev_serial"),
-                               GetHumanValue(ComboType.EquipType, r.Item("dev_eq_type")),
-                               r.Item("dev_description"),
-                               GetHumanValue(ComboType.OSType, r.Item("dev_osversion")),
-                               GetHumanValue(ComboType.Location, r.Item("dev_location")),
+                table.Rows.Add(NoNull(r.Item("dev_cur_user")),
+                               NoNull(r.Item("dev_asset_tag")),
+                               NoNull(r.Item("dev_serial")),
+                               GetHumanValue(ComboType.EquipType, NoNull(r.Item("dev_eq_type"))),
+                               NoNull(r.Item("dev_description")),
+                               GetHumanValue(ComboType.OSType, NoNull(r.Item("dev_osversion"))),
+                               GetHumanValue(ComboType.Location, NoNull(r.Item("dev_location"))),
                                NoNull(r.Item("dev_po")),
-                               r.Item("dev_purchase_date"),
-                               r.Item("dev_replacement_year"),
-                               r.Item("dev_UID"))
+                               NoNull(r.Item("dev_purchase_date")),
+                               NoNull(r.Item("dev_replacement_year")),
+                               NoNull(r.Item("dev_lastmod_date")),
+                               NoNull(r.Item("dev_UID")))
             Next
             bolGridFilling = True
             ResultGrid.DataSource = table
@@ -421,7 +427,6 @@ Public Class MainForm
                 ConnectStatus("Connecting", Color.Black)
         End Select
         If Not ConnectionWatchDog.IsBusy Then ConnectionWatchDog.RunWorkerAsync()
-        lblConnections.Text = "Connections: " & TotConnections
     End Sub
     Private Sub ConnectionWatchDog_DoWork(sender As Object, e As DoWorkEventArgs) Handles ConnectionWatchDog.DoWork
         Do Until ProgramEnding
@@ -514,15 +519,15 @@ Public Class MainForm
         ConnectionReady()
         StatusBar("Connected!")
     End Sub
-    Private Sub cmdChangeDB_Click(sender As Object, e As EventArgs)
-        If cmbDBs.Text <> "" And cmbDBs.Text <> MySQLDB.strDatabase Then
-            MySQLDB.strDatabase = cmbDBs.Text
-            MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
-            CloseConnections()
-            GlobalConn = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
-            OpenConnections()
-        End If
-    End Sub
+    'Private Sub cmdChangeDB_Click(sender As Object, e As EventArgs)
+    '    If cmbDBs.Text <> "" And cmbDBs.Text <> MySQLDB.strDatabase Then
+    '        MySQLDB.strDatabase = cmbDBs.Text
+    '        MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
+    '        CloseConnections()
+    '        GlobalConn = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
+    '        OpenConnections()
+    '    End If
+    'End Sub
     Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
         Dim ViewAttachments As New Attachments
         ViewAttachments.bolAdminMode = CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel)
@@ -534,15 +539,15 @@ Public Class MainForm
     Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
         MsgBox(My.Application.Info.Version.ToString)
     End Sub
-    Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
-        If cmbDBs.Text <> "" And cmbDBs.Text <> MySQLDB.strDatabase Then
-            MySQLDB.strDatabase = cmbDBs.Text
-            MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
-            CloseConnections()
-            GlobalConn = MySQLDB.NewConnection 'New MySqlConnection(MySQLDB.MySQLConnectString)
-            OpenConnections()
-        End If
-    End Sub
+    'Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
+    '    If cmbDBs.Text <> "" And cmbDBs.Text <> MySQLDB.strDatabase Then
+    '        MySQLDB.strDatabase = cmbDBs.Text
+    '        MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
+    '        CloseConnections()
+    '        GlobalConn = MySQLDB.NewConnection 'New MySqlConnection(MySQLDB.MySQLConnectString)
+    '        OpenConnections()
+    '    End If
+    'End Sub
     Private Sub cmbEquipType_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub
@@ -605,6 +610,9 @@ Public Class MainForm
             LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
             e.SuppressKeyPress = True
         End If
+    End Sub
+    Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
+        ScanAttachements()
     End Sub
     Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Dim f As Form = sender

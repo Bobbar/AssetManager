@@ -84,7 +84,7 @@ Class Attachments
             Dim table As New DataTable
             Dim strQry As String
             If bolAdminMode Then
-                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash,dev_UID,dev_asset_tag FROM dev_attachments,devices WHERE dev_UID = attach_dev_UID ORDER BY attach_upload_date DESC"
+                strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash,dev_UID,dev_asset_tag FROM dev_attachments,devices WHERE dev_UID = attach_dev_UID ORDER BY attach_upload_date DESC"
                 table.Columns.Add("Filename", GetType(String))
                 table.Columns.Add("Size", GetType(String))
                 table.Columns.Add("Date", GetType(String))
@@ -92,7 +92,7 @@ Class Attachments
                 table.Columns.Add("AttachUID", GetType(String))
                 table.Columns.Add("MD5", GetType(String))
             ElseIf Not bolAdminMode Then
-                strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash FROM dev_attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
+                strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash FROM dev_attachments WHERE attach_dev_UID='" & DeviceUID & "' ORDER BY attach_upload_date DESC"
                 table.Columns.Add(" ", GetType(Image))
                 table.Columns.Add("Filename", GetType(String))
                 table.Columns.Add("Size", GetType(String))

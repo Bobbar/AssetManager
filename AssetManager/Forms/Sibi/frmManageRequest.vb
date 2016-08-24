@@ -602,7 +602,7 @@ VALUES
         table.Columns.Add("UID")
         For Each r As DataRow In Results.Rows
             table.Rows.Add(r.Item("sibi_datestamp"),
-                           IIf(Len(r.Item("sibi_note")) > intPreviewChars, Strings.Left(r.Item("sibi_note"), intPreviewChars) & "...", r.Item("sibi_note")),
+                           IIf(Len(r.Item("sibi_note")) > intPreviewChars, NotePreview(r.Item("sibi_note")), r.Item("sibi_note")),
                            r.Item("sibi_note_uid"))
         Next
         dgvNotes.DataSource = table

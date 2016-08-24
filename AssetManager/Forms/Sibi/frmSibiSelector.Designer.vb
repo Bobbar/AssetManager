@@ -41,7 +41,7 @@ Partial Class frmSibiSelector
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(12, 12)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(917, 386)
+        Me.Panel1.Size = New System.Drawing.Size(1080, 415)
         Me.Panel1.TabIndex = 1
         '
         'Label1
@@ -57,7 +57,7 @@ Partial Class frmSibiSelector
         'cmdShowAll
         '
         Me.cmdShowAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdShowAll.Location = New System.Drawing.Point(814, 4)
+        Me.cmdShowAll.Location = New System.Drawing.Point(977, 4)
         Me.cmdShowAll.Name = "cmdShowAll"
         Me.cmdShowAll.Size = New System.Drawing.Size(100, 30)
         Me.cmdShowAll.TabIndex = 1
@@ -104,7 +104,7 @@ Partial Class frmSibiSelector
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(911, 331)
+        Me.ResultGrid.Size = New System.Drawing.Size(1074, 360)
         Me.ResultGrid.TabIndex = 18
         Me.ResultGrid.VirtualMode = True
         '
@@ -112,7 +112,7 @@ Partial Class frmSibiSelector
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(941, 410)
+        Me.ClientSize = New System.Drawing.Size(1104, 439)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmSibiSelector"
@@ -121,6 +121,7 @@ Partial Class frmSibiSelector
         Me.Panel1.PerformLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Label1 As Label

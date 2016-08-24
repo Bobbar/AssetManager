@@ -7,7 +7,7 @@ Public Class LiveBox
     Private strPrevSearchString As String
     Private dtLiveBoxData As DataTable
     Private MySQLComms As New MySQL_Comms
-    Private LiveConn As MySqlConnection = MySQLComms.NewConnection '(MySQLDB.MySQLConnectString)
+    Private LiveConn As New MySqlConnection
     Private Structure LiveBoxArgs
         Public Control As Control
         Public Type As String
@@ -49,6 +49,7 @@ Public Class LiveBox
             If LiveConn.State = ConnectionState.Open Then
                 Return True
             Else
+                LiveConn = MySQLComms.NewConnection
                 LiveConn.Open()
                 Return True
             End If
@@ -58,9 +59,12 @@ Public Class LiveBox
         End Try
     End Function
     Public Sub Unload()
-        HideLiveBox()
-        MySQLDB.CloseConnection(LiveConn)
-        LiveBox.Dispose()
+        Try
+            HideLiveBox()
+            MySQLDB.CloseConnection(LiveConn)
+            LiveBox.Dispose()
+        Catch
+        End Try
     End Sub
     Private Sub LiveBoxSelect(Control As Control, Type As String)
         Select Case Type.ToString

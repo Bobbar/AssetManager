@@ -47,11 +47,11 @@ Partial Class Attachments
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.Spinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.statMBPS = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.cmdCancel = New System.Windows.Forms.ToolStripDropDownButton()
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
         Me.ProgTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.cmdCancel = New System.Windows.Forms.ToolStripDropDownButton()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -287,7 +287,7 @@ Partial Class Attachments
         Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusLabel.Name = "StatusLabel"
         Me.StatusLabel.Padding = New System.Windows.Forms.Padding(0, 0, 10, 0)
-        Me.StatusLabel.Size = New System.Drawing.Size(88, 17)
+        Me.StatusLabel.Size = New System.Drawing.Size(86, 17)
         Me.StatusLabel.Text = "%STATUS%"
         Me.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -320,6 +320,23 @@ Partial Class Attachments
         Me.statMBPS.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
         Me.statMBPS.Size = New System.Drawing.Size(10, 17)
         '
+        'ToolStripStatusLabel1
+        '
+        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(816, 17)
+        Me.ToolStripStatusLabel1.Spring = True
+        '
+        'cmdCancel
+        '
+        Me.cmdCancel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdCancel.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
+        Me.cmdCancel.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdCancel.Name = "cmdCancel"
+        Me.cmdCancel.ShowDropDownArrow = False
+        Me.cmdCancel.Size = New System.Drawing.Size(63, 20)
+        Me.cmdCancel.Text = "Cancel"
+        Me.cmdCancel.Visible = False
+        '
         'UploadWorker
         '
         Me.UploadWorker.WorkerReportsProgress = True
@@ -333,23 +350,6 @@ Partial Class Attachments
         'ProgTimer
         '
         Me.ProgTimer.Interval = 50
-        '
-        'ToolStripStatusLabel1
-        '
-        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(552, 17)
-        Me.ToolStripStatusLabel1.Spring = True
-        '
-        'cmdCancel
-        '
-        Me.cmdCancel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCancel.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
-        Me.cmdCancel.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.cmdCancel.Name = "cmdCancel"
-        Me.cmdCancel.ShowDropDownArrow = False
-        Me.cmdCancel.Size = New System.Drawing.Size(63, 20)
-        Me.cmdCancel.Text = "Cancel"
-        Me.cmdCancel.Visible = False
         '
         'Attachments
         '
@@ -376,6 +376,7 @@ Partial Class Attachments
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents cmdUpload As Button
     Friend WithEvents RightClickMenu As ContextMenuStrip

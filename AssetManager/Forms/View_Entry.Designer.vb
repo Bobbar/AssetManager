@@ -131,11 +131,11 @@ Partial Class View_Entry
         'txtEntryGUID
         '
         Me.txtEntryGUID.BackColor = System.Drawing.SystemColors.Window
-        Me.txtEntryGUID.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtEntryGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtEntryGUID.Location = New System.Drawing.Point(563, 94)
         Me.txtEntryGUID.Name = "txtEntryGUID"
         Me.txtEntryGUID.ReadOnly = True
-        Me.txtEntryGUID.Size = New System.Drawing.Size(228, 22)
+        Me.txtEntryGUID.Size = New System.Drawing.Size(228, 23)
         Me.txtEntryGUID.TabIndex = 33
         '
         'Label16
@@ -151,11 +151,11 @@ Partial Class View_Entry
         'txtStatus
         '
         Me.txtStatus.BackColor = System.Drawing.SystemColors.Window
-        Me.txtStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtStatus.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtStatus.Location = New System.Drawing.Point(614, 138)
         Me.txtStatus.Name = "txtStatus"
         Me.txtStatus.ReadOnly = True
-        Me.txtStatus.Size = New System.Drawing.Size(108, 22)
+        Me.txtStatus.Size = New System.Drawing.Size(108, 23)
         Me.txtStatus.TabIndex = 31
         '
         'cmdClose
@@ -180,7 +180,7 @@ Partial Class View_Entry
         'txtNotes
         '
         Me.txtNotes.BackColor = System.Drawing.SystemColors.Window
-        Me.txtNotes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtNotes.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtNotes.Location = New System.Drawing.Point(194, 224)
         Me.txtNotes.Multiline = True
         Me.txtNotes.Name = "txtNotes"
@@ -201,11 +201,11 @@ Partial Class View_Entry
         'txtActionUser
         '
         Me.txtActionUser.BackColor = System.Drawing.SystemColors.Window
-        Me.txtActionUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtActionUser.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtActionUser.Location = New System.Drawing.Point(17, 94)
         Me.txtActionUser.Name = "txtActionUser"
         Me.txtActionUser.ReadOnly = True
-        Me.txtActionUser.Size = New System.Drawing.Size(108, 22)
+        Me.txtActionUser.Size = New System.Drawing.Size(108, 23)
         Me.txtActionUser.TabIndex = 26
         '
         'Label13
@@ -221,11 +221,11 @@ Partial Class View_Entry
         'txtEntryTime
         '
         Me.txtEntryTime.BackColor = System.Drawing.SystemColors.Window
-        Me.txtEntryTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtEntryTime.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtEntryTime.Location = New System.Drawing.Point(17, 47)
         Me.txtEntryTime.Name = "txtEntryTime"
         Me.txtEntryTime.ReadOnly = True
-        Me.txtEntryTime.Size = New System.Drawing.Size(155, 22)
+        Me.txtEntryTime.Size = New System.Drawing.Size(155, 23)
         Me.txtEntryTime.TabIndex = 24
         '
         'Label12
@@ -241,11 +241,11 @@ Partial Class View_Entry
         'txtGUID
         '
         Me.txtGUID.BackColor = System.Drawing.SystemColors.Window
-        Me.txtGUID.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtGUID.Location = New System.Drawing.Point(563, 47)
         Me.txtGUID.Name = "txtGUID"
         Me.txtGUID.ReadOnly = True
-        Me.txtGUID.Size = New System.Drawing.Size(228, 22)
+        Me.txtGUID.Size = New System.Drawing.Size(228, 23)
         Me.txtGUID.TabIndex = 22
         '
         'Label11
@@ -261,11 +261,11 @@ Partial Class View_Entry
         'txtEQType
         '
         Me.txtEQType.BackColor = System.Drawing.SystemColors.Window
-        Me.txtEQType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtEQType.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtEQType.Location = New System.Drawing.Point(441, 181)
         Me.txtEQType.Name = "txtEQType"
         Me.txtEQType.ReadOnly = True
-        Me.txtEQType.Size = New System.Drawing.Size(108, 22)
+        Me.txtEQType.Size = New System.Drawing.Size(108, 23)
         Me.txtEQType.TabIndex = 20
         '
         'Label10
@@ -281,11 +281,11 @@ Partial Class View_Entry
         'txtOSVersion
         '
         Me.txtOSVersion.BackColor = System.Drawing.SystemColors.Window
-        Me.txtOSVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtOSVersion.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtOSVersion.Location = New System.Drawing.Point(441, 138)
         Me.txtOSVersion.Name = "txtOSVersion"
         Me.txtOSVersion.ReadOnly = True
-        Me.txtOSVersion.Size = New System.Drawing.Size(108, 22)
+        Me.txtOSVersion.Size = New System.Drawing.Size(108, 23)
         Me.txtOSVersion.TabIndex = 18
         '
         'Label9
@@ -301,11 +301,11 @@ Partial Class View_Entry
         'txtPONumber
         '
         Me.txtPONumber.BackColor = System.Drawing.SystemColors.Window
-        Me.txtPONumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPONumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtPONumber.Location = New System.Drawing.Point(441, 94)
         Me.txtPONumber.Name = "txtPONumber"
         Me.txtPONumber.ReadOnly = True
-        Me.txtPONumber.Size = New System.Drawing.Size(108, 22)
+        Me.txtPONumber.Size = New System.Drawing.Size(108, 23)
         Me.txtPONumber.TabIndex = 16
         '
         'Label8
@@ -321,11 +321,11 @@ Partial Class View_Entry
         'txtReplaceYear
         '
         Me.txtReplaceYear.BackColor = System.Drawing.SystemColors.Window
-        Me.txtReplaceYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtReplaceYear.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtReplaceYear.Location = New System.Drawing.Point(320, 181)
         Me.txtReplaceYear.Name = "txtReplaceYear"
         Me.txtReplaceYear.ReadOnly = True
-        Me.txtReplaceYear.Size = New System.Drawing.Size(108, 22)
+        Me.txtReplaceYear.Size = New System.Drawing.Size(108, 23)
         Me.txtReplaceYear.TabIndex = 14
         '
         'Label7
@@ -341,11 +341,11 @@ Partial Class View_Entry
         'txtPurchaseDate
         '
         Me.txtPurchaseDate.BackColor = System.Drawing.SystemColors.Window
-        Me.txtPurchaseDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPurchaseDate.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtPurchaseDate.Location = New System.Drawing.Point(320, 138)
         Me.txtPurchaseDate.Name = "txtPurchaseDate"
         Me.txtPurchaseDate.ReadOnly = True
-        Me.txtPurchaseDate.Size = New System.Drawing.Size(108, 22)
+        Me.txtPurchaseDate.Size = New System.Drawing.Size(108, 23)
         Me.txtPurchaseDate.TabIndex = 12
         '
         'Label6
@@ -361,18 +361,18 @@ Partial Class View_Entry
         'txtLocation
         '
         Me.txtLocation.BackColor = System.Drawing.SystemColors.Window
-        Me.txtLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtLocation.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtLocation.Location = New System.Drawing.Point(320, 94)
         Me.txtLocation.Name = "txtLocation"
         Me.txtLocation.ReadOnly = True
-        Me.txtLocation.Size = New System.Drawing.Size(108, 22)
+        Me.txtLocation.Size = New System.Drawing.Size(108, 23)
         Me.txtLocation.TabIndex = 10
         '
         'Label5
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(327, 28)
+        Me.Label5.Location = New System.Drawing.Point(317, 28)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(76, 16)
         Me.Label5.TabIndex = 9
@@ -381,11 +381,11 @@ Partial Class View_Entry
         'txtDescription
         '
         Me.txtDescription.BackColor = System.Drawing.SystemColors.Window
-        Me.txtDescription.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDescription.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtDescription.Location = New System.Drawing.Point(320, 47)
         Me.txtDescription.Name = "txtDescription"
         Me.txtDescription.ReadOnly = True
-        Me.txtDescription.Size = New System.Drawing.Size(229, 22)
+        Me.txtDescription.Size = New System.Drawing.Size(229, 23)
         Me.txtDescription.TabIndex = 8
         '
         'Label4
@@ -401,11 +401,11 @@ Partial Class View_Entry
         'txtSerial
         '
         Me.txtSerial.BackColor = System.Drawing.SystemColors.Window
-        Me.txtSerial.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerial.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSerial.Location = New System.Drawing.Point(194, 181)
         Me.txtSerial.Name = "txtSerial"
         Me.txtSerial.ReadOnly = True
-        Me.txtSerial.Size = New System.Drawing.Size(108, 22)
+        Me.txtSerial.Size = New System.Drawing.Size(108, 23)
         Me.txtSerial.TabIndex = 6
         '
         'Label3
@@ -421,11 +421,11 @@ Partial Class View_Entry
         'txtAssetTag
         '
         Me.txtAssetTag.BackColor = System.Drawing.SystemColors.Window
-        Me.txtAssetTag.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTag.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtAssetTag.Location = New System.Drawing.Point(194, 138)
         Me.txtAssetTag.Name = "txtAssetTag"
         Me.txtAssetTag.ReadOnly = True
-        Me.txtAssetTag.Size = New System.Drawing.Size(108, 22)
+        Me.txtAssetTag.Size = New System.Drawing.Size(108, 23)
         Me.txtAssetTag.TabIndex = 4
         '
         'Label2
@@ -441,11 +441,11 @@ Partial Class View_Entry
         'txtCurrentUser
         '
         Me.txtCurrentUser.BackColor = System.Drawing.SystemColors.Window
-        Me.txtCurrentUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCurrentUser.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCurrentUser.Location = New System.Drawing.Point(192, 94)
         Me.txtCurrentUser.Name = "txtCurrentUser"
         Me.txtCurrentUser.ReadOnly = True
-        Me.txtCurrentUser.Size = New System.Drawing.Size(108, 22)
+        Me.txtCurrentUser.Size = New System.Drawing.Size(108, 23)
         Me.txtCurrentUser.TabIndex = 2
         '
         'Label1
@@ -461,11 +461,11 @@ Partial Class View_Entry
         'txtChangeType
         '
         Me.txtChangeType.BackColor = System.Drawing.SystemColors.Window
-        Me.txtChangeType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtChangeType.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtChangeType.Location = New System.Drawing.Point(192, 47)
         Me.txtChangeType.Name = "txtChangeType"
         Me.txtChangeType.ReadOnly = True
-        Me.txtChangeType.Size = New System.Drawing.Size(110, 22)
+        Me.txtChangeType.Size = New System.Drawing.Size(110, 23)
         Me.txtChangeType.TabIndex = 0
         '
         'View_Entry
@@ -484,6 +484,7 @@ Partial Class View_Entry
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label2 As Label

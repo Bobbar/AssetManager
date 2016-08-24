@@ -263,7 +263,7 @@ Class frmSibiAttachments
         Dim FileSize As Long
         Dim FileSizeMB As Integer
         Dim FileNumber As Integer = 1
-        Dim conn As MySqlConnection = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
+        Dim conn As MySqlConnection = MySQLDB.NewConnection
         Dim cmd As New MySqlCommand
         Try
             For Each file As String In Files
@@ -364,12 +364,8 @@ Class frmSibiAttachments
     End Sub
     Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
         Dim Filename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
-        'Dim blah = MsgBox("Move " & Filename & " to " & GetHumanValue(ComboType.SibiAttachFolder, Folder) & "?", vbYesNo + vbQuestion, "Move Attachment")
-        'If blah = vbYes Then
         MySQLDB.Update_SQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
         ListAttachments(AttachRequest)
-        'Else
-        'End If
         cmbMoveFolder.SelectedIndex = -1
         cmbMoveFolder.Text = "Select a folder"
         RightClickMenu.Close()
@@ -414,9 +410,8 @@ Class frmSibiAttachments
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry = "Select * FROM sibi_attachments WHERE sibi_attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
-        Dim conn As MySqlConnection = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
+        Dim conn As MySqlConnection = MySQLDB.NewConnection
         Dim cmd As New MySqlCommand(strQry, conn)
-        'Dim FileSize As UInt32
         Dim strFilename As String, strFiletype As String, strFullPath As String
         Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
         Try
@@ -427,7 +422,6 @@ Class frmSibiAttachments
                     strFilename = !sibi_attach_file_name & strTimeStamp
                     strFiletype = !sibi_attach_file_type
                     strFullPath = strTempPath & strFilename & strFiletype
-                    'FileSize = !attach_file_size
                     Foldername = !sibi_attach_UID
                     FileExpectedHash = !sibi_attach_file_hash
                     FileUID = !sibi_attach_file_UID
@@ -436,8 +430,6 @@ Class frmSibiAttachments
             reader.Close()
             reader.Dispose()
             MySQLDB.CloseConnection(conn)
-            'conn.Close()
-            'conn.Dispose()
             'FTP STUFF
             Dim buffer(1023) As Byte
             Dim bytesIn As Integer
@@ -722,11 +714,6 @@ Class frmSibiAttachments
         e.Effect = DragDropEffects.Copy
     End Sub
     Private Sub AttachGrid_DragDrop(sender As Object, e As DragEventArgs) Handles AttachGrid.DragDrop
-        'Dim formats As String() = e.Data.GetFormats
-        'For Each strFormat As String In formats
-        '    Debug.Print(strFormat)
-        'Next
-        'UploadWorker.RunWorkerAsync(ProcessDrop(e.Data))
         If Not bolAllowDrag Then ProcessDrop(e.Data)
     End Sub
     Private Function ProcessDrop(AttachObject As IDataObject) ' As String()
@@ -773,8 +760,6 @@ Class frmSibiAttachments
     Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
         Try
             Dim streamFileName As New MemoryStream
-            'Dim fileNames() As String
-            'Dim fileName As String
             Select Case DataFormat
                 Case "RenPrivateItem" '"FileGroupDescriptor"
                     streamFileName = AttachObject.GetData("FileGroupDescriptor")
@@ -784,12 +769,6 @@ Class frmSibiAttachments
                     fullString = Replace(fullString, vbNullChar, "")
                     fullString = Replace(fullString, ChrW(1), "")
                     Return fullString
-                    'Case "FileDrop"
-                    '    fileNames = AttachObject.GetData("FileNameW")
-                    '    For Each file In fileNames
-                    '        fileName = Path.GetFileName(file)
-                    '    Next
-                    '    Return fileName
             End Select
         Catch ex As Exception
             Return Nothing

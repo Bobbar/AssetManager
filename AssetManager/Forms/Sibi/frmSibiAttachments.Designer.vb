@@ -159,7 +159,7 @@ Partial Class frmSibiAttachments
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 113)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(944, 409)
+        Me.GroupBox1.Size = New System.Drawing.Size(793, 401)
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Manage Attachments"
@@ -177,14 +177,14 @@ Partial Class frmSibiAttachments
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(150, 21)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(788, 382)
+        Me.Panel1.Size = New System.Drawing.Size(637, 374)
         Me.Panel1.TabIndex = 19
         '
         'chkAllowDrag
         '
         Me.chkAllowDrag.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkAllowDrag.AutoSize = True
-        Me.chkAllowDrag.Location = New System.Drawing.Point(652, 7)
+        Me.chkAllowDrag.Location = New System.Drawing.Point(501, 7)
         Me.chkAllowDrag.Name = "chkAllowDrag"
         Me.chkAllowDrag.Size = New System.Drawing.Size(131, 19)
         Me.chkAllowDrag.TabIndex = 21
@@ -254,7 +254,7 @@ Partial Class frmSibiAttachments
         Me.AttachGrid.ShowCellErrors = False
         Me.AttachGrid.ShowCellToolTips = False
         Me.AttachGrid.ShowEditingIcon = False
-        Me.AttachGrid.Size = New System.Drawing.Size(780, 345)
+        Me.AttachGrid.Size = New System.Drawing.Size(629, 337)
         Me.AttachGrid.TabIndex = 18
         Me.AttachGrid.VirtualMode = True
         '
@@ -336,9 +336,9 @@ Partial Class frmSibiAttachments
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.ProgressBar1, Me.ToolStripStatusLabel2, Me.Spinner, Me.statMBPS, Me.ToolStripStatusLabel1, Me.cmdCancel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 525)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 517)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(968, 22)
+        Me.StatusStrip1.Size = New System.Drawing.Size(817, 22)
         Me.StatusStrip1.TabIndex = 8
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -383,7 +383,7 @@ Partial Class frmSibiAttachments
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(847, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(696, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'cmdCancel
@@ -417,13 +417,13 @@ Partial Class frmSibiAttachments
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(968, 547)
+        Me.ClientSize = New System.Drawing.Size(817, 539)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MinimumSize = New System.Drawing.Size(673, 585)
+        Me.MinimumSize = New System.Drawing.Size(833, 370)
         Me.Name = "frmSibiAttachments"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Sibi Attachments"
@@ -438,6 +438,7 @@ Partial Class frmSibiAttachments
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents cmdUpload As Button
     Friend WithEvents RightClickMenu As ContextMenuStrip

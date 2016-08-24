@@ -351,7 +351,7 @@ Partial Class frmManageRequest
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(12, 300)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1084, 348)
+        Me.Panel1.Size = New System.Drawing.Size(1071, 271)
         Me.Panel1.TabIndex = 1
         '
         'Label10
@@ -398,7 +398,7 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.RequestItemsGrid.ShowCellToolTips = False
-        Me.RequestItemsGrid.Size = New System.Drawing.Size(1078, 327)
+        Me.RequestItemsGrid.Size = New System.Drawing.Size(1065, 250)
         Me.RequestItemsGrid.TabIndex = 18
         '
         'PopupMenuItems
@@ -431,7 +431,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip.Size = New System.Drawing.Size(1108, 32)
+        Me.ToolStrip.Size = New System.Drawing.Size(1095, 32)
         Me.ToolStrip.Stretch = True
         Me.ToolStrip.TabIndex = 2
         Me.ToolStrip.Text = "ToolStrip1"
@@ -551,7 +551,7 @@ Partial Class frmManageRequest
         Me.GroupBox3.Controls.Add(Me.Panel2)
         Me.GroupBox3.Location = New System.Drawing.Point(618, 44)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(478, 250)
+        Me.GroupBox3.Size = New System.Drawing.Size(465, 250)
         Me.GroupBox3.TabIndex = 4
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Notes"
@@ -564,7 +564,7 @@ Partial Class frmManageRequest
         Me.Panel2.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel2.Location = New System.Drawing.Point(6, 13)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(467, 231)
+        Me.Panel2.Size = New System.Drawing.Size(454, 231)
         Me.Panel2.TabIndex = 0
         '
         'dgvNotes
@@ -606,7 +606,7 @@ Partial Class frmManageRequest
         Me.dgvNotes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.dgvNotes.ShowCellErrors = False
         Me.dgvNotes.ShowCellToolTips = False
-        Me.dgvNotes.Size = New System.Drawing.Size(461, 225)
+        Me.dgvNotes.Size = New System.Drawing.Size(448, 225)
         Me.dgvNotes.TabIndex = 19
         '
         'PopupMenuNotes
@@ -631,12 +631,13 @@ Partial Class frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1108, 660)
+        Me.ClientSize = New System.Drawing.Size(1095, 583)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MinimumSize = New System.Drawing.Size(771, 443)
         Me.Name = "frmManageRequest"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Manage Request"
@@ -657,6 +658,7 @@ Partial Class frmManageRequest
         Me.PopupMenuNotes.ResumeLayout(False)
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents chkPlanned As CheckBox

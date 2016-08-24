@@ -135,7 +135,7 @@ Public Class View
     Public Sub UpdateDevice(UpdateInfo As Update_Info)
         Try
             Dim rows As Integer
-            Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable, dev_po=@dev_po WHERE dev_UID='" & CurrentViewDevice.strGUID & "'"
+            Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable, dev_po=@dev_po, dev_lastmod_user=@dev_lastmod_user, dev_lastmod_date=@dev_lastmod_date WHERE dev_UID='" & CurrentViewDevice.strGUID & "'"
             Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSQLQry1)
             cmd.Parameters.AddWithValue("@dev_description", NewData.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", NewData.strLocation)
@@ -149,6 +149,8 @@ Public Class View
             cmd.Parameters.AddWithValue("@dev_status", NewData.strStatus)
             cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(NewData.bolTrackable))
             cmd.Parameters.AddWithValue("@dev_po", NewData.strPO)
+            cmd.Parameters.AddWithValue("@dev_lastmod_user", strLocalUser)
+            cmd.Parameters.AddWithValue("@dev_lastmod_date", Now)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO dev_historical (hist_change_type,hist_notes,hist_serial,hist_description,hist_location,hist_cur_user,hist_asset_tag,hist_purchase_date,hist_replacement_year,hist_osversion,hist_dev_UID,hist_action_user,hist_eq_type,hist_status,hist_trackable,hist_po) VALUES (@hist_change_type,@hist_notes,@hist_serial,@hist_description,@hist_location,@hist_cur_user,@hist_asset_tag,@hist_purchase_date,@hist_replacement_year,@hist_osversion,@hist_dev_UID,@hist_action_user,@hist_eq_type,@hist_status,@hist_trackable,@hist_po)"
             cmd.CommandText = strSqlQry2
@@ -259,6 +261,7 @@ Public Class View
                 table.Columns.Add("Date", GetType(String))
                 table.Columns.Add("Action Type", GetType(String))
                 table.Columns.Add("Action User", GetType(String))
+                table.Columns.Add("Note Peek", GetType(String))
                 table.Columns.Add("User", GetType(String))
                 table.Columns.Add("Asset ID", GetType(String))
                 table.Columns.Add("Serial", GetType(String))
@@ -270,6 +273,7 @@ Public Class View
                     table.Rows.Add(NoNull(r.Item("hist_action_datetime")),
                            GetHumanValue(ComboType.ChangeType, NoNull(r.Item("hist_change_type"))),
                            NoNull(r.Item("hist_action_user")),
+                           NotePreview(NoNull(r.Item("hist_notes")), 25),
                            NoNull(r.Item("hist_cur_user")),
                            NoNull(r.Item("hist_asset_tag")),
                            NoNull(r.Item("hist_serial")),
@@ -520,11 +524,9 @@ Public Class View
         UpdateDev.Show()
     End Sub
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        MyLiveBox.Unload()
+
         Me.Dispose()
-        Attachments.Dispose()
-        Tracking.Dispose()
-        CloseChildren()
+
     End Sub
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
         NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
@@ -604,7 +606,7 @@ Public Class View
         FillComboBox(OSType, cmbOSVersion_REQ)
         FillComboBox(StatusType, cmbStatus_REQ)
     End Sub
-    Private Sub DeleteDeviceToolStripMenuItem_Click(sender As Object, e As EventArgs)
+    Private Sub DeleteDevice()
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
         Dim blah = MsgBox("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbCritical, "WARNING")
         If blah = vbYes Then
@@ -623,6 +625,9 @@ Public Class View
         Else
             Exit Sub
         End If
+    End Sub
+    Private Sub DeleteDeviceToolStripMenuItem_Click(sender As Object, e As EventArgs)
+        DeleteDevice()
     End Sub
     Private Sub txtAssetTag_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag_View_REQ.TextChanged
         If bolCheckFields Then CheckFields()
@@ -901,6 +906,9 @@ Public Class View
         End If
     End Sub
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        MyLiveBox.Unload()
+        Attachments.Dispose()
+        Tracking.Dispose()
         CloseChildren()
     End Sub
     Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint
