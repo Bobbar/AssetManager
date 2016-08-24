@@ -8,6 +8,7 @@ Public Class frmManageRequest
     Private CurrentRequest As Request_Info
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
+        Me.Text = Me.Text + " - " + CurrentRequest.strDescription
     End Sub
     Public Sub ClearAll()
         ClearControls(Me)
@@ -681,6 +682,7 @@ VALUES
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         If CurrentRequest.strUID <> "" Then
             Dim NewAttach As New frmSibiAttachments
+            NewAttach.Tag = Me
             NewAttach.ListAttachments(CurrentRequest)
             NewAttach.Activate()
             NewAttach.Show()
@@ -696,7 +698,23 @@ VALUES
         cmdAddNew.Visible = True
     End Sub
     Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        CurrentRequest = Nothing
+        CloseChildren()
+        Me.Dispose()
+    End Sub
+    Private Sub CloseChildren()
+        Dim children(0) As frmSibiAttachments
+        For Each frms As Form In My.Application.OpenForms
+            If TypeOf frms Is frmSibiAttachments Then
+                Dim AttachForm As frmSibiAttachments = frms
+                If AttachForm.AttachRequest.strUID = CurrentRequest.strUID Then
+                    children(UBound(children)) = frms
+                    ReDim Preserve children(UBound(children) + 1)
+                End If
+            End If
+        Next
+        For Each child As frmSibiAttachments In children
+            If Not IsNothing(child) Then child.Dispose()
+        Next
     End Sub
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub

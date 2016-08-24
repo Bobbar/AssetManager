@@ -44,7 +44,7 @@ Partial Class frmSibiMain
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(12, 28)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1022, 393)
+        Me.Panel1.Size = New System.Drawing.Size(1050, 522)
         Me.Panel1.TabIndex = 0
         '
         'Label1
@@ -60,7 +60,7 @@ Partial Class frmSibiMain
         'cmdShowAll
         '
         Me.cmdShowAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdShowAll.Location = New System.Drawing.Point(919, 4)
+        Me.cmdShowAll.Location = New System.Drawing.Point(947, 4)
         Me.cmdShowAll.Name = "cmdShowAll"
         Me.cmdShowAll.Size = New System.Drawing.Size(100, 30)
         Me.cmdShowAll.TabIndex = 1
@@ -107,7 +107,7 @@ Partial Class frmSibiMain
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1016, 338)
+        Me.ResultGrid.Size = New System.Drawing.Size(1044, 467)
         Me.ResultGrid.TabIndex = 18
         Me.ResultGrid.VirtualMode = True
         '
@@ -116,7 +116,7 @@ Partial Class frmSibiMain
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdManage})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(1043, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(1071, 25)
         Me.ToolStrip1.TabIndex = 2
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -133,13 +133,13 @@ Partial Class frmSibiMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1043, 427)
+        Me.ClientSize = New System.Drawing.Size(1071, 556)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmSibiMain"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Sibi - Acqusition Manager"
+        Me.Text = "Sibi Acqusition Manager - Main"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
@@ -147,6 +147,7 @@ Partial Class frmSibiMain
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ResultGrid As DataGridView

@@ -19,7 +19,7 @@ Class frmSibiAttachments
     Private bolDragging As Boolean = False
     Private bolAllowDrag As Boolean = False
     Private strDragFilePath As String
-    Private AttachRequest As Request_Info
+    Public AttachRequest As Request_Info
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String

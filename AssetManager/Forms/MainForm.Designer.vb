@@ -65,6 +65,8 @@ Partial Class MainForm
         Me.StripSpinner = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ConnStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.lblConnections = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
@@ -87,8 +89,6 @@ Partial Class MainForm
         Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
         Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.lblConnections = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -563,6 +563,20 @@ Partial Class MainForm
         Me.ConnStatusLabel.Size = New System.Drawing.Size(73, 17)
         Me.ConnStatusLabel.Text = "Connected"
         '
+        'ToolStripStatusLabel4
+        '
+        Me.ToolStripStatusLabel4.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripStatusLabel4.Name = "ToolStripStatusLabel4"
+        Me.ToolStripStatusLabel4.Size = New System.Drawing.Size(12, 17)
+        Me.ToolStripStatusLabel4.Text = "|"
+        '
+        'lblConnections
+        '
+        Me.lblConnections.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblConnections.Name = "lblConnections"
+        Me.lblConnections.Size = New System.Drawing.Size(93, 17)
+        Me.lblConnections.Text = "Connections: 0"
+        '
         'ToolStripStatusLabel2
         '
         Me.ToolStripStatusLabel2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -732,20 +746,6 @@ Partial Class MainForm
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
         '
-        'lblConnections
-        '
-        Me.lblConnections.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblConnections.Name = "lblConnections"
-        Me.lblConnections.Size = New System.Drawing.Size(93, 17)
-        Me.lblConnections.Text = "Connections: 0"
-        '
-        'ToolStripStatusLabel4
-        '
-        Me.ToolStripStatusLabel4.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripStatusLabel4.Name = "ToolStripStatusLabel4"
-        Me.ToolStripStatusLabel4.Size = New System.Drawing.Size(12, 17)
-        Me.ToolStripStatusLabel4.Text = "|"
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -761,7 +761,7 @@ Partial Class MainForm
         Me.MinimumSize = New System.Drawing.Size(1256, 443)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Asset Manager"
+        Me.Text = "Asset Manager - Main"
         Me.GroupBox1.ResumeLayout(False)
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ContextMenuStrip1.ResumeLayout(False)
