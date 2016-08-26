@@ -1,14 +1,16 @@
 ﻿Imports MySql.Data.MySqlClient
 Public Class frmNotes
     Private NoteRequest As Request_Info
+    Private CallingForm As frmManageRequest
     Private Sub ClearAll()
         rtbNotes.Clear()
     End Sub
     Private Sub frmNotes_Load(sender As Object, e As EventArgs) Handles Me.Load
         'ClearAll()
     End Sub
-    Public Sub LoadNote(Request As Request_Info)
+    Public Sub LoadNote(Request As Request_Info, Sender As frmManageRequest)
         NoteRequest = Request
+        CallingForm = Sender
         Me.Show()
     End Sub
     Private Function AddNewNote(RequestUID As String, Note As String) As Boolean
@@ -48,7 +50,7 @@ VALUES
         If AddNewNote(NoteRequest.strUID, Trim(rtbNotes.Text)) Then
             'MsgBox("Success!")
             Me.Dispose()
-            frmManageRequest.OpenRequest(NoteRequest.strUID)
+            CallingForm.OpenRequest(NoteRequest.strUID)
         Else
             MsgBox("Failed!")
         End If
