@@ -181,6 +181,46 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property err_critical() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("err_critical", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property err_exclamation() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("err_exclamation", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property err_information() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("err_information", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property err_question() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("err_question", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.Byte[].
         '''</summary>
         Public ReadOnly Property Exh_K_01_Asset_Input_Formnew() As Byte()

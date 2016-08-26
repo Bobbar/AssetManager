@@ -364,6 +364,7 @@
   <ItemGroup>
     <Content Include="AssetManager.ico" />
     <None Include="Resources\239360-transfer_arrows-512.png" />
+    <None Include="Resources\2000px-Achtung.svg.png" />
     <Content Include="Resources\Add.png" />
     <None Include="Resources\check-out.png" />
     <None Include="Resources\delete-icon-red.png" />
@@ -374,6 +375,7 @@
     <None Include="Resources\clip-512.png" />
     <None Include="Resources\cancel.png" />
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
+    <None Include="Resources\attencion_exclamation_mark_circle_danger-128.png" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <None Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
@@ -381,6 +383,11 @@
     <None Include="Resources\Find.png" />
     <None Include="Resources\Form2-512.png" />
     <None Include="Resources\import_document_mail_save-512.png" />
+    <None Include="Resources\information-icon-5.png" />
+    <None Include="Resources\err_critical.png" />
+    <None Include="Resources\err_exclamation.png" />
+    <None Include="Resources\err_information.png" />
+    <None Include="Resources\err_question.png" />
     <Content Include="Resources\inventory-small.fw.png" />
     <None Include="Resources\report.png" />
     <None Include="Resources\presentation-512.png" />

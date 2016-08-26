@@ -963,41 +963,13 @@ Public Class View
     End Sub
 
     Private Sub tsmAssetTransferForm_Click(sender As Object, e As EventArgs) Handles tsmAssetTransferForm.Click
-        'Dim newDia As New MyDialog
+        'Dim newDialog As New MyDialog
+        'With newDialog
+        '    .Text = "Error Dialog"
+        '    .AddLabel("Blah blah blah blah blah blah Blah blah blah blah blah blahBlah blah blah blah blah blahBlah blah blah blah blah blahBlah blah blah blah blah blah")
 
-        'Dim cmb1 As New ComboBox
-        'FillComboBox(Locations, cmb1)
-        'cmb1.Name = "cmbLocations"
-        'cmb1.Tag = "Locations:"
-        'newDia.AddControl(cmb1)
-
-
-        'Dim lbl1 As New Label
-        'lbl1.Text = "Label some stuff:"
-        'newDia.AddControl(lbl1)
-
-
-        'Dim cmb2 As New ComboBox
-        'FillComboBox(OSType, cmb2)
-        'cmb2.Name = "cmbOSType"
-        'cmb2.Tag = "OS Type:"
-        'newDia.AddControl(cmb2)
-
-        'Dim txt1 As New TextBox
-        ''txt1.Name = "txtSomeInfo"
-        'txt1.Tag = "Some info here:"
-        'newDia.AddControl(txt1)
-
-        'newDia.ShowDialog()
-
-        'Debug.Print(GetDBValue(Locations, newDia.GetControlValue("cmb1")))
-        'Debug.Print(GetDBValue(Locations, newDia.GetControlValue("cmb2")))
-        'Debug.Print(newDia.GetControlValue("txt1"))
-
-
-        'newDia.Dispose()
-
-
+        '    .ShowDialog()
+        'End With
 
 
         'ListFieldNames()

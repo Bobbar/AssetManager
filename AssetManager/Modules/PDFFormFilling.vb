@@ -93,7 +93,7 @@ Module PDFFormFilling
             .Text = "Additional Input Required"
             .AddComboBox("cmbFromLoc", "Transfer FROM:", Locations)
             .AddComboBox("cmbToLoc", "Transfer TO:", Locations)
-            .AddLabel("Reason For Transfer-Check One:")
+            .AddLabel("Reason For Transfer-Check One:", True)
             .AddCheckBox("chkBetterU", "Better Use of asset:")
             .AddCheckBox("chkTradeIn", "Trade-in or exchange:")
             .AddCheckBox("chkExcess", "Excess assets:")

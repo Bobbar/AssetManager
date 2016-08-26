@@ -170,14 +170,16 @@
                 End If
             Next
             If intOrphanFiles > 0 Or intOrphanFolders > 0 Then
-                Dim blah = MsgBox("Orphans found!  Folders:" & intOrphanFolders & "  Files:" & intOrphanFiles & vbCrLf & "See log for details:" & strLogPath & vbCrLf & vbCrLf & "Press OK now to delete orphans.", vbOKCancel + vbCritical, "Corruption Detected")
+                Dim blah = MyDialog.Message("Orphans found!  Folders:" & intOrphanFolders & "  Files:" & intOrphanFiles & vbCrLf & "See log for details:" & strLogPath & vbCrLf & vbCrLf & "Press OK now to delete orphans.", vbOKCancel + vbCritical, "Corruption Detected")
+                'Dim blah = MsgBox("Orphans found!  Folders:" & intOrphanFolders & "  Files:" & intOrphanFiles & vbCrLf & "See log for details:" & strLogPath & vbCrLf & vbCrLf & "Press OK now to delete orphans.", vbOKCancel + vbCritical, "Corruption Detected")
                 If blah = vbOK Then
                     CleanFiles(BadFiles)
                     ScanAttachements()
                 End If
             Else
                 Logger("No Orphans Found.")
-                Dim blah = MsgBox("No issues found.", vbOKOnly + vbInformation, "Scan OK")
+                Dim blah = MyDialog.Message("No issues found.", vbOKOnly + vbInformation, "Scan OK")
+                'Dim blah = MsgBox("No issues found.", vbOKOnly + vbInformation, "Scan OK")
             End If
             Logger("**********End Scan Results*********")
             Logger("***********************************")

@@ -614,6 +614,13 @@ Public Class MainForm
     Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
         ScanAttachements()
     End Sub
+
+    Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim huh = MyDialog.Message("Blakdf asd  h  bla h bla h bla ha  Blakdf asd  h  bla h bla h bla haBlakdf asd  h  bla h bla h bla haBlakdf asd  h  bla h bla h bla ha ", vbYesNo + vbInformation, "Testing")
+
+        Debug.Print(huh.ToString)
+    End Sub
+
     Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Dim f As Form = sender
         If f.WindowState = FormWindowState.Minimized Then
