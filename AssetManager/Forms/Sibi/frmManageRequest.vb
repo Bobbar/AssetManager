@@ -787,7 +787,8 @@ VALUES
     Private Sub cmdAddNote_Click(sender As Object, e As EventArgs) Handles cmdAddNote.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         If CurrentRequest.strUID <> "" Then
-            frmNotes.LoadNote(CurrentRequest)
+            Dim NewNote As New frmNotes
+            NewNote.LoadNote(CurrentRequest, Me)
         End If
     End Sub
     Private Sub dgvNotes_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvNotes.CellDoubleClick
