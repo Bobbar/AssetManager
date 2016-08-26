@@ -219,6 +219,11 @@ Public Module DBFunctions
         Next
         Return Nothing
     End Function
+    Public Function GetHumanValueFromIndex(ByVal Type As String, index As Integer) As String
+        Dim SearchIndex() As Combo_Data
+        SearchIndex = GetSearchIndex(Type)
+        Return SearchIndex(index).strLong
+    End Function
     Public Function GetDBValueFromHuman(ByVal Type As String, ByVal LongVal As String) As String
         Dim SearchIndex() As Combo_Data = GetSearchIndex(Type)
         For Each i As Combo_Data In SearchIndex
@@ -277,13 +282,13 @@ Public Module DBFunctions
         End With
         Logger("Building Indexes Done...")
     End Sub
-    Public Function GetShortEquipType(ByVal index As Integer) As String
-        Try
-            Return EquipType(index).strShort
-        Catch
-            Return ""
-        End Try
-    End Function
+    'Public Function GetShortEquipType(ByVal index As Integer) As String
+    '    Try
+    '        Return EquipType(index).strShort
+    '    Catch
+    '        Return ""
+    '    End Try
+    'End Function
     Public Function ConnectionReady() As Boolean
         Select Case GlobalConn.State
             Case ConnectionState.Closed

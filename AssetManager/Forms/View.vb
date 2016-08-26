@@ -1000,7 +1000,7 @@ Public Class View
 
 
 
-        ' ListFieldNames()
+        'ListFieldNames()
         FillForm(CurrentViewDevice, FormType.TransferForm)
     End Sub
 

@@ -48,42 +48,8 @@ Module PDFFormFilling
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_03_Asset_Transfer_Form)
                     pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
                     Dim pdfFormFields As AcroFields = TransferFormFields(Device, pdfStamper)
-
-
             End Select
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD")
-            '' pdfFormFields.SetField("topmostSubform[0].Page1[0].Asterisked_items_____must_be_completed_by_the_department[0]", CurrentDevice.strAssetTag)
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined[0]", Device.strSerial)
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_2[0]", Munis.Get_VendorName_From_PO(Device.strPO))
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_3[0]", Device.strDescription)
-            ''pdfFormFields.SetField("topmostSubform[0].Page1[0]._1[0]", "6") 
-            '' pdfFormFields.SetField("topmostSubform[0].Page1[0]._2[0]", "7")
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_4[0]", Device.strPO)
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_5[0]", Get_MunisCode_From_AssetCode(Device.strLocation))
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_6[0]", "5200")
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_7[0]", Get_MunisCode_From_AssetCode(Device.strEqType))
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_8[0]", "GP")
-            ''pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_9[0]", "13")
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_10[0]", "1")
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_11[0]", strUnitPrice)
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].undefined_12[0]", Device.dtPurchaseDate.ToString("MM/dd/yyyy"))
-            'pdfFormFields.SetField("topmostSubform[0].Page1[0].Date[0]", Now.ToString("MM/dd/yyyy"))
-            PdfStamper.FormFlattening = True
+            pdfStamper.FormFlattening = True
             ' close the pdf
             pdfStamper.Close()
             Process.Start(newFile)
@@ -122,72 +88,74 @@ Module PDFFormFilling
     End Function
     Private Function TransferFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
-
         Dim newDialog As New MyDialog
-        Dim cmbFromLoc As New ComboBox
-        cmbFromLoc.Name = "cmbFromLoc"
-        cmbFromLoc.Tag = "Transfer FROM:"
-        FillComboBox(Locations, cmbFromLoc)
-        newDialog.AddControl(cmbFromLoc)
-
-        Dim cmbToLoc As New ComboBox
-        cmbToLoc.Name = "cmbToLoc"
-        cmbToLoc.Tag = "Transfer TO:"
-        FillComboBox(Locations, cmbToLoc)
-        newDialog.AddControl(cmbToLoc)
-
-        Dim lbl As New Label
-        lbl.Text = "Reason For Transfer-Check One:"
-        newDialog.AddControl(lbl)
-
-        Dim chkBetterU As New CheckBox
-        chkBetterU.Name = "chkBetterU"
-        chkBetterU.Tag = "Better Use of asset:"
-        newDialog.AddControl(chkBetterU)
-
-        Dim chkTradeIn As New CheckBox
-        chkTradeIn.Name = "chkTradeIn"
-        chkTradeIn.Tag = "Trade-in or exchange:"
-        newDialog.AddControl(chkTradeIn)
-
-        Dim chkExcess As New CheckBox
-        chkExcess.Name = "chkExcess"
-        chkExcess.Tag = "Excess assets:"
-        newDialog.AddControl(chkExcess)
-
-        Dim chkOther As New CheckBox
-        chkOther.Name = "chkOther"
-        chkOther.Tag = "Other:"
-        newDialog.AddControl(chkOther)
-
-
-        Dim rtbOther As New RichTextBox
-        rtbOther.Name = "rtbOther"
-        rtbOther.Tag = "If Other, Please explain:"
-        newDialog.AddControl(rtbOther)
-
-        newDialog.ShowDialog()
-
+        With newDialog
+            .Text = "Additional Input Required"
+            .AddComboBox("cmbFromLoc", "Transfer FROM:", Locations)
+            .AddComboBox("cmbToLoc", "Transfer TO:", Locations)
+            .AddLabel("Reason For Transfer-Check One:")
+            .AddCheckBox("chkBetterU", "Better Use of asset:")
+            .AddCheckBox("chkTradeIn", "Trade-in or exchange:")
+            .AddCheckBox("chkExcess", "Excess assets:")
+            .AddCheckBox("chkOther", "Other:")
+            .AddRichTextBox("rtbOther", "If Other, Please explain:")
+            .ShowDialog()
+        End With
+        If newDialog.DialogResult <> DialogResult.OK Then Return Nothing
         With tmpFields
             .SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.strAssetTag)
             .SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.strSerial)
             .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
-
-
             .SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD - 5200")
-            .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
-            .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
-            .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
-            .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
-            .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
-            .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
+            .SetField("topmostSubform[0].Page1[0].Location[0]", GetHumanValueFromIndex(ComboType.Location, newDialog.GetControlValue("cmbFromLoc")))
+            .SetField("topmostSubform[0].Page1[0].Department_2[0]", "FCBDD - 5200")
+            .SetField("topmostSubform[0].Page1[0].Location_2[0]", GetHumanValueFromIndex(ComboType.Location, newDialog.GetControlValue("cmbToLoc")))
+            .SetField("topmostSubform[0].Page1[0].Better_utilization_of_assets[0]", CheckValueToString(newDialog.GetControlValue("chkBetterU")))
+            .SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]", CheckValueToString(newDialog.GetControlValue("chkTradeIn")))
+            .SetField("topmostSubform[0].Page1[0].Excess_assets[0]", CheckValueToString(newDialog.GetControlValue("chkExcess")))
+            .SetField("topmostSubform[0].Page1[0].undefined[0]", CheckValueToString(newDialog.GetControlValue("chkOther")))
+            .SetField("topmostSubform[0].Page1[0].Other__Please_explain_1[0]", newDialog.GetControlValue("rtbOther"))
 
-
+            'key
+            'topmostSubform[0].Page1[0].AssetTag_number[0]
+            'topmostSubform[0].Page1[0].Serial_number[0]
+            'topmostSubform[0].Page1[0].Description_of_asset[0]
+            'topmostSubform[0].Page1[0].Department[0]
+            'topmostSubform[0].Page1[0].Location[0]
+            'topmostSubform[0].Page1[0].Department_2[0]
+            'topmostSubform[0].Page1[0].Location_2[0]
+            'topmostSubform[0].Page1[0].Better_utilization_of_assets[0]
+            'topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]
+            'topmostSubform[0].Page1[0].Excess_assets[0]
+            'topmostSubform[0].Page1[0].undefined[0]
+            'topmostSubform[0].Page1[0].Other__Please_explain_1[0]
+            'topmostSubform[0].Page1[0].Other__Please_explain_2[0]
+            'topmostSubform[0].Page1[0].Method_of_Delivery_or_Shipping_Please_Check_One[0]
+            'topmostSubform[0].Page1[0].Hand-carried_by[0]
+            'topmostSubform[0].Page1[0].undefined_2[0]
+            'topmostSubform[0].Page1[0].Carrier_company[0]
+            'topmostSubform[0].Page1[0].US_Mail[0]
+            'topmostSubform[0].Page1[0].Shipping_receipt_number[0]
+            'topmostSubform[0].Page1[0].Date_of_shipment_or_transfer[0]
+            'topmostSubform[0].Page1[0].Signature_of_SENDING_official[0]
+            'topmostSubform[0].Page1[0].Department_3[0]
+            'topmostSubform[0].Page1[0].Date[0]
+            'topmostSubform[0].Page1[0].Signature_of_RECEIVING_official[0]
+            'topmostSubform[0].Page1[0].Department_4[0]
+            'topmostSubform[0].Page1[0].Date_2[0]
+            'topmostSubform[0].Page1[0].PrintButton1[0]
 
 
         End With
-
+        newDialog.Dispose()
         Return tmpFields
 
+    End Function
+    Private Function CheckValueToString(CheckValue As CheckState) As String
+        If CheckValue = CheckState.Checked Then
+            Return "X"
+        Else
+            Return ""
+        End If
     End Function
 End Module
