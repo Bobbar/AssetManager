@@ -6,13 +6,14 @@ Public Class MyDialog
             Return MyControls
         End Get
     End Property
+    Private FormControlSize As Size = New Size(600, 345)
     Private IsMessageBox As Boolean = False
     Private MyControls As New List(Of Control)
     Public Function Message(ByVal Prompt As Object, Optional ByVal Buttons As MsgBoxStyle = MsgBoxStyle.OkOnly, Optional ByVal Title As Object = Nothing) As DialogResult
         IsMessageBox = True
         Me.Text = Title
         AddLabel(Prompt)
-        SetupButtons(Buttons)
+
         Me.Size = Me.MinimumSize
         ParseStyle(Buttons)
         Me.ShowDialog()
@@ -23,12 +24,15 @@ Public Class MyDialog
 
     End Function
     Private Sub ParseStyle(ByVal style As MsgBoxStyle)
+
+
         Dim types As Integer
         Dim icons As Integer
         Dim defs As Integer
         Dim modes As Integer
         Dim miscs As Integer
         Dim iStyle As Integer
+
 
         Const MB_TYPEMASK As Integer = &HF
         Const MB_ICONMASK As Integer = &HF0
@@ -37,6 +41,8 @@ Public Class MyDialog
         Const MB_MISCMASK As Integer = &HFFC000
 
         iStyle = style
+
+
 
         types = iStyle And MB_TYPEMASK
         icons = iStyle And MB_ICONMASK
@@ -55,26 +61,24 @@ Public Class MyDialog
             pbIcon.Image = My.Resources.err_information
         Else ' Assume MBS.Information (MB_USERICON isn't wrapped)
             pbIcon.Image = Nothing
-            pbIcon.Visible = False
+            pnlIcon.Visible = False
+            pnlControls.Dock = DockStyle.Fill
         End If
-    End Sub
-    Private Sub SetupButtons(style As MsgBoxStyle)
-        Select Case style
-            Case MsgBoxStyle.OkCancel
-                tblOkCancel.Visible = True
+
+        If types = MsgBoxStyle.OkOnly Then
+            tblOkCancel.Visible = True
+            Cancel_Button.Visible = False
+        ElseIf types = MsgBoxStyle.OkCancel Then
+            tblOkCancel.Visible = True
+        ElseIf types = MsgBoxStyle.YesNo Then
+
+            tblOkCancel.Visible = False
+            tblYesNo.Visible = True
+
+        End If
 
 
-            Case MsgBoxStyle.OkOnly
-                tblOkCancel.Visible = True
-                Cancel_Button.Visible = False
 
-            Case MsgBoxStyle.YesNo
-
-                tblOkCancel.Visible = False
-                tblYesNo.Visible = True
-
-
-        End Select
 
 
     End Sub
@@ -99,7 +103,17 @@ Public Class MyDialog
     End Sub
     Private Sub Dialog1_Load(sender As Object, e As EventArgs) Handles Me.Load
         LoadControls(MyControls)
-        If Not IsMessageBox Then pbIcon.Visible = False
+        If Not IsMessageBox Then
+            Me.Size = FormControlSize
+            pnlIcon.Visible = False
+            pnlControls.Dock = DockStyle.Fill
+            pnlControls.Refresh()
+            pnlMaster.Refresh()
+            pnlControls.AutoSize = False
+            pnlMaster.AutoSize = False
+            Me.AutoSize = False
+            Me.Update()
+        End If
     End Sub
     Private Sub LoadControls(lstControls As List(Of Control))
         For Each ctl As Control In lstControls
@@ -125,7 +139,7 @@ Public Class MyDialog
                     Dim lbl As Label = ctl
                     lbl.AutoSize = True
                     If IsMessageBox Then
-
+                        'lbl.BorderStyle = BorderStyle.FixedSingle
                         lbl.Anchor = AnchorStyles.Bottom + AnchorStyles.Top
                         lbl.TextAlign = ContentAlignment.MiddleLeft
                     End If
@@ -147,7 +161,7 @@ Public Class MyDialog
         pnl.FlowDirection = FlowDirection.TopDown
         pnl.AutoSize = True
         pnl.AutoSizeMode = AutoSizeMode.GrowOnly
-        pnl.Padding = New Padding(0, 0, 5, 10)
+        pnl.Padding = New Padding(0, 0, 10, 10)
         Return pnl
     End Function
     Public Function NewControlLabel(Text As String) As Label
@@ -204,4 +218,17 @@ Public Class MyDialog
         Next
         Return Nothing
     End Function
+    Private Sub MyDialog_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
+        pnlControls.AutoSize = False
+        pnlMaster.AutoSize = False
+        Me.AutoSize = False
+    End Sub
+
+    Private Sub MyDialog_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+
+    End Sub
+
+    Private Sub MyDialog_StyleChanged(sender As Object, e As EventArgs) Handles Me.StyleChanged
+
+    End Sub
 End Class

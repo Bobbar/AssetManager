@@ -30,12 +30,16 @@ Partial Class MyDialog
         Me.tblYesNo = New System.Windows.Forms.TableLayoutPanel()
         Me.Yes_Button = New System.Windows.Forms.Button()
         Me.No_Button = New System.Windows.Forms.Button()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.pbIcon = New System.Windows.Forms.PictureBox()
+        Me.pnlIcon = New System.Windows.Forms.Panel()
+        Me.pnlControls = New System.Windows.Forms.Panel()
+        Me.pnlMaster = New System.Windows.Forms.Panel()
         Me.tblOkCancel.SuspendLayout()
         Me.tblYesNo.SuspendLayout()
-        Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.pbIcon, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlIcon.SuspendLayout()
+        Me.pnlControls.SuspendLayout()
+        Me.pnlMaster.SuspendLayout()
         Me.SuspendLayout()
         '
         'tblOkCancel
@@ -46,7 +50,7 @@ Partial Class MyDialog
         Me.tblOkCancel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.tblOkCancel.Controls.Add(Me.OK_Button, 0, 0)
         Me.tblOkCancel.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.tblOkCancel.Location = New System.Drawing.Point(319, 163)
+        Me.tblOkCancel.Location = New System.Drawing.Point(304, 95)
         Me.tblOkCancel.Name = "tblOkCancel"
         Me.tblOkCancel.RowCount = 1
         Me.tblOkCancel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -74,16 +78,17 @@ Partial Class MyDialog
         '
         'Panel
         '
+        Me.Panel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel.AutoScroll = True
         Me.Panel.AutoSize = True
-        Me.Panel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.Panel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel.Location = New System.Drawing.Point(3, 3)
         Me.Panel.Name = "Panel"
         Me.Panel.Padding = New System.Windows.Forms.Padding(10, 10, 10, 0)
-        Me.Panel.Size = New System.Drawing.Size(376, 137)
+        Me.Panel.Size = New System.Drawing.Size(328, 68)
         Me.Panel.TabIndex = 3
         '
         'tblYesNo
@@ -94,7 +99,7 @@ Partial Class MyDialog
         Me.tblYesNo.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.tblYesNo.Controls.Add(Me.Yes_Button, 0, 0)
         Me.tblYesNo.Controls.Add(Me.No_Button, 1, 0)
-        Me.tblYesNo.Location = New System.Drawing.Point(12, 163)
+        Me.tblYesNo.Location = New System.Drawing.Point(12, 95)
         Me.tblYesNo.Name = "tblYesNo"
         Me.tblYesNo.RowCount = 1
         Me.tblYesNo.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -121,28 +126,10 @@ Partial Class MyDialog
         Me.No_Button.TabIndex = 1
         Me.No_Button.Text = "&No"
         '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.AutoSize = True
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.TableLayoutPanel1.Controls.Add(Me.pbIcon, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Panel, 0, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(12, 12)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(453, 143)
-        Me.TableLayoutPanel1.TabIndex = 5
-        '
         'pbIcon
         '
         Me.pbIcon.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.pbIcon.Location = New System.Drawing.Point(385, 39)
+        Me.pbIcon.Location = New System.Drawing.Point(17, 7)
         Me.pbIcon.MinimumSize = New System.Drawing.Size(65, 65)
         Me.pbIcon.Name = "pbIcon"
         Me.pbIcon.Size = New System.Drawing.Size(65, 65)
@@ -150,14 +137,53 @@ Partial Class MyDialog
         Me.pbIcon.TabIndex = 4
         Me.pbIcon.TabStop = False
         '
+        'pnlIcon
+        '
+        Me.pnlIcon.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pnlIcon.Controls.Add(Me.pbIcon)
+        Me.pnlIcon.Location = New System.Drawing.Point(350, 3)
+        Me.pnlIcon.Name = "pnlIcon"
+        Me.pnlIcon.Size = New System.Drawing.Size(100, 82)
+        Me.pnlIcon.TabIndex = 6
+        '
+        'pnlControls
+        '
+        Me.pnlControls.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pnlControls.AutoSize = True
+        Me.pnlControls.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.pnlControls.Controls.Add(Me.Panel)
+        Me.pnlControls.Location = New System.Drawing.Point(3, 6)
+        Me.pnlControls.Name = "pnlControls"
+        Me.pnlControls.Size = New System.Drawing.Size(337, 75)
+        Me.pnlControls.TabIndex = 7
+        '
+        'pnlMaster
+        '
+        Me.pnlMaster.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pnlMaster.AutoSize = True
+        Me.pnlMaster.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.pnlMaster.Controls.Add(Me.pnlIcon)
+        Me.pnlMaster.Controls.Add(Me.pnlControls)
+        Me.pnlMaster.Location = New System.Drawing.Point(3, 0)
+        Me.pnlMaster.Name = "pnlMaster"
+        Me.pnlMaster.Size = New System.Drawing.Size(453, 88)
+        Me.pnlMaster.TabIndex = 8
+        '
         'MyDialog
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoSize = True
+        Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(477, 204)
-        Me.Controls.Add(Me.TableLayoutPanel1)
+        Me.ClientSize = New System.Drawing.Size(462, 136)
+        Me.Controls.Add(Me.pnlMaster)
         Me.Controls.Add(Me.tblYesNo)
         Me.Controls.Add(Me.tblOkCancel)
         Me.DoubleBuffered = True
@@ -171,9 +197,12 @@ Partial Class MyDialog
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.tblOkCancel.ResumeLayout(False)
         Me.tblYesNo.ResumeLayout(False)
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.TableLayoutPanel1.PerformLayout()
         CType(Me.pbIcon, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlIcon.ResumeLayout(False)
+        Me.pnlControls.ResumeLayout(False)
+        Me.pnlControls.PerformLayout()
+        Me.pnlMaster.ResumeLayout(False)
+        Me.pnlMaster.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -185,6 +214,8 @@ Partial Class MyDialog
     Friend WithEvents tblYesNo As TableLayoutPanel
     Friend WithEvents Yes_Button As Button
     Friend WithEvents No_Button As Button
-    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents pbIcon As PictureBox
+    Friend WithEvents pnlIcon As Panel
+    Friend WithEvents pnlControls As Panel
+    Friend WithEvents pnlMaster As Panel
 End Class
