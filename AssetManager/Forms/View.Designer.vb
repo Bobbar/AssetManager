@@ -21,6 +21,7 @@ Partial Class View
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
         Me.cmdBrowseFiles = New System.Windows.Forms.Button()
@@ -93,6 +94,7 @@ Partial Class View
         Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeviceInfoBox.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
@@ -511,6 +513,15 @@ Partial Class View
         Me.DataGridHistory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridHistory.ContextMenuStrip = Me.RightClickMenu
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.Padding = New System.Windows.Forms.Padding(10)
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridHistory.DefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridHistory.Location = New System.Drawing.Point(6, 6)
         Me.DataGridHistory.MultiSelect = False
@@ -775,7 +786,7 @@ Partial Class View
         '
         'tsdAssetControl
         '
-        Me.tsdAssetControl.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAssetInputForm})
+        Me.tsdAssetControl.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAssetInputForm, Me.tsmAssetTransferForm})
         Me.tsdAssetControl.Image = Global.AssetManager.My.Resources.Resources.Form2_512
         Me.tsdAssetControl.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdAssetControl.Name = "tsdAssetControl"
@@ -786,7 +797,7 @@ Partial Class View
         '
         Me.tsmAssetInputForm.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.tsmAssetInputForm.Name = "tsmAssetInputForm"
-        Me.tsmAssetInputForm.Size = New System.Drawing.Size(183, 32)
+        Me.tsmAssetInputForm.Size = New System.Drawing.Size(201, 32)
         Me.tsmAssetInputForm.Text = "Asset Input Form"
         '
         'ToolStripSeparator1
@@ -864,6 +875,12 @@ Partial Class View
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
+        'tsmAssetTransferForm
+        '
+        Me.tsmAssetTransferForm.Name = "tsmAssetTransferForm"
+        Me.tsmAssetTransferForm.Size = New System.Drawing.Size(201, 32)
+        Me.tsmAssetTransferForm.Text = "Asset Transfer Form"
+        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -900,6 +917,7 @@ Partial Class View
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents DeviceInfoBox As GroupBox
     Friend WithEvents Label9 As Label
@@ -974,4 +992,5 @@ Partial Class View
     Friend WithEvents grpNetTools As GroupBox
     Friend WithEvents tsdAssetControl As ToolStripDropDownButton
     Friend WithEvents tsmAssetInputForm As ToolStripMenuItem
+    Friend WithEvents tsmAssetTransferForm As ToolStripMenuItem
 End Class

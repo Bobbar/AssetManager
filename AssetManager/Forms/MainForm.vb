@@ -285,10 +285,10 @@ Public Class MainForm
             Waiting()
             Dim NewView As New View
             NewView.ViewDevice(strGUID)
-            If Not NewView.IsDisposed Then
-                NewView.Show()
-                NewView.Activate()
-            End If
+            ' If Not NewView.IsDisposed Then
+            'NewView.Show()
+            'NewView.Activate()
+            'End If
             DoneWaiting()
         Else
             ' Dim blah = MsgBox("That device is already open.", vbOKOnly + vbExclamation, "Duplicate Window")

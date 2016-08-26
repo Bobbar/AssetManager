@@ -30,8 +30,8 @@ Public Class LiveBox
         AddHandler LiveWorker.DoWork, AddressOf LiveWorker_DoWork
         AddHandler LiveWorker.RunWorkerCompleted, AddressOf LiveWorkerr_RunWorkerCompleted
         With LiveWorker
-            .WorkerReportsProgress = True
-            .WorkerSupportsCancellation = True
+            .WorkerReportsProgress = False
+            .WorkerSupportsCancellation = False
         End With
     End Sub
     Private Sub InitializeControl()

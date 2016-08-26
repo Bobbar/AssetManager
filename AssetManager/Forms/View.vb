@@ -197,17 +197,16 @@ Public Class View
         End If
         Try
             Waiting()
-            'ClearFields()
             RefreshCombos()
             If ViewHistory(DeviceUID) Then
                 ViewTracking(CurrentViewDevice.strGUID)
-                DoneWaiting()
                 Me.Text = Me.Text + FormTitle(CurrentViewDevice)
                 Me.Show()
                 Me.Activate()
             Else
                 Me.Dispose()
             End If
+            DoneWaiting()
         Catch ex As Exception
             DoneWaiting()
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -958,13 +957,53 @@ Public Class View
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Private Sub Button1_Click_4(sender As Object, e As EventArgs)
-        'ListFieldNames()
-        FillForm(CurrentViewDevice)
-    End Sub
+
     Private Sub tsmAssetInputForm_Click(sender As Object, e As EventArgs) Handles tsmAssetInputForm.Click
-        FillForm(CurrentViewDevice)
+        FillForm(CurrentViewDevice, FormType.InputForm)
     End Sub
+
+    Private Sub tsmAssetTransferForm_Click(sender As Object, e As EventArgs) Handles tsmAssetTransferForm.Click
+        'Dim newDia As New MyDialog
+
+        'Dim cmb1 As New ComboBox
+        'FillComboBox(Locations, cmb1)
+        'cmb1.Name = "cmbLocations"
+        'cmb1.Tag = "Locations:"
+        'newDia.AddControl(cmb1)
+
+
+        'Dim lbl1 As New Label
+        'lbl1.Text = "Label some stuff:"
+        'newDia.AddControl(lbl1)
+
+
+        'Dim cmb2 As New ComboBox
+        'FillComboBox(OSType, cmb2)
+        'cmb2.Name = "cmbOSType"
+        'cmb2.Tag = "OS Type:"
+        'newDia.AddControl(cmb2)
+
+        'Dim txt1 As New TextBox
+        ''txt1.Name = "txtSomeInfo"
+        'txt1.Tag = "Some info here:"
+        'newDia.AddControl(txt1)
+
+        'newDia.ShowDialog()
+
+        'Debug.Print(GetDBValue(Locations, newDia.GetControlValue("cmb1")))
+        'Debug.Print(GetDBValue(Locations, newDia.GetControlValue("cmb2")))
+        'Debug.Print(newDia.GetControlValue("txt1"))
+
+
+        'newDia.Dispose()
+
+
+
+
+        ' ListFieldNames()
+        FillForm(CurrentViewDevice, FormType.TransferForm)
+    End Sub
+
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub
