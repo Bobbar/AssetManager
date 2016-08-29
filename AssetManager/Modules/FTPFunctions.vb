@@ -179,7 +179,7 @@
             Else
                 Logger("No Orphans Found.")
                 Dim blah = MyDialog.Message("No issues found.", vbOKOnly + vbInformation, "Scan OK")
-                'Dim blah = MsgBox("No issues found.", vbOKOnly + vbInformation, "Scan OK")
+                'Dim blah = MsgBox("No issues found.", vbOKOnly + vbInformation)
             End If
             Logger("**********End Scan Results*********")
             Logger("***********************************")
@@ -199,7 +199,8 @@
                 End If
             End If
         Next
-        Dim blah = MsgBox("Cleaned " & intSuccesses & " orphans.")
+        Dim blah = MyDialog.Message("Cleaned " & intSuccesses & " orphans.")
+        'Dim blah = MsgBox("Cleaned " & intSuccesses & " orphans.")
     End Sub
     Private Function DeleteDirectory(Directory As String) As Boolean
         Dim FileList As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & Directory & "/")

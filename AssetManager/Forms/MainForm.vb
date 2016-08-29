@@ -616,7 +616,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim huh = MyDialog.Message("Blakdf asd  h  bla h bla h bla ha  Blakdf asd  h  bla h bla h bla haBlakdf asd  h  bla h bla h bla haBlakdf asd  h  bla h bla h bla ha ", vbYesNo + vbInformation, "Testing")
+        Dim huh = MyDialog.Message("Blakdf asd  h  bla h bla h bla ha  Blakdf asd  h  bla h bla h bla haBlakdf asd  h  bla h bla h bla haBlakdf asd  h  bla h bla h bla ha ", vbOKCancel + vbInformation)
 
         Debug.Print(huh.ToString)
     End Sub

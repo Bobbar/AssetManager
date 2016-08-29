@@ -9,19 +9,19 @@ Public Class MyDialog
     Private FormControlSize As Size = New Size(600, 345)
     Private IsMessageBox As Boolean = False
     Private MyControls As New List(Of Control)
-    Public Function Message(ByVal Prompt As Object, Optional ByVal Buttons As MsgBoxStyle = MsgBoxStyle.OkOnly, Optional ByVal Title As Object = Nothing) As DialogResult
+    Public Function Message(ByVal Prompt As Object, Optional ByVal Buttons As MsgBoxStyle = MsgBoxStyle.OkOnly, Optional ByVal Title As String = Nothing) As DialogResult
         IsMessageBox = True
-        Me.Text = Title
+        If IsNothing(Title) Then
+            Me.Text = My.Application.Info.AssemblyName
+        Else
+            Me.Text = Title
+        End If
         AddLabel(Prompt)
-
         Me.Size = Me.MinimumSize
         ParseStyle(Buttons)
         Me.ShowDialog()
         Me.Dispose()
         Return Me.DialogResult
-
-
-
     End Function
     Private Sub ParseStyle(ByVal style As MsgBoxStyle)
 
