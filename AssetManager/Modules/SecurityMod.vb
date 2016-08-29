@@ -119,7 +119,7 @@ Module SecurityMod
     End Function
     Public Function CheckForAccess(recModule As String) As Boolean
         If Not CanAccess(recModule, UserAccess.intAccessLevel) Then
-            Dim blah = MsgBox("You do not have the required rights for this function. Must have access to '" & recModule & "'.", vbOKOnly + vbExclamation, "Access Denied")
+            Dim blah = MyDialog.Message("You do not have the required rights for this function. Must have access to '" & recModule & "'.", vbOKOnly + vbExclamation, "Access Denied")
             Return False
         Else
             Return True

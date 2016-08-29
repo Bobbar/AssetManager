@@ -26,7 +26,7 @@ Public Class MainForm
             If OpenConnections() Then
                 ConnectionReady()
             Else
-                Dim blah = MsgBox("Error connecting to server!", vbOKOnly + vbCritical, "Could not connect")
+                Dim blah = MyDialog.Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect")
                 EndProgram()
             End If
             Dim userFullName As String = UserPrincipal.Current.DisplayName
@@ -37,7 +37,7 @@ Public Class MainForm
             GetAccessLevels()
             GetUserAccess()
             If Not CanAccess(AccessGroup.CanRun, UserAccess.intAccessLevel) Then
-                MsgBox("You do not have permission to run this software.", vbOKOnly + vbCritical, "Access Denied")
+                MyDialog.Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied")
                 EndProgram()
             End If
             If CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel) Then
@@ -99,7 +99,7 @@ Public Class MainForm
         Else
             e.Cancel = True
             Attachments.Activate()
-            Dim blah = MsgBox("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
+            Dim blah = MyDialog.Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
             If blah = vbYes Then
                 If Attachments.UploadWorker.IsBusy Then Attachments.UploadWorker.CancelAsync()
                 If Attachments.DownloadWorker.IsBusy Then Attachments.DownloadWorker.CancelAsync()
@@ -256,7 +256,7 @@ Public Class MainForm
             End If
         Next
         If strDynaQry = "" Then
-            Dim blah = MsgBox("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing")
+            Dim blah = MyDialog.Message("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing")
             Exit Sub
         End If
         Dim strQry = strStartQry & strDynaQry
@@ -291,7 +291,7 @@ Public Class MainForm
             'End If
             DoneWaiting()
         Else
-            ' Dim blah = MsgBox("That device is already open.", vbOKOnly + vbExclamation, "Duplicate Window")
+            ' Dim blah = MyDialog.Message("That device is already open.", vbOKOnly + vbExclamation, "Duplicate Window")
             ActivateForm(strGUID)
         End If
     End Sub
@@ -537,7 +537,7 @@ Public Class MainForm
         ViewAttachments.cmdUpload.Enabled = False
     End Sub
     Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
-        MsgBox(My.Application.Info.Version.ToString)
+        MyDialog.Message(My.Application.Info.Version.ToString)
     End Sub
     'Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
     '    If cmbDBs.Text <> "" And cmbDBs.Text <> MySQLDB.strDatabase Then
@@ -616,7 +616,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim huh = MyDialog.Message("Blakdf asd  h  bla h bla h bla ha  Blakdf asd  h  bla h bla h bla haBlakdf asd  h  bla h bla h bla haBlakdf asd  h  bla h bla h bla ha ", vbOKCancel + vbInformation)
+        Dim huh = MyDialog.Message("Blakdf asd  h  bla h bla h bla ha  Blakdf asd  h  bla h bla h bla haBlakdf asd  h  bla h bla h bla haBlakdf asd  h  bla h bla h bla ha ", vbOKCancel + vbCritical)
 
         Debug.Print(huh.ToString)
     End Sub

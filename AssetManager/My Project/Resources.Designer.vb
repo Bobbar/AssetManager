@@ -153,6 +153,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Public ReadOnly Property critical_funny() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("critical_funny", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Public ReadOnly Property delete_icon() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("delete_icon", resourceCulture)
@@ -196,6 +206,16 @@ Namespace My.Resources
         Public ReadOnly Property err_exclamation() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("err_exclamation", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property err_exclamation_fill() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("err_exclamation_fill", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

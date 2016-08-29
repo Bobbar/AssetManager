@@ -51,7 +51,7 @@ Public Class MyDialog
         miscs = iStyle And MB_MISCMASK
 
         If icons = MsgBoxStyle.Critical Then
-            pbIcon.Image = My.Resources.err_critical
+            pbIcon.Image = My.Resources.critical_funny 'err_critical
         ElseIf icons = MsgBoxStyle.Question Then
             pbIcon.Image = My.Resources.err_question
         ElseIf icons = MsgBoxStyle.Exclamation Then
@@ -84,19 +84,19 @@ Public Class MyDialog
     End Sub
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Close()
+        Me.Dispose()
     End Sub
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Close()
+        Me.Dispose()
     End Sub
     Private Sub Yes_Button_Click(sender As Object, e As EventArgs) Handles Yes_Button.Click
         Me.DialogResult = DialogResult.Yes
-        Me.Close()
+        Me.Dispose()
     End Sub
     Private Sub No_Button_Click(sender As Object, e As EventArgs) Handles No_Button.Click
         Me.DialogResult = DialogResult.No
-        Me.Close()
+        Me.Dispose()
     End Sub
     Public Sub AddControl(c As Control)
         MyControls.Add(c)
@@ -106,14 +106,36 @@ Public Class MyDialog
         If Not IsMessageBox Then
             Me.Size = FormControlSize
             pnlIcon.Visible = False
-            pnlControls.Dock = DockStyle.Fill
-            pnlControls.Refresh()
-            pnlMaster.Refresh()
+            'pnlControls.Dock = DockStyle.Fill
+            pnlControls.Width = pnlMaster.Width
+            pnlControls.Height = pnlMaster.Height - pnlButtons.Height - 10
             pnlControls.AutoSize = False
             pnlMaster.AutoSize = False
             Me.AutoSize = False
-            Me.Update()
+
         End If
+
+        pnlControls.Refresh()
+        pnlMaster.Refresh()
+        Me.Update()
+
+    End Sub
+    Private Sub MyDialog_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
+        pnlControls.AutoSize = False
+        pnlMaster.AutoSize = False
+        Me.AutoSize = False
+    End Sub
+
+    Private Sub MyDialog_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+
+    End Sub
+
+    Private Sub MyDialog_StyleChanged(sender As Object, e As EventArgs) Handles Me.StyleChanged
+
+    End Sub
+
+    Private Sub MyDialog_AutoSizeChanged(sender As Object, e As EventArgs) Handles Me.AutoSizeChanged
+
     End Sub
     Private Sub LoadControls(lstControls As List(Of Control))
         For Each ctl As Control In lstControls
@@ -139,7 +161,7 @@ Public Class MyDialog
                     Dim lbl As Label = ctl
                     lbl.AutoSize = True
                     If IsMessageBox Then
-                        'lbl.BorderStyle = BorderStyle.FixedSingle
+                        ' lbl.BorderStyle = BorderStyle.FixedSingle
                         lbl.Anchor = AnchorStyles.Bottom + AnchorStyles.Top
                         lbl.TextAlign = ContentAlignment.MiddleLeft
                     End If
@@ -160,7 +182,7 @@ Public Class MyDialog
         Dim pnl As New FlowLayoutPanel
         pnl.FlowDirection = FlowDirection.TopDown
         pnl.AutoSize = True
-        pnl.AutoSizeMode = AutoSizeMode.GrowOnly
+        pnl.AutoSizeMode = AutoSizeMode.GrowAndShrink
         pnl.Padding = New Padding(0, 0, 10, 10)
         Return pnl
     End Function
@@ -218,17 +240,17 @@ Public Class MyDialog
         Next
         Return Nothing
     End Function
-    Private Sub MyDialog_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
-        pnlControls.AutoSize = False
-        pnlMaster.AutoSize = False
-        Me.AutoSize = False
+    Private Sub RefreshAutoSize()
+        'pnlControls.AutoSize = False
+        'pnlMaster.AutoSize = False
+        'Me.AutoSize = False
+        Me.Width = Me.Width + 100
+        Me.Width = Me.Width - 100
+
+
     End Sub
 
-    Private Sub MyDialog_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-
-    End Sub
-
-    Private Sub MyDialog_StyleChanged(sender As Object, e As EventArgs) Handles Me.StyleChanged
+    Private Sub MyDialog_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
 
     End Sub
 End Class

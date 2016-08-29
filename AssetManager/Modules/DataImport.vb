@@ -19,7 +19,7 @@ Module DataImport
             'cmd.ExecuteNonQuery()
             Debug.Print(i & " - " & Device(i).strCurrentUser)
         Next
-        MsgBox("Done?! Did it work?")
+        MyDialog.Message("Done?! Did it work?")
     End Sub
     Private Sub ParseDevices()
         Dim ConnID As String = Guid.NewGuid.ToString

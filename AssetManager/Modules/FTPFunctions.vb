@@ -170,8 +170,8 @@
                 End If
             Next
             If intOrphanFiles > 0 Or intOrphanFolders > 0 Then
-                Dim blah = MyDialog.Message("Orphans found!  Folders:" & intOrphanFolders & "  Files:" & intOrphanFiles & vbCrLf & "See log for details:" & strLogPath & vbCrLf & vbCrLf & "Press OK now to delete orphans.", vbOKCancel + vbCritical, "Corruption Detected")
-                'Dim blah = MsgBox("Orphans found!  Folders:" & intOrphanFolders & "  Files:" & intOrphanFiles & vbCrLf & "See log for details:" & strLogPath & vbCrLf & vbCrLf & "Press OK now to delete orphans.", vbOKCancel + vbCritical, "Corruption Detected")
+                Dim blah = MyDialog.Message("Orphans found!  Folders:" & intOrphanFolders & "  Files:" & intOrphanFiles & vbCrLf & "See log for details:" & Chr(34) & strLogPath & Chr(34) & vbCrLf & vbCrLf & "Press OK now to delete orphans.", vbOKCancel + vbExclamation, "Corruption Detected")
+                'Dim blah = MyDialog.Message("Orphans found!  Folders:" & intOrphanFolders & "  Files:" & intOrphanFiles & vbCrLf & "See log for details:" & strLogPath & vbCrLf & vbCrLf & "Press OK now to delete orphans.", vbOKCancel + vbCritical, "Corruption Detected")
                 If blah = vbOK Then
                     CleanFiles(BadFiles)
                     ScanAttachements()
@@ -179,7 +179,7 @@
             Else
                 Logger("No Orphans Found.")
                 Dim blah = MyDialog.Message("No issues found.", vbOKOnly + vbInformation, "Scan OK")
-                'Dim blah = MsgBox("No issues found.", vbOKOnly + vbInformation)
+                'Dim blah = MyDialog.Message("No issues found.", vbOKOnly + vbInformation)
             End If
             Logger("**********End Scan Results*********")
             Logger("***********************************")
@@ -200,7 +200,7 @@
             End If
         Next
         Dim blah = MyDialog.Message("Cleaned " & intSuccesses & " orphans.")
-        'Dim blah = MsgBox("Cleaned " & intSuccesses & " orphans.")
+        'Dim blah = MyDialog.Message("Cleaned " & intSuccesses & " orphans.")
     End Sub
     Private Function DeleteDirectory(Directory As String) As Boolean
         Dim FileList As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & Directory & "/")

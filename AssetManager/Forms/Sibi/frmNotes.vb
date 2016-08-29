@@ -48,11 +48,11 @@ VALUES
     End Sub
     Private Sub cmdOK_Click(sender As Object, e As EventArgs) Handles cmdOK.Click
         If AddNewNote(NoteRequest.strUID, Trim(rtbNotes.Text)) Then
-            'MsgBox("Success!")
+            'MyDialog.Message("Success!")
             Me.Dispose()
             CallingForm.OpenRequest(NoteRequest.strUID)
         Else
-            MsgBox("Failed!")
+            MyDialog.Message("Failed!")
         End If
     End Sub
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click

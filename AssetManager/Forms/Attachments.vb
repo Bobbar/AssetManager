@@ -208,16 +208,16 @@ Class Attachments
         Dim i As Integer = GetIndexFromUID(AttachUID)
         strFilename = AttachIndex(i).strFilename & AttachIndex(i).strFileType
         Dim blah
-        blah = MsgBox("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
+        blah = MyDialog.Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             Waiting()
             If MySQLDB.DeleteAttachment(AttachIndex(i).strFileUID, Entry_Type.Device) > 0 Then
                 ListAttachments(CurrentAttachDevice.strGUID)
                 DoneWaiting()
-                blah = MsgBox("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
+                blah = MyDialog.Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
             Else
                 DoneWaiting()
-                blah = MsgBox("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results")
+                blah = MyDialog.Message("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results")
             End If
         End If
     End Sub
@@ -247,7 +247,7 @@ Class Attachments
         If FileSizeMB > FileSizeMBLimit Then
             e.Result = False
             UploadWorker.ReportProgress(2, "Error!")
-            Dim blah = MsgBox("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
+            Dim blah = MyDialog.Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
             Exit Sub
         End If
         UploadWorker.ReportProgress(1, "Connecting...")
@@ -333,8 +333,7 @@ Class Attachments
             ListAttachments(CurrentAttachDevice.strGUID)
             If Not e.Cancelled Then
                 If e.Result Then
-                    MessageBox.Show("File uploaded successfully!",
-              "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                    MyDialog.Message("File uploaded successfully!", MessageBoxButtons.OK + MessageBoxIcon.Asterisk, "Success!")
                 Else
                     MessageBox.Show("File upload failed.",
          "Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
@@ -431,7 +430,7 @@ Class Attachments
                 Else
                     'something is very wrong
                     Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
-                    Dim blah = MsgBox("File varification failed! The file on the database is corrupt or there was a problem writing the data do the disk.   The local copy of the attachment will now be deleted for saftey.   Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch")
+                    Dim blah = MyDialog.Message("File varification failed! The file on the database is corrupt or there was a problem writing the data do the disk.   The local copy of the attachment will now be deleted for saftey.   Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch")
                     PurgeTempDir()
                     'DeleteAttachment(FileUID)
                     e.Result = False
@@ -580,7 +579,7 @@ Class Attachments
     Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If UploadWorker.IsBusy Or DownloadWorker.IsBusy Then
             e.Cancel = True
-            Dim blah = MsgBox("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
+            Dim blah = MyDialog.Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
             If blah = vbYes Then
                 If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
                 If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()

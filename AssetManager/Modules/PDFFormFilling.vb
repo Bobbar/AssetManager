@@ -21,6 +21,7 @@ Module PDFFormFilling
         Debug.Print(sb.ToString())
     End Sub
     Private Function GetUnitPrice(Device As Device_Info) As String
+        MyDialog.Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
         Dim f As New View_Munis
         f.Text = "Select a Line Item"
         f.HideFixedAssetGrid()

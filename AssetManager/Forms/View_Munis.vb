@@ -92,7 +92,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
                 LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
                 Me.Show()
             Else
-                MsgBox("Could not pull Munis info. No FA info and/or no PO", vbOKOnly + vbInformation, "Nothing Found")
+                MyDialog.Message("Could not pull Munis info. No FA info and/or no PO", vbOKOnly + vbInformation, "Nothing Found")
             End If
         End If
     End Sub
