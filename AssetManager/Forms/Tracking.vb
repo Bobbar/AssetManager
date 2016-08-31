@@ -22,7 +22,7 @@ Public Class Tracking
                 If TypeOf c Is TextBox Then
                     If c.Visible Then
                         If Trim(c.Text) = "" Then
-                            Dim blah = MyDialog.Message("Please complete all fields.", vbOKOnly + vbExclamation, "Missing Data")
+                            Dim blah = Message("Please complete all fields.", vbOKOnly + vbExclamation, "Missing Data")
                             Return False
                         End If
                     End If
@@ -33,7 +33,7 @@ Public Class Tracking
             For Each c In CheckInBox.Controls
                 If TypeOf c Is TextBox Then
                     If Trim(c.Text) = "" Then
-                        Dim blah = MyDialog.Message("Please complete all fields.", vbOKOnly + vbExclamation, "Missing Data")
+                        Dim blah = Message("Please complete all fields.", vbOKOnly + vbExclamation, "Missing Data")
                         Return False
                     End If
                 End If
@@ -135,9 +135,9 @@ Public Class Tracking
             rows = rows + cmd.ExecuteNonQuery()
             UpdateDev.strNewNote = Nothing
             If rows = 2 Then
-                Dim blah = MyDialog.Message("Device Checked Out!", vbOKOnly + vbInformation, "Success")
+                Dim blah = Message("Device Checked Out!", vbOKOnly + vbInformation, "Success")
             Else
-                Dim blah = MyDialog.Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result")
+                Dim blah = Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result")
             End If
             Me.Dispose()
             CurrentSender.ViewDevice(CurrentTrackingDevice.strGUID)
@@ -175,9 +175,9 @@ Public Class Tracking
             rows = rows + cmd.ExecuteNonQuery()
             UpdateDev.strNewNote = Nothing
             If rows = 2 Then
-                Dim blah = MyDialog.Message("Device Checked In!", vbOKOnly + vbInformation, "Success")
+                Dim blah = Message("Device Checked In!", vbOKOnly + vbInformation, "Success")
             Else
-                Dim blah = MyDialog.Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
+                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
             End If
             Me.Dispose()
             cmd.Dispose()

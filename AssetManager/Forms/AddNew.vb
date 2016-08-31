@@ -13,7 +13,7 @@ Public Class AddNew
             Dim strUID As String = Guid.NewGuid.ToString
             Dim rows As Integer
             If Not CheckFields() Then
-                Dim blah = MyDialog.Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
+                Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
                 bolCheckFields = True
                 Exit Sub
             End If
@@ -55,11 +55,11 @@ Public Class AddNew
             cmd.CommandText = strSqlQry2
             rows = rows + cmd.ExecuteNonQuery()
             If rows = 2 Then 'ExecuteQuery returns the number of rows affected. We can check this to make sure the qry completed successfully.
-                Dim blah = MyDialog.Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
+                Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
                 If Not chkNoClear.Checked Then ClearAll()
                 If blah = vbNo Then Me.Hide()
             Else
-                Dim blah = MyDialog.Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
+                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
             End If
             cmd.Dispose()
             Exit Sub
@@ -178,7 +178,7 @@ Public Class AddNew
         Next
     End Sub
     Private Sub Button1_Click(sender As Object, e As EventArgs)
-        If Not CheckFields() Then Dim blah = MyDialog.Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
+        If Not CheckFields() Then Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
     End Sub
     Private Sub txtSerial_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtSerial_REQ.TextChanged
         If bolCheckFields Then CheckFields()

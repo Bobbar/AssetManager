@@ -175,10 +175,10 @@ Public Class View
             cmd.Dispose()
             If rows = 2 Then
                 ViewDevice(CurrentViewDevice.strGUID)
-                Dim blah = MyDialog.Message("Update Added.", vbOKOnly + vbInformation, "Success")
+                Dim blah = Message("Update Added.", vbOKOnly + vbInformation, "Success")
             Else
                 ViewDevice(CurrentViewDevice.strGUID)
-                Dim blah = MyDialog.Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
+                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
             End If
             Exit Sub
         Catch ex As Exception
@@ -220,7 +220,7 @@ Public Class View
                 CloseChildren()
                 Results.Dispose()
                 CurrentViewDevice = Nothing
-                Dim blah = MyDialog.Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
+                Dim blah = Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
                 Return False
             End If
             CurrentViewDevice = CollectDeviceInfo(Results)
@@ -514,7 +514,7 @@ Public Class View
             Exit Sub
         End If
         If Not CheckFields() Then
-            Dim blah = MyDialog.Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
+            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
             bolCheckFields = True
             Exit Sub
         End If
@@ -605,17 +605,17 @@ Public Class View
     End Sub
     Private Sub DeleteDevice()
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
-        Dim blah = MyDialog.Message("Are you absolutely sure?  This cannot be undone and will delete all histrical data.", vbYesNo + vbExclamation, "WARNING")
+        Dim blah = Message("Are you absolutely sure?" & vbCrLf & vbCrLf & "This cannot be undone and will delete all histrical data.", vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
             Dim rows As Integer
             rows = DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device)
             If rows > 0 Then
-                Dim blah2 = MyDialog.Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
+                Dim blah2 = Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentViewDevice = Nothing
                 Me.Dispose()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentViewDevice.strGUID)
-                Dim blah2 = MyDialog.Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
+                Dim blah2 = Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
                 CurrentViewDevice = Nothing
                 Me.Dispose()
             End If
@@ -670,9 +670,9 @@ Public Class View
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value
         Dim Info As Device_Info = MySQLDB.Get_EntryInfo(strGUID)
-        Dim blah = MyDialog.Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING")
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
-            Dim blah2 = MyDialog.Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
+            Dim blah2 = Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
             ViewDevice(CurrentViewDevice.strGUID)
         Else
             Exit Sub
@@ -753,15 +753,15 @@ Public Class View
     End Sub
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
-        Dim blah = MyDialog.Message("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING")
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
             If DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device) Then
-                Dim blah2 = MyDialog.Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
+                Dim blah2 = Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentViewDevice = Nothing
                 Me.Dispose()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentViewDevice.strGUID)
-                Dim blah2 = MyDialog.Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
+                Dim blah2 = Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
                 CurrentViewDevice = Nothing
                 Me.Dispose()
             End If
@@ -861,7 +861,7 @@ Public Class View
             Exit Sub
         End If
         If Not CheckFields() Then
-            Dim blah = MyDialog.Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
+            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
             bolCheckFields = True
             Exit Sub
         End If
@@ -926,7 +926,7 @@ Public Class View
     Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         If CurrentViewDevice.strSibiLink Is "" Then
-            Dim blah = MyDialog.Message("Sibi Link not set.  Set one now?", vbYesNo + vbQuestion, "Sibi Link")
+            Dim blah = Message("Sibi Link not set.  Set one now?", vbYesNo + vbQuestion, "Sibi Link")
             If blah = vbYes Then
                 LinkSibi()
             End If
@@ -957,25 +957,19 @@ Public Class View
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-
     Private Sub tsmAssetInputForm_Click(sender As Object, e As EventArgs) Handles tsmAssetInputForm.Click
         FillForm(CurrentViewDevice, FormType.InputForm)
     End Sub
-
     Private Sub tsmAssetTransferForm_Click(sender As Object, e As EventArgs) Handles tsmAssetTransferForm.Click
         'Dim newDialog As New MyDialog
         'With newDialog
         '    .Text = "Error Dialog"
         '    .AddLabel("Blah blah blah blah blah blah Blah blah blah blah blah blahBlah blah blah blah blah blahBlah blah blah blah blah blahBlah blah blah blah blah blah")
-
         '    .ShowDialog()
         'End With
-
-
         'ListFieldNames()
         FillForm(CurrentViewDevice, FormType.TransferForm)
     End Sub
-
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub

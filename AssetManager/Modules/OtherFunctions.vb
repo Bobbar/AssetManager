@@ -140,7 +140,7 @@ Module OtherFunctions
         Return Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value
     End Function
     Public Sub ConnectionNotReady()
-        Dim blah = MyDialog.Message("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
+        Dim blah = Message("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
     End Sub
     Public Sub EndProgram()
         ProgramEnding = True
@@ -231,5 +231,10 @@ Module OtherFunctions
         Else
             Return ""
         End If
+    End Function
+    Public Function Message(ByVal Prompt As Object, Optional ByVal Buttons As MsgBoxStyle = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As DialogResult
+        Dim NewMessage As New MyDialog
+        NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
+        Return NewMessage.DialogResult
     End Function
 End Module

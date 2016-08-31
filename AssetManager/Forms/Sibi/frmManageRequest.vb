@@ -181,7 +181,7 @@ Public Class frmManageRequest
         bolFieldsValid = True
         Dim ValidateResults As Boolean = CheckFields(Me, bolFieldsValid)
         If Not ValidateResults Then
-            Dim blah = MyDialog.Message("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data")
+            Dim blah = Message("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data")
         End If
         Return ValidateResults
     End Function
@@ -334,7 +334,7 @@ Public Class frmManageRequest
         Try
             Dim rows As Integer
             'If Not CheckFields() Then
-            '    Dim blah = MyDialog.Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
+            '    Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
             '    bolCheckFields = True
             '    Exit Sub
             'End If
@@ -426,7 +426,7 @@ VALUES
                 cmd.Parameters.Clear()
             Next
             cmd.Dispose()
-            Dim blah = MyDialog.Message("New Request Added.", vbOKOnly + vbInformation, "Complete")
+            Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete")
             OpenRequest(strRequestUID)
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -550,7 +550,7 @@ VALUES
             Next
             cmd.Dispose()
             'If rows = RequestData.RequstItems.Rows.Count + 1 Then
-            MyDialog.Message("Success!")
+            Message("Success!")
             'End If
             OpenRequest(CurrentRequest.strUID)
         Catch ex As Exception
@@ -719,9 +719,9 @@ VALUES
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim blah
-        blah = MyDialog.Message("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row")
+        blah = Message("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row")
         If blah = vbYes Then
-            blah = MyDialog.Message(DeleteItem(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+            blah = Message(DeleteItem(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
             OpenRequest(CurrentRequest.strUID)
         Else
         End If
@@ -768,15 +768,15 @@ VALUES
     End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
         If Not CheckForAccess(AccessGroup.Sibi_Delete) Then Exit Sub
-        Dim blah = MyDialog.Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING")
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
             If DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
-                Dim blah2 = MyDialog.Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
+                Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentRequest = Nothing
                 Me.Dispose()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)
-                Dim blah2 = MyDialog.Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
+                Dim blah2 = Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
                 CurrentRequest = Nothing
                 Me.Dispose()
             End If
@@ -796,7 +796,7 @@ VALUES
     End Sub
     Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim blah = MyDialog.Message(DeleteItem(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value, "sibi_note_uid", "sibi_notes") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+        Dim blah = Message(DeleteItem(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value, "sibi_note_uid", "sibi_notes") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
         OpenRequest(CurrentRequest.strUID)
     End Sub
     Private Sub cmdClearForm_Click(sender As Object, e As EventArgs) Handles cmdClearForm.Click
@@ -897,7 +897,7 @@ VALUES
         Munis.ReqSearch()
     End Sub
     Private Sub RequestItemsGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles RequestItemsGrid.DataError
-        Dim blah = MyDialog.Message("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error")
+        Dim blah = Message("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error")
         ' ErrHandleNew(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod().Name)
     End Sub
     Private Sub RequestItemsGrid_DefaultValuesNeeded(sender As Object, e As DataGridViewRowEventArgs) Handles RequestItemsGrid.DefaultValuesNeeded

@@ -28,32 +28,58 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
         Return "20" + strFYyy
     End Function
     Public Sub NameSearch()
-        Dim blah As String = InputBox("Enter a full or patial first or last name of the Employee.", "Org/Object Code Search", "")
-        If Trim(blah) IsNot "" Then
-            NewMunisView_NameSearch(blah)
+        Dim NewDialog As New MyDialog
+        Dim strName As String
+        With NewDialog
+            .Text = "Org/Object Code Search"
+            .AddTextBox("txtName", "First or Last Name:")
+            .ShowDialog()
+            If .DialogResult = DialogResult.OK Then strName = NewDialog.GetControlValue("txtName")
+        End With
+        If Trim(strName) IsNot "" Then
+            NewMunisView_NameSearch(strName)
         End If
     End Sub
     Public Sub POSearch()
         Try
-            Dim blah As String = InputBox("Enter PO # followed by FY separated by a comma.  (Format ########,YYYY", "PO Search", "")
-            If Trim(blah) IsNot "" Then
-                Dim splitValues() As String = Split(blah, ",")
-                Dim PO As String = splitValues(0)
-                Dim FY As String = splitValues(1)
-                NewMunisView_POSearch(PO, FY)
-            End If
+            Dim PO, FY As String
+            Dim NewDialog As New MyDialog
+            With NewDialog
+                .Text = "PO Search"
+                .AddTextBox("txtPO", "PO #:")
+                .AddTextBox("txtFY", "FY:")
+                .ShowDialog()
+                If .DialogResult = DialogResult.OK Then
+                    PO = NewDialog.GetControlValue("txtPO")
+                    FY = NewDialog.GetControlValue("txtFY")
+                    NewMunisView_POSearch(PO, FY)
+                End If
+            End With
         Catch
         End Try
     End Sub
     Public Sub ReqSearch()
         Try
-            Dim blah As String = InputBox("Enter Requisition # followed by FY separated by a comma.  (Format #########,YYYY", "Req Search", "")
-            If Trim(blah) IsNot "" Then
-                Dim splitValues() As String = Split(blah, ",")
-                Dim ReqNumber As String = splitValues(0)
-                Dim FY As String = splitValues(1)
-                NewMunisView_ReqSearch(ReqNumber, FY)
-            End If
+            'Dim blah As String = InputBox("Enter Requisition # followed by FY separated by a comma.  (Format #########,YYYY", "Req Search", "")
+            'If Trim(blah) IsNot "" Then
+            '    Dim splitValues() As String = Split(blah, ",")
+            '    Dim ReqNumber As String = splitValues(0)
+            '    Dim FY As String = splitValues(1)
+            '    NewMunisView_ReqSearch(ReqNumber, FY)
+            'End If
+            Dim ReqNumber, FY As String
+            Dim NewDialog As New MyDialog
+            With NewDialog
+                .Text = "Req Search"
+                .AddTextBox("txtReqNum", "Requisition #:")
+                .AddTextBox("txtFY", "FY:")
+                .ShowDialog()
+                If .DialogResult = DialogResult.OK Then
+                    ReqNumber = NewDialog.GetControlValue("txtReqNum")
+                    FY = NewDialog.GetControlValue("txtFY")
+                    NewMunisView_ReqSearch(ReqNumber, FY)
+                End If
+            End With
         Catch
         End Try
     End Sub

@@ -208,16 +208,16 @@ Class Attachments
         Dim i As Integer = GetIndexFromUID(AttachUID)
         strFilename = AttachIndex(i).strFilename & AttachIndex(i).strFileType
         Dim blah
-        blah = MyDialog.Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
+        blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             Waiting()
             If MySQLDB.DeleteAttachment(AttachIndex(i).strFileUID, Entry_Type.Device) > 0 Then
                 ListAttachments(CurrentAttachDevice.strGUID)
                 DoneWaiting()
-                blah = MyDialog.Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
+                blah = Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
             Else
                 DoneWaiting()
-                blah = MyDialog.Message("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results")
+                blah = Message("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results")
             End If
         End If
     End Sub
@@ -247,7 +247,7 @@ Class Attachments
         If FileSizeMB > FileSizeMBLimit Then
             e.Result = False
             UploadWorker.ReportProgress(2, "Error!")
-            Dim blah = MyDialog.Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
+            Dim blah = Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
             Exit Sub
         End If
         UploadWorker.ReportProgress(1, "Connecting...")
@@ -271,13 +271,13 @@ Class Attachments
             Dim totalBytesIn As Integer
             Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
             Dim FileHash As String = GetHashOfStream(ftpStream)
-            Dim flLength As Integer = ftpstream.Length
+            Dim flLength As Integer = ftpStream.Length
             Dim reqfile As System.IO.Stream = Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
             Dim perc As Short
             stpSpeed.Start()
             UploadWorker.ReportProgress(1, "Uploading...")
             Do Until bytesIn < 1 Or UploadWorker.CancellationPending
-                bytesIn = ftpstream.Read(buffer, 0, 1024)
+                bytesIn = ftpStream.Read(buffer, 0, 1024)
                 If bytesIn > 0 Then
                     reqfile.Write(buffer, 0, bytesIn)
                     totalBytesIn += bytesIn
@@ -290,8 +290,8 @@ Class Attachments
             Loop
             reqfile.Close()
             reqfile.Dispose()
-            ftpstream.Close()
-            ftpstream.Dispose()
+            ftpStream.Close()
+            ftpStream.Dispose()
             If UploadWorker.CancellationPending Then
                 e.Cancel = True
                 DeleteFTPAttachment(strFileGuid, Foldername)
@@ -333,7 +333,7 @@ Class Attachments
             ListAttachments(CurrentAttachDevice.strGUID)
             If Not e.Cancelled Then
                 If e.Result Then
-                    MyDialog.Message("File uploaded successfully!", MessageBoxButtons.OK + MessageBoxIcon.Asterisk, "Success!")
+                    Message("File uploaded successfully!", MessageBoxButtons.OK + MessageBoxIcon.Asterisk, "Success!")
                 Else
                     MessageBox.Show("File upload failed.",
          "Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
@@ -430,7 +430,7 @@ Class Attachments
                 Else
                     'something is very wrong
                     Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
-                    Dim blah = MyDialog.Message("File varification failed! The file on the database is corrupt or there was a problem writing the data do the disk.   The local copy of the attachment will now be deleted for saftey.   Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch")
+                    Dim blah = Message("File varification failed! The file on the database is corrupt or there was a problem writing the data do the disk.   The local copy of the attachment will now be deleted for saftey.   Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch")
                     PurgeTempDir()
                     'DeleteAttachment(FileUID)
                     e.Result = False
@@ -579,7 +579,7 @@ Class Attachments
     Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If UploadWorker.IsBusy Or DownloadWorker.IsBusy Then
             e.Cancel = True
-            Dim blah = MyDialog.Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
+            Dim blah = Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
             If blah = vbYes Then
                 If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
                 If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()

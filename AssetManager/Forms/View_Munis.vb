@@ -92,7 +92,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
                 LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
                 Me.Show()
             Else
-                MyDialog.Message("Could not pull Munis info. No FA info and/or no PO", vbOKOnly + vbInformation, "Nothing Found")
+                Message("Could not pull Munis info. No FA info and/or no PO", vbOKOnly + vbInformation, "Nothing Found")
             End If
         End If
     End Sub
@@ -107,7 +107,10 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         ExtendedMethods.DoubleBuffered(DataGridMunis_Requisition, True)
         DataGridMunis_Inventory.DefaultCellStyle = GridStylez
         DataGridMunis_Requisition.DefaultCellStyle = GridStylez
-        Me.Text = Me.Text + FormTitle(CurrentMunisDevice)
+        If IsNothing(CurrentMunisDevice.strGUID) Then
+        Else
+            Me.Text = Me.Text + FormTitle(CurrentMunisDevice)
+        End If
         bolGridFilling = False
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click

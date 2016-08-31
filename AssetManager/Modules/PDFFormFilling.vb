@@ -21,7 +21,7 @@ Module PDFFormFilling
         Debug.Print(sb.ToString())
     End Sub
     Private Function GetUnitPrice(Device As Device_Info) As String
-        MyDialog.Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
+        Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
         Dim f As New View_Munis
         f.Text = "Select a Line Item"
         f.HideFixedAssetGrid()
@@ -83,9 +83,7 @@ Module PDFFormFilling
             .SetField("topmostSubform[0].Page1[0].undefined_12[0]", Device.dtPurchaseDate.ToString("MM/dd/yyyy"))
             .SetField("topmostSubform[0].Page1[0].Date[0]", Now.ToString("MM/dd/yyyy"))
         End With
-
         Return tmpFields
-
     End Function
     Private Function TransferFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
@@ -116,7 +114,6 @@ Module PDFFormFilling
             .SetField("topmostSubform[0].Page1[0].Excess_assets[0]", CheckValueToString(newDialog.GetControlValue("chkExcess")))
             .SetField("topmostSubform[0].Page1[0].undefined[0]", CheckValueToString(newDialog.GetControlValue("chkOther")))
             .SetField("topmostSubform[0].Page1[0].Other__Please_explain_1[0]", newDialog.GetControlValue("rtbOther"))
-
             'key
             'topmostSubform[0].Page1[0].AssetTag_number[0]
             'topmostSubform[0].Page1[0].Serial_number[0]
@@ -145,12 +142,9 @@ Module PDFFormFilling
             'topmostSubform[0].Page1[0].Department_4[0]
             'topmostSubform[0].Page1[0].Date_2[0]
             'topmostSubform[0].Page1[0].PrintButton1[0]
-
-
         End With
         newDialog.Dispose()
         Return tmpFields
-
     End Function
     Private Function CheckValueToString(CheckValue As CheckState) As String
         If CheckValue = CheckState.Checked Then

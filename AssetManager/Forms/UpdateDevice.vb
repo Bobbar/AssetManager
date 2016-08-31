@@ -14,7 +14,7 @@ Public Class UpdateDev
     End Sub
     Private Sub cmdSubmit_Click(sender As Object, e As EventArgs) Handles cmdSubmit.Click
         If Not CheckFields() Then
-            Dim blah = MyDialog.Message("Please select a change type.", vbOKOnly + vbExclamation, "Missing Field")
+            Dim blah = Message("Please select a change type.", vbOKOnly + vbExclamation, "Missing Field")
             Exit Sub
         End If
         NewUpdateInfo.strNote = Trim(txtUpdate_Note.Text)
