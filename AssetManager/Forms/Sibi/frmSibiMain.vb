@@ -57,4 +57,51 @@
         Dim ManRequest As New frmManageRequest
         ManRequest.OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
     End Sub
+    Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
+        If e.RowIndex > -1 Then
+            Dim dvgRow As DataGridViewRow = ResultGrid.Rows(e.RowIndex)
+            dvgRow.DefaultCellStyle.BackColor = GetRowColor(dvgRow.Cells("Status").Value.ToString)
+            dvgRow.DefaultCellStyle.ForeColor = GetFontColor(GetRowColor(dvgRow.Cells("Status").Value.ToString))
+        End If
+    End Sub
+    Private Function GetRowColor(Value As String) As Color
+        Dim DBVal As String = GetDBValueFromHuman(ComboType.SibiStatusType, Value)
+        Select Case DBVal
+            Case "NEW"
+                Return Color.FromArgb(0, 255, 30)
+            Case "QTN"
+                Return Color.FromArgb(242, 255, 0)
+            Case "QTR"
+                Return Color.FromArgb(255, 208, 0)
+            Case "QRC"
+                Return Color.FromArgb(255, 162, 0)
+            Case "RQN"
+                Return Color.FromArgb(0, 255, 251)
+            Case "RQR"
+                Return Color.FromArgb(0, 140, 255)
+            Case "POS"
+                Return Color.FromArgb(197, 105, 255)
+            Case "SHD"
+                Return Color.FromArgb(255, 79, 243)
+            Case "ORC"
+                Return Color.FromArgb(79, 144, 255)
+            Case "NPAY"
+                Return Color.FromArgb(255, 36, 36)
+            Case "RCOMP"
+                Return Color.FromArgb(158, 158, 158)
+            Case "ONH"
+                Return Color.FromArgb(255, 255, 255)
+        End Select
+    End Function
+    Private Function GetFontColor(color As Color) As Color 'get contrasting font color
+        Dim d As Integer = 0
+        Dim a As Double
+        a = 1 - (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255
+        If a < 0.5 Then
+            d = 0
+        Else
+            d = 255
+        End If
+        Return Color.FromArgb(d, d, d)
+    End Function
 End Class
