@@ -427,6 +427,7 @@ VALUES
             Next
             cmd.Dispose()
             Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete")
+            frmSibiMain.ShowAll()
             OpenRequest(strRequestUID)
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -550,6 +551,7 @@ VALUES
             Next
             cmd.Dispose()
             'If rows = RequestData.RequstItems.Rows.Count + 1 Then
+            frmSibiMain.ShowAll()
             Message("Success!")
             'End If
             OpenRequest(CurrentRequest.strUID)

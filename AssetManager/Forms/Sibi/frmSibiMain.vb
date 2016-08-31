@@ -45,7 +45,7 @@
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Private Sub ShowAll()
+    Public Sub ShowAll()
         SendToGrid(MySQLDB.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_request_number DESC"))
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
@@ -68,30 +68,39 @@
         Dim DBVal As String = GetDBValueFromHuman(ComboType.SibiStatusType, Value)
         Select Case DBVal
             Case "NEW"
-                Return Color.FromArgb(0, 255, 30)
+                Return ColorAlphaBlend(Color.FromArgb(0, 255, 30))
             Case "QTN"
-                Return Color.FromArgb(242, 255, 0)
+                Return ColorAlphaBlend(Color.FromArgb(242, 255, 0))
             Case "QTR"
-                Return Color.FromArgb(255, 208, 0)
+                Return ColorAlphaBlend(Color.FromArgb(255, 208, 0))
             Case "QRC"
-                Return Color.FromArgb(255, 162, 0)
+                Return ColorAlphaBlend(Color.FromArgb(255, 162, 0))
             Case "RQN"
-                Return Color.FromArgb(0, 255, 251)
+                Return ColorAlphaBlend(Color.FromArgb(0, 255, 251))
             Case "RQR"
-                Return Color.FromArgb(0, 140, 255)
+                Return ColorAlphaBlend(Color.FromArgb(0, 140, 255))
             Case "POS"
-                Return Color.FromArgb(197, 105, 255)
+                Return ColorAlphaBlend(Color.FromArgb(197, 105, 255))
             Case "SHD"
-                Return Color.FromArgb(255, 79, 243)
+                Return ColorAlphaBlend(Color.FromArgb(255, 79, 243))
             Case "ORC"
-                Return Color.FromArgb(79, 144, 255)
+                Return ColorAlphaBlend(Color.FromArgb(79, 144, 255))
             Case "NPAY"
-                Return Color.FromArgb(255, 36, 36)
+                Return ColorAlphaBlend(Color.FromArgb(255, 36, 36))
             Case "RCOMP"
-                Return Color.FromArgb(158, 158, 158)
+                Return ColorAlphaBlend(Color.FromArgb(158, 158, 158))
             Case "ONH"
-                Return Color.FromArgb(255, 255, 255)
+                Return ColorAlphaBlend(Color.FromArgb(255, 255, 255))
         End Select
+    End Function
+    Private Function ColorAlphaBlend(InColor As Color) As Color 'blend colors with darker color so they aren't so intense
+        Dim DarkColor As Color = Color.FromArgb(222, 222, 222) 'gray color
+        Dim BlendColor As Color
+        BlendColor = Color.FromArgb((CInt(InColor.A) + CInt(DarkColor.A)) / 2,
+                                    (CInt(InColor.R) + CInt(DarkColor.R)) / 2,
+                                    (CInt(InColor.G) + CInt(DarkColor.G)) / 2,
+                                    (CInt(InColor.B) + CInt(DarkColor.B)) / 2)
+        Return BlendColor
     End Function
     Private Function GetFontColor(color As Color) As Color 'get contrasting font color
         Dim d As Integer = 0
