@@ -8,6 +8,8 @@ Public Class frmManageRequest
     Private CurrentRequest As Request_Info
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
+    End Sub
+    Private Sub SetTitle()
         Me.Text = Me.Text + " - " + CurrentRequest.strDescription
     End Sub
     Public Sub ClearAll()
@@ -585,6 +587,7 @@ VALUES
             LoadNotes(CurrentRequest.strUID)
             'RequestItemsGrid.ReadOnly = True
             DisableControls(Me)
+            SetTitle()
             Me.Show()
             Me.Activate()
         Catch ex As Exception
@@ -740,13 +743,9 @@ VALUES
             Exit Sub
         End If
         Dim NewMunis As New View_Munis
-        'Waiting()
-        'AddChild(NewMunis)
         NewMunis.HideFixedAssetGrid()
         NewMunis.Show()
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNum, YearFromDate(CurrentRequest.dtDateStamp))
-        ' NewMunis.ViewEntry(GUID)
-        ' DoneWaiting()
     End Sub
     Private Sub NewMunisViewPO(PO As String)
         If Not ConnectionReady() Then
@@ -754,13 +753,9 @@ VALUES
             Exit Sub
         End If
         Dim NewMunis As New View_Munis
-        'Waiting()
-        'AddChild(NewMunis)
         NewMunis.HideFixedAssetGrid()
         NewMunis.Show()
         NewMunis.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(PO), Munis.Get_FY_From_PO(PO)) 'YearFromDate(CurrentRequest.dtDateStamp))
-        ' NewMunis.ViewEntry(GUID)
-        ' DoneWaiting()
     End Sub
     Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
         Dim ReqNum As String = Trim(txtReqNumber.Text)
@@ -775,6 +770,7 @@ VALUES
             If DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
                 Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentRequest = Nothing
+                frmSibiMain.ShowAll()
                 Me.Dispose()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)
