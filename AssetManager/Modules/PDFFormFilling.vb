@@ -90,8 +90,8 @@ Module PDFFormFilling
         Dim newDialog As New MyDialog
         With newDialog
             .Text = "Additional Input Required"
-            .AddComboBox("cmbFromLoc", "Transfer FROM:", Locations)
-            .AddComboBox("cmbToLoc", "Transfer TO:", Locations)
+            .AddComboBox("cmbFromLoc", "Transfer FROM:", DeviceIndex.Locations)
+            .AddComboBox("cmbToLoc", "Transfer TO:", DeviceIndex.Locations)
             .AddLabel("Reason For Transfer-Check One:", True)
             .AddCheckBox("chkBetterU", "Better Use of asset:")
             .AddCheckBox("chkTradeIn", "Trade-in or exchange:")
@@ -106,9 +106,9 @@ Module PDFFormFilling
             .SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.strSerial)
             .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
             .SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD - 5200")
-            .SetField("topmostSubform[0].Page1[0].Location[0]", GetHumanValueFromIndex(ComboType.Location, newDialog.GetControlValue("cmbFromLoc")))
+            .SetField("topmostSubform[0].Page1[0].Location[0]", GetHumanValueFromIndex(DeviceIndex.Locations, newDialog.GetControlValue("cmbFromLoc")))
             .SetField("topmostSubform[0].Page1[0].Department_2[0]", "FCBDD - 5200")
-            .SetField("topmostSubform[0].Page1[0].Location_2[0]", GetHumanValueFromIndex(ComboType.Location, newDialog.GetControlValue("cmbToLoc")))
+            .SetField("topmostSubform[0].Page1[0].Location_2[0]", GetHumanValueFromIndex(DeviceIndex.Locations, newDialog.GetControlValue("cmbToLoc")))
             .SetField("topmostSubform[0].Page1[0].Better_utilization_of_assets[0]", CheckValueToString(newDialog.GetControlValue("chkBetterU")))
             .SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]", CheckValueToString(newDialog.GetControlValue("chkTradeIn")))
             .SetField("topmostSubform[0].Page1[0].Excess_assets[0]", CheckValueToString(newDialog.GetControlValue("chkExcess")))

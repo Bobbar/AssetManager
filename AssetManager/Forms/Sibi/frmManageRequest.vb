@@ -153,8 +153,8 @@ Public Class frmManageRequest
             .Add("User", "User")
             .Add("Description", "Description")
             .Add(intQty) '"Qty", "Qty")
-            .Add(DataGridCombo(Locations, "Location", ComboType.Location)) '.Add("Location")
-            .Add(DataGridCombo(Sibi_ItemStatusType, "Status", ComboType.SibiItemStatusType))
+            .Add(DataGridCombo(DeviceIndex.Locations, "Location", Attrib_Type.Location)) '.Add("Location")
+            .Add(DataGridCombo(SibiIndex.ItemStatusType, "Status", Attrib_Type.SibiItemStatusType))
             .Add("Replace Asset", "Replace Asset")
             .Add("Replace Serial", "Replace Serial")
             .Add("New Asset", "New Asset")
@@ -167,8 +167,8 @@ Public Class frmManageRequest
         RequestItemsGrid.Columns.Item("Item UID").ReadOnly = True
     End Sub
     Private Sub FillCombos()
-        FillComboBox(Sibi_StatusType, cmbStatus)
-        FillComboBox(Sibi_RequestType, cmbType)
+        FillComboBox(SibiIndex.StatusType, cmbStatus)
+        FillComboBox(SibiIndex.RequestType, cmbType)
     End Sub
     Private Sub SetFieldTags()
         txtDescription.Tag = True
@@ -289,9 +289,9 @@ Public Class frmManageRequest
             With info
                 .strDescription = Trim(txtDescription.Text)
                 .strUser = Trim(txtUser.Text)
-                .strType = GetDBValue(Sibi_RequestType, cmbType.SelectedIndex)
+                .strType = GetDBValue(SibiIndex.RequestType, cmbType.SelectedIndex)
                 .dtNeedBy = dtNeedBy.Value.ToString(strDBDateFormat)
-                .strStatus = GetDBValue(Sibi_StatusType, cmbStatus.SelectedIndex)
+                .strStatus = GetDBValue(SibiIndex.StatusType, cmbStatus.SelectedIndex)
                 .strPO = Trim(txtPO.Text)
                 .strRequisitionNumber = Trim(txtReqNumber.Text)
                 .strRTNumber = Trim(txtRTNumber.Text)
@@ -306,9 +306,17 @@ Public Class frmManageRequest
                     Dim NewRow As DataRow = DBTable.NewRow()
                     For Each dcell As DataGridViewCell In row.Cells
                         If dcell.OwningColumn.CellType.Name = "DataGridViewComboBoxCell" Then
-                            'Dim cmb As DataGridViewComboBoxCell = dcell
-                            'Debug.Print(cmb.Value)
-                            NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(dcell.OwningColumn.Name, dcell.Value)
+
+
+                            Select Case dcell.OwningColumn.Name
+                                Case Attrib_Type.Location
+                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(DeviceIndex.Locations, dcell.Value)
+                                Case Attrib_Type.SibiItemStatusType
+                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(SibiIndex.ItemStatusType, dcell.Value)
+
+                            End Select
+
+                            '**************************NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(dcell.OwningColumn.Name, dcell.Value)
                         Else
                             NewRow(dcell.ColumnIndex) = Trim(dcell.Value)
                         End If
@@ -414,8 +422,8 @@ VALUES
                 cmd.Parameters.AddWithValue("@sibi_items_request_uid", strRequestUID)
                 cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
                 cmd.Parameters.AddWithValue("@sibi_items_description", row.Item("Description"))
-                cmd.Parameters.AddWithValue("@sibi_items_location", row.Item(ComboType.Location))
-                cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
+                cmd.Parameters.AddWithValue("@sibi_items_location", row.Item(Attrib_Type.Location))
+                cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(Attrib_Type.SibiItemStatusType))
                 cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
                 cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
                 cmd.Parameters.AddWithValue("@sibi_items_new_asset", row.Item("Replace Asset"))
@@ -489,8 +497,8 @@ sibi_items_qty = @sibi_items_qty
 WHERE sibi_items_uid ='" & row.Item("Item UID") & "'"
                     cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
                     cmd.Parameters.AddWithValue("@sibi_items_description", row.Item("Description"))
-                    cmd.Parameters.AddWithValue("@sibi_items_location", row.Item(ComboType.Location))
-                    cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
+                    cmd.Parameters.AddWithValue("@sibi_items_location", row.Item(Attrib_Type.Location))
+                    cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(Attrib_Type.SibiItemStatusType))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
                     cmd.Parameters.AddWithValue("@sibi_items_new_asset", row.Item("New Asset"))
@@ -537,8 +545,8 @@ VALUES
                     cmd.Parameters.AddWithValue("@sibi_items_request_uid", CurrentRequest.strUID)
                     cmd.Parameters.AddWithValue("@sibi_items_user", row.Item("User"))
                     cmd.Parameters.AddWithValue("@sibi_items_description", row.Item("Description"))
-                    cmd.Parameters.AddWithValue("@sibi_items_location", row.Item(ComboType.Location))
-                    cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(ComboType.SibiItemStatusType))
+                    cmd.Parameters.AddWithValue("@sibi_items_location", row.Item(Attrib_Type.Location))
+                    cmd.Parameters.AddWithValue("@sibi_items_status", row.Item(Attrib_Type.SibiItemStatusType))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_asset", row.Item("Replace Asset"))
                     cmd.Parameters.AddWithValue("@sibi_items_replace_serial", row.Item("Replace Serial"))
                     cmd.Parameters.AddWithValue("@sibi_items_new_asset", row.Item("Replace Asset"))
@@ -575,9 +583,9 @@ VALUES
             With RequestResults.Rows(0)
                 txtDescription.Text = NoNull(.Item("sibi_description"))
                 txtUser.Text = NoNull(.Item("sibi_request_user"))
-                cmbType.SelectedIndex = GetComboIndexFromShort(ComboType.SibiRequestType, NoNull(.Item("sibi_type")))
+                cmbType.SelectedIndex = GetComboIndexFromShort(SibiIndex.RequestType, NoNull(.Item("sibi_type")))
                 dtNeedBy.Value = NoNull(.Item("sibi_need_by"))
-                cmbStatus.SelectedIndex = GetComboIndexFromShort(ComboType.SibiStatusType, NoNull(.Item("sibi_status")))
+                cmbStatus.SelectedIndex = GetComboIndexFromShort(SibiIndex.StatusType, NoNull(.Item("sibi_status")))
                 txtPO.Text = NoNull(.Item("sibi_PO"))
                 txtReqNumber.Text = NoNull(.Item("sibi_requisition_number"))
                 txtRequestNum.Text = NoNull(.Item("sibi_request_number"))
@@ -592,9 +600,9 @@ VALUES
             Me.Activate()
         Catch ex As Exception
             If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-        Else
-            EndProgram()
-        End If
+            Else
+                EndProgram()
+            End If
         End Try
     End Sub
     Private Sub LoadNotes(RequestUID As String)
@@ -638,8 +646,8 @@ VALUES
                     .Add(NoNull(r.Item("sibi_items_user")),
                         NoNull(r.Item("sibi_items_description")),
                          NoNull(r.Item("sibi_items_qty")),
-                        GetHumanValue(ComboType.Location, NoNull(r.Item("sibi_items_location"))),
-                             GetHumanValue(ComboType.SibiItemStatusType, NoNull(r.Item("sibi_items_status"))),
+                        GetHumanValue(DeviceIndex.Locations, NoNull(r.Item("sibi_items_location"))),
+                             GetHumanValue(SibiIndex.ItemStatusType, NoNull(r.Item("sibi_items_status"))),
                              NoNull(r.Item("sibi_items_replace_asset")),
                              NoNull(r.Item("sibi_items_replace_serial")),
                          NoNull(r.Item("sibi_items_new_asset")),
@@ -922,4 +930,5 @@ VALUES
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
+
 End Class

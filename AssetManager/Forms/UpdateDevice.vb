@@ -18,7 +18,7 @@ Public Class UpdateDev
             Exit Sub
         End If
         NewUpdateInfo.strNote = Trim(txtUpdate_Note.Text)
-        NewUpdateInfo.strChangeType = GetDBValue(ChangeType, cmbUpdate_ChangeType.SelectedIndex)
+        NewUpdateInfo.strChangeType = GetDBValue(DeviceIndex.ChangeType, cmbUpdate_ChangeType.SelectedIndex)
         txtUpdate_Note.Text = ""
         cmbUpdate_ChangeType.Enabled = True
         Me.DialogResult = DialogResult.OK

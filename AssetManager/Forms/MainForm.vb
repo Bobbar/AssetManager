@@ -164,10 +164,10 @@ Public Class MainForm
                 table.Rows.Add(NoNull(r.Item("dev_cur_user")),
                                NoNull(r.Item("dev_asset_tag")),
                                NoNull(r.Item("dev_serial")),
-                               GetHumanValue(ComboType.EquipType, NoNull(r.Item("dev_eq_type"))),
+                               GetHumanValue(DeviceIndex.EquipType, NoNull(r.Item("dev_eq_type"))),
                                NoNull(r.Item("dev_description")),
-                               GetHumanValue(ComboType.OSType, NoNull(r.Item("dev_osversion"))),
-                               GetHumanValue(ComboType.Location, NoNull(r.Item("dev_location"))),
+                               GetHumanValue(DeviceIndex.OSType, NoNull(r.Item("dev_osversion"))),
+                               GetHumanValue(DeviceIndex.Locations, NoNull(r.Item("dev_location"))),
                                NoNull(r.Item("dev_po")),
                                NoNull(r.Item("dev_purchase_date")),
                                NoNull(r.Item("dev_replacement_year")),
@@ -189,12 +189,12 @@ Public Class MainForm
             New SearchVal("dev_serial", Trim(txtSerialSearch.Text)),
             New SearchVal("dev_asset_tag", Trim(txtAssetTagSearch.Text)),
             New SearchVal("dev_description", Trim(txtDescription.Text)),
-            New SearchVal("dev_eq_type", GetDBValue(EquipType, cmbEquipType.SelectedIndex)),
+            New SearchVal("dev_eq_type", GetDBValue(DeviceIndex.EquipType, cmbEquipType.SelectedIndex)),
             New SearchVal("dev_replacement_year", Trim(txtReplaceYear.Text)),
-            New SearchVal("dev_osversion", GetDBValue(OSType, cmbOSType.SelectedIndex)),
-            New SearchVal("dev_location", GetDBValue(Locations, cmbLocation.SelectedIndex)),
+            New SearchVal("dev_osversion", GetDBValue(DeviceIndex.OSType, cmbOSType.SelectedIndex)),
+            New SearchVal("dev_location", GetDBValue(DeviceIndex.Locations, cmbLocation.SelectedIndex)),
             New SearchVal("dev_cur_user", Trim(txtCurUser.Text)),
-            New SearchVal("dev_status", GetDBValue(StatusType, cmbStatus.SelectedIndex)),
+            New SearchVal("dev_status", GetDBValue(DeviceIndex.StatusType, cmbStatus.SelectedIndex)),
             New SearchVal("dev_trackable", chkTrackables.Checked)
             }
     End Function
@@ -296,12 +296,12 @@ Public Class MainForm
         End If
     End Sub
     Private Sub RefreshCombos()
-        FillComboBox(EquipType, cmbEquipType)
-        FillComboBox(Locations, cmbLocation)
-        FillComboBox(ChangeType, UpdateDev.cmbUpdate_ChangeType)
-        FillComboBox(StatusType, AddNew.cmbStatus_REQ)
-        FillComboBox(StatusType, cmbStatus)
-        FillComboBox(OSType, cmbOSType)
+        FillComboBox(DeviceIndex.EquipType, cmbEquipType)
+        FillComboBox(DeviceIndex.Locations, cmbLocation)
+        FillComboBox(DeviceIndex.ChangeType, UpdateDev.cmbUpdate_ChangeType)
+        FillComboBox(DeviceIndex.StatusType, AddNew.cmbStatus_REQ)
+        FillComboBox(DeviceIndex.StatusType, cmbStatus)
+        FillComboBox(DeviceIndex.OSType, cmbOSType)
     End Sub
     Private Sub ViewSelectedToolStripMenuItem_Click(sender As Object, e As EventArgs)
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)

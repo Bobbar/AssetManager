@@ -124,12 +124,12 @@ Public Class AddNew
         Device.strAssetTag = Trim(txtAssetTag_REQ.Text)
         Device.dtPurchaseDate = dtPurchaseDate_REQ.Text
         Device.strReplaceYear = Trim(txtReplaceYear.Text)
-        Device.strLocation = GetDBValue(Locations, cmbLocation_REQ.SelectedIndex)
+        Device.strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_REQ.SelectedIndex)
         Device.strCurrentUser = Trim(txtCurUser_REQ.Text)
         Device.strNote = Trim(txtNotes.Text)
-        Device.strOSVersion = GetDBValue(OSType, cmbOSType_REQ.SelectedIndex)
-        Device.strEqType = GetDBValue(EquipType, cmbEquipType_REQ.SelectedIndex)
-        Device.strStatus = GetDBValue(StatusType, cmbStatus_REQ.SelectedIndex)
+        Device.strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex)
+        Device.strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_REQ.SelectedIndex)
+        Device.strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
         Device.bolTrackable = chkTrackable.Checked
         Device.strPO = Trim(txtPO.Text)
     End Sub
@@ -141,7 +141,7 @@ Public Class AddNew
         RefreshCombos()
         ClearFields()
         dtPurchaseDate_REQ.Value = Now
-        cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType, "INSRV")
+        cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, "INSRV")
         ResetBackColors()
         chkTrackable.Checked = False
         chkNoClear.Checked = False
@@ -149,10 +149,10 @@ Public Class AddNew
         fieldErrorIcon.Clear()
     End Sub
     Private Sub RefreshCombos()
-        FillComboBox(Locations, cmbLocation_REQ)
-        FillComboBox(EquipType, cmbEquipType_REQ)
-        FillComboBox(OSType, cmbOSType_REQ)
-        FillComboBox(StatusType, cmbStatus_REQ)
+        FillComboBox(DeviceIndex.Locations, cmbLocation_REQ)
+        FillComboBox(DeviceIndex.EquipType, cmbEquipType_REQ)
+        FillComboBox(DeviceIndex.OSType, cmbOSType_REQ)
+        FillComboBox(DeviceIndex.StatusType, cmbStatus_REQ)
     End Sub
     Private Sub ResetBackColors()
         Dim c As Control

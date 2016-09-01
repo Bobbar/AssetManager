@@ -103,11 +103,11 @@ Class frmSibiAttachments
             '    table.Columns.Add("AttachUID", GetType(String))
             '    table.Columns.Add("MD5", GetType(String))
             'ElseIf Not bolAdminMode Then
-            Select Case GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex)
+            Select Case GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
                 Case "ALL"
                     strQry = "Select * FROM sibi_attachments WHERE sibi_attach_UID='" & AttachRequest.strUID & "' ORDER BY sibi_attach_timestamp DESC"
                 Case Else
-                    strQry = "Select * FROM sibi_attachments WHERE sibi_attach_folder='" & GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex) & "' AND sibi_attach_UID ='" & AttachRequest.strUID & "' ORDER BY sibi_attach_timestamp DESC"
+                    strQry = "Select * FROM sibi_attachments WHERE sibi_attach_folder='" & GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex) & "' AND sibi_attach_UID ='" & AttachRequest.strUID & "' ORDER BY sibi_attach_timestamp DESC"
             End Select
             table.Columns.Add(" ", GetType(Image))
             table.Columns.Add("Filename", GetType(String))
@@ -128,7 +128,7 @@ Class frmSibiAttachments
                     ' If bolAdminMode Then
                     ' table.Rows.Add(strFullFilename, strFileSizeHuman,!attach_upload_date,!dev_asset_tag,!attach_file_UID,!attach_file_hash)
                     ' Else
-                    table.Rows.Add(FileIcon(!sibi_attach_file_type), strFullFilename, strFileSizeHuman, !sibi_attach_timestamp, GetHumanValue(ComboType.SibiAttachFolder, !sibi_attach_folder), !sibi_attach_file_UID, !sibi_attach_file_hash)
+                    table.Rows.Add(FileIcon(!sibi_attach_file_type), strFullFilename, strFileSizeHuman, !sibi_attach_timestamp, GetHumanValue(SibiIndex.AttachFolder, !sibi_attach_folder), !sibi_attach_file_UID, !sibi_attach_file_hash)
                     ' End If
                     ReDim Preserve AttachIndex(row)
                     AttachIndex(row).strFilename = !sibi_attach_file_name
@@ -205,8 +205,8 @@ Class frmSibiAttachments
         DoneWaiting()
     End Sub
     Private Sub FillFolderCombos()
-        FillComboBox(Sibi_AttachFolder, cmbFolder)
-        FillToolComboBox(Sibi_AttachFolder, cmbMoveFolder)
+        FillComboBox(SibiIndex.AttachFolder, cmbFolder)
+        FillToolComboBox(SibiIndex.AttachFolder, cmbMoveFolder)
     End Sub
     Public Sub FillInfo()
         txtUID.Text = AttachRequest.strUID
@@ -637,11 +637,11 @@ Class frmSibiAttachments
     End Sub
     Private Sub cmbFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFolder.SelectedIndexChanged
         ListAttachments(AttachRequest)
-        strSelectedFolder = GetDBValue(Sibi_AttachFolder, cmbFolder.SelectedIndex)
+        strSelectedFolder = GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
     End Sub
     Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, GetDBValue(Sibi_AttachFolder, cmbMoveFolder.SelectedIndex))
+        If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, GetDBValue(SibiIndex.AttachFolder, cmbMoveFolder.SelectedIndex))
     End Sub
     Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub

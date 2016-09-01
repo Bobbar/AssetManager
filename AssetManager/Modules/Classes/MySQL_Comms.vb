@@ -151,7 +151,7 @@ Public Class MySQL_Comms
             reader = Return_SQLReader(strQry)
             With reader
                 Do While .Read()
-                    tmpInfo.Historical.strChangeType = GetHumanValue(ComboType.ChangeType, !hist_change_type)
+                    tmpInfo.Historical.strChangeType = GetHumanValue(DeviceIndex.ChangeType, !hist_change_type)
                     tmpInfo.strAssetTag = !hist_asset_tag
                     tmpInfo.strCurrentUser = !hist_cur_user
                     tmpInfo.strSerial = !hist_serial

@@ -214,6 +214,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\Classes\Crypto.vb" />
+    <Compile Include="Modules\Classes\Device_Indexes.vb" />
     <Compile Include="Modules\Classes\Munis_Functions.vb" />
     <Compile Include="Modules\Classes\Munis_Comms.vb" />
     <Compile Include="Modules\DataImport.vb" />
@@ -225,6 +226,7 @@
     <Compile Include="Modules\Classes\MySQL_Comms.vb" />
     <Compile Include="Modules\PDFFormFilling.vb" />
     <Compile Include="Modules\SecurityMod.vb" />
+    <Compile Include="Modules\Classes\Sibi_Indexes.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -85,18 +85,9 @@ Public Module DBFunctions
         Public strNote As String
         Public strChangeType As String
     End Structure
-    Public AccessLevels() As Access_Info
-    Public Locations() As Combo_Data
-    Public ChangeType() As Combo_Data
-    Public EquipType() As Combo_Data
-    Public OSType() As Combo_Data
-    Public StatusType() As Combo_Data
+    Public DeviceIndex As New Device_Indexes
     'sibi
-    Public RequestData As Request_Info
-    Public Sibi_StatusType() As Combo_Data
-    Public Sibi_ItemStatusType() As Combo_Data
-    Public Sibi_RequestType() As Combo_Data
-    Public Sibi_AttachFolder() As Combo_Data
+    Public SibiIndex As New Sibi_Indexes
     Public MunisComms As New Munis_Comms
     Public Munis As New Munis_Functions
     Public MySQLDB As New MySQL_Comms
@@ -108,7 +99,7 @@ Public Module DBFunctions
         Public strUID As String
     End Structure
     Public UserAccess As User_Info
-    Public NotInheritable Class ComboType
+    Public NotInheritable Class Attrib_Type
         Public Const Location As String = "LOCATION"
         Public Const ChangeType As String = "CHANGETYPE"
         Public Const EquipType As String = "EQ_TYPE"
@@ -119,7 +110,7 @@ Public Module DBFunctions
         Public Const SibiRequestType As String = "REQ_TYPE"
         Public Const SibiAttachFolder As String = "ATTACH_FOLDER"
     End Class
-    Public NotInheritable Class CodeType
+    Public NotInheritable Class Attrib_Table
         Public Const Sibi As String = "sibi_codes"
         Public Const Device As String = "dev_codes"
     End Class
@@ -184,7 +175,7 @@ Public Module DBFunctions
     End Function
     Public Function GetShortLocation(ByVal index As Integer) As String
         Try
-            Return Locations(index).strShort
+            Return DeviceIndex.Locations(index).strShort
         Catch
             Return ""
         End Try
@@ -210,57 +201,24 @@ Public Module DBFunctions
             Return Nothing
         End Try
     End Function
-    Public Function GetHumanValue(ByVal Type As String, ByVal ShortVal As String) As String
-        Dim SearchIndex() As Combo_Data
-        Dim i As Integer
-        SearchIndex = GetSearchIndex(Type)
-        For i = 0 To UBound(SearchIndex)
-            If SearchIndex(i).strShort = ShortVal Then Return SearchIndex(i).strLong
+    Public Function GetHumanValue(ByVal CodeIndex() As Combo_Data, ByVal ShortVal As String) As String
+        For Each Code As Combo_Data In CodeIndex
+            If Code.strShort = ShortVal Then Return Code.strLong
         Next
         Return Nothing
     End Function
-    Public Function GetHumanValueFromIndex(ByVal Type As String, index As Integer) As String
-        Dim SearchIndex() As Combo_Data
-        SearchIndex = GetSearchIndex(Type)
-        Return SearchIndex(index).strLong
+    Public Function GetHumanValueFromIndex(ByVal CodeIndex() As Combo_Data, index As Integer) As String
+        Return CodeIndex(index).strLong
     End Function
-    Public Function GetDBValueFromHuman(ByVal Type As String, ByVal LongVal As String) As String
-        Dim SearchIndex() As Combo_Data = GetSearchIndex(Type)
-        For Each i As Combo_Data In SearchIndex
+    Public Function GetDBValueFromHuman(ByVal CodeIndex() As Combo_Data, ByVal LongVal As String) As String
+        For Each i As Combo_Data In CodeIndex
             If i.strLong = LongVal Then Return i.strShort
         Next
         Return Nothing
     End Function
-    Private Function GetSearchIndex(ByVal Type As String) As Combo_Data()
-        Select Case Type
-            Case ComboType.Location
-                Return Locations
-            Case ComboType.ChangeType
-                Return ChangeType
-            Case ComboType.EquipType
-                Return EquipType
-            Case ComboType.OSType
-                Return OSType
-            Case ComboType.StatusType
-                Return StatusType
-            Case ComboType.SibiItemStatusType
-                Return Sibi_ItemStatusType
-            Case ComboType.SibiRequestType
-                Return Sibi_RequestType
-            Case ComboType.SibiStatusType
-                Return Sibi_StatusType
-            Case ComboType.SibiAttachFolder
-                Return Sibi_AttachFolder
-            Case Else
-                Return Nothing
-        End Select
-    End Function
-    Public Function GetComboIndexFromShort(ByVal Type As String, ByVal ShortVal As String) As Integer
-        Dim SearchIndex() As Combo_Data
-        Dim i As Integer
-        SearchIndex = GetSearchIndex(Type)
-        For i = 0 To UBound(SearchIndex)
-            If SearchIndex(i).strShort = ShortVal Then Return i
+    Public Function GetComboIndexFromShort(ByVal CodeIndex() As Combo_Data, ByVal ShortVal As String) As Integer
+        For i As Integer = 0 To UBound(CodeIndex)
+            If CodeIndex(i).strShort = ShortVal Then Return i
         Next
         Return Nothing
     End Function
@@ -270,25 +228,18 @@ Public Module DBFunctions
     Public Sub BuildIndexes()
         Logger("Building Indexes...")
         With MySQLDB
-            Locations = .BuildIndex(CodeType.Device, ComboType.Location)
-            ChangeType = .BuildIndex(CodeType.Device, ComboType.ChangeType)
-            EquipType = .BuildIndex(CodeType.Device, ComboType.EquipType)
-            OSType = .BuildIndex(CodeType.Device, ComboType.OSType)
-            StatusType = .BuildIndex(CodeType.Device, ComboType.StatusType)
-            Sibi_StatusType = .BuildIndex(CodeType.Sibi, ComboType.SibiStatusType)
-            Sibi_ItemStatusType = .BuildIndex(CodeType.Sibi, ComboType.SibiItemStatusType)
-            Sibi_RequestType = .BuildIndex(CodeType.Sibi, ComboType.SibiRequestType)
-            Sibi_AttachFolder = .BuildIndex(CodeType.Sibi, ComboType.SibiAttachFolder)
+            DeviceIndex.Locations = .BuildIndex(Attrib_Table.Device, Attrib_Type.Location)
+            DeviceIndex.ChangeType = .BuildIndex(Attrib_Table.Device, Attrib_Type.ChangeType)
+            DeviceIndex.EquipType = .BuildIndex(Attrib_Table.Device, Attrib_Type.EquipType)
+            DeviceIndex.OSType = .BuildIndex(Attrib_Table.Device, Attrib_Type.OSType)
+            DeviceIndex.StatusType = .BuildIndex(Attrib_Table.Device, Attrib_Type.StatusType)
+            SibiIndex.StatusType = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiStatusType)
+            SibiIndex.ItemStatusType = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiItemStatusType)
+            SibiIndex.RequestType = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiRequestType)
+            SibiIndex.AttachFolder = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiAttachFolder)
         End With
         Logger("Building Indexes Done...")
     End Sub
-    'Public Function GetShortEquipType(ByVal index As Integer) As String
-    '    Try
-    '        Return EquipType(index).strShort
-    '    Catch
-    '        Return ""
-    '    End Try
-    'End Function
     Public Function ConnectionReady() As Boolean
         Select Case GlobalConn.State
             Case ConnectionState.Closed

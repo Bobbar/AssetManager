@@ -26,10 +26,10 @@
             'table.Columns.Add("GUID", GetType(String))
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item("sibi_request_number")),
-                               GetHumanValue(ComboType.SibiStatusType, r.Item("sibi_status")),
+                               GetHumanValue(SibiIndex.StatusType, r.Item("sibi_status")),
                                NoNull(r.Item("sibi_description")),
                                NoNull(r.Item("sibi_request_user")),
-                               GetHumanValue(ComboType.SibiRequestType, r.Item("sibi_type")),
+                               GetHumanValue(SibiIndex.RequestType, r.Item("sibi_type")),
                                NoNull(r.Item("sibi_need_by")),
                                NoNull(r.Item("sibi_PO")),
                                NoNull(r.Item("sibi_requisition_number")),
@@ -65,7 +65,7 @@
         End If
     End Sub
     Private Function GetRowColor(Value As String) As Color
-        Dim DBVal As String = GetDBValueFromHuman(ComboType.SibiStatusType, Value)
+        Dim DBVal As String = GetDBValueFromHuman(SibiIndex.StatusType, Value)
         Select Case DBVal
             Case "NEW"
                 Return ColorAlphaBlend(Color.FromArgb(0, 255, 30))

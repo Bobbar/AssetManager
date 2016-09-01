@@ -83,7 +83,7 @@ Public Class Tracking
         txtAssetTag.Text = CurrentTrackingDevice.strAssetTag
         txtDescription.Text = CurrentTrackingDevice.strDescription
         txtSerial.Text = CurrentTrackingDevice.strSerial
-        txtDeviceType.Text = GetHumanValue(ComboType.EquipType, CurrentTrackingDevice.strEqType)
+        txtDeviceType.Text = GetHumanValue(DeviceIndex.EquipType, CurrentTrackingDevice.strEqType)
         If CurrentTrackingDevice.Tracking.bolCheckedOut Then
             dtCheckOut.Value = CurrentTrackingDevice.Tracking.strCheckOutTime
             dtDueBack.Value = CurrentTrackingDevice.Tracking.strDueBackTime

@@ -18,6 +18,7 @@ Module SecurityMod
         Public Const Sibi_Delete As String = "sibi_delete"
         Public Const IsAdmin As String = "admin"
     End Class
+    Public AccessLevels() As Access_Info
     Public Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
     Public Const EncFTPUserPass As String = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ="
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"

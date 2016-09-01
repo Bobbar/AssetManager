@@ -31,14 +31,14 @@ Public Class View
         With OldData
             .strAssetTag = Trim(txtAssetTag_View_REQ.Text)
             .strDescription = Trim(txtDescription_View_REQ.Text)
-            .strEqType = GetDBValue(EquipType, cmbEquipType_View_REQ.SelectedIndex)
+            .strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_View_REQ.SelectedIndex)
             .strSerial = Trim(txtSerial_View_REQ.Text)
-            .strLocation = GetDBValue(Locations, cmbLocation_View_REQ.SelectedIndex)
+            .strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_View_REQ.SelectedIndex)
             .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
             .dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
             .strReplaceYear = Trim(txtReplacementYear_View.Text)
-            .strOSVersion = GetDBValue(OSType, cmbOSVersion_REQ.SelectedIndex)
-            .strStatus = GetDBValue(StatusType, cmbStatus_REQ.SelectedIndex)
+            .strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSVersion_REQ.SelectedIndex)
+            .strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
             .bolTrackable = chkTrackable.Checked
             .strPO = Trim(txtPONumber.Text)
         End With
@@ -47,14 +47,14 @@ Public Class View
         With NewData
             .strAssetTag = Trim(txtAssetTag_View_REQ.Text)
             .strDescription = Trim(txtDescription_View_REQ.Text)
-            .strEqType = GetDBValue(EquipType, cmbEquipType_View_REQ.SelectedIndex)
+            .strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_View_REQ.SelectedIndex)
             .strSerial = Trim(txtSerial_View_REQ.Text)
-            .strLocation = GetDBValue(Locations, cmbLocation_View_REQ.SelectedIndex)
+            .strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_View_REQ.SelectedIndex)
             .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
             .dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
             .strReplaceYear = Trim(txtReplacementYear_View.Text)
-            .strOSVersion = GetDBValue(OSType, cmbOSVersion_REQ.SelectedIndex)
-            .strStatus = GetDBValue(StatusType, cmbStatus_REQ.SelectedIndex)
+            .strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSVersion_REQ.SelectedIndex)
+            .strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
             .strNote = UpdateInfo.strNote
             .bolTrackable = chkTrackable.Checked
             .strPO = Trim(txtPONumber.Text)
@@ -240,14 +240,14 @@ Public Class View
         With CurrentViewDevice
             txtAssetTag_View_REQ.Text = .strAssetTag
             txtDescription_View_REQ.Text = .strDescription
-            cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.EquipType, .strEqType)
+            cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.EquipType, .strEqType)
             txtSerial_View_REQ.Text = .strSerial
-            cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.Location, .strLocation)
+            cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.Locations, .strLocation)
             txtCurUser_View_REQ.Text = .strCurrentUser
             dtPurchaseDate_View_REQ.Value = .dtPurchaseDate
             txtReplacementYear_View.Text = .strReplaceYear
-            cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.OSType, .strOSVersion)
-            cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(ComboType.StatusType, .strStatus)
+            cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.OSType, .strOSVersion)
+            cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, .strStatus)
             txtGUID.Text = .strGUID
             chkTrackable.Checked = CBool(.bolTrackable)
             txtPONumber.Text = .strPO
@@ -270,14 +270,14 @@ Public Class View
                 table.Columns.Add("GUID", GetType(String))
                 For Each r As DataRow In tblResults.Rows
                     table.Rows.Add(NoNull(r.Item("hist_action_datetime")),
-                           GetHumanValue(ComboType.ChangeType, NoNull(r.Item("hist_change_type"))),
+                           GetHumanValue(DeviceIndex.ChangeType, NoNull(r.Item("hist_change_type"))),
                            NoNull(r.Item("hist_action_user")),
                            NotePreview(NoNull(r.Item("hist_notes")), 25),
                            NoNull(r.Item("hist_cur_user")),
                            NoNull(r.Item("hist_asset_tag")),
                            NoNull(r.Item("hist_serial")),
                            NoNull(r.Item("hist_description")),
-                           GetHumanValue(ComboType.Location, NoNull(r.Item("hist_location"))),
+                           GetHumanValue(DeviceIndex.Locations, NoNull(r.Item("hist_location"))),
                            NoNull(r.Item("hist_purchase_date")),
                            NoNull(r.Item("hist_uid")))
                 Next
@@ -398,7 +398,7 @@ Public Class View
             txtDueBack.Text = CurrentViewDevice.Tracking.strDueBackTime
         Else
             txtCheckOut.BackColor = colCheckIn
-            txtCheckLocation.Text = GetHumanValue(ComboType.Location, CurrentViewDevice.strLocation)
+            txtCheckLocation.Text = GetHumanValue(DeviceIndex.Locations, CurrentViewDevice.strLocation)
             lblCheckTime.Text = "CheckIn Time:"
             txtCheckTime.Text = CurrentViewDevice.Tracking.strCheckInTime
             lblCheckUser.Text = "CheckIn User:"
@@ -593,15 +593,15 @@ Public Class View
     End Sub
     Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs)
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
-        UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
+        UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(DeviceIndex.ChangeType, "NOTE")
         UpdateDev.cmbUpdate_ChangeType.Enabled = False
         UpdateDev.Show()
     End Sub
     Private Sub RefreshCombos()
-        FillComboBox(EquipType, cmbEquipType_View_REQ)
-        FillComboBox(Locations, cmbLocation_View_REQ)
-        FillComboBox(OSType, cmbOSVersion_REQ)
-        FillComboBox(StatusType, cmbStatus_REQ)
+        FillComboBox(DeviceIndex.EquipType, cmbEquipType_View_REQ)
+        FillComboBox(DeviceIndex.Locations, cmbLocation_View_REQ)
+        FillComboBox(DeviceIndex.OSType, cmbOSVersion_REQ)
+        FillComboBox(DeviceIndex.StatusType, cmbStatus_REQ)
     End Sub
     Private Sub DeleteDevice()
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
@@ -739,8 +739,8 @@ Public Class View
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         Dim UpdateDia As New UpdateDev
-        FillComboBox(ChangeType, UpdateDia.cmbUpdate_ChangeType)
-        UpdateDia.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(ComboType.ChangeType, "NOTE")
+        FillComboBox(DeviceIndex.ChangeType, UpdateDia.cmbUpdate_ChangeType)
+        UpdateDia.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(DeviceIndex.ChangeType, "NOTE")
         UpdateDia.cmbUpdate_ChangeType.Enabled = False
         UpdateDia.txtUpdate_Note.Clear()
         UpdateDia.ShowDialog(Me)
@@ -867,7 +867,7 @@ Public Class View
         End If
         DisableControls()
         Dim UpdateDia As New UpdateDev
-        FillComboBox(ChangeType, UpdateDia.cmbUpdate_ChangeType)
+        FillComboBox(DeviceIndex.ChangeType, UpdateDia.cmbUpdate_ChangeType)
         UpdateDia.cmbUpdate_ChangeType.SelectedIndex = -1
         UpdateDia.cmbUpdate_ChangeType.Enabled = True
         UpdateDia.txtUpdate_Note.Clear()
