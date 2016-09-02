@@ -90,6 +90,7 @@ Partial Class frmSibiMain
         Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle1
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.ResultGrid.Location = New System.Drawing.Point(3, 52)
+        Me.ResultGrid.MultiSelect = False
         Me.ResultGrid.Name = "ResultGrid"
         Me.ResultGrid.ReadOnly = True
         Me.ResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
@@ -101,9 +102,8 @@ Partial Class frmSibiMain
         DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle2
-        Me.ResultGrid.RowHeadersVisible = False
         Me.ResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
@@ -148,6 +148,7 @@ Partial Class frmSibiMain
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ResultGrid As DataGridView

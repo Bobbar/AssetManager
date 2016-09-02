@@ -1,4 +1,5 @@
-﻿Imports iTextSharp
+﻿Option Explicit On
+Imports iTextSharp
 Imports iTextSharp.text
 Imports iTextSharp.text.pdf
 Imports iTextSharp.text.xml
@@ -45,10 +46,18 @@ Module PDFFormFilling
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_01_Asset_Input_Formnew)
                     pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
                     Dim pdfFormFields As AcroFields = InputFormFields(Device, pdfStamper) 'pdfStamper.AcroFields
+                    If IsNothing(pdfFormFields) Then
+                        pdfStamper.Close()
+                        Exit Sub
+                    End If
                 Case FormType.TransferForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_03_Asset_Transfer_Form)
                     pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
                     Dim pdfFormFields As AcroFields = TransferFormFields(Device, pdfStamper)
+                    If IsNothing(pdfFormFields) Then
+                        pdfStamper.Close()
+                        Exit Sub
+                    End If
             End Select
             pdfStamper.FormFlattening = True
             ' close the pdf

@@ -178,7 +178,7 @@ Partial Class MainForm
         'ViewToolStripMenuItem
         '
         Me.ViewToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ViewToolStripMenuItem.Image = CType(resources.GetObject("ViewToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.ViewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.View_Details
         Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
         Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(126, 22)
         Me.ViewToolStripMenuItem.Text = "View"
@@ -784,6 +784,7 @@ Partial Class MainForm
         Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents cmdShowAll As Button

@@ -77,6 +77,8 @@ Partial Class frmManageRequest
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.pnlCreate = New System.Windows.Forms.Panel()
+        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.GroupBox1.SuspendLayout()
         Me.pnlEditButtons.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -89,16 +91,17 @@ Partial Class frmManageRequest
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PopupMenuNotes.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlCreate.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.pnlEditButtons)
+        Me.GroupBox1.Controls.Add(Me.Panel3)
         Me.GroupBox1.Controls.Add(Me.Label8)
         Me.GroupBox1.Controls.Add(Me.txtRequestNum)
         Me.GroupBox1.Controls.Add(Me.cmbStatus)
         Me.GroupBox1.Controls.Add(Me.Label7)
-        Me.GroupBox1.Controls.Add(Me.cmdAddNew)
         Me.GroupBox1.Controls.Add(Me.GroupBox2)
         Me.GroupBox1.Controls.Add(Me.chkPlanned)
         Me.GroupBox1.Controls.Add(Me.cmbType)
@@ -121,34 +124,33 @@ Partial Class frmManageRequest
         '
         Me.pnlEditButtons.Controls.Add(Me.cmdAccept)
         Me.pnlEditButtons.Controls.Add(Me.cmdDiscard)
-        Me.pnlEditButtons.Location = New System.Drawing.Point(255, 83)
+        Me.pnlEditButtons.Location = New System.Drawing.Point(3, 4)
         Me.pnlEditButtons.Name = "pnlEditButtons"
-        Me.pnlEditButtons.Size = New System.Drawing.Size(141, 98)
+        Me.pnlEditButtons.Size = New System.Drawing.Size(141, 78)
         Me.pnlEditButtons.TabIndex = 20
+        Me.pnlEditButtons.Visible = False
         '
         'cmdAccept
         '
         Me.cmdAccept.BackColor = System.Drawing.Color.PaleGreen
         Me.cmdAccept.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAccept.Location = New System.Drawing.Point(9, 11)
+        Me.cmdAccept.Location = New System.Drawing.Point(9, 3)
         Me.cmdAccept.Name = "cmdAccept"
         Me.cmdAccept.Size = New System.Drawing.Size(119, 41)
         Me.cmdAccept.TabIndex = 18
         Me.cmdAccept.Text = "Accept Changes"
         Me.cmdAccept.UseVisualStyleBackColor = False
-        Me.cmdAccept.Visible = False
         '
         'cmdDiscard
         '
         Me.cmdDiscard.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.cmdDiscard.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdDiscard.Location = New System.Drawing.Point(9, 58)
+        Me.cmdDiscard.Location = New System.Drawing.Point(9, 50)
         Me.cmdDiscard.Name = "cmdDiscard"
         Me.cmdDiscard.Size = New System.Drawing.Size(119, 24)
         Me.cmdDiscard.TabIndex = 19
         Me.cmdDiscard.Text = "Discard Changes"
         Me.cmdDiscard.UseVisualStyleBackColor = False
-        Me.cmdDiscard.Visible = False
         '
         'Label8
         '
@@ -189,13 +191,12 @@ Partial Class frmManageRequest
         'cmdAddNew
         '
         Me.cmdAddNew.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAddNew.Location = New System.Drawing.Point(264, 190)
+        Me.cmdAddNew.Location = New System.Drawing.Point(9, 8)
         Me.cmdAddNew.Name = "cmdAddNew"
         Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
         Me.cmdAddNew.TabIndex = 12
         Me.cmdAddNew.Text = "Create Request"
         Me.cmdAddNew.UseVisualStyleBackColor = True
-        Me.cmdAddNew.Visible = False
         '
         'GroupBox2
         '
@@ -627,6 +628,27 @@ Partial Class frmManageRequest
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
+        'pnlCreate
+        '
+        Me.pnlCreate.Controls.Add(Me.cmdAddNew)
+        Me.pnlCreate.Location = New System.Drawing.Point(3, 90)
+        Me.pnlCreate.Name = "pnlCreate"
+        Me.pnlCreate.Size = New System.Drawing.Size(142, 55)
+        Me.pnlCreate.TabIndex = 21
+        Me.pnlCreate.Visible = False
+        '
+        'Panel3
+        '
+        Me.Panel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+        Me.Panel3.AutoSize = True
+        Me.Panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.Panel3.Controls.Add(Me.pnlEditButtons)
+        Me.Panel3.Controls.Add(Me.pnlCreate)
+        Me.Panel3.Location = New System.Drawing.Point(255, 94)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(148, 148)
+        Me.Panel3.TabIndex = 22
+        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -657,7 +679,10 @@ Partial Class frmManageRequest
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PopupMenuNotes.ResumeLayout(False)
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlCreate.ResumeLayout(False)
+        Me.Panel3.ResumeLayout(False)
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents chkPlanned As CheckBox
@@ -711,4 +736,6 @@ Partial Class frmManageRequest
     Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
     Friend WithEvents fieldErrorIcon As ErrorProvider
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents pnlCreate As Panel
 End Class

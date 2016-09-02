@@ -105,8 +105,8 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
     Private Sub View_Munis_Load(sender As Object, e As EventArgs) Handles Me.Load
         ExtendedMethods.DoubleBuffered(DataGridMunis_Inventory, True)
         ExtendedMethods.DoubleBuffered(DataGridMunis_Requisition, True)
-        DataGridMunis_Inventory.DefaultCellStyle = GridStylez
-        DataGridMunis_Requisition.DefaultCellStyle = GridStylez
+        DataGridMunis_Inventory.DefaultCellStyle = GridStyles
+        DataGridMunis_Requisition.DefaultCellStyle = GridStyles
         If IsNothing(CurrentMunisDevice.strGUID) Then
         Else
             Me.Text = Me.Text + FormTitle(CurrentMunisDevice)

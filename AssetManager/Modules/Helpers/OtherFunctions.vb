@@ -23,7 +23,7 @@ Module OtherFunctions
     Public colToolBarColor As Color = Color.FromArgb(249, 226, 166)
     Public DefGridBC As Color, DefGridSelCol As Color
     'misc
-    Public GridStylez As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
+    Public GridStyles As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Public stpw As New Stopwatch
     Public ProgramEnding As Boolean = False
@@ -33,7 +33,7 @@ Module OtherFunctions
     Private Const FILE_ATTRIBUTE_NORMAL As Int32 = &H80
     Public Sub SetGridStyle(Grid As DataGridView)
         Grid.BackgroundColor = DefGridBC
-        Grid.DefaultCellStyle = GridStylez
+        Grid.DefaultCellStyle = GridStyles
         Grid.DefaultCellStyle.Font = GridFont
     End Sub
     Private Structure SHFILEINFO

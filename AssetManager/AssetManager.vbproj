@@ -33,7 +33,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>19</ApplicationRevision>
+    <ApplicationRevision>20</ApplicationRevision>
     <ApplicationVersion>4.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -214,19 +214,19 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\Classes\Crypto.vb" />
-    <Compile Include="Modules\Classes\Device_Indexes.vb" />
+    <Compile Include="Modules\Classes\Indexes.vb" />
     <Compile Include="Modules\Classes\Munis_Functions.vb" />
     <Compile Include="Modules\Classes\Munis_Comms.vb" />
     <Compile Include="Modules\DataImport.vb" />
-    <Compile Include="Modules\DBFunctions.vb" />
+    <Compile Include="Modules\Helpers\DBFunctions.vb" />
     <Compile Include="Modules\ErrorHandling.vb" />
     <Compile Include="Modules\ExtendedMethods.vb" />
-    <Compile Include="Modules\FTPFunctions.vb" />
+    <Compile Include="Modules\Helpers\FTPFunctions.vb" />
     <Compile Include="Modules\Classes\LiveBox.vb" />
     <Compile Include="Modules\Classes\MySQL_Comms.vb" />
+    <Compile Include="Modules\MyStructures.vb" />
     <Compile Include="Modules\PDFFormFilling.vb" />
     <Compile Include="Modules\SecurityMod.vb" />
-    <Compile Include="Modules\Classes\Sibi_Indexes.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -254,7 +254,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Modules\OtherFunctions.vb" />
+    <Compile Include="Modules\Helpers\OtherFunctions.vb" />
     <Compile Include="Forms\View.Designer.vb">
       <DependentUpon>View.vb</DependentUpon>
     </Compile>

@@ -60,8 +60,11 @@
     Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
         If e.RowIndex > -1 Then
             Dim dvgRow As DataGridViewRow = ResultGrid.Rows(e.RowIndex)
-            dvgRow.DefaultCellStyle.BackColor = GetRowColor(dvgRow.Cells("Status").Value.ToString)
-            dvgRow.DefaultCellStyle.ForeColor = GetFontColor(GetRowColor(dvgRow.Cells("Status").Value.ToString))
+            Dim BackCol, ForeCol As Color
+            BackCol = GetRowColor(dvgRow.Cells("Status").Value.ToString)
+            ForeCol = GetFontColor(BackCol)
+            dvgRow.DefaultCellStyle.BackColor = BackCol
+            dvgRow.DefaultCellStyle.ForeColor = ForeCol
         End If
     End Sub
     Private Function GetRowColor(Value As String) As Color

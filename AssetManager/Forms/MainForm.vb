@@ -14,7 +14,11 @@ Public Class MainForm
     Private bolGridFilling As Boolean = False
     Private ConnectAttempts As Integer = 0
     Private MyLiveBox As New LiveBox
+    Private strLastQry As String
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadProgram()
+    End Sub
+    Private Sub LoadProgram()
         Try
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
@@ -47,7 +51,7 @@ Public Class MainForm
             End If
             MyLiveBox.InitializeLiveBox()
             Clear_All()
-            GetGridStylez()
+            GetGridStyles()
             SetGridStyle(ResultGrid)
             ConnectionWatchDog.RunWorkerAsync()
             Status("Ready!")
@@ -59,7 +63,7 @@ Public Class MainForm
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Sub GetGridStylez()
+    Public Sub GetGridStyles()
         'set colors
         ResultGrid.DefaultCellStyle.SelectionBackColor = colSelectColor
         DefGridBC = ResultGrid.DefaultCellStyle.BackColor
@@ -72,7 +76,7 @@ Public Class MainForm
         tmpStyle.SelectionBackColor = ResultGrid.DefaultCellStyle.SelectionBackColor
         tmpStyle.SelectionForeColor = ResultGrid.DefaultCellStyle.SelectionForeColor
         tmpStyle.WrapMode = ResultGrid.DefaultCellStyle.WrapMode
-        GridStylez = tmpStyle
+        GridStyles = tmpStyle
     End Sub
     Public Sub Status(Text As String)
         SplashScreen.lblStatus.Text = Text

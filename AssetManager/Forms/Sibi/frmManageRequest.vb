@@ -6,11 +6,15 @@ Public Class frmManageRequest
     Public bolUpdating As Boolean = False
     Private bolGridFilling As Boolean = False
     Private CurrentRequest As Request_Info
+    Private MyText As String
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
     End Sub
     Private Sub SetTitle()
-        Me.Text = Me.Text + " - " + CurrentRequest.strDescription
+        If MyText = "" Then
+            MyText = Me.Text
+        End If
+        Me.Text = MyText + " - " + CurrentRequest.strDescription
     End Sub
     Public Sub ClearAll()
         ClearControls(Me)
@@ -20,7 +24,7 @@ Public Class frmManageRequest
         SetupGrid()
         FillCombos()
         EnableControls(Me)
-        cmdAddNew.Visible = False
+        pnlCreate.Visible = False
         CurrentRequest = Nothing
         DisableControls(Me)
         ToolStrip.BackColor = colToolBarColor
@@ -114,14 +118,10 @@ Public Class frmManageRequest
         EnableGrid()
     End Sub
     Private Sub ShowEditControls()
-        For Each c As Control In pnlEditButtons.Controls
-            c.Visible = True
-        Next
+        pnlEditButtons.Visible = True
     End Sub
     Private Sub HideEditControls()
-        For Each c As Control In pnlEditButtons.Controls
-            c.Visible = False
-        Next
+        pnlEditButtons.Visible = False
     End Sub
     Private Sub DisableGrid()
         RequestItemsGrid.EditMode = DataGridViewEditMode.EditProgrammatically
@@ -334,7 +334,7 @@ Public Class frmManageRequest
     End Function
     Private Sub cmdAddNew_Click(sender As Object, e As EventArgs) Handles cmdAddNew.Click
         If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
-        cmdAddNew.Visible = False
+        pnlCreate.Visible = False
         AddNewRequest()
     End Sub
     Private Sub AddNewRequest()
@@ -708,7 +708,7 @@ VALUES
         If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
         ClearAll()
         EnableControls(Me)
-        cmdAddNew.Visible = True
+        pnlCreate.Visible = True
     End Sub
     Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         CloseChildren()
@@ -773,6 +773,7 @@ VALUES
     End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
         If Not CheckForAccess(AccessGroup.Sibi_Delete) Then Exit Sub
+        If IsNothing(CurrentRequest.RequstItems) Then Exit Sub
         Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
             If DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
@@ -807,6 +808,7 @@ VALUES
     End Sub
     Private Sub cmdClearForm_Click(sender As Object, e As EventArgs) Handles cmdClearForm.Click
         ClearAll()
+        Me.Text = MyText
         CurrentRequest = Nothing
     End Sub
     Private Sub RequestItemsGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles RequestItemsGrid.CellMouseDown
