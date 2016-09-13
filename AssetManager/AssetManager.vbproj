@@ -227,6 +227,12 @@
     <Compile Include="Modules\MyStructures.vb" />
     <Compile Include="Modules\PDFFormFilling.vb" />
     <Compile Include="Modules\SecurityMod.vb" />
+    <Compile Include="MunisTools.Designer.vb">
+      <DependentUpon>MunisTools.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MunisTools.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -323,6 +329,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UpdateDevice.resx">
       <DependentUpon>UpdateDevice.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MunisTools.resx">
+      <DependentUpon>MunisTools.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>

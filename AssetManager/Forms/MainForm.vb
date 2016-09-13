@@ -20,6 +20,7 @@ Public Class MainForm
     End Sub
     Private Sub LoadProgram()
         Try
+
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
             ToolStrip1.BackColor = colToolBarColor
@@ -58,6 +59,8 @@ Public Class MainForm
             ShowAll()
             Thread.Sleep(500)
             SplashScreen.Hide()
+            Dim MyMunisTools As New MunisToolsMenu
+            ToolStrip1.Items.Insert(2, MyMunisTools.MunisTools)
             Me.Show()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -588,18 +591,6 @@ Public Class MainForm
     Private Sub tsmUserManager_Click(sender As Object, e As EventArgs) Handles tsmUserManager.Click
         frmUserManager.Show()
     End Sub
-    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs)
-        Munis.NameSearch()
-    End Sub
-    Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
-        Munis.NameSearch()
-    End Sub
-    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
-        Munis.POSearch()
-    End Sub
-    Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem3.Click
-        Munis.ReqSearch()
-    End Sub
     Private Sub TextEnCrypterToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TextEnCrypterToolStripMenuItem.Click
         frmEncrypter.Show()
         frmEncrypter.Activate()
@@ -618,6 +609,11 @@ Public Class MainForm
     Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
         ScanAttachements()
     End Sub
+
+    Private Sub MunisToolsTSM_Click(sender As Object, e As EventArgs)
+
+    End Sub
+
     Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Dim f As Form = sender
         If f.WindowState = FormWindowState.Minimized Then

@@ -142,9 +142,9 @@ Partial Class View_Munis
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(0, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(89, 16)
+        Me.Label3.Size = New System.Drawing.Size(119, 16)
         Me.Label3.TabIndex = 49
-        Me.Label3.Text = "MUNIS Info:"
+        Me.Label3.Text = "Requisition Info:"
         '
         'DataGridMunis_Requisition
         '
@@ -207,6 +207,7 @@ Partial Class View_Munis
         CType(Me.DataGridMunis_Requisition, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnlMaster.ResumeLayout(False)
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents DataGridMunis_Inventory As DataGridView
     Friend WithEvents pnlFixedAsset As Panel

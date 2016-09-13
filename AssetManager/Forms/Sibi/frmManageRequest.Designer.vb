@@ -26,14 +26,16 @@ Partial Class frmManageRequest
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.pnlEditButtons = New System.Windows.Forms.Panel()
         Me.cmdAccept = New System.Windows.Forms.Button()
         Me.cmdDiscard = New System.Windows.Forms.Button()
+        Me.pnlCreate = New System.Windows.Forms.Panel()
+        Me.cmdAddNew = New System.Windows.Forms.Button()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.txtRequestNum = New System.Windows.Forms.TextBox()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.cmdAddNew = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtRTNumber = New System.Windows.Forms.TextBox()
@@ -64,10 +66,6 @@ Partial Class frmManageRequest
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripDropDownButton2 = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmdOrgObLookup = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdClearForm = New System.Windows.Forms.ToolStripButton()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
@@ -77,10 +75,10 @@ Partial Class frmManageRequest
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.pnlCreate = New System.Windows.Forms.Panel()
-        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.GroupBox1.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         Me.pnlEditButtons.SuspendLayout()
+        Me.pnlCreate.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -91,8 +89,6 @@ Partial Class frmManageRequest
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PopupMenuNotes.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pnlCreate.SuspendLayout()
-        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -119,6 +115,18 @@ Partial Class frmManageRequest
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Request Info"
+        '
+        'Panel3
+        '
+        Me.Panel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+        Me.Panel3.AutoSize = True
+        Me.Panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.Panel3.Controls.Add(Me.pnlEditButtons)
+        Me.Panel3.Controls.Add(Me.pnlCreate)
+        Me.Panel3.Location = New System.Drawing.Point(255, 94)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(148, 148)
+        Me.Panel3.TabIndex = 22
         '
         'pnlEditButtons
         '
@@ -151,6 +159,25 @@ Partial Class frmManageRequest
         Me.cmdDiscard.TabIndex = 19
         Me.cmdDiscard.Text = "Discard Changes"
         Me.cmdDiscard.UseVisualStyleBackColor = False
+        '
+        'pnlCreate
+        '
+        Me.pnlCreate.Controls.Add(Me.cmdAddNew)
+        Me.pnlCreate.Location = New System.Drawing.Point(3, 90)
+        Me.pnlCreate.Name = "pnlCreate"
+        Me.pnlCreate.Size = New System.Drawing.Size(142, 55)
+        Me.pnlCreate.TabIndex = 21
+        Me.pnlCreate.Visible = False
+        '
+        'cmdAddNew
+        '
+        Me.cmdAddNew.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdAddNew.Location = New System.Drawing.Point(9, 8)
+        Me.cmdAddNew.Name = "cmdAddNew"
+        Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
+        Me.cmdAddNew.TabIndex = 12
+        Me.cmdAddNew.Text = "Create Request"
+        Me.cmdAddNew.UseVisualStyleBackColor = True
         '
         'Label8
         '
@@ -187,16 +214,6 @@ Partial Class frmManageRequest
         Me.Label7.Size = New System.Drawing.Size(44, 15)
         Me.Label7.TabIndex = 13
         Me.Label7.Text = "Status:"
-        '
-        'cmdAddNew
-        '
-        Me.cmdAddNew.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAddNew.Location = New System.Drawing.Point(9, 8)
-        Me.cmdAddNew.Name = "cmdAddNew"
-        Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
-        Me.cmdAddNew.TabIndex = 12
-        Me.cmdAddNew.Text = "Create Request"
-        Me.cmdAddNew.UseVisualStyleBackColor = True
         '
         'GroupBox2
         '
@@ -428,7 +445,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.ToolStripDropDownButton2, Me.cmdOrgObLookup, Me.cmdClearForm})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.cmdOrgObLookup, Me.cmdClearForm})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -495,33 +512,6 @@ Partial Class frmManageRequest
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
-        '
-        'ToolStripDropDownButton2
-        '
-        Me.ToolStripDropDownButton2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.ToolStripMenuItem2, Me.ToolStripMenuItem3})
-        Me.ToolStripDropDownButton2.Image = Global.AssetManager.My.Resources.Resources.Find
-        Me.ToolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripDropDownButton2.Name = "ToolStripDropDownButton2"
-        Me.ToolStripDropDownButton2.Size = New System.Drawing.Size(98, 29)
-        Me.ToolStripDropDownButton2.Text = "MUNIS"
-        '
-        'ToolStripMenuItem1
-        '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(227, 26)
-        Me.ToolStripMenuItem1.Text = "User Org/Ob Lookup"
-        '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(227, 26)
-        Me.ToolStripMenuItem2.Text = "PO Lookup"
-        '
-        'ToolStripMenuItem3
-        '
-        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(227, 26)
-        Me.ToolStripMenuItem3.Text = "Requisition # Lookup"
         '
         'cmdOrgObLookup
         '
@@ -628,27 +618,6 @@ Partial Class frmManageRequest
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
-        'pnlCreate
-        '
-        Me.pnlCreate.Controls.Add(Me.cmdAddNew)
-        Me.pnlCreate.Location = New System.Drawing.Point(3, 90)
-        Me.pnlCreate.Name = "pnlCreate"
-        Me.pnlCreate.Size = New System.Drawing.Size(142, 55)
-        Me.pnlCreate.TabIndex = 21
-        Me.pnlCreate.Visible = False
-        '
-        'Panel3
-        '
-        Me.Panel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.Panel3.AutoSize = True
-        Me.Panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.Panel3.Controls.Add(Me.pnlEditButtons)
-        Me.Panel3.Controls.Add(Me.pnlCreate)
-        Me.Panel3.Location = New System.Drawing.Point(255, 94)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(148, 148)
-        Me.Panel3.TabIndex = 22
-        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -665,7 +634,9 @@ Partial Class frmManageRequest
         Me.Text = "Manage Request"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.Panel3.ResumeLayout(False)
         Me.pnlEditButtons.ResumeLayout(False)
+        Me.pnlCreate.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
@@ -679,8 +650,6 @@ Partial Class frmManageRequest
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PopupMenuNotes.ResumeLayout(False)
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pnlCreate.ResumeLayout(False)
-        Me.Panel3.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -731,10 +700,6 @@ Partial Class frmManageRequest
     Friend WithEvents cmdDiscard As Button
     Friend WithEvents pnlEditButtons As Panel
     Friend WithEvents cmdOrgObLookup As ToolStripSeparator
-    Friend WithEvents ToolStripDropDownButton2 As ToolStripDropDownButton
-    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
     Friend WithEvents fieldErrorIcon As ErrorProvider
     Friend WithEvents Panel3 As Panel
     Friend WithEvents pnlCreate As Panel

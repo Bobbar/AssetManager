@@ -12,6 +12,9 @@
                 Dim MunisTable As DataTable
                 Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_loc,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
                 MunisTable = MunisComms.Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_serial='" & Device.strSerial & "'")
+                If MunisTable.Rows.Count < 1 Then
+                    MunisTable = MunisComms.Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_tag='" & Device.strAssetTag & "'")
+                End If
                 bolGridFilling = True
                 DataGridMunis_Inventory.DataSource = MunisTable
                 bolGridFilling = False

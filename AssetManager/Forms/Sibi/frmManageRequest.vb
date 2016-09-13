@@ -9,6 +9,8 @@ Public Class frmManageRequest
     Private MyText As String
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
+        Dim MyMunisTools As New MunisToolsMenu
+        ToolStrip.Items.Insert(7, MyMunisTools.MunisTools)
     End Sub
     Private Sub SetTitle()
         If MyText = "" Then
@@ -886,23 +888,11 @@ VALUES
         HideEditControls()
         OpenRequest(CurrentRequest.strUID)
     End Sub
-    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs)
-        Munis.NameSearch()
-    End Sub
     Private Sub txtPO_Click(sender As Object, e As EventArgs) Handles txtPO.Click
         Dim PO As String = Trim(txtPO.Text)
         If Not bolUpdating And PO <> "" Then
             NewMunisViewPO(PO)
         End If
-    End Sub
-    Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
-        Munis.NameSearch()
-    End Sub
-    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
-        Munis.POSearch()
-    End Sub
-    Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem3.Click
-        Munis.ReqSearch()
     End Sub
     Private Sub RequestItemsGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles RequestItemsGrid.DataError
         Dim blah = Message("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error")
