@@ -59,51 +59,53 @@
     End Sub
     Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
         If e.RowIndex > -1 Then
+            Dim dvgCell As DataGridViewCell = ResultGrid.Rows(e.RowIndex).Cells("Status")
             Dim dvgRow As DataGridViewRow = ResultGrid.Rows(e.RowIndex)
             Dim BackCol, ForeCol As Color
             BackCol = GetRowColor(dvgRow.Cells("Status").Value.ToString)
             ForeCol = GetFontColor(BackCol)
-            dvgRow.DefaultCellStyle.BackColor = BackCol
-            dvgRow.DefaultCellStyle.ForeColor = ForeCol
+            dvgCell.Style.BackColor = BackCol
+            dvgCell.Style.ForeColor = ForeCol
+            dvgCell.Style.SelectionBackColor = ColorAlphaBlend(BackCol, Color.FromArgb(87, 87, 87))
         End If
     End Sub
     Private Function GetRowColor(Value As String) As Color
         Dim DBVal As String = GetDBValueFromHuman(SibiIndex.StatusType, Value)
+        Dim DarkColor As Color = Color.FromArgb(222, 222, 222) 'gray color
         Select Case DBVal
             Case "NEW"
-                Return ColorAlphaBlend(Color.FromArgb(0, 255, 30))
+                Return ColorAlphaBlend(Color.FromArgb(0, 255, 30), DarkColor)
             Case "QTN"
-                Return ColorAlphaBlend(Color.FromArgb(242, 255, 0))
+                Return ColorAlphaBlend(Color.FromArgb(242, 255, 0), DarkColor)
             Case "QTR"
-                Return ColorAlphaBlend(Color.FromArgb(255, 208, 0))
+                Return ColorAlphaBlend(Color.FromArgb(255, 208, 0), DarkColor)
             Case "QRC"
-                Return ColorAlphaBlend(Color.FromArgb(255, 162, 0))
+                Return ColorAlphaBlend(Color.FromArgb(255, 162, 0), DarkColor)
             Case "RQN"
-                Return ColorAlphaBlend(Color.FromArgb(0, 255, 251))
+                Return ColorAlphaBlend(Color.FromArgb(0, 255, 251), DarkColor)
             Case "RQR"
-                Return ColorAlphaBlend(Color.FromArgb(0, 140, 255))
+                Return ColorAlphaBlend(Color.FromArgb(0, 140, 255), DarkColor)
             Case "POS"
-                Return ColorAlphaBlend(Color.FromArgb(197, 105, 255))
+                Return ColorAlphaBlend(Color.FromArgb(197, 105, 255), DarkColor)
             Case "SHD"
-                Return ColorAlphaBlend(Color.FromArgb(255, 79, 243))
+                Return ColorAlphaBlend(Color.FromArgb(255, 79, 243), DarkColor)
             Case "ORC"
-                Return ColorAlphaBlend(Color.FromArgb(79, 144, 255))
+                Return ColorAlphaBlend(Color.FromArgb(79, 144, 255), DarkColor)
             Case "NPAY"
-                Return ColorAlphaBlend(Color.FromArgb(255, 36, 36))
+                Return ColorAlphaBlend(Color.FromArgb(255, 36, 36), DarkColor)
             Case "RCOMP"
-                Return ColorAlphaBlend(Color.FromArgb(158, 158, 158))
+                Return ColorAlphaBlend(Color.FromArgb(158, 158, 158), DarkColor)
             Case "ONH"
-                Return ColorAlphaBlend(Color.FromArgb(255, 255, 255))
+                Return ColorAlphaBlend(Color.FromArgb(255, 255, 255), DarkColor)
         End Select
     End Function
-    Private Function ColorAlphaBlend(InColor As Color) As Color 'blend colors with darker color so they aren't so intense
-        Dim DarkColor As Color = Color.FromArgb(222, 222, 222) 'gray color
-        Dim BlendColor As Color
-        BlendColor = Color.FromArgb((CInt(InColor.A) + CInt(DarkColor.A)) / 2,
-                                    (CInt(InColor.R) + CInt(DarkColor.R)) / 2,
-                                    (CInt(InColor.G) + CInt(DarkColor.G)) / 2,
-                                    (CInt(InColor.B) + CInt(DarkColor.B)) / 2)
-        Return BlendColor
+    Private Function ColorAlphaBlend(InColor As Color, BlendColor As Color) As Color 'blend colors with darker color so they aren't so intense
+        Dim OutColor As Color
+        OutColor = Color.FromArgb((CInt(InColor.A) + CInt(BlendColor.A)) / 2,
+                                    (CInt(InColor.R) + CInt(BlendColor.R)) / 2,
+                                    (CInt(InColor.G) + CInt(BlendColor.G)) / 2,
+                                    (CInt(InColor.B) + CInt(BlendColor.B)) / 2)
+        Return OutColor
     End Function
     Private Function GetFontColor(color As Color) As Color 'get contrasting font color
         Dim d As Integer = 0
