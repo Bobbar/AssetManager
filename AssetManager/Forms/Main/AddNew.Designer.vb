@@ -22,6 +22,7 @@ Partial Class AddNew
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AddNew))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cmdUserSearch = New System.Windows.Forms.Button()
         Me.chkNoClear = New System.Windows.Forms.CheckBox()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.cmdClear = New System.Windows.Forms.Button()
@@ -51,7 +52,6 @@ Partial Class AddNew
         Me.txtAssetTag_REQ = New System.Windows.Forms.TextBox()
         Me.txtSerial_REQ = New System.Windows.Forms.TextBox()
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.cmdUserSearch = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -93,6 +93,15 @@ Partial Class AddNew
         Me.GroupBox1.Size = New System.Drawing.Size(1023, 333)
         Me.GroupBox1.TabIndex = 23
         Me.GroupBox1.TabStop = False
+        '
+        'cmdUserSearch
+        '
+        Me.cmdUserSearch.Location = New System.Drawing.Point(156, 69)
+        Me.cmdUserSearch.Name = "cmdUserSearch"
+        Me.cmdUserSearch.Size = New System.Drawing.Size(141, 23)
+        Me.cmdUserSearch.TabIndex = 50
+        Me.cmdUserSearch.Text = "Munis Search"
+        Me.cmdUserSearch.UseVisualStyleBackColor = True
         '
         'chkNoClear
         '
@@ -373,15 +382,6 @@ Partial Class AddNew
         Me.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
-        '
-        'cmdUserSearch
-        '
-        Me.cmdUserSearch.Location = New System.Drawing.Point(156, 69)
-        Me.cmdUserSearch.Name = "cmdUserSearch"
-        Me.cmdUserSearch.Size = New System.Drawing.Size(141, 23)
-        Me.cmdUserSearch.TabIndex = 50
-        Me.cmdUserSearch.Text = "Munis Link"
-        Me.cmdUserSearch.UseVisualStyleBackColor = True
         '
         'AddNew
         '

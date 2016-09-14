@@ -5,6 +5,7 @@ Public Class AddNew
     Private Device As Device_Info
     Private bolCheckFields As Boolean
     Private MyLiveBox As New LiveBox
+    Private MunisUser As Emp_Info = Nothing
     Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
         AddNewDevice()
     End Sub
@@ -18,7 +19,7 @@ Public Class AddNew
                 Exit Sub
             End If
             GetDBValues()
-            Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_po,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_lastmod_date,dev_trackable) VALUES(@dev_UID,@dev_description,@dev_location,@dev_cur_user,@dev_serial,@dev_asset_tag,@dev_purchase_date,@dev_po,@dev_replacement_year,@dev_eq_type,@dev_osversion,@dev_status,@dev_lastmod_user,@dev_lastmod_date,@dev_trackable)"
+            Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_po,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_lastmod_date,dev_trackable,dev_cur_user_emp_num) VALUES(@dev_UID,@dev_description,@dev_location,@dev_cur_user,@dev_serial,@dev_asset_tag,@dev_purchase_date,@dev_po,@dev_replacement_year,@dev_eq_type,@dev_osversion,@dev_status,@dev_lastmod_user,@dev_lastmod_date,@dev_trackable,@dev_cur_user_emp_num)"
             Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSqlQry1)
             cmd.Parameters.AddWithValue("@dev_UID", strUID)
             cmd.Parameters.AddWithValue("@dev_description", Device.strDescription)
@@ -35,6 +36,7 @@ Public Class AddNew
             cmd.Parameters.AddWithValue("@dev_lastmod_user", strLocalUser)
             cmd.Parameters.AddWithValue("@dev_lastmod_date", Now)
             cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(Device.bolTrackable))
+            cmd.Parameters.AddWithValue("@dev_cur_user_emp_num", MunisUser.Number)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO dev_historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES(@hist_change_type, @hist_notes, @hist_serial, @hist_description, @hist_location, @hist_cur_user, @hist_asset_tag, @hist_purchase_date, @hist_replacement_year, @hist_po, @hist_osversion, @hist_dev_UID, @hist_action_user, @hist_eq_type, @hist_status, @hist_trackable)"
             cmd.Parameters.AddWithValue("@hist_change_type", "NEWD")
@@ -125,7 +127,12 @@ Public Class AddNew
         Device.dtPurchaseDate = dtPurchaseDate_REQ.Text
         Device.strReplaceYear = Trim(txtReplaceYear.Text)
         Device.strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_REQ.SelectedIndex)
-        Device.strCurrentUser = Trim(txtCurUser_REQ.Text)
+        If IsNothing(MunisUser) Then
+            Device.strCurrentUser = Trim(txtCurUser_REQ.Text)
+        Else
+            Device.strCurrentUser = MunisUser.Name
+            MySQLDB.AddNewEmp(MunisUser)
+        End If
         Device.strNote = Trim(txtNotes.Text)
         Device.strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex)
         Device.strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_REQ.SelectedIndex)
@@ -166,11 +173,13 @@ Public Class AddNew
         Next
     End Sub
     Private Sub ClearFields()
+        MunisUser = Nothing
         Dim c As Control
         For Each c In GroupBox1.Controls
             If TypeOf c Is TextBox Then
                 Dim txt As TextBox = c
                 txt.Text = ""
+                txt.ReadOnly = False
             End If
             If TypeOf c Is ComboBox Then
                 Dim cmb As ComboBox = c
@@ -228,5 +237,16 @@ Public Class AddNew
     End Sub
     Private Sub AddNew_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         MyLiveBox.Unload()
+    End Sub
+
+    Private Sub cmdUserSearch_Click(sender As Object, e As EventArgs) Handles cmdUserSearch.Click
+        Dim NewMunisSearch As New frmMunisUser
+        NewMunisSearch.ShowDialog()
+        If NewMunisSearch.DialogResult = DialogResult.Yes Then
+            MunisUser = NewMunisSearch.EmployeeInfo
+            NewMunisSearch.Dispose()
+            txtCurUser_REQ.Text = MunisUser.Name
+            txtCurUser_REQ.ReadOnly = True
+        End If
     End Sub
 End Class

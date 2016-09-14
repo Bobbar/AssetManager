@@ -78,4 +78,9 @@ Public Module MyStructures
         Public intAccessLevel As Integer
         Public strUID As String
     End Structure
+    Public Structure Emp_Info
+        Public Number As String
+        Public Name As String
+        Public UID As String
+    End Structure
 End Module

@@ -2,12 +2,7 @@
 Module DBScript
     Private DeviceList As DataTable
     Private Munis As New Munis_Comms
-    Private Structure Emp_Info
-        Public Number As String
-        'Public LastName As String
-        'Public FirstName As String
-        Public Name As String
-    End Structure
+
     Public Sub GetAndSetEmpNums()
         Dim strQRY As String = "SELECT * FROM devices"
 

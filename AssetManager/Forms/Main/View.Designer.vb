@@ -20,10 +20,12 @@ Partial Class View
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
+        Me.cmdBrowseFiles = New System.Windows.Forms.Button()
+        Me.cmdRDP = New System.Windows.Forms.Button()
         Me.pnlOtherFunctions = New System.Windows.Forms.Panel()
         Me.cmdMunisInfo = New System.Windows.Forms.Button()
         Me.cmdSibiLink = New System.Windows.Forms.Button()
@@ -54,6 +56,7 @@ Partial Class View
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.HistoryTab = New System.Windows.Forms.TabPage()
         Me.DataGridHistory = New System.Windows.Forms.DataGridView()
@@ -72,14 +75,6 @@ Partial Class View
         Me.Label11 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.PingWorker = New System.ComponentModel.BackgroundWorker()
-        Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
-        Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
@@ -90,11 +85,17 @@ Partial Class View
         Me.tsdAssetControl = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmAssetInputForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAccept_Tool = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
-        Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmdBrowseFiles = New System.Windows.Forms.Button()
-        Me.cmdRDP = New System.Windows.Forms.Button()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.PingWorker = New System.ComponentModel.BackgroundWorker()
+        Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
+        Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.DeviceInfoBox.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
@@ -113,6 +114,7 @@ Partial Class View
         'DeviceInfoBox
         '
         Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.DeviceInfoBox.Controls.Add(Me.Button1)
         Me.DeviceInfoBox.Controls.Add(Me.grpNetTools)
         Me.DeviceInfoBox.Controls.Add(Me.pnlOtherFunctions)
         Me.DeviceInfoBox.Controls.Add(Me.cmdSetSibi)
@@ -144,7 +146,7 @@ Partial Class View
         Me.DeviceInfoBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DeviceInfoBox.Location = New System.Drawing.Point(12, 46)
         Me.DeviceInfoBox.Name = "DeviceInfoBox"
-        Me.DeviceInfoBox.Size = New System.Drawing.Size(738, 242)
+        Me.DeviceInfoBox.Size = New System.Drawing.Size(738, 274)
         Me.DeviceInfoBox.TabIndex = 39
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
@@ -155,7 +157,7 @@ Partial Class View
         Me.grpNetTools.Controls.Add(Me.cmdRDP)
         Me.grpNetTools.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.grpNetTools.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.grpNetTools.Location = New System.Drawing.Point(468, 169)
+        Me.grpNetTools.Location = New System.Drawing.Point(468, 197)
         Me.grpNetTools.Name = "grpNetTools"
         Me.grpNetTools.Size = New System.Drawing.Size(101, 67)
         Me.grpNetTools.TabIndex = 52
@@ -163,11 +165,36 @@ Partial Class View
         Me.grpNetTools.Text = "Remote Mgmt"
         Me.grpNetTools.Visible = False
         '
+        'cmdBrowseFiles
+        '
+        Me.cmdBrowseFiles.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdBrowseFiles.BackgroundImage = CType(resources.GetObject("cmdBrowseFiles.BackgroundImage"), System.Drawing.Image)
+        Me.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdBrowseFiles.Location = New System.Drawing.Point(11, 19)
+        Me.cmdBrowseFiles.Name = "cmdBrowseFiles"
+        Me.cmdBrowseFiles.Size = New System.Drawing.Size(40, 40)
+        Me.cmdBrowseFiles.TabIndex = 52
+        Me.ToolTip1.SetToolTip(Me.cmdBrowseFiles, "Browse Files")
+        Me.cmdBrowseFiles.UseVisualStyleBackColor = True
+        '
+        'cmdRDP
+        '
+        Me.cmdRDP.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdRDP.BackgroundImage = CType(resources.GetObject("cmdRDP.BackgroundImage"), System.Drawing.Image)
+        Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.cmdRDP.Location = New System.Drawing.Point(53, 19)
+        Me.cmdRDP.Name = "cmdRDP"
+        Me.cmdRDP.Size = New System.Drawing.Size(40, 40)
+        Me.cmdRDP.TabIndex = 46
+        Me.ToolTip1.SetToolTip(Me.cmdRDP, "Launch Remote Desktop")
+        Me.cmdRDP.UseVisualStyleBackColor = True
+        '
         'pnlOtherFunctions
         '
         Me.pnlOtherFunctions.Controls.Add(Me.cmdMunisInfo)
         Me.pnlOtherFunctions.Controls.Add(Me.cmdSibiLink)
-        Me.pnlOtherFunctions.Location = New System.Drawing.Point(616, 178)
+        Me.pnlOtherFunctions.Location = New System.Drawing.Point(616, 206)
         Me.pnlOtherFunctions.Name = "pnlOtherFunctions"
         Me.pnlOtherFunctions.Size = New System.Drawing.Size(116, 61)
         Me.pnlOtherFunctions.TabIndex = 51
@@ -194,7 +221,7 @@ Partial Class View
         '
         'cmdSetSibi
         '
-        Me.cmdSetSibi.Location = New System.Drawing.Point(110, 208)
+        Me.cmdSetSibi.Location = New System.Drawing.Point(110, 236)
         Me.cmdSetSibi.Name = "cmdSetSibi"
         Me.cmdSetSibi.Size = New System.Drawing.Size(106, 23)
         Me.cmdSetSibi.TabIndex = 50
@@ -223,7 +250,7 @@ Partial Class View
         '
         Me.chkTrackable.AutoSize = True
         Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(305, 178)
+        Me.chkTrackable.Location = New System.Drawing.Point(547, 172)
         Me.chkTrackable.Name = "chkTrackable"
         Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
         Me.chkTrackable.TabIndex = 45
@@ -252,7 +279,7 @@ Partial Class View
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(17, 158)
+        Me.Label10.Location = New System.Drawing.Point(17, 186)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(90, 16)
         Me.Label10.TabIndex = 41
@@ -269,7 +296,7 @@ Partial Class View
         'txtGUID
         '
         Me.txtGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGUID.Location = New System.Drawing.Point(20, 177)
+        Me.txtGUID.Location = New System.Drawing.Point(20, 205)
         Me.txtGUID.Name = "txtGUID"
         Me.txtGUID.ReadOnly = True
         Me.txtGUID.Size = New System.Drawing.Size(268, 23)
@@ -442,6 +469,13 @@ Partial Class View
         Me.RightClickMenu.Name = "RightClickMenu"
         Me.RightClickMenu.Size = New System.Drawing.Size(138, 26)
         '
+        'DeleteEntryToolStripMenuItem
+        '
+        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
+        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
+        '
         'TabControl1
         '
         Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -451,10 +485,10 @@ Partial Class View
         Me.TabControl1.Controls.Add(Me.TrackingTab)
         Me.TabControl1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TabControl1.ItemSize = New System.Drawing.Size(61, 21)
-        Me.TabControl1.Location = New System.Drawing.Point(12, 303)
+        Me.TabControl1.Location = New System.Drawing.Point(12, 353)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1064, 347)
+        Me.TabControl1.Size = New System.Drawing.Size(1064, 297)
         Me.TabControl1.TabIndex = 40
         '
         'HistoryTab
@@ -463,7 +497,7 @@ Partial Class View
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1056, 318)
+        Me.HistoryTab.Size = New System.Drawing.Size(1056, 268)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -499,7 +533,7 @@ Partial Class View
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1044, 306)
+        Me.DataGridHistory.Size = New System.Drawing.Size(1044, 256)
         Me.DataGridHistory.TabIndex = 40
         '
         'TrackingTab
@@ -553,7 +587,7 @@ Partial Class View
         Me.TrackingBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TrackingBox.Location = New System.Drawing.Point(756, 46)
         Me.TrackingBox.Name = "TrackingBox"
-        Me.TrackingBox.Size = New System.Drawing.Size(316, 242)
+        Me.TrackingBox.Size = New System.Drawing.Size(316, 274)
         Me.TrackingBox.TabIndex = 41
         Me.TrackingBox.TabStop = False
         Me.TrackingBox.Text = "Tracking Info"
@@ -685,57 +719,6 @@ Partial Class View
         Me.ToolStrip1.TabIndex = 44
         Me.ToolStrip1.Text = "ToolStrip1"
         '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
-        Me.ToolStripSeparator1.Visible = False
-        '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
-        Me.ToolStripSeparator3.Visible = False
-        '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
-        Me.ToolStripSeparator2.Visible = False
-        '
-        'StatusStrip1
-        '
-        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 653)
-        Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1085, 22)
-        Me.StatusStrip1.TabIndex = 45
-        Me.StatusStrip1.Text = "StatusStrip1"
-        '
-        'StatusLabel
-        '
-        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StatusLabel.Name = "StatusLabel"
-        Me.StatusLabel.Size = New System.Drawing.Size(76, 17)
-        Me.StatusLabel.Text = "%STATUS%"
-        '
-        'PingWorker
-        '
-        Me.PingWorker.WorkerReportsProgress = True
-        Me.PingWorker.WorkerSupportsCancellation = True
-        '
-        'tmr_RDPRefresher
-        '
-        Me.tmr_RDPRefresher.Enabled = True
-        Me.tmr_RDPRefresher.Interval = 10000
-        '
-        'fieldErrorIcon
-        '
-        Me.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
-        Me.fieldErrorIcon.ContainerControl = Me
-        Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
-        '
         'ToolStripButton1
         '
         Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.Edit
@@ -826,6 +809,12 @@ Partial Class View
         Me.tsmAssetTransferForm.Size = New System.Drawing.Size(201, 32)
         Me.tsmAssetTransferForm.Text = "Asset Transfer Form"
         '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator1.Visible = False
+        '
         'cmdAccept_Tool
         '
         Me.cmdAccept_Tool.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -837,6 +826,12 @@ Partial Class View
         Me.cmdAccept_Tool.Size = New System.Drawing.Size(178, 29)
         Me.cmdAccept_Tool.Text = "Accept"
         Me.cmdAccept_Tool.Visible = False
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator3.Visible = False
         '
         'cmdCancel_Tool
         '
@@ -850,37 +845,55 @@ Partial Class View
         Me.cmdCancel_Tool.Text = "Cancel"
         Me.cmdCancel_Tool.Visible = False
         '
-        'DeleteEntryToolStripMenuItem
+        'ToolStripSeparator2
         '
-        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
-        Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
-        Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
-        Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator2.Visible = False
         '
-        'cmdBrowseFiles
+        'StatusStrip1
         '
-        Me.cmdBrowseFiles.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdBrowseFiles.BackgroundImage = CType(resources.GetObject("cmdBrowseFiles.BackgroundImage"), System.Drawing.Image)
-        Me.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.cmdBrowseFiles.Location = New System.Drawing.Point(11, 19)
-        Me.cmdBrowseFiles.Name = "cmdBrowseFiles"
-        Me.cmdBrowseFiles.Size = New System.Drawing.Size(40, 40)
-        Me.cmdBrowseFiles.TabIndex = 52
-        Me.ToolTip1.SetToolTip(Me.cmdBrowseFiles, "Browse Files")
-        Me.cmdBrowseFiles.UseVisualStyleBackColor = True
+        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 653)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Size = New System.Drawing.Size(1085, 22)
+        Me.StatusStrip1.TabIndex = 45
+        Me.StatusStrip1.Text = "StatusStrip1"
         '
-        'cmdRDP
+        'StatusLabel
         '
-        Me.cmdRDP.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdRDP.BackgroundImage = CType(resources.GetObject("cmdRDP.BackgroundImage"), System.Drawing.Image)
-        Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRDP.Location = New System.Drawing.Point(53, 19)
-        Me.cmdRDP.Name = "cmdRDP"
-        Me.cmdRDP.Size = New System.Drawing.Size(40, 40)
-        Me.cmdRDP.TabIndex = 46
-        Me.ToolTip1.SetToolTip(Me.cmdRDP, "Launch Remote Desktop")
-        Me.cmdRDP.UseVisualStyleBackColor = True
+        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StatusLabel.Name = "StatusLabel"
+        Me.StatusLabel.Size = New System.Drawing.Size(76, 17)
+        Me.StatusLabel.Text = "%STATUS%"
+        '
+        'PingWorker
+        '
+        Me.PingWorker.WorkerReportsProgress = True
+        Me.PingWorker.WorkerSupportsCancellation = True
+        '
+        'tmr_RDPRefresher
+        '
+        Me.tmr_RDPRefresher.Enabled = True
+        Me.tmr_RDPRefresher.Interval = 10000
+        '
+        'fieldErrorIcon
+        '
+        Me.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
+        Me.fieldErrorIcon.ContainerControl = Me
+        Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
+        '
+        'Button1
+        '
+        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.Location = New System.Drawing.Point(20, 160)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(134, 23)
+        Me.Button1.TabIndex = 53
+        Me.Button1.Text = "Munis Search"
+        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
         '
         'View
         '
@@ -918,6 +931,7 @@ Partial Class View
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents DeviceInfoBox As GroupBox
     Friend WithEvents Label9 As Label
@@ -993,4 +1007,5 @@ Partial Class View
     Friend WithEvents tsdAssetControl As ToolStripDropDownButton
     Friend WithEvents tsmAssetInputForm As ToolStripMenuItem
     Friend WithEvents tsmAssetTransferForm As ToolStripMenuItem
+    Friend WithEvents Button1 As Button
 End Class

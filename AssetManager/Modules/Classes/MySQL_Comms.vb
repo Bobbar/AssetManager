@@ -266,4 +266,35 @@ Public Class MySQL_Comms
             Return CollectDeviceInfo(Return_SQLTable("SELECT * FROM devices WHERE dev_serial='" & Serial & "'"))
         End If
     End Function
+    Public Sub AddNewEmp(EmpInfo As Emp_Info)
+        Try
+            If Not EmpIsInDB(EmpInfo.Number) Then
+                Dim UID As String = Guid.NewGuid.ToString
+                Dim strQRY As String = "INSERT INTO employees
+(emp_name,
+emp_number,
+emp_UID)
+VALUES
+(@emp_name,
+@emp_number,
+@emp_UID)"
+                Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strQRY)
+                cmd.Parameters.AddWithValue("@emp_name", EmpInfo.Name)
+                cmd.Parameters.AddWithValue("@emp_number", EmpInfo.Number)
+                cmd.Parameters.AddWithValue("@emp_UID", UID)
+                cmd.ExecuteNonQuery()
+                cmd.Dispose()
+            End If
+        Catch ex As MySqlException
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
+    Public Function EmpIsInDB(EmpNum As String) As Boolean
+        Dim EmpName As String = MySQLDB.Get_SQLValue("employees", "emp_number", EmpNum, "emp_name")
+        If EmpName <> "" Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
 End Class

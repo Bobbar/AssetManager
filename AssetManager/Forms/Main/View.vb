@@ -5,6 +5,7 @@ Public Class View
     Private Children(0) As Form
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
+    Private MunisUser As Emp_Info = Nothing
     Private Structure UserInput
         Public strAssetTag As String
         Public strDescription As String
@@ -972,6 +973,18 @@ Public Class View
         'ListFieldNames()
         FillForm(CurrentViewDevice, FormType.TransferForm)
     End Sub
+
+    Private Sub Button1_Click_4(sender As Object, e As EventArgs) Handles Button1.Click
+        'Dim NewMunisSearch As New frmMunisUser
+        'NewMunisSearch.ShowDialog()
+        'If NewMunisSearch.DialogResult = DialogResult.Yes Then
+        '    MunisUser = NewMunisSearch.EmployeeInfo
+        '    NewMunisSearch.Dispose()
+        '    txtCurUser_REQ.Text = MunisUser.Name
+        '    txtCurUser_REQ.ReadOnly = True
+        'End If
+    End Sub
+
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub
