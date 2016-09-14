@@ -128,10 +128,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\AddNew.Designer.vb">
+    <Compile Include="Forms\Main\AddNew.Designer.vb">
       <DependentUpon>AddNew.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\AddNew.vb">
+    <Compile Include="Forms\Main\AddNew.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\AdminTools\frmEncrypter.Designer.vb">
@@ -176,17 +176,17 @@
     <Compile Include="Forms\Sibi\frmSibiMain.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MainForm.vb">
+    <Compile Include="Forms\Main\MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MainForm.Designer.vb">
+    <Compile Include="Forms\Main\MainForm.Designer.vb">
       <DependentUpon>MainForm.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Attachments.Designer.vb">
+    <Compile Include="Forms\Main\Attachments.Designer.vb">
       <DependentUpon>Attachments.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Attachments.vb">
+    <Compile Include="Forms\Main\Attachments.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Sibi\frmSibiSelector.Designer.vb">
@@ -195,22 +195,22 @@
     <Compile Include="Forms\Sibi\frmSibiSelector.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Tracking.Designer.vb">
+    <Compile Include="Forms\Main\Tracking.Designer.vb">
       <DependentUpon>Tracking.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Tracking.vb">
+    <Compile Include="Forms\Main\Tracking.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\View_Munis.Designer.vb">
+    <Compile Include="Forms\Main\View_Munis.Designer.vb">
       <DependentUpon>View_Munis.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\View_Munis.vb">
+    <Compile Include="Forms\Main\View_Munis.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\View_Tracking.Designer.vb">
+    <Compile Include="Forms\Main\View_Tracking.Designer.vb">
       <DependentUpon>View_Tracking.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\View_Tracking.vb">
+    <Compile Include="Forms\Main\View_Tracking.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\Classes\Crypto.vb" />
@@ -218,6 +218,7 @@
     <Compile Include="Modules\Classes\Munis_Functions.vb" />
     <Compile Include="Modules\Classes\Munis_Comms.vb" />
     <Compile Include="Modules\DataImport.vb" />
+    <Compile Include="Modules\DBScript.vb" />
     <Compile Include="Modules\Helpers\DBFunctions.vb" />
     <Compile Include="Modules\ErrorHandling.vb" />
     <Compile Include="Modules\ExtendedMethods.vb" />
@@ -227,10 +228,10 @@
     <Compile Include="Modules\MyStructures.vb" />
     <Compile Include="Modules\PDFFormFilling.vb" />
     <Compile Include="Modules\SecurityMod.vb" />
-    <Compile Include="MunisTools.Designer.vb">
+    <Compile Include="MyControls\MunisTools.Designer.vb">
       <DependentUpon>MunisTools.vb</DependentUpon>
     </Compile>
-    <Compile Include="MunisTools.vb">
+    <Compile Include="MyControls\MunisTools.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
@@ -244,10 +245,10 @@
     <Compile Include="Forms\SplashScreen1.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UpdateDevice.Designer.vb">
+    <Compile Include="Forms\Main\UpdateDevice.Designer.vb">
       <DependentUpon>UpdateDevice.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\UpdateDevice.vb">
+    <Compile Include="Forms\Main\UpdateDevice.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -261,28 +262,28 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Modules\Helpers\OtherFunctions.vb" />
-    <Compile Include="Forms\View.Designer.vb">
+    <Compile Include="Forms\Main\View.Designer.vb">
       <DependentUpon>View.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\View.vb">
+    <Compile Include="Forms\Main\View.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\View_Entry.Designer.vb">
+    <Compile Include="Forms\Main\View_Entry.Designer.vb">
       <DependentUpon>View_Entry.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\View_Entry.vb">
+    <Compile Include="Forms\Main\View_Entry.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PanelNoScrollOnFocus.Designer.vb">
+    <Compile Include="MyControls\PanelNoScrollOnFocus.Designer.vb">
       <DependentUpon>PanelNoScrollOnFocus.vb</DependentUpon>
     </Compile>
-    <Compile Include="PanelNoScrollOnFocus.vb">
+    <Compile Include="MyControls\PanelNoScrollOnFocus.vb">
       <SubType>Component</SubType>
       <CustomToolNamespace>NoScrollPanel</CustomToolNamespace>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\AddNew.resx">
+    <EmbeddedResource Include="Forms\Main\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AdminTools\frmEncrypter.resx">
@@ -306,31 +307,31 @@
     <EmbeddedResource Include="Forms\Sibi\frmSibiMain.resx">
       <DependentUpon>frmSibiMain.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MainForm.resx">
+    <EmbeddedResource Include="Forms\Main\MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Attachments.resx">
+    <EmbeddedResource Include="Forms\Main\Attachments.resx">
       <DependentUpon>Attachments.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Sibi\frmSibiSelector.resx">
       <DependentUpon>frmSibiSelector.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Tracking.resx">
+    <EmbeddedResource Include="Forms\Main\Tracking.resx">
       <DependentUpon>Tracking.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\View_Munis.resx">
+    <EmbeddedResource Include="Forms\Main\View_Munis.resx">
       <DependentUpon>View_Munis.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\View_Tracking.resx">
+    <EmbeddedResource Include="Forms\Main\View_Tracking.resx">
       <DependentUpon>View_Tracking.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SplashScreen1.resx">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UpdateDevice.resx">
+    <EmbeddedResource Include="Forms\Main\UpdateDevice.resx">
       <DependentUpon>UpdateDevice.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MunisTools.resx">
+    <EmbeddedResource Include="MyControls\MunisTools.resx">
       <DependentUpon>MunisTools.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -339,10 +340,10 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\View.resx">
+    <EmbeddedResource Include="Forms\Main\View.resx">
       <DependentUpon>View.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\View_Entry.resx">
+    <EmbeddedResource Include="Forms\Main\View_Entry.resx">
       <DependentUpon>View_Entry.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

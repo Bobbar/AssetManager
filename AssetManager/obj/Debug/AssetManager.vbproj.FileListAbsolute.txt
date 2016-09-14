@@ -60,5 +60,5 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MyDialog.resources
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MunisToolsMenu.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache

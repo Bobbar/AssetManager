@@ -36,7 +36,7 @@ Partial Class MunisToolsMenu
         Me.MunisTools.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.MunisTools.Name = "MunisTools"
         Me.MunisTools.Size = New System.Drawing.Size(87, 29)
-        Me.MunisTools.Text = "MUNIS"
+        Me.MunisTools.Text = "MUNIS Tools"
         Me.AutoSize = True
 
 

@@ -614,6 +614,11 @@ Public Class MainForm
 
     End Sub
 
+    Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles Button1.Click
+        ' GetAndSetEmpNums()
+        SetEmpNames()
+    End Sub
+
     Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Dim f As Form = sender
         If f.WindowState = FormWindowState.Minimized Then

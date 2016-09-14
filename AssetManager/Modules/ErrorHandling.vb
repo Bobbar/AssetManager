@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Net.Sockets
 Imports System.ComponentModel
+Imports System.Data.SqlClient
 Module ErrorHandling
     Public Function ErrHandleNew(ex As Exception, strOrigSub As String) As Boolean
         Dim ErrorResult As Boolean
@@ -14,6 +15,8 @@ Module ErrorHandling
                 ErrorResult = True
             Case "MySqlException"
                 ErrorResult = handleMySqlException(ex, strOrigSub)
+            Case "SqlException"
+                ErrorResult = handleSQLException(ex, strOrigSub)
             Case "InvalidCastException"
                 Dim handEx As InvalidCastException = ex
                 Select Case handEx.HResult
@@ -143,6 +146,22 @@ Module ErrorHandling
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
                 Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                EndProgram()
+        End Select
+    End Function
+    Private Function handleSQLException(ex As SqlException, strOrigSub As String) As Boolean
+        Select Case ex.Number
+            Case 18456
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
+                Dim blah = Message("Error connecting to MUNIS Database.  Your username may not have access.", vbOKOnly + vbExclamation, "MUNIS Error")
+                Return False
+            Case 102
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
+                Dim blah = Message("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "ERROR")
+                Return False
+            Case Else
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
+                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
                 EndProgram()
         End Select
     End Function

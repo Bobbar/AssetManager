@@ -14,8 +14,9 @@ Public Class Munis_Comms
         Catch ex As Exception
             da.Dispose()
             ds.Dispose()
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            Return Nothing
+            If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Return Nothing
+            End If
         End Try
     End Function
     Public Function Return_MSSQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String

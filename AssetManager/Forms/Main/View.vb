@@ -20,6 +20,8 @@ Public Class View
     Public NewData As Device_Info
     Private MyLiveBox As New LiveBox
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Dim MyMunisMenu As New MunisToolsMenu
+        ToolStrip1.Items.Insert(6, MyMunisMenu.MunisTools)
         MyLiveBox.InitializeLiveBox()
         grpNetTools.Visible = False
         ToolStrip1.BackColor = colToolBarColor
