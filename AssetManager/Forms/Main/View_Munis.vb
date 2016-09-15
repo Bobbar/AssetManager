@@ -7,16 +7,18 @@
         CurrentMunisDevice = Device
     End Sub
     Private Sub LoadMunisInventoryGrid(Device As Device_Info)
+        Dim MunisTable As New DataTable
         Try
             If NeededInfo(Device) Then
-                Dim MunisTable As DataTable
                 Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_loc,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
                 MunisTable = MunisComms.Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_serial='" & Device.strSerial & "'")
                 If MunisTable.Rows.Count < 1 Then
                     MunisTable = MunisComms.Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_tag='" & Device.strAssetTag & "'")
                 End If
+                If MunisTable.Rows.Count < 1 Then Exit Sub
                 bolGridFilling = True
                 DataGridMunis_Inventory.DataSource = MunisTable
+                MunisTable.Dispose()
                 bolGridFilling = False
             Else
                 DataGridMunis_Inventory.DataSource = Nothing
@@ -39,6 +41,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             Debug.Print(strQRY)
             Dim results As DataTable
             results = MunisComms.Return_MSSQLTable(strQRY)
+            If IsNothing(results) Then Exit Sub
             bolGridFilling = True
             DataGridMunis_Requisition.DataSource = results
             DataGridMunis_Requisition.ClearSelection()
@@ -49,14 +52,16 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         End Try
     End Sub
     Public Sub LoadMunisEmployeeByLastName(Name As String)
+        Dim results As New DataTable
         Try
             Dim strColumns As String = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short"
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
             Debug.Print(strQRY)
-            Dim results As DataTable
             results = MunisComms.Return_MSSQLTable(strQRY)
+            If IsNothing(results) Then Exit Sub
             bolGridFilling = True
             DataGridMunis_Requisition.DataSource = results
+            results.Dispose()
             DataGridMunis_Requisition.ClearSelection()
             ' bolGridFilling = False
         Catch ex As Exception
