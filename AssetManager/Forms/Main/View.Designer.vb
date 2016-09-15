@@ -23,6 +23,7 @@ Partial Class View
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
+        Me.cmdMunisSearch = New System.Windows.Forms.Button()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
         Me.cmdBrowseFiles = New System.Windows.Forms.Button()
         Me.cmdRDP = New System.Windows.Forms.Button()
@@ -95,7 +96,6 @@ Partial Class View
         Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.DeviceInfoBox.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
@@ -114,7 +114,7 @@ Partial Class View
         'DeviceInfoBox
         '
         Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.DeviceInfoBox.Controls.Add(Me.Button1)
+        Me.DeviceInfoBox.Controls.Add(Me.cmdMunisSearch)
         Me.DeviceInfoBox.Controls.Add(Me.grpNetTools)
         Me.DeviceInfoBox.Controls.Add(Me.pnlOtherFunctions)
         Me.DeviceInfoBox.Controls.Add(Me.cmdSetSibi)
@@ -150,6 +150,17 @@ Partial Class View
         Me.DeviceInfoBox.TabIndex = 39
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
+        '
+        'cmdMunisSearch
+        '
+        Me.cmdMunisSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdMunisSearch.Location = New System.Drawing.Point(20, 160)
+        Me.cmdMunisSearch.Name = "cmdMunisSearch"
+        Me.cmdMunisSearch.Size = New System.Drawing.Size(134, 23)
+        Me.cmdMunisSearch.TabIndex = 53
+        Me.cmdMunisSearch.Text = "Munis Search"
+        Me.cmdMunisSearch.UseVisualStyleBackColor = True
+        Me.cmdMunisSearch.Visible = False
         '
         'grpNetTools
         '
@@ -485,10 +496,10 @@ Partial Class View
         Me.TabControl1.Controls.Add(Me.TrackingTab)
         Me.TabControl1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TabControl1.ItemSize = New System.Drawing.Size(61, 21)
-        Me.TabControl1.Location = New System.Drawing.Point(12, 353)
+        Me.TabControl1.Location = New System.Drawing.Point(12, 326)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1064, 297)
+        Me.TabControl1.Size = New System.Drawing.Size(1064, 290)
         Me.TabControl1.TabIndex = 40
         '
         'HistoryTab
@@ -497,7 +508,7 @@ Partial Class View
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1056, 268)
+        Me.HistoryTab.Size = New System.Drawing.Size(1056, 261)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -533,7 +544,7 @@ Partial Class View
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1044, 256)
+        Me.DataGridHistory.Size = New System.Drawing.Size(1044, 249)
         Me.DataGridHistory.TabIndex = 40
         '
         'TrackingTab
@@ -542,7 +553,7 @@ Partial Class View
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1056, 318)
+        Me.TrackingTab.Size = New System.Drawing.Size(1056, 295)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -701,7 +712,10 @@ Partial Class View
         '
         'ToolTip1
         '
+        Me.ToolTip1.AutoPopDelay = 5000
+        Me.ToolTip1.InitialDelay = 100
         Me.ToolTip1.IsBalloon = True
+        Me.ToolTip1.ReshowDelay = 100
         '
         'ToolStrip1
         '
@@ -855,7 +869,7 @@ Partial Class View
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 653)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 619)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1085, 22)
         Me.StatusStrip1.TabIndex = 45
@@ -884,23 +898,12 @@ Partial Class View
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
-        'Button1
-        '
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(20, 160)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(134, 23)
-        Me.Button1.TabIndex = 53
-        Me.Button1.Text = "Munis Search"
-        Me.Button1.UseVisualStyleBackColor = True
-        Me.Button1.Visible = False
-        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1085, 675)
+        Me.ClientSize = New System.Drawing.Size(1085, 641)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.TrackingBox)
@@ -1007,5 +1010,5 @@ Partial Class View
     Friend WithEvents tsdAssetControl As ToolStripDropDownButton
     Friend WithEvents tsmAssetInputForm As ToolStripMenuItem
     Friend WithEvents tsmAssetTransferForm As ToolStripMenuItem
-    Friend WithEvents Button1 As Button
+    Friend WithEvents cmdMunisSearch As Button
 End Class

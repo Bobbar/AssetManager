@@ -20,9 +20,9 @@ Partial Class MainForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
@@ -38,26 +38,6 @@ Partial Class MainForm
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.txtSerial = New System.Windows.Forms.TextBox()
         Me.SearchGroup = New System.Windows.Forms.GroupBox()
-        Me.PanelNoScrollOnFocus1 = New AssetManager.PanelNoScrollOnFocus()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.txtReplaceYear = New System.Windows.Forms.TextBox()
-        Me.txtDescription = New System.Windows.Forms.TextBox()
-        Me.cmbOSType = New System.Windows.Forms.ComboBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.cmbStatus = New System.Windows.Forms.ComboBox()
-        Me.chkTrackables = New System.Windows.Forms.CheckBox()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.cmbEquipType = New System.Windows.Forms.ComboBox()
-        Me.txtSerialSearch = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.cmbLocation = New System.Windows.Forms.ComboBox()
-        Me.txtCurUser = New System.Windows.Forms.TextBox()
-        Me.txtAssetTagSearch = New System.Windows.Forms.TextBox()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.cmdSearch = New System.Windows.Forms.Button()
         Me.cmdClear = New System.Windows.Forms.Button()
         Me.cmdShowAll = New System.Windows.Forms.Button()
@@ -84,16 +64,37 @@ Partial Class MainForm
         Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.PanelNoScrollOnFocus1 = New AssetManager.PanelNoScrollOnFocus()
+        Me.cmdSupDevSearch = New System.Windows.Forms.Button()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.txtReplaceYear = New System.Windows.Forms.TextBox()
+        Me.txtDescription = New System.Windows.Forms.TextBox()
+        Me.cmbOSType = New System.Windows.Forms.ComboBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
+        Me.chkTrackables = New System.Windows.Forms.CheckBox()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.cmbEquipType = New System.Windows.Forms.ComboBox()
+        Me.txtSerialSearch = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.cmbLocation = New System.Windows.Forms.ComboBox()
+        Me.txtCurUser = New System.Windows.Forms.TextBox()
+        Me.txtAssetTagSearch = New System.Windows.Forms.TextBox()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.InstantGroup.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SearchGroup.SuspendLayout()
-        Me.PanelNoScrollOnFocus1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.PanelNoScrollOnFocus1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -122,38 +123,38 @@ Partial Class MainForm
         Me.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ResultGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ResultGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.ResultGrid.ContextMenuStrip = Me.ContextMenuStrip1
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(5)
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle5.Padding = New System.Windows.Forms.Padding(5)
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle5
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.ResultGrid.Location = New System.Drawing.Point(15, 19)
         Me.ResultGrid.Name = "ResultGrid"
         Me.ResultGrid.ReadOnly = True
         Me.ResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
         Me.ResultGrid.RowHeadersVisible = False
         Me.ResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
@@ -284,12 +285,221 @@ Partial Class MainForm
         Me.SearchGroup.TabStop = False
         Me.SearchGroup.Text = "Search"
         '
+        'cmdSearch
+        '
+        Me.cmdSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdSearch.Location = New System.Drawing.Point(759, 29)
+        Me.cmdSearch.Name = "cmdSearch"
+        Me.cmdSearch.Size = New System.Drawing.Size(88, 56)
+        Me.cmdSearch.TabIndex = 45
+        Me.cmdSearch.Text = "Search"
+        Me.cmdSearch.UseVisualStyleBackColor = True
+        '
+        'cmdClear
+        '
+        Me.cmdClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdClear.Location = New System.Drawing.Point(759, 104)
+        Me.cmdClear.Name = "cmdClear"
+        Me.cmdClear.Size = New System.Drawing.Size(88, 32)
+        Me.cmdClear.TabIndex = 18
+        Me.cmdClear.Text = "Clear"
+        Me.cmdClear.UseVisualStyleBackColor = True
+        '
+        'cmdShowAll
+        '
+        Me.cmdShowAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdShowAll.Location = New System.Drawing.Point(1069, 78)
+        Me.cmdShowAll.Name = "cmdShowAll"
+        Me.cmdShowAll.Size = New System.Drawing.Size(134, 35)
+        Me.cmdShowAll.TabIndex = 27
+        Me.cmdShowAll.Text = "Show All"
+        Me.cmdShowAll.UseVisualStyleBackColor = True
+        '
+        'StatusStrip1
+        '
+        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel4, Me.DateTimeLabel})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 632)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Size = New System.Drawing.Size(1240, 22)
+        Me.StatusStrip1.TabIndex = 5
+        Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'StatusLabel
+        '
+        Me.StatusLabel.Name = "StatusLabel"
+        Me.StatusLabel.Size = New System.Drawing.Size(101, 17)
+        Me.StatusLabel.Text = "%StatusLabel%"
+        '
+        'StripSpinner
+        '
+        Me.StripSpinner.Image = Global.AssetManager.My.Resources.Resources.loading
+        Me.StripSpinner.Name = "StripSpinner"
+        Me.StripSpinner.Size = New System.Drawing.Size(16, 17)
+        Me.StripSpinner.Visible = False
+        '
+        'ToolStripStatusLabel1
+        '
+        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(916, 17)
+        Me.ToolStripStatusLabel1.Spring = True
+        '
+        'ConnStatusLabel
+        '
+        Me.ConnStatusLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.ConnStatusLabel.Name = "ConnStatusLabel"
+        Me.ConnStatusLabel.Size = New System.Drawing.Size(73, 17)
+        Me.ConnStatusLabel.Text = "Connected"
+        '
+        'ToolStripStatusLabel4
+        '
+        Me.ToolStripStatusLabel4.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripStatusLabel4.Name = "ToolStripStatusLabel4"
+        Me.ToolStripStatusLabel4.Size = New System.Drawing.Size(12, 17)
+        Me.ToolStripStatusLabel4.Text = "|"
+        '
+        'DateTimeLabel
+        '
+        Me.DateTimeLabel.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DateTimeLabel.Name = "DateTimeLabel"
+        Me.DateTimeLabel.Size = New System.Drawing.Size(76, 17)
+        Me.DateTimeLabel.Text = "ServerTime"
+        '
+        'BigQueryWorker
+        '
+        Me.BigQueryWorker.WorkerReportsProgress = True
+        '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
+        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddDeviceTool, Me.AdminDropDown, Me.ToolStripSeparator5, Me.cmdSibi})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
+        Me.ToolStrip1.Size = New System.Drawing.Size(1240, 32)
+        Me.ToolStrip1.Stretch = True
+        Me.ToolStrip1.TabIndex = 6
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'AddDeviceTool
+        '
+        Me.AddDeviceTool.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.AddDeviceTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.AddDeviceTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.AddDeviceTool.Name = "AddDeviceTool"
+        Me.AddDeviceTool.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
+        Me.AddDeviceTool.Size = New System.Drawing.Size(123, 29)
+        Me.AddDeviceTool.Text = "Add Device"
+        '
+        'AdminDropDown
+        '
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem})
+        Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
+        Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.AdminDropDown.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.AdminDropDown.Name = "AdminDropDown"
+        Me.AdminDropDown.Padding = New System.Windows.Forms.Padding(50, 0, 0, 0)
+        Me.AdminDropDown.Size = New System.Drawing.Size(168, 29)
+        Me.AdminDropDown.Text = "Admin Tools"
+        '
+        'cmbDBs
+        '
+        Me.cmbDBs.Items.AddRange(New Object() {"asset_manager", "test_db"})
+        Me.cmbDBs.Name = "cmbDBs"
+        Me.cmbDBs.Size = New System.Drawing.Size(121, 23)
+        Me.cmbDBs.Text = "asset_manager"
+        Me.cmbDBs.ToolTipText = "Change DB"
+        Me.cmbDBs.Visible = False
+        '
+        'ManageAttachmentsToolStripMenuItem
+        '
+        Me.ManageAttachmentsToolStripMenuItem.Name = "ManageAttachmentsToolStripMenuItem"
+        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.ManageAttachmentsToolStripMenuItem.Text = "Manage Attachments"
+        Me.ManageAttachmentsToolStripMenuItem.ToolTipText = "Manage ALL Attachments"
+        '
+        'txtGUID
+        '
+        Me.txtGUID.AutoSize = False
+        Me.txtGUID.Name = "txtGUID"
+        Me.txtGUID.Size = New System.Drawing.Size(150, 23)
+        Me.txtGUID.ToolTipText = "GUID Lookup. (Press Enter)"
+        '
+        'tsmUserManager
+        '
+        Me.tsmUserManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.tsmUserManager.Name = "tsmUserManager"
+        Me.tsmUserManager.Size = New System.Drawing.Size(210, 22)
+        Me.tsmUserManager.Text = "User Manager"
+        '
+        'TextEnCrypterToolStripMenuItem
+        '
+        Me.TextEnCrypterToolStripMenuItem.Name = "TextEnCrypterToolStripMenuItem"
+        Me.TextEnCrypterToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.TextEnCrypterToolStripMenuItem.Text = "Text Encrypter"
+        '
+        'ScanAttachmentToolStripMenuItem
+        '
+        Me.ScanAttachmentToolStripMenuItem.Name = "ScanAttachmentToolStripMenuItem"
+        Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.ScanAttachmentToolStripMenuItem.Text = "Scan Attachments"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 32)
+        '
+        'cmdSibi
+        '
+        Me.cmdSibi.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdSibi.Image = CType(resources.GetObject("cmdSibi.Image"), System.Drawing.Image)
+        Me.cmdSibi.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdSibi.Name = "cmdSibi"
+        Me.cmdSibi.Size = New System.Drawing.Size(186, 29)
+        Me.cmdSibi.Text = "Sibi Aquisition Manager"
+        '
+        'ConnectionWatcher
+        '
+        Me.ConnectionWatcher.Enabled = True
+        Me.ConnectionWatcher.Interval = 500
+        '
+        'ConnectionWatchDog
+        '
+        Me.ConnectionWatchDog.WorkerReportsProgress = True
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.Button1)
+        Me.GroupBox2.Controls.Add(Me.SearchGroup)
+        Me.GroupBox2.Controls.Add(Me.InstantGroup)
+        Me.GroupBox2.Controls.Add(Me.cmdShowAll)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 35)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(1215, 181)
+        Me.GroupBox2.TabIndex = 7
+        Me.GroupBox2.TabStop = False
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(1110, 34)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(52, 30)
+        Me.Button1.TabIndex = 35
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
+        '
         'PanelNoScrollOnFocus1
         '
         Me.PanelNoScrollOnFocus1.AutoScroll = True
         Me.PanelNoScrollOnFocus1.AutoScrollMargin = New System.Drawing.Size(10, 20)
         Me.PanelNoScrollOnFocus1.BackColor = System.Drawing.Color.FromArgb(CType(CType(202, Byte), Integer), CType(CType(202, Byte), Integer), CType(CType(202, Byte), Integer))
         Me.PanelNoScrollOnFocus1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmdSupDevSearch)
         Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label6)
         Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label4)
         Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtReplaceYear)
@@ -313,6 +523,15 @@ Partial Class MainForm
         Me.PanelNoScrollOnFocus1.Name = "PanelNoScrollOnFocus1"
         Me.PanelNoScrollOnFocus1.Size = New System.Drawing.Size(732, 121)
         Me.PanelNoScrollOnFocus1.TabIndex = 52
+        '
+        'cmdSupDevSearch
+        '
+        Me.cmdSupDevSearch.Location = New System.Drawing.Point(570, 117)
+        Me.cmdSupDevSearch.Name = "cmdSupDevSearch"
+        Me.cmdSupDevSearch.Size = New System.Drawing.Size(125, 44)
+        Me.cmdSupDevSearch.TabIndex = 55
+        Me.cmdSupDevSearch.Text = "Devices By Supervisor"
+        Me.cmdSupDevSearch.UseVisualStyleBackColor = True
         '
         'Label6
         '
@@ -505,213 +724,6 @@ Partial Class MainForm
         Me.Label11.TabIndex = 38
         Me.Label11.Text = "Current User:"
         '
-        'cmdSearch
-        '
-        Me.cmdSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdSearch.Location = New System.Drawing.Point(759, 29)
-        Me.cmdSearch.Name = "cmdSearch"
-        Me.cmdSearch.Size = New System.Drawing.Size(88, 56)
-        Me.cmdSearch.TabIndex = 45
-        Me.cmdSearch.Text = "Search"
-        Me.cmdSearch.UseVisualStyleBackColor = True
-        '
-        'cmdClear
-        '
-        Me.cmdClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdClear.Location = New System.Drawing.Point(759, 104)
-        Me.cmdClear.Name = "cmdClear"
-        Me.cmdClear.Size = New System.Drawing.Size(88, 32)
-        Me.cmdClear.TabIndex = 18
-        Me.cmdClear.Text = "Clear"
-        Me.cmdClear.UseVisualStyleBackColor = True
-        '
-        'cmdShowAll
-        '
-        Me.cmdShowAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdShowAll.Location = New System.Drawing.Point(1069, 78)
-        Me.cmdShowAll.Name = "cmdShowAll"
-        Me.cmdShowAll.Size = New System.Drawing.Size(134, 35)
-        Me.cmdShowAll.TabIndex = 27
-        Me.cmdShowAll.Text = "Show All"
-        Me.cmdShowAll.UseVisualStyleBackColor = True
-        '
-        'StatusStrip1
-        '
-        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel4, Me.DateTimeLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 632)
-        Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1240, 22)
-        Me.StatusStrip1.TabIndex = 5
-        Me.StatusStrip1.Text = "StatusStrip1"
-        '
-        'StatusLabel
-        '
-        Me.StatusLabel.Name = "StatusLabel"
-        Me.StatusLabel.Size = New System.Drawing.Size(101, 17)
-        Me.StatusLabel.Text = "%StatusLabel%"
-        '
-        'StripSpinner
-        '
-        Me.StripSpinner.Image = Global.AssetManager.My.Resources.Resources.loading
-        Me.StripSpinner.Name = "StripSpinner"
-        Me.StripSpinner.Size = New System.Drawing.Size(16, 17)
-        Me.StripSpinner.Visible = False
-        '
-        'ToolStripStatusLabel1
-        '
-        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(963, 17)
-        Me.ToolStripStatusLabel1.Spring = True
-        '
-        'ConnStatusLabel
-        '
-        Me.ConnStatusLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.ConnStatusLabel.Name = "ConnStatusLabel"
-        Me.ConnStatusLabel.Size = New System.Drawing.Size(73, 17)
-        Me.ConnStatusLabel.Text = "Connected"
-        '
-        'ToolStripStatusLabel4
-        '
-        Me.ToolStripStatusLabel4.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripStatusLabel4.Name = "ToolStripStatusLabel4"
-        Me.ToolStripStatusLabel4.Size = New System.Drawing.Size(12, 17)
-        Me.ToolStripStatusLabel4.Text = "|"
-        '
-        'DateTimeLabel
-        '
-        Me.DateTimeLabel.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DateTimeLabel.Name = "DateTimeLabel"
-        Me.DateTimeLabel.Size = New System.Drawing.Size(76, 17)
-        Me.DateTimeLabel.Text = "ServerTime"
-        '
-        'BigQueryWorker
-        '
-        Me.BigQueryWorker.WorkerReportsProgress = True
-        '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
-        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddDeviceTool, Me.AdminDropDown, Me.ToolStripSeparator5, Me.cmdSibi})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip1.Size = New System.Drawing.Size(1240, 32)
-        Me.ToolStrip1.Stretch = True
-        Me.ToolStrip1.TabIndex = 6
-        Me.ToolStrip1.Text = "ToolStrip1"
-        '
-        'AddDeviceTool
-        '
-        Me.AddDeviceTool.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.AddDeviceTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.AddDeviceTool.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.AddDeviceTool.Name = "AddDeviceTool"
-        Me.AddDeviceTool.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.AddDeviceTool.Size = New System.Drawing.Size(123, 29)
-        Me.AddDeviceTool.Text = "Add Device"
-        '
-        'AdminDropDown
-        '
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem})
-        Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
-        Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.AdminDropDown.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.AdminDropDown.Name = "AdminDropDown"
-        Me.AdminDropDown.Padding = New System.Windows.Forms.Padding(50, 0, 0, 0)
-        Me.AdminDropDown.Size = New System.Drawing.Size(168, 29)
-        Me.AdminDropDown.Text = "Admin Tools"
-        '
-        'cmbDBs
-        '
-        Me.cmbDBs.Items.AddRange(New Object() {"asset_manager", "test_db"})
-        Me.cmbDBs.Name = "cmbDBs"
-        Me.cmbDBs.Size = New System.Drawing.Size(121, 23)
-        Me.cmbDBs.Text = "asset_manager"
-        Me.cmbDBs.ToolTipText = "Change DB"
-        Me.cmbDBs.Visible = False
-        '
-        'ManageAttachmentsToolStripMenuItem
-        '
-        Me.ManageAttachmentsToolStripMenuItem.Name = "ManageAttachmentsToolStripMenuItem"
-        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.ManageAttachmentsToolStripMenuItem.Text = "Manage Attachments"
-        Me.ManageAttachmentsToolStripMenuItem.ToolTipText = "Manage ALL Attachments"
-        '
-        'txtGUID
-        '
-        Me.txtGUID.AutoSize = False
-        Me.txtGUID.Name = "txtGUID"
-        Me.txtGUID.Size = New System.Drawing.Size(150, 23)
-        Me.txtGUID.ToolTipText = "GUID Lookup. (Press Enter)"
-        '
-        'tsmUserManager
-        '
-        Me.tsmUserManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.tsmUserManager.Name = "tsmUserManager"
-        Me.tsmUserManager.Size = New System.Drawing.Size(210, 22)
-        Me.tsmUserManager.Text = "User Manager"
-        '
-        'TextEnCrypterToolStripMenuItem
-        '
-        Me.TextEnCrypterToolStripMenuItem.Name = "TextEnCrypterToolStripMenuItem"
-        Me.TextEnCrypterToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.TextEnCrypterToolStripMenuItem.Text = "Text Encrypter"
-        '
-        'ScanAttachmentToolStripMenuItem
-        '
-        Me.ScanAttachmentToolStripMenuItem.Name = "ScanAttachmentToolStripMenuItem"
-        Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.ScanAttachmentToolStripMenuItem.Text = "Scan Attachments"
-        '
-        'ToolStripSeparator5
-        '
-        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 32)
-        '
-        'cmdSibi
-        '
-        Me.cmdSibi.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdSibi.Image = CType(resources.GetObject("cmdSibi.Image"), System.Drawing.Image)
-        Me.cmdSibi.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.cmdSibi.Name = "cmdSibi"
-        Me.cmdSibi.Size = New System.Drawing.Size(186, 29)
-        Me.cmdSibi.Text = "Sibi Aquisition Manager"
-        '
-        'ConnectionWatcher
-        '
-        Me.ConnectionWatcher.Enabled = True
-        Me.ConnectionWatcher.Interval = 500
-        '
-        'ConnectionWatchDog
-        '
-        Me.ConnectionWatchDog.WorkerReportsProgress = True
-        '
-        'GroupBox2
-        '
-        Me.GroupBox2.Controls.Add(Me.Button1)
-        Me.GroupBox2.Controls.Add(Me.SearchGroup)
-        Me.GroupBox2.Controls.Add(Me.InstantGroup)
-        Me.GroupBox2.Controls.Add(Me.cmdShowAll)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 35)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(1215, 181)
-        Me.GroupBox2.TabIndex = 7
-        Me.GroupBox2.TabStop = False
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(1110, 34)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(52, 30)
-        Me.Button1.TabIndex = 35
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -735,13 +747,13 @@ Partial Class MainForm
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.SearchGroup.ResumeLayout(False)
-        Me.PanelNoScrollOnFocus1.ResumeLayout(False)
-        Me.PanelNoScrollOnFocus1.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
+        Me.PanelNoScrollOnFocus1.ResumeLayout(False)
+        Me.PanelNoScrollOnFocus1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -806,4 +818,5 @@ Partial Class MainForm
     Friend WithEvents lblRecords As Label
     Friend WithEvents ScanAttachmentToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Button1 As Button
+    Friend WithEvents cmdSupDevSearch As Button
 End Class

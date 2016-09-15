@@ -75,6 +75,7 @@ Public Module DBFunctions
                 .strDescription = NoNull(DeviceTable.Rows(0).Item("dev_description"))
                 .strLocation = NoNull(DeviceTable.Rows(0).Item("dev_location"))
                 .strCurrentUser = NoNull(DeviceTable.Rows(0).Item("dev_cur_user"))
+                .strCurrentUserEmpNum = NoNull(DeviceTable.Rows(0).Item("dev_cur_user_emp_num"))
                 .strSerial = NoNull(DeviceTable.Rows(0).Item("dev_serial"))
                 .strAssetTag = NoNull(DeviceTable.Rows(0).Item("dev_asset_tag"))
                 .dtPurchaseDate = NoNull(DeviceTable.Rows(0).Item("dev_purchase_date"))
@@ -171,5 +172,27 @@ Public Module DBFunctions
             Case Else
                 Return False
         End Select
+    End Function
+    Public Function DevicesBySup() As DataTable
+        Dim SupInfo As Emp_Info
+        Dim NewMunisSearch As New frmMunisUser
+        NewMunisSearch.ShowDialog()
+        If NewMunisSearch.DialogResult = DialogResult.Yes Then
+            SupInfo = NewMunisSearch.EmployeeInfo
+            NewMunisSearch.Dispose()
+        End If
+        Dim EmpList As DataTable = ListOfEmpBySup(SupInfo.Number)
+        Dim DeviceList As New DataTable
+        For Each r As DataRow In EmpList.Rows
+            Dim tmpTable As New DataTable
+            Dim strQRY As String = "SELECT * FROM devices WHERE dev_cur_user_emp_num='" & r.Item("a_employee_number") & "'"
+            tmpTable = MySQLDB.Return_SQLTable(strQRY)
+            DeviceList.Merge(tmpTable)
+        Next
+        Return DeviceList
+    End Function
+    Private Function ListOfEmpBySup(SupEmpNum As String) As DataTable
+        Dim strQRY As String = "SELECT TOP 100 a_employee_number FROM pr_employee_master WHERE e_supervisor='" & SupEmpNum & "'"
+        Return MunisComms.Return_MSSQLTable(strQRY)
     End Function
 End Module

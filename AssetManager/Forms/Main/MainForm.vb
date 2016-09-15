@@ -3,6 +3,7 @@ Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
+Imports System.Deployment.Application
 Public Class MainForm
     Private strSearchString As String, strPrevSearchString As String
     Private StartingControl As Control
@@ -140,7 +141,6 @@ Public Class MainForm
     End Sub
     Private Sub BigQueryDone(Results As DataTable)
         SendToGrid(Results)
-        DisplayRecords(Results.Rows.Count)
         StripSpinner.Visible = False
         If ClickedButton IsNot Nothing Then
             ClickedButton.Enabled = True
@@ -185,6 +185,7 @@ Public Class MainForm
             ResultGrid.DataSource = table
             ResultGrid.ClearSelection()
             bolGridFilling = False
+            DisplayRecords(table.Rows.Count)
             table.Dispose()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -544,7 +545,11 @@ Public Class MainForm
         ViewAttachments.cmdUpload.Enabled = False
     End Sub
     Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
-        Message(My.Application.Info.Version.ToString)
+        If ApplicationDeployment.IsNetworkDeployed Then
+            Message(ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString)
+        Else
+            Message("Debug")
+        End If
     End Sub
     'Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
     '    If cmbDBs.Text <> "" And cmbDBs.Text <> MySQLDB.strDatabase Then
@@ -609,16 +614,13 @@ Public Class MainForm
     Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
         ScanAttachements()
     End Sub
-
-    Private Sub MunisToolsTSM_Click(sender As Object, e As EventArgs)
-
-    End Sub
-
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles Button1.Click
         ' GetAndSetEmpNums()
         SetEmpNames()
     End Sub
-
+    Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
+        SendToGrid(DevicesBySup())
+    End Sub
     Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Dim f As Form = sender
         If f.WindowState = FormWindowState.Minimized Then

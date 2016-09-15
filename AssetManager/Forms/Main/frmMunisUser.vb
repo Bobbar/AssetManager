@@ -21,11 +21,9 @@ Public Class frmMunisUser
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-
     Private Sub MunisUser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         MunisResults.DefaultCellStyle = GridStyles
     End Sub
-
     Private Sub MunisResults_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles MunisResults.CellClick
         With SelectedEmpInfo
             .Name = MunisResults.Item(GetColIndex(MunisResults, "a_name_first"), MunisResults.CurrentRow.Index).Value & " " & MunisResults.Item(GetColIndex(MunisResults, "a_name_last"), MunisResults.CurrentRow.Index).Value
@@ -33,17 +31,20 @@ Public Class frmMunisUser
         End With
         lblSelectedEmp.Text = "Selected Emp: " & SelectedEmpInfo.Name & " - " & SelectedEmpInfo.Number
     End Sub
-
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         EmpNameSearch(Trim(txtSearchName.Text))
     End Sub
-
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
+        MySQLDB.AddNewEmp(SelectedEmpInfo)
         Me.DialogResult = DialogResult.Yes
         Me.Close()
     End Sub
-
-    Private Sub MunisUser_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-
+    Private Sub txtSearchName_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSearchName.KeyDown
+        If e.KeyCode = Keys.Enter Then EmpNameSearch(Trim(txtSearchName.Text))
+    End Sub
+    Private Sub MunisResults_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles MunisResults.CellDoubleClick
+        MySQLDB.AddNewEmp(SelectedEmpInfo)
+        Me.DialogResult = DialogResult.Yes
+        Me.Close()
     End Sub
 End Class

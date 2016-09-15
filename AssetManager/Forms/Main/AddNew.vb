@@ -5,7 +5,7 @@ Public Class AddNew
     Private Device As Device_Info
     Private bolCheckFields As Boolean
     Private MyLiveBox As New LiveBox
-    Private MunisUser As Emp_Info = Nothing
+    Public MunisUser As Emp_Info = Nothing
     Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
         AddNewDevice()
     End Sub
@@ -25,6 +25,7 @@ Public Class AddNew
             cmd.Parameters.AddWithValue("@dev_description", Device.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", Device.strLocation)
             cmd.Parameters.AddWithValue("@dev_cur_user", Device.strCurrentUser)
+            cmd.Parameters.AddWithValue("@dev_cur_user_emp_num", MunisUser.Number)
             cmd.Parameters.AddWithValue("@dev_serial", Device.strSerial)
             cmd.Parameters.AddWithValue("@dev_asset_tag", Device.strAssetTag)
             cmd.Parameters.AddWithValue("@dev_purchase_date", Device.dtPurchaseDate)
@@ -36,7 +37,6 @@ Public Class AddNew
             cmd.Parameters.AddWithValue("@dev_lastmod_user", strLocalUser)
             cmd.Parameters.AddWithValue("@dev_lastmod_date", Now)
             cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(Device.bolTrackable))
-            cmd.Parameters.AddWithValue("@dev_cur_user_emp_num", MunisUser.Number)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO dev_historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES(@hist_change_type, @hist_notes, @hist_serial, @hist_description, @hist_location, @hist_cur_user, @hist_asset_tag, @hist_purchase_date, @hist_replacement_year, @hist_po, @hist_osversion, @hist_dev_UID, @hist_action_user, @hist_eq_type, @hist_status, @hist_trackable)"
             cmd.Parameters.AddWithValue("@hist_change_type", "NEWD")
@@ -127,11 +127,10 @@ Public Class AddNew
         Device.dtPurchaseDate = dtPurchaseDate_REQ.Text
         Device.strReplaceYear = Trim(txtReplaceYear.Text)
         Device.strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_REQ.SelectedIndex)
-        If IsNothing(MunisUser) Then
+        If IsNothing(MunisUser.Number) Then
             Device.strCurrentUser = Trim(txtCurUser_REQ.Text)
         Else
             Device.strCurrentUser = MunisUser.Name
-            MySQLDB.AddNewEmp(MunisUser)
         End If
         Device.strNote = Trim(txtNotes.Text)
         Device.strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex)
@@ -230,7 +229,7 @@ Public Class AddNew
         AdjustComboBoxWidth(sender, e)
     End Sub
     Private Sub txtCurUser_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_REQ.KeyUp
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_cur_user")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
     End Sub
     Private Sub txtDescription_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription_REQ.KeyUp
         MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_description")

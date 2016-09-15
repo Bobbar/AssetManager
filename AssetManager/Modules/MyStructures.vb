@@ -16,6 +16,7 @@ Public Module MyStructures
         Public strSerial As String
         Public strLocation As String
         Public strCurrentUser As String
+        Public strCurrentUserEmpNum As String
         Public strFiscalYear As String
         Public dtPurchaseDate As Date 'As Object
         Public strReplaceYear As String

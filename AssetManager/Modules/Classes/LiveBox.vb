@@ -8,16 +8,19 @@ Public Class LiveBox
     Private dtLiveBoxData As DataTable
     Private MySQLComms As New MySQL_Comms
     Private LiveConn As New MySqlConnection
+    Private LiveBoxResults As DataTable
     Private Structure LiveBoxArgs
         Public Control As Control
         Public Type As String
-        Public DBColumn As String
+        Public ViewMember As String
+        Public DataMember As String
     End Structure
     Private CurrentLiveBoxArgs As LiveBoxArgs
     Public Class LiveBoxType
         Public Const DynamicSearch As String = "DYNA"
         Public Const InstaLoad As String = "INSTA"
         Public Const SelectValue As String = "SELE"
+        Public Const UserSelect As String = "U_SELE"
     End Class
     Public Sub InitializeLiveBox()
         If OpenConnection() Then
@@ -28,7 +31,7 @@ Public Class LiveBox
     Private Sub InitializeWorker()
         LiveWorker = New BackgroundWorker
         AddHandler LiveWorker.DoWork, AddressOf LiveWorker_DoWork
-        AddHandler LiveWorker.RunWorkerCompleted, AddressOf LiveWorkerr_RunWorkerCompleted
+        AddHandler LiveWorker.RunWorkerCompleted, AddressOf LiveWorker_RunWorkerCompleted
         With LiveWorker
             .WorkerReportsProgress = False
             .WorkerSupportsCancellation = False
@@ -76,6 +79,21 @@ Public Class LiveBox
                 CurrentLiveBoxArgs.Control.Text = ""
             Case LiveBoxType.SelectValue
                 Control.Text = LiveBox.Text
+            Case LiveBoxType.UserSelect
+                Control.Text = LiveBox.Text
+                If Control.FindForm.Name = "View" Then
+                    If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
+                        Dim FrmSetData As View = Control.FindForm
+                        FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember)
+                        FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)
+                    End If
+                ElseIf Control.FindForm.Name = "AddNew" Then
+                    If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
+                        Dim FrmSetData As AddNew = Control.FindForm
+                        FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember)
+                        FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)
+                    End If
+                End If
         End Select
         HideLiveBox()
     End Sub
@@ -88,8 +106,9 @@ Public Class LiveBox
             Dim cmd As New MySqlCommand
             Dim strQryRow As String
             Dim strQry As String
-            strQryRow = CurrentLiveBoxArgs.DBColumn
-            strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
+            'strQryRow = IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember)
+            'strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
+            strQry = "SELECT dev_UID," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember) & " FROM devices WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
             cmd.Connection = LiveConn
             cmd.CommandText = strQry
             cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
@@ -103,8 +122,9 @@ Public Class LiveBox
             ConnectionReady()
         End Try
     End Sub
-    Private Sub LiveWorkerr_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
+    Private Sub LiveWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
         DrawLiveBox(e.Result)
+        LiveBoxResults = e.Result
     End Sub
     Private Sub DrawLiveBox(dtResults As DataTable)
         Try
@@ -122,7 +142,7 @@ Public Class LiveBox
                 LiveBox.Visible = False
                 Exit Sub
             End If
-            strQryRow = CurrentLiveBoxArgs.DBColumn
+            strQryRow = CurrentLiveBoxArgs.ViewMember ' & "," & CurrentLiveBoxArgs.DataMember
             LiveBox.Items.Clear()
             With dr
                 For Each dr In dtResults.Rows
@@ -136,7 +156,7 @@ Public Class LiveBox
                 LiveBox.Visible = False
             End If
             If strPrevSearchString <> CurrentLiveBoxArgs.Control.Text Then
-                StartLiveSearch(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type, CurrentLiveBoxArgs.DBColumn) 'if search string has changed since last completetion, run again.
+                StartLiveSearch(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type, CurrentLiveBoxArgs.ViewMember) 'if search string has changed since last completetion, run again.
             End If
             dtLiveBoxData = dtResults
             Exit Sub
@@ -167,8 +187,8 @@ Public Class LiveBox
             LiveBox.SelectedIndex = 0
         End If
     End Sub
-    Public Sub StartLiveSearch(Control As Control, Type As String, DBColumn As String)
-        CollectLiveBoxArgs(Control, Type, DBColumn)
+    Public Sub StartLiveSearch(Control As Control, Type As String, ViewMember As String, Optional DataMember As String = Nothing)
+        CollectLiveBoxArgs(Control, Type, ViewMember, DataMember)
         If LiveBox.IsDisposed Then InitializeControl()
         Dim strSearchString As String = CurrentLiveBoxArgs.Control.Text
         If Trim(strSearchString) <> "" Then
@@ -186,11 +206,12 @@ Public Class LiveBox
         Catch
         End Try
     End Sub
-    Private Sub CollectLiveBoxArgs(Control As Control, Type As String, DBColumn As String)
+    Private Sub CollectLiveBoxArgs(Control As Control, Type As String, ViewMember As String, Optional DataMember As String = Nothing)
         With CurrentLiveBoxArgs
             .Control = Control
             .Type = Type
-            .DBColumn = DBColumn
+            .ViewMember = ViewMember
+            If Not IsNothing(DataMember) Then .DataMember = DataMember
         End With
     End Sub
     Private Sub LiveBox_MouseMove(sender As Object, e As MouseEventArgs)

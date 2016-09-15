@@ -11,6 +11,7 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\itextsharp.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmEncrypter.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmUserManager.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmMunisUser.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MyDialog.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmNotes.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiAttachments.resources
@@ -24,6 +25,7 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Munis.resource
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreen.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.UpdateDev.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MunisToolsMenu.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Resources.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Entry.resources
@@ -34,3 +36,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache

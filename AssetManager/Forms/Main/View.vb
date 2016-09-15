@@ -5,18 +5,7 @@ Public Class View
     Private Children(0) As Form
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
-    Private MunisUser As Emp_Info = Nothing
-    Private Structure UserInput
-        Public strAssetTag As String
-        Public strDescription As String
-        Public strEqType As String
-        Public strSerial As String
-        Public strLocation As String
-        Public strCurrentUser As String
-        Public dtPurchaseDate As String
-        Public strReplaceYear As String
-        Public strOSVersion As String
-    End Structure
+    Public MunisUser As Emp_Info = Nothing
     Private OldData As Device_Info
     Public NewData As Device_Info
     Private MyLiveBox As New LiveBox
@@ -53,7 +42,12 @@ Public Class View
             .strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_View_REQ.SelectedIndex)
             .strSerial = Trim(txtSerial_View_REQ.Text)
             .strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_View_REQ.SelectedIndex)
-            .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
+            If Not IsNothing(MunisUser.Number) Then
+                .strCurrentUser = MunisUser.Name
+                .strCurrentUserEmpNum = MunisUser.Number
+            Else
+                .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
+            End If
             .dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
             .strReplaceYear = Trim(txtReplacementYear_View.Text)
             .strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSVersion_REQ.SelectedIndex)
@@ -62,6 +56,7 @@ Public Class View
             .bolTrackable = chkTrackable.Checked
             .strPO = Trim(txtPONumber.Text)
         End With
+        MunisUser = Nothing
     End Sub
     Private Sub EnableControls()
         Dim c As Control
@@ -88,6 +83,7 @@ Public Class View
             c.Visible = False
         Next
         cmdSetSibi.Visible = True
+        cmdMunisSearch.Visible = True
         Me.Text = "*View - MODIFYING*"
         ToolStrip1.BackColor = colEditColor
         For Each t As ToolStripItem In ToolStrip1.Items
@@ -123,6 +119,7 @@ Public Class View
             If c.Name IsNot "cmdRDP" Then c.Visible = True
         Next
         cmdSetSibi.Visible = False
+        cmdMunisSearch.Visible = False
         Me.Text = "View"
         ToolStrip1.BackColor = colToolBarColor
         For Each t As ToolStripItem In ToolStrip1.Items
@@ -138,11 +135,12 @@ Public Class View
     Public Sub UpdateDevice(UpdateInfo As Update_Info)
         Try
             Dim rows As Integer
-            Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable, dev_po=@dev_po, dev_lastmod_user=@dev_lastmod_user, dev_lastmod_date=@dev_lastmod_date WHERE dev_UID='" & CurrentViewDevice.strGUID & "'"
+            Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable, dev_po=@dev_po, dev_lastmod_user=@dev_lastmod_user, dev_lastmod_date=@dev_lastmod_date, dev_cur_user_emp_num=@dev_cur_user_emp_num WHERE dev_UID='" & CurrentViewDevice.strGUID & "'"
             Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSQLQry1)
             cmd.Parameters.AddWithValue("@dev_description", NewData.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", NewData.strLocation)
             cmd.Parameters.AddWithValue("@dev_cur_user", NewData.strCurrentUser)
+            cmd.Parameters.AddWithValue("@dev_cur_user_emp_num", NewData.strCurrentUserEmpNum)
             cmd.Parameters.AddWithValue("@dev_serial", NewData.strSerial)
             cmd.Parameters.AddWithValue("@dev_asset_tag", NewData.strAssetTag)
             cmd.Parameters.AddWithValue("@dev_purchase_date", NewData.dtPurchaseDate)
@@ -246,6 +244,12 @@ Public Class View
             cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.EquipType, .strEqType)
             txtSerial_View_REQ.Text = .strSerial
             cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.Locations, .strLocation)
+            txtCurUser_View_REQ.Text = .strCurrentUser
+            ToolTip1.SetToolTip(txtCurUser_View_REQ, "")
+            If .strCurrentUserEmpNum <> "" Then
+                txtCurUser_View_REQ.BackColor = colEditColor
+                ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee")
+            End If
             txtCurUser_View_REQ.Text = .strCurrentUser
             dtPurchaseDate_View_REQ.Value = .dtPurchaseDate
             txtReplacementYear_View.Text = .strReplaceYear
@@ -608,7 +612,7 @@ Public Class View
     End Sub
     Private Sub DeleteDevice()
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
-        Dim blah = Message("Are you absolutely sure?" & vbCrLf & vbCrLf & "This cannot be undone and will delete all histrical data.", vbYesNo + vbExclamation, "WARNING")
+        Dim blah = Message("Are you absolutely sure?" & vbCrLf & vbCrLf & "This cannot be undone and will delete all historical data.", vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
             Dim rows As Integer
             rows = DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device)
@@ -654,7 +658,7 @@ Public Class View
         If bolCheckFields Then CheckFields()
     End Sub
     Private Sub txtCurUser_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_View_REQ.KeyUp
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_cur_user")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
     End Sub
     Private Sub txtDescription_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription_View_REQ.KeyUp
         MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_description")
@@ -974,15 +978,15 @@ Public Class View
         FillForm(CurrentViewDevice, FormType.TransferForm)
     End Sub
 
-    Private Sub Button1_Click_4(sender As Object, e As EventArgs) Handles Button1.Click
-        'Dim NewMunisSearch As New frmMunisUser
-        'NewMunisSearch.ShowDialog()
-        'If NewMunisSearch.DialogResult = DialogResult.Yes Then
-        '    MunisUser = NewMunisSearch.EmployeeInfo
-        '    NewMunisSearch.Dispose()
-        '    txtCurUser_REQ.Text = MunisUser.Name
-        '    txtCurUser_REQ.ReadOnly = True
-        'End If
+    Private Sub cmdMunisSearch_Click(sender As Object, e As EventArgs) Handles cmdMunisSearch.Click
+        Dim NewMunisSearch As New frmMunisUser
+        NewMunisSearch.ShowDialog()
+        If NewMunisSearch.DialogResult = DialogResult.Yes Then
+            MunisUser = NewMunisSearch.EmployeeInfo
+            NewMunisSearch.Dispose()
+            txtCurUser_View_REQ.Text = MunisUser.Name
+            txtCurUser_View_REQ.ReadOnly = True
+        End If
     End Sub
 
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
