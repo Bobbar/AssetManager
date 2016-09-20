@@ -7,19 +7,15 @@
         CurrentMunisDevice = Device
     End Sub
     Private Sub LoadMunisInventoryGrid(Device As Device_Info)
-        Dim MunisTable As New DataTable
+        Dim intRows As Integer = 0
         Try
             If NeededInfo(Device) Then
                 Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_loc,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
-                MunisTable = MunisComms.Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_serial='" & Device.strSerial & "'")
-                If MunisTable.Rows.Count < 1 Then
-                    MunisTable = MunisComms.Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_tag='" & Device.strAssetTag & "'")
+                intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_serial='" & Device.strSerial & "'")
+                If intRows < 1 Then
+                    intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_tag='" & Device.strAssetTag & "'")
                 End If
-                If MunisTable.Rows.Count < 1 Then Exit Sub
-                bolGridFilling = True
-                DataGridMunis_Inventory.DataSource = MunisTable
-                MunisTable.Dispose()
-                bolGridFilling = False
+                If intRows < 1 Then Exit Sub
             Else
                 DataGridMunis_Inventory.DataSource = Nothing
             End If
@@ -29,8 +25,6 @@
     End Sub
     Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String)
         Try
-            'Dim strColumns As String = "rg_fiscal_year,a_requisition_no,rg_line_number,rg_org,rg_object,rg_dollar_am,a_object_desc,a_org_description,rqdt_sug_vn,rqdt_pur_no,rqdt_pur_dt,rqdt_des_ln"
-            'Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM rq_gl_info, rqdetail WHERE a_requisition_no='" & ReqNumber & "' AND rg_fiscal_year='" & FiscalYr & "' AND rg_line_number = rqdt_lin_no AND a_requisition_no = rqdt_req_no AND rg_fiscal_year = rqdt_fsc_yr"
             Dim strQRY As String = "SELECT TOP " & intMaxResults & "dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc, 
                          dbo.ap_vendor.a_vendor_name, dbo.ap_vendor.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr,
                          dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln
@@ -38,36 +32,39 @@
                          dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr INNER JOIN
                          dbo.ap_vendor ON dbo.rqdetail.rqdt_sug_vn = dbo.ap_vendor.a_vendor_number
 WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ") AND (dbo.ap_vendor.a_vendor_remit_seq = 1)"
-            Debug.Print(strQRY)
-            Dim results As DataTable
-            results = MunisComms.Return_MSSQLTable(strQRY)
-            If IsNothing(results) Then Exit Sub
-            bolGridFilling = True
-            DataGridMunis_Requisition.DataSource = results
-            DataGridMunis_Requisition.ClearSelection()
-            DataGridMunis_Requisition.Refresh()
-            ' bolGridFilling = False
+            ProcessMunisQuery(DataGridMunis_Requisition, strQRY)
+            Me.Show()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Sub LoadMunisEmployeeByLastName(Name As String)
-        Dim results As New DataTable
         Try
             Dim strColumns As String = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short"
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
-            Debug.Print(strQRY)
-            results = MunisComms.Return_MSSQLTable(strQRY)
-            If IsNothing(results) Then Exit Sub
-            bolGridFilling = True
-            DataGridMunis_Requisition.DataSource = results
-            results.Dispose()
-            DataGridMunis_Requisition.ClearSelection()
-            ' bolGridFilling = False
+            ProcessMunisQuery(DataGridMunis_Requisition, strQRY)
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
+    Private Function ProcessMunisQuery(Grid As DataGridView, Query As String) As Integer
+        Dim results As New DataTable
+        Dim intRows As Integer
+        Try
+            Debug.Print(Query)
+            results = MunisComms.Return_MSSQLTable(Query)
+            If IsNothing(results) Then Return 0
+            intRows = results.Rows.Count
+            bolGridFilling = True
+            Grid.DataSource = results
+            Grid.ClearSelection()
+            Grid.Refresh()
+            results.Dispose()
+            Return intRows
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Function
     Public Sub LoadMunisInfoByDevice(Device As Device_Info)
         CurrentMunisDevice = Device
         If Device.strPO <> "" And YearFromDate(Device.dtPurchaseDate) <> "" Then 'if PO and Fiscal yr on record > load data using our records

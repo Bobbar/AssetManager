@@ -754,7 +754,6 @@ VALUES
         End If
         Dim NewMunis As New View_Munis
         NewMunis.HideFixedAssetGrid()
-        NewMunis.Show()
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNum, YearFromDate(CurrentRequest.dtDateStamp))
     End Sub
     Private Sub NewMunisViewPO(PO As String)
@@ -764,7 +763,6 @@ VALUES
         End If
         Dim NewMunis As New View_Munis
         NewMunis.HideFixedAssetGrid()
-        NewMunis.Show()
         NewMunis.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(PO), Munis.Get_FY_From_PO(PO)) 'YearFromDate(CurrentRequest.dtDateStamp))
     End Sub
     Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
