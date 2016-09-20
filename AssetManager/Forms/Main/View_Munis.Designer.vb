@@ -195,6 +195,7 @@ Partial Class View_Munis
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "View_Munis"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Munis Info"
         CType(Me.DataGridMunis_Inventory, System.ComponentModel.ISupportInitialize).EndInit()

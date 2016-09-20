@@ -44,7 +44,7 @@ Partial Class frmSibiMain
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(12, 28)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1145, 513)
+        Me.Panel1.Size = New System.Drawing.Size(1142, 507)
         Me.Panel1.TabIndex = 0
         '
         'Label1
@@ -60,7 +60,7 @@ Partial Class frmSibiMain
         'cmdShowAll
         '
         Me.cmdShowAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdShowAll.Location = New System.Drawing.Point(1042, 4)
+        Me.cmdShowAll.Location = New System.Drawing.Point(1039, 4)
         Me.cmdShowAll.Name = "cmdShowAll"
         Me.cmdShowAll.Size = New System.Drawing.Size(100, 30)
         Me.cmdShowAll.TabIndex = 1
@@ -107,7 +107,7 @@ Partial Class frmSibiMain
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1139, 458)
+        Me.ResultGrid.Size = New System.Drawing.Size(1136, 452)
         Me.ResultGrid.TabIndex = 18
         Me.ResultGrid.VirtualMode = True
         '
@@ -139,6 +139,7 @@ Partial Class frmSibiMain
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(338, 248)
         Me.Name = "frmSibiMain"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Sibi Acqusition Manager - Main"
         Me.Panel1.ResumeLayout(False)

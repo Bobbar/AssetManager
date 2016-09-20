@@ -630,6 +630,7 @@ Partial Class frmManageRequest
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(771, 443)
         Me.Name = "frmManageRequest"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Manage Request"
         Me.GroupBox1.ResumeLayout(False)
