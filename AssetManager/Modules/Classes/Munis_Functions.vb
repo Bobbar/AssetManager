@@ -6,8 +6,8 @@
     Public Function Get_PO_From_Asset(AssetTag As String) As String
         Return Trim(Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_purch_memo"))
     End Function
-    Public Function Get_PO_From_Serial(AssetTag As String) As String
-        Return Trim(Comms.Return_MSSQLValue("famaster", "fama_serial", AssetTag, "fama_purch_memo"))
+    Public Function Get_PO_From_Serial(Serial As String) As String
+        Return Trim(Comms.Return_MSSQLValue("famaster", "fama_serial", Serial, "fama_purch_memo"))
     End Function
     Public Function Get_FY_From_Asset(AssetTag As String) As String
         Return Trim(Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_fisc_yr"))

@@ -33,7 +33,6 @@
                          dbo.ap_vendor ON dbo.rqdetail.rqdt_sug_vn = dbo.ap_vendor.a_vendor_number
 WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ") AND (dbo.ap_vendor.a_vendor_remit_seq = 1)"
             ProcessMunisQuery(DataGridMunis_Requisition, strQRY)
-            Me.Show()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
