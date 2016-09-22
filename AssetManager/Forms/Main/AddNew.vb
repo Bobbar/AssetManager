@@ -237,7 +237,6 @@ Public Class AddNew
     Private Sub AddNew_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         MyLiveBox.Unload()
     End Sub
-
     Private Sub cmdUserSearch_Click(sender As Object, e As EventArgs) Handles cmdUserSearch.Click
         Dim NewMunisSearch As New frmMunisUser
         NewMunisSearch.ShowDialog()
