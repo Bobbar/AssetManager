@@ -20,20 +20,7 @@ Public Class View
         CheckRDP()
     End Sub
     Private Sub GetCurrentValues()
-        With OldData
-            .strAssetTag = Trim(txtAssetTag_View_REQ.Text)
-            .strDescription = Trim(txtDescription_View_REQ.Text)
-            .strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_View_REQ.SelectedIndex)
-            .strSerial = Trim(txtSerial_View_REQ.Text)
-            .strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_View_REQ.SelectedIndex)
-            .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
-            .dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
-            .strReplaceYear = Trim(txtReplacementYear_View.Text)
-            .strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSVersion_REQ.SelectedIndex)
-            .strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
-            .bolTrackable = chkTrackable.Checked
-            .strPO = Trim(txtPONumber.Text)
-        End With
+        OldData = CollectDeviceInfo(MySQLDB.Return_SQLTable("SELECT * FROM devices WHERE dev_UID = '" & CurrentViewDevice.strGUID & "'"))
     End Sub
     Public Sub GetNewValues(UpdateInfo As Update_Info)
         With NewData
@@ -46,7 +33,13 @@ Public Class View
                 .strCurrentUser = MunisUser.Name
                 .strCurrentUserEmpNum = MunisUser.Number
             Else
-                .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
+                If OldData.strCurrentUser <> Trim(txtCurUser_View_REQ.Text) Then
+                    .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
+                    .strCurrentUserEmpNum = ""
+                Else
+                    .strCurrentUser = OldData.strCurrentUser
+                    .strCurrentUserEmpNum = OldData.strCurrentUserEmpNum
+                End If
             End If
             .dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
             .strReplaceYear = Trim(txtReplacementYear_View.Text)
