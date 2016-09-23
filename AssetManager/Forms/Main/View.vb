@@ -738,6 +738,7 @@ Public Class View
     End Sub
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
+        GetCurrentValues()
         Dim UpdateDia As New UpdateDev
         FillComboBox(DeviceIndex.ChangeType, UpdateDia.cmbUpdate_ChangeType)
         UpdateDia.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(DeviceIndex.ChangeType, "NOTE")
