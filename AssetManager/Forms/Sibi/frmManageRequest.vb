@@ -5,7 +5,7 @@ Imports MySql.Data.MySqlClient
 Public Class frmManageRequest
     Public bolUpdating As Boolean = False
     Private bolGridFilling As Boolean = False
-    Private CurrentRequest As Request_Info
+    Public CurrentRequest As Request_Info
     Private MyText As String
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
