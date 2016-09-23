@@ -54,8 +54,19 @@
         frmManageRequest.Show()
     End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
-        Dim ManRequest As New frmManageRequest
-        ManRequest.OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
+        OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
+    End Sub
+    Private Sub OpenRequest(strUID As String)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        If Not RequestIsOpen(strUID) Then
+            Dim ManRequest As New frmManageRequest
+            ManRequest.OpenRequest(strUID)
+        Else
+            ActivateForm(strUID)
+        End If
     End Sub
     Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
         If e.RowIndex > -1 Then
