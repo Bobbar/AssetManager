@@ -229,6 +229,13 @@ Module OtherFunctions
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
+                Case "frmSibiAttachments"
+                    Dim vw As frmSibiAttachments = frm
+                    If vw.AttachRequest.strUID = strGUID Then
+                        vw.Activate()
+                        vw.WindowState = FormWindowState.Normal
+                        vw.Show()
+                    End If
             End Select
         Next
     End Sub

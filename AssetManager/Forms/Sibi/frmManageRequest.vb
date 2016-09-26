@@ -695,14 +695,27 @@ VALUES
     End Sub
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
-        If CurrentRequest.strUID <> "" Then
-            Dim NewAttach As New frmSibiAttachments
-            NewAttach.Tag = Me
-            NewAttach.ListAttachments(CurrentRequest)
-            NewAttach.Activate()
-            NewAttach.Show()
+        If Not AttachmentsIsOpen(CurrentRequest.strUID) Then
+            If CurrentRequest.strUID <> "" Then
+                Dim NewAttach As New frmSibiAttachments
+                NewAttach.Tag = Me
+                NewAttach.ListAttachments(CurrentRequest)
+                NewAttach.Activate()
+                NewAttach.Show()
+            End If
+        Else
+            ActivateForm(CurrentRequest.strUID)
         End If
     End Sub
+    Public Function AttachmentsIsOpen(strGUID As String) As Boolean
+        For Each frm As Form In My.Application.OpenForms
+            If frm.Name = "frmSibiAttachments" Then
+                Dim attach As frmSibiAttachments = frm
+                If attach.AttachRequest.strUID = strGUID Then Return True
+            End If
+        Next
+        Return False
+    End Function
     Private Sub cmdCreate_Click(sender As Object, e As EventArgs) Handles cmdCreate.Click
         NewRequest()
     End Sub
