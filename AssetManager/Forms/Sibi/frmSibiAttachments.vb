@@ -696,11 +696,12 @@ Class frmSibiAttachments
         Return False
     End Function
     Private Sub AttachGrid_MouseMove(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseMove
-        If bolAllowDrag Then
+        If bolAllowDrag And Not bolDragging Then
             If e.Button = MouseButtons.Left Then
                 If MouseIsDragging(, e.Location) And Not DownloadWorker.IsBusy Then
                     bolDragging = True
                     DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+                    WaitForDownload()
                     Dim fileList As New Collections.Specialized.StringCollection
                     fileList.Add(strDragFilePath)
                     Dim dataObj As New DataObject
@@ -709,6 +710,12 @@ Class frmSibiAttachments
                 End If
             End If
         End If
+    End Sub
+    Private Sub WaitForDownload()
+        Do While DownloadWorker.IsBusy
+            Thread.Sleep(10)
+            Application.DoEvents()
+        Loop
     End Sub
     Private Sub AttachGrid_DragOver(sender As Object, e As DragEventArgs) Handles AttachGrid.DragOver
         e.Effect = DragDropEffects.Copy
@@ -721,10 +728,10 @@ Class frmSibiAttachments
         Select Case True
             Case AttachObject.GetDataPresent("RenPrivateItem")
                 File = CopyAttachement(AttachObject, "RenPrivateItem")
-                UploadWorker.RunWorkerAsync(File)
+                If Not IsNothing(File) Then UploadWorker.RunWorkerAsync(File)
             Case AttachObject.GetDataPresent("FileDrop")
                 File = AttachObject.GetData("FileNameW")
-                UploadWorker.RunWorkerAsync(File)
+                If Not IsNothing(File) Then UploadWorker.RunWorkerAsync(File)
         End Select
     End Function
     Private Function CopyAttachement(AttachObject As IDataObject, DataFormat As String) As String()
