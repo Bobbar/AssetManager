@@ -2,7 +2,6 @@
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class View
-    Private Children As New List(Of Form)
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
     Public MunisUser As Emp_Info = Nothing
@@ -11,6 +10,7 @@ Public Class View
     Private MyLiveBox As New LiveBox
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim MyMunisMenu As New MunisToolsMenu
+        MyMunisMenu.Tag = Me
         ToolStrip1.Items.Insert(6, MyMunisMenu.MunisTools)
         MyLiveBox.InitializeLiveBox()
         grpNetTools.Visible = False
@@ -211,7 +211,7 @@ Public Class View
         Try
             Results = MySQLDB.Return_SQLTable("Select * FROM devices, dev_historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
             If Results.Rows.Count < 1 Then
-                CloseChildren()
+                CloseChildren(Me)
                 Results.Dispose()
                 CurrentViewDevice = Nothing
                 Dim blah = Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
@@ -535,36 +535,14 @@ Public Class View
         End If
         Dim NewEntry As New View_Entry
         Waiting()
-        AddChild(NewEntry)
+        NewEntry.Tag = Me
         NewEntry.ViewEntry(GUID)
         NewEntry.Show()
         DoneWaiting()
     End Sub
     Private Sub NewMunisView(Device As Device_Info)
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
-        Dim NewMunis As New View_Munis
         Waiting()
-        AddChild(NewMunis)
-        NewMunis.LoadMunisInfoByDevice(Device)
-        DoneWaiting()
-    End Sub
-    Private Sub NewMunisViewEmp(Name As String)
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
-        Dim SplitName() As String = Split(Name, " ")
-        Dim LastName As String = SplitName(SplitName.Count - 1)
-        Dim NewMunis As New View_Munis
-        Waiting()
-        AddChild(NewMunis)
-        NewMunis.HideFixedAssetGrid()
-        'NewMunis.Show()
-        NewMunis.LoadMunisEmployeeByLastName(LastName)
-        ' NewMunis.ViewEntry(GUID)
+        Munis.NewMunisView_Device(Device, Me)
         DoneWaiting()
     End Sub
     Private Sub NewTrackingView(GUID As String)
@@ -574,28 +552,10 @@ Public Class View
         End If
         Dim NewTracking As New View_Tracking
         Waiting()
-        AddChild(NewTracking)
+        NewTracking.Tag = Me
         NewTracking.ViewTrackingEntry(GUID, CurrentViewDevice)
         NewTracking.Show()
         DoneWaiting()
-    End Sub
-    Private Sub AddChild(form As Form)
-        Children.Add(form)
-    End Sub
-    Public Sub CloseChildren()
-        For Each child As Form In Children
-            child.Dispose()
-        Next
-    End Sub
-    Private Sub RestoreChildren()
-        For Each chld As Form In Children
-            chld.WindowState = FormWindowState.Normal
-        Next
-    End Sub
-    Private Sub MinimizeChildren()
-        For Each chld As Form In Children
-            chld.WindowState = FormWindowState.Minimized
-        Next
     End Sub
     Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs)
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
@@ -785,7 +745,7 @@ Public Class View
         Waiting()
         Dim NewTracking As New Tracking
         NewTracking.SetupTracking(CurrentViewDevice, Me)
-        AddChild(Tracking)
+        NewTracking.Tag = Me
         NewTracking.Show()
         DoneWaiting()
     End Sub
@@ -798,7 +758,7 @@ Public Class View
         Waiting()
         Dim NewTracking As New Tracking
         NewTracking.SetupTracking(CurrentViewDevice, Me)
-        AddChild(Tracking)
+        NewTracking.Tag = Me
         NewTracking.Show()
         DoneWaiting()
     End Sub
@@ -809,11 +769,10 @@ Public Class View
         End If
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         Dim NewAttachments As New Attachments
-        AddChild(NewAttachments)
+        NewAttachments.Tag = Me
         NewAttachments.LoadAttachments(CurrentViewDevice)
         NewAttachments.Activate()
         NewAttachments.Show()
-        'NewAttachments.ListAttachments(CurrentViewDevice.strGUID)
     End Sub
     Private DefGridBC As Color, DefGridSelCol As Color, bolGridFilling As Boolean = False
     Private Sub HighlightCurrentRow(Row As Integer)
@@ -913,7 +872,7 @@ Public Class View
         MyLiveBox.Unload()
         Attachments.Dispose()
         Tracking.Dispose()
-        CloseChildren()
+        CloseChildren(Me)
     End Sub
     Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint
         On Error Resume Next
@@ -951,7 +910,7 @@ Public Class View
     End Sub
     Private Sub OpenSibiLink(SibiUID As String)
         Dim sibiForm As New frmManageRequest
-        AddChild(sibiForm)
+        sibiForm.Tag = Me
         sibiForm.OpenRequest(SibiUID)
     End Sub
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
@@ -999,22 +958,17 @@ Public Class View
         Process.Start(StartInfo)
     End Sub
     Private Sub View_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        If Children.Count > 0 Then
-            Dim f As Form = sender
-            If f.WindowState = FormWindowState.Minimized Then
-                MinimizeChildren()
-                PrevWindowState = f.WindowState
-            ElseIf f.WindowState <> PrevWindowState And f.WindowState = FormWindowState.Normal Then
-                If PrevWindowState <> FormWindowState.Maximized Then RestoreChildren()
-            End If
+        Dim f As Form = sender
+        If f.WindowState = FormWindowState.Minimized Then
+            MinimizeChildren(Me)
+            PrevWindowState = f.WindowState
+        ElseIf f.WindowState <> PrevWindowState And f.WindowState = FormWindowState.Normal Then
+            If PrevWindowState <> FormWindowState.Maximized Then RestoreChildren(Me)
         End If
     End Sub
     Private PrevWindowState As Integer
     Private Sub View_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
         Dim f As Form = sender
         PrevWindowState = f.WindowState
-    End Sub
-    Private Sub View_ResizeEnd(sender As Object, e As EventArgs) Handles Me.ResizeEnd
-        Dim f As Form = sender
     End Sub
 End Class

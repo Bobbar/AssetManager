@@ -116,4 +116,13 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNumber, FY)
         NewMunis.Show()
     End Sub
+    Public Sub NewMunisView_Device(Device As Device_Info, Optional Parent As Form = Nothing)
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
+        Dim NewMunis As New View_Munis
+        NewMunis.Tag = Parent
+        NewMunis.LoadMunisInfoByDevice(Device)
+    End Sub
 End Class
