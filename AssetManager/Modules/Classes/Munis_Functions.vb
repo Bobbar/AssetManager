@@ -27,7 +27,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
         Dim strFYyy As String = Left(PO, 2)
         Return "20" + strFYyy
     End Function
-    Public Sub NameSearch()
+    Public Sub NameSearch(Parent As Form)
         Dim NewDialog As New MyDialog
         Dim strName As String
         With NewDialog
@@ -37,10 +37,10 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
             If .DialogResult = DialogResult.OK Then strName = NewDialog.GetControlValue("txtName")
         End With
         If Trim(strName) IsNot "" Then
-            NewMunisView_NameSearch(strName)
+            NewMunisView_NameSearch(strName, Parent)
         End If
     End Sub
-    Public Sub POSearch()
+    Public Sub POSearch(Parent As Form)
         Try
             Dim PO, FY As String
             Dim NewDialog As New MyDialog
@@ -52,13 +52,13 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
                 If .DialogResult = DialogResult.OK Then
                     PO = NewDialog.GetControlValue("txtPO")
                     FY = NewDialog.GetControlValue("txtFY")
-                    NewMunisView_POSearch(PO, FY)
+                    NewMunisView_POSearch(PO, Parent)
                 End If
             End With
         Catch
         End Try
     End Sub
-    Public Sub ReqSearch()
+    Public Sub ReqSearch(Parent As Form)
         Try
             'Dim blah As String = InputBox("Enter Requisition # followed by FY separated by a comma.  (Format #########,YYYY", "Req Search", "")
             'If Trim(blah) IsNot "" Then
@@ -77,38 +77,41 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
                 If .DialogResult = DialogResult.OK Then
                     ReqNumber = NewDialog.GetControlValue("txtReqNum")
                     FY = NewDialog.GetControlValue("txtFY")
-                    NewMunisView_ReqSearch(ReqNumber, FY)
+                    NewMunisView_ReqSearch(ReqNumber, FY, Parent)
                 End If
             End With
         Catch
         End Try
     End Sub
-    Private Sub NewMunisView_NameSearch(Name As String)
+    Public Sub NewMunisView_NameSearch(Name As String, Optional Parent As Form = Nothing)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
         End If
         Dim NewMunis As New View_Munis
+        NewMunis.Tag = Parent
         NewMunis.HideFixedAssetGrid()
         NewMunis.LoadMunisEmployeeByLastName(Name)
         NewMunis.Show()
     End Sub
-    Private Sub NewMunisView_POSearch(PO As String, FY As String)
+    Public Sub NewMunisView_POSearch(PO As String, Optional Parent As Form = Nothing)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
         End If
         Dim NewMunis As New View_Munis
+        NewMunis.Tag = Parent
         NewMunis.HideFixedAssetGrid()
         NewMunis.LoadMunisRequisitionGridByReqNo(Get_ReqNumber_From_PO(PO), Get_FY_From_PO(PO)) 'LoadMunisRequisitionGridByPO(PO, FY)
         NewMunis.Show()
     End Sub
-    Private Sub NewMunisView_ReqSearch(ReqNumber As String, FY As String)
+    Public Sub NewMunisView_ReqSearch(ReqNumber As String, FY As String, Optional Parent As Form = Nothing)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
         End If
         Dim NewMunis As New View_Munis
+        NewMunis.Tag = Parent
         NewMunis.HideFixedAssetGrid()
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNumber, FY)
         NewMunis.Show()

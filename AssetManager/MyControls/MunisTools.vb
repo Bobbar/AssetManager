@@ -1,16 +1,11 @@
 ﻿Public Class MunisToolsMenu
-    Private Sub MunisToolsMenu_Click(sender As Object, e As EventArgs) Handles Me.Click
-
-    End Sub
-
     Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles tsmUserOrgObLookup.Click
-        Munis.NameSearch()
+        Munis.NameSearch(Me.Tag)
     End Sub
     Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles tsmPOLookUp.Click
-        Munis.POSearch()
+        Munis.POSearch(Me.Tag)
     End Sub
     Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles tsmReqNumLookUp.Click
-        Munis.ReqSearch()
+        Munis.ReqSearch(Me.Tag)
     End Sub
-
 End Class

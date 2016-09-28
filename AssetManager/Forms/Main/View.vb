@@ -2,7 +2,7 @@
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class View
-    Private Children(0) As Form
+    Private Children As New List(Of Form)
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
     Public MunisUser As Emp_Info = Nothing
@@ -580,16 +580,22 @@ Public Class View
         DoneWaiting()
     End Sub
     Private Sub AddChild(form As Form)
-        ReDim Preserve Children(UBound(Children) + 1)
-        Children(UBound(Children)) = form
+        Children.Add(form)
     End Sub
     Public Sub CloseChildren()
-        If UBound(Children) > 0 Then
-            For i As Integer = 1 To UBound(Children)
-                Children(i).Dispose()
-            Next
-            ReDim Children(0)
-        End If
+        For Each child As Form In Children
+            child.Dispose()
+        Next
+    End Sub
+    Private Sub RestoreChildren()
+        For Each chld As Form In Children
+            chld.WindowState = FormWindowState.Normal
+        Next
+    End Sub
+    Private Sub MinimizeChildren()
+        For Each chld As Form In Children
+            chld.WindowState = FormWindowState.Minimized
+        Next
     End Sub
     Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs)
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
@@ -991,5 +997,24 @@ Public Class View
         StartInfo.FileName = "mstsc.exe"
         StartInfo.Arguments = "/v:D" & CurrentViewDevice.strSerial
         Process.Start(StartInfo)
+    End Sub
+    Private Sub View_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        If Children.Count > 0 Then
+            Dim f As Form = sender
+            If f.WindowState = FormWindowState.Minimized Then
+                MinimizeChildren()
+                PrevWindowState = f.WindowState
+            ElseIf f.WindowState <> PrevWindowState And f.WindowState = FormWindowState.Normal Then
+                If PrevWindowState <> FormWindowState.Maximized Then RestoreChildren()
+            End If
+        End If
+    End Sub
+    Private PrevWindowState As Integer
+    Private Sub View_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
+        Dim f As Form = sender
+        PrevWindowState = f.WindowState
+    End Sub
+    Private Sub View_ResizeEnd(sender As Object, e As EventArgs) Handles Me.ResizeEnd
+        Dim f As Form = sender
     End Sub
 End Class
