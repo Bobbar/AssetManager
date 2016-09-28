@@ -261,4 +261,40 @@ Module OtherFunctions
         NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
         Return NewMessage.DialogResult
     End Function
+    Public Function GetChildren(ParentForm As Form) As List(Of Form)
+        Dim Children As New List(Of Form)
+        For Each frms As Form In My.Application.OpenForms
+            If frms.Tag Is ParentForm Then
+                Children.Add(frms)
+            End If
+        Next
+        Return Children
+    End Function
+    Public Sub CloseChildren(ParentForm As Form)
+        Dim Children As List(Of Form) = GetChildren(ParentForm)
+        If Children.Count > 0 Then
+            For Each child As Form In Children
+                child.Dispose()
+            Next
+        End If
+        Children.Clear()
+    End Sub
+    Public Sub RestoreChildren(ParentForm As Form)
+        Dim Children As List(Of Form) = GetChildren(ParentForm)
+        If Children.Count > 0 Then
+            For Each chld As Form In Children
+                chld.WindowState = FormWindowState.Normal
+            Next
+        End If
+        Children.Clear()
+    End Sub
+    Public Sub MinimizeChildren(ParentForm As Form)
+        Dim Children As List(Of Form) = GetChildren(ParentForm)
+        If Children.Count > 0 Then
+            For Each chld As Form In Children
+                chld.WindowState = FormWindowState.Minimized
+            Next
+        End If
+        Children.Clear()
+    End Sub
 End Module

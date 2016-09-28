@@ -10,6 +10,7 @@ Public Class frmManageRequest
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
         Dim MyMunisTools As New MunisToolsMenu
+        MyMunisTools.Tag = Me
         ToolStrip.Items.Insert(7, MyMunisTools.MunisTools)
     End Sub
     Private Sub SetTitle()
@@ -726,23 +727,8 @@ VALUES
         pnlCreate.Visible = True
     End Sub
     Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        CloseChildren()
+        CloseChildren(Me)
         Me.Dispose()
-    End Sub
-    Private Sub CloseChildren()
-        Dim children(0) As frmSibiAttachments
-        For Each frms As Form In My.Application.OpenForms
-            If TypeOf frms Is frmSibiAttachments Then
-                Dim AttachForm As frmSibiAttachments = frms
-                If AttachForm.AttachRequest.strUID = CurrentRequest.strUID Then
-                    children(UBound(children)) = frms
-                    ReDim Preserve children(UBound(children) + 1)
-                End If
-            End If
-        Next
-        For Each child As frmSibiAttachments In children
-            If Not IsNothing(child) Then child.Dispose()
-        Next
     End Sub
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
@@ -760,30 +746,11 @@ VALUES
             Process.Start("http://rt.co.fairfield.oh.us/rt/Ticket/Display.html?id=" & RTNum)
         End If
     End Sub
-    Private Sub NewMunisViewReq(ReqNum As String)
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
-        Dim NewMunis As New View_Munis
-        NewMunis.HideFixedAssetGrid()
-        NewMunis.LoadMunisRequisitionGridByReqNo(ReqNum, YearFromDate(CurrentRequest.dtDateStamp))
-        NewMunis.Show()
-    End Sub
-    Private Sub NewMunisViewPO(PO As String)
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
-        Dim NewMunis As New View_Munis
-        NewMunis.HideFixedAssetGrid()
-        NewMunis.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(PO), Munis.Get_FY_From_PO(PO)) 'YearFromDate(CurrentRequest.dtDateStamp))
-        NewMunis.Show()
-    End Sub
     Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
         Dim ReqNum As String = Trim(txtReqNumber.Text)
         If Not bolUpdating And ReqNum <> "" Then
-            NewMunisViewReq(ReqNum)
+            Munis.NewMunisView_ReqSearch(ReqNum, YearFromDate(CurrentRequest.dtDateStamp), Me)
+
         End If
     End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
@@ -904,7 +871,7 @@ VALUES
     Private Sub txtPO_Click(sender As Object, e As EventArgs) Handles txtPO.Click
         Dim PO As String = Trim(txtPO.Text)
         If Not bolUpdating And PO <> "" Then
-            NewMunisViewPO(PO)
+            Munis.NewMunisView_POSearch(PO, Me)
         End If
     End Sub
     Private Sub RequestItemsGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles RequestItemsGrid.DataError
@@ -935,5 +902,18 @@ VALUES
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-
+    Private Sub frmManageRequest_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        Dim f As Form = sender
+        If f.WindowState = FormWindowState.Minimized Then
+            MinimizeChildren(Me)
+            PrevWindowState = f.WindowState
+        ElseIf f.WindowState <> PrevWindowState And f.WindowState = FormWindowState.Normal Then
+            If PrevWindowState <> FormWindowState.Maximized Then RestoreChildren(Me)
+        End If
+    End Sub
+    Private PrevWindowState As Integer
+    Private Sub frmManageRequest_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
+        Dim f As Form = sender
+        PrevWindowState = f.WindowState
+    End Sub
 End Class
