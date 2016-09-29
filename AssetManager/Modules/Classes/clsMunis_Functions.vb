@@ -1,5 +1,5 @@
-﻿Public Class Munis_Functions
-    Private Comms As New Munis_Comms
+﻿Public Class clsMunis_Functions
+    Private Comms As New clsMunis_Comms
     Public Function Get_ReqNumber_From_PO(PO As String) As String
         Return Comms.Return_MSSQLValue("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber")
     End Function

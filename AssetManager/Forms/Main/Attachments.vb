@@ -3,6 +3,7 @@ Option Compare Binary
 Imports System.ComponentModel
 Imports System.IO
 Imports MySql.Data.MySqlClient
+Imports System.Threading
 Class Attachments
     Public bolAdminMode As Boolean = False
     Private AttachQry As String
@@ -12,7 +13,10 @@ Class Attachments
     Private stpSpeed As New Stopwatch
     Private bolGridFilling As Boolean
     Private progIts As Integer = 0
-    Private CurrentAttachDevice As Device_Info
+    Public CurrentAttachDevice As Device_Info
+    Private bolDragging As Boolean = False
+    Private bolAllowDrag As Boolean = False
+    Private strDragFilePath As String
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -22,21 +26,20 @@ Class Attachments
     Private AttachIndex() As Attach_Struct
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
         Dim fd As OpenFileDialog = New OpenFileDialog()
-        Dim strFileName As String
         fd.ShowHelp = True
         fd.Title = "Select File To Upload - " & FileSizeMBLimit & "MB Limit"
         fd.InitialDirectory = "C:\"
         fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*"
         fd.FilterIndex = 2
+        fd.Multiselect = True
         fd.RestoreDirectory = True
         If fd.ShowDialog() = DialogResult.OK Then
-            strFileName = fd.FileName
+            UploadFile(fd.FileNames)
         Else
             Exit Sub
         End If
-        UploadFile(strFileName)
     End Sub
-    Private Sub UploadFile(FilePath As String)
+    Private Sub UploadFile(Files() As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
@@ -44,7 +47,7 @@ Class Attachments
         If Not UploadWorker.IsBusy Then
             StatusBar("Starting Upload...")
             WorkerFeedback(True)
-            UploadWorker.RunWorkerAsync(FilePath)
+            UploadWorker.RunWorkerAsync(Files)
         End If
     End Sub
     Private Sub WorkerFeedback(WorkerRunning As Boolean)
@@ -234,95 +237,108 @@ Class Attachments
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
         'file stuff
         Dim Foldername As String = CurrentAttachDevice.strGUID
-        Dim strFileGuid As String = Guid.NewGuid.ToString
-        Dim FilePath As String = DirectCast(e.Argument, String)
-        Dim strFilename As String = Path.GetFileNameWithoutExtension(FilePath)
-        Dim strFileType As String = Path.GetExtension(FilePath)
-        Dim strFullFilename As String = Path.GetFileName(FilePath)
-        Dim myFileInfo As New FileInfo(FilePath)
+        Dim strFileGuid As String
+        Dim Files() As String = DirectCast(e.Argument, String())
+        Dim strFilename As String
+        Dim strFileType As String
+        Dim strFullFilename As String
+        Dim myFileInfo As FileInfo
         Dim FileSize As Long
         Dim FileSizeMB As Integer
-        FileSize = myFileInfo.Length
-        FileSizeMB = FileSize / (1024 * 1024)
-        If FileSizeMB > FileSizeMBLimit Then
-            e.Result = False
-            UploadWorker.ReportProgress(2, "Error!")
-            Dim blah = Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
-            Exit Sub
-        End If
-        UploadWorker.ReportProgress(1, "Connecting...")
-        'sql stuff
-        Dim conn As MySqlConnection = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
+        Dim FileNumber As Integer = 1
+        Dim conn As MySqlConnection = MySQLDB.NewConnection
         Dim cmd As New MySqlCommand
-        Dim SQL As String
         Try
-            Dim resp As Net.FtpWebResponse = Nothing
-            Using resp 'check if device folder exists. create directory if not.
-                resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
-                Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
-                Dim s As String = sr.ReadToEnd()
-                If Not s.Contains(Foldername) Then
-                    resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
+            For Each file As String In Files
+                strFilename = Path.GetFileNameWithoutExtension(file)
+                strFileType = Path.GetExtension(file)
+                strFullFilename = Path.GetFileName(file)
+                myFileInfo = New FileInfo(file)
+                strFileGuid = Guid.NewGuid.ToString
+                FileSize = myFileInfo.Length
+                FileSizeMB = FileSize / (1024 * 1024)
+                If FileSizeMB > FileSizeMBLimit Then
+                    e.Result = False
+                    UploadWorker.ReportProgress(2, "Error!")
+                    Dim blah = Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
+                    Exit Sub
                 End If
-            End Using
-            'ftp upload
-            Dim buffer(1023) As Byte
-            Dim bytesIn As Integer = 1
-            Dim totalBytesIn As Integer
-            Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
-            Dim FileHash As String = GetHashOfStream(ftpStream)
-            Dim flLength As Integer = ftpStream.Length
-            Dim reqfile As System.IO.Stream = Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
-            Dim perc As Short
-            stpSpeed.Start()
-            UploadWorker.ReportProgress(1, "Uploading...")
-            Do Until bytesIn < 1 Or UploadWorker.CancellationPending
-                bytesIn = ftpStream.Read(buffer, 0, 1024)
-                If bytesIn > 0 Then
-                    reqfile.Write(buffer, 0, bytesIn)
-                    totalBytesIn += bytesIn
-                    lngBytesMoved += bytesIn
-                    If flLength > 0 Then
-                        perc = (totalBytesIn / flLength) * 100
-                        intProgress = perc
+                UploadWorker.ReportProgress(1, "Connecting...")
+                'sql stuff
+                Dim SQL As String
+                Dim resp As Net.FtpWebResponse = Nothing
+                Using resp 'check if device folder exists. create directory if not.
+                    resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
+                    Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
+                    Dim s As String = sr.ReadToEnd()
+                    If Not s.Contains(Foldername) Then
+                        resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
                     End If
+                End Using
+                'ftp upload
+                Dim buffer(1023) As Byte
+                Dim bytesIn As Integer = 1
+                Dim totalBytesIn As Integer
+                Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
+                Dim FileHash As String = GetHashOfStream(ftpStream)
+                Dim flLength As Integer = ftpStream.Length
+                Dim reqfile As System.IO.Stream = Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+                Dim perc As Short = 0
+                stpSpeed.Start()
+                UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
+                lngBytesMoved = 0
+                intProgress = 0
+                totalBytesIn = 0
+                Do Until bytesIn < 1 Or UploadWorker.CancellationPending
+                    bytesIn = ftpStream.Read(buffer, 0, 1024)
+                    If bytesIn > 0 Then
+                        reqfile.Write(buffer, 0, bytesIn)
+                        totalBytesIn += bytesIn
+                        lngBytesMoved += bytesIn
+                        If flLength > 0 Then
+                            perc = (totalBytesIn / flLength) * 100
+                            intProgress = perc
+                        End If
+                    End If
+                Loop
+                reqfile.Close()
+                reqfile.Dispose()
+                ftpStream.Close()
+                ftpStream.Dispose()
+                If UploadWorker.CancellationPending Then
+                    e.Cancel = True
+                    DeleteFTPAttachment(strFileGuid, Foldername)
                 End If
-            Loop
-            reqfile.Close()
-            reqfile.Dispose()
-            ftpStream.Close()
-            ftpStream.Dispose()
-            If UploadWorker.CancellationPending Then
-                e.Cancel = True
-                DeleteFTPAttachment(strFileGuid, Foldername)
-            End If
-            'update sql table
-            If Not UploadWorker.CancellationPending Then
-                SQL = "INSERT INTO dev_attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`, `attach_file_hash`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash)"
-                conn.Open()
-                cmd.Connection = conn
-                cmd.CommandText = SQL
-                cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentAttachDevice.strGUID)
-                cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
-                cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
-                cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
-                cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
-                cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
-                cmd.ExecuteNonQuery()
-                MySQLDB.CloseConnection(conn)
-                'conn.Close()
-                'conn.Dispose()
-                cmd.Dispose()
-                e.Result = True
-            Else
-                e.Result = False
-            End If
+                'update sql table
+                If Not UploadWorker.CancellationPending Then
+                    SQL = "INSERT INTO dev_attachments (`attach_dev_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`, `attach_file_hash`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash)"
+                    conn.Open()
+                    cmd.Connection = conn
+                    cmd.CommandText = SQL
+                    cmd.Parameters.AddWithValue("@attach_dev_UID", CurrentAttachDevice.strGUID)
+                    cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
+                    cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
+                    cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
+                    cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
+                    cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
+                    cmd.ExecuteNonQuery()
+                    cmd.Parameters.Clear()
+                    MySQLDB.CloseConnection(conn)
+                    cmd.Dispose()
+                    e.Result = True
+                Else
+                    e.Result = False
+                End If
+                FileNumber += 1
+                MySQLDB.CloseConnection(conn) 
+                UploadWorker.ReportProgress(3, "Idle...")
+            Next
+            MySQLDB.CloseConnection(conn)
+            cmd.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
         Catch ex As Exception
             e.Result = False
             MySQLDB.CloseConnection(conn)
-            'conn.Close()
-            'conn.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
             If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
@@ -333,7 +349,7 @@ Class Attachments
             ListAttachments(CurrentAttachDevice.strGUID)
             If Not e.Cancelled Then
                 If e.Result Then
-                    Message("File uploaded successfully!", MessageBoxButtons.OK + MessageBoxIcon.Asterisk, "Success!")
+                    '  Message("File uploaded successfully!", MessageBoxButtons.OK + MessageBoxIcon.Asterisk, "Success!")
                 Else
                     MessageBox.Show("File upload failed.",
          "Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
@@ -425,8 +441,13 @@ Class Attachments
                 DownloadWorker.ReportProgress(2, "Verifying file...")
                 Dim FileResultHash As String = GetHashOfFile(strFullPath)
                 If FileResultHash = FileExpectedHash Then
-                    Process.Start(strFullPath)
-                    e.Result = True
+                    If bolDragging Then
+                        strDragFilePath = strFullPath
+                        e.Result = True
+                    Else
+                        Process.Start(strFullPath)
+                        e.Result = True
+                    End If
                 Else
                     'something is very wrong
                     Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
@@ -589,5 +610,127 @@ Class Attachments
     Private Sub ToolStripDropDownButton1_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
         If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
         If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
+    End Sub
+    Private Sub AttachGrid_MouseDown(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseDown
+        If bolAllowDrag Then
+            MouseIsDragging(e.Location)
+        End If
+    End Sub
+    Private Sub AttachGrid_CellMouseUp(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseUp
+        bolDragging = False
+    End Sub
+    Private MouseStartPos As Point
+    Private Function MouseIsDragging(Optional NewStartPos As Point = Nothing, Optional CurrentPos As Point = Nothing) As Boolean
+        Dim intMouseMoveThreshold As Integer = 100
+        If NewStartPos <> Nothing Then
+            MouseStartPos = NewStartPos
+        Else
+            Dim intDistanceMoved = Math.Sqrt((MouseStartPos.X - CurrentPos.X) ^ 2 + (MouseStartPos.Y - CurrentPos.Y) ^ 2)
+            If intDistanceMoved > intMouseMoveThreshold Then
+                Return True
+            Else
+                Return False
+            End If
+        End If
+        Return False
+    End Function
+    Private Sub AttachGrid_MouseMove(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseMove
+        If bolAllowDrag And Not bolDragging Then
+            If e.Button = MouseButtons.Left Then
+                If MouseIsDragging(, e.Location) And Not DownloadWorker.IsBusy Then
+                    bolDragging = True
+                    DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+                    WaitForDownload()
+                    Dim fileList As New Collections.Specialized.StringCollection
+                    fileList.Add(strDragFilePath)
+                    Dim dataObj As New DataObject
+                    dataObj.SetFileDropList(fileList)
+                    AttachGrid.DoDragDrop(dataObj, DragDropEffects.All)
+                End If
+            End If
+        End If
+    End Sub
+    Private Sub WaitForDownload()
+        Do While DownloadWorker.IsBusy
+            Thread.Sleep(10)
+            Application.DoEvents()
+        Loop
+    End Sub
+    Private Sub AttachGrid_DragOver(sender As Object, e As DragEventArgs) Handles AttachGrid.DragOver
+        e.Effect = DragDropEffects.Copy
+    End Sub
+    Private Sub AttachGrid_DragDrop(sender As Object, e As DragEventArgs) Handles AttachGrid.DragDrop
+        If Not bolAllowDrag Then ProcessDrop(e.Data)
+    End Sub
+    Private Function ProcessDrop(AttachObject As IDataObject) ' As String()
+        Dim File() As String
+        Select Case True
+            Case AttachObject.GetDataPresent("RenPrivateItem")
+                File = CopyAttachement(AttachObject, "RenPrivateItem")
+                If Not IsNothing(File) Then UploadWorker.RunWorkerAsync(File)
+            Case AttachObject.GetDataPresent("FileDrop")
+                File = AttachObject.GetData("FileNameW")
+                If Not IsNothing(File) Then UploadWorker.RunWorkerAsync(File)
+        End Select
+    End Function
+    Private Function CopyAttachement(AttachObject As IDataObject, DataFormat As String) As String()
+        Try
+            Dim strTimeStamp As String = Now.ToString("_hhmmss")
+            Dim streamFileData As New MemoryStream
+            Dim FileName As String
+            FileName = GetAttachFileName(AttachObject, DataFormat)
+            streamFileData = AttachObject.GetData("FileContents")
+            streamFileData.Position = 0
+            Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
+            Dim output As IO.Stream
+            Dim strFullPath(0) As String
+            strFullPath(0) = strTempPath & FileName ' & strTimeStamp
+            output = IO.File.Create(strFullPath(0))
+            Dim buffer(1023) As Byte
+            Dim bytesIn As Integer = 1
+            Dim totalBytesIn As Integer
+            Dim flLength As Int64 = streamFileData.Length
+            Do Until bytesIn < 1
+                bytesIn = streamFileData.Read(buffer, 0, 1024)
+                If bytesIn > 0 Then
+                    output.Write(buffer, 0, bytesIn)
+                    totalBytesIn += bytesIn 'downloaded bytes
+                End If
+            Loop
+            output.Dispose()
+            Return strFullPath
+        Catch ex As Exception
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Function
+    Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
+        Try
+            Dim streamFileName As New MemoryStream
+            Select Case DataFormat
+                Case "RenPrivateItem" '"FileGroupDescriptor"
+                    streamFileName = AttachObject.GetData("FileGroupDescriptor")
+                    streamFileName.Position = 0
+                    Dim sr As New StreamReader(streamFileName)
+                    Dim fullString As String = sr.ReadToEnd
+                    fullString = Replace(fullString, vbNullChar, "")
+                    fullString = Replace(fullString, ChrW(1), "")
+                    Return fullString
+            End Select
+        Catch ex As Exception
+            Return Nothing
+            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Function
+
+    Private Sub chkAllowDrag_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowDrag.CheckedChanged
+        If chkAllowDrag.CheckState = CheckState.Checked Then
+            bolAllowDrag = True
+            AttachGrid.MultiSelect = False
+            AttachGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        Else
+            bolAllowDrag = False
+            AttachGrid.MultiSelect = True
+            AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect
+        End If
     End Sub
 End Class

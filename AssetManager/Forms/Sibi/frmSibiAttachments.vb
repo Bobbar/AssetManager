@@ -30,7 +30,6 @@ Class frmSibiAttachments
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim fd As OpenFileDialog = New OpenFileDialog()
-        Dim strFileName As String
         fd.ShowHelp = True
         fd.Title = "Select File To Upload - " & FileSizeMBLimit & "MB Limit"
         fd.InitialDirectory = "C:\"
@@ -39,12 +38,10 @@ Class frmSibiAttachments
         fd.Multiselect = True
         fd.RestoreDirectory = True
         If fd.ShowDialog() = DialogResult.OK Then
-            strFileName = fd.FileName
+            UploadFile(fd.FileNames)
         Else
             Exit Sub
         End If
-        'strMultiFileCount = i & " of " & fd.FileNames.Count
-        UploadFile(fd.FileNames)
     End Sub
     Private Sub UploadFile(Files() As String)
         If Not ConnectionReady() Then
@@ -346,18 +343,15 @@ Class frmSibiAttachments
                     e.Result = False
                 End If
                 FileNumber += 1
-                MySQLDB.CloseConnection(conn) 'conn.Close()
+                MySQLDB.CloseConnection(conn)
                 UploadWorker.ReportProgress(3, "Idle...")
             Next
-            MySQLDB.CloseConnection(conn) 'conn.Close()
-            'conn.Dispose()
+            MySQLDB.CloseConnection(conn)
             cmd.Dispose()
             UploadWorker.ReportProgress(3, "Idle...")
         Catch ex As Exception
             e.Result = False
             MySQLDB.CloseConnection(conn)
-            'conn.Close()
-            'conn.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
             If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try

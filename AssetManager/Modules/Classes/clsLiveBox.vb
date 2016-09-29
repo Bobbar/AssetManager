@@ -1,12 +1,12 @@
 ﻿Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
-Public Class LiveBox
+Public Class clsLiveBox
     Private RowLimit As Integer = 15
     Private WithEvents LiveWorker As BackgroundWorker
     Private LiveBox As ListBox
     Private strPrevSearchString As String
     Private dtLiveBoxData As DataTable
-    Private MySQLComms As New MySQL_Comms
+    Private MySQLComms As New clsMySQL_Comms
     Private LiveConn As New MySqlConnection
     Private LiveBoxResults As DataTable
     Private Structure LiveBoxArgs

@@ -14,7 +14,7 @@ Public Class MainForm
     Private intPrevRow As Integer
     Private bolGridFilling As Boolean = False
     Private ConnectAttempts As Integer = 0
-    Private MyLiveBox As New LiveBox
+    Private MyLiveBox As New clsLiveBox
     Private strLastQry As String
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadProgram()

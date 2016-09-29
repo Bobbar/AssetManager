@@ -4,7 +4,7 @@ Imports MySql.Data.MySqlClient
 Public Class AddNew
     Private Device As Device_Info
     Private bolCheckFields As Boolean
-    Private MyLiveBox As New LiveBox
+    Private MyLiveBox As New clsLiveBox
     Public MunisUser As Emp_Info = Nothing
     Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
         AddNewDevice()

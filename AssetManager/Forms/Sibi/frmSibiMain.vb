@@ -1,4 +1,5 @@
 ﻿Public Class frmSibiMain
+    Private bolGridFilling As Boolean = False
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         ShowAll()
     End Sub
@@ -19,6 +20,7 @@
             table.Columns.Add("PO Number", GetType(String))
             table.Columns.Add("Req. Number", GetType(String))
             table.Columns.Add("RT Number", GetType(String))
+            table.Columns.Add("Create Date", GetType(String))
             table.Columns.Add("UID", GetType(String))
             'table.Columns.Add("Location", GetType(String))
             'table.Columns.Add("Purchase Date", GetType(String))
@@ -34,12 +36,13 @@
                                NoNull(r.Item("sibi_PO")),
                                NoNull(r.Item("sibi_requisition_number")),
                                NoNull(r.Item("sibi_RT_number")),
+                               NoNull(r.Item("sibi_datestamp")),
                                NoNull(r.Item("sibi_uid")))
             Next
-            'bolGridFilling = True
+            bolGridFilling = True
             ResultGrid.DataSource = table
             ResultGrid.ClearSelection()
-            'bolGridFilling = False
+            bolGridFilling = False
             table.Dispose()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -129,4 +132,47 @@
         End If
         Return Color.FromArgb(d, d, d)
     End Function
+    Private Sub HighlightCurrentRow(Row As Integer)
+        On Error Resume Next
+        If Not bolGridFilling Then
+            Dim BackColor As Color = DefGridBC
+            Dim SelectColor As Color = DefGridSelCol
+            Dim c1 As Color = colHighlightColor 'highlight color
+            If Row > -1 Then
+                For Each cell As DataGridViewCell In ResultGrid.Rows(Row).Cells
+                    If cell.ColumnIndex <> GetColIndex(ResultGrid, "Status") Then 'skip the colored status column
+                        Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
+                        Dim BlendColor As Color
+                        BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                        cell.Style.SelectionBackColor = BlendColor
+                        c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
+                        BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                        cell.Style.BackColor = BlendColor
+                    End If
+
+                Next
+            End If
+        End If
+    End Sub
+    Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
+        HighlightCurrentRow(e.RowIndex)
+    End Sub
+    Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
+        Dim BackColor As Color = DefGridBC
+        Dim SelectColor As Color = DefGridSelCol
+        If e.RowIndex > -1 Then
+            For Each cell As DataGridViewCell In ResultGrid.Rows(e.RowIndex).Cells
+                If cell.ColumnIndex <> GetColIndex(ResultGrid, "Status") Then 'skip the colored status column
+                    cell.Style.SelectionBackColor = SelectColor
+                    cell.Style.BackColor = BackColor
+                End If
+            Next
+        End If
+    End Sub
 End Class

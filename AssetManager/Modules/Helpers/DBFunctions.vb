@@ -14,9 +14,9 @@ Public Module DBFunctions
     Public strServerTime As String
     Public DeviceIndex As New Device_Indexes
     Public SibiIndex As New Sibi_Indexes
-    Public MunisComms As New Munis_Comms
-    Public Munis As New Munis_Functions
-    Public MySQLDB As New MySQL_Comms
+    Public MunisComms As New clsMunis_Comms
+    Public Munis As New clsMunis_Functions
+    Public MySQLDB As New clsMySQL_Comms
     Public UserAccess As User_Info
     Public NotInheritable Class Attrib_Type
         Public Const Location As String = "LOCATION"

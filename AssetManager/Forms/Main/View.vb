@@ -7,7 +7,7 @@ Public Class View
     Public MunisUser As Emp_Info = Nothing
     Private OldData As Device_Info
     Public NewData As Device_Info
-    Private MyLiveBox As New LiveBox
+    Private MyLiveBox As New clsLiveBox
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim MyMunisMenu As New MunisToolsMenu
         MyMunisMenu.Tag = Me
@@ -768,12 +768,24 @@ Public Class View
             Exit Sub
         End If
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
-        Dim NewAttachments As New Attachments
-        NewAttachments.Tag = Me
-        NewAttachments.LoadAttachments(CurrentViewDevice)
-        NewAttachments.Activate()
-        NewAttachments.Show()
+        If Not AttachmentsIsOpen() Then
+            Dim NewAttachments As New Attachments
+            NewAttachments.Tag = Me
+            NewAttachments.LoadAttachments(CurrentViewDevice)
+            NewAttachments.Activate()
+            NewAttachments.Show()
+        Else
+            ActivateForm(CurrentViewDevice.strGUID)
+        End If
     End Sub
+    Public Function AttachmentsIsOpen() As Boolean
+        For Each frm As Form In My.Application.OpenForms
+            If frm.Name = "Attachments" And frm.Tag Is Me Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
     Private DefGridBC As Color, DefGridSelCol As Color, bolGridFilling As Boolean = False
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
