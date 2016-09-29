@@ -711,9 +711,8 @@ VALUES
     End Sub
     Public Function AttachmentsIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
-            If frm.Name = "frmSibiAttachments" Then
-                Dim attach As frmSibiAttachments = frm
-                If attach.AttachRequest.strUID = strGUID Then Return True
+            If frm.Name = "frmSibiAttachments" And frm.Tag Is Me Then
+                Return True
             End If
         Next
         Return False

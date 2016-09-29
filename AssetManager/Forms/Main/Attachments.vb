@@ -13,7 +13,7 @@ Class Attachments
     Private stpSpeed As New Stopwatch
     Private bolGridFilling As Boolean
     Private progIts As Integer = 0
-    Private CurrentAttachDevice As Device_Info
+    Public CurrentAttachDevice As Device_Info
     Private bolDragging As Boolean = False
     Private bolAllowDrag As Boolean = False
     Private strDragFilePath As String

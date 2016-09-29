@@ -236,6 +236,13 @@ Module OtherFunctions
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
+                Case "Attachments"
+                    Dim vw As Attachments = frm
+                    If vw.CurrentAttachDevice.strGUID = strGUID Then
+                        vw.Activate()
+                        vw.WindowState = FormWindowState.Normal
+                        vw.Show()
+                    End If
             End Select
         Next
     End Sub
