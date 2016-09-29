@@ -593,6 +593,7 @@ VALUES
                 txtReqNumber.Text = NoNull(.Item("sibi_requisition_number"))
                 txtRequestNum.Text = NoNull(.Item("sibi_request_number"))
                 txtRTNumber.Text = NoNull(.Item("sibi_RT_number"))
+                txtCreateDate.Text = NoNull(.Item("sibi_datestamp"))
             End With
             SendToGrid(RequestItemsResults)
             LoadNotes(CurrentRequest.strUID)

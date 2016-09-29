@@ -75,6 +75,7 @@ Partial Class frmManageRequest
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.txtCreateDate = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.pnlEditButtons.SuspendLayout()
@@ -93,6 +94,7 @@ Partial Class frmManageRequest
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.txtCreateDate)
         Me.GroupBox1.Controls.Add(Me.Panel3)
         Me.GroupBox1.Controls.Add(Me.Label8)
         Me.GroupBox1.Controls.Add(Me.txtRequestNum)
@@ -183,7 +185,7 @@ Partial Class frmManageRequest
         '
         Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(493, 28)
+        Me.Label8.Location = New System.Drawing.Point(474, 17)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(66, 15)
         Me.Label8.TabIndex = 16
@@ -192,7 +194,7 @@ Partial Class frmManageRequest
         'txtRequestNum
         '
         Me.txtRequestNum.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtRequestNum.Location = New System.Drawing.Point(496, 44)
+        Me.txtRequestNum.Location = New System.Drawing.Point(477, 33)
         Me.txtRequestNum.Name = "txtRequestNum"
         Me.txtRequestNum.ReadOnly = True
         Me.txtRequestNum.Size = New System.Drawing.Size(86, 21)
@@ -224,7 +226,7 @@ Partial Class frmManageRequest
         Me.GroupBox2.Controls.Add(Me.txtReqNumber)
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Controls.Add(Me.txtPO)
-        Me.GroupBox2.Location = New System.Drawing.Point(419, 83)
+        Me.GroupBox2.Location = New System.Drawing.Point(419, 87)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(175, 157)
         Me.GroupBox2.TabIndex = 11
@@ -243,9 +245,10 @@ Partial Class frmManageRequest
         'txtRTNumber
         '
         Me.txtRTNumber.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.txtRTNumber.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtRTNumber.Location = New System.Drawing.Point(20, 119)
         Me.txtRTNumber.Name = "txtRTNumber"
-        Me.txtRTNumber.Size = New System.Drawing.Size(137, 21)
+        Me.txtRTNumber.Size = New System.Drawing.Size(137, 22)
         Me.txtRTNumber.TabIndex = 8
         Me.ToolTip.SetToolTip(Me.txtRTNumber, "Click to open RT Ticket.")
         '
@@ -261,9 +264,10 @@ Partial Class frmManageRequest
         'txtReqNumber
         '
         Me.txtReqNumber.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.txtReqNumber.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtReqNumber.Location = New System.Drawing.Point(20, 79)
         Me.txtReqNumber.Name = "txtReqNumber"
-        Me.txtReqNumber.Size = New System.Drawing.Size(137, 21)
+        Me.txtReqNumber.Size = New System.Drawing.Size(137, 22)
         Me.txtReqNumber.TabIndex = 6
         '
         'Label5
@@ -278,9 +282,10 @@ Partial Class frmManageRequest
         'txtPO
         '
         Me.txtPO.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.txtPO.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtPO.Location = New System.Drawing.Point(20, 41)
         Me.txtPO.Name = "txtPO"
-        Me.txtPO.Size = New System.Drawing.Size(137, 21)
+        Me.txtPO.Size = New System.Drawing.Size(137, 22)
         Me.txtPO.TabIndex = 4
         '
         'chkPlanned
@@ -618,6 +623,22 @@ Partial Class frmManageRequest
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
+        'txtCreateDate
+        '
+        Me.txtCreateDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtCreateDate.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtCreateDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCreateDate.ForeColor = System.Drawing.Color.Silver
+        Me.txtCreateDate.Location = New System.Drawing.Point(451, 60)
+        Me.txtCreateDate.Name = "txtCreateDate"
+        Me.txtCreateDate.ReadOnly = True
+        Me.txtCreateDate.Size = New System.Drawing.Size(134, 13)
+        Me.txtCreateDate.TabIndex = 23
+        Me.txtCreateDate.Text = "2016-07-29 15:42:16"
+        Me.txtCreateDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ToolTip.SetToolTip(Me.txtCreateDate, "Create Date")
+        Me.txtCreateDate.WordWrap = False
+        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -704,4 +725,5 @@ Partial Class frmManageRequest
     Friend WithEvents fieldErrorIcon As ErrorProvider
     Friend WithEvents Panel3 As Panel
     Friend WithEvents pnlCreate As Panel
+    Friend WithEvents txtCreateDate As TextBox
 End Class
