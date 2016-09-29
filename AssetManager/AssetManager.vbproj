@@ -219,18 +219,19 @@
     <Compile Include="Forms\Main\View_Tracking.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\Classes\Crypto.vb" />
-    <Compile Include="Modules\Classes\Indexes.vb" />
-    <Compile Include="Modules\Classes\Munis_Functions.vb" />
-    <Compile Include="Modules\Classes\Munis_Comms.vb" />
+    <Compile Include="Modules\Classes\clsForm_Control.vb" />
+    <Compile Include="Modules\Classes\clsCrypto.vb" />
+    <Compile Include="Modules\Classes\clsIndexes.vb" />
+    <Compile Include="Modules\Classes\clsMunis_Functions.vb" />
+    <Compile Include="Modules\Classes\clsMunis_Comms.vb" />
     <Compile Include="Modules\DataImport.vb" />
     <Compile Include="Modules\DBScript.vb" />
     <Compile Include="Modules\Helpers\DBFunctions.vb" />
     <Compile Include="Modules\ErrorHandling.vb" />
     <Compile Include="Modules\ExtendedMethods.vb" />
     <Compile Include="Modules\Helpers\FTPFunctions.vb" />
-    <Compile Include="Modules\Classes\LiveBox.vb" />
-    <Compile Include="Modules\Classes\MySQL_Comms.vb" />
+    <Compile Include="Modules\Classes\clsLiveBox.vb" />
+    <Compile Include="Modules\Classes\clsMySQL_Comms.vb" />
     <Compile Include="Modules\MyStructures.vb" />
     <Compile Include="Modules\PDFFormFilling.vb" />
     <Compile Include="Modules\SecurityMod.vb" />

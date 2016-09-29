@@ -1,5 +1,5 @@
 ﻿Imports System.Data.SqlClient
-Public Class Munis_Comms
+Public Class clsMunis_Comms
     Private Const MSSQLConnectString As String = "server=svr-munis5.core.co.fairfield.oh.us; database=mu_live; trusted_connection=True;"
     Public Function Return_MSSQLTable(strSQLQry As String) As DataTable
         Dim ds As New DataSet

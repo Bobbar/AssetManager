@@ -1,7 +1,7 @@
 ﻿Imports MySql.Data.MySqlClient
 Module DBScript
     Private DeviceList As DataTable
-    Private Munis As New Munis_Comms
+    Private Munis As New clsMunis_Comms
 
     Public Sub GetAndSetEmpNums()
         Dim strQRY As String = "SELECT * FROM devices"

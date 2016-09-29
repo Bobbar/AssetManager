@@ -7,7 +7,7 @@ Public Class View
     Public MunisUser As Emp_Info = Nothing
     Private OldData As Device_Info
     Public NewData As Device_Info
-    Private MyLiveBox As New LiveBox
+    Private MyLiveBox As New clsLiveBox
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim MyMunisMenu As New MunisToolsMenu
         MyMunisMenu.Tag = Me

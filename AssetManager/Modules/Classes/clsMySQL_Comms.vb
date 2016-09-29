@@ -1,5 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
-Public Class MySQL_Comms
+Public Class clsMySQL_Comms
     Private strDatabase As String = "asset_manager"
     Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
