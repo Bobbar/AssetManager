@@ -219,7 +219,7 @@
     <Compile Include="Forms\Main\View_Tracking.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\Classes\clsForm_Control.vb" />
+    <Compile Include="Modules\Form_Control.vb" />
     <Compile Include="Modules\Classes\clsCrypto.vb" />
     <Compile Include="Modules\Classes\clsIndexes.vb" />
     <Compile Include="Modules\Classes\clsMunis_Functions.vb" />

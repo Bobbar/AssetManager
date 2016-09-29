@@ -1,4 +1,4 @@
-﻿Public Class clsForm_Control
+﻿Public Module Form_Control
     Public Sub ActivateForm(strGUID As String)
         For Each frm As Form In My.Application.OpenForms
             Select Case frm.Name
@@ -87,4 +87,4 @@
         Next
         Return False
     End Function
-End Class
+End Module
