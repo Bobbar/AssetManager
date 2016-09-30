@@ -7,7 +7,7 @@ Imports System.IO
 Imports System.Collections
 Imports System.ComponentModel
 Imports System.Text
-Module PDFFormFilling
+Module modPDFFormFilling
     Public NotInheritable Class FormType
         Public Const InputForm As String = "INPUT"
         Public Const TransferForm As String = "TRANSFER"

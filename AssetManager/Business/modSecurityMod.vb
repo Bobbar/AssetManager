@@ -3,7 +3,7 @@ Imports MySql.Data.MySqlClient
 Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Text
-Module SecurityMod
+Module modSecurityMod
 
     Public AccessLevels() As Access_Info
 

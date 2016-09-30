@@ -3,11 +3,6 @@ Imports System.Environment
 Imports System.IO
 Imports System.Runtime.InteropServices
 Module OtherFunctions
-    'paths
-
-    'colors
-
-    'misc
     Public GridStyles As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Public stpw As New Stopwatch

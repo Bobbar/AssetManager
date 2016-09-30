@@ -1,4 +1,4 @@
-﻿Module Attrib_Classes
+﻿Module Type_Classes
     Public NotInheritable Class Attrib_Type
         Public Const Location As String = "LOCATION"
         Public Const ChangeType As String = "CHANGETYPE"

@@ -128,15 +128,15 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Attrib_Classes.vb" />
-    <Compile Include="Classes\Colors.vb" />
+    <Compile Include="Classes\Type_Classes.vb" />
+    <Compile Include="UserInterface\Colors.vb" />
     <Compile Include="Classes\Constants.vb" />
     <Compile Include="Classes\Global_Instances.vb" />
     <Compile Include="Classes\Paths.vb" />
-    <Compile Include="DataRepo\AssetManager\FTP\clsFTP_Comms.vb" />
-    <Compile Include="DataRepo\AssetManager\MySQL\ServerInfo.vb" />
+    <Compile Include="DataComms\AssetManager\FTP\clsFTP_Comms.vb" />
+    <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
     <Compile Include="Helpers\Form_Control.vb" />
-    <Compile Include="Services\clsAssetManager_Functions.vb" />
+    <Compile Include="DataFunctions\clsAssetManager_Functions.vb" />
     <Compile Include="UserInterface\Forms\Main\AddNew.Designer.vb">
       <DependentUpon>AddNew.vb</DependentUpon>
     </Compile>
@@ -230,18 +230,18 @@
     </Compile>
     <Compile Include="Business\clsCrypto.vb" />
     <Compile Include="Classes\Indexes.vb" />
-    <Compile Include="Services\clsMunis_Functions.vb" />
-    <Compile Include="DataRepo\Munis\clsMunis_Comms.vb" />
-    <Compile Include="Business\DBScript.vb" />
+    <Compile Include="DataFunctions\clsMunis_Functions.vb" />
+    <Compile Include="DataComms\Munis\clsMunis_Comms.vb" />
+    <Compile Include="Business\modDBScript.vb" />
     <Compile Include="Helpers\DBFunctions.vb" />
     <Compile Include="Helpers\ErrorHandling.vb" />
     <Compile Include="Helpers\ExtendedMethods.vb" />
-    <Compile Include="Services\clsFTP_Functions.vb" />
+    <Compile Include="DataFunctions\clsFTP_Functions.vb" />
     <Compile Include="UserInterface\MyControls\clsLiveBox.vb" />
-    <Compile Include="DataRepo\AssetManager\MySQL\clsMySQL_Comms.vb" />
+    <Compile Include="DataComms\AssetManager\MySQL\clsMySQL_Comms.vb" />
     <Compile Include="Classes\Structures.vb" />
-    <Compile Include="Business\PDFFormFilling.vb" />
-    <Compile Include="Business\SecurityMod.vb" />
+    <Compile Include="Business\modPDFFormFilling.vb" />
+    <Compile Include="Business\modSecurityMod.vb" />
     <Compile Include="UserInterface\MyControls\MunisTools.Designer.vb">
       <DependentUpon>MunisTools.vb</DependentUpon>
     </Compile>
@@ -393,7 +393,6 @@
   <ItemGroup>
     <Content Include="AssetManager.ico" />
     <None Include="Resources\239360-transfer_arrows-512.png" />
-    <None Include="Resources\2000px-Achtung.svg.png" />
     <Content Include="Resources\Add.png" />
     <None Include="Resources\check-out.png" />
     <None Include="Resources\delete-icon-red.png" />

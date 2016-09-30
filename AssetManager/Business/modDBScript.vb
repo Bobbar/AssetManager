@@ -1,5 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
-Module DBScript
+Module modDBScript
     Private DeviceList As DataTable
     Private Munis As New clsMunis_Comms
     Private MySQLDB As New clsMySQL_Comms
