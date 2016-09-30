@@ -4,23 +4,10 @@ Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Text
 Module SecurityMod
-    Public NotInheritable Class AccessGroup
-        Public Const Add As String = "add"
-        Public Const CanRun As String = "can_run"
-        Public Const Delete As String = "delete"
-        Public Const ManageAttachment As String = "manage_attach"
-        Public Const Modify As String = "modify"
-        Public Const Tracking As String = "track"
-        Public Const ViewAttachment As String = "view_attach"
-        Public Const Sibi_View As String = "sibi_view"
-        Public Const Sibi_Add As String = "sibi_add"
-        Public Const Sibi_Modify As String = "sibi_modify"
-        Public Const Sibi_Delete As String = "sibi_delete"
-        Public Const IsAdmin As String = "admin"
-    End Class
+
     Public AccessLevels() As Access_Info
-    Public Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
-    Public Const EncFTPUserPass As String = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ="
+
+
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
     Public Function DecodePassword(strCypher As String) As String
         Dim wrapper As New Simple3Des(CryptKey)
@@ -58,50 +45,8 @@ Module SecurityMod
             If Group.strModule = SecModule Then Return Group.intLevel
         Next
     End Function
-    Public Sub GetAccessLevels()
-        Try
-            Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM security ORDER BY sec_access_level" ' WHERE usr_username='" & strLocalUser & "'"
-            Dim rows As Integer
-            reader = MySQLDB.Return_SQLReader(strQRY)
-            ReDim AccessLevels(0)
-            rows = -1
-            With reader
-                Do While .Read()
-                    rows += 1
-                    ReDim Preserve AccessLevels(rows)
-                    AccessLevels(rows).intLevel = !sec_access_level
-                    AccessLevels(rows).strModule = !sec_module
-                    AccessLevels(rows).strDesc = !sec_desc
-                Loop
-            End With
-            reader.Close()
-        Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
-    End Sub
-    Public Sub GetUserAccess()
-        Try
-            Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM users WHERE usr_username='" & strLocalUser & "'"
-            reader = MySQLDB.Return_SQLReader(strQRY)
-            With reader
-                If .HasRows Then
-                    Do While .Read()
-                        UserAccess.strUsername = !usr_username
-                        UserAccess.strFullname = !usr_fullname
-                        UserAccess.intAccessLevel = !usr_access_level
-                        UserAccess.strUID = !usr_UID
-                    Loop
-                Else
-                    UserAccess.intAccessLevel = 0
-                End If
-            End With
-            reader.Close()
-        Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
-    End Sub
+
+
     Public Function CanAccess(recModule As String, intAccessLevel As Integer) As Boolean 'bitwise access levels
         Dim mask As UInteger = 1
         Dim calc_level As UInteger

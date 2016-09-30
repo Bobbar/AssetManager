@@ -40,8 +40,8 @@ Public Class MainForm
             Status("Loading Indexes...")
             BuildIndexes()
             Status("Checking Access Level...")
-            GetAccessLevels()
-            GetUserAccess()
+            Asset.GetAccessLevels()
+            Asset.GetUserAccess()
             If Not CanAccess(AccessGroup.CanRun, UserAccess.intAccessLevel) Then
                 Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied")
                 EndProgram()
@@ -206,9 +206,6 @@ Public Class MainForm
             New SearchVal("dev_trackable", chkTrackables.Checked)
             }
     End Function
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs)
-        StartImport()
-    End Sub
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
         Clear_All()
     End Sub
@@ -348,11 +345,12 @@ Public Class MainForm
     End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
+            Dim SQLComm As New clsMySQL_Comms
             Dim QryComm As New MySqlCommand
             QryComm = DirectCast(e.Argument, Object)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
-            Dim conn As MySqlConnection = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
+            Dim conn As MySqlConnection = SQLComm.NewConnection '(MySQLDB.MySQLConnectString)
             QryComm.Connection = conn
             BigQueryWorker.ReportProgress(1)
             da.SelectCommand = QryComm
@@ -360,7 +358,7 @@ Public Class MainForm
             da.Dispose()
             e.Result = ds.Tables(0)
             ds.Dispose()
-            MySQLDB.CloseConnection(conn) 'conn.Close()
+            Asset.CloseConnection(conn) 'conn.Close()
         Catch ex As Exception
             ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             ConnectionReady()
@@ -440,16 +438,17 @@ Public Class MainForm
         Do Until ProgramEnding
             If GlobalConn.State = ConnectionState.Open Then 'test connection
                 Try
+                    Dim SQLComm As New clsMySQL_Comms
                     Dim ds As New DataSet
                     Dim da As New MySqlDataAdapter
                     Dim rows As Integer
-                    Dim conn As MySqlConnection = MySQLDB.NewConnection
+                    Dim conn As MySqlConnection = SQLComm.NewConnection
                     da.SelectCommand = New MySqlCommand("SELECT NOW()")
                     da.SelectCommand.Connection = conn
                     da.Fill(ds)
                     rows = ds.Tables(0).Rows.Count
                     strServerTime = ds.Tables(0).Rows(0).Item(0).ToString
-                    MySQLDB.CloseConnection(conn)
+                    Asset.CloseConnection(conn)
                     da.Dispose()
                     ds.Dispose()
                 Catch ex As MySqlException
@@ -612,14 +611,14 @@ Public Class MainForm
         End If
     End Sub
     Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
-        ScanAttachements()
+        FTP.ScanAttachements()
     End Sub
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles Button1.Click
         ' GetAndSetEmpNums()
         SetEmpNames()
     End Sub
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
-        SendToGrid(DevicesBySup())
+        SendToGrid(Asset.DevicesBySup())
     End Sub
     Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Dim f As Form = sender

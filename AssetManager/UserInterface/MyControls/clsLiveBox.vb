@@ -64,7 +64,7 @@ Public Class clsLiveBox
     Public Sub Unload()
         Try
             HideLiveBox()
-            MySQLDB.CloseConnection(LiveConn)
+            Asset.CloseConnection(LiveConn)
             LiveBox.Dispose()
         Catch
         End Try

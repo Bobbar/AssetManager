@@ -1,16 +1,10 @@
-﻿Module FTPFunctions
-    Public Const strFTPUser As String = "asset_manager"
-    Public strFTPPass As String = DecodePassword(EncFTPUserPass)
-    Public FTPcreds As Net.NetworkCredential = New Net.NetworkCredential(strFTPUser, strFTPPass)
-    Private intSocketTimeout As Integer = 30000 'timeout for FTP comms in MS
-    Public Structure FTPScan_Parms
-        Public IsOrphan As Boolean
-        Public strTable As String
-    End Structure
+﻿Public Class clsFTP_Functions
+    Private FTPComms As New clsFTP_Comms
+    Private SQLComms As New clsMySQL_Comms
     Public Function DeleteFTPAttachment(AttachUID As String, DeviceUID As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Try
-            resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/" & AttachUID, Net.WebRequestMethods.Ftp.DeleteFile)
+            resp = FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/" & AttachUID, Net.WebRequestMethods.Ftp.DeleteFile)
             If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                 Return True
             Else
@@ -24,7 +18,7 @@
         Dim resp As Net.FtpWebResponse = Nothing
         Dim files As List(Of String)
         Try
-            resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/", Net.WebRequestMethods.Ftp.ListDirectory)
+            resp = FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/", Net.WebRequestMethods.Ftp.ListDirectory)
             Dim responseStream As System.IO.Stream = resp.GetResponseStream
             files = New List(Of String)
             Dim reader As IO.StreamReader = New IO.StreamReader(responseStream)
@@ -35,10 +29,10 @@
             responseStream.Dispose()
             Dim i As Integer = 0
             For Each file In files  'delete each file counting for successes
-                i += MySQLDB.DeleteAttachment(file, Type)
+                i += Asset.DeleteSQLAttachment(file, Type)
             Next
             If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
-                resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID, Net.WebRequestMethods.Ftp.RemoveDirectory)
+                resp = FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID, Net.WebRequestMethods.Ftp.RemoveDirectory)
             End If
             If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                 Return True
@@ -50,46 +44,16 @@
             Return False
         End Try
     End Function
-    Public Function Return_FTPResponse(strUri As String, Method As String) As Net.WebResponse
-        Dim request As Net.FtpWebRequest = Net.FtpWebRequest.Create(strUri)
-        Try
-            With request
-                '.KeepAlive = True
-                .Proxy = New Net.WebProxy() 'set proxy to nothing to bypass .NET auto-detect process. This speeds up the initial connection greatly.
-                .Credentials = FTPcreds
-                .Method = Method
-                .ReadWriteTimeout = intSocketTimeout
-                Return .GetResponse
-            End With
-        Catch ex As Exception
-            Return request.GetResponse
-        End Try
-    End Function
-    Public Function Return_FTPRequestStream(strUri As String, Method As String) As IO.Stream
-        Try
-            Dim request As Net.FtpWebRequest = Net.FtpWebRequest.Create(strUri)
-            With request
-                '.KeepAlive = True
-                .Proxy = New Net.WebProxy() 'set proxy to nothing to bypass .NET auto-detect process. This speeds up the initial connection greatly.
-                .Credentials = FTPcreds
-                .Method = Method
-                .ReadWriteTimeout = intSocketTimeout
-                Return .GetRequestStream
-            End With
-        Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            Return Nothing
-        End Try
-    End Function
+
     Private Function FTPFolderIsOrphan(FolderUID As String) As FTPScan_Parms
         Dim ScanResults As New FTPScan_Parms
         Dim intHits As Integer = 0
         Dim results As String
-        results = MySQLDB.Get_SQLValue("devices", "dev_UID", FolderUID, "dev_UID")
+        results = Asset.Get_SQLValue("devices", "dev_UID", FolderUID, "dev_UID")
         If results <> "" Then
             intHits += 1
         End If
-        results = MySQLDB.Get_SQLValue("sibi_requests", "sibi_uid", FolderUID, "sibi_uid")
+        results = Asset.Get_SQLValue("sibi_requests", "sibi_uid", FolderUID, "sibi_uid")
         If results <> "" Then
             intHits += 1
         End If
@@ -107,13 +71,13 @@
         Dim strQRYDev As String = "SELECT * FROM dev_attachments WHERE attach_dev_UID ='" & FolderUID & "' AND attach_file_UID = '" & FileUID & "'"
         Dim strQRYSibi As String = "SELECT * FROM sibi_attachments WHERE sibi_attach_uid ='" & FolderUID & "' AND sibi_attach_file_UID='" & FileUID & "'"
         Dim results As DataTable
-        results = MySQLDB.Return_SQLTable(strQRYDev)
+        results = SQLComms.Return_SQLTable(strQRYDev)
         If results.Rows.Count > 0 Then
             intHits += 1
         Else
             ScanResults.strTable = "Device"
         End If
-        results = MySQLDB.Return_SQLTable(strQRYSibi)
+        results = SQLComms.Return_SQLTable(strQRYSibi)
         If results.Rows.Count > 0 Then
             intHits += 1
         Else
@@ -131,7 +95,7 @@
         Dim resp As Net.FtpWebResponse
         Dim files As List(Of String)
         Try
-            resp = Return_FTPResponse(Uri, Net.WebRequestMethods.Ftp.ListDirectory) '"ftp://" & strServerIP & "/attachments/"
+            resp = FTPComms.Return_FTPResponse(Uri, Net.WebRequestMethods.Ftp.ListDirectory) '"ftp://" & strServerIP & "/attachments/"
             Dim responseStream As System.IO.Stream = resp.GetResponseStream
             files = New List(Of String)
             Dim reader As IO.StreamReader = New IO.StreamReader(responseStream)
@@ -210,7 +174,7 @@
         Next
         If FileList.Count = i Then
             Dim resp As Net.FtpWebResponse = Nothing
-            resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Directory, Net.WebRequestMethods.Ftp.RemoveDirectory)
+            resp = FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Directory, Net.WebRequestMethods.Ftp.RemoveDirectory)
             If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                 Return True
             Else
@@ -218,4 +182,4 @@
             End If
         End If
     End Function
-End Module
+End Class

@@ -2,6 +2,7 @@
 Module DBScript
     Private DeviceList As DataTable
     Private Munis As New clsMunis_Comms
+    Private MySQLDB As New clsMySQL_Comms
 
     Public Sub GetAndSetEmpNums()
         Dim strQRY As String = "SELECT * FROM devices"
@@ -18,7 +19,7 @@ Module DBScript
                     AddEmp(EmpInfo)
 
                 End If
-                MySQLDB.Update_SQLValue("devices", "dev_cur_user_emp_num", EmpInfo.Number, "dev_UID", (r.Item("dev_UID")))
+                Asset.Update_SQLValue("devices", "dev_cur_user_emp_num", EmpInfo.Number, "dev_UID", (r.Item("dev_UID")))
             End If
 
 
@@ -37,7 +38,7 @@ Module DBScript
         For Each r As DataRow In EmpList.Rows
 
             Debug.Print(r.Item("emp_name"))
-            MySQLDB.Update_SQLValue("devices", "dev_cur_user", r.Item("emp_name"), "dev_cur_user_emp_num", r.Item("emp_number"))
+            Asset.Update_SQLValue("devices", "dev_cur_user", r.Item("emp_name"), "dev_cur_user_emp_num", r.Item("emp_number"))
 
 
         Next
@@ -46,7 +47,7 @@ Module DBScript
 
     End Sub
     Private Function IsInDB(EmpNum As String) As Boolean
-        Dim EmpName As String = MySQLDB.Get_SQLValue("employees", "emp_number", EmpNum, "emp_name")
+        Dim EmpName As String = Asset.Get_SQLValue("employees", "emp_number", EmpNum, "emp_name")
         If EmpName <> "" Then
             Return True
         Else

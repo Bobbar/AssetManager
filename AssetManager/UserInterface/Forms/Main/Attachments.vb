@@ -83,6 +83,7 @@ Class Attachments
         End If
         Waiting()
         Try
+            Dim Comms As New clsMySQL_Comms
             Dim reader As MySqlDataReader
             Dim table As New DataTable
             Dim strQry As String
@@ -103,7 +104,7 @@ Class Attachments
                 table.Columns.Add("AttachUID", GetType(String))
                 table.Columns.Add("MD5", GetType(String))
             End If
-            reader = MySQLDB.Return_SQLReader(strQry)
+            reader = Comms.Return_SQLReader(strQry)
             Dim strFullFilename As String
             Dim row As Integer
             ReDim AttachIndex(0)
@@ -214,7 +215,7 @@ Class Attachments
         blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             Waiting()
-            If MySQLDB.DeleteAttachment(AttachIndex(i).strFileUID, Entry_Type.Device) > 0 Then
+            If Asset.DeleteSQLAttachment(AttachIndex(i).strFileUID, Entry_Type.Device) > 0 Then
                 ListAttachments(CurrentAttachDevice.strGUID)
                 DoneWaiting()
                 blah = Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
@@ -236,6 +237,8 @@ Class Attachments
     End Sub
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
         'file stuff
+        Dim SQLComm As New clsMySQL_Comms
+        Dim FTPComm As New clsFTP_Comms
         Dim Foldername As String = CurrentAttachDevice.strGUID
         Dim strFileGuid As String
         Dim Files() As String = DirectCast(e.Argument, String())
@@ -246,7 +249,7 @@ Class Attachments
         Dim FileSize As Long
         Dim FileSizeMB As Integer
         Dim FileNumber As Integer = 1
-        Dim conn As MySqlConnection = MySQLDB.NewConnection
+        Dim conn As MySqlConnection = SQLComm.NewConnection
         Dim cmd As New MySqlCommand
         Try
             For Each file As String In Files
@@ -268,11 +271,11 @@ Class Attachments
                 Dim SQL As String
                 Dim resp As Net.FtpWebResponse = Nothing
                 Using resp 'check if device folder exists. create directory if not.
-                    resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
+                    resp = FTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
                     Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
                     Dim s As String = sr.ReadToEnd()
                     If Not s.Contains(Foldername) Then
-                        resp = Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
+                        resp = FTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
                     End If
                 End Using
                 'ftp upload
@@ -282,7 +285,7 @@ Class Attachments
                 Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
                 Dim FileHash As String = GetHashOfStream(ftpStream)
                 Dim flLength As Integer = ftpStream.Length
-                Dim reqfile As System.IO.Stream = Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+                Dim reqfile As System.IO.Stream = FTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
                 Dim perc As Short = 0
                 stpSpeed.Start()
                 UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
@@ -307,7 +310,7 @@ Class Attachments
                 ftpStream.Dispose()
                 If UploadWorker.CancellationPending Then
                     e.Cancel = True
-                    DeleteFTPAttachment(strFileGuid, Foldername)
+                    FTP.DeleteFTPAttachment(strFileGuid, Foldername)
                 End If
                 'update sql table
                 If Not UploadWorker.CancellationPending Then
@@ -323,22 +326,22 @@ Class Attachments
                     cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
                     cmd.ExecuteNonQuery()
                     cmd.Parameters.Clear()
-                    MySQLDB.CloseConnection(conn)
+                    Asset.CloseConnection(conn)
                     cmd.Dispose()
                     e.Result = True
                 Else
                     e.Result = False
                 End If
                 FileNumber += 1
-                MySQLDB.CloseConnection(conn) 
+                Asset.CloseConnection(conn)
                 UploadWorker.ReportProgress(3, "Idle...")
             Next
-            MySQLDB.CloseConnection(conn)
+            Asset.CloseConnection(conn)
             cmd.Dispose()
             UploadWorker.ReportProgress(1, "Idle...")
         Catch ex As Exception
             e.Result = False
-            MySQLDB.CloseConnection(conn)
+            Asset.CloseConnection(conn)
             UploadWorker.ReportProgress(1, "Idle...")
             If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
@@ -363,6 +366,8 @@ Class Attachments
         End Try
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
+        Dim SQLComm As New clsMySQL_Comms
+        Dim FTPComm As New clsFTP_Comms
         Dim strTimeStamp As String = Now.ToString("_hhmmss")
         Dim Foldername As String
         Dim FileExpectedHash As String
@@ -374,7 +379,7 @@ Class Attachments
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_file_UID,attach_dev_UID,attach_file_hash FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
-        Dim conn As MySqlConnection = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
+        Dim conn As MySqlConnection = SQLComm.NewConnection '(MySQLDB.MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
         'Dim FileSize As UInt32
         Dim strFilename As String, strFiletype As String, strFullPath As String
@@ -395,7 +400,7 @@ Class Attachments
             End With
             reader.Close()
             reader.Dispose()
-            MySQLDB.CloseConnection(conn)
+            Asset.CloseConnection(conn)
             'conn.Close()
             'conn.Dispose()
             'FTP STUFF
@@ -406,9 +411,9 @@ Class Attachments
             Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID
             Dim resp As Net.FtpWebResponse = Nothing
             'get file size
-            Dim flLength As Int64 = CInt(Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
+            Dim flLength As Int64 = CInt(FTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
             'setup download
-            resp = Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
+            resp = FTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
             Dim respStream As IO.Stream = resp.GetResponseStream
             'ftp download
             ProgTimer.Enabled = True
@@ -541,7 +546,7 @@ Class Attachments
         ProgressBar1.Value = intProgress
     End Sub
     Private Sub Button1_Click_1(sender As Object, e As EventArgs)
-        DeleteFTPFolder(CurrentAttachDevice.strGUID, Entry_Type.Device)
+        FTP.DeleteFTPFolder(CurrentAttachDevice.strGUID, Entry_Type.Device)
         ListAttachments(CurrentAttachDevice.strGUID)
     End Sub
     Private Sub HighlightCurrentRow(Row As Integer)

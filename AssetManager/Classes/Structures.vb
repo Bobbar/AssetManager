@@ -1,5 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
-Public Module MyStructures
+Public Module Structures
     Public Structure ConnectionData
         Public DBConnection As MySqlConnection
         Public ConnectionID As String
@@ -84,4 +84,9 @@ Public Module MyStructures
         Public Name As String
         Public UID As String
     End Structure
+    Public Structure FTPScan_Parms
+        Public IsOrphan As Boolean
+        Public strTable As String
+    End Structure
+
 End Module
