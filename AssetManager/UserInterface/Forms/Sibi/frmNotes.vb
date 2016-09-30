@@ -2,6 +2,7 @@
 Public Class frmNotes
     Private NoteRequest As Request_Info
     Private CallingForm As frmManageRequest
+    Private SQLComms As New clsMySQL_Comms
     Private Sub ClearAll()
         rtbNotes.Clear()
     End Sub
@@ -24,7 +25,7 @@ VALUES
 (@sibi_request_uid,
 @sibi_note_uid,
 @sibi_note)"
-            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strAddNoteQry)
+            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strAddNoteQry)
             cmd.Parameters.AddWithValue("@sibi_request_uid", RequestUID)
             cmd.Parameters.AddWithValue("@sibi_note_uid", strNoteUID)
             cmd.Parameters.AddWithValue("@sibi_note", Note)
@@ -42,7 +43,7 @@ VALUES
     Public Sub ViewNote(NoteUID As String)
         cmdOK.Visible = False
         rtbNotes.Clear()
-        rtbNotes.Text = MySQLDB.Get_SQLValue("sibi_notes", "sibi_note_uid", NoteUID, "sibi_note")
+        rtbNotes.Text = Asset.Get_SQLValue("sibi_notes", "sibi_note_uid", NoteUID, "sibi_note")
         rtbNotes.ReadOnly = True
         Me.Show()
     End Sub

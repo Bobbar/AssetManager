@@ -1,20 +1,11 @@
 ﻿Option Explicit On
 Imports MySql.Data.MySqlClient
 Public Class Tracking
-    Private Structure CheckStruct
-        Public strCheckOutTime As String
-        Public strDueDate As String
-        Public strUseLocation As String
-        Public strUseReason As String
-        Public strCheckInNotes As String
-        Public strDeviceUID As String
-        Public strCheckOutUser As String
-        Public strCheckInUser As String
-        Public strCheckInTime As String
-    End Structure
+
     Private CurrentTrackingDevice As Device_Info
     Private CurrentSender As View
     Private CheckData As CheckStruct
+    Private SQLComms As New clsMySQL_Comms
     Private Function GetCheckData() As Boolean
         If Not CurrentTrackingDevice.Tracking.bolCheckedOut Then
             Dim c As Control
@@ -64,7 +55,7 @@ Public Class Tracking
     Private Sub GetCurrentTracking(strGUID As String)
         Dim dt As DataTable
         Dim dr As DataRow
-        dt = MySQLDB.Return_SQLTable("SELECT * FROM dev_trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1") 'ds.Tables(0)
+        dt = SQLComms.Return_SQLTable("SELECT * FROM dev_trackable WHERE track_device_uid='" & strGUID & "' ORDER BY track_datestamp DESC LIMIT 1") 'ds.Tables(0)
         If dt.Rows.Count > 0 Then
             For Each dr In dt.Rows
                 With dr
@@ -121,7 +112,7 @@ Public Class Tracking
             Waiting()
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='1' WHERE dev_UID='" & CurrentTrackingDevice.strGUID & "'"
-            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSQLQry1)
+            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO dev_trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkout_user, track_use_location, track_notes, track_device_uid) VALUES(@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkout_user, @track_use_location, @track_notes, @track_device_uid)"
             cmd.CommandText = strSqlQry2
@@ -159,7 +150,7 @@ Public Class Tracking
             Waiting()
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE devices SET dev_checkedout='0' WHERE dev_UID='" & CurrentTrackingDevice.strGUID & "'"
-            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSQLQry1)
+            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO dev_trackable (track_check_type, track_checkout_time, track_dueback_date, track_checkin_time, track_checkout_user, track_checkin_user, track_use_location, track_notes, track_device_uid) VALUES (@track_check_type, @track_checkout_time, @track_dueback_date, @track_checkin_time, @track_checkout_user, @track_checkin_user, @track_use_location, @track_notes, @track_device_uid)"
             cmd.CommandText = strSqlQry2

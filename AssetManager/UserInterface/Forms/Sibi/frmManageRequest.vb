@@ -3,6 +3,7 @@ Imports System.Collections
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class frmManageRequest
+    Private SQLComms As New clsMySQL_Comms
     Public bolUpdating As Boolean = False
     Private bolGridFilling As Boolean = False
     Public CurrentRequest As Request_Info
@@ -375,7 +376,7 @@ VALUES
 @sibi_replace_asset,
 @sibi_replace_serial,
 @sibi_RT_number)"
-            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSqlQry1)
+            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
             cmd.Parameters.AddWithValue("@sibi_uid", strRequestUID)
             cmd.Parameters.AddWithValue("@sibi_request_user", RequestData.strUser)
             cmd.Parameters.AddWithValue("@sibi_description", RequestData.strDescription)
@@ -468,7 +469,7 @@ sibi_replace_asset = @sibi_replace_asset ,
 sibi_replace_serial = @sibi_replace_serial ,
 sibi_RT_number = @sibi_RT_number 
 WHERE sibi_uid ='" & CurrentRequest.strUID & "'"
-            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strRequestQRY)
+            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strRequestQRY)
             cmd.Parameters.AddWithValue("@sibi_request_user", RequestData.strUser)
             cmd.Parameters.AddWithValue("@sibi_description", RequestData.strDescription)
             cmd.Parameters.AddWithValue("@sibi_need_by", RequestData.dtNeedBy)
@@ -579,8 +580,8 @@ VALUES
         Try
             Dim strRequestQRY As String = "SELECT * FROM sibi_requests WHERE sibi_uid='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT * FROM sibi_request_items WHERE sibi_items_request_uid='" & RequestUID & "'"
-            Dim RequestResults As DataTable = MySQLDB.Return_SQLTable(strRequestQRY)
-            Dim RequestItemsResults As DataTable = MySQLDB.Return_SQLTable(strRequestItemsQRY)
+            Dim RequestResults As DataTable = SQLComms.Return_SQLTable(strRequestQRY)
+            Dim RequestItemsResults As DataTable = SQLComms.Return_SQLTable(strRequestItemsQRY)
             ClearAll()
             CollectRequestInfo(RequestResults, RequestItemsResults)
             With RequestResults.Rows(0)
@@ -611,7 +612,7 @@ VALUES
     End Sub
     Private Sub LoadNotes(RequestUID As String)
         Dim strPullNotesQry As String = "SELECT * FROM sibi_notes WHERE sibi_request_uid='" & RequestUID & "' ORDER BY sibi_datestamp DESC"
-        Dim Results As DataTable = MySQLDB.Return_SQLTable(strPullNotesQry)
+        Dim Results As DataTable = SQLComms.Return_SQLTable(strPullNotesQry)
         Dim table As New DataTable
         Dim intPreviewChars As Integer = 50
         table.Columns.Add("Date Stamp")
@@ -631,7 +632,7 @@ VALUES
         Try
             Dim rows
             Dim strSQLQry As String = "DELETE FROM " & Table & " WHERE " & ItemColumnName & "='" & ItemUID & "'"
-            rows = MySQLDB.Return_SQLCommand(strSQLQry).ExecuteNonQuery
+            rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function
         Catch ex As Exception
@@ -758,7 +759,7 @@ VALUES
         If IsNothing(CurrentRequest.RequstItems) Then Exit Sub
         Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
-            If DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
+            If Asset.DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
                 Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentRequest = Nothing
                 frmSibiMain.ShowAll()
@@ -848,9 +849,9 @@ VALUES
     End Sub
     Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click
         If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
-            LookupDevice(MySQLDB.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value))
+            LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value))
         ElseIf RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
-            LookupDevice(MySQLDB.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value))
+            LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value))
         End If
     End Sub
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click

@@ -8,6 +8,7 @@ Public Class View
     Private OldData As Device_Info
     Public NewData As Device_Info
     Private MyLiveBox As New clsLiveBox
+    Private SQLComms As New clsMySQL_Comms
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim MyMunisMenu As New MunisToolsMenu
         MyMunisMenu.Tag = Me
@@ -20,7 +21,7 @@ Public Class View
         CheckRDP()
     End Sub
     Private Sub GetCurrentValues()
-        OldData = CollectDeviceInfo(MySQLDB.Return_SQLTable("SELECT * FROM devices WHERE dev_UID = '" & CurrentViewDevice.strGUID & "'"))
+        OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM devices WHERE dev_UID = '" & CurrentViewDevice.strGUID & "'"))
     End Sub
     Public Sub GetNewValues(UpdateInfo As Update_Info)
         With NewData
@@ -129,7 +130,7 @@ Public Class View
         Try
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable, dev_po=@dev_po, dev_lastmod_user=@dev_lastmod_user, dev_lastmod_date=@dev_lastmod_date, dev_cur_user_emp_num=@dev_cur_user_emp_num WHERE dev_UID='" & CurrentViewDevice.strGUID & "'"
-            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSQLQry1)
+            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
             cmd.Parameters.AddWithValue("@dev_description", NewData.strDescription)
             cmd.Parameters.AddWithValue("@dev_location", NewData.strLocation)
             cmd.Parameters.AddWithValue("@dev_cur_user", NewData.strCurrentUser)
@@ -209,7 +210,7 @@ Public Class View
     Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
         Dim table, Results As New DataTable
         Try
-            Results = MySQLDB.Return_SQLTable("Select * FROM devices, dev_historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
+            Results = SQLComms.Return_SQLTable("Select * FROM devices, dev_historical WHERE dev_UID = hist_dev_UID And dev_UID = '" & DeviceUID & "' ORDER BY hist_action_datetime DESC")
             If Results.Rows.Count < 1 Then
                 CloseChildren(Me)
                 Results.Dispose()
@@ -217,7 +218,7 @@ Public Class View
                 Dim blah = Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
                 Return False
             End If
-            CurrentViewDevice = CollectDeviceInfo(Results)
+            CurrentViewDevice = Asset.CollectDeviceInfo(Results)
             FillDeviceInfo()
             SendToHistGrid(DataGridHistory, Results)
             Results.Dispose()
@@ -348,7 +349,7 @@ Public Class View
                 Exit Sub
             End If
             Waiting()
-            Results = MySQLDB.Return_SQLTable(strQry)
+            Results = SQLComms.Return_SQLTable(strQry)
             If Results.Rows.Count > 0 Then
                 CollectCurrentTracking(Results)
                 SendToTrackGrid(TrackingGrid, Results)
@@ -574,7 +575,7 @@ Public Class View
         Dim blah = Message("Are you absolutely sure?" & vbCrLf & vbCrLf & "This cannot be undone and will delete all historical data.", vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
             Dim rows As Integer
-            rows = DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device)
+            rows = Asset.DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device)
             If rows > 0 Then
                 Dim blah2 = Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentViewDevice = Nothing
@@ -635,7 +636,7 @@ Public Class View
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value
-        Dim Info As Device_Info = MySQLDB.Get_EntryInfo(strGUID)
+        Dim Info As Device_Info = Asset.Get_EntryInfo(strGUID)
         Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
             Dim blah2 = Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
@@ -648,7 +649,7 @@ Public Class View
         Try
             Dim rows
             Dim strSQLQry As String = "DELETE FROM dev_historical WHERE hist_uid='" & strGUID & "'"
-            rows = MySQLDB.Return_SQLCommand(strSQLQry).ExecuteNonQuery
+            rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function
         Catch ex As Exception
@@ -722,7 +723,7 @@ Public Class View
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
         Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
-            If DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device) Then
+            If Asset.DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device) Then
                 Dim blah2 = Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentViewDevice = Nothing
                 Me.Dispose()
@@ -916,7 +917,7 @@ Public Class View
         Dim f As New frmSibiSelector
         f.ShowDialog(Me)
         If f.DialogResult = DialogResult.OK Then
-            MySQLDB.Update_SQLValue("devices", "dev_sibi_link", f.SibiUID, "dev_UID", CurrentViewDevice.strGUID)
+            Asset.Update_SQLValue("devices", "dev_sibi_link", f.SibiUID, "dev_UID", CurrentViewDevice.strGUID)
             ViewDevice(CurrentViewDevice.strGUID)
         End If
     End Sub

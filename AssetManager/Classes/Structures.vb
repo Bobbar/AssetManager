@@ -88,5 +88,15 @@ Public Module Structures
         Public IsOrphan As Boolean
         Public strTable As String
     End Structure
-
+    Public Structure CheckStruct
+        Public strCheckOutTime As String
+        Public strDueDate As String
+        Public strUseLocation As String
+        Public strUseReason As String
+        Public strCheckInNotes As String
+        Public strDeviceUID As String
+        Public strCheckOutUser As String
+        Public strCheckInUser As String
+        Public strCheckInTime As String
+    End Structure
 End Module

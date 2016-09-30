@@ -3,6 +3,7 @@
     Private bolGridFilling As Boolean
     Public bolSelectMod As Boolean = False
     Private CurrentMunisDevice As Device_Info
+    Private MunisComms As New clsMunis_Comms
     Public Sub LoadDevice(Device As Device_Info)
         CurrentMunisDevice = Device
     End Sub

@@ -7,72 +7,26 @@ Public Class AddNew
     Private MyLiveBox As New clsLiveBox
     Public MunisUser As Emp_Info = Nothing
     Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
-        AddNewDevice()
+        AddDevice()
     End Sub
-    Private Sub AddNewDevice()
-        Try
-            Dim strUID As String = Guid.NewGuid.ToString
-            Dim rows As Integer
-            If Not CheckFields() Then
-                Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
-                bolCheckFields = True
-                Exit Sub
-            End If
-            GetDBValues()
-            Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_po,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_lastmod_date,dev_trackable,dev_cur_user_emp_num) VALUES(@dev_UID,@dev_description,@dev_location,@dev_cur_user,@dev_serial,@dev_asset_tag,@dev_purchase_date,@dev_po,@dev_replacement_year,@dev_eq_type,@dev_osversion,@dev_status,@dev_lastmod_user,@dev_lastmod_date,@dev_trackable,@dev_cur_user_emp_num)"
-            Dim cmd As MySqlCommand = MySQLDB.Return_SQLCommand(strSqlQry1)
-            cmd.Parameters.AddWithValue("@dev_UID", strUID)
-            cmd.Parameters.AddWithValue("@dev_description", Device.strDescription)
-            cmd.Parameters.AddWithValue("@dev_location", Device.strLocation)
-            cmd.Parameters.AddWithValue("@dev_cur_user", Device.strCurrentUser)
-            cmd.Parameters.AddWithValue("@dev_cur_user_emp_num", MunisUser.Number)
-            cmd.Parameters.AddWithValue("@dev_serial", Device.strSerial)
-            cmd.Parameters.AddWithValue("@dev_asset_tag", Device.strAssetTag)
-            cmd.Parameters.AddWithValue("@dev_purchase_date", Device.dtPurchaseDate)
-            cmd.Parameters.AddWithValue("@dev_po", Device.strPO)
-            cmd.Parameters.AddWithValue("@dev_replacement_year", Device.strReplaceYear)
-            cmd.Parameters.AddWithValue("@dev_eq_type", Device.strEqType)
-            cmd.Parameters.AddWithValue("@dev_osversion", Device.strOSVersion)
-            cmd.Parameters.AddWithValue("@dev_status", Device.strStatus)
-            cmd.Parameters.AddWithValue("@dev_lastmod_user", strLocalUser)
-            cmd.Parameters.AddWithValue("@dev_lastmod_date", Now)
-            cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(Device.bolTrackable))
-            rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO dev_historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES(@hist_change_type, @hist_notes, @hist_serial, @hist_description, @hist_location, @hist_cur_user, @hist_asset_tag, @hist_purchase_date, @hist_replacement_year, @hist_po, @hist_osversion, @hist_dev_UID, @hist_action_user, @hist_eq_type, @hist_status, @hist_trackable)"
-            cmd.Parameters.AddWithValue("@hist_change_type", "NEWD")
-            cmd.Parameters.AddWithValue("@hist_notes", Device.strNote)
-            cmd.Parameters.AddWithValue("@hist_serial", Device.strSerial)
-            cmd.Parameters.AddWithValue("@hist_description", Device.strDescription)
-            cmd.Parameters.AddWithValue("@hist_location", Device.strLocation)
-            cmd.Parameters.AddWithValue("@hist_cur_user", Device.strCurrentUser)
-            cmd.Parameters.AddWithValue("@hist_asset_tag", Device.strAssetTag)
-            cmd.Parameters.AddWithValue("@hist_purchase_date", Device.dtPurchaseDate)
-            cmd.Parameters.AddWithValue("@hist_replacement_year", Device.strReplaceYear)
-            cmd.Parameters.AddWithValue("@hist_po", Device.strPO)
-            cmd.Parameters.AddWithValue("@hist_osversion", Device.strOSVersion)
-            cmd.Parameters.AddWithValue("@hist_dev_UID", strUID)
-            cmd.Parameters.AddWithValue("@hist_action_user", strLocalUser)
-            cmd.Parameters.AddWithValue("@hist_eq_type", Device.strEqType)
-            cmd.Parameters.AddWithValue("@hist_status", Device.strStatus)
-            cmd.Parameters.AddWithValue("@hist_trackable", Convert.ToInt32(Device.bolTrackable))
-            cmd.CommandText = strSqlQry2
-            rows = rows + cmd.ExecuteNonQuery()
-            If rows = 2 Then 'ExecuteQuery returns the number of rows affected. We can check this to make sure the qry completed successfully.
+    Private Sub AddDevice()
+        If Not CheckFields() Then
+            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
+            bolCheckFields = True
+            Exit Sub
+        Else
+            Dim NewDevice As Device_Info = GetDBValues()
+            Dim Success As Boolean = Asset.AddNewDevice(NewDevice, MunisUser)
+            If Success Then
                 Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
                 If Not chkNoClear.Checked Then ClearAll()
                 If blah = vbNo Then Me.Hide()
             Else
                 Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
             End If
-            cmd.Dispose()
+
             Exit Sub
-        Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                Exit Sub
-            Else
-                EndProgram()
-            End If
-        End Try
+        End If
     End Sub
     Private Function CheckFields() As Boolean
         Dim bolMissingField As Boolean
@@ -120,25 +74,29 @@ Public Class AddNew
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
         ClearAll()
     End Sub
-    Private Sub GetDBValues() 'cleanup user input for db
-        Device.strSerial = Trim(txtSerial_REQ.Text)
-        Device.strDescription = Trim(txtDescription_REQ.Text)
-        Device.strAssetTag = Trim(txtAssetTag_REQ.Text)
-        Device.dtPurchaseDate = dtPurchaseDate_REQ.Text
-        Device.strReplaceYear = Trim(txtReplaceYear.Text)
-        Device.strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_REQ.SelectedIndex)
-        If IsNothing(MunisUser.Number) Then
-            Device.strCurrentUser = Trim(txtCurUser_REQ.Text)
-        Else
-            Device.strCurrentUser = MunisUser.Name
-        End If
-        Device.strNote = Trim(txtNotes.Text)
-        Device.strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex)
-        Device.strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_REQ.SelectedIndex)
-        Device.strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
-        Device.bolTrackable = chkTrackable.Checked
-        Device.strPO = Trim(txtPO.Text)
-    End Sub
+    Private Function GetDBValues() As Device_Info 'cleanup user input for db
+        Dim tmpDevice As Device_Info
+        With tmpDevice
+            .strSerial = Trim(txtSerial_REQ.Text)
+            .strDescription = Trim(txtDescription_REQ.Text)
+            .strAssetTag = Trim(txtAssetTag_REQ.Text)
+            .dtPurchaseDate = dtPurchaseDate_REQ.Text
+            .strReplaceYear = Trim(txtReplaceYear.Text)
+            .strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_REQ.SelectedIndex)
+            If IsNothing(MunisUser.Number) Then
+                .strCurrentUser = Trim(txtCurUser_REQ.Text)
+            Else
+                .strCurrentUser = MunisUser.Name
+            End If
+            .strNote = Trim(txtNotes.Text)
+            .strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex)
+            .strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_REQ.SelectedIndex)
+            .strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
+            .bolTrackable = chkTrackable.Checked
+            .strPO = Trim(txtPO.Text)
+        End With
+        Return tmpDevice
+    End Function
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
         MyLiveBox.InitializeLiveBox()
         ClearAll()

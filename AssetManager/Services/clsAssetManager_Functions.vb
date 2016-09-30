@@ -3,6 +3,62 @@ Public Class clsAssetManager_Functions
     Private SQLComms As New clsMySQL_Comms
     Private FPTComms As New clsFTP_Comms
 
+    Public Function AddNewDevice(DeviceInfo As Device_Info, MunisEmp As Emp_Info) As Boolean
+        Try
+            Dim strUID As String = Guid.NewGuid.ToString
+            Dim rows As Integer
+            Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_po,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_lastmod_date,dev_trackable,dev_cur_user_emp_num) VALUES(@dev_UID,@dev_description,@dev_location,@dev_cur_user,@dev_serial,@dev_asset_tag,@dev_purchase_date,@dev_po,@dev_replacement_year,@dev_eq_type,@dev_osversion,@dev_status,@dev_lastmod_user,@dev_lastmod_date,@dev_trackable,@dev_cur_user_emp_num)"
+            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
+            cmd.Parameters.AddWithValue("@dev_UID", strUID)
+            cmd.Parameters.AddWithValue("@dev_description", DeviceInfo.strDescription)
+            cmd.Parameters.AddWithValue("@dev_location", DeviceInfo.strLocation)
+            cmd.Parameters.AddWithValue("@dev_cur_user", DeviceInfo.strCurrentUser)
+            cmd.Parameters.AddWithValue("@dev_cur_user_emp_num", MunisEmp.Number)
+            cmd.Parameters.AddWithValue("@dev_serial", DeviceInfo.strSerial)
+            cmd.Parameters.AddWithValue("@dev_asset_tag", DeviceInfo.strAssetTag)
+            cmd.Parameters.AddWithValue("@dev_purchase_date", DeviceInfo.dtPurchaseDate)
+            cmd.Parameters.AddWithValue("@dev_po", DeviceInfo.strPO)
+            cmd.Parameters.AddWithValue("@dev_replacement_year", DeviceInfo.strReplaceYear)
+            cmd.Parameters.AddWithValue("@dev_eq_type", DeviceInfo.strEqType)
+            cmd.Parameters.AddWithValue("@dev_osversion", DeviceInfo.strOSVersion)
+            cmd.Parameters.AddWithValue("@dev_status", DeviceInfo.strStatus)
+            cmd.Parameters.AddWithValue("@dev_lastmod_user", strLocalUser)
+            cmd.Parameters.AddWithValue("@dev_lastmod_date", Now)
+            cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(DeviceInfo.bolTrackable))
+            rows = rows + cmd.ExecuteNonQuery()
+            Dim strSqlQry2 = "INSERT INTO dev_historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES(@hist_change_type, @hist_notes, @hist_serial, @hist_description, @hist_location, @hist_cur_user, @hist_asset_tag, @hist_purchase_date, @hist_replacement_year, @hist_po, @hist_osversion, @hist_dev_UID, @hist_action_user, @hist_eq_type, @hist_status, @hist_trackable)"
+            cmd.Parameters.AddWithValue("@hist_change_type", "NEWD")
+            cmd.Parameters.AddWithValue("@hist_notes", DeviceInfo.strNote)
+            cmd.Parameters.AddWithValue("@hist_serial", DeviceInfo.strSerial)
+            cmd.Parameters.AddWithValue("@hist_description", DeviceInfo.strDescription)
+            cmd.Parameters.AddWithValue("@hist_location", DeviceInfo.strLocation)
+            cmd.Parameters.AddWithValue("@hist_cur_user", DeviceInfo.strCurrentUser)
+            cmd.Parameters.AddWithValue("@hist_asset_tag", DeviceInfo.strAssetTag)
+            cmd.Parameters.AddWithValue("@hist_purchase_date", DeviceInfo.dtPurchaseDate)
+            cmd.Parameters.AddWithValue("@hist_replacement_year", DeviceInfo.strReplaceYear)
+            cmd.Parameters.AddWithValue("@hist_po", DeviceInfo.strPO)
+            cmd.Parameters.AddWithValue("@hist_osversion", DeviceInfo.strOSVersion)
+            cmd.Parameters.AddWithValue("@hist_dev_UID", strUID)
+            cmd.Parameters.AddWithValue("@hist_action_user", strLocalUser)
+            cmd.Parameters.AddWithValue("@hist_eq_type", DeviceInfo.strEqType)
+            cmd.Parameters.AddWithValue("@hist_status", DeviceInfo.strStatus)
+            cmd.Parameters.AddWithValue("@hist_trackable", Convert.ToInt32(DeviceInfo.bolTrackable))
+            cmd.CommandText = strSqlQry2
+            rows = rows + cmd.ExecuteNonQuery()
+            cmd.Dispose()
+            If rows = 2 Then
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Exit Function
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Function
     Public Function Update_SQLValue(table As String, fieldIN As String, valueIN As String, idField As String, idValue As String) As Integer
         Try
             Dim sqlUpdateQry As String = "UPDATE " & table & " SET " & fieldIN & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"
@@ -194,6 +250,26 @@ Public Class clsAssetManager_Functions
             End If
         End Try
     End Function
+    Public Function BuildModuleIndex() As List(Of Access_Info)
+        Dim tmpList As New List(Of Access_Info)
+        Dim ModuleTable As DataTable = SQLComms.Return_SQLTable("SELECT * FROM security ORDER BY sec_access_level")
+        Dim i As Integer = 0
+        'ReDim ModuleArray(ModuleTable.Rows.Count - 1)
+        For Each row As DataRow In ModuleTable.Rows
+            Dim tmpInfo As Access_Info
+            With tmpInfo
+                .intLevel = row.Item("sec_access_level")
+                .strModule = row.Item("sec_module")
+                .strDesc = row.Item("sec_desc")
+            End With
+            tmpList.Add(tmpInfo)
+        Next
+        Return tmpList
+    End Function
+    Public Sub UpdateUser(ByRef User As User_Info, AccessLevel As Integer)
+        User.intAccessLevel = AccessLevel
+        Update_SQLValue("users", "usr_access_level", User.intAccessLevel, "usr_UID", User.strUID)
+    End Sub
     Public Function FindDevice(Optional AssetTag As String = "", Optional Serial As String = "") As Device_Info
         If AssetTag IsNot "" Then
             Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM devices WHERE dev_asset_tag='" & AssetTag & "'"))

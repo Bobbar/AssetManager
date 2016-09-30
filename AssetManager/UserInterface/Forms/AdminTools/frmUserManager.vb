@@ -1,19 +1,15 @@
 ﻿Public Class frmUserManager
-    Private ModuleArray() As Access_Info
-    Private Structure User_Info
-        Public strUsername As String
-        Public strFullname As String
-        Public intAccessLevel As Integer
-        Public strUID As String
-    End Structure
+    Private ModuleIndex As New List(Of Access_Info)
+
     Private CurrentUser As User_Info
     Private Sub frmUserManager_Load(sender As Object, e As EventArgs) Handles Me.Load
         ListUsers()
-        BuildModuleArray()
+        ModuleIndex = Asset.BuildModuleIndex()
         LoadModuleBoxes()
     End Sub
     Private Sub ListUsers()
-        SendToGrid(MySQLDB.Return_SQLTable("SELECT * FROM users"))
+        Dim Comm As New clsMySQL_Comms
+        SendToGrid(Comm.Return_SQLTable("SELECT * FROM users"))
     End Sub
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
@@ -55,7 +51,7 @@
         Dim i As Integer = 0
         Dim intTopOffset As Integer = 0
         Dim chkModuleBox As CheckBox
-        For Each ModuleBox As Access_Info In ModuleArray
+        For Each ModuleBox As Access_Info In ModuleIndex
             chkModuleBox = New CheckBox
             With chkModuleBox
                 .Text = ModuleBox.strDesc
@@ -66,19 +62,7 @@
         Next
         AutoSizeCLBColumns(clbModules)
     End Sub
-    Private Sub BuildModuleArray()
-        Dim ModuleTable As DataTable = MySQLDB.Return_SQLTable("SELECT * FROM security ORDER BY sec_access_level")
-        Dim i As Integer = 0
-        ReDim ModuleArray(ModuleTable.Rows.Count - 1)
-        For Each row As DataRow In ModuleTable.Rows
-            With ModuleArray(i)
-                .intLevel = row.Item("sec_access_level")
-                .strModule = row.Item("sec_module")
-                .strDesc = row.Item("sec_desc")
-            End With
-            i += 1
-        Next
-    End Sub
+
     Private Function CalcAccessLevel() As Integer
         Dim intAccessLevel As Integer = 0
         For Each chkBox As CheckBox In clbModules.Items
@@ -88,11 +72,7 @@
         Next
         Return intAccessLevel
     End Function
-    Private Sub UpdateUser(User As User_Info)
-        CurrentUser.intAccessLevel = CalcAccessLevel()
-        MySQLDB.Update_SQLValue("users", "usr_access_level", CurrentUser.intAccessLevel, "usr_UID", CurrentUser.strUID)
-        ListUsers()
-    End Sub
+
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick
         DisplayAccess(UserGrid.Item(GetColIndex(UserGrid, "Access Level"), UserGrid.CurrentRow.Index).Value)
     End Sub
@@ -105,8 +85,9 @@
         End With
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
-        UpdateUser(CurrentUser)
-        GetUserAccess()
+        Asset.UpdateUser(CurrentUser, CalcAccessLevel)
+        ListUsers()
+        Asset.GetUserAccess()
     End Sub
     Private Sub AutoSizeCLBColumns(CLB As CheckedListBox)
         Dim intMaxLen As Integer = 0

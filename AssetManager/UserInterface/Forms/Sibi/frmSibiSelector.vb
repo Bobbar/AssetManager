@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Public Class frmSibiSelector
+    Private SQLComms As New clsMySQL_Comms
     Public ReadOnly Property SibiUID As String
         Get
             Return SelectedUID
@@ -48,7 +49,7 @@ Public Class frmSibiSelector
         End Try
     End Sub
     Private Sub ShowAll()
-        SendToGrid(MySQLDB.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
+        SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
     End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
         SelectedUID = ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value

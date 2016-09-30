@@ -1,6 +1,7 @@
 ﻿Option Explicit On
 Imports MySql.Data.MySqlClient
 Public Class View_Entry
+    Private SQLComms As New clsMySQL_Comms
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
@@ -17,7 +18,7 @@ Public Class View_Entry
         Dim reader As MySqlDataReader
         Try
             Dim strQry = "Select * FROM dev_historical WHERE  hist_UID = '" & EntryUID & "'"
-            reader = MySQLDB.Return_SQLReader(strQry)
+            reader = SQLComms.Return_SQLReader(strQry)
             With reader
                 Do While .Read()
                     txtEntryTime.Text = NoNull(!hist_action_datetime)

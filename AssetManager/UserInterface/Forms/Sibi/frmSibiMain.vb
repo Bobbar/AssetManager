@@ -1,5 +1,6 @@
 ﻿Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
+    Private SQLComms As New clsMySQL_Comms
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         ShowAll()
     End Sub
@@ -49,7 +50,7 @@
         End Try
     End Sub
     Public Sub ShowAll()
-        SendToGrid(MySQLDB.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_request_number DESC"))
+        SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_request_number DESC"))
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
         frmManageRequest.ClearAll()
