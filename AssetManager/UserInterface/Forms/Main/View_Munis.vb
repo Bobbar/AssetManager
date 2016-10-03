@@ -21,7 +21,7 @@
                 DataGridMunis_Inventory.DataSource = Nothing
             End If
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String)
@@ -35,7 +35,7 @@
 WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ") AND (dbo.ap_vendor.a_vendor_remit_seq = 1)"
             ProcessMunisQuery(DataGridMunis_Requisition, strQRY)
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Sub LoadMunisEmployeeByLastName(Name As String)
@@ -44,7 +44,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
             ProcessMunisQuery(DataGridMunis_Requisition, strQRY)
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Function ProcessMunisQuery(Grid As DataGridView, Query As String) As Integer
@@ -62,7 +62,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             results.Dispose()
             Return intRows
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
     Public Sub LoadMunisInfoByDevice(Device As Device_Info)

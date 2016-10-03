@@ -52,7 +52,7 @@ Public Class clsAssetManager_Functions
                 Return False
             End If
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 Exit Function
             Else
                 EndProgram()
@@ -66,7 +66,7 @@ Public Class clsAssetManager_Functions
             cmd.Parameters.AddWithValue("@ValueIN", valueIN)
             Return cmd.ExecuteNonQuery()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return Nothing
         End Try
     End Function
@@ -116,7 +116,7 @@ Public Class clsAssetManager_Functions
             End If
             Exit Function
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 Exit Try
             Else
                 EndProgram()
@@ -139,7 +139,7 @@ Public Class clsAssetManager_Functions
             reader.Close()
             Return bolHasRows
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else
                 EndProgram()
             End If
@@ -154,7 +154,7 @@ Public Class clsAssetManager_Functions
             cmd.CommandText = sqlQRY
             Return Convert.ToString(cmd.ExecuteScalar)
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return ""
         End Try
     End Function
@@ -182,7 +182,7 @@ Public Class clsAssetManager_Functions
             Return tmpInfo
             Exit Function
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 Exit Try
             Else
                 EndProgram()
@@ -216,7 +216,7 @@ Public Class clsAssetManager_Functions
             Return rows
             Exit Function
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else
                 EndProgram()
             End If
@@ -243,7 +243,7 @@ Public Class clsAssetManager_Functions
             reader.Close()
             Return tmpArray
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 Return Nothing
             Else
                 EndProgram()
@@ -297,7 +297,7 @@ VALUES
                 cmd.Dispose()
             End If
         Catch ex As MySqlException
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Function EmpIsInDB(EmpNum As String) As Boolean
@@ -327,7 +327,7 @@ VALUES
             End With
             reader.Close()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Sub GetAccessLevels()
@@ -349,7 +349,7 @@ VALUES
             End With
             reader.Close()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Function DeleteMaster(ByVal strGUID As String, Type As String) As Boolean
@@ -360,7 +360,7 @@ VALUES
                 Return Delete_SQLMasterEntry(strGUID, Type) 'delete sql records
             End If
         Catch ex As Exception
-            Return ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
     Public Function DevicesBySup() As DataTable
@@ -408,8 +408,26 @@ VALUES
             End With
             Return newDeviceInfo
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return Nothing
+        End Try
+    End Function
+    Public Function User_GetUserList() As List(Of User_Info)
+        Dim Qry As String = "SELECT * FROM users"
+        Dim tmpList As New List(Of User_Info)
+        Try
+            Dim Results As DataTable = SQLComms.Return_SQLTable(Qry)
+            For Each r As DataRow In Results.Rows
+                Dim tmpItem As User_Info
+                tmpItem.strUsername = r.Item("usr_username")
+                tmpItem.strFullname = r.Item("usr_fullname")
+                tmpItem.intAccessLevel = r.Item("usr_access_level")
+                tmpItem.strUID = r.Item("usr_UID")
+                tmpList.Add(tmpItem)
+            Next
+            Return tmpList
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
 End Class

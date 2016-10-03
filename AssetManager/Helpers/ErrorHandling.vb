@@ -4,7 +4,7 @@ Imports System.Net.Sockets
 Imports System.ComponentModel
 Imports System.Data.SqlClient
 Module ErrorHandling
-    Public Function ErrHandleNew(ex As Exception, strOrigSub As String) As Boolean
+    Public Function ErrHandle(ex As Exception, strOrigSub As String) As Boolean
         Dim ErrorResult As Boolean
         Select Case TypeName(ex)
             Case "WebException"
@@ -39,7 +39,7 @@ Module ErrorHandling
                 ErrorResult = False
                 EndProgram()
         End Select
-        If Not IsNothing(ex.InnerException) Then ErrHandleNew(ex.InnerException, strOrigSub)
+        If Not IsNothing(ex.InnerException) Then ErrHandle(ex.InnerException, strOrigSub)
         Return ErrorResult
     End Function
     Private Function handleWin32Exception(ex As Win32Exception, strOrigSub As String) As Boolean

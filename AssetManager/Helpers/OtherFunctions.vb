@@ -143,7 +143,7 @@ Module OtherFunctions
         Try
             Return IIf(IsDBNull(DBVal), "", DBVal.ToString)
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return ""
         End Try
     End Function

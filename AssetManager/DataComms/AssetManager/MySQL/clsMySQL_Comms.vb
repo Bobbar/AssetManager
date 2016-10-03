@@ -17,7 +17,7 @@ Public Class clsMySQL_Comms
         Catch ex As Exception
             da.Dispose()
             ds.Dispose()
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return Nothing
         End Try
     End Function
@@ -27,7 +27,7 @@ Public Class clsMySQL_Comms
             Dim cmd As New MySqlCommand(strSQLQry, GlobalConn)
             Return cmd.ExecuteReader
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return Nothing
         End Try
     End Function
@@ -39,7 +39,7 @@ Public Class clsMySQL_Comms
             cmd.CommandText = strSQLQry
             Return cmd
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return Nothing
         End Try
     End Function
@@ -60,7 +60,7 @@ Public Class clsMySQL_Comms
             End If
             Exit Function
         Catch ex As MySqlException
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
         End Try
     End Function

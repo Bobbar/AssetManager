@@ -45,7 +45,7 @@ Public Class View_Entry
             reader.Close()
             DoneWaiting()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click

@@ -64,7 +64,7 @@ Public Class MainForm
             ToolStrip1.Items.Insert(2, MyMunisTools.MunisTools)
             Me.Show()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Sub GetGridStyles()
@@ -188,7 +188,7 @@ Public Class MainForm
             DisplayRecords(table.Rows.Count)
             table.Dispose()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Function BuildSearchList() As IEnumerable(Of SearchVal)
@@ -360,7 +360,7 @@ Public Class MainForm
             ds.Dispose()
             Asset.CloseConnection(conn) 'conn.Close()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             ConnectionReady()
         End Try
     End Sub

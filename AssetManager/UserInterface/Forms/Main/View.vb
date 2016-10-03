@@ -177,7 +177,7 @@ Public Class View
             End If
             Exit Sub
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 ViewDevice(CurrentViewDevice.strGUID)
                 Exit Sub
             Else
@@ -204,7 +204,7 @@ Public Class View
             DoneWaiting()
         Catch ex As Exception
             DoneWaiting()
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
@@ -226,7 +226,7 @@ Public Class View
             Return True
         Catch ex As Exception
             DoneWaiting()
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Results.Dispose()
             Return False
         End Try
@@ -290,7 +290,7 @@ Public Class View
             End If
         Catch ex As Exception
             table.Dispose()
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub SendToTrackGrid(Grid As DataGridView, tblResults As DataTable)
@@ -325,7 +325,7 @@ Public Class View
             End If
         Catch ex As Exception
             table.Dispose()
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub Waiting()
@@ -365,7 +365,7 @@ Public Class View
             Exit Sub
         Catch ex As Exception
             Results.Dispose()
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             DoneWaiting()
         End Try
     End Sub
@@ -653,7 +653,7 @@ Public Class View
             Return rows
             Exit Function
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else
                 EndProgram()
             End If
@@ -871,7 +871,7 @@ Public Class View
         Try
             e.Result = My.Computer.Network.Ping("D" & CurrentViewDevice.strSerial)
         Catch ex As Exception
-            e.Result = ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            e.Result = ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub PingWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles PingWorker.RunWorkerCompleted
@@ -933,7 +933,7 @@ Public Class View
         Try
             Process.Start("\\D" & CurrentViewDevice.strSerial & "\c$")
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub tsmAssetInputForm_Click(sender As Object, e As EventArgs) Handles tsmAssetInputForm.Click

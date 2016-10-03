@@ -64,7 +64,7 @@ Module modPDFFormFilling
             pdfStamper.Close()
             Process.Start(newFile)
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Function InputFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields

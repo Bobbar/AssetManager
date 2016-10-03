@@ -35,7 +35,7 @@ VALUES
                 Return False
             End If
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 Return False
             End If
         End Try

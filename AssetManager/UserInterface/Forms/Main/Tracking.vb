@@ -136,7 +136,7 @@ Public Class Tracking
             DoneWaiting()
             Exit Sub
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 DoneWaiting()
                 Exit Try
             Else
@@ -176,7 +176,7 @@ Public Class Tracking
             DoneWaiting()
             Exit Sub
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 DoneWaiting()
                 Exit Try
             Else

@@ -45,7 +45,7 @@ Public Class frmSibiSelector
             'bolGridFilling = False
             table.Dispose()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub ShowAll()

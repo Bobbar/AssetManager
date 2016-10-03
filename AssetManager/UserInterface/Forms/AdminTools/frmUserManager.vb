@@ -1,6 +1,5 @@
 ﻿Public Class frmUserManager
     Private ModuleIndex As New List(Of Access_Info)
-
     Private CurrentUser As User_Info
     Private Sub frmUserManager_Load(sender As Object, e As EventArgs) Handles Me.Load
         ListUsers()
@@ -8,27 +7,26 @@
         LoadModuleBoxes()
     End Sub
     Private Sub ListUsers()
-        Dim Comm As New clsMySQL_Comms
-        SendToGrid(Comm.Return_SQLTable("SELECT * FROM users"))
+        SendToGrid(Asset.User_GetUserList) 'Comm.Return_SQLTable("SELECT * FROM users"))
     End Sub
-    Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
+    Private Sub SendToGrid(Results As List(Of User_Info)) ' Data() As Device_Info)
         Try
             Dim table As New DataTable
             table.Columns.Add("Username", GetType(String))
             table.Columns.Add("Full Name", GetType(String))
             table.Columns.Add("Access Level", GetType(String))
             table.Columns.Add("UID", GetType(String))
-            For Each r As DataRow In Results.Rows
-                table.Rows.Add(r.Item("usr_username"),
-                               r.Item("usr_fullname"),
-                               r.Item("usr_access_level"),
-                               r.Item("usr_UID"))
+            For Each r As User_Info In Results
+                table.Rows.Add(r.strUsername,
+                               r.strFullname,
+                               r.intAccessLevel,
+                               r.strUID)
             Next
             UserGrid.DataSource = table
             UserGrid.ClearSelection()
             table.Dispose()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub DisplayAccess(intAccessLevel As Integer)
@@ -72,7 +70,6 @@
         Next
         Return intAccessLevel
     End Function
-
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick
         DisplayAccess(UserGrid.Item(GetColIndex(UserGrid, "Access Level"), UserGrid.CurrentRow.Index).Value)
     End Sub

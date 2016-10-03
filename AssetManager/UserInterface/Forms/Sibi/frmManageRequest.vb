@@ -332,7 +332,7 @@ Public Class frmManageRequest
             info.RequstItems = DBTable
             Return info
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             EndProgram()
         End Try
     End Function
@@ -444,7 +444,7 @@ VALUES
             frmSibiMain.ShowAll()
             OpenRequest(strRequestUID)
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 Exit Sub
             Else
                 EndProgram()
@@ -570,7 +570,7 @@ VALUES
             'End If
             OpenRequest(CurrentRequest.strUID)
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else
                 EndProgram()
             End If
@@ -604,7 +604,7 @@ VALUES
             Me.Show()
             Me.Activate()
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else
                 EndProgram()
             End If
@@ -636,7 +636,7 @@ VALUES
             Return rows
             Exit Function
         Catch ex As Exception
-            If ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else
                 EndProgram()
             End If
@@ -665,7 +665,7 @@ VALUES
             RequestItemsGrid.ClearSelection()
             bolGridFilling = False
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub cmdClearAll_Click(sender As Object, e As EventArgs)
@@ -877,7 +877,7 @@ VALUES
     End Sub
     Private Sub RequestItemsGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles RequestItemsGrid.DataError
         Dim blah = Message("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error")
-        ' ErrHandleNew(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        ' ErrHandle(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod().Name)
     End Sub
     Private Sub RequestItemsGrid_DefaultValuesNeeded(sender As Object, e As DataGridViewRowEventArgs) Handles RequestItemsGrid.DefaultValuesNeeded
         e.Row.Cells("Qty").Value = 1
@@ -900,7 +900,7 @@ VALUES
                 .RequstItems = RequestItemsResults
             End With
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub frmManageRequest_Resize(sender As Object, e As EventArgs) Handles Me.Resize

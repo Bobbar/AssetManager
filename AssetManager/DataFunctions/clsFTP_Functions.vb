@@ -11,7 +11,7 @@
                 Return False
             End If
         Catch ex As Exception
-            Return ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
     Public Function DeleteFTPFolder(DeviceUID As String, Type As String) As Boolean
@@ -40,7 +40,7 @@
                 Return False
             End If
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
         End Try
     End Function
@@ -104,7 +104,8 @@
             End While
             Return files
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
         End Try
     End Function
     Public Sub ScanAttachements()
@@ -148,7 +149,7 @@
             Logger("**********End Scan Results*********")
             Logger("***********************************")
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub CleanFiles(DirList As List(Of String))
@@ -164,22 +165,26 @@
             End If
         Next
         Dim blah = Message("Cleaned " & intSuccesses & " orphans.")
-        'Dim blah = Message("Cleaned " & intSuccesses & " orphans.")
     End Sub
     Private Function DeleteDirectory(Directory As String) As Boolean
-        Dim FileList As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & Directory & "/")
-        Dim i As Integer
-        For Each file In FileList
-            If DeleteFTPAttachment(file, Directory) Then i += 1
-        Next
-        If FileList.Count = i Then
-            Dim resp As Net.FtpWebResponse = Nothing
-            resp = FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Directory, Net.WebRequestMethods.Ftp.RemoveDirectory)
-            If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
-                Return True
-            Else
-                Return False
+        Try
+            Dim FileList As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & Directory & "/")
+            Dim i As Integer
+            For Each file In FileList
+                If DeleteFTPAttachment(file, Directory) Then i += 1
+            Next
+            If FileList.Count = i Then
+                Dim resp As Net.FtpWebResponse = Nothing
+                resp = FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Directory, Net.WebRequestMethods.Ftp.RemoveDirectory)
+                If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
+                    Return True
+                Else
+                    Return False
+                End If
             End If
-        End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return False
+        End Try
     End Function
 End Class

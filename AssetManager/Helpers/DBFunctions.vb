@@ -31,7 +31,7 @@ Public Module DBFunctions
             'GlobalConn.Close()
             'GlobalConn.Dispose()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return False
         End Try
         Return True

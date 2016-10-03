@@ -405,6 +405,7 @@
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
     <None Include="Resources\attencion_exclamation_mark_circle_danger-128.png" />
     <None Include="Resources\critical_funny.png" />
+    <Content Include="Resources\AssetManager.ico" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <None Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
@@ -418,8 +419,6 @@
     <None Include="Resources\err_information.png" />
     <None Include="Resources\err_question.png" />
     <None Include="Resources\err_exclamation_stroke.png" />
-    <None Include="Resources\exclamation-xxl.png" />
-    <None Include="Resources\exclamation_blue.png" />
     <None Include="Resources\err_exclamation_fill.png" />
     <Content Include="Resources\inventory-small.fw.png" />
     <None Include="Resources\report.png" />

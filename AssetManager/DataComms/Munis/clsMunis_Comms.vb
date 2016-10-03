@@ -14,9 +14,8 @@ Public Class clsMunis_Comms
         Catch ex As Exception
             da.Dispose()
             ds.Dispose()
-            If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                Return Nothing
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
         End Try
     End Function
     Public Function Return_MSSQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
@@ -30,7 +29,7 @@ Public Class clsMunis_Comms
             conn.Open()
             Return Convert.ToString(cmd.ExecuteScalar)
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return Nothing
         End Try
     End Function

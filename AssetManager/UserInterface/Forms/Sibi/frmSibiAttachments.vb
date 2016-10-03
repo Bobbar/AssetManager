@@ -148,7 +148,7 @@ Class frmSibiAttachments
             Exit Sub
         Catch ex As Exception
             DoneWaiting()
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Exit Sub
         End Try
     End Sub
@@ -356,7 +356,7 @@ Class frmSibiAttachments
             e.Result = False
             Asset.CloseConnection(conn)
             UploadWorker.ReportProgress(1, "Idle...")
-            If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
+            If Not ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
     End Sub
     Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
@@ -372,7 +372,7 @@ Class frmSibiAttachments
             Asset.Update_SQLValue("sibi_attachments", "sibi_attach_file_name", NewFileName, "sibi_attach_file_UID", AttachUID)
             ListAttachments(AttachRequest)
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
@@ -393,7 +393,7 @@ Class frmSibiAttachments
      "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
@@ -494,7 +494,7 @@ Class frmSibiAttachments
             e.Result = False
             DownloadWorker.ReportProgress(2, "ERROR!")
             Logger("DOWNLOAD ERROR: " & "Device: " & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID)
-            If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If Not ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 EndProgram()
             Else
                 e.Result = False
@@ -513,7 +513,7 @@ Class frmSibiAttachments
                 MessageBox.Show("The download was cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             End If
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
@@ -760,7 +760,7 @@ Class frmSibiAttachments
             output.Dispose()
             Return strFullPath
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
     Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
@@ -778,7 +778,7 @@ Class frmSibiAttachments
             End Select
         Catch ex As Exception
             Return Nothing
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
 End Class

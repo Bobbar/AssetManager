@@ -121,7 +121,7 @@ Class Attachments
                     AttachIndex(row).strFilename = !attach_file_name
                     AttachIndex(row).strFileType = !attach_file_type
                     AttachIndex(row).FileSize = !attach_file_size
-                    AttachIndex(row).strFileUID = IIf(IsDBNull(!attach_file_UID), "", !attach_file_UID) '!UID
+                    AttachIndex(row).strFileUID = NoNull(!attach_file_UID)
                     row += 1
                 Loop
             End With
@@ -136,7 +136,7 @@ Class Attachments
             Exit Sub
         Catch ex As Exception
             DoneWaiting()
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Exit Sub
         End Try
     End Sub
@@ -343,7 +343,7 @@ Class Attachments
             e.Result = False
             Asset.CloseConnection(conn)
             UploadWorker.ReportProgress(1, "Idle...")
-            If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
+            If Not ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
     End Sub
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
@@ -362,7 +362,7 @@ Class Attachments
      "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
@@ -468,7 +468,7 @@ Class Attachments
             e.Result = False
             DownloadWorker.ReportProgress(2, "ERROR!")
             Logger("DOWNLOAD ERROR: " & "Device: " & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID)
-            If Not ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If Not ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 EndProgram()
             Else
                 e.Result = False
@@ -486,7 +486,7 @@ Class Attachments
                 MessageBox.Show("The download was cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             End If
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
@@ -705,7 +705,7 @@ Class Attachments
             output.Dispose()
             Return strFullPath
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
     Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
@@ -723,7 +723,7 @@ Class Attachments
             End Select
         Catch ex As Exception
             Return Nothing
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
 

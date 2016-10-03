@@ -58,7 +58,7 @@ Public Class clsLiveBox
             End If
         Catch ex As Exception
             Return False
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
     Public Sub Unload()
@@ -118,7 +118,7 @@ Public Class clsLiveBox
             da.Dispose()
             ds.Dispose()
         Catch ex As Exception
-            ErrHandleNew(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             ConnectionReady()
         End Try
     End Sub
