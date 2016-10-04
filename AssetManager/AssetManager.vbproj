@@ -128,117 +128,124 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\Main\AddNew.Designer.vb">
+    <Compile Include="Classes\Type_Classes.vb" />
+    <Compile Include="UserInterface\Colors.vb" />
+    <Compile Include="Classes\Constants.vb" />
+    <Compile Include="Classes\Global_Instances.vb" />
+    <Compile Include="Classes\Paths.vb" />
+    <Compile Include="DataComms\AssetManager\FTP\clsFTP_Comms.vb" />
+    <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
+    <Compile Include="Helpers\Form_Control.vb" />
+    <Compile Include="DataFunctions\clsAssetManager_Functions.vb" />
+    <Compile Include="UserInterface\Forms\Main\AddNew.Designer.vb">
       <DependentUpon>AddNew.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Main\AddNew.vb">
+    <Compile Include="UserInterface\Forms\Main\AddNew.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AdminTools\frmEncrypter.Designer.vb">
+    <Compile Include="UserInterface\Forms\AdminTools\frmEncrypter.Designer.vb">
       <DependentUpon>frmEncrypter.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\AdminTools\frmEncrypter.vb">
+    <Compile Include="UserInterface\Forms\AdminTools\frmEncrypter.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AdminTools\frmUserManager.Designer.vb">
+    <Compile Include="UserInterface\Forms\AdminTools\frmUserManager.Designer.vb">
       <DependentUpon>frmUserManager.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\AdminTools\frmUserManager.vb">
+    <Compile Include="UserInterface\Forms\AdminTools\frmUserManager.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Main\frmMunisUser.Designer.vb">
+    <Compile Include="UserInterface\Forms\Main\frmMunisUser.Designer.vb">
       <DependentUpon>frmMunisUser.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Main\frmMunisUser.vb">
+    <Compile Include="UserInterface\Forms\Main\frmMunisUser.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MyDialog.Designer.vb">
+    <Compile Include="UserInterface\Forms\MyDialog.Designer.vb">
       <DependentUpon>MyDialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MyDialog.vb">
+    <Compile Include="UserInterface\Forms\MyDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Sibi\frmNotes.Designer.vb">
+    <Compile Include="UserInterface\Forms\Sibi\frmNotes.Designer.vb">
       <DependentUpon>frmNotes.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Sibi\frmNotes.vb">
+    <Compile Include="UserInterface\Forms\Sibi\frmNotes.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Sibi\frmSibiAttachments.Designer.vb">
+    <Compile Include="UserInterface\Forms\Sibi\frmSibiAttachments.Designer.vb">
       <DependentUpon>frmSibiAttachments.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Sibi\frmSibiAttachments.vb">
+    <Compile Include="UserInterface\Forms\Sibi\frmSibiAttachments.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Sibi\frmManageRequest.Designer.vb">
+    <Compile Include="UserInterface\Forms\Sibi\frmManageRequest.Designer.vb">
       <DependentUpon>frmManageRequest.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Sibi\frmManageRequest.vb">
+    <Compile Include="UserInterface\Forms\Sibi\frmManageRequest.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Sibi\frmSibiMain.Designer.vb">
+    <Compile Include="UserInterface\Forms\Sibi\frmSibiMain.Designer.vb">
       <DependentUpon>frmSibiMain.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Sibi\frmSibiMain.vb">
+    <Compile Include="UserInterface\Forms\Sibi\frmSibiMain.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Main\MainForm.vb">
+    <Compile Include="UserInterface\Forms\Main\MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Main\MainForm.Designer.vb">
+    <Compile Include="UserInterface\Forms\Main\MainForm.Designer.vb">
       <DependentUpon>MainForm.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Main\Attachments.Designer.vb">
+    <Compile Include="UserInterface\Forms\Main\Attachments.Designer.vb">
       <DependentUpon>Attachments.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Main\Attachments.vb">
+    <Compile Include="UserInterface\Forms\Main\Attachments.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Sibi\frmSibiSelector.Designer.vb">
+    <Compile Include="UserInterface\Forms\Sibi\frmSibiSelector.Designer.vb">
       <DependentUpon>frmSibiSelector.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Sibi\frmSibiSelector.vb">
+    <Compile Include="UserInterface\Forms\Sibi\frmSibiSelector.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Main\Tracking.Designer.vb">
+    <Compile Include="UserInterface\Forms\Main\Tracking.Designer.vb">
       <DependentUpon>Tracking.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Main\Tracking.vb">
+    <Compile Include="UserInterface\Forms\Main\Tracking.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Main\View_Munis.Designer.vb">
+    <Compile Include="UserInterface\Forms\Main\View_Munis.Designer.vb">
       <DependentUpon>View_Munis.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Main\View_Munis.vb">
+    <Compile Include="UserInterface\Forms\Main\View_Munis.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Main\View_Tracking.Designer.vb">
+    <Compile Include="UserInterface\Forms\Main\View_Tracking.Designer.vb">
       <DependentUpon>View_Tracking.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Main\View_Tracking.vb">
+    <Compile Include="UserInterface\Forms\Main\View_Tracking.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\Form_Control.vb" />
-    <Compile Include="Modules\Classes\clsCrypto.vb" />
-    <Compile Include="Modules\Classes\clsIndexes.vb" />
-    <Compile Include="Modules\Classes\clsMunis_Functions.vb" />
-    <Compile Include="Modules\Classes\clsMunis_Comms.vb" />
-    <Compile Include="Modules\DataImport.vb" />
-    <Compile Include="Modules\DBScript.vb" />
-    <Compile Include="Modules\Helpers\DBFunctions.vb" />
-    <Compile Include="Modules\ErrorHandling.vb" />
-    <Compile Include="Modules\ExtendedMethods.vb" />
-    <Compile Include="Modules\Helpers\FTPFunctions.vb" />
-    <Compile Include="Modules\Classes\clsLiveBox.vb" />
-    <Compile Include="Modules\Classes\clsMySQL_Comms.vb" />
-    <Compile Include="Modules\MyStructures.vb" />
-    <Compile Include="Modules\PDFFormFilling.vb" />
-    <Compile Include="Modules\SecurityMod.vb" />
-    <Compile Include="MyControls\MunisTools.Designer.vb">
+    <Compile Include="Business\clsCrypto.vb" />
+    <Compile Include="Classes\Indexes.vb" />
+    <Compile Include="DataFunctions\clsMunis_Functions.vb" />
+    <Compile Include="DataComms\Munis\clsMunis_Comms.vb" />
+    <Compile Include="Business\modDBScript.vb" />
+    <Compile Include="Helpers\DBFunctions.vb" />
+    <Compile Include="Helpers\ErrorHandling.vb" />
+    <Compile Include="Helpers\ExtendedMethods.vb" />
+    <Compile Include="DataFunctions\clsFTP_Functions.vb" />
+    <Compile Include="UserInterface\MyControls\clsLiveBox.vb" />
+    <Compile Include="DataComms\AssetManager\MySQL\clsMySQL_Comms.vb" />
+    <Compile Include="Classes\Structures.vb" />
+    <Compile Include="Business\modPDFFormFilling.vb" />
+    <Compile Include="Business\modSecurityMod.vb" />
+    <Compile Include="UserInterface\MyControls\MunisTools.Designer.vb">
       <DependentUpon>MunisTools.vb</DependentUpon>
     </Compile>
-    <Compile Include="MyControls\MunisTools.vb">
+    <Compile Include="UserInterface\MyControls\MunisTools.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
@@ -246,16 +253,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SplashScreen1.Designer.vb">
+    <Compile Include="UserInterface\Forms\SplashScreen1.Designer.vb">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SplashScreen1.vb">
+    <Compile Include="UserInterface\Forms\SplashScreen1.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Main\UpdateDevice.Designer.vb">
+    <Compile Include="UserInterface\Forms\Main\UpdateDevice.Designer.vb">
       <DependentUpon>UpdateDevice.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Main\UpdateDevice.vb">
+    <Compile Include="UserInterface\Forms\Main\UpdateDevice.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -268,80 +275,80 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Modules\Helpers\OtherFunctions.vb" />
-    <Compile Include="Forms\Main\View.Designer.vb">
+    <Compile Include="Helpers\OtherFunctions.vb" />
+    <Compile Include="UserInterface\Forms\Main\View.Designer.vb">
       <DependentUpon>View.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Main\View.vb">
+    <Compile Include="UserInterface\Forms\Main\View.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Main\View_Entry.Designer.vb">
+    <Compile Include="UserInterface\Forms\Main\View_Entry.Designer.vb">
       <DependentUpon>View_Entry.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Main\View_Entry.vb">
+    <Compile Include="UserInterface\Forms\Main\View_Entry.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MyControls\PanelNoScrollOnFocus.Designer.vb">
+    <Compile Include="UserInterface\MyControls\PanelNoScrollOnFocus.Designer.vb">
       <DependentUpon>PanelNoScrollOnFocus.vb</DependentUpon>
     </Compile>
-    <Compile Include="MyControls\PanelNoScrollOnFocus.vb">
+    <Compile Include="UserInterface\MyControls\PanelNoScrollOnFocus.vb">
       <SubType>Component</SubType>
       <CustomToolNamespace>NoScrollPanel</CustomToolNamespace>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\Main\AddNew.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Main\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\AdminTools\frmEncrypter.resx">
+    <EmbeddedResource Include="UserInterface\Forms\AdminTools\frmEncrypter.resx">
       <DependentUpon>frmEncrypter.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\AdminTools\frmUserManager.resx">
+    <EmbeddedResource Include="UserInterface\Forms\AdminTools\frmUserManager.resx">
       <DependentUpon>frmUserManager.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main\frmMunisUser.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Main\frmMunisUser.resx">
       <DependentUpon>frmMunisUser.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MyDialog.resx">
+    <EmbeddedResource Include="UserInterface\Forms\MyDialog.resx">
       <DependentUpon>MyDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Sibi\frmNotes.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Sibi\frmNotes.resx">
       <DependentUpon>frmNotes.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Sibi\frmSibiAttachments.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Sibi\frmSibiAttachments.resx">
       <DependentUpon>frmSibiAttachments.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Sibi\frmManageRequest.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Sibi\frmManageRequest.resx">
       <DependentUpon>frmManageRequest.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Sibi\frmSibiMain.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Sibi\frmSibiMain.resx">
       <DependentUpon>frmSibiMain.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main\MainForm.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Main\MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main\Attachments.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Main\Attachments.resx">
       <DependentUpon>Attachments.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Sibi\frmSibiSelector.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Sibi\frmSibiSelector.resx">
       <DependentUpon>frmSibiSelector.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main\Tracking.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Main\Tracking.resx">
       <DependentUpon>Tracking.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main\View_Munis.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Main\View_Munis.resx">
       <DependentUpon>View_Munis.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main\View_Tracking.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Main\View_Tracking.resx">
       <DependentUpon>View_Tracking.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SplashScreen1.resx">
+    <EmbeddedResource Include="UserInterface\Forms\SplashScreen1.resx">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main\UpdateDevice.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Main\UpdateDevice.resx">
       <DependentUpon>UpdateDevice.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MyControls\MunisTools.resx">
+    <EmbeddedResource Include="UserInterface\MyControls\MunisTools.resx">
       <DependentUpon>MunisTools.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -350,10 +357,10 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main\View.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Main\View.resx">
       <DependentUpon>View.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main\View_Entry.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Main\View_Entry.resx">
       <DependentUpon>View_Entry.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -386,7 +393,6 @@
   <ItemGroup>
     <Content Include="AssetManager.ico" />
     <None Include="Resources\239360-transfer_arrows-512.png" />
-    <None Include="Resources\2000px-Achtung.svg.png" />
     <Content Include="Resources\Add.png" />
     <None Include="Resources\check-out.png" />
     <None Include="Resources\delete-icon-red.png" />
@@ -399,6 +405,7 @@
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
     <None Include="Resources\attencion_exclamation_mark_circle_danger-128.png" />
     <None Include="Resources\critical_funny.png" />
+    <Content Include="Resources\AssetManager.ico" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <None Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
@@ -412,8 +419,6 @@
     <None Include="Resources\err_information.png" />
     <None Include="Resources\err_question.png" />
     <None Include="Resources\err_exclamation_stroke.png" />
-    <None Include="Resources\exclamation-xxl.png" />
-    <None Include="Resources\exclamation_blue.png" />
     <None Include="Resources\err_exclamation_fill.png" />
     <Content Include="Resources\inventory-small.fw.png" />
     <None Include="Resources\report.png" />
@@ -485,6 +490,7 @@
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
