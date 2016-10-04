@@ -8,12 +8,10 @@ Public Class View
     Private OldData As Device_Info
     Public NewData As Device_Info
     Private MyLiveBox As New clsLiveBox
-    Private SQLComms As New clsMySQL_Comms
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim MyMunisMenu As New MunisToolsMenu
         MyMunisMenu.Tag = Me
         ToolStrip1.Items.Insert(6, MyMunisMenu.MunisTools)
-        MyLiveBox.InitializeLiveBox()
         grpNetTools.Visible = False
         ToolStrip1.BackColor = colToolBarColor
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)

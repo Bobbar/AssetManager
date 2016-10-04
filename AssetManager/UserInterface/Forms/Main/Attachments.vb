@@ -83,7 +83,6 @@ Class Attachments
         End If
         Waiting()
         Try
-            Dim Comms As New clsMySQL_Comms
             Dim reader As MySqlDataReader
             Dim table As New DataTable
             Dim strQry As String
@@ -104,7 +103,7 @@ Class Attachments
                 table.Columns.Add("AttachUID", GetType(String))
                 table.Columns.Add("MD5", GetType(String))
             End If
-            reader = Comms.Return_SQLReader(strQry)
+            reader = SQLComms.Return_SQLReader(strQry)
             Dim strFullFilename As String
             Dim row As Integer
             ReDim AttachIndex(0)
@@ -237,8 +236,8 @@ Class Attachments
     End Sub
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
         'file stuff
-        Dim SQLComm As New clsMySQL_Comms
-        Dim FTPComm As New clsFTP_Comms
+        Dim LocalSQLComm As New clsMySQL_Comms
+        Dim LocalFTPComm As New clsFTP_Comms
         Dim Foldername As String = CurrentAttachDevice.strGUID
         Dim strFileGuid As String
         Dim Files() As String = DirectCast(e.Argument, String())
@@ -249,7 +248,7 @@ Class Attachments
         Dim FileSize As Long
         Dim FileSizeMB As Integer
         Dim FileNumber As Integer = 1
-        Dim conn As MySqlConnection = SQLComm.NewConnection
+        Dim conn As MySqlConnection = LocalSQLComm.NewConnection
         Dim cmd As New MySqlCommand
         Try
             For Each file As String In Files
@@ -271,11 +270,11 @@ Class Attachments
                 Dim SQL As String
                 Dim resp As Net.FtpWebResponse = Nothing
                 Using resp 'check if device folder exists. create directory if not.
-                    resp = FTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
+                    resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
                     Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
                     Dim s As String = sr.ReadToEnd()
                     If Not s.Contains(Foldername) Then
-                        resp = FTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
+                        resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
                     End If
                 End Using
                 'ftp upload
@@ -285,7 +284,7 @@ Class Attachments
                 Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
                 Dim FileHash As String = GetHashOfStream(ftpStream)
                 Dim flLength As Integer = ftpStream.Length
-                Dim reqfile As System.IO.Stream = FTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+                Dim reqfile As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
                 Dim perc As Short = 0
                 stpSpeed.Start()
                 UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
@@ -366,8 +365,8 @@ Class Attachments
         End Try
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
-        Dim SQLComm As New clsMySQL_Comms
-        Dim FTPComm As New clsFTP_Comms
+        Dim LocalSQLComm As New clsMySQL_Comms
+        Dim LocalFTPComm As New clsFTP_Comms
         Dim strTimeStamp As String = Now.ToString("_hhmmss")
         Dim Foldername As String
         Dim FileExpectedHash As String
@@ -379,7 +378,7 @@ Class Attachments
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry = "Select attach_file_name,attach_file_type,attach_file_size,attach_file_UID,attach_dev_UID,attach_file_hash FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
-        Dim conn As MySqlConnection = SQLComm.NewConnection '(MySQLDB.MySQLConnectString)
+        Dim conn As MySqlConnection = LocalSQLComm.NewConnection '(MySQLDB.MySQLConnectString)
         Dim cmd As New MySqlCommand(strQry, conn)
         'Dim FileSize As UInt32
         Dim strFilename As String, strFiletype As String, strFullPath As String
@@ -411,9 +410,9 @@ Class Attachments
             Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID
             Dim resp As Net.FtpWebResponse = Nothing
             'get file size
-            Dim flLength As Int64 = CInt(FTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
+            Dim flLength As Int64 = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
             'setup download
-            resp = FTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
+            resp = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
             Dim respStream As IO.Stream = resp.GetResponseStream
             'ftp download
             ProgTimer.Enabled = True

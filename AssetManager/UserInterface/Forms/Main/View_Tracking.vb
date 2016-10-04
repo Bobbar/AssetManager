@@ -3,7 +3,6 @@ Imports MySql.Data.MySqlClient
 Public Class View_Tracking
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
     Private CurrentViewTrackDevice As Device_Info
-    Private SQLComms As New clsMySQL_Comms
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
     End Sub
     Private Sub Waiting()

@@ -51,7 +51,6 @@ Public Class MainForm
             Else
                 AdminDropDown.Visible = False
             End If
-            MyLiveBox.InitializeLiveBox()
             Clear_All()
             GetGridStyles()
             SetGridStyle(ResultGrid)
@@ -345,12 +344,12 @@ Public Class MainForm
     End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
-            Dim SQLComm As New clsMySQL_Comms
+            Dim LocalSQLComm As New clsMySQL_Comms
             Dim QryComm As New MySqlCommand
             QryComm = DirectCast(e.Argument, Object)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
-            Dim conn As MySqlConnection = SQLComm.NewConnection '(MySQLDB.MySQLConnectString)
+            Dim conn As MySqlConnection = LocalSQLComm.NewConnection '(MySQLDB.MySQLConnectString)
             QryComm.Connection = conn
             BigQueryWorker.ReportProgress(1)
             da.SelectCommand = QryComm
@@ -438,11 +437,11 @@ Public Class MainForm
         Do Until ProgramEnding
             If GlobalConn.State = ConnectionState.Open Then 'test connection
                 Try
-                    Dim SQLComm As New clsMySQL_Comms
+                    Dim LocalSQLComm As New clsMySQL_Comms
                     Dim ds As New DataSet
                     Dim da As New MySqlDataAdapter
                     Dim rows As Integer
-                    Dim conn As MySqlConnection = SQLComm.NewConnection
+                    Dim conn As MySqlConnection = LocalSQLComm.NewConnection
                     da.SelectCommand = New MySqlCommand("SELECT NOW()")
                     da.SelectCommand.Connection = conn
                     da.Fill(ds)

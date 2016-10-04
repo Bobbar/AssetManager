@@ -22,7 +22,7 @@ Public Class clsLiveBox
         Public Const SelectValue As String = "SELE"
         Public Const UserSelect As String = "U_SELE"
     End Class
-    Public Sub InitializeLiveBox()
+    Sub New()
         If OpenConnection() Then
             InitializeWorker()
             InitializeControl()
@@ -47,6 +47,7 @@ Public Class clsLiveBox
         LiveBox.Visible = False
         SetStyle()
     End Sub
+
     Private Function OpenConnection() As Boolean
         Try
             If LiveConn.State = ConnectionState.Open Then

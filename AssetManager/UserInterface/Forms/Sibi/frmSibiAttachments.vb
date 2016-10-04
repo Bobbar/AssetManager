@@ -88,19 +88,9 @@ Class frmSibiAttachments
         End If
         Waiting()
         Try
-            Dim SQLComm As New clsMySQL_Comms
             Dim reader As MySqlDataReader
             Dim table As New DataTable
             Dim strQry As String
-            'If bolAdminMode Then
-            '    strQry = "Select UID,attach_file_name,attach_file_type,attach_file_size,attach_upload_date,attach_file_UID,attach_file_hash,dev_UID,dev_asset_tag FROM dev_attachments,devices WHERE dev_UID = attach_dev_UID ORDER BY attach_upload_date DESC"
-            '    table.Columns.Add("Filename", GetType(String))
-            '    table.Columns.Add("Size", GetType(String))
-            '    table.Columns.Add("Date", GetType(String))
-            '    table.Columns.Add("Device", GetType(String))
-            '    table.Columns.Add("AttachUID", GetType(String))
-            '    table.Columns.Add("MD5", GetType(String))
-            'ElseIf Not bolAdminMode Then
             Select Case GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
                 Case "ALL"
                     strQry = "Select * FROM sibi_attachments WHERE sibi_attach_UID='" & AttachRequest.strUID & "' ORDER BY sibi_attach_timestamp DESC"
@@ -114,8 +104,7 @@ Class frmSibiAttachments
             table.Columns.Add("Folder", GetType(String))
             table.Columns.Add("AttachUID", GetType(String))
             table.Columns.Add("MD5", GetType(String))
-            ' End If
-            reader = SQLComm.Return_SQLReader(strQry)
+            reader = SQLComms.Return_SQLReader(strQry)
             Dim strFullFilename As String
             Dim row As Integer
             ReDim AttachIndex(0)
@@ -123,11 +112,7 @@ Class frmSibiAttachments
                 Do While .Read()
                     Dim strFileSizeHuman As String = Math.Round((!sibi_attach_file_size / 1024), 1) & " KB"
                     strFullFilename = !sibi_attach_file_name & !sibi_attach_file_type
-                    ' If bolAdminMode Then
-                    ' table.Rows.Add(strFullFilename, strFileSizeHuman,!attach_upload_date,!dev_asset_tag,!attach_file_UID,!attach_file_hash)
-                    ' Else
                     table.Rows.Add(FileIcon(!sibi_attach_file_type), strFullFilename, strFileSizeHuman, !sibi_attach_timestamp, GetHumanValue(SibiIndex.AttachFolder, !sibi_attach_folder), !sibi_attach_file_UID, !sibi_attach_file_hash)
-                    ' End If
                     ReDim Preserve AttachIndex(row)
                     AttachIndex(row).strFilename = !sibi_attach_file_name
                     AttachIndex(row).strFileType = !sibi_attach_file_type
@@ -153,7 +138,7 @@ Class frmSibiAttachments
         End Try
     End Sub
     Private Function FileIcon(strExtension As String) As Image
-        Return GetFileIcon(strExtension) 'Icon.ExtractAssociatedIcon(strExtension)
+        Return GetFileIcon(strExtension)
     End Function
     Private Function GetUIDFromIndex(Index As Integer) As String
         Return AttachIndex(Index).strFileUID
@@ -251,8 +236,8 @@ Class frmSibiAttachments
     End Sub
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
         'file stuff
-        Dim SQLComm As New clsMySQL_Comms
-        Dim FTPComm As New clsFTP_Comms
+        Dim LocalSQLComm As New clsMySQL_Comms
+        Dim LocalFTPComm As New clsFTP_Comms
         Dim Foldername As String = AttachRequest.strUID
         Dim strFileGuid As String
         Dim Files() As String = DirectCast(e.Argument, String())
@@ -263,7 +248,7 @@ Class frmSibiAttachments
         Dim FileSize As Long
         Dim FileSizeMB As Integer
         Dim FileNumber As Integer = 1
-        Dim conn As MySqlConnection = SQLComm.NewConnection
+        Dim conn As MySqlConnection = LocalSQLComm.NewConnection
         Dim cmd As New MySqlCommand
         Try
             For Each file As String In Files
@@ -285,11 +270,11 @@ Class frmSibiAttachments
                 Dim SQL As String
                 Dim resp As Net.FtpWebResponse = Nothing
                 Using resp 'check if device folder exists. create directory if not.
-                    resp = FTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
+                    resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
                     Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
                     Dim s As String = sr.ReadToEnd()
                     If Not s.Contains(Foldername) Then
-                        resp = FTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
+                        resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
                     End If
                 End Using
                 'ftp upload
@@ -299,7 +284,7 @@ Class frmSibiAttachments
                 Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
                 Dim FileHash As String = GetHashOfStream(ftpStream)
                 Dim flLength As Integer = ftpStream.Length
-                Dim reqfile As System.IO.Stream = FTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+                Dim reqfile As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
                 Dim perc As Short = 0
                 stpSpeed.Start()
                 UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
@@ -397,8 +382,8 @@ Class frmSibiAttachments
         End Try
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
-        Dim SQLComm As New clsMySQL_Comms
-        Dim FTPComm As New clsFTP_Comms
+        Dim LocalSQLComm As New clsMySQL_Comms
+        Dim LocalFTPComm As New clsFTP_Comms
         Dim strTimeStamp As String = Now.ToString("_hhmmss")
         Dim Foldername As String
         Dim FileExpectedHash As String
@@ -409,7 +394,7 @@ Class frmSibiAttachments
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry = "Select * FROM sibi_attachments WHERE sibi_attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
-        Dim conn As MySqlConnection = SQLComm.NewConnection
+        Dim conn As MySqlConnection = LocalSQLComm.NewConnection
         Dim cmd As New MySqlCommand(strQry, conn)
         Dim strFilename As String, strFiletype As String, strFullPath As String
         Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
@@ -437,9 +422,9 @@ Class frmSibiAttachments
             Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID
             Dim resp As Net.FtpWebResponse = Nothing
             'get file size
-            Dim flLength As Int64 = CInt(FTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
+            Dim flLength As Int64 = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
             'setup download
-            resp = FTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
+            resp = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
             Dim respStream As IO.Stream = resp.GetResponseStream
             'ftp download
             ProgTimer.Enabled = True

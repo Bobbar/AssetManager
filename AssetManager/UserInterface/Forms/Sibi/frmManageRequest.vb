@@ -3,7 +3,6 @@ Imports System.Collections
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class frmManageRequest
-    Private SQLComms As New clsMySQL_Comms
     Public bolUpdating As Boolean = False
     Private bolGridFilling As Boolean = False
     Public CurrentRequest As Request_Info

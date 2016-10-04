@@ -98,7 +98,6 @@ Public Class AddNew
         Return tmpDevice
     End Function
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
-        MyLiveBox.InitializeLiveBox()
         ClearAll()
     End Sub
     Private Sub ClearAll()

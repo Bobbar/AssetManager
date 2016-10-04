@@ -5,7 +5,6 @@ Public Class Tracking
     Private CurrentTrackingDevice As Device_Info
     Private CurrentSender As View
     Private CheckData As CheckStruct
-    Private SQLComms As New clsMySQL_Comms
     Private Function GetCheckData() As Boolean
         If Not CurrentTrackingDevice.Tracking.bolCheckedOut Then
             Dim c As Control

@@ -1,7 +1,6 @@
 ﻿Option Explicit On
 Imports MySql.Data.MySqlClient
 Public Class View_Entry
-    Private SQLComms As New clsMySQL_Comms
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor

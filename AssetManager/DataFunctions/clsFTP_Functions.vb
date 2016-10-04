@@ -1,6 +1,5 @@
 ﻿Public Class clsFTP_Functions
     Private FTPComms As New clsFTP_Comms
-    Private SQLComms As New clsMySQL_Comms
     Public Function DeleteFTPAttachment(AttachUID As String, DeviceUID As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Try

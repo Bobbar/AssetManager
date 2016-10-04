@@ -1,6 +1,5 @@
 ﻿Imports System.ComponentModel
 Public Class frmSibiSelector
-    Private SQLComms As New clsMySQL_Comms
     Public ReadOnly Property SibiUID As String
         Get
             Return SelectedUID
@@ -13,7 +12,6 @@ Public Class frmSibiSelector
     End Sub
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
-            'StatusBar(strLoadingGridMessage)
             Dim table As New DataTable
             table.Columns.Add("Request #", GetType(String))
             table.Columns.Add("Status", GetType(String))
@@ -24,10 +22,6 @@ Public Class frmSibiSelector
             table.Columns.Add("PO Number", GetType(String))
             table.Columns.Add("Req. Number", GetType(String))
             table.Columns.Add("UID", GetType(String))
-            'table.Columns.Add("Location", GetType(String))
-            'table.Columns.Add("Purchase Date", GetType(String))
-            'table.Columns.Add("Replace Year", GetType(String))
-            'table.Columns.Add("GUID", GetType(String))
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item("sibi_request_number")),
                                GetHumanValue(SibiIndex.StatusType, r.Item("sibi_status")),
@@ -39,10 +33,8 @@ Public Class frmSibiSelector
                                NoNull(r.Item("sibi_requisition_number")),
                                NoNull(r.Item("sibi_uid")))
             Next
-            'bolGridFilling = True
             ResultGrid.DataSource = table
             ResultGrid.ClearSelection()
-            'bolGridFilling = False
             table.Dispose()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)

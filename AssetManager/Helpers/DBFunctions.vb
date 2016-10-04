@@ -1,18 +1,16 @@
 ﻿Option Explicit On
 Imports MySql.Data.MySqlClient
 Public Module DBFunctions
-
     Public Const strCommMessage As String = "Communicating..."
     Public Const strLoadingGridMessage As String = "Building Grid..."
     Public Const strCheckOut As String = "OUT"
     Public Const strCheckIn As String = "IN"
     Public strServerTime As String
     Public Function OpenConnections() As Boolean
-        Dim Comm As New clsMySQL_Comms
         Try
             If GlobalConn.State <> ConnectionState.Open Then
                 Asset.CloseConnection(GlobalConn)
-                GlobalConn = Comm.NewConnection
+                GlobalConn = SQLComms.NewConnection
             End If
             GlobalConn.Open()
             If GlobalConn.State = ConnectionState.Open Then

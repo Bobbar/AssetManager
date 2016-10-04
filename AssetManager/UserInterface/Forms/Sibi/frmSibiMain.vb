@@ -1,6 +1,5 @@
 ﻿Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
-    Private SQLComms As New clsMySQL_Comms
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         ShowAll()
     End Sub
@@ -8,9 +7,8 @@
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         ShowAll()
     End Sub
-    Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
+    Private Sub SendToGrid(Results As DataTable)
         Try
-            'StatusBar(strLoadingGridMessage)
             Dim table As New DataTable
             table.Columns.Add("Request #", GetType(String))
             table.Columns.Add("Status", GetType(String))
@@ -23,10 +21,6 @@
             table.Columns.Add("RT Number", GetType(String))
             table.Columns.Add("Create Date", GetType(String))
             table.Columns.Add("UID", GetType(String))
-            'table.Columns.Add("Location", GetType(String))
-            'table.Columns.Add("Purchase Date", GetType(String))
-            'table.Columns.Add("Replace Year", GetType(String))
-            'table.Columns.Add("GUID", GetType(String))
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item("sibi_request_number")),
                                GetHumanValue(SibiIndex.StatusType, r.Item("sibi_status")),

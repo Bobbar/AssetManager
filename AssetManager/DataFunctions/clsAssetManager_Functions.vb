@@ -1,8 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
 Public Class clsAssetManager_Functions
-    Private SQLComms As New clsMySQL_Comms
-    Private FPTComms As New clsFTP_Comms
-
     Public Function AddNewDevice(DeviceInfo As Device_Info, MunisEmp As Emp_Info) As Boolean
         Try
             Dim strUID As String = Guid.NewGuid.ToString

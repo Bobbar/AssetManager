@@ -2,7 +2,6 @@
 Public Class frmNotes
     Private NoteRequest As Request_Info
     Private CallingForm As frmManageRequest
-    Private SQLComms As New clsMySQL_Comms
     Private Sub ClearAll()
         rtbNotes.Clear()
     End Sub
