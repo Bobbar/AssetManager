@@ -570,14 +570,13 @@ Public Class View
     End Sub
     Private Sub DeleteDevice()
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
-        Dim blah = Message("Are you absolutely sure?" & vbCrLf & vbCrLf & "This cannot be undone and will delete all historical data.", vbYesNo + vbExclamation, "WARNING")
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
-            Dim rows As Integer
-            rows = Asset.DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device)
-            If rows > 0 Then
+            If Asset.DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device) Then
                 Dim blah2 = Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentViewDevice = Nothing
                 Me.Dispose()
+                MainForm.RefreshCurrent()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentViewDevice.strGUID)
                 Dim blah2 = Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
@@ -587,9 +586,6 @@ Public Class View
         Else
             Exit Sub
         End If
-    End Sub
-    Private Sub DeleteDeviceToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        DeleteDevice()
     End Sub
     Private Sub txtAssetTag_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag_View_REQ.TextChanged
         If bolCheckFields Then CheckFields()
@@ -717,23 +713,9 @@ Public Class View
             CancelModify()
         End If
     End Sub
-    Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
-        If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
-        Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all histrical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING")
-        If blah = vbYes Then
-            If Asset.DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device) Then
-                Dim blah2 = Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
-                CurrentViewDevice = Nothing
-                Me.Dispose()
-            Else
-                Logger("*****DELETION ERROR******: " & CurrentViewDevice.strGUID)
-                Dim blah2 = Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
-                CurrentViewDevice = Nothing
-                Me.Dispose()
-            End If
-        Else
-            Exit Sub
-        End If
+    Private Sub tsbDeleteDevice_Click(sender As Object, e As EventArgs) Handles tsbDeleteDevice.Click
+
+        DeleteDevice()
     End Sub
     Private Sub CheckInTool_Click(sender As Object, e As EventArgs) Handles CheckInTool.Click
         If Not ConnectionReady() Then

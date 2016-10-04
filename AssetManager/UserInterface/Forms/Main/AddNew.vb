@@ -21,6 +21,7 @@ Public Class AddNew
                 Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
                 If Not chkNoClear.Checked Then ClearAll()
                 If blah = vbNo Then Me.Hide()
+                MainForm.RefreshCurrent()
             Else
                 Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
             End If

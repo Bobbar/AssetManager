@@ -16,6 +16,7 @@ Public Class MainForm
     Private ConnectAttempts As Integer = 0
     Private MyLiveBox As New clsLiveBox
     Private strLastQry As String
+    Private cmdLastCommand As MySqlCommand
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadProgram()
     End Sub
@@ -123,6 +124,9 @@ Public Class MainForm
         cmd.CommandText = strShowAllQry
         strLastQry = strShowAllQry
         StartBigQuery(cmd)
+    End Sub
+    Public Sub RefreshCurrent()
+        StartBigQuery(cmdLastCommand)
     End Sub
     Private Sub StartBigQuery(QryCommand As Object)
         If Not ConnectionReady() Then
@@ -347,6 +351,7 @@ Public Class MainForm
             Dim LocalSQLComm As New clsMySQL_Comms
             Dim QryComm As New MySqlCommand
             QryComm = DirectCast(e.Argument, Object)
+            cmdLastCommand = QryComm
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
             Dim conn As MySqlConnection = LocalSQLComm.NewConnection '(MySQLDB.MySQLConnectString)
@@ -611,10 +616,6 @@ Public Class MainForm
     End Sub
     Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
         FTP.ScanAttachements()
-    End Sub
-    Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles Button1.Click
-        ' GetAndSetEmpNums()
-        SetEmpNames()
     End Sub
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
         SendToGrid(Asset.DevicesBySup())

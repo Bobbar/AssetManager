@@ -78,7 +78,7 @@ Partial Class View
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
+        Me.tsbDeleteDevice = New System.Windows.Forms.ToolStripButton()
         Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
         Me.TrackingTool = New System.Windows.Forms.ToolStripDropDownButton()
         Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
@@ -553,7 +553,7 @@ Partial Class View
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1056, 295)
+        Me.TrackingTab.Size = New System.Drawing.Size(1056, 261)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -723,7 +723,7 @@ Partial Class View
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.tsbDeleteDevice, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
@@ -753,15 +753,15 @@ Partial Class View
         Me.ToolStripButton2.Size = New System.Drawing.Size(114, 29)
         Me.ToolStripButton2.Text = "Add Note"
         '
-        'ToolStripButton3
+        'tsbDeleteDevice
         '
-        Me.ToolStripButton3.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
-        Me.ToolStripButton3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton3.Name = "ToolStripButton3"
-        Me.ToolStripButton3.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.ToolStripButton3.Size = New System.Drawing.Size(126, 29)
-        Me.ToolStripButton3.Text = "Delete Device"
+        Me.tsbDeleteDevice.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
+        Me.tsbDeleteDevice.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.tsbDeleteDevice.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.tsbDeleteDevice.Name = "tsbDeleteDevice"
+        Me.tsbDeleteDevice.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
+        Me.tsbDeleteDevice.Size = New System.Drawing.Size(126, 29)
+        Me.tsbDeleteDevice.Text = "Delete Device"
         '
         'AttachmentTool
         '
@@ -982,7 +982,7 @@ Partial Class View
     Friend WithEvents ToolStrip1 As ToolStrip
     Friend WithEvents ToolStripButton1 As ToolStripButton
     Friend WithEvents ToolStripButton2 As ToolStripButton
-    Friend WithEvents ToolStripButton3 As ToolStripButton
+    Friend WithEvents tsbDeleteDevice As ToolStripButton
     Friend WithEvents TrackingTool As ToolStripDropDownButton
     Friend WithEvents CheckOutTool As ToolStripMenuItem
     Friend WithEvents CheckInTool As ToolStripMenuItem
