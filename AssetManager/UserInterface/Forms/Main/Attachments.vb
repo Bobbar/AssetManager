@@ -737,4 +737,23 @@ Class Attachments
             AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect
         End If
     End Sub
+    Private Sub RenameAttachement(AttachUID As String, NewFileName As String)
+        Try
+            Asset.Update_SQLValue("dev_attachments", "attach_file_name", NewFileName, "attach_file_UID", AttachUID)
+            ListAttachments(CurrentAttachDevice.strGUID)
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
+    Private Sub tsmRename_Click(sender As Object, e As EventArgs) Handles tsmRename.Click
+        If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
+        Dim strCurrentFileName As String = Asset.Get_SQLValue("dev_attachments", "attach_file_UID", AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, "attach_file_name") 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
+        Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value
+        Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
+        If blah Is "" Then
+            blah = strCurrentFileName
+        Else
+            RenameAttachement(strAttachUID, Trim(blah))
+        End If
+    End Sub
 End Class

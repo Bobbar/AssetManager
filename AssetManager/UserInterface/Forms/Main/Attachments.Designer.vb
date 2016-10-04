@@ -53,6 +53,7 @@ Partial Class Attachments
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
         Me.ProgTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.tsmRename = New System.Windows.Forms.ToolStripMenuItem()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -73,9 +74,9 @@ Partial Class Attachments
         '
         'RightClickMenu
         '
-        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.CopyTextTool, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
+        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.CopyTextTool, Me.tsmRename, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(174, 76)
+        Me.RightClickMenu.Size = New System.Drawing.Size(174, 120)
         '
         'OpenTool
         '
@@ -365,6 +366,12 @@ Partial Class Attachments
         '
         Me.ProgTimer.Interval = 50
         '
+        'tsmRename
+        '
+        Me.tsmRename.Name = "tsmRename"
+        Me.tsmRename.Size = New System.Drawing.Size(173, 22)
+        Me.tsmRename.Text = "Rename"
+        '
         'Attachments
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -423,4 +430,5 @@ Partial Class Attachments
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents cmdCancel As ToolStripDropDownButton
     Friend WithEvents chkAllowDrag As CheckBox
+    Friend WithEvents tsmRename As ToolStripMenuItem
 End Class
