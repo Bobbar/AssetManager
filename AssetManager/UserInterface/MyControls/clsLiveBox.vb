@@ -3,6 +3,7 @@ Imports MySql.Data.MySqlClient
 Public Class clsLiveBox
     Private RowLimit As Integer = 15
     Private WithEvents LiveWorker As BackgroundWorker
+    Private WithEvents HideTimer As Timer
     Private LiveBox As ListBox
     Private strPrevSearchString As String
     Private dtLiveBoxData As DataTable
@@ -26,6 +27,7 @@ Public Class clsLiveBox
         If OpenConnection() Then
             InitializeWorker()
             InitializeControl()
+            InitializeTimer()
         End If
     End Sub
     Private Sub InitializeWorker()
@@ -47,7 +49,12 @@ Public Class clsLiveBox
         LiveBox.Visible = False
         SetStyle()
     End Sub
-
+    Private Sub InitializeTimer()
+        HideTimer = New Timer
+        HideTimer.Interval = 250
+        HideTimer.Enabled = True
+        AddHandler HideTimer.Tick, AddressOf HideTimer_Tick
+    End Sub
     Private Function OpenConnection() As Boolean
         Try
             If LiveConn.State = ConnectionState.Open Then
@@ -233,5 +240,21 @@ Public Class clsLiveBox
             .Font = LiveBoxFont
             .ForeColor = Color.Black
         End With
+    End Sub
+    Private Sub HideTimer_Tick(sender As Object, e As EventArgs) Handles HideTimer.Tick
+        If Not IsNothing(CurrentLiveBoxArgs.Control) Then
+            If Not CurrentLiveBoxArgs.Control.Focused And Not LiveBox.Focused Then
+                HideLiveBox()
+            End If
+            If Not CurrentLiveBoxArgs.Control.Enabled Then
+                HideLiveBox()
+            End If
+            If TypeOf CurrentLiveBoxArgs.Control Is TextBox Then
+                Dim txt As TextBox = CurrentLiveBoxArgs.Control
+                If txt.ReadOnly Then
+                    HideLiveBox()
+                End If
+            End If
+        End If
     End Sub
 End Class
