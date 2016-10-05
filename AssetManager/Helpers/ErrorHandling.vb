@@ -101,6 +101,16 @@ Module ErrorHandling
                 EndProgram()
         End Select
     End Function
+    Private Function handleOperationException(ex As InvalidOperationException, strOrigSub As String) As Boolean
+        Select Case ex.HResult
+            Case -2146233079
+                Return False
+            Case Else
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                EndProgram()
+        End Select
+    End Function
     Private Function handleWebException(ex As Net.WebException, strOrigSub As String) As Boolean
         Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Status & "  Message:" & ex.Message)
         Dim handResponse As Net.FtpWebResponse = ex.Response
