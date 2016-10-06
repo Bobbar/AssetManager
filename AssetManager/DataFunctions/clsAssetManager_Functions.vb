@@ -78,17 +78,17 @@ Public Class clsAssetManager_Functions
             Dim strDeviceID As String
             Dim strSQLIDQry As String
             If Type = Entry_Type.Device Then
-                strSQLIDQry = "SELECT attach_dev_UID FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
+                strSQLIDQry = "SELECT attach_fkey_UID FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
             ElseIf Type = Entry_Type.Sibi Then
-                strSQLIDQry = "SELECT sibi_attach_uid FROM sibi_attachments WHERE sibi_attach_file_UID='" & AttachUID & "'"
+                strSQLIDQry = "SELECT attach_fkey_UID FROM sibi_attachments WHERE attach_file_UID='" & AttachUID & "'"
             End If
             reader = SQLComms.Return_SQLReader(strSQLIDQry)
             With reader
                 Do While .Read()
                     If Type = Entry_Type.Device Then
-                        strDeviceID = !attach_dev_UID
+                        strDeviceID = !attach_fkey_UID
                     ElseIf Type = Entry_Type.Sibi Then
-                        strDeviceID = !sibi_attach_UID
+                        strDeviceID = !attach_fkey_UID
                     End If
                 Loop
             End With
@@ -100,7 +100,7 @@ Public Class clsAssetManager_Functions
                 If Type = Entry_Type.Device Then
                     strSQLDelQry = "DELETE FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
                 ElseIf Type = Entry_Type.Sibi Then
-                    strSQLDelQry = "DELETE FROM sibi_attachments WHERE sibi_attach_file_UID='" & AttachUID & "'"
+                    strSQLDelQry = "DELETE FROM sibi_attachments WHERE attach_file_UID='" & AttachUID & "'"
                 End If
                 rows = SQLComms.Return_SQLCommand(strSQLDelQry).ExecuteNonQuery
                 Return rows
@@ -127,9 +127,9 @@ Public Class clsAssetManager_Functions
             Dim strQRY As String
             Select Case Type
                 Case Entry_Type.Device
-                    strQRY = "SELECT attach_dev_UID FROM dev_attachments WHERE attach_dev_UID='" & strGUID & "'"
+                    strQRY = "SELECT attach_fkey_UID FROM dev_attachments WHERE attach_fkey_UID='" & strGUID & "'"
                 Case Entry_Type.Sibi
-                    strQRY = "SELECT sibi_attach_uid FROM sibi_attachments WHERE sibi_attach_uid='" & strGUID & "'"
+                    strQRY = "SELECT attach_fkey_UID FROM sibi_attachments WHERE attach_fkey_UID='" & strGUID & "'"
             End Select
             reader = SQLComms.Return_SQLReader(strQRY)
             Dim bolHasRows As Boolean = reader.HasRows

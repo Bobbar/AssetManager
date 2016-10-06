@@ -5,7 +5,7 @@ Imports System.IO
 Imports MySql.Data.MySqlClient
 Imports System.Text
 Imports System.Threading
-Class frmSibiAttachments
+Class frmAttachments
     Public bolAdminMode As Boolean = False
     Private AttachQry As String
     Private Const FileSizeMBLimit As Short = 150
@@ -19,7 +19,45 @@ Class frmSibiAttachments
     Private bolDragging As Boolean = False
     Private bolAllowDrag As Boolean = False
     Private strDragFilePath As String
-    Public AttachRequest As Request_Info
+    Private AttachRequest As Request_Info
+    Private AttachDevice As Device_Info
+    Private AttachType As String
+    Public AttachFolderID As String
+    Private AttachTable As String
+
+    Sub New(Optional AttachInfo As Object = Nothing)
+        InitializeComponent()
+        If Not IsNothing(AttachInfo) Then
+            If TypeOf AttachInfo Is Request_Info Then
+                AttachType = Entry_Type.Sibi
+                AttachRequest = AttachInfo
+                AttachFolderID = AttachRequest.strUID
+                AttachTable = "sibi_attachments"
+                Me.Text = "Sibi Attachements"
+                DeviceGroup.Visible = False
+                SibiGroup.Dock = DockStyle.Top
+                FillFolderCombos()
+                FillSibiInfo()
+            ElseIf TypeOf AttachInfo Is Device_Info Then
+                AttachType = Entry_Type.Device
+                AttachDevice = AttachInfo
+                AttachFolderID = AttachDevice.strGUID
+                AttachTable = "dev_attachments"
+                Me.Text = "Device Attachements"
+                SibiGroup.Visible = False
+                DeviceGroup.Dock = DockStyle.Top
+                MoveStripMenuItem.Visible = False
+                FolderPanel.Visible = False
+                FillDeviceInfo()
+            End If
+        Else
+            SibiGroup.Visible = False
+            MoveStripMenuItem.Visible = False
+            FolderPanel.Visible = False
+            AttachType = Entry_Type.Device
+            AttachTable = "dev_attachments"
+        End If
+    End Sub
     Private Structure Attach_Struct
         Public strFilename As String
         Public strFileType As String
@@ -81,8 +119,54 @@ Class frmSibiAttachments
             Me.Refresh()
         End If
     End Sub
-    Public Sub ListAttachments(Request As Request_Info)
-        AttachRequest = Request
+    Private Function GetQry() As String
+        Dim strQry As String = ""
+        If AttachType = Entry_Type.Sibi Then
+            Select Case GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
+                Case "ALL"
+                    strQry = "Select * FROM " & AttachTable & " WHERE attach_fkey_UID='" & AttachRequest.strUID & "' ORDER BY attach_timestamp DESC"
+                Case Else
+                    strQry = "Select * FROM " & AttachTable & " WHERE attach_folder='" & GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex) & "' AND attach_fkey_UID ='" & AttachRequest.strUID & "' ORDER BY attach_timestamp DESC"
+            End Select
+        ElseIf AttachType = Entry_Type.Device Then
+            If bolAdminMode Then
+                strQry = "Select * FROM " & AttachTable & ",devices WHERE dev_UID = attach_fkey_UID ORDER BY attach_timestamp DESC"
+            ElseIf Not bolAdminMode Then
+                strQry = "Select * FROM " & AttachTable & " WHERE attach_fkey_UID='" & AttachDevice.strGUID & "' ORDER BY attach_timestamp DESC"
+            End If
+        End If
+        Return strQry
+    End Function
+    Private Function GetTable() As DataTable
+        Dim table As New DataTable
+        If AttachType = Entry_Type.Sibi Then
+            table.Columns.Add(" ", GetType(Image))
+            table.Columns.Add("Filename", GetType(String))
+            table.Columns.Add("Size", GetType(String))
+            table.Columns.Add("Date", GetType(String))
+            table.Columns.Add("Folder", GetType(String))
+            table.Columns.Add("AttachUID", GetType(String))
+            table.Columns.Add("MD5", GetType(String))
+        ElseIf AttachType = Entry_Type.Device Then
+            If bolAdminMode Then
+                table.Columns.Add("Filename", GetType(String))
+                table.Columns.Add("Size", GetType(String))
+                table.Columns.Add("Date", GetType(String))
+                table.Columns.Add("Device", GetType(String))
+                table.Columns.Add("AttachUID", GetType(String))
+                table.Columns.Add("MD5", GetType(String))
+            ElseIf Not bolAdminMode Then
+                table.Columns.Add(" ", GetType(Image))
+                table.Columns.Add("Filename", GetType(String))
+                table.Columns.Add("Size", GetType(String))
+                table.Columns.Add("Date", GetType(String))
+                table.Columns.Add("AttachUID", GetType(String))
+                table.Columns.Add("MD5", GetType(String))
+            End If
+        End If
+        Return table
+    End Function
+    Public Sub ListAttachments()
         If Not ConnectionReady() Then
             Exit Sub
         End If
@@ -91,33 +175,30 @@ Class frmSibiAttachments
             Dim reader As MySqlDataReader
             Dim table As New DataTable
             Dim strQry As String
-            Select Case GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
-                Case "ALL"
-                    strQry = "Select * FROM sibi_attachments WHERE sibi_attach_UID='" & AttachRequest.strUID & "' ORDER BY sibi_attach_timestamp DESC"
-                Case Else
-                    strQry = "Select * FROM sibi_attachments WHERE sibi_attach_folder='" & GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex) & "' AND sibi_attach_UID ='" & AttachRequest.strUID & "' ORDER BY sibi_attach_timestamp DESC"
-            End Select
-            table.Columns.Add(" ", GetType(Image))
-            table.Columns.Add("Filename", GetType(String))
-            table.Columns.Add("Size", GetType(String))
-            table.Columns.Add("Date", GetType(String))
-            table.Columns.Add("Folder", GetType(String))
-            table.Columns.Add("AttachUID", GetType(String))
-            table.Columns.Add("MD5", GetType(String))
+            strQry = GetQry()
+            table = GetTable()
             reader = SQLComms.Return_SQLReader(strQry)
             Dim strFullFilename As String
             Dim row As Integer
             ReDim AttachIndex(0)
             With reader
                 Do While .Read()
-                    Dim strFileSizeHuman As String = Math.Round((!sibi_attach_file_size / 1024), 1) & " KB"
-                    strFullFilename = !sibi_attach_file_name & !sibi_attach_file_type
-                    table.Rows.Add(FileIcon(!sibi_attach_file_type), strFullFilename, strFileSizeHuman, !sibi_attach_timestamp, GetHumanValue(SibiIndex.AttachFolder, !sibi_attach_folder), !sibi_attach_file_UID, !sibi_attach_file_hash)
+                    Dim strFileSizeHuman As String = Math.Round((!attach_file_size / 1024), 1) & " KB"
+                    strFullFilename = !attach_file_name & !attach_file_type
+                    If AttachType = Entry_Type.Sibi Then
+                        table.Rows.Add(FileIcon(!attach_file_type), strFullFilename, strFileSizeHuman, !attach_timestamp, GetHumanValue(SibiIndex.AttachFolder, !attach_folder), !attach_file_UID, !attach_file_hash)
+                    ElseIf AttachType = Entry_Type.Device Then
+                        If bolAdminMode Then
+                            table.Rows.Add(strFullFilename, strFileSizeHuman, !attach_timestamp, !dev_asset_tag, !attach_file_UID, !attach_file_hash)
+                        Else
+                            table.Rows.Add(GetFileIcon(!attach_file_type), strFullFilename, strFileSizeHuman, !attach_timestamp, !attach_file_UID, !attach_file_hash)
+                        End If
+                    End If
                     ReDim Preserve AttachIndex(row)
-                    AttachIndex(row).strFilename = !sibi_attach_file_name
-                    AttachIndex(row).strFileType = !sibi_attach_file_type
-                    AttachIndex(row).FileSize = !sibi_attach_file_size
-                    AttachIndex(row).strFileUID = IIf(IsDBNull(!sibi_attach_file_UID), "", !sibi_attach_file_UID) '!UID
+                    AttachIndex(row).strFilename = !attach_file_name
+                    AttachIndex(row).strFileType = !attach_file_type
+                    AttachIndex(row).FileSize = !attach_file_size
+                    AttachIndex(row).strFileUID = IIf(IsDBNull(!attach_file_UID), "", !attach_file_UID) '!UID
                     row += 1
                 Loop
             End With
@@ -175,7 +256,6 @@ Class frmSibiAttachments
     Private Sub Attachments_Load(sender As Object, e As EventArgs) Handles Me.Load
         ExtendedMethods.DoubleBuffered(AttachGrid, True)
         StatusBar("Idle...")
-        Waiting()
         If CanAccess(AccessGroup.ManageAttachment, UserAccess.intAccessLevel) Then
             cmdUpload.Enabled = True
             cmdDelete.Enabled = True
@@ -183,19 +263,22 @@ Class frmSibiAttachments
             cmdUpload.Enabled = False
             cmdDelete.Enabled = False
         End If
-        FillFolderCombos()
-        FillInfo()
-        DoneWaiting()
+        ListAttachments()
     End Sub
     Private Sub FillFolderCombos()
         FillComboBox(SibiIndex.AttachFolder, cmbFolder)
         FillToolComboBox(SibiIndex.AttachFolder, cmbMoveFolder)
     End Sub
-    Public Sub FillInfo()
+    Public Sub FillSibiInfo()
         txtUID.Text = AttachRequest.strUID
         txtRequestNum.Text = AttachRequest.strRequestNumber
         txtDescription.Text = AttachRequest.strDescription
         cmbFolder.SelectedIndex = 0
+    End Sub
+    Private Sub FillDeviceInfo()
+        txtAssetTag.Text = AttachDevice.strAssetTag
+        txtSerial.Text = AttachDevice.strSerial
+        txtDeviceDescription.Text = AttachDevice.strDescription
     End Sub
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs)
         OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
@@ -206,7 +289,7 @@ Class frmSibiAttachments
         End If
     End Sub
     Private Sub StartAttachDelete(AttachUID As String)
-        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+        If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
         Dim strFilename As String
         Dim i As Integer = GetIndexFromUID(AttachUID)
         strFilename = AttachIndex(i).strFilename & AttachIndex(i).strFileType
@@ -214,8 +297,8 @@ Class frmSibiAttachments
         blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             Waiting()
-            If Asset.DeleteSQLAttachment(AttachIndex(i).strFileUID, Entry_Type.Sibi) > 0 Then
-                ListAttachments(AttachRequest)
+            If Asset.DeleteSQLAttachment(AttachIndex(i).strFileUID, AttachType) > 0 Then
+                ListAttachments()
                 DoneWaiting()
                 ' blah = Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
             Else
@@ -238,7 +321,7 @@ Class frmSibiAttachments
         'file stuff
         Dim LocalSQLComm As New clsMySQL_Comms
         Dim LocalFTPComm As New clsFTP_Comms
-        Dim Foldername As String = AttachRequest.strUID
+        Dim Foldername As String = AttachFolderID
         Dim strFileGuid As String
         Dim Files() As String = DirectCast(e.Argument, String())
         Dim strFilename As String
@@ -313,17 +396,21 @@ Class frmSibiAttachments
                 End If
                 'update sql table
                 If Not UploadWorker.CancellationPending Then
-                    SQL = "INSERT INTO sibi_attachments (`sibi_attach_UID`, `sibi_attach_file_name`, `sibi_attach_file_type`, `sibi_attach_file_size`, `sibi_attach_file_UID`, `sibi_attach_file_hash`, `sibi_attach_folder`) VALUES(@attach_dev_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash, @sibi_attach_folder)"
+                    If AttachType = Entry_Type.Sibi Then
+                        SQL = "INSERT INTO " & AttachTable & " (`attach_fkey_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`, `attach_file_hash`, `attach_folder`) VALUES(@attach_fkey_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash, @attach_folder)"
+                    ElseIf AttachType = Entry_Type.Device Then
+                        SQL = "INSERT INTO " & AttachTable & " (`attach_fkey_UID`, `attach_file_name`, `attach_file_type`, `attach_file_size`, `attach_file_UID`, `attach_file_hash`) VALUES(@attach_fkey_UID, @attach_file_name, @attach_file_type, @attach_file_size, @attach_file_UID, @attach_file_hash)"
+                    End If
                     conn.Open()
                     cmd.Connection = conn
                     cmd.CommandText = SQL
-                    cmd.Parameters.AddWithValue("@attach_dev_UID", AttachRequest.strUID)
+                    cmd.Parameters.AddWithValue("@attach_fkey_UID", AttachFolderID)
                     cmd.Parameters.AddWithValue("@attach_file_name", strFilename)
                     cmd.Parameters.AddWithValue("@attach_file_type", strFileType)
                     cmd.Parameters.AddWithValue("@attach_file_size", FileSize)
                     cmd.Parameters.AddWithValue("@attach_file_UID", strFileGuid)
                     cmd.Parameters.AddWithValue("@attach_file_hash", FileHash)
-                    cmd.Parameters.AddWithValue("@sibi_attach_folder", strSelectedFolder)
+                    If AttachType = Entry_Type.Sibi Then cmd.Parameters.AddWithValue("@attach_folder", strSelectedFolder)
                     cmd.ExecuteNonQuery()
                     cmd.Parameters.Clear()
                     e.Result = True
@@ -346,16 +433,16 @@ Class frmSibiAttachments
     End Sub
     Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
         Dim Filename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
-        Asset.Update_SQLValue("sibi_attachments", "sibi_attach_folder", Folder, "sibi_attach_file_UID", AttachUID)
-        ListAttachments(AttachRequest)
+        Asset.Update_SQLValue("sibi_attachments", "attach_folder", Folder, "attach_file_UID", AttachUID)
+        ListAttachments()
         cmbMoveFolder.SelectedIndex = -1
         cmbMoveFolder.Text = "Select a folder"
         RightClickMenu.Close()
     End Sub
     Private Sub RenameAttachement(AttachUID As String, NewFileName As String)
         Try
-            Asset.Update_SQLValue("sibi_attachments", "sibi_attach_file_name", NewFileName, "sibi_attach_file_UID", AttachUID)
-            ListAttachments(AttachRequest)
+            Asset.Update_SQLValue(AttachTable, "attach_file_name", NewFileName, "attach_file_UID", AttachUID)
+            ListAttachments()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
@@ -364,7 +451,7 @@ Class frmSibiAttachments
         Try
             strMultiFileCount = ""
             WorkerFeedback(False)
-            ListAttachments(AttachRequest)
+            ListAttachments()
             If Not e.Cancelled Then
                 If e.Result Then
                     ' MessageBox.Show("File uploaded successfully!",
@@ -392,7 +479,8 @@ Class frmSibiAttachments
         Dim reader As MySqlDataReader
         Dim table As New DataTable
         Dim AttachUID As String = DirectCast(e.Argument, String)
-        Dim strQry = "Select * FROM sibi_attachments WHERE sibi_attach_file_UID='" & AttachUID & "'"
+        Dim strQry As String
+        strQry = "Select * FROM " & AttachTable & " WHERE attach_file_UID='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
         Dim conn As MySqlConnection = LocalSQLComm.NewConnection
         Dim cmd As New MySqlCommand(strQry, conn)
@@ -403,12 +491,12 @@ Class frmSibiAttachments
             reader = cmd.ExecuteReader
             With reader
                 While .Read()
-                    strFilename = !sibi_attach_file_name & strTimeStamp
-                    strFiletype = !sibi_attach_file_type
+                    strFilename = !attach_file_name & strTimeStamp
+                    strFiletype = !attach_file_type
                     strFullPath = strTempPath & strFilename & strFiletype
-                    Foldername = !sibi_attach_UID
-                    FileExpectedHash = !sibi_attach_file_hash
-                    FileUID = !sibi_attach_file_UID
+                    Foldername = !attach_fkey_UID
+                    FileExpectedHash = !attach_file_hash
+                    FileUID = !attach_file_UID
                 End While
             End With
             reader.Close()
@@ -538,7 +626,7 @@ Class frmSibiAttachments
                 Me.Refresh()
             Case 3
                 StatusBar(e.UserState)
-                ListAttachments(AttachRequest)
+                ListAttachments()
         End Select
     End Sub
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
@@ -620,7 +708,7 @@ Class frmSibiAttachments
         If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
     End Sub
     Private Sub cmbFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFolder.SelectedIndexChanged
-        ListAttachments(AttachRequest)
+        ListAttachments()
         strSelectedFolder = GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
     End Sub
     Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
@@ -629,7 +717,7 @@ Class frmSibiAttachments
     End Sub
     Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim strCurrentFileName As String = Asset.Get_SQLValue("sibi_attachments", "sibi_attach_file_UID", AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, "sibi_attach_file_name") 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
+        Dim strCurrentFileName As String = Asset.Get_SQLValue(AttachTable, "attach_file_UID", AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, "attach_file_name") 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
         Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value
         Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
         If blah Is "" Then
@@ -712,10 +800,16 @@ Class frmSibiAttachments
         Select Case True
             Case AttachObject.GetDataPresent("RenPrivateItem")
                 File = CopyAttachement(AttachObject, "RenPrivateItem")
-                If Not IsNothing(File) Then UploadWorker.RunWorkerAsync(File)
+                If Not IsNothing(File) Then
+                    WorkerFeedback(True)
+                    UploadWorker.RunWorkerAsync(File)
+                End If
             Case AttachObject.GetDataPresent("FileDrop")
                 File = AttachObject.GetData("FileNameW")
-                If Not IsNothing(File) Then UploadWorker.RunWorkerAsync(File)
+                If Not IsNothing(File) Then
+                    WorkerFeedback(True)
+                    UploadWorker.RunWorkerAsync(File)
+                End If
         End Select
     End Function
     Private Function CopyAttachement(AttachObject As IDataObject, DataFormat As String) As String()
