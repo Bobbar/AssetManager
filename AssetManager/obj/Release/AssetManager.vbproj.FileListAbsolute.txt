@@ -8,18 +8,15 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\itextsharp.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.Entity.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\itextsharp.xml
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmEncrypter.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmUserManager.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmMunisUser.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MyDialog.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmNotes.resources
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiAttachments.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmManageRequest.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiMain.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MainForm.resources
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Attachments.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiSelector.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Munis.resources
@@ -37,3 +34,5 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmAttachments.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache
