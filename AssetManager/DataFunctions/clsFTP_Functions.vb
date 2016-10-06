@@ -67,8 +67,8 @@
     Private Function FTPFileIsOrphan(FolderUID As String, FileUID As String) As FTPScan_Parms
         Dim ScanResults As New FTPScan_Parms
         Dim intHits As Integer = 0
-        Dim strQRYDev As String = "SELECT * FROM dev_attachments WHERE attach_dev_UID ='" & FolderUID & "' AND attach_file_UID = '" & FileUID & "'"
-        Dim strQRYSibi As String = "SELECT * FROM sibi_attachments WHERE sibi_attach_uid ='" & FolderUID & "' AND sibi_attach_file_UID='" & FileUID & "'"
+        Dim strQRYDev As String = "SELECT * FROM dev_attachments WHERE attach_fkey_UID ='" & FolderUID & "' AND attach_file_UID = '" & FileUID & "'"
+        Dim strQRYSibi As String = "SELECT * FROM sibi_attachments WHERE attach_fkey_UID ='" & FolderUID & "' AND attach_file_UID='" & FileUID & "'"
         Dim results As DataTable
         results = SQLComms.Return_SQLTable(strQRYDev)
         If results.Rows.Count > 0 Then

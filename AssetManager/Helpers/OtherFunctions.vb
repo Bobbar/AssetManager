@@ -176,7 +176,7 @@ Module OtherFunctions
     End Function
     Public Function DeviceIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
-            If frm.Name = "View" Then
+            If TypeOf frm Is View Then
                 Dim vw As View = frm
                 If vw.CurrentViewDevice.strGUID = strGUID Then Return True
             End If
@@ -185,7 +185,7 @@ Module OtherFunctions
     End Function
     Public Function RequestIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
-            If frm.Name = "frmManageRequest" Then
+            If TypeOf frm Is frmManageRequest Then
                 Dim vw As frmManageRequest = frm
                 If vw.CurrentRequest.strUID = strGUID Then Return True
             End If

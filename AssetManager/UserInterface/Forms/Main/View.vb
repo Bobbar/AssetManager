@@ -750,9 +750,8 @@ Public Class View
         End If
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen() Then
-            Dim NewAttachments As New Attachments
+            Dim NewAttachments As New frmAttachments(CurrentViewDevice)
             NewAttachments.Tag = Me
-            NewAttachments.LoadAttachments(CurrentViewDevice)
             NewAttachments.Activate()
             NewAttachments.Show()
         Else
@@ -761,7 +760,7 @@ Public Class View
     End Sub
     Public Function AttachmentsIsOpen() As Boolean
         For Each frm As Form In My.Application.OpenForms
-            If frm.Name = "Attachments" And frm.Tag Is Me Then
+            If TypeOf frm Is frmAttachments And frm.Tag Is Me Then
                 Return True
             End If
         Next
@@ -863,8 +862,6 @@ Public Class View
     End Sub
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         MyLiveBox.Unload()
-        Attachments.Dispose()
-        Tracking.Dispose()
         CloseChildren(Me)
     End Sub
     Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint

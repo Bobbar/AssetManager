@@ -137,6 +137,12 @@
     <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
     <Compile Include="Helpers\Form_Control.vb" />
     <Compile Include="DataFunctions\clsAssetManager_Functions.vb" />
+    <Compile Include="UserInterface\Forms\frmAttachments.Designer.vb">
+      <DependentUpon>frmAttachments.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\frmAttachments.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Forms\Main\AddNew.Designer.vb">
       <DependentUpon>AddNew.vb</DependentUpon>
     </Compile>
@@ -173,12 +179,6 @@
     <Compile Include="UserInterface\Forms\Sibi\frmNotes.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\Forms\Sibi\frmSibiAttachments.Designer.vb">
-      <DependentUpon>frmSibiAttachments.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Sibi\frmSibiAttachments.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="UserInterface\Forms\Sibi\frmManageRequest.Designer.vb">
       <DependentUpon>frmManageRequest.vb</DependentUpon>
     </Compile>
@@ -196,12 +196,6 @@
     </Compile>
     <Compile Include="UserInterface\Forms\Main\MainForm.Designer.vb">
       <DependentUpon>MainForm.vb</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Main\Attachments.Designer.vb">
-      <DependentUpon>Attachments.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Main\Attachments.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Sibi\frmSibiSelector.Designer.vb">
@@ -297,6 +291,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="UserInterface\Forms\frmAttachments.resx">
+      <DependentUpon>frmAttachments.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
@@ -315,9 +312,6 @@
     <EmbeddedResource Include="UserInterface\Forms\Sibi\frmNotes.resx">
       <DependentUpon>frmNotes.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\Sibi\frmSibiAttachments.resx">
-      <DependentUpon>frmSibiAttachments.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\frmManageRequest.resx">
       <DependentUpon>frmManageRequest.vb</DependentUpon>
     </EmbeddedResource>
@@ -326,9 +320,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\Main\Attachments.resx">
-      <DependentUpon>Attachments.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\frmSibiSelector.resx">
       <DependentUpon>frmSibiSelector.vb</DependentUpon>

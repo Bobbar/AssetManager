@@ -699,9 +699,8 @@ VALUES
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         If Not AttachmentsIsOpen(CurrentRequest.strUID) Then
             If CurrentRequest.strUID <> "" Then
-                Dim NewAttach As New frmSibiAttachments
+                Dim NewAttach As New frmAttachments(CurrentRequest)
                 NewAttach.Tag = Me
-                NewAttach.ListAttachments(CurrentRequest)
                 NewAttach.Activate()
                 NewAttach.Show()
             End If
@@ -711,7 +710,7 @@ VALUES
     End Sub
     Public Function AttachmentsIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
-            If frm.Name = "frmSibiAttachments" And frm.Tag Is Me Then
+            If TypeOf frm Is frmAttachments And frm.Tag Is Me Then
                 Return True
             End If
         Next
@@ -915,5 +914,8 @@ VALUES
     Private Sub frmManageRequest_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
         Dim f As Form = sender
         PrevWindowState = f.WindowState
+    End Sub
+    Private Sub frmManageRequest_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        CloseChildren(Me)
     End Sub
 End Class

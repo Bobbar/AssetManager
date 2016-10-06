@@ -102,17 +102,22 @@ Public Class MainForm
         RefreshCombos()
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If Not Attachments.UploadWorker.IsBusy And Not Attachments.DownloadWorker.IsBusy Then
-            EndProgram()
-        Else
-            e.Cancel = True
-            Attachments.Activate()
-            Dim blah = Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
-            If blah = vbYes Then
-                If Attachments.UploadWorker.IsBusy Then Attachments.UploadWorker.CancelAsync()
-                If Attachments.DownloadWorker.IsBusy Then Attachments.DownloadWorker.CancelAsync()
+        For Each frm As Form In My.Application.OpenForms
+            If TypeOf frm Is frmAttachments Then
+                Dim Attachments As frmAttachments = frm
+                If Not Attachments.UploadWorker.IsBusy And Not Attachments.DownloadWorker.IsBusy Then
+                    EndProgram()
+                Else
+                    e.Cancel = True
+                    Attachments.Activate()
+                    Dim blah = Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
+                    If blah = vbYes Then
+                        If Attachments.UploadWorker.IsBusy Then Attachments.UploadWorker.CancelAsync()
+                        If Attachments.DownloadWorker.IsBusy Then Attachments.DownloadWorker.CancelAsync()
+                    End If
+                End If
             End If
-        End If
+        Next
     End Sub
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         If Not BigQueryWorker.IsBusy Then
@@ -540,11 +545,11 @@ Public Class MainForm
     '    End If
     'End Sub
     Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
-        Dim ViewAttachments As New Attachments
+        Dim ViewAttachments As New frmAttachments()
         ViewAttachments.bolAdminMode = CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel)
         ViewAttachments.ListAttachments()
         ViewAttachments.Text = ViewAttachments.Text & " - MANAGE ALL ATTACHMENTS"
-        ViewAttachments.GroupBox2.Visible = False
+        ViewAttachments.DeviceGroup.Visible = False
         ViewAttachments.cmdUpload.Enabled = False
     End Sub
     Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click

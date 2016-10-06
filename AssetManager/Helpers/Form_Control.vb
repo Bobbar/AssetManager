@@ -1,35 +1,29 @@
 ﻿Public Module Form_Control
     Public Sub ActivateForm(strGUID As String)
         For Each frm As Form In My.Application.OpenForms
-            Select Case frm.Name
-                Case "View"
+            Select Case frm.GetType
+                Case GetType(View)
                     Dim vw As View = frm
                     If vw.CurrentViewDevice.strGUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
-                Case "frmManageRequest"
+                Case GetType(frmManageRequest)
                     Dim vw As frmManageRequest = frm
                     If vw.CurrentRequest.strUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
-                Case "frmSibiAttachments"
-                    Dim vw As frmSibiAttachments = frm
-                    If vw.AttachRequest.strUID = strGUID Then
+                Case GetType(frmAttachments)
+                    Dim vw As frmAttachments = frm
+                    If vw.AttachFolderID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
-                Case "Attachments"
-                    Dim vw As Attachments = frm
-                    If vw.CurrentAttachDevice.strGUID = strGUID Then
-                        vw.Activate()
-                        vw.WindowState = FormWindowState.Normal
-                        vw.Show()
-                    End If
+
             End Select
         Next
     End Sub
