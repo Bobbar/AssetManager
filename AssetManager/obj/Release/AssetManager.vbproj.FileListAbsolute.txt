@@ -6,7 +6,6 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\bin\Release\itextsharp.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.dll
-C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.Entity.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\itextsharp.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmEncrypter.resources
@@ -35,4 +34,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmAttachments.resources
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache
+C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.xml
