@@ -179,14 +179,15 @@ Class frmAttachments
             table = GetTable()
             reader = SQLComms.Return_SQLReader(strQry)
             Dim strFullFilename As String
+            Dim strFileSizeHuman As String
             Dim row As Integer
             ReDim AttachIndex(0)
             With reader
                 Do While .Read()
-                    Dim strFileSizeHuman As String = Math.Round((!attach_file_size / 1024), 1) & " KB"
+                    strFileSizeHuman = Math.Round((!attach_file_size / 1024), 1) & " KB"
                     strFullFilename = !attach_file_name & !attach_file_type
                     If AttachType = Entry_Type.Sibi Then
-                        table.Rows.Add(FileIcon(!attach_file_type), strFullFilename, strFileSizeHuman, !attach_timestamp, GetHumanValue(SibiIndex.AttachFolder, !attach_folder), !attach_file_UID, !attach_file_hash)
+                        table.Rows.Add(GetFileIcon(!attach_file_type), strFullFilename, strFileSizeHuman, !attach_timestamp, GetHumanValue(SibiIndex.AttachFolder, !attach_folder), !attach_file_UID, !attach_file_hash)
                     ElseIf AttachType = Entry_Type.Device Then
                         If bolAdminMode Then
                             table.Rows.Add(strFullFilename, strFileSizeHuman, !attach_timestamp, !dev_asset_tag, !attach_file_UID, !attach_file_hash)
@@ -214,13 +215,10 @@ Class frmAttachments
             Exit Sub
         Catch ex As Exception
             DoneWaiting()
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            Exit Sub
+        ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        Exit Sub
         End Try
     End Sub
-    Private Function FileIcon(strExtension As String) As Image
-        Return GetFileIcon(strExtension)
-    End Function
     Private Function GetUIDFromIndex(Index As Integer) As String
         Return AttachIndex(Index).strFileUID
     End Function
