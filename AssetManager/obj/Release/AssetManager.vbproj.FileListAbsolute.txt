@@ -35,3 +35,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmAttachments.resources
 C:\GitHub\AssetManager\AssetManager\bin\Release\MySql.Data.xml
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache
