@@ -24,14 +24,16 @@ Partial Class MunisToolsMenu
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.MunisTools = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.tsmDeviceLookUp = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmUserOrgObLookup = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmPOLookUp = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmReqNumLookUp = New System.Windows.Forms.ToolStripMenuItem()
+
         'Me.SuspendLayout()
         '
         'MunisTools
         '
-        Me.MunisTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmUserOrgObLookup, Me.tsmPOLookUp, Me.tsmReqNumLookUp})
+        Me.MunisTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmUserOrgObLookup, Me.tsmPOLookUp, Me.tsmReqNumLookUp, Me.tsmDeviceLookUp})
         Me.MunisTools.Image = Global.AssetManager.My.Resources.Resources.Find
         Me.MunisTools.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.MunisTools.Name = "MunisTools"
@@ -39,7 +41,13 @@ Partial Class MunisToolsMenu
         Me.MunisTools.Text = "MUNIS Tools"
         Me.AutoSize = True
 
-
+        '
+        'tsmDeviceLookUp
+        '
+        Me.tsmDeviceLookUp.Name = "tsmDeviceLookUp"
+        Me.tsmDeviceLookUp.Size = New System.Drawing.Size(186, 22)
+        Me.tsmDeviceLookUp.Text = "Device Lookup"
+        '
         'tsmUserOrgObLookup
         '
         Me.tsmUserOrgObLookup.Name = "tsmUserOrgObLookup"
@@ -66,7 +74,9 @@ Partial Class MunisToolsMenu
 
     End Sub
     Friend WithEvents MunisTools As ToolStripDropDownButton
+    Friend WithEvents tsmDeviceLookUp As ToolStripMenuItem
     Friend WithEvents tsmUserOrgObLookup As ToolStripMenuItem
     Friend WithEvents tsmPOLookUp As ToolStripMenuItem
     Friend WithEvents tsmReqNumLookUp As ToolStripMenuItem
+
 End Class

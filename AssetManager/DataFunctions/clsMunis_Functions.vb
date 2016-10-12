@@ -27,6 +27,26 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
         Dim strFYyy As String = Left(PO, 2)
         Return "20" + strFYyy
     End Function
+    Public Sub AssetSearch(Parent As Form)
+        Try
+            Dim Device As New Device_Info
+            Device.dtPurchaseDate = Nothing
+            Dim NewDialog As New MyDialog
+            With NewDialog
+                .Text = "Asset Search"
+                .AddTextBox("txtAsset", "Asset:")
+                .AddTextBox("txtSerial", "Serial:")
+                .ShowDialog()
+                If .DialogResult = DialogResult.OK Then
+                    Device.strAssetTag = NewDialog.GetControlValue("txtAsset")
+                    Device.strSerial = NewDialog.GetControlValue("txtSerial")
+                    NewMunisView_Device(Device, Parent)
+                End If
+            End With
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
     Public Sub NameSearch(Parent As Form)
         Dim NewDialog As New MyDialog
         Dim strName As String
@@ -55,7 +75,8 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
                     NewMunisView_POSearch(PO, Parent)
                 End If
             End With
-        Catch
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Sub ReqSearch(Parent As Form)
@@ -80,7 +101,8 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
                     NewMunisView_ReqSearch(ReqNumber, FY, Parent)
                 End If
             End With
-        Catch
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Function ListOfEmpBySup(SupEmpNum As String) As DataTable

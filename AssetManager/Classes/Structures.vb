@@ -18,7 +18,7 @@ Public Module Structures
         Public strCurrentUser As String
         Public strCurrentUserEmpNum As String
         Public strFiscalYear As String
-        Public dtPurchaseDate As Date 'As Object
+        Public dtPurchaseDate As Date
         Public strReplaceYear As String
         Public strOSVersion As String
         Public strGUID As String

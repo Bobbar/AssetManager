@@ -9,5 +9,4 @@ Module Global_Instances
     Public SQLComms As New clsMySQL_Comms
     Public MunisComms As New clsMunis_Comms
     Public GlobalConn As MySqlConnection = SQLComms.NewConnection()
-
 End Module

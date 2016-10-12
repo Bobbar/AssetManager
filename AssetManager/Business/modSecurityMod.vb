@@ -4,10 +4,7 @@ Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Text
 Module modSecurityMod
-
     Public AccessLevels() As Access_Info
-
-
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
     Public Function DecodePassword(strCypher As String) As String
         Dim wrapper As New Simple3Des(CryptKey)
@@ -45,8 +42,6 @@ Module modSecurityMod
             If Group.strModule = SecModule Then Return Group.intLevel
         Next
     End Function
-
-
     Public Function CanAccess(recModule As String, intAccessLevel As Integer) As Boolean 'bitwise access levels
         Dim mask As UInteger = 1
         Dim calc_level As UInteger

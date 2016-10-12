@@ -193,7 +193,7 @@ Partial Class MainForm
         '
         Me.lblRecords.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblRecords.ForeColor = System.Drawing.Color.Gray
+        Me.lblRecords.ForeColor = System.Drawing.Color.FromArgb(CType(CType(53, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(53, Byte), Integer))
         Me.lblRecords.Location = New System.Drawing.Point(15, 387)
         Me.lblRecords.Name = "lblRecords"
         Me.lblRecords.Size = New System.Drawing.Size(1188, 13)
@@ -572,7 +572,7 @@ Partial Class MainForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(963, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(916, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ConnStatusLabel

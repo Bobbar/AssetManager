@@ -10,16 +10,14 @@
     Private Sub LoadMunisInventoryGrid(Device As Device_Info)
         Dim intRows As Integer = 0
         Try
-            If NeededInfo(Device) Then
-                Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_loc,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
+            Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_loc,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
+            If Device.strSerial <> "" Then
                 intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_serial='" & Device.strSerial & "'")
-                If intRows < 1 Then
-                    intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_tag='" & Device.strAssetTag & "'")
-                End If
-                If intRows < 1 Then Exit Sub
-            Else
-                DataGridMunis_Inventory.DataSource = Nothing
             End If
+            If intRows < 1 Then
+                intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_tag='" & Device.strAssetTag & "'")
+            End If
+            If intRows < 1 Then Exit Sub
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
@@ -67,7 +65,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
     End Function
     Public Sub LoadMunisInfoByDevice(Device As Device_Info)
         CurrentMunisDevice = Device
-        If Device.strPO <> "" And YearFromDate(Device.dtPurchaseDate) <> "" Then 'if PO and Fiscal yr on record > load data using our records
+        If Device.strPO <> "" Then 'And Device.dtPurchaseDate <> dtDefaultDate Then 'if PO and Fiscal yr on record > load data using our records
             Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             LoadMunisInventoryGrid(Device)
             LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
@@ -82,16 +80,16 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
                     If PO <> "" Then Device.strPO = PO
                 End If
             End If
-            If YearFromDate(Device.dtPurchaseDate) = "" Then
-                Dim FY As String = Munis.Get_FY_From_PO(Device.strPO) 'Munis_GetFYFromAsset(Device.strAssetTag)
-                If FY <> "" Then
-                    Device.strFiscalYear = FY
-                Else
-                    Device.strFiscalYear = Munis.Get_FY_From_Asset(Device.strAssetTag)
-                End If
-            Else
-                Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
-            End If
+            'If YearFromDate(Device.dtPurchaseDate) = "" Then
+            '    Dim FY As String = Munis.Get_FY_From_PO(Device.strPO) 'Munis_GetFYFromAsset(Device.strAssetTag)
+            '    If FY <> "" Then
+            '        Device.strFiscalYear = FY
+            '    Else
+            '        Device.strFiscalYear = Munis.Get_FY_From_Asset(Device.strAssetTag)
+            '    End If
+            'Else
+            '    Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
+            'End If
             If Device.strPO <> "" Then
                 LoadMunisInventoryGrid(Device)
                 LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
