@@ -1,13 +1,31 @@
 ﻿Public Class clsMunis_Functions
     Private priv_Comms As New clsMunis_Comms
     Public Function Get_ReqNumber_From_PO(PO As String) As String
-        Return priv_Comms.Return_MSSQLValue("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber")
+        If Not IsNothing(PO) Then
+            If PO <> "" Then
+                Return priv_Comms.Return_MSSQLValue("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber")
+            Else
+                Return Nothing
+            End If
+        End If
     End Function
     Public Function Get_PO_From_Asset(AssetTag As String) As String
-        Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_purch_memo"))
+        If Not IsNothing(AssetTag) Then
+            If AssetTag <> "" Then
+                Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_purch_memo"))
+            Else
+                Return Nothing
+            End If
+        End If
     End Function
     Public Function Get_PO_From_Serial(Serial As String) As String
-        Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_serial", Serial, "fama_purch_memo"))
+        If Not IsNothing(Serial) Then
+            If Serial <> "" Then
+                Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_serial", Serial, "fama_purch_memo"))
+            Else
+                Return Nothing
+            End If
+        End If
     End Function
     Public Function Get_FY_From_Asset(AssetTag As String) As String
         Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_fisc_yr"))
