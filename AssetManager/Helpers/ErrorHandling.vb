@@ -4,7 +4,7 @@ Imports System.Net.Sockets
 Imports System.ComponentModel
 Imports System.Data.SqlClient
 Module ErrorHandling
-    Public Function ErrHandle(ex As Exception, strOrigSub As String) As Boolean
+    Public Function ErrHandle(ex As Exception, strOrigSub As String) As Boolean 'Recursive error handler. Returns False for undesired or dangerous errors, True if safe to continue.
         Dim ErrorResult As Boolean
         Select Case TypeName(ex)
             Case "WebException"
@@ -33,6 +33,8 @@ Module ErrorHandling
                 ErrorResult = handleFormatException(ex, strOrigSub)
             Case "Win32Exception"
                 ErrorResult = handleWin32Exception(ex, strOrigSub)
+            Case "InvalidOperationException"
+                ErrorResult = handleOperationException(ex, strOrigSub)
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
                 Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
