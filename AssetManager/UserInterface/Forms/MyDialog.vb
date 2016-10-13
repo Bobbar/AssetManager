@@ -148,8 +148,20 @@ Public Class MyDialog
                         smPanel.Controls.Add(rtb)
                         pnlControls.Controls.Add(smPanel)
                     End If
+                Case TypeOf ctl Is Button
+                    Dim but As Button = ctl
+                    but.AutoSize = True
+                    but.Text = ctl.Text
+                    but.Name = ctl.Name
+                    AddHandler but.Click, AddressOf ButtonClick
+                    pnlControls.Controls.Add(but)
             End Select
         Next
+    End Sub
+    Private Sub ButtonClick(ByVal sender As Object, ByVal e As EventArgs)
+        Dim btn As Button = DirectCast(sender, Button)
+        Dim ClickAction As Action = btn.Tag
+        ClickAction()
     End Sub
     Public Function ControlPanel() As FlowLayoutPanel
         Dim pnl As New FlowLayoutPanel
@@ -199,6 +211,13 @@ Public Class MyDialog
         If Not IsNothing(Text) Then txt.Text = Text
         AddControl(txt)
     End Sub
+    Public Sub AddButton(Name As String, Text As String, ClickAction As Action)
+        Dim but As New Button
+        but.Name = Name
+        but.Text = Text
+        but.Tag = ClickAction
+        AddControl(but)
+    End Sub
     Public Function GetControlValue(ControlName As String) As Object
         For Each ctl As Control In MyControls
             If ctl.Name = ControlName Then
@@ -222,4 +241,24 @@ Public Class MyDialog
         Next
         Return Nothing
     End Function
+    Public Sub SetControlValue(ControlName As String, Value As Object)
+        For Each ctl As Control In MyControls
+            If ctl.Name = ControlName Then
+                Select Case True
+                    Case TypeOf ctl Is ComboBox
+                        Dim cmb As ComboBox = ctl
+                        cmb.SelectedIndex = Value
+                    Case TypeOf ctl Is TextBox
+                        Dim txt As TextBox = ctl
+                        txt.Text = Value
+                    Case TypeOf ctl Is RichTextBox
+                        Dim txt As RichTextBox = ctl
+                        txt.Text = Value
+                    Case TypeOf ctl Is CheckBox
+                        Dim chk As CheckBox = ctl
+                        chk.CheckState = Value
+                End Select
+            End If
+        Next
+    End Sub
 End Class

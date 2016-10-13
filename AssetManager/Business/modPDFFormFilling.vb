@@ -8,6 +8,10 @@ Imports System.Collections
 Imports System.ComponentModel
 Imports System.Text
 Module modPDFFormFilling
+    Private CurrentDevice As Device_Info
+    Private UnitPrice As String
+    Private CurrentDialog As MyDialog
+    Private UnitPriceTxtName As String = "txtUnitPrice"
     Public NotInheritable Class FormType
         Public Const InputForm As String = "INPUT"
         Public Const TransferForm As String = "TRANSFER"
@@ -22,6 +26,21 @@ Module modPDFFormFilling
         Debug.Print(sb.ToString())
     End Sub
     Private Function GetUnitPrice(Device As Device_Info) As String
+        CurrentDevice = Device
+        Dim NewDialog As New MyDialog
+        CurrentDialog = NewDialog
+        With NewDialog
+            .Text = "Input Unit Price"
+            .AddTextBox(UnitPriceTxtName, "Enter Unit Price:")
+            .AddButton("cmdReqSelect", "Select From Req.", AddressOf PriceFromMunis)
+            .ShowDialog()
+            If .DialogResult = DialogResult.OK Then
+                Return .GetControlValue(UnitPriceTxtName)
+            End If
+        End With
+    End Function
+    Private Sub PriceFromMunis()
+        Dim Device As Device_Info = CurrentDevice
         Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
         Dim f As New View_Munis
         f.Text = "Select a Line Item"
@@ -30,11 +49,12 @@ Module modPDFFormFilling
         f.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
         f.ShowDialog(View)
         If f.DialogResult = DialogResult.OK Then
-            Return f.UnitPrice
+            UnitPrice = f.UnitPrice
+            CurrentDialog.SetControlValue(UnitPriceTxtName, UnitPrice)
         Else
-            Return Nothing
+            UnitPrice = Nothing
         End If
-    End Function
+    End Sub
     Public Sub FillForm(Device As Device_Info, Type As String)
         Try
             Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
