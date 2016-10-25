@@ -1,11 +1,13 @@
 ﻿Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
+        SetDisplayYears()
         ShowAll()
     End Sub
     Private Sub frmSibiMain_Load(sender As Object, e As EventArgs) Handles Me.Load
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
-        ShowAll()
+        SetDisplayYears()
+        ShowAll("All")
     End Sub
     Private Sub SendToGrid(Results As DataTable)
         Try
@@ -43,8 +45,23 @@
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Sub ShowAll()
-        SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_request_number DESC"))
+    Private Sub SetDisplayYears()
+        Dim strQRY As String = "SELECT DISTINCT YEAR(sibi_datestamp) FROM sibi_requests ORDER BY sibi_datestamp DESC"
+        Dim results As DataTable = SQLComms.Return_SQLTable(strQRY)
+        cmbDisplayYear.Items.Clear()
+        cmbDisplayYear.Items.Add("All")
+        For Each r As DataRow In results.Rows
+            cmbDisplayYear.Items.Add(r.Item("YEAR(sibi_datestamp)"))
+        Next
+        cmbDisplayYear.SelectedIndex = 0
+    End Sub
+    Public Sub ShowAll(Optional Year As String = "")
+        If Year = "" Then Year = cmbDisplayYear.Text
+        If Year = "All" Then
+            SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_request_number DESC"))
+        Else
+            SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM sibi_requests WHERE YEAR(sibi_datestamp) = " & Year & " ORDER BY sibi_request_number DESC"))
+        End If
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
         frmManageRequest.ClearAll()
@@ -168,6 +185,11 @@
                     cell.Style.BackColor = BackColor
                 End If
             Next
+        End If
+    End Sub
+    Private Sub cmbDisplayYear_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbDisplayYear.SelectedIndexChanged
+        If Not IsNothing(cmbDisplayYear.Text) Then
+            ShowAll(cmbDisplayYear.Text)
         End If
     End Sub
 End Class
