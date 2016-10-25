@@ -22,7 +22,6 @@ Public Class MainForm
     End Sub
     Private Sub LoadProgram()
         Try
-
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
             ToolStrip1.BackColor = colToolBarColor
@@ -596,7 +595,10 @@ Public Class MainForm
         MyLiveBox.HideLiveBox()
     End Sub
     Private Sub cmdSibi_Click(sender As Object, e As EventArgs) Handles cmdSibi.Click
-        ' frmNewRequest.Show()
+        If Not ConnectionReady() Then
+            ConnectionNotReady()
+            Exit Sub
+        End If
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         frmSibiMain.Show()
         frmSibiMain.Activate()

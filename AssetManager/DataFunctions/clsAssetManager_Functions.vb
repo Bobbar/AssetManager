@@ -427,4 +427,23 @@ VALUES
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
+    Public Function CheckConnection() As Boolean
+        Try
+            Dim ds As New DataSet
+            Dim da As New MySqlDataAdapter
+            Dim rows As Integer
+            Dim result As String
+            da.SelectCommand = New MySqlCommand("SELECT NOW()")
+            da.SelectCommand.Connection = GlobalConn
+            da.Fill(ds)
+            rows = ds.Tables(0).Rows.Count
+            result = ds.Tables(0).Rows(0).Item(0).ToString
+            da.Dispose()
+            ds.Dispose()
+            If result <> "" Then Return True
+            Return False
+        Catch
+            Return False
+        End Try
+    End Function
 End Class

@@ -93,6 +93,7 @@ Public Module DBFunctions
         Logger("Building Indexes Done...")
     End Sub
     Public Function ConnectionReady() As Boolean
+        Asset.CheckConnection()
         Select Case GlobalConn.State
             Case ConnectionState.Closed
                 Return False
@@ -104,6 +105,4 @@ Public Module DBFunctions
                 Return False
         End Select
     End Function
-
-
 End Module
