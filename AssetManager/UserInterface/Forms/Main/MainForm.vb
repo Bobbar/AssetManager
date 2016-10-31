@@ -209,7 +209,7 @@ Public Class MainForm
             {
             New SearchVal("dev_serial", Trim(txtSerialSearch.Text)),
             New SearchVal("dev_asset_tag", Trim(txtAssetTagSearch.Text)),
-            New SearchVal("dev_description", Trim(txtDescription.Text)),
+            New SearchVal(devices.Description, Trim(txtDescription.Text)),
             New SearchVal("dev_eq_type", GetDBValue(DeviceIndex.EquipType, cmbEquipType.SelectedIndex)),
             New SearchVal("dev_replacement_year", Trim(txtReplaceYear.Text)),
             New SearchVal("dev_osversion", GetDBValue(DeviceIndex.OSType, cmbOSType.SelectedIndex)),
@@ -222,16 +222,16 @@ Public Class MainForm
     Function BuildSearchListNew() As List(Of SearchVal)
         Dim tmpList As New List(Of SearchVal)
 
-        tmpList.Add(New SearchVal("dev_serial", Trim(txtSerialSearch.Text)))
-        tmpList.Add(New SearchVal("dev_asset_tag", Trim(txtAssetTagSearch.Text)))
-        tmpList.Add(New SearchVal("dev_description", Trim(txtDescription.Text)))
-        tmpList.Add(New SearchVal("dev_eq_type", GetDBValue(DeviceIndex.EquipType, cmbEquipType.SelectedIndex)))
-        tmpList.Add(New SearchVal("dev_replacement_year", Trim(txtReplaceYear.Text)))
-        tmpList.Add(New SearchVal("dev_osversion", GetDBValue(DeviceIndex.OSType, cmbOSType.SelectedIndex)))
-        tmpList.Add(New SearchVal("dev_location", GetDBValue(DeviceIndex.Locations, cmbLocation.SelectedIndex)))
-        tmpList.Add(New SearchVal("dev_cur_user", Trim(txtCurUser.Text)))
-        tmpList.Add(New SearchVal("dev_status", GetDBValue(DeviceIndex.StatusType, cmbStatus.SelectedIndex)))
-        tmpList.Add(New SearchVal("dev_trackable", chkTrackables.Checked))
+        tmpList.Add(New SearchVal(devices.Serial, Trim(txtSerialSearch.Text)))
+        tmpList.Add(New SearchVal(devices.AssetTag, Trim(txtAssetTagSearch.Text)))
+        tmpList.Add(New SearchVal(devices.Description, Trim(txtDescription.Text)))
+        tmpList.Add(New SearchVal(devices.EQType, GetDBValue(DeviceIndex.EquipType, cmbEquipType.SelectedIndex)))
+        tmpList.Add(New SearchVal(devices.ReplacementYear, Trim(txtReplaceYear.Text)))
+        tmpList.Add(New SearchVal(devices.OSVersion, GetDBValue(DeviceIndex.OSType, cmbOSType.SelectedIndex)))
+        tmpList.Add(New SearchVal(devices.Location, GetDBValue(DeviceIndex.Locations, cmbLocation.SelectedIndex)))
+        tmpList.Add(New SearchVal(devices.CurrentUser, Trim(txtCurUser.Text)))
+        tmpList.Add(New SearchVal(devices.Status, GetDBValue(DeviceIndex.StatusType, cmbStatus.SelectedIndex)))
+        tmpList.Add(New SearchVal(devices.Trackable, chkTrackables.Checked))
 
         'If chkHistorical.Checked Then
 
@@ -291,25 +291,25 @@ Public Class MainForm
                         End If
                     Else
                         Select Case fld.FieldName 'use the fixed fields with EQUALS operator instead of LIKE
-                            Case "dev_osversion"
+                            Case devices.OSVersion
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case "hist_osversion"
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case "dev_eq_type"
+                            Case devices.EQType
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case "hist_eq_type"
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case "dev_location"
+                            Case devices.Location
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case "hist_location"
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case "dev_status"
+                            Case devices.Status
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case "hist_status"
@@ -396,16 +396,16 @@ Public Class MainForm
         AddNew.Show()
     End Sub
     Private Sub txtSerial_TextChanged(sender As Object, e As EventArgs) Handles txtSerial.TextChanged
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.InstaLoad, "dev_serial")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.InstaLoad, devices.Serial)
     End Sub
     Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.InstaLoad, "dev_asset_tag")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.InstaLoad, devices.AssetTag)
     End Sub
     Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.DynamicSearch, "dev_description")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.DynamicSearch, devices.Description)
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.DynamicSearch, "dev_cur_user")
+        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.DynamicSearch, devices.CurrentUser)
     End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
