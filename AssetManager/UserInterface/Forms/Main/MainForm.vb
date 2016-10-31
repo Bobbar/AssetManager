@@ -8,7 +8,7 @@ Public Class MainForm
     Private strSearchString As String, strPrevSearchString As String
     Private StartingControl As Control
     Private strWorkerQry As String
-    Private Const strShowAllQry As String = "SELECT * FROM devices ORDER BY dev_input_datetime DESC"
+    Private Const strShowAllQry As String = "SELECT * FROM devices ORDER BY " & devices.Input_DateTime & " DESC"
     Private ClickedButton As Control
     Dim dtResults As New DataTable
     Private intPrevRow As Integer
@@ -178,21 +178,21 @@ Public Class MainForm
             If chkHistorical.Checked Then
                 ModDateColumn = "hist_action_datetime"
             Else
-                ModDateColumn = "dev_lastmod_date"
+                ModDateColumn = devices.LastMod_Date
             End If
             For Each r As DataRow In Results.Rows
-                table.Rows.Add(NoNull(r.Item("dev_cur_user")),
-                               NoNull(r.Item("dev_asset_tag")),
-                               NoNull(r.Item("dev_serial")),
-                               GetHumanValue(DeviceIndex.EquipType, NoNull(r.Item("dev_eq_type"))),
-                               NoNull(r.Item("dev_description")),
-                               GetHumanValue(DeviceIndex.OSType, NoNull(r.Item("dev_osversion"))),
-                               GetHumanValue(DeviceIndex.Locations, NoNull(r.Item("dev_location"))),
-                               NoNull(r.Item("dev_po")),
-                               NoNull(r.Item("dev_purchase_date")),
-                               NoNull(r.Item("dev_replacement_year")),
+                table.Rows.Add(NoNull(r.Item(devices.CurrentUser)),
+                               NoNull(r.Item(devices.AssetTag)),
+                               NoNull(r.Item(devices.Serial)),
+                               GetHumanValue(DeviceIndex.EquipType, NoNull(r.Item(devices.EQType))),
+                               NoNull(r.Item(devices.Description)),
+                               GetHumanValue(DeviceIndex.OSType, NoNull(r.Item(devices.OSVersion))),
+                               GetHumanValue(DeviceIndex.Locations, NoNull(r.Item(devices.Location))),
+                               NoNull(r.Item(devices.PO)),
+                               NoNull(r.Item(devices.PurchaseDate)),
+                               NoNull(r.Item(devices.ReplacementYear)),
                                NoNull(r.Item(ModDateColumn)),
-                               NoNull(r.Item("dev_UID")))
+                               NoNull(r.Item(devices.UID)))
             Next
             bolGridFilling = True
             ResultGrid.DataSource = table
