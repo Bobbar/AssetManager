@@ -174,6 +174,12 @@ Public Class MainForm
             table.Columns.Add("Replace Year", GetType(String))
             table.Columns.Add("Modified", GetType(String))
             table.Columns.Add("GUID", GetType(String))
+            Dim ModDateColumn As String
+            If chkHistorical.Checked Then
+                ModDateColumn = "hist_action_datetime"
+            Else
+                ModDateColumn = "dev_lastmod_date"
+            End If
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item("dev_cur_user")),
                                NoNull(r.Item("dev_asset_tag")),
@@ -185,7 +191,7 @@ Public Class MainForm
                                NoNull(r.Item("dev_po")),
                                NoNull(r.Item("dev_purchase_date")),
                                NoNull(r.Item("dev_replacement_year")),
-                               NoNull(r.Item("dev_lastmod_date")),
+                               NoNull(r.Item(ModDateColumn)),
                                NoNull(r.Item("dev_UID")))
             Next
             bolGridFilling = True
@@ -211,7 +217,39 @@ Public Class MainForm
             New SearchVal("dev_cur_user", Trim(txtCurUser.Text)),
             New SearchVal("dev_status", GetDBValue(DeviceIndex.StatusType, cmbStatus.SelectedIndex)),
             New SearchVal("dev_trackable", chkTrackables.Checked)
-            }
+                           }
+    End Function
+    Function BuildSearchListNew() As List(Of SearchVal)
+        Dim tmpList As New List(Of SearchVal)
+
+        tmpList.Add(New SearchVal("dev_serial", Trim(txtSerialSearch.Text)))
+        tmpList.Add(New SearchVal("dev_asset_tag", Trim(txtAssetTagSearch.Text)))
+        tmpList.Add(New SearchVal("dev_description", Trim(txtDescription.Text)))
+        tmpList.Add(New SearchVal("dev_eq_type", GetDBValue(DeviceIndex.EquipType, cmbEquipType.SelectedIndex)))
+        tmpList.Add(New SearchVal("dev_replacement_year", Trim(txtReplaceYear.Text)))
+        tmpList.Add(New SearchVal("dev_osversion", GetDBValue(DeviceIndex.OSType, cmbOSType.SelectedIndex)))
+        tmpList.Add(New SearchVal("dev_location", GetDBValue(DeviceIndex.Locations, cmbLocation.SelectedIndex)))
+        tmpList.Add(New SearchVal("dev_cur_user", Trim(txtCurUser.Text)))
+        tmpList.Add(New SearchVal("dev_status", GetDBValue(DeviceIndex.StatusType, cmbStatus.SelectedIndex)))
+        tmpList.Add(New SearchVal("dev_trackable", chkTrackables.Checked))
+
+        'If chkHistorical.Checked Then
+
+        '    tmpList.Add(New SearchVal("hist_serial", Trim(txtSerialSearch.Text)))
+        '    tmpList.Add(New SearchVal("hist_asset_tag", Trim(txtAssetTagSearch.Text)))
+        '    tmpList.Add(New SearchVal("hist_description", Trim(txtDescription.Text)))
+        '    tmpList.Add(New SearchVal("hist_eq_type", GetDBValue(DeviceIndex.EquipType, cmbEquipType.SelectedIndex)))
+        '    tmpList.Add(New SearchVal("hist_replacement_year", Trim(txtReplaceYear.Text)))
+        '    tmpList.Add(New SearchVal("hist_osversion", GetDBValue(DeviceIndex.OSType, cmbOSType.SelectedIndex)))
+        '    tmpList.Add(New SearchVal("hist_location", GetDBValue(DeviceIndex.Locations, cmbLocation.SelectedIndex)))
+        '    tmpList.Add(New SearchVal("hist_cur_user", Trim(txtCurUser.Text)))
+        '    tmpList.Add(New SearchVal("hist_status", GetDBValue(DeviceIndex.StatusType, cmbStatus.SelectedIndex)))
+        '    'tmpList.Add(New SearchVal("dev_trackable", chkTrackables.Checked))
+
+        'End If
+
+
+        Return tmpList
     End Function
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
         Clear_All()
@@ -234,9 +272,15 @@ Public Class MainForm
     Public Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         Dim table As New DataTable
         Dim cmd As New MySqlCommand
-        Dim strStartQry As String = "SELECT * FROM devices WHERE "
+        Dim strStartQry As String
+        If chkHistorical.Checked Then
+            strStartQry = "SELECT * FROM dev_historical WHERE "
+        Else
+            strStartQry = "SELECT * FROM devices WHERE "
+        End If
         Dim strDynaQry As String
-        Dim SearchValCol As IEnumerable(Of SearchVal) = BuildSearchList()
+        ' Dim SearchValCol As IEnumerable(Of SearchVal) = BuildSearchList()
+        Dim SearchValCol As List(Of SearchVal) = BuildSearchListNew()
         For Each fld As SearchVal In SearchValCol
             If Not IsNothing(fld.Value) Then
                 If fld.Value.ToString <> "" Then
@@ -250,13 +294,25 @@ Public Class MainForm
                             Case "dev_osversion"
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                            Case "hist_osversion"
+                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case "dev_eq_type"
+                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                            Case "hist_eq_type"
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case "dev_location"
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                            Case "hist_location"
+                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case "dev_status"
+                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                            Case "hist_status"
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case Else
@@ -276,6 +332,7 @@ Public Class MainForm
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
         strLastQry = strQry
+        Debug.Print(strQry)
         cmd.CommandText = strQry
         StartBigQuery(cmd)
     End Sub
@@ -364,6 +421,7 @@ Public Class MainForm
             da.SelectCommand = QryComm
             da.Fill(ds)
             da.Dispose()
+            Debug.Print(ds.Tables(0).Rows.Count)
             e.Result = ds.Tables(0)
             ds.Dispose()
             Asset.CloseConnection(conn) 'conn.Close()

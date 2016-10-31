@@ -84,6 +84,7 @@ Partial Class MainForm
         Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
         Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.chkHistorical = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -290,6 +291,7 @@ Partial Class MainForm
         Me.PanelNoScrollOnFocus1.AutoScrollMargin = New System.Drawing.Size(10, 20)
         Me.PanelNoScrollOnFocus1.BackColor = System.Drawing.Color.FromArgb(CType(CType(202, Byte), Integer), CType(CType(202, Byte), Integer), CType(CType(202, Byte), Integer))
         Me.PanelNoScrollOnFocus1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.chkHistorical)
         Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmdSupDevSearch)
         Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label6)
         Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label4)
@@ -428,7 +430,7 @@ Partial Class MainForm
         '
         Me.chkTrackables.AutoSize = True
         Me.chkTrackables.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackables.Location = New System.Drawing.Point(324, 128)
+        Me.chkTrackables.Location = New System.Drawing.Point(304, 129)
         Me.chkTrackables.Name = "chkTrackables"
         Me.chkTrackables.Size = New System.Drawing.Size(100, 22)
         Me.chkTrackables.TabIndex = 50
@@ -572,7 +574,7 @@ Partial Class MainForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(916, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(963, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ConnStatusLabel
@@ -712,6 +714,17 @@ Partial Class MainForm
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
         '
+        'chkHistorical
+        '
+        Me.chkHistorical.AutoSize = True
+        Me.chkHistorical.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkHistorical.Location = New System.Drawing.Point(425, 129)
+        Me.chkHistorical.Name = "chkHistorical"
+        Me.chkHistorical.Size = New System.Drawing.Size(89, 22)
+        Me.chkHistorical.TabIndex = 56
+        Me.chkHistorical.Text = "Historical"
+        Me.chkHistorical.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -806,4 +819,5 @@ Partial Class MainForm
     Friend WithEvents lblRecords As Label
     Friend WithEvents ScanAttachmentToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmdSupDevSearch As Button
+    Friend WithEvents chkHistorical As CheckBox
 End Class

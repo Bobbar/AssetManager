@@ -151,6 +151,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\DataColumns.vb" />
     <Compile Include="Classes\Type_Classes.vb" />
     <Compile Include="UserInterface\Colors.vb" />
     <Compile Include="Classes\Constants.vb" />
