@@ -145,9 +145,6 @@ Public Class View
                 ", " & devices.Munis_Emp_Num & "=@" & devices.Munis_Emp_Num &
                 " WHERE " & devices.UID & "='" & CurrentViewDevice.strGUID & "'"
 
-
-
-
             Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
             cmd.Parameters.AddWithValue("@" & devices.Description, NewData.strDescription)
             cmd.Parameters.AddWithValue("@" & devices.Location, NewData.strLocation)
@@ -198,6 +195,7 @@ VALUES (@" & historical_dev.ChangeType & ",
 @" & historical_dev.Trackable & ",
 @" & historical_dev.PO & ")"
             cmd.CommandText = strSqlQry2
+            cmd.Parameters.Clear()
             cmd.Parameters.AddWithValue("@" & historical_dev.ChangeType, UpdateInfo.strChangeType) 'GetDBValue(ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
             cmd.Parameters.AddWithValue("@" & historical_dev.Notes, NewData.strNote)
             cmd.Parameters.AddWithValue("@" & historical_dev.Serial, NewData.strSerial)
@@ -257,26 +255,30 @@ VALUES (@" & historical_dev.ChangeType & ",
         End Try
     End Sub
     Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
-        Dim table, Results As New DataTable
+        Dim HistoricalResults, DeviceResults As New DataTable
         Try
-            Results = SQLComms.Return_SQLTable("Select * FROM " & devices.TableName & ", " & historical_dev.TableName & " WHERE " & devices.TableName & "." & devices.UID & " = " & historical_dev.TableName & "." & historical_dev.UID & " And " & devices.TableName & "." & devices.UID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
-            If Results.Rows.Count < 1 Then
+            DeviceResults = SQLComms.Return_SQLTable("Select * FROM " & devices.TableName & " WHERE " & devices.UID & " = '" & DeviceUID & "'")
+            ' Debug.Print("Select * FROM " & devices.TableName & ", " & historical_dev.TableName & " WHERE " & devices.TableName & "." & devices.UID & " = " & historical_dev.TableName & "." & historical_dev.UID & " And " & devices.TableName & "." & devices.UID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
+            If DeviceResults.Rows.Count < 1 Then
                 CloseChildren(Me)
-                Results.Dispose()
+                DeviceResults.Dispose()
                 CurrentViewDevice = Nothing
                 Dim blah = Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
                 Return False
             End If
-            CurrentViewDevice = Asset.CollectDeviceInfo(Results)
+            CurrentViewDevice = Asset.CollectDeviceInfo(DeviceResults)
             FillDeviceInfo()
-            SendToHistGrid(DataGridHistory, Results)
-            Results.Dispose()
+            HistoricalResults = SQLComms.Return_SQLTable("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.UID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
+            SendToHistGrid(DataGridHistory, HistoricalResults)
+            HistoricalResults.Dispose()
+            DeviceResults.Dispose()
             DisableControls()
             Return True
         Catch ex As Exception
             DoneWaiting()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            Results.Dispose()
+            HistoricalResults.Dispose()
+            DeviceResults.Dispose()
             Return False
         End Try
     End Function
@@ -356,15 +358,15 @@ VALUES (@" & historical_dev.ChangeType & ",
                 table.Columns.Add("Location", GetType(String))
                 table.Columns.Add("GUID", GetType(String))
                 For Each r As DataRow In tblResults.Rows
-                    table.Rows.Add(NoNull(r.Item("track_datestamp")),
-                           NoNull(r.Item("track_check_type")),
-                           NoNull(r.Item("track_checkout_user")),
-                           NoNull(r.Item("track_checkin_user")),
-                           NoNull(r.Item("track_checkout_time")),
-                           NoNull(r.Item("track_checkin_time")),
-                           NoNull(r.Item("track_dueback_date")),
-                           NoNull(r.Item("track_use_location")),
-                           NoNull(r.Item("track_uid")))
+                    table.Rows.Add(NoNull(r.Item(trackable.DateStamp)),
+                           NoNull(r.Item(trackable.CheckType)),
+                           NoNull(r.Item(trackable.CheckOut_User)),
+                           NoNull(r.Item(trackable.CheckIn_User)),
+                           NoNull(r.Item(trackable.CheckOut_Time)),
+                           NoNull(r.Item(trackable.CheckIn_Time)),
+                           NoNull(r.Item(trackable.DueBackDate)),
+                           NoNull(r.Item(trackable.UseLocation)),
+                           NoNull(r.Item(trackable.UID)))
                 Next
                 Grid.DataSource = table
                 table.Dispose()
@@ -391,7 +393,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Public Sub ViewTracking(strGUID As String)
         Dim Results As New DataTable
-        Dim strQry = "Select * FROM dev_trackable, devices WHERE track_device_uid = dev_UID And track_device_uid = '" & strGUID & "' ORDER BY track_datestamp DESC"
+        Dim strQry = "Select * FROM " & trackable.TableName & ", " & devices.TableName & " WHERE " & trackable.DeviceUID & " = " & devices.UID & " And " & trackable.DeviceUID & " = '" & strGUID & "' ORDER BY " & trackable.DateStamp & " DESC"
         Try
             If Not ConnectionReady() Then
                 ConnectionNotReady()
@@ -420,13 +422,13 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub CollectCurrentTracking(Results As DataTable)
         With CurrentViewDevice
-            .Tracking.strCheckOutTime = NoNull(Results.Rows(0).Item("track_checkout_time"))
-            .Tracking.strCheckInTime = NoNull(Results.Rows(0).Item("track_checkin_time"))
-            .Tracking.strUseLocation = NoNull(Results.Rows(0).Item("track_use_location"))
-            .Tracking.strCheckOutUser = NoNull(Results.Rows(0).Item("track_checkout_user"))
-            .Tracking.strCheckInUser = NoNull(Results.Rows(0).Item("track_checkin_user"))
-            .Tracking.strDueBackTime = NoNull(Results.Rows(0).Item("track_dueback_date"))
-            .Tracking.strUseReason = NoNull(Results.Rows(0).Item("track_notes"))
+            .Tracking.strCheckOutTime = NoNull(Results.Rows(0).Item(trackable.CheckOut_Time))
+            .Tracking.strCheckInTime = NoNull(Results.Rows(0).Item(trackable.CheckIn_Time))
+            .Tracking.strUseLocation = NoNull(Results.Rows(0).Item(trackable.UseLocation))
+            .Tracking.strCheckOutUser = NoNull(Results.Rows(0).Item(trackable.CheckOut_User))
+            .Tracking.strCheckInUser = NoNull(Results.Rows(0).Item(trackable.CheckIn_User))
+            .Tracking.strDueBackTime = NoNull(Results.Rows(0).Item(trackable.DueBackDate))
+            .Tracking.strUseReason = NoNull(Results.Rows(0).Item(trackable.Notes))
         End With
     End Sub
     Private Sub DisableSorting(Grid As DataGridView)
@@ -693,7 +695,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Function DeleteHistoryEntry(ByVal strGUID As String) As Integer
         Try
             Dim rows
-            Dim strSQLQry As String = "DELETE FROM dev_historical WHERE hist_uid='" & strGUID & "'"
+            Dim strSQLQry As String = "DELETE FROM " & historical_dev.TableName & " WHERE " & historical_dev.UID & "='" & strGUID & "'"
             rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function
@@ -945,7 +947,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         Dim f As New frmSibiSelector
         f.ShowDialog(Me)
         If f.DialogResult = DialogResult.OK Then
-            Asset.Update_SQLValue("devices", "dev_sibi_link", f.SibiUID, "dev_UID", CurrentViewDevice.strGUID)
+            Asset.Update_SQLValue(devices.TableName, devices.Sibi_Link_UID, f.SibiUID, devices.UID, CurrentViewDevice.strGUID)
             ViewDevice(CurrentViewDevice.strGUID)
         End If
     End Sub
@@ -977,7 +979,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         'ListFieldNames()
         FillForm(CurrentViewDevice, FormType.TransferForm)
     End Sub
-
     Private Sub cmdMunisSearch_Click(sender As Object, e As EventArgs) Handles cmdMunisSearch.Click
         Dim NewMunisSearch As New frmMunisUser
         NewMunisSearch.ShowDialog()
@@ -988,7 +989,6 @@ VALUES (@" & historical_dev.ChangeType & ",
             txtCurUser_View_REQ.ReadOnly = True
         End If
     End Sub
-
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
     End Sub

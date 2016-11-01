@@ -38,5 +38,22 @@
 
     End Class
 
+    Public Class trackable
+        Public Const TableName As String = "dev_trackable"
+
+        Public Const UID As String = "track_uid"
+        Public Const CheckType As String = "track_check_type"
+        Public Const CheckOut_Time As String = "track_checkout_time"
+        Public Const DueBackDate As String = "track_dueback_date"
+        Public Const CheckIn_Time As String = "track_checkin_time"
+        Public Const CheckOut_User As String = "track_checkout_user"
+        Public Const CheckIn_User As String = "track_checkin_user"
+        Public Const AssetTag As String = "track_asset_tag"
+        Public Const FromLocation As String = "track_out_location"
+        Public Const UseLocation As String = "track_use_location"
+        Public Const Notes As String = "track_notes"
+        Public Const DeviceUID As String = "track_device_uid"
+        Public Const DateStamp As String = "track_datestamp"
+    End Class
 End Module
 
