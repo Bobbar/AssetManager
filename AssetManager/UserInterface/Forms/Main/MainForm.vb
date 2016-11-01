@@ -192,7 +192,7 @@ Public Class MainForm
                                NoNull(r.Item(devices.PurchaseDate)),
                                NoNull(r.Item(devices.ReplacementYear)),
                                NoNull(r.Item(ModDateColumn)),
-                               NoNull(r.Item(devices.UID)))
+                               NoNull(r.Item(devices.DeviceUID)))
             Next
             bolGridFilling = True
             ResultGrid.DataSource = table

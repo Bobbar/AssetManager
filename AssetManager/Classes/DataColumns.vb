@@ -2,7 +2,7 @@
 
     Public Class devices_main
 
-        Public Const UID As String = "dev_UID"
+        Public Const DeviceUID As String = "dev_UID"
         Public Const Description As String = "dev_description"
         Public Const Location As String = "dev_location"
         Public Const CurrentUser As String = "dev_cur_user"

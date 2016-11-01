@@ -14,34 +14,31 @@ Public Class View_Entry
             Exit Sub
         End If
         Waiting()
-        Dim reader As MySqlDataReader
+        Dim results As New DataTable
         Try
-            Dim strQry = "Select * FROM dev_historical WHERE  hist_UID = '" & EntryUID & "'"
-            reader = SQLComms.Return_SQLReader(strQry)
-            With reader
-                Do While .Read()
-                    txtEntryTime.Text = NoNull(!hist_action_datetime)
-                    txtActionUser.Text = NoNull(!hist_action_user)
-                    txtChangeType.Text = GetHumanValue(DeviceIndex.ChangeType, !hist_change_type)
-                    txtDescription.Text = NoNull(!hist_description)
-                    txtGUID.Text = NoNull(!hist_dev_UID)
-                    txtCurrentUser.Text = NoNull(!hist_cur_user)
-                    txtLocation.Text = GetHumanValue(DeviceIndex.Locations, !hist_location)
-                    txtPONumber.Text = NoNull(!hist_po)
-                    txtAssetTag.Text = NoNull(!hist_asset_tag)
-                    txtPurchaseDate.Text = NoNull(!hist_purchase_date)
-                    txtOSVersion.Text = GetHumanValue(DeviceIndex.OSType, !hist_osversion)
-                    txtSerial.Text = NoNull(!hist_serial)
-                    txtReplaceYear.Text = NoNull(!hist_replacement_year)
-                    txtEQType.Text = GetHumanValue(DeviceIndex.EquipType, !hist_eq_type)
-                    txtNotes.Text = NoNull(!hist_notes)
-                    txtStatus.Text = GetHumanValue(DeviceIndex.StatusType, !hist_status)
-                    txtEntryGUID.Text = NoNull(!hist_uid)
-                    chkTrackable.Checked = CBool(!hist_trackable)
-                    Me.Text = Me.Text + " - " & NoNull(!hist_action_datetime)
-                Loop
-            End With
-            reader.Close()
+            Dim strQry = "Select * FROM " & historical_dev.TableName & " WHERE  " & historical_dev.History_Entry_UID & " = '" & EntryUID & "'"
+            results = SQLComms.Return_SQLTable(strQry)
+            For Each r As DataRow In results.Rows
+                txtEntryTime.Text = NoNull(r.Item(historical_dev.ActionDateTime))
+                txtActionUser.Text = NoNull(r.Item(historical_dev.ActionUser))
+                txtChangeType.Text = GetHumanValue(DeviceIndex.ChangeType, r.Item(historical_dev.ChangeType))
+                txtDescription.Text = NoNull(r.Item(historical_dev.Description))
+                txtGUID.Text = NoNull(r.Item(historical_dev.DeviceUID))
+                txtCurrentUser.Text = NoNull(r.Item(historical_dev.CurrentUser))
+                txtLocation.Text = GetHumanValue(DeviceIndex.Locations, r.Item(historical_dev.Location))
+                txtPONumber.Text = NoNull(r.Item(historical_dev.PO))
+                txtAssetTag.Text = NoNull(r.Item(historical_dev.AssetTag))
+                txtPurchaseDate.Text = NoNull(r.Item(historical_dev.PurchaseDate))
+                txtOSVersion.Text = GetHumanValue(DeviceIndex.OSType, r.Item(historical_dev.OSVersion))
+                txtSerial.Text = NoNull(r.Item(historical_dev.Serial))
+                txtReplaceYear.Text = NoNull(r.Item(historical_dev.ReplacementYear))
+                txtEQType.Text = GetHumanValue(DeviceIndex.EquipType, r.Item(historical_dev.EQType))
+                txtNotes.Text = NoNull(r.Item(historical_dev.Notes))
+                txtStatus.Text = GetHumanValue(DeviceIndex.StatusType, r.Item(historical_dev.Status))
+                txtEntryGUID.Text = NoNull(r.Item(historical_dev.History_Entry_UID))
+                chkTrackable.Checked = CBool(r.Item(historical_dev.Trackable))
+                Me.Text = Me.Text + " - " & NoNull(r.Item(historical_dev.ActionDateTime))
+            Next
             DoneWaiting()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
