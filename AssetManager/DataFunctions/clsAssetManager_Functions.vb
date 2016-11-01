@@ -4,42 +4,107 @@ Public Class clsAssetManager_Functions
         Try
             Dim strUID As String = Guid.NewGuid.ToString
             Dim rows As Integer
-            Dim strSqlQry1 = "INSERT INTO devices (dev_UID,dev_description,dev_location,dev_cur_user,dev_serial,dev_asset_tag,dev_purchase_date,dev_po,dev_replacement_year,dev_eq_type,dev_osversion,dev_status,dev_lastmod_user,dev_lastmod_date,dev_trackable,dev_cur_user_emp_num) VALUES(@dev_UID,@dev_description,@dev_location,@dev_cur_user,@dev_serial,@dev_asset_tag,@dev_purchase_date,@dev_po,@dev_replacement_year,@dev_eq_type,@dev_osversion,@dev_status,@dev_lastmod_user,@dev_lastmod_date,@dev_trackable,@dev_cur_user_emp_num)"
+            Dim strSqlQry1 = "INSERT INTO " & devices.TableName &
+" (" & devices.DeviceUID & ",
+" & devices.Description & ",
+" & devices.Location & ",
+" & devices.CurrentUser & ",
+" & devices.Serial & ",
+" & devices.AssetTag & ",
+" & devices.PurchaseDate & ",
+" & devices.PO & ",
+" & devices.ReplacementYear & ",
+" & devices.EQType & ",
+" & devices.OSVersion & ",
+" & devices.Status & ",
+" & devices.LastMod_User & ",
+" & devices.LastMod_Date & ",
+" & devices.Trackable & ",
+" & devices.Munis_Emp_Num & ") 
+VALUES(@" & devices.DeviceUID & ",
+@" & devices.Description & ",
+@" & devices.Location & ",
+@" & devices.CurrentUser & ",
+@" & devices.Serial & ",
+@" & devices.AssetTag & ",
+@" & devices.PurchaseDate & ",
+@" & devices.PO & ",
+@" & devices.ReplacementYear & ",
+@" & devices.EQType & ",
+@" & devices.OSVersion & ",
+@" & devices.Status & ",
+@" & devices.LastMod_User & ",
+@" & devices.LastMod_Date & ",
+@" & devices.Trackable & ",
+@" & devices.Munis_Emp_Num & ")"
             Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
-            cmd.Parameters.AddWithValue("@dev_UID", strUID)
-            cmd.Parameters.AddWithValue("@dev_description", DeviceInfo.strDescription)
-            cmd.Parameters.AddWithValue("@dev_location", DeviceInfo.strLocation)
-            cmd.Parameters.AddWithValue("@dev_cur_user", DeviceInfo.strCurrentUser)
-            cmd.Parameters.AddWithValue("@dev_cur_user_emp_num", MunisEmp.Number)
-            cmd.Parameters.AddWithValue("@dev_serial", DeviceInfo.strSerial)
-            cmd.Parameters.AddWithValue("@dev_asset_tag", DeviceInfo.strAssetTag)
-            cmd.Parameters.AddWithValue("@dev_purchase_date", DeviceInfo.dtPurchaseDate)
-            cmd.Parameters.AddWithValue("@dev_po", DeviceInfo.strPO)
-            cmd.Parameters.AddWithValue("@dev_replacement_year", DeviceInfo.strReplaceYear)
-            cmd.Parameters.AddWithValue("@dev_eq_type", DeviceInfo.strEqType)
-            cmd.Parameters.AddWithValue("@dev_osversion", DeviceInfo.strOSVersion)
-            cmd.Parameters.AddWithValue("@dev_status", DeviceInfo.strStatus)
-            cmd.Parameters.AddWithValue("@dev_lastmod_user", strLocalUser)
-            cmd.Parameters.AddWithValue("@dev_lastmod_date", Now)
-            cmd.Parameters.AddWithValue("@dev_trackable", Convert.ToInt32(DeviceInfo.bolTrackable))
+            cmd.Parameters.AddWithValue("@" & devices.DeviceUID, strUID)
+            cmd.Parameters.AddWithValue("@" & devices.Description, DeviceInfo.strDescription)
+            cmd.Parameters.AddWithValue("@" & devices.Location, DeviceInfo.strLocation)
+            cmd.Parameters.AddWithValue("@" & devices.CurrentUser, DeviceInfo.strCurrentUser)
+            cmd.Parameters.AddWithValue("@" & devices.Munis_Emp_Num, MunisEmp.Number)
+            cmd.Parameters.AddWithValue("@" & devices.Serial, DeviceInfo.strSerial)
+            cmd.Parameters.AddWithValue("@" & devices.AssetTag, DeviceInfo.strAssetTag)
+            cmd.Parameters.AddWithValue("@" & devices.PurchaseDate, DeviceInfo.dtPurchaseDate)
+            cmd.Parameters.AddWithValue("@" & devices.PO, DeviceInfo.strPO)
+            cmd.Parameters.AddWithValue("@" & devices.ReplacementYear, DeviceInfo.strReplaceYear)
+            cmd.Parameters.AddWithValue("@" & devices.EQType, DeviceInfo.strEqType)
+            cmd.Parameters.AddWithValue("@" & devices.OSVersion, DeviceInfo.strOSVersion)
+            cmd.Parameters.AddWithValue("@" & devices.Status, DeviceInfo.strStatus)
+            cmd.Parameters.AddWithValue("@" & devices.LastMod_User, strLocalUser)
+            cmd.Parameters.AddWithValue("@" & devices.LastMod_Date, Now)
+            cmd.Parameters.AddWithValue("@" & devices.Trackable, Convert.ToInt32(DeviceInfo.bolTrackable))
             rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO dev_historical (hist_change_type, hist_notes, hist_serial, hist_description, hist_location, hist_cur_user, hist_asset_tag, hist_purchase_date, hist_replacement_year, hist_po, hist_osversion, hist_dev_UID, hist_action_user, hist_eq_type, hist_status, hist_trackable) VALUES(@hist_change_type, @hist_notes, @hist_serial, @hist_description, @hist_location, @hist_cur_user, @hist_asset_tag, @hist_purchase_date, @hist_replacement_year, @hist_po, @hist_osversion, @hist_dev_UID, @hist_action_user, @hist_eq_type, @hist_status, @hist_trackable)"
-            cmd.Parameters.AddWithValue("@hist_change_type", "NEWD")
-            cmd.Parameters.AddWithValue("@hist_notes", DeviceInfo.strNote)
-            cmd.Parameters.AddWithValue("@hist_serial", DeviceInfo.strSerial)
-            cmd.Parameters.AddWithValue("@hist_description", DeviceInfo.strDescription)
-            cmd.Parameters.AddWithValue("@hist_location", DeviceInfo.strLocation)
-            cmd.Parameters.AddWithValue("@hist_cur_user", DeviceInfo.strCurrentUser)
-            cmd.Parameters.AddWithValue("@hist_asset_tag", DeviceInfo.strAssetTag)
-            cmd.Parameters.AddWithValue("@hist_purchase_date", DeviceInfo.dtPurchaseDate)
-            cmd.Parameters.AddWithValue("@hist_replacement_year", DeviceInfo.strReplaceYear)
-            cmd.Parameters.AddWithValue("@hist_po", DeviceInfo.strPO)
-            cmd.Parameters.AddWithValue("@hist_osversion", DeviceInfo.strOSVersion)
-            cmd.Parameters.AddWithValue("@hist_dev_UID", strUID)
-            cmd.Parameters.AddWithValue("@hist_action_user", strLocalUser)
-            cmd.Parameters.AddWithValue("@hist_eq_type", DeviceInfo.strEqType)
-            cmd.Parameters.AddWithValue("@hist_status", DeviceInfo.strStatus)
-            cmd.Parameters.AddWithValue("@hist_trackable", Convert.ToInt32(DeviceInfo.bolTrackable))
+            Dim strSqlQry2 = "INSERT INTO " & historical_dev.TableName & "
+(" & historical_dev.ChangeType & ",
+" & historical_dev.Notes & ",
+" & historical_dev.Serial & ", 
+" & historical_dev.Description & ", 
+" & historical_dev.Location & ",
+" & historical_dev.CurrentUser & ", 
+" & historical_dev.AssetTag & ", 
+" & historical_dev.PurchaseDate & ", 
+" & historical_dev.ReplacementYear & ", 
+" & historical_dev.PO & ",
+" & historical_dev.OSVersion & ", 
+" & historical_dev.DeviceUID & ",
+" & historical_dev.ActionUser & ", 
+" & historical_dev.EQType & ", 
+" & historical_dev.Status & ",
+" & historical_dev.Trackable & ") 
+VALUES(@" & historical_dev.ChangeType & ",
+@" & historical_dev.Notes & ",
+@" & historical_dev.Serial & ",
+@" & historical_dev.Description & ",
+@" & historical_dev.Location & ",
+@" & historical_dev.CurrentUser & ",
+@" & historical_dev.AssetTag & ",
+@" & historical_dev.PurchaseDate & ", 
+@" & historical_dev.ReplacementYear & ",
+@" & historical_dev.PO & ",
+@" & historical_dev.OSVersion & ", 
+@" & historical_dev.DeviceUID & ",
+@" & historical_dev.ActionUser & ", 
+@" & historical_dev.EQType & ",
+@" & historical_dev.Status & ",
+@" & historical_dev.Trackable & ")"
+            cmd.Parameters.Clear()
+            cmd.Parameters.AddWithValue("@" & historical_dev.ChangeType, "NEWD")
+            cmd.Parameters.AddWithValue("@" & historical_dev.Notes, DeviceInfo.strNote)
+            cmd.Parameters.AddWithValue("@" & historical_dev.Serial, DeviceInfo.strSerial)
+            cmd.Parameters.AddWithValue("@" & historical_dev.Description, DeviceInfo.strDescription)
+            cmd.Parameters.AddWithValue("@" & historical_dev.Location, DeviceInfo.strLocation)
+            cmd.Parameters.AddWithValue("@" & historical_dev.CurrentUser, DeviceInfo.strCurrentUser)
+            cmd.Parameters.AddWithValue("@" & historical_dev.AssetTag, DeviceInfo.strAssetTag)
+            cmd.Parameters.AddWithValue("@" & historical_dev.PurchaseDate, DeviceInfo.dtPurchaseDate)
+            cmd.Parameters.AddWithValue("@" & historical_dev.ReplacementYear, DeviceInfo.strReplaceYear)
+            cmd.Parameters.AddWithValue("@" & historical_dev.PO, DeviceInfo.strPO)
+            cmd.Parameters.AddWithValue("@" & historical_dev.OSVersion, DeviceInfo.strOSVersion)
+            cmd.Parameters.AddWithValue("@" & historical_dev.DeviceUID, strUID)
+            cmd.Parameters.AddWithValue("@" & historical_dev.ActionUser, strLocalUser)
+            cmd.Parameters.AddWithValue("@" & historical_dev.EQType, DeviceInfo.strEqType)
+            cmd.Parameters.AddWithValue("@" & historical_dev.Status, DeviceInfo.strStatus)
+            cmd.Parameters.AddWithValue("@" & historical_dev.Trackable, Convert.ToInt32(DeviceInfo.bolTrackable))
             cmd.CommandText = strSqlQry2
             rows = rows + cmd.ExecuteNonQuery()
             cmd.Dispose()
