@@ -18,34 +18,32 @@ Public Class View_Tracking
                 Exit Sub
             End If
             Waiting()
-            Dim reader As MySqlDataReader
-            Dim strQry = "Select * FROM dev_trackable WHERE  track_uid = '" & EntryUID & "'"
-            reader = SQLComms.Return_SQLReader(strQry)
-            With reader
-                Do While .Read()
-                    txtTimeStamp.Text = !track_datestamp
-                    txtCheckType.Text = !track_check_type
-                    If txtCheckType.Text = "IN" Then
-                        txtCheckType.BackColor = colCheckIn
-                    ElseIf txtCheckType.Text = "OUT" Then
-                        txtCheckType.BackColor = colCheckOut
-                    End If
-                    txtDescription.Text = Device.strDescription
-                    txtGUID.Text = NoNull(!track_device_uid)
-                    txtCheckOutUser.Text = NoNull(!track_checkout_user)
-                    txtCheckInUser.Text = NoNull(!track_checkin_user)
-                    txtLocation.Text = NoNull(!track_use_location)
-                    txtAssetTag.Text = Device.strAssetTag
-                    txtCheckOutTime.Text = NoNull(!track_checkout_time)
-                    txtDueBack.Text = NoNull(!track_dueback_date)
-                    txtSerial.Text = Device.strSerial
-                    txtCheckInTime.Text = NoNull(!track_checkin_time)
-                    txtNotes.Text = NoNull(!track_notes)
-                    txtEntryGUID.Text = NoNull(!track_uid)
-                    Me.Text = Me.Text + " - " & NoNull(!track_datestamp)
-                Loop
-            End With
-            reader.Close()
+            Dim results As New DataTable
+            Dim strQry = "Select * FROM " & trackable.TableName & " WHERE  " & trackable.UID & " = '" & EntryUID & "'"
+            results = SQLComms.Return_SQLTable(strQry)
+            For Each r As DataRow In results.Rows
+                txtTimeStamp.Text = NoNull(r.Item(trackable.DateStamp))
+                txtCheckType.Text = NoNull(r.Item(trackable.CheckType))
+                If txtCheckType.Text = "IN" Then
+                    txtCheckType.BackColor = colCheckIn
+                ElseIf txtCheckType.Text = "OUT" Then
+                    txtCheckType.BackColor = colCheckOut
+                End If
+                txtDescription.Text = Device.strDescription
+                txtGUID.Text = NoNull(r.Item(trackable.DeviceUID))
+                txtCheckOutUser.Text = NoNull(r.Item(trackable.CheckOut_User))
+                txtCheckInUser.Text = NoNull(r.Item(trackable.CheckIn_User))
+                txtLocation.Text = NoNull(r.Item(trackable.UseLocation))
+                txtAssetTag.Text = Device.strAssetTag
+                txtCheckOutTime.Text = NoNull(r.Item(trackable.CheckOut_Time))
+                txtDueBack.Text = NoNull(r.Item(trackable.DueBackDate))
+                txtSerial.Text = Device.strSerial
+                txtCheckInTime.Text = NoNull(r.Item(trackable.CheckIn_Time))
+                txtNotes.Text = NoNull(r.Item(trackable.Notes))
+                txtEntryGUID.Text = NoNull(r.Item(trackable.UID))
+                Me.Text = Me.Text + " - " & NoNull(r.Item(trackable.DateStamp))
+            Next
+            results.Dispose()
             DoneWaiting()
             Exit Sub
         Catch ex As Exception

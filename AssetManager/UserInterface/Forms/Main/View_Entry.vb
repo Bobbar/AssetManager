@@ -39,6 +39,7 @@ Public Class View_Entry
                 chkTrackable.Checked = CBool(r.Item(historical_dev.Trackable))
                 Me.Text = Me.Text + " - " & NoNull(r.Item(historical_dev.ActionDateTime))
             Next
+            results.Dispose()
             DoneWaiting()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
