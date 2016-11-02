@@ -55,5 +55,24 @@
         Public Const DeviceUID As String = "track_device_uid"
         Public Const DateStamp As String = "track_datestamp"
     End Class
+    Public Class main_attachments
+        Public Const TimeStamp As String = "attach_timestamp"
+        Public Const FKey As String = "attach_fkey_UID"
+        Public Const FileName As String = "attach_file_name"
+        Public Const FileType As String = "attach_file_type"
+        Public Const FileSize As String = "attach_file_size"
+        Public Const FileUID As String = "attach_file_UID"
+        Public Const FileHash As String = "attach_file_hash"
+    End Class
+    Public Class dev_attachments
+        Inherits main_attachments
+        Public Const TableName As String = "dev_attachments"
+    End Class
+    Public Class sibi_attachments
+        Inherits main_attachments
+        Public Const TableName As String = "sibi_attachments"
+        Public Const Folder As String = "attach_folder"
+
+    End Class
 End Module
 

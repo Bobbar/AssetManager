@@ -139,33 +139,33 @@ VALUES(@" & historical_dev.ChangeType & ",
         End If
         Try
             Dim rows
-            Dim reader As MySqlDataReader
+            ' Dim reader As MySqlDataReader
+            Dim results As New DataTable
             Dim strDeviceID As String
             Dim strSQLIDQry As String
             If Type = Entry_Type.Device Then
-                strSQLIDQry = "SELECT attach_fkey_UID FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
+                strSQLIDQry = "SELECT " & dev_attachments.FKey & " FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FileUID & "='" & AttachUID & "'"
             ElseIf Type = Entry_Type.Sibi Then
-                strSQLIDQry = "SELECT attach_fkey_UID FROM sibi_attachments WHERE attach_file_UID='" & AttachUID & "'"
+                strSQLIDQry = "SELECT " & sibi_attachments.FKey & " FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FileUID & "='" & AttachUID & "'"
             End If
-            reader = SQLComms.Return_SQLReader(strSQLIDQry)
-            With reader
-                Do While .Read()
-                    If Type = Entry_Type.Device Then
-                        strDeviceID = !attach_fkey_UID
-                    ElseIf Type = Entry_Type.Sibi Then
-                        strDeviceID = !attach_fkey_UID
-                    End If
-                Loop
-            End With
-            reader.Close()
+            'reader = SQLComms.Return_SQLReader(strSQLIDQry)
+            results = SQLComms.Return_SQLTable(strSQLIDQry)
+            For Each r As DataRow In results.Rows
+                If Type = Entry_Type.Device Then
+                    strDeviceID = r.Item(dev_attachments.FKey)
+                ElseIf Type = Entry_Type.Sibi Then
+                    strDeviceID = r.Item(sibi_attachments.FKey)
+                End If
+            Next
+            results.Dispose()
             'Delete FTP Attachment
             If FTP.DeleteFTPAttachment(AttachUID, strDeviceID) Then
                 'delete SQL entry
                 Dim strSQLDelQry As String
                 If Type = Entry_Type.Device Then
-                    strSQLDelQry = "DELETE FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
+                    strSQLDelQry = "DELETE FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FileUID & "='" & AttachUID & "'"
                 ElseIf Type = Entry_Type.Sibi Then
-                    strSQLDelQry = "DELETE FROM sibi_attachments WHERE attach_file_UID='" & AttachUID & "'"
+                    strSQLDelQry = "DELETE FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FileUID & "='" & AttachUID & "'"
                 End If
                 rows = SQLComms.Return_SQLCommand(strSQLDelQry).ExecuteNonQuery
                 Return rows
