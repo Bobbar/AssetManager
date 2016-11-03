@@ -121,5 +121,37 @@
 
 
     End Class
+
+    Public Class security
+        Public Const TableName As String = "security"
+
+        Public Const SecModule As String = "sec_module"
+        Public Const AccessLevel As String = "sec_access_level"
+        Public Const Description As String = "sec_desc"
+
+
+    End Class
+
+    Public Class users
+
+        Public Const TableName As String = "users"
+
+        Public Const UserName As String = "usr_username"
+        Public Const FullName As String = "usr_fullname"
+        Public Const AccessLevel As String = "usr_access_level"
+        Public Const UID As String = "usr_UID"
+
+    End Class
+
+    Public Class employees
+        Public Const TableName As String = "employees"
+
+        Public Const Name As String = "emp_name"
+        Public Const Number As String = "emp_number"
+        Public Const UID As String = "emp_UID"
+
+
+
+    End Class
 End Module
 

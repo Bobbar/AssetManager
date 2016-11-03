@@ -254,7 +254,7 @@ VALUES(@" & historical_dev.ChangeType & ",
     Public Function Get_DeviceUID(ByVal AssetTag As String, ByVal Serial As String) As String
         Dim reader As MySqlDataReader
         Dim UID As String
-        Dim strQry = "SELECT " & devices.DeviceUID & " from devices WHERE " & devices.AssetTag & " = '" & AssetTag & "' AND " & devices.Serial & " = '" & Serial & "' ORDER BY " & devices.Input_DateTime & ""
+        Dim strQry = "SELECT " & devices.DeviceUID & " from " & devices.TableName & " WHERE " & devices.AssetTag & " = '" & AssetTag & "' AND " & devices.Serial & " = '" & Serial & "' ORDER BY " & devices.Input_DateTime & ""
         reader = SQLComms.Return_SQLReader(strQry)
         With reader
             Do While .Read()
@@ -288,7 +288,7 @@ VALUES(@" & historical_dev.ChangeType & ",
         Try
             Dim tmpArray() As Combo_Data
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM " & CodeType & " WHERE type_name ='" & TypeName & "' ORDER BY human_value"
+            Dim strQRY = "SELECT * FROM " & CodeType & " WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
             Dim row As Integer
             reader = SQLComms.Return_SQLReader(strQRY)
             ReDim tmpArray(0)
@@ -314,15 +314,15 @@ VALUES(@" & historical_dev.ChangeType & ",
     End Function
     Public Function BuildModuleIndex() As List(Of Access_Info)
         Dim tmpList As New List(Of Access_Info)
-        Dim ModuleTable As DataTable = SQLComms.Return_SQLTable("SELECT * FROM security ORDER BY sec_access_level")
+        Dim ModuleTable As DataTable = SQLComms.Return_SQLTable("SELECT * FROM " & security.TableName & " ORDER BY " & security.AccessLevel & "")
         Dim i As Integer = 0
         'ReDim ModuleArray(ModuleTable.Rows.Count - 1)
         For Each row As DataRow In ModuleTable.Rows
             Dim tmpInfo As Access_Info
             With tmpInfo
-                .intLevel = row.Item("sec_access_level")
-                .strModule = row.Item("sec_module")
-                .strDesc = row.Item("sec_desc")
+                .intLevel = row.Item(security.AccessLevel)
+                .strModule = row.Item(security.SecModule)
+                .strDesc = row.Item(security.Description)
             End With
             tmpList.Add(tmpInfo)
         Next
@@ -330,7 +330,7 @@ VALUES(@" & historical_dev.ChangeType & ",
     End Function
     Public Sub UpdateUser(ByRef User As User_Info, AccessLevel As Integer)
         User.intAccessLevel = AccessLevel
-        Update_SQLValue("users", "usr_access_level", User.intAccessLevel, "usr_UID", User.strUID)
+        Update_SQLValue(users.TableName, users.AccessLevel, User.intAccessLevel, users.UID, User.strUID)
     End Sub
     Public Function FindDevice(Optional AssetTag As String = "", Optional Serial As String = "") As Device_Info
         If AssetTag IsNot "" Then
@@ -343,18 +343,18 @@ VALUES(@" & historical_dev.ChangeType & ",
         Try
             If Not EmpIsInDB(EmpInfo.Number) Then
                 Dim UID As String = Guid.NewGuid.ToString
-                Dim strQRY As String = "INSERT INTO employees
-(emp_name,
-emp_number,
-emp_UID)
+                Dim strQRY As String = "INSERT INTO " & employees.TableName & "
+(" & employees.Name & ",
+" & employees.Number & ",
+" & employees.UID & ")
 VALUES
-(@emp_name,
-@emp_number,
-@emp_UID)"
+(@" & employees.Name & ",
+@" & employees.Number & ",
+@" & employees.UID & ")"
                 Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strQRY)
-                cmd.Parameters.AddWithValue("@emp_name", EmpInfo.Name)
-                cmd.Parameters.AddWithValue("@emp_number", EmpInfo.Number)
-                cmd.Parameters.AddWithValue("@emp_UID", UID)
+                cmd.Parameters.AddWithValue("@" & employees.Name, EmpInfo.Name)
+                cmd.Parameters.AddWithValue("@" & employees.Number, EmpInfo.Number)
+                cmd.Parameters.AddWithValue("@" & employees.UID, UID)
                 cmd.ExecuteNonQuery()
                 cmd.Dispose()
             End If
@@ -363,7 +363,7 @@ VALUES
         End Try
     End Sub
     Public Function EmpIsInDB(EmpNum As String) As Boolean
-        Dim EmpName As String = Get_SQLValue("employees", "emp_number", EmpNum, "emp_name")
+        Dim EmpName As String = Get_SQLValue(employees.TableName, employees.Number, EmpNum, employees.Name)
         If EmpName <> "" Then
             Return True
         Else
@@ -373,7 +373,7 @@ VALUES
     Public Sub GetUserAccess()
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM users WHERE usr_username='" & strLocalUser & "'"
+            Dim strQRY = "SELECT * FROM " & users.TableName & " WHERE " & users.UserName & "='" & strLocalUser & "'"
             reader = SQLComms.Return_SQLReader(strQRY)
             With reader
                 If .HasRows Then
@@ -395,7 +395,7 @@ VALUES
     Public Sub GetAccessLevels()
         Try
             Dim reader As MySqlDataReader
-            Dim strQRY = "SELECT * FROM security ORDER BY sec_access_level" ' WHERE usr_username='" & strLocalUser & "'"
+            Dim strQRY = "SELECT * FROM " & security.TableName & " ORDER BY " & security.AccessLevel & "" ' WHERE usr_username='" & strLocalUser & "'"
             Dim rows As Integer
             reader = SQLComms.Return_SQLReader(strQRY)
             ReDim AccessLevels(0)
@@ -437,7 +437,7 @@ VALUES
         Dim DeviceList As New DataTable
         For Each r As DataRow In EmpList.Rows
             Dim tmpTable As New DataTable
-            Dim strQRY As String = "SELECT * FROM devices WHERE dev_cur_user_emp_num='" & r.Item("a_employee_number") & "'"
+            Dim strQRY As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.Munis_Emp_Num & "='" & r.Item("a_employee_number") & "'"
             tmpTable = SQLComms.Return_SQLTable(strQRY)
             DeviceList.Merge(tmpTable)
         Next
@@ -451,22 +451,22 @@ VALUES
         Try
             Dim newDeviceInfo As Device_Info
             With newDeviceInfo
-                .strGUID = NoNull(DeviceTable.Rows(0).Item("dev_UID"))
-                .strDescription = NoNull(DeviceTable.Rows(0).Item("dev_description"))
-                .strLocation = NoNull(DeviceTable.Rows(0).Item("dev_location"))
-                .strCurrentUser = NoNull(DeviceTable.Rows(0).Item("dev_cur_user"))
-                .strCurrentUserEmpNum = NoNull(DeviceTable.Rows(0).Item("dev_cur_user_emp_num"))
-                .strSerial = NoNull(DeviceTable.Rows(0).Item("dev_serial"))
-                .strAssetTag = NoNull(DeviceTable.Rows(0).Item("dev_asset_tag"))
-                .dtPurchaseDate = NoNull(DeviceTable.Rows(0).Item("dev_purchase_date"))
-                .strReplaceYear = NoNull(DeviceTable.Rows(0).Item("dev_replacement_year"))
-                .strPO = NoNull(DeviceTable.Rows(0).Item("dev_po"))
-                .strOSVersion = NoNull(DeviceTable.Rows(0).Item("dev_osversion"))
-                .strEqType = NoNull(DeviceTable.Rows(0).Item("dev_eq_type"))
-                .strStatus = NoNull(DeviceTable.Rows(0).Item("dev_status"))
-                .bolTrackable = CBool(DeviceTable.Rows(0).Item("dev_trackable"))
-                .strSibiLink = NoNull(DeviceTable.Rows(0).Item("dev_sibi_link"))
-                .Tracking.bolCheckedOut = CBool(DeviceTable.Rows(0).Item("dev_checkedout"))
+                .strGUID = NoNull(DeviceTable.Rows(0).Item(devices.DeviceUID))
+                .strDescription = NoNull(DeviceTable.Rows(0).Item(devices.Description))
+                .strLocation = NoNull(DeviceTable.Rows(0).Item(devices.Location))
+                .strCurrentUser = NoNull(DeviceTable.Rows(0).Item(devices.CurrentUser))
+                .strCurrentUserEmpNum = NoNull(DeviceTable.Rows(0).Item(devices.Munis_Emp_Num))
+                .strSerial = NoNull(DeviceTable.Rows(0).Item(devices.Serial))
+                .strAssetTag = NoNull(DeviceTable.Rows(0).Item(devices.AssetTag))
+                .dtPurchaseDate = NoNull(DeviceTable.Rows(0).Item(devices.PurchaseDate))
+                .strReplaceYear = NoNull(DeviceTable.Rows(0).Item(devices.ReplacementYear))
+                .strPO = NoNull(DeviceTable.Rows(0).Item(devices.PO))
+                .strOSVersion = NoNull(DeviceTable.Rows(0).Item(devices.OSVersion))
+                .strEqType = NoNull(DeviceTable.Rows(0).Item(devices.EQType))
+                .strStatus = NoNull(DeviceTable.Rows(0).Item(devices.Status))
+                .bolTrackable = CBool(DeviceTable.Rows(0).Item(devices.Trackable))
+                .strSibiLink = NoNull(DeviceTable.Rows(0).Item(devices.Sibi_Link_UID))
+                .Tracking.bolCheckedOut = CBool(DeviceTable.Rows(0).Item(devices.CheckedOut))
             End With
             Return newDeviceInfo
         Catch ex As Exception
@@ -475,16 +475,16 @@ VALUES
         End Try
     End Function
     Public Function User_GetUserList() As List(Of User_Info)
-        Dim Qry As String = "SELECT * FROM users"
+        Dim Qry As String = "SELECT * FROM " & users.TableName
         Dim tmpList As New List(Of User_Info)
         Try
             Dim Results As DataTable = SQLComms.Return_SQLTable(Qry)
             For Each r As DataRow In Results.Rows
                 Dim tmpItem As User_Info
-                tmpItem.strUsername = r.Item("usr_username")
-                tmpItem.strFullname = r.Item("usr_fullname")
-                tmpItem.intAccessLevel = r.Item("usr_access_level")
-                tmpItem.strUID = r.Item("usr_UID")
+                tmpItem.strUsername = r.Item(users.UserName)
+                tmpItem.strFullname = r.Item(users.FullName)
+                tmpItem.intAccessLevel = r.Item(users.AccessLevel)
+                tmpItem.strUID = r.Item(users.UID)
                 tmpList.Add(tmpItem)
             Next
             Return tmpList
