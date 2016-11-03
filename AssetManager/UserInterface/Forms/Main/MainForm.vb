@@ -8,7 +8,7 @@ Public Class MainForm
     Private strSearchString As String, strPrevSearchString As String
     Private StartingControl As Control
     Private strWorkerQry As String
-    Private Const strShowAllQry As String = "SELECT * FROM devices ORDER BY " & devices.Input_DateTime & " DESC"
+    Private Const strShowAllQry As String = "SELECT * FROM " & devices.TableName & " ORDER BY " & devices.Input_DateTime & " DESC"
     Private ClickedButton As Control
     Dim dtResults As New DataTable
     Private intPrevRow As Integer

@@ -5,7 +5,6 @@ Public Class clsMySQL_Comms
     Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
     Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
-        Debug.Print(strSQLQry)
         'Debug.Print("Table Hit " & Date.Now.Ticks)
         Dim ds As New DataSet
         Dim da As New MySqlDataAdapter
