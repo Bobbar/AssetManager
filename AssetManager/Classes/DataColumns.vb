@@ -74,5 +74,52 @@
         Public Const Folder As String = "attach_folder"
 
     End Class
+
+    Public Class sibi_requests
+
+        Public Const TableName As String = "sibi_attachments"
+
+        Public Const UID As String = "sibi_uid"
+        Public Const RequestUser As String = "sibi_request_user"
+        Public Const Description As String = "sibi_description"
+        Public Const DateStamp As String = "sibi_datestamp"
+        Public Const NeedBy As String = "sibi_need_by"
+        Public Const Status As String = "sibi_status"
+        Public Const Type As String = "sibi_type"
+        Public Const PO As String = "sibi_PO"
+        Public Const RequisitionNumber As String = "sibi_requisition_number"
+        Public Const Replace_Asset As String = "sibi_replace_asset"
+        Public Const Replace_Serial As String = "sibi_replace_serial"
+        Public Const RequestNumber As String = "sibi_request_number"
+        Public Const RT_Number As String = "sibi_RT_number"
+
+
+
+
+    End Class
+    Public Class main_combocodes
+
+        Public Const TypeName As String = "type_name"
+        Public Const HumanValue As String = "human_value"
+        Public Const DB_Value As String = "db_value"
+        Public Const ID As String = "id"
+
+
+
+    End Class
+
+    Public Class dev_codes
+        Inherits main_combocodes
+        Public Const TableName As String = "dev_codes"
+
+        Public Const MunisCode As String = "munis_code"
+
+    End Class
+    Public Class sibi_codes
+        Inherits main_combocodes
+        Public Const TableName As String = "sibi_codes"
+
+
+    End Class
 End Module
 

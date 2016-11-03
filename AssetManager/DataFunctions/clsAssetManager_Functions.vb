@@ -192,9 +192,9 @@ VALUES(@" & historical_dev.ChangeType & ",
             Dim strQRY As String
             Select Case Type
                 Case Entry_Type.Device
-                    strQRY = "SELECT attach_fkey_UID FROM dev_attachments WHERE attach_fkey_UID='" & strGUID & "'"
+                    strQRY = "SELECT " & dev_attachments.FKey & " FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FKey & "='" & strGUID & "'"
                 Case Entry_Type.Sibi
-                    strQRY = "SELECT attach_fkey_UID FROM sibi_attachments WHERE attach_fkey_UID='" & strGUID & "'"
+                    strQRY = "SELECT " & sibi_attachments.FKey & " FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FKey & "='" & strGUID & "'"
             End Select
             reader = SQLComms.Return_SQLReader(strQRY)
             Dim bolHasRows As Boolean = reader.HasRows
@@ -227,7 +227,7 @@ VALUES(@" & historical_dev.ChangeType & ",
             End If
             Dim tmpInfo As Device_Info
             Dim reader As MySqlDataReader
-            Dim strQry = "SELECT * FROM dev_historical WHERE hist_uid='" & strGUID & "'"
+            Dim strQry = "SELECT * FROM " & historical_dev.TableName & " WHERE " & historical_dev.History_Entry_UID & "='" & strGUID & "'"
             reader = SQLComms.Return_SQLReader(strQry)
             With reader
                 Do While .Read()
@@ -254,7 +254,7 @@ VALUES(@" & historical_dev.ChangeType & ",
     Public Function Get_DeviceUID(ByVal AssetTag As String, ByVal Serial As String) As String
         Dim reader As MySqlDataReader
         Dim UID As String
-        Dim strQry = "SELECT dev_UID from devices WHERE dev_asset_tag = '" & AssetTag & "' AND dev_serial = '" & Serial & "' ORDER BY dev_input_datetime"
+        Dim strQry = "SELECT " & devices.DeviceUID & " from devices WHERE " & devices.AssetTag & " = '" & AssetTag & "' AND " & devices.Serial & " = '" & Serial & "' ORDER BY " & devices.Input_DateTime & ""
         reader = SQLComms.Return_SQLReader(strQry)
         With reader
             Do While .Read()
@@ -270,9 +270,9 @@ VALUES(@" & historical_dev.ChangeType & ",
             Dim strSQLQry As String
             Select Case Type
                 Case Entry_Type.Device
-                    strSQLQry = "DELETE FROM devices WHERE dev_UID='" & strGUID & "'"
+                    strSQLQry = "DELETE FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & strGUID & "'"
                 Case Entry_Type.Sibi
-                    strSQLQry = "DELETE FROM sibi_requests WHERE sibi_uid='" & strGUID & "'"
+                    strSQLQry = "DELETE FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & strGUID & "'"
             End Select
             rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
@@ -334,9 +334,9 @@ VALUES(@" & historical_dev.ChangeType & ",
     End Sub
     Public Function FindDevice(Optional AssetTag As String = "", Optional Serial As String = "") As Device_Info
         If AssetTag IsNot "" Then
-            Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM devices WHERE dev_asset_tag='" & AssetTag & "'"))
+            Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.AssetTag & "='" & AssetTag & "'"))
         ElseIf Serial IsNot "" Then
-            Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM devices WHERE dev_serial='" & Serial & "'"))
+            Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.Serial & "='" & Serial & "'"))
         End If
     End Function
     Public Sub AddNewEmp(EmpInfo As Emp_Info)
