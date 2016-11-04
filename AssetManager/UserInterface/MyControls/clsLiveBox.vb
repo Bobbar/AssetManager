@@ -83,7 +83,7 @@ Public Class clsLiveBox
                 Control.Text = LiveBox.Text
                 MainForm.DynamicSearch()
             Case LiveBoxType.InstaLoad
-                MainForm.LoadDevice(dtLiveBoxData.Rows(LiveBox.SelectedIndex).Item("dev_UID"))
+                MainForm.LoadDevice(dtLiveBoxData.Rows(LiveBox.SelectedIndex).Item(devices.DeviceUID))
                 CurrentLiveBoxArgs.Control.Text = ""
             Case LiveBoxType.SelectValue
                 Control.Text = LiveBox.Text
@@ -116,7 +116,7 @@ Public Class clsLiveBox
             Dim strQry As String
             'strQryRow = IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember)
             'strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
-            strQry = "SELECT dev_UID," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember) & " FROM devices WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
+            strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember) & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
             cmd.Connection = LiveConn
             cmd.CommandText = strQry
             cmd.Parameters.AddWithValue("@Search_Value", strSearchString)

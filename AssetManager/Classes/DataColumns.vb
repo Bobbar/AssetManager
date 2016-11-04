@@ -26,7 +26,6 @@
         Public Const Sibi_Link_UID As String = "dev_sibi_link"
         Public Const Munis_Emp_Num As String = "dev_cur_user_emp_num"
     End Class
-
     Public Class historical_dev
         Inherits devices_main
         Public Const TableName As String = "dev_historical"
