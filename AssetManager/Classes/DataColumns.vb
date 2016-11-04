@@ -96,6 +96,38 @@
 
 
     End Class
+
+    Public Class sibi_request_items
+        Public Const TableName As String = "sibi_request_items"
+
+        Public Const Item_UID As String = "sibi_items_uid"
+        Public Const Request_UID As String = "sibi_items_request_uid"
+        Public Const User As String = "sibi_items_user"
+        Public Const Description As String = "sibi_items_description"
+        Public Const Location As String = "sibi_items_location"
+        Public Const Status As String = "sibi_items_status"
+        Public Const Replace_Asset As String = "sibi_items_replace_asset"
+        Public Const Replace_Serial As String = "sibi_items_replace_serial"
+        Public Const New_Asset As String = "sibi_items_new_asset"
+        Public Const New_Serial As String = "sibi_items_new_serial"
+        Public Const Org_Code As String = "sibi_items_org_code"
+        Public Const Object_Code As String = "sibi_items_object_code"
+        Public Const Qty As String = "sibi_items_qty"
+
+
+
+    End Class
+    Public Class sibi_notes
+        Public Const TableName As String = "sibi_notes"
+
+        Public Const Request_UID As String = "sibi_request_uid"
+        Public Const Note_UID As String = "sibi_note_uid"
+        Public Const DateStamp As String = "sibi_datestamp"
+        Public Const Note As String = "sibi_note"
+
+
+
+    End Class
     Public Class main_combocodes
 
         Public Const TypeName As String = "type_name"
