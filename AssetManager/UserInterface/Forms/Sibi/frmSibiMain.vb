@@ -24,17 +24,17 @@
             table.Columns.Add("Create Date", GetType(String))
             table.Columns.Add("UID", GetType(String))
             For Each r As DataRow In Results.Rows
-                table.Rows.Add(NoNull(r.Item("sibi_request_number")),
-                               GetHumanValue(SibiIndex.StatusType, r.Item("sibi_status")),
-                               NoNull(r.Item("sibi_description")),
-                               NoNull(r.Item("sibi_request_user")),
-                               GetHumanValue(SibiIndex.RequestType, r.Item("sibi_type")),
-                               NoNull(r.Item("sibi_need_by")),
-                               NoNull(r.Item("sibi_PO")),
-                               NoNull(r.Item("sibi_requisition_number")),
-                               NoNull(r.Item("sibi_RT_number")),
-                               NoNull(r.Item("sibi_datestamp")),
-                               NoNull(r.Item("sibi_uid")))
+                table.Rows.Add(NoNull(r.Item(sibi_requests.RequestNumber)),
+                               GetHumanValue(SibiIndex.StatusType, r.Item(sibi_requests.Status)),
+                               NoNull(r.Item(sibi_requests.Description)),
+                               NoNull(r.Item(sibi_requests.RequestUser)),
+                               GetHumanValue(SibiIndex.RequestType, r.Item(sibi_requests.Type)),
+                               NoNull(r.Item(sibi_requests.NeedBy)),
+                               NoNull(r.Item(sibi_requests.PO)),
+                               NoNull(r.Item(sibi_requests.RequisitionNumber)),
+                               NoNull(r.Item(sibi_requests.RT_Number)),
+                               NoNull(r.Item(sibi_requests.DateStamp)),
+                               NoNull(r.Item(sibi_requests.UID)))
             Next
             bolGridFilling = True
             ResultGrid.DataSource = table
@@ -46,21 +46,21 @@
         End Try
     End Sub
     Private Sub SetDisplayYears()
-        Dim strQRY As String = "SELECT DISTINCT YEAR(sibi_datestamp) FROM sibi_requests ORDER BY sibi_datestamp DESC"
+        Dim strQRY As String = "SELECT DISTINCT YEAR(" & sibi_requests.DateStamp & ") FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.DateStamp & " DESC"
         Dim results As DataTable = SQLComms.Return_SQLTable(strQRY)
         cmbDisplayYear.Items.Clear()
         cmbDisplayYear.Items.Add("All")
         For Each r As DataRow In results.Rows
-            cmbDisplayYear.Items.Add(r.Item("YEAR(sibi_datestamp)"))
+            cmbDisplayYear.Items.Add(r.Item("YEAR(" & sibi_requests.DateStamp & ")"))
         Next
         cmbDisplayYear.SelectedIndex = 0
     End Sub
     Public Sub ShowAll(Optional Year As String = "")
         If Year = "" Then Year = cmbDisplayYear.Text
         If Year = "All" Then
-            SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_request_number DESC"))
+            SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
         Else
-            SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM sibi_requests WHERE YEAR(sibi_datestamp) = " & Year & " ORDER BY sibi_request_number DESC"))
+            SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM " & sibi_requests.TableName & " WHERE YEAR(" & sibi_requests.DateStamp & ") = " & Year & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
         End If
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click

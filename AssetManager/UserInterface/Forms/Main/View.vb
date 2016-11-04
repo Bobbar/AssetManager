@@ -19,7 +19,7 @@ Public Class View
         CheckRDP()
     End Sub
     Private Sub GetCurrentValues()
-        OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM devices WHERE dev_UID = '" & CurrentViewDevice.strGUID & "'"))
+        OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
     End Sub
     Public Sub GetNewValues(UpdateInfo As Update_Info)
         With NewData
