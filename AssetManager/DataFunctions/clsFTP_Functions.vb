@@ -48,11 +48,11 @@
         Dim ScanResults As New FTPScan_Parms
         Dim intHits As Integer = 0
         Dim results As String
-        results = Asset.Get_SQLValue("devices", "dev_UID", FolderUID, "dev_UID")
+        results = Asset.Get_SQLValue(devices.TableName, devices.DeviceUID, FolderUID, devices.DeviceUID)
         If results <> "" Then
             intHits += 1
         End If
-        results = Asset.Get_SQLValue("sibi_requests", "sibi_uid", FolderUID, "sibi_uid")
+        results = Asset.Get_SQLValue(sibi_requests.TableName, sibi_requests.UID, FolderUID, sibi_requests.UID)
         If results <> "" Then
             intHits += 1
         End If
@@ -67,8 +67,8 @@
     Private Function FTPFileIsOrphan(FolderUID As String, FileUID As String) As FTPScan_Parms
         Dim ScanResults As New FTPScan_Parms
         Dim intHits As Integer = 0
-        Dim strQRYDev As String = "SELECT * FROM dev_attachments WHERE attach_fkey_UID ='" & FolderUID & "' AND attach_file_UID = '" & FileUID & "'"
-        Dim strQRYSibi As String = "SELECT * FROM sibi_attachments WHERE attach_fkey_UID ='" & FolderUID & "' AND attach_file_UID='" & FileUID & "'"
+        Dim strQRYDev As String = "SELECT * FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FKey & " ='" & FolderUID & "' AND " & dev_attachments.FileUID & " = '" & FileUID & "'"
+        Dim strQRYSibi As String = "SELECT * FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FKey & " ='" & FolderUID & "' AND " & sibi_attachments.FileUID & "='" & FileUID & "'"
         Dim results As DataTable
         results = SQLComms.Return_SQLTable(strQRYDev)
         If results.Rows.Count > 0 Then
