@@ -99,4 +99,10 @@ Public Module Structures
         Public strCheckInUser As String
         Public strCheckInTime As String
     End Structure
+    Public Structure Qry_Struct
+        Public strQry As String
+        Public cmdQry As MySqlCommand
+        Public bolHistorical As Boolean
+
+    End Structure
 End Module

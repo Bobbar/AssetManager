@@ -4,6 +4,7 @@ Imports MySql.Data.MySqlClient
 Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
 Imports System.Deployment.Application
+
 Public Class MainForm
     Private strSearchString As String, strPrevSearchString As String
     Private StartingControl As Control
@@ -98,6 +99,7 @@ Public Class MainForm
         txtDescription.Clear()
         txtReplaceYear.Clear()
         chkTrackables.Checked = False
+        chkHistorical.Checked = False
         RefreshCombos()
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -127,6 +129,9 @@ Public Class MainForm
         Dim cmd As New MySqlCommand
         cmd.CommandText = strShowAllQry
         strLastQry = strShowAllQry
+        'Dim QryInfo As New Qry_Struct
+        'QryInfo.bolHistorical = False
+        'QryInfo.cmdQry = cmd
         StartBigQuery(cmd)
     End Sub
     Public Sub RefreshCurrent()
@@ -174,12 +179,12 @@ Public Class MainForm
             table.Columns.Add("Replace Year", GetType(String))
             table.Columns.Add("Modified", GetType(String))
             table.Columns.Add("GUID", GetType(String))
-            Dim ModDateColumn As String
-            If chkHistorical.Checked Then
-                ModDateColumn = "hist_action_datetime"
-            Else
-                ModDateColumn = devices.LastMod_Date
-            End If
+            'Dim ModDateColumn As String
+            'If chkHistorical.Checked Then
+            '    ModDateColumn = historical_dev.ActionDateTime
+            'Else
+            '    ModDateColumn = devices.LastMod_Date
+            'End If
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item(devices.CurrentUser)),
                                NoNull(r.Item(devices.AssetTag)),
@@ -191,7 +196,7 @@ Public Class MainForm
                                NoNull(r.Item(devices.PO)),
                                NoNull(r.Item(devices.PurchaseDate)),
                                NoNull(r.Item(devices.ReplacementYear)),
-                               NoNull(r.Item(ModDateColumn)),
+                               NoNull(r.Item(devices.LastMod_Date)),
                                NoNull(r.Item(devices.DeviceUID)))
             Next
             bolGridFilling = True
@@ -204,24 +209,16 @@ Public Class MainForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Function BuildSearchList() As IEnumerable(Of SearchVal)
-        Return New List(Of SearchVal) From
-            {
-            New SearchVal("dev_serial", Trim(txtSerialSearch.Text)),
-            New SearchVal("dev_asset_tag", Trim(txtAssetTagSearch.Text)),
-            New SearchVal(devices.Description, Trim(txtDescription.Text)),
-            New SearchVal("dev_eq_type", GetDBValue(DeviceIndex.EquipType, cmbEquipType.SelectedIndex)),
-            New SearchVal("dev_replacement_year", Trim(txtReplaceYear.Text)),
-            New SearchVal("dev_osversion", GetDBValue(DeviceIndex.OSType, cmbOSType.SelectedIndex)),
-            New SearchVal("dev_location", GetDBValue(DeviceIndex.Locations, cmbLocation.SelectedIndex)),
-            New SearchVal("dev_cur_user", Trim(txtCurUser.Text)),
-            New SearchVal("dev_status", GetDBValue(DeviceIndex.StatusType, cmbStatus.SelectedIndex)),
-            New SearchVal("dev_trackable", chkTrackables.Checked)
-                           }
-    End Function
+    Public Class SearchVal
+        Public Property FieldName As String
+        Public Property Value As Object
+        Public Sub New(ByVal strFieldName As String, ByVal obValue As Object)
+            FieldName = strFieldName
+            Value = obValue
+        End Sub
+    End Class
     Function BuildSearchListNew() As List(Of SearchVal)
         Dim tmpList As New List(Of SearchVal)
-
         tmpList.Add(New SearchVal(devices.Serial, Trim(txtSerialSearch.Text)))
         tmpList.Add(New SearchVal(devices.AssetTag, Trim(txtAssetTagSearch.Text)))
         tmpList.Add(New SearchVal(devices.Description, Trim(txtDescription.Text)))
@@ -232,23 +229,6 @@ Public Class MainForm
         tmpList.Add(New SearchVal(devices.CurrentUser, Trim(txtCurUser.Text)))
         tmpList.Add(New SearchVal(devices.Status, GetDBValue(DeviceIndex.StatusType, cmbStatus.SelectedIndex)))
         tmpList.Add(New SearchVal(devices.Trackable, chkTrackables.Checked))
-
-        'If chkHistorical.Checked Then
-
-        '    tmpList.Add(New SearchVal("hist_serial", Trim(txtSerialSearch.Text)))
-        '    tmpList.Add(New SearchVal("hist_asset_tag", Trim(txtAssetTagSearch.Text)))
-        '    tmpList.Add(New SearchVal("hist_description", Trim(txtDescription.Text)))
-        '    tmpList.Add(New SearchVal("hist_eq_type", GetDBValue(DeviceIndex.EquipType, cmbEquipType.SelectedIndex)))
-        '    tmpList.Add(New SearchVal("hist_replacement_year", Trim(txtReplaceYear.Text)))
-        '    tmpList.Add(New SearchVal("hist_osversion", GetDBValue(DeviceIndex.OSType, cmbOSType.SelectedIndex)))
-        '    tmpList.Add(New SearchVal("hist_location", GetDBValue(DeviceIndex.Locations, cmbLocation.SelectedIndex)))
-        '    tmpList.Add(New SearchVal("hist_cur_user", Trim(txtCurUser.Text)))
-        '    tmpList.Add(New SearchVal("hist_status", GetDBValue(DeviceIndex.StatusType, cmbStatus.SelectedIndex)))
-        '    'tmpList.Add(New SearchVal("dev_trackable", chkTrackables.Checked))
-
-        'End If
-
-
         Return tmpList
     End Function
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
@@ -261,22 +241,15 @@ Public Class MainForm
             DynamicSearch()
         End If
     End Sub
-    Public Class SearchVal
-        Public Property FieldName As String
-        Public Property Value As Object
-        Public Sub New(ByVal strFieldName As String, ByVal obValue As Object)
-            FieldName = strFieldName
-            Value = obValue
-        End Sub
-    End Class
+
     Public Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         Dim table As New DataTable
         Dim cmd As New MySqlCommand
         Dim strStartQry As String
         If chkHistorical.Checked Then
-            strStartQry = "SELECT * FROM dev_historical WHERE "
+            strStartQry = "SELECT * FROM " & historical_dev.TableName & " WHERE "
         Else
-            strStartQry = "SELECT * FROM devices WHERE "
+            strStartQry = "SELECT * FROM " & devices.TableName & " WHERE "
         End If
         Dim strDynaQry As String
         ' Dim SearchValCol As IEnumerable(Of SearchVal) = BuildSearchList()
@@ -294,25 +267,13 @@ Public Class MainForm
                             Case devices.OSVersion
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case "hist_osversion"
-                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case devices.EQType
-                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case "hist_eq_type"
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case devices.Location
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case "hist_location"
-                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case devices.Status
-                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case "hist_status"
                                 strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                 cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
                             Case Else
@@ -407,6 +368,7 @@ Public Class MainForm
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
         MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.DynamicSearch, devices.CurrentUser)
     End Sub
+
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
             Dim LocalSQLComm As New clsMySQL_Comms

@@ -32,7 +32,7 @@
         Public Const History_Entry_UID As String = "hist_uid"
         Public Const ChangeType As String = "hist_change_type"
         Public Const Notes As String = "hist_notes"
-        Public Const ActionDateTime As String = "hist_action_datetime"
+        Public Const ActionDateTime As String = "dev_lastmod_date" '"hist_action_datetime"
         Public Const ActionUser As String = "hist_action_user"
 
     End Class

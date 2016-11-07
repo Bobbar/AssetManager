@@ -16,18 +16,18 @@ Public Class frmNotes
     Private Function AddNewNote(RequestUID As String, Note As String) As Boolean
         Dim strNoteUID As String = Guid.NewGuid.ToString
         Try
-            Dim strAddNoteQry As String = "INSERT INTO `asset_manager`.`sibi_notes`
-(`sibi_request_uid`,
-`sibi_note_uid`,
-`sibi_note`)
+            Dim strAddNoteQry As String = "INSERT INTO " & sibi_notes.TableName & "
+(" & sibi_notes.Request_UID & ",
+" & sibi_notes.Note_UID & ",
+" & sibi_notes.Note & ")
 VALUES
-(@sibi_request_uid,
-@sibi_note_uid,
-@sibi_note)"
+(@" & sibi_notes.Request_UID & ",
+@" & sibi_notes.Note_UID & ",
+@" & sibi_notes.Note & ")"
             Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strAddNoteQry)
-            cmd.Parameters.AddWithValue("@sibi_request_uid", RequestUID)
-            cmd.Parameters.AddWithValue("@sibi_note_uid", strNoteUID)
-            cmd.Parameters.AddWithValue("@sibi_note", Note)
+            cmd.Parameters.AddWithValue("@" & sibi_notes.Request_UID, RequestUID)
+            cmd.Parameters.AddWithValue("@" & sibi_notes.Note_UID, strNoteUID)
+            cmd.Parameters.AddWithValue("@" & sibi_notes.Note, Note)
             If cmd.ExecuteNonQuery() > 0 Then
                 Return True
             Else
@@ -42,7 +42,7 @@ VALUES
     Public Sub ViewNote(NoteUID As String)
         cmdOK.Visible = False
         rtbNotes.Clear()
-        rtbNotes.Text = Asset.Get_SQLValue("sibi_notes", "sibi_note_uid", NoteUID, "sibi_note")
+        rtbNotes.Text = Asset.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.Note)
         rtbNotes.ReadOnly = True
         Me.Show()
     End Sub
