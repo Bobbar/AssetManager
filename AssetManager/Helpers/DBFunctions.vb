@@ -34,7 +34,6 @@ Public Module DBFunctions
         End Try
         Return True
     End Function
-
     Public Function GetShortLocation(ByVal index As Integer) As String
         Try
             Return DeviceIndex.Locations(index).strShort
@@ -42,7 +41,6 @@ Public Module DBFunctions
             Return ""
         End Try
     End Function
-
     Public Function GetDBValue(ByVal CodeIndex() As Combo_Data, ByVal index As Integer) As Object
         Try
             If index > -1 Then

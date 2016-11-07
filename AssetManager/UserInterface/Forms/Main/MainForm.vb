@@ -129,9 +129,6 @@ Public Class MainForm
         Dim cmd As New MySqlCommand
         cmd.CommandText = strShowAllQry
         strLastQry = strShowAllQry
-        'Dim QryInfo As New Qry_Struct
-        'QryInfo.bolHistorical = False
-        'QryInfo.cmdQry = cmd
         StartBigQuery(cmd)
     End Sub
     Public Sub RefreshCurrent()
@@ -179,12 +176,6 @@ Public Class MainForm
             table.Columns.Add("Replace Year", GetType(String))
             table.Columns.Add("Modified", GetType(String))
             table.Columns.Add("GUID", GetType(String))
-            'Dim ModDateColumn As String
-            'If chkHistorical.Checked Then
-            '    ModDateColumn = historical_dev.ActionDateTime
-            'Else
-            '    ModDateColumn = devices.LastMod_Date
-            'End If
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item(devices.CurrentUser)),
                                NoNull(r.Item(devices.AssetTag)),
@@ -252,7 +243,6 @@ Public Class MainForm
             strStartQry = "SELECT * FROM " & devices.TableName & " WHERE "
         End If
         Dim strDynaQry As String
-        ' Dim SearchValCol As IEnumerable(Of SearchVal) = BuildSearchList()
         Dim SearchValCol As List(Of SearchVal) = BuildSearchListNew()
         For Each fld As SearchVal In SearchValCol
             If Not IsNothing(fld.Value) Then

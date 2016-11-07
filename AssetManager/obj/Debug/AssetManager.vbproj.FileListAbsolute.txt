@@ -62,3 +62,5 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MainForm.resources
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.CodeAnalysisLog.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.lastcodeanalysissucceeded
