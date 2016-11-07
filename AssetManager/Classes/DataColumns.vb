@@ -76,7 +76,7 @@
 
     Public Class sibi_requests
 
-        Public Const TableName As String = "sibi_attachments"
+        Public Const TableName As String = "sibi_requests"
 
         Public Const UID As String = "sibi_uid"
         Public Const RequestUser As String = "sibi_request_user"
