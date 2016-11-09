@@ -10,12 +10,12 @@
     Private Sub LoadMunisInventoryGrid(Device As Device_Info)
         Dim intRows As Integer = 0
         Try
-            Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_loc,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
+            Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
             If Device.strSerial <> "" Then
-                intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_serial='" & Device.strSerial & "'")
+                intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_serial='" & Device.strSerial & "'")
             End If
             If intRows < 1 Then
-                intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster WHERE fama_tag='" & Device.strAssetTag & "'")
+                intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.strAssetTag & "'")
             End If
             If intRows < 1 Then Exit Sub
         Catch ex As Exception
