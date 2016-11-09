@@ -134,6 +134,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
         End If
         Dim NewMunis As New View_Munis
         NewMunis.Tag = Parent
+        NewMunis.lblReqInfo.Text = "MUNIS Info:"
         NewMunis.HideFixedAssetGrid()
         NewMunis.LoadMunisEmployeeByLastName(Name)
         NewMunis.Show()

@@ -22,13 +22,13 @@ Partial Class View_Munis
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View_Munis))
         Me.DataGridMunis_Inventory = New System.Windows.Forms.DataGridView()
         Me.pnlFixedAsset = New System.Windows.Forms.Panel()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.lblFAInfo = New System.Windows.Forms.Label()
         Me.txtSerial = New System.Windows.Forms.TextBox()
         Me.cmdSearch = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.pnlRequisition = New System.Windows.Forms.Panel()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.lblReqInfo = New System.Windows.Forms.Label()
         Me.DataGridMunis_Requisition = New System.Windows.Forms.DataGridView()
         Me.pnlMaster = New System.Windows.Forms.Panel()
         CType(Me.DataGridMunis_Inventory, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -67,22 +67,22 @@ Partial Class View_Munis
         Me.pnlFixedAsset.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pnlFixedAsset.Controls.Add(Me.DataGridMunis_Inventory)
-        Me.pnlFixedAsset.Controls.Add(Me.Label2)
+        Me.pnlFixedAsset.Controls.Add(Me.lblFAInfo)
         Me.pnlFixedAsset.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.pnlFixedAsset.Location = New System.Drawing.Point(0, 12)
         Me.pnlFixedAsset.Name = "pnlFixedAsset"
         Me.pnlFixedAsset.Size = New System.Drawing.Size(848, 159)
         Me.pnlFixedAsset.TabIndex = 42
         '
-        'Label2
+        'lblFAInfo
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(0, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(122, 16)
-        Me.Label2.TabIndex = 47
-        Me.Label2.Text = "Fixed Asset Info:"
+        Me.lblFAInfo.AutoSize = True
+        Me.lblFAInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblFAInfo.Location = New System.Drawing.Point(0, 0)
+        Me.lblFAInfo.Name = "lblFAInfo"
+        Me.lblFAInfo.Size = New System.Drawing.Size(122, 16)
+        Me.lblFAInfo.TabIndex = 47
+        Me.lblFAInfo.Text = "Fixed Asset Info:"
         '
         'txtSerial
         '
@@ -128,7 +128,7 @@ Partial Class View_Munis
         Me.pnlRequisition.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pnlRequisition.Controls.Add(Me.Label3)
+        Me.pnlRequisition.Controls.Add(Me.lblReqInfo)
         Me.pnlRequisition.Controls.Add(Me.DataGridMunis_Requisition)
         Me.pnlRequisition.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.pnlRequisition.Location = New System.Drawing.Point(0, 177)
@@ -136,15 +136,15 @@ Partial Class View_Munis
         Me.pnlRequisition.Size = New System.Drawing.Size(851, 394)
         Me.pnlRequisition.TabIndex = 48
         '
-        'Label3
+        'lblReqInfo
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(0, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(119, 16)
-        Me.Label3.TabIndex = 49
-        Me.Label3.Text = "Requisition Info:"
+        Me.lblReqInfo.AutoSize = True
+        Me.lblReqInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblReqInfo.Location = New System.Drawing.Point(0, 0)
+        Me.lblReqInfo.Name = "lblReqInfo"
+        Me.lblReqInfo.Size = New System.Drawing.Size(119, 16)
+        Me.lblReqInfo.TabIndex = 49
+        Me.lblReqInfo.Text = "Requisition Info:"
         '
         'DataGridMunis_Requisition
         '
@@ -216,9 +216,9 @@ Partial Class View_Munis
     Friend WithEvents cmdSearch As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents Panel2 As Panel
-    Friend WithEvents Label2 As Label
+    Friend WithEvents lblFAInfo As Label
     Friend WithEvents pnlRequisition As Panel
     Friend WithEvents DataGridMunis_Requisition As DataGridView
-    Friend WithEvents Label3 As Label
+    Friend WithEvents lblReqInfo As Label
     Friend WithEvents pnlMaster As Panel
 End Class
