@@ -43,6 +43,17 @@ Public Class clsMySQL_Comms
             Return Nothing
         End Try
     End Function
+    Public Function Return_Adapter(strSQLQry As String) As MySqlDataAdapter
+        'Debug.Print("Command Hit " & Date.Now.Ticks)
+        Try
+            Dim adapter As New MySqlDataAdapter(strSQLQry, MySQLConnectString)
+
+            Return adapter
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
+        End Try
+    End Function
 
     Public Function CheckConnection() As Boolean
         Try
