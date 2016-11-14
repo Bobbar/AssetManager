@@ -85,7 +85,7 @@ Public Class frmUserManager
         End With
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
-        Dim blah = Message("Are you sure?  Committed changes cannot be undone.", vbYesNo, "Commit Changes", Me)
+        Dim blah = Message("Are you sure?  Committed changes cannot be undone.", vbYesNo + vbQuestion, "Commit Changes", Me)
         If blah = DialogResult.Yes Then
             UserGrid.EndEdit()
             AddGUIDs()
