@@ -119,7 +119,7 @@ Module OtherFunctions
         End Try
     End Function
     Public Function GetCellValue(ByVal Grid As DataGridView, ColumnName As String) As String
-        Return Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value
+        Return NoNull(Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value)
     End Function
     Public Sub ConnectionNotReady()
         Dim blah = Message("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")

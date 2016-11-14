@@ -1,33 +1,31 @@
-﻿Public Class frmUserManager
+﻿Imports MySql.Data.MySqlClient
+Public Class frmUserManager
     Private ModuleIndex As New List(Of Access_Info)
     Private CurrentUser As User_Info
+    Private DataBinder As New BindingSource
+    Private Qry As String = "SELECT * FROM " & users.TableName
+    Private myAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(Qry)
+    Private SelectedRow As Integer
     Private Sub frmUserManager_Load(sender As Object, e As EventArgs) Handles Me.Load
+        LoadUserData()
+    End Sub
+    Private Sub LoadUserData()
+        UserGrid.DataSource = DataBinder
         ListUsers()
         ModuleIndex = Asset.BuildModuleIndex()
         LoadModuleBoxes()
+        UpdateAccessLabel()
     End Sub
     Private Sub ListUsers()
         SendToGrid(Asset.User_GetUserList) 'Comm.Return_SQLTable("SELECT * FROM users"))
     End Sub
     Private Sub SendToGrid(Results As List(Of User_Info)) ' Data() As Device_Info)
-        Try
-            Dim table As New DataTable
-            table.Columns.Add("Username", GetType(String))
-            table.Columns.Add("Full Name", GetType(String))
-            table.Columns.Add("Access Level", GetType(String))
-            table.Columns.Add("UID", GetType(String))
-            For Each r As User_Info In Results
-                table.Rows.Add(r.strUsername,
-                               r.strFullname,
-                               r.intAccessLevel,
-                               r.strUID)
-            Next
-            UserGrid.DataSource = table
-            UserGrid.ClearSelection()
-            table.Dispose()
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
+        Dim cmdBuilder As New MySqlCommandBuilder(myAdapter)
+        Dim table As New DataTable
+        table.Locale = System.Globalization.CultureInfo.InvariantCulture
+        myAdapter.Fill(table)
+        DataBinder.DataSource = table
+        UserGrid.Columns(users.UID).ReadOnly = True
     End Sub
     Private Sub DisplayAccess(intAccessLevel As Integer)
         Dim clbItemStates(clbModules.Items.Count - 1) As CheckState
@@ -42,13 +40,13 @@
             clbModules.SetItemChecked(i, clbItemStates(i))
         Next
         UpdateAccessLabel()
-        GetUserInfo()
         AutoSizeCLBColumns(clbModules)
     End Sub
     Private Sub LoadModuleBoxes()
         Dim i As Integer = 0
         Dim intTopOffset As Integer = 0
         Dim chkModuleBox As CheckBox
+        clbModules.Items.Clear()
         For Each ModuleBox As Access_Info In ModuleIndex
             chkModuleBox = New CheckBox
             With chkModuleBox
@@ -60,7 +58,6 @@
         Next
         AutoSizeCLBColumns(clbModules)
     End Sub
-
     Private Function CalcAccessLevel() As Integer
         Dim intAccessLevel As Integer = 0
         For Each chkBox As CheckBox In clbModules.Items
@@ -71,20 +68,47 @@
         Return intAccessLevel
     End Function
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick
-        DisplayAccess(UserGrid.Item(GetColIndex(UserGrid, "Access Level"), UserGrid.CurrentRow.Index).Value)
+        If TypeOf UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value Is Integer Then
+            DisplayAccess(UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value)
+            GetUserInfo()
+        Else
+            DisplayAccess(0)
+        End If
+        SelectedRow = e.RowIndex
     End Sub
     Private Sub GetUserInfo()
         With CurrentUser
-            .intAccessLevel = GetCellValue(UserGrid, "Access Level")
-            .strUsername = GetCellValue(UserGrid, "Username")
-            .strUID = GetCellValue(UserGrid, "UID")
-            .strFullname = GetCellValue(UserGrid, "Full Name")
+            .intAccessLevel = GetCellValue(UserGrid, users.AccessLevel)
+            .strUsername = GetCellValue(UserGrid, users.UserName)
+            .strUID = GetCellValue(UserGrid, users.UID)
+            .strFullname = GetCellValue(UserGrid, users.FullName)
         End With
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
-        Asset.UpdateUser(CurrentUser, CalcAccessLevel)
-        ListUsers()
-        Asset.GetUserAccess()
+        Dim blah = Message("Are you sure?  Committed changes cannot be undone.", vbYesNo + vbQuestion, "Commit Changes", Me)
+        If blah = DialogResult.Yes Then
+            UserGrid.EndEdit()
+            AddGUIDs()
+            myAdapter.Update(CType(DataBinder.DataSource, DataTable))
+            ListUsers()
+            Asset.GetUserAccess()
+        Else
+
+        End If
+    End Sub
+    Private Sub AddGUIDs()
+        For Each rows As DataGridViewRow In UserGrid.Rows
+            If rows.Cells(GetColIndex(UserGrid, users.UID)).EditedFormattedValue = "" Then
+                Dim UserUID As String = Guid.NewGuid.ToString
+                rows.Cells(GetColIndex(UserGrid, users.UID)).Value = UserUID
+            End If
+        Next
+    End Sub
+    Private Sub AddAccessLevelToGrid()
+        UserGrid.Rows(SelectedRow).Cells(GetColIndex(UserGrid, users.AccessLevel)).Selected = True
+        UserGrid.BeginEdit(False)
+        UserGrid.Rows(SelectedRow).Cells(GetColIndex(UserGrid, users.AccessLevel)).Value = CalcAccessLevel()
+        UserGrid.EndEdit()
     End Sub
     Private Sub AutoSizeCLBColumns(CLB As CheckedListBox)
         Dim intMaxLen As Integer = 0
@@ -101,5 +125,18 @@
     End Sub
     Private Sub clbModules_MouseUp(sender As Object, e As MouseEventArgs) Handles clbModules.MouseUp
         UpdateAccessLabel()
+        AddAccessLevelToGrid()
+    End Sub
+    Private Sub UserGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles UserGrid.KeyDown
+        If e.KeyCode = Keys.Delete Then
+            UserGrid.Rows.RemoveAt(SelectedRow)
+        End If
+    End Sub
+    Private Sub UserGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellDoubleClick
+        UserGrid.BeginEdit(False)
+    End Sub
+
+    Private Sub cmdRefresh_Click(sender As Object, e As EventArgs) Handles cmdRefresh.Click
+        LoadUserData()
     End Sub
 End Class
