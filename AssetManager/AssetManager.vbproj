@@ -151,18 +151,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="asset_managerDataSet.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>asset_managerDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Classes\DataColumns.vb" />
     <Compile Include="Classes\Type_Classes.vb" />
-    <Compile Include="My Project\Settings.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="UserInterface\Colors.vb" />
     <Compile Include="Classes\Constants.vb" />
     <Compile Include="Classes\Global_Instances.vb" />
@@ -385,18 +375,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AssetManager_TemporaryKey.pfx" />
-    <None Include="asset_managerDataSet.xsc">
-      <DependentUpon>asset_managerDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="asset_managerDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>asset_managerDataSet.Designer.vb</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="asset_managerDataSet.xss">
-      <DependentUpon>asset_managerDataSet.xsd</DependentUpon>
-    </None>
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
@@ -418,11 +396,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AssetManager.ico" />
-    <None Include="My Project\Settings.settings">
-      <CustomToolNamespace>My</CustomToolNamespace>
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
-    </None>
     <None Include="Resources\239360-transfer_arrows-512.png" />
     <Content Include="Resources\Add.png" />
     <None Include="Resources\check-out.png" />
