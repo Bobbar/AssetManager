@@ -174,7 +174,7 @@ Module OtherFunctions
         Next
     End Sub
     Public Function FormTitle(Device As Device_Info) As String
-        Return " - " + Device.strDescription + " - " + Device.strCurrentUser
+        Return " - " + Device.strCurrentUser + " - " + Device.strDescription
     End Function
     Public Function DeviceIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
