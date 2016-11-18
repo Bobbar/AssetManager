@@ -7,6 +7,7 @@ Public Class frmManageRequest
     Private bolGridFilling As Boolean = False
     Public CurrentRequest As Request_Info
     Private MyText As String
+    Private bolNewRequest As Boolean = False
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
         Dim MyMunisTools As New MunisToolsMenu
@@ -20,6 +21,7 @@ Public Class frmManageRequest
         Me.Text = MyText + " - " + CurrentRequest.strDescription
     End Sub
     Public Sub ClearAll()
+        bolNewRequest = False
         ClearControls(Me)
         ResetBackColors(Me)
         HideEditControls()
@@ -337,7 +339,6 @@ Public Class frmManageRequest
     End Function
     Private Sub cmdAddNew_Click(sender As Object, e As EventArgs) Handles cmdAddNew.Click
         If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
-        pnlCreate.Visible = False
         AddNewRequest()
     End Sub
     Private Sub AddNewRequest()
@@ -439,11 +440,14 @@ VALUES
                 cmd.Parameters.Clear()
             Next
             cmd.Dispose()
+            bolNewRequest = False
+            pnlCreate.Visible = False
             Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete")
             frmSibiMain.ShowAll()
             OpenRequest(strRequestUID)
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                bolNewRequest = False
                 Exit Sub
             Else
                 EndProgram()
@@ -627,19 +631,32 @@ VALUES
         table.Dispose()
         Results.Dispose()
     End Sub
-    Private Function DeleteItem(ItemUID As String, ItemColumnName As String, Table As String) As Integer
+    Private Function DeleteItem_FromSQL(ItemUID As String, ItemColumnName As String, Table As String) As Integer
         Try
             Dim rows
             Dim strSQLQry As String = "DELETE FROM " & Table & " WHERE " & ItemColumnName & "='" & ItemUID & "'"
             rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
-            Exit Function
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else
                 EndProgram()
             End If
         End Try
+        Return -1
+    End Function
+    Private Function DeleteItem_FromLocal(RowIndex As Integer) As Boolean
+        Try
+            RequestItemsGrid.Rows.Remove(RequestItemsGrid.Rows(RowIndex))
+            Return True
+        Catch ex As Exception
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Else
+                Return False
+                EndProgram()
+            End If
+        End Try
+        Return False
     End Function
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
@@ -722,6 +739,7 @@ VALUES
     Public Sub NewRequest()
         If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
         ClearAll()
+        bolNewRequest = True
         EnableControls(Me)
         pnlCreate.Visible = True
     End Sub
@@ -734,10 +752,18 @@ VALUES
         Dim blah
         blah = Message("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row")
         If blah = vbYes Then
-            blah = Message(DeleteItem(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
-            OpenRequest(CurrentRequest.strUID)
+            If bolNewRequest Then
+                If DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index) Then
+                Else
+                    blah = Message("Failed to delete row.", vbExclamation + vbOKOnly, "Error", Me)
+                End If
+            Else
+                blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+                OpenRequest(CurrentRequest.strUID)
+            End If
+
         Else
-        End If
+            End If
     End Sub
     Private Sub txtRTNumber_Click(sender As Object, e As EventArgs) Handles txtRTNumber.Click
         Dim RTNum As String = Trim(txtRTNumber.Text)
@@ -784,7 +810,7 @@ VALUES
     End Sub
     Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim blah = Message(DeleteItem(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value, sibi_notes.Note_UID, sibi_notes.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+        Dim blah = Message(DeleteItem_FromSQL(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value, sibi_notes.Note_UID, sibi_notes.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
         OpenRequest(CurrentRequest.strUID)
     End Sub
     Private Sub cmdClearForm_Click(sender As Object, e As EventArgs) Handles cmdClearForm.Click
