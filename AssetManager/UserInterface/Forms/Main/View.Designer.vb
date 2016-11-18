@@ -38,7 +38,6 @@ Partial Class View
         Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.txtSerial_View_REQ = New System.Windows.Forms.TextBox()
-        Me.txtGUID = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtCurUser_View_REQ = New System.Windows.Forms.TextBox()
@@ -96,6 +95,7 @@ Partial Class View
         Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.lblGUID = New System.Windows.Forms.Label()
         Me.DeviceInfoBox.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
@@ -114,6 +114,7 @@ Partial Class View
         'DeviceInfoBox
         '
         Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.DeviceInfoBox.Controls.Add(Me.lblGUID)
         Me.DeviceInfoBox.Controls.Add(Me.cmdMunisSearch)
         Me.DeviceInfoBox.Controls.Add(Me.grpNetTools)
         Me.DeviceInfoBox.Controls.Add(Me.pnlOtherFunctions)
@@ -125,7 +126,6 @@ Partial Class View
         Me.DeviceInfoBox.Controls.Add(Me.txtAssetTag_View_REQ)
         Me.DeviceInfoBox.Controls.Add(Me.Label10)
         Me.DeviceInfoBox.Controls.Add(Me.txtSerial_View_REQ)
-        Me.DeviceInfoBox.Controls.Add(Me.txtGUID)
         Me.DeviceInfoBox.Controls.Add(Me.Label2)
         Me.DeviceInfoBox.Controls.Add(Me.Label9)
         Me.DeviceInfoBox.Controls.Add(Me.txtCurUser_View_REQ)
@@ -232,7 +232,7 @@ Partial Class View
         '
         'cmdSetSibi
         '
-        Me.cmdSetSibi.Location = New System.Drawing.Point(110, 236)
+        Me.cmdSetSibi.Location = New System.Drawing.Point(99, 243)
         Me.cmdSetSibi.Name = "cmdSetSibi"
         Me.cmdSetSibi.Size = New System.Drawing.Size(106, 23)
         Me.cmdSetSibi.TabIndex = 50
@@ -303,16 +303,6 @@ Partial Class View
         Me.txtSerial_View_REQ.Name = "txtSerial_View_REQ"
         Me.txtSerial_View_REQ.Size = New System.Drawing.Size(133, 23)
         Me.txtSerial_View_REQ.TabIndex = 21
-        '
-        'txtGUID
-        '
-        Me.txtGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGUID.Location = New System.Drawing.Point(20, 205)
-        Me.txtGUID.Name = "txtGUID"
-        Me.txtGUID.ReadOnly = True
-        Me.txtGUID.Size = New System.Drawing.Size(268, 23)
-        Me.txtGUID.TabIndex = 40
-        Me.txtGUID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label2
         '
@@ -898,6 +888,17 @@ Partial Class View
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
+        'lblGUID
+        '
+        Me.lblGUID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblGUID.Cursor = System.Windows.Forms.Cursors.Cross
+        Me.lblGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblGUID.Location = New System.Drawing.Point(21, 206)
+        Me.lblGUID.Name = "lblGUID"
+        Me.lblGUID.Size = New System.Drawing.Size(272, 34)
+        Me.lblGUID.TabIndex = 54
+        Me.lblGUID.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -958,7 +959,6 @@ Partial Class View
     Friend WithEvents Label1 As Label
     Friend WithEvents txtAssetTag_View_REQ As TextBox
     Friend WithEvents Label10 As Label
-    Friend WithEvents txtGUID As TextBox
     Friend WithEvents RightClickMenu As ContextMenuStrip
     Friend WithEvents DeleteEntryToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents chkTrackable As CheckBox
@@ -1011,4 +1011,5 @@ Partial Class View
     Friend WithEvents tsmAssetInputForm As ToolStripMenuItem
     Friend WithEvents tsmAssetTransferForm As ToolStripMenuItem
     Friend WithEvents cmdMunisSearch As Button
+    Friend WithEvents lblGUID As Label
 End Class

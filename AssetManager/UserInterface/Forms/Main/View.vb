@@ -14,10 +14,31 @@ Public Class View
         ToolStrip1.Items.Insert(6, MyMunisMenu.MunisTools)
         grpNetTools.Visible = False
         ToolStrip1.BackColor = colToolBarColor
+        lblGUID.BackColor = SetBarColor(CurrentViewDevice.strGUID)
+        lblGUID.ForeColor = GetFontColor(lblGUID.BackColor)
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
         CheckRDP()
     End Sub
+    Private Function SetBarColor(UID As String) As Color
+        Dim hash As Integer = UID.GetHashCode
+        Dim r, g, b As Integer
+        r = (hash And &HFF0000) >> 16
+        g = (hash And &HFF00) >> 8
+        b = hash And &HFF
+        Return Color.FromArgb(r, g, b)
+    End Function
+    Private Function GetFontColor(color As Color) As Color 'get contrasting font color
+        Dim d As Integer = 0
+        Dim a As Double
+        a = 1 - (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255
+        If a < 0.5 Then
+            d = 0
+        Else
+            d = 255
+        End If
+        Return Color.FromArgb(d, d, d)
+    End Function
     Private Sub GetCurrentValues()
         OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
     End Sub
@@ -300,7 +321,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             txtReplacementYear_View.Text = .strReplaceYear
             cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.OSType, .strOSVersion)
             cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, .strStatus)
-            txtGUID.Text = .strGUID
+            lblGUID.Text = .strGUID
             chkTrackable.Checked = CBool(.bolTrackable)
             txtPONumber.Text = .strPO
         End With
@@ -1007,9 +1028,22 @@ VALUES (@" & historical_dev.ChangeType & ",
             If PrevWindowState <> FormWindowState.Maximized Then RestoreChildren(Me)
         End If
     End Sub
+
+    Private Sub lblGUID_Click(sender As Object, e As EventArgs) Handles lblGUID.Click
+        Clipboard.SetText(lblGUID.Text)
+        Message("GUID Copied to clipboard.", vbInformation + vbOKOnly,, Me)
+    End Sub
+
     Private PrevWindowState As Integer
     Private Sub View_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
         Dim f As Form = sender
         PrevWindowState = f.WindowState
+    End Sub
+
+    Private Sub lblGUID_MouseClick(sender As Object, e As MouseEventArgs) Handles lblGUID.MouseClick
+        'If e.Button = MouseButtons.Right Then
+        '    Clipboard.SetText(lblGUID.Text)
+        '    Message("GUID Copied to clipboard.", vbInformation + vbOKOnly,, Me)
+        'End If
     End Sub
 End Class
