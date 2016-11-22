@@ -26,6 +26,7 @@ Partial Class frmManageRequest
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.txtCreateDate = New System.Windows.Forms.TextBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.pnlEditButtons = New System.Windows.Forms.Panel()
         Me.cmdAccept = New System.Windows.Forms.Button()
@@ -75,7 +76,8 @@ Partial Class frmManageRequest
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.txtCreateDate = New System.Windows.Forms.TextBox()
+        Me.cmdNewNote = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.GroupBox1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.pnlEditButtons.SuspendLayout()
@@ -117,6 +119,22 @@ Partial Class frmManageRequest
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Request Info"
+        '
+        'txtCreateDate
+        '
+        Me.txtCreateDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtCreateDate.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtCreateDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCreateDate.ForeColor = System.Drawing.Color.Silver
+        Me.txtCreateDate.Location = New System.Drawing.Point(451, 60)
+        Me.txtCreateDate.Name = "txtCreateDate"
+        Me.txtCreateDate.ReadOnly = True
+        Me.txtCreateDate.Size = New System.Drawing.Size(134, 13)
+        Me.txtCreateDate.TabIndex = 23
+        Me.txtCreateDate.Text = "2016-07-29 15:42:16"
+        Me.txtCreateDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ToolTip.SetToolTip(Me.txtCreateDate, "Create Date")
+        Me.txtCreateDate.WordWrap = False
         '
         'Panel3
         '
@@ -607,14 +625,14 @@ Partial Class frmManageRequest
         '
         'PopupMenuNotes
         '
-        Me.PopupMenuNotes.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdDeleteNote})
+        Me.PopupMenuNotes.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdNewNote, Me.ToolStripSeparator1, Me.cmdDeleteNote})
         Me.PopupMenuNotes.Name = "PopupMenu"
-        Me.PopupMenuNotes.Size = New System.Drawing.Size(137, 26)
+        Me.PopupMenuNotes.Size = New System.Drawing.Size(153, 76)
         '
         'cmdDeleteNote
         '
         Me.cmdDeleteNote.Name = "cmdDeleteNote"
-        Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
+        Me.cmdDeleteNote.Size = New System.Drawing.Size(152, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
         '
         'fieldErrorIcon
@@ -623,21 +641,16 @@ Partial Class frmManageRequest
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
-        'txtCreateDate
+        'cmdNewNote
         '
-        Me.txtCreateDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtCreateDate.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtCreateDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCreateDate.ForeColor = System.Drawing.Color.Silver
-        Me.txtCreateDate.Location = New System.Drawing.Point(451, 60)
-        Me.txtCreateDate.Name = "txtCreateDate"
-        Me.txtCreateDate.ReadOnly = True
-        Me.txtCreateDate.Size = New System.Drawing.Size(134, 13)
-        Me.txtCreateDate.TabIndex = 23
-        Me.txtCreateDate.Text = "2016-07-29 15:42:16"
-        Me.txtCreateDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        Me.ToolTip.SetToolTip(Me.txtCreateDate, "Create Date")
-        Me.txtCreateDate.WordWrap = False
+        Me.cmdNewNote.Name = "cmdNewNote"
+        Me.cmdNewNote.Size = New System.Drawing.Size(152, 22)
+        Me.cmdNewNote.Text = "Add Note"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(149, 6)
         '
         'frmManageRequest
         '
@@ -726,4 +739,6 @@ Partial Class frmManageRequest
     Friend WithEvents Panel3 As Panel
     Friend WithEvents pnlCreate As Panel
     Friend WithEvents txtCreateDate As TextBox
+    Friend WithEvents cmdNewNote As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
 End Class

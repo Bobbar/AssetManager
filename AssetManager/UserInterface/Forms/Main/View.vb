@@ -716,7 +716,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Function DeleteHistoryEntry(ByVal strGUID As String) As Integer
         Try
             Dim rows
-            Dim strSQLQry As String = "DELETE FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & "='" & strGUID & "'"
+            Dim strSQLQry As String = "DELETE FROM " & historical_dev.TableName & " WHERE " & historical_dev.History_Entry_UID & "='" & strGUID & "'"
             rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
             Exit Function
@@ -955,14 +955,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
-        If CurrentViewDevice.strSibiLink Is "" Then
-            Dim blah = Message("Sibi Link not set.  Set one now?", vbYesNo + vbQuestion, "Sibi Link")
-            If blah = vbYes Then
-                LinkSibi()
-            End If
-        Else
-            OpenSibiLink(CurrentViewDevice.strSibiLink)
-        End If
+        OpenSibiLink(CurrentViewDevice.strPO)
     End Sub
     Private Sub LinkSibi()
         Dim f As New frmSibiSelector
@@ -972,10 +965,19 @@ VALUES (@" & historical_dev.ChangeType & ",
             ViewDevice(CurrentViewDevice.strGUID)
         End If
     End Sub
-    Private Sub OpenSibiLink(SibiUID As String)
-        Dim sibiForm As New frmManageRequest
-        sibiForm.Tag = Me
-        sibiForm.OpenRequest(SibiUID)
+    Private Sub OpenSibiLink(PO As String)
+        If Trim(PO) = "" Then
+            Message("A valid PO number is required.", vbOKOnly + vbInformation, "No PO #", Me)
+            Exit Sub
+        End If
+        Dim SibiUID As String = Asset.Get_SQLValue(sibi_requests.TableName, sibi_requests.PO, PO, sibi_requests.UID)
+        If SibiUID = "" Then
+            Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
+        Else
+            Dim sibiForm As New frmManageRequest
+            sibiForm.Tag = Me
+            sibiForm.OpenRequest(SibiUID)
+        End If
     End Sub
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
         LinkSibi()

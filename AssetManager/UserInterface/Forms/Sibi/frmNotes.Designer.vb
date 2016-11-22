@@ -33,14 +33,14 @@ Partial Class frmNotes
         Me.rtbNotes.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rtbNotes.Location = New System.Drawing.Point(12, 12)
         Me.rtbNotes.Name = "rtbNotes"
-        Me.rtbNotes.Size = New System.Drawing.Size(501, 225)
+        Me.rtbNotes.Size = New System.Drawing.Size(448, 205)
         Me.rtbNotes.TabIndex = 0
         Me.rtbNotes.Text = ""
         '
         'cmdClose
         '
         Me.cmdClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdClose.Location = New System.Drawing.Point(418, 254)
+        Me.cmdClose.Location = New System.Drawing.Point(365, 234)
         Me.cmdClose.Name = "cmdClose"
         Me.cmdClose.Size = New System.Drawing.Size(95, 30)
         Me.cmdClose.TabIndex = 1
@@ -50,7 +50,7 @@ Partial Class frmNotes
         'cmdOK
         '
         Me.cmdOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.cmdOK.Location = New System.Drawing.Point(12, 254)
+        Me.cmdOK.Location = New System.Drawing.Point(12, 234)
         Me.cmdOK.Name = "cmdOK"
         Me.cmdOK.Size = New System.Drawing.Size(95, 30)
         Me.cmdOK.TabIndex = 2
@@ -61,15 +61,19 @@ Partial Class frmNotes
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(525, 296)
+        Me.ClientSize = New System.Drawing.Size(472, 276)
         Me.Controls.Add(Me.cmdOK)
         Me.Controls.Add(Me.cmdClose)
         Me.Controls.Add(Me.rtbNotes)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximumSize = New System.Drawing.Size(981, 669)
+        Me.MinimumSize = New System.Drawing.Size(253, 160)
         Me.Name = "frmNotes"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Notes"
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents rtbNotes As RichTextBox
     Friend WithEvents cmdClose As Button

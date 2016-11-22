@@ -54,7 +54,6 @@ Public Class clsMySQL_Comms
             Return Nothing
         End Try
     End Function
-
     Public Function CheckConnection() As Boolean
         Try
             Dim ds As New DataSet
@@ -75,7 +74,6 @@ Public Class clsMySQL_Comms
             Return False
         End Try
     End Function
-
     Public Function NewConnection() As MySqlConnection
         Return New MySqlConnection(MySQLConnectString)
     End Function

@@ -23,7 +23,6 @@
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
-
             End Select
         Next
     End Sub

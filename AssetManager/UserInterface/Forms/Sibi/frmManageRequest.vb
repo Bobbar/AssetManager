@@ -799,6 +799,9 @@ VALUES
         End If
     End Sub
     Private Sub cmdAddNote_Click(sender As Object, e As EventArgs) Handles cmdAddNote.Click
+        AddNote()
+    End Sub
+    Private Sub AddNote()
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         If CurrentRequest.strUID <> "" Then
             Dim NewNote As New frmNotes
@@ -810,8 +813,14 @@ VALUES
     End Sub
     Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim blah = Message(DeleteItem_FromSQL(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value, sibi_notes.Note_UID, sibi_notes.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
-        OpenRequest(CurrentRequest.strUID)
+        Dim blah = Message("Are you sure?", vbYesNo + vbQuestion, "Delete Note", Me)
+        If blah = vbYes Then
+            Dim NoteUID As String = dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value
+            If NoteUID <> "" Then
+                Message(DeleteItem_FromSQL(NoteUID, sibi_notes.Note_UID, sibi_notes.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+                OpenRequest(CurrentRequest.strUID)
+            End If
+        End If
     End Sub
     Private Sub cmdClearForm_Click(sender As Object, e As EventArgs) Handles cmdClearForm.Click
         ClearAll()
@@ -943,5 +952,8 @@ VALUES
     End Sub
     Private Sub frmManageRequest_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         CloseChildren(Me)
+    End Sub
+    Private Sub cmdNewNote_Click(sender As Object, e As EventArgs) Handles cmdNewNote.Click
+        AddNote()
     End Sub
 End Class

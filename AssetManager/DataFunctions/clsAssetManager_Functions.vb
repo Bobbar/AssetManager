@@ -139,7 +139,6 @@ VALUES(@" & historical_dev.ChangeType & ",
         End If
         Try
             Dim rows
-            ' Dim reader As MySqlDataReader
             Dim results As New DataTable
             Dim strDeviceID As String
             Dim strSQLIDQry As String
@@ -148,7 +147,6 @@ VALUES(@" & historical_dev.ChangeType & ",
             ElseIf Type = Entry_Type.Sibi Then
                 strSQLIDQry = "SELECT " & sibi_attachments.FKey & " FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FileUID & "='" & AttachUID & "'"
             End If
-            'reader = SQLComms.Return_SQLReader(strSQLIDQry)
             results = SQLComms.Return_SQLTable(strSQLIDQry)
             For Each r As DataRow In results.Rows
                 If Type = Entry_Type.Device Then
@@ -225,22 +223,19 @@ VALUES(@" & historical_dev.ChangeType & ",
             If Not ConnectionReady() Then
                 Exit Function
             End If
-            Dim tmpInfo As Device_Info
-            Dim reader As MySqlDataReader
+            Dim tmpInfo As New Device_Info
+            Dim results As DataTable
             Dim strQry = "SELECT * FROM " & historical_dev.TableName & " WHERE " & historical_dev.History_Entry_UID & "='" & strGUID & "'"
-            reader = SQLComms.Return_SQLReader(strQry)
-            With reader
-                Do While .Read()
-                    tmpInfo.Historical.strChangeType = GetHumanValue(DeviceIndex.ChangeType, !hist_change_type)
-                    tmpInfo.strAssetTag = !hist_asset_tag
-                    tmpInfo.strCurrentUser = !hist_cur_user
-                    tmpInfo.strSerial = !hist_serial
-                    tmpInfo.strDescription = !hist_description
-                    tmpInfo.Historical.dtActionDateTime = !hist_action_datetime
-                    tmpInfo.Historical.strActionUser = !hist_action_user
-                Loop
-            End With
-            reader.Close()
+            results = SQLComms.Return_SQLTable(strQry)
+            For Each r As DataRow In results.Rows
+                tmpInfo.Historical.strChangeType = GetHumanValue(DeviceIndex.ChangeType, r.Item(historical_dev.ChangeType))
+                tmpInfo.strAssetTag = r.Item(historical_dev.AssetTag)
+                tmpInfo.strCurrentUser = r.Item(historical_dev.CurrentUser)
+                tmpInfo.strSerial = r.Item(historical_dev.Serial)
+                tmpInfo.strDescription = r.Item(historical_dev.Description)
+                tmpInfo.Historical.dtActionDateTime = r.Item(historical_dev.ActionDateTime)
+                tmpInfo.Historical.strActionUser = r.Item(historical_dev.ActionUser)
+            Next
             Return tmpInfo
             Exit Function
         Catch ex As Exception
@@ -252,16 +247,12 @@ VALUES(@" & historical_dev.ChangeType & ",
         End Try
     End Function
     Public Function Get_DeviceUID(ByVal AssetTag As String, ByVal Serial As String) As String
-        Dim reader As MySqlDataReader
+        Dim cmd As MySqlCommand
         Dim UID As String
         Dim strQry = "SELECT " & devices.DeviceUID & " from " & devices.TableName & " WHERE " & devices.AssetTag & " = '" & AssetTag & "' AND " & devices.Serial & " = '" & Serial & "' ORDER BY " & devices.Input_DateTime & ""
-        reader = SQLComms.Return_SQLReader(strQry)
-        With reader
-            Do While .Read()
-                UID = (!dev_UID)
-            Loop
-        End With
-        reader.Close()
+        cmd = SQLComms.Return_SQLCommand(strQry)
+        UID = cmd.ExecuteScalar
+        cmd.Dispose()
         Return UID
     End Function
     Public Function Delete_SQLMasterEntry(ByVal strGUID As String, Type As String) As Integer
@@ -287,22 +278,20 @@ VALUES(@" & historical_dev.ChangeType & ",
     Public Function BuildIndex(CodeType As String, TypeName As String) As Combo_Data()
         Try
             Dim tmpArray() As Combo_Data
-            Dim reader As MySqlDataReader
+            Dim results As New DataTable
             Dim strQRY = "SELECT * FROM " & CodeType & " WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
             Dim row As Integer
-            reader = SQLComms.Return_SQLReader(strQRY)
+            results = SQLComms.Return_SQLTable(strQRY)
             ReDim tmpArray(0)
             row = -1
-            With reader
-                Do While .Read()
-                    row += 1
-                    ReDim Preserve tmpArray(row)
-                    tmpArray(row).strID = !id
-                    tmpArray(row).strLong = !human_value
-                    tmpArray(row).strShort = !db_value
-                Loop
-            End With
-            reader.Close()
+            For Each r As DataRow In results.Rows
+                row += 1
+                ReDim Preserve tmpArray(row)
+                tmpArray(row).strID = r.Item(main_combocodes.ID)
+                tmpArray(row).strLong = r.Item(main_combocodes.HumanValue)
+                tmpArray(row).strShort = r.Item(main_combocodes.DB_Value)
+            Next
+            results.Dispose()
             Return tmpArray
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -316,7 +305,6 @@ VALUES(@" & historical_dev.ChangeType & ",
         Dim tmpList As New List(Of Access_Info)
         Dim ModuleTable As DataTable = SQLComms.Return_SQLTable("SELECT * FROM " & security.TableName & " ORDER BY " & security.AccessLevel & "")
         Dim i As Integer = 0
-        'ReDim ModuleArray(ModuleTable.Rows.Count - 1)
         For Each row As DataRow In ModuleTable.Rows
             Dim tmpInfo As Access_Info
             With tmpInfo
@@ -372,44 +360,39 @@ VALUES
     End Function
     Public Sub GetUserAccess()
         Try
-            Dim reader As MySqlDataReader
+            Dim results As DataTable
             Dim strQRY = "SELECT * FROM " & users.TableName & " WHERE " & users.UserName & "='" & strLocalUser & "'"
-            reader = SQLComms.Return_SQLReader(strQRY)
-            With reader
-                If .HasRows Then
-                    Do While .Read()
-                        UserAccess.strUsername = !usr_username
-                        UserAccess.strFullname = !usr_fullname
-                        UserAccess.intAccessLevel = !usr_access_level
-                        UserAccess.strUID = !usr_UID
-                    Loop
-                Else
-                    UserAccess.intAccessLevel = 0
-                End If
-            End With
-            reader.Close()
+            results = SQLComms.Return_SQLTable(strQRY)
+            If results.Rows.Count > 0 Then
+                For Each r As DataRow In results.Rows
+                    UserAccess.strUsername = r.Item(users.UserName)
+                    UserAccess.strFullname = r.Item(users.FullName)
+                    UserAccess.intAccessLevel = r.Item(users.AccessLevel)
+                    UserAccess.strUID = r.Item(users.UID)
+                Next
+            Else
+                UserAccess.intAccessLevel = 0
+            End If
+            results.Dispose()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Sub GetAccessLevels()
         Try
-            Dim reader As MySqlDataReader
+            Dim results As DataTable
             Dim strQRY = "SELECT * FROM " & security.TableName & " ORDER BY " & security.AccessLevel & "" ' WHERE usr_username='" & strLocalUser & "'"
             Dim rows As Integer
-            reader = SQLComms.Return_SQLReader(strQRY)
+            results = SQLComms.Return_SQLTable(strQRY)
             ReDim AccessLevels(0)
             rows = -1
-            With reader
-                Do While .Read()
-                    rows += 1
-                    ReDim Preserve AccessLevels(rows)
-                    AccessLevels(rows).intLevel = !sec_access_level
-                    AccessLevels(rows).strModule = !sec_module
-                    AccessLevels(rows).strDesc = !sec_desc
-                Loop
-            End With
-            reader.Close()
+            For Each r As DataRow In results.Rows
+                rows += 1
+                ReDim Preserve AccessLevels(rows)
+                AccessLevels(rows).intLevel = r.Item(security.AccessLevel)
+                AccessLevels(rows).strModule = r.Item(security.SecModule)
+                AccessLevels(rows).strDesc = r.Item(security.Description)
+            Next
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
