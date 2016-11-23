@@ -68,6 +68,7 @@ Public Class View
             .strNote = UpdateInfo.strNote
             .bolTrackable = chkTrackable.Checked
             .strPO = Trim(txtPONumber.Text)
+            NewData.CheckSum = GetHashOfDevice(NewData)
         End With
         MunisUser = Nothing
     End Sub
@@ -164,6 +165,7 @@ Public Class View
                 ", " & devices.LastMod_User & "=@" & devices.LastMod_User &
                 ", " & devices.LastMod_Date & "=@" & devices.LastMod_Date &
                 ", " & devices.Munis_Emp_Num & "=@" & devices.Munis_Emp_Num &
+                ", " & devices.CheckSum & "=@" & devices.CheckSum &
                 " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
 
             Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
@@ -182,6 +184,7 @@ Public Class View
             cmd.Parameters.AddWithValue("@" & devices.PO, NewData.strPO)
             cmd.Parameters.AddWithValue("@" & devices.LastMod_User, strLocalUser)
             cmd.Parameters.AddWithValue("@" & devices.LastMod_Date, Now)
+            cmd.Parameters.AddWithValue("@" & devices.CheckSum, NewData.CheckSum)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO " & historical_dev.TableName & " (" & historical_dev.ChangeType & ",
 " & historical_dev.Notes & ",
@@ -905,12 +908,25 @@ VALUES (@" & historical_dev.ChangeType & ",
         UpdateDia.txtUpdate_Note.Clear()
         UpdateDia.ShowDialog(Me)
         If UpdateDia.DialogResult = DialogResult.OK Then
+            If Not ConcurrencyCheck() Then
+                CancelModify()
+                Exit Sub
+            End If
             GetNewValues(UpdateDia.UpdateInfo)
             UpdateDevice(UpdateDia.UpdateInfo)
         Else
             CancelModify()
         End If
     End Sub
+    Private Function ConcurrencyCheck() As Boolean
+        Dim InDBCheckSum As String = Asset.Get_SQLValue(devices.TableName, devices.DeviceUID, OldData.strGUID, devices.CheckSum)
+        If InDBCheckSum = OldData.CheckSum Then
+            Return True
+        Else
+            Message("This record appears to have been modified by someone else since the start of this modification.", vbOKOnly + vbExclamation, "Concurrency Error", Me)
+            Return False
+        End If
+    End Function
     Private Sub cmdCancel_Tool_Click(sender As Object, e As EventArgs) Handles cmdCancel_Tool.Click
         CancelModify()
     End Sub

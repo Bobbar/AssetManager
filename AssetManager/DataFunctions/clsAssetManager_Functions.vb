@@ -450,6 +450,7 @@ VALUES
                 .bolTrackable = CBool(DeviceTable.Rows(0).Item(devices.Trackable))
                 .strSibiLink = NoNull(DeviceTable.Rows(0).Item(devices.Sibi_Link_UID))
                 .Tracking.bolCheckedOut = CBool(DeviceTable.Rows(0).Item(devices.CheckedOut))
+                .CheckSum = NoNull(DeviceTable.Rows(0).Item(devices.CheckSum))
             End With
             Return newDeviceInfo
         Catch ex As Exception

@@ -27,6 +27,7 @@ Public Module Structures
         Public strNote As String
         Public bolTrackable As Boolean
         Public strSibiLink As String
+        Public CheckSum As String
         Public Tracking As Track_Info
         Public Historical As Hist_Info
     End Structure

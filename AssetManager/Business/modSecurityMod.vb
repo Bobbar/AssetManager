@@ -3,12 +3,31 @@ Imports MySql.Data.MySqlClient
 Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Text
+Imports System.Runtime.Serialization
 Module modSecurityMod
     Public AccessLevels() As Access_Info
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
     Public Function DecodePassword(strCypher As String) As String
         Dim wrapper As New Simple3Des(CryptKey)
         Return wrapper.DecryptData(strCypher)
+    End Function
+    Public Function GetHashOfTable(Table As DataTable) As String
+        Dim serializer = New DataContractSerializer(GetType(DataTable))
+        Dim memoryStream = New MemoryStream()
+        serializer.WriteObject(memoryStream, Table)
+        Dim serializedData As Byte() = memoryStream.ToArray()
+        Dim SHA = New SHA1CryptoServiceProvider()
+        Dim hash As Byte() = SHA.ComputeHash(serializedData)
+        Return Convert.ToBase64String(hash)
+    End Function
+    Public Function GetHashOfDevice(Device As Device_Info) As String
+        Dim serializer = New DataContractSerializer(GetType(Device_Info))
+        Dim memoryStream = New MemoryStream()
+        serializer.WriteObject(memoryStream, Device)
+        Dim serializedData As Byte() = memoryStream.ToArray()
+        Dim SHA = New SHA1CryptoServiceProvider()
+        Dim hash As Byte() = SHA.ComputeHash(serializedData)
+        Return Convert.ToBase64String(hash)
     End Function
     Public Function GetHashOfFile(Path As String) As String
         Dim hash ' As MD5
