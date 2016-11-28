@@ -200,15 +200,7 @@ Public Class MainForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Class SearchVal
-        Public Property FieldName As String
-        Public Property Value As Object
-        Public Sub New(ByVal strFieldName As String, ByVal obValue As Object)
-            FieldName = strFieldName
-            Value = obValue
-        End Sub
-    End Class
-    Function BuildSearchListNew() As List(Of SearchVal)
+    Private Function BuildSearchListNew() As List(Of SearchVal)
         Dim tmpList As New List(Of SearchVal)
         tmpList.Add(New SearchVal(devices.Serial, Trim(txtSerialSearch.Text)))
         tmpList.Add(New SearchVal(devices.AssetTag, Trim(txtAssetTagSearch.Text)))

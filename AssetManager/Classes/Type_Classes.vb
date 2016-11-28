@@ -32,4 +32,12 @@
         Public Const Sibi_Delete As String = "sibi_delete"
         Public Const IsAdmin As String = "admin"
     End Class
+    Public Class SearchVal
+        Public Property FieldName As String
+        Public Property Value As Object
+        Public Sub New(ByVal strFieldName As String, ByVal obValue As Object)
+            FieldName = strFieldName
+            Value = obValue
+        End Sub
+    End Class
 End Module
