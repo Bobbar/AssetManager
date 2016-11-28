@@ -746,6 +746,7 @@ VALUES
     Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         CloseChildren(Me)
         Me.Dispose()
+        frmSibiMain.MyWindowList.RefreshWindowList()
     End Sub
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub

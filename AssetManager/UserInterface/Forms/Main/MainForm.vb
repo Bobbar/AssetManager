@@ -18,6 +18,7 @@ Public Class MainForm
     Private MyLiveBox As New clsLiveBox
     Private strLastQry As String
     Private cmdLastCommand As MySqlCommand
+    Public MyWindowList As WindowList
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadProgram()
     End Sub
@@ -62,6 +63,7 @@ Public Class MainForm
             SplashScreen.Hide()
             Dim MyMunisTools As New MunisToolsMenu
             ToolStrip1.Items.Insert(2, MyMunisTools.MunisTools)
+            MyWindowList = New WindowList(Me, tsdSelectWindow)
             Me.Show()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -297,10 +299,8 @@ Public Class MainForm
             Waiting()
             Dim NewView As New View
             NewView.ViewDevice(strGUID)
-            ' If Not NewView.IsDisposed Then
-            'NewView.Show()
-            'NewView.Activate()
-            'End If
+            NewView.Tag = Me
+            MyWindowList.RefreshWindowList()
             DoneWaiting()
         Else
             ' Dim blah = Message("That device is already open.", vbOKOnly + vbExclamation, "Duplicate Window")

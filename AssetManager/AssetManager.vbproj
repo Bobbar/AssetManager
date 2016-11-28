@@ -398,6 +398,8 @@
   <ItemGroup>
     <Content Include="AssetManager.ico" />
     <None Include="Resources\239360-transfer_arrows-512.png" />
+    <None Include="Resources\Acquire_new_shadow_crop.ico" />
+    <None Include="Resources\Acquire_new_shadow_small.png" />
     <Content Include="Resources\Add.png" />
     <None Include="Resources\check-out.png" />
     <None Include="Resources\delete-icon-red.png" />
@@ -410,6 +412,7 @@
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
     <None Include="Resources\attencion_exclamation_mark_circle_danger-128.png" />
     <None Include="Resources\critical_funny.png" />
+    <None Include="Resources\application_cascade-512.png" />
     <Content Include="Resources\AssetManager.ico" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />

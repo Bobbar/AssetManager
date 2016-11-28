@@ -80,4 +80,54 @@
         Next
         Return False
     End Function
+
+    Public Class WindowList
+        Private CurrentWindows As New List(Of Form)
+        Private MyParentForm As Form
+        Private DropDownControl As ToolStripDropDownButton
+        Sub New(ParentForm As Form, DropDownCtl As ToolStripDropDownButton)
+            MyParentForm = ParentForm
+            DropDownControl = DropDownCtl
+            Init()
+        End Sub
+        Private Sub Init()
+            AddHandler DropDownControl.DropDownItemClicked, AddressOf WindowSelectClick
+        End Sub
+        Public Sub RefreshWindowList()
+            CurrentWindows.Clear()
+            For Each frm As Form In My.Application.OpenForms
+                If frm.Tag Is MyParentForm And Not frm.IsDisposed Then
+                    CurrentWindows.Add(frm)
+                End If
+            Next
+            DropDownControl.DropDownItems.Clear()
+            For Each frm As Form In CurrentWindows
+                If frm.GetType Is GetType(View) Then
+                    Dim vw As View = frm
+                    Dim newitem As New ToolStripMenuItem
+                    newitem.Text = vw.Text
+                    newitem.Image = My.Resources.inventory_small_fw
+                    newitem.Tag = vw
+                    DropDownControl.DropDownItems.Add(newitem)
+                ElseIf frm.GetType Is GetType(frmManageRequest) Then
+                    Dim req As frmManageRequest = frm
+                    Dim newitem As New ToolStripMenuItem
+                    newitem.Text = req.Text
+                    newitem.Image = My.Resources.Acquire_new_shadow_small
+                    newitem.Tag = req
+                    DropDownControl.DropDownItems.Add(newitem)
+                End If
+            Next
+        End Sub
+        Private Sub WindowSelectClick(sender As Object, e As ToolStripItemClickedEventArgs)
+            Dim item As ToolStripItem = e.ClickedItem
+            If item.Tag.GetType Is GetType(View) Then
+                Dim vw As View = item.Tag
+                ActivateForm(vw.CurrentViewDevice.strGUID)
+            ElseIf item.Tag.GetType Is GetType(frmManageRequest) Then
+                Dim req As frmManageRequest = item.Tag
+                ActivateForm(req.CurrentRequest.strUID)
+            End If
+        End Sub
+    End Class
 End Module

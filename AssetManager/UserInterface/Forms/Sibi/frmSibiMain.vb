@@ -1,5 +1,7 @@
-﻿Public Class frmSibiMain
+﻿Imports System.ComponentModel
+Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
+    Public MyWindowList As WindowList
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         SetDisplayYears()
         ShowAll()
@@ -8,6 +10,8 @@
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         SetDisplayYears()
         ShowAll("All")
+        MyWindowList = New WindowList(Me, tsdSelectWindow)
+        MyWindowList.RefreshWindowList()
     End Sub
     Private Sub SendToGrid(Results As DataTable)
         Try
@@ -78,7 +82,9 @@
         End If
         If Not RequestIsOpen(strUID) Then
             Dim ManRequest As New frmManageRequest
+            ManRequest.Tag = Me
             ManRequest.OpenRequest(strUID)
+            MyWindowList.RefreshWindowList()
         Else
             ActivateForm(strUID)
         End If
@@ -191,5 +197,9 @@
         If Not IsNothing(cmbDisplayYear.Text) Then
             ShowAll(cmbDisplayYear.Text)
         End If
+    End Sub
+
+    Private Sub frmSibiMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        CloseChildren(Me)
     End Sub
 End Class
