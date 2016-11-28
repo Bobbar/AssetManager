@@ -971,7 +971,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
-        OpenSibiLink(CurrentViewDevice.strPO)
+        OpenSibiLink(CurrentViewDevice) '.strPO)
     End Sub
     Private Sub LinkSibi()
         Dim f As New frmSibiSelector
@@ -981,12 +981,18 @@ VALUES (@" & historical_dev.ChangeType & ",
             ViewDevice(CurrentViewDevice.strGUID)
         End If
     End Sub
-    Private Sub OpenSibiLink(PO As String)
-        If Trim(PO) = "" Then
-            Message("A valid PO number is required.", vbOKOnly + vbInformation, "No PO #", Me)
-            Exit Sub
+    Private Sub OpenSibiLink(LinkDevice As Device_Info)
+        Dim SibiUID As String
+        If LinkDevice.strSibiLink = "" Then
+            If LinkDevice.strPO = "" Then
+                Message("A valid PO Number or Sibi Link is required.", vbOKOnly + vbInformation, "Missing Info", Me)
+                Exit Sub
+            Else
+                SibiUID = Asset.Get_SQLValue(sibi_requests.TableName, sibi_requests.PO, LinkDevice.strPO, sibi_requests.UID)
+            End If
+        Else
+            SibiUID = LinkDevice.strSibiLink
         End If
-        Dim SibiUID As String = Asset.Get_SQLValue(sibi_requests.TableName, sibi_requests.PO, PO, sibi_requests.UID)
         If SibiUID = "" Then
             Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
         Else
