@@ -166,6 +166,7 @@ Public Class View
                 ", " & devices.LastMod_Date & "=@" & devices.LastMod_Date &
                 ", " & devices.Munis_Emp_Num & "=@" & devices.Munis_Emp_Num &
                 ", " & devices.CheckSum & "=@" & devices.CheckSum &
+                ", " & devices.Sibi_Link_UID & "=@" & devices.Sibi_Link_UID &
                 " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
 
             Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
@@ -185,6 +186,7 @@ Public Class View
             cmd.Parameters.AddWithValue("@" & devices.LastMod_User, strLocalUser)
             cmd.Parameters.AddWithValue("@" & devices.LastMod_Date, Now)
             cmd.Parameters.AddWithValue("@" & devices.CheckSum, NewData.CheckSum)
+            cmd.Parameters.AddWithValue("@" & devices.Sibi_Link_UID, NewData.strSibiLink)
             rows = rows + cmd.ExecuteNonQuery()
             Dim strSqlQry2 = "INSERT INTO " & historical_dev.TableName & " (" & historical_dev.ChangeType & ",
 " & historical_dev.Notes & ",
@@ -977,8 +979,8 @@ VALUES (@" & historical_dev.ChangeType & ",
         Dim f As New frmSibiSelector
         f.ShowDialog(Me)
         If f.DialogResult = DialogResult.OK Then
-            Asset.Update_SQLValue(devices.TableName, devices.Sibi_Link_UID, f.SibiUID, devices.DeviceUID, CurrentViewDevice.strGUID)
-            ViewDevice(CurrentViewDevice.strGUID)
+            NewData.strSibiLink = f.SibiUID
+            Message("Sibi Link Set.", vbOKOnly + vbInformation, "Success", Me)
         End If
     End Sub
     Private Sub OpenSibiLink(LinkDevice As Device_Info)
