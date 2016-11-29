@@ -23,6 +23,7 @@ Partial Class View
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
+        Me.lblGUID = New System.Windows.Forms.Label()
         Me.cmdMunisSearch = New System.Windows.Forms.Button()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
         Me.cmdBrowseFiles = New System.Windows.Forms.Button()
@@ -95,7 +96,6 @@ Partial Class View
         Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.lblGUID = New System.Windows.Forms.Label()
         Me.DeviceInfoBox.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
@@ -150,6 +150,17 @@ Partial Class View
         Me.DeviceInfoBox.TabIndex = 39
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
+        '
+        'lblGUID
+        '
+        Me.lblGUID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblGUID.Cursor = System.Windows.Forms.Cursors.Cross
+        Me.lblGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblGUID.Location = New System.Drawing.Point(21, 206)
+        Me.lblGUID.Name = "lblGUID"
+        Me.lblGUID.Size = New System.Drawing.Size(272, 34)
+        Me.lblGUID.TabIndex = 54
+        Me.lblGUID.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'cmdMunisSearch
         '
@@ -888,17 +899,6 @@ Partial Class View
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
-        'lblGUID
-        '
-        Me.lblGUID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblGUID.Cursor = System.Windows.Forms.Cursors.Cross
-        Me.lblGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblGUID.Location = New System.Drawing.Point(21, 206)
-        Me.lblGUID.Name = "lblGUID"
-        Me.lblGUID.Size = New System.Drawing.Size(272, 34)
-        Me.lblGUID.TabIndex = 54
-        Me.lblGUID.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'View
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -914,7 +914,6 @@ Partial Class View
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(1101, 533)
         Me.Name = "View"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View"
         Me.DeviceInfoBox.ResumeLayout(False)
         Me.DeviceInfoBox.PerformLayout()

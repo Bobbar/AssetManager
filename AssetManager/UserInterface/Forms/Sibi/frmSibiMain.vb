@@ -202,4 +202,7 @@ Public Class frmSibiMain
     Private Sub frmSibiMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         CloseChildren(Me)
     End Sub
+    Private Sub frmSibiMain_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        MainForm.MyWindowList.RefreshWindowList()
+    End Sub
 End Class

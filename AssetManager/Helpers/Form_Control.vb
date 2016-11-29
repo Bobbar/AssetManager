@@ -80,7 +80,30 @@
         Next
         Return False
     End Function
-
+    Public Function SibiIsOpen() As Boolean
+        If Application.OpenForms.OfType(Of frmSibiMain).Any Then
+            Return True
+        End If
+        Return False
+    End Function
+    Public Function DeviceIsOpen(strGUID As String) As Boolean
+        For Each frm As Form In My.Application.OpenForms
+            If TypeOf frm Is View Then
+                Dim vw As View = frm
+                If vw.CurrentViewDevice.strGUID = strGUID Then Return True
+            End If
+        Next
+        Return False
+    End Function
+    Public Function RequestIsOpen(strGUID As String) As Boolean
+        For Each frm As Form In My.Application.OpenForms
+            If TypeOf frm Is frmManageRequest Then
+                Dim vw As frmManageRequest = frm
+                If vw.CurrentRequest.strUID = strGUID Then Return True
+            End If
+        Next
+        Return False
+    End Function
     Public Class WindowList
         Private CurrentWindows As New List(Of Form)
         Private MyParentForm As Form
@@ -116,6 +139,15 @@
                     newitem.Image = My.Resources.Acquire_new_shadow_small
                     newitem.Tag = req
                     DropDownControl.DropDownItems.Add(newitem)
+                ElseIf frm.GetType Is GetType(frmSibiMain) Then
+                    Dim sibi As frmSibiMain = frm
+                    Dim newitem As New ToolStripMenuItem
+                    newitem.Text = sibi.Text
+                    newitem.Image = My.Resources.Acquire_new_shadow_small
+                    newitem.Tag = sibi
+                    '  DropDownControl.DropDownItems.Add(newitem)
+                    DropDownControl.DropDownItems.Insert(0, newitem)
+
                 End If
             Next
         End Sub
@@ -127,6 +159,11 @@
             ElseIf item.Tag.GetType Is GetType(frmManageRequest) Then
                 Dim req As frmManageRequest = item.Tag
                 ActivateForm(req.CurrentRequest.strUID)
+            ElseIf item.Tag.GetType Is GetType(frmSibiMain) Then
+                'Dim req As frmManageRequest = item.Tag
+                'ActivateForm(req.CurrentRequest.strUID)
+                frmSibiMain.Show()
+                frmSibiMain.WindowState = FormWindowState.Normal
             End If
         End Sub
     End Class

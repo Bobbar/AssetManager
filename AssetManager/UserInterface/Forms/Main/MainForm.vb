@@ -602,8 +602,15 @@ Public Class MainForm
             Exit Sub
         End If
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
-        frmSibiMain.Show()
-        frmSibiMain.Activate()
+        If Not SibiIsOpen() Then
+            frmSibiMain.Tag = Me
+            frmSibiMain.Show()
+            frmSibiMain.Activate()
+            MyWindowList.RefreshWindowList()
+        Else
+            frmSibiMain.Show()
+            frmSibiMain.WindowState = FormWindowState.Normal
+        End If
     End Sub
     Private Sub tsmUserManager_Click(sender As Object, e As EventArgs) Handles tsmUserManager.Click
         frmUserManager.Show()
@@ -633,8 +640,8 @@ Public Class MainForm
         Dim f As Form = sender
         If f.WindowState = FormWindowState.Minimized Then
             MinimizeAll()
-        ElseIf f.WindowState = FormWindowState.Normal Then
-            RestoreAll()
+            'ElseIf f.WindowState = FormWindowState.Normal Then
+            '    RestoreAll()
         End If
     End Sub
 End Class

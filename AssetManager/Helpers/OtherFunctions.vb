@@ -176,24 +176,6 @@ Module OtherFunctions
     Public Function FormTitle(Device As Device_Info) As String
         Return " - " + Device.strCurrentUser + " - " + Device.strDescription
     End Function
-    Public Function DeviceIsOpen(strGUID As String) As Boolean
-        For Each frm As Form In My.Application.OpenForms
-            If TypeOf frm Is View Then
-                Dim vw As View = frm
-                If vw.CurrentViewDevice.strGUID = strGUID Then Return True
-            End If
-        Next
-        Return False
-    End Function
-    Public Function RequestIsOpen(strGUID As String) As Boolean
-        For Each frm As Form In My.Application.OpenForms
-            If TypeOf frm Is frmManageRequest Then
-                Dim vw As frmManageRequest = frm
-                If vw.CurrentRequest.strUID = strGUID Then Return True
-            End If
-        Next
-        Return False
-    End Function
     Public Function NotePreview(Note As String, Optional CharLimit As Integer = 50) As String
         If Note <> "" Then
             Return Strings.Left(Note, CharLimit) & IIf(Len(Note) > CharLimit, "...", "")
