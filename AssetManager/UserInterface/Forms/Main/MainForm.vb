@@ -609,6 +609,7 @@ Public Class MainForm
             MyWindowList.RefreshWindowList()
         Else
             frmSibiMain.Show()
+            frmSibiMain.Activate()
             frmSibiMain.WindowState = FormWindowState.Normal
         End If
     End Sub

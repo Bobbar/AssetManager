@@ -145,9 +145,7 @@
                     newitem.Text = sibi.Text
                     newitem.Image = My.Resources.Acquire_new_shadow_small
                     newitem.Tag = sibi
-                    '  DropDownControl.DropDownItems.Add(newitem)
                     DropDownControl.DropDownItems.Insert(0, newitem)
-
                 End If
             Next
         End Sub
@@ -160,9 +158,8 @@
                 Dim req As frmManageRequest = item.Tag
                 ActivateForm(req.CurrentRequest.strUID)
             ElseIf item.Tag.GetType Is GetType(frmSibiMain) Then
-                'Dim req As frmManageRequest = item.Tag
-                'ActivateForm(req.CurrentRequest.strUID)
                 frmSibiMain.Show()
+                frmSibiMain.Activate()
                 frmSibiMain.WindowState = FormWindowState.Normal
             End If
         End Sub

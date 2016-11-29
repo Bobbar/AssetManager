@@ -174,7 +174,7 @@ Module OtherFunctions
         Next
     End Sub
     Public Function FormTitle(Device As Device_Info) As String
-        Return " - " + Device.strCurrentUser + " - " + Device.strDescription
+        Return " - " + Device.strCurrentUser + " - " + Device.strAssetTag + " - " + Device.strDescription
     End Function
     Public Function NotePreview(Note As String, Optional CharLimit As Integer = 50) As String
         If Note <> "" Then
