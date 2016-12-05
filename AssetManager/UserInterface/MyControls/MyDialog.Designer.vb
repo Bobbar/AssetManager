@@ -211,7 +211,7 @@ Partial Class MyDialog
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
-        Me.MaximumSize = New System.Drawing.Size(835, 452)
+        Me.MaximumSize = New System.Drawing.Size(1068, 678)
         Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(479, 196)
         Me.Name = "MyDialog"
@@ -229,6 +229,7 @@ Partial Class MyDialog
         Me.pnlButtons.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
     Friend WithEvents tblOkCancel As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button

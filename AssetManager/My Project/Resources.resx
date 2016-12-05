@@ -142,8 +142,8 @@
   <data name="Find" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Find.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="checked_checkbox-green" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\checked_checkbox-green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="delete_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\delete-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Exh_K_01_Asset_Input_Formnew" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Exh_K-01_Asset_Input_Formnew.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -166,9 +166,6 @@
   <data name="import_document_mail_save-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\import_document_mail_save-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="delete_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\delete-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Form2-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Form2-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -187,8 +184,14 @@
   <data name="critical_funny" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\critical_funny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Acquire_new_shadow_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Acquire_new_shadow_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Acquire_new_shadow_crop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Acquire_new_shadow_crop.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="checked_checkbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\checked_checkbox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -202,8 +205,14 @@
   <data name="239360-transfer_arrows-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\239360-transfer_arrows-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="trash-var-solid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\trash-var-solid.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="check-out" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\check-out.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Exh_K_02_Asset_Disposal_Form" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Exh_K-02_Asset_Disposal_Form.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="inventory_small_fw" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\inventory-small.fw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -211,10 +220,10 @@
   <data name="application_cascade-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\application_cascade-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Acquire_new_shadow_crop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Acquire_new_shadow_crop.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="checked_checkbox-green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\checked_checkbox-green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Acquire_new_shadow_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Acquire_new_shadow_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="trash_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\trash_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

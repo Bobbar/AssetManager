@@ -283,6 +283,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Byte[].
         '''</summary>
+        Public ReadOnly Property Exh_K_02_Asset_Disposal_Form() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Exh_K_02_Asset_Disposal_Form", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Byte[].
+        '''</summary>
         Public ReadOnly Property Exh_K_03_Asset_Transfer_Form() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("Exh_K_03_Asset_Transfer_Form", resourceCulture)
@@ -366,6 +376,26 @@ Namespace My.Resources
         Public ReadOnly Property report() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("report", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property trash_icon() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("trash_icon", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property trash_var_solid() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("trash-var-solid", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

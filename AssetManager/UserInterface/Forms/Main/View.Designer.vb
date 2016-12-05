@@ -86,6 +86,7 @@ Partial Class View
         Me.tsdAssetControl = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmAssetInputForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AssetDisposalFormToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAccept_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
@@ -790,7 +791,7 @@ Partial Class View
         Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_red
         Me.CheckOutTool.Name = "CheckOutTool"
-        Me.CheckOutTool.Size = New System.Drawing.Size(142, 32)
+        Me.CheckOutTool.Size = New System.Drawing.Size(161, 32)
         Me.CheckOutTool.Text = "Check Out"
         '
         'CheckInTool
@@ -798,12 +799,12 @@ Partial Class View
         Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_green
         Me.CheckInTool.Name = "CheckInTool"
-        Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
+        Me.CheckInTool.Size = New System.Drawing.Size(161, 32)
         Me.CheckInTool.Text = "Check In"
         '
         'tsdAssetControl
         '
-        Me.tsdAssetControl.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAssetInputForm, Me.tsmAssetTransferForm})
+        Me.tsdAssetControl.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAssetInputForm, Me.tsmAssetTransferForm, Me.AssetDisposalFormToolStripMenuItem})
         Me.tsdAssetControl.Image = Global.AssetManager.My.Resources.Resources.Form2_512
         Me.tsdAssetControl.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdAssetControl.Name = "tsdAssetControl"
@@ -814,15 +815,22 @@ Partial Class View
         '
         Me.tsmAssetInputForm.Image = Global.AssetManager.My.Resources.Resources.import_document_mail_save_512
         Me.tsmAssetInputForm.Name = "tsmAssetInputForm"
-        Me.tsmAssetInputForm.Size = New System.Drawing.Size(201, 32)
+        Me.tsmAssetInputForm.Size = New System.Drawing.Size(204, 32)
         Me.tsmAssetInputForm.Text = "Asset Input Form"
         '
         'tsmAssetTransferForm
         '
         Me.tsmAssetTransferForm.Image = Global.AssetManager.My.Resources.Resources._239360_transfer_arrows_512
         Me.tsmAssetTransferForm.Name = "tsmAssetTransferForm"
-        Me.tsmAssetTransferForm.Size = New System.Drawing.Size(201, 32)
+        Me.tsmAssetTransferForm.Size = New System.Drawing.Size(204, 32)
         Me.tsmAssetTransferForm.Text = "Asset Transfer Form"
+        '
+        'AssetDisposalFormToolStripMenuItem
+        '
+        Me.AssetDisposalFormToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.trash_icon
+        Me.AssetDisposalFormToolStripMenuItem.Name = "AssetDisposalFormToolStripMenuItem"
+        Me.AssetDisposalFormToolStripMenuItem.Size = New System.Drawing.Size(204, 32)
+        Me.AssetDisposalFormToolStripMenuItem.Text = "Asset Disposal Form"
         '
         'ToolStripSeparator1
         '
@@ -1011,4 +1019,5 @@ Partial Class View
     Friend WithEvents tsmAssetTransferForm As ToolStripMenuItem
     Friend WithEvents cmdMunisSearch As Button
     Friend WithEvents lblGUID As Label
+    Friend WithEvents AssetDisposalFormToolStripMenuItem As ToolStripMenuItem
 End Class

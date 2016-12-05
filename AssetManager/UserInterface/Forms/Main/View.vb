@@ -1062,6 +1062,12 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
 
     Private PrevWindowState As Integer
+
+    Private Sub AssetDisposalFormToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AssetDisposalFormToolStripMenuItem.Click
+        FillForm(CurrentViewDevice, FormType.DisposeForm)
+        'ListFieldNames()
+    End Sub
+
     Private Sub View_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
         Dim f As Form = sender
         PrevWindowState = f.WindowState

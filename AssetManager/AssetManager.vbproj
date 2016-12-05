@@ -192,10 +192,10 @@
     <Compile Include="UserInterface\Forms\Main\frmMunisUser.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\Forms\MyDialog.Designer.vb">
+    <Compile Include="UserInterface\MyControls\MyDialog.Designer.vb">
       <DependentUpon>MyDialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\MyDialog.vb">
+    <Compile Include="UserInterface\MyControls\MyDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Sibi\frmNotes.Designer.vb">
@@ -326,7 +326,7 @@
     <EmbeddedResource Include="UserInterface\Forms\Main\frmMunisUser.resx">
       <DependentUpon>frmMunisUser.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\MyDialog.resx">
+    <EmbeddedResource Include="UserInterface\MyControls\MyDialog.resx">
       <DependentUpon>MyDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\frmNotes.resx">
@@ -417,6 +417,7 @@
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <None Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
+    <None Include="Resources\Exh_K-02_Asset_Disposal_Form.pdf" />
     <None Include="Resources\Exh_K-03_Asset_Transfer_Form.pdf" />
     <None Include="Resources\Find.png" />
     <None Include="Resources\Form2-512.png" />
@@ -433,6 +434,8 @@
     <None Include="Resources\presentation-512.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Resources\note-icon-27942.png" />
+    <None Include="Resources\trash-var-solid.png" />
+    <None Include="Resources\trash_icon.png" />
     <Content Include="Resources\view.png" />
     <Content Include="Resources\View_Details.png" />
   </ItemGroup>

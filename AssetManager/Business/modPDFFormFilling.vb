@@ -15,9 +15,10 @@ Module modPDFFormFilling
     Public NotInheritable Class FormType
         Public Const InputForm As String = "INPUT"
         Public Const TransferForm As String = "TRANSFER"
+        Public Const DisposeForm As String = "DISPOSE"
     End Class
     Public Sub ListFieldNames()
-        Dim pdfReader As PdfReader = New PdfReader(My.Resources.Exh_K_03_Asset_Transfer_Form)
+        Dim pdfReader As PdfReader = New PdfReader(My.Resources.Exh_K_02_Asset_Disposal_Form)
         Dim sb As New StringBuilder()
         Dim de As New KeyValuePair(Of String, iTextSharp.text.pdf.AcroFields.Item) 'DictionaryEntry
         For Each de In pdfReader.AcroFields.Fields
@@ -78,6 +79,15 @@ Module modPDFFormFilling
                         pdfStamper.Close()
                         Exit Sub
                     End If
+                Case FormType.DisposeForm
+                    Dim pdfReader As New PdfReader(My.Resources.Exh_K_02_Asset_Disposal_Form)
+                    pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
+                    Dim pdfFormFields As AcroFields = DisposalFormFields(Device, pdfStamper)
+                    If IsNothing(pdfFormFields) Then
+                        pdfStamper.Close()
+                        Exit Sub
+                    End If
+
             End Select
             pdfStamper.FormFlattening = True
             ' close the pdf
@@ -87,6 +97,91 @@ Module modPDFFormFilling
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
+    Private Function DisposalFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
+        Dim tmpFields As AcroFields = pdfStamper.AcroFields
+        Dim newDialog As New MyDialog
+        With newDialog
+            .Text = "Additional Input Required"
+#Region "Section2"
+            .AddLabel("Reason for asset disposal-please check one:", True)
+            .AddCheckBox("chkAuction", "Prep for public auction:")
+            .AddCheckBox("chkObsolete", "Functional obsolescence:")
+            .AddCheckBox("chkTradeIn", "Trade-in or exchange:")
+            .AddCheckBox("chkDamaged", "Asset is damaged beyond repair:")
+            .AddCheckBox("chkScrap", "Sold as scrap, not at a public sale:")
+            .AddCheckBox("chkParts", "Used for parts:")
+            .AddCheckBox("chkOther", "Other:")
+            .AddRichTextBox("rtbOther", "If Other, Please explain:")
+#End Region
+
+#Region "Section3"
+            .AddLabel("Method of asset disposal-please check one:", True)
+            .AddCheckBox("chkHand", "Hand carried by:")
+            .AddRichTextBox("rtbHand", "")
+            .AddCheckBox("chkCarrier", "Carrier company:")
+            .AddRichTextBox("rtbCarrier", "")
+            .AddCheckBox("chkShipping", "Shipping receipt number:")
+            .AddRichTextBox("rtbShipping", "")
+            .AddCheckBox("chkDisposed", "Disposed of on premises:")
+            .AddRichTextBox("rtbDisposed", "")
+            .AddCheckBox("chkOtherMethod", "Other. Please explain:")
+            .AddRichTextBox("rtpOtherMethod", "")
+
+#End Region
+
+#Region "Section4"
+            .AddTextBox("txtSaleAmount", "List the amount of proceedes from the sale of the diposed asset, if any.")
+            .AddLabel("If the asset item was traded, procide the following information for the asset BEGING ACQUIRED:", True)
+            .AddTextBox("txtAssetTag", "Asset/Tag Number:")
+            .AddTextBox("txtSerial", "Serial Number:")
+            .AddTextBox("txtDescription", "Description:")
+#End Region
+
+            .ShowDialog()
+        End With
+        If newDialog.DialogResult <> DialogResult.OK Then Return Nothing
+        With tmpFields
+            .SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.strAssetTag)
+            .SetField("topmostSubform[0].Page1[0].Mfg_serial_number_1[0]", Device.strSerial)
+            .SetField("topmostSubform[0].Page1[0].Mfg_serial_number_2[0]", Device.strDescription)
+            .SetField("topmostSubform[0].Page1[0].Mfg_serial_number_3[0]", "FCBDD")
+            .SetField("topmostSubform[0].Page1[0].County_s_possession[0]", Now.ToString("MM/dd/yyyy"))
+#Region "Section 2"
+            .SetField("topmostSubform[0].Page1[0].Preparation_for_public_auction[0]", CheckValueToString(newDialog.GetControlValue("chkAuction")))
+            .SetField("topmostSubform[0].Page1[0].Functional_obsolescence[0]", CheckValueToString(newDialog.GetControlValue("chkObsolete")))
+            .SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange[0]", CheckValueToString(newDialog.GetControlValue("chkTradeIn")))
+            .SetField("topmostSubform[0].Page1[0].Asset_is_damaged_beyond_repair[0]", CheckValueToString(newDialog.GetControlValue("chkDamaged")))
+            .SetField("topmostSubform[0].Page1[0].Sold_as_scrap__not_at_a_public_sale[0]", CheckValueToString(newDialog.GetControlValue("chkScrap")))
+            .SetField("topmostSubform[0].Page1[0].Used_for_parts[0]", CheckValueToString(newDialog.GetControlValue("chkParts")))
+            .SetField("topmostSubform[0].Page1[0].undefined[0]", CheckValueToString(newDialog.GetControlValue("chkOther")))
+            .SetField("topmostSubform[0].Page1[0].Other__Please_explain_2[0]", newDialog.GetControlValue("rtbOther"))
+#End Region
+
+#Region "Section 3"
+            .SetField("topmostSubform[0].Page1[0].Method_of_asset_disposal_please_check_one[0]", CheckValueToString(newDialog.GetControlValue("chkHand")))
+            .SetField("topmostSubform[0].Page1[0].Hand_carried_by[0]", newDialog.GetControlValue("rtbHand"))
+            .SetField("topmostSubform[0].Page1[0]._1[0]", CheckValueToString(newDialog.GetControlValue("chkCarrier")))
+            .SetField("topmostSubform[0].Page1[0].Carrier_company[0]", newDialog.GetControlValue("rtbCarrier"))
+            .SetField("topmostSubform[0].Page1[0]._2[0]", CheckValueToString(newDialog.GetControlValue("chkShipping")))
+            .SetField("topmostSubform[0].Page1[0].Shipping_receipt_number[0]", newDialog.GetControlValue("rtbShipping"))
+            .SetField("topmostSubform[0].Page1[0]._3[0]", CheckValueToString(newDialog.GetControlValue("chkDisposed")))
+            .SetField("topmostSubform[0].Page1[0].Disposed_of_on_premises[0]", newDialog.GetControlValue("rtbDisposed"))
+            .SetField("topmostSubform[0].Page1[0]._4[0]", CheckValueToString(newDialog.GetControlValue("chkOtherMethod")))
+            .SetField("topmostSubform[0].Page1[0].Other__Please_explain_3[0]", newDialog.GetControlValue("rtpOtherMethod"))
+#End Region
+
+#Region "Section 4"
+            .SetField("topmostSubform[0].Page1[0].List_the_amount_of_proceeds_from_the_sale_of_the_disposed_asset__if_any[0]", newDialog.GetControlValue("txtSaleAmount"))
+            .SetField("topmostSubform[0].Page1[0].AssetTag_number_2[0]", newDialog.GetControlValue("txtAssetTag"))
+            .SetField("topmostSubform[0].Page1[0].Serial_number[0]", newDialog.GetControlValue("txtSerial"))
+            .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", newDialog.GetControlValue("txtDescription"))
+            .SetField("topmostSubform[0].Page1[0].Department_1[0]", "FCBDD")
+            .SetField("topmostSubform[0].Page1[0].Date[0]", Now.ToString("MM/dd/yyyy"))
+#End Region
+
+        End With
+        Return tmpFields
+    End Function
     Private Function InputFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
         Dim strUnitPrice As String = GetUnitPrice(Device)
