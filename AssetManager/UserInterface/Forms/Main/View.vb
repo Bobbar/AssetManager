@@ -1067,16 +1067,8 @@ VALUES (@" & historical_dev.ChangeType & ",
         FillForm(CurrentViewDevice, FormType.DisposeForm)
         'ListFieldNames()
     End Sub
-
     Private Sub View_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
         Dim f As Form = sender
         PrevWindowState = f.WindowState
-    End Sub
-
-    Private Sub lblGUID_MouseClick(sender As Object, e As MouseEventArgs) Handles lblGUID.MouseClick
-        'If e.Button = MouseButtons.Right Then
-        '    Clipboard.SetText(lblGUID.Text)
-        '    Message("GUID Copied to clipboard.", vbInformation + vbOKOnly,, Me)
-        'End If
     End Sub
 End Class

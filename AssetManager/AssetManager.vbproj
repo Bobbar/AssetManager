@@ -429,6 +429,7 @@
     <None Include="Resources\err_question.png" />
     <None Include="Resources\err_exclamation_stroke.png" />
     <None Include="Resources\err_exclamation_fill.png" />
+    <None Include="Resources\icon-trash-01.png" />
     <Content Include="Resources\inventory-small.fw.png" />
     <None Include="Resources\report.png" />
     <None Include="Resources\presentation-512.png" />
@@ -436,6 +437,7 @@
     <None Include="Resources\note-icon-27942.png" />
     <None Include="Resources\trash-var-solid.png" />
     <None Include="Resources\trash_icon.png" />
+    <None Include="Resources\trash-512.png" />
     <Content Include="Resources\view.png" />
     <Content Include="Resources\View_Details.png" />
   </ItemGroup>

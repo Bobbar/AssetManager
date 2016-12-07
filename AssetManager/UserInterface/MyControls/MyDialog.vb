@@ -1,10 +1,15 @@
 ﻿Imports System.Windows.Forms
 Public Class MyDialog
+    Sub New(Optional StartMaximized As Boolean = False)
+        InitializeComponent()
+        StartFullSize = StartMaximized
+    End Sub
     Public ReadOnly Property ControlValues As List(Of Control)
         Get
             Return MyControls
         End Get
     End Property
+    Private StartFullSize As Boolean = False
     Private FormControlSize As Size = New Size(600, 345)
     Private IsMessageBox As Boolean = False
     Private MyControls As New List(Of Control)
@@ -93,6 +98,7 @@ Public Class MyDialog
             pnlControls_Main.Width = pnlMaster.Width
             pnlControls_Main.Height = pnlMaster.Height - pnlButtons.Height - 10
         End If
+        If StartFullSize Then MaximizeForm()
         pnlControls_Main.Refresh()
         pnlMaster.Refresh()
         Me.Update()
@@ -103,6 +109,7 @@ Public Class MyDialog
         Me.AutoSize = False
     End Sub
     Private Sub LoadControls(lstControls As List(Of Control))
+        pnlControls.SuspendLayout()
         For Each ctl As Control In lstControls
             Select Case True
                 Case TypeOf ctl Is ComboBox
@@ -144,7 +151,7 @@ Public Class MyDialog
                     Else
                         rtb.Width = 150
                         rtb.Height = 80
-                        smPanel.Controls.Add(NewControlLabel(rtb.Tag))
+                        If rtb.Tag <> "" Then smPanel.Controls.Add(NewControlLabel(rtb.Tag))
                         smPanel.Controls.Add(rtb)
                         pnlControls.Controls.Add(smPanel)
                     End If
@@ -157,6 +164,13 @@ Public Class MyDialog
                     pnlControls.Controls.Add(but)
             End Select
         Next
+        pnlControls.ResumeLayout()
+    End Sub
+    Private Sub MaximizeForm()
+        pnlControls_Main.AutoSize = False
+        pnlMaster.AutoSize = False
+        Me.AutoSize = False
+        Me.Size = Me.MaximumSize
     End Sub
     Private Sub ButtonClick(ByVal sender As Object, ByVal e As EventArgs)
         Dim btn As Button = DirectCast(sender, Button)

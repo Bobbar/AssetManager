@@ -99,7 +99,7 @@ Module modPDFFormFilling
     End Sub
     Private Function DisposalFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
-        Dim newDialog As New MyDialog
+        Dim newDialog As New MyDialog(True)
         With newDialog
             .Text = "Additional Input Required"
 #Region "Section2"
@@ -136,7 +136,6 @@ Module modPDFFormFilling
             .AddTextBox("txtSerial", "Serial Number:")
             .AddTextBox("txtDescription", "Description:")
 #End Region
-
             .ShowDialog()
         End With
         If newDialog.DialogResult <> DialogResult.OK Then Return Nothing

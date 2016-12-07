@@ -206,7 +206,7 @@ Partial Class MyDialog
         Me.AutoSize = True
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(463, 157)
+        Me.ClientSize = New System.Drawing.Size(468, 157)
         Me.Controls.Add(Me.pnlMaster)
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

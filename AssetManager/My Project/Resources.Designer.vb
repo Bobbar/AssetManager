@@ -383,19 +383,9 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Public ReadOnly Property trash_icon() As System.Drawing.Bitmap
+        Public ReadOnly Property trash_512() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("trash_icon", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Public ReadOnly Property trash_var_solid() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("trash-var-solid", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("trash-512", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

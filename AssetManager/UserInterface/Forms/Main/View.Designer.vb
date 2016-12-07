@@ -791,7 +791,7 @@ Partial Class View
         Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_red
         Me.CheckOutTool.Name = "CheckOutTool"
-        Me.CheckOutTool.Size = New System.Drawing.Size(161, 32)
+        Me.CheckOutTool.Size = New System.Drawing.Size(142, 32)
         Me.CheckOutTool.Text = "Check Out"
         '
         'CheckInTool
@@ -799,7 +799,7 @@ Partial Class View
         Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_green
         Me.CheckInTool.Name = "CheckInTool"
-        Me.CheckInTool.Size = New System.Drawing.Size(161, 32)
+        Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
         Me.CheckInTool.Text = "Check In"
         '
         'tsdAssetControl
@@ -827,7 +827,7 @@ Partial Class View
         '
         'AssetDisposalFormToolStripMenuItem
         '
-        Me.AssetDisposalFormToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.trash_icon
+        Me.AssetDisposalFormToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.trash_512
         Me.AssetDisposalFormToolStripMenuItem.Name = "AssetDisposalFormToolStripMenuItem"
         Me.AssetDisposalFormToolStripMenuItem.Size = New System.Drawing.Size(204, 32)
         Me.AssetDisposalFormToolStripMenuItem.Text = "Asset Disposal Form"
