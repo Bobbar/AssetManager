@@ -21,11 +21,12 @@ Partial Class View
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View))
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
         Me.lblGUID = New System.Windows.Forms.Label()
         Me.cmdMunisSearch = New System.Windows.Forms.Button()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
+        Me.cmdShowIP = New System.Windows.Forms.Button()
         Me.cmdBrowseFiles = New System.Windows.Forms.Button()
         Me.cmdRDP = New System.Windows.Forms.Button()
         Me.pnlOtherFunctions = New System.Windows.Forms.Panel()
@@ -176,24 +177,39 @@ Partial Class View
         '
         'grpNetTools
         '
+        Me.grpNetTools.Controls.Add(Me.cmdShowIP)
         Me.grpNetTools.Controls.Add(Me.cmdBrowseFiles)
         Me.grpNetTools.Controls.Add(Me.cmdRDP)
         Me.grpNetTools.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.grpNetTools.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.grpNetTools.Location = New System.Drawing.Point(468, 197)
+        Me.grpNetTools.Location = New System.Drawing.Point(431, 197)
         Me.grpNetTools.Name = "grpNetTools"
-        Me.grpNetTools.Size = New System.Drawing.Size(101, 67)
+        Me.grpNetTools.Size = New System.Drawing.Size(138, 67)
         Me.grpNetTools.TabIndex = 52
         Me.grpNetTools.TabStop = False
         Me.grpNetTools.Text = "Remote Mgmt"
         Me.grpNetTools.Visible = False
+        '
+        'cmdShowIP
+        '
+        Me.cmdShowIP.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdShowIP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdShowIP.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdShowIP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.cmdShowIP.Location = New System.Drawing.Point(92, 19)
+        Me.cmdShowIP.Name = "cmdShowIP"
+        Me.cmdShowIP.Size = New System.Drawing.Size(40, 40)
+        Me.cmdShowIP.TabIndex = 53
+        Me.cmdShowIP.Text = "IP"
+        Me.ToolTip1.SetToolTip(Me.cmdShowIP, "Show IP")
+        Me.cmdShowIP.UseVisualStyleBackColor = True
         '
         'cmdBrowseFiles
         '
         Me.cmdBrowseFiles.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdBrowseFiles.BackgroundImage = CType(resources.GetObject("cmdBrowseFiles.BackgroundImage"), System.Drawing.Image)
         Me.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.cmdBrowseFiles.Location = New System.Drawing.Point(11, 19)
+        Me.cmdBrowseFiles.Location = New System.Drawing.Point(8, 19)
         Me.cmdBrowseFiles.Name = "cmdBrowseFiles"
         Me.cmdBrowseFiles.Size = New System.Drawing.Size(40, 40)
         Me.cmdBrowseFiles.TabIndex = 52
@@ -206,7 +222,7 @@ Partial Class View
         Me.cmdRDP.BackgroundImage = CType(resources.GetObject("cmdRDP.BackgroundImage"), System.Drawing.Image)
         Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRDP.Location = New System.Drawing.Point(53, 19)
+        Me.cmdRDP.Location = New System.Drawing.Point(50, 19)
         Me.cmdRDP.Name = "cmdRDP"
         Me.cmdRDP.Size = New System.Drawing.Size(40, 40)
         Me.cmdRDP.TabIndex = 46
@@ -528,15 +544,15 @@ Partial Class View
         Me.DataGridHistory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridHistory.ContextMenuStrip = Me.RightClickMenu
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.Padding = New System.Windows.Forms.Padding(10)
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridHistory.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(10)
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridHistory.DefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridHistory.Location = New System.Drawing.Point(6, 6)
         Me.DataGridHistory.MultiSelect = False
@@ -1020,4 +1036,5 @@ Partial Class View
     Friend WithEvents cmdMunisSearch As Button
     Friend WithEvents lblGUID As Label
     Friend WithEvents AssetDisposalFormToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents cmdShowIP As Button
 End Class

@@ -438,6 +438,7 @@
     <None Include="Resources\trash-var-solid.png" />
     <None Include="Resources\trash_icon.png" />
     <None Include="Resources\trash-512.png" />
+    <None Include="Resources\IP_address_icon.png" />
     <Content Include="Resources\view.png" />
     <Content Include="Resources\View_Details.png" />
   </ItemGroup>

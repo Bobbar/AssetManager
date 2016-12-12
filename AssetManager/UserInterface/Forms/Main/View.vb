@@ -1,6 +1,7 @@
 ﻿Option Explicit On
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
+Imports System.Net
 Public Class View
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
@@ -8,6 +9,10 @@ Public Class View
     Private OldData As Device_Info
     Public NewData As Device_Info
     Private MyLiveBox As New clsLiveBox
+    Private Structure Ping_Results
+        Public CanPing As Boolean
+        Public Address As String
+    End Structure
     Sub New(ParentForm As Form, DeviceGUID As String)
         InitializeComponent()
         ViewDevice(DeviceGUID)
@@ -929,19 +934,23 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
         NewMunisView(CurrentViewDevice)
     End Sub
+
     Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
+        Dim PingResults As New Ping_Results
         Try
-            e.Result = My.Computer.Network.Ping("D" & CurrentViewDevice.strSerial)
+            Dim Hostname As String = "D" & CurrentViewDevice.strSerial
+            PingResults.CanPing = My.Computer.Network.Ping(Hostname)
+            Dim IPEntry As IPHostEntry = Dns.GetHostEntry(Hostname)
+            PingResults.Address = IPEntry.AddressList(IPEntry.AddressList.Count - 1).ToString
+            e.Result = PingResults
         Catch ex As Exception
-            e.Result = ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            PingResults.CanPing = False
+            e.Result = PingResults 'ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub PingWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles PingWorker.RunWorkerCompleted
-        If e.Result Then
-            SetupNetTools()
-        Else
-            grpNetTools.Visible = False
-        End If
+        Dim PingResults As Ping_Results = e.Result
+        SetupNetTools(PingResults)
     End Sub
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         MyLiveBox.Unload()
@@ -951,8 +960,11 @@ VALUES (@" & historical_dev.ChangeType & ",
         On Error Resume Next
         TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
     End Sub
-    Private Sub SetupNetTools()
-        grpNetTools.Visible = True
+    Private Sub SetupNetTools(PingResults As Ping_Results)
+        grpNetTools.Visible = PingResults.CanPing
+        If PingResults.CanPing Then
+            cmdShowIP.Tag = PingResults.Address
+        End If
     End Sub
     Private Sub CheckRDP()
         If InStr(CurrentViewDevice.strOSVersion, "WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
@@ -1052,6 +1064,15 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
 
     Private PrevWindowState As Integer
+
+    Private Sub cmdShowIP_Click(sender As Object, e As EventArgs) Handles cmdShowIP.Click
+        If Not IsNothing(cmdShowIP.Tag) Then
+            Dim blah = Message(cmdShowIP.Tag & vbCrLf & vbCrLf & "Press 'Yes' to copy to clipboard.", vbInformation + vbYesNo, "IP Address", Me)
+            If blah = vbYes Then
+                Clipboard.SetText(cmdShowIP.Tag)
+            End If
+        End If
+    End Sub
 
     Private Sub AssetDisposalFormToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AssetDisposalFormToolStripMenuItem.Click
         FillForm(CurrentViewDevice, FormType.DisposeForm)
