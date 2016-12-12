@@ -88,7 +88,7 @@ Module modPDFFormFilling
                         Exit Sub
                     End If
             End Select
-            pdfStamper.FormFlattening = False
+            pdfStamper.FormFlattening = FlattenPrompt() 'False
             ' close the pdf
             pdfStamper.Close()
             Process.Start(newFile)
@@ -96,6 +96,14 @@ Module modPDFFormFilling
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
+    Private Function FlattenPrompt() As Boolean
+        Dim blah As Object = Message("Select 'Yes' to save the PDF as an editable form. Select 'No' to save the PDF as a flattened, ready to print document.", vbQuestion + vbYesNo, "PDF Type")
+        If blah = vbYes Then
+            Return False
+        Else
+            Return True
+        End If
+    End Function
     Private Function DisposalFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
         Dim newDialog As New MyDialog(True)
