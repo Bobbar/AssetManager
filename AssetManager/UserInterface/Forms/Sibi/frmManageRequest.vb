@@ -8,6 +8,17 @@ Public Class frmManageRequest
     Public CurrentRequest As Request_Info
     Private MyText As String
     Private bolNewRequest As Boolean = False
+    Sub New(ParentForm As Form, RequestUID As String)
+        InitializeComponent()
+        Tag = ParentForm
+        OpenRequest(RequestUID)
+    End Sub
+    Sub New(ParentForm As Form)
+        InitializeComponent()
+        NewRequest()
+        Show()
+        Activate()
+    End Sub
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
         Dim MyMunisTools As New MunisToolsMenu
@@ -579,6 +590,32 @@ VALUES
             End If
         End Try
     End Sub
+    Private Function AddNewNote(RequestUID As String, Note As String) As Boolean
+        Dim strNoteUID As String = Guid.NewGuid.ToString
+        Try
+            Dim strAddNoteQry As String = "INSERT INTO " & sibi_notes.TableName & "
+(" & sibi_notes.Request_UID & ",
+" & sibi_notes.Note_UID & ",
+" & sibi_notes.Note & ")
+VALUES
+(@" & sibi_notes.Request_UID & ",
+@" & sibi_notes.Note_UID & ",
+@" & sibi_notes.Note & ")"
+            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strAddNoteQry)
+            cmd.Parameters.AddWithValue("@" & sibi_notes.Request_UID, RequestUID)
+            cmd.Parameters.AddWithValue("@" & sibi_notes.Note_UID, strNoteUID)
+            cmd.Parameters.AddWithValue("@" & sibi_notes.Note, Note)
+            If cmd.ExecuteNonQuery() > 0 Then
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Return False
+            End If
+        End Try
+    End Function
     Public Sub OpenRequest(RequestUID As String)
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & RequestUID & "'"
@@ -716,10 +753,10 @@ VALUES
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         If Not AttachmentsIsOpen(CurrentRequest.strUID) Then
             If CurrentRequest.strUID <> "" Then
-                Dim NewAttach As New frmAttachments(CurrentRequest)
-                NewAttach.Tag = Me
-                NewAttach.Activate()
-                NewAttach.Show()
+                Dim NewAttach As New frmAttachments(Me, CurrentRequest)
+                'NewAttach.Tag = Me
+                'NewAttach.Activate()
+                'NewAttach.Show()
             End If
         Else
             ActivateForm(CurrentRequest.strUID)
@@ -805,12 +842,18 @@ VALUES
     Private Sub AddNote()
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         If CurrentRequest.strUID <> "" Then
-            Dim NewNote As New frmNotes
-            NewNote.LoadNote(CurrentRequest, Me)
+            Dim NewNote As New frmNotes(Me, CurrentRequest)
+            If NewNote.DialogResult = DialogResult.OK Then
+                AddNewNote(NewNote.Request.strUID, Trim(NewNote.rtbNotes.Text))
+                RefreshRequest()
+            End If
         End If
     End Sub
+    Private Sub RefreshRequest()
+        OpenRequest(CurrentRequest.strUID)
+    End Sub
     Private Sub dgvNotes_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvNotes.CellDoubleClick
-        frmNotes.ViewNote(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value)
+        Dim ViewNote As New frmNotes(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value)
     End Sub
     Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub

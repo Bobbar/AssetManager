@@ -8,6 +8,14 @@ Public Class View
     Private OldData As Device_Info
     Public NewData As Device_Info
     Private MyLiveBox As New clsLiveBox
+    Sub New(ParentForm As Form, DeviceGUID As String)
+        InitializeComponent()
+        ViewDevice(DeviceGUID)
+        Tag = ParentForm
+    End Sub
+    Sub New()
+        InitializeComponent()
+    End Sub
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim MyMunisMenu As New MunisToolsMenu
         MyMunisMenu.Tag = Me
@@ -812,10 +820,10 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen() Then
-            Dim NewAttachments As New frmAttachments(CurrentViewDevice)
-            NewAttachments.Tag = Me
-            NewAttachments.Activate()
-            NewAttachments.Show()
+            Dim NewAttachments As New frmAttachments(Me, CurrentViewDevice)
+            'NewAttachments.Tag = Me
+            'NewAttachments.Activate()
+            'NewAttachments.Show()
         Else
             ActivateForm(CurrentViewDevice.strGUID)
         End If
@@ -981,9 +989,9 @@ VALUES (@" & historical_dev.ChangeType & ",
         If SibiUID = "" Then
             Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
         Else
-            Dim sibiForm As New frmManageRequest
-            sibiForm.Tag = Me
-            sibiForm.OpenRequest(SibiUID)
+            Dim sibiForm As New frmManageRequest(Me, SibiUID)
+            'sibiForm.Tag = Me
+            'sibiForm.OpenRequest(SibiUID)
         End If
     End Sub
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click

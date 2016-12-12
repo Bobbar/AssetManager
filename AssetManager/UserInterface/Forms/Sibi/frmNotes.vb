@@ -1,61 +1,39 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.ComponentModel
+Imports MySql.Data.MySqlClient
 Public Class frmNotes
-    Private NoteRequest As Request_Info
-    Private CallingForm As frmManageRequest
+    Private MyRequest As Request_Info
+    Public ReadOnly Property Request
+        Get
+            Return MyRequest
+        End Get
+    End Property
+    Sub New(ParentForm As Form, Request As Request_Info)
+        InitializeComponent()
+        Tag = ParentForm
+        MyRequest = Request
+        ShowDialog(ParentForm)
+    End Sub
+    Sub New(NoteUID As String)
+        InitializeComponent()
+        ViewNote(NoteUID)
+    End Sub
     Private Sub ClearAll()
         rtbNotes.Clear()
     End Sub
-    Private Sub frmNotes_Load(sender As Object, e As EventArgs) Handles Me.Load
-        'ClearAll()
-    End Sub
-    Public Sub LoadNote(Request As Request_Info, Sender As frmManageRequest)
-        NoteRequest = Request
-        CallingForm = Sender
-        Me.Show()
-    End Sub
-    Private Function AddNewNote(RequestUID As String, Note As String) As Boolean
-        Dim strNoteUID As String = Guid.NewGuid.ToString
-        Try
-            Dim strAddNoteQry As String = "INSERT INTO " & sibi_notes.TableName & "
-(" & sibi_notes.Request_UID & ",
-" & sibi_notes.Note_UID & ",
-" & sibi_notes.Note & ")
-VALUES
-(@" & sibi_notes.Request_UID & ",
-@" & sibi_notes.Note_UID & ",
-@" & sibi_notes.Note & ")"
-            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strAddNoteQry)
-            cmd.Parameters.AddWithValue("@" & sibi_notes.Request_UID, RequestUID)
-            cmd.Parameters.AddWithValue("@" & sibi_notes.Note_UID, strNoteUID)
-            cmd.Parameters.AddWithValue("@" & sibi_notes.Note, Note)
-            If cmd.ExecuteNonQuery() > 0 Then
-                Return True
-            Else
-                Return False
-            End If
-        Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                Return False
-            End If
-        End Try
-    End Function
-    Public Sub ViewNote(NoteUID As String)
+    Private Sub ViewNote(NoteUID As String)
         cmdOK.Visible = False
         rtbNotes.Clear()
         rtbNotes.Text = Asset.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.Note)
         rtbNotes.ReadOnly = True
-        Me.Show()
+        Show()
+        Activate()
     End Sub
     Private Sub cmdOK_Click(sender As Object, e As EventArgs) Handles cmdOK.Click
-        If AddNewNote(NoteRequest.strUID, Trim(rtbNotes.Text)) Then
-            'Message("Success!")
-            Me.Dispose()
-            CallingForm.OpenRequest(NoteRequest.strUID)
-        Else
-            Message("Failed!")
-        End If
+        DialogResult = DialogResult.OK
+        Me.Close()
     End Sub
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click
+        DialogResult = DialogResult.Abort
         Me.Dispose()
     End Sub
     Private Sub rtbNotes_LinkClicked(sender As Object, e As LinkClickedEventArgs) Handles rtbNotes.LinkClicked

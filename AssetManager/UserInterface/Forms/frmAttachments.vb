@@ -25,8 +25,9 @@ Class frmAttachments
     Public AttachFolderID As String
     Private AttachTable As String
 
-    Sub New(Optional AttachInfo As Object = Nothing)
+    Sub New(ParentForm As Form, Optional AttachInfo As Object = Nothing)
         InitializeComponent()
+        Tag = ParentForm
         If Not IsNothing(AttachInfo) Then
             If TypeOf AttachInfo Is Request_Info Then
                 AttachType = Entry_Type.Sibi
@@ -38,6 +39,8 @@ Class frmAttachments
                 SibiGroup.Dock = DockStyle.Top
                 FillFolderCombos()
                 FillSibiInfo()
+                Show()
+                Activate()
             ElseIf TypeOf AttachInfo Is Device_Info Then
                 AttachType = Entry_Type.Device
                 AttachDevice = AttachInfo
@@ -49,6 +52,8 @@ Class frmAttachments
                 MoveStripMenuItem.Visible = False
                 FolderPanel.Visible = False
                 FillDeviceInfo()
+                Show()
+                Activate()
             End If
         Else
             SibiGroup.Visible = False
@@ -56,6 +61,8 @@ Class frmAttachments
             FolderPanel.Visible = False
             AttachType = Entry_Type.Device
             AttachTable = dev_attachments.TableName
+            Show()
+            Activate()
         End If
     End Sub
     Private Structure Attach_Struct

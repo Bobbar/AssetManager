@@ -68,9 +68,10 @@ Public Class frmSibiMain
         End If
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
-        frmManageRequest.ClearAll()
-        frmManageRequest.NewRequest()
-        frmManageRequest.Show()
+        Dim NewRequest As New frmManageRequest(Me)
+        'frmManageRequest.ClearAll()
+        'frmManageRequest.NewRequest()
+        'frmManageRequest.Show()
     End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
         OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
@@ -81,9 +82,9 @@ Public Class frmSibiMain
             Exit Sub
         End If
         If Not RequestIsOpen(strUID) Then
-            Dim ManRequest As New frmManageRequest
-            ManRequest.Tag = Me
-            ManRequest.OpenRequest(strUID)
+            Dim ManRequest As New frmManageRequest(Me, strUID)
+            'ManRequest.Tag = Me
+            'ManRequest.OpenRequest(strUID)
             MyWindowList.RefreshWindowList()
         Else
             ActivateForm(strUID)

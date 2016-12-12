@@ -297,9 +297,7 @@ Public Class MainForm
         End If
         If Not DeviceIsOpen(strGUID) Then
             Waiting()
-            Dim NewView As New View
-            NewView.ViewDevice(strGUID)
-            NewView.Tag = Me
+            Dim NewView As New View(Me, strGUID)
             MyWindowList.RefreshWindowList()
             DoneWaiting()
         Else
@@ -546,7 +544,7 @@ Public Class MainForm
     '    End If
     'End Sub
     Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
-        Dim ViewAttachments As New frmAttachments()
+        Dim ViewAttachments As New frmAttachments(Me)
         ViewAttachments.bolAdminMode = CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel)
         ViewAttachments.ListAttachments()
         ViewAttachments.Text = ViewAttachments.Text & " - MANAGE ALL ATTACHMENTS"
@@ -637,6 +635,11 @@ Public Class MainForm
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
         SendToGrid(Asset.DevicesBySup())
     End Sub
+
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
+        MyWindowList.RefreshWindowList()
+    End Sub
+
     Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Dim f As Form = sender
         If f.WindowState = FormWindowState.Minimized Then
