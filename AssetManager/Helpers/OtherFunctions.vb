@@ -68,6 +68,25 @@ Module OtherFunctions
         senderComboBox.DropDownWidth = width
         Return False
     End Function
+    Public Function SetBarColor(UID As String) As Color
+        Dim hash As Integer = UID.GetHashCode
+        Dim r, g, b As Integer
+        r = (hash And &HFF0000) >> 16
+        g = (hash And &HFF00) >> 8
+        b = hash And &HFF
+        Return Color.FromArgb(r, g, b)
+    End Function
+    Public Function GetFontColor(color As Color) As Color 'get contrasting font color
+        Dim d As Integer = 0
+        Dim a As Double
+        a = 1 - (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255
+        If a < 0.5 Then
+            d = 0
+        Else
+            d = 255
+        End If
+        Return Color.FromArgb(d, d, d)
+    End Function
     Public Sub StartTimer()
         stpw.Stop()
         stpw.Reset()
