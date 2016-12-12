@@ -28,7 +28,9 @@ Public Class View
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
         CheckRDP()
     End Sub
-
+    Public Sub SetAttachCount()
+        AttachmentTool.Text = "Attachments (" + Asset.GetAttachmentCount(CurrentViewDevice).ToString + ")"
+    End Sub
     Private Sub GetCurrentValues()
         OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
     End Sub
@@ -289,6 +291,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             HistoricalResults.Dispose()
             DeviceResults.Dispose()
             DisableControls()
+            SetAttachCount()
             Return True
         Catch ex As Exception
             DoneWaiting()
@@ -602,11 +605,8 @@ VALUES (@" & historical_dev.ChangeType & ",
             ConnectionNotReady()
             Exit Sub
         End If
-        Dim NewEntry As New View_Entry
         Waiting()
-        NewEntry.Tag = Me
-        NewEntry.ViewEntry(GUID)
-        NewEntry.Show()
+        Dim NewEntry As New View_Entry(Me, GUID)
         DoneWaiting()
     End Sub
     Private Sub NewMunisView(Device As Device_Info)

@@ -15,6 +15,8 @@ Public Class frmManageRequest
     End Sub
     Sub New(ParentForm As Form)
         InitializeComponent()
+        Tag = ParentForm
+        Text += " - *New Request*"
         NewRequest()
         Show()
         Activate()
@@ -24,6 +26,9 @@ Public Class frmManageRequest
         Dim MyMunisTools As New MunisToolsMenu
         MyMunisTools.Tag = Me
         ToolStrip.Items.Insert(7, MyMunisTools.MunisTools)
+    End Sub
+    Public Sub SetAttachCount()
+        cmdAttachments.Text = "Attachments (" + Asset.GetAttachmentCount(CurrentRequest).ToString + ")"
     End Sub
     Private Sub SetTitle()
         If MyText = "" Then
@@ -641,6 +646,7 @@ VALUES
             'RequestItemsGrid.ReadOnly = True
             DisableControls(Me)
             SetTitle()
+            SetAttachCount()
             Me.Show()
             Me.Activate()
         Catch ex As Exception
@@ -754,9 +760,6 @@ VALUES
         If Not AttachmentsIsOpen(CurrentRequest.strUID) Then
             If CurrentRequest.strUID <> "" Then
                 Dim NewAttach As New frmAttachments(Me, CurrentRequest)
-                'NewAttach.Tag = Me
-                'NewAttach.Activate()
-                'NewAttach.Show()
             End If
         Else
             ActivateForm(CurrentRequest.strUID)

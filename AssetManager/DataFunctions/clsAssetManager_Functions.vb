@@ -495,4 +495,26 @@ VALUES
             Return False
         End Try
     End Function
+    Public Function GetAttachmentCount(AttachInfo As Object) As Integer
+        Try
+            Dim cmd As New MySqlCommand
+            Dim strQRY As String = ""
+            If TypeOf AttachInfo Is Device_Info Then
+                Dim Dev As Device_Info = AttachInfo
+                strQRY = "SELECT COUNT(*) FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FKey & "='" & Dev.strGUID & "'"
+            ElseIf TypeOf AttachInfo Is Request_Info Then
+                Dim Req As Request_Info = AttachInfo
+                strQRY = "SELECT COUNT(*) FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FKey & "='" & Req.strUID & "'"
+            End If
+            cmd.Connection = GlobalConn
+            cmd.CommandText = strQRY
+            Return cmd.ExecuteScalar
+        Catch ex As Exception
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Else
+                EndProgram()
+            End If
+            Return Nothing
+        End Try
+    End Function
 End Class

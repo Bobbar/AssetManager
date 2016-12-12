@@ -69,12 +69,11 @@ Public Class frmSibiMain
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
         Dim NewRequest As New frmManageRequest(Me)
-        'frmManageRequest.ClearAll()
-        'frmManageRequest.NewRequest()
-        'frmManageRequest.Show()
+        MyWindowList.RefreshWindowList()
     End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
         OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
+        MyWindowList.RefreshWindowList()
     End Sub
     Private Sub OpenRequest(strUID As String)
         If Not ConnectionReady() Then
@@ -83,8 +82,6 @@ Public Class frmSibiMain
         End If
         If Not RequestIsOpen(strUID) Then
             Dim ManRequest As New frmManageRequest(Me, strUID)
-            'ManRequest.Tag = Me
-            'ManRequest.OpenRequest(strUID)
             MyWindowList.RefreshWindowList()
         Else
             ActivateForm(strUID)

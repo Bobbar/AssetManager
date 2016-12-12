@@ -2,6 +2,13 @@
 Imports MySql.Data.MySqlClient
 Public Class View_Entry
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
+    Sub New(ParentForm As Form, EntryGUID As String)
+        InitializeComponent()
+        Tag = ParentForm
+        ViewEntry(EntryGUID)
+        Show()
+        Activate()
+    End Sub
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
     End Sub

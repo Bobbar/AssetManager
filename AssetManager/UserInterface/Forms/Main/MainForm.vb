@@ -636,10 +636,6 @@ Public Class MainForm
         SendToGrid(Asset.DevicesBySup())
     End Sub
 
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
-        MyWindowList.RefreshWindowList()
-    End Sub
-
     Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Dim f As Form = sender
         If f.WindowState = FormWindowState.Minimized Then

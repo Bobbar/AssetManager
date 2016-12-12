@@ -87,9 +87,8 @@ Module modPDFFormFilling
                         pdfStamper.Close()
                         Exit Sub
                     End If
-
             End Select
-            pdfStamper.FormFlattening = True
+            pdfStamper.FormFlattening = False
             ' close the pdf
             pdfStamper.Close()
             Process.Start(newFile)
@@ -229,9 +228,9 @@ Module modPDFFormFilling
             .SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.strSerial)
             .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
             .SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD - 5200")
-            .SetField("topmostSubform[0].Page1[0].Location[0]", GetHumanValueFromIndex(DeviceIndex.Locations, newDialog.GetControlValue("cmbFromLoc")))
+            .SetField("topmostSubform[0].Page1[0].Location[0]", GetHumanValueFromIndex(DeviceIndex.Locations, newDialog.GetControlValue("cmbFromLoc")) & " - " & Get_MunisCode_From_AssetCode(GetDBValue(DeviceIndex.Locations, newDialog.GetControlValue("cmbFromLoc"))))
             .SetField("topmostSubform[0].Page1[0].Department_2[0]", "FCBDD - 5200")
-            .SetField("topmostSubform[0].Page1[0].Location_2[0]", GetHumanValueFromIndex(DeviceIndex.Locations, newDialog.GetControlValue("cmbToLoc")))
+            .SetField("topmostSubform[0].Page1[0].Location_2[0]", GetHumanValueFromIndex(DeviceIndex.Locations, newDialog.GetControlValue("cmbToLoc")) & " - " & Get_MunisCode_From_AssetCode(GetDBValue(DeviceIndex.Locations, newDialog.GetControlValue("cmbToLoc"))))
             .SetField("topmostSubform[0].Page1[0].Better_utilization_of_assets[0]", CheckValueToString(newDialog.GetControlValue("chkBetterU")))
             .SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]", CheckValueToString(newDialog.GetControlValue("chkTradeIn")))
             .SetField("topmostSubform[0].Page1[0].Excess_assets[0]", CheckValueToString(newDialog.GetControlValue("chkExcess")))

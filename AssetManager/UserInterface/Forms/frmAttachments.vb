@@ -24,7 +24,6 @@ Class frmAttachments
     Private AttachType As String
     Public AttachFolderID As String
     Private AttachTable As String
-
     Sub New(ParentForm As Form, Optional AttachInfo As Object = Nothing)
         InitializeComponent()
         Tag = ParentForm
@@ -217,13 +216,23 @@ Class frmAttachments
             DoneWaiting()
             Me.Show()
             bolGridFilling = False
-            Exit Sub
+            RefreshAttachCount()
         Catch ex As Exception
             DoneWaiting()
         ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         Exit Sub
         End Try
     End Sub
+    Private Sub RefreshAttachCount()
+        If TypeOf Tag Is View Then
+            Dim vw As View = Tag
+            vw.SetAttachCount()
+        ElseIf TypeOf Tag Is frmManageRequest Then
+            Dim req As frmManageRequest = Tag
+            req.SetAttachCount()
+        End If
+    End Sub
+
     Private Function GetUIDFromIndex(Index As Integer) As String
         Return AttachIndex(Index).strFileUID
     End Function
