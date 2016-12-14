@@ -1,8 +1,23 @@
 ﻿Imports System.ComponentModel
+Imports MySql.Data.MySqlClient
 Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
     Public MyWindowList As WindowList
+    Private Sub ClearAll(TopControl As Control.ControlCollection)
+        For Each ctl As Control In TopControl
+            If TypeOf ctl Is TextBox Then
+                Dim txt As TextBox = ctl
+                txt.Clear()
+            ElseIf TypeOf ctl Is ComboBox Then
+                Dim cmb As ComboBox = ctl
+                cmb.SelectedIndex = 0
+            ElseIf ctl.Controls.Count > 0 Then
+                ClearAll(ctl.Controls)
+            End If
+        Next
+    End Sub
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
+        ClearAll(Me.Controls)
         SetDisplayYears()
         ShowAll()
     End Sub
@@ -13,7 +28,59 @@ Public Class frmSibiMain
         MyWindowList = New WindowList(Me, tsdSelectWindow)
         MyWindowList.RefreshWindowList()
     End Sub
-    Private Sub SendToGrid(Results As DataTable)
+    Private Function BuildSearchListNew() As List(Of SearchVal)
+        Dim tmpList As New List(Of SearchVal)
+        tmpList.Add(New SearchVal(sibi_requests.RT_Number, Trim(txtRTNum.Text)))
+        tmpList.Add(New SearchVal(sibi_requests.Description, Trim(txtDescription.Text)))
+        tmpList.Add(New SearchVal(sibi_requests.PO, txtPO.Text))
+        tmpList.Add(New SearchVal(sibi_requests.RequisitionNumber, txtReq.Text))
+        Return tmpList
+    End Function
+    Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
+        Dim table As New DataTable
+        Dim cmd As New MySqlCommand
+        Dim strStartQry As String
+        strStartQry = "SELECT * FROM " & sibi_requests.TableName & " WHERE"
+        Dim strDynaQry As String = ""
+        Dim SearchValCol As List(Of SearchVal) = BuildSearchListNew()
+        For Each fld As SearchVal In SearchValCol
+            If Not IsNothing(fld.Value) Then
+                If fld.Value.ToString <> "" Then
+                    strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE CONCAT('%', @" + fld.FieldName + ", '%') AND"
+                    cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                End If
+            End If
+        Next
+        If strDynaQry = "" Then
+            Exit Sub
+        End If
+        Dim strQry = strStartQry & strDynaQry
+        If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
+            strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
+        End If
+        strQry += " ORDER BY " & sibi_requests.RequestNumber & " DESC"
+        cmd.CommandText = strQry
+        ExecuteCmd(cmd)
+    End Sub
+    Private Sub ExecuteCmd(cmd As MySqlCommand)
+        Try
+            Dim LocalSQLComm As New clsMySQL_Comms
+            Dim QryComm As MySqlCommand = cmd
+            Dim ds As New DataSet
+            Dim da As New MySqlDataAdapter
+            QryComm.Connection = GlobalConn
+            da.SelectCommand = QryComm
+            da.Fill(ds)
+            da.Dispose()
+            SendToGrid(ds.Tables(0))
+            ds.Dispose()
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ConnectionReady()
+        End Try
+    End Sub
+
+    Public Sub SendToGrid(Results As DataTable)
         Try
             Dim table As New DataTable
             table.Columns.Add("Request #", GetType(String))
@@ -196,11 +263,22 @@ Public Class frmSibiMain
             ShowAll(cmbDisplayYear.Text)
         End If
     End Sub
-
     Private Sub frmSibiMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         CloseChildren(Me)
     End Sub
     Private Sub frmSibiMain_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         MainForm.MyWindowList.RefreshWindowList()
+    End Sub
+    Private Sub txtPO_TextChanged(sender As Object, e As EventArgs) Handles txtPO.TextChanged
+        DynamicSearch()
+    End Sub
+    Private Sub txtReq_TextChanged(sender As Object, e As EventArgs) Handles txtReq.TextChanged
+        DynamicSearch()
+    End Sub
+    Private Sub txtDescription_TextChanged(sender As Object, e As EventArgs) Handles txtDescription.TextChanged
+        DynamicSearch()
+    End Sub
+    Private Sub txtRTNum_TextChanged(sender As Object, e As EventArgs) Handles txtRTNum.TextChanged
+        DynamicSearch()
     End Sub
 End Class
