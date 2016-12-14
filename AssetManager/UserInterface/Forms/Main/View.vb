@@ -32,6 +32,7 @@ Public Class View
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
         CheckRDP()
+        Me.CenterToParent()
     End Sub
     Public Sub SetAttachCount()
         AttachmentTool.Text = "Attachments (" + Asset.GetAttachmentCount(CurrentViewDevice).ToString + ")"
