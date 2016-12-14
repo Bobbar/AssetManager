@@ -785,8 +785,17 @@ VALUES
     End Sub
     Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         CloseChildren(Me)
+        SendWindowListRefresh()
         Me.Dispose()
-        frmSibiMain.MyWindowList.RefreshWindowList()
+    End Sub
+    Private Sub SendWindowListRefresh()
+        Dim ParentForm As Form = Me.Tag
+        If TypeOf ParentForm Is frmSibiMain Then
+            Dim sibi As frmSibiMain = ParentForm
+            sibi.MyWindowList.RefreshWindowList()
+        ElseIf TypeOf ParentForm Is View Then
+            'do nut-zing
+        End If
     End Sub
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
@@ -804,7 +813,7 @@ VALUES
             End If
 
         Else
-            End If
+        End If
     End Sub
     Private Sub txtRTNumber_Click(sender As Object, e As EventArgs) Handles txtRTNumber.Click
         Dim RTNum As String = Trim(txtRTNumber.Text)
