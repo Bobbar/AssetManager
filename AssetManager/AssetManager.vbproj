@@ -152,6 +152,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="Classes\DataColumns.vb" />
     <Compile Include="Classes\Type_Classes.vb" />
     <Compile Include="UserInterface\Colors.vb" />
@@ -259,7 +260,6 @@
     <Compile Include="UserInterface\MyControls\clsLiveBox.vb" />
     <Compile Include="DataComms\AssetManager\MySQL\clsMySQL_Comms.vb" />
     <Compile Include="Classes\Structures.vb" />
-    <Compile Include="Business\modPDFFormFilling.vb" />
     <Compile Include="Business\modSecurityMod.vb" />
     <Compile Include="UserInterface\MyControls\MunisTools.Designer.vb">
       <DependentUpon>MunisTools.vb</DependentUpon>

@@ -187,10 +187,10 @@ Public Class AddNew
         AdjustComboBoxWidth(sender, e)
     End Sub
     Private Sub txtCurUser_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_REQ.KeyUp
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
+        MyLiveBox.StartLiveSearch(sender, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
     End Sub
     Private Sub txtDescription_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription_REQ.KeyUp
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_description")
+        MyLiveBox.StartLiveSearch(sender, LiveBoxType.SelectValue, "dev_description")
     End Sub
     Private Sub AddNew_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         MyLiveBox.Unload()

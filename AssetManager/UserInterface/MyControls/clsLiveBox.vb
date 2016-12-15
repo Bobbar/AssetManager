@@ -12,17 +12,11 @@ Public Class clsLiveBox
     Private LiveBoxResults As DataTable
     Private Structure LiveBoxArgs
         Public Control As Control
-        Public Type As String
+        Public Type As LiveBoxType
         Public ViewMember As String
         Public DataMember As String
     End Structure
     Private CurrentLiveBoxArgs As LiveBoxArgs
-    Public Class LiveBoxType
-        Public Const DynamicSearch As String = "DYNA"
-        Public Const InstaLoad As String = "INSTA"
-        Public Const SelectValue As String = "SELE"
-        Public Const UserSelect As String = "U_SELE"
-    End Class
     Sub New()
         If OpenConnection() Then
             InitializeWorker()
@@ -77,8 +71,8 @@ Public Class clsLiveBox
         Catch
         End Try
     End Sub
-    Private Sub LiveBoxSelect(Control As Control, Type As String)
-        Select Case Type.ToString
+    Private Sub LiveBoxSelect(Control As Control, Type As LiveBoxType)
+        Select Case Type
             Case LiveBoxType.DynamicSearch
                 Control.Text = LiveBox.Text
                 MainForm.DynamicSearch()
@@ -89,13 +83,13 @@ Public Class clsLiveBox
                 Control.Text = LiveBox.Text
             Case LiveBoxType.UserSelect
                 Control.Text = LiveBox.Text
-                If Control.FindForm.Name = "View" Then
+                If Control.FindForm Is View Then
                     If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
                         Dim FrmSetData As View = Control.FindForm
                         FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember)
                         FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)
                     End If
-                ElseIf Control.FindForm.Name = "AddNew" Then
+                ElseIf Control.FindForm Is AddNew Then
                     If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
                         Dim FrmSetData As AddNew = Control.FindForm
                         FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember)

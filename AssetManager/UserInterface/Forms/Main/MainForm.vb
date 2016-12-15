@@ -337,16 +337,16 @@ Public Class MainForm
         AddNew.Show()
     End Sub
     Private Sub txtSerial_TextChanged(sender As Object, e As EventArgs) Handles txtSerial.TextChanged
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.InstaLoad, devices.Serial)
+        MyLiveBox.StartLiveSearch(sender, LiveBoxType.InstaLoad, devices.Serial)
     End Sub
     Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.InstaLoad, devices.AssetTag)
+        MyLiveBox.StartLiveSearch(sender, LiveBoxType.InstaLoad, devices.AssetTag)
     End Sub
     Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.DynamicSearch, devices.Description)
+        MyLiveBox.StartLiveSearch(sender, LiveBoxType.DynamicSearch, devices.Description)
     End Sub
     Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.DynamicSearch, devices.CurrentUser)
+        MyLiveBox.StartLiveSearch(sender, LiveBoxType.DynamicSearch, devices.CurrentUser)
     End Sub
 
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork

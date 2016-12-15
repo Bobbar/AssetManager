@@ -13,7 +13,7 @@
             Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
-    Public Function DeleteFTPFolder(DeviceUID As String, Type As String) As Boolean
+    Public Function DeleteFTPFolder(DeviceUID As String, Type As Entry_Type) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Dim files As List(Of String)
         Try

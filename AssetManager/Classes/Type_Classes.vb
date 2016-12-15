@@ -1,4 +1,4 @@
-﻿'Public Module Type_Classes
+﻿
 Public NotInheritable Class Attrib_Type
     Public Const Location As String = "LOCATION"
     Public Const ChangeType As String = "CHANGETYPE"
@@ -14,10 +14,10 @@ Public NotInheritable Class Attrib_Table
     Public Const Sibi As String = "sibi_codes"
     Public Const Device As String = "dev_codes"
 End Class
-Public NotInheritable Class Entry_Type
-    Public Const Sibi As String = "sibi_"
-    Public Const Device As String = "dev_"
-End Class
+Public Enum Entry_Type
+    Sibi
+    Device
+End Enum
 Public NotInheritable Class AccessGroup
     Public Const Add As String = "add"
     Public Const CanRun As String = "can_run"
@@ -32,11 +32,6 @@ Public NotInheritable Class AccessGroup
     Public Const Sibi_Delete As String = "sibi_delete"
     Public Const IsAdmin As String = "admin"
 End Class
-'Public Class FormType
-'    Public Const InputForm As String = "INPUT"
-'    Public Const TransferForm As String = "TRANSFER"
-'    Public Const DisposeForm As String = "DISPOSE"
-'End Class
 Public Enum PDFFormType
     InputForm
     TransferForm
@@ -50,4 +45,9 @@ Public Class SearchVal
         Value = obValue
     End Sub
 End Class
-'End Module
+Public Enum LiveBoxType
+    DynamicSearch
+    InstaLoad
+    SelectValue
+    UserSelect
+End Enum

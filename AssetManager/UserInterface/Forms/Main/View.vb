@@ -688,10 +688,10 @@ VALUES (@" & historical_dev.ChangeType & ",
         If bolCheckFields Then CheckFields()
     End Sub
     Private Sub txtCurUser_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_View_REQ.KeyUp
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
+        MyLiveBox.StartLiveSearch(sender, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
     End Sub
     Private Sub txtDescription_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription_View_REQ.KeyUp
-        MyLiveBox.StartLiveSearch(sender, MyLiveBox.LiveBoxType.SelectValue, "dev_description")
+        MyLiveBox.StartLiveSearch(sender, LiveBoxType.SelectValue, "dev_description")
     End Sub
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
         If bolCheckFields Then CheckFields()

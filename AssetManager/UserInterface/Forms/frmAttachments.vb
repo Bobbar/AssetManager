@@ -21,7 +21,7 @@ Class frmAttachments
     Private strDragFilePath As String
     Private AttachRequest As Request_Info
     Private AttachDevice As Device_Info
-    Private AttachType As String
+    Private AttachType As Entry_Type
     Public AttachFolderID As String
     Private AttachTable As String
     Sub New(ParentForm As Form, Optional AttachInfo As Object = Nothing)

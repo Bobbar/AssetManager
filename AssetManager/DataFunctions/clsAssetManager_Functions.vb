@@ -132,7 +132,7 @@ VALUES(@" & historical_dev.ChangeType & ",
             Return Nothing
         End Try
     End Function
-    Public Function DeleteSQLAttachment(AttachUID As String, Type As String) As Integer
+    Public Function DeleteSQLAttachment(AttachUID As String, Type As Entry_Type) As Integer
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Function
@@ -184,7 +184,7 @@ VALUES(@" & historical_dev.ChangeType & ",
         End Try
         Return -1
     End Function
-    Public Function Has_Attachments(strGUID As String, Type As String) As Boolean
+    Public Function Has_Attachments(strGUID As String, Type As Entry_Type) As Boolean
         Try
             Dim reader As MySqlDataReader
             Dim strQRY As String
@@ -255,7 +255,7 @@ VALUES(@" & historical_dev.ChangeType & ",
         cmd.Dispose()
         Return UID
     End Function
-    Public Function Delete_SQLMasterEntry(ByVal strGUID As String, Type As String) As Integer
+    Public Function Delete_SQLMasterEntry(ByVal strGUID As String, Type As Entry_Type) As Integer
         Try
             Dim rows
             Dim strSQLQry As String
@@ -397,7 +397,7 @@ VALUES
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Function DeleteMaster(ByVal strGUID As String, Type As String) As Boolean
+    Public Function DeleteMaster(ByVal strGUID As String, Type As Entry_Type) As Boolean
         Try
             If Has_Attachments(strGUID, Type) Then
                 If FTP.DeleteFTPFolder(strGUID, Type) Then Return Delete_SQLMasterEntry(strGUID, Type) ' if has attachments, delete ftp directory, then delete the sql records.
