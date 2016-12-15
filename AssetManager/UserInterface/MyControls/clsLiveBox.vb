@@ -18,11 +18,9 @@ Public Class clsLiveBox
     End Structure
     Private CurrentLiveBoxArgs As LiveBoxArgs
     Sub New()
-        If OpenConnection() Then
-            InitializeWorker()
-            InitializeControl()
-            InitializeTimer()
-        End If
+        InitializeWorker()
+        InitializeControl()
+        InitializeTimer()
     End Sub
     Private Sub InitializeWorker()
         LiveWorker = New BackgroundWorker
@@ -106,12 +104,10 @@ Public Class clsLiveBox
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
             Dim cmd As New MySqlCommand
-            Dim strQryRow As String
+            Dim con As MySqlConnection = MySQLComms.NewConnection
             Dim strQry As String
-            'strQryRow = IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember)
-            'strQry = "SELECT dev_UID," & strQryRow & " FROM devices WHERE " & strQryRow & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & strQryRow & " ORDER BY " & strQryRow & " LIMIT " & RowLimit
             strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember) & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
-            cmd.Connection = LiveConn
+            cmd.Connection = con
             cmd.CommandText = strQry
             cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
             da.SelectCommand = cmd
@@ -119,6 +115,8 @@ Public Class clsLiveBox
             e.Result = ds.Tables(0)
             da.Dispose()
             ds.Dispose()
+            con.Close()
+            con.Dispose()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             ConnectionReady()
@@ -161,7 +159,6 @@ Public Class clsLiveBox
                 StartLiveSearch(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type, CurrentLiveBoxArgs.ViewMember) 'if search string has changed since last completetion, run again.
             End If
             dtLiveBoxData = dtResults
-            Exit Sub
         Catch
             LiveBox.Visible = False
             LiveBox.Items.Clear()
@@ -189,7 +186,7 @@ Public Class clsLiveBox
             LiveBox.SelectedIndex = 0
         End If
     End Sub
-    Public Sub StartLiveSearch(Control As Control, Type As String, ViewMember As String, Optional DataMember As String = Nothing)
+    Public Sub StartLiveSearch(Control As Control, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
         CollectLiveBoxArgs(Control, Type, ViewMember, DataMember)
         If LiveBox.IsDisposed Then InitializeControl()
         Dim strSearchString As String = CurrentLiveBoxArgs.Control.Text
@@ -208,7 +205,7 @@ Public Class clsLiveBox
         Catch
         End Try
     End Sub
-    Private Sub CollectLiveBoxArgs(Control As Control, Type As String, ViewMember As String, Optional DataMember As String = Nothing)
+    Private Sub CollectLiveBoxArgs(Control As Control, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
         With CurrentLiveBoxArgs
             .Control = Control
             .Type = Type

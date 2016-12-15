@@ -308,8 +308,6 @@ Public Class MainForm
     Private Sub RefreshCombos()
         FillComboBox(DeviceIndex.EquipType, cmbEquipType)
         FillComboBox(DeviceIndex.Locations, cmbLocation)
-        FillComboBox(DeviceIndex.ChangeType, UpdateDev.cmbUpdate_ChangeType)
-        FillComboBox(DeviceIndex.StatusType, AddNew.cmbStatus_REQ)
         FillComboBox(DeviceIndex.StatusType, cmbStatus)
         FillComboBox(DeviceIndex.OSType, cmbOSType)
     End Sub
