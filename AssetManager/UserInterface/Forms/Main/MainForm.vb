@@ -532,15 +532,6 @@ Public Class MainForm
         ConnectionReady()
         StatusBar("Connected!")
     End Sub
-    'Private Sub cmdChangeDB_Click(sender As Object, e As EventArgs)
-    '    If cmbDBs.Text <> "" And cmbDBs.Text <> MySQLDB.strDatabase Then
-    '        MySQLDB.strDatabase = cmbDBs.Text
-    '        MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
-    '        CloseConnections()
-    '        GlobalConn = MySQLDB.NewConnection '(MySQLDB.MySQLConnectString)
-    '        OpenConnections()
-    '    End If
-    'End Sub
     Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
         Dim ViewAttachments As New frmAttachments(Me)
         ViewAttachments.bolAdminMode = CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel)
@@ -556,15 +547,6 @@ Public Class MainForm
             Message("Debug")
         End If
     End Sub
-    'Private Sub cmbDBs_TextChanged(sender As Object, e As EventArgs) Handles cmbDBs.TextChanged
-    '    If cmbDBs.Text <> "" And cmbDBs.Text <> MySQLDB.strDatabase Then
-    '        MySQLDB.strDatabase = cmbDBs.Text
-    '        MySQLDB.MySQLConnectString = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & MySQLDB.strDatabase
-    '        CloseConnections()
-    '        GlobalConn = MySQLDB.NewConnection 'New MySqlConnection(MySQLDB.MySQLConnectString)
-    '        OpenConnections()
-    '    End If
-    'End Sub
     Private Sub cmbEquipType_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub

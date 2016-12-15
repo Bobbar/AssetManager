@@ -9,6 +9,7 @@ Public Class View
     Private OldData As Device_Info
     Public NewData As Device_Info
     Private MyLiveBox As New clsLiveBox
+    Private PrevWindowState As Integer
     Private Structure Ping_Results
         Public CanPing As Boolean
         Public Address As String
@@ -17,9 +18,6 @@ Public Class View
         InitializeComponent()
         ViewDevice(DeviceGUID)
         Tag = ParentForm
-    End Sub
-    Sub New()
-        InitializeComponent()
     End Sub
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim MyMunisMenu As New MunisToolsMenu
@@ -1004,8 +1002,6 @@ VALUES (@" & historical_dev.ChangeType & ",
             Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
         Else
             Dim sibiForm As New frmManageRequest(Me, SibiUID)
-            'sibiForm.Tag = Me
-            'sibiForm.OpenRequest(SibiUID)
         End If
     End Sub
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
@@ -1020,19 +1016,9 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub tsmAssetInputForm_Click(sender As Object, e As EventArgs) Handles tsmAssetInputForm.Click
         Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.InputForm)
-        ' PDFForm.FillForm(CurrentViewDevice, PDFFormType.InputForm)
-
     End Sub
     Private Sub tsmAssetTransferForm_Click(sender As Object, e As EventArgs) Handles tsmAssetTransferForm.Click
-        'Dim newDialog As New MyDialog
-        'With newDialog
-        '    .Text = "Error Dialog"
-        '    .AddLabel("Blah blah blah blah blah blah Blah blah blah blah blah blahBlah blah blah blah blah blahBlah blah blah blah blah blahBlah blah blah blah blah blah")
-        '    .ShowDialog()
-        'End With
-        'ListFieldNames()
         Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.TransferForm)
-        ' FillForm(CurrentViewDevice, FormType.TransferForm)
     End Sub
     Private Sub cmdMunisSearch_Click(sender As Object, e As EventArgs) Handles cmdMunisSearch.Click
         Dim NewMunisSearch As New frmMunisUser
@@ -1062,14 +1048,10 @@ VALUES (@" & historical_dev.ChangeType & ",
             If PrevWindowState <> FormWindowState.Maximized Then RestoreChildren(Me)
         End If
     End Sub
-
     Private Sub lblGUID_Click(sender As Object, e As EventArgs) Handles lblGUID.Click
         Clipboard.SetText(lblGUID.Text)
         Message("GUID Copied to clipboard.", vbInformation + vbOKOnly,, Me)
     End Sub
-
-    Private PrevWindowState As Integer
-
     Private Sub cmdShowIP_Click(sender As Object, e As EventArgs) Handles cmdShowIP.Click
         If Not IsNothing(cmdShowIP.Tag) Then
             Dim blah = Message(cmdShowIP.Tag & vbCrLf & vbCrLf & "Press 'Yes' to copy to clipboard.", vbInformation + vbYesNo, "IP Address", Me)
@@ -1078,11 +1060,8 @@ VALUES (@" & historical_dev.ChangeType & ",
             End If
         End If
     End Sub
-
     Private Sub AssetDisposalFormToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AssetDisposalFormToolStripMenuItem.Click
         Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.DisposeForm)
-        ' FillForm(CurrentViewDevice, FormType.DisposeForm)
-        'ListFieldNames()
     End Sub
     Private Sub View_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
         Dim f As Form = sender

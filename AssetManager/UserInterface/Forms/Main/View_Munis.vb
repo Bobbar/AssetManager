@@ -4,20 +4,9 @@
     Public bolSelectMod As Boolean = False
     Private CurrentMunisDevice As Device_Info
     Private MunisComms As New clsMunis_Comms
-
-
-    'Sub New()
-
-    '    ' This call is required by the designer.
-    '    InitializeComponent()
-
-    '    ' Add any initialization after the InitializeComponent() call.
-
-    'End Sub
     Sub New(ParentForm As Form)
         InitializeComponent()
         Me.Tag = ParentForm
-
     End Sub
     Public Sub LoadDevice(Device As Device_Info)
         CurrentMunisDevice = Device
@@ -91,7 +80,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
     End Function
     Public Sub LoadMunisInfoByDevice(Device As Device_Info)
         CurrentMunisDevice = Device
-        If Device.strPO <> "" Then 'And Device.dtPurchaseDate <> dtDefaultDate Then 'if PO and Fiscal yr on record > load data using our records
+        If Device.strPO <> "" Then
             Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
             LoadMunisInventoryGrid(Device)
             LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
@@ -100,22 +89,12 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             If Device.strPO = "" Then
                 Dim PO As String = Munis.Get_PO_From_Asset(Device.strAssetTag)
                 If PO <> "" Then
-                    Device.strPO = PO 'if some's missing > try to find it by other means
+                    Device.strPO = PO 'if some's missing -> try to find it by other means
                 Else
                     PO = Munis.Get_PO_From_Serial(Device.strSerial)
                     If PO <> "" Then Device.strPO = PO
                 End If
             End If
-            'If YearFromDate(Device.dtPurchaseDate) = "" Then
-            '    Dim FY As String = Munis.Get_FY_From_PO(Device.strPO) 'Munis_GetFYFromAsset(Device.strAssetTag)
-            '    If FY <> "" Then
-            '        Device.strFiscalYear = FY
-            '    Else
-            '        Device.strFiscalYear = Munis.Get_FY_From_Asset(Device.strAssetTag)
-            '    End If
-            'Else
-            '    Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
-            'End If
             If Device.strPO <> "" Then
                 LoadMunisInventoryGrid(Device)
                 LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))

@@ -55,10 +55,4 @@ Public Class View_Entry
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click
         Me.Hide()
     End Sub
-    Private Sub View_Entry_Layout(sender As Object, e As LayoutEventArgs) Handles Me.Layout
-        'Dim c As Control
-        'For Each c In GroupBox1.Controls
-        '    If TypeOf c Is TextBox Then c.BackColor = colTextBoxBG
-        'Next
-    End Sub
 End Class

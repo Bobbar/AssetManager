@@ -291,22 +291,16 @@ Public Class frmManageRequest
         tmpCombo.Name = Name
         tmpCombo.Width = 200
         Dim myList As New List(Of String)
-        Dim i As Integer = 0
         For Each ComboItem As Combo_Data In IndexType
             myList.Add(ComboItem.strLong)
-            'tmpCombo.Items.Insert(i, ComboItem.strLong)
-            'i += 1
         Next
         tmpCombo.DataSource = myList
-        ' tmpCombo.ValueMember = ""
         Return tmpCombo
     End Function
     Private Function CollectData() As Request_Info
         Try
             Dim info As Request_Info
-            ' Dim dt As DataTable = RequestItemsGrid.DataSource
             RequestItemsGrid.EndEdit()
-            ' Dim GridTable = TryCast(RequestItemsGrid.DataSource, DataTable)
             With info
                 .strDescription = Trim(txtDescription.Text)
                 .strUser = Trim(txtUser.Text)
@@ -316,7 +310,6 @@ Public Class frmManageRequest
                 .strPO = Trim(txtPO.Text)
                 .strRequisitionNumber = Trim(txtReqNumber.Text)
                 .strRTNumber = Trim(txtRTNumber.Text)
-                '   .RequstItems = dt 'GridTable
             End With
             Dim DBTable As New DataTable
             For Each col As DataGridViewColumn In RequestItemsGrid.Columns
@@ -327,21 +320,15 @@ Public Class frmManageRequest
                     Dim NewRow As DataRow = DBTable.NewRow()
                     For Each dcell As DataGridViewCell In row.Cells
                         If dcell.OwningColumn.CellType.Name = "DataGridViewComboBoxCell" Then
-
-
                             Select Case dcell.OwningColumn.Name
                                 Case Attrib_Type.Location
                                     NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(DeviceIndex.Locations, dcell.Value)
                                 Case Attrib_Type.SibiItemStatusType
                                     NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(SibiIndex.ItemStatusType, dcell.Value)
-
                             End Select
-
-                            '**************************NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(dcell.OwningColumn.Name, dcell.Value)
                         Else
                             NewRow(dcell.ColumnIndex) = Trim(dcell.Value)
                         End If
-                        ' Debug.Print(dcell.OwningColumn.Name & " - " & dcell.OwningColumn.CellType.ToString & " - " & dcell.FormattedValue)
                     Next
                     DBTable.Rows.Add(NewRow)
                 End If
@@ -363,11 +350,6 @@ Public Class frmManageRequest
         Dim strRequestUID As String = Guid.NewGuid.ToString
         Try
             Dim rows As Integer
-            'If Not CheckFields() Then
-            '    Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
-            '    bolCheckFields = True
-            '    Exit Sub
-            'End If
             Dim strSqlQry1 = "INSERT INTO " & sibi_requests.TableName & "
 (" & sibi_requests.UID & ",
 " & sibi_requests.RequestUser & ",
@@ -950,7 +932,6 @@ VALUES
         cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
         cmdUpdate.Text = "Update"
         HideEditControls()
-        ' cmdUpdate.Image = My.Resources.Edit
         UpdateRequest()
         bolUpdating = False
     End Sub
@@ -966,7 +947,6 @@ VALUES
     End Sub
     Private Sub RequestItemsGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles RequestItemsGrid.DataError
         Dim blah = Message("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error")
-        ' ErrHandle(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod().Name)
     End Sub
     Private Sub RequestItemsGrid_DefaultValuesNeeded(sender As Object, e As DataGridViewRowEventArgs) Handles RequestItemsGrid.DefaultValuesNeeded
         e.Row.Cells("Qty").Value = 1
