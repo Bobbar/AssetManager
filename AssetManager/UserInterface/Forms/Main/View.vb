@@ -141,6 +141,7 @@ Public Class View
                 t.Visible = False
             End If
         Next
+        TrackingTool.Visible = False
         cmdAccept_Tool.Visible = False
         cmdCancel_Tool.Visible = False
     End Sub
