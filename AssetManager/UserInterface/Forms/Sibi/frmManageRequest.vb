@@ -775,7 +775,7 @@ VALUES
         If TypeOf ParentForm Is frmSibiMain Then
             Dim sibi As frmSibiMain = ParentForm
             sibi.MyWindowList.RefreshWindowList()
-        ElseIf TypeOf ParentForm Is View Then
+        ElseIf TypeOf ParentForm Is frmView Then
             'do nut-zing
         End If
     End Sub
@@ -916,7 +916,8 @@ VALUES
         End If
     End Sub
     Private Sub LookupDevice(Device As Device_Info)
-        View.ViewDevice(Device.strGUID)
+        Dim newView As New frmView(Me, Device.strGUID)
+        'frmView.ViewDevice(Device.strGUID)
     End Sub
     Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click
         If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then

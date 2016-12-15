@@ -290,10 +290,10 @@
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
     <Compile Include="Helpers\OtherFunctions.vb" />
-    <Compile Include="UserInterface\Forms\Main\View.Designer.vb">
-      <DependentUpon>View.vb</DependentUpon>
+    <Compile Include="UserInterface\Forms\Main\frmView.Designer.vb">
+      <DependentUpon>frmView.vb</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\Main\View.vb">
+    <Compile Include="UserInterface\Forms\Main\frmView.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Main\View_Entry.Designer.vb">
@@ -368,8 +368,8 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\Main\View.resx">
-      <DependentUpon>View.vb</DependentUpon>
+    <EmbeddedResource Include="UserInterface\Forms\Main\frmView.resx">
+      <DependentUpon>frmView.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\View_Entry.resx">
       <DependentUpon>View_Entry.vb</DependentUpon>

@@ -297,7 +297,7 @@ Public Class MainForm
         End If
         If Not DeviceIsOpen(strGUID) Then
             Waiting()
-            Dim NewView As New View(Me, strGUID)
+            Dim NewView As New frmView(Me, strGUID)
             MyWindowList.RefreshWindowList()
             DoneWaiting()
         Else

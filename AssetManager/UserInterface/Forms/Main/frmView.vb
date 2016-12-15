@@ -2,7 +2,7 @@
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.Net
-Public Class View
+Public Class frmView
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
     Public MunisUser As Emp_Info = Nothing
@@ -18,6 +18,9 @@ Public Class View
         InitializeComponent()
         ViewDevice(DeviceGUID)
         Tag = ParentForm
+    End Sub
+    Sub New()
+        InitializeComponent()
     End Sub
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim MyMunisMenu As New MunisToolsMenu

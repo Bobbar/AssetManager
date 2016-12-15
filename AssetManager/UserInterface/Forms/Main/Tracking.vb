@@ -3,7 +3,7 @@ Imports MySql.Data.MySqlClient
 Public Class Tracking
 
     Private CurrentTrackingDevice As Device_Info
-    Private CurrentSender As View
+    Private CurrentSender As frmView
     Private CheckData As CheckStruct
     Private Function GetCheckData() As Boolean
         If Not CurrentTrackingDevice.Tracking.bolCheckedOut Then
@@ -42,7 +42,7 @@ Public Class Tracking
         End With
         Return True
     End Function
-    Public Sub SetupTracking(ByRef Device As Device_Info, Sender As View)
+    Public Sub SetupTracking(ByRef Device As Device_Info, Sender As frmView)
         CurrentTrackingDevice = Device
         CurrentSender = Sender
         ClearAll()

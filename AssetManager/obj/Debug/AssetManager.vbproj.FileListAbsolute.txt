@@ -51,7 +51,6 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.SplashScreen.resource
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.UpdateDev.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MunisToolsMenu.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Resources.resources
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Entry.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbproj.GenerateResource.Cache
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.TrustInfo.xml
@@ -61,4 +60,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MainForm.resources
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmView.resources

@@ -49,7 +49,7 @@ Public Class PDFFormFilling
         f.HideFixedAssetGrid()
         f.LoadDevice(CurrentDevice)
         f.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(CurrentDevice.strPO), Munis.Get_FY_From_PO(CurrentDevice.strPO))
-        f.ShowDialog(View)
+        f.ShowDialog(ParentForm)
         If f.DialogResult = DialogResult.OK Then
             UnitPrice = f.UnitPrice
             CurrentDialog.SetControlValue(UnitPriceTxtName, UnitPrice)

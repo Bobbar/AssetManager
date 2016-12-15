@@ -224,8 +224,8 @@ Class frmAttachments
         End Try
     End Sub
     Private Sub RefreshAttachCount()
-        If TypeOf Tag Is View Then
-            Dim vw As View = Tag
+        If TypeOf Tag Is frmView Then
+            Dim vw As frmView = Tag
             vw.SetAttachCount()
         ElseIf TypeOf Tag Is frmManageRequest Then
             Dim req As frmManageRequest = Tag

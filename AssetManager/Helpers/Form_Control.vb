@@ -2,8 +2,8 @@
     Public Sub ActivateForm(strGUID As String)
         For Each frm As Form In My.Application.OpenForms
             Select Case frm.GetType
-                Case GetType(View)
-                    Dim vw As View = frm
+                Case GetType(frmView)
+                    Dim vw As frmView = frm
                     If vw.CurrentViewDevice.strGUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
@@ -88,8 +88,8 @@
     End Function
     Public Function DeviceIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
-            If TypeOf frm Is View Then
-                Dim vw As View = frm
+            If TypeOf frm Is frmView Then
+                Dim vw As frmView = frm
                 If vw.CurrentViewDevice.strGUID = strGUID Then Return True
             End If
         Next
@@ -125,8 +125,8 @@
             Next
             DropDownControl.DropDownItems.Clear()
             For Each frm As Form In CurrentWindows
-                If frm.GetType Is GetType(View) Then
-                    Dim vw As View = frm
+                If frm.GetType Is GetType(frmView) Then
+                    Dim vw As frmView = frm
                     Dim newitem As New ToolStripMenuItem
                     newitem.Text = vw.Text
                     newitem.Image = My.Resources.inventory_small_fw
@@ -151,8 +151,8 @@
         End Sub
         Private Sub WindowSelectClick(sender As Object, e As ToolStripItemClickedEventArgs)
             Dim item As ToolStripItem = e.ClickedItem
-            If item.Tag.GetType Is GetType(View) Then
-                Dim vw As View = item.Tag
+            If item.Tag.GetType Is GetType(frmView) Then
+                Dim vw As frmView = item.Tag
                 ActivateForm(vw.CurrentViewDevice.strGUID)
             ElseIf item.Tag.GetType Is GetType(frmManageRequest) Then
                 Dim req As frmManageRequest = item.Tag
