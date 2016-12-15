@@ -131,6 +131,8 @@
                     newitem.Text = vw.Text
                     newitem.Image = My.Resources.inventory_small_fw
                     newitem.Tag = vw
+                    newitem.ToolTipText = "Right-Click to close."
+                    AddHandler newitem.MouseDown, AddressOf WindowCloseClick
                     DropDownControl.DropDownItems.Add(newitem)
                 ElseIf frm.GetType Is GetType(frmManageRequest) Then
                     Dim req As frmManageRequest = frm
@@ -138,6 +140,8 @@
                     newitem.Text = req.Text
                     newitem.Image = My.Resources.Acquire_new_shadow_small
                     newitem.Tag = req
+                    newitem.ToolTipText = "Right-Click to close."
+                    AddHandler newitem.MouseDown, AddressOf WindowCloseClick
                     DropDownControl.DropDownItems.Add(newitem)
                 ElseIf frm.GetType Is GetType(frmSibiMain) Then
                     Dim sibi As frmSibiMain = frm
@@ -145,6 +149,8 @@
                     newitem.Text = sibi.Text
                     newitem.Image = My.Resources.Acquire_new_shadow_small
                     newitem.Tag = sibi
+                    newitem.ToolTipText = "Right-Click to close."
+                    AddHandler newitem.MouseDown, AddressOf WindowCloseClick
                     DropDownControl.DropDownItems.Insert(0, newitem)
                 End If
             Next
@@ -161,6 +167,26 @@
                 frmSibiMain.Show()
                 frmSibiMain.Activate()
                 frmSibiMain.WindowState = FormWindowState.Normal
+            End If
+        End Sub
+        Private Sub WindowCloseClick(sender As ToolStripItem, e As MouseEventArgs)
+            If e.Button = MouseButtons.Right Then
+                Dim item As ToolStripItem = sender
+                If item.Tag.GetType Is GetType(frmView) Then
+                    DropDownControl.DropDownItems.Remove(item)
+                    Dim vw As frmView = item.Tag
+                    vw.Dispose()
+                ElseIf item.Tag.GetType Is GetType(frmManageRequest) Then
+                    DropDownControl.DropDownItems.Remove(item)
+                    Dim req As frmManageRequest = item.Tag
+                    req.Dispose()
+                ElseIf item.Tag.GetType Is GetType(frmSibiMain) Then
+                    DropDownControl.DropDownItems.Remove(item)
+                    frmSibiMain.Dispose()
+                End If
+                If DropDownControl.DropDownItems.Count = 0 Then
+                    DropDownControl.HideDropDown()
+                End If
             End If
         End Sub
     End Class
