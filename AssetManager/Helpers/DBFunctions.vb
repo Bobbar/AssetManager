@@ -76,7 +76,6 @@ Public Module DBFunctions
         Return Asset.Get_SQLValue("munis_codes", "asset_man_code", AssetCode, "munis_code")
     End Function
     Public Sub BuildIndexes()
-        Logger("Building Indexes...")
         With Asset
             DeviceIndex.Locations = .BuildIndex(Attrib_Table.Device, Attrib_Type.Location)
             DeviceIndex.ChangeType = .BuildIndex(Attrib_Table.Device, Attrib_Type.ChangeType)
@@ -88,7 +87,6 @@ Public Module DBFunctions
             SibiIndex.RequestType = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiRequestType)
             SibiIndex.AttachFolder = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiAttachFolder)
         End With
-        Logger("Building Indexes Done...")
     End Sub
     Public Function ConnectionReady() As Boolean
         Asset.CheckConnection()

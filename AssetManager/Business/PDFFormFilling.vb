@@ -7,16 +7,17 @@ Imports System.IO
 Imports System.Collections
 Imports System.ComponentModel
 Imports System.Text
-Module modPDFFormFilling
+Public Class PDFFormFilling
+    Private ParentForm As Form
     Private CurrentDevice As Device_Info
     Private UnitPrice As String
     Private CurrentDialog As MyDialog
     Private UnitPriceTxtName As String = "txtUnitPrice"
-    Public NotInheritable Class FormType
-        Public Const InputForm As String = "INPUT"
-        Public Const TransferForm As String = "TRANSFER"
-        Public Const DisposeForm As String = "DISPOSE"
-    End Class
+    Sub New(Parent As Form, DeviceInfo As Device_Info, Type As PDFFormType)
+        ParentForm = Parent
+        CurrentDevice = DeviceInfo
+        FillForm(Type)
+    End Sub
     Public Sub ListFieldNames()
         Dim pdfReader As PdfReader = New PdfReader(My.Resources.Exh_K_02_Asset_Disposal_Form)
         Dim sb As New StringBuilder()
@@ -27,7 +28,7 @@ Module modPDFFormFilling
         Debug.Print(sb.ToString())
     End Sub
     Private Function GetUnitPrice(Device As Device_Info) As String
-        CurrentDevice = Device
+        'CurrentDevice = Device
         Dim NewDialog As New MyDialog
         CurrentDialog = NewDialog
         With NewDialog
@@ -41,13 +42,13 @@ Module modPDFFormFilling
         End With
     End Function
     Private Sub PriceFromMunis()
-        Dim Device As Device_Info = CurrentDevice
+        '  Dim Device As Device_Info = CurrentDevice
         Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
-        Dim f As New View_Munis
+        Dim f As New View_Munis(ParentForm)
         f.Text = "Select a Line Item"
         f.HideFixedAssetGrid()
-        f.LoadDevice(Device)
-        f.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
+        f.LoadDevice(CurrentDevice)
+        f.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(CurrentDevice.strPO), Munis.Get_FY_From_PO(CurrentDevice.strPO))
         f.ShowDialog(View)
         If f.DialogResult = DialogResult.OK Then
             UnitPrice = f.UnitPrice
@@ -56,33 +57,33 @@ Module modPDFFormFilling
             UnitPrice = Nothing
         End If
     End Sub
-    Public Sub FillForm(Device As Device_Info, Type As String)
+    Private Sub FillForm(Type As PDFFormType)
         Try
             Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
             Dim strTimeStamp As String = Now.ToString("_hhmmss")
-            Dim newFile As String = strTempPath & Device.strDescription & strTimeStamp & ".pdf"
+            Dim newFile As String = strTempPath & CurrentDevice.strDescription & strTimeStamp & ".pdf"
             Dim pdfStamper As PdfStamper
             Select Case Type
-                Case FormType.InputForm
+                Case PDFFormType.InputForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_01_Asset_Input_Formnew)
                     pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
-                    Dim pdfFormFields As AcroFields = InputFormFields(Device, pdfStamper) 'pdfStamper.AcroFields
+                    Dim pdfFormFields As AcroFields = InputFormFields(CurrentDevice, pdfStamper) 'pdfStamper.AcroFields
                     If IsNothing(pdfFormFields) Then
                         pdfStamper.Close()
                         Exit Sub
                     End If
-                Case FormType.TransferForm
+                Case PDFFormType.TransferForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_03_Asset_Transfer_Form)
                     pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
-                    Dim pdfFormFields As AcroFields = TransferFormFields(Device, pdfStamper)
+                    Dim pdfFormFields As AcroFields = TransferFormFields(CurrentDevice, pdfStamper)
                     If IsNothing(pdfFormFields) Then
                         pdfStamper.Close()
                         Exit Sub
                     End If
-                Case FormType.DisposeForm
+                Case PDFFormType.DisposeForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_02_Asset_Disposal_Form)
                     pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
-                    Dim pdfFormFields As AcroFields = DisposalFormFields(Device, pdfStamper)
+                    Dim pdfFormFields As AcroFields = DisposalFormFields(CurrentDevice, pdfStamper)
                     If IsNothing(pdfFormFields) Then
                         pdfStamper.Close()
                         Exit Sub
@@ -283,4 +284,4 @@ Module modPDFFormFilling
             Return ""
         End If
     End Function
-End Module
+End Class

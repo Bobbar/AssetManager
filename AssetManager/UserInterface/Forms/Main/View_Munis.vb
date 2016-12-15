@@ -4,6 +4,21 @@
     Public bolSelectMod As Boolean = False
     Private CurrentMunisDevice As Device_Info
     Private MunisComms As New clsMunis_Comms
+
+
+    'Sub New()
+
+    '    ' This call is required by the designer.
+    '    InitializeComponent()
+
+    '    ' Add any initialization after the InitializeComponent() call.
+
+    'End Sub
+    Sub New(ParentForm As Form)
+        InitializeComponent()
+        Me.Tag = ParentForm
+
+    End Sub
     Public Sub LoadDevice(Device As Device_Info)
         CurrentMunisDevice = Device
     End Sub
@@ -14,7 +29,7 @@
             If Device.strSerial <> "" Then
                 intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_serial='" & Device.strSerial & "'")
             End If
-            If intRows < 1 Then
+            If intRows < 1 And Device.strAssetTag <> "" Then
                 intRows = ProcessMunisQuery(DataGridMunis_Inventory, "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.strAssetTag & "'")
             End If
             If intRows < 1 Then Exit Sub
@@ -25,6 +40,7 @@
     Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String)
         Try
             If ReqNumber = "" Or FiscalYr = "" Then Exit Sub
+            HideFixedAssetGrid()
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc, 
                          VEN.a_vendor_name, VEN.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr,
                          dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln
@@ -38,15 +54,19 @@
 ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number
 WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ")" ' AND (dbo.ap_vendor.a_vendor_remit_seq = 0)"
             ProcessMunisQuery(DataGridMunis_Requisition, strQRY)
+            Me.Show()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Public Sub LoadMunisEmployeeByLastName(Name As String)
         Try
+            lblReqInfo.Text = "MUNIS Info:"
+            HideFixedAssetGrid()
             Dim strColumns As String = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short"
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
             ProcessMunisQuery(DataGridMunis_Requisition, strQRY)
+            Me.Show()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try

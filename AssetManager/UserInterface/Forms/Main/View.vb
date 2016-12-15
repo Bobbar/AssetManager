@@ -1018,7 +1018,9 @@ VALUES (@" & historical_dev.ChangeType & ",
         End Try
     End Sub
     Private Sub tsmAssetInputForm_Click(sender As Object, e As EventArgs) Handles tsmAssetInputForm.Click
-        FillForm(CurrentViewDevice, FormType.InputForm)
+        Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.InputForm)
+        ' PDFForm.FillForm(CurrentViewDevice, PDFFormType.InputForm)
+
     End Sub
     Private Sub tsmAssetTransferForm_Click(sender As Object, e As EventArgs) Handles tsmAssetTransferForm.Click
         'Dim newDialog As New MyDialog
@@ -1028,7 +1030,8 @@ VALUES (@" & historical_dev.ChangeType & ",
         '    .ShowDialog()
         'End With
         'ListFieldNames()
-        FillForm(CurrentViewDevice, FormType.TransferForm)
+        Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.TransferForm)
+        ' FillForm(CurrentViewDevice, FormType.TransferForm)
     End Sub
     Private Sub cmdMunisSearch_Click(sender As Object, e As EventArgs) Handles cmdMunisSearch.Click
         Dim NewMunisSearch As New frmMunisUser
@@ -1076,7 +1079,8 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
 
     Private Sub AssetDisposalFormToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AssetDisposalFormToolStripMenuItem.Click
-        FillForm(CurrentViewDevice, FormType.DisposeForm)
+        Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.DisposeForm)
+        ' FillForm(CurrentViewDevice, FormType.DisposeForm)
         'ListFieldNames()
     End Sub
     Private Sub View_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin

@@ -140,42 +140,42 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
             ConnectionNotReady()
             Exit Sub
         End If
-        Dim NewMunis As New View_Munis
-        NewMunis.Tag = Parent
-        NewMunis.lblReqInfo.Text = "MUNIS Info:"
-        NewMunis.HideFixedAssetGrid()
+        Dim NewMunis As New View_Munis(Parent)
+        ' NewMunis.Tag = Parent
+        ' NewMunis.lblReqInfo.Text = "MUNIS Info:"
+        '  NewMunis.HideFixedAssetGrid()
         NewMunis.LoadMunisEmployeeByLastName(Name)
-        NewMunis.Show()
+        ' NewMunis.Show()
     End Sub
     Public Sub NewMunisView_POSearch(PO As String, Optional Parent As Form = Nothing)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
         End If
-        Dim NewMunis As New View_Munis
-        NewMunis.Tag = Parent
-        NewMunis.HideFixedAssetGrid()
+        Dim NewMunis As New View_Munis(Parent)
+        'NewMunis.Tag = Parent
+        ' NewMunis.HideFixedAssetGrid()
         NewMunis.LoadMunisRequisitionGridByReqNo(Get_ReqNumber_From_PO(PO), Get_FY_From_PO(PO)) 'LoadMunisRequisitionGridByPO(PO, FY)
-        NewMunis.Show()
+        ' NewMunis.Show()
     End Sub
     Public Sub NewMunisView_ReqSearch(ReqNumber As String, FY As String, Optional Parent As Form = Nothing)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
         End If
-        Dim NewMunis As New View_Munis
-        NewMunis.Tag = Parent
-        NewMunis.HideFixedAssetGrid()
+        Dim NewMunis As New View_Munis(Parent)
+        ' NewMunis.Tag = Parent
+        'NewMunis.HideFixedAssetGrid()
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNumber, FY)
-        NewMunis.Show()
+        ' NewMunis.Show()
     End Sub
     Public Sub NewMunisView_Device(Device As Device_Info, Optional Parent As Form = Nothing)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub
         End If
-        Dim NewMunis As New View_Munis
-        NewMunis.Tag = Parent
+        Dim NewMunis As New View_Munis(Parent)
+        'NewMunis.Tag = Parent
         NewMunis.LoadMunisInfoByDevice(Device)
     End Sub
 End Class
