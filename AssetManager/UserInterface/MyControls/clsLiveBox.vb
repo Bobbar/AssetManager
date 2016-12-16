@@ -130,28 +130,26 @@ Public Class clsLiveBox
         Try
             Dim dr As DataRow
             Dim strQryRow As String
-            Select Case TypeName(CurrentLiveBoxArgs.Control.Parent)
-                Case "GroupBox"
-                    Dim CntGroup As GroupBox
-                    CntGroup = CurrentLiveBoxArgs.Control.Parent
-                Case "Panel"
-                    Dim CntGroup As Panel
-                    CntGroup = CurrentLiveBoxArgs.Control.Parent
-            End Select
-            If dtResults.Rows.Count < 1 Then
+            If TypeOf CurrentLiveBoxArgs.Control.Parent Is GroupBox Then
+                Dim CntGroup As GroupBox
+                CntGroup = CurrentLiveBoxArgs.Control.Parent
+            ElseIf TypeOf CurrentLiveBoxArgs.Control.Parent Is Panel Then
+                Dim CntGroup As Panel
+                CntGroup = CurrentLiveBoxArgs.Control.Parent
+            End If
+            If dtResults.Rows.Count < 0 Then
                 LiveBox.Visible = False
                 Exit Sub
             End If
             strQryRow = CurrentLiveBoxArgs.ViewMember ' & "," & CurrentLiveBoxArgs.DataMember
             LiveBox.Items.Clear()
-            With dr
-                For Each dr In dtResults.Rows
-                    LiveBox.Items.Add(dr.Item(strQryRow))
-                Next
-            End With
+            For Each dr In dtResults.Rows
+                LiveBox.Items.Add(dr.Item(strQryRow))
+            Next
             PosistionLiveBox()
             If dtResults.Rows.Count > 0 Then
                 LiveBox.Visible = True
+                LiveBox.Height = LiveBox.PreferredHeight
             Else
                 LiveBox.Visible = False
             End If
@@ -165,7 +163,6 @@ Public Class clsLiveBox
         End Try
     End Sub
     Private Sub PosistionLiveBox()
-        LiveBox.Visible = False
         Dim ParentForm As Form = CurrentLiveBoxArgs.Control.FindForm
         LiveBox.Parent = ParentForm
         LiveBox.BringToFront()
@@ -235,15 +232,15 @@ Public Class clsLiveBox
     Private Sub HideTimer_Tick(sender As Object, e As EventArgs) Handles HideTimer.Tick
         If Not IsNothing(CurrentLiveBoxArgs.Control) Then
             If Not CurrentLiveBoxArgs.Control.Focused And Not LiveBox.Focused Then
-                HideLiveBox()
+                If LiveBox.Visible Then HideLiveBox()
             End If
             If Not CurrentLiveBoxArgs.Control.Enabled Then
-                HideLiveBox()
+                If LiveBox.Visible Then HideLiveBox()
             End If
             If TypeOf CurrentLiveBoxArgs.Control Is TextBox Then
                 Dim txt As TextBox = CurrentLiveBoxArgs.Control
                 If txt.ReadOnly Then
-                    HideLiveBox()
+                    If LiveBox.Visible Then HideLiveBox()
                 End If
             End If
         End If
