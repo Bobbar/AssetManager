@@ -67,6 +67,7 @@ Partial Class frmAttachments
         Me.txtSerial = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -75,6 +76,7 @@ Partial Class frmAttachments
         Me.SibiGroup.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.DeviceGroup.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmdUpload
@@ -170,7 +172,7 @@ Partial Class frmAttachments
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 113)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(793, 401)
+        Me.GroupBox1.Size = New System.Drawing.Size(793, 416)
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Manage Attachments"
@@ -187,7 +189,7 @@ Partial Class frmAttachments
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(150, 21)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(637, 374)
+        Me.Panel1.Size = New System.Drawing.Size(637, 389)
         Me.Panel1.TabIndex = 19
         '
         'chkAllowDrag
@@ -245,7 +247,7 @@ Partial Class frmAttachments
         Me.AttachGrid.ShowCellErrors = False
         Me.AttachGrid.ShowCellToolTips = False
         Me.AttachGrid.ShowEditingIcon = False
-        Me.AttachGrid.Size = New System.Drawing.Size(629, 337)
+        Me.AttachGrid.Size = New System.Drawing.Size(629, 352)
         Me.AttachGrid.TabIndex = 18
         Me.AttachGrid.VirtualMode = True
         '
@@ -287,7 +289,7 @@ Partial Class frmAttachments
         Me.SibiGroup.Controls.Add(Me.Label1)
         Me.SibiGroup.Controls.Add(Me.txtUID)
         Me.SibiGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SibiGroup.Location = New System.Drawing.Point(12, 12)
+        Me.SibiGroup.Location = New System.Drawing.Point(0, 3)
         Me.SibiGroup.Name = "SibiGroup"
         Me.SibiGroup.Size = New System.Drawing.Size(793, 95)
         Me.SibiGroup.TabIndex = 7
@@ -355,7 +357,7 @@ Partial Class frmAttachments
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.ProgressBar1, Me.ToolStripStatusLabel2, Me.Spinner, Me.statMBPS, Me.ToolStripStatusLabel1, Me.cmdCancel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 517)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 532)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(817, 22)
         Me.StatusStrip1.TabIndex = 8
@@ -440,7 +442,7 @@ Partial Class frmAttachments
         Me.DeviceGroup.Controls.Add(Me.Label7)
         Me.DeviceGroup.Controls.Add(Me.txtAssetTag)
         Me.DeviceGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DeviceGroup.Location = New System.Drawing.Point(811, 12)
+        Me.DeviceGroup.Location = New System.Drawing.Point(817, 3)
         Me.DeviceGroup.Name = "DeviceGroup"
         Me.DeviceGroup.Size = New System.Drawing.Size(633, 95)
         Me.DeviceGroup.TabIndex = 9
@@ -504,17 +506,27 @@ Partial Class frmAttachments
         Me.txtAssetTag.Size = New System.Drawing.Size(105, 25)
         Me.txtAssetTag.TabIndex = 0
         '
+        'Panel2
+        '
+        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel2.Controls.Add(Me.DeviceGroup)
+        Me.Panel2.Controls.Add(Me.SibiGroup)
+        Me.Panel2.Location = New System.Drawing.Point(12, 12)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(793, 116)
+        Me.Panel2.TabIndex = 10
+        '
         'frmAttachments
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(817, 539)
-        Me.Controls.Add(Me.DeviceGroup)
+        Me.ClientSize = New System.Drawing.Size(817, 554)
         Me.Controls.Add(Me.StatusStrip1)
-        Me.Controls.Add(Me.SibiGroup)
         Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.Panel2)
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(833, 370)
@@ -534,6 +546,7 @@ Partial Class frmAttachments
         Me.StatusStrip1.PerformLayout()
         Me.DeviceGroup.ResumeLayout(False)
         Me.DeviceGroup.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -581,4 +594,5 @@ Partial Class frmAttachments
     Friend WithEvents Label7 As Label
     Friend WithEvents txtAssetTag As TextBox
     Friend WithEvents FolderPanel As Panel
+    Friend WithEvents Panel2 As Panel
 End Class
