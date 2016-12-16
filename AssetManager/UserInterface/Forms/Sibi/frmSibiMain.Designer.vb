@@ -37,7 +37,7 @@ Partial Class frmSibiMain
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStrip1 = New MyToolStrip()
         Me.cmdManage = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsdSelectWindow = New System.Windows.Forms.ToolStripDropDownButton()
@@ -293,7 +293,7 @@ Partial Class frmSibiMain
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ResultGrid As DataGridView
     Friend WithEvents cmdShowAll As Button
-    Friend WithEvents ToolStrip1 As ToolStrip
+    Friend WithEvents ToolStrip1 As MyToolStrip
     Friend WithEvents cmdManage As ToolStripButton
     Friend WithEvents Label2 As Label
     Friend WithEvents cmbDisplayYear As ComboBox

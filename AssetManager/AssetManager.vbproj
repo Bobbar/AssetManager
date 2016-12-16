@@ -302,6 +302,12 @@
     <Compile Include="UserInterface\Forms\Main\View_Entry.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\MyControls\MyToolStrip.Designer.vb">
+      <DependentUpon>MyToolStrip.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\MyControls\MyToolStrip.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserInterface\MyControls\PanelNoScrollOnFocus.Designer.vb">
       <DependentUpon>PanelNoScrollOnFocus.vb</DependentUpon>
     </Compile>

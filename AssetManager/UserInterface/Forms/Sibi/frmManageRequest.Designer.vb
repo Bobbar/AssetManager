@@ -59,7 +59,7 @@ Partial Class frmManageRequest
         Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStrip = New System.Windows.Forms.ToolStrip()
+        Me.ToolStrip = New MyToolStrip()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
@@ -708,7 +708,7 @@ Partial Class frmManageRequest
     Friend WithEvents RequestItemsGrid As DataGridView
     Friend WithEvents cmbStatus As ComboBox
     Friend WithEvents Label7 As Label
-    Friend WithEvents ToolStrip As ToolStrip
+    Friend WithEvents ToolStrip As MyToolStrip
     Friend WithEvents cmdCreate As ToolStripButton
     Friend WithEvents cmdAttachments As ToolStripButton
     Friend WithEvents cmdUpdate As ToolStripButton

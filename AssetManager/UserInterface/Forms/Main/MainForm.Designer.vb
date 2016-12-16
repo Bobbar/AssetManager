@@ -49,20 +49,6 @@ Partial Class MainForm
         Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.AddDeviceTool = New System.Windows.Forms.ToolStripButton()
-        Me.AdminDropDown = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.cmbDBs = New System.Windows.Forms.ToolStripComboBox()
-        Me.ManageAttachmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.txtGUID = New System.Windows.Forms.ToolStripTextBox()
-        Me.tsmUserManager = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TextEnCrypterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsdSelectWindow = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
         Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
         Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -88,6 +74,18 @@ Partial Class MainForm
         Me.txtCurUser = New System.Windows.Forms.TextBox()
         Me.txtAssetTagSearch = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
+        Me.ToolStrip1 = New AssetManager.MyToolStrip()
+        Me.AddDeviceTool = New System.Windows.Forms.ToolStripButton()
+        Me.AdminDropDown = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.cmbDBs = New System.Windows.Forms.ToolStripComboBox()
+        Me.ManageAttachmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.txtGUID = New System.Windows.Forms.ToolStripTextBox()
+        Me.tsmUserManager = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TextEnCrypterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsdSelectWindow = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -95,9 +93,9 @@ Partial Class MainForm
         Me.Panel1.SuspendLayout()
         Me.SearchGroup.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.PanelNoScrollOnFocus1.SuspendLayout()
+        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -372,119 +370,6 @@ Partial Class MainForm
         '
         Me.BigQueryWorker.WorkerReportsProgress = True
         '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
-        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddDeviceTool, Me.AdminDropDown, Me.tsdSelectWindow, Me.ToolStripSeparator5, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.cmdSibi})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip1.Size = New System.Drawing.Size(1240, 32)
-        Me.ToolStrip1.Stretch = True
-        Me.ToolStrip1.TabIndex = 6
-        Me.ToolStrip1.Text = "ToolStrip1"
-        '
-        'AddDeviceTool
-        '
-        Me.AddDeviceTool.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.AddDeviceTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.AddDeviceTool.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.AddDeviceTool.Name = "AddDeviceTool"
-        Me.AddDeviceTool.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.AddDeviceTool.Size = New System.Drawing.Size(123, 29)
-        Me.AddDeviceTool.Text = "Add Device"
-        '
-        'AdminDropDown
-        '
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem})
-        Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
-        Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.AdminDropDown.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.AdminDropDown.Name = "AdminDropDown"
-        Me.AdminDropDown.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.AdminDropDown.Size = New System.Drawing.Size(128, 29)
-        Me.AdminDropDown.Text = "Admin Tools"
-        '
-        'cmbDBs
-        '
-        Me.cmbDBs.Items.AddRange(New Object() {"asset_manager", "test_db"})
-        Me.cmbDBs.Name = "cmbDBs"
-        Me.cmbDBs.Size = New System.Drawing.Size(121, 23)
-        Me.cmbDBs.Text = "asset_manager"
-        Me.cmbDBs.ToolTipText = "Change DB"
-        Me.cmbDBs.Visible = False
-        '
-        'ManageAttachmentsToolStripMenuItem
-        '
-        Me.ManageAttachmentsToolStripMenuItem.Name = "ManageAttachmentsToolStripMenuItem"
-        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.ManageAttachmentsToolStripMenuItem.Text = "Manage Attachments"
-        Me.ManageAttachmentsToolStripMenuItem.ToolTipText = "Manage ALL Attachments"
-        '
-        'txtGUID
-        '
-        Me.txtGUID.AutoSize = False
-        Me.txtGUID.Name = "txtGUID"
-        Me.txtGUID.Size = New System.Drawing.Size(150, 23)
-        Me.txtGUID.ToolTipText = "GUID Lookup. (Press Enter)"
-        '
-        'tsmUserManager
-        '
-        Me.tsmUserManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.tsmUserManager.Name = "tsmUserManager"
-        Me.tsmUserManager.Size = New System.Drawing.Size(210, 22)
-        Me.tsmUserManager.Text = "User Manager"
-        '
-        'TextEnCrypterToolStripMenuItem
-        '
-        Me.TextEnCrypterToolStripMenuItem.Name = "TextEnCrypterToolStripMenuItem"
-        Me.TextEnCrypterToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.TextEnCrypterToolStripMenuItem.Text = "Text Encrypter"
-        '
-        'ScanAttachmentToolStripMenuItem
-        '
-        Me.ScanAttachmentToolStripMenuItem.Name = "ScanAttachmentToolStripMenuItem"
-        Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.ScanAttachmentToolStripMenuItem.Text = "Scan Attachments"
-        '
-        'tsdSelectWindow
-        '
-        Me.tsdSelectWindow.Image = Global.AssetManager.My.Resources.Resources.application_cascade_512
-        Me.tsdSelectWindow.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.tsdSelectWindow.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.tsdSelectWindow.Name = "tsdSelectWindow"
-        Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.tsdSelectWindow.Size = New System.Drawing.Size(151, 29)
-        Me.tsdSelectWindow.Text = "Select Window"
-        '
-        'ToolStripSeparator5
-        '
-        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 32)
-        '
-        'ToolStripLabel1
-        '
-        Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Padding = New System.Windows.Forms.Padding(0, 0, 60, 0)
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(60, 29)
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
-        '
-        'cmdSibi
-        '
-        Me.cmdSibi.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdSibi.Image = CType(resources.GetObject("cmdSibi.Image"), System.Drawing.Image)
-        Me.cmdSibi.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.cmdSibi.Name = "cmdSibi"
-        Me.cmdSibi.Size = New System.Drawing.Size(186, 29)
-        Me.cmdSibi.Text = "Sibi Aquisition Manager"
-        '
         'ConnectionWatcher
         '
         Me.ConnectionWatcher.Enabled = True
@@ -748,6 +633,111 @@ Partial Class MainForm
         Me.Label11.TabIndex = 38
         Me.Label11.Text = "Current User:"
         '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
+        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddDeviceTool, Me.AdminDropDown, Me.tsdSelectWindow, Me.ToolStripSeparator5, Me.cmdSibi})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
+        Me.ToolStrip1.Size = New System.Drawing.Size(1240, 32)
+        Me.ToolStrip1.Stretch = True
+        Me.ToolStrip1.TabIndex = 6
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'AddDeviceTool
+        '
+        Me.AddDeviceTool.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.AddDeviceTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.AddDeviceTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.AddDeviceTool.Name = "AddDeviceTool"
+        Me.AddDeviceTool.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
+        Me.AddDeviceTool.Size = New System.Drawing.Size(123, 29)
+        Me.AddDeviceTool.Text = "Add Device"
+        '
+        'AdminDropDown
+        '
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem})
+        Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
+        Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.AdminDropDown.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.AdminDropDown.Name = "AdminDropDown"
+        Me.AdminDropDown.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
+        Me.AdminDropDown.Size = New System.Drawing.Size(128, 29)
+        Me.AdminDropDown.Text = "Admin Tools"
+        '
+        'cmbDBs
+        '
+        Me.cmbDBs.Items.AddRange(New Object() {"asset_manager", "test_db"})
+        Me.cmbDBs.Name = "cmbDBs"
+        Me.cmbDBs.Size = New System.Drawing.Size(121, 23)
+        Me.cmbDBs.Text = "asset_manager"
+        Me.cmbDBs.ToolTipText = "Change DB"
+        Me.cmbDBs.Visible = False
+        '
+        'ManageAttachmentsToolStripMenuItem
+        '
+        Me.ManageAttachmentsToolStripMenuItem.Name = "ManageAttachmentsToolStripMenuItem"
+        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.ManageAttachmentsToolStripMenuItem.Text = "Manage Attachments"
+        Me.ManageAttachmentsToolStripMenuItem.ToolTipText = "Manage ALL Attachments"
+        '
+        'txtGUID
+        '
+        Me.txtGUID.AutoSize = False
+        Me.txtGUID.Name = "txtGUID"
+        Me.txtGUID.Size = New System.Drawing.Size(150, 23)
+        Me.txtGUID.ToolTipText = "GUID Lookup. (Press Enter)"
+        '
+        'tsmUserManager
+        '
+        Me.tsmUserManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.tsmUserManager.Name = "tsmUserManager"
+        Me.tsmUserManager.Size = New System.Drawing.Size(210, 22)
+        Me.tsmUserManager.Text = "User Manager"
+        '
+        'TextEnCrypterToolStripMenuItem
+        '
+        Me.TextEnCrypterToolStripMenuItem.Name = "TextEnCrypterToolStripMenuItem"
+        Me.TextEnCrypterToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.TextEnCrypterToolStripMenuItem.Text = "Text Encrypter"
+        '
+        'ScanAttachmentToolStripMenuItem
+        '
+        Me.ScanAttachmentToolStripMenuItem.Name = "ScanAttachmentToolStripMenuItem"
+        Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.ScanAttachmentToolStripMenuItem.Text = "Scan Attachments"
+        '
+        'tsdSelectWindow
+        '
+        Me.tsdSelectWindow.Image = Global.AssetManager.My.Resources.Resources.application_cascade_512
+        Me.tsdSelectWindow.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.tsdSelectWindow.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.tsdSelectWindow.Name = "tsdSelectWindow"
+        Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
+        Me.tsdSelectWindow.Size = New System.Drawing.Size(151, 29)
+        Me.tsdSelectWindow.Text = "Select Window"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 32)
+        '
+        'cmdSibi
+        '
+        Me.cmdSibi.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.cmdSibi.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdSibi.Image = CType(resources.GetObject("cmdSibi.Image"), System.Drawing.Image)
+        Me.cmdSibi.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdSibi.Name = "cmdSibi"
+        Me.cmdSibi.Padding = New System.Windows.Forms.Padding(20, 0, 20, 0)
+        Me.cmdSibi.Size = New System.Drawing.Size(226, 29)
+        Me.cmdSibi.Text = "Sibi Aquisition Manager"
+        Me.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -773,11 +763,11 @@ Partial Class MainForm
         Me.SearchGroup.ResumeLayout(False)
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.PanelNoScrollOnFocus1.ResumeLayout(False)
         Me.PanelNoScrollOnFocus1.PerformLayout()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -813,7 +803,7 @@ Partial Class MainForm
     Friend WithEvents txtSerialSearch As TextBox
     Friend WithEvents BigQueryWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents StripSpinner As ToolStripStatusLabel
-    Friend WithEvents ToolStrip1 As ToolStrip
+    Friend WithEvents ToolStrip1 As MyToolStrip
     Friend WithEvents AddDeviceTool As ToolStripButton
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents CopyTool As ToolStripMenuItem
@@ -844,6 +834,4 @@ Partial Class MainForm
     Friend WithEvents cmdSupDevSearch As Button
     Friend WithEvents chkHistorical As CheckBox
     Friend WithEvents tsdSelectWindow As ToolStripDropDownButton
-    Friend WithEvents ToolStripLabel1 As ToolStripLabel
-    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
 End Class

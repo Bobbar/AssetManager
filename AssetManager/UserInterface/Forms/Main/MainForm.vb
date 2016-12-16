@@ -64,6 +64,7 @@ Public Class MainForm
             Dim MyMunisTools As New MunisToolsMenu
             ToolStrip1.Items.Insert(2, MyMunisTools.MunisTools)
             MyWindowList = New WindowList(Me, tsdSelectWindow)
+
             Me.Show()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)

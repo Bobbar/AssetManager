@@ -76,7 +76,7 @@ Partial Class frmView
         Me.txtCheckOut = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStrip1 = New MyToolStrip()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.tsbDeleteDevice = New System.Windows.Forms.ToolStripButton()
@@ -1003,7 +1003,7 @@ Partial Class frmView
     Friend WithEvents txtDueBack As TextBox
     Friend WithEvents lblDueBack As Label
     Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents ToolStrip1 As ToolStrip
+    Friend WithEvents ToolStrip1 As MyToolStrip
     Friend WithEvents ToolStripButton1 As ToolStripButton
     Friend WithEvents ToolStripButton2 As ToolStripButton
     Friend WithEvents tsbDeleteDevice As ToolStripButton
