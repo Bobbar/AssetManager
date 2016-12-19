@@ -4,9 +4,10 @@
     Public bolSelectMod As Boolean = False
     Private CurrentMunisDevice As Device_Info
     Private MunisComms As New clsMunis_Comms
-    Sub New(ParentForm As Form)
+    Sub New(ParentForm As Form, Optional Hide_FA As Boolean = False)
         InitializeComponent()
         Me.Tag = ParentForm
+        If Hide_FA Then HideFixedAssetGrid()
     End Sub
     Public Sub LoadDevice(Device As Device_Info)
         CurrentMunisDevice = Device
@@ -29,7 +30,6 @@
     Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String)
         Try
             If ReqNumber = "" Or FiscalYr = "" Then Exit Sub
-            HideFixedAssetGrid()
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc, 
                          VEN.a_vendor_name, VEN.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr,
                          dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln
@@ -133,7 +133,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         Next
         DataGridMunis_Inventory.DataSource = MunisTable
     End Sub
-    Public Sub HideFixedAssetGrid()
+    Private Sub HideFixedAssetGrid()
         pnlFixedAsset.Visible = False
         pnlRequisition.Top = pnlMaster.Top
         pnlRequisition.Height = pnlMaster.Height

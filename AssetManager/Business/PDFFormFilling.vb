@@ -44,9 +44,8 @@ Public Class PDFFormFilling
     Private Sub PriceFromMunis()
         '  Dim Device As Device_Info = CurrentDevice
         Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
-        Dim f As New View_Munis(ParentForm)
+        Dim f As New View_Munis(ParentForm, True)
         f.Text = "Select a Line Item"
-        f.HideFixedAssetGrid()
         f.LoadDevice(CurrentDevice)
         f.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(CurrentDevice.strPO), Munis.Get_FY_From_PO(CurrentDevice.strPO))
         f.ShowDialog(ParentForm)
