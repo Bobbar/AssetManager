@@ -1,5 +1,26 @@
 ﻿Imports MySql.Data.MySqlClient
 Public Class clsAssetManager_Functions
+    Public Function DeviceExists(Device As Device_Info) As Boolean
+        Dim CheckAsset As String = Get_SQLValue(devices.TableName, devices.AssetTag, Device.strAssetTag, devices.AssetTag)
+        Dim bolAsset As Boolean
+        If CheckAsset <> "" Then
+            bolAsset = True
+        Else
+            bolAsset = False
+        End If
+        Dim CheckSerial As String = Get_SQLValue(devices.TableName, devices.Serial, Device.strSerial, devices.Serial)
+        Dim bolSerial As Boolean
+        If CheckSerial <> "" Then
+            bolSerial = True
+        Else
+            bolSerial = False
+        End If
+        If bolSerial Or bolAsset Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
     Public Function AddNewDevice(DeviceInfo As Device_Info, MunisEmp As Emp_Info) As Boolean
         Try
             Dim strUID As String = Guid.NewGuid.ToString

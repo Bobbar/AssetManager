@@ -16,18 +16,24 @@ Public Class AddNew
             Exit Sub
         Else
             Dim NewDevice As Device_Info = GetDBValues()
-            Dim Success As Boolean = Asset.AddNewDevice(NewDevice, MunisUser)
-            If Success Then
-                Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
-                If Not chkNoClear.Checked Then ClearAll()
-                If blah = vbNo Then Me.Hide()
-                MainForm.RefreshCurrent()
+            If Asset.DeviceExists(NewDevice) Then
+                Dim blah = Message("A device with that serial and/or asset tag already exists.", vbOKOnly + vbExclamation, "Duplicate Device")
+                Exit Sub
             Else
-                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
+                'proceed
             End If
+            Dim Success As Boolean = Asset.AddNewDevice(NewDevice, MunisUser)
+                If Success Then
+                    Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
+                    If Not chkNoClear.Checked Then ClearAll()
+                    If blah = vbNo Then Me.Hide()
+                    MainForm.RefreshCurrent()
+                Else
+                    Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
+                End If
 
-            Exit Sub
-        End If
+                Exit Sub
+            End If
     End Sub
     Private Function CheckFields() As Boolean
         Dim bolMissingField As Boolean
