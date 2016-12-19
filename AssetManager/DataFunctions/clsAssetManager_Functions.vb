@@ -279,7 +279,7 @@ VALUES(@" & historical_dev.ChangeType & ",
         Try
             Dim tmpArray() As Combo_Data
             Dim results As New DataTable
-            Dim strQRY = "SELECT " & CodeType & ".* FROM {OJ " & CodeType & " LEFT OUTER JOIN munis_codes on " & CodeType & ".db_value = munis_codes.asset_man_code} WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
+            Dim strQRY = "SELECT * FROM {OJ " & CodeType & " LEFT OUTER JOIN munis_codes on " & CodeType & ".db_value = munis_codes.asset_man_code} WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
             Dim row As Integer
             results = SQLComms.Return_SQLTable(strQRY)
             ReDim tmpArray(0)
