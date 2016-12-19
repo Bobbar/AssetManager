@@ -279,7 +279,7 @@ VALUES(@" & historical_dev.ChangeType & ",
         Try
             Dim tmpArray() As Combo_Data
             Dim results As New DataTable
-            Dim strQRY = "SELECT * FROM " & CodeType & " WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
+            Dim strQRY = "SELECT " & CodeType & ".* FROM {OJ " & CodeType & " LEFT OUTER JOIN munis_codes on " & CodeType & ".db_value = munis_codes.asset_man_code} WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
             Dim row As Integer
             results = SQLComms.Return_SQLTable(strQRY)
             ReDim tmpArray(0)
@@ -288,7 +288,15 @@ VALUES(@" & historical_dev.ChangeType & ",
                 row += 1
                 ReDim Preserve tmpArray(row)
                 tmpArray(row).strID = r.Item(main_combocodes.ID)
-                tmpArray(row).strLong = r.Item(main_combocodes.HumanValue)
+                If r.Table.Columns.Contains("munis_code") Then
+                    If Not IsDBNull(r.Item("munis_code")) Then
+                        tmpArray(row).strLong = r.Item(main_combocodes.HumanValue) & " - " & r.Item("munis_code")
+                    Else
+                        tmpArray(row).strLong = r.Item(main_combocodes.HumanValue)
+                    End If
+                Else
+                    tmpArray(row).strLong = r.Item(main_combocodes.HumanValue)
+                End If
                 tmpArray(row).strShort = r.Item(main_combocodes.DB_Value)
             Next
             results.Dispose()
