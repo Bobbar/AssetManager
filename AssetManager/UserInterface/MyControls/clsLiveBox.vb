@@ -81,13 +81,13 @@ Public Class clsLiveBox
                 Control.Text = LiveBox.Text
             Case LiveBoxType.UserSelect
                 Control.Text = LiveBox.Text
-                If Control.FindForm Is frmView Then
+                If Control.FindForm.GetType Is GetType(frmView) Then
                     If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
                         Dim FrmSetData As frmView = Control.FindForm
                         FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember)
                         FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)
                     End If
-                ElseIf Control.FindForm Is AddNew Then
+                ElseIf Control.FindForm.GetType Is GetType(AddNew) Then
                     If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
                         Dim FrmSetData As AddNew = Control.FindForm
                         FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember)
