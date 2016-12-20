@@ -125,7 +125,7 @@
             Next
             DropDownControl.DropDownItems.Clear()
             For Each frm As Form In CurrentWindows
-                If frm.GetType Is GetType(frmView) Then
+                If TypeOf frm Is frmView Then
                     Dim vw As frmView = frm
                     Dim newitem As New ToolStripMenuItem
                     newitem.Text = vw.Text
@@ -134,7 +134,7 @@
                     newitem.ToolTipText = "Right-Click to close."
                     AddHandler newitem.MouseDown, AddressOf WindowCloseClick
                     DropDownControl.DropDownItems.Add(newitem)
-                ElseIf frm.GetType Is GetType(frmManageRequest) Then
+                ElseIf TypeOf frm Is frmManageRequest Then
                     Dim req As frmManageRequest = frm
                     Dim newitem As New ToolStripMenuItem
                     newitem.Text = req.Text
@@ -143,7 +143,7 @@
                     newitem.ToolTipText = "Right-Click to close."
                     AddHandler newitem.MouseDown, AddressOf WindowCloseClick
                     DropDownControl.DropDownItems.Add(newitem)
-                ElseIf frm.GetType Is GetType(frmSibiMain) Then
+                ElseIf TypeOf frm Is frmSibiMain Then
                     Dim sibi As frmSibiMain = frm
                     Dim newitem As New ToolStripMenuItem
                     newitem.Text = sibi.Text
@@ -157,13 +157,13 @@
         End Sub
         Private Sub WindowSelectClick(sender As Object, e As ToolStripItemClickedEventArgs)
             Dim item As ToolStripItem = e.ClickedItem
-            If item.Tag.GetType Is GetType(frmView) Then
+            If TypeOf item.Tag Is frmView Then
                 Dim vw As frmView = item.Tag
                 ActivateForm(vw.CurrentViewDevice.strGUID)
-            ElseIf item.Tag.GetType Is GetType(frmManageRequest) Then
+            ElseIf TypeOf item.Tag Is frmManageRequest Then
                 Dim req As frmManageRequest = item.Tag
                 ActivateForm(req.CurrentRequest.strUID)
-            ElseIf item.Tag.GetType Is GetType(frmSibiMain) Then
+            ElseIf TypeOf item.Tag Is frmSibiMain Then
                 frmSibiMain.Show()
                 frmSibiMain.Activate()
                 frmSibiMain.WindowState = FormWindowState.Normal
@@ -172,15 +172,15 @@
         Private Sub WindowCloseClick(sender As ToolStripItem, e As MouseEventArgs)
             If e.Button = MouseButtons.Right Then
                 Dim item As ToolStripItem = sender
-                If item.Tag.GetType Is GetType(frmView) Then
+                If TypeOf item.Tag Is frmView Then
                     DropDownControl.DropDownItems.Remove(item)
                     Dim vw As frmView = item.Tag
                     vw.Dispose()
-                ElseIf item.Tag.GetType Is GetType(frmManageRequest) Then
+                ElseIf TypeOf item.Tag Is frmManageRequest Then
                     DropDownControl.DropDownItems.Remove(item)
                     Dim req As frmManageRequest = item.Tag
                     req.Dispose()
-                ElseIf item.Tag.GetType Is GetType(frmSibiMain) Then
+                ElseIf TypeOf item.Tag Is frmSibiMain Then
                     DropDownControl.DropDownItems.Remove(item)
                     frmSibiMain.Dispose()
                 End If

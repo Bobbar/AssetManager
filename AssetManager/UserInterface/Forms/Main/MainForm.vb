@@ -37,7 +37,6 @@ Public Class MainForm
                 Dim blah = Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect")
                 EndProgram()
             End If
-            Dim userFullName As String = UserPrincipal.Current.DisplayName
             ExtendedMethods.DoubleBuffered(ResultGrid, True)
             Status("Loading Indexes...")
             BuildIndexes()
@@ -61,10 +60,8 @@ Public Class MainForm
             ShowAll()
             Thread.Sleep(500)
             SplashScreen.Hide()
-            Dim MyMunisTools As New MunisToolsMenu
-            ToolStrip1.Items.Insert(2, MyMunisTools.MunisTools)
+            Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip1, 2)
             MyWindowList = New WindowList(Me, tsdSelectWindow)
-
             Me.Show()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)

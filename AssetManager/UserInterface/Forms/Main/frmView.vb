@@ -23,9 +23,7 @@ Public Class frmView
         InitializeComponent()
     End Sub
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim MyMunisMenu As New MunisToolsMenu
-        MyMunisMenu.Tag = Me
-        ToolStrip1.Items.Insert(6, MyMunisMenu.MunisTools)
+        Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
         grpNetTools.Visible = False
         ToolStrip1.BackColor = colToolBarColor
         lblGUID.BackColor = SetBarColor(CurrentViewDevice.strGUID)

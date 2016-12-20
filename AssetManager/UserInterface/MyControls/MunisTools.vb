@@ -1,4 +1,9 @@
 ﻿Public Class MunisToolsMenu
+    Sub New(ParentForm As Form, ByRef TargetToolStrip As MyToolStrip, LocationIndex As Integer)
+        InitializeComponent()
+        Me.Tag = ParentForm
+        TargetToolStrip.Items.Insert(LocationIndex, Me.MunisTools)
+    End Sub
     Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles tsmUserOrgObLookup.Click
         Munis.NameSearch(Me.Tag)
     End Sub
