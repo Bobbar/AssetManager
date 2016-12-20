@@ -64,8 +64,8 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
                 .AddTextBox("txtSerial", "Serial:")
                 .ShowDialog()
                 If .DialogResult = DialogResult.OK Then
-                    Device.strAssetTag = NewDialog.GetControlValue("txtAsset")
-                    Device.strSerial = NewDialog.GetControlValue("txtSerial")
+                    Device.strAssetTag = Trim(NewDialog.GetControlValue("txtAsset"))
+                    Device.strSerial = Trim(NewDialog.GetControlValue("txtSerial"))
                     NewMunisView_Device(Device, Parent)
                 End If
             End With
