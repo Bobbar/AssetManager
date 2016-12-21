@@ -1,5 +1,5 @@
 ﻿Public Module Form_Control
-    Public Sub ActivateForm(strGUID As String)
+    Public Sub ActivateFormByUID(strGUID As String)
         For Each frm As Form In My.Application.OpenForms
             Select Case frm.GetType
                 Case GetType(frmView)
@@ -25,6 +25,11 @@
                     End If
             End Select
         Next
+    End Sub
+    Public Sub ActivateFormByHandle(form As Form)
+        form.Show()
+        form.Activate()
+        form.WindowState = FormWindowState.Normal
     End Sub
     Public Sub MinimizeAll()
         For Each frm As Form In My.Application.OpenForms
@@ -106,84 +111,59 @@
     End Function
     Public Class WindowList
         '  Private CurrentWindows As New List(Of Form)
+        Private WithEvents RefreshTimer As Timer
         Private MyParentForm As Form
         Private DropDownControl As ToolStripDropDownButton
+        Private intFormCount As Integer
         Sub New(ParentForm As Form, DropDownCtl As ToolStripDropDownButton)
             MyParentForm = ParentForm
             DropDownControl = DropDownCtl
             Init()
         End Sub
         Private Sub Init()
+            InitializeTimer()
             ' AddHandler DropDownControl.DropDownItemClicked, AddressOf WindowSelectClick
         End Sub
+        Private Sub InitializeTimer()
+            RefreshTimer = New Timer
+            RefreshTimer.Interval = 100
+            RefreshTimer.Enabled = True
+            AddHandler RefreshTimer.Tick, AddressOf RefreshTimer_Tick
+        End Sub
+        Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs) Handles RefreshTimer.Tick
+            If FormCount() <> intFormCount Then
+                If Not DropDownControl.DropDown.Focused Then
+                    RefreshWindowList(MyParentForm)
+                    intFormCount = FormCount()
+                End If
+
+            End If
+        End Sub
+        Private Function FormCount() As Integer
+            Dim i As Integer = 0
+            For Each frm As Form In My.Application.OpenForms
+                If Not frm.IsDisposed Then i += 1
+            Next
+            Return i
+        End Function
         Public Sub RefreshWindowList(Optional ParentForm As Form = Nothing)
-            'CurrentWindows.Clear()
-            'For Each frm As Form In My.Application.OpenForms
-            '    If frm.Tag Is MyParentForm And Not frm.IsDisposed Then
-            '        CurrentWindows.Add(frm)
-            '    End If
-            'Next
             DropDownControl.DropDownItems.Clear()
             For Each frm As Form In My.Application.OpenForms 'CurrentWindows
-
                 If frm.Tag Is MyParentForm And Not frm.IsDisposed Then
-
-
                     If HasChildren(frm) Then
-
-
-
                         Dim NewDropDown As ToolStripMenuItem = WindowListButton(frm)
-
-
                         For Each Childfrm As Form In ListOfChilden(frm)
                             If Not Childfrm.IsDisposed Then
                                 AddDDItem(NewDropDown.DropDownItems, Childfrm)
                             End If
-
                         Next
                         DropDownControl.DropDownItems.Add(NewDropDown)
                     Else
                         ' Dim NewDropDown As ToolStripMenuItem = WindowListButton(frm)
                         AddDDItem(DropDownControl.DropDownItems, frm)
-
-
-
                     End If
-
-
                 End If
 
-
-                'If TypeOf frm Is frmView Then
-                '    Dim vw As frmView = frm
-                '    Dim newitem As New ToolStripMenuItem
-                '    newitem.Text = vw.Text
-                '    newitem.Image = My.Resources.inventory_small_fw
-                '    newitem.Tag = vw
-                '    newitem.ToolTipText = "Right-Click to close."
-                '    AddHandler newitem.MouseDown, AddressOf WindowCloseClick
-
-                '    DropDownControl.DropDownItems.Add(newitem)
-                'ElseIf TypeOf frm Is frmManageRequest Then
-                '    Dim req As frmManageRequest = frm
-                '    Dim newitem As New ToolStripMenuItem
-                '    newitem.Text = req.Text
-                '    newitem.Image = My.Resources.Acquire_new_shadow_small
-                '    newitem.Tag = req
-                '    newitem.ToolTipText = "Right-Click to close."
-                '    AddHandler newitem.MouseDown, AddressOf WindowCloseClick
-                '    DropDownControl.DropDownItems.Add(newitem)
-                'ElseIf TypeOf frm Is frmSibiMain Then
-                '    Dim sibi As frmSibiMain = frm
-                '    Dim newitem As New ToolStripMenuItem
-                '    newitem.Text = sibi.Text
-                '    newitem.Image = My.Resources.Acquire_new_shadow_small
-                '    newitem.Tag = sibi
-                '    newitem.ToolTipText = "Right-Click to close."
-                '    AddHandler newitem.MouseDown, AddressOf WindowCloseClick
-                '    DropDownControl.DropDownItems.Insert(0, newitem)
-                'End If
             Next
         End Sub
         Private Function WindowListButton(frm As Form) As ToolStripMenuItem
@@ -289,58 +269,72 @@
             Return tmpList
 
         End Function
-        Private Sub WindowSelectClick(sender As Object, e As ToolStripItemClickedEventArgs)
-            Dim item As ToolStripItem = e.ClickedItem
-            If TypeOf item.Tag Is frmView Then
-                Dim vw As frmView = item.Tag
-                ActivateForm(vw.CurrentViewDevice.strGUID)
-            ElseIf TypeOf item.Tag Is frmManageRequest Then
-                Dim req As frmManageRequest = item.Tag
-                ActivateForm(req.CurrentRequest.strUID)
-            ElseIf TypeOf item.Tag Is frmSibiMain Then
-                frmSibiMain.Show()
-                frmSibiMain.Activate()
-                frmSibiMain.WindowState = FormWindowState.Normal
-            End If
-        End Sub
+        'Private Sub WindowSelectClick(sender As Object, e As ToolStripItemClickedEventArgs)
+        '    Dim item As ToolStripItem = e.ClickedItem
+        '    If TypeOf item.Tag Is frmView Then
+        '        Dim vw As frmView = item.Tag
+        '        ActivateFormByUID(vw.CurrentViewDevice.strGUID)
+        '    ElseIf TypeOf item.Tag Is frmManageRequest Then
+        '        Dim req As frmManageRequest = item.Tag
+        '        ActivateFormByUID(req.CurrentRequest.strUID)
+        '    ElseIf TypeOf item.Tag Is frmSibiMain Then
+        '        frmSibiMain.Show()
+        '        frmSibiMain.Activate()
+        '        frmSibiMain.WindowState = FormWindowState.Normal
+        '    End If
+        'End Sub
         Private Sub WindowClick(sender As ToolStripItem, e As MouseEventArgs)
             If e.Button = MouseButtons.Right Then
                 Dim item As ToolStripItem = sender
                 If TypeOf item.Tag Is frmView Then
-                    DropDownControl.DropDownItems.Remove(item)
+                    '   DropDownControl.DropDownItems.Remove(item)
+                    item.Dispose()
                     Dim vw As frmView = item.Tag
                     vw.Dispose()
                 ElseIf TypeOf item.Tag Is frmManageRequest Then
-                    DropDownControl.DropDownItems.Remove(item)
+                    'DropDownControl.DropDownItems.Remove(item)
+                    item.Dispose()
                     Dim req As frmManageRequest = item.Tag
                     req.Dispose()
                 ElseIf TypeOf item.Tag Is frmSibiMain Then
-                    DropDownControl.DropDownItems.Remove(item)
+                    'DropDownControl.DropDownItems.Remove(item)
+                    item.Dispose()
                     frmSibiMain.Dispose()
                 ElseIf TypeOf item.Tag Is frmAttachments Then
-                    DropDownControl.DropDownItems.Remove(item)
+                    '  Dim ItemParent As 
+                    item.Dispose()
+                    'DropDownControl.DropDownItems.Remove(item)
                     Dim attach As frmAttachments = item.Tag
                     attach.Dispose()
 
                 End If
-
-
+                intFormCount = FormCount()
+                Debug.Print(FormCount() & " vs " & My.Application.OpenForms.Count)
                 If DropDownControl.DropDownItems.Count = 0 Then
                     DropDownControl.HideDropDown()
                 End If
             ElseIf e.Button = MouseButtons.Left Then
-                Dim item As ToolStripItem = sender 'e.ClickedItem
-                If TypeOf item.Tag Is frmView Then
-                    Dim vw As frmView = item.Tag
-                    ActivateForm(vw.CurrentViewDevice.strGUID)
-                ElseIf TypeOf item.Tag Is frmManageRequest Then
-                    Dim req As frmManageRequest = item.Tag
-                    ActivateForm(req.CurrentRequest.strUID)
-                ElseIf TypeOf item.Tag Is frmSibiMain Then
-                    frmSibiMain.Show()
-                    frmSibiMain.Activate()
-                    frmSibiMain.WindowState = FormWindowState.Normal
-                End If
+                ' Dim item As ToolStripItem = sender 'e.ClickedItem
+
+                ActivateFormByHandle(sender.Tag)
+                'If TypeOf item.Tag Is frmView Then
+                '    'Dim vw As frmView = item.Tag
+                '    'ActivateFormByUID(vw.CurrentViewDevice.strGUID)
+                '    ActivateFormByHandle(item.Tag)
+                'ElseIf TypeOf item.Tag Is frmManageRequest Then
+                '    'Dim req As frmManageRequest = item.Tag
+                '    'ActivateFormByUID(req.CurrentRequest.strUID)
+
+                'ElseIf TypeOf item.Tag Is frmSibiMain Then
+                '    frmSibiMain.Show()
+                '    frmSibiMain.Activate()
+                '    frmSibiMain.WindowState = FormWindowState.Normal
+                'Else
+                '    Dim frm As Form = item.Tag
+                '    frm.Show()
+                '    frm.Activate()
+                '    frm.WindowState = FormWindowState.Normal
+                'End If
 
 
 

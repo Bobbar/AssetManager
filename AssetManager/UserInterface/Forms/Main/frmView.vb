@@ -831,7 +831,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             'NewAttachments.Activate()
             'NewAttachments.Show()
         Else
-            ActivateForm(CurrentViewDevice.strGUID)
+            ActivateFormByUID(CurrentViewDevice.strGUID)
         End If
     End Sub
     Public Function AttachmentsIsOpen() As Boolean

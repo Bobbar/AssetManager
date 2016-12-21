@@ -742,7 +742,7 @@ VALUES
                 Dim NewAttach As New frmAttachments(Me, CurrentRequest)
             End If
         Else
-            ActivateForm(CurrentRequest.strUID)
+            ActivateFormByUID(CurrentRequest.strUID)
         End If
     End Sub
     Public Function AttachmentsIsOpen(strGUID As String) As Boolean

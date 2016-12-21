@@ -300,7 +300,7 @@ Public Class MainForm
             DoneWaiting()
         Else
             ' Dim blah = Message("That device is already open.", vbOKOnly + vbExclamation, "Duplicate Window")
-            ActivateForm(strGUID)
+            ActivateFormByUID(strGUID)
         End If
     End Sub
     Private Sub RefreshCombos()

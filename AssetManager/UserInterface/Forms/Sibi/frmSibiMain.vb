@@ -151,7 +151,7 @@ Public Class frmSibiMain
             Dim ManRequest As New frmManageRequest(Me, strUID)
             MyWindowList.RefreshWindowList()
         Else
-            ActivateForm(strUID)
+            ActivateFormByUID(strUID)
         End If
     End Sub
     Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
@@ -267,6 +267,7 @@ Public Class frmSibiMain
         CloseChildren(Me)
     End Sub
     Private Sub frmSibiMain_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        CloseChildren(Me)
         MainForm.MyWindowList.RefreshWindowList()
     End Sub
     Private Sub txtPO_TextChanged(sender As Object, e As EventArgs) Handles txtPO.TextChanged
