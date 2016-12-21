@@ -26,7 +26,6 @@ Public Class frmSibiMain
         SetDisplayYears()
         ShowAll("All")
         MyWindowList = New WindowList(Me, tsdSelectWindow)
-        MyWindowList.RefreshWindowList()
     End Sub
     Private Function BuildSearchListNew() As List(Of SearchVal)
         Dim tmpList As New List(Of SearchVal)
@@ -136,11 +135,11 @@ Public Class frmSibiMain
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
         Dim NewRequest As New frmManageRequest(Me)
-        MyWindowList.RefreshWindowList()
+        '    MyWindowList.RefreshWindowList()
     End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
         OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
-        MyWindowList.RefreshWindowList()
+        '   MyWindowList.RefreshWindowList()
     End Sub
     Private Sub OpenRequest(strUID As String)
         If Not ConnectionReady() Then
@@ -149,7 +148,7 @@ Public Class frmSibiMain
         End If
         If Not RequestIsOpen(strUID) Then
             Dim ManRequest As New frmManageRequest(Me, strUID)
-            MyWindowList.RefreshWindowList()
+            '   MyWindowList.RefreshWindowList()
         Else
             ActivateFormByUID(strUID)
         End If
@@ -268,7 +267,7 @@ Public Class frmSibiMain
     End Sub
     Private Sub frmSibiMain_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         CloseChildren(Me)
-        MainForm.MyWindowList.RefreshWindowList()
+        '    MainForm.MyWindowList.RefreshWindowList()
     End Sub
     Private Sub txtPO_TextChanged(sender As Object, e As EventArgs) Handles txtPO.TextChanged
         DynamicSearch()

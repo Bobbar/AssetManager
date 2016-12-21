@@ -296,7 +296,6 @@ Public Class MainForm
         If Not DeviceIsOpen(strGUID) Then
             Waiting()
             Dim NewView As New frmView(Me, strGUID)
-            MyWindowList.RefreshWindowList()
             DoneWaiting()
         Else
             ' Dim blah = Message("That device is already open.", vbOKOnly + vbExclamation, "Duplicate Window")
@@ -582,7 +581,7 @@ Public Class MainForm
             frmSibiMain.Tag = Me
             frmSibiMain.Show()
             frmSibiMain.Activate()
-            MyWindowList.RefreshWindowList()
+            ' MyWindowList.RefreshWindowList()
         Else
             frmSibiMain.Show()
             frmSibiMain.Activate()
