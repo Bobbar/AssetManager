@@ -13,7 +13,7 @@
     End Sub
     Private Sub InitializeTimer()
         RefreshTimer = New Timer
-        RefreshTimer.Interval = 100
+        RefreshTimer.Interval = 250
         RefreshTimer.Enabled = True
         AddHandler RefreshTimer.Tick, AddressOf RefreshTimer_Tick
     End Sub
