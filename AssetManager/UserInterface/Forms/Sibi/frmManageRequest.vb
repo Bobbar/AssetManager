@@ -767,8 +767,8 @@ VALUES
     End Sub
     Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         CloseChildren(Me)
-        SendWindowListRefresh()
         Me.Dispose()
+        SendWindowListRefresh()
     End Sub
     Private Sub SendWindowListRefresh()
         Dim ParentForm As Form = Me.Tag
