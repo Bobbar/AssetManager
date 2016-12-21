@@ -315,6 +315,7 @@
       <SubType>Component</SubType>
       <CustomToolNamespace>NoScrollPanel</CustomToolNamespace>
     </Compile>
+    <Compile Include="UserInterface\MyControls\WindowList.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UserInterface\Forms\frmAttachments.resx">
