@@ -72,9 +72,8 @@
     End Function
     Private Sub WindowClick(sender As ToolStripItem, e As MouseEventArgs)
         If e.Button = MouseButtons.Right Then
-            Dim item As ToolStripItem = sender
-            Dim frm As Form = item.Tag
-            item.Dispose()
+            Dim frm As Form = sender.Tag
+            sender.Dispose()
             frm.Dispose()
             intFormCount = FormCount()
             If DropDownControl.DropDownItems.Count = 0 Then

@@ -439,7 +439,10 @@ VALUES
             bolNewRequest = False
             pnlCreate.Visible = False
             Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete")
-            frmSibiMain.ShowAll()
+            If TypeOf Me.Tag Is frmSibiMain Then
+                Dim ParentForm As frmSibiMain = Me.Tag
+                ParentForm.RefreshResults()
+            End If
             OpenRequest(strRequestUID)
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -563,10 +566,11 @@ VALUES
                 End If
             Next
             cmd.Dispose()
-            'If rows = RequestData.RequstItems.Rows.Count + 1 Then
-            frmSibiMain.ShowAll()
+            If TypeOf Me.Tag Is frmSibiMain Then
+                Dim ParentForm As frmSibiMain = Me.Tag
+                ParentForm.RefreshResults()
+            End If
             Message("Success!")
-            'End If
             OpenRequest(CurrentRequest.strUID)
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -806,7 +810,10 @@ VALUES
             If Asset.DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
                 Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
                 CurrentRequest = Nothing
-                frmSibiMain.ShowAll()
+                If TypeOf Me.Tag Is frmSibiMain Then
+                    Dim ParentForm As frmSibiMain = Me.Tag
+                    ParentForm.RefreshResults()
+                End If
                 Me.Dispose()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)

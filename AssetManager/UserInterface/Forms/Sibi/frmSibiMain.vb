@@ -3,6 +3,10 @@ Imports MySql.Data.MySqlClient
 Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
     Public MyWindowList As WindowList
+    Private LastCmd As MySqlCommand
+    Public Sub RefreshResults()
+        ExecuteCmd(LastCmd)
+    End Sub
     Private Sub ClearAll(TopControl As Control.ControlCollection)
         For Each ctl As Control In TopControl
             If TypeOf ctl Is TextBox Then
@@ -63,6 +67,7 @@ Public Class frmSibiMain
     End Sub
     Private Sub ExecuteCmd(cmd As MySqlCommand)
         Try
+            LastCmd = cmd
             Dim LocalSQLComm As New clsMySQL_Comms
             Dim QryComm As MySqlCommand = cmd
             Dim ds As New DataSet
@@ -78,7 +83,6 @@ Public Class frmSibiMain
             ConnectionReady()
         End Try
     End Sub
-
     Public Sub SendToGrid(Results As DataTable)
         Try
             Dim table As New DataTable
@@ -125,21 +129,19 @@ Public Class frmSibiMain
         Next
         cmbDisplayYear.SelectedIndex = 0
     End Sub
-    Public Sub ShowAll(Optional Year As String = "")
+    Private Sub ShowAll(Optional Year As String = "")
         If Year = "" Then Year = cmbDisplayYear.Text
         If Year = "All" Then
-            SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
+            ExecuteCmd(SQLComms.Return_SQLCommand("SELECT * FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
         Else
-            SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM " & sibi_requests.TableName & " WHERE YEAR(" & sibi_requests.DateStamp & ") = " & Year & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
+            ExecuteCmd(SQLComms.Return_SQLCommand("SELECT * FROM " & sibi_requests.TableName & " WHERE YEAR(" & sibi_requests.DateStamp & ") = " & Year & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
         End If
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
         Dim NewRequest As New frmManageRequest(Me)
-        '    MyWindowList.RefreshWindowList()
     End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
         OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
-        '   MyWindowList.RefreshWindowList()
     End Sub
     Private Sub OpenRequest(strUID As String)
         If Not ConnectionReady() Then
@@ -148,7 +150,6 @@ Public Class frmSibiMain
         End If
         If Not RequestIsOpen(strUID) Then
             Dim ManRequest As New frmManageRequest(Me, strUID)
-            '   MyWindowList.RefreshWindowList()
         Else
             ActivateFormByUID(strUID)
         End If
@@ -267,7 +268,6 @@ Public Class frmSibiMain
     End Sub
     Private Sub frmSibiMain_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         CloseChildren(Me)
-        '    MainForm.MyWindowList.RefreshWindowList()
     End Sub
     Private Sub txtPO_TextChanged(sender As Object, e As EventArgs) Handles txtPO.TextChanged
         DynamicSearch()

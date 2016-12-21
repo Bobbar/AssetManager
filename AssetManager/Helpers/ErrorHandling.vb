@@ -19,6 +19,8 @@ Module ErrorHandling
                 ErrorResult = handleSQLException(ex, strOrigSub)
             Case "InvalidCastException"
                 Dim handEx As InvalidCastException = ex
+                Logger("CAST ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.HResult & "  Message:" & handEx.Message)
+                Dim blah = Message("An object was cast to an unmatched type.  See log for details.  Log: " & strLogPath, vbOKOnly + vbExclamation, "Invalid Cast Error")
                 Select Case handEx.HResult
                     Case -2147467262 'DBNull to String type error. These are pretty ubiquitous and not a big deal. Move along.
                         ErrorResult = True
@@ -81,10 +83,10 @@ Module ErrorHandling
                 Dim blah = Message("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbExclamation, "Connection Lost")
                 Return True
             Case 1064
-                Dim blah = Message("Something went wrong with the SQL command. See log for details.  Log= " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
+                Dim blah = Message("Something went wrong with the SQL command. See log for details.  Log: " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
                 Return True
             Case 1292
-                Dim blah = Message("Something went wrong with the SQL command. See log for details.  Log= " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
+                Dim blah = Message("Something went wrong with the SQL command. See log for details.  Log: " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
                 Return True
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
