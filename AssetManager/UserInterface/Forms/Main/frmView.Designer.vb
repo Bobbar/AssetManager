@@ -738,47 +738,46 @@ Partial Class frmView
         'ToolStrip1
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
-        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.tsbDeleteDevice, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip1.Size = New System.Drawing.Size(1085, 32)
+        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.ToolStrip1.Size = New System.Drawing.Size(1085, 37)
         Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 44
         Me.ToolStrip1.Text = "ToolStrip1"
         '
         'ToolStripButton1
         '
+        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.Edit
-        Me.ToolStripButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.ToolStripButton1.Size = New System.Drawing.Size(98, 29)
+        Me.ToolStripButton1.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.ToolStripButton1.Size = New System.Drawing.Size(39, 34)
         Me.ToolStripButton1.Text = "Modify"
         '
         'ToolStripButton2
         '
+        Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ToolStripButton2.Image = Global.AssetManager.My.Resources.Resources.note_icon_27942
-        Me.ToolStripButton2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
-        Me.ToolStripButton2.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.ToolStripButton2.Size = New System.Drawing.Size(114, 29)
+        Me.ToolStripButton2.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.ToolStripButton2.Size = New System.Drawing.Size(39, 34)
         Me.ToolStripButton2.Text = "Add Note"
         '
         'tsbDeleteDevice
         '
+        Me.tsbDeleteDevice.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.tsbDeleteDevice.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
-        Me.tsbDeleteDevice.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.tsbDeleteDevice.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbDeleteDevice.Name = "tsbDeleteDevice"
-        Me.tsbDeleteDevice.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.tsbDeleteDevice.Size = New System.Drawing.Size(126, 29)
+        Me.tsbDeleteDevice.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.tsbDeleteDevice.Size = New System.Drawing.Size(39, 34)
         Me.tsbDeleteDevice.Text = "Delete Device"
         '
         'AttachmentTool
@@ -787,8 +786,8 @@ Partial Class frmView
         Me.AttachmentTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AttachmentTool.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.AttachmentTool.Name = "AttachmentTool"
-        Me.AttachmentTool.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.AttachmentTool.Size = New System.Drawing.Size(118, 29)
+        Me.AttachmentTool.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.AttachmentTool.Size = New System.Drawing.Size(136, 34)
         Me.AttachmentTool.Text = "Attachments"
         '
         'TrackingTool
@@ -799,7 +798,7 @@ Partial Class frmView
         Me.TrackingTool.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.TrackingTool.Name = "TrackingTool"
         Me.TrackingTool.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.TrackingTool.Size = New System.Drawing.Size(104, 29)
+        Me.TrackingTool.Size = New System.Drawing.Size(116, 34)
         Me.TrackingTool.Text = "Tracking"
         '
         'CheckOutTool
@@ -807,7 +806,7 @@ Partial Class frmView
         Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_red
         Me.CheckOutTool.Name = "CheckOutTool"
-        Me.CheckOutTool.Size = New System.Drawing.Size(142, 32)
+        Me.CheckOutTool.Size = New System.Drawing.Size(144, 32)
         Me.CheckOutTool.Text = "Check Out"
         '
         'CheckInTool
@@ -815,7 +814,7 @@ Partial Class frmView
         Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_green
         Me.CheckInTool.Name = "CheckInTool"
-        Me.CheckInTool.Size = New System.Drawing.Size(142, 32)
+        Me.CheckInTool.Size = New System.Drawing.Size(144, 32)
         Me.CheckInTool.Text = "Check In"
         '
         'tsdAssetControl
@@ -824,34 +823,34 @@ Partial Class frmView
         Me.tsdAssetControl.Image = Global.AssetManager.My.Resources.Resources.Form2_512
         Me.tsdAssetControl.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdAssetControl.Name = "tsdAssetControl"
-        Me.tsdAssetControl.Size = New System.Drawing.Size(164, 29)
+        Me.tsdAssetControl.Size = New System.Drawing.Size(189, 34)
         Me.tsdAssetControl.Text = "Asset Control Forms"
         '
         'tsmAssetInputForm
         '
         Me.tsmAssetInputForm.Image = Global.AssetManager.My.Resources.Resources.import_document_mail_save_512
         Me.tsmAssetInputForm.Name = "tsmAssetInputForm"
-        Me.tsmAssetInputForm.Size = New System.Drawing.Size(204, 32)
+        Me.tsmAssetInputForm.Size = New System.Drawing.Size(230, 32)
         Me.tsmAssetInputForm.Text = "Asset Input Form"
         '
         'tsmAssetTransferForm
         '
         Me.tsmAssetTransferForm.Image = Global.AssetManager.My.Resources.Resources._239360_transfer_arrows_512
         Me.tsmAssetTransferForm.Name = "tsmAssetTransferForm"
-        Me.tsmAssetTransferForm.Size = New System.Drawing.Size(204, 32)
+        Me.tsmAssetTransferForm.Size = New System.Drawing.Size(230, 32)
         Me.tsmAssetTransferForm.Text = "Asset Transfer Form"
         '
         'AssetDisposalFormToolStripMenuItem
         '
         Me.AssetDisposalFormToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.trash_512
         Me.AssetDisposalFormToolStripMenuItem.Name = "AssetDisposalFormToolStripMenuItem"
-        Me.AssetDisposalFormToolStripMenuItem.Size = New System.Drawing.Size(204, 32)
+        Me.AssetDisposalFormToolStripMenuItem.Size = New System.Drawing.Size(230, 32)
         Me.AssetDisposalFormToolStripMenuItem.Text = "Asset Disposal Form"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 37)
         Me.ToolStripSeparator1.Visible = False
         '
         'cmdAccept_Tool
@@ -862,14 +861,14 @@ Partial Class frmView
         Me.cmdAccept_Tool.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdAccept_Tool.Name = "cmdAccept_Tool"
         Me.cmdAccept_Tool.Padding = New System.Windows.Forms.Padding(100, 0, 0, 0)
-        Me.cmdAccept_Tool.Size = New System.Drawing.Size(178, 29)
+        Me.cmdAccept_Tool.Size = New System.Drawing.Size(178, 34)
         Me.cmdAccept_Tool.Text = "Accept"
         Me.cmdAccept_Tool.Visible = False
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 37)
         Me.ToolStripSeparator3.Visible = False
         '
         'cmdCancel_Tool
@@ -880,14 +879,14 @@ Partial Class frmView
         Me.cmdCancel_Tool.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdCancel_Tool.Name = "cmdCancel_Tool"
         Me.cmdCancel_Tool.Padding = New System.Windows.Forms.Padding(50, 0, 0, 0)
-        Me.cmdCancel_Tool.Size = New System.Drawing.Size(126, 29)
+        Me.cmdCancel_Tool.Size = New System.Drawing.Size(126, 34)
         Me.cmdCancel_Tool.Text = "Cancel"
         Me.cmdCancel_Tool.Visible = False
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 37)
         Me.ToolStripSeparator2.Visible = False
         '
         'StatusStrip1

@@ -35,7 +35,8 @@ Public Class frmView
         Me.CenterToParent()
     End Sub
     Public Sub SetAttachCount()
-        AttachmentTool.Text = "Attachments (" + Asset.GetAttachmentCount(CurrentViewDevice).ToString + ")"
+        AttachmentTool.Text = "(" + Asset.GetAttachmentCount(CurrentViewDevice).ToString + ")"
+        AttachmentTool.ToolTipText = "Attachments " + AttachmentTool.Text
     End Sub
     Private Sub GetCurrentValues()
         OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))

@@ -637,12 +637,11 @@ Partial Class MainForm
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddDeviceTool, Me.AdminDropDown, Me.tsdSelectWindow, Me.ToolStripSeparator5, Me.cmdSibi})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
+        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.ToolStrip1.Size = New System.Drawing.Size(1240, 32)
         Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 6
@@ -688,6 +687,8 @@ Partial Class MainForm
         'txtGUID
         '
         Me.txtGUID.AutoSize = False
+        Me.txtGUID.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.txtGUID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtGUID.Name = "txtGUID"
         Me.txtGUID.Size = New System.Drawing.Size(150, 23)
         Me.txtGUID.ToolTipText = "GUID Lookup. (Press Enter)"

@@ -19,8 +19,8 @@ Partial Class frmSibiMain
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmSibiMain))
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -58,7 +58,7 @@ Partial Class frmSibiMain
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(3, 28)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1179, 559)
+        Me.Panel1.Size = New System.Drawing.Size(1179, 596)
         Me.Panel1.TabIndex = 0
         '
         'GroupBox2
@@ -76,7 +76,7 @@ Partial Class frmSibiMain
         Me.GroupBox2.Controls.Add(Me.Label1)
         Me.GroupBox2.Controls.Add(Me.cmbDisplayYear)
         Me.GroupBox2.Controls.Add(Me.Label2)
-        Me.GroupBox2.Location = New System.Drawing.Point(6, 4)
+        Me.GroupBox2.Location = New System.Drawing.Point(6, 16)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(1170, 59)
         Me.GroupBox2.TabIndex = 22
@@ -183,9 +183,9 @@ Partial Class frmSibiMain
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.ResultGrid)
         Me.GroupBox1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(6, 69)
+        Me.GroupBox1.Location = New System.Drawing.Point(6, 81)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1170, 487)
+        Me.GroupBox1.Size = New System.Drawing.Size(1170, 512)
         Me.GroupBox1.TabIndex = 21
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Requests:"
@@ -203,74 +203,81 @@ Partial Class frmSibiMain
         Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ResultGrid.DefaultCellStyle = DataGridViewCellStyle1
         Me.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.ResultGrid.Location = New System.Drawing.Point(6, 22)
         Me.ResultGrid.MultiSelect = False
         Me.ResultGrid.Name = "ResultGrid"
         Me.ResultGrid.ReadOnly = True
         Me.ResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ResultGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.ResultGrid.RowHeadersVisible = False
         Me.ResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1158, 459)
+        Me.ResultGrid.Size = New System.Drawing.Size(1158, 484)
         Me.ResultGrid.TabIndex = 18
         Me.ResultGrid.VirtualMode = True
         '
         'ToolStrip1
         '
+        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
+        Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdManage, Me.ToolStripSeparator1, Me.tsdSelectWindow})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(1188, 25)
+        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.ToolStrip1.Size = New System.Drawing.Size(1188, 32)
+        Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 2
         Me.ToolStrip1.Text = "ToolStrip1"
         '
         'cmdManage
         '
-        Me.cmdManage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.cmdManage.Image = CType(resources.GetObject("cmdManage.Image"), System.Drawing.Image)
+        Me.cmdManage.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.cmdManage.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdManage.Name = "cmdManage"
-        Me.cmdManage.Size = New System.Drawing.Size(80, 22)
+        Me.cmdManage.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
+        Me.cmdManage.Size = New System.Drawing.Size(115, 29)
         Me.cmdManage.Text = "New Request"
+        Me.cmdManage.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
         '
         'tsdSelectWindow
         '
         Me.tsdSelectWindow.Image = Global.AssetManager.My.Resources.Resources.application_cascade_512
         Me.tsdSelectWindow.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdSelectWindow.Name = "tsdSelectWindow"
-        Me.tsdSelectWindow.Size = New System.Drawing.Size(114, 22)
+        Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(10, 0, 10, 0)
+        Me.tsdSelectWindow.Size = New System.Drawing.Size(143, 29)
         Me.tsdSelectWindow.Text = "Select Window"
+        Me.tsdSelectWindow.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'frmSibiMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1188, 599)
+        Me.ClientSize = New System.Drawing.Size(1188, 636)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

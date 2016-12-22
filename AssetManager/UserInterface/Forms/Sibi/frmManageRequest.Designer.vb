@@ -20,13 +20,25 @@ Partial Class frmManageRequest
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
+        Me.txtRTNumber = New System.Windows.Forms.TextBox()
         Me.txtCreateDate = New System.Windows.Forms.TextBox()
+        Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.cmdNewNote = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
+        Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.ContentPanel = New System.Windows.Forms.ToolStripContentPanel()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.pnlEditButtons = New System.Windows.Forms.Panel()
         Me.cmdAccept = New System.Windows.Forms.Button()
@@ -39,7 +51,6 @@ Partial Class frmManageRequest
         Me.Label7 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label9 = New System.Windows.Forms.Label()
-        Me.txtRTNumber = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReqNumber = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -53,46 +64,133 @@ Partial Class frmManageRequest
         Me.txtUser = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtDescription = New System.Windows.Forms.TextBox()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
-        Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStrip = New AssetManager.MyToolStrip()
-        Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
-        Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
-        Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
-        Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.cmdOrgObLookup = New System.Windows.Forms.ToolStripSeparator()
-        Me.cmdClearForm = New System.Windows.Forms.ToolStripButton()
-        Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
-        Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.cmdNewNote = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
-        Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
+        Me.ToolStrip = New AssetManager.MyToolStrip()
+        Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
+        Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
+        Me.cmdClearForm = New System.Windows.Forms.ToolStripButton()
+        Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
+        Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
+        Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
+        Me.PopupMenuItems.SuspendLayout()
+        Me.PopupMenuNotes.SuspendLayout()
+        CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel4.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.pnlEditButtons.SuspendLayout()
         Me.pnlCreate.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
-        Me.Panel1.SuspendLayout()
-        CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.PopupMenuItems.SuspendLayout()
-        Me.ToolStrip.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.PopupMenuNotes.SuspendLayout()
-        CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1.SuspendLayout()
+        CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ToolStrip.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'PopupMenuItems
+        '
+        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmDeleteItem, Me.tsmLookupDevice})
+        Me.PopupMenuItems.Name = "PopupMenu"
+        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 48)
+        '
+        'tsmDeleteItem
+        '
+        Me.tsmDeleteItem.Name = "tsmDeleteItem"
+        Me.tsmDeleteItem.Size = New System.Drawing.Size(152, 22)
+        Me.tsmDeleteItem.Text = "Delete Item"
+        '
+        'tsmLookupDevice
+        '
+        Me.tsmLookupDevice.Name = "tsmLookupDevice"
+        Me.tsmLookupDevice.Size = New System.Drawing.Size(152, 22)
+        Me.tsmLookupDevice.Text = "Lookup Device"
+        Me.tsmLookupDevice.Visible = False
+        '
+        'ToolTip
+        '
+        Me.ToolTip.AutomaticDelay = 0
+        Me.ToolTip.AutoPopDelay = 5500
+        Me.ToolTip.InitialDelay = 0
+        Me.ToolTip.IsBalloon = True
+        Me.ToolTip.ReshowDelay = 110
+        '
+        'txtRTNumber
+        '
+        Me.txtRTNumber.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.txtRTNumber.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtRTNumber.Location = New System.Drawing.Point(20, 119)
+        Me.txtRTNumber.Name = "txtRTNumber"
+        Me.txtRTNumber.Size = New System.Drawing.Size(137, 22)
+        Me.txtRTNumber.TabIndex = 8
+        Me.ToolTip.SetToolTip(Me.txtRTNumber, "Click to open RT Ticket.")
+        '
+        'txtCreateDate
+        '
+        Me.txtCreateDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtCreateDate.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtCreateDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCreateDate.ForeColor = System.Drawing.Color.Silver
+        Me.txtCreateDate.Location = New System.Drawing.Point(451, 60)
+        Me.txtCreateDate.Name = "txtCreateDate"
+        Me.txtCreateDate.ReadOnly = True
+        Me.txtCreateDate.Size = New System.Drawing.Size(134, 13)
+        Me.txtCreateDate.TabIndex = 23
+        Me.txtCreateDate.Text = "2016-07-29 15:42:16"
+        Me.txtCreateDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ToolTip.SetToolTip(Me.txtCreateDate, "Create Date")
+        Me.txtCreateDate.WordWrap = False
+        '
+        'PopupMenuNotes
+        '
+        Me.PopupMenuNotes.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdNewNote, Me.ToolStripSeparator1, Me.cmdDeleteNote})
+        Me.PopupMenuNotes.Name = "PopupMenu"
+        Me.PopupMenuNotes.Size = New System.Drawing.Size(137, 54)
+        '
+        'cmdNewNote
+        '
+        Me.cmdNewNote.Name = "cmdNewNote"
+        Me.cmdNewNote.Size = New System.Drawing.Size(136, 22)
+        Me.cmdNewNote.Text = "Add Note"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(133, 6)
+        '
+        'cmdDeleteNote
+        '
+        Me.cmdDeleteNote.Name = "cmdDeleteNote"
+        Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
+        Me.cmdDeleteNote.Text = "Delete Note"
+        '
+        'fieldErrorIcon
+        '
+        Me.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
+        Me.fieldErrorIcon.ContainerControl = Me
+        Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
+        '
+        'ContentPanel
+        '
+        Me.ContentPanel.AutoScroll = True
+        Me.ContentPanel.Size = New System.Drawing.Size(1014, 557)
+        '
+        'Panel4
+        '
+        Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel4.Controls.Add(Me.GroupBox1)
+        Me.Panel4.Controls.Add(Me.GroupBox3)
+        Me.Panel4.Location = New System.Drawing.Point(8, 40)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(1181, 259)
+        Me.Panel4.TabIndex = 5
         '
         'GroupBox1
         '
@@ -113,28 +211,12 @@ Partial Class frmManageRequest
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Controls.Add(Me.txtDescription)
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 44)
+        Me.GroupBox1.Location = New System.Drawing.Point(5, 4)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(600, 250)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Request Info"
-        '
-        'txtCreateDate
-        '
-        Me.txtCreateDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtCreateDate.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtCreateDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCreateDate.ForeColor = System.Drawing.Color.Silver
-        Me.txtCreateDate.Location = New System.Drawing.Point(451, 60)
-        Me.txtCreateDate.Name = "txtCreateDate"
-        Me.txtCreateDate.ReadOnly = True
-        Me.txtCreateDate.Size = New System.Drawing.Size(134, 13)
-        Me.txtCreateDate.TabIndex = 23
-        Me.txtCreateDate.Text = "2016-07-29 15:42:16"
-        Me.txtCreateDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        Me.ToolTip.SetToolTip(Me.txtCreateDate, "Create Date")
-        Me.txtCreateDate.WordWrap = False
         '
         'Panel3
         '
@@ -260,16 +342,6 @@ Partial Class frmManageRequest
         Me.Label9.TabIndex = 9
         Me.Label9.Text = "RT #:"
         '
-        'txtRTNumber
-        '
-        Me.txtRTNumber.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.txtRTNumber.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtRTNumber.Location = New System.Drawing.Point(20, 119)
-        Me.txtRTNumber.Name = "txtRTNumber"
-        Me.txtRTNumber.Size = New System.Drawing.Size(137, 22)
-        Me.txtRTNumber.TabIndex = 8
-        Me.ToolTip.SetToolTip(Me.txtRTNumber, "Click to open RT Ticket.")
-        '
         'Label6
         '
         Me.Label6.AutoSize = True
@@ -382,6 +454,71 @@ Partial Class frmManageRequest
         Me.txtDescription.TabIndex = 0
         Me.txtDescription.Tag = ""
         '
+        'GroupBox3
+        '
+        Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox3.Controls.Add(Me.Panel2)
+        Me.GroupBox3.Location = New System.Drawing.Point(611, 4)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(567, 250)
+        Me.GroupBox3.TabIndex = 4
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "Notes"
+        '
+        'Panel2
+        '
+        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel2.Controls.Add(Me.dgvNotes)
+        Me.Panel2.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Panel2.Location = New System.Drawing.Point(6, 13)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(556, 231)
+        Me.Panel2.TabIndex = 0
+        '
+        'dgvNotes
+        '
+        Me.dgvNotes.AllowUserToAddRows = False
+        Me.dgvNotes.AllowUserToDeleteRows = False
+        Me.dgvNotes.AllowUserToResizeRows = False
+        Me.dgvNotes.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvNotes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
+        Me.dgvNotes.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.dgvNotes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.dgvNotes.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        Me.dgvNotes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvNotes.ContextMenuStrip = Me.PopupMenuNotes
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvNotes.DefaultCellStyle = DataGridViewCellStyle3
+        Me.dgvNotes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
+        Me.dgvNotes.Location = New System.Drawing.Point(3, 3)
+        Me.dgvNotes.Name = "dgvNotes"
+        Me.dgvNotes.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvNotes.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
+        Me.dgvNotes.RowHeadersVisible = False
+        Me.dgvNotes.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.dgvNotes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.dgvNotes.ShowCellErrors = False
+        Me.dgvNotes.ShowCellToolTips = False
+        Me.dgvNotes.Size = New System.Drawing.Size(550, 225)
+        Me.dgvNotes.TabIndex = 19
+        '
         'Panel1
         '
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -390,9 +527,9 @@ Partial Class frmManageRequest
         Me.Panel1.Controls.Add(Me.Label10)
         Me.Panel1.Controls.Add(Me.RequestItemsGrid)
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel1.Location = New System.Drawing.Point(12, 300)
+        Me.Panel1.Location = New System.Drawing.Point(8, 310)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1071, 271)
+        Me.Panel1.Size = New System.Drawing.Size(1180, 375)
         Me.Panel1.TabIndex = 1
         '
         'Label10
@@ -439,42 +576,20 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.RequestItemsGrid.ShowCellToolTips = False
-        Me.RequestItemsGrid.Size = New System.Drawing.Size(1065, 250)
+        Me.RequestItemsGrid.Size = New System.Drawing.Size(1174, 354)
         Me.RequestItemsGrid.TabIndex = 18
-        '
-        'PopupMenuItems
-        '
-        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmDeleteItem, Me.tsmLookupDevice})
-        Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 48)
-        '
-        'tsmDeleteItem
-        '
-        Me.tsmDeleteItem.Name = "tsmDeleteItem"
-        Me.tsmDeleteItem.Size = New System.Drawing.Size(152, 22)
-        Me.tsmDeleteItem.Text = "Delete Item"
-        '
-        'tsmLookupDevice
-        '
-        Me.tsmLookupDevice.Name = "tsmLookupDevice"
-        Me.tsmLookupDevice.Size = New System.Drawing.Size(152, 22)
-        Me.tsmLookupDevice.Text = "Lookup Device"
-        Me.tsmLookupDevice.Visible = False
         '
         'ToolStrip
         '
-        Me.ToolStrip.AutoSize = False
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.cmdOrgObLookup, Me.cmdClearForm})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdClearForm, Me.cmdDelete, Me.cmdAddNote, Me.cmdAttachments})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
-        Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip.Size = New System.Drawing.Size(1095, 32)
-        Me.ToolStrip.Stretch = True
-        Me.ToolStrip.TabIndex = 2
+        Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.ToolStrip.Size = New System.Drawing.Size(1199, 37)
+        Me.ToolStrip.TabIndex = 6
         Me.ToolStrip.Text = "ToolStrip1"
         '
         'cmdCreate
@@ -483,8 +598,8 @@ Partial Class frmManageRequest
         Me.cmdCreate.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.cmdCreate.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdCreate.Name = "cmdCreate"
-        Me.cmdCreate.Padding = New System.Windows.Forms.Padding(5)
-        Me.cmdCreate.Size = New System.Drawing.Size(39, 29)
+        Me.cmdCreate.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.cmdCreate.Size = New System.Drawing.Size(39, 34)
         Me.cmdCreate.Text = "New Request"
         '
         'cmdUpdate
@@ -493,10 +608,21 @@ Partial Class frmManageRequest
         Me.cmdUpdate.Image = Global.AssetManager.My.Resources.Resources.Edit
         Me.cmdUpdate.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdUpdate.Name = "cmdUpdate"
-        Me.cmdUpdate.Padding = New System.Windows.Forms.Padding(5)
-        Me.cmdUpdate.Size = New System.Drawing.Size(39, 29)
+        Me.cmdUpdate.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.cmdUpdate.Size = New System.Drawing.Size(39, 34)
         Me.cmdUpdate.Text = "Update"
         Me.cmdUpdate.ToolTipText = "Modify"
+        '
+        'cmdClearForm
+        '
+        Me.cmdClearForm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.cmdClearForm.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
+        Me.cmdClearForm.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdClearForm.Name = "cmdClearForm"
+        Me.cmdClearForm.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.cmdClearForm.Size = New System.Drawing.Size(39, 34)
+        Me.cmdClearForm.Text = "Clear Form"
+        Me.cmdClearForm.Visible = False
         '
         'cmdDelete
         '
@@ -504,169 +630,47 @@ Partial Class frmManageRequest
         Me.cmdDelete.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
         Me.cmdDelete.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdDelete.Name = "cmdDelete"
-        Me.cmdDelete.Padding = New System.Windows.Forms.Padding(5)
-        Me.cmdDelete.Size = New System.Drawing.Size(39, 29)
+        Me.cmdDelete.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.cmdDelete.Size = New System.Drawing.Size(39, 34)
         Me.cmdDelete.Text = "Delete"
         '
         'cmdAddNote
         '
+        Me.cmdAddNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.note_icon_27942
         Me.cmdAddNote.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdAddNote.Name = "cmdAddNote"
-        Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5)
-        Me.cmdAddNote.Size = New System.Drawing.Size(115, 29)
+        Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.cmdAddNote.Size = New System.Drawing.Size(39, 34)
         Me.cmdAddNote.Text = "Add Note"
-        '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 32)
         '
         'cmdAttachments
         '
         Me.cmdAttachments.Image = Global.AssetManager.My.Resources.Resources.clip_512
         Me.cmdAttachments.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdAttachments.Name = "cmdAttachments"
-        Me.cmdAttachments.Padding = New System.Windows.Forms.Padding(5)
-        Me.cmdAttachments.Size = New System.Drawing.Size(136, 29)
+        Me.cmdAttachments.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.cmdAttachments.Size = New System.Drawing.Size(136, 34)
         Me.cmdAttachments.Text = "Attachments"
-        '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 32)
-        '
-        'cmdOrgObLookup
-        '
-        Me.cmdOrgObLookup.Name = "cmdOrgObLookup"
-        Me.cmdOrgObLookup.Size = New System.Drawing.Size(6, 32)
-        '
-        'cmdClearForm
-        '
-        Me.cmdClearForm.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
-        Me.cmdClearForm.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.cmdClearForm.Name = "cmdClearForm"
-        Me.cmdClearForm.Padding = New System.Windows.Forms.Padding(5)
-        Me.cmdClearForm.Size = New System.Drawing.Size(126, 29)
-        Me.cmdClearForm.Text = "Clear Form"
-        '
-        'ToolTip
-        '
-        Me.ToolTip.AutomaticDelay = 0
-        Me.ToolTip.AutoPopDelay = 5500
-        Me.ToolTip.InitialDelay = 0
-        Me.ToolTip.IsBalloon = True
-        Me.ToolTip.ReshowDelay = 110
-        '
-        'GroupBox3
-        '
-        Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox3.Controls.Add(Me.Panel2)
-        Me.GroupBox3.Location = New System.Drawing.Point(618, 44)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(465, 250)
-        Me.GroupBox3.TabIndex = 4
-        Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Notes"
-        '
-        'Panel2
-        '
-        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel2.Controls.Add(Me.dgvNotes)
-        Me.Panel2.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel2.Location = New System.Drawing.Point(6, 13)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(454, 231)
-        Me.Panel2.TabIndex = 0
-        '
-        'dgvNotes
-        '
-        Me.dgvNotes.AllowUserToAddRows = False
-        Me.dgvNotes.AllowUserToDeleteRows = False
-        Me.dgvNotes.AllowUserToResizeRows = False
-        Me.dgvNotes.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.dgvNotes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
-        Me.dgvNotes.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.dgvNotes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.dgvNotes.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        Me.dgvNotes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvNotes.ContextMenuStrip = Me.PopupMenuNotes
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(39, Byte), Integer))
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvNotes.DefaultCellStyle = DataGridViewCellStyle3
-        Me.dgvNotes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.dgvNotes.Location = New System.Drawing.Point(3, 3)
-        Me.dgvNotes.Name = "dgvNotes"
-        Me.dgvNotes.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvNotes.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
-        Me.dgvNotes.RowHeadersVisible = False
-        Me.dgvNotes.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.dgvNotes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.dgvNotes.ShowCellErrors = False
-        Me.dgvNotes.ShowCellToolTips = False
-        Me.dgvNotes.Size = New System.Drawing.Size(448, 225)
-        Me.dgvNotes.TabIndex = 19
-        '
-        'PopupMenuNotes
-        '
-        Me.PopupMenuNotes.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdNewNote, Me.ToolStripSeparator1, Me.cmdDeleteNote})
-        Me.PopupMenuNotes.Name = "PopupMenu"
-        Me.PopupMenuNotes.Size = New System.Drawing.Size(137, 54)
-        '
-        'cmdNewNote
-        '
-        Me.cmdNewNote.Name = "cmdNewNote"
-        Me.cmdNewNote.Size = New System.Drawing.Size(136, 22)
-        Me.cmdNewNote.Text = "Add Note"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(133, 6)
-        '
-        'cmdDeleteNote
-        '
-        Me.cmdDeleteNote.Name = "cmdDeleteNote"
-        Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
-        Me.cmdDeleteNote.Text = "Delete Note"
-        '
-        'fieldErrorIcon
-        '
-        Me.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
-        Me.fieldErrorIcon.ContainerControl = Me
-        Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1095, 583)
-        Me.Controls.Add(Me.GroupBox3)
+        Me.ClientSize = New System.Drawing.Size(1199, 697)
         Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.Panel4)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(771, 443)
         Me.Name = "frmManageRequest"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Manage Request"
+        Me.PopupMenuItems.ResumeLayout(False)
+        Me.PopupMenuNotes.ResumeLayout(False)
+        CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel4.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.Panel3.ResumeLayout(False)
@@ -674,21 +678,57 @@ Partial Class frmManageRequest
         Me.pnlCreate.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
-        CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.PopupMenuItems.ResumeLayout(False)
-        Me.ToolStrip.ResumeLayout(False)
-        Me.ToolStrip.PerformLayout()
         Me.GroupBox3.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.PopupMenuNotes.ResumeLayout(False)
-        CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ToolStrip.ResumeLayout(False)
+        Me.ToolStrip.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
+    Friend WithEvents PopupMenuItems As ContextMenuStrip
+    Friend WithEvents tsmDeleteItem As ToolStripMenuItem
+    Friend WithEvents ToolTip As ToolTip
+    Friend WithEvents PopupMenuNotes As ContextMenuStrip
+    Friend WithEvents cmdDeleteNote As ToolStripMenuItem
+    Friend WithEvents tsmLookupDevice As ToolStripMenuItem
+    Friend WithEvents fieldErrorIcon As ErrorProvider
+    Friend WithEvents cmdNewNote As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ToolStrip As MyToolStrip
+    Friend WithEvents cmdCreate As ToolStripButton
+    Friend WithEvents cmdUpdate As ToolStripButton
+    Friend WithEvents cmdDelete As ToolStripButton
+    Friend WithEvents cmdAddNote As ToolStripButton
+    Friend WithEvents cmdAttachments As ToolStripButton
+    Friend WithEvents cmdClearForm As ToolStripButton
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Label10 As Label
+    Friend WithEvents RequestItemsGrid As DataGridView
+    Friend WithEvents Panel4 As Panel
     Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents txtCreateDate As TextBox
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents pnlEditButtons As Panel
+    Friend WithEvents cmdAccept As Button
+    Friend WithEvents cmdDiscard As Button
+    Friend WithEvents pnlCreate As Panel
+    Friend WithEvents cmdAddNew As Button
+    Friend WithEvents Label8 As Label
+    Friend WithEvents txtRequestNum As TextBox
+    Friend WithEvents cmbStatus As ComboBox
+    Friend WithEvents Label7 As Label
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents Label9 As Label
+    Friend WithEvents txtRTNumber As TextBox
+    Friend WithEvents Label6 As Label
+    Friend WithEvents txtReqNumber As TextBox
+    Friend WithEvents Label5 As Label
+    Friend WithEvents txtPO As TextBox
     Friend WithEvents chkPlanned As CheckBox
     Friend WithEvents cmbType As ComboBox
     Friend WithEvents Label4 As Label
@@ -698,47 +738,8 @@ Partial Class frmManageRequest
     Friend WithEvents txtUser As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents txtDescription As TextBox
-    Friend WithEvents GroupBox2 As GroupBox
-    Friend WithEvents Label6 As Label
-    Friend WithEvents txtReqNumber As TextBox
-    Friend WithEvents Label5 As Label
-    Friend WithEvents txtPO As TextBox
-    Friend WithEvents cmdAddNew As Button
-    Friend WithEvents Panel1 As Panel
-    Friend WithEvents RequestItemsGrid As DataGridView
-    Friend WithEvents cmbStatus As ComboBox
-    Friend WithEvents Label7 As Label
-    Friend WithEvents ToolStrip As MyToolStrip
-    Friend WithEvents cmdCreate As ToolStripButton
-    Friend WithEvents cmdAttachments As ToolStripButton
-    Friend WithEvents cmdUpdate As ToolStripButton
-    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
-    Friend WithEvents Label8 As Label
-    Friend WithEvents txtRequestNum As TextBox
-    Friend WithEvents Label9 As Label
-    Friend WithEvents txtRTNumber As TextBox
-    Friend WithEvents PopupMenuItems As ContextMenuStrip
-    Friend WithEvents tsmDeleteItem As ToolStripMenuItem
-    Friend WithEvents ToolTip As ToolTip
-    Friend WithEvents cmdDelete As ToolStripButton
-    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents GroupBox3 As GroupBox
     Friend WithEvents Panel2 As Panel
     Friend WithEvents dgvNotes As DataGridView
-    Friend WithEvents cmdAddNote As ToolStripButton
-    Friend WithEvents PopupMenuNotes As ContextMenuStrip
-    Friend WithEvents cmdDeleteNote As ToolStripMenuItem
-    Friend WithEvents cmdClearForm As ToolStripButton
-    Friend WithEvents Label10 As Label
-    Friend WithEvents tsmLookupDevice As ToolStripMenuItem
-    Friend WithEvents cmdAccept As Button
-    Friend WithEvents cmdDiscard As Button
-    Friend WithEvents pnlEditButtons As Panel
-    Friend WithEvents cmdOrgObLookup As ToolStripSeparator
-    Friend WithEvents fieldErrorIcon As ErrorProvider
-    Friend WithEvents Panel3 As Panel
-    Friend WithEvents pnlCreate As Panel
-    Friend WithEvents txtCreateDate As TextBox
-    Friend WithEvents cmdNewNote As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ContentPanel As ToolStripContentPanel
 End Class

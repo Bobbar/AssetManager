@@ -24,10 +24,11 @@ Public Class frmManageRequest
     End Sub
     Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
-        Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip, 7)
+        Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip, 6)
     End Sub
     Public Sub SetAttachCount()
-        cmdAttachments.Text = "Attachments (" + Asset.GetAttachmentCount(CurrentRequest).ToString + ")"
+        cmdAttachments.Text = "(" + Asset.GetAttachmentCount(CurrentRequest).ToString + ")"
+        cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text
     End Sub
     Private Sub SetTitle()
         If MyText = "" Then
