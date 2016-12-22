@@ -118,9 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="presentation-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\presentation-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="err_information" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\err_information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -150,9 +147,6 @@
   </data>
   <data name="err_critical" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\err_critical.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="report" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\report.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="note-icon-27942" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\note-icon-27942.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -187,23 +181,11 @@
   <data name="critical_funny" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\critical_funny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Acquire_new_shadow_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Acquire_new_shadow_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Acquire_new_shadow_crop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Acquire_new_shadow_crop.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="checked_checkbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\checked_checkbox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="view" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\view.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="err_exclamation_fill" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\err_exclamation_fill.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="239360-transfer_arrows-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\239360-transfer_arrows-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -213,9 +195,6 @@
   </data>
   <data name="Exh_K_02_Asset_Disposal_Form" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Exh_K-02_Asset_Disposal_Form.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="inventory_small_fw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\inventory-small.fw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="application_cascade-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\application_cascade-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

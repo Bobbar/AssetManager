@@ -33,8 +33,8 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>24</ApplicationRevision>
-    <ApplicationVersion>4.4.1.%2a</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>4.4.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -51,6 +51,7 @@
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -155,6 +156,11 @@
     <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="Classes\DataColumns.vb" />
     <Compile Include="Classes\Type_Classes.vb" />
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="UserInterface\Colors.vb" />
     <Compile Include="Classes\Constants.vb" />
     <Compile Include="Classes\Global_Instances.vb" />
@@ -265,11 +271,6 @@
     </Compile>
     <Compile Include="UserInterface\MyControls\MunisTools.vb">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="My Project\Resources.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\Forms\SplashScreen1.Designer.vb">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
@@ -402,10 +403,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AssetManager.ico" />
     <None Include="Resources\239360-transfer_arrows-512.png" />
-    <None Include="Resources\Acquire_new_shadow_crop.ico" />
-    <None Include="Resources\Acquire_new_shadow_small.png" />
     <Content Include="inventory_icon_orange_large.ico" />
     <Content Include="Resources\Add.png" />
     <None Include="Resources\check-out.png" />
@@ -417,10 +415,8 @@
     <None Include="Resources\clip-512.png" />
     <None Include="Resources\cancel.png" />
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
-    <None Include="Resources\attencion_exclamation_mark_circle_danger-128.png" />
     <None Include="Resources\critical_funny.png" />
     <None Include="Resources\application_cascade-512.png" />
-    <Content Include="Resources\AssetManager.ico" />
     <Content Include="Resources\delete-icon.png" />
     <Content Include="Resources\Edit.png" />
     <None Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
@@ -429,29 +425,18 @@
     <None Include="Resources\Find.png" />
     <None Include="Resources\Form2-512.png" />
     <None Include="Resources\import_document_mail_save-512.png" />
-    <None Include="Resources\information-icon-5.png" />
     <None Include="Resources\err_critical.png" />
     <None Include="Resources\err_exclamation.png" />
     <None Include="Resources\err_information.png" />
     <None Include="Resources\err_question.png" />
-    <None Include="Resources\err_exclamation_stroke.png" />
-    <None Include="Resources\err_exclamation_fill.png" />
-    <None Include="Resources\icon-trash-01.png" />
     <None Include="Resources\icon-box.ico" />
-    <None Include="Resources\icon-box.png" />
-    <Content Include="Resources\inventory-small.fw.png" />
-    <None Include="Resources\report.png" />
     <None Include="Resources\presentation-512.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Resources\note-icon-27942.png" />
-    <None Include="Resources\trash-var-solid.png" />
-    <None Include="Resources\trash_icon.png" />
     <None Include="Resources\trash-512.png" />
-    <None Include="Resources\IP_address_icon.png" />
     <None Include="Resources\inv_box_large.png" />
     <None Include="Resources\inventory_icon_orange_large.png" />
     <None Include="Resources\inventory_icon_orange.ico" />
-    <Content Include="Resources\view.png" />
     <Content Include="Resources\View_Details.png" />
   </ItemGroup>
   <ItemGroup>
@@ -476,26 +461,6 @@
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Resources\Edit.png">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="Resources\inventory-small.fw.png">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="Resources\view.png">
       <Visible>False</Visible>
       <Group>
       </Group>
