@@ -155,7 +155,6 @@ Public Class MainForm
             ClickedButton.Enabled = True
             ClickedButton = Nothing
         End If
-        StatusBar("Idle...")
     End Sub
     Private Sub DisplayRecords(NumberOf As Integer)
         lblRecords.Text = "Records: " & NumberOf
@@ -196,6 +195,7 @@ Public Class MainForm
             bolGridFilling = False
             DisplayRecords(table.Rows.Count)
             table.Dispose()
+            StatusBar("Idle...")
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
