@@ -57,7 +57,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
         Try
             Dim Device As New Device_Info
             Device.dtPurchaseDate = Nothing
-            Dim NewDialog As New MyDialog
+            Dim NewDialog As New MyDialog(Parent)
             With NewDialog
                 .Text = "Asset Search"
                 .AddTextBox("txtAsset", "Asset:")
@@ -74,7 +74,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
         End Try
     End Sub
     Public Sub NameSearch(Parent As Form)
-        Dim NewDialog As New MyDialog
+        Dim NewDialog As New MyDialog(Parent)
         Dim strName As String
         With NewDialog
             .Text = "Org/Object Code Search"
@@ -89,7 +89,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
     Public Sub POSearch(Parent As Form)
         Try
             Dim PO, FY As String
-            Dim NewDialog As New MyDialog
+            Dim NewDialog As New MyDialog(Parent)
             With NewDialog
                 .Text = "PO Search"
                 .AddTextBox("txtPO", "PO #:")
@@ -115,7 +115,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
             '    NewMunisView_ReqSearch(ReqNumber, FY)
             'End If
             Dim ReqNumber, FY As String
-            Dim NewDialog As New MyDialog
+            Dim NewDialog As New MyDialog(Parent)
             With NewDialog
                 .Text = "Req Search"
                 .AddTextBox("txtReqNum", "Requisition #:")

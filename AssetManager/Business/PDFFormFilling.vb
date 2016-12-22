@@ -29,7 +29,7 @@ Public Class PDFFormFilling
     End Sub
     Private Function GetUnitPrice(Device As Device_Info) As String
         'CurrentDevice = Device
-        Dim NewDialog As New MyDialog
+        Dim NewDialog As New MyDialog(ParentForm)
         CurrentDialog = NewDialog
         With NewDialog
             .Text = "Input Unit Price"
@@ -106,7 +106,7 @@ Public Class PDFFormFilling
     End Function
     Private Function DisposalFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
-        Dim newDialog As New MyDialog(True)
+        Dim newDialog As New MyDialog(ParentForm, True)
         With newDialog
             .Text = "Additional Input Required"
 #Region "Section2"
@@ -217,7 +217,7 @@ Public Class PDFFormFilling
     End Function
     Private Function TransferFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
-        Dim newDialog As New MyDialog
+        Dim newDialog As New MyDialog(ParentForm)
         With newDialog
             .Text = "Additional Input Required"
             .AddComboBox("cmbFromLoc", "Transfer FROM:", DeviceIndex.Locations)

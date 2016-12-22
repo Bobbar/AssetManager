@@ -252,7 +252,6 @@
     <Compile Include="Classes\Indexes.vb" />
     <Compile Include="DataFunctions\clsMunis_Functions.vb" />
     <Compile Include="DataComms\Munis\clsMunis_Comms.vb" />
-    <Compile Include="Business\modDBScript.vb" />
     <Compile Include="Helpers\DBFunctions.vb" />
     <Compile Include="Helpers\ErrorHandling.vb" />
     <Compile Include="Helpers\ExtendedMethods.vb" />

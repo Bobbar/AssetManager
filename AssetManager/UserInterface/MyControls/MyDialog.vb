@@ -1,8 +1,9 @@
 ﻿Imports System.Windows.Forms
 Public Class MyDialog
-    Sub New(Optional StartMaximized As Boolean = False)
+    Sub New(ParentForm As Form, Optional StartMaximized As Boolean = False)
         InitializeComponent()
         StartFullSize = StartMaximized
+        If Not IsNothing(ParentForm) Then Icon = ParentForm.Icon
     End Sub
     Public ReadOnly Property ControlValues As List(Of Control)
         Get

@@ -24,16 +24,6 @@
 \\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
 \\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\MySql.Data.Entity.dll
 \\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
-C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.config
-C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.manifest
-C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.application
-C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe
-C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.pdb
-C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.xml
-C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.dll
-C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
-C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.xml
-C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmAttachments.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmEncrypter.resources
@@ -55,9 +45,19 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Resources.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmView.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Entry.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbproj.GenerateResource.Cache
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.config
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.manifest
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.application
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.TrustInfo.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe.manifest
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb

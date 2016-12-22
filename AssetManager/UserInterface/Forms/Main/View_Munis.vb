@@ -6,7 +6,8 @@
     Private MunisComms As New clsMunis_Comms
     Sub New(ParentForm As Form, Optional Hide_FA As Boolean = False)
         InitializeComponent()
-        Me.Tag = ParentForm
+        Tag = ParentForm
+        Icon = ParentForm.Icon
         If Hide_FA Then HideFixedAssetGrid()
     End Sub
     Public Sub LoadDevice(Device As Device_Info)

@@ -203,7 +203,7 @@ Module OtherFunctions
         End If
     End Function
     Public Function Message(ByVal Prompt As Object, Optional ByVal Buttons As MsgBoxStyle = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As DialogResult
-        Dim NewMessage As New MyDialog
+        Dim NewMessage As New MyDialog(ParentFrm)
         NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
         Return NewMessage.DialogResult
     End Function
