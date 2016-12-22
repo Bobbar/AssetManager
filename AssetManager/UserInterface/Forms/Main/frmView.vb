@@ -18,6 +18,7 @@ Public Class frmView
         InitializeComponent()
         ViewDevice(DeviceGUID)
         Tag = ParentForm
+        Icon = ParentForm.Icon
     End Sub
     Sub New()
         InitializeComponent()
@@ -1021,14 +1022,10 @@ VALUES (@" & historical_dev.ChangeType & ",
         Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.TransferForm)
     End Sub
     Private Sub cmdMunisSearch_Click(sender As Object, e As EventArgs) Handles cmdMunisSearch.Click
-        Dim NewMunisSearch As New frmMunisUser
-        NewMunisSearch.ShowDialog()
-        If NewMunisSearch.DialogResult = DialogResult.Yes Then
-            MunisUser = NewMunisSearch.EmployeeInfo
-            NewMunisSearch.Dispose()
-            txtCurUser_View_REQ.Text = MunisUser.Name
-            txtCurUser_View_REQ.ReadOnly = True
-        End If
+        Dim NewMunisSearch As New frmMunisUser(Me)
+        MunisUser = NewMunisSearch.EmployeeInfo
+        txtCurUser_View_REQ.Text = MunisUser.Name
+        txtCurUser_View_REQ.ReadOnly = True
     End Sub
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()

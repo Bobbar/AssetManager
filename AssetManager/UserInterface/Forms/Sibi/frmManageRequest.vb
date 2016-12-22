@@ -11,6 +11,7 @@ Public Class frmManageRequest
     Sub New(ParentForm As Form, RequestUID As String)
         InitializeComponent()
         Tag = ParentForm
+        Icon = ParentForm.Icon
         OpenRequest(RequestUID)
     End Sub
     Sub New(ParentForm As Form)

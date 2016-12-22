@@ -27,6 +27,7 @@ Class frmAttachments
     Sub New(ParentForm As Form, Optional AttachInfo As Object = Nothing)
         InitializeComponent()
         Tag = ParentForm
+        Icon = ParentForm.Icon
         If Not IsNothing(AttachInfo) Then
             If TypeOf AttachInfo Is Request_Info Then
                 AttachType = Entry_Type.Sibi

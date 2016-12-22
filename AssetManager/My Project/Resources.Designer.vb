@@ -321,11 +321,51 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Public ReadOnly Property icon_box() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("icon_box", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
         Public ReadOnly Property import_document_mail_save_512() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("import_document_mail_save-512", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property inv_box_large() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("inv_box_large", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Public ReadOnly Property inventory_icon_orange() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("inventory_icon_orange", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property inventory_icon_orange_large() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("inventory_icon_orange_large", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

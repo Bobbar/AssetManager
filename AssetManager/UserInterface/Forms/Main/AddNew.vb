@@ -106,6 +106,7 @@ Public Class AddNew
     End Function
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
         ClearAll()
+        Icon = MainForm.Icon
     End Sub
     Private Sub ClearAll()
         RefreshCombos()
@@ -202,13 +203,9 @@ Public Class AddNew
         MyLiveBox.Unload()
     End Sub
     Private Sub cmdUserSearch_Click(sender As Object, e As EventArgs) Handles cmdUserSearch.Click
-        Dim NewMunisSearch As New frmMunisUser
-        NewMunisSearch.ShowDialog()
-        If NewMunisSearch.DialogResult = DialogResult.Yes Then
-            MunisUser = NewMunisSearch.EmployeeInfo
-            NewMunisSearch.Dispose()
-            txtCurUser_REQ.Text = MunisUser.Name
-            txtCurUser_REQ.ReadOnly = True
-        End If
+        Dim NewMunisSearch As New frmMunisUser(Me)
+        MunisUser = NewMunisSearch.EmployeeInfo
+        txtCurUser_REQ.Text = MunisUser.Name
+        txtCurUser_REQ.ReadOnly = True
     End Sub
 End Class

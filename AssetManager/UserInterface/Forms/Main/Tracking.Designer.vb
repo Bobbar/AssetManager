@@ -367,6 +367,7 @@ Partial Class Tracking
         Me.DeviceInfoBox.ResumeLayout(False)
         Me.DeviceInfoBox.PerformLayout()
         Me.ResumeLayout(False)
+
     End Sub
     Friend WithEvents CheckInBox As GroupBox
     Friend WithEvents CheckOutBox As GroupBox

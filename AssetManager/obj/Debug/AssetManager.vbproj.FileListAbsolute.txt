@@ -43,6 +43,7 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MyDialog.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmNotes.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmManageRequest.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmSibiMain.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MainForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmSibiSelector.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Munis.resources
@@ -51,6 +52,7 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.SplashScreen.resource
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.UpdateDev.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MunisToolsMenu.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Resources.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmView.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Entry.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbproj.GenerateResource.Cache
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.TrustInfo.xml
@@ -59,5 +61,3 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MainForm.resources
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmView.resources

@@ -58,7 +58,7 @@ Public Class MainForm
             ConnectionWatchDog.RunWorkerAsync()
             Status("Ready!")
             ShowAll()
-            Thread.Sleep(500)
+            Thread.Sleep(1000)
             SplashScreen.Hide()
             Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip1, 2)
             MyWindowList = New WindowList(Me, tsdSelectWindow)
@@ -610,7 +610,7 @@ Public Class MainForm
         FTP.ScanAttachements()
     End Sub
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
-        SendToGrid(Asset.DevicesBySup())
+        SendToGrid(Asset.DevicesBySup(Me))
     End Sub
 
     Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize

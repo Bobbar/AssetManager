@@ -27,8 +27,8 @@ Partial Class frmUserManager
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.pnlModule = New System.Windows.Forms.Panel()
         Me.clbModules = New System.Windows.Forms.CheckedListBox()
-        Me.cmdUpdate = New System.Windows.Forms.Button()
         Me.lblAccessValue = New System.Windows.Forms.Label()
+        Me.cmdUpdate = New System.Windows.Forms.Button()
         Me.cmdRefresh = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel1.SuspendLayout()
@@ -127,16 +127,6 @@ Partial Class frmUserManager
         Me.clbModules.Sorted = True
         Me.clbModules.TabIndex = 0
         '
-        'cmdUpdate
-        '
-        Me.cmdUpdate.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.cmdUpdate.Location = New System.Drawing.Point(37, 28)
-        Me.cmdUpdate.Name = "cmdUpdate"
-        Me.cmdUpdate.Size = New System.Drawing.Size(134, 47)
-        Me.cmdUpdate.TabIndex = 2
-        Me.cmdUpdate.Text = "Commit Changes"
-        Me.cmdUpdate.UseVisualStyleBackColor = True
-        '
         'lblAccessValue
         '
         Me.lblAccessValue.Anchor = System.Windows.Forms.AnchorStyles.Bottom
@@ -147,6 +137,16 @@ Partial Class frmUserManager
         Me.lblAccessValue.TabIndex = 3
         Me.lblAccessValue.Text = "Selected Access Value:"
         Me.lblAccessValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'cmdUpdate
+        '
+        Me.cmdUpdate.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.cmdUpdate.Location = New System.Drawing.Point(37, 28)
+        Me.cmdUpdate.Name = "cmdUpdate"
+        Me.cmdUpdate.Size = New System.Drawing.Size(134, 47)
+        Me.cmdUpdate.TabIndex = 2
+        Me.cmdUpdate.Text = "Commit Changes"
+        Me.cmdUpdate.UseVisualStyleBackColor = True
         '
         'cmdRefresh
         '

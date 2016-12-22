@@ -76,7 +76,7 @@ Partial Class frmView
         Me.txtCheckOut = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.ToolStrip1 = New MyToolStrip()
+        Me.ToolStrip1 = New AssetManager.MyToolStrip()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.tsbDeleteDevice = New System.Windows.Forms.ToolStripButton()
@@ -923,7 +923,7 @@ Partial Class frmView
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
-        'View
+        'frmView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -937,7 +937,7 @@ Partial Class frmView
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(1101, 533)
-        Me.Name = "View"
+        Me.Name = "frmView"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "View"
         Me.DeviceInfoBox.ResumeLayout(False)

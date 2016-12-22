@@ -79,7 +79,7 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>AssetManager.ico</ApplicationIcon>
+    <ApplicationIcon>inventory_icon_orange_large.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>82B448DBD285A7F3B1B97087CC53EFB40DBA8CE9</ManifestCertificateThumbprint>
@@ -407,6 +407,7 @@
     <None Include="Resources\239360-transfer_arrows-512.png" />
     <None Include="Resources\Acquire_new_shadow_crop.ico" />
     <None Include="Resources\Acquire_new_shadow_small.png" />
+    <Content Include="inventory_icon_orange_large.ico" />
     <Content Include="Resources\Add.png" />
     <None Include="Resources\check-out.png" />
     <None Include="Resources\delete-icon-red.png" />
@@ -437,6 +438,8 @@
     <None Include="Resources\err_exclamation_stroke.png" />
     <None Include="Resources\err_exclamation_fill.png" />
     <None Include="Resources\icon-trash-01.png" />
+    <None Include="Resources\icon-box.ico" />
+    <None Include="Resources\icon-box.png" />
     <Content Include="Resources\inventory-small.fw.png" />
     <None Include="Resources\report.png" />
     <None Include="Resources\presentation-512.png" />
@@ -446,6 +449,9 @@
     <None Include="Resources\trash_icon.png" />
     <None Include="Resources\trash-512.png" />
     <None Include="Resources\IP_address_icon.png" />
+    <None Include="Resources\inv_box_large.png" />
+    <None Include="Resources\inventory_icon_orange_large.png" />
+    <None Include="Resources\inventory_icon_orange.ico" />
     <Content Include="Resources\view.png" />
     <Content Include="Resources\View_Details.png" />
   </ItemGroup>

@@ -3,11 +3,21 @@
 Public Class frmMunisUser
     Public ReadOnly Property EmployeeInfo
         Get
-            Return SelectedEmpInfo
+            Using Me
+                If DialogResult = DialogResult.Yes Then
+                    Return SelectedEmpInfo
+                End If
+                Return Nothing
+            End Using
         End Get
     End Property
     Private SelectedEmpInfo As Emp_Info
     Private Const intMaxResults As Integer = 50
+    Sub New(ParentForm As Form)
+        InitializeComponent()
+        Me.Tag = ParentForm
+        ShowDialog(ParentForm)
+    End Sub
     Private Sub EmpNameSearch(Name As String)
         Try
             MunisResults.DataSource = Nothing
@@ -35,17 +45,23 @@ Public Class frmMunisUser
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         EmpNameSearch(Trim(txtSearchName.Text))
     End Sub
+    Private Sub SelectEmp()
+        If SelectedEmpInfo.Name <> "" AndAlso SelectedEmpInfo.Number <> "" Then
+            Asset.AddNewEmp(SelectedEmpInfo)
+            Me.DialogResult = DialogResult.Yes
+            Me.Close()
+        Else
+            Me.DialogResult = DialogResult.Abort
+            Me.Close()
+        End If
+    End Sub
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
-        Asset.AddNewEmp(SelectedEmpInfo)
-        Me.DialogResult = DialogResult.Yes
-        Me.Close()
+        SelectEmp()
     End Sub
     Private Sub txtSearchName_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSearchName.KeyDown
         If e.KeyCode = Keys.Enter Then EmpNameSearch(Trim(txtSearchName.Text))
     End Sub
     Private Sub MunisResults_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles MunisResults.CellDoubleClick
-        Asset.AddNewEmp(SelectedEmpInfo)
-        Me.DialogResult = DialogResult.Yes
-        Me.Close()
+        SelectEmp()
     End Sub
 End Class

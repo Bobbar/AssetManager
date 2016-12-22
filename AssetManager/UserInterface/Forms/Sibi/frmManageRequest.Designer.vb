@@ -59,7 +59,7 @@ Partial Class frmManageRequest
         Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStrip = New MyToolStrip()
+        Me.ToolStrip = New AssetManager.MyToolStrip()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
@@ -74,10 +74,10 @@ Partial Class frmManageRequest
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
         Me.PopupMenuNotes = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
-        Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.cmdNewNote = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.cmdDeleteNote = New System.Windows.Forms.ToolStripMenuItem()
+        Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.GroupBox1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.pnlEditButtons.SuspendLayout()
@@ -627,12 +627,23 @@ Partial Class frmManageRequest
         '
         Me.PopupMenuNotes.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdNewNote, Me.ToolStripSeparator1, Me.cmdDeleteNote})
         Me.PopupMenuNotes.Name = "PopupMenu"
-        Me.PopupMenuNotes.Size = New System.Drawing.Size(153, 76)
+        Me.PopupMenuNotes.Size = New System.Drawing.Size(137, 54)
+        '
+        'cmdNewNote
+        '
+        Me.cmdNewNote.Name = "cmdNewNote"
+        Me.cmdNewNote.Size = New System.Drawing.Size(136, 22)
+        Me.cmdNewNote.Text = "Add Note"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(133, 6)
         '
         'cmdDeleteNote
         '
         Me.cmdDeleteNote.Name = "cmdDeleteNote"
-        Me.cmdDeleteNote.Size = New System.Drawing.Size(152, 22)
+        Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
         '
         'fieldErrorIcon
@@ -640,17 +651,6 @@ Partial Class frmManageRequest
         Me.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
-        '
-        'cmdNewNote
-        '
-        Me.cmdNewNote.Name = "cmdNewNote"
-        Me.cmdNewNote.Size = New System.Drawing.Size(152, 22)
-        Me.cmdNewNote.Text = "Add Note"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(149, 6)
         '
         'frmManageRequest
         '

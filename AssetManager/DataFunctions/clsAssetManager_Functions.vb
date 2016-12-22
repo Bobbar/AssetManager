@@ -437,14 +437,10 @@ VALUES
             Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
-    Public Function DevicesBySup() As DataTable
+    Public Function DevicesBySup(ParentForm As Form) As DataTable
         Dim SupInfo As Emp_Info
-        Dim NewMunisSearch As New frmMunisUser
-        NewMunisSearch.ShowDialog()
-        If NewMunisSearch.DialogResult = DialogResult.Yes Then
-            SupInfo = NewMunisSearch.EmployeeInfo
-            NewMunisSearch.Dispose()
-        End If
+        Dim NewMunisSearch As New frmMunisUser(ParentForm)
+        SupInfo = NewMunisSearch.EmployeeInfo
         Dim EmpList As DataTable = Munis.ListOfEmpBySup(SupInfo.Number)
         Dim DeviceList As New DataTable
         For Each r As DataRow In EmpList.Rows
