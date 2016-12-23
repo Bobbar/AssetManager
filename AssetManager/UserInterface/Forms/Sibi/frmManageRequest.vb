@@ -17,6 +17,7 @@ Public Class frmManageRequest
     Sub New(ParentForm As Form)
         InitializeComponent()
         Tag = ParentForm
+        Icon = ParentForm.Icon
         Text += " - *New Request*"
         NewRequest()
         Show()
@@ -204,7 +205,7 @@ Public Class frmManageRequest
         bolFieldsValid = True
         Dim ValidateResults As Boolean = CheckFields(Me, bolFieldsValid)
         If Not ValidateResults Then
-            Dim blah = Message("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data")
+            Dim blah = Message("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
         End If
         Return ValidateResults
     End Function

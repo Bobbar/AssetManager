@@ -2,9 +2,12 @@
 Public Class MyDialog
     Sub New(ParentForm As Form, Optional StartMaximized As Boolean = False)
         InitializeComponent()
-        Icon = ParentForm.Icon
         StartFullSize = StartMaximized
-        If Not IsNothing(ParentForm) Then Icon = ParentForm.Icon
+        If Not IsNothing(ParentForm) Then
+            Icon = ParentForm.Icon
+        Else
+            Icon = My.Resources.inventory_icon_orange
+        End If
     End Sub
     Public ReadOnly Property ControlValues As List(Of Control)
         Get
