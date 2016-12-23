@@ -19,7 +19,6 @@ Partial Class frmEncrypter
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmEncrypter))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.cmdClear = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -123,8 +122,8 @@ Partial Class frmEncrypter
         Me.ClientSize = New System.Drawing.Size(515, 352)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmEncrypter"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Encoder"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

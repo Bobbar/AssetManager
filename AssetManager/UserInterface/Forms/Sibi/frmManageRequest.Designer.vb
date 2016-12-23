@@ -189,7 +189,7 @@ Partial Class frmManageRequest
         Me.Panel4.Controls.Add(Me.GroupBox3)
         Me.Panel4.Location = New System.Drawing.Point(8, 40)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1181, 259)
+        Me.Panel4.Size = New System.Drawing.Size(1011, 259)
         Me.Panel4.TabIndex = 5
         '
         'GroupBox1
@@ -225,7 +225,7 @@ Partial Class frmManageRequest
         Me.Panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.Panel3.Controls.Add(Me.pnlEditButtons)
         Me.Panel3.Controls.Add(Me.pnlCreate)
-        Me.Panel3.Location = New System.Drawing.Point(255, 94)
+        Me.Panel3.Location = New System.Drawing.Point(265, 93)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(148, 148)
         Me.Panel3.TabIndex = 22
@@ -381,7 +381,7 @@ Partial Class frmManageRequest
         'chkPlanned
         '
         Me.chkPlanned.AutoSize = True
-        Me.chkPlanned.Location = New System.Drawing.Point(172, 124)
+        Me.chkPlanned.Location = New System.Drawing.Point(180, 124)
         Me.chkPlanned.Name = "chkPlanned"
         Me.chkPlanned.Size = New System.Drawing.Size(79, 19)
         Me.chkPlanned.TabIndex = 10
@@ -461,7 +461,7 @@ Partial Class frmManageRequest
         Me.GroupBox3.Controls.Add(Me.Panel2)
         Me.GroupBox3.Location = New System.Drawing.Point(611, 4)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(567, 250)
+        Me.GroupBox3.Size = New System.Drawing.Size(397, 250)
         Me.GroupBox3.TabIndex = 4
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Notes"
@@ -474,7 +474,7 @@ Partial Class frmManageRequest
         Me.Panel2.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel2.Location = New System.Drawing.Point(6, 13)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(556, 231)
+        Me.Panel2.Size = New System.Drawing.Size(386, 231)
         Me.Panel2.TabIndex = 0
         '
         'dgvNotes
@@ -516,7 +516,7 @@ Partial Class frmManageRequest
         Me.dgvNotes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.dgvNotes.ShowCellErrors = False
         Me.dgvNotes.ShowCellToolTips = False
-        Me.dgvNotes.Size = New System.Drawing.Size(550, 225)
+        Me.dgvNotes.Size = New System.Drawing.Size(380, 225)
         Me.dgvNotes.TabIndex = 19
         '
         'Panel1
@@ -529,7 +529,7 @@ Partial Class frmManageRequest
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(8, 310)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1180, 375)
+        Me.Panel1.Size = New System.Drawing.Size(1010, 263)
         Me.Panel1.TabIndex = 1
         '
         'Label10
@@ -576,7 +576,7 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.RequestItemsGrid.ShowCellToolTips = False
-        Me.RequestItemsGrid.Size = New System.Drawing.Size(1174, 354)
+        Me.RequestItemsGrid.Size = New System.Drawing.Size(1004, 242)
         Me.RequestItemsGrid.TabIndex = 18
         '
         'ToolStrip
@@ -588,7 +588,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ToolStrip.Size = New System.Drawing.Size(1199, 37)
+        Me.ToolStrip.Size = New System.Drawing.Size(1029, 37)
         Me.ToolStrip.TabIndex = 6
         Me.ToolStrip.Text = "ToolStrip1"
         '
@@ -657,7 +657,7 @@ Partial Class frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1199, 697)
+        Me.ClientSize = New System.Drawing.Size(1029, 585)
         Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel4)

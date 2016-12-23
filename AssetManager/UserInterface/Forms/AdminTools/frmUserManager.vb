@@ -6,6 +6,12 @@ Public Class frmUserManager
     Private Qry As String = "SELECT * FROM " & users.TableName
     Private myAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(Qry)
     Private SelectedRow As Integer
+    Sub New(ParentForm As Form)
+        InitializeComponent()
+        Tag = ParentForm
+        Icon = ParentForm.Icon
+        Show()
+    End Sub
     Private Sub frmUserManager_Load(sender As Object, e As EventArgs) Handles Me.Load
         LoadUserData()
     End Sub

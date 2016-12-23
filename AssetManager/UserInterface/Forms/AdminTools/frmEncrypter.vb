@@ -1,4 +1,10 @@
 ﻿Public Class frmEncrypter
+    Sub New(ParentForm As Form)
+        InitializeComponent()
+        Tag = ParentForm
+        Icon = ParentForm.Icon
+        Show()
+    End Sub
     Private Sub cmdEncode_Click(sender As Object, e As EventArgs) Handles cmdEncode.Click
         If Trim(txtString.Text) <> "" Then
             Dim CryptKey As String = Trim(txtKey.Text)

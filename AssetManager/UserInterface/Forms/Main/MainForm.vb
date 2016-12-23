@@ -589,11 +589,10 @@ Public Class MainForm
         End If
     End Sub
     Private Sub tsmUserManager_Click(sender As Object, e As EventArgs) Handles tsmUserManager.Click
-        frmUserManager.Show()
+        Dim NewUserMan As New frmUserManager(Me)
     End Sub
     Private Sub TextEnCrypterToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TextEnCrypterToolStripMenuItem.Click
-        frmEncrypter.Show()
-        frmEncrypter.Activate()
+        Dim NewEncryp As New frmEncrypter(Me)
     End Sub
     Private Sub txtReplaceYear_KeyDown(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyDown
         If e.KeyCode = Keys.Down Then
