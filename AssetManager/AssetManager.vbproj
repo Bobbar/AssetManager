@@ -404,8 +404,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\239360-transfer_arrows-512.png" />
-    <Content Include="inventory_icon_orange_large.ico" />
-    <Content Include="Resources\Add.png" />
+    <None Include="inventory_icon_orange_large.ico" />
+    <None Include="Resources\Add.png" />
     <None Include="Resources\check-out.png" />
     <None Include="Resources\delete-icon-red.png" />
     <None Include="Resources\check_alt-128.png" />
@@ -417,11 +417,11 @@
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
     <None Include="Resources\critical_funny.png" />
     <None Include="Resources\application_cascade-512.png" />
-    <Content Include="Resources\delete-icon.png" />
-    <Content Include="Resources\Edit.png" />
-    <None Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
-    <None Include="Resources\Exh_K-02_Asset_Disposal_Form.pdf" />
-    <None Include="Resources\Exh_K-03_Asset_Transfer_Form.pdf" />
+    <None Include="Resources\delete-icon.png" />
+    <None Include="Resources\Edit.png" />
+    <EmbeddedResource Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
+    <EmbeddedResource Include="Resources\Exh_K-02_Asset_Disposal_Form.pdf" />
+    <EmbeddedResource Include="Resources\Exh_K-03_Asset_Transfer_Form.pdf" />
     <None Include="Resources\Find.png" />
     <None Include="Resources\Form2-512.png" />
     <None Include="Resources\import_document_mail_save-512.png" />
@@ -437,7 +437,7 @@
     <None Include="Resources\inv_box_large.png" />
     <None Include="Resources\inventory_icon_orange_large.png" />
     <None Include="Resources\inventory_icon_orange.ico" />
-    <Content Include="Resources\View_Details.png" />
+    <None Include="Resources\View_Details.png" />
   </ItemGroup>
   <ItemGroup>
     <PublishFile Include="Resources\Add.png">
