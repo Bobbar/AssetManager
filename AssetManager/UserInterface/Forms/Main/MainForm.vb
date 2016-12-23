@@ -18,7 +18,7 @@ Public Class MainForm
     Private MyLiveBox As New clsLiveBox
     Private strLastQry As String
     Private cmdLastCommand As MySqlCommand
-    Public MyWindowList As WindowList
+    Private MyWindowList As WindowList
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadProgram()
     End Sub
@@ -26,7 +26,7 @@ Public Class MainForm
         Try
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
-            ToolStrip1.BackColor = colToolBarColor
+            ToolStrip1.BackColor = colAssetToolBarColor
             Logger("Starting AssetManager...")
             Status("Loading...")
             SplashScreen.Show()

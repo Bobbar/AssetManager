@@ -4,12 +4,14 @@
     Public colCheckIn As Color = ColorTranslator.FromHtml("#B6FCC0")
     Public colCheckOut As Color = ColorTranslator.FromHtml("#FCB6B6")
     Public colHighlightOrange As Color = ColorTranslator.FromHtml("#FF9A26") '"#FF9827")
-    Public colHighlightBlue As Color = ColorTranslator.FromHtml("#8BCEE8")
+    Public colHighlightBlue As Color = Color.FromArgb(46, 112, 255) 'ColorTranslator.FromHtml("#8BCEE8")
+    Public colSibiSelectColor As Color = Color.FromArgb(185, 205, 255) '(146, 148, 255) '(31, 47, 155)
     Public colHighlightColor As Color = ColorTranslator.FromHtml("#FF6600")
     Public colSelectColor As Color = ColorTranslator.FromHtml("#FFB917")
     Public colEditColor As Color = ColorTranslator.FromHtml("#81EAAA")
     Public colFormBackColor As Color = Color.FromArgb(232, 232, 232)
     Public colStatusBarProblem As Color = ColorTranslator.FromHtml("#FF9696")
-    Public colToolBarColor As Color = Color.FromArgb(249, 226, 166)
+    Public colAssetToolBarColor As Color = Color.FromArgb(249, 226, 166)
+    Public colSibiToolBarColor As Color = Color.FromArgb(148, 213, 255)
     Public DefGridBC As Color, DefGridSelCol As Color
 End Module

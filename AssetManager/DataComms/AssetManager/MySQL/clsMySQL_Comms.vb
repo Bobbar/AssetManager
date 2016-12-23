@@ -1,7 +1,6 @@
 ﻿Imports MySql.Data.MySqlClient
 Public Class clsMySQL_Comms
-
-    Private Const strDatabase As String = "test_db" '"asset_manager"
+    Private Const strDatabase As String = "asset_manager"
     Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
     Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase
     Public Function Return_SQLTable(strSQLQry As String) As DataTable

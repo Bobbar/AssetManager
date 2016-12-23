@@ -2,8 +2,9 @@
 Imports MySql.Data.MySqlClient
 Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
-    Public MyWindowList As WindowList
+    Private MyWindowList As WindowList
     Private LastCmd As MySqlCommand
+
     Public Sub RefreshResults()
         ExecuteCmd(LastCmd)
     End Sub
@@ -219,8 +220,8 @@ Public Class frmSibiMain
         On Error Resume Next
         If Not bolGridFilling Then
             Dim BackColor As Color = DefGridBC
-            Dim SelectColor As Color = DefGridSelCol
-            Dim c1 As Color = colHighlightColor 'highlight color
+            Dim SelectColor As Color = colSibiSelectColor 'DefGridSelCol
+            Dim c1 As Color = colHighlightBlue 'colHighlightColor 'highlight color
             If Row > -1 Then
                 For Each cell As DataGridViewCell In ResultGrid.Rows(Row).Cells
                     If cell.ColumnIndex <> GetColIndex(ResultGrid, "Status") Then 'skip the colored status column
@@ -248,7 +249,7 @@ Public Class frmSibiMain
     End Sub
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
         Dim BackColor As Color = DefGridBC
-        Dim SelectColor As Color = DefGridSelCol
+        Dim SelectColor As Color = colSibiSelectColor 'DefGridSelCol
         If e.RowIndex > -1 Then
             For Each cell As DataGridViewCell In ResultGrid.Rows(e.RowIndex).Cells
                 If cell.ColumnIndex <> GetColIndex(ResultGrid, "Status") Then 'skip the colored status column

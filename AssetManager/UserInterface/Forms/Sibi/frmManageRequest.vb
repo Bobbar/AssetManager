@@ -10,12 +10,14 @@ Public Class frmManageRequest
     Private bolNewRequest As Boolean = False
     Sub New(ParentForm As Form, RequestUID As String)
         InitializeComponent()
+        dgvNotes.DefaultCellStyle.SelectionBackColor = colSibiSelectColor
         Tag = ParentForm
         Icon = ParentForm.Icon
         OpenRequest(RequestUID)
     End Sub
     Sub New(ParentForm As Form)
         InitializeComponent()
+        dgvNotes.DefaultCellStyle.SelectionBackColor = colSibiSelectColor
         Tag = ParentForm
         Icon = ParentForm.Icon
         Text += " - *New Request*"
@@ -49,7 +51,7 @@ Public Class frmManageRequest
         pnlCreate.Visible = False
         CurrentRequest = Nothing
         DisableControls(Me)
-        ToolStrip.BackColor = colToolBarColor
+        ToolStrip.BackColor = colSibiToolBarColor
         cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
         cmdUpdate.Text = "Update"
         bolUpdating = False
@@ -733,7 +735,7 @@ VALUES
             bolUpdating = True
         Else
             DisableControls(Me)
-            ToolStrip.BackColor = colToolBarColor
+            ToolStrip.BackColor = colSibiToolBarColor
             cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
             cmdUpdate.Text = "Update"
             HideEditControls()
@@ -879,8 +881,8 @@ VALUES
         On Error Resume Next
         If Not bolGridFilling Then
             Dim BackColor As Color = DefGridBC
-            Dim SelectColor As Color = DefGridSelCol
-            Dim c1 As Color = colHighlightColor 'highlight color
+            Dim SelectColor As Color = colSibiSelectColor 'DefGridSelCol
+            Dim c1 As Color = colHighlightBlue 'colHighlightColor 'highlight color
             If Row > -1 Then
                 For Each cell As DataGridViewCell In RequestItemsGrid.Rows(Row).Cells
                     Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
@@ -905,7 +907,7 @@ VALUES
     End Sub
     Private Sub RequestItemsGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellLeave
         Dim BackColor As Color = DefGridBC
-        Dim SelectColor As Color = DefGridSelCol
+        Dim SelectColor As Color = colSibiSelectColor 'DefGridSelCol
         If e.RowIndex > -1 Then
             For Each cell As DataGridViewCell In RequestItemsGrid.Rows(e.RowIndex).Cells
                 cell.Style.SelectionBackColor = SelectColor
@@ -927,7 +929,7 @@ VALUES
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
         If Not ValidateFields() Then Exit Sub
         DisableControls(Me)
-        ToolStrip.BackColor = colToolBarColor
+        ToolStrip.BackColor = colSibiToolBarColor
         cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
         cmdUpdate.Text = "Update"
         HideEditControls()

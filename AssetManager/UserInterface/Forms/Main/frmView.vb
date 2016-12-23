@@ -26,7 +26,7 @@ Public Class frmView
     Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
         grpNetTools.Visible = False
-        ToolStrip1.BackColor = colToolBarColor
+        ToolStrip1.BackColor = colAssetToolBarColor
         lblGUID.BackColor = SetBarColor(CurrentViewDevice.strGUID)
         lblGUID.ForeColor = GetFontColor(lblGUID.BackColor)
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
@@ -134,7 +134,7 @@ Public Class frmView
         cmdSetSibi.Visible = False
         cmdMunisSearch.Visible = False
         Me.Text = "View"
-        ToolStrip1.BackColor = colToolBarColor
+        ToolStrip1.BackColor = colAssetToolBarColor
         For Each t As ToolStripItem In ToolStrip1.Items
             If TypeOf t IsNot ToolStripSeparator Then
                 t.Visible = True

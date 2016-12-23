@@ -21,7 +21,7 @@
         If FormCount() <> intFormCount Then
             If Not DropDownControl.DropDown.Focused Then
                 DropDownControl.DropDownItems.Clear()
-                RefreshWindowList(MyParentForm, DropDownControl.DropDownItems)
+                BuildWindowList(MyParentForm, DropDownControl.DropDownItems)
                 intFormCount = FormCount()
             End If
         End If
@@ -33,14 +33,27 @@
         Next
         Return i
     End Function
-    Private Sub RefreshWindowList(ParentForm As Form, ByRef TargetMenuItem As ToolStripItemCollection)
+    ''' <summary>
+    ''' Recursively build ToolStripItemCollections of Forms and their Children and add them to the ToolStrip. Making sure to add SibiMain to the top of the list.
+    ''' </summary>
+    ''' <param name="ParentForm">Form to add to ToolStrip.</param>
+    ''' <param name="TargetMenuItem">Item to add the Form item to.</param>
+    Private Sub BuildWindowList(ParentForm As Form, ByRef TargetMenuItem As ToolStripItemCollection)
         For Each frm As Form In ListOfChilden(ParentForm)
             If HasChildren(frm) Then
                 Dim NewDropDown As ToolStripMenuItem = NewMenuItem(frm)
-                TargetMenuItem.Add(NewDropDown)
-                RefreshWindowList(frm, NewDropDown.DropDownItems)
+                If TypeOf frm Is frmSibiMain Then
+                    TargetMenuItem.Insert(0, NewDropDown)
+                Else
+                    TargetMenuItem.Add(NewDropDown)
+                End If
+                BuildWindowList(frm, NewDropDown.DropDownItems)
             Else
-                TargetMenuItem.Add(NewMenuItem(frm))
+                If TypeOf frm Is frmSibiMain Then
+                    TargetMenuItem.Insert(0, NewMenuItem(frm))
+                Else
+                    TargetMenuItem.Add(NewMenuItem(frm))
+                End If
             End If
         Next
     End Sub
