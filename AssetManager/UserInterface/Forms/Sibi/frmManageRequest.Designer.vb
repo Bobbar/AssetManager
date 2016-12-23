@@ -20,11 +20,11 @@ Partial Class frmManageRequest
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmManageRequest))
         Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
@@ -661,7 +661,6 @@ Partial Class frmManageRequest
         Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel4)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(771, 443)
         Me.Name = "frmManageRequest"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show

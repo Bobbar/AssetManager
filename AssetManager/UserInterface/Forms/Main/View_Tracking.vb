@@ -3,7 +3,12 @@ Imports MySql.Data.MySqlClient
 Public Class View_Tracking
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
     Private CurrentViewTrackDevice As Device_Info
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
+    Sub New(ParentForm As Form, EntryGUID As String, Device As Device_Info)
+        InitializeComponent()
+        Tag = ParentForm
+        Icon = ParentForm.Icon
+        ViewTrackingEntry(EntryGUID, Device)
+        Show()
     End Sub
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
@@ -11,7 +16,7 @@ Public Class View_Tracking
     Private Sub DoneWaiting()
         Me.Cursor = Cursors.Default
     End Sub
-    Public Sub ViewTrackingEntry(ByVal EntryUID As String, ByRef Device As Device_Info)
+    Private Sub ViewTrackingEntry(ByVal EntryUID As String, ByRef Device As Device_Info)
         Try
             If Not ConnectionReady() Then
                 ConnectionNotReady()
@@ -53,19 +58,9 @@ Public Class View_Tracking
             End If
         End Try
     End Sub
-    Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
-    End Sub
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click
         Me.Dispose()
         Me.Hide()
-    End Sub
-    Private Sub GroupBox1_Enter(sender As Object, e As EventArgs) Handles GroupBox1.Enter
-    End Sub
-    Private Sub View_Entry_Layout(sender As Object, e As LayoutEventArgs) Handles Me.Layout
-    End Sub
-    Private Sub txtChangeType_TextChanged(sender As Object, e As EventArgs) Handles txtCheckType.TextChanged
-    End Sub
-    Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
     End Sub
     Private Sub View_Tracking_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim c As Control

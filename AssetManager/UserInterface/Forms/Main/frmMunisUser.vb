@@ -15,7 +15,8 @@ Public Class frmMunisUser
     Private Const intMaxResults As Integer = 50
     Sub New(ParentForm As Form)
         InitializeComponent()
-        Me.Tag = ParentForm
+        Tag = ParentForm
+        Icon = ParentForm.Icon
         ShowDialog(ParentForm)
     End Sub
     Private Sub EmpNameSearch(Name As String)

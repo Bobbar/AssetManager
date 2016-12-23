@@ -23,7 +23,6 @@ Partial Class frmAttachments
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmAttachments))
         Me.cmdUpload = New System.Windows.Forms.Button()
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.OpenTool = New System.Windows.Forms.ToolStripMenuItem()
@@ -528,7 +527,6 @@ Partial Class frmAttachments
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Panel2)
         Me.DoubleBuffered = True
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(833, 370)
         Me.Name = "frmAttachments"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

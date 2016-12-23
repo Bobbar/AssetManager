@@ -5,6 +5,7 @@ Public Class View_Entry
     Sub New(ParentForm As Form, EntryGUID As String)
         InitializeComponent()
         Tag = ParentForm
+        Icon = ParentForm.Icon
         ViewEntry(EntryGUID)
         Show()
         Activate()
@@ -15,7 +16,7 @@ Public Class View_Entry
     Private Sub DoneWaiting()
         Me.Cursor = Cursors.Default
     End Sub
-    Public Sub ViewEntry(ByVal EntryUID As String)
+    Private Sub ViewEntry(ByVal EntryUID As String)
         If Not ConnectionReady() Then
             ConnectionNotReady()
             Exit Sub

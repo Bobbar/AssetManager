@@ -21,7 +21,6 @@ Partial Class frmSibiSelector
     Private Sub InitializeComponent()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmSibiSelector))
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.cmdShowAll = New System.Windows.Forms.Button()
@@ -114,8 +113,8 @@ Partial Class frmSibiSelector
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1104, 439)
         Me.Controls.Add(Me.Panel1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmSibiSelector"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Select Request"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()

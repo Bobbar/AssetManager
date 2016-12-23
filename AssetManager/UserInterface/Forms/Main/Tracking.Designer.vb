@@ -19,7 +19,6 @@ Partial Class Tracking
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Tracking))
         Me.CheckInBox = New System.Windows.Forms.GroupBox()
         Me.cmdCheckIn = New System.Windows.Forms.Button()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -355,7 +354,6 @@ Partial Class Tracking
         Me.Controls.Add(Me.CheckOutBox)
         Me.Controls.Add(Me.CheckInBox)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "Tracking"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

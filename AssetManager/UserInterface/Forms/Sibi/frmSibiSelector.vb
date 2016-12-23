@@ -6,6 +6,11 @@ Public Class frmSibiSelector
         End Get
     End Property
     Private SelectedUID As String
+    Sub New(ParentForm As Form)
+        InitializeComponent()
+        Icon = ParentForm.Icon
+        ShowDialog(ParentForm)
+    End Sub
     Private Sub frmSibiSelector_Load(sender As Object, e As EventArgs) Handles Me.Load
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         ShowAll()

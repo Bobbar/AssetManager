@@ -6,11 +6,21 @@ Public Class UpdateDev
             Return NewUpdateInfo
         End Get
     End Property
-    Public strNewNote As String
     Private CurrentForm As Form
     Private NewUpdateInfo As Update_Info
-    Public Sub FinishUpdate(SendingForm As Form)
-        CurrentForm = SendingForm
+    Private MyParent As Form
+    Sub New(ParentForm As Form, Optional bolNewNote As Boolean = False)
+        InitializeComponent()
+        MyParent = ParentForm
+        Icon = ParentForm.Icon
+        FillComboBox(DeviceIndex.ChangeType, cmbUpdate_ChangeType)
+        If bolNewNote Then
+            cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(DeviceIndex.ChangeType, "NOTE")
+            cmbUpdate_ChangeType.Enabled = False
+        Else
+            cmbUpdate_ChangeType.SelectedIndex = -1
+        End If
+        ShowDialog(ParentForm)
     End Sub
     Private Sub cmdSubmit_Click(sender As Object, e As EventArgs) Handles cmdSubmit.Click
         If Not CheckFields() Then

@@ -2,6 +2,7 @@
 Public Class MyDialog
     Sub New(ParentForm As Form, Optional StartMaximized As Boolean = False)
         InitializeComponent()
+        Icon = ParentForm.Icon
         StartFullSize = StartMaximized
         If Not IsNothing(ParentForm) Then Icon = ParentForm.Icon
     End Sub

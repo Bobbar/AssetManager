@@ -19,7 +19,6 @@ Partial Class MyDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MyDialog))
         Me.tblOkCancel = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
@@ -209,7 +208,6 @@ Partial Class MyDialog
         Me.ClientSize = New System.Drawing.Size(468, 157)
         Me.Controls.Add(Me.pnlMaster)
         Me.DoubleBuffered = True
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MaximumSize = New System.Drawing.Size(1068, 678)
         Me.MinimizeBox = False

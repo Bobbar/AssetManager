@@ -19,7 +19,6 @@ Partial Class View_Munis
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(View_Munis))
         Me.DataGridMunis_Inventory = New System.Windows.Forms.DataGridView()
         Me.pnlFixedAsset = New System.Windows.Forms.Panel()
         Me.lblFAInfo = New System.Windows.Forms.Label()
@@ -193,7 +192,6 @@ Partial Class View_Munis
         Me.Controls.Add(Me.pnlMaster)
         Me.Controls.Add(Me.Panel2)
         Me.DoubleBuffered = True
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "View_Munis"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

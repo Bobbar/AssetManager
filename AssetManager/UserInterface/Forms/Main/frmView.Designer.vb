@@ -806,7 +806,7 @@ Partial Class frmView
         Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_red
         Me.CheckOutTool.Name = "CheckOutTool"
-        Me.CheckOutTool.Size = New System.Drawing.Size(144, 32)
+        Me.CheckOutTool.Size = New System.Drawing.Size(161, 32)
         Me.CheckOutTool.Text = "Check Out"
         '
         'CheckInTool
@@ -814,7 +814,7 @@ Partial Class frmView
         Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_green
         Me.CheckInTool.Name = "CheckInTool"
-        Me.CheckInTool.Size = New System.Drawing.Size(144, 32)
+        Me.CheckInTool.Size = New System.Drawing.Size(161, 32)
         Me.CheckInTool.Text = "Check In"
         '
         'tsdAssetControl
@@ -934,7 +934,6 @@ Partial Class frmView
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.DeviceInfoBox)
         Me.DoubleBuffered = True
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(1101, 533)
         Me.Name = "frmView"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent

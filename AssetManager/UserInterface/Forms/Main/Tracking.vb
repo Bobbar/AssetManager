@@ -1,10 +1,22 @@
 ﻿Option Explicit On
 Imports MySql.Data.MySqlClient
 Public Class Tracking
-
     Private CurrentTrackingDevice As Device_Info
-    Private CurrentSender As frmView
+    Private MyParent As frmView
     Private CheckData As CheckStruct
+    Sub New(ByRef Device As Device_Info, ParentForm As Form)
+        InitializeComponent()
+        CurrentTrackingDevice = Device
+        Tag = ParentForm
+        MyParent = ParentForm
+        Icon = ParentForm.Icon
+        ClearAll()
+        SetDates()
+        SetGroups()
+        GetCurrentTracking(CurrentTrackingDevice.strGUID)
+        LoadTracking()
+        Show()
+    End Sub
     Private Function GetCheckData() As Boolean
         If Not CurrentTrackingDevice.Tracking.bolCheckedOut Then
             Dim c As Control
@@ -42,15 +54,7 @@ Public Class Tracking
         End With
         Return True
     End Function
-    Public Sub SetupTracking(ByRef Device As Device_Info, Sender As frmView)
-        CurrentTrackingDevice = Device
-        CurrentSender = Sender
-        ClearAll()
-        SetDates()
-        SetGroups()
-        GetCurrentTracking(CurrentTrackingDevice.strGUID)
-        LoadTracking()
-    End Sub
+
     Private Sub GetCurrentTracking(strGUID As String)
         Dim dt As DataTable
         Dim dr As DataRow
@@ -137,14 +141,13 @@ VALUES(@" & trackable.CheckType & ",
             cmd.Parameters.AddWithValue("@" & trackable.Notes, CheckData.strUseReason)
             cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.strDeviceUID)
             rows = rows + cmd.ExecuteNonQuery()
-            UpdateDev.strNewNote = Nothing
             If rows = 2 Then
                 Dim blah = Message("Device Checked Out!", vbOKOnly + vbInformation, "Success")
             Else
                 Dim blah = Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result")
             End If
             Me.Dispose()
-            CurrentSender.ViewDevice(CurrentTrackingDevice.strGUID)
+            MyParent.ViewDevice(CurrentTrackingDevice.strGUID)
             cmd.Dispose()
             DoneWaiting()
             Exit Sub
@@ -195,7 +198,6 @@ VALUES (@" & trackable.CheckType & ",
             cmd.Parameters.AddWithValue("@" & trackable.Notes, CheckData.strCheckInNotes)
             cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.strDeviceUID)
             rows = rows + cmd.ExecuteNonQuery()
-            UpdateDev.strNewNote = Nothing
             If rows = 2 Then
                 Dim blah = Message("Device Checked In!", vbOKOnly + vbInformation, "Success")
             Else
@@ -203,7 +205,7 @@ VALUES (@" & trackable.CheckType & ",
             End If
             Me.Dispose()
             cmd.Dispose()
-            CurrentSender.ViewDevice(CurrentTrackingDevice.strGUID)
+            MyParent.ViewDevice(CurrentTrackingDevice.strGUID)
             DoneWaiting()
             Exit Sub
         Catch ex As Exception

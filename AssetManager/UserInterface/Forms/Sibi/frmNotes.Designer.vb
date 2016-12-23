@@ -19,7 +19,6 @@ Partial Class frmNotes
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmNotes))
         Me.rtbNotes = New System.Windows.Forms.RichTextBox()
         Me.cmdClose = New System.Windows.Forms.Button()
         Me.cmdOK = New System.Windows.Forms.Button()
@@ -65,7 +64,6 @@ Partial Class frmNotes
         Me.Controls.Add(Me.cmdOK)
         Me.Controls.Add(Me.cmdClose)
         Me.Controls.Add(Me.rtbNotes)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximumSize = New System.Drawing.Size(981, 669)
         Me.MinimumSize = New System.Drawing.Size(253, 160)
         Me.Name = "frmNotes"

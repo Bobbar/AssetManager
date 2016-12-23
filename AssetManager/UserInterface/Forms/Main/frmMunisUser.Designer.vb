@@ -22,7 +22,6 @@ Partial Class frmMunisUser
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMunisUser))
         Me.MunisResults = New System.Windows.Forms.DataGridView()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.lblSelectedEmp = New System.Windows.Forms.Label()
@@ -147,7 +146,6 @@ Partial Class frmMunisUser
         Me.ClientSize = New System.Drawing.Size(742, 487)
         Me.Controls.Add(Me.pnlSearch)
         Me.Controls.Add(Me.GroupBox1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(391, 441)
         Me.Name = "frmMunisUser"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show

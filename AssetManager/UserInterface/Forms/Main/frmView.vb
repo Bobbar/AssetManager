@@ -239,7 +239,6 @@ VALUES (@" & historical_dev.ChangeType & ",
             cmd.Parameters.AddWithValue("@" & historical_dev.Trackable, Convert.ToInt32(NewData.bolTrackable))
             cmd.Parameters.AddWithValue("@" & historical_dev.PO, NewData.strPO)
             rows = rows + cmd.ExecuteNonQuery()
-            UpdateDev.strNewNote = Nothing
             cmd.Dispose()
             If rows = 2 Then
                 ViewDevice(CurrentViewDevice.strGUID)
@@ -597,9 +596,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             bolCheckFields = True
             Exit Sub
         End If
-        UpdateDev.cmbUpdate_ChangeType.SelectedIndex = -1
-        UpdateDev.cmbUpdate_ChangeType.Enabled = True
-        UpdateDev.Show()
+        Dim UpdateDia As New UpdateDev(Me)
     End Sub
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Me.Dispose()
@@ -626,18 +623,9 @@ VALUES (@" & historical_dev.ChangeType & ",
             ConnectionNotReady()
             Exit Sub
         End If
-        Dim NewTracking As New View_Tracking
         Waiting()
-        NewTracking.Tag = Me
-        NewTracking.ViewTrackingEntry(GUID, CurrentViewDevice)
-        NewTracking.Show()
+        Dim NewTracking As New View_Tracking(Me, GUID, CurrentViewDevice)
         DoneWaiting()
-    End Sub
-    Private Sub AddNoteToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
-        UpdateDev.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(DeviceIndex.ChangeType, "NOTE")
-        UpdateDev.cmbUpdate_ChangeType.Enabled = False
-        UpdateDev.Show()
     End Sub
     Private Sub RefreshCombos()
         FillComboBox(DeviceIndex.EquipType, cmbEquipType_View_REQ)
@@ -777,12 +765,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         GetCurrentValues()
-        Dim UpdateDia As New UpdateDev
-        FillComboBox(DeviceIndex.ChangeType, UpdateDia.cmbUpdate_ChangeType)
-        UpdateDia.cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(DeviceIndex.ChangeType, "NOTE")
-        UpdateDia.cmbUpdate_ChangeType.Enabled = False
-        UpdateDia.txtUpdate_Note.Clear()
-        UpdateDia.ShowDialog(Me)
+        Dim UpdateDia As New UpdateDev(Me, True)
         If UpdateDia.DialogResult = DialogResult.OK Then
             GetNewValues(UpdateDia.UpdateInfo)
             UpdateDevice(UpdateDia.UpdateInfo)
@@ -801,10 +784,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
         If Not CheckForAccess(AccessGroup.Tracking) Then Exit Sub
         Waiting()
-        Dim NewTracking As New Tracking
-        NewTracking.SetupTracking(CurrentViewDevice, Me)
-        NewTracking.Tag = Me
-        NewTracking.Show()
+        Dim NewTracking As New Tracking(CurrentViewDevice, Me)
         DoneWaiting()
     End Sub
     Private Sub CheckOutTool_Click(sender As Object, e As EventArgs) Handles CheckOutTool.Click
@@ -814,10 +794,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
         If Not CheckForAccess(AccessGroup.Tracking) Then Exit Sub
         Waiting()
-        Dim NewTracking As New Tracking
-        NewTracking.SetupTracking(CurrentViewDevice, Me)
-        NewTracking.Tag = Me
-        NewTracking.Show()
+        Dim NewTracking As New Tracking(CurrentViewDevice, Me)
         DoneWaiting()
     End Sub
     Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
@@ -828,9 +805,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen() Then
             Dim NewAttachments As New frmAttachments(Me, CurrentViewDevice)
-            'NewAttachments.Tag = Me
-            'NewAttachments.Activate()
-            'NewAttachments.Show()
         Else
             ActivateFormByUID(CurrentViewDevice.strGUID)
         End If
@@ -901,12 +875,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             Exit Sub
         End If
         DisableControls()
-        Dim UpdateDia As New UpdateDev
-        FillComboBox(DeviceIndex.ChangeType, UpdateDia.cmbUpdate_ChangeType)
-        UpdateDia.cmbUpdate_ChangeType.SelectedIndex = -1
-        UpdateDia.cmbUpdate_ChangeType.Enabled = True
-        UpdateDia.txtUpdate_Note.Clear()
-        UpdateDia.ShowDialog(Me)
+        Dim UpdateDia As New UpdateDev(Me)
         If UpdateDia.DialogResult = DialogResult.OK Then
             If Not ConcurrencyCheck() Then
                 CancelModify()
@@ -981,8 +950,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         OpenSibiLink(CurrentViewDevice) '.strPO)
     End Sub
     Private Sub LinkSibi()
-        Dim f As New frmSibiSelector
-        f.ShowDialog(Me)
+        Dim f As New frmSibiSelector(Me)
         If f.DialogResult = DialogResult.OK Then
             NewData.strSibiLink = f.SibiUID
             Message("Sibi Link Set.", vbOKOnly + vbInformation, "Success", Me)

@@ -10,6 +10,7 @@ Public Class frmNotes
     Sub New(ParentForm As Form, Request As Request_Info)
         InitializeComponent()
         Tag = ParentForm
+        Icon = ParentForm.Icon
         MyRequest = Request
         ShowDialog(ParentForm)
     End Sub
