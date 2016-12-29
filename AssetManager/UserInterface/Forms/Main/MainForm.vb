@@ -610,12 +610,4 @@ Public Class MainForm
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
         SendToGrid(Asset.DevicesBySup(Me))
     End Sub
-    Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        Dim f As Form = sender
-        If f.WindowState = FormWindowState.Minimized Then
-            MinimizeAll()
-            'ElseIf f.WindowState = FormWindowState.Normal Then
-            '    RestoreAll()
-        End If
-    End Sub
 End Class
