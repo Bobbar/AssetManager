@@ -100,10 +100,10 @@ Public Class frmSibiMain
             table.Columns.Add("UID", GetType(String))
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item(sibi_requests.RequestNumber)),
-               GetHumanValue(SibiIndex.StatusType, r.Item(sibi_requests.Status)),
+               GetHumanValue(SibiIndex.StatusType, r.Item(sibi_requests.Status).ToString),
                NoNull(r.Item(sibi_requests.Description)),
                NoNull(r.Item(sibi_requests.RequestUser)),
-               GetHumanValue(SibiIndex.RequestType, r.Item(sibi_requests.Type)),
+               GetHumanValue(SibiIndex.RequestType, r.Item(sibi_requests.Type).ToString),
                NoNull(r.Item(sibi_requests.NeedBy)),
                NoNull(r.Item(sibi_requests.PO)),
                NoNull(r.Item(sibi_requests.RequisitionNumber)),
@@ -142,7 +142,7 @@ Public Class frmSibiMain
         Dim NewRequest As New frmManageRequest(Me)
     End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
-        OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value)
+        OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub OpenRequest(strUID As String)
         If Not ConnectionReady() Then
@@ -265,7 +265,12 @@ Public Class frmSibiMain
         End If
     End Sub
     Private Sub frmSibiMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        CloseChildren(Me)
+        Dim CancelClose As Boolean = CheckForActiveTransfers()
+        If CancelClose Then
+            e.Cancel = True
+        Else
+            CloseChildren(Me)
+        End If
     End Sub
     Private Sub frmSibiMain_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         CloseChildren(Me)

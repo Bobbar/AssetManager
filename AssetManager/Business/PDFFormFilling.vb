@@ -37,7 +37,7 @@ Public Class PDFFormFilling
             .AddButton("cmdReqSelect", "Select From Req.", AddressOf PriceFromMunis)
             .ShowDialog()
             If .DialogResult = DialogResult.OK Then
-                Return .GetControlValue(UnitPriceTxtName)
+                Return .GetControlValue(UnitPriceTxtName).ToString
             End If
         End With
     End Function

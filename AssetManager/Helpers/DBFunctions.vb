@@ -23,17 +23,6 @@ Public Module DBFunctions
             Return False
         End Try
     End Function
-    Public Function CloseConnections()
-        Try
-            Asset.CloseConnection(GlobalConn)
-            'GlobalConn.Close()
-            'GlobalConn.Dispose()
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            Return False
-        End Try
-        Return True
-    End Function
     Public Function GetShortLocation(ByVal index As Integer) As String
         Try
             Return DeviceIndex.Locations(index).strShort
@@ -41,7 +30,7 @@ Public Module DBFunctions
             Return ""
         End Try
     End Function
-    Public Function GetDBValue(ByVal CodeIndex() As Combo_Data, ByVal index As Integer) As Object
+    Public Function GetDBValue(ByVal CodeIndex() As Combo_Data, ByVal index As Integer) As String
         Try
             If index > -1 Then
                 Return CodeIndex(index).strShort

@@ -2,7 +2,7 @@
 Imports MySql.Data.MySqlClient
 Public Class frmNotes
     Private MyRequest As Request_Info
-    Public ReadOnly Property Request
+    Public ReadOnly Property Request As Request_Info
         Get
             Return MyRequest
         End Get

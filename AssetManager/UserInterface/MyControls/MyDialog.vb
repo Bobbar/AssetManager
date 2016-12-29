@@ -18,7 +18,7 @@ Public Class MyDialog
     Private FormControlSize As Size = New Size(600, 345)
     Private IsMessageBox As Boolean = False
     Private MyControls As New List(Of Control)
-    Public Function DialogMessage(ByVal Prompt As Object, Optional ByVal Buttons As MsgBoxStyle = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As DialogResult
+    Public Function DialogMessage(ByVal Prompt As String, Optional ByVal Buttons As Integer = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As MsgBoxResult
         IsMessageBox = True
         If IsNothing(Title) Then
             Me.Text = My.Application.Info.AssemblyName
@@ -27,14 +27,14 @@ Public Class MyDialog
         End If
         AddRichTextBox("MessageBox", "MessageBox", Prompt)
         Me.Size = Me.MinimumSize
-        ParseStyle(Buttons)
+        ParseStyle(CType(Buttons, MsgBoxStyle))
         If Not IsNothing(ParentFrm) Then
             Me.ShowDialog(ParentFrm)
         Else
             Me.ShowDialog()
         End If
         Me.Dispose()
-        Return Me.DialogResult
+        Return CType(Me.DialogResult, MsgBoxResult)
     End Function
     Private Sub ParseStyle(ByVal style As MsgBoxStyle)
         Dim types As Integer
@@ -179,7 +179,7 @@ Public Class MyDialog
     End Sub
     Private Sub ButtonClick(ByVal sender As Object, ByVal e As EventArgs)
         Dim btn As Button = DirectCast(sender, Button)
-        Dim ClickAction As Action = btn.Tag
+        Dim ClickAction As Action = CType(btn.Tag, Action)
         ClickAction()
     End Sub
     Public Function ControlPanel() As FlowLayoutPanel

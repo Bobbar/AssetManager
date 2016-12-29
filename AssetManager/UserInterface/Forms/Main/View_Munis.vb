@@ -125,15 +125,6 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         End If
         bolGridFilling = False
     End Sub
-    Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
-        Dim MunisTable As DataTable
-        MunisTable = MunisComms.Return_MSSQLTable("SELECT TOP 10 * FROM famaster WHERE fama_serial='" & Trim(txtSerial.Text) & "'")
-        Dim r As DataRow
-        For Each r In MunisTable.Rows
-            Debug.Print(r.Item("fama_asset"))
-        Next
-        DataGridMunis_Inventory.DataSource = MunisTable
-    End Sub
     Private Sub HideFixedAssetGrid()
         pnlFixedAsset.Visible = False
         pnlRequisition.Top = pnlMaster.Top
@@ -185,8 +176,8 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
     Private SelectedUnitPrice As String
     Private Sub DataGridMunis_Requisition_CellMouseDoubleClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridMunis_Requisition.CellMouseDoubleClick
         If Me.Modal Then
-            SelectedUnitPrice = DataGridMunis_Requisition.Item(GetColIndex(DataGridMunis_Requisition, "rqdt_uni_pr"), DataGridMunis_Requisition.CurrentRow.Index).Value
-            Dim decPrice As Decimal = SelectedUnitPrice
+            SelectedUnitPrice = DataGridMunis_Requisition.Item(GetColIndex(DataGridMunis_Requisition, "rqdt_uni_pr"), DataGridMunis_Requisition.CurrentRow.Index).Value.ToString
+            Dim decPrice As Decimal = Convert.ToDecimal(SelectedUnitPrice)
             SelectedUnitPrice = decPrice.ToString("C")
             Me.DialogResult = DialogResult.OK
         End If

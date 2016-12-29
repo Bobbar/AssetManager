@@ -83,17 +83,18 @@
         Next
         Return tmpList
     End Function
-    Private Sub WindowClick(sender As ToolStripItem, e As MouseEventArgs)
+    Private Sub WindowClick(sender As Object, e As MouseEventArgs)
+        Dim item As ToolStripItem = CType(sender, ToolStripItem)
         If e.Button = MouseButtons.Right Then
-            Dim frm As Form = sender.Tag
-            sender.Dispose()
+            Dim frm As Form = CType(item.Tag, Form)
+            item.Dispose()
             frm.Dispose()
             intFormCount = FormCount()
             If DropDownControl.DropDownItems.Count = 0 Then
                 DropDownControl.HideDropDown()
             End If
         ElseIf e.Button = MouseButtons.Left Then
-            ActivateFormByHandle(sender.Tag)
+            ActivateFormByHandle(CType(item.Tag, Form))
         End If
     End Sub
 End Class

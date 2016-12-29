@@ -7,6 +7,8 @@ Module ErrorHandling
     Public Function ErrHandle(ex As Exception, strOrigSub As String) As Boolean 'Recursive error handler. Returns False for undesired or dangerous errors, True if safe to continue.
         Dim ErrorResult As Boolean
         Select Case TypeName(ex)
+            Case "BackgroundWorkerCancelledException"
+                ErrorResult = True
             Case "WebException"
                 ErrorResult = handleWebException(ex, strOrigSub)
             Case "IndexOutOfRangeException"

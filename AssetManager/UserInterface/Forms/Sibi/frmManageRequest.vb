@@ -323,12 +323,12 @@ Public Class frmManageRequest
                         If dcell.OwningColumn.CellType.Name = "DataGridViewComboBoxCell" Then
                             Select Case dcell.OwningColumn.Name
                                 Case Attrib_Type.Location
-                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(DeviceIndex.Locations, dcell.Value)
+                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(DeviceIndex.Locations, dcell.Value.ToString)
                                 Case Attrib_Type.SibiItemStatusType
-                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(SibiIndex.ItemStatusType, dcell.Value)
+                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(SibiIndex.ItemStatusType, dcell.Value.ToString)
                             End Select
                         Else
-                            NewRow(dcell.ColumnIndex) = Trim(dcell.Value)
+                            NewRow(dcell.ColumnIndex) = Trim(dcell.Value.ToString)
                         End If
                     Next
                     DBTable.Rows.Add(NewRow)
@@ -489,7 +489,7 @@ WHERE " & sibi_requests.UID & " ='" & CurrentRequest.strUID & "'"
             cmd.Parameters.Clear()
             Dim strRequestItemsQry As String
             For Each row As DataRow In RequestData.RequstItems.Rows
-                If row.Item("Item UID") <> "" Then
+                If row.Item("Item UID").ToString <> "" Then
                     strRequestItemsQry = "UPDATE " & sibi_request_items.TableName & "
 SET
 " & sibi_request_items.User & " = @" & sibi_request_items.User & " ,
@@ -503,7 +503,7 @@ SET
 " & sibi_request_items.Org_Code & " = @" & sibi_request_items.Org_Code & ",
 " & sibi_request_items.Object_Code & " = @" & sibi_request_items.Object_Code & ",
 " & sibi_request_items.Qty & " = @" & sibi_request_items.Qty & "
-WHERE " & sibi_request_items.Item_UID & " ='" & row.Item("Item UID") & "'"
+WHERE " & sibi_request_items.Item_UID & " ='" & row.Item("Item UID").ToString & "'"
                     cmd.Parameters.AddWithValue("@" & sibi_request_items.User, row.Item("User"))
                     cmd.Parameters.AddWithValue("@" & sibi_request_items.Description, row.Item("Description"))
                     cmd.Parameters.AddWithValue("@" & sibi_request_items.Location, row.Item(Attrib_Type.Location))
@@ -653,7 +653,7 @@ VALUES
         table.Columns.Add("UID")
         For Each r As DataRow In Results.Rows
             table.Rows.Add(r.Item(sibi_notes.DateStamp),
-                           IIf(Len(r.Item(sibi_notes.Note)) > intPreviewChars, NotePreview(r.Item(sibi_notes.Note)), r.Item(sibi_notes.Note)),
+                           IIf(Len(r.Item(sibi_notes.Note)) > intPreviewChars, NotePreview(r.Item(sibi_notes.Note).ToString), r.Item(sibi_notes.Note)),
                            r.Item(sibi_notes.Note_UID))
         Next
         dgvNotes.DataSource = table
@@ -663,7 +663,7 @@ VALUES
     End Sub
     Private Function DeleteItem_FromSQL(ItemUID As String, ItemColumnName As String, Table As String) As Integer
         Try
-            Dim rows
+            Dim rows As Integer
             Dim strSQLQry As String = "DELETE FROM " & Table & " WHERE " & ItemColumnName & "='" & ItemUID & "'"
             rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
             Return rows
@@ -771,12 +771,17 @@ VALUES
         pnlCreate.Visible = True
     End Sub
     Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        CloseChildren(Me)
-        Me.Dispose()
+        Dim CancelClose As Boolean = CheckForActiveTransfers()
+        If CancelClose Then
+            e.Cancel = True
+        Else
+            CloseChildren(Me)
+        End If
+
     End Sub
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim blah
+        Dim blah As MsgBoxResult
         blah = Message("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row")
         If blah = vbYes Then
             If bolNewRequest Then
@@ -785,7 +790,7 @@ VALUES
                     blah = Message("Failed to delete row.", vbExclamation + vbOKOnly, "Error", Me)
                 End If
             Else
-                blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+                blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value.ToString, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
                 OpenRequest(CurrentRequest.strUID)
             End If
 
@@ -845,13 +850,13 @@ VALUES
         OpenRequest(CurrentRequest.strUID)
     End Sub
     Private Sub dgvNotes_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvNotes.CellDoubleClick
-        Dim ViewNote As New frmNotes(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value)
+        Dim ViewNote As New frmNotes(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim blah = Message("Are you sure?", vbYesNo + vbQuestion, "Delete Note", Me)
         If blah = vbYes Then
-            Dim NoteUID As String = dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value
+            Dim NoteUID As String = dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString
             If NoteUID <> "" Then
                 Message(DeleteItem_FromSQL(NoteUID, sibi_notes.Note_UID, sibi_notes.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
                 OpenRequest(CurrentRequest.strUID)
@@ -869,7 +874,7 @@ VALUES
             RequestItemsGrid.Rows(e.RowIndex).Selected = True
             RequestItemsGrid.CurrentCell = RequestItemsGrid(e.ColumnIndex, e.RowIndex)
         End If
-        If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Or RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
+        If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value.ToString IsNot "" Or RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value.ToString IsNot "" Then
             tsmLookupDevice.Visible = True
         Else
             tsmLookupDevice.Visible = False
@@ -918,10 +923,10 @@ VALUES
         'frmView.ViewDevice(Device.strGUID)
     End Sub
     Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click
-        If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
-            LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value))
-        ElseIf RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value IsNot "" Then
-            LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value))
+        If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value.ToString IsNot "" Then
+            LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value.ToString))
+        ElseIf RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value.ToString IsNot "" Then
+            LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value.ToString))
         End If
     End Sub
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click

@@ -27,8 +27,8 @@ Public Class frmView
         lblGUID.ForeColor = GetFontColor(lblGUID.BackColor)
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
-        CheckRDP()
         ViewDevice(DeviceGUID)
+        CheckRDP()
     End Sub
     Public Sub SetAttachCount()
         AttachmentTool.Text = "(" + Asset.GetAttachmentCount(CurrentViewDevice).ToString + ")"
@@ -241,7 +241,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                 Dim blah = Message("Update Added.", vbOKOnly + vbInformation, "Success")
             Else
                 ViewDevice(CurrentViewDevice.strGUID)
-                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
+                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
             End If
             Exit Sub
         Catch ex As Exception
@@ -476,7 +476,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             lblDueBack.Visible = False
             txtDueBack.Visible = False
         End If
-        txtCheckOut.Text = IIf(CurrentViewDevice.Tracking.bolCheckedOut, "Checked Out", "Checked In")
+        txtCheckOut.Text = IIf(CurrentViewDevice.Tracking.bolCheckedOut, "Checked Out", "Checked In").ToString
     End Sub
     Public Sub SetTracking(bolEnabled As Boolean, bolCheckedOut As Boolean)
         If bolEnabled Then
@@ -594,7 +594,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         Me.Dispose()
     End Sub
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
-        NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value)
+        NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub NewEntryView(GUID As String)
         If Not ConnectionReady() Then
@@ -686,7 +686,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
-        Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value
+        Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
         Dim Info As Device_Info = Asset.Get_EntryInfo(strGUID)
         Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING")
         If blah = vbYes Then
@@ -728,7 +728,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                                                 (CInt(c1.G) + CInt(c2.G)) / 2,
                                                 (CInt(c1.B) + CInt(c2.B)) / 2)
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = BlendColor
-        ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckOut Then
+        ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value.ToString = strCheckOut Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
             Dim c2 As Color = Color.FromArgb(colCheckOut.R, colCheckOut.G, colCheckOut.B)
             Dim BlendColor As Color
@@ -740,11 +740,11 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Sub
     Private Sub Button1_Click_1(sender As Object, e As EventArgs)
-        TrackingGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnMode.ColumnHeader
+        TrackingGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader
         TrackingGrid.AutoResizeColumns()
     End Sub
     Private Sub TrackingGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellDoubleClick
-        NewTrackingView(TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value)
+        NewTrackingView(TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
         If Not ConnectionReady() Then
@@ -930,7 +930,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Sub
     Private Sub CheckRDP()
-        If InStr(CurrentViewDevice.strOSVersion, "WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
+        If CurrentViewDevice.strOSVersion.Contains("WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
             If Not PingWorker.IsBusy Then PingWorker.RunWorkerAsync()
         End If
     End Sub
@@ -1012,9 +1012,9 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub cmdShowIP_Click(sender As Object, e As EventArgs) Handles cmdShowIP.Click
         If Not IsNothing(cmdShowIP.Tag) Then
-            Dim blah = Message(cmdShowIP.Tag & vbCrLf & vbCrLf & "Press 'Yes' to copy to clipboard.", vbInformation + vbYesNo, "IP Address", Me)
+            Dim blah = Message(cmdShowIP.Tag.ToString & vbCrLf & vbCrLf & "Press 'Yes' to copy to clipboard.", vbInformation + vbYesNo, "IP Address", Me)
             If blah = vbYes Then
-                Clipboard.SetText(cmdShowIP.Tag)
+                Clipboard.SetText(cmdShowIP.Tag.ToString)
             End If
         End If
     End Sub

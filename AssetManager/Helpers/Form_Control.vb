@@ -77,14 +77,6 @@
         End If
         Children.Clear()
     End Sub
-    Public Function WindowIsOpen(WindowName As String, ParentForm As Form)
-        For Each frm As Form In My.Application.OpenForms
-            If frm.Name = WindowName And frm.Tag Is ParentForm Then
-                Return True
-            End If
-        Next
-        Return False
-    End Function
     Public Function SibiIsOpen() As Boolean
         If Application.OpenForms.OfType(Of frmSibiMain).Any Then
             Return True

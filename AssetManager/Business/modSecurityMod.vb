@@ -30,7 +30,7 @@ Module modSecurityMod
         Return Convert.ToBase64String(hash)
     End Function
     Public Function GetHashOfFile(Path As String) As String
-        Dim hash ' As MD5
+        Dim hash As MD5
         hash = MD5.Create
         Dim hashValue() As Byte
         Dim fileStream As FileStream = File.OpenRead(Path)
@@ -62,9 +62,9 @@ Module modSecurityMod
         Next
     End Function
     Public Function CanAccess(recModule As String, intAccessLevel As Integer) As Boolean 'bitwise access levels
-        Dim mask As UInteger = 1
-        Dim calc_level As UInteger
-        Dim UsrLevel As UInteger = intAccessLevel 'UserAccess.intAccessLevel
+        Dim mask As Integer = 1
+        Dim calc_level As Integer
+        Dim UsrLevel As Integer = intAccessLevel 'UserAccess.intAccessLevel
         Dim levels As Integer
         For levels = 0 To UBound(AccessLevels)
             calc_level = UsrLevel And mask

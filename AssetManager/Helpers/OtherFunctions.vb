@@ -52,7 +52,7 @@ Module OtherFunctions
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
-    Public Function AdjustComboBoxWidth(ByVal sender As Object, ByVal e As EventArgs)
+    Public Sub AdjustComboBoxWidth(ByVal sender As Object, ByVal e As EventArgs)
         Dim senderComboBox = DirectCast(sender, ComboBox)
         Dim width As Integer = senderComboBox.DropDownWidth
         Dim g As Graphics = senderComboBox.CreateGraphics()
@@ -66,8 +66,7 @@ Module OtherFunctions
             End If
         Next
         senderComboBox.DropDownWidth = width
-        Return False
-    End Function
+    End Sub
     Public Function SetBarColor(UID As String) As Color
         Dim hash As Integer = UID.GetHashCode
         Dim r, g, b As Integer
@@ -100,7 +99,7 @@ Module OtherFunctions
     End Sub
     Public Sub Logger(Message As String)
         Dim MaxLogSizeKiloBytes As Short = 100
-        Dim DateStamp As String = DateTime.Now
+        Dim DateStamp As String = DateTime.Now.ToString
         Dim infoReader As FileInfo
         infoReader = My.Computer.FileSystem.GetFileInfo(strLogPath)
         If Not File.Exists(strLogPath) Then
@@ -140,7 +139,7 @@ Module OtherFunctions
         End Try
     End Function
     Public Function GetCellValue(ByVal Grid As DataGridView, ColumnName As String) As String
-        Return NoNull(Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value)
+        Return NoNull(Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value.ToString)
     End Function
     Public Sub ConnectionNotReady()
         Dim blah = Message("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
@@ -164,7 +163,7 @@ Module OtherFunctions
     End Sub
     Public Function NoNull(DBVal As Object) As String
         Try
-            Return IIf(IsDBNull(DBVal), "", DBVal.ToString)
+            Return IIf(IsDBNull(DBVal), "", DBVal.ToString).ToString
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return ""
@@ -199,15 +198,44 @@ Module OtherFunctions
     End Function
     Public Function NotePreview(Note As String, Optional CharLimit As Integer = 50) As String
         If Note <> "" Then
-            Return Strings.Left(Note, CharLimit) & IIf(Len(Note) > CharLimit, "...", "")
+            Return Strings.Left(Note, CharLimit) & IIf(Len(Note) > CharLimit, "...", "").ToString
         Else
             Return ""
         End If
     End Function
-    Public Function Message(ByVal Prompt As Object, Optional ByVal Buttons As MsgBoxStyle = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As DialogResult
+    Public Function Message(ByVal Prompt As String, Optional ByVal Buttons As Integer = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As MsgBoxResult
         Dim NewMessage As New MyDialog(ParentFrm)
-        NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
-        Return NewMessage.DialogResult
+        '  NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
+        Return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm) 'NewMessage.DialogResult
     End Function
-
+    Public Function CheckForActiveTransfers() As Boolean
+        Dim CancelClose As Boolean = False
+        Dim ActiveTransfers As New List(Of frmAttachments)
+        For Each frm As Form In My.Application.OpenForms
+            If TypeOf frm Is frmAttachments Then
+                Dim Attachments As frmAttachments = frm
+                If Attachments.UploadWorker.IsBusy Or Attachments.DownloadWorker.IsBusy Then
+                    ActiveTransfers.Add(Attachments)
+                End If
+            End If
+        Next
+        If ActiveTransfers.Count > 0 Then
+            Dim blah As MsgBoxResult = Message("There are " & ActiveTransfers.Count.ToString & " active uploads/downloads. Do you wish to cancel the current operations?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
+            If blah = vbYes Then
+                For Each AttachForm As frmAttachments In ActiveTransfers
+                    If AttachForm.UploadWorker.IsBusy Then AttachForm.UploadWorker.CancelAsync()
+                    If AttachForm.DownloadWorker.IsBusy Then AttachForm.DownloadWorker.CancelAsync()
+                Next
+                Return False
+            Else
+                For Each AttachForm As frmAttachments In ActiveTransfers
+                    AttachForm.WindowState = FormWindowState.Normal
+                    AttachForm.Activate()
+                Next
+                Return True
+            End If
+        Else
+            Return False
+        End If
+    End Function
 End Module

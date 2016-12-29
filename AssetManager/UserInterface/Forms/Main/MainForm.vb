@@ -103,22 +103,12 @@ Public Class MainForm
         RefreshCombos()
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        For Each frm As Form In My.Application.OpenForms
-            If TypeOf frm Is frmAttachments Then
-                Dim Attachments As frmAttachments = frm
-                If Not Attachments.UploadWorker.IsBusy And Not Attachments.DownloadWorker.IsBusy Then
-                    EndProgram()
-                Else
-                    e.Cancel = True
-                    Attachments.Activate()
-                    Dim blah = Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
-                    If blah = vbYes Then
-                        If Attachments.UploadWorker.IsBusy Then Attachments.UploadWorker.CancelAsync()
-                        If Attachments.DownloadWorker.IsBusy Then Attachments.DownloadWorker.CancelAsync()
-                    End If
-                End If
-            End If
-        Next
+        Dim CancelClose As Boolean = CheckForActiveTransfers()
+        If CancelClose Then
+            e.Cancel = True
+        Else
+            EndProgram()
+        End If
     End Sub
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         If Not BigQueryWorker.IsBusy Then
@@ -240,7 +230,8 @@ Public Class MainForm
             If Not IsNothing(fld.Value) Then
                 If fld.Value.ToString <> "" Then
                     If TypeOf fld.Value Is Boolean Then  'trackable boolean. if false, dont add it.
-                        If fld.Value <> False Then
+                        Dim bolTrackable As Boolean = CType(fld.Value, Boolean)
+                        If Not bolTrackable Then
                             strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE CONCAT('%', @" + fld.FieldName + ", '%') AND"
                             cmd.Parameters.AddWithValue("@" & fld.FieldName, Convert.ToInt32(fld.Value))
                         End If
@@ -286,7 +277,7 @@ Public Class MainForm
         AddNew.Show()
     End Sub
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
-        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
+        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Public Sub LoadDevice(ByVal strGUID As String)
         If Not ConnectionReady() Then
@@ -309,10 +300,10 @@ Public Class MainForm
         FillComboBox(DeviceIndex.OSType, cmbOSType)
     End Sub
     Private Sub ViewSelectedToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
+        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
-        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
+        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub Waiting()
         Me.Cursor = Cursors.WaitCursor
@@ -348,7 +339,7 @@ Public Class MainForm
         Try
             Dim LocalSQLComm As New clsMySQL_Comms
             Dim QryComm As New MySqlCommand
-            QryComm = DirectCast(e.Argument, Object)
+            QryComm = DirectCast(e.Argument, MySqlCommand)
             cmdLastCommand = QryComm
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
@@ -600,7 +591,7 @@ Public Class MainForm
     End Sub
     Private Sub ResultGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles ResultGrid.KeyDown
         If e.KeyCode = Keys.Enter Then
-            LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value)
+            LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
             e.SuppressKeyPress = True
         End If
     End Sub

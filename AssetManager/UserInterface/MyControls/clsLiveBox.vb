@@ -75,7 +75,7 @@ Public Class clsLiveBox
                 Control.Text = LiveBox.Text
                 MainForm.DynamicSearch()
             Case LiveBoxType.InstaLoad
-                MainForm.LoadDevice(dtLiveBoxData.Rows(LiveBox.SelectedIndex).Item(devices.DeviceUID))
+                MainForm.LoadDevice(dtLiveBoxData.Rows(LiveBox.SelectedIndex).Item(devices.DeviceUID).ToString)
                 CurrentLiveBoxArgs.Control.Text = ""
             Case LiveBoxType.SelectValue
                 Control.Text = LiveBox.Text
@@ -84,14 +84,14 @@ Public Class clsLiveBox
                 If TypeOf Control.FindForm Is frmView Then
                     If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
                         Dim FrmSetData As frmView = Control.FindForm
-                        FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember)
-                        FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)
+                        FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember).ToString
+                        FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember).ToString
                     End If
                 ElseIf TypeOf Control.FindForm Is AddNew Then
                     If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
                         Dim FrmSetData As AddNew = Control.FindForm
-                        FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember)
-                        FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)
+                        FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember).ToString
+                        FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember).ToString
                     End If
                 End If
         End Select
@@ -106,7 +106,7 @@ Public Class clsLiveBox
             Dim cmd As New MySqlCommand
             Dim con As MySqlConnection = MySQLComms.NewConnection
             Dim strQry As String
-            strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember) & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
+            strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
             cmd.Connection = con
             cmd.CommandText = strQry
             cmd.Parameters.AddWithValue("@Search_Value", strSearchString)

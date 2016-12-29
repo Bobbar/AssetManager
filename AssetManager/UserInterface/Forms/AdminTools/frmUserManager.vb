@@ -75,7 +75,7 @@ Public Class frmUserManager
     End Function
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick
         If TypeOf UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value Is Integer Then
-            DisplayAccess(UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value)
+            DisplayAccess(UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value.ToString)
             GetUserInfo()
         Else
             DisplayAccess(0)

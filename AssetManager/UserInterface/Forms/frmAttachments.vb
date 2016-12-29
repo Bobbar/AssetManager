@@ -294,11 +294,11 @@ Class frmAttachments
         txtDeviceDescription.Text = AttachDevice.strDescription
     End Sub
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs)
-        OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+        OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub DeleteAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteAttachmentToolStripMenuItem.Click
-        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
-            StartAttachDelete(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString <> "" Then
+            StartAttachDelete(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
         End If
     End Sub
     Private Sub StartAttachDelete(AttachUID As String)
@@ -321,13 +321,13 @@ Class frmAttachments
         End If
     End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
-        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
-            StartAttachDelete(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString <> "" Then
+            StartAttachDelete(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
         End If
     End Sub
     Private Sub cmdOpen_Click(sender As Object, e As EventArgs) Handles cmdOpen.Click
-        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
-            OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString <> "" Then
+            OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
         End If
     End Sub
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
@@ -406,6 +406,7 @@ Class frmAttachments
                 If UploadWorker.CancellationPending Then
                     e.Cancel = True
                     FTP.DeleteFTPAttachment(strFileGuid, Foldername)
+                    Throw New BackgroundWorkerCancelledException("The upload was cancelled.")
                 End If
                 'update sql table
                 If Not UploadWorker.CancellationPending Then
@@ -469,8 +470,51 @@ VALUES(@" & dev_attachments.FKey & ",
             If Not ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try
     End Sub
+    Private Sub UploadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles UploadWorker.ProgressChanged
+        Select Case e.ProgressPercentage
+            Case 1
+                StatusBar(e.UserState)
+            Case 2
+                stpSpeed.Stop()
+                stpSpeed.Reset()
+                statMBPS.Text = Nothing
+                ProgressBar1.Visible = False
+                ProgressBar1.Value = 0
+                ProgTimer.Enabled = False
+                Spinner.Visible = False
+                StatusBar(e.UserState)
+                Me.Refresh()
+            Case 3
+                StatusBar(e.UserState)
+                ListAttachments()
+        End Select
+    End Sub
+    Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
+        Try
+            If Not Me.IsDisposed Then
+                strMultiFileCount = ""
+                WorkerFeedback(False)
+                If Not e.Cancelled Then
+                    ListAttachments()
+                    If e.Result Then
+                        ' MessageBox.Show("File uploaded successfully!",
+                        '"Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                    Else
+                        MessageBox.Show("File upload failed.",
+             "Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                    End If
+                Else
+                    '           MessageBox.Show("The upload was cancelled.",
+                    '"Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                End If
+            End If
+
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
     Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
-        Dim Filename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
+        Dim Filename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value.ToString
         Asset.Update_SQLValue(sibi_attachments.TableName, sibi_attachments.Folder, Folder, sibi_attachments.FileUID, AttachUID)
         ListAttachments()
         cmbMoveFolder.SelectedIndex = -1
@@ -481,27 +525,6 @@ VALUES(@" & dev_attachments.FKey & ",
         Try
             Asset.Update_SQLValue(AttachTable, main_attachments.FileName, NewFileName, main_attachments.FileUID, AttachUID)
             ListAttachments()
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
-    End Sub
-    Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
-        Try
-            strMultiFileCount = ""
-            WorkerFeedback(False)
-            ListAttachments()
-            If Not e.Cancelled Then
-                If e.Result Then
-                    ' MessageBox.Show("File uploaded successfully!",
-                    '"Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
-                Else
-                    MessageBox.Show("File upload failed.",
-         "Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
-                End If
-            Else
-                MessageBox.Show("The upload was cancelled.",
-     "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
@@ -620,8 +643,8 @@ VALUES(@" & dev_attachments.FKey & ",
         End Try
     End Sub
     Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
-        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value <> "" Then
-            OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString <> "" Then
+            OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
         End If
     End Sub
     Private Sub DownloadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles DownloadWorker.ProgressChanged
@@ -640,25 +663,7 @@ VALUES(@" & dev_attachments.FKey & ",
                 Me.Refresh()
         End Select
     End Sub
-    Private Sub UploadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles UploadWorker.ProgressChanged
-        Select Case e.ProgressPercentage
-            Case 1
-                StatusBar(e.UserState)
-            Case 2
-                stpSpeed.Stop()
-                stpSpeed.Reset()
-                statMBPS.Text = Nothing
-                ProgressBar1.Visible = False
-                ProgressBar1.Value = 0
-                ProgTimer.Enabled = False
-                Spinner.Visible = False
-                StatusBar(e.UserState)
-                Me.Refresh()
-            Case 3
-                StatusBar(e.UserState)
-                ListAttachments()
-        End Select
-    End Sub
+
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
         Dim BytesPerSecond As Single
         Dim ResetCounter As Integer = 40
@@ -714,7 +719,7 @@ VALUES(@" & dev_attachments.FKey & ",
         End If
     End Sub
     Private Sub AttachGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellDoubleClick
-        OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+        OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub CopyTextTool_Click(sender As Object, e As EventArgs) Handles CopyTextTool.Click
         Clipboard.SetDataObject(Me.AttachGrid.GetClipboardContent())
@@ -743,12 +748,12 @@ VALUES(@" & dev_attachments.FKey & ",
     End Sub
     Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, GetDBValue(SibiIndex.AttachFolder, cmbMoveFolder.SelectedIndex))
+        If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString, GetDBValue(SibiIndex.AttachFolder, cmbMoveFolder.SelectedIndex))
     End Sub
     Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim strCurrentFileName As String = Asset.Get_SQLValue(AttachTable, main_attachments.FileUID, AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value, main_attachments.FileName) 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value
-        Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value
+        Dim strCurrentFileName As String = Asset.Get_SQLValue(AttachTable, main_attachments.FileUID, AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString, main_attachments.FileName) 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value.ToString
+        Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
         Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
         If blah Is "" Then
             blah = strCurrentFileName
@@ -802,7 +807,7 @@ VALUES(@" & dev_attachments.FKey & ",
             If e.Button = MouseButtons.Left Then
                 If MouseIsDragging(, e.Location) And Not DownloadWorker.IsBusy Then
                     bolDragging = True
-                    DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value)
+                    DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
                     WaitForDownload()
                     Dim fileList As New Collections.Specialized.StringCollection
                     fileList.Add(strDragFilePath)
@@ -825,8 +830,8 @@ VALUES(@" & dev_attachments.FKey & ",
     Private Sub AttachGrid_DragDrop(sender As Object, e As DragEventArgs) Handles AttachGrid.DragDrop
         If Not bolAllowDrag Then ProcessDrop(e.Data)
     End Sub
-    Private Function ProcessDrop(AttachObject As IDataObject) ' As String()
-        Dim File() As String
+    Private Sub ProcessDrop(AttachObject As IDataObject) ' As String()
+        Dim File As Object
         Select Case True
             Case AttachObject.GetDataPresent("RenPrivateItem")
                 File = CopyAttachement(AttachObject, "RenPrivateItem")
@@ -841,7 +846,7 @@ VALUES(@" & dev_attachments.FKey & ",
                     UploadWorker.RunWorkerAsync(File)
                 End If
         End Select
-    End Function
+    End Sub
     Private Function CopyAttachement(AttachObject As IDataObject, DataFormat As String) As String()
         Try
             Dim strTimeStamp As String = Now.ToString("_hhmmss")

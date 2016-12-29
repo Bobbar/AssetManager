@@ -29,10 +29,10 @@ Public Class frmSibiSelector
             table.Columns.Add("UID", GetType(String))
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item("sibi_request_number")),
-                               GetHumanValue(SibiIndex.StatusType, r.Item("sibi_status")),
+                               GetHumanValue(SibiIndex.StatusType, r.Item("sibi_status").ToString),
                                NoNull(r.Item("sibi_description")),
                                NoNull(r.Item("sibi_request_user")),
-                               GetHumanValue(SibiIndex.RequestType, r.Item("sibi_type")),
+                               GetHumanValue(SibiIndex.RequestType, r.Item("sibi_type").ToString),
                                NoNull(r.Item("sibi_need_by")),
                                NoNull(r.Item("sibi_PO")),
                                NoNull(r.Item("sibi_requisition_number")),
@@ -49,7 +49,7 @@ Public Class frmSibiSelector
         SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
     End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
-        SelectedUID = ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value
+        SelectedUID = ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value.ToString
         Me.DialogResult = DialogResult.OK
     End Sub
 End Class
