@@ -325,7 +325,7 @@ Public Class MainForm
     Public Sub StatusBar(Text As String)
         On Error Resume Next
         StatusLabel.Text = Text
-        Me.Refresh()
+        Application.DoEvents()
     End Sub
     Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs)
         If Not CheckForAccess(AccessGroup.Add) Then Exit Sub
@@ -358,7 +358,6 @@ Public Class MainForm
             da.SelectCommand = QryComm
             da.Fill(ds)
             da.Dispose()
-            Debug.Print(ds.Tables(0).Rows.Count)
             e.Result = ds.Tables(0)
             ds.Dispose()
             Asset.CloseConnection(conn) 'conn.Close()
@@ -611,7 +610,6 @@ Public Class MainForm
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
         SendToGrid(Asset.DevicesBySup(Me))
     End Sub
-
     Private Sub MainForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Dim f As Form = sender
         If f.WindowState = FormWindowState.Minimized Then

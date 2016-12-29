@@ -2,6 +2,7 @@
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.Net
+Imports System.Runtime.InteropServices
 Public Class frmView
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
@@ -16,23 +17,18 @@ Public Class frmView
     End Structure
     Sub New(ParentForm As Form, DeviceGUID As String)
         InitializeComponent()
-        ViewDevice(DeviceGUID)
+        Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
         Tag = ParentForm
         Icon = ParentForm.Icon
-    End Sub
-    Sub New()
-        InitializeComponent()
-    End Sub
-    Private Sub View_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
+        RefreshCombos()
         grpNetTools.Visible = False
         ToolStrip1.BackColor = colAssetToolBarColor
-        lblGUID.BackColor = SetBarColor(CurrentViewDevice.strGUID)
+        lblGUID.BackColor = SetBarColor(DeviceGUID)
         lblGUID.ForeColor = GetFontColor(lblGUID.BackColor)
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
         CheckRDP()
-        Me.CenterToParent()
+        ViewDevice(DeviceGUID)
     End Sub
     Public Sub SetAttachCount()
         AttachmentTool.Text = "(" + Asset.GetAttachmentCount(CurrentViewDevice).ToString + ")"
@@ -264,12 +260,10 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
         Try
             Waiting()
-            RefreshCombos()
             If ViewHistory(DeviceUID) Then
                 ViewTracking(CurrentViewDevice.strGUID)
                 Me.Text = Me.Text + FormTitle(CurrentViewDevice)
                 Me.Show()
-                Me.Activate()
             Else
                 Me.Dispose()
             End If
@@ -415,7 +409,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Public Sub StatusBar(Text As String)
         StatusLabel.Text = Text
-        Me.Refresh()
+        Application.DoEvents()
     End Sub
     Public Sub ViewTracking(strGUID As String)
         Dim Results As New DataTable
@@ -425,7 +419,6 @@ VALUES (@" & historical_dev.ChangeType & ",
                 ConnectionNotReady()
                 Exit Sub
             End If
-            Waiting()
             Results = SQLComms.Return_SQLTable(strQry)
             If Results.Rows.Count > 0 Then
                 CollectCurrentTracking(Results)
@@ -438,7 +431,6 @@ VALUES (@" & historical_dev.ChangeType & ",
             FillTrackingBox()
             SetTracking(CurrentViewDevice.bolTrackable, CurrentViewDevice.Tracking.bolCheckedOut)
             Results.Dispose()
-            DoneWaiting()
             Exit Sub
         Catch ex As Exception
             Results.Dispose()

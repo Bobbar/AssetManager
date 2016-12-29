@@ -92,9 +92,11 @@ Module OtherFunctions
         stpw.Reset()
         stpw.Start()
     End Sub
+    Private intTimerHits As Integer = 0
     Public Sub StopTimer()
         stpw.Stop()
-        Debug.Print("Stopwatch: MS:" & stpw.ElapsedMilliseconds & " Ticks: " & stpw.ElapsedTicks)
+        intTimerHits += 1
+        Debug.Print(intTimerHits & "  Stopwatch: MS:" & stpw.ElapsedMilliseconds & " Ticks: " & stpw.ElapsedTicks)
     End Sub
     Public Sub Logger(Message As String)
         Dim MaxLogSizeKiloBytes As Short = 100

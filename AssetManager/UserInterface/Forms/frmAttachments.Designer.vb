@@ -410,7 +410,6 @@ Partial Class frmAttachments
         '
         Me.cmdCancel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdCancel.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
-        Me.cmdCancel.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdCancel.Name = "cmdCancel"
         Me.cmdCancel.ShowDropDownArrow = False
         Me.cmdCancel.Size = New System.Drawing.Size(63, 20)

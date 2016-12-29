@@ -91,16 +91,20 @@ Public Class frmUserManager
         End With
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
-        Dim blah = Message("Are you sure?  Committed changes cannot be undone.", vbYesNo + vbQuestion, "Commit Changes", Me)
-        If blah = DialogResult.Yes Then
-            UserGrid.EndEdit()
-            AddGUIDs()
-            myAdapter.Update(CType(DataBinder.DataSource, DataTable))
-            ListUsers()
-            Asset.GetUserAccess()
-        Else
+        Try
+            Dim blah = Message("Are you sure?  Committed changes cannot be undone.", vbYesNo + vbQuestion, "Commit Changes", Me)
+            If blah = DialogResult.Yes Then
+                UserGrid.EndEdit()
+                AddGUIDs()
+                myAdapter.Update(CType(DataBinder.DataSource, DataTable))
+                ListUsers()
+                Asset.GetUserAccess()
+            Else
 
-        End If
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Private Sub AddGUIDs()
         For Each rows As DataGridViewRow In UserGrid.Rows

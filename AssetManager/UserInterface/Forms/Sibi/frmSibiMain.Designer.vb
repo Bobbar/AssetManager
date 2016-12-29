@@ -251,7 +251,6 @@ Partial Class frmSibiMain
         'cmdManage
         '
         Me.cmdManage.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.cmdManage.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdManage.Name = "cmdManage"
         Me.cmdManage.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
         Me.cmdManage.Size = New System.Drawing.Size(115, 29)
@@ -266,7 +265,6 @@ Partial Class frmSibiMain
         'tsdSelectWindow
         '
         Me.tsdSelectWindow.Image = Global.AssetManager.My.Resources.Resources.application_cascade_512
-        Me.tsdSelectWindow.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdSelectWindow.Name = "tsdSelectWindow"
         Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(10, 0, 10, 0)
         Me.tsdSelectWindow.Size = New System.Drawing.Size(143, 29)

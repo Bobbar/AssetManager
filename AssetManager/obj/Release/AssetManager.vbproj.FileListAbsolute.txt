@@ -26,7 +26,6 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreen.resour
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.UpdateDev.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MunisToolsMenu.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Resources.resources
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Entry.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbproj.GenerateResource.Cache
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.TrustInfo.xml
@@ -35,3 +34,5 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmView.resources

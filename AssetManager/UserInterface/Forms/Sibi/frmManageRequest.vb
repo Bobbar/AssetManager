@@ -10,24 +10,22 @@ Public Class frmManageRequest
     Private bolNewRequest As Boolean = False
     Sub New(ParentForm As Form, RequestUID As String)
         InitializeComponent()
-        dgvNotes.DefaultCellStyle.SelectionBackColor = colSibiSelectColor
-        Tag = ParentForm
-        Icon = ParentForm.Icon
+        InitForm(ParentForm)
         OpenRequest(RequestUID)
     End Sub
     Sub New(ParentForm As Form)
         InitializeComponent()
-        dgvNotes.DefaultCellStyle.SelectionBackColor = colSibiSelectColor
-        Tag = ParentForm
-        Icon = ParentForm.Icon
+        InitForm(ParentForm)
         Text += " - *New Request*"
         NewRequest()
         Show()
-        Activate()
     End Sub
-    Private Sub frmNewRequest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub InitForm(ParentForm As Form)
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
         Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip, 6)
+        dgvNotes.DefaultCellStyle.SelectionBackColor = colSibiSelectColor
+        Tag = ParentForm
+        Icon = ParentForm.Icon
     End Sub
     Public Sub SetAttachCount()
         cmdAttachments.Text = "(" + Asset.GetAttachmentCount(CurrentRequest).ToString + ")"

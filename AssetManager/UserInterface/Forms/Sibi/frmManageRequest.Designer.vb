@@ -596,7 +596,6 @@ Partial Class frmManageRequest
         '
         Me.cmdCreate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.cmdCreate.Image = Global.AssetManager.My.Resources.Resources.Add
-        Me.cmdCreate.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdCreate.Name = "cmdCreate"
         Me.cmdCreate.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdCreate.Size = New System.Drawing.Size(39, 34)
@@ -606,7 +605,6 @@ Partial Class frmManageRequest
         '
         Me.cmdUpdate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.cmdUpdate.Image = Global.AssetManager.My.Resources.Resources.Edit
-        Me.cmdUpdate.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdUpdate.Name = "cmdUpdate"
         Me.cmdUpdate.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdUpdate.Size = New System.Drawing.Size(39, 34)
@@ -617,7 +615,6 @@ Partial Class frmManageRequest
         '
         Me.cmdClearForm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.cmdClearForm.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
-        Me.cmdClearForm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdClearForm.Name = "cmdClearForm"
         Me.cmdClearForm.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdClearForm.Size = New System.Drawing.Size(39, 34)
@@ -628,7 +625,6 @@ Partial Class frmManageRequest
         '
         Me.cmdDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.cmdDelete.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
-        Me.cmdDelete.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdDelete.Name = "cmdDelete"
         Me.cmdDelete.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdDelete.Size = New System.Drawing.Size(39, 34)
@@ -638,7 +634,6 @@ Partial Class frmManageRequest
         '
         Me.cmdAddNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.note_icon_27942
-        Me.cmdAddNote.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdAddNote.Name = "cmdAddNote"
         Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdAddNote.Size = New System.Drawing.Size(39, 34)
@@ -647,7 +642,6 @@ Partial Class frmManageRequest
         'cmdAttachments
         '
         Me.cmdAttachments.Image = Global.AssetManager.My.Resources.Resources.clip_512
-        Me.cmdAttachments.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.cmdAttachments.Name = "cmdAttachments"
         Me.cmdAttachments.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdAttachments.Size = New System.Drawing.Size(136, 34)

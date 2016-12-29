@@ -35,7 +35,6 @@ Partial Class MunisToolsMenu
         '
         Me.MunisTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmUserOrgObLookup, Me.tsmPOLookUp, Me.tsmReqNumLookUp, Me.tsmDeviceLookUp})
         Me.MunisTools.Image = Global.AssetManager.My.Resources.Resources.Find
-        Me.MunisTools.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.MunisTools.Name = "MunisTools"
         Me.MunisTools.Size = New System.Drawing.Size(87, 29)
         Me.MunisTools.Text = "MUNIS Tools"

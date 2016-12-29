@@ -100,16 +100,16 @@ Public Class frmSibiMain
             table.Columns.Add("UID", GetType(String))
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item(sibi_requests.RequestNumber)),
-                               GetHumanValue(SibiIndex.StatusType, r.Item(sibi_requests.Status)),
-                               NoNull(r.Item(sibi_requests.Description)),
-                               NoNull(r.Item(sibi_requests.RequestUser)),
-                               GetHumanValue(SibiIndex.RequestType, r.Item(sibi_requests.Type)),
-                               NoNull(r.Item(sibi_requests.NeedBy)),
-                               NoNull(r.Item(sibi_requests.PO)),
-                               NoNull(r.Item(sibi_requests.RequisitionNumber)),
-                               NoNull(r.Item(sibi_requests.RT_Number)),
-                               NoNull(r.Item(sibi_requests.DateStamp)),
-                               NoNull(r.Item(sibi_requests.UID)))
+               GetHumanValue(SibiIndex.StatusType, r.Item(sibi_requests.Status)),
+               NoNull(r.Item(sibi_requests.Description)),
+               NoNull(r.Item(sibi_requests.RequestUser)),
+               GetHumanValue(SibiIndex.RequestType, r.Item(sibi_requests.Type)),
+               NoNull(r.Item(sibi_requests.NeedBy)),
+               NoNull(r.Item(sibi_requests.PO)),
+               NoNull(r.Item(sibi_requests.RequisitionNumber)),
+               NoNull(r.Item(sibi_requests.RT_Number)),
+               NoNull(r.Item(sibi_requests.DateStamp)),
+               NoNull(r.Item(sibi_requests.UID)))
             Next
             bolGridFilling = True
             ResultGrid.DataSource = table
