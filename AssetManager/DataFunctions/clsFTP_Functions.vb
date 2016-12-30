@@ -13,6 +13,22 @@
             Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
+    Public Function Has_FTPFolder(ItemUID As String) As Boolean
+        Dim files As New List(Of String)
+        Try
+            Using resp As Net.FtpWebResponse = FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & ItemUID & "/", Net.WebRequestMethods.Ftp.ListDirectory),
+                responseStream As System.IO.Stream = resp.GetResponseStream,
+                reader As IO.StreamReader = New IO.StreamReader(responseStream)
+                If reader.ReadLine.ToString <> "" Then
+                    Return True
+                Else
+                    Return False
+                End If
+            End Using
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
     Public Function DeleteFTPFolder(DeviceUID As String, Type As Entry_Type) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Dim files As List(Of String)
@@ -27,8 +43,8 @@
             reader.Close()
             responseStream.Dispose()
             Dim i As Integer = 0
-            For Each file In files  'delete each file counting for successes
-                i += Asset.DeleteSQLAttachment(file, Type)
+            For Each file As String In files  'delete each file counting for successes
+                If DeleteFTPAttachment(file, DeviceUID) Then i += 1
             Next
             If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
                 resp = FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID, Net.WebRequestMethods.Ftp.RemoveDirectory)

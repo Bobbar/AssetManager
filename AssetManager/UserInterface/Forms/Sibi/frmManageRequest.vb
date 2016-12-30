@@ -323,12 +323,12 @@ Public Class frmManageRequest
                         If dcell.OwningColumn.CellType.Name = "DataGridViewComboBoxCell" Then
                             Select Case dcell.OwningColumn.Name
                                 Case Attrib_Type.Location
-                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(DeviceIndex.Locations, dcell.Value.ToString)
+                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(DeviceIndex.Locations, dcell.Value)
                                 Case Attrib_Type.SibiItemStatusType
-                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(SibiIndex.ItemStatusType, dcell.Value.ToString)
+                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(SibiIndex.ItemStatusType, dcell.Value)
                             End Select
                         Else
-                            NewRow(dcell.ColumnIndex) = Trim(dcell.Value.ToString)
+                            NewRow(dcell.ColumnIndex) = Trim(dcell.Value)
                         End If
                     Next
                     DBTable.Rows.Add(NewRow)

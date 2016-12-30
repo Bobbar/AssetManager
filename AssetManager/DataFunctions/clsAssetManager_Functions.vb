@@ -428,7 +428,7 @@ VALUES
     End Sub
     Public Function DeleteMaster(ByVal strGUID As String, Type As Entry_Type) As Boolean
         Try
-            If Has_Attachments(strGUID, Type) Then
+            If FTP.Has_FTPFolder(strGUID) Then
                 If FTP.DeleteFTPFolder(strGUID, Type) Then Return Delete_SQLMasterEntry(strGUID, Type) ' if has attachments, delete ftp directory, then delete the sql records.
             Else
                 Return Delete_SQLMasterEntry(strGUID, Type) 'delete sql records
