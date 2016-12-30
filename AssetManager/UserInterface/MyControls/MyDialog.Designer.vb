@@ -50,19 +50,20 @@ Partial Class MyDialog
         Me.tblOkCancel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.tblOkCancel.Controls.Add(Me.OK_Button, 0, 0)
         Me.tblOkCancel.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.tblOkCancel.Location = New System.Drawing.Point(160, 6)
+        Me.tblOkCancel.Location = New System.Drawing.Point(165, 6)
         Me.tblOkCancel.Name = "tblOkCancel"
         Me.tblOkCancel.RowCount = 1
         Me.tblOkCancel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tblOkCancel.Size = New System.Drawing.Size(146, 29)
+        Me.tblOkCancel.Size = New System.Drawing.Size(162, 29)
         Me.tblOkCancel.TabIndex = 0
         '
         'OK_Button
         '
         Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.OK_Button.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OK_Button.Location = New System.Drawing.Point(3, 3)
         Me.OK_Button.Name = "OK_Button"
-        Me.OK_Button.Size = New System.Drawing.Size(67, 23)
+        Me.OK_Button.Size = New System.Drawing.Size(75, 23)
         Me.OK_Button.TabIndex = 0
         Me.OK_Button.Text = "&OK"
         '
@@ -70,9 +71,10 @@ Partial Class MyDialog
         '
         Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.No
-        Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
+        Me.Cancel_Button.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Cancel_Button.Location = New System.Drawing.Point(84, 3)
         Me.Cancel_Button.Name = "Cancel_Button"
-        Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
+        Me.Cancel_Button.Size = New System.Drawing.Size(75, 23)
         Me.Cancel_Button.TabIndex = 1
         Me.Cancel_Button.Text = "&Cancel"
         '
@@ -107,16 +109,17 @@ Partial Class MyDialog
         Me.tblYesNo.Name = "tblYesNo"
         Me.tblYesNo.RowCount = 1
         Me.tblYesNo.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tblYesNo.Size = New System.Drawing.Size(146, 29)
+        Me.tblYesNo.Size = New System.Drawing.Size(162, 29)
         Me.tblYesNo.TabIndex = 4
         Me.tblYesNo.Visible = False
         '
         'Yes_Button
         '
         Me.Yes_Button.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Yes_Button.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Yes_Button.Location = New System.Drawing.Point(3, 3)
         Me.Yes_Button.Name = "Yes_Button"
-        Me.Yes_Button.Size = New System.Drawing.Size(67, 23)
+        Me.Yes_Button.Size = New System.Drawing.Size(75, 23)
         Me.Yes_Button.TabIndex = 0
         Me.Yes_Button.Text = "&Yes"
         '
@@ -124,9 +127,10 @@ Partial Class MyDialog
         '
         Me.No_Button.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.No_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.No_Button.Location = New System.Drawing.Point(76, 3)
+        Me.No_Button.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.No_Button.Location = New System.Drawing.Point(84, 3)
         Me.No_Button.Name = "No_Button"
-        Me.No_Button.Size = New System.Drawing.Size(67, 23)
+        Me.No_Button.Size = New System.Drawing.Size(75, 23)
         Me.No_Button.TabIndex = 1
         Me.No_Button.Text = "&No"
         '
@@ -144,10 +148,10 @@ Partial Class MyDialog
         '
         Me.pbIcon.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.pbIcon.BackColor = System.Drawing.SystemColors.Control
-        Me.pbIcon.Location = New System.Drawing.Point(14, 13)
+        Me.pbIcon.Location = New System.Drawing.Point(17, 10)
         Me.pbIcon.MinimumSize = New System.Drawing.Size(65, 65)
         Me.pbIcon.Name = "pbIcon"
-        Me.pbIcon.Size = New System.Drawing.Size(65, 65)
+        Me.pbIcon.Size = New System.Drawing.Size(70, 70)
         Me.pbIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pbIcon.TabIndex = 4
         Me.pbIcon.TabStop = False
@@ -178,7 +182,7 @@ Partial Class MyDialog
         Me.pnlMaster.Controls.Add(Me.pnlButtons)
         Me.pnlMaster.Controls.Add(Me.pnlControls_Main)
         Me.pnlMaster.Controls.Add(Me.pnlIcon)
-        Me.pnlMaster.Location = New System.Drawing.Point(12, 12)
+        Me.pnlMaster.Location = New System.Drawing.Point(9, 8)
         Me.pnlMaster.MinimumSize = New System.Drawing.Size(444, 135)
         Me.pnlMaster.Name = "pnlMaster"
         Me.pnlMaster.Size = New System.Drawing.Size(444, 137)
@@ -192,9 +196,9 @@ Partial Class MyDialog
         Me.pnlButtons.Controls.Add(Me.tblYesNo)
         Me.pnlButtons.Controls.Add(Me.tblOkCancel)
         Me.pnlButtons.Cursor = System.Windows.Forms.Cursors.Default
-        Me.pnlButtons.Location = New System.Drawing.Point(132, 96)
+        Me.pnlButtons.Location = New System.Drawing.Point(111, 96)
         Me.pnlButtons.Name = "pnlButtons"
-        Me.pnlButtons.Size = New System.Drawing.Size(309, 38)
+        Me.pnlButtons.Size = New System.Drawing.Size(330, 38)
         Me.pnlButtons.TabIndex = 9
         '
         'MyDialog
@@ -205,13 +209,13 @@ Partial Class MyDialog
         Me.AutoSize = True
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(468, 157)
+        Me.ClientSize = New System.Drawing.Size(461, 151)
         Me.Controls.Add(Me.pnlMaster)
         Me.DoubleBuffered = True
         Me.MaximizeBox = False
         Me.MaximumSize = New System.Drawing.Size(1068, 678)
         Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(479, 196)
+        Me.MinimumSize = New System.Drawing.Size(477, 190)
         Me.Name = "MyDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

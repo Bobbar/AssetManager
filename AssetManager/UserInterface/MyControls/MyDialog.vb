@@ -55,13 +55,13 @@ Public Class MyDialog
         modes = iStyle And MB_MODEMASK
         miscs = iStyle And MB_MISCMASK
         If icons = MsgBoxStyle.Critical Then
-            pbIcon.Image = My.Resources.critical_funny 'err_critical
+            pbIcon.Image = My.Resources.critical_funny_crop_2
         ElseIf icons = MsgBoxStyle.Question Then
             pbIcon.Image = My.Resources.err_question
         ElseIf icons = MsgBoxStyle.Exclamation Then
-            pbIcon.Image = My.Resources.err_exclamation
+            pbIcon.Image = My.Resources.exclamation
         ElseIf icons = MsgBoxStyle.Information Then
-            pbIcon.Image = My.Resources.err_information
+            pbIcon.Image = My.Resources.err_information_crop
         Else ' Assume MBS.Information (MB_USERICON isn't wrapped)
             pbIcon.Image = Nothing
             pnlIcon.Visible = False

@@ -449,8 +449,18 @@
     <None Include="Resources\inventory_icon_orange.ico" />
     <None Include="Resources\View_Details.png" />
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\critical_funny_crop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\critical_funny_crop_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exclamation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\err_information_crop.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
