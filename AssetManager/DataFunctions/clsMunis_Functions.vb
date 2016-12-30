@@ -47,7 +47,10 @@ FROM            dbo.ap_vendor INNER JOIN
                          dbo.rqdetail ON dbo.ap_vendor.a_vendor_number = dbo.rqdetail.rqdt_sug_vn
 WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_fsc_yr = " & FY & ")"
         Dim table As DataTable = priv_Comms.Return_MSSQLTable(strQRY)
-        Return table(0).Item("a_vendor_number")
+        If table.Rows.Count > 0 Then
+            Return table(0).Item("a_vendor_number")
+        End If
+        Return Nothing
     End Function
     Public Function Get_FY_From_PO(PO As String) As String
         Dim strFYyy As String = Left(PO, 2)

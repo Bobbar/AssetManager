@@ -807,7 +807,6 @@ VALUES
         Dim ReqNum As String = Trim(txtReqNumber.Text)
         If Not bolUpdating And ReqNum <> "" Then
             Munis.NewMunisView_ReqSearch(ReqNum, YearFromDate(CurrentRequest.dtDateStamp), Me)
-
         End If
     End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
