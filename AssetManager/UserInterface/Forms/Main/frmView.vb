@@ -716,7 +716,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Sub
     Private Sub TrackingGrid_RowPrePaint(sender As Object, e As DataGridViewRowPrePaintEventArgs) Handles TrackingGrid.RowPrePaint
-        Dim c1 As Color = colHighlightBlue 'highlight color
+        Dim c1 As Color = ColorTranslator.FromHtml("#8BCEE8") 'highlight color
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
         TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
         If TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckIn Then
@@ -977,7 +977,11 @@ VALUES (@" & historical_dev.ChangeType & ",
         End Try
     End Sub
     Private Sub tsmAssetInputForm_Click(sender As Object, e As EventArgs) Handles tsmAssetInputForm.Click
-        Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.InputForm)
+        If CurrentViewDevice.strPO <> "" Then
+            Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.InputForm)
+        Else
+            Message("Please add a valid PO number to this device.", vbOKOnly + vbExclamation, "Missing Info", Me)
+        End If
     End Sub
     Private Sub tsmAssetTransferForm_Click(sender As Object, e As EventArgs) Handles tsmAssetTransferForm.Click
         Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.TransferForm)

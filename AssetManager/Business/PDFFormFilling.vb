@@ -27,8 +27,7 @@ Public Class PDFFormFilling
         Next
         Debug.Print(sb.ToString())
     End Sub
-    Private Function GetUnitPrice(Device As Device_Info) As String
-        'CurrentDevice = Device
+    Private Function GetUnitPrice() As String
         Dim NewDialog As New MyDialog(ParentForm)
         CurrentDialog = NewDialog
         With NewDialog
@@ -42,7 +41,6 @@ Public Class PDFFormFilling
         End With
     End Function
     Private Sub PriceFromMunis()
-        '  Dim Device As Device_Info = CurrentDevice
         Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
         Dim f As New View_Munis(ParentForm, True)
         f.Text = "Select a Line Item"
@@ -190,7 +188,7 @@ Public Class PDFFormFilling
     End Function
     Private Function InputFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
-        Dim strUnitPrice As String = GetUnitPrice(Device)
+        Dim strUnitPrice As String = GetUnitPrice()
         If strUnitPrice = "" Or IsNothing(strUnitPrice) Then
             Exit Function
         End If

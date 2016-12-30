@@ -59,7 +59,6 @@
             Return False
         End Try
     End Function
-
     Private Function FTPFolderIsOrphan(FolderUID As String) As FTPScan_Parms
         Dim ScanResults As New FTPScan_Parms
         Dim intHits As Integer = 0
