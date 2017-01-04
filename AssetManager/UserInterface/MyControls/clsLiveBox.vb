@@ -10,16 +10,17 @@ Public Class clsLiveBox
     Private MySQLComms As New clsMySQL_Comms
     Private LiveConn As New MySqlConnection
     Private LiveBoxResults As DataTable
+    Private LiveBoxControls As New List(Of LiveBoxArgs)
     Private Structure LiveBoxArgs
-        Public Control As Control
+        Public Control As TextBox
         Public Type As LiveBoxType
         Public ViewMember As String
         Public DataMember As String
     End Structure
     Private CurrentLiveBoxArgs As LiveBoxArgs
-    Sub New()
+    Sub New(ParentForm As Form)
         InitializeWorker()
-        InitializeControl()
+        InitializeControl(ParentForm)
         InitializeTimer()
     End Sub
     Private Sub InitializeWorker()
@@ -31,8 +32,11 @@ Public Class clsLiveBox
             .WorkerSupportsCancellation = False
         End With
     End Sub
-    Private Sub InitializeControl()
+    Private Sub InitializeControl(ParentForm As Form)
         LiveBox = New ListBox
+        LiveBox.Parent = ParentForm
+        LiveBox.BringToFront()
+        LiveBox.Padding = New Padding(0, 0, 0, 10)
         'AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
         AddHandler LiveBox.MouseDown, AddressOf LiveBox_MouseDown
         AddHandler LiveBox.MouseMove, AddressOf LiveBox_MouseMove
@@ -47,20 +51,6 @@ Public Class clsLiveBox
         HideTimer.Enabled = True
         AddHandler HideTimer.Tick, AddressOf HideTimer_Tick
     End Sub
-    Private Function OpenConnection() As Boolean
-        Try
-            If LiveConn.State = ConnectionState.Open Then
-                Return True
-            Else
-                LiveConn = MySQLComms.NewConnection
-                LiveConn.Open()
-                Return True
-            End If
-        Catch ex As Exception
-            Return False
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
-    End Function
     Public Sub Unload()
         Try
             HideLiveBox()
@@ -69,27 +59,27 @@ Public Class clsLiveBox
         Catch
         End Try
     End Sub
-    Private Sub LiveBoxSelect(Control As Control, Type As LiveBoxType)
-        Select Case Type
+    Private Sub LiveBoxSelect()
+        Select Case CurrentLiveBoxArgs.Type
             Case LiveBoxType.DynamicSearch
-                Control.Text = LiveBox.Text
+                CurrentLiveBoxArgs.Control.Text = LiveBox.Text
                 MainForm.DynamicSearch()
             Case LiveBoxType.InstaLoad
                 MainForm.LoadDevice(dtLiveBoxData.Rows(LiveBox.SelectedIndex).Item(devices.DeviceUID).ToString)
                 CurrentLiveBoxArgs.Control.Text = ""
             Case LiveBoxType.SelectValue
-                Control.Text = LiveBox.Text
+                CurrentLiveBoxArgs.Control.Text = LiveBox.Text
             Case LiveBoxType.UserSelect
-                Control.Text = LiveBox.Text
-                If TypeOf Control.FindForm Is frmView Then
+                CurrentLiveBoxArgs.Control.Text = LiveBox.Text
+                If TypeOf CurrentLiveBoxArgs.Control.FindForm Is frmView Then
                     If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
-                        Dim FrmSetData As frmView = Control.FindForm
+                        Dim FrmSetData As frmView = CurrentLiveBoxArgs.Control.FindForm
                         FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember).ToString
                         FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember).ToString
                     End If
-                ElseIf TypeOf Control.FindForm Is AddNew Then
+                ElseIf TypeOf CurrentLiveBoxArgs.Control.FindForm Is AddNew Then
                     If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
-                        Dim FrmSetData As AddNew = Control.FindForm
+                        Dim FrmSetData As AddNew = CurrentLiveBoxArgs.Control.FindForm
                         FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember).ToString
                         FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember).ToString
                     End If
@@ -128,51 +118,43 @@ Public Class clsLiveBox
     End Sub
     Private Sub DrawLiveBox(dtResults As DataTable)
         Try
-            Dim dr As DataRow
-            Dim strQryRow As String
-            If TypeOf CurrentLiveBoxArgs.Control.Parent Is GroupBox Then
-                Dim CntGroup As GroupBox
-                CntGroup = CurrentLiveBoxArgs.Control.Parent
-            ElseIf TypeOf CurrentLiveBoxArgs.Control.Parent Is Panel Then
-                Dim CntGroup As Panel
-                CntGroup = CurrentLiveBoxArgs.Control.Parent
-            End If
-            If dtResults.Rows.Count < 0 Then
-                LiveBox.Visible = False
-                Exit Sub
-            End If
-            strQryRow = CurrentLiveBoxArgs.ViewMember ' & "," & CurrentLiveBoxArgs.DataMember
-            LiveBox.Items.Clear()
-            For Each dr In dtResults.Rows
-                LiveBox.Items.Add(dr.Item(strQryRow))
-            Next
-            PosistionLiveBox()
             If dtResults.Rows.Count > 0 Then
+                Dim strQryRow As String
+                If TypeOf CurrentLiveBoxArgs.Control.Parent Is GroupBox Then
+                    Dim CntGroup As GroupBox
+                    CntGroup = CurrentLiveBoxArgs.Control.Parent
+                ElseIf TypeOf CurrentLiveBoxArgs.Control.Parent Is Panel Then
+                    Dim CntGroup As Panel
+                    CntGroup = CurrentLiveBoxArgs.Control.Parent
+                End If
+                strQryRow = CurrentLiveBoxArgs.ViewMember
+                LiveBox.Items.Clear()
+                For Each dr As DataRow In dtResults.Rows
+                    LiveBox.Items.Add(dr.Item(strQryRow))
+                Next
+                PosistionLiveBox()
                 LiveBox.Visible = True
-                LiveBox.Height = LiveBox.PreferredHeight
+                If strPrevSearchString <> CurrentLiveBoxArgs.Control.Text Then
+                    StartLiveSearch(CurrentLiveBoxArgs) 'if search string has changed since last completion, run again.
+                End If
+                dtLiveBoxData = dtResults
             Else
                 LiveBox.Visible = False
             End If
-            If strPrevSearchString <> CurrentLiveBoxArgs.Control.Text Then
-                StartLiveSearch(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type, CurrentLiveBoxArgs.ViewMember) 'if search string has changed since last completetion, run again.
-            End If
-            dtLiveBoxData = dtResults
+
         Catch
             LiveBox.Visible = False
             LiveBox.Items.Clear()
         End Try
     End Sub
     Private Sub PosistionLiveBox()
-        Dim ParentForm As Form = CurrentLiveBoxArgs.Control.FindForm
-        LiveBox.Parent = ParentForm
-        LiveBox.BringToFront()
-        Dim ScreenPos As Point = ParentForm.PointToClient(CurrentLiveBoxArgs.Control.Parent.PointToScreen(CurrentLiveBoxArgs.Control.Location))
+        Dim ScreenPos As Point = LiveBox.Parent.PointToClient(CurrentLiveBoxArgs.Control.Parent.PointToScreen(CurrentLiveBoxArgs.Control.Location))
         ScreenPos.Y = ScreenPos.Y + CurrentLiveBoxArgs.Control.Height
         LiveBox.Location = ScreenPos
         LiveBox.Width = CurrentLiveBoxArgs.Control.Width
-        Dim FormBounds As Rectangle = ParentForm.ClientRectangle
+        Dim FormBounds As Rectangle = LiveBox.Parent.ClientRectangle
         If LiveBox.PreferredHeight + LiveBox.Top > FormBounds.Bottom Then
-            LiveBox.Height = FormBounds.Bottom - LiveBox.Top
+            LiveBox.Height = FormBounds.Bottom - LiveBox.Top - LiveBox.Padding.Bottom
         Else
             LiveBox.Height = LiveBox.PreferredHeight
         End If
@@ -183,11 +165,10 @@ Public Class clsLiveBox
             LiveBox.SelectedIndex = 0
         End If
     End Sub
-    Public Sub StartLiveSearch(Control As Control, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
-        CollectLiveBoxArgs(Control, Type, ViewMember, DataMember)
-        If LiveBox.IsDisposed Then InitializeControl()
-        Dim strSearchString As String = CurrentLiveBoxArgs.Control.Text
-        If Trim(strSearchString) <> "" Then
+    Private Sub StartLiveSearch(Args As LiveBoxArgs)
+        CurrentLiveBoxArgs = Args
+        Dim strSearchString As String = Trim(CurrentLiveBoxArgs.Control.Text)
+        If strSearchString <> "" Then
             If Not LiveWorker.IsBusy And ConnectionReady() Then
                 LiveWorker.RunWorkerAsync(strSearchString)
             End If
@@ -214,11 +195,20 @@ Public Class clsLiveBox
         LiveBox.SelectedIndex = LiveBox.IndexFromPoint(e.Location)
     End Sub
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs)
-        If e.KeyCode = Keys.Enter Then LiveBoxSelect(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type)
+        Select Case e.KeyCode
+            Case Keys.Enter
+                LiveBoxSelect()
+            Case Keys.Escape
+                HideLiveBox()
+        End Select
     End Sub
     Private Sub LiveBox_MouseDown(sender As Object, e As MouseEventArgs)
-        If e.Button = MouseButtons.Left Then LiveBoxSelect(CurrentLiveBoxArgs.Control, CurrentLiveBoxArgs.Type)
-        If e.Button = MouseButtons.Right Then HideLiveBox()
+        Select Case e.Button
+            Case MouseButtons.Left
+                LiveBoxSelect()
+            Case MouseButtons.Right
+                HideLiveBox()
+        End Select
     End Sub
     Private Sub SetStyle()
         Dim LiveBoxFont As Font = New Font("Consolas", 11.25, FontStyle.Bold)
@@ -244,5 +234,31 @@ Public Class clsLiveBox
                 End If
             End If
         End If
+    End Sub
+    Private Sub Control_KeyUp(sender As Object, e As KeyEventArgs)
+        If e.KeyCode = Keys.Escape Then
+            HideLiveBox()
+        Else
+            For Each item As LiveBoxArgs In LiveBoxControls
+                If item.Control Is sender Then
+                    StartLiveSearch(item)
+                End If
+            Next
+        End If
+    End Sub
+    Private Sub Control_KeyDown(sender As Object, e As KeyEventArgs)
+        If e.KeyCode = Keys.Down Then
+            GiveLiveBoxFocus()
+        End If
+    End Sub
+    Public Sub AddControl(Control As Control, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
+        Dim ControlArgs As New LiveBoxArgs
+        ControlArgs.Control = Control
+        ControlArgs.Type = Type
+        ControlArgs.ViewMember = ViewMember
+        If Not IsNothing(DataMember) Then ControlArgs.DataMember = DataMember
+        LiveBoxControls.Add(ControlArgs)
+        AddHandler ControlArgs.Control.KeyUp, AddressOf Control_KeyUp
+        AddHandler ControlArgs.Control.KeyDown, AddressOf Control_KeyDown
     End Sub
 End Class

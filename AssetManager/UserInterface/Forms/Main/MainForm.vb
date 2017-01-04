@@ -15,7 +15,7 @@ Public Class MainForm
     Private intPrevRow As Integer
     Private bolGridFilling As Boolean = False
     Private ConnectAttempts As Integer = 0
-    Private MyLiveBox As New clsLiveBox
+    Private MyLiveBox As clsLiveBox
     Private strLastQry As String
     Private cmdLastCommand As MySqlCommand
     Private MyWindowList As WindowList
@@ -52,7 +52,6 @@ Public Class MainForm
             Else
                 AdminDropDown.Visible = False
             End If
-            Clear_All()
             GetGridStyles()
             SetGridStyle(ResultGrid)
             ConnectionWatchDog.RunWorkerAsync()
@@ -62,12 +61,21 @@ Public Class MainForm
             SplashScreen.Hide()
             Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip1, 2)
             MyWindowList = New WindowList(Me, tsdSelectWindow)
+            InitLiveBox()
+            Clear_All()
             Me.Show()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Sub GetGridStyles()
+    Private Sub InitLiveBox()
+        MyLiveBox = New clsLiveBox(Me)
+        MyLiveBox.AddControl(txtDescription, LiveBoxType.DynamicSearch, devices.Description)
+        MyLiveBox.AddControl(txtCurUser, LiveBoxType.DynamicSearch, devices.CurrentUser)
+        MyLiveBox.AddControl(txtSerial, LiveBoxType.InstaLoad, devices.Serial)
+        MyLiveBox.AddControl(txtAssetTag, LiveBoxType.InstaLoad, devices.AssetTag)
+    End Sub
+    Private Sub GetGridStyles()
         'set colors
         ResultGrid.DefaultCellStyle.SelectionBackColor = colSelectColor
         DefGridBC = ResultGrid.DefaultCellStyle.BackColor
@@ -87,7 +95,6 @@ Public Class MainForm
         SplashScreen.Refresh()
     End Sub
     Private Sub Clear_All()
-        MyLiveBox.HideLiveBox()
         txtAssetTag.Clear()
         txtAssetTagSearch.Clear()
         txtSerial.Clear()
@@ -210,7 +217,6 @@ Public Class MainForm
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         If Not BigQueryWorker.IsBusy Then
             ClickedButton = cmdSearch
-            MyLiveBox.HideLiveBox()
             DynamicSearch()
         End If
     End Sub
@@ -322,19 +328,6 @@ Public Class MainForm
         If Not CheckForAccess(AccessGroup.Add) Then Exit Sub
         AddNew.Show()
     End Sub
-    Private Sub txtSerial_TextChanged(sender As Object, e As EventArgs) Handles txtSerial.TextChanged
-        MyLiveBox.StartLiveSearch(sender, LiveBoxType.InstaLoad, devices.Serial)
-    End Sub
-    Private Sub txtAssetTag_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag.TextChanged
-        MyLiveBox.StartLiveSearch(sender, LiveBoxType.InstaLoad, devices.AssetTag)
-    End Sub
-    Private Sub txtDescription_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyUp
-        MyLiveBox.StartLiveSearch(sender, LiveBoxType.DynamicSearch, devices.Description)
-    End Sub
-    Private Sub txtCurUser_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyUp
-        MyLiveBox.StartLiveSearch(sender, LiveBoxType.DynamicSearch, devices.CurrentUser)
-    End Sub
-
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Try
             Dim LocalSQLComm As New clsMySQL_Comms
@@ -362,21 +355,6 @@ Public Class MainForm
     End Sub
     Private Sub BigQueryWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BigQueryWorker.ProgressChanged
         StatusBar("Background query running...")
-    End Sub
-    Private Sub txtAssetTag_KeyDown(sender As Object, e As KeyEventArgs) Handles txtAssetTag.KeyDown
-        If e.KeyCode = Keys.Down Then
-            MyLiveBox.GiveLiveBoxFocus()
-        End If
-    End Sub
-    Private Sub txtSerial_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSerial.KeyDown
-        If e.KeyCode = Keys.Down Then
-            MyLiveBox.GiveLiveBoxFocus()
-        End If
-    End Sub
-    Private Sub txtCurUser_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCurUser.KeyDown
-        If e.KeyCode = Keys.Down Then
-            MyLiveBox.GiveLiveBoxFocus()
-        End If
     End Sub
     Private Sub AddDeviceTool_Click(sender As Object, e As EventArgs) Handles AddDeviceTool.Click
         If Not ConnectionReady() Then
@@ -545,12 +523,6 @@ Public Class MainForm
             LoadDevice(Trim(txtGUID.Text))
             txtGUID.Clear()
         End If
-    End Sub
-    Private Sub Panel1_Scroll(sender As Object, e As ScrollEventArgs)
-        MyLiveBox.HideLiveBox()
-    End Sub
-    Private Sub Panel1_MouseWheel(sender As Object, e As MouseEventArgs)
-        MyLiveBox.HideLiveBox()
     End Sub
     Private Sub cmbOSType_DropDown(sender As Object, e As EventArgs) Handles cmbOSType.DropDown
         AdjustComboBoxWidth(sender, e)

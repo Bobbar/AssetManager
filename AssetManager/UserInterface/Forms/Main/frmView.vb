@@ -9,7 +9,7 @@ Public Class frmView
     Public MunisUser As Emp_Info = Nothing
     Private OldData As Device_Info
     Public NewData As Device_Info
-    Private MyLiveBox As New clsLiveBox
+    Private MyLiveBox As New clsLiveBox(Me)
     Private PrevWindowState As Integer
     Private Structure Ping_Results
         Public CanPing As Boolean
@@ -17,6 +17,8 @@ Public Class frmView
     End Structure
     Sub New(ParentForm As Form, DeviceGUID As String)
         InitializeComponent()
+        MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
+        MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, "dev_description")
         Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
         Tag = ParentForm
         Icon = ParentForm.Icon
@@ -512,7 +514,6 @@ VALUES (@" & historical_dev.ChangeType & ",
             End If
         Next
         fieldErrorIcon.Clear()
-        MyLiveBox.HideLiveBox()
     End Sub
     Private Function CheckFields() As Boolean
         Dim bolMissingField As Boolean
@@ -667,12 +668,6 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub txtCurUser_View_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser_View_REQ.TextChanged
         If bolCheckFields Then CheckFields()
-    End Sub
-    Private Sub txtCurUser_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_View_REQ.KeyUp
-        MyLiveBox.StartLiveSearch(sender, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
-    End Sub
-    Private Sub txtDescription_View_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription_View_REQ.KeyUp
-        MyLiveBox.StartLiveSearch(sender, LiveBoxType.SelectValue, "dev_description")
     End Sub
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
         If bolCheckFields Then CheckFields()

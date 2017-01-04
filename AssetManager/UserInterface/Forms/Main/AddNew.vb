@@ -4,7 +4,7 @@ Imports MySql.Data.MySqlClient
 Public Class AddNew
     Private Device As Device_Info
     Private bolCheckFields As Boolean
-    Private MyLiveBox As New clsLiveBox
+    Private MyLiveBox As New clsLiveBox(Me)
     Public MunisUser As Emp_Info = Nothing
     Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
         AddDevice()
@@ -106,6 +106,8 @@ Public Class AddNew
     End Function
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
         ClearAll()
+        MyLiveBox.AddControl(txtCurUser_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
+        MyLiveBox.AddControl(txtDescription_REQ, LiveBoxType.SelectValue, devices.Description)
         Icon = MainForm.Icon
     End Sub
     Private Sub ClearAll()
@@ -192,12 +194,6 @@ Public Class AddNew
     End Sub
     Private Sub cmbEquipType_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType_REQ.DropDown
         AdjustComboBoxWidth(sender, e)
-    End Sub
-    Private Sub txtCurUser_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCurUser_REQ.KeyUp
-        MyLiveBox.StartLiveSearch(sender, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
-    End Sub
-    Private Sub txtDescription_REQ_KeyUp(sender As Object, e As KeyEventArgs) Handles txtDescription_REQ.KeyUp
-        MyLiveBox.StartLiveSearch(sender, LiveBoxType.SelectValue, "dev_description")
     End Sub
     Private Sub AddNew_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         MyLiveBox.Unload()
