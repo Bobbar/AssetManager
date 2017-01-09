@@ -378,7 +378,7 @@ Class frmAttachments
                 Dim bytesIn As Integer = 1
                 Dim totalBytesIn As Integer
                 Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
-                Dim FileHash As String = GetHashOfStream(ftpStream)
+                Dim FileHash As String = GetHashOfFileStream(ftpStream)
                 Dim flLength As Integer = ftpStream.Length
                 Dim reqfile As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
                 Dim perc As Short = 0
@@ -533,8 +533,8 @@ VALUES(@" & dev_attachments.FKey & ",
         Dim LocalSQLComm As New clsMySQL_Comms
         Dim LocalFTPComm As New clsFTP_Comms
         Dim strTimeStamp As String = Now.ToString("_hhmmss")
-        Dim Foldername As String
-        Dim FileExpectedHash As String
+        Dim Foldername As String = Nothing
+        Dim FileExpectedHash As String = Nothing
         Dim FileUID As String
         Dim Success As Boolean = False
         Dim results As New DataTable
@@ -543,7 +543,7 @@ VALUES(@" & dev_attachments.FKey & ",
         Dim strQry As String
         strQry = "Select * FROM " & AttachTable & " WHERE " & main_attachments.FileUID & "='" & AttachUID & "'"
         DownloadWorker.ReportProgress(1, "Connecting...")
-        Dim strFilename As String, strFiletype As String, strFullPath As String
+        Dim strFilename As String, strFiletype As String, strFullPath As String = Nothing
         Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
         Try
             results = LocalSQLComm.Return_SQLTable(strQry)
@@ -559,63 +559,57 @@ VALUES(@" & dev_attachments.FKey & ",
             Dim buffer(1023) As Byte
             Dim bytesIn As Integer
             Dim totalBytesIn As Integer
-            Dim output As IO.Stream
             Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID
-            Dim resp As Net.FtpWebResponse = Nothing
             'get file size
             Dim flLength As Int64 = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
             'setup download
-            resp = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
-            Dim respStream As IO.Stream = resp.GetResponseStream
-            'ftp download
-            ProgTimer.Enabled = True
-            DownloadWorker.ReportProgress(1, "Downloading...")
-            output = IO.File.Create(strFullPath)
-            bytesIn = 1
-            Dim perc As Integer = 0
-            stpSpeed.Start()
-            Do Until bytesIn < 1 Or DownloadWorker.CancellationPending
-                bytesIn = respStream.Read(buffer, 0, 1024)
-                If bytesIn > 0 Then
-                    output.Write(buffer, 0, bytesIn)
-                    totalBytesIn += bytesIn 'downloaded bytes
-                    lngBytesMoved += bytesIn
-                    If flLength > 0 Then
-                        perc = (totalBytesIn / flLength) * 100
-                        'report progress
-                        intProgress = perc
+            Using resp = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile),
+                respStream = resp.GetResponseStream,
+                outputStream = IO.File.Create(strFullPath),
+                memStream As New IO.MemoryStream
+                'ftp download
+                ProgTimer.Enabled = True
+                DownloadWorker.ReportProgress(1, "Downloading...")
+                bytesIn = 1
+                Dim perc As Integer = 0
+                stpSpeed.Start()
+                Do Until bytesIn < 1 Or DownloadWorker.CancellationPending
+                    bytesIn = respStream.Read(buffer, 0, 1024)
+                    If bytesIn > 0 Then
+                        memStream.Write(buffer, 0, bytesIn) 'download data to memory before saving to disk
+                        totalBytesIn += bytesIn 'downloaded bytes
+                        lngBytesMoved += bytesIn
+                        If flLength > 0 Then
+                            perc = (totalBytesIn / flLength) * 100
+                            'report progress
+                            intProgress = perc
+                        End If
                     End If
-                End If
-            Loop
-            output.Close()
-            output.Dispose()
-            respStream.Close()
-            respStream.Dispose()
-            resp.Close()
-            resp.Dispose()
-            e.Cancel = DownloadWorker.CancellationPending
-            If Not e.Cancel Then
-                DownloadWorker.ReportProgress(2, "Verifying file...")
-                Dim FileResultHash As String = GetHashOfFile(strFullPath)
-                If FileResultHash = FileExpectedHash Then
-                    If bolDragging Then
-                        strDragFilePath = strFullPath
-                        e.Result = True
+                Loop
+                e.Cancel = DownloadWorker.CancellationPending
+                If Not e.Cancel Then
+                    DownloadWorker.ReportProgress(2, "Verifying file...")
+                    Dim FileResultHash As String = GetHashOfIOStream(memStream)
+                    If FileResultHash = FileExpectedHash Then
+                        memStream.CopyTo(outputStream) 'once data is verified we go ahead and copy it to disk
+                        If bolDragging Then
+                            strDragFilePath = strFullPath
+                            e.Result = True
+                        Else
+                            Process.Start(strFullPath)
+                            e.Result = True
+                        End If
                     Else
-                        Process.Start(strFullPath)
-                        e.Result = True
+                        'something is very wrong
+                        Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
+                        Dim blah = Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch")
+                        PurgeTempDir()
+                        e.Result = False
                     End If
                 Else
-                    'something is very wrong
-                    Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
-                    Dim blah = Message("File varification failed! The file on the database is corrupt or there was a problem writing the data do the disk.   The local copy of the attachment will now be deleted for saftey.   Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch")
                     PurgeTempDir()
-                    'DeleteAttachment(FileUID)
-                    e.Result = False
                 End If
-            Else
-                PurgeTempDir()
-            End If
+            End Using
         Catch ex As Exception
             e.Result = False
             DownloadWorker.ReportProgress(2, "ERROR!")
@@ -631,7 +625,8 @@ VALUES(@" & dev_attachments.FKey & ",
         Try
             WorkerFeedback(False)
             If Not e.Cancelled Then
-                If Not e.Result Then 'if did not complete with success, kill the form.
+                Dim Success As Boolean = CType(e.Result, Boolean)
+                If Not Success Then 'if did not complete with success, kill the form.
                     Me.Dispose()
                 Else
                 End If

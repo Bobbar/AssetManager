@@ -44,7 +44,19 @@ Module modSecurityMod
         fileStream.Close()
         Return sBuilder.ToString
     End Function
-    Public Function GetHashOfStream(ByRef MemStream As IO.FileStream) As String
+    Public Function GetHashOfFileStream(ByRef MemStream As IO.FileStream) As String
+        Dim md5Hash As MD5 = MD5.Create
+        MemStream.Position = 0
+        Dim hash As Byte() = md5Hash.ComputeHash(MemStream)
+        Dim sBuilder As New StringBuilder
+        Dim i As Integer
+        For i = 0 To hash.Length - 1
+            sBuilder.Append(hash(i).ToString("x2"))
+        Next
+        MemStream.Position = 0
+        Return sBuilder.ToString
+    End Function
+    Public Function GetHashOfIOStream(ByVal MemStream As IO.MemoryStream) As String
         Dim md5Hash As MD5 = MD5.Create
         MemStream.Position = 0
         Dim hash As Byte() = md5Hash.ComputeHash(MemStream)
