@@ -65,13 +65,7 @@ Class frmAttachments
             Activate()
         End If
     End Sub
-    Private Structure Attach_Struct
-        Public strFilename As String
-        Public strFileType As String
-        Public FileSize As Int32
-        Public strFileUID As String
-    End Structure
-    Private AttachIndex() As Attach_Struct
+    Private AttachIndex As New List(Of Attach_Info)
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim fd As OpenFileDialog = New OpenFileDialog()
@@ -187,8 +181,7 @@ Class frmAttachments
             results = SQLComms.Return_SQLTable(strQry)
             Dim strFullFilename As String
             Dim strFileSizeHuman As String
-            Dim row As Integer
-            ReDim AttachIndex(0)
+            Dim NewAttachment As New Attach_Info
             For Each r As DataRow In results.Rows
                 strFileSizeHuman = Math.Round((r.Item(main_attachments.FileSize) / 1024), 1) & " KB"
                 strFullFilename = r.Item(main_attachments.FileName) & r.Item(main_attachments.FileType)
@@ -201,12 +194,11 @@ Class frmAttachments
                         table.Rows.Add(GetFileIcon(r.Item(dev_attachments.FileType)), strFullFilename, strFileSizeHuman, r.Item(dev_attachments.TimeStamp), r.Item(dev_attachments.FileUID), r.Item(dev_attachments.FileHash))
                     End If
                 End If
-                ReDim Preserve AttachIndex(row)
-                AttachIndex(row).strFilename = r.Item(main_attachments.FileName)
-                AttachIndex(row).strFileType = r.Item(main_attachments.FileType)
-                AttachIndex(row).FileSize = r.Item(main_attachments.FileSize)
-                AttachIndex(row).strFileUID = IIf(IsDBNull(r.Item(main_attachments.FileUID)), "", r.Item(main_attachments.FileUID)) '!UID
-                row += 1
+                NewAttachment.Filename = r.Item(main_attachments.FileName)
+                NewAttachment.Extention = r.Item(main_attachments.FileType)
+                NewAttachment.FileSize = r.Item(main_attachments.FileSize)
+                NewAttachment.FileUID = IIf(IsDBNull(r.Item(main_attachments.FileUID)), "", r.Item(main_attachments.FileUID)) '!UID
+                AttachIndex.Add(NewAttachment)
             Next
             results.Dispose()
             bolGridFilling = True
@@ -233,13 +225,9 @@ Class frmAttachments
             req.SetAttachCount()
         End If
     End Sub
-
-    Private Function GetUIDFromIndex(Index As Integer) As String
-        Return AttachIndex(Index).strFileUID
-    End Function
     Private Function GetIndexFromUID(UID As String) As Integer
-        For i As Integer = 0 To AttachIndex.Count
-            If AttachIndex(i).strFileUID = UID Then Return i
+        For Each Attach As Attach_Info In AttachIndex
+            If Attach.FileUID = UID Then Return AttachIndex.IndexOf(Attach)
         Next
         Return -1
     End Function
@@ -305,12 +293,12 @@ Class frmAttachments
         If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
         Dim strFilename As String
         Dim i As Integer = GetIndexFromUID(AttachUID)
-        strFilename = AttachIndex(i).strFilename & AttachIndex(i).strFileType
+        strFilename = AttachIndex(i).Filename & AttachIndex(i).Extention
         Dim blah
         blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
         If blah = vbYes Then
             Waiting()
-            If Asset.DeleteSQLAttachment(AttachIndex(i).strFileUID, AttachType) > 0 Then
+            If Asset.DeleteSQLAttachment(AttachIndex(i).FileUID, AttachType) > 0 Then
                 ListAttachments()
                 DoneWaiting()
                 ' blah = Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
@@ -335,26 +323,15 @@ Class frmAttachments
         Dim LocalSQLComm As New clsMySQL_Comms
         Dim LocalFTPComm As New clsFTP_Comms
         Dim Foldername As String = AttachFolderID
-        Dim strFileGuid As String
         Dim Files() As String = DirectCast(e.Argument, String())
-        Dim strFilename As String
-        Dim strFileType As String
-        Dim strFullFilename As String
-        Dim myFileInfo As FileInfo
-        Dim FileSize As Long
         Dim FileSizeMB As Integer
         Dim FileNumber As Integer = 1
         Dim conn As MySqlConnection = LocalSQLComm.NewConnection
         Dim cmd As New MySqlCommand
         Try
             For Each file As String In Files
-                strFilename = Path.GetFileNameWithoutExtension(file)
-                strFileType = Path.GetExtension(file)
-                strFullFilename = Path.GetFileName(file)
-                myFileInfo = New FileInfo(file)
-                strFileGuid = Guid.NewGuid.ToString
-                FileSize = myFileInfo.Length
-                FileSizeMB = FileSize / (1024 * 1024)
+                Dim CurrentFile As New Attachment(file)
+                FileSizeMB = CurrentFile.Filesize / (1024 * 1024)
                 If FileSizeMB > FileSizeMBLimit Then
                     e.Result = False
                     UploadWorker.ReportProgress(2, "Error!")
@@ -362,8 +339,6 @@ Class frmAttachments
                     Exit Sub
                 End If
                 UploadWorker.ReportProgress(1, "Connecting...")
-                'sql stuff
-                Dim SQL As String
                 Dim resp As Net.FtpWebResponse = Nothing
                 Using resp 'check if device folder exists. create directory if not.
                     resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
@@ -377,10 +352,9 @@ Class frmAttachments
                 Dim buffer(1023) As Byte
                 Dim bytesIn As Integer = 1
                 Dim totalBytesIn As Integer
-                Dim ftpStream As System.IO.FileStream = myFileInfo.OpenRead()
-                Dim FileHash As String = GetHashOfFileStream(ftpStream)
+                Dim ftpStream As System.IO.FileStream = CurrentFile.FileInfo.OpenRead()
                 Dim flLength As Integer = ftpStream.Length
-                Dim reqfile As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & strFileGuid, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+                Dim reqfile As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & CurrentFile.FileUID, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
                 Dim perc As Short = 0
                 stpSpeed.Start()
                 UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
@@ -405,11 +379,12 @@ Class frmAttachments
                 ftpStream.Dispose()
                 If UploadWorker.CancellationPending Then
                     e.Cancel = True
-                    FTP.DeleteFTPAttachment(strFileGuid, Foldername)
+                    FTP.DeleteFTPAttachment(CurrentFile.FileUID, Foldername)
                     Throw New BackgroundWorkerCancelledException("The upload was cancelled.")
                 End If
                 'update sql table
                 If Not UploadWorker.CancellationPending Then
+                    Dim SQL As String
                     If AttachType = Entry_Type.Sibi Then
                         SQL = "INSERT INTO " & AttachTable & " (" & sibi_attachments.FKey & ", 
 " & sibi_attachments.FileName & ",
@@ -426,7 +401,7 @@ VALUES(@" & sibi_attachments.FKey & ",
 @" & sibi_attachments.FileHash & ",
 @" & sibi_attachments.Folder & ")"
                     ElseIf AttachType = Entry_Type.Device Then
-                        SQL = "INSERT INTO " & AttachTable & " (" & dev_attachments.FKey & ", 
+                        Sql = "INSERT INTO " & AttachTable & " (" & dev_attachments.FKey & ", 
 " & dev_attachments.FileName & ",
 " & dev_attachments.FileType & ", 
 " & dev_attachments.FileSize & ", 
@@ -444,11 +419,11 @@ VALUES(@" & dev_attachments.FKey & ",
                     cmd.Connection = conn
                     cmd.CommandText = SQL
                     cmd.Parameters.AddWithValue("@" & main_attachments.FKey, AttachFolderID)
-                    cmd.Parameters.AddWithValue("@" & main_attachments.FileName, strFilename)
-                    cmd.Parameters.AddWithValue("@" & main_attachments.FileType, strFileType)
-                    cmd.Parameters.AddWithValue("@" & main_attachments.FileSize, FileSize)
-                    cmd.Parameters.AddWithValue("@" & main_attachments.FileUID, strFileGuid)
-                    cmd.Parameters.AddWithValue("@" & main_attachments.FileHash, FileHash)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FileName, CurrentFile.Filename)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FileType, CurrentFile.Extention)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FileSize, CurrentFile.Filesize)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FileUID, CurrentFile.FileUID)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FileHash, CurrentFile.MD5)
                     If AttachType = Entry_Type.Sibi Then cmd.Parameters.AddWithValue("@" & sibi_attachments.Folder, strSelectedFolder)
                     cmd.ExecuteNonQuery()
                     cmd.Parameters.Clear()
@@ -592,6 +567,7 @@ VALUES(@" & dev_attachments.FKey & ",
                     Dim FileResultHash As String = GetHashOfIOStream(memStream)
                     If FileResultHash = FileExpectedHash Then
                         memStream.CopyTo(outputStream) 'once data is verified we go ahead and copy it to disk
+                        outputStream.Close()
                         If bolDragging Then
                             strDragFilePath = strFullPath
                             e.Result = True
