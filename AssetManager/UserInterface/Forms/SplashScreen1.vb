@@ -1,8 +1,9 @@
 ﻿Imports System.Drawing.Text
 Imports System.Deployment.Application
-Public NotInheritable Class SplashScreen
+Public Class SplashScreen
     Private Sub SplashScreen1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.FormBorderStyle = FormBorderStyle.None
+
         'Me.Height = 300
         'Me.Width = 400
         Dim p As New Drawing2D.GraphicsPath()
@@ -27,6 +28,7 @@ Public NotInheritable Class SplashScreen
         'Copyright info
         Copyright.Text = My.Application.Info.Copyright
     End Sub
-    Private Sub SplashScreen1_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
+    Overloads Sub Hide()
+        Me.Dispose()
     End Sub
 End Class

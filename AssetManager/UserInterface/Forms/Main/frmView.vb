@@ -11,12 +11,14 @@ Public Class frmView
     Public NewData As Device_Info
     Private MyLiveBox As New clsLiveBox(Me)
     Private PrevWindowState As Integer
+    Private MyWindowList As WindowList
     Private Structure Ping_Results
         Public CanPing As Boolean
         Public Address As String
     End Structure
     Sub New(ParentForm As Form, DeviceGUID As String)
         InitializeComponent()
+        MyWindowList = New WindowList(Me, tsdSelectWindow)
         MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
         MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, "dev_description")
         Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)

@@ -76,6 +76,11 @@ Partial Class frmView
         Me.txtCheckOut = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.PingWorker = New System.ComponentModel.BackgroundWorker()
+        Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
+        Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.ToolStrip1 = New AssetManager.MyToolStrip()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
@@ -88,16 +93,12 @@ Partial Class frmView
         Me.tsmAssetInputForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.AssetDisposalFormToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsdSelectWindow = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAccept_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.PingWorker = New System.ComponentModel.BackgroundWorker()
-        Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
-        Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.DeviceInfoBox.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
@@ -108,9 +109,9 @@ Partial Class frmView
         Me.TrackingTab.SuspendLayout()
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TrackingBox.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'DeviceInfoBox
@@ -736,12 +737,45 @@ Partial Class frmView
         Me.ToolTip1.IsBalloon = True
         Me.ToolTip1.ReshowDelay = 100
         '
+        'StatusStrip1
+        '
+        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 619)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Size = New System.Drawing.Size(1085, 22)
+        Me.StatusStrip1.TabIndex = 45
+        Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'StatusLabel
+        '
+        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StatusLabel.Name = "StatusLabel"
+        Me.StatusLabel.Size = New System.Drawing.Size(76, 17)
+        Me.StatusLabel.Text = "%STATUS%"
+        '
+        'PingWorker
+        '
+        Me.PingWorker.WorkerReportsProgress = True
+        Me.PingWorker.WorkerSupportsCancellation = True
+        '
+        'tmr_RDPRefresher
+        '
+        Me.tmr_RDPRefresher.Enabled = True
+        Me.tmr_RDPRefresher.Interval = 10000
+        '
+        'fieldErrorIcon
+        '
+        Me.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
+        Me.fieldErrorIcon.ContainerControl = Me
+        Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
+        '
         'ToolStrip1
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.tsbDeleteDevice, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.tsbDeleteDevice, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.tsdSelectWindow, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
@@ -842,6 +876,15 @@ Partial Class frmView
         Me.AssetDisposalFormToolStripMenuItem.Size = New System.Drawing.Size(230, 32)
         Me.AssetDisposalFormToolStripMenuItem.Text = "Asset Disposal Form"
         '
+        'tsdSelectWindow
+        '
+        Me.tsdSelectWindow.Image = Global.AssetManager.My.Resources.Resources.application_cascade_512
+        Me.tsdSelectWindow.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.tsdSelectWindow.Name = "tsdSelectWindow"
+        Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
+        Me.tsdSelectWindow.Size = New System.Drawing.Size(171, 34)
+        Me.tsdSelectWindow.Text = "Select Window"
+        '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
@@ -882,39 +925,6 @@ Partial Class frmView
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 37)
         Me.ToolStripSeparator2.Visible = False
         '
-        'StatusStrip1
-        '
-        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 619)
-        Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1085, 22)
-        Me.StatusStrip1.TabIndex = 45
-        Me.StatusStrip1.Text = "StatusStrip1"
-        '
-        'StatusLabel
-        '
-        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StatusLabel.Name = "StatusLabel"
-        Me.StatusLabel.Size = New System.Drawing.Size(76, 17)
-        Me.StatusLabel.Text = "%STATUS%"
-        '
-        'PingWorker
-        '
-        Me.PingWorker.WorkerReportsProgress = True
-        Me.PingWorker.WorkerSupportsCancellation = True
-        '
-        'tmr_RDPRefresher
-        '
-        Me.tmr_RDPRefresher.Enabled = True
-        Me.tmr_RDPRefresher.Interval = 10000
-        '
-        'fieldErrorIcon
-        '
-        Me.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
-        Me.fieldErrorIcon.ContainerControl = Me
-        Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
-        '
         'frmView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -943,11 +953,11 @@ Partial Class frmView
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TrackingBox.ResumeLayout(False)
         Me.TrackingBox.PerformLayout()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1029,4 +1039,5 @@ Partial Class frmView
     Friend WithEvents lblGUID As Label
     Friend WithEvents AssetDisposalFormToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmdShowIP As Button
+    Friend WithEvents tsdSelectWindow As ToolStripDropDownButton
 End Class

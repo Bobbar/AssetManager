@@ -8,6 +8,7 @@ Public Class frmManageRequest
     Public CurrentRequest As Request_Info
     Private MyText As String
     Private bolNewRequest As Boolean = False
+    Private MyWindowList As WindowList
     Sub New(ParentForm As Form, RequestUID As String)
         InitializeComponent()
         InitForm(ParentForm)
@@ -23,6 +24,7 @@ Public Class frmManageRequest
     Private Sub InitForm(ParentForm As Form)
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
         Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip, 6)
+        MyWindowList = New WindowList(Me, tsdSelectWindow)
         dgvNotes.DefaultCellStyle.SelectionBackColor = colSibiSelectColor
         Tag = ParentForm
         Icon = ParentForm.Icon

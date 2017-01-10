@@ -6,6 +6,7 @@
     Sub New(ParentForm As Form, DropDownCtl As ToolStripDropDownButton)
         MyParentForm = ParentForm
         DropDownControl = DropDownCtl
+        DropDownControl.Visible = False
         Init()
     End Sub
     Private Sub Init()
@@ -13,23 +14,35 @@
     End Sub
     Private Sub InitializeTimer()
         RefreshTimer = New Timer
-        RefreshTimer.Interval = 250
+        RefreshTimer.Interval = 200
         RefreshTimer.Enabled = True
         AddHandler RefreshTimer.Tick, AddressOf RefreshTimer_Tick
     End Sub
     Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs) Handles RefreshTimer.Tick
-        If FormCount() <> intFormCount Then
+        If FormCount(MyParentForm) < 1 Then
+            DropDownControl.Visible = False
+        Else
+            DropDownControl.Visible = True
+        End If
+        If FormCount(MyParentForm) <> intFormCount Then
             If Not DropDownControl.DropDown.Focused Then
                 DropDownControl.DropDownItems.Clear()
                 BuildWindowList(MyParentForm, DropDownControl.DropDownItems)
-                intFormCount = FormCount()
+                intFormCount = FormCount(MyParentForm)
+                DropDownControl.Text = CountText(intFormCount)
             End If
+
         End If
     End Sub
-    Private Function FormCount() As Integer
+    Private Function FormCount(ParentForm As Form) As Integer
         Dim i As Integer = 0
         For Each frm As Form In My.Application.OpenForms
-            If Not frm.IsDisposed And Not frm.Modal Then i += 1
+            If Not frm.IsDisposed And Not frm.Modal And frm IsNot ParentForm Then
+                If frm.Tag Is ParentForm Then
+                    i += 1
+                    i += FormCount(frm)
+                End If
+            End If
         Next
         Return i
     End Function
@@ -89,7 +102,8 @@
             Dim frm As Form = CType(item.Tag, Form)
             item.Dispose()
             frm.Dispose()
-            intFormCount = FormCount()
+            intFormCount = FormCount(MyParentForm)
+            DropDownControl.Text = CountText(intFormCount)
             If DropDownControl.DropDownItems.Count = 0 Then
                 DropDownControl.HideDropDown()
             End If
@@ -97,4 +111,12 @@
             ActivateFormByHandle(CType(item.Tag, Form))
         End If
     End Sub
+    Private Function CountText(count As Integer) As String
+        Dim MainText As String = "Select Window"
+        If count > 0 Then
+            Return MainText & " (" & count & ")"
+        Else
+            Return MainText
+        End If
+    End Function
 End Class
