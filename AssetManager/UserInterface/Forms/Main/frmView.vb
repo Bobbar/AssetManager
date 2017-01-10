@@ -903,7 +903,8 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
         Dim PingResults As New Ping_Results
         Try
-            Dim Hostname As String = "D" & CurrentViewDevice.strSerial
+            Dim Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
+            Dim Hostname As String = "D" & CurrentViewDevice.strSerial & "." & Domain
             PingResults.CanPing = My.Computer.Network.Ping(Hostname)
             Dim IPEntry As IPHostEntry = Dns.GetHostEntry(Hostname)
             PingResults.Address = IPEntry.AddressList(IPEntry.AddressList.Count - 1).ToString
