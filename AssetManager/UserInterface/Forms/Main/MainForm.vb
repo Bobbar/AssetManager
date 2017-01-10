@@ -482,6 +482,7 @@ Public Class MainForm
         End If
     End Sub
     Private Sub ResultGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ResultGrid.CellMouseDown
+        On Error Resume Next
         If e.Button = MouseButtons.Right And Not ResultGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
             ResultGrid.Rows(e.RowIndex).Selected = True
             ResultGrid.CurrentCell = ResultGrid(e.ColumnIndex, e.RowIndex)
