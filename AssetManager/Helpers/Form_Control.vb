@@ -23,6 +23,13 @@
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
+                Case GetType(View_Entry)
+                    Dim vw As View_Entry = frm
+                    If vw.MyEntryGUID = strGUID Then
+                        vw.Activate()
+                        vw.WindowState = FormWindowState.Normal
+                        vw.Show()
+                    End If
             End Select
         Next
     End Sub
@@ -101,4 +108,15 @@
         Next
         Return False
     End Function
+    Public Function EntryIsOpen(EntryUID As String) As Boolean
+        For Each frm As Form In My.Application.OpenForms
+            If TypeOf frm Is View_Entry Then
+                Dim vw As View_Entry = frm
+                If vw.MyEntryGUID = EntryUID Then Return True
+            End If
+        Next
+        Return False
+    End Function
+
+
 End Module

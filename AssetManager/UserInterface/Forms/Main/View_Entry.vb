@@ -2,11 +2,13 @@
 Imports MySql.Data.MySqlClient
 Public Class View_Entry
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
-    Sub New(ParentForm As Form, EntryGUID As String)
+    Public MyEntryGUID As String
+    Sub New(ParentForm As Form, EntryUID As String)
         InitializeComponent()
+        MyEntryGUID = EntryUID
         Tag = ParentForm
         Icon = ParentForm.Icon
-        ViewEntry(EntryGUID)
+        ViewEntry(EntryUID)
         Show()
         Activate()
     End Sub

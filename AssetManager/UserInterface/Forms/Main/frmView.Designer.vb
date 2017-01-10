@@ -156,13 +156,14 @@ Partial Class frmView
         'lblGUID
         '
         Me.lblGUID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblGUID.Cursor = System.Windows.Forms.Cursors.Cross
+        Me.lblGUID.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblGUID.Location = New System.Drawing.Point(21, 206)
         Me.lblGUID.Name = "lblGUID"
         Me.lblGUID.Size = New System.Drawing.Size(272, 34)
         Me.lblGUID.TabIndex = 54
         Me.lblGUID.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.ToolTip1.SetToolTip(Me.lblGUID, "Click to copy GUID.")
         '
         'cmdMunisSearch
         '
@@ -500,7 +501,7 @@ Partial Class frmView
         '
         'DeleteEntryToolStripMenuItem
         '
-        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon
+        Me.DeleteEntryToolStripMenuItem.Image = CType(resources.GetObject("DeleteEntryToolStripMenuItem.Image"), System.Drawing.Image)
         Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
         Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
         Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
@@ -753,7 +754,7 @@ Partial Class frmView
         'ToolStripButton1
         '
         Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton1.Image = Global.AssetManager.My.Resources.Resources.Edit
+        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.ToolStripButton1.Size = New System.Drawing.Size(39, 34)
@@ -762,7 +763,7 @@ Partial Class frmView
         'ToolStripButton2
         '
         Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton2.Image = Global.AssetManager.My.Resources.Resources.note_icon_27942
+        Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.ToolStripButton2.Size = New System.Drawing.Size(39, 34)
@@ -771,7 +772,7 @@ Partial Class frmView
         'tsbDeleteDevice
         '
         Me.tsbDeleteDevice.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.tsbDeleteDevice.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
+        Me.tsbDeleteDevice.Image = CType(resources.GetObject("tsbDeleteDevice.Image"), System.Drawing.Image)
         Me.tsbDeleteDevice.Name = "tsbDeleteDevice"
         Me.tsbDeleteDevice.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.tsbDeleteDevice.Size = New System.Drawing.Size(39, 34)
@@ -779,7 +780,7 @@ Partial Class frmView
         '
         'AttachmentTool
         '
-        Me.AttachmentTool.Image = Global.AssetManager.My.Resources.Resources.clip_512
+        Me.AttachmentTool.Image = CType(resources.GetObject("AttachmentTool.Image"), System.Drawing.Image)
         Me.AttachmentTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AttachmentTool.Name = "AttachmentTool"
         Me.AttachmentTool.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
@@ -789,7 +790,7 @@ Partial Class frmView
         'TrackingTool
         '
         Me.TrackingTool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckOutTool, Me.CheckInTool})
-        Me.TrackingTool.Image = Global.AssetManager.My.Resources.Resources.check_out
+        Me.TrackingTool.Image = CType(resources.GetObject("TrackingTool.Image"), System.Drawing.Image)
         Me.TrackingTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.TrackingTool.Name = "TrackingTool"
         Me.TrackingTool.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
@@ -799,7 +800,7 @@ Partial Class frmView
         'CheckOutTool
         '
         Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_red
+        Me.CheckOutTool.Image = CType(resources.GetObject("CheckOutTool.Image"), System.Drawing.Image)
         Me.CheckOutTool.Name = "CheckOutTool"
         Me.CheckOutTool.Size = New System.Drawing.Size(144, 32)
         Me.CheckOutTool.Text = "Check Out"
@@ -807,7 +808,7 @@ Partial Class frmView
         'CheckInTool
         '
         Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox_green
+        Me.CheckInTool.Image = CType(resources.GetObject("CheckInTool.Image"), System.Drawing.Image)
         Me.CheckInTool.Name = "CheckInTool"
         Me.CheckInTool.Size = New System.Drawing.Size(144, 32)
         Me.CheckInTool.Text = "Check In"
@@ -815,28 +816,28 @@ Partial Class frmView
         'tsdAssetControl
         '
         Me.tsdAssetControl.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAssetInputForm, Me.tsmAssetTransferForm, Me.AssetDisposalFormToolStripMenuItem})
-        Me.tsdAssetControl.Image = Global.AssetManager.My.Resources.Resources.Form2_512
+        Me.tsdAssetControl.Image = CType(resources.GetObject("tsdAssetControl.Image"), System.Drawing.Image)
         Me.tsdAssetControl.Name = "tsdAssetControl"
         Me.tsdAssetControl.Size = New System.Drawing.Size(189, 34)
         Me.tsdAssetControl.Text = "Asset Control Forms"
         '
         'tsmAssetInputForm
         '
-        Me.tsmAssetInputForm.Image = Global.AssetManager.My.Resources.Resources.import_document_mail_save_512
+        Me.tsmAssetInputForm.Image = CType(resources.GetObject("tsmAssetInputForm.Image"), System.Drawing.Image)
         Me.tsmAssetInputForm.Name = "tsmAssetInputForm"
         Me.tsmAssetInputForm.Size = New System.Drawing.Size(230, 32)
         Me.tsmAssetInputForm.Text = "Asset Input Form"
         '
         'tsmAssetTransferForm
         '
-        Me.tsmAssetTransferForm.Image = Global.AssetManager.My.Resources.Resources._239360_transfer_arrows_512
+        Me.tsmAssetTransferForm.Image = CType(resources.GetObject("tsmAssetTransferForm.Image"), System.Drawing.Image)
         Me.tsmAssetTransferForm.Name = "tsmAssetTransferForm"
         Me.tsmAssetTransferForm.Size = New System.Drawing.Size(230, 32)
         Me.tsmAssetTransferForm.Text = "Asset Transfer Form"
         '
         'AssetDisposalFormToolStripMenuItem
         '
-        Me.AssetDisposalFormToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.trash_512
+        Me.AssetDisposalFormToolStripMenuItem.Image = CType(resources.GetObject("AssetDisposalFormToolStripMenuItem.Image"), System.Drawing.Image)
         Me.AssetDisposalFormToolStripMenuItem.Name = "AssetDisposalFormToolStripMenuItem"
         Me.AssetDisposalFormToolStripMenuItem.Size = New System.Drawing.Size(230, 32)
         Me.AssetDisposalFormToolStripMenuItem.Text = "Asset Disposal Form"
@@ -850,7 +851,7 @@ Partial Class frmView
         'cmdAccept_Tool
         '
         Me.cmdAccept_Tool.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAccept_Tool.Image = Global.AssetManager.My.Resources.Resources.checked_checkbox
+        Me.cmdAccept_Tool.Image = CType(resources.GetObject("cmdAccept_Tool.Image"), System.Drawing.Image)
         Me.cmdAccept_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.cmdAccept_Tool.Name = "cmdAccept_Tool"
         Me.cmdAccept_Tool.Padding = New System.Windows.Forms.Padding(100, 0, 0, 0)
@@ -867,7 +868,7 @@ Partial Class frmView
         'cmdCancel_Tool
         '
         Me.cmdCancel_Tool.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCancel_Tool.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
+        Me.cmdCancel_Tool.Image = CType(resources.GetObject("cmdCancel_Tool.Image"), System.Drawing.Image)
         Me.cmdCancel_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.cmdCancel_Tool.Name = "cmdCancel_Tool"
         Me.cmdCancel_Tool.Padding = New System.Windows.Forms.Padding(50, 0, 0, 0)

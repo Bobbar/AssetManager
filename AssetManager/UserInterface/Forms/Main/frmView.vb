@@ -595,7 +595,12 @@ VALUES (@" & historical_dev.ChangeType & ",
         Me.Dispose()
     End Sub
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
-        NewEntryView(DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString)
+        Dim EntryUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
+        If Not EntryIsOpen(EntryUID) Then
+            NewEntryView(EntryUID)
+        Else
+            ActivateFormByUID(EntryUID)
+        End If
     End Sub
     Private Sub NewEntryView(GUID As String)
         If Not ConnectionReady() Then
