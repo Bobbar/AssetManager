@@ -241,7 +241,9 @@ Public Class clsLiveBox
         Else
             For Each item As LiveBoxArgs In LiveBoxControls
                 If item.Control Is sender Then
-                    StartLiveSearch(item)
+                    If Not item.Control.ReadOnly Then
+                        StartLiveSearch(item)
+                    End If
                 End If
             Next
         End If
