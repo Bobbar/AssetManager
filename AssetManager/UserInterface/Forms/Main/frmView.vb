@@ -992,8 +992,10 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub cmdMunisSearch_Click(sender As Object, e As EventArgs) Handles cmdMunisSearch.Click
         Dim NewMunisSearch As New frmMunisUser(Me)
         MunisUser = NewMunisSearch.EmployeeInfo
-        txtCurUser_View_REQ.Text = MunisUser.Name
-        txtCurUser_View_REQ.ReadOnly = True
+        If MunisUser.Name <> "" Then
+            txtCurUser_View_REQ.Text = MunisUser.Name
+            txtCurUser_View_REQ.ReadOnly = True
+        End If
     End Sub
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click
         LaunchRDP()
