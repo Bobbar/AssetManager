@@ -134,7 +134,7 @@ Public Class clsLiveBox
                 Next
                 PosistionLiveBox()
                 LiveBox.Visible = True
-                If strPrevSearchString <> CurrentLiveBoxArgs.Control.Text Then
+                If strPrevSearchString <> Trim(CurrentLiveBoxArgs.Control.Text) Then
                     StartLiveSearch(CurrentLiveBoxArgs) 'if search string has changed since last completion, run again.
                 End If
                 dtLiveBoxData = dtResults
