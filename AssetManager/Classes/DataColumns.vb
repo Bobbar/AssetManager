@@ -98,6 +98,8 @@ Public Class sibi_request_items
     Public Const Org_Code As String = "sibi_items_org_code"
     Public Const Object_Code As String = "sibi_items_object_code"
     Public Const Qty As String = "sibi_items_qty"
+    Public Const Sequence As String = "sibi_items_seq"
+    Public Const TimeStamp As String = "sibi_items_timestamp"
 End Class
 Public Class sibi_notes
     Public Const TableName As String = "sibi_notes"

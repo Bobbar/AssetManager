@@ -163,6 +163,7 @@ Public Class frmManageRequest
         RequestItemsGrid.Columns(2).Width = 50
         RequestItemsGrid.Columns(3).Width = 200
         RequestItemsGrid.Columns(4).Width = 200
+        RequestItemsGrid.RowHeadersWidth = 57
     End Sub
     Private Sub SetupGrid()
         RequestItemsGrid.DataSource = Nothing
@@ -350,7 +351,7 @@ Public Class frmManageRequest
     Private Sub AddNewRequest()
         If Not ValidateFields() Then Exit Sub
         Dim RequestData As Request_Info = CollectData()
-        Dim strRequestUID As String = Guid.NewGuid.ToString
+        RequestData.strUID = Guid.NewGuid.ToString
         Try
             Dim rows As Integer
             Dim strSqlQry1 = "INSERT INTO " & sibi_requests.TableName & "
@@ -378,7 +379,7 @@ VALUES
 @" & sibi_requests.Replace_Serial & ",
 @" & sibi_requests.RT_Number & ")"
             Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.UID, strRequestUID)
+            cmd.Parameters.AddWithValue("@" & sibi_requests.UID, RequestData.strUID)
             cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
             cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
             cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
@@ -392,51 +393,7 @@ VALUES
             rows = rows + cmd.ExecuteNonQuery()
             cmd.Parameters.Clear()
             For Each row As DataRow In RequestData.RequstItems.Rows
-                Dim strItemUID As String = Guid.NewGuid.ToString
-                Dim strSqlQry2 = "INSERT INTO " & sibi_request_items.TableName & "
-(" & sibi_request_items.Item_UID & ",
-" & sibi_request_items.Request_UID & ",
-" & sibi_request_items.User & ",
-" & sibi_request_items.Description & ",
-" & sibi_request_items.Location & ",
-" & sibi_request_items.Status & ",
-" & sibi_request_items.Replace_Asset & ",
-" & sibi_request_items.Replace_Serial & ",
-" & sibi_request_items.New_Asset & ",
-" & sibi_request_items.New_Serial & ",
-" & sibi_request_items.Org_Code & ",
-" & sibi_request_items.Object_Code & ",
-" & sibi_request_items.Qty & "
-)
-VALUES
-(@" & sibi_request_items.Item_UID & ",
-@" & sibi_request_items.Request_UID & ",
-@" & sibi_request_items.User & ",
-@" & sibi_request_items.Description & ",
-@" & sibi_request_items.Location & ",
-@" & sibi_request_items.Status & ",
-@" & sibi_request_items.Replace_Asset & ",
-@" & sibi_request_items.Replace_Serial & ",
-@" & sibi_request_items.New_Asset & ",
-@" & sibi_request_items.New_Serial & ",
-@" & sibi_request_items.Org_Code & ",
-@" & sibi_request_items.Object_Code & ",
-@" & sibi_request_items.Qty & "
-)"
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.Item_UID, strItemUID)
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.Request_UID, strRequestUID)
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.User, row.Item("User"))
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.Description, row.Item("Description"))
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.Location, row.Item(Attrib_Type.Location))
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.Status, row.Item(Attrib_Type.SibiItemStatusType))
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Asset, row.Item("Replace Asset"))
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Serial, row.Item("Replace Serial"))
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Asset, row.Item("Replace Asset"))
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Serial, row.Item("Replace Serial"))
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.Org_Code, row.Item("Org Code"))
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.Object_Code, row.Item("Object Code"))
-                cmd.Parameters.AddWithValue("@" & sibi_request_items.Qty, row.Item("Qty"))
-                cmd.CommandText = strSqlQry2
+                InsertRequestItem(row, cmd, RequestData)
                 rows = rows + cmd.ExecuteNonQuery()
                 cmd.Parameters.Clear()
             Next
@@ -448,7 +405,7 @@ VALUES
                 Dim ParentForm As frmSibiMain = Me.Tag
                 ParentForm.RefreshResults()
             End If
-            OpenRequest(strRequestUID)
+            OpenRequest(RequestData.strUID)
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 bolNewRequest = False
@@ -461,6 +418,7 @@ VALUES
     Private Sub UpdateRequest()
         Try
             Dim RequestData As Request_Info = CollectData()
+            RequestData.strUID = CurrentRequest.strUID
             If RequestData.RequstItems Is Nothing Then Exit Sub
             Dim rows As Integer
             Dim strRequestQRY As String = "UPDATE " & sibi_requests.TableName & "
@@ -475,7 +433,7 @@ SET
 " & sibi_requests.Replace_Asset & " = @" & sibi_requests.Replace_Asset & " ,
 " & sibi_requests.Replace_Serial & " = @" & sibi_requests.Replace_Serial & " ,
 " & sibi_requests.RT_Number & " = @" & sibi_requests.RT_Number & " 
-WHERE " & sibi_requests.UID & " ='" & CurrentRequest.strUID & "'"
+WHERE " & sibi_requests.UID & " ='" & RequestData.strUID & "'"
             Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strRequestQRY)
             cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
             cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
@@ -489,40 +447,50 @@ WHERE " & sibi_requests.UID & " ='" & CurrentRequest.strUID & "'"
             cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
             rows += cmd.ExecuteNonQuery()
             cmd.Parameters.Clear()
-            Dim strRequestItemsQry As String
             For Each row As DataRow In RequestData.RequstItems.Rows
                 If row.Item("Item UID").ToString <> "" Then
-                    strRequestItemsQry = "UPDATE " & sibi_request_items.TableName & "
-SET
-" & sibi_request_items.User & " = @" & sibi_request_items.User & " ,
-" & sibi_request_items.Description & " = @" & sibi_request_items.Description & " ,
-" & sibi_request_items.Location & " = @" & sibi_request_items.Location & " ,
-" & sibi_request_items.Status & " = @" & sibi_request_items.Status & " ,
-" & sibi_request_items.Replace_Asset & " = @" & sibi_request_items.Replace_Asset & " ,
-" & sibi_request_items.Replace_Serial & " = @" & sibi_request_items.Replace_Serial & ",
-" & sibi_request_items.New_Asset & " = @" & sibi_request_items.New_Asset & " ,
-" & sibi_request_items.New_Serial & " = @" & sibi_request_items.New_Serial & ",
-" & sibi_request_items.Org_Code & " = @" & sibi_request_items.Org_Code & ",
-" & sibi_request_items.Object_Code & " = @" & sibi_request_items.Object_Code & ",
-" & sibi_request_items.Qty & " = @" & sibi_request_items.Qty & "
-WHERE " & sibi_request_items.Item_UID & " ='" & row.Item("Item UID").ToString & "'"
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.User, row.Item("User"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Description, row.Item("Description"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Location, row.Item(Attrib_Type.Location))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Status, row.Item(Attrib_Type.SibiItemStatusType))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Asset, row.Item("Replace Asset"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Serial, row.Item("Replace Serial"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Asset, row.Item("New Asset"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Serial, row.Item("New Serial"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Org_Code, row.Item("Org Code"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Object_Code, row.Item("Object Code"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Qty, row.Item("Qty"))
-                    cmd.CommandText = strRequestItemsQry
+                    SetRequestItemParameters(row, cmd, RequestData, False)
+                    cmd.CommandText = RequestItemUpdateQry(row)
                     cmd.ExecuteNonQuery()
                     cmd.Parameters.Clear()
                 Else
-                    Dim strItemUID As String = Guid.NewGuid.ToString
-                    strRequestItemsQry = "INSERT INTO " & sibi_request_items.TableName & "
+                    InsertRequestItem(row, cmd, RequestData)
+                    rows += cmd.ExecuteNonQuery()
+                    cmd.Parameters.Clear()
+                End If
+            Next
+            cmd.Dispose()
+            If TypeOf Me.Tag Is frmSibiMain Then
+                Dim ParentForm As frmSibiMain = Me.Tag
+                ParentForm.RefreshResults()
+            End If
+            ' Message("Success!")
+            OpenRequest(CurrentRequest.strUID)
+        Catch ex As Exception
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Sub
+    Private Function RequestItemUpdateQry(row As DataRow) As String
+        Return "UPDATE " & sibi_request_items.TableName & "
+                    SET
+                    " & sibi_request_items.User & " = @" & sibi_request_items.User & " ,
+                    " & sibi_request_items.Description & " = @" & sibi_request_items.Description & " ,
+                    " & sibi_request_items.Location & " = @" & sibi_request_items.Location & " ,
+                    " & sibi_request_items.Status & " = @" & sibi_request_items.Status & " ,
+                    " & sibi_request_items.Replace_Asset & " = @" & sibi_request_items.Replace_Asset & " ,
+                    " & sibi_request_items.Replace_Serial & " = @" & sibi_request_items.Replace_Serial & ",
+                    " & sibi_request_items.New_Asset & " = @" & sibi_request_items.New_Asset & " ,
+                    " & sibi_request_items.New_Serial & " = @" & sibi_request_items.New_Serial & ",
+                    " & sibi_request_items.Org_Code & " = @" & sibi_request_items.Org_Code & ",
+                    " & sibi_request_items.Object_Code & " = @" & sibi_request_items.Object_Code & ",
+                    " & sibi_request_items.Qty & " = @" & sibi_request_items.Qty & "
+                    WHERE " & sibi_request_items.Item_UID & " ='" & row.Item("Item UID").ToString & "'"
+    End Function
+    Private Function RequestItemInsertQry() As String
+        Return "INSERT INTO " & sibi_request_items.TableName & "
 (" & sibi_request_items.Item_UID & ",
 " & sibi_request_items.Request_UID & ",
 " & sibi_request_items.User & ",
@@ -535,7 +503,8 @@ WHERE " & sibi_request_items.Item_UID & " ='" & row.Item("Item UID").ToString & 
 " & sibi_request_items.New_Serial & ",
 " & sibi_request_items.Org_Code & ",
 " & sibi_request_items.Object_Code & ",
-" & sibi_request_items.Qty & "
+" & sibi_request_items.Qty & ",
+" & sibi_request_items.Sequence & "
 )
 VALUES
 (@" & sibi_request_items.Item_UID & ",
@@ -550,39 +519,32 @@ VALUES
 @" & sibi_request_items.New_Serial & ",
 @" & sibi_request_items.Org_Code & ",
 @" & sibi_request_items.Object_Code & ",
-@" & sibi_request_items.Qty & "
+@" & sibi_request_items.Qty & ",
+@" & sibi_request_items.Sequence & "
 )"
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Item_UID, strItemUID)
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Request_UID, CurrentRequest.strUID)
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.User, row.Item("User"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Description, row.Item("Description"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Location, row.Item(Attrib_Type.Location))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Status, row.Item(Attrib_Type.SibiItemStatusType))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Asset, row.Item("Replace Asset"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Serial, row.Item("Replace Serial"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Asset, row.Item("New Asset"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Serial, row.Item("New Serial"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Org_Code, row.Item("Org Code"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Object_Code, row.Item("Object Code"))
-                    cmd.Parameters.AddWithValue("@" & sibi_request_items.Qty, row.Item("Qty"))
-                    cmd.CommandText = strRequestItemsQry
-                    rows += cmd.ExecuteNonQuery()
-                    cmd.Parameters.Clear()
-                End If
-            Next
-            cmd.Dispose()
-            If TypeOf Me.Tag Is frmSibiMain Then
-                Dim ParentForm As frmSibiMain = Me.Tag
-                ParentForm.RefreshResults()
-            End If
-            Message("Success!")
-            OpenRequest(CurrentRequest.strUID)
-        Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-            Else
-                EndProgram()
-            End If
-        End Try
+    End Function
+    Private Sub SetRequestItemParameters(row As DataRow, ByRef cmd As MySqlCommand, RequestData As Request_Info, IsInsert As Boolean)
+        If IsInsert Then
+            Dim strItemUID As String = Guid.NewGuid.ToString
+            cmd.Parameters.AddWithValue("@" & sibi_request_items.Item_UID, strItemUID)
+            cmd.Parameters.AddWithValue("@" & sibi_request_items.Request_UID, RequestData.strUID)
+        End If
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.User, row.Item("User"))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Description, row.Item("Description"))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Location, row.Item(Attrib_Type.Location))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Status, row.Item(Attrib_Type.SibiItemStatusType))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Asset, row.Item("Replace Asset"))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Serial, row.Item("Replace Serial"))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Asset, row.Item("New Asset"))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Serial, row.Item("New Serial"))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Org_Code, row.Item("Org Code"))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Object_Code, row.Item("Object Code"))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Qty, row.Item("Qty"))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Sequence, RequestData.RequstItems.Rows.IndexOf(row) + 1)
+    End Sub
+    Private Sub InsertRequestItem(row As DataRow, ByRef cmd As MySqlCommand, RequestData As Request_Info)
+        SetRequestItemParameters(row, cmd, RequestData, True)
+        cmd.CommandText = RequestItemInsertQry()
     End Sub
     Private Function AddNewNote(RequestUID As String, Note As String) As Boolean
         Dim strNoteUID As String = Guid.NewGuid.ToString
@@ -613,7 +575,7 @@ VALUES
     Public Sub OpenRequest(RequestUID As String)
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & RequestUID & "'"
-            Dim strRequestItemsQRY As String = "SELECT * FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & RequestUID & "'"
+            Dim strRequestItemsQRY As String = "SELECT * FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_request_items.Sequence
             Dim RequestResults As DataTable = SQLComms.Return_SQLTable(strRequestQRY)
             Dim RequestItemsResults As DataTable = SQLComms.Return_SQLTable(strRequestItemsQRY)
             ClearAll()
@@ -708,6 +670,7 @@ VALUES
                          NoNull(r.Item(sibi_request_items.Org_Code)),
                          NoNull(r.Item(sibi_request_items.Object_Code)),
                          NoNull(r.Item(sibi_request_items.Item_UID)))
+                    RequestItemsGrid.Rows(RequestItemsGrid.Rows.Count - 1).HeaderCell.Value = r.Item(sibi_request_items.Sequence).ToString
                 End With
             Next
             RequestItemsGrid.ClearSelection()
