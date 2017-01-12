@@ -56,6 +56,6 @@ Public Class View_Entry
         End Try
     End Sub
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click
-        Me.Hide()
+        Me.Dispose()
     End Sub
 End Class
