@@ -90,7 +90,7 @@ Partial Class AddNew
         Me.GroupBox1.Controls.Add(Me.txtSerial_REQ)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1023, 333)
+        Me.GroupBox1.Size = New System.Drawing.Size(1008, 315)
         Me.GroupBox1.TabIndex = 23
         Me.GroupBox1.TabStop = False
         '
@@ -107,7 +107,7 @@ Partial Class AddNew
         '
         Me.chkNoClear.AutoSize = True
         Me.chkNoClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkNoClear.Location = New System.Drawing.Point(543, 267)
+        Me.chkNoClear.Location = New System.Drawing.Point(560, 267)
         Me.chkNoClear.Name = "chkNoClear"
         Me.chkNoClear.Size = New System.Drawing.Size(91, 20)
         Me.chkNoClear.TabIndex = 49
@@ -118,7 +118,7 @@ Partial Class AddNew
         '
         Me.chkTrackable.AutoSize = True
         Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(739, 174)
+        Me.chkTrackable.Location = New System.Drawing.Point(721, 186)
         Me.chkTrackable.Name = "chkTrackable"
         Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
         Me.chkTrackable.TabIndex = 48
@@ -128,7 +128,7 @@ Partial Class AddNew
         'cmdClear
         '
         Me.cmdClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdClear.Location = New System.Drawing.Point(872, 275)
+        Me.cmdClear.Location = New System.Drawing.Point(891, 275)
         Me.cmdClear.Name = "cmdClear"
         Me.cmdClear.Size = New System.Drawing.Size(97, 23)
         Me.cmdClear.TabIndex = 13
@@ -214,7 +214,7 @@ Partial Class AddNew
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(251, 190)
+        Me.Label7.Location = New System.Drawing.Point(269, 190)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(47, 16)
         Me.Label7.TabIndex = 39
@@ -223,7 +223,7 @@ Partial Class AddNew
         'txtNotes
         '
         Me.txtNotes.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtNotes.Location = New System.Drawing.Point(304, 161)
+        Me.txtNotes.Location = New System.Drawing.Point(322, 161)
         Me.txtNotes.MaxLength = 200
         Me.txtNotes.Multiline = True
         Me.txtNotes.Name = "txtNotes"
@@ -233,7 +233,7 @@ Partial Class AddNew
         'cmdAdd
         '
         Me.cmdAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAdd.Location = New System.Drawing.Point(419, 254)
+        Me.cmdAdd.Location = New System.Drawing.Point(436, 254)
         Me.cmdAdd.Name = "cmdAdd"
         Me.cmdAdd.Size = New System.Drawing.Size(97, 44)
         Me.cmdAdd.TabIndex = 12
@@ -388,7 +388,7 @@ Partial Class AddNew
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1047, 357)
+        Me.ClientSize = New System.Drawing.Size(1033, 336)
         Me.Controls.Add(Me.GroupBox1)
         Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle

@@ -68,6 +68,7 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <WarningsAsErrors>
     </WarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>

@@ -100,10 +100,12 @@
         Dim item As ToolStripItem = CType(sender, ToolStripItem)
         If e.Button = MouseButtons.Right Then
             Dim frm As Form = CType(item.Tag, Form)
+            RemoveHandler item.MouseDown, AddressOf WindowClick
             item.Dispose()
             frm.Dispose()
             intFormCount = FormCount(MyParentForm)
             DropDownControl.Text = CountText(intFormCount)
+            GC.Collect()
             If DropDownControl.DropDownItems.Count = 0 Then
                 DropDownControl.HideDropDown()
             End If

@@ -262,6 +262,7 @@ Partial Class frmView
         '
         'cmdSetSibi
         '
+        Me.cmdSetSibi.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdSetSibi.Location = New System.Drawing.Point(99, 243)
         Me.cmdSetSibi.Name = "cmdSetSibi"
         Me.cmdSetSibi.Size = New System.Drawing.Size(106, 23)
@@ -519,7 +520,7 @@ Partial Class frmView
         Me.TabControl1.Location = New System.Drawing.Point(12, 326)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1064, 290)
+        Me.TabControl1.Size = New System.Drawing.Size(1064, 324)
         Me.TabControl1.TabIndex = 40
         '
         'HistoryTab
@@ -528,7 +529,7 @@ Partial Class frmView
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1056, 261)
+        Me.HistoryTab.Size = New System.Drawing.Size(1056, 295)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -564,7 +565,7 @@ Partial Class frmView
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1044, 249)
+        Me.DataGridHistory.Size = New System.Drawing.Size(1044, 283)
         Me.DataGridHistory.TabIndex = 40
         '
         'TrackingTab
@@ -573,7 +574,7 @@ Partial Class frmView
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1056, 261)
+        Me.TrackingTab.Size = New System.Drawing.Size(1056, 295)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -599,7 +600,7 @@ Partial Class frmView
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1044, 306)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1044, 283)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
@@ -741,7 +742,7 @@ Partial Class frmView
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 619)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 653)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1085, 22)
         Me.StatusStrip1.TabIndex = 45
@@ -930,7 +931,7 @@ Partial Class frmView
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1085, 641)
+        Me.ClientSize = New System.Drawing.Size(1085, 675)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.TrackingBox)

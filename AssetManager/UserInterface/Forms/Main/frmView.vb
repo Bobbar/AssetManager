@@ -2,7 +2,6 @@
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.Net
-Imports System.Runtime.InteropServices
 Public Class frmView
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
