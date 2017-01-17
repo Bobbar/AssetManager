@@ -28,7 +28,7 @@
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String)
+    Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String, Optional Modal As Boolean = False)
         Try
             If ReqNumber = "" Or FiscalYr = "" Then Exit Sub
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc, 
@@ -44,7 +44,9 @@
 ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number
 WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ")" ' AND (dbo.ap_vendor.a_vendor_remit_seq = 0)"
             ProcessMunisQuery(DataGridMunis_Requisition, strQRY)
-            Me.Show()
+            If Not Modal Then
+                Me.Show()
+            End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
@@ -119,7 +121,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         ExtendedMethods.DoubleBuffered(DataGridMunis_Requisition, True)
         DataGridMunis_Inventory.DefaultCellStyle = GridStyles
         DataGridMunis_Requisition.DefaultCellStyle = GridStyles
-        If IsNothing(CurrentMunisDevice.strGUID) Then
+        If CurrentMunisDevice.strGUID IsNot Nothing Then
         Else
             Me.Text = Me.Text + FormTitle(CurrentMunisDevice)
         End If

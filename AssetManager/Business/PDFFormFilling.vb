@@ -41,18 +41,22 @@ Public Class PDFFormFilling
         End With
     End Function
     Private Sub PriceFromMunis()
-        Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
-        Dim f As New View_Munis(ParentForm, True)
-        f.Text = "Select a Line Item"
-        f.LoadDevice(CurrentDevice)
-        f.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(CurrentDevice.strPO), Munis.Get_FY_From_PO(CurrentDevice.strPO))
-        f.ShowDialog(ParentForm)
-        If f.DialogResult = DialogResult.OK Then
-            UnitPrice = f.UnitPrice
-            CurrentDialog.SetControlValue(UnitPriceTxtName, UnitPrice)
-        Else
-            UnitPrice = Nothing
-        End If
+        Try
+            Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
+            Dim f As New View_Munis(ParentForm, True)
+            f.Text = "Select a Line Item"
+            f.LoadDevice(CurrentDevice)
+            f.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(CurrentDevice.strPO), Munis.Get_FY_From_PO(CurrentDevice.strPO), True)
+            f.ShowDialog(ParentForm)
+            If f.DialogResult = DialogResult.OK Then
+                UnitPrice = f.UnitPrice
+                CurrentDialog.SetControlValue(UnitPriceTxtName, UnitPrice)
+            Else
+                UnitPrice = Nothing
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Private Sub FillForm(Type As PDFFormType)
         Try
