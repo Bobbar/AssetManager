@@ -11,12 +11,15 @@ Public Class frmView
     Private MyLiveBox As New clsLiveBox(Me)
     Private PrevWindowState As Integer
     Private MyWindowList As WindowList
+    Private MyGridTheme As Grid_Theme
+    Private bolGridFilling As Boolean = False
     Private Structure Ping_Results
         Public CanPing As Boolean
         Public Address As String
     End Structure
-    Sub New(ParentForm As Form, DeviceGUID As String)
+    Sub New(ParentForm As Form, GridTheme As Grid_Theme, DeviceGUID As String)
         InitializeComponent()
+        MyGridTheme = GridTheme
         MyWindowList = New WindowList(Me, tsdSelectWindow)
         MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
         MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, "dev_description")
@@ -241,10 +244,10 @@ VALUES (@" & historical_dev.ChangeType & ",
             cmd.Dispose()
             If rows = 2 Then
                 ViewDevice(CurrentViewDevice.strGUID)
-                Dim blah = Message("Update Added.", vbOKOnly + vbInformation, "Success")
+                Dim blah = Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
             Else
                 ViewDevice(CurrentViewDevice.strGUID)
-                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
+                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
             End If
             Exit Sub
         Catch ex As Exception
@@ -263,6 +266,8 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
         Try
             Waiting()
+            'TODO: Find a solution to the TabControls glitchyness that requires odd steps (like 2 x Show() calls) to get around spontaneous style changes of contained controls.
+            Me.Show()
             If ViewHistory(DeviceUID) Then
                 ViewTracking(CurrentViewDevice.strGUID)
                 Me.Text = Me.Text + FormTitle(CurrentViewDevice)
@@ -280,12 +285,11 @@ VALUES (@" & historical_dev.ChangeType & ",
         Dim HistoricalResults, DeviceResults As New DataTable
         Try
             DeviceResults = SQLComms.Return_SQLTable("Select * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & DeviceUID & "'")
-            ' Debug.Print("Select * FROM " & devices.TableName & ", " & historical_dev.TableName & " WHERE " & devices.TableName & "." & devices.UID & " = " & historical_dev.TableName & "." & historical_dev.UID & " And " & devices.TableName & "." & devices.UID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
             If DeviceResults.Rows.Count < 1 Then
                 CloseChildren(Me)
                 DeviceResults.Dispose()
                 CurrentViewDevice = Nothing
-                Dim blah = Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found")
+                Dim blah = Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found", Me)
                 Return False
             End If
             CurrentViewDevice = Asset.CollectDeviceInfo(DeviceResults)
@@ -356,7 +360,10 @@ VALUES (@" & historical_dev.ChangeType & ",
                            NoNull(r.Item(historical_dev.PurchaseDate)),
                            NoNull(r.Item(historical_dev.History_Entry_UID)))
                 Next
+                bolGridFilling = True
                 Grid.DataSource = table
+                Grid.ClearSelection()
+                bolGridFilling = False
                 table.Dispose()
             Else
                 table.Dispose()
@@ -486,6 +493,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             If Not TabControl1.TabPages.Contains(TrackingTab) Then TabControl1.TabPages.Insert(1, TrackingTab)
             SetGridStyle(DataGridHistory)
             SetGridStyle(TrackingGrid)
+            DataGridHistory.DefaultCellStyle.SelectionBackColor = MyGridTheme.CellSelectColor
             TrackingBox.Visible = True
             TrackingTool.Visible = bolEnabled
             CheckOutTool.Visible = Not bolCheckedOut
@@ -495,6 +503,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             TabControl1.TabPages.Remove(TrackingTab)
             SetGridStyle(DataGridHistory)
             SetGridStyle(TrackingGrid)
+            DataGridHistory.DefaultCellStyle.SelectionBackColor = MyGridTheme.CellSelectColor
             TrackingBox.Visible = False
         End If
     End Sub
@@ -586,7 +595,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             Exit Sub
         End If
         If Not CheckFields() Then
-            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
+            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
             bolCheckFields = True
             Exit Sub
         End If
@@ -634,16 +643,16 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub DeleteDevice()
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
-        Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING")
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
             If Asset.DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device) Then
-                Dim blah2 = Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
+                Dim blah2 = Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                 CurrentViewDevice = Nothing
                 Me.Dispose()
                 MainForm.RefreshCurrent()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentViewDevice.strGUID)
-                Dim blah2 = Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
+                Dim blah2 = Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
                 CurrentViewDevice = Nothing
                 Me.Dispose()
             End If
@@ -689,9 +698,9 @@ VALUES (@" & historical_dev.ChangeType & ",
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
         Dim Info As Device_Info = Asset.Get_EntryInfo(strGUID)
-        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING")
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
-            Dim blah2 = Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results")
+            Dim blah2 = Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results", Me)
             ViewDevice(CurrentViewDevice.strGUID)
         Else
             Exit Sub
@@ -712,7 +721,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         End Try
     End Function
     Private Sub DataGridHistory_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridHistory.CellMouseDown
-        If e.Button = MouseButtons.Right Then
+        If e.Button = MouseButtons.Right And e.ColumnIndex > -1 And e.RowIndex > -1 Then
             DataGridHistory.CurrentCell = DataGridHistory(e.ColumnIndex, e.RowIndex)
         End If
     End Sub
@@ -797,7 +806,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen() Then
-            Dim NewAttachments As New frmAttachments(Me, CurrentViewDevice)
+            Dim NewAttachments As New frmAttachments(Me, MyGridTheme, CurrentViewDevice)
         Else
             ActivateFormByUID(CurrentViewDevice.strGUID)
         End If
@@ -810,34 +819,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         Next
         Return False
     End Function
-    Private DefGridBC As Color, DefGridSelCol As Color, bolGridFilling As Boolean = False
-    Private Sub HighlightCurrentRow(Row As Integer)
-        On Error Resume Next
-        If Not bolGridFilling Then
-            DefGridBC = TrackingGrid.Rows(Row).DefaultCellStyle.BackColor
-            DefGridSelCol = TrackingGrid.Rows(Row).DefaultCellStyle.SelectionBackColor
-            Dim BackColor As Color = DefGridBC
-            Dim SelectColor As Color = DefGridSelCol
-            Dim c1 As Color = colHighlightColor 'highlight color
-            If Row > -1 Then
-                For Each cell As DataGridViewCell In TrackingGrid.Rows(Row).Cells
-                    Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
-                    Dim BlendColor As Color
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                    cell.Style.SelectionBackColor = BlendColor
-                    c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                    cell.Style.BackColor = BlendColor
-                Next
-            End If
-        End If
-    End Sub
     Public Sub CancelModify()
         bolCheckFields = False
         DisableControls()
@@ -863,7 +844,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             Exit Sub
         End If
         If Not CheckFields() Then
-            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
+            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
             bolCheckFields = True
             Exit Sub
         End If
@@ -965,7 +946,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         If SibiUID = "" Then
             Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
         Else
-            Dim sibiForm As New frmManageRequest(Me, SibiUID)
+            Dim sibiForm As New frmManageRequest(Me, MyGridTheme, SibiUID)
         End If
     End Sub
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
@@ -1006,12 +987,9 @@ VALUES (@" & historical_dev.ChangeType & ",
         Process.Start(StartInfo)
     End Sub
     Private Sub View_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        Dim f As Form = sender
-        If f.WindowState = FormWindowState.Minimized Then
+        If Me.WindowState = FormWindowState.Minimized Then
             MinimizeChildren(Me)
-            PrevWindowState = f.WindowState
-        ElseIf f.WindowState <> PrevWindowState And f.WindowState = FormWindowState.Normal Then
-            If PrevWindowState <> FormWindowState.Maximized Then RestoreChildren(Me)
+            PrevWindowState = Me.WindowState
         End If
     End Sub
     Private Sub lblGUID_Click(sender As Object, e As EventArgs) Handles lblGUID.Click
@@ -1029,8 +1007,12 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub AssetDisposalFormToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AssetDisposalFormToolStripMenuItem.Click
         Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.DisposeForm)
     End Sub
-    Private Sub View_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
-        Dim f As Form = sender
-        PrevWindowState = f.WindowState
+    Private Sub DataGridHistory_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellEnter
+        If Not bolGridFilling Then
+            HighlightRow(DataGridHistory, MyGridTheme, e.RowIndex)
+        End If
+    End Sub
+    Private Sub DataGridHistory_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellLeave
+        LeaveRow(DataGridHistory, MyGridTheme, e.RowIndex)
     End Sub
 End Class

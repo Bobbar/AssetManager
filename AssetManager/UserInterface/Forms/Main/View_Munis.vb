@@ -101,7 +101,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
                 LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
                 Me.Show()
             Else
-                Message("Could not pull all Munis info. No FA info and/or no PO", vbOKOnly + vbInformation, "Nothing Found")
+                Message("Could not pull all Munis info. No FA info and/or no PO", vbOKOnly + vbInformation, "Nothing Found", Me.Tag)
                 LoadMunisInventoryGrid(Device)
                 LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
                 Me.Show()

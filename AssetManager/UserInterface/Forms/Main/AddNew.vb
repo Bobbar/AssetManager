@@ -11,26 +11,26 @@ Public Class AddNew
     End Sub
     Private Sub AddDevice()
         If Not CheckFields() Then
-            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
+            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
             bolCheckFields = True
             Exit Sub
         Else
             Dim NewDevice As Device_Info = GetDBValues()
             If Asset.DeviceExists(NewDevice) Then
-                Dim blah = Message("A device with that serial and/or asset tag already exists.", vbOKOnly + vbExclamation, "Duplicate Device")
+                Dim blah = Message("A device with that serial and/or asset tag already exists.", vbOKOnly + vbExclamation, "Duplicate Device", Me)
                 Exit Sub
             Else
                 'proceed
             End If
             Dim Success As Boolean = Asset.AddNewDevice(NewDevice, MunisUser)
                 If Success Then
-                    Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete")
-                    If Not chkNoClear.Checked Then ClearAll()
+                Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete", Me)
+                If Not chkNoClear.Checked Then ClearAll()
                     If blah = vbNo Then Me.Hide()
                     MainForm.RefreshCurrent()
                 Else
-                    Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result")
-                End If
+                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
+            End If
 
                 Exit Sub
             End If
@@ -152,9 +152,6 @@ Public Class AddNew
                 cmb.SelectedIndex = -1
             End If
         Next
-    End Sub
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-        If Not CheckFields() Then Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data")
     End Sub
     Private Sub txtSerial_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtSerial_REQ.TextChanged
         If bolCheckFields Then CheckFields()

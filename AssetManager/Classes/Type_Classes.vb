@@ -1,4 +1,4 @@
-﻿
+﻿Imports System.IO
 Public NotInheritable Class Attrib_Type
     Public Const Location As String = "LOCATION"
     Public Const ChangeType As String = "CHANGETYPE"
@@ -37,6 +37,13 @@ Public Enum PDFFormType
     TransferForm
     DisposeForm
 End Enum
+
+Public Enum LiveBoxType
+    DynamicSearch
+    InstaLoad
+    SelectValue
+    UserSelect
+End Enum
 Public Class SearchVal
     Public Property FieldName As String
     Public Property Value As Object
@@ -45,9 +52,51 @@ Public Class SearchVal
         Value = obValue
     End Sub
 End Class
-Public Enum LiveBoxType
-    DynamicSearch
-    InstaLoad
-    SelectValue
-    UserSelect
-End Enum
+Public Class Attachment
+    Private MyInfo As Attach_Info
+    ''' <summary>
+    ''' Create new Attachment from a file path.
+    ''' </summary>
+    ''' <param name="NewFile">Full path to file.</param>
+    Sub New(NewFile As String)
+        MyInfo.FileInfo = New FileInfo(NewFile)
+        MyInfo.FileUID = Guid.NewGuid.ToString
+        MyInfo.MD5 = GetHash(MyInfo.FileInfo)
+        MyInfo.FileSize = MyInfo.FileInfo.Length
+        MyInfo.Extention = MyInfo.FileInfo.Extension
+    End Sub
+    Private Function GetHash(Fileinfo As FileInfo) As String
+        Dim HashStream As FileStream = Fileinfo.OpenRead
+        Return GetHashOfFileStream(HashStream)
+    End Function
+    Public ReadOnly Property FileInfo As FileInfo
+        Get
+            Return MyInfo.FileInfo
+        End Get
+    End Property
+    Public ReadOnly Property Filename As String
+        Get
+            Return Path.GetFileNameWithoutExtension(MyInfo.FileInfo.Name)
+        End Get
+    End Property
+    Public ReadOnly Property Extention As String
+        Get
+            Return MyInfo.FileInfo.Extension
+        End Get
+    End Property
+    Public ReadOnly Property Filesize As Integer
+        Get
+            Return MyInfo.FileInfo.Length
+        End Get
+    End Property
+    Public ReadOnly Property FileUID As String
+        Get
+            Return MyInfo.FileUID
+        End Get
+    End Property
+    Public ReadOnly Property MD5 As String
+        Get
+            Return MyInfo.MD5
+        End Get
+    End Property
+End Class

@@ -4,6 +4,7 @@ Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
     Private MyWindowList As WindowList
     Private LastCmd As MySqlCommand
+    Private MyGridTheme As Grid_Theme
 
     Public Sub RefreshResults()
         ExecuteCmd(LastCmd)
@@ -30,6 +31,9 @@ Public Class frmSibiMain
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         SetDisplayYears()
         ShowAll("All")
+        MyGridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
+        MyGridTheme.CellSelectColor = colSibiSelectColor
+        MyGridTheme.RowHighlightColor = colHighlightBlue
         MyWindowList = New WindowList(Me, tsdSelectWindow)
     End Sub
     Private Function BuildSearchListNew() As List(Of SearchVal)
@@ -150,7 +154,7 @@ Public Class frmSibiMain
             Exit Sub
         End If
         If Not RequestIsOpen(strUID) Then
-            Dim ManRequest As New frmManageRequest(Me, strUID)
+            Dim ManRequest As New frmManageRequest(Me, MyGridTheme, strUID)
         Else
             ActivateFormByUID(strUID)
         End If
@@ -219,45 +223,14 @@ Public Class frmSibiMain
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
         If Not bolGridFilling Then
-            Dim BackColor As Color = DefGridBC
-            Dim SelectColor As Color = colSibiSelectColor 'DefGridSelCol
-            Dim c1 As Color = colHighlightBlue 'colHighlightColor 'highlight color
-            If Row > -1 Then
-                For Each cell As DataGridViewCell In ResultGrid.Rows(Row).Cells
-                    If cell.ColumnIndex <> GetColIndex(ResultGrid, "Status") Then 'skip the colored status column
-                        Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
-                        Dim BlendColor As Color
-                        BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                        cell.Style.SelectionBackColor = BlendColor
-                        c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
-                        BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                        cell.Style.BackColor = BlendColor
-                    End If
-
-                Next
-            End If
+            HighlightRow(ResultGrid, MyGridTheme, Row)
         End If
     End Sub
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
     End Sub
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
-        Dim BackColor As Color = DefGridBC
-        Dim SelectColor As Color = colSibiSelectColor 'DefGridSelCol
-        If e.RowIndex > -1 Then
-            For Each cell As DataGridViewCell In ResultGrid.Rows(e.RowIndex).Cells
-                If cell.ColumnIndex <> GetColIndex(ResultGrid, "Status") Then 'skip the colored status column
-                    cell.Style.SelectionBackColor = SelectColor
-                    cell.Style.BackColor = BackColor
-                End If
-            Next
-        End If
+        LeaveRow(ResultGrid, MyGridTheme, e.RowIndex)
     End Sub
     Private Sub cmbDisplayYear_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbDisplayYear.SelectedIndexChanged
         If Not IsNothing(cmbDisplayYear.Text) Then

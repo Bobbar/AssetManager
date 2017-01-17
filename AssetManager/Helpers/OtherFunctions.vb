@@ -238,4 +238,37 @@ Module OtherFunctions
             Return False
         End If
     End Function
+    Public Sub HighlightRow(ByRef Grid As DataGridView, Theme As Grid_Theme, Row As Integer)
+        On Error Resume Next
+        Dim BackColor As Color = Theme.BackColor 'DefGridBC
+        Dim SelectColor As Color = Theme.CellSelectColor 'DefGridSelCol
+        Dim c1 As Color = Theme.RowHighlightColor 'colHighlightColor 'highlight color
+        If Row > -1 Then
+            For Each cell As DataGridViewCell In Grid.Rows(Row).Cells
+                Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
+                Dim BlendColor As Color
+                BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                cell.Style.SelectionBackColor = BlendColor
+                c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
+                BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
+                                                (CInt(c1.R) + CInt(c2.R)) / 2,
+                                                (CInt(c1.G) + CInt(c2.G)) / 2,
+                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+                cell.Style.BackColor = BlendColor
+            Next
+        End If
+    End Sub
+    Public Sub LeaveRow(ByRef Grid As DataGridView, Theme As Grid_Theme, Row As Integer)
+        Dim BackColor As Color = Theme.BackColor
+        Dim SelectColor As Color = Theme.CellSelectColor
+        If Row > -1 Then
+            For Each cell As DataGridViewCell In Grid.Rows(Row).Cells
+                cell.Style.SelectionBackColor = SelectColor
+                cell.Style.BackColor = BackColor
+            Next
+        End If
+    End Sub
 End Module

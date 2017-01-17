@@ -558,15 +558,16 @@ Partial Class frmView
         Me.DataGridHistory.DefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridHistory.Location = New System.Drawing.Point(6, 6)
-        Me.DataGridHistory.MultiSelect = False
         Me.DataGridHistory.Name = "DataGridHistory"
         Me.DataGridHistory.ReadOnly = True
         Me.DataGridHistory.RowHeadersVisible = False
-        Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
         Me.DataGridHistory.Size = New System.Drawing.Size(1044, 283)
         Me.DataGridHistory.TabIndex = 40
+        Me.DataGridHistory.TabStop = False
+        Me.DataGridHistory.VirtualMode = True
         '
         'TrackingTab
         '

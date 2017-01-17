@@ -24,10 +24,12 @@ Class frmAttachments
     Private AttachType As Entry_Type
     Public AttachFolderID As String
     Private AttachTable As String
-    Sub New(ParentForm As Form, Optional AttachInfo As Object = Nothing)
+    Private MyGridTheme As Grid_Theme
+    Sub New(ParentForm As Form, GridTheme As Grid_Theme, Optional AttachInfo As Object = Nothing)
         InitializeComponent()
         Tag = ParentForm
         Icon = ParentForm.Icon
+        MyGridTheme = GridTheme
         If Not IsNothing(AttachInfo) Then
             If TypeOf AttachInfo Is Request_Info Then
                 AttachType = Entry_Type.Sibi
@@ -295,7 +297,7 @@ Class frmAttachments
         Dim i As Integer = GetIndexFromUID(AttachUID)
         strFilename = AttachIndex(i).Filename & AttachIndex(i).Extention
         Dim blah
-        blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete")
+        blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete", Me)
         If blah = vbYes Then
             Waiting()
             If Asset.DeleteSQLAttachment(AttachIndex(i).FileUID, AttachType) > 0 Then
@@ -304,7 +306,7 @@ Class frmAttachments
                 ' blah = Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
             Else
                 DoneWaiting()
-                blah = Message("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results")
+                blah = Message("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results", Me)
             End If
         End If
     End Sub
@@ -335,7 +337,7 @@ Class frmAttachments
                 If FileSizeMB > FileSizeMBLimit Then
                     e.Result = False
                     UploadWorker.ReportProgress(2, "Error!")
-                    Dim blah = Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded")
+                    Dim blah = Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded", Me)
                     Exit Sub
                 End If
                 UploadWorker.ReportProgress(1, "Connecting...")
@@ -578,7 +580,7 @@ VALUES(@" & dev_attachments.FKey & ",
                     Else
                         'something is very wrong
                         Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
-                        Dim blah = Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch")
+                        Dim blah = Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch", Me)
                         PurgeTempDir()
                         e.Result = False
                     End If
@@ -654,40 +656,8 @@ VALUES(@" & dev_attachments.FKey & ",
         If intProgress > 1 Then ProgressBar1.Value = ProgressBar1.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
         ProgressBar1.Value = intProgress
     End Sub
-    Private Sub HighlightCurrentRow(Row As Integer)
-        On Error Resume Next
-        If Not bolGridFilling Then
-            Dim BackColor As Color = DefGridBC
-            Dim SelectColor As Color = DefGridSelCol
-            Dim c1 As Color = colHighlightColor 'highlight color
-            If Row > -1 Then
-                For Each cell As DataGridViewCell In AttachGrid.Rows(Row).Cells
-                    Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
-                    Dim BlendColor As Color
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                    cell.Style.SelectionBackColor = BlendColor
-                    c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                    cell.Style.BackColor = BlendColor
-                Next
-            End If
-        End If
-    End Sub
     Private Sub AttachGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellLeave
-        Dim BackColor As Color = DefGridBC
-        Dim SelectColor As Color = DefGridSelCol
-        If e.RowIndex > -1 Then
-            For Each cell As DataGridViewCell In AttachGrid.Rows(e.RowIndex).Cells
-                cell.Style.SelectionBackColor = SelectColor
-                cell.Style.BackColor = BackColor
-            Next
-        End If
+        LeaveRow(AttachGrid, MyGridTheme, e.RowIndex)
     End Sub
     Private Sub AttachGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellDoubleClick
         OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
@@ -696,12 +666,14 @@ VALUES(@" & dev_attachments.FKey & ",
         Clipboard.SetDataObject(Me.AttachGrid.GetClipboardContent())
     End Sub
     Private Sub AttachGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellEnter
-        HighlightCurrentRow(e.RowIndex)
+        If Not bolGridFilling Then
+            HighlightRow(AttachGrid, MyGridTheme, e.RowIndex)
+        End If
     End Sub
     Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If UploadWorker.IsBusy Or DownloadWorker.IsBusy Then
             e.Cancel = True
-            Dim blah = Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
+            Dim blah = Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy", Me)
             If blah = vbYes Then
                 If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
                 If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()

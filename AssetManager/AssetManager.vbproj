@@ -59,16 +59,16 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
-    <DefineDebug>false</DefineDebug>
+    <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>AssetManager.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <WarningsAsErrors>
     </WarningsAsErrors>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -178,7 +178,7 @@
     <Compile Include="Classes\Paths.vb" />
     <Compile Include="DataComms\AssetManager\FTP\clsFTP_Comms.vb" />
     <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
-    <Compile Include="Helpers\Form_Control.vb" />
+    <Compile Include="UserInterface\Form_Control.vb" />
     <Compile Include="DataFunctions\clsAssetManager_Functions.vb" />
     <Compile Include="UserInterface\Forms\frmAttachments.Designer.vb">
       <DependentUpon>frmAttachments.vb</DependentUpon>
@@ -265,7 +265,7 @@
     <Compile Include="UserInterface\Forms\Main\View_Tracking.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Business\clsCrypto.vb" />
+    <Compile Include="Classes\clsCrypto.vb" />
     <Compile Include="Classes\Indexes.vb" />
     <Compile Include="DataFunctions\clsMunis_Functions.vb" />
     <Compile Include="DataComms\Munis\clsMunis_Comms.vb" />
@@ -276,7 +276,7 @@
     <Compile Include="UserInterface\MyControls\clsLiveBox.vb" />
     <Compile Include="DataComms\AssetManager\MySQL\clsMySQL_Comms.vb" />
     <Compile Include="Classes\Structures.vb" />
-    <Compile Include="Business\modSecurityMod.vb" />
+    <Compile Include="Classes\modSecurityMod.vb" />
     <Compile Include="UserInterface\MyControls\MunisTools.Designer.vb">
       <DependentUpon>MunisTools.vb</DependentUpon>
     </Compile>

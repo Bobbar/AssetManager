@@ -9,8 +9,10 @@ Public Class frmManageRequest
     Private MyText As String
     Private bolNewRequest As Boolean = False
     Private MyWindowList As WindowList
-    Sub New(ParentForm As Form, RequestUID As String)
+    Private MyGridTheme As Grid_Theme
+    Sub New(ParentForm As Form, GridTheme As Grid_Theme, RequestUID As String)
         InitializeComponent()
+        MyGridTheme = GridTheme
         InitForm(ParentForm)
         OpenRequest(RequestUID)
     End Sub
@@ -208,7 +210,7 @@ Public Class frmManageRequest
         bolFieldsValid = True
         Dim ValidateResults As Boolean = CheckFields(Me, bolFieldsValid)
         If Not ValidateResults Then
-            Dim blah = Message("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
+            Dim blah = Message("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data", Me.Tag)
         End If
         Return ValidateResults
     End Function
@@ -400,7 +402,7 @@ VALUES
             cmd.Dispose()
             bolNewRequest = False
             pnlCreate.Visible = False
-            Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete")
+            Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me.Tag)
             If TypeOf Me.Tag Is frmSibiMain Then
                 Dim ParentForm As frmSibiMain = Me.Tag
                 ParentForm.RefreshResults()
@@ -711,7 +713,7 @@ VALUES
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         If Not AttachmentsIsOpen(CurrentRequest.strUID) Then
             If CurrentRequest.strUID <> "" Then
-                Dim NewAttach As New frmAttachments(Me, CurrentRequest)
+                Dim NewAttach As New frmAttachments(Me, MyGridTheme, CurrentRequest)
             End If
         Else
             ActivateFormByUID(CurrentRequest.strUID)
@@ -747,15 +749,15 @@ VALUES
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim blah As MsgBoxResult
-        blah = Message("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row")
+        blah = Message("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row", Me.Tag)
         If blah = vbYes Then
             If bolNewRequest Then
                 If DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index) Then
                 Else
-                    blah = Message("Failed to delete row.", vbExclamation + vbOKOnly, "Error", Me)
+                    blah = Message("Failed to delete row.", vbExclamation + vbOKOnly, "Error", Me.Tag)
                 End If
             Else
-                blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value.ToString, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+                blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value.ToString, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me.Tag)
                 OpenRequest(CurrentRequest.strUID)
             End If
 
@@ -777,10 +779,10 @@ VALUES
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
         If Not CheckForAccess(AccessGroup.Sibi_Delete) Then Exit Sub
         If IsNothing(CurrentRequest.RequstItems) Then Exit Sub
-        Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING")
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
             If Asset.DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
-                Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted")
+                Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                 CurrentRequest = Nothing
                 If TypeOf Me.Tag Is frmSibiMain Then
                     Dim ParentForm As frmSibiMain = Me.Tag
@@ -789,7 +791,7 @@ VALUES
                 Me.Dispose()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)
-                Dim blah2 = Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed")
+                Dim blah2 = Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
                 CurrentRequest = Nothing
                 Me.Dispose()
             End If
@@ -822,7 +824,7 @@ VALUES
         If blah = vbYes Then
             Dim NoteUID As String = dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString
             If NoteUID <> "" Then
-                Message(DeleteItem_FromSQL(NoteUID, sibi_notes.Note_UID, sibi_notes.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item")
+                Message(DeleteItem_FromSQL(NoteUID, sibi_notes.Note_UID, sibi_notes.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me)
                 OpenRequest(CurrentRequest.strUID)
             End If
         End If
@@ -847,44 +849,17 @@ VALUES
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
         If Not bolGridFilling Then
-            Dim BackColor As Color = DefGridBC
-            Dim SelectColor As Color = colSibiSelectColor 'DefGridSelCol
-            Dim c1 As Color = colHighlightBlue 'colHighlightColor 'highlight color
-            If Row > -1 Then
-                For Each cell As DataGridViewCell In RequestItemsGrid.Rows(Row).Cells
-                    Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
-                    Dim BlendColor As Color
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                    cell.Style.SelectionBackColor = BlendColor
-                    c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                    cell.Style.BackColor = BlendColor
-                Next
-            End If
+            HighlightRow(RequestItemsGrid, MyGridTheme, Row)
         End If
     End Sub
     Private Sub RequestItemsGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
     End Sub
     Private Sub RequestItemsGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellLeave
-        Dim BackColor As Color = DefGridBC
-        Dim SelectColor As Color = colSibiSelectColor 'DefGridSelCol
-        If e.RowIndex > -1 Then
-            For Each cell As DataGridViewCell In RequestItemsGrid.Rows(e.RowIndex).Cells
-                cell.Style.SelectionBackColor = SelectColor
-                cell.Style.BackColor = BackColor
-            Next
-        End If
+        LeaveRow(RequestItemsGrid, MyGridTheme, e.RowIndex)
     End Sub
     Private Sub LookupDevice(Device As Device_Info)
-        Dim newView As New frmView(Me, Device.strGUID)
-        'frmView.ViewDevice(Device.strGUID)
+        Dim newView As New frmView(Me, MyGridTheme, Device.strGUID)
     End Sub
     Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click
         If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value.ToString IsNot "" Then
@@ -914,7 +889,7 @@ VALUES
         End If
     End Sub
     Private Sub RequestItemsGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles RequestItemsGrid.DataError
-        Dim blah = Message("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error")
+        Dim blah = Message("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error", Me)
     End Sub
     Private Sub RequestItemsGrid_DefaultValuesNeeded(sender As Object, e As DataGridViewRowEventArgs) Handles RequestItemsGrid.DefaultValuesNeeded
         e.Row.Cells("Qty").Value = 1

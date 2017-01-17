@@ -19,13 +19,14 @@ Public Class MainForm
     Private strLastQry As String
     Private cmdLastCommand As MySqlCommand
     Private MyWindowList As WindowList
+    Private MyGridTheme As Grid_Theme
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadProgram()
     End Sub
     Private Sub LoadProgram()
         Try
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
-            ResultGrid.DefaultCellStyle.SelectionBackColor = colHighlightOrange
+
             ToolStrip1.BackColor = colAssetToolBarColor
             Logger("Starting AssetManager...")
             Status("Loading...")
@@ -34,7 +35,7 @@ Public Class MainForm
             If OpenConnections() Then
                 ConnectionReady()
             Else
-                Dim blah = Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect")
+                Dim blah = Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect", Me)
                 EndProgram()
             End If
             ExtendedMethods.DoubleBuffered(ResultGrid, True)
@@ -44,7 +45,7 @@ Public Class MainForm
             Asset.GetAccessLevels()
             Asset.GetUserAccess()
             If Not CanAccess(AccessGroup.CanRun, UserAccess.intAccessLevel) Then
-                Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied")
+                Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", Me)
                 EndProgram()
             End If
             If CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel) Then
@@ -77,9 +78,15 @@ Public Class MainForm
     End Sub
     Private Sub GetGridStyles()
         'set colors
-        ResultGrid.DefaultCellStyle.SelectionBackColor = colSelectColor
+
         DefGridBC = ResultGrid.DefaultCellStyle.BackColor
         DefGridSelCol = ResultGrid.DefaultCellStyle.SelectionBackColor
+
+        ResultGrid.DefaultCellStyle.SelectionBackColor = colSelectColor
+        MyGridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
+        MyGridTheme.CellSelectColor = ResultGrid.DefaultCellStyle.SelectionBackColor
+        MyGridTheme.RowHighlightColor = colHighlightColor
+
         Dim tmpStyle As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         tmpStyle.Alignment = ResultGrid.DefaultCellStyle.Alignment
         tmpStyle.BackColor = ResultGrid.DefaultCellStyle.BackColor
@@ -264,7 +271,7 @@ Public Class MainForm
             End If
         Next
         If strDynaQry = "" Then
-            Dim blah = Message("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing")
+            Dim blah = Message("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing", Me)
             Exit Sub
         End If
         Dim strQry = strStartQry & strDynaQry
@@ -293,7 +300,7 @@ Public Class MainForm
         If Not DeviceIsOpen(strGUID) Then
             ResultGrid.Enabled = False
             Waiting()
-            Dim NewView As New frmView(Me, strGUID)
+            Dim NewView As New frmView(Me, MyGridTheme, strGUID)
             DoneWaiting()
             ResultGrid.Enabled = True
         Else
@@ -472,14 +479,7 @@ Public Class MainForm
         End Select
     End Sub
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
-        Dim BackColor As Color = DefGridBC
-        Dim SelectColor As Color = DefGridSelCol
-        If e.RowIndex > -1 Then
-            For Each cell As DataGridViewCell In ResultGrid.Rows(e.RowIndex).Cells
-                cell.Style.SelectionBackColor = SelectColor
-                cell.Style.BackColor = BackColor
-            Next
-        End If
+        LeaveRow(ResultGrid, MyGridTheme, e.RowIndex)
     End Sub
     Private Sub ResultGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ResultGrid.CellMouseDown
         On Error Resume Next
@@ -489,7 +489,9 @@ Public Class MainForm
         End If
     End Sub
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
-        HighlightCurrentRow(e.RowIndex)
+        If Not bolGridFilling Then
+            HighlightRow(ResultGrid, MyGridTheme, e.RowIndex)
+        End If
     End Sub
     Private Sub ReconnectThread_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
         StatusBar("Trying to reconnect... " & ConnectAttempts)
@@ -499,7 +501,7 @@ Public Class MainForm
         StatusBar("Connected!")
     End Sub
     Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
-        Dim ViewAttachments As New frmAttachments(Me)
+        Dim ViewAttachments As New frmAttachments(Me, MyGridTheme)
         ViewAttachments.bolAdminMode = CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel)
         ViewAttachments.ListAttachments()
         ViewAttachments.Text = ViewAttachments.Text & " - MANAGE ALL ATTACHMENTS"
@@ -508,9 +510,9 @@ Public Class MainForm
     End Sub
     Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
         If ApplicationDeployment.IsNetworkDeployed Then
-            Message(ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString)
+            Message(ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString,,, Me)
         Else
-            Message("Debug")
+            Message("Debug",,, Me)
         End If
     End Sub
     Private Sub cmbEquipType_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType.DropDown

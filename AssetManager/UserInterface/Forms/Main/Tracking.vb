@@ -24,7 +24,7 @@ Public Class Tracking
                 If TypeOf c Is TextBox Then
                     If c.Visible Then
                         If Trim(c.Text) = "" Then
-                            Dim blah = Message("Please complete all fields.", vbOKOnly + vbExclamation, "Missing Data")
+                            Dim blah = Message("Please complete all fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
                             Return False
                         End If
                     End If
@@ -35,7 +35,7 @@ Public Class Tracking
             For Each c In CheckInBox.Controls
                 If TypeOf c Is TextBox Then
                     If Trim(c.Text) = "" Then
-                        Dim blah = Message("Please complete all fields.", vbOKOnly + vbExclamation, "Missing Data")
+                        Dim blah = Message("Please complete all fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
                         Return False
                     End If
                 End If
@@ -142,9 +142,9 @@ VALUES(@" & trackable.CheckType & ",
             cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.strDeviceUID)
             rows = rows + cmd.ExecuteNonQuery()
             If rows = 2 Then
-                Dim blah = Message("Device Checked Out!", vbOKOnly + vbInformation, "Success")
+                Dim blah = Message("Device Checked Out!", vbOKOnly + vbInformation, "Success", Me)
             Else
-                Dim blah = Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result")
+                Dim blah = Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
             End If
             Me.Dispose()
             MyParent.ViewDevice(CurrentTrackingDevice.strGUID)
@@ -199,9 +199,9 @@ VALUES (@" & trackable.CheckType & ",
             cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.strDeviceUID)
             rows = rows + cmd.ExecuteNonQuery()
             If rows = 2 Then
-                Dim blah = Message("Device Checked In!", vbOKOnly + vbInformation, "Success")
+                Dim blah = Message("Device Checked In!", vbOKOnly + vbInformation, "Success", Me)
             Else
-                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result")
+                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
             End If
             Me.Dispose()
             cmd.Dispose()
