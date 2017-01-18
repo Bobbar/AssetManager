@@ -122,7 +122,6 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         DataGridMunis_Inventory.DefaultCellStyle = GridStyles
         DataGridMunis_Requisition.DefaultCellStyle = GridStyles
         If CurrentMunisDevice.strGUID IsNot Nothing Then
-        Else
             Me.Text = Me.Text + FormTitle(CurrentMunisDevice)
         End If
         bolGridFilling = False
