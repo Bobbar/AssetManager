@@ -30,6 +30,8 @@ Class frmAttachments
         Tag = ParentForm
         Icon = ParentForm.Icon
         MyGridTheme = GridTheme
+        ExtendedMethods.DoubleBuffered(AttachGrid, True)
+        StatusBar("Idle...")
         If Not IsNothing(AttachInfo) Then
             If TypeOf AttachInfo Is Request_Info Then
                 AttachType = Entry_Type.Sibi
@@ -41,8 +43,6 @@ Class frmAttachments
                 SibiGroup.Dock = DockStyle.Top
                 FillFolderCombos()
                 FillSibiInfo()
-                Show()
-                Activate()
             ElseIf TypeOf AttachInfo Is Device_Info Then
                 AttachType = Entry_Type.Device
                 AttachDevice = AttachInfo
@@ -54,8 +54,6 @@ Class frmAttachments
                 MoveStripMenuItem.Visible = False
                 FolderPanel.Visible = False
                 FillDeviceInfo()
-                Show()
-                Activate()
             End If
         Else
             SibiGroup.Visible = False
@@ -63,9 +61,16 @@ Class frmAttachments
             FolderPanel.Visible = False
             AttachType = Entry_Type.Device
             AttachTable = dev_attachments.TableName
-            Show()
-            Activate()
         End If
+
+        If CanAccess(AccessGroup.ManageAttachment, UserAccess.intAccessLevel) Then
+            cmdUpload.Enabled = True
+            cmdDelete.Enabled = True
+        Else
+            cmdUpload.Enabled = False
+            cmdDelete.Enabled = False
+        End If
+        ListAttachments()
     End Sub
     Private AttachIndex As New List(Of Attach_Info)
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
@@ -206,16 +211,17 @@ Class frmAttachments
             bolGridFilling = True
             AttachGrid.DataSource = table
             AttachGrid.Columns("Filename").DefaultCellStyle.Font = New Font("Consolas", 9.75, FontStyle.Bold)
-            AttachGrid.ClearSelection()
             table.Dispose()
+            RefreshAttachCount()
             DoneWaiting()
             Me.Show()
+            AttachGrid.ClearSelection()
             bolGridFilling = False
-            RefreshAttachCount()
+
         Catch ex As Exception
             DoneWaiting()
-        ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        Exit Sub
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Exit Sub
         End Try
     End Sub
     Private Sub RefreshAttachCount()
@@ -256,18 +262,18 @@ Class frmAttachments
         StatusLabel.Text = Text
         Me.Refresh()
     End Sub
-    Private Sub Attachments_Load(sender As Object, e As EventArgs) Handles Me.Load
-        ExtendedMethods.DoubleBuffered(AttachGrid, True)
-        StatusBar("Idle...")
-        If CanAccess(AccessGroup.ManageAttachment, UserAccess.intAccessLevel) Then
-            cmdUpload.Enabled = True
-            cmdDelete.Enabled = True
-        Else
-            cmdUpload.Enabled = False
-            cmdDelete.Enabled = False
-        End If
-        ListAttachments()
-    End Sub
+    'Private Sub Attachments_Load(sender As Object, e As EventArgs) Handles Me.Load
+    '    ExtendedMethods.DoubleBuffered(AttachGrid, True)
+    '    StatusBar("Idle...")
+    '    If CanAccess(AccessGroup.ManageAttachment, UserAccess.intAccessLevel) Then
+    '        cmdUpload.Enabled = True
+    '        cmdDelete.Enabled = True
+    '    Else
+    '        cmdUpload.Enabled = False
+    '        cmdDelete.Enabled = False
+    '    End If
+    '    ListAttachments()
+    'End Sub
     Private Sub FillFolderCombos()
         FillComboBox(SibiIndex.AttachFolder, cmbFolder)
         FillToolComboBox(SibiIndex.AttachFolder, cmbMoveFolder)
@@ -686,8 +692,11 @@ VALUES(@" & dev_attachments.FKey & ",
         If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
     End Sub
     Private Sub cmbFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFolder.SelectedIndexChanged
-        ListAttachments()
-        strSelectedFolder = GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
+        If Visible Then
+            ListAttachments()
+            strSelectedFolder = GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
+        End If
+
     End Sub
     Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub

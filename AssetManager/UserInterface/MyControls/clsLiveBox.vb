@@ -166,6 +166,7 @@ Public Class clsLiveBox
         End If
     End Sub
     Private Sub StartLiveSearch(Args As LiveBoxArgs)
+        HideLiveBox()
         CurrentLiveBoxArgs = Args
         Dim strSearchString As String = Trim(CurrentLiveBoxArgs.Control.Text)
         If strSearchString <> "" Then

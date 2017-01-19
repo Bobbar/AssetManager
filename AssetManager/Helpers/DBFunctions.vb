@@ -78,7 +78,6 @@ Public Module DBFunctions
         End With
     End Sub
     Public Function ConnectionReady() As Boolean
-        Asset.CheckConnection()
         Select Case GlobalConn.State
             Case ConnectionState.Closed
                 Return False
