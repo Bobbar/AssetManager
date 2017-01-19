@@ -266,12 +266,13 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
         Try
             Waiting()
-            'TODO: Find a solution to the TabControls glitchyness that requires odd steps (like 2 x Show() calls) to get around spontaneous style changes of contained controls.
-            Me.Show()
+            bolGridFilling = True
             If ViewHistory(DeviceUID) Then
                 ViewTracking(CurrentViewDevice.strGUID)
                 Me.Text = Me.Text + FormTitle(CurrentViewDevice)
                 Me.Show()
+                DataGridHistory.ClearSelection()
+                bolGridFilling = False
             Else
                 Me.Dispose()
             End If
@@ -360,10 +361,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                            NoNull(r.Item(historical_dev.PurchaseDate)),
                            NoNull(r.Item(historical_dev.History_Entry_UID)))
                 Next
-                bolGridFilling = True
                 Grid.DataSource = table
-                Grid.ClearSelection()
-                bolGridFilling = False
                 table.Dispose()
             Else
                 table.Dispose()
