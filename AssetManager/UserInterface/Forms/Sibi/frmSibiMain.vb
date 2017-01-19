@@ -4,7 +4,7 @@ Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
     Private MyWindowList As WindowList
     Private LastCmd As MySqlCommand
-    Private MyGridTheme As Grid_Theme
+    Private MyGridTheme As New Grid_Theme
 
     Public Sub RefreshResults()
         ExecuteCmd(LastCmd)

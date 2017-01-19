@@ -11,7 +11,7 @@ Public Class frmView
     Private MyLiveBox As New clsLiveBox(Me)
     Private PrevWindowState As Integer
     Private MyWindowList As WindowList
-    Private MyGridTheme As Grid_Theme
+    Private MyGridTheme As New Grid_Theme
     Private bolGridFilling As Boolean = False
     Private Structure Ping_Results
         Public CanPing As Boolean

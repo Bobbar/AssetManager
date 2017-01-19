@@ -100,3 +100,16 @@ Public Class Attachment
         End Get
     End Property
 End Class
+Public Class Grid_Theme
+    Sub New(HighlightCol As Color, CellSelCol As Color, BackCol As Color)
+        RowHighlightColor = HighlightCol
+        CellSelectColor = CellSelCol
+        BackColor = BackCol
+    End Sub
+    Sub New()
+
+    End Sub
+    Public RowHighlightColor As Color
+    Public CellSelectColor As Color
+    Public BackColor As Color
+End Class

@@ -114,9 +114,5 @@ Public Structure Attach_Info
     Public MD5 As String
     Public FileUID As String
 End Structure
-Public Structure Grid_Theme
-    Public RowHighlightColor As Color
-    Public CellSelectColor As Color
-    Public BackColor As Color
-End Structure
+
 

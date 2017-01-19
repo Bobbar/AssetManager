@@ -19,4 +19,7 @@
     Public colAssetToolBarColor As Color = Color.FromArgb(249, 226, 166)
     Public colSibiToolBarColor As Color = Color.FromArgb(148, 213, 255)
     Public DefGridBC As Color, DefGridSelCol As Color
+    Public DefaultSibiTheme As New Grid_Theme(colHighlightBlue, colSibiSelectColor, Color.FromArgb(64, 64, 64))
+
+
 End Module

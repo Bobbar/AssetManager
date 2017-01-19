@@ -9,7 +9,7 @@ Public Class frmManageRequest
     Private MyText As String
     Private bolNewRequest As Boolean = False
     Private MyWindowList As WindowList
-    Private MyGridTheme As Grid_Theme
+    Private MyGridTheme As New Grid_Theme
     Sub New(ParentForm As Form, GridTheme As Grid_Theme, RequestUID As String)
         InitializeComponent()
         MyGridTheme = GridTheme
@@ -18,6 +18,7 @@ Public Class frmManageRequest
     End Sub
     Sub New(ParentForm As Form)
         InitializeComponent()
+        MyGridTheme = DefaultSibiTheme
         InitForm(ParentForm)
         Text += " - *New Request*"
         NewRequest()
@@ -306,7 +307,7 @@ Public Class frmManageRequest
     Private Function CollectData() As Request_Info
         Try
             Dim info As Request_Info
-            RequestItemsGrid.EndEdit()
+            ' RequestItemsGrid.EndEdit()
             With info
                 .strDescription = Trim(txtDescription.Text)
                 .strUser = Trim(txtUser.Text)

@@ -19,7 +19,7 @@ Public Class MainForm
     Private strLastQry As String
     Private cmdLastCommand As MySqlCommand
     Private MyWindowList As WindowList
-    Private MyGridTheme As Grid_Theme
+    Private MyGridTheme As New Grid_Theme
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadProgram()
     End Sub

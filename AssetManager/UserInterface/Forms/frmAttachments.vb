@@ -24,7 +24,7 @@ Class frmAttachments
     Private AttachType As Entry_Type
     Public AttachFolderID As String
     Private AttachTable As String
-    Private MyGridTheme As Grid_Theme
+    Private MyGridTheme As New Grid_Theme
     Sub New(ParentForm As Form, GridTheme As Grid_Theme, Optional AttachInfo As Object = Nothing)
         InitializeComponent()
         Tag = ParentForm
