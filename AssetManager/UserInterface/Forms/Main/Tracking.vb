@@ -218,10 +218,10 @@ VALUES (@" & trackable.CheckType & ",
         End Try
     End Sub
     Private Sub Waiting()
-        Me.Cursor = Cursors.WaitCursor
+        SetCursor(Cursors.WaitCursor)
     End Sub
     Private Sub DoneWaiting()
-        Me.Cursor = Cursors.Default
+        SetCursor(Cursors.Default)
     End Sub
     Private Sub cmdCheckOut_Click(sender As Object, e As EventArgs) Handles cmdCheckOut.Click
         CheckOut()

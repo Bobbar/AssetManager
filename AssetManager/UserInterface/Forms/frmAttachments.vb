@@ -38,6 +38,7 @@ Class frmAttachments
                 AttachRequest = AttachInfo
                 AttachFolderID = AttachRequest.strUID
                 AttachTable = sibi_attachments.TableName
+                strSelectedFolder = GetHumanValueFromIndex(SibiIndex.AttachFolder, 0)
                 Me.Text = "Sibi Attachements"
                 DeviceGroup.Visible = False
                 SibiGroup.Dock = DockStyle.Top
@@ -102,17 +103,16 @@ Class frmAttachments
     End Sub
     Private Sub WorkerFeedback(WorkerRunning As Boolean)
         If WorkerRunning Then
-            Me.Cursor = Cursors.AppStarting
+            SetCursor(Cursors.WaitCursor)
             intProgress = 0
             ProgressBar1.Value = 0
             ProgressBar1.Visible = True
             cmdCancel.Visible = True
             Spinner.Visible = True
             ProgTimer.Enabled = True
-            Me.Refresh()
         Else
             lngBytesMoved = 0
-            Me.Cursor = Cursors.Default
+            SetCursor(Cursors.Default)
             stpSpeed.Stop()
             stpSpeed.Reset()
             intProgress = 0
@@ -124,7 +124,6 @@ Class frmAttachments
             statMBPS.Text = Nothing
             StatusBar("Idle...")
             DoneWaiting()
-            Me.Refresh()
         End If
     End Sub
     Private Function GetQry() As String
@@ -251,29 +250,17 @@ Class frmAttachments
         End If
     End Sub
     Private Sub Waiting()
-        Me.Cursor = Cursors.WaitCursor
+        SetCursor(Cursors.WaitCursor)
         StatusBar("Processing...")
     End Sub
     Private Sub DoneWaiting()
-        Me.Cursor = Cursors.Default
+        SetCursor(Cursors.Default)
         StatusBar("Idle...")
     End Sub
     Public Sub StatusBar(Text As String)
         StatusLabel.Text = Text
-        Me.Refresh()
+        Application.DoEvents()
     End Sub
-    'Private Sub Attachments_Load(sender As Object, e As EventArgs) Handles Me.Load
-    '    ExtendedMethods.DoubleBuffered(AttachGrid, True)
-    '    StatusBar("Idle...")
-    '    If CanAccess(AccessGroup.ManageAttachment, UserAccess.intAccessLevel) Then
-    '        cmdUpload.Enabled = True
-    '        cmdDelete.Enabled = True
-    '    Else
-    '        cmdUpload.Enabled = False
-    '        cmdDelete.Enabled = False
-    '    End If
-    '    ListAttachments()
-    'End Sub
     Private Sub FillFolderCombos()
         FillComboBox(SibiIndex.AttachFolder, cmbFolder)
         FillToolComboBox(SibiIndex.AttachFolder, cmbMoveFolder)
@@ -615,7 +602,7 @@ VALUES(@" & dev_attachments.FKey & ",
                 Else
                 End If
             Else
-                MessageBox.Show("The download was cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                'Message("The download was cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)

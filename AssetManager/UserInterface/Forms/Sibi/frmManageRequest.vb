@@ -11,10 +11,12 @@ Public Class frmManageRequest
     Private MyWindowList As WindowList
     Private MyGridTheme As New Grid_Theme
     Sub New(ParentForm As Form, GridTheme As Grid_Theme, RequestUID As String)
+        Waiting()
         InitializeComponent()
         MyGridTheme = GridTheme
         InitForm(ParentForm)
         OpenRequest(RequestUID)
+        DoneWaiting()
     End Sub
     Sub New(ParentForm As Form)
         InitializeComponent()
@@ -576,6 +578,7 @@ VALUES
         End Try
     End Function
     Public Sub OpenRequest(RequestUID As String)
+        Waiting()
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT * FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_request_items.Sequence
@@ -608,6 +611,8 @@ VALUES
             Else
                 EndProgram()
             End If
+        Finally
+            DoneWaiting()
         End Try
     End Sub
     Private Sub LoadNotes(RequestUID As String)
@@ -782,6 +787,7 @@ VALUES
         If IsNothing(CurrentRequest.RequstItems) Then Exit Sub
         Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
+            Waiting()
             If Asset.DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
                 Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                 CurrentRequest = Nothing
@@ -789,6 +795,7 @@ VALUES
                     Dim ParentForm As frmSibiMain = Me.Tag
                     ParentForm.RefreshResults()
                 End If
+                DoneWaiting()
                 Me.Dispose()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)
@@ -830,11 +837,6 @@ VALUES
             End If
         End If
     End Sub
-    Private Sub cmdClearForm_Click(sender As Object, e As EventArgs) Handles cmdClearForm.Click
-        ClearAll()
-        Me.Text = MyText
-        CurrentRequest = Nothing
-    End Sub
     Private Sub RequestItemsGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles RequestItemsGrid.CellMouseDown
         On Error Resume Next
         If e.Button = MouseButtons.Right And Not RequestItemsGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
@@ -860,7 +862,13 @@ VALUES
         LeaveRow(RequestItemsGrid, MyGridTheme, e.RowIndex)
     End Sub
     Private Sub LookupDevice(Device As Device_Info)
-        Dim newView As New frmView(Me, MyGridTheme, Device.strGUID)
+        If Not DeviceIsOpen(Device.strGUID) Then
+            Waiting()
+            Dim NewView As New frmView(Me, MyGridTheme, Device.strGUID)
+            DoneWaiting()
+        Else
+            ActivateFormByUID(Device.strGUID)
+        End If
     End Sub
     Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click
         If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value.ToString IsNot "" Then
@@ -935,5 +943,11 @@ VALUES
     End Sub
     Private Sub cmdNewNote_Click(sender As Object, e As EventArgs) Handles cmdNewNote.Click
         AddNote()
+    End Sub
+    Private Sub Waiting()
+        SetCursor(Cursors.WaitCursor)
+    End Sub
+    Private Sub DoneWaiting()
+        SetCursor(Cursors.Default)
     End Sub
 End Class

@@ -26,7 +26,6 @@ Public Class MainForm
     Private Sub LoadProgram()
         Try
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
-
             ToolStrip1.BackColor = colAssetToolBarColor
             Logger("Starting AssetManager...")
             Status("Loading...")
@@ -320,11 +319,11 @@ Public Class MainForm
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub Waiting()
-        Me.Cursor = Cursors.WaitCursor
+        SetCursor(Cursors.WaitCursor)
         StatusBar("Processing...")
     End Sub
     Private Sub DoneWaiting()
-        Me.Cursor = Cursors.Default
+        SetCursor(Cursors.Default)
         If ConnectionReady() Then StatusBar("Idle...")
     End Sub
     Public Sub StatusBar(Text As String)
@@ -542,16 +541,17 @@ Public Class MainForm
             Exit Sub
         End If
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
+        Waiting()
         If Not SibiIsOpen() Then
             frmSibiMain.Tag = Me
             frmSibiMain.Show()
             frmSibiMain.Activate()
-            ' MyWindowList.RefreshWindowList()
         Else
             frmSibiMain.Show()
             frmSibiMain.Activate()
             frmSibiMain.WindowState = FormWindowState.Normal
         End If
+        DoneWaiting()
     End Sub
     Private Sub tsmUserManager_Click(sender As Object, e As EventArgs) Handles tsmUserManager.Click
         Dim NewUserMan As New frmUserManager(Me)

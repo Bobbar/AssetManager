@@ -205,8 +205,7 @@ Module OtherFunctions
     End Function
     Public Function Message(ByVal Prompt As String, Optional ByVal Buttons As Integer = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As MsgBoxResult
         Dim NewMessage As New MyDialog(ParentFrm)
-        '  NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
-        Return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm) 'NewMessage.DialogResult
+        Return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
     End Function
     Public Function CheckForActiveTransfers() As Boolean
         Dim CancelClose As Boolean = False
@@ -269,6 +268,11 @@ Module OtherFunctions
                 cell.Style.SelectionBackColor = SelectColor
                 cell.Style.BackColor = BackColor
             Next
+        End If
+    End Sub
+    Public Sub SetCursor(CursorType As Cursor)
+        If Cursor.Current IsNot CursorType Then
+            Cursor.Current = CursorType
         End If
     End Sub
 End Module

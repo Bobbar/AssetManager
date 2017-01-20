@@ -11,10 +11,10 @@ Public Class View_Tracking
         Show()
     End Sub
     Private Sub Waiting()
-        Me.Cursor = Cursors.WaitCursor
+        SetCursor(Cursors.WaitCursor)
     End Sub
     Private Sub DoneWaiting()
-        Me.Cursor = Cursors.Default
+        SetCursor(Cursors.Default)
     End Sub
     Private Sub ViewTrackingEntry(ByVal EntryUID As String, ByRef Device As Device_Info)
         Try

@@ -73,7 +73,6 @@ Public Class frmSibiMain
     Private Sub ExecuteCmd(cmd As MySqlCommand)
         Try
             LastCmd = cmd
-            Dim LocalSQLComm As New clsMySQL_Comms
             Dim QryComm As MySqlCommand = cmd
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
@@ -259,5 +258,11 @@ Public Class frmSibiMain
     End Sub
     Private Sub txtRTNum_TextChanged(sender As Object, e As EventArgs) Handles txtRTNum.TextChanged
         DynamicSearch()
+    End Sub
+    Private Sub Waiting()
+        SetCursor(Cursors.WaitCursor)
+    End Sub
+    Private Sub DoneWaiting()
+        SetCursor(Cursors.Default)
     End Sub
 End Class

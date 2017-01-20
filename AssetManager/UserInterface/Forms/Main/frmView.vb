@@ -34,7 +34,6 @@ Public Class frmView
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
         ViewDevice(DeviceGUID)
-        CheckRDP()
     End Sub
     Public Sub SetAttachCount()
         AttachmentTool.Text = "(" + Asset.GetAttachmentCount(CurrentViewDevice).ToString + ")"
@@ -273,6 +272,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                 Me.Show()
                 DataGridHistory.ClearSelection()
                 bolGridFilling = False
+                CheckRDP()
             Else
                 Me.Dispose()
             End If
@@ -408,11 +408,11 @@ VALUES (@" & historical_dev.ChangeType & ",
         End Try
     End Sub
     Private Sub Waiting()
-        Me.Cursor = Cursors.WaitCursor
+        SetCursor(Cursors.WaitCursor)
         StatusBar("Processing...")
     End Sub
     Private Sub DoneWaiting()
-        Me.Cursor = Cursors.Default
+        SetCursor(Cursors.Default)
         StatusBar("Idle...")
     End Sub
     Public Sub StatusBar(Text As String)

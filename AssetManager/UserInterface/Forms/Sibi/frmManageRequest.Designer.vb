@@ -73,7 +73,6 @@ Partial Class frmManageRequest
         Me.ToolStrip = New AssetManager.MyToolStrip()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
-        Me.cmdClearForm = New System.Windows.Forms.ToolStripButton()
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
         Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
@@ -585,7 +584,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(148, Byte), Integer), CType(CType(213, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdClearForm, Me.cmdDelete, Me.cmdAddNote, Me.cmdAttachments, Me.tsdSelectWindow})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.cmdAttachments, Me.tsdSelectWindow})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
@@ -611,16 +610,6 @@ Partial Class frmManageRequest
         Me.cmdUpdate.Size = New System.Drawing.Size(39, 34)
         Me.cmdUpdate.Text = "Update"
         Me.cmdUpdate.ToolTipText = "Modify"
-        '
-        'cmdClearForm
-        '
-        Me.cmdClearForm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.cmdClearForm.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
-        Me.cmdClearForm.Name = "cmdClearForm"
-        Me.cmdClearForm.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
-        Me.cmdClearForm.Size = New System.Drawing.Size(39, 34)
-        Me.cmdClearForm.Text = "Clear Form"
-        Me.cmdClearForm.Visible = False
         '
         'cmdDelete
         '
@@ -708,7 +697,6 @@ Partial Class frmManageRequest
     Friend WithEvents cmdDelete As ToolStripButton
     Friend WithEvents cmdAddNote As ToolStripButton
     Friend WithEvents cmdAttachments As ToolStripButton
-    Friend WithEvents cmdClearForm As ToolStripButton
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Label10 As Label
     Friend WithEvents RequestItemsGrid As DataGridView

@@ -13,10 +13,10 @@ Public Class View_Entry
         Activate()
     End Sub
     Private Sub Waiting()
-        Me.Cursor = Cursors.WaitCursor
+        SetCursor(Cursors.WaitCursor)
     End Sub
     Private Sub DoneWaiting()
-        Me.Cursor = Cursors.Default
+        SetCursor(Cursors.Default)
     End Sub
     Private Sub ViewEntry(ByVal EntryUID As String)
         If Not ConnectionReady() Then
