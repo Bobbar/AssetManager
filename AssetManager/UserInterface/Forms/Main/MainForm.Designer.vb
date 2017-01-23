@@ -636,14 +636,15 @@ Partial Class MainForm
         '
         'ToolStrip1
         '
+        Me.ToolStrip1.AutoSize = False
         Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
-        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddDeviceTool, Me.AdminDropDown, Me.tsdSelectWindow, Me.ToolStripSeparator5, Me.cmdSibi})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ToolStrip1.Size = New System.Drawing.Size(1240, 32)
+        Me.ToolStrip1.Size = New System.Drawing.Size(1240, 37)
         Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 6
         Me.ToolStrip1.Text = "ToolStrip1"
@@ -654,7 +655,7 @@ Partial Class MainForm
         Me.AddDeviceTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AddDeviceTool.Name = "AddDeviceTool"
         Me.AddDeviceTool.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.AddDeviceTool.Size = New System.Drawing.Size(123, 29)
+        Me.AddDeviceTool.Size = New System.Drawing.Size(137, 29)
         Me.AddDeviceTool.Text = "Add Device"
         '
         'AdminDropDown
@@ -664,7 +665,7 @@ Partial Class MainForm
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.Name = "AdminDropDown"
         Me.AdminDropDown.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.AdminDropDown.Size = New System.Drawing.Size(128, 29)
+        Me.AdminDropDown.Size = New System.Drawing.Size(143, 34)
         Me.AdminDropDown.Text = "Admin Tools"
         '
         'cmbDBs
@@ -679,7 +680,7 @@ Partial Class MainForm
         'ManageAttachmentsToolStripMenuItem
         '
         Me.ManageAttachmentsToolStripMenuItem.Name = "ManageAttachmentsToolStripMenuItem"
-        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(227, 26)
         Me.ManageAttachmentsToolStripMenuItem.Text = "Manage Attachments"
         Me.ManageAttachmentsToolStripMenuItem.ToolTipText = "Manage ALL Attachments"
         '
@@ -696,19 +697,19 @@ Partial Class MainForm
         '
         Me.tsmUserManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
         Me.tsmUserManager.Name = "tsmUserManager"
-        Me.tsmUserManager.Size = New System.Drawing.Size(210, 22)
+        Me.tsmUserManager.Size = New System.Drawing.Size(227, 26)
         Me.tsmUserManager.Text = "User Manager"
         '
         'TextEnCrypterToolStripMenuItem
         '
         Me.TextEnCrypterToolStripMenuItem.Name = "TextEnCrypterToolStripMenuItem"
-        Me.TextEnCrypterToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.TextEnCrypterToolStripMenuItem.Size = New System.Drawing.Size(227, 26)
         Me.TextEnCrypterToolStripMenuItem.Text = "Text Encrypter"
         '
         'ScanAttachmentToolStripMenuItem
         '
         Me.ScanAttachmentToolStripMenuItem.Name = "ScanAttachmentToolStripMenuItem"
-        Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(227, 26)
         Me.ScanAttachmentToolStripMenuItem.Text = "Scan Attachments"
         '
         'tsdSelectWindow
@@ -717,7 +718,7 @@ Partial Class MainForm
         Me.tsdSelectWindow.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.tsdSelectWindow.Name = "tsdSelectWindow"
         Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.tsdSelectWindow.Size = New System.Drawing.Size(151, 29)
+        Me.tsdSelectWindow.Size = New System.Drawing.Size(171, 29)
         Me.tsdSelectWindow.Text = "Select Window"
         '
         'ToolStripSeparator5

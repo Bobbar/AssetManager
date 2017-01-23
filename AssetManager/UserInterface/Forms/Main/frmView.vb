@@ -19,8 +19,9 @@ Public Class frmView
     End Structure
     Sub New(ParentForm As Form, GridTheme As Grid_Theme, DeviceGUID As String)
         InitializeComponent()
+        Debug.Print("Vis " & tsdSelectWindow.Visible.ToString)
         MyGridTheme = GridTheme
-        MyWindowList = New WindowList(Me, tsdSelectWindow)
+        ' MyWindowList = New WindowList(Me, tsdSelectWindow)
         MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
         MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, "dev_description")
         Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
@@ -34,6 +35,9 @@ Public Class frmView
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
         ExtendedMethods.DoubleBuffered(TrackingGrid, True)
         ViewDevice(DeviceGUID)
+    End Sub
+    Private Sub frmView_Load(sender As Object, e As EventArgs) Handles Me.Load
+        MyWindowList = New WindowList(Me, tsdSelectWindow)
     End Sub
     Public Sub SetAttachCount()
         AttachmentTool.Text = "(" + Asset.GetAttachmentCount(CurrentViewDevice).ToString + ")"
@@ -916,6 +920,11 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Sub
     Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
+        'If tsdSelectWindow.Visible = False Then
+        '    Me.Hide()
+        '    Application.DoEvents()
+        '    Me.Show()
+        'End If
         CheckRDP()
     End Sub
     Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
@@ -1013,4 +1022,22 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub DataGridHistory_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellLeave
         LeaveRow(DataGridHistory, MyGridTheme, e.RowIndex)
     End Sub
+
+    Private Sub frmView_LostFocus(sender As Object, e As EventArgs) Handles Me.LostFocus
+        Debug.Print(Me.ToString & " - " & Me.Focused.ToString)
+    End Sub
+
+    Private Sub frmView_Activated(sender As Object, e As EventArgs) Handles Me.Activated
+        Debug.Print("Activate")
+    End Sub
+
+    Private Sub frmView_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
+        Debug.Print(Me.ToString & " - " & Me.Focused.ToString)
+    End Sub
+
+    Private Sub frmView_Enter(sender As Object, e As EventArgs) Handles Me.Enter
+        Debug.Print("Enter")
+
+    End Sub
+
 End Class

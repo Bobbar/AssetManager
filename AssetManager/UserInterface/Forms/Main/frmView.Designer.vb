@@ -774,6 +774,7 @@ Partial Class frmView
         '
         'ToolStrip1
         '
+        Me.ToolStrip1.AutoSize = False
         Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
@@ -880,12 +881,14 @@ Partial Class frmView
         '
         'tsdSelectWindow
         '
+        Me.tsdSelectWindow.AutoSize = False
         Me.tsdSelectWindow.Image = Global.AssetManager.My.Resources.Resources.application_cascade_512
         Me.tsdSelectWindow.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.tsdSelectWindow.Name = "tsdSelectWindow"
         Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
         Me.tsdSelectWindow.Size = New System.Drawing.Size(171, 34)
         Me.tsdSelectWindow.Text = "Select Window"
+        Me.tsdSelectWindow.Visible = False
         '
         'ToolStripSeparator1
         '

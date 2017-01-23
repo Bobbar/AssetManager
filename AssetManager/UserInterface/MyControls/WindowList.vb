@@ -31,7 +31,6 @@
                 intFormCount = FormCount(MyParentForm)
                 DropDownControl.Text = CountText(intFormCount)
             End If
-
         End If
     End Sub
     Private Function FormCount(ParentForm As Form) As Integer
@@ -100,14 +99,18 @@
         Dim item As ToolStripItem = CType(sender, ToolStripItem)
         If e.Button = MouseButtons.Right Then
             Dim frm As Form = CType(item.Tag, Form)
-            RemoveHandler item.MouseDown, AddressOf WindowClick
-            item.Dispose()
             frm.Dispose()
-            intFormCount = FormCount(MyParentForm)
-            DropDownControl.Text = CountText(intFormCount)
             GC.Collect()
-            If DropDownControl.DropDownItems.Count = 0 Then
-                DropDownControl.HideDropDown()
+            If DropDownControl.DropDownItems.Count = 1 Then
+                DropDownControl.Visible = False
+                DropDownControl.DropDownItems.Clear()
+                RemoveHandler item.MouseDown, AddressOf WindowClick
+                item.Dispose()
+            Else
+                RemoveHandler item.MouseDown, AddressOf WindowClick
+                item.Dispose()
+                intFormCount = FormCount(MyParentForm)
+                DropDownControl.Text = CountText(intFormCount)
             End If
         ElseIf e.Button = MouseButtons.Left Then
             ActivateFormByHandle(CType(item.Tag, Form))
