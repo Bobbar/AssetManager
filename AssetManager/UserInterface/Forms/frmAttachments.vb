@@ -834,4 +834,8 @@ VALUES(@" & dev_attachments.FKey & ",
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Function
+
+    Private Sub AttachGrid_DragLeave(sender As Object, e As EventArgs) Handles AttachGrid.DragLeave
+        bolDragging = False
+    End Sub
 End Class

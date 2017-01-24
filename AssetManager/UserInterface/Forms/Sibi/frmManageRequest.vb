@@ -10,6 +10,7 @@ Public Class frmManageRequest
     Private bolNewRequest As Boolean = False
     Private MyWindowList As WindowList
     Private MyGridTheme As New Grid_Theme
+    Private bolDragging As Boolean = False
     Sub New(ParentForm As Form, GridTheme As Grid_Theme, RequestUID As String)
         Waiting()
         InitializeComponent()
@@ -111,7 +112,9 @@ Public Class frmManageRequest
                     Dim dtp As DateTimePicker = c
                     dtp.Enabled = False
                 Case TypeOf c Is CheckBox
-                    c.Enabled = False
+                    If c IsNot chkAllowDrag Then
+                        c.Enabled = False
+                    End If
                 Case TypeOf c Is Label
                     'do nut-zing
             End Select
@@ -213,7 +216,7 @@ Public Class frmManageRequest
         bolFieldsValid = True
         Dim ValidateResults As Boolean = CheckFields(Me, bolFieldsValid)
         If Not ValidateResults Then
-            Dim blah = Message("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data", Me.Tag)
+            Dim blah = Message("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
         End If
         Return ValidateResults
     End Function
@@ -405,7 +408,7 @@ VALUES
             cmd.Dispose()
             bolNewRequest = False
             pnlCreate.Visible = False
-            Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me.Tag)
+            Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
             If TypeOf Me.Tag Is frmSibiMain Then
                 Dim ParentForm As frmSibiMain = Me.Tag
                 ParentForm.RefreshResults()
@@ -755,15 +758,15 @@ VALUES
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
         Dim blah As MsgBoxResult
-        blah = Message("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row", Me.Tag)
+        blah = Message("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row", Me)
         If blah = vbYes Then
             If bolNewRequest Then
                 If DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index) Then
                 Else
-                    blah = Message("Failed to delete row.", vbExclamation + vbOKOnly, "Error", Me.Tag)
+                    blah = Message("Failed to delete row.", vbExclamation + vbOKOnly, "Error", Me)
                 End If
             Else
-                blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value.ToString, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me.Tag)
+                blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value.ToString, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me)
                 OpenRequest(CurrentRequest.strUID)
             End If
 
@@ -949,5 +952,66 @@ VALUES
     End Sub
     Private Sub DoneWaiting()
         SetCursor(Cursors.Default)
+    End Sub
+    Private MouseStartPos As Point
+    Private Function MouseIsDragging(Optional NewStartPos As Point = Nothing, Optional CurrentPos As Point = Nothing) As Boolean
+        Dim intMouseMoveThreshold As Integer = 50
+        If NewStartPos <> Nothing Then
+            MouseStartPos = NewStartPos
+        Else
+            Dim intDistanceMoved = Math.Sqrt((MouseStartPos.X - CurrentPos.X) ^ 2 + (MouseStartPos.Y - CurrentPos.Y) ^ 2)
+            If intDistanceMoved > intMouseMoveThreshold Then
+                Return True
+            Else
+                Return False
+            End If
+        End If
+        Return False
+    End Function
+    Private Sub RequestItemsGrid_MouseDown(sender As Object, e As MouseEventArgs) Handles RequestItemsGrid.MouseDown
+        MouseIsDragging(e.Location)
+    End Sub
+    Private Sub RequestItemsGrid_MouseMove(sender As Object, e As MouseEventArgs) Handles RequestItemsGrid.MouseMove
+        If RequestItemsGrid.SelectedRows.Count > 0 Then
+            If chkAllowDrag.Checked And Not bolDragging Then
+                If e.Button = MouseButtons.Left Then
+                    If MouseIsDragging(, e.Location) Then
+                        bolDragging = True
+                        RequestItemsGrid.DoDragDrop(RequestItemsGrid.SelectedRows(0), DragDropEffects.All)
+                    End If
+                End If
+            End If
+        End If
+    End Sub
+    Private Sub RequestItemsGrid_MouseUp(sender As Object, e As MouseEventArgs) Handles RequestItemsGrid.MouseUp
+        bolDragging = False
+    End Sub
+    Private Sub RequestItemsGrid_DragLeave(sender As Object, e As EventArgs) Handles RequestItemsGrid.DragLeave
+        bolDragging = False
+    End Sub
+    Private Sub RequestItemsGrid_DragEnter(sender As Object, e As DragEventArgs) Handles RequestItemsGrid.DragEnter
+        e.Effect = DragDropEffects.Copy
+    End Sub
+    Private Sub RequestItemsGrid_DragDrop(sender As Object, e As DragEventArgs) Handles RequestItemsGrid.DragDrop
+        Try
+            If bolUpdating Then
+                Dim R As DataGridViewRow = e.Data.GetData(GetType(DataGridViewRow)) 'get Row data then selectively add rows to grid.
+                RequestItemsGrid.Rows.Add(R.Cells(0).Value, R.Cells(1).Value, R.Cells(2).Value, R.Cells(3).Value, R.Cells(4).Value, R.Cells(5).Value, R.Cells(6).Value, R.Cells(7).Value, R.Cells(8).Value, R.Cells(9).Value, R.Cells(10).Value)
+            Else
+                If Not bolDragging Then
+                    Message("You must be modifying this request before you can drag-drop rows from another request.", vbOKOnly + MsgBoxStyle.Exclamation, "Not Allowed", Me)
+                End If
+            End If
+        Catch ex As Exception
+        End Try
+    End Sub
+    Private Sub chkAllowDrag_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowDrag.CheckedChanged
+        If chkAllowDrag.Checked Then
+            RequestItemsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+            RequestItemsGrid.MultiSelect = False
+        Else
+            RequestItemsGrid.SelectionMode = DataGridViewSelectionMode.CellSelect
+            RequestItemsGrid.MultiSelect = True
+        End If
     End Sub
 End Class
