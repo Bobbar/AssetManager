@@ -7,8 +7,8 @@ Public Class clsLiveBox
     Private LiveBox As ListBox
     Private strPrevSearchString As String
     Private dtLiveBoxData As DataTable
-    Private MySQLComms As New clsMySQL_Comms
-    Private LiveConn As New MySqlConnection
+
+    ' Private LiveConn As New MySqlConnection
     Private LiveBoxResults As DataTable
     Private LiveBoxControls As New List(Of LiveBoxArgs)
     Private Structure LiveBoxArgs
@@ -54,7 +54,7 @@ Public Class clsLiveBox
     Public Sub Unload()
         Try
             HideLiveBox()
-            Asset.CloseConnection(LiveConn)
+            '  MySQLComms.CloseConnection() '(LiveConn)
             LiveBox.Dispose()
         Catch
         End Try
@@ -91,25 +91,29 @@ Public Class clsLiveBox
         Try
             Dim strSearchString As String = DirectCast(e.Argument, String)
             strPrevSearchString = strSearchString
+            Dim MySQLComms As New clsMySQL_Comms
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
-            Dim cmd As New MySqlCommand
+
             Dim con As MySqlConnection = MySQLComms.NewConnection
             Dim strQry As String
             strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
-            cmd.Connection = con
-            cmd.CommandText = strQry
+            Dim cmd As MySqlCommand = MySQLComms.Return_SQLCommand(strQry)
+            'cmd.Connection = con
+            'cmd.CommandText = strQry
+
             cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
             da.SelectCommand = cmd
             da.Fill(ds)
             e.Result = ds.Tables(0)
             da.Dispose()
             ds.Dispose()
-            con.Close()
-            con.Dispose()
+            MySQLComms.CloseConnection()
+            'con.Close()
+            'con.Dispose()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            ConnectionReady()
+            ' ConnectionReady()
         End Try
     End Sub
     Private Sub LiveWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
@@ -141,7 +145,6 @@ Public Class clsLiveBox
             Else
                 LiveBox.Visible = False
             End If
-
         Catch
             LiveBox.Visible = False
             LiveBox.Items.Clear()
@@ -166,7 +169,6 @@ Public Class clsLiveBox
         End If
     End Sub
     Private Sub StartLiveSearch(Args As LiveBoxArgs)
-        HideLiveBox()
         CurrentLiveBoxArgs = Args
         Dim strSearchString As String = Trim(CurrentLiveBoxArgs.Control.Text)
         If strSearchString <> "" Then

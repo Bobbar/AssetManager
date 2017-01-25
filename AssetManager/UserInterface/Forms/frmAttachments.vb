@@ -427,15 +427,15 @@ VALUES(@" & dev_attachments.FKey & ",
                     e.Result = False
                 End If
                 FileNumber += 1
-                Asset.CloseConnection(conn)
+                LocalSQLComm.CloseConnection() '(conn)
                 UploadWorker.ReportProgress(3, "Idle...")
             Next
-            Asset.CloseConnection(conn)
+            LocalSQLComm.CloseConnection() '(conn)
             cmd.Dispose()
             UploadWorker.ReportProgress(3, "Idle...")
         Catch ex As Exception
             e.Result = False
-            Asset.CloseConnection(conn)
+            LocalSQLComm.CloseConnection() '(conn)
             UploadWorker.ReportProgress(1, "Idle...")
             If Not ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
         End Try

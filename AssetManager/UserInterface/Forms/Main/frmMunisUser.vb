@@ -44,7 +44,9 @@ Public Class frmMunisUser
         lblSelectedEmp.Text = "Selected Emp: " & SelectedEmpInfo.Name & " - " & SelectedEmpInfo.Number
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
+        Me.Cursor = Cursors.WaitCursor
         EmpNameSearch(Trim(txtSearchName.Text))
+        Me.Cursor = Cursors.Default
     End Sub
     Private Sub SelectEmp()
         If SelectedEmpInfo.Name <> "" AndAlso SelectedEmpInfo.Number <> "" Then
@@ -60,7 +62,11 @@ Public Class frmMunisUser
         SelectEmp()
     End Sub
     Private Sub txtSearchName_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSearchName.KeyDown
-        If e.KeyCode = Keys.Enter Then EmpNameSearch(Trim(txtSearchName.Text))
+        If e.KeyCode = Keys.Enter Then
+            Me.Cursor = Cursors.WaitCursor
+            EmpNameSearch(Trim(txtSearchName.Text))
+            Me.Cursor = Cursors.Default
+        End If
     End Sub
     Private Sub MunisResults_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles MunisResults.CellDoubleClick
         SelectEmp()

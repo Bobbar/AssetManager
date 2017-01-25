@@ -148,7 +148,7 @@ Module OtherFunctions
         ProgramEnding = True
         Logger("Ending Program...")
         PurgeTempDir()
-        GlobalConn.Close()
+        SQLComms.Connection.Close()
         Application.Exit()
         End
     End Sub

@@ -38,6 +38,20 @@ Partial Class MainForm
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.txtSerial = New System.Windows.Forms.TextBox()
         Me.SearchGroup = New System.Windows.Forms.GroupBox()
+        Me.cmdSearch = New System.Windows.Forms.Button()
+        Me.cmdClear = New System.Windows.Forms.Button()
+        Me.cmdShowAll = New System.Windows.Forms.Button()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.StripSpinner = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ConnStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
+        Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
+        Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.PanelNoScrollOnFocus1 = New AssetManager.PanelNoScrollOnFocus()
         Me.chkHistorical = New System.Windows.Forms.CheckBox()
         Me.cmdSupDevSearch = New System.Windows.Forms.Button()
@@ -60,20 +74,6 @@ Partial Class MainForm
         Me.txtCurUser = New System.Windows.Forms.TextBox()
         Me.txtAssetTagSearch = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
-        Me.cmdSearch = New System.Windows.Forms.Button()
-        Me.cmdClear = New System.Windows.Forms.Button()
-        Me.cmdShowAll = New System.Windows.Forms.Button()
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.StripSpinner = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ConnStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
-        Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
-        Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.ToolStrip1 = New AssetManager.MyToolStrip()
         Me.AddDeviceTool = New System.Windows.Forms.ToolStripButton()
         Me.AdminDropDown = New System.Windows.Forms.ToolStripDropDownButton()
@@ -92,9 +92,9 @@ Partial Class MainForm
         Me.InstantGroup.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SearchGroup.SuspendLayout()
-        Me.PanelNoScrollOnFocus1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.PanelNoScrollOnFocus1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -106,9 +106,9 @@ Partial Class MainForm
         Me.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.GroupBox1.Controls.Add(Me.ResultGrid)
         Me.GroupBox1.Controls.Add(Me.lblRecords)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 222)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 289)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1215, 403)
+        Me.GroupBox1.Size = New System.Drawing.Size(1215, 336)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         '
@@ -162,7 +162,7 @@ Partial Class MainForm
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1188, 365)
+        Me.ResultGrid.Size = New System.Drawing.Size(1188, 298)
         Me.ResultGrid.TabIndex = 17
         Me.ResultGrid.VirtualMode = True
         '
@@ -196,7 +196,7 @@ Partial Class MainForm
         Me.lblRecords.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblRecords.ForeColor = System.Drawing.Color.FromArgb(CType(CType(53, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(53, Byte), Integer))
-        Me.lblRecords.Location = New System.Drawing.Point(15, 387)
+        Me.lblRecords.Location = New System.Drawing.Point(15, 320)
         Me.lblRecords.Name = "lblRecords"
         Me.lblRecords.Size = New System.Drawing.Size(1188, 13)
         Me.lblRecords.TabIndex = 18
@@ -205,27 +205,31 @@ Partial Class MainForm
         '
         'InstantGroup
         '
+        Me.InstantGroup.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.InstantGroup.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.InstantGroup.Controls.Add(Me.Panel1)
         Me.InstantGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InstantGroup.Location = New System.Drawing.Point(9, 19)
         Me.InstantGroup.Name = "InstantGroup"
-        Me.InstantGroup.Size = New System.Drawing.Size(177, 149)
+        Me.InstantGroup.Size = New System.Drawing.Size(177, 216)
         Me.InstantGroup.TabIndex = 34
         Me.InstantGroup.TabStop = False
         Me.InstantGroup.Text = "Instant Lookup"
         '
         'Panel1
         '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel1.Controls.Add(Me.Label9)
         Me.Panel1.Controls.Add(Me.Label8)
         Me.Panel1.Controls.Add(Me.txtAssetTag)
         Me.Panel1.Controls.Add(Me.txtSerial)
         Me.Panel1.Location = New System.Drawing.Point(6, 20)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(165, 121)
+        Me.Panel1.Size = New System.Drawing.Size(165, 188)
         Me.Panel1.TabIndex = 39
         '
         'Label9
@@ -233,7 +237,7 @@ Partial Class MainForm
         Me.Label9.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(11, 53)
+        Me.Label9.Location = New System.Drawing.Point(12, 88)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(46, 16)
         Me.Label9.TabIndex = 38
@@ -244,7 +248,7 @@ Partial Class MainForm
         Me.Label8.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(11, 6)
+        Me.Label8.Location = New System.Drawing.Point(12, 41)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(73, 16)
         Me.Label8.TabIndex = 37
@@ -254,7 +258,7 @@ Partial Class MainForm
         '
         Me.txtAssetTag.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txtAssetTag.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTag.Location = New System.Drawing.Point(14, 23)
+        Me.txtAssetTag.Location = New System.Drawing.Point(15, 58)
         Me.txtAssetTag.MaxLength = 45
         Me.txtAssetTag.Name = "txtAssetTag"
         Me.txtAssetTag.Size = New System.Drawing.Size(135, 23)
@@ -264,7 +268,7 @@ Partial Class MainForm
         '
         Me.txtSerial.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txtSerial.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSerial.Location = New System.Drawing.Point(14, 72)
+        Me.txtSerial.Location = New System.Drawing.Point(15, 107)
         Me.txtSerial.MaxLength = 45
         Me.txtSerial.Name = "txtSerial"
         Me.txtSerial.Size = New System.Drawing.Size(135, 23)
@@ -274,265 +278,21 @@ Partial Class MainForm
         '
         Me.SearchGroup.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.SearchGroup.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.SearchGroup.Controls.Add(Me.PanelNoScrollOnFocus1)
         Me.SearchGroup.Controls.Add(Me.cmdSearch)
         Me.SearchGroup.Controls.Add(Me.cmdClear)
         Me.SearchGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SearchGroup.Location = New System.Drawing.Point(192, 19)
         Me.SearchGroup.Name = "SearchGroup"
-        Me.SearchGroup.Size = New System.Drawing.Size(862, 149)
+        Me.SearchGroup.Size = New System.Drawing.Size(862, 216)
         Me.SearchGroup.TabIndex = 31
         Me.SearchGroup.TabStop = False
-        Me.SearchGroup.Text = "Search"
-        '
-        'PanelNoScrollOnFocus1
-        '
-        Me.PanelNoScrollOnFocus1.AutoScroll = True
-        Me.PanelNoScrollOnFocus1.AutoScrollMargin = New System.Drawing.Size(10, 20)
-        Me.PanelNoScrollOnFocus1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.PanelNoScrollOnFocus1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.chkHistorical)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmdSupDevSearch)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label6)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label4)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtReplaceYear)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtDescription)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbOSType)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label2)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label5)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label1)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label10)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbStatus)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.chkTrackables)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label12)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbEquipType)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtSerialSearch)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label3)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbLocation)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtCurUser)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtAssetTagSearch)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label11)
-        Me.PanelNoScrollOnFocus1.Location = New System.Drawing.Point(11, 20)
-        Me.PanelNoScrollOnFocus1.Name = "PanelNoScrollOnFocus1"
-        Me.PanelNoScrollOnFocus1.Size = New System.Drawing.Size(732, 121)
-        Me.PanelNoScrollOnFocus1.TabIndex = 52
-        '
-        'chkHistorical
-        '
-        Me.chkHistorical.AutoSize = True
-        Me.chkHistorical.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkHistorical.Location = New System.Drawing.Point(425, 129)
-        Me.chkHistorical.Name = "chkHistorical"
-        Me.chkHistorical.Size = New System.Drawing.Size(89, 22)
-        Me.chkHistorical.TabIndex = 56
-        Me.chkHistorical.Text = "Historical"
-        Me.chkHistorical.UseVisualStyleBackColor = True
-        '
-        'cmdSupDevSearch
-        '
-        Me.cmdSupDevSearch.Location = New System.Drawing.Point(570, 117)
-        Me.cmdSupDevSearch.Name = "cmdSupDevSearch"
-        Me.cmdSupDevSearch.Size = New System.Drawing.Size(125, 44)
-        Me.cmdSupDevSearch.TabIndex = 55
-        Me.cmdSupDevSearch.Text = "Devices By Supervisor"
-        Me.cmdSupDevSearch.UseVisualStyleBackColor = True
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(176, 111)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(95, 16)
-        Me.Label6.TabIndex = 54
-        Me.Label6.Text = "Replace Year:"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(15, 9)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(73, 16)
-        Me.Label4.TabIndex = 48
-        Me.Label4.Text = "Asset Tag:"
-        '
-        'txtReplaceYear
-        '
-        Me.txtReplaceYear.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtReplaceYear.Location = New System.Drawing.Point(179, 129)
-        Me.txtReplaceYear.MaxLength = 200
-        Me.txtReplaceYear.Name = "txtReplaceYear"
-        Me.txtReplaceYear.Size = New System.Drawing.Size(100, 23)
-        Me.txtReplaceYear.TabIndex = 53
-        Me.txtReplaceYear.TabStop = False
-        '
-        'txtDescription
-        '
-        Me.txtDescription.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDescription.Location = New System.Drawing.Point(179, 75)
-        Me.txtDescription.MaxLength = 200
-        Me.txtDescription.Name = "txtDescription"
-        Me.txtDescription.Size = New System.Drawing.Size(330, 23)
-        Me.txtDescription.TabIndex = 43
-        Me.txtDescription.TabStop = False
-        '
-        'cmbOSType
-        '
-        Me.cmbOSType.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbOSType.FormattingEnabled = True
-        Me.cmbOSType.Location = New System.Drawing.Point(18, 129)
-        Me.cmbOSType.Name = "cmbOSType"
-        Me.cmbOSType.Size = New System.Drawing.Size(135, 23)
-        Me.cmbOSType.TabIndex = 51
-        Me.cmbOSType.TabStop = False
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(176, 57)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(79, 16)
-        Me.Label2.TabIndex = 44
-        Me.Label2.Text = "Description:"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(15, 110)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(65, 16)
-        Me.Label5.TabIndex = 52
-        Me.Label5.Text = "OS Type:"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(527, 57)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(48, 16)
-        Me.Label1.TabIndex = 42
-        Me.Label1.Text = "Status:"
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(347, 8)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(110, 16)
-        Me.Label10.TabIndex = 36
-        Me.Label10.Text = "Equipment Type:"
-        '
-        'cmbStatus
-        '
-        Me.cmbStatus.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbStatus.FormattingEnabled = True
-        Me.cmbStatus.Location = New System.Drawing.Point(530, 76)
-        Me.cmbStatus.Name = "cmbStatus"
-        Me.cmbStatus.Size = New System.Drawing.Size(165, 23)
-        Me.cmbStatus.TabIndex = 41
-        Me.cmbStatus.TabStop = False
-        '
-        'chkTrackables
-        '
-        Me.chkTrackables.AutoSize = True
-        Me.chkTrackables.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackables.Location = New System.Drawing.Point(304, 129)
-        Me.chkTrackables.Name = "chkTrackables"
-        Me.chkTrackables.Size = New System.Drawing.Size(100, 22)
-        Me.chkTrackables.TabIndex = 50
-        Me.chkTrackables.Text = "Trackables"
-        Me.chkTrackables.UseVisualStyleBackColor = True
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(527, 8)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(62, 16)
-        Me.Label12.TabIndex = 40
-        Me.Label12.Text = "Location:"
-        '
-        'cmbEquipType
-        '
-        Me.cmbEquipType.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbEquipType.FormattingEnabled = True
-        Me.cmbEquipType.Location = New System.Drawing.Point(350, 26)
-        Me.cmbEquipType.Name = "cmbEquipType"
-        Me.cmbEquipType.Size = New System.Drawing.Size(159, 23)
-        Me.cmbEquipType.TabIndex = 35
-        Me.cmbEquipType.TabStop = False
-        '
-        'txtSerialSearch
-        '
-        Me.txtSerialSearch.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSerialSearch.Location = New System.Drawing.Point(18, 75)
-        Me.txtSerialSearch.MaxLength = 45
-        Me.txtSerialSearch.Name = "txtSerialSearch"
-        Me.txtSerialSearch.Size = New System.Drawing.Size(135, 23)
-        Me.txtSerialSearch.TabIndex = 46
-        Me.txtSerialSearch.TabStop = False
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(15, 56)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(46, 16)
-        Me.Label3.TabIndex = 49
-        Me.Label3.Text = "Serial:"
-        '
-        'cmbLocation
-        '
-        Me.cmbLocation.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbLocation.FormattingEnabled = True
-        Me.cmbLocation.Location = New System.Drawing.Point(530, 27)
-        Me.cmbLocation.Name = "cmbLocation"
-        Me.cmbLocation.Size = New System.Drawing.Size(165, 23)
-        Me.cmbLocation.TabIndex = 39
-        Me.cmbLocation.TabStop = False
-        '
-        'txtCurUser
-        '
-        Me.txtCurUser.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCurUser.Location = New System.Drawing.Point(179, 27)
-        Me.txtCurUser.MaxLength = 45
-        Me.txtCurUser.Name = "txtCurUser"
-        Me.txtCurUser.Size = New System.Drawing.Size(148, 23)
-        Me.txtCurUser.TabIndex = 37
-        Me.txtCurUser.TabStop = False
-        '
-        'txtAssetTagSearch
-        '
-        Me.txtAssetTagSearch.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTagSearch.Location = New System.Drawing.Point(18, 26)
-        Me.txtAssetTagSearch.MaxLength = 45
-        Me.txtAssetTagSearch.Name = "txtAssetTagSearch"
-        Me.txtAssetTagSearch.Size = New System.Drawing.Size(135, 23)
-        Me.txtAssetTagSearch.TabIndex = 47
-        Me.txtAssetTagSearch.TabStop = False
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(176, 9)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(85, 16)
-        Me.Label11.TabIndex = 38
-        Me.Label11.Text = "Current User:"
+        Me.SearchGroup.Text = "Custom Search"
         '
         'cmdSearch
         '
         Me.cmdSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdSearch.Location = New System.Drawing.Point(759, 29)
+        Me.cmdSearch.Location = New System.Drawing.Point(758, 57)
         Me.cmdSearch.Name = "cmdSearch"
         Me.cmdSearch.Size = New System.Drawing.Size(88, 56)
         Me.cmdSearch.TabIndex = 45
@@ -542,7 +302,7 @@ Partial Class MainForm
         'cmdClear
         '
         Me.cmdClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdClear.Location = New System.Drawing.Point(759, 104)
+        Me.cmdClear.Location = New System.Drawing.Point(758, 132)
         Me.cmdClear.Name = "cmdClear"
         Me.cmdClear.Size = New System.Drawing.Size(88, 32)
         Me.cmdClear.TabIndex = 18
@@ -552,7 +312,7 @@ Partial Class MainForm
         'cmdShowAll
         '
         Me.cmdShowAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdShowAll.Location = New System.Drawing.Point(1069, 78)
+        Me.cmdShowAll.Location = New System.Drawing.Point(1069, 105)
         Me.cmdShowAll.Name = "cmdShowAll"
         Me.cmdShowAll.Size = New System.Drawing.Size(134, 35)
         Me.cmdShowAll.TabIndex = 27
@@ -630,9 +390,253 @@ Partial Class MainForm
         Me.GroupBox2.Controls.Add(Me.cmdShowAll)
         Me.GroupBox2.Location = New System.Drawing.Point(12, 35)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(1215, 181)
+        Me.GroupBox2.Size = New System.Drawing.Size(1215, 248)
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
+        '
+        'PanelNoScrollOnFocus1
+        '
+        Me.PanelNoScrollOnFocus1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.PanelNoScrollOnFocus1.AutoScrollMargin = New System.Drawing.Size(10, 20)
+        Me.PanelNoScrollOnFocus1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.PanelNoScrollOnFocus1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.chkHistorical)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmdSupDevSearch)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label6)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label4)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtReplaceYear)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtDescription)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbOSType)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label2)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label5)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label1)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label10)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbStatus)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.chkTrackables)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label12)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbEquipType)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtSerialSearch)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label3)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbLocation)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtCurUser)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtAssetTagSearch)
+        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label11)
+        Me.PanelNoScrollOnFocus1.Location = New System.Drawing.Point(11, 20)
+        Me.PanelNoScrollOnFocus1.Name = "PanelNoScrollOnFocus1"
+        Me.PanelNoScrollOnFocus1.Size = New System.Drawing.Size(732, 188)
+        Me.PanelNoScrollOnFocus1.TabIndex = 52
+        '
+        'chkHistorical
+        '
+        Me.chkHistorical.AutoSize = True
+        Me.chkHistorical.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkHistorical.Location = New System.Drawing.Point(432, 138)
+        Me.chkHistorical.Name = "chkHistorical"
+        Me.chkHistorical.Size = New System.Drawing.Size(89, 22)
+        Me.chkHistorical.TabIndex = 56
+        Me.chkHistorical.Text = "Historical"
+        Me.chkHistorical.UseVisualStyleBackColor = True
+        '
+        'cmdSupDevSearch
+        '
+        Me.cmdSupDevSearch.Location = New System.Drawing.Point(577, 126)
+        Me.cmdSupDevSearch.Name = "cmdSupDevSearch"
+        Me.cmdSupDevSearch.Size = New System.Drawing.Size(125, 44)
+        Me.cmdSupDevSearch.TabIndex = 55
+        Me.cmdSupDevSearch.Text = "Devices By Supervisor"
+        Me.cmdSupDevSearch.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(183, 120)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(95, 16)
+        Me.Label6.TabIndex = 54
+        Me.Label6.Text = "Replace Year:"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(22, 18)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(73, 16)
+        Me.Label4.TabIndex = 48
+        Me.Label4.Text = "Asset Tag:"
+        '
+        'txtReplaceYear
+        '
+        Me.txtReplaceYear.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtReplaceYear.Location = New System.Drawing.Point(186, 138)
+        Me.txtReplaceYear.MaxLength = 200
+        Me.txtReplaceYear.Name = "txtReplaceYear"
+        Me.txtReplaceYear.Size = New System.Drawing.Size(100, 23)
+        Me.txtReplaceYear.TabIndex = 53
+        Me.txtReplaceYear.TabStop = False
+        '
+        'txtDescription
+        '
+        Me.txtDescription.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDescription.Location = New System.Drawing.Point(186, 84)
+        Me.txtDescription.MaxLength = 200
+        Me.txtDescription.Name = "txtDescription"
+        Me.txtDescription.Size = New System.Drawing.Size(330, 23)
+        Me.txtDescription.TabIndex = 43
+        Me.txtDescription.TabStop = False
+        '
+        'cmbOSType
+        '
+        Me.cmbOSType.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbOSType.FormattingEnabled = True
+        Me.cmbOSType.Location = New System.Drawing.Point(25, 138)
+        Me.cmbOSType.Name = "cmbOSType"
+        Me.cmbOSType.Size = New System.Drawing.Size(135, 23)
+        Me.cmbOSType.TabIndex = 51
+        Me.cmbOSType.TabStop = False
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(183, 66)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(79, 16)
+        Me.Label2.TabIndex = 44
+        Me.Label2.Text = "Description:"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(22, 119)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(65, 16)
+        Me.Label5.TabIndex = 52
+        Me.Label5.Text = "OS Type:"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(534, 66)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(48, 16)
+        Me.Label1.TabIndex = 42
+        Me.Label1.Text = "Status:"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Location = New System.Drawing.Point(354, 17)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(110, 16)
+        Me.Label10.TabIndex = 36
+        Me.Label10.Text = "Equipment Type:"
+        '
+        'cmbStatus
+        '
+        Me.cmbStatus.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbStatus.FormattingEnabled = True
+        Me.cmbStatus.Location = New System.Drawing.Point(537, 85)
+        Me.cmbStatus.Name = "cmbStatus"
+        Me.cmbStatus.Size = New System.Drawing.Size(165, 23)
+        Me.cmbStatus.TabIndex = 41
+        Me.cmbStatus.TabStop = False
+        '
+        'chkTrackables
+        '
+        Me.chkTrackables.AutoSize = True
+        Me.chkTrackables.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkTrackables.Location = New System.Drawing.Point(311, 138)
+        Me.chkTrackables.Name = "chkTrackables"
+        Me.chkTrackables.Size = New System.Drawing.Size(100, 22)
+        Me.chkTrackables.TabIndex = 50
+        Me.chkTrackables.Text = "Trackables"
+        Me.chkTrackables.UseVisualStyleBackColor = True
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(534, 17)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(62, 16)
+        Me.Label12.TabIndex = 40
+        Me.Label12.Text = "Location:"
+        '
+        'cmbEquipType
+        '
+        Me.cmbEquipType.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbEquipType.FormattingEnabled = True
+        Me.cmbEquipType.Location = New System.Drawing.Point(357, 35)
+        Me.cmbEquipType.Name = "cmbEquipType"
+        Me.cmbEquipType.Size = New System.Drawing.Size(159, 23)
+        Me.cmbEquipType.TabIndex = 35
+        Me.cmbEquipType.TabStop = False
+        '
+        'txtSerialSearch
+        '
+        Me.txtSerialSearch.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSerialSearch.Location = New System.Drawing.Point(25, 84)
+        Me.txtSerialSearch.MaxLength = 45
+        Me.txtSerialSearch.Name = "txtSerialSearch"
+        Me.txtSerialSearch.Size = New System.Drawing.Size(135, 23)
+        Me.txtSerialSearch.TabIndex = 46
+        Me.txtSerialSearch.TabStop = False
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(22, 65)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(46, 16)
+        Me.Label3.TabIndex = 49
+        Me.Label3.Text = "Serial:"
+        '
+        'cmbLocation
+        '
+        Me.cmbLocation.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbLocation.FormattingEnabled = True
+        Me.cmbLocation.Location = New System.Drawing.Point(537, 36)
+        Me.cmbLocation.Name = "cmbLocation"
+        Me.cmbLocation.Size = New System.Drawing.Size(165, 23)
+        Me.cmbLocation.TabIndex = 39
+        Me.cmbLocation.TabStop = False
+        '
+        'txtCurUser
+        '
+        Me.txtCurUser.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCurUser.Location = New System.Drawing.Point(186, 36)
+        Me.txtCurUser.MaxLength = 45
+        Me.txtCurUser.Name = "txtCurUser"
+        Me.txtCurUser.Size = New System.Drawing.Size(148, 23)
+        Me.txtCurUser.TabIndex = 37
+        Me.txtCurUser.TabStop = False
+        '
+        'txtAssetTagSearch
+        '
+        Me.txtAssetTagSearch.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAssetTagSearch.Location = New System.Drawing.Point(25, 35)
+        Me.txtAssetTagSearch.MaxLength = 45
+        Me.txtAssetTagSearch.Name = "txtAssetTagSearch"
+        Me.txtAssetTagSearch.Size = New System.Drawing.Size(135, 23)
+        Me.txtAssetTagSearch.TabIndex = 47
+        Me.txtAssetTagSearch.TabStop = False
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Location = New System.Drawing.Point(183, 18)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(85, 16)
+        Me.Label11.TabIndex = 38
+        Me.Label11.Text = "Current User:"
         '
         'ToolStrip1
         '
@@ -655,7 +659,7 @@ Partial Class MainForm
         Me.AddDeviceTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AddDeviceTool.Name = "AddDeviceTool"
         Me.AddDeviceTool.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.AddDeviceTool.Size = New System.Drawing.Size(137, 29)
+        Me.AddDeviceTool.Size = New System.Drawing.Size(137, 34)
         Me.AddDeviceTool.Text = "Add Device"
         '
         'AdminDropDown
@@ -718,13 +722,13 @@ Partial Class MainForm
         Me.tsdSelectWindow.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.tsdSelectWindow.Name = "tsdSelectWindow"
         Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.tsdSelectWindow.Size = New System.Drawing.Size(171, 29)
+        Me.tsdSelectWindow.Size = New System.Drawing.Size(171, 34)
         Me.tsdSelectWindow.Text = "Select Window"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 37)
         '
         'cmdSibi
         '
@@ -733,7 +737,7 @@ Partial Class MainForm
         Me.cmdSibi.Image = Global.AssetManager.My.Resources.Resources.inv_box_large
         Me.cmdSibi.Name = "cmdSibi"
         Me.cmdSibi.Padding = New System.Windows.Forms.Padding(20, 0, 20, 0)
-        Me.cmdSibi.Size = New System.Drawing.Size(226, 29)
+        Me.cmdSibi.Size = New System.Drawing.Size(226, 34)
         Me.cmdSibi.Text = "Sibi Aquisition Manager"
         Me.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -760,11 +764,11 @@ Partial Class MainForm
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.SearchGroup.ResumeLayout(False)
-        Me.PanelNoScrollOnFocus1.ResumeLayout(False)
-        Me.PanelNoScrollOnFocus1.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
+        Me.PanelNoScrollOnFocus1.ResumeLayout(False)
+        Me.PanelNoScrollOnFocus1.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)

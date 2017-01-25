@@ -29,7 +29,7 @@ Public Class frmManageRequest
     End Sub
     Private Sub InitForm(ParentForm As Form)
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
-        Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip, 6)
+        Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip, 5)
         MyWindowList = New WindowList(Me, tsdSelectWindow)
         dgvNotes.DefaultCellStyle.SelectionBackColor = colSibiSelectColor
         Tag = ParentForm

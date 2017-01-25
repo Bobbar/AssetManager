@@ -77,11 +77,11 @@ Module ErrorHandling
         Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
         Select Case ex.Number
             Case 1042
-                ConnectionReady()
+                ' ConnectionReady()
                 Dim blah = Message("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbExclamation, "Connection Lost")
                 Return True
             Case 0
-                ConnectionReady()
+                ' ConnectionReady()
                 Dim blah = Message("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbExclamation, "Connection Lost")
                 Return True
             Case 1064

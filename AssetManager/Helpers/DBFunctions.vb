@@ -6,23 +6,23 @@ Public Module DBFunctions
     Public Const strCheckOut As String = "OUT"
     Public Const strCheckIn As String = "IN"
     Public strServerTime As String
-    Public Function OpenConnections() As Boolean
-        Try
-            If GlobalConn.State <> ConnectionState.Open Then
-                Asset.CloseConnection(GlobalConn)
-                GlobalConn = SQLComms.NewConnection
-            End If
-            GlobalConn.Open()
-            If GlobalConn.State = ConnectionState.Open Then
-                Return True
-            Else
-                Return False
-            End If
-        Catch ex As MySqlException
-            Logger("ERROR:  MethodName=" & System.Reflection.MethodInfo.GetCurrentMethod().Name & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
-            Return False
-        End Try
-    End Function
+    'Public Function OpenConnections() As Boolean
+    '    Try
+    '        If GlobalConn.State <> ConnectionState.Open Then
+    '            Asset.CloseConnection(GlobalConn)
+    '            GlobalConn = SQLComms.NewConnection
+    '        End If
+    '        GlobalConn.Open()
+    '        If GlobalConn.State = ConnectionState.Open Then
+    '            Return True
+    '        Else
+    '            Return False
+    '        End If
+    '    Catch ex As MySqlException
+    '        Logger("ERROR:  MethodName=" & System.Reflection.MethodInfo.GetCurrentMethod().Name & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
+    '        Return False
+    '    End Try
+    'End Function
     Public Function GetShortLocation(ByVal index As Integer) As String
         Try
             Return DeviceIndex.Locations(index).strShort
@@ -78,7 +78,7 @@ Public Module DBFunctions
         End With
     End Sub
     Public Function ConnectionReady() As Boolean
-        Select Case GlobalConn.State
+        Select Case SQLComms.Connection.State
             Case ConnectionState.Closed
                 Return False
             Case ConnectionState.Open

@@ -31,8 +31,8 @@ Public Class MainForm
             Status("Loading...")
             SplashScreen.Show()
             Status("Checking Server Connection...")
-            If OpenConnections() Then
-                ConnectionReady()
+            If SQLComms.OpenConnection() Then
+                ' ConnectionReady()
             Else
                 Dim blah = Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect", Me)
                 EndProgram()
@@ -138,7 +138,7 @@ Public Class MainForm
         StartBigQuery(cmdLastCommand)
     End Sub
     Private Sub StartBigQuery(QryCommand As Object)
-        If Not ConnectionReady() Then
+        If Not SQLComms.ConnectionReady Then
             ConnectionNotReady()
             Exit Sub
         End If
@@ -243,7 +243,7 @@ Public Class MainForm
                 If fld.Value.ToString <> "" Then
                     If TypeOf fld.Value Is Boolean Then  'trackable boolean. if false, dont add it.
                         Dim bolTrackable As Boolean = CType(fld.Value, Boolean)
-                        If Not bolTrackable Then
+                        If bolTrackable Then
                             strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE CONCAT('%', @" + fld.FieldName + ", '%') AND"
                             cmd.Parameters.AddWithValue("@" & fld.FieldName, Convert.ToInt32(fld.Value))
                         End If
@@ -343,18 +343,18 @@ Public Class MainForm
             cmdLastCommand = QryComm
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
-            Dim conn As MySqlConnection = LocalSQLComm.NewConnection '(MySQLDB.MySQLConnectString)
-            QryComm.Connection = conn
+            'Dim conn As MySqlConnection = LocalSQLComm.NewConnection '(MySQLDB.MySQLConnectString)
+            QryComm.Connection = LocalSQLComm.Connection
             BigQueryWorker.ReportProgress(1)
             da.SelectCommand = QryComm
             da.Fill(ds)
             da.Dispose()
             e.Result = ds.Tables(0)
             ds.Dispose()
-            Asset.CloseConnection(conn) 'conn.Close()
+            LocalSQLComm.CloseConnection() '(conn) 'conn.Close()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            ConnectionReady()
+            'ConnectionReady()
         End Try
     End Sub
     Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
@@ -370,6 +370,8 @@ Public Class MainForm
         End If
         If Not CheckForAccess(AccessGroup.Add) Then Exit Sub
         AddNew.Show()
+        AddNew.Activate()
+        AddNew.WindowState = FormWindowState.Normal
     End Sub
     Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
         If e.KeyCode = Keys.Down Then
@@ -406,7 +408,7 @@ Public Class MainForm
     End Sub
     Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatcher.Tick
         If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
-        Select Case GlobalConn.State
+        Select Case SQLComms.Connection.State
             Case ConnectionState.Connecting
                 ConnectStatus("Connecting", Color.Black)
         End Select
@@ -414,19 +416,19 @@ Public Class MainForm
     End Sub
     Private Sub ConnectionWatchDog_DoWork(sender As Object, e As DoWorkEventArgs) Handles ConnectionWatchDog.DoWork
         Do Until ProgramEnding
-            If GlobalConn.State = ConnectionState.Open Then 'test connection
+            If SQLComms.Connection.State = ConnectionState.Open Then 'test connection
                 Try
                     Dim LocalSQLComm As New clsMySQL_Comms
                     Dim ds As New DataSet
                     Dim da As New MySqlDataAdapter
                     Dim rows As Integer
                     Dim conn As MySqlConnection = LocalSQLComm.NewConnection
-                    da.SelectCommand = New MySqlCommand("SELECT NOW()")
-                    da.SelectCommand.Connection = conn
+                    da.SelectCommand = LocalSQLComm.Return_SQLCommand("SELECT NOW()") 'New MySqlCommand("SELECT NOW()")
+                    'da.SelectCommand.Connection = conn
                     da.Fill(ds)
                     rows = ds.Tables(0).Rows.Count
                     strServerTime = ds.Tables(0).Rows(0).Item(0).ToString
-                    Asset.CloseConnection(conn)
+                    LocalSQLComm.CloseConnection() '(conn)
                     da.Dispose()
                     ds.Dispose()
                 Catch ex As MySqlException
@@ -436,20 +438,20 @@ Public Class MainForm
                         'MySQLDB.CheckConnection()
                     End If
                 End Try
-            ElseIf GlobalConn.State <> ConnectionState.Open Then 'connection recovery
+            ElseIf SQLComms.Connection.State <> ConnectionState.Open Then 'connection recovery
                 ConnectAttempts = 0
-                Do Until GlobalConn.State = ConnectionState.Open
+                Do Until SQLComms.Connection.State = ConnectionState.Open
                     ConnectAttempts += 1
                     ConnectionWatchDog.ReportProgress(1, "Trying to reconnect... " & ConnectAttempts)
-                    ConnectionWatchDog.ReportProgress(5, GlobalConn.State)
-                    If OpenConnections() Then
+                    ConnectionWatchDog.ReportProgress(5, SQLComms.Connection.State)
+                    If SQLComms.OpenConnection() Then
                     Else
                         Thread.Sleep(5000)
                     End If
                 Loop
                 ConnectionWatchDog.ReportProgress(1, "Reconnected!")
             End If
-            ConnectionWatchDog.ReportProgress(5, GlobalConn.State)
+            ConnectionWatchDog.ReportProgress(5, SQLComms.Connection.State)
             Thread.Sleep(5000)
         Loop
     End Sub
@@ -492,13 +494,13 @@ Public Class MainForm
             HighlightRow(ResultGrid, MyGridTheme, e.RowIndex)
         End If
     End Sub
-    Private Sub ReconnectThread_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
-        StatusBar("Trying to reconnect... " & ConnectAttempts)
-    End Sub
-    Private Sub ReconnectThread_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
-        ConnectionReady()
-        StatusBar("Connected!")
-    End Sub
+    'Private Sub ReconnectThread_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
+    '    StatusBar("Trying to reconnect... " & ConnectAttempts)
+    'End Sub
+    'Private Sub ReconnectThread_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
+    '    ConnectionReady()
+    '    StatusBar("Connected!")
+    'End Sub
     Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
         Dim ViewAttachments As New frmAttachments(Me, MyGridTheme)
         ViewAttachments.bolAdminMode = CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel)

@@ -109,6 +109,7 @@ Public Class AddNew
         MyLiveBox.AddControl(txtCurUser_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
         MyLiveBox.AddControl(txtDescription_REQ, LiveBoxType.SelectValue, devices.Description)
         Icon = MainForm.Icon
+        Tag = MainForm
     End Sub
     Private Sub ClearAll()
         RefreshCombos()

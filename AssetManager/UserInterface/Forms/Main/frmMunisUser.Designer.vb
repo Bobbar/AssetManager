@@ -58,7 +58,7 @@ Partial Class frmMunisUser
         Me.MunisResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.MunisResults.ShowCellToolTips = False
         Me.MunisResults.ShowEditingIcon = False
-        Me.MunisResults.Size = New System.Drawing.Size(701, 250)
+        Me.MunisResults.Size = New System.Drawing.Size(672, 240)
         Me.MunisResults.TabIndex = 42
         Me.MunisResults.VirtualMode = True
         '
@@ -73,7 +73,7 @@ Partial Class frmMunisUser
         Me.GroupBox1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 103)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(715, 370)
+        Me.GroupBox1.Size = New System.Drawing.Size(686, 360)
         Me.GroupBox1.TabIndex = 43
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Results"
@@ -82,9 +82,9 @@ Partial Class frmMunisUser
         '
         Me.lblSelectedEmp.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblSelectedEmp.Location = New System.Drawing.Point(6, 287)
+        Me.lblSelectedEmp.Location = New System.Drawing.Point(6, 277)
         Me.lblSelectedEmp.Name = "lblSelectedEmp"
-        Me.lblSelectedEmp.Size = New System.Drawing.Size(701, 18)
+        Me.lblSelectedEmp.Size = New System.Drawing.Size(672, 18)
         Me.lblSelectedEmp.TabIndex = 44
         Me.lblSelectedEmp.Text = "Selected Emp:"
         Me.lblSelectedEmp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -92,7 +92,7 @@ Partial Class frmMunisUser
         'cmdAccept
         '
         Me.cmdAccept.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.cmdAccept.Location = New System.Drawing.Point(301, 320)
+        Me.cmdAccept.Location = New System.Drawing.Point(287, 310)
         Me.cmdAccept.Name = "cmdAccept"
         Me.cmdAccept.Size = New System.Drawing.Size(92, 29)
         Me.cmdAccept.TabIndex = 43
@@ -109,7 +109,7 @@ Partial Class frmMunisUser
         Me.pnlSearch.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.pnlSearch.Location = New System.Drawing.Point(12, 12)
         Me.pnlSearch.Name = "pnlSearch"
-        Me.pnlSearch.Size = New System.Drawing.Size(715, 85)
+        Me.pnlSearch.Size = New System.Drawing.Size(686, 85)
         Me.pnlSearch.TabIndex = 44
         Me.pnlSearch.TabStop = False
         Me.pnlSearch.Text = "Search"
@@ -125,7 +125,7 @@ Partial Class frmMunisUser
         '
         'cmdSearch
         '
-        Me.cmdSearch.Location = New System.Drawing.Point(202, 42)
+        Me.cmdSearch.Location = New System.Drawing.Point(201, 45)
         Me.cmdSearch.Name = "cmdSearch"
         Me.cmdSearch.Size = New System.Drawing.Size(131, 26)
         Me.cmdSearch.TabIndex = 1
@@ -143,7 +143,7 @@ Partial Class frmMunisUser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(742, 487)
+        Me.ClientSize = New System.Drawing.Size(713, 477)
         Me.Controls.Add(Me.pnlSearch)
         Me.Controls.Add(Me.GroupBox1)
         Me.MinimumSize = New System.Drawing.Size(391, 441)

@@ -231,8 +231,9 @@ VALUES(@" & historical_dev.ChangeType & ",
         Dim sqlQRY As String = "SELECT " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
         Try
             Dim cmd As New MySqlCommand
-            cmd.Connection = GlobalConn
-            cmd.CommandText = sqlQRY
+            cmd = SQLComms.Return_SQLCommand(sqlQRY)
+            'cmd.Connection = GlobalConn
+            'cmd.CommandText = sqlQRY
             Return Convert.ToString(cmd.ExecuteScalar)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -451,10 +452,10 @@ VALUES
         Next
         Return DeviceList
     End Function
-    Public Sub CloseConnection(ByRef conn As MySqlConnection)
-        conn.Close()
-        conn.Dispose()
-    End Sub
+    'Public Sub CloseConnection(ByRef conn As MySqlConnection)
+    '    conn.Close()
+    '    conn.Dispose()
+    'End Sub
     Public Function CollectDeviceInfo(DeviceTable As DataTable) As Device_Info
         Try
             Dim newDeviceInfo As Device_Info
@@ -507,8 +508,8 @@ VALUES
             Dim da As New MySqlDataAdapter
             Dim rows As Integer
             Dim result As String
-            da.SelectCommand = New MySqlCommand("SELECT NOW()")
-            da.SelectCommand.Connection = GlobalConn
+            da.SelectCommand = SQLComms.Return_SQLCommand("SELECT NOW()") '("SELECT NOW()")
+            ' da.SelectCommand.Connection = GlobalConn
             da.Fill(ds)
             rows = ds.Tables(0).Rows.Count
             result = ds.Tables(0).Rows(0).Item(0).ToString
@@ -522,7 +523,6 @@ VALUES
     End Function
     Public Function GetAttachmentCount(AttachInfo As Object) As Integer
         Try
-            Dim cmd As New MySqlCommand
             Dim strQRY As String = ""
             If TypeOf AttachInfo Is Device_Info Then
                 Dim Dev As Device_Info = AttachInfo
@@ -531,8 +531,9 @@ VALUES
                 Dim Req As Request_Info = AttachInfo
                 strQRY = "SELECT COUNT(*) FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FKey & "='" & Req.strUID & "'"
             End If
-            cmd.Connection = GlobalConn
-            cmd.CommandText = strQRY
+            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strQRY)
+            'cmd.Connection = GlobalConn
+            'cmd.CommandText = strQRY
             Return cmd.ExecuteScalar
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then

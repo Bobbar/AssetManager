@@ -76,7 +76,7 @@ Public Class frmSibiMain
             Dim QryComm As MySqlCommand = cmd
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter
-            QryComm.Connection = GlobalConn
+            QryComm.Connection = SQLComms.Connection
             da.SelectCommand = QryComm
             da.Fill(ds)
             da.Dispose()
@@ -84,7 +84,7 @@ Public Class frmSibiMain
             ds.Dispose()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            ConnectionReady()
+            ' ConnectionReady()
         End Try
     End Sub
     Public Sub SendToGrid(Results As DataTable)
