@@ -753,26 +753,40 @@ VALUES
         Else
             CloseChildren(Me)
         End If
-
     End Sub
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
-        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim blah As MsgBoxResult
-        blah = Message("Delete selected item?", vbYesNo + vbQuestion, "Delete Item Row", Me)
-        If blah = vbYes Then
-            If bolNewRequest Then
-                If DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index) Then
+        Try
+            If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+            Dim blah As MsgBoxResult
+            blah = Message("Delete selected row?", vbYesNo + vbQuestion, "Delete Item Row", Me)
+            If blah = vbYes Then
+                If IsNewRow(RequestItemsGrid.CurrentRow.Index) Then
+                    If DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index) Then
+                    Else
+                        blah = Message("Failed to delete row.", vbExclamation + vbOKOnly, "Error", Me)
+                    End If
                 Else
-                    blah = Message("Failed to delete row.", vbExclamation + vbOKOnly, "Error", Me)
+                    blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value.ToString, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me)
+                    OpenRequest(CurrentRequest.strUID)
                 End If
             Else
-                blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value.ToString, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me)
-                OpenRequest(CurrentRequest.strUID)
             End If
-
-        Else
-        End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
+    Private Function IsNewRow(RowIndex As Integer) As Boolean
+        Try
+            Dim GUID As String = RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RowIndex).Value
+            If GUID <> "" Then
+                Return False
+            Else
+                Return True
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Function
     Private Sub txtRTNumber_Click(sender As Object, e As EventArgs) Handles txtRTNumber.Click
         Dim RTNum As String = Trim(txtRTNumber.Text)
         If Not bolUpdating And RTNum <> "" Then
