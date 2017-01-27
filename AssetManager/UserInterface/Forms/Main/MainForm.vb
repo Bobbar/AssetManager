@@ -10,7 +10,6 @@ Public Class MainForm
     Private StartingControl As Control
     Private strWorkerQry As String
     Private Const strShowAllQry As String = "SELECT * FROM " & devices.TableName & " ORDER BY " & devices.Input_DateTime & " DESC"
-    Private ClickedButton As Control
     Dim dtResults As New DataTable
     Private intPrevRow As Integer
     Private bolGridFilling As Boolean = False
@@ -27,28 +26,7 @@ Public Class MainForm
         Try
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             ToolStrip1.BackColor = colAssetToolBarColor
-            'Logger("Starting AssetManager...")
-            'Status("Loading...")
-            '' SplashScreen.Show()
-            'Status("Checking Server Connection...")
-            'Using SQLComms As New clsMySQL_Comms
-            '    If SQLComms.OpenConnection() Then
-            '        ' ConnectionReady()
-            '    Else
-            '        Dim blah = Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect", Me)
-            '        EndProgram()
-            '    End If
-            'End Using
             ExtendedMethods.DoubleBuffered(ResultGrid, True)
-            'Status("Loading Indexes...")
-            'BuildIndexes()
-            'Status("Checking Access Level...")
-            'Asset.GetAccessLevels()
-            'Asset.GetUserAccess()
-            'If Not CanAccess(AccessGroup.CanRun, UserAccess.intAccessLevel) Then
-            '    Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", Me)
-            '    EndProgram()
-            'End If
             If CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel) Then
                 AdminDropDown.Visible = True
             Else
@@ -57,10 +35,9 @@ Public Class MainForm
             GetGridStyles()
             SetGridStyle(ResultGrid)
             ConnectionWatchDog.RunWorkerAsync()
-            'Status("Ready!")
             ShowAll()
             Thread.Sleep(1000)
-            SplashScreen.Hide()
+            SplashScreen1.Hide()
             Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip1, 2)
             MyWindowList = New WindowList(Me, tsdSelectWindow)
             InitLiveBox()
@@ -99,10 +76,6 @@ Public Class MainForm
         tmpStyle.WrapMode = ResultGrid.DefaultCellStyle.WrapMode
         GridStyles = tmpStyle
     End Sub
-    'Public Sub Status(Text As String)
-    '    SplashScreen.lblStatus.Text = Text
-    '    SplashScreen.Refresh()
-    'End Sub
     Private Sub Clear_All()
         txtAssetTag.Clear()
         txtAssetTagSearch.Clear()
@@ -143,9 +116,6 @@ Public Class MainForm
     End Sub
     Private Sub StartBigQuery(QryCommand As Object)
         If Not BigQueryWorker.IsBusy Then
-            If ClickedButton IsNot Nothing Then
-                ClickedButton.Enabled = False
-            End If
             StatusBar("Request sent to background...")
             StripSpinner.Visible = True
             BigQueryWorker.RunWorkerAsync(QryCommand)
@@ -154,10 +124,6 @@ Public Class MainForm
     Private Sub BigQueryDone(Results As DataTable)
         SendToGrid(Results)
         DoneWaiting()
-        If ClickedButton IsNot Nothing Then
-            ClickedButton.Enabled = True
-            ClickedButton = Nothing
-        End If
     End Sub
     Private Sub DisplayRecords(NumberOf As Integer)
         lblRecords.Text = "Records: " & NumberOf
@@ -223,7 +189,6 @@ Public Class MainForm
     End Sub
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
         If Not BigQueryWorker.IsBusy Then
-            ClickedButton = cmdSearch
             DynamicSearch()
         End If
     End Sub

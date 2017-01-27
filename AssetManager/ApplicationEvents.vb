@@ -7,47 +7,34 @@
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
         Private Sub LoadSplash(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
-            Dim splash As SplashScreen = CType(My.Application.SplashScreen, SplashScreen)
-
-            ' DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
-            'ToolStrip1.BackColor = colAssetToolBarColor
+            SplashScreen1.Show()
             Logger("Starting AssetManager...")
-            splash.Status = "Loading..."
-            '  Status("Loading...", splash)
-            ' SplashScreen.Show()
-            Status("Checking Server Connection...", splash)
+            Status("Loading...")
+            Status("Checking Server Connection...")
             Using SQLComms As New clsMySQL_Comms
                 If SQLComms.OpenConnection() Then
                     ' ConnectionReady()
                 Else
-                    Dim blah = Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect", splash)
+                    Dim blah = Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect", SplashScreen1)
                     EndProgram()
                 End If
             End Using
-            ' ExtendedMethods.DoubleBuffered(ResultGrid, True)
-            Status("Loading Indexes...", splash)
+            Status("Loading Indexes...")
             BuildIndexes()
-            Status("Checking Access Level...", splash)
+            Status("Checking Access Level...")
             Asset.GetAccessLevels()
             Asset.GetUserAccess()
             If Not CanAccess(AccessGroup.CanRun, UserAccess.intAccessLevel) Then
-                Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", splash)
+                Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", SplashScreen1)
                 EndProgram()
             End If
-            'If CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel) Then
-            '    AdminDropDown.Visible = True
-            'Else
-            '    AdminDropDown.Visible = False
-            'End If
-            'GetGridStyles()
-            'SetGridStyle(ResultGrid)
-            'ConnectionWatchDog.RunWorkerAsync()
-            Status("Ready!", splash)
+            Status("Ready!")
+
 
         End Sub
-        Public Sub Status(Text As String, splash As SplashScreen)
-            splash.lblStatus.Text = Text
-            splash.Refresh()
+        Public Sub Status(Text As String)
+            SplashScreen1.lblStatus.Text = Text
+            SplashScreen1.Refresh()
         End Sub
     End Class
 End Namespace

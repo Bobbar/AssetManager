@@ -18,17 +18,10 @@ Public Class View_Entry
         SetCursor(Cursors.Default)
     End Sub
     Private Sub ViewEntry(ByVal EntryUID As String)
-        'If Not ConnectionReady() Then
-        '    ConnectionNotReady()
-        '    Exit Sub
-        'End If
         Waiting()
-        ' Dim results As New DataTable
         Try
             Dim strQry = "Select * FROM " & historical_dev.TableName & " WHERE  " & historical_dev.History_Entry_UID & " = '" & EntryUID & "'"
-
             Using SQLComms As New clsMySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQry)
-                ' results = SQLComms.Return_SQLTable(strQry)
                 For Each r As DataRow In results.Rows
                     txtEntryTime.Text = NoNull(r.Item(historical_dev.ActionDateTime))
                     txtActionUser.Text = NoNull(r.Item(historical_dev.ActionUser))
@@ -50,13 +43,10 @@ Public Class View_Entry
                     chkTrackable.Checked = CBool(r.Item(historical_dev.Trackable))
                     Me.Text = Me.Text + " - " & NoNull(r.Item(historical_dev.ActionDateTime))
                 Next
-                'results.Dispose()
                 Show()
                 Activate()
-
                 DoneWaiting()
             End Using
-
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try

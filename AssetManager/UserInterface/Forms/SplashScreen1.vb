@@ -1,6 +1,6 @@
 ﻿Imports System.Drawing.Text
 Imports System.Deployment.Application
-Public Class SplashScreen
+Public Class SplashScreen1
     Public WriteOnly Property Status As String
 
         Set(value As String)
@@ -8,6 +8,7 @@ Public Class SplashScreen
         End Set
     End Property
     Private Sub SplashScreen1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
         Me.FormBorderStyle = FormBorderStyle.None
 
         'Me.Height = 300

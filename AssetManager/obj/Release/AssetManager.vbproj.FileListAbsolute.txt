@@ -22,7 +22,6 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiSelector.res
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Munis.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Tracking.resources
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreen.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.UpdateDev.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MunisToolsMenu.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Resources.resources
@@ -36,3 +35,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreen1.resources
