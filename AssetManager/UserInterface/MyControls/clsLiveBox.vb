@@ -1,14 +1,12 @@
 ﻿Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
-Public Class clsLiveBox
+Public Class clsLiveBox : Implements IDisposable
     Private RowLimit As Integer = 15
     Private WithEvents LiveWorker As BackgroundWorker
     Private WithEvents HideTimer As Timer
     Private LiveBox As ListBox
     Private strPrevSearchString As String
     Private dtLiveBoxData As DataTable
-
-    ' Private LiveConn As New MySqlConnection
     Private LiveBoxResults As DataTable
     Private LiveBoxControls As New List(Of LiveBoxArgs)
     Private Structure LiveBoxArgs
@@ -51,14 +49,14 @@ Public Class clsLiveBox
         HideTimer.Enabled = True
         AddHandler HideTimer.Tick, AddressOf HideTimer_Tick
     End Sub
-    Public Sub Unload()
-        Try
-            HideLiveBox()
-            '  MySQLComms.CloseConnection() '(LiveConn)
-            LiveBox.Dispose()
-        Catch
-        End Try
-    End Sub
+    'Public Sub Unload()
+    '    Try
+    '        HideLiveBox()
+    '        '  MySQLComms.CloseConnection() '(LiveConn)
+    '        LiveBox.Dispose()
+    '    Catch
+    '    End Try
+    'End Sub
     Private Sub LiveBoxSelect()
         Select Case CurrentLiveBoxArgs.Type
             Case LiveBoxType.DynamicSearch
@@ -91,24 +89,27 @@ Public Class clsLiveBox
         Try
             Dim strSearchString As String = DirectCast(e.Argument, String)
             strPrevSearchString = strSearchString
-            Dim MySQLComms As New clsMySQL_Comms
-            Dim ds As New DataSet
-            Dim da As New MySqlDataAdapter
+            ' Dim MySQLComms As New clsMySQL_Comms
+            'Dim ds As New DataSet
+            'Dim da As New MySqlDataAdapter
 
-            Dim con As MySqlConnection = MySQLComms.NewConnection
+            ' Dim con As MySqlConnection = MySQLComms.NewConnection
             Dim strQry As String
             strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
-            Dim cmd As MySqlCommand = MySQLComms.Return_SQLCommand(strQry)
-            'cmd.Connection = con
-            'cmd.CommandText = strQry
+            '  Dim cmd As MySqlCommand = MySQLComms.Return_SQLCommand(strQry)
 
-            cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
-            da.SelectCommand = cmd
-            da.Fill(ds)
-            e.Result = ds.Tables(0)
-            da.Dispose()
-            ds.Dispose()
-            MySQLComms.CloseConnection()
+            Using MySQLComms As New clsMySQL_Comms, ds As New DataSet, da As New MySqlDataAdapter, cmd As MySqlCommand = MySQLComms.Return_SQLCommand(strQry)
+                'cmd.Connection = con
+                'cmd.CommandText = strQry
+
+                cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
+                da.SelectCommand = cmd
+                da.Fill(ds)
+                e.Result = ds.Tables(0)
+            End Using
+            'da.Dispose()
+            'ds.Dispose()
+            'MySQLComms.CloseConnection()
             'con.Close()
             'con.Dispose()
         Catch ex As Exception
@@ -172,7 +173,7 @@ Public Class clsLiveBox
         CurrentLiveBoxArgs = Args
         Dim strSearchString As String = Trim(CurrentLiveBoxArgs.Control.Text)
         If strSearchString <> "" Then
-            If Not LiveWorker.IsBusy And ConnectionReady() Then
+            If Not LiveWorker.IsBusy Then
                 LiveWorker.RunWorkerAsync(strSearchString)
             End If
         Else
@@ -266,4 +267,43 @@ Public Class clsLiveBox
         AddHandler ControlArgs.Control.KeyUp, AddressOf Control_KeyUp
         AddHandler ControlArgs.Control.KeyDown, AddressOf Control_KeyDown
     End Sub
+
+#Region "IDisposable Support"
+    Private disposedValue As Boolean ' To detect redundant calls
+
+    ' IDisposable
+    Protected Overridable Sub Dispose(disposing As Boolean)
+        If Not disposedValue Then
+            If disposing Then
+
+                ' TODO: dispose managed state (managed objects).
+                LiveWorker.Dispose()
+                HideTimer.Dispose()
+                LiveBox.Dispose()
+                'dtLiveBoxData.Dispose()
+                'LiveBoxResults.Dispose()
+                LiveBoxControls.Clear()
+            End If
+
+            ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
+            ' TODO: set large fields to null.
+        End If
+        disposedValue = True
+    End Sub
+
+    ' TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
+    'Protected Overrides Sub Finalize()
+    '    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+    '    Dispose(False)
+    '    MyBase.Finalize()
+    'End Sub
+
+    ' This code added by Visual Basic to correctly implement the disposable pattern.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+        Dispose(True)
+        ' TODO: uncomment the following line if Finalize() is overridden above.
+        ' GC.SuppressFinalize(Me)
+    End Sub
+#End Region
 End Class

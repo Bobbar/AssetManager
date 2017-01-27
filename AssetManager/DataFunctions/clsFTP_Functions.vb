@@ -84,26 +84,28 @@
         Dim intHits As Integer = 0
         Dim strQRYDev As String = "SELECT * FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FKey & " ='" & FolderUID & "' AND " & dev_attachments.FileUID & " = '" & FileUID & "'"
         Dim strQRYSibi As String = "SELECT * FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FKey & " ='" & FolderUID & "' AND " & sibi_attachments.FileUID & "='" & FileUID & "'"
-        Dim results As DataTable
-        results = SQLComms.Return_SQLTable(strQRYDev)
-        If results.Rows.Count > 0 Then
-            intHits += 1
-        Else
-            ScanResults.strTable = "Device"
-        End If
-        results = SQLComms.Return_SQLTable(strQRYSibi)
-        If results.Rows.Count > 0 Then
-            intHits += 1
-        Else
-            ScanResults.strTable = "Sibi"
-        End If
-        If intHits > 0 Then
-            ScanResults.IsOrphan = False
-            Return ScanResults
-        Else
-            ScanResults.IsOrphan = True
-            Return ScanResults
-        End If
+        Using SQLComms As New clsMySQL_Comms
+            Dim results As DataTable
+            results = SQLComms.Return_SQLTable(strQRYDev)
+            If results.Rows.Count > 0 Then
+                intHits += 1
+            Else
+                ScanResults.strTable = "Device"
+            End If
+            results = SQLComms.Return_SQLTable(strQRYSibi)
+            If results.Rows.Count > 0 Then
+                intHits += 1
+            Else
+                ScanResults.strTable = "Sibi"
+            End If
+            If intHits > 0 Then
+                ScanResults.IsOrphan = False
+                Return ScanResults
+            Else
+                ScanResults.IsOrphan = True
+                Return ScanResults
+            End If
+        End Using
     End Function
     Private Function ListDirectory(Uri As String) As List(Of String)
         Dim resp As Net.FtpWebResponse

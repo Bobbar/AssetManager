@@ -10,30 +10,35 @@ Public Class AddNew
         AddDevice()
     End Sub
     Private Sub AddDevice()
-        If Not CheckFields() Then
-            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
-            bolCheckFields = True
-            Exit Sub
-        Else
-            Dim NewDevice As Device_Info = GetDBValues()
-            If Asset.DeviceExists(NewDevice) Then
-                Dim blah = Message("A device with that serial and/or asset tag already exists.", vbOKOnly + vbExclamation, "Duplicate Device", Me)
+        Try
+            If Not CheckFields() Then
+                Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
+                bolCheckFields = True
                 Exit Sub
             Else
-                'proceed
-            End If
-            Dim Success As Boolean = Asset.AddNewDevice(NewDevice, MunisUser)
+                Dim NewDevice As Device_Info = GetDBValues()
+                If Asset.DeviceExists(NewDevice) Then
+                    Dim blah = Message("A device with that serial and/or asset tag already exists.", vbOKOnly + vbExclamation, "Duplicate Device", Me)
+                    Exit Sub
+                Else
+                    'proceed
+                End If
+                Dim Success As Boolean = Asset.AddNewDevice(NewDevice, MunisUser)
                 If Success Then
-                Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete", Me)
-                If Not chkNoClear.Checked Then ClearAll()
+                    Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete", Me)
+                    If Not chkNoClear.Checked Then ClearAll()
                     If blah = vbNo Then Me.Hide()
                     MainForm.RefreshCurrent()
                 Else
-                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
-            End If
+                    Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
+                End If
 
                 Exit Sub
             End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Dim blah = Message("Unable to add new device.", vbOKOnly + vbExclamation, "Error", Me)
+        End Try
     End Sub
     Private Function CheckFields() As Boolean
         Dim bolMissingField As Boolean
@@ -194,7 +199,7 @@ Public Class AddNew
         AdjustComboBoxWidth(sender, e)
     End Sub
     Private Sub AddNew_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        MyLiveBox.Unload()
+        MyLiveBox.Dispose()
     End Sub
     Private Sub cmdUserSearch_Click(sender As Object, e As EventArgs) Handles cmdUserSearch.Click
         Dim NewMunisSearch As New frmMunisUser(Me)

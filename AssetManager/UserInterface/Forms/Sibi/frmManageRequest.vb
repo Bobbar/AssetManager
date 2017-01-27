@@ -386,26 +386,27 @@ VALUES
 @" & sibi_requests.Replace_Asset & ",
 @" & sibi_requests.Replace_Serial & ",
 @" & sibi_requests.RT_Number & ")"
-            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.UID, RequestData.strUID)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.Status, RequestData.strStatus)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.Type, RequestData.strType)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.PO, RequestData.strPO)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.RequisitionNumber, RequestData.strRequisitionNumber)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Asset, RequestData.strReplaceAsset)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Serial, RequestData.strReplaceSerial)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
-            rows = rows + cmd.ExecuteNonQuery()
-            cmd.Parameters.Clear()
-            For Each row As DataRow In RequestData.RequstItems.Rows
-                InsertRequestItem(row, cmd, RequestData)
+            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
+                '     Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.UID, RequestData.strUID)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.Status, RequestData.strStatus)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.Type, RequestData.strType)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.PO, RequestData.strPO)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.RequisitionNumber, RequestData.strRequisitionNumber)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Asset, RequestData.strReplaceAsset)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Serial, RequestData.strReplaceSerial)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
                 rows = rows + cmd.ExecuteNonQuery()
                 cmd.Parameters.Clear()
-            Next
-            cmd.Dispose()
+                For Each row As DataRow In RequestData.RequstItems.Rows
+                    InsertRequestItem(row, cmd, RequestData)
+                    rows = rows + cmd.ExecuteNonQuery()
+                    cmd.Parameters.Clear()
+                Next
+            End Using
             bolNewRequest = False
             pnlCreate.Visible = False
             Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
@@ -442,32 +443,32 @@ SET
 " & sibi_requests.Replace_Serial & " = @" & sibi_requests.Replace_Serial & " ,
 " & sibi_requests.RT_Number & " = @" & sibi_requests.RT_Number & " 
 WHERE " & sibi_requests.UID & " ='" & RequestData.strUID & "'"
-            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strRequestQRY)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.Status, RequestData.strStatus)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.Type, RequestData.strType)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.PO, RequestData.strPO)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.RequisitionNumber, RequestData.strRequisitionNumber)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Asset, RequestData.strReplaceAsset)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Serial, RequestData.strReplaceSerial)
-            cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
-            rows += cmd.ExecuteNonQuery()
-            cmd.Parameters.Clear()
-            For Each row As DataRow In RequestData.RequstItems.Rows
-                If row.Item("Item UID").ToString <> "" Then
-                    SetRequestItemParameters(row, cmd, RequestData, False)
-                    cmd.CommandText = RequestItemUpdateQry(row)
-                    cmd.ExecuteNonQuery()
-                    cmd.Parameters.Clear()
-                Else
-                    InsertRequestItem(row, cmd, RequestData)
-                    rows += cmd.ExecuteNonQuery()
-                    cmd.Parameters.Clear()
-                End If
-            Next
-            cmd.Dispose()
+            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strRequestQRY)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.Status, RequestData.strStatus)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.Type, RequestData.strType)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.PO, RequestData.strPO)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.RequisitionNumber, RequestData.strRequisitionNumber)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Asset, RequestData.strReplaceAsset)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Serial, RequestData.strReplaceSerial)
+                cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
+                rows += cmd.ExecuteNonQuery()
+                cmd.Parameters.Clear()
+                For Each row As DataRow In RequestData.RequstItems.Rows
+                    If row.Item("Item UID").ToString <> "" Then
+                        SetRequestItemParameters(row, cmd, RequestData, False)
+                        cmd.CommandText = RequestItemUpdateQry(row)
+                        cmd.ExecuteNonQuery()
+                        cmd.Parameters.Clear()
+                    Else
+                        InsertRequestItem(row, cmd, RequestData)
+                        rows += cmd.ExecuteNonQuery()
+                        cmd.Parameters.Clear()
+                    End If
+                Next
+            End Using
             If TypeOf Me.Tag Is frmSibiMain Then
                 Dim ParentForm As frmSibiMain = Me.Tag
                 ParentForm.RefreshResults()
@@ -565,15 +566,16 @@ VALUES
 (@" & sibi_notes.Request_UID & ",
 @" & sibi_notes.Note_UID & ",
 @" & sibi_notes.Note & ")"
-            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strAddNoteQry)
-            cmd.Parameters.AddWithValue("@" & sibi_notes.Request_UID, RequestUID)
-            cmd.Parameters.AddWithValue("@" & sibi_notes.Note_UID, strNoteUID)
-            cmd.Parameters.AddWithValue("@" & sibi_notes.Note, Note)
-            If cmd.ExecuteNonQuery() > 0 Then
-                Return True
-            Else
-                Return False
-            End If
+            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strAddNoteQry)
+                cmd.Parameters.AddWithValue("@" & sibi_notes.Request_UID, RequestUID)
+                cmd.Parameters.AddWithValue("@" & sibi_notes.Note_UID, strNoteUID)
+                cmd.Parameters.AddWithValue("@" & sibi_notes.Note, Note)
+                If cmd.ExecuteNonQuery() > 0 Then
+                    Return True
+                Else
+                    Return False
+                End If
+            End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 Return False
@@ -585,32 +587,35 @@ VALUES
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT * FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_request_items.Sequence
-            Dim RequestResults As DataTable = SQLComms.Return_SQLTable(strRequestQRY)
-            Dim RequestItemsResults As DataTable = SQLComms.Return_SQLTable(strRequestItemsQRY)
-            ClearAll()
-            CollectRequestInfo(RequestResults, RequestItemsResults)
-            With RequestResults.Rows(0)
-                txtDescription.Text = NoNull(.Item(sibi_requests.Description))
-                txtUser.Text = NoNull(.Item(sibi_requests.RequestUser))
-                cmbType.SelectedIndex = GetComboIndexFromShort(SibiIndex.RequestType, NoNull(.Item(sibi_requests.Type)))
-                dtNeedBy.Value = NoNull(.Item(sibi_requests.NeedBy))
-                cmbStatus.SelectedIndex = GetComboIndexFromShort(SibiIndex.StatusType, NoNull(.Item(sibi_requests.Status)))
-                txtPO.Text = NoNull(.Item(sibi_requests.PO))
-                txtReqNumber.Text = NoNull(.Item(sibi_requests.RequisitionNumber))
-                txtRequestNum.Text = NoNull(.Item(sibi_requests.RequestNumber))
-                txtRTNumber.Text = NoNull(.Item(sibi_requests.RT_Number))
-                txtCreateDate.Text = NoNull(.Item(sibi_requests.DateStamp))
-            End With
-            SendToGrid(RequestItemsResults)
-            LoadNotes(CurrentRequest.strUID)
-            'RequestItemsGrid.ReadOnly = True
-            DisableControls(Me)
-            SetTitle()
-            SetAttachCount()
-            Me.Show()
-            Me.Activate()
+            Using SQLComms As New clsMySQL_Comms
+                Dim RequestResults As DataTable = SQLComms.Return_SQLTable(strRequestQRY)
+                Dim RequestItemsResults As DataTable = SQLComms.Return_SQLTable(strRequestItemsQRY)
+                ClearAll()
+                CollectRequestInfo(RequestResults, RequestItemsResults)
+                With RequestResults.Rows(0)
+                    txtDescription.Text = NoNull(.Item(sibi_requests.Description))
+                    txtUser.Text = NoNull(.Item(sibi_requests.RequestUser))
+                    cmbType.SelectedIndex = GetComboIndexFromShort(SibiIndex.RequestType, NoNull(.Item(sibi_requests.Type)))
+                    dtNeedBy.Value = NoNull(.Item(sibi_requests.NeedBy))
+                    cmbStatus.SelectedIndex = GetComboIndexFromShort(SibiIndex.StatusType, NoNull(.Item(sibi_requests.Status)))
+                    txtPO.Text = NoNull(.Item(sibi_requests.PO))
+                    txtReqNumber.Text = NoNull(.Item(sibi_requests.RequisitionNumber))
+                    txtRequestNum.Text = NoNull(.Item(sibi_requests.RequestNumber))
+                    txtRTNumber.Text = NoNull(.Item(sibi_requests.RT_Number))
+                    txtCreateDate.Text = NoNull(.Item(sibi_requests.DateStamp))
+                End With
+                SendToGrid(RequestItemsResults)
+                LoadNotes(CurrentRequest.strUID)
+                'RequestItemsGrid.ReadOnly = True
+                DisableControls(Me)
+                SetTitle()
+                SetAttachCount()
+                Me.Show()
+                Me.Activate()
+            End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+                Dispose()
             Else
                 EndProgram()
             End If
@@ -620,28 +625,28 @@ VALUES
     End Sub
     Private Sub LoadNotes(RequestUID As String)
         Dim strPullNotesQry As String = "SELECT * FROM " & sibi_notes.TableName & " WHERE " & sibi_notes.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_notes.DateStamp & " DESC"
-        Dim Results As DataTable = SQLComms.Return_SQLTable(strPullNotesQry)
-        Dim table As New DataTable
-        Dim intPreviewChars As Integer = 50
-        table.Columns.Add("Date Stamp")
-        table.Columns.Add("Preview")
-        table.Columns.Add("UID")
-        For Each r As DataRow In Results.Rows
-            table.Rows.Add(r.Item(sibi_notes.DateStamp),
-                           IIf(Len(r.Item(sibi_notes.Note)) > intPreviewChars, NotePreview(r.Item(sibi_notes.Note).ToString), r.Item(sibi_notes.Note)),
-                           r.Item(sibi_notes.Note_UID))
-        Next
-        dgvNotes.DataSource = table
-        dgvNotes.ClearSelection()
-        table.Dispose()
-        Results.Dispose()
+        Using SQLComms As New clsMySQL_Comms, table As New DataTable, Results As DataTable = SQLComms.Return_SQLTable(strPullNotesQry)
+            Dim intPreviewChars As Integer = 50
+            table.Columns.Add("Date Stamp")
+            table.Columns.Add("Preview")
+            table.Columns.Add("UID")
+            For Each r As DataRow In Results.Rows
+                table.Rows.Add(r.Item(sibi_notes.DateStamp),
+                               IIf(Len(r.Item(sibi_notes.Note)) > intPreviewChars, NotePreview(r.Item(sibi_notes.Note).ToString), r.Item(sibi_notes.Note)),
+                               r.Item(sibi_notes.Note_UID))
+            Next
+            dgvNotes.DataSource = table
+            dgvNotes.ClearSelection()
+        End Using
     End Sub
     Private Function DeleteItem_FromSQL(ItemUID As String, ItemColumnName As String, Table As String) As Integer
         Try
             Dim rows As Integer
             Dim strSQLQry As String = "DELETE FROM " & Table & " WHERE " & ItemColumnName & "='" & ItemUID & "'"
-            rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
-            Return rows
+            Using SQLComms As New clsMySQL_Comms
+                rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
+                Return rows
+            End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else

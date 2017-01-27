@@ -58,20 +58,22 @@ Public Class Tracking
     Private Sub GetCurrentTracking(strGUID As String)
         Dim dt As DataTable
         Dim dr As DataRow
-        dt = SQLComms.Return_SQLTable("SELECT * FROM " & trackable.TableName & " WHERE " & trackable.DeviceUID & "='" & strGUID & "' ORDER BY " & trackable.DateStamp & " DESC LIMIT 1") 'ds.Tables(0)
-        If dt.Rows.Count > 0 Then
-            For Each dr In dt.Rows
-                With dr
-                    CurrentTrackingDevice.Tracking.strCheckOutTime = .Item(trackable.CheckOut_Time).ToString
-                    CurrentTrackingDevice.Tracking.strCheckInTime = .Item(trackable.CheckIn_Time).ToString
-                    CurrentTrackingDevice.Tracking.strUseLocation = .Item(trackable.UseLocation).ToString
-                    CurrentTrackingDevice.Tracking.strCheckOutUser = .Item(trackable.CheckOut_User).ToString
-                    CurrentTrackingDevice.Tracking.strCheckInUser = .Item(trackable.CheckIn_User).ToString
-                    CurrentTrackingDevice.Tracking.strDueBackTime = .Item(trackable.DueBackDate).ToString
-                    CurrentTrackingDevice.Tracking.strUseReason = .Item(trackable.Notes).ToString
-                End With
-            Next
-        End If
+        Using SQLComms As New clsMySQL_Comms
+            dt = SQLComms.Return_SQLTable("SELECT * FROM " & trackable.TableName & " WHERE " & trackable.DeviceUID & "='" & strGUID & "' ORDER BY " & trackable.DateStamp & " DESC LIMIT 1") 'ds.Tables(0)
+            If dt.Rows.Count > 0 Then
+                For Each dr In dt.Rows
+                    With dr
+                        CurrentTrackingDevice.Tracking.strCheckOutTime = .Item(trackable.CheckOut_Time).ToString
+                        CurrentTrackingDevice.Tracking.strCheckInTime = .Item(trackable.CheckIn_Time).ToString
+                        CurrentTrackingDevice.Tracking.strUseLocation = .Item(trackable.UseLocation).ToString
+                        CurrentTrackingDevice.Tracking.strCheckOutUser = .Item(trackable.CheckOut_User).ToString
+                        CurrentTrackingDevice.Tracking.strCheckInUser = .Item(trackable.CheckIn_User).ToString
+                        CurrentTrackingDevice.Tracking.strDueBackTime = .Item(trackable.DueBackDate).ToString
+                        CurrentTrackingDevice.Tracking.strUseReason = .Item(trackable.Notes).ToString
+                    End With
+                Next
+            End If
+        End Using
     End Sub
     Private Sub LoadTracking()
         txtAssetTag.Text = CurrentTrackingDevice.strAssetTag
@@ -115,9 +117,10 @@ Public Class Tracking
             Waiting()
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE " & devices.TableName & " SET " & devices.CheckedOut & "='1' WHERE " & devices.DeviceUID & "='" & CurrentTrackingDevice.strGUID & "'"
-            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
-            rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO " & trackable.TableName & " 
+            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
+                'Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
+                rows = rows + cmd.ExecuteNonQuery()
+                Dim strSqlQry2 = "INSERT INTO " & trackable.TableName & " 
 (" & trackable.CheckType & ", 
 " & trackable.CheckOut_Time & ",
 " & trackable.DueBackDate & ", 
@@ -132,25 +135,25 @@ VALUES(@" & trackable.CheckType & ",
 @" & trackable.UseLocation & ",
 @" & trackable.Notes & ",
 @" & trackable.DeviceUID & ")"
-            cmd.CommandText = strSqlQry2
-            cmd.Parameters.AddWithValue("@" & trackable.CheckType, strCheckOut)
-            cmd.Parameters.AddWithValue("@" & trackable.CheckOut_Time, CheckData.strCheckOutTime)
-            cmd.Parameters.AddWithValue("@" & trackable.DueBackDate, CheckData.strDueDate)
-            cmd.Parameters.AddWithValue("@" & trackable.CheckOut_User, CheckData.strCheckOutUser)
-            cmd.Parameters.AddWithValue("@" & trackable.UseLocation, CheckData.strUseLocation)
-            cmd.Parameters.AddWithValue("@" & trackable.Notes, CheckData.strUseReason)
-            cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.strDeviceUID)
-            rows = rows + cmd.ExecuteNonQuery()
-            If rows = 2 Then
-                Dim blah = Message("Device Checked Out!", vbOKOnly + vbInformation, "Success", Me)
-            Else
-                Dim blah = Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
-            End If
+                cmd.CommandText = strSqlQry2
+                cmd.Parameters.AddWithValue("@" & trackable.CheckType, strCheckOut)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_Time, CheckData.strCheckOutTime)
+                cmd.Parameters.AddWithValue("@" & trackable.DueBackDate, CheckData.strDueDate)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_User, CheckData.strCheckOutUser)
+                cmd.Parameters.AddWithValue("@" & trackable.UseLocation, CheckData.strUseLocation)
+                cmd.Parameters.AddWithValue("@" & trackable.Notes, CheckData.strUseReason)
+                cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.strDeviceUID)
+                rows = rows + cmd.ExecuteNonQuery()
+                If rows = 2 Then
+                    Dim blah = Message("Device Checked Out!", vbOKOnly + vbInformation, "Success", Me)
+                Else
+                    Dim blah = Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
+                End If
+            End Using
             Me.Dispose()
-            MyParent.ViewDevice(CurrentTrackingDevice.strGUID)
-            cmd.Dispose()
-            DoneWaiting()
-            Exit Sub
+                MyParent.ViewDevice(CurrentTrackingDevice.strGUID)
+                DoneWaiting()
+                Exit Sub
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
                 DoneWaiting()
@@ -166,9 +169,9 @@ VALUES(@" & trackable.CheckType & ",
             Waiting()
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE " & devices.TableName & " SET " & devices.CheckedOut & "='0' WHERE " & devices.DeviceUID & "='" & CurrentTrackingDevice.strGUID & "'"
-            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
-            rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO " & trackable.TableName & " 
+            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
+                rows = rows + cmd.ExecuteNonQuery()
+                Dim strSqlQry2 = "INSERT INTO " & trackable.TableName & " 
 (" & trackable.CheckType & ", 
 " & trackable.CheckOut_Time & ",
 " & trackable.DueBackDate & ", 
@@ -187,24 +190,24 @@ VALUES (@" & trackable.CheckType & ",
 @" & trackable.UseLocation & ", 
 @" & trackable.Notes & ",
 @" & trackable.DeviceUID & ")"
-            cmd.CommandText = strSqlQry2
-            cmd.Parameters.AddWithValue("@" & trackable.CheckType, strCheckIn)
-            cmd.Parameters.AddWithValue("@" & trackable.CheckOut_Time, CheckData.strCheckOutTime)
-            cmd.Parameters.AddWithValue("@" & trackable.DueBackDate, CheckData.strDueDate)
-            cmd.Parameters.AddWithValue("@" & trackable.CheckIn_Time, CheckData.strCheckInTime)
-            cmd.Parameters.AddWithValue("@" & trackable.CheckOut_User, CheckData.strCheckOutUser)
-            cmd.Parameters.AddWithValue("@" & trackable.CheckIn_User, CheckData.strCheckInUser)
-            cmd.Parameters.AddWithValue("@" & trackable.UseLocation, CheckData.strUseLocation)
-            cmd.Parameters.AddWithValue("@" & trackable.Notes, CheckData.strCheckInNotes)
-            cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.strDeviceUID)
-            rows = rows + cmd.ExecuteNonQuery()
-            If rows = 2 Then
-                Dim blah = Message("Device Checked In!", vbOKOnly + vbInformation, "Success", Me)
-            Else
-                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
-            End If
+                cmd.CommandText = strSqlQry2
+                cmd.Parameters.AddWithValue("@" & trackable.CheckType, strCheckIn)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_Time, CheckData.strCheckOutTime)
+                cmd.Parameters.AddWithValue("@" & trackable.DueBackDate, CheckData.strDueDate)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckIn_Time, CheckData.strCheckInTime)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_User, CheckData.strCheckOutUser)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckIn_User, CheckData.strCheckInUser)
+                cmd.Parameters.AddWithValue("@" & trackable.UseLocation, CheckData.strUseLocation)
+                cmd.Parameters.AddWithValue("@" & trackable.Notes, CheckData.strCheckInNotes)
+                cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.strDeviceUID)
+                rows = rows + cmd.ExecuteNonQuery()
+                If rows = 2 Then
+                    Dim blah = Message("Device Checked In!", vbOKOnly + vbInformation, "Success", Me)
+                Else
+                    Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
+                End If
+            End Using
             Me.Dispose()
-            cmd.Dispose()
             MyParent.ViewDevice(CurrentTrackingDevice.strGUID)
             DoneWaiting()
             Exit Sub

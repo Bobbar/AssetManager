@@ -19,9 +19,7 @@ Public Class frmView
     End Structure
     Sub New(ParentForm As Form, GridTheme As Grid_Theme, DeviceGUID As String)
         InitializeComponent()
-        Debug.Print("Vis " & tsdSelectWindow.Visible.ToString)
         MyGridTheme = GridTheme
-        ' MyWindowList = New WindowList(Me, tsdSelectWindow)
         MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
         MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, "dev_description")
         Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
@@ -44,7 +42,9 @@ Public Class frmView
         AttachmentTool.ToolTipText = "Attachments " + AttachmentTool.Text
     End Sub
     Private Sub GetCurrentValues()
-        OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
+        Using SQLComms As New clsMySQL_Comms
+            OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
+        End Using
     End Sub
     Public Sub GetNewValues(UpdateInfo As Update_Info)
         With NewData
@@ -173,27 +173,26 @@ Public Class frmView
                 ", " & devices.CheckSum & "=@" & devices.CheckSum &
                 ", " & devices.Sibi_Link_UID & "=@" & devices.Sibi_Link_UID &
                 " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
-
-            Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
-            cmd.Parameters.AddWithValue("@" & devices.Description, NewData.strDescription)
-            cmd.Parameters.AddWithValue("@" & devices.Location, NewData.strLocation)
-            cmd.Parameters.AddWithValue("@" & devices.CurrentUser, NewData.strCurrentUser)
-            cmd.Parameters.AddWithValue("@" & devices.Munis_Emp_Num, NewData.strCurrentUserEmpNum)
-            cmd.Parameters.AddWithValue("@" & devices.Serial, NewData.strSerial)
-            cmd.Parameters.AddWithValue("@" & devices.AssetTag, NewData.strAssetTag)
-            cmd.Parameters.AddWithValue("@" & devices.PurchaseDate, NewData.dtPurchaseDate)
-            cmd.Parameters.AddWithValue("@" & devices.ReplacementYear, NewData.strReplaceYear)
-            cmd.Parameters.AddWithValue("@" & devices.OSVersion, NewData.strOSVersion)
-            cmd.Parameters.AddWithValue("@" & devices.EQType, NewData.strEqType)
-            cmd.Parameters.AddWithValue("@" & devices.Status, NewData.strStatus)
-            cmd.Parameters.AddWithValue("@" & devices.Trackable, Convert.ToInt32(NewData.bolTrackable))
-            cmd.Parameters.AddWithValue("@" & devices.PO, NewData.strPO)
-            cmd.Parameters.AddWithValue("@" & devices.LastMod_User, strLocalUser)
-            cmd.Parameters.AddWithValue("@" & devices.LastMod_Date, Now)
-            cmd.Parameters.AddWithValue("@" & devices.CheckSum, NewData.CheckSum)
-            cmd.Parameters.AddWithValue("@" & devices.Sibi_Link_UID, NewData.strSibiLink)
-            rows = rows + cmd.ExecuteNonQuery()
-            Dim strSqlQry2 = "INSERT INTO " & historical_dev.TableName & " (" & historical_dev.ChangeType & ",
+            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
+                cmd.Parameters.AddWithValue("@" & devices.Description, NewData.strDescription)
+                cmd.Parameters.AddWithValue("@" & devices.Location, NewData.strLocation)
+                cmd.Parameters.AddWithValue("@" & devices.CurrentUser, NewData.strCurrentUser)
+                cmd.Parameters.AddWithValue("@" & devices.Munis_Emp_Num, NewData.strCurrentUserEmpNum)
+                cmd.Parameters.AddWithValue("@" & devices.Serial, NewData.strSerial)
+                cmd.Parameters.AddWithValue("@" & devices.AssetTag, NewData.strAssetTag)
+                cmd.Parameters.AddWithValue("@" & devices.PurchaseDate, NewData.dtPurchaseDate)
+                cmd.Parameters.AddWithValue("@" & devices.ReplacementYear, NewData.strReplaceYear)
+                cmd.Parameters.AddWithValue("@" & devices.OSVersion, NewData.strOSVersion)
+                cmd.Parameters.AddWithValue("@" & devices.EQType, NewData.strEqType)
+                cmd.Parameters.AddWithValue("@" & devices.Status, NewData.strStatus)
+                cmd.Parameters.AddWithValue("@" & devices.Trackable, Convert.ToInt32(NewData.bolTrackable))
+                cmd.Parameters.AddWithValue("@" & devices.PO, NewData.strPO)
+                cmd.Parameters.AddWithValue("@" & devices.LastMod_User, strLocalUser)
+                cmd.Parameters.AddWithValue("@" & devices.LastMod_Date, Now)
+                cmd.Parameters.AddWithValue("@" & devices.CheckSum, NewData.CheckSum)
+                cmd.Parameters.AddWithValue("@" & devices.Sibi_Link_UID, NewData.strSibiLink)
+                rows = rows + cmd.ExecuteNonQuery()
+                Dim strSqlQry2 = "INSERT INTO " & historical_dev.TableName & " (" & historical_dev.ChangeType & ",
 " & historical_dev.Notes & ",
 " & historical_dev.Serial & ",
 " & historical_dev.Description & ",
@@ -225,26 +224,26 @@ VALUES (@" & historical_dev.ChangeType & ",
 @" & historical_dev.Status & ",
 @" & historical_dev.Trackable & ",
 @" & historical_dev.PO & ")"
-            cmd.CommandText = strSqlQry2
-            cmd.Parameters.Clear()
-            cmd.Parameters.AddWithValue("@" & historical_dev.ChangeType, UpdateInfo.strChangeType) 'GetDBValue(ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
-            cmd.Parameters.AddWithValue("@" & historical_dev.Notes, NewData.strNote)
-            cmd.Parameters.AddWithValue("@" & historical_dev.Serial, NewData.strSerial)
-            cmd.Parameters.AddWithValue("@" & historical_dev.Description, NewData.strDescription)
-            cmd.Parameters.AddWithValue("@" & historical_dev.Location, NewData.strLocation)
-            cmd.Parameters.AddWithValue("@" & historical_dev.CurrentUser, NewData.strCurrentUser)
-            cmd.Parameters.AddWithValue("@" & historical_dev.AssetTag, NewData.strAssetTag)
-            cmd.Parameters.AddWithValue("@" & historical_dev.PurchaseDate, NewData.dtPurchaseDate)
-            cmd.Parameters.AddWithValue("@" & historical_dev.ReplacementYear, NewData.strReplaceYear)
-            cmd.Parameters.AddWithValue("@" & historical_dev.OSVersion, NewData.strOSVersion)
-            cmd.Parameters.AddWithValue("@" & historical_dev.DeviceUID, CurrentViewDevice.strGUID)
-            cmd.Parameters.AddWithValue("@" & historical_dev.ActionUser, strLocalUser)
-            cmd.Parameters.AddWithValue("@" & historical_dev.EQType, NewData.strEqType)
-            cmd.Parameters.AddWithValue("@" & historical_dev.Status, NewData.strStatus)
-            cmd.Parameters.AddWithValue("@" & historical_dev.Trackable, Convert.ToInt32(NewData.bolTrackable))
-            cmd.Parameters.AddWithValue("@" & historical_dev.PO, NewData.strPO)
-            rows = rows + cmd.ExecuteNonQuery()
-            cmd.Dispose()
+                cmd.CommandText = strSqlQry2
+                cmd.Parameters.Clear()
+                cmd.Parameters.AddWithValue("@" & historical_dev.ChangeType, UpdateInfo.strChangeType) 'GetDBValue(ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
+                cmd.Parameters.AddWithValue("@" & historical_dev.Notes, NewData.strNote)
+                cmd.Parameters.AddWithValue("@" & historical_dev.Serial, NewData.strSerial)
+                cmd.Parameters.AddWithValue("@" & historical_dev.Description, NewData.strDescription)
+                cmd.Parameters.AddWithValue("@" & historical_dev.Location, NewData.strLocation)
+                cmd.Parameters.AddWithValue("@" & historical_dev.CurrentUser, NewData.strCurrentUser)
+                cmd.Parameters.AddWithValue("@" & historical_dev.AssetTag, NewData.strAssetTag)
+                cmd.Parameters.AddWithValue("@" & historical_dev.PurchaseDate, NewData.dtPurchaseDate)
+                cmd.Parameters.AddWithValue("@" & historical_dev.ReplacementYear, NewData.strReplaceYear)
+                cmd.Parameters.AddWithValue("@" & historical_dev.OSVersion, NewData.strOSVersion)
+                cmd.Parameters.AddWithValue("@" & historical_dev.DeviceUID, CurrentViewDevice.strGUID)
+                cmd.Parameters.AddWithValue("@" & historical_dev.ActionUser, strLocalUser)
+                cmd.Parameters.AddWithValue("@" & historical_dev.EQType, NewData.strEqType)
+                cmd.Parameters.AddWithValue("@" & historical_dev.Status, NewData.strStatus)
+                cmd.Parameters.AddWithValue("@" & historical_dev.Trackable, Convert.ToInt32(NewData.bolTrackable))
+                cmd.Parameters.AddWithValue("@" & historical_dev.PO, NewData.strPO)
+                rows = rows + cmd.ExecuteNonQuery()
+            End Using
             If rows = 2 Then
                 ViewDevice(CurrentViewDevice.strGUID)
                 Dim blah = Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
@@ -263,10 +262,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         End Try
     End Sub
     Public Sub ViewDevice(ByVal DeviceUID As String)
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
         Try
             Waiting()
             bolGridFilling = True
@@ -276,7 +271,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                 Me.Show()
                 DataGridHistory.ClearSelection()
                 bolGridFilling = False
-                CheckRDP()
+                tmr_RDPRefresher.Enabled = True
             Else
                 Me.Dispose()
             End If
@@ -289,23 +284,25 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
         Dim HistoricalResults, DeviceResults As New DataTable
         Try
-            DeviceResults = SQLComms.Return_SQLTable("Select * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & DeviceUID & "'")
-            If DeviceResults.Rows.Count < 1 Then
-                CloseChildren(Me)
+            Using SQLComms As New clsMySQL_Comms
+                DeviceResults = SQLComms.Return_SQLTable("Select * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & DeviceUID & "'")
+                If DeviceResults.Rows.Count < 1 Then
+                    CloseChildren(Me)
+                    DeviceResults.Dispose()
+                    CurrentViewDevice = Nothing
+                    Dim blah = Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found", Me)
+                    Return False
+                End If
+                CurrentViewDevice = Asset.CollectDeviceInfo(DeviceResults)
+                FillDeviceInfo()
+                HistoricalResults = SQLComms.Return_SQLTable("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
+                SendToHistGrid(DataGridHistory, HistoricalResults)
+                HistoricalResults.Dispose()
                 DeviceResults.Dispose()
-                CurrentViewDevice = Nothing
-                Dim blah = Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found", Me)
-                Return False
-            End If
-            CurrentViewDevice = Asset.CollectDeviceInfo(DeviceResults)
-            FillDeviceInfo()
-            HistoricalResults = SQLComms.Return_SQLTable("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
-            SendToHistGrid(DataGridHistory, HistoricalResults)
-            HistoricalResults.Dispose()
-            DeviceResults.Dispose()
-            DisableControls()
-            SetAttachCount()
-            Return True
+                DisableControls()
+                SetAttachCount()
+                Return True
+            End Using
         Catch ex As Exception
             DoneWaiting()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -424,28 +421,21 @@ VALUES (@" & historical_dev.ChangeType & ",
         Application.DoEvents()
     End Sub
     Public Sub ViewTracking(strGUID As String)
-        Dim Results As New DataTable
         Dim strQry = "Select * FROM " & trackable.TableName & ", " & devices.TableName & " WHERE " & trackable.DeviceUID & " = " & devices.DeviceUID & " And " & trackable.DeviceUID & " = '" & strGUID & "' ORDER BY " & trackable.DateStamp & " DESC"
         Try
-            If Not ConnectionReady() Then
-                ConnectionNotReady()
-                Exit Sub
-            End If
-            Results = SQLComms.Return_SQLTable(strQry)
-            If Results.Rows.Count > 0 Then
-                CollectCurrentTracking(Results)
-                SendToTrackGrid(TrackingGrid, Results)
-                DisableSorting(TrackingGrid)
-            Else
-                Results.Dispose()
-                TrackingGrid.DataSource = Nothing
-            End If
-            FillTrackingBox()
-            SetTracking(CurrentViewDevice.bolTrackable, CurrentViewDevice.Tracking.bolCheckedOut)
-            Results.Dispose()
-            Exit Sub
+            Using SQLComms As New clsMySQL_Comms, Results As DataTable = SQLComms.Return_SQLTable(strQry)
+                If Results.Rows.Count > 0 Then
+                    CollectCurrentTracking(Results)
+                    SendToTrackGrid(TrackingGrid, Results)
+                    DisableSorting(TrackingGrid)
+                Else
+                    Results.Dispose()
+                    TrackingGrid.DataSource = Nothing
+                End If
+                FillTrackingBox()
+                SetTracking(CurrentViewDevice.bolTrackable, CurrentViewDevice.Tracking.bolCheckedOut)
+            End Using
         Catch ex As Exception
-            Results.Dispose()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             DoneWaiting()
         End Try
@@ -592,10 +582,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         ModifyDevice()
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs)
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
         If Not CheckFields() Then
             Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
             bolCheckFields = True
@@ -615,10 +601,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Sub
     Private Sub NewEntryView(GUID As String)
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
         Waiting()
         Dim NewEntry As New View_Entry(Me, GUID)
         DoneWaiting()
@@ -629,10 +611,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         DoneWaiting()
     End Sub
     Private Sub NewTrackingView(GUID As String)
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
         Waiting()
         Dim NewTracking As New View_Tracking(Me, GUID, CurrentViewDevice)
         DoneWaiting()
@@ -712,9 +690,10 @@ VALUES (@" & historical_dev.ChangeType & ",
         Try
             Dim rows
             Dim strSQLQry As String = "DELETE FROM " & historical_dev.TableName & " WHERE " & historical_dev.History_Entry_UID & "='" & strGUID & "'"
-            rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
-            Return rows
-            Exit Function
+            Using SQLComms As New clsMySQL_Comms
+                rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
+                Return rows
+            End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else
@@ -759,10 +738,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         NewTrackingView(TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         ModifyDevice()
     End Sub
@@ -778,34 +753,21 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Sub
     Private Sub tsbDeleteDevice_Click(sender As Object, e As EventArgs) Handles tsbDeleteDevice.Click
-
         DeleteDevice()
     End Sub
     Private Sub CheckInTool_Click(sender As Object, e As EventArgs) Handles CheckInTool.Click
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
         If Not CheckForAccess(AccessGroup.Tracking) Then Exit Sub
         Waiting()
         Dim NewTracking As New Tracking(CurrentViewDevice, Me)
         DoneWaiting()
     End Sub
     Private Sub CheckOutTool_Click(sender As Object, e As EventArgs) Handles CheckOutTool.Click
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
         If Not CheckForAccess(AccessGroup.Tracking) Then Exit Sub
         Waiting()
         Dim NewTracking As New Tracking(CurrentViewDevice, Me)
         DoneWaiting()
     End Sub
     Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen() Then
             Dim NewAttachments As New frmAttachments(Me, MyGridTheme, CurrentViewDevice)
@@ -841,10 +803,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         AdjustComboBoxWidth(sender, e)
     End Sub
     Private Sub cmdAccept_Tool_Click(sender As Object, e As EventArgs) Handles cmdAccept_Tool.Click
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
         If Not CheckFields() Then
             Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
             bolCheckFields = True
@@ -901,7 +859,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         SetupNetTools(PingResults)
     End Sub
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
-        MyLiveBox.Unload()
+        MyLiveBox.Dispose()
         CloseChildren(Me)
     End Sub
     Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint
@@ -920,11 +878,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Sub
     Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
-        'If tsdSelectWindow.Visible = False Then
-        '    Me.Hide()
-        '    Application.DoEvents()
-        '    Me.Show()
-        'End If
         CheckRDP()
     End Sub
     Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
@@ -1022,22 +975,4 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub DataGridHistory_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellLeave
         LeaveRow(DataGridHistory, MyGridTheme, e.RowIndex)
     End Sub
-
-    Private Sub frmView_LostFocus(sender As Object, e As EventArgs) Handles Me.LostFocus
-        Debug.Print(Me.ToString & " - " & Me.Focused.ToString)
-    End Sub
-
-    Private Sub frmView_Activated(sender As Object, e As EventArgs) Handles Me.Activated
-        Debug.Print("Activate")
-    End Sub
-
-    Private Sub frmView_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
-        Debug.Print(Me.ToString & " - " & Me.Focused.ToString)
-    End Sub
-
-    Private Sub frmView_Enter(sender As Object, e As EventArgs) Handles Me.Enter
-        Debug.Print("Enter")
-
-    End Sub
-
 End Class

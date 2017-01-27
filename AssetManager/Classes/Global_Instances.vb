@@ -6,7 +6,5 @@ Module Global_Instances
     Public Asset As New clsAssetManager_Functions
     Public FTP As New clsFTP_Functions
     Public UserAccess As User_Info
-    Public SQLComms As New clsMySQL_Comms
     Public MunisComms As New clsMunis_Comms
-    'Public GlobalConn As MySqlConnection = SQLComms.NewConnection()
 End Module

@@ -18,39 +18,37 @@ Public Class View_Tracking
     End Sub
     Private Sub ViewTrackingEntry(ByVal EntryUID As String, ByRef Device As Device_Info)
         Try
-            If Not ConnectionReady() Then
-                ConnectionNotReady()
-                Exit Sub
-            End If
+            'If Not ConnectionReady() Then
+            '    ConnectionNotReady()
+            '    Exit Sub
+            'End If
             Waiting()
-            Dim results As New DataTable
             Dim strQry = "Select * FROM " & trackable.TableName & " WHERE  " & trackable.UID & " = '" & EntryUID & "'"
-            results = SQLComms.Return_SQLTable(strQry)
-            For Each r As DataRow In results.Rows
-                txtTimeStamp.Text = NoNull(r.Item(trackable.DateStamp))
-                txtCheckType.Text = NoNull(r.Item(trackable.CheckType))
-                If txtCheckType.Text = "IN" Then
-                    txtCheckType.BackColor = colCheckIn
-                ElseIf txtCheckType.Text = "OUT" Then
-                    txtCheckType.BackColor = colCheckOut
-                End If
-                txtDescription.Text = Device.strDescription
-                txtGUID.Text = NoNull(r.Item(trackable.DeviceUID))
-                txtCheckOutUser.Text = NoNull(r.Item(trackable.CheckOut_User))
-                txtCheckInUser.Text = NoNull(r.Item(trackable.CheckIn_User))
-                txtLocation.Text = NoNull(r.Item(trackable.UseLocation))
-                txtAssetTag.Text = Device.strAssetTag
-                txtCheckOutTime.Text = NoNull(r.Item(trackable.CheckOut_Time))
-                txtDueBack.Text = NoNull(r.Item(trackable.DueBackDate))
-                txtSerial.Text = Device.strSerial
-                txtCheckInTime.Text = NoNull(r.Item(trackable.CheckIn_Time))
-                txtNotes.Text = NoNull(r.Item(trackable.Notes))
-                txtEntryGUID.Text = NoNull(r.Item(trackable.UID))
-                Me.Text = Me.Text + " - " & NoNull(r.Item(trackable.DateStamp))
-            Next
-            results.Dispose()
+            Using SQLComms As New clsMySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQry)
+                For Each r As DataRow In results.Rows
+                    txtTimeStamp.Text = NoNull(r.Item(trackable.DateStamp))
+                    txtCheckType.Text = NoNull(r.Item(trackable.CheckType))
+                    If txtCheckType.Text = "IN" Then
+                        txtCheckType.BackColor = colCheckIn
+                    ElseIf txtCheckType.Text = "OUT" Then
+                        txtCheckType.BackColor = colCheckOut
+                    End If
+                    txtDescription.Text = Device.strDescription
+                    txtGUID.Text = NoNull(r.Item(trackable.DeviceUID))
+                    txtCheckOutUser.Text = NoNull(r.Item(trackable.CheckOut_User))
+                    txtCheckInUser.Text = NoNull(r.Item(trackable.CheckIn_User))
+                    txtLocation.Text = NoNull(r.Item(trackable.UseLocation))
+                    txtAssetTag.Text = Device.strAssetTag
+                    txtCheckOutTime.Text = NoNull(r.Item(trackable.CheckOut_Time))
+                    txtDueBack.Text = NoNull(r.Item(trackable.DueBackDate))
+                    txtSerial.Text = Device.strSerial
+                    txtCheckInTime.Text = NoNull(r.Item(trackable.CheckIn_Time))
+                    txtNotes.Text = NoNull(r.Item(trackable.Notes))
+                    txtEntryGUID.Text = NoNull(r.Item(trackable.UID))
+                    Me.Text = Me.Text + " - " & NoNull(r.Item(trackable.DateStamp))
+                Next
+            End Using
             DoneWaiting()
-            Exit Sub
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
             Else

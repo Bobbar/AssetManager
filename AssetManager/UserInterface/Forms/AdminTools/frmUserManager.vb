@@ -1,9 +1,11 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.ComponentModel
+Imports MySql.Data.MySqlClient
 Public Class frmUserManager
     Private ModuleIndex As New List(Of Access_Info)
     Private CurrentUser As User_Info
     Private DataBinder As New BindingSource
     Private Qry As String = "SELECT * FROM " & users.TableName
+    Private SQLComms As New clsMySQL_Comms
     Private myAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(Qry)
     Private SelectedRow As Integer
     Sub New(ParentForm As Form)
@@ -145,8 +147,10 @@ Public Class frmUserManager
     Private Sub UserGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellDoubleClick
         UserGrid.BeginEdit(False)
     End Sub
-
     Private Sub cmdRefresh_Click(sender As Object, e As EventArgs) Handles cmdRefresh.Click
         LoadUserData()
+    End Sub
+    Private Sub frmUserManager_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        SQLComms.Dispose()
     End Sub
 End Class

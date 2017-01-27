@@ -5,7 +5,7 @@ Public Class frmSibiMain
     Private MyWindowList As WindowList
     Private LastCmd As MySqlCommand
     Private MyGridTheme As New Grid_Theme
-
+    Private bolRebuildingCombo As Boolean = False
     Public Sub RefreshResults()
         ExecuteCmd(LastCmd)
     End Sub
@@ -24,17 +24,22 @@ Public Class frmSibiMain
     End Sub
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         ClearAll(Me.Controls)
-        SetDisplayYears()
-        ShowAll()
+        If SetDisplayYears() Then
+            ShowAll()
+        End If
+
     End Sub
     Private Sub frmSibiMain_Load(sender As Object, e As EventArgs) Handles Me.Load
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
-        SetDisplayYears()
-        ShowAll("All")
-        MyGridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
-        MyGridTheme.CellSelectColor = colSibiSelectColor
-        MyGridTheme.RowHighlightColor = colHighlightBlue
-        MyWindowList = New WindowList(Me, tsdSelectWindow)
+        If SetDisplayYears() Then
+            ShowAll("All")
+            MyGridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
+            MyGridTheme.CellSelectColor = colSibiSelectColor
+            MyGridTheme.RowHighlightColor = colHighlightBlue
+            MyWindowList = New WindowList(Me, tsdSelectWindow)
+        Else
+            Me.Dispose()
+        End If
     End Sub
     Private Function BuildSearchListNew() As List(Of SearchVal)
         Dim tmpList As New List(Of SearchVal)
@@ -73,15 +78,12 @@ Public Class frmSibiMain
     Private Sub ExecuteCmd(cmd As MySqlCommand)
         Try
             LastCmd = cmd
-            Dim QryComm As MySqlCommand = cmd
-            Dim ds As New DataSet
-            Dim da As New MySqlDataAdapter
-            QryComm.Connection = SQLComms.Connection
-            da.SelectCommand = QryComm
-            da.Fill(ds)
-            da.Dispose()
-            SendToGrid(ds.Tables(0))
-            ds.Dispose()
+            Using SQLComms As New clsMySQL_Comms, QryComm As MySqlCommand = cmd, ds As New DataSet, da As New MySqlDataAdapter
+                QryComm.Connection = SQLComms.Connection
+                da.SelectCommand = QryComm
+                da.Fill(ds)
+                SendToGrid(ds.Tables(0))
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             ' ConnectionReady()
@@ -123,23 +125,35 @@ Public Class frmSibiMain
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
-    Private Sub SetDisplayYears()
-        Dim strQRY As String = "SELECT DISTINCT YEAR(" & sibi_requests.DateStamp & ") FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.DateStamp & " DESC"
-        Dim results As DataTable = SQLComms.Return_SQLTable(strQRY)
-        cmbDisplayYear.Items.Clear()
-        cmbDisplayYear.Items.Add("All")
-        For Each r As DataRow In results.Rows
-            cmbDisplayYear.Items.Add(r.Item("YEAR(" & sibi_requests.DateStamp & ")"))
-        Next
-        cmbDisplayYear.SelectedIndex = 0
-    End Sub
+    Private Function SetDisplayYears() As Boolean
+        Try
+            bolRebuildingCombo = True
+            Dim strQRY As String = "SELECT DISTINCT YEAR(" & sibi_requests.DateStamp & ") FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.DateStamp & " DESC"
+            Using SQLComms As New clsMySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQRY)
+                '  If Not SQLComms.ConnectionReady Then Return False
+                cmbDisplayYear.Items.Clear()
+                cmbDisplayYear.Items.Add("All")
+                For Each r As DataRow In results.Rows
+                    cmbDisplayYear.Items.Add(r.Item("YEAR(" & sibi_requests.DateStamp & ")"))
+                Next
+                cmbDisplayYear.SelectedIndex = 0
+                bolRebuildingCombo = False
+                Return True
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return False
+        End Try
+    End Function
     Private Sub ShowAll(Optional Year As String = "")
-        If Year = "" Then Year = cmbDisplayYear.Text
-        If Year = "All" Then
-            ExecuteCmd(SQLComms.Return_SQLCommand("SELECT * FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
-        Else
-            ExecuteCmd(SQLComms.Return_SQLCommand("SELECT * FROM " & sibi_requests.TableName & " WHERE YEAR(" & sibi_requests.DateStamp & ") = " & Year & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
-        End If
+        Using SQLComms As New clsMySQL_Comms
+            If Year = "" Then Year = cmbDisplayYear.Text
+            If Year = "All" Then
+                ExecuteCmd(SQLComms.Return_SQLCommand("SELECT * FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
+            Else
+                ExecuteCmd(SQLComms.Return_SQLCommand("SELECT * FROM " & sibi_requests.TableName & " WHERE YEAR(" & sibi_requests.DateStamp & ") = " & Year & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
+            End If
+        End Using
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
         Dim NewRequest As New frmManageRequest(Me)
@@ -148,10 +162,10 @@ Public Class frmSibiMain
         OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub OpenRequest(strUID As String)
-        If Not ConnectionReady() Then
-            ConnectionNotReady()
-            Exit Sub
-        End If
+        'If Not ConnectionReady() Then
+        '    ConnectionNotReady()
+        '    Exit Sub
+        'End If
         If Not RequestIsOpen(strUID) Then
             Dim ManRequest As New frmManageRequest(Me, MyGridTheme, strUID)
         Else
@@ -232,7 +246,7 @@ Public Class frmSibiMain
         LeaveRow(ResultGrid, MyGridTheme, e.RowIndex)
     End Sub
     Private Sub cmbDisplayYear_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbDisplayYear.SelectedIndexChanged
-        If Not IsNothing(cmbDisplayYear.Text) Then
+        If cmbDisplayYear.Text IsNot Nothing And Not bolRebuildingCombo Then
             ShowAll(cmbDisplayYear.Text)
         End If
     End Sub
