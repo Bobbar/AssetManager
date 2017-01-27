@@ -72,7 +72,7 @@ Public Class frmView
             .strNote = UpdateInfo.strNote
             .bolTrackable = chkTrackable.Checked
             .strPO = Trim(txtPONumber.Text)
-            NewData.CheckSum = GetHashOfDevice(NewData)
+            .CheckSum = GetHashOfDevice(NewData)
         End With
         MunisUser = Nothing
     End Sub
@@ -577,10 +577,6 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub Button2_Click(sender As Object, e As EventArgs)
         DisableControls()
     End Sub
-    Private Sub EditToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
-        ModifyDevice()
-    End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs)
         If Not CheckFields() Then
             Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
@@ -741,11 +737,14 @@ VALUES (@" & historical_dev.ChangeType & ",
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         ModifyDevice()
     End Sub
-    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+    Private Sub tsbNewNote_Click(sender As Object, e As EventArgs) Handles tsbNewNote.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
-        GetCurrentValues()
         Dim UpdateDia As New UpdateDev(Me, True)
         If UpdateDia.DialogResult = DialogResult.OK Then
+            If Not ConcurrencyCheck() Then
+                CancelModify()
+                Exit Sub
+            End If
             GetNewValues(UpdateDia.UpdateInfo)
             UpdateDevice(UpdateDia.UpdateInfo)
         Else
@@ -822,8 +821,8 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Sub
     Private Function ConcurrencyCheck() As Boolean
-        Dim InDBCheckSum As String = Asset.Get_SQLValue(devices.TableName, devices.DeviceUID, OldData.strGUID, devices.CheckSum)
-        If InDBCheckSum = OldData.CheckSum Then
+        Dim InDBCheckSum As String = Asset.Get_SQLValue(devices.TableName, devices.DeviceUID, CurrentViewDevice.strGUID, devices.CheckSum)
+        If InDBCheckSum = CurrentViewDevice.CheckSum Then
             Return True
         Else
             Message("This record appears to have been modified by someone else since the start of this modification.", vbOKOnly + vbExclamation, "Concurrency Error", Me)

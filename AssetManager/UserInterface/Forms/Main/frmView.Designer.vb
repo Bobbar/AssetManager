@@ -83,7 +83,7 @@ Partial Class frmView
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.ToolStrip1 = New AssetManager.MyToolStrip()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
+        Me.tsbNewNote = New System.Windows.Forms.ToolStripButton()
         Me.tsbDeleteDevice = New System.Windows.Forms.ToolStripButton()
         Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
         Me.TrackingTool = New System.Windows.Forms.ToolStripDropDownButton()
@@ -777,7 +777,7 @@ Partial Class frmView
         Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.tsbDeleteDevice, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.tsdSelectWindow, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.tsbNewNote, Me.tsbDeleteDevice, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.tsdSelectWindow, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
@@ -796,14 +796,14 @@ Partial Class frmView
         Me.ToolStripButton1.Size = New System.Drawing.Size(39, 34)
         Me.ToolStripButton1.Text = "Modify"
         '
-        'ToolStripButton2
+        'tsbNewNote
         '
-        Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
-        Me.ToolStripButton2.Name = "ToolStripButton2"
-        Me.ToolStripButton2.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
-        Me.ToolStripButton2.Size = New System.Drawing.Size(39, 34)
-        Me.ToolStripButton2.Text = "Add Note"
+        Me.tsbNewNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.tsbNewNote.Image = CType(resources.GetObject("tsbNewNote.Image"), System.Drawing.Image)
+        Me.tsbNewNote.Name = "tsbNewNote"
+        Me.tsbNewNote.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.tsbNewNote.Size = New System.Drawing.Size(39, 34)
+        Me.tsbNewNote.Text = "Add Note"
         '
         'tsbDeleteDevice
         '
@@ -1010,7 +1010,7 @@ Partial Class frmView
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents ToolStrip1 As MyToolStrip
     Friend WithEvents ToolStripButton1 As ToolStripButton
-    Friend WithEvents ToolStripButton2 As ToolStripButton
+    Friend WithEvents tsbNewNote As ToolStripButton
     Friend WithEvents tsbDeleteDevice As ToolStripButton
     Friend WithEvents TrackingTool As ToolStripDropDownButton
     Friend WithEvents CheckOutTool As ToolStripMenuItem
