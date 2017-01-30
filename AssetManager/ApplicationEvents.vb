@@ -5,20 +5,16 @@
     ' UnhandledException: Raised if the application encounters an unhandled exception.
     ' StartupNextInstance: Raised when launching a single-instance application and the application is already active. 
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
+
     Partial Friend Class MyApplication
+
         Private Sub LoadSplash(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
             Try
                 SplashScreen1.Show()
                 Logger("Starting AssetManager...")
-                Status("Loading...")
                 Status("Checking Server Connection...")
                 Using SQLComms As New clsMySQL_Comms
-                    'If SQLComms.OpenConnection() Then
-                    '    ' ConnectionReady()
-                    'Else
-                    '    Dim blah = Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect", SplashScreen1)
-                    '    EndProgram()
-                    'End If
+                    'check connection
                 End Using
                 Status("Loading Indexes...")
                 BuildIndexes()
@@ -30,6 +26,7 @@
                     EndProgram()
                 End If
                 Status("Ready!")
+                System.Threading.Thread.Sleep(1000)
             Catch ex As Exception
                 ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
                 e.Cancel = True

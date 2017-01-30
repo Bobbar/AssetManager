@@ -101,14 +101,14 @@
             Dim frm As Form = CType(item.Tag, Form)
             frm.Dispose()
             GC.Collect()
-            If DropDownControl.DropDownItems.Count = 1 Then
+            If DropDownControl.DropDownItems.Count < 1 Then
                 DropDownControl.Visible = False
                 DropDownControl.DropDownItems.Clear()
-                RemoveHandler item.MouseDown, AddressOf WindowClick
                 item.Dispose()
             Else
-                RemoveHandler item.MouseDown, AddressOf WindowClick
+                item.Visible = False
                 item.Dispose()
+                DropDownControl.DropDownItems.Remove(item)
                 intFormCount = FormCount(MyParentForm)
                 DropDownControl.Text = CountText(intFormCount)
             End If

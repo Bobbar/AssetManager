@@ -19,11 +19,13 @@ Public Class MainForm
     Private cmdLastCommand As MySqlCommand
     Private MyWindowList As WindowList
     Private MyGridTheme As New Grid_Theme
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub MainForm_HandleCreated(sender As Object, e As EventArgs) Handles Me.HandleCreated
         LoadProgram()
     End Sub
     Private Sub LoadProgram()
         Try
+            ShowAll()
+            SplashScreen1.Hide()
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             ToolStrip1.BackColor = colAssetToolBarColor
             ExtendedMethods.DoubleBuffered(ResultGrid, True)
@@ -35,14 +37,10 @@ Public Class MainForm
             GetGridStyles()
             SetGridStyle(ResultGrid)
             ConnectionWatchDog.RunWorkerAsync()
-            ShowAll()
-            Thread.Sleep(1000)
-            SplashScreen1.Hide()
             Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip1, 2)
             MyWindowList = New WindowList(Me, tsdSelectWindow)
             InitLiveBox()
             Clear_All()
-            Me.Show()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             EndProgram()
@@ -500,5 +498,13 @@ Public Class MainForm
     End Sub
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
         SendToGrid(Asset.DevicesBySup(Me))
+    End Sub
+
+    Private Sub ToolStrip1_Click(sender As Object, e As EventArgs) Handles ToolStrip1.Click
+
+    End Sub
+
+    Private Sub ToolStrip1_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles ToolStrip1.ItemClicked
+
     End Sub
 End Class
