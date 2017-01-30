@@ -27,6 +27,7 @@ Public Class MainForm
             ShowAll()
             SplashScreen1.Hide()
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
+            DateTimeLabel.Text = Now
             ToolStrip1.BackColor = colAssetToolBarColor
             ExtendedMethods.DoubleBuffered(ResultGrid, True)
             If CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel) Then

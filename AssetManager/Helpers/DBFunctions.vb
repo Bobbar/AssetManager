@@ -5,7 +5,7 @@ Public Module DBFunctions
     Public Const strLoadingGridMessage As String = "Building Grid..."
     Public Const strCheckOut As String = "OUT"
     Public Const strCheckIn As String = "IN"
-    Public strServerTime As String
+    Public strServerTime As String = Now
     Public bolServerPinging As Boolean = True
     Public Function GetShortLocation(ByVal index As Integer) As String
         Try
