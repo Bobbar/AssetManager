@@ -3,7 +3,7 @@
     Private Const EncFTPUserPass As String = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ="
     Private strFTPPass As String = DecodePassword(EncFTPUserPass)
     Private FTPcreds As Net.NetworkCredential = New Net.NetworkCredential(strFTPUser, strFTPPass)
-    Private intSocketTimeout As Integer = 30000 'timeout for FTP comms in MS
+    Private intSocketTimeout As Integer = 10000 'timeout for FTP comms in MS
     Public Function Return_FTPResponse(strUri As String, Method As String) As Net.WebResponse
         Dim request As Net.FtpWebRequest = Net.FtpWebRequest.Create(strUri)
         Try

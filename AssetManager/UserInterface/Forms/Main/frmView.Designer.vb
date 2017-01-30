@@ -78,7 +78,6 @@ Partial Class frmView
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.PingWorker = New System.ComponentModel.BackgroundWorker()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.ToolStrip1 = New AssetManager.MyToolStrip()
@@ -756,14 +755,9 @@ Partial Class frmView
         Me.StatusLabel.Size = New System.Drawing.Size(76, 17)
         Me.StatusLabel.Text = "%STATUS%"
         '
-        'PingWorker
-        '
-        Me.PingWorker.WorkerReportsProgress = True
-        Me.PingWorker.WorkerSupportsCancellation = True
-        '
         'tmr_RDPRefresher
         '
-        Me.tmr_RDPRefresher.Interval = 10000
+        Me.tmr_RDPRefresher.Interval = 3000
         '
         'fieldErrorIcon
         '
@@ -1024,7 +1018,6 @@ Partial Class frmView
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents cmdMunisInfo As Button
-    Friend WithEvents PingWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents cmdRDP As Button
     Friend WithEvents tmrRDPRefresh As Timer
     Friend WithEvents Label12 As Label

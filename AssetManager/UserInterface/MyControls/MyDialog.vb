@@ -28,10 +28,10 @@ Public Class MyDialog
         AddRichTextBox("MessageBox", "MessageBox", Prompt)
         Me.Size = Me.MinimumSize
         ParseStyle(CType(Buttons, MsgBoxStyle))
-        If Not IsNothing(ParentFrm) Then
+        If ParentFrm IsNot Nothing Then
             Me.ShowDialog(ParentFrm)
         Else
-            Me.ShowDialog()
+            Me.ShowDialog(ActiveForm)
         End If
         Me.Dispose()
         Return CType(Me.DialogResult, MsgBoxResult)

@@ -6,20 +6,20 @@ Imports System.Data.SqlClient
 Module ErrorHandling
     Public Function ErrHandle(ex As Exception, strOrigSub As String) As Boolean 'Recursive error handler. Returns False for undesired or dangerous errors, True if safe to continue.
         Dim ErrorResult As Boolean
-        Select Case TypeName(ex)
-            Case "BackgroundWorkerCancelledException"
+        Select Case True
+            Case TypeOf ex Is BackgroundWorkerCancelledException
                 ErrorResult = True
-            Case "WebException"
+            Case TypeOf ex Is Net.WebException
                 ErrorResult = handleWebException(ex, strOrigSub)
-            Case "IndexOutOfRangeException"
+            Case TypeOf ex Is IndexOutOfRangeException
                 Dim handEx As IndexOutOfRangeException = ex
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.HResult & "  Message:" & handEx.Message)
                 ErrorResult = True
-            Case "MySqlException"
+            Case TypeOf ex Is MySqlException '"MySqlException"
                 ErrorResult = handleMySqlException(ex, strOrigSub)
-            Case "SqlException"
+            Case TypeOf ex Is SqlException
                 ErrorResult = handleSQLException(ex, strOrigSub)
-            Case "InvalidCastException"
+            Case TypeOf ex Is InvalidCastException
                 Dim handEx As InvalidCastException = ex
                 Logger("CAST ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & handEx.HResult & "  Message:" & handEx.Message)
                 Dim blah = Message("An object was cast to an unmatched type.  See log for details.  Log: " & strLogPath, vbOKOnly + vbExclamation, "Invalid Cast Error")
@@ -27,18 +27,20 @@ Module ErrorHandling
                     Case -2147467262 'DBNull to String type error. These are pretty ubiquitous and not a big deal. Move along.
                         ErrorResult = True
                 End Select
-            Case "IOException"
+            Case TypeOf ex Is IOException
                 ErrorResult = handleIOException(ex, strOrigSub)
-            Case "PingException"
+            Case TypeOf ex Is Net.NetworkInformation.PingException
                 ErrorResult = handlePingException(ex, strOrigSub)
-            Case "SocketException"
+            Case TypeOf ex Is SocketException
                 ErrorResult = handleSocketException(ex, strOrigSub)
-            Case "FormatException"
+            Case TypeOf ex Is FormatException
                 ErrorResult = handleFormatException(ex, strOrigSub)
-            Case "Win32Exception"
+            Case TypeOf ex Is Win32Exception
                 ErrorResult = handleWin32Exception(ex, strOrigSub)
-            Case "InvalidOperationException"
+            Case TypeOf ex Is InvalidOperationException
                 ErrorResult = handleOperationException(ex, strOrigSub)
+            Case TypeOf ex Is NoPingException
+                ErrorResult = handleNoPingException(ex, strOrigSub)
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
                 Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
@@ -108,8 +110,10 @@ Module ErrorHandling
         End Select
     End Function
     Private Function handleOperationException(ex As InvalidOperationException, strOrigSub As String) As Boolean
+
         Select Case ex.HResult
             Case -2146233079
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
                 Return False
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
@@ -189,6 +193,10 @@ Module ErrorHandling
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
                 Dim blah = Message("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "ERROR")
                 Return False
+            Case 121
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
+                Dim blah = Message("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "ERROR")
+                Return False
             Case 245
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
                 'Dim blah = Message("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "ERROR")
@@ -200,6 +208,18 @@ Module ErrorHandling
             Case Else
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
                 Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                EndProgram()
+        End Select
+    End Function
+    Private Function handleNoPingException(ex As NoPingException, strOrigSub As String) As Boolean
+        Select Case ex.HResult
+            Case -2146233088
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Dim blah = Message("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbExclamation, "Connection Lost")
+                Return True
+            Case Else
+                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
                 EndProgram()
         End Select
     End Function

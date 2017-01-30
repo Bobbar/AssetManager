@@ -13,12 +13,16 @@ Public Class frmView
     Private MyWindowList As WindowList
     Private MyGridTheme As New Grid_Theme
     Private bolGridFilling As Boolean = False
+    Private MyPing As New Net.NetworkInformation.Ping
+    Private MyPingHostname As String = Nothing
+    Private MyPingRunning As Boolean = False
     Private Structure Ping_Results
         Public CanPing As Boolean
         Public Address As String
     End Structure
     Sub New(ParentForm As Form, GridTheme As Grid_Theme, DeviceGUID As String)
         InitializeComponent()
+        AddHandler MyPing.PingCompleted, AddressOf PingComplete
         MyGridTheme = GridTheme
         MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
         MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, "dev_description")
@@ -271,6 +275,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                 Me.Show()
                 DataGridHistory.ClearSelection()
                 bolGridFilling = False
+                CheckRDP()
                 tmr_RDPRefresher.Enabled = True
             Else
                 Me.Dispose()
@@ -571,12 +576,6 @@ VALUES (@" & historical_dev.ChangeType & ",
             End Select
         Next
     End Sub
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-        EnableControls()
-    End Sub
-    Private Sub Button2_Click(sender As Object, e As EventArgs)
-        DisableControls()
-    End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs)
         If Not CheckFields() Then
             Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
@@ -663,13 +662,6 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
         If bolCheckFields Then CheckFields()
     End Sub
-    Private Sub cmdCancel_Click(sender As Object, e As EventArgs)
-        bolCheckFields = False
-        DisableControls()
-        ResetBackColors()
-        Me.Refresh()
-        ViewDevice(CurrentViewDevice.strGUID)
-    End Sub
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
@@ -725,10 +717,6 @@ VALUES (@" & historical_dev.ChangeType & ",
                                                 (CInt(c1.B) + CInt(c2.B)) / 2)
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = BlendColor
         End If
-    End Sub
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs)
-        TrackingGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader
-        TrackingGrid.AutoResizeColumns()
     End Sub
     Private Sub TrackingGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellDoubleClick
         NewTrackingView(TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value.ToString)
@@ -838,25 +826,6 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
         NewMunisView(CurrentViewDevice)
     End Sub
-
-    Private Sub PingWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles PingWorker.DoWork
-        Dim PingResults As New Ping_Results
-        Try
-            Dim Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
-            Dim Hostname As String = "D" & CurrentViewDevice.strSerial & "." & Domain
-            PingResults.CanPing = My.Computer.Network.Ping(Hostname)
-            Dim IPEntry As IPHostEntry = Dns.GetHostEntry(Hostname)
-            PingResults.Address = IPEntry.AddressList(IPEntry.AddressList.Count - 1).ToString
-            e.Result = PingResults
-        Catch ex As Exception
-            PingResults.CanPing = False
-            e.Result = PingResults 'ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
-    End Sub
-    Private Sub PingWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles PingWorker.RunWorkerCompleted
-        Dim PingResults As Ping_Results = e.Result
-        SetupNetTools(PingResults)
-    End Sub
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         MyLiveBox.Dispose()
         CloseChildren(Me)
@@ -872,9 +841,41 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Sub
     Private Sub CheckRDP()
-        If CurrentViewDevice.strOSVersion.Contains("WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
-            If Not PingWorker.IsBusy Then PingWorker.RunWorkerAsync()
-        End If
+        Try
+            If CurrentViewDevice.strOSVersion.Contains("WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
+                Dim Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
+                Dim options As New Net.NetworkInformation.PingOptions
+                options.DontFragment = True
+                MyPingHostname = "D" & CurrentViewDevice.strSerial & "." & Domain
+                If Not MyPingRunning Then MyPing.SendAsync(MyPingHostname, 1000, options)
+                MyPingRunning = True
+            End If
+        Catch ex As Exception
+
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
+    Private Sub PingComplete(ByVal sender As Object, ByVal e As System.Net.NetworkInformation.PingCompletedEventArgs)
+        Try
+            Dim PingResults As New Ping_Results
+            If e.Error Is Nothing Then
+                Dim MyPingResults As Net.NetworkInformation.PingReply = e.Reply
+                If MyPingResults.Status = Net.NetworkInformation.IPStatus.Success Then
+                    PingResults.CanPing = True
+                Else
+                    PingResults.CanPing = False
+                End If
+                Dim IPEntry As IPHostEntry = Dns.GetHostEntry(MyPingHostname)
+                PingResults.Address = IPEntry.AddressList(IPEntry.AddressList.Count - 1).ToString
+            Else
+                PingResults.CanPing = False
+                PingResults.Address = Nothing
+            End If
+            SetupNetTools(PingResults)
+            MyPingRunning = False
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
     End Sub
     Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
         CheckRDP()

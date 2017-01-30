@@ -316,76 +316,69 @@ Class frmAttachments
         End If
     End Sub
     Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
-        'file stuff
-        ' Dim LocalSQLComm As New clsMySQL_Comms
         Dim LocalFTPComm As New clsFTP_Comms
         Dim Foldername As String = AttachFolderID
         Dim Files() As String = DirectCast(e.Argument, String())
         Dim FileSizeMB As Integer
         Dim FileNumber As Integer = 1
-        ' Dim conn As MySqlConnection = LocalSQLComm.NewConnection
-        ' Dim cmd As New MySqlCommand
-        Try
-
-
-            For Each file As String In Files
-                    Dim CurrentFile As New Attachment(file)
-                    FileSizeMB = CurrentFile.Filesize / (1024 * 1024)
-                    If FileSizeMB > FileSizeMBLimit Then
-                        e.Result = False
-                        UploadWorker.ReportProgress(2, "Error!")
-                        Dim blah = Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded", Me)
-                        Exit Sub
+        For Each file As String In Files
+            Dim CurrentFile As New Attachment(file)
+            FileSizeMB = CurrentFile.Filesize / (1024 * 1024)
+            If FileSizeMB > FileSizeMBLimit Then
+                e.Result = False
+                UploadWorker.ReportProgress(2, "Error!")
+                Dim blah = Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded", Me)
+                Exit Sub
+            End If
+            UploadWorker.ReportProgress(1, "Connecting...")
+            Dim resp As Net.FtpWebResponse = Nothing
+            Using resp 'check if device folder exists. create directory if not.
+                resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
+                Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
+                Dim s As String = sr.ReadToEnd()
+                If Not s.Contains(Foldername) Then
+                    resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
+                End If
+            End Using
+            'ftp upload
+            Dim buffer(1023) As Byte
+            Dim bytesIn As Integer = 1
+            Dim totalBytesIn As Integer
+            Dim ftpStream As System.IO.FileStream = CurrentFile.FileInfo.OpenRead()
+            Dim flLength As Integer = ftpStream.Length
+            Dim reqfile As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & CurrentFile.FileUID, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+            Dim perc As Short = 0
+            stpSpeed.Start()
+            UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
+            lngBytesMoved = 0
+            intProgress = 0
+            totalBytesIn = 0
+            Do Until bytesIn < 1 Or UploadWorker.CancellationPending
+                bytesIn = ftpStream.Read(buffer, 0, 1024)
+                If bytesIn > 0 Then
+                    reqfile.Write(buffer, 0, bytesIn)
+                    totalBytesIn += bytesIn
+                    lngBytesMoved += bytesIn
+                    If flLength > 0 Then
+                        perc = (totalBytesIn / flLength) * 100
+                        intProgress = perc
                     End If
-                    UploadWorker.ReportProgress(1, "Connecting...")
-                    Dim resp As Net.FtpWebResponse = Nothing
-                    Using resp 'check if device folder exists. create directory if not.
-                        resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
-                        Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
-                        Dim s As String = sr.ReadToEnd()
-                        If Not s.Contains(Foldername) Then
-                            resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
-                        End If
-                    End Using
-                    'ftp upload
-                    Dim buffer(1023) As Byte
-                    Dim bytesIn As Integer = 1
-                    Dim totalBytesIn As Integer
-                    Dim ftpStream As System.IO.FileStream = CurrentFile.FileInfo.OpenRead()
-                    Dim flLength As Integer = ftpStream.Length
-                    Dim reqfile As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & CurrentFile.FileUID, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
-                    Dim perc As Short = 0
-                    stpSpeed.Start()
-                    UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
-                    lngBytesMoved = 0
-                    intProgress = 0
-                    totalBytesIn = 0
-                    Do Until bytesIn < 1 Or UploadWorker.CancellationPending
-                        bytesIn = ftpStream.Read(buffer, 0, 1024)
-                        If bytesIn > 0 Then
-                            reqfile.Write(buffer, 0, bytesIn)
-                            totalBytesIn += bytesIn
-                            lngBytesMoved += bytesIn
-                            If flLength > 0 Then
-                                perc = (totalBytesIn / flLength) * 100
-                                intProgress = perc
-                            End If
-                        End If
-                    Loop
-                    reqfile.Close()
-                    reqfile.Dispose()
-                    ftpStream.Close()
-                    ftpStream.Dispose()
-                    If UploadWorker.CancellationPending Then
-                        e.Cancel = True
-                        FTP.DeleteFTPAttachment(CurrentFile.FileUID, Foldername)
-                        Throw New BackgroundWorkerCancelledException("The upload was cancelled.")
-                    End If
-                    'update sql table
-                    If Not UploadWorker.CancellationPending Then
-                        Dim SQL As String
-                        If AttachType = Entry_Type.Sibi Then
-                            SQL = "INSERT INTO " & AttachTable & " (" & sibi_attachments.FKey & ", 
+                End If
+            Loop
+            reqfile.Close()
+            reqfile.Dispose()
+            ftpStream.Close()
+            ftpStream.Dispose()
+            If UploadWorker.CancellationPending Then
+                e.Cancel = True
+                FTP.DeleteFTPAttachment(CurrentFile.FileUID, Foldername)
+                Throw New BackgroundWorkerCancelledException("The upload was cancelled.")
+            End If
+            'update sql table
+            If Not UploadWorker.CancellationPending Then
+                Dim SQL As String
+                If AttachType = Entry_Type.Sibi Then
+                    SQL = "INSERT INTO " & AttachTable & " (" & sibi_attachments.FKey & ", 
 " & sibi_attachments.FileName & ",
 " & sibi_attachments.FileType & ",
 " & sibi_attachments.FileSize & ",
@@ -399,8 +392,8 @@ VALUES(@" & sibi_attachments.FKey & ",
 @" & sibi_attachments.FileUID & ",
 @" & sibi_attachments.FileHash & ",
 @" & sibi_attachments.Folder & ")"
-                        ElseIf AttachType = Entry_Type.Device Then
-                            SQL = "INSERT INTO " & AttachTable & " (" & dev_attachments.FKey & ", 
+                ElseIf AttachType = Entry_Type.Device Then
+                    SQL = "INSERT INTO " & AttachTable & " (" & dev_attachments.FKey & ", 
 " & dev_attachments.FileName & ",
 " & dev_attachments.FileType & ", 
 " & dev_attachments.FileSize & ", 
@@ -412,45 +405,28 @@ VALUES(@" & dev_attachments.FKey & ",
 @" & dev_attachments.FileSize & ",
 @" & dev_attachments.FileUID & ",
 @" & dev_attachments.FileHash & ")"
-                            Debug.Print(SQL)
-                        End If
-                    Using LocalSQLComm As New clsMySQL_Comms, cmd As MySqlCommand = LocalSQLComm.Return_SQLCommand(SQL)
-                        'conn.Open()
-                        'cmd.Connection = conn
-                        'cmd.CommandText = SQL
-                        '     cmd = LocalSQLComm.Return_SQLCommand(SQL)
-                        cmd.Parameters.AddWithValue("@" & main_attachments.FKey, AttachFolderID)
-                        cmd.Parameters.AddWithValue("@" & main_attachments.FileName, CurrentFile.Filename)
-                        cmd.Parameters.AddWithValue("@" & main_attachments.FileType, CurrentFile.Extention)
-                        cmd.Parameters.AddWithValue("@" & main_attachments.FileSize, CurrentFile.Filesize)
-                        cmd.Parameters.AddWithValue("@" & main_attachments.FileUID, CurrentFile.FileUID)
-                        cmd.Parameters.AddWithValue("@" & main_attachments.FileHash, CurrentFile.MD5)
-                        If AttachType = Entry_Type.Sibi Then cmd.Parameters.AddWithValue("@" & sibi_attachments.Folder, strSelectedFolder)
-                        cmd.ExecuteNonQuery()
-                        cmd.Parameters.Clear()
-                        e.Result = True
+                    Debug.Print(SQL)
+                End If
+                Using LocalSQLComm As New clsMySQL_Comms, cmd As MySqlCommand = LocalSQLComm.Return_SQLCommand(SQL)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FKey, AttachFolderID)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FileName, CurrentFile.Filename)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FileType, CurrentFile.Extention)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FileSize, CurrentFile.Filesize)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FileUID, CurrentFile.FileUID)
+                    cmd.Parameters.AddWithValue("@" & main_attachments.FileHash, CurrentFile.MD5)
+                    If AttachType = Entry_Type.Sibi Then cmd.Parameters.AddWithValue("@" & sibi_attachments.Folder, strSelectedFolder)
+                    cmd.ExecuteNonQuery()
+                    cmd.Parameters.Clear()
+                    e.Result = True
 
-                    End Using
-                Else
-                    e.Result = False
-                    End If
-                    FileNumber += 1
-                'LocalSQLComm.Dispose()
-                ' LocalSQLComm.CloseConnection() '(conn)
-
-                UploadWorker.ReportProgress(3, "Idle...")
-                Next
-            ' LocalSQLComm.CloseConnection() '(conn)
-            'LocalSQLComm.Dispose()
-            'cmd.Dispose()
-
+                End Using
+            Else
+                e.Result = False
+            End If
+            FileNumber += 1
             UploadWorker.ReportProgress(3, "Idle...")
-        Catch ex As Exception
-            e.Result = False
-            ' LocalSQLComm.CloseConnection() '(conn)
-            UploadWorker.ReportProgress(1, "Idle...")
-            If Not ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
-        End Try
+        Next
+        UploadWorker.ReportProgress(3, "Idle...")
     End Sub
     Private Sub UploadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles UploadWorker.ProgressChanged
         Select Case e.ProgressPercentage
@@ -474,23 +450,27 @@ VALUES(@" & dev_attachments.FKey & ",
     Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
         Try
             If Not Me.IsDisposed Then
-                strMultiFileCount = ""
                 WorkerFeedback(False)
-                If Not e.Cancelled Then
-                    If e.Result Then
-                        ListAttachments()
-                        ' MessageBox.Show("File uploaded successfully!",
-                        '"Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                If e.Error Is Nothing Then
+                    strMultiFileCount = ""
+                    If Not e.Cancelled Then
+                        If e.Result Then
+                            ListAttachments()
+                            ' MessageBox.Show("File uploaded successfully!",
+                            '"Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                        Else
+                            Message("File upload failed.", MessageBoxButtons.OK + MessageBoxIcon.Exclamation, "Failed", Me)
+                        End If
                     Else
-                        MessageBox.Show("File upload failed.",
-             "Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                        '           MessageBox.Show("The upload was cancelled.",
+                        '"Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     End If
                 Else
-                    '           MessageBox.Show("The upload was cancelled.",
-                    '"Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    DoneWaiting()
+                    If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
+                    Message("File upload failed.", MessageBoxButtons.OK + MessageBoxIcon.Exclamation, "Failed", Me)
                 End If
             End If
-
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
@@ -527,9 +507,8 @@ VALUES(@" & dev_attachments.FKey & ",
         DownloadWorker.ReportProgress(1, "Connecting...")
         Dim strFilename As String, strFiletype As String, strFullPath As String = Nothing
         Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
-        Try
-            results = LocalSQLComm.Return_SQLTable(strQry)
-            For Each r As DataRow In results.Rows
+        results = LocalSQLComm.Return_SQLTable(strQry)
+        For Each r As DataRow In results.Rows
                 strFilename = r.Item(main_attachments.FileName) & strTimeStamp
                 strFiletype = r.Item(main_attachments.FileType)
                 strFullPath = strTempPath & strFilename & strFiletype
@@ -593,28 +572,22 @@ VALUES(@" & dev_attachments.FKey & ",
                     PurgeTempDir()
                 End If
             End Using
-        Catch ex As Exception
-            e.Result = False
-            DownloadWorker.ReportProgress(2, "ERROR!")
-            Logger("DOWNLOAD ERROR: " & "Device: " & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID)
-            If Not ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
-                EndProgram()
-            Else
-                e.Result = False
-            End If
-        End Try
     End Sub
     Private Sub DownloadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles DownloadWorker.RunWorkerCompleted
         Try
             WorkerFeedback(False)
-            If Not e.Cancelled Then
-                Dim Success As Boolean = CType(e.Result, Boolean)
-                If Not Success Then 'if did not complete with success, kill the form.
-                    Me.Dispose()
+            If e.Error Is Nothing Then
+                If Not e.Cancelled Then
+                    Dim Success As Boolean = CType(e.Result, Boolean)
+                    If Not Success Then 'if did not complete with success, kill the form.
+                        Me.Dispose()
+                    Else
+                    End If
                 Else
+                    'Message("The download was cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 End If
             Else
-                'Message("The download was cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -641,7 +614,6 @@ VALUES(@" & dev_attachments.FKey & ",
                 Me.Refresh()
         End Select
     End Sub
-
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
         Dim BytesPerSecond As Single
         Dim ResetCounter As Integer = 40

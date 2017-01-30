@@ -4,7 +4,7 @@ Imports MySql.Data.MySqlClient
 Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
 Imports System.Deployment.Application
-
+Imports System.Net
 Public Class MainForm
     Private strSearchString As String, strPrevSearchString As String
     Private StartingControl As Control
@@ -248,12 +248,6 @@ Public Class MainForm
         cmd.CommandText = strQry
         StartBigQuery(cmd)
     End Sub
-    Private Sub Button2_Click(sender As Object, e As EventArgs)
-        Clear_All()
-    End Sub
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-        AddNew.Show()
-    End Sub
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
@@ -274,9 +268,6 @@ Public Class MainForm
         FillComboBox(DeviceIndex.StatusType, cmbStatus)
         FillComboBox(DeviceIndex.OSType, cmbOSType)
     End Sub
-    Private Sub ViewSelectedToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
-    End Sub
     Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
@@ -294,32 +285,29 @@ Public Class MainForm
         StatusLabel.Text = Text
         Application.DoEvents()
     End Sub
-    Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        If Not CheckForAccess(AccessGroup.Add) Then Exit Sub
-        AddNew.Show()
-    End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
-        Try
-            Using LocalSQLComm As New clsMySQL_Comms,
+        Using LocalSQLComm As New clsMySQL_Comms,
                 ds As New DataSet,
                 da As New MySqlDataAdapter,
                 QryComm As MySqlCommand = DirectCast(e.Argument, MySqlCommand)
-                cmdLastCommand = QryComm
-                QryComm.Connection = LocalSQLComm.Connection
-                BigQueryWorker.ReportProgress(1)
-                da.SelectCommand = QryComm
-                da.Fill(ds)
-                e.Result = ds.Tables(0)
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
+            cmdLastCommand = QryComm
+            QryComm.Connection = LocalSQLComm.Connection
+            BigQueryWorker.ReportProgress(1)
+            da.SelectCommand = QryComm
+            da.Fill(ds)
+            e.Result = ds.Tables(0)
+        End Using
+        DoneWaiting()
     End Sub
     Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
-        If e.Result IsNot Nothing Then
-            BigQueryDone(e.Result)
+        If e.Error Is Nothing Then
+            If e.Result IsNot Nothing Then
+                BigQueryDone(e.Result)
+            Else
+                DoneWaiting()
+            End If
         Else
-            DoneWaiting()
+            ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End If
     End Sub
     Private Sub BigQueryWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BigQueryWorker.ProgressChanged
@@ -365,57 +353,25 @@ Public Class MainForm
         End If
     End Sub
     Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatcher.Tick
-        'If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
-        'Select Case SQLComms.Connection.State
-        '    Case ConnectionState.Connecting
-        '        ConnectStatus("Connecting", Color.Black)
-        'End Select
-        'If Not ConnectionWatchDog.IsBusy Then ConnectionWatchDog.RunWorkerAsync()
+        If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
+        If Not ConnectionWatchDog.IsBusy Then ConnectionWatchDog.RunWorkerAsync()
     End Sub
     Private Sub ConnectionWatchDog_DoWork(sender As Object, e As DoWorkEventArgs) Handles ConnectionWatchDog.DoWork
-        'Do Until ProgramEnding
-        '    If SQLComms.Connection.State = ConnectionState.Open Then 'test connection
-        '        Try
-        '            Using LocalSQLComm As New clsMySQL_Comms,
-        '                    ds As New DataSet,
-        '                    da As New MySqlDataAdapter
-        '                ' Dim LocalSQLComm As New clsMySQL_Comms
-        '                '  Dim ds As New DataSet
-        '                ' Dim da As New MySqlDataAdapter
-        '                Dim rows As Integer
-        '                ' Dim conn As MySqlConnection = LocalSQLComm.NewConnection
-        '                da.SelectCommand = LocalSQLComm.Return_SQLCommand("SELECT NOW()") 'New MySqlCommand("SELECT NOW()")
-        '                'da.SelectCommand.Connection = conn
-        '                da.Fill(ds)
-        '                rows = ds.Tables(0).Rows.Count
-        '                strServerTime = ds.Tables(0).Rows(0).Item(0).ToString
-        '                'LocalSQLComm.CloseConnection() '(conn)
-        '                'da.Dispose()
-        '                'ds.Dispose()
-        '            End Using
-        '        Catch ex As MySqlException
-        '            If ex.HResult = -2147467259 Then
-        '                ConnectionWatchDog.ReportProgress(1, "Connection Problem! Checking...")
-        '                ConnectionWatchDog.ReportProgress(2, "Disconnected")
-        '                'MySQLDB.CheckConnection()
-        '            End If
-        '        End Try
-        '    ElseIf SQLComms.Connection.State <> ConnectionState.Open Then 'connection recovery
-        '        ConnectAttempts = 0
-        '        Do Until SQLComms.Connection.State = ConnectionState.Open
-        '            ConnectAttempts += 1
-        '            ConnectionWatchDog.ReportProgress(1, "Trying to reconnect... " & ConnectAttempts)
-        '            ConnectionWatchDog.ReportProgress(5, SQLComms.Connection.State)
-        '            If SQLComms.OpenConnection() Then
-        '            Else
-        '                Thread.Sleep(5000)
-        '            End If
-        '        Loop
-        '        ConnectionWatchDog.ReportProgress(1, "Reconnected!")
-        '    End If
-        '    ConnectionWatchDog.ReportProgress(5, SQLComms.Connection.State)
-        '    Thread.Sleep(5000)
-        'Loop
+        Thread.Sleep(5000)
+        Dim CanPing As Boolean = My.Computer.Network.Ping(strServerIP)
+        bolServerPinging = CanPing
+        If CanPing Then
+            Using LocalSQLComm As New clsMySQL_Comms,
+                    ds As New DataSet,
+                    da As New MySqlDataAdapter
+                Dim rows As Integer
+                da.SelectCommand = LocalSQLComm.Return_SQLCommand("SELECT NOW()")
+                da.Fill(ds)
+                rows = ds.Tables(0).Rows.Count
+                strServerTime = ds.Tables(0).Rows(0).Item(0).ToString
+            End Using
+            e.Result = CanPing
+        End If
     End Sub
     Private Sub ConnectionWatchDog_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles ConnectionWatchDog.ProgressChanged
         Select Case e.ProgressPercentage 'hack alert!
@@ -440,6 +396,22 @@ Public Class MainForm
                         ConnectStatus("Disconnected", Color.Red)
                 End Select
         End Select
+    End Sub
+    Private Sub ConnectionWatchDog_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles ConnectionWatchDog.RunWorkerCompleted
+        Dim CanPing As Boolean = False
+        If e.Error Is Nothing Then
+            CanPing = CType(e.Result, Boolean)
+        Else
+            CanPing = False
+        End If
+        bolServerPinging = CanPing
+        If CanPing Then
+            ConnectStatus("Connected", Color.Green)
+            StatusStrip1.BackColor = colFormBackColor
+        Else
+            StatusStrip1.BackColor = colStatusBarProblem
+            ConnectStatus("Offline", Color.Red)
+        End If
     End Sub
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
         LeaveRow(ResultGrid, MyGridTheme, e.RowIndex)

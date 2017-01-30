@@ -7,30 +7,34 @@
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
         Private Sub LoadSplash(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
-            SplashScreen1.Show()
-            Logger("Starting AssetManager...")
-            Status("Loading...")
-            Status("Checking Server Connection...")
-            Using SQLComms As New clsMySQL_Comms
-                If SQLComms.OpenConnection() Then
-                    ' ConnectionReady()
-                Else
-                    Dim blah = Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect", SplashScreen1)
+            Try
+                SplashScreen1.Show()
+                Logger("Starting AssetManager...")
+                Status("Loading...")
+                Status("Checking Server Connection...")
+                Using SQLComms As New clsMySQL_Comms
+                    'If SQLComms.OpenConnection() Then
+                    '    ' ConnectionReady()
+                    'Else
+                    '    Dim blah = Message("Error connecting to server!", vbOKOnly + vbExclamation, "Could not connect", SplashScreen1)
+                    '    EndProgram()
+                    'End If
+                End Using
+                Status("Loading Indexes...")
+                BuildIndexes()
+                Status("Checking Access Level...")
+                Asset.GetAccessLevels()
+                Asset.GetUserAccess()
+                If Not CanAccess(AccessGroup.CanRun, UserAccess.intAccessLevel) Then
+                    Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", SplashScreen1)
                     EndProgram()
                 End If
-            End Using
-            Status("Loading Indexes...")
-            BuildIndexes()
-            Status("Checking Access Level...")
-            Asset.GetAccessLevels()
-            Asset.GetUserAccess()
-            If Not CanAccess(AccessGroup.CanRun, UserAccess.intAccessLevel) Then
-                Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", SplashScreen1)
+                Status("Ready!")
+            Catch ex As Exception
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+                e.Cancel = True
                 EndProgram()
-            End If
-            Status("Ready!")
-
-
+            End Try
         End Sub
         Public Sub Status(Text As String)
             SplashScreen1.lblStatus.Text = Text

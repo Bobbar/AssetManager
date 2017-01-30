@@ -39,9 +39,14 @@ Public Class clsMySQL_Comms : Implements IDisposable
     Private ConnectionException As Exception
     Public Connection As MySqlConnection = NewConnection()
     Sub New()
-        If Not OpenConnection() Then
-            Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referenceing object
-            Dispose()
+        If bolServerPinging Then
+            If Not OpenConnection() Then
+                Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
+                Dispose()
+            End If
+        Else
+            Throw New NoPingException
+            '  Dispose()
         End If
     End Sub
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
