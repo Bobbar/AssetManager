@@ -243,7 +243,6 @@ Public Class MainForm
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
         strLastQry = strQry
-        Debug.Print(strQry)
         cmd.CommandText = strQry
         StartBigQuery(cmd)
     End Sub

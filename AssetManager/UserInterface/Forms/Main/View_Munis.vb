@@ -67,7 +67,6 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         Dim results As New DataTable
         Dim intRows As Integer
         Try
-            Debug.Print(Query)
             results = MunisComms.Return_MSSQLTable(Query)
             If IsNothing(results) Then Return 0
             intRows = results.Rows.Count

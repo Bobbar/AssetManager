@@ -20,7 +20,6 @@ Public Class clsMunis_Comms
     End Function
     Public Function Return_MSSQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
         Dim sqlQRY As String = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
-        Debug.Print(sqlQRY)
         Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)
         Try
             Dim cmd As New SqlCommand

@@ -405,7 +405,6 @@ VALUES(@" & dev_attachments.FKey & ",
 @" & dev_attachments.FileSize & ",
 @" & dev_attachments.FileUID & ",
 @" & dev_attachments.FileHash & ")"
-                    Debug.Print(SQL)
                 End If
                 Using LocalSQLComm As New clsMySQL_Comms, cmd As MySqlCommand = LocalSQLComm.Return_SQLCommand(SQL)
                     cmd.Parameters.AddWithValue("@" & main_attachments.FKey, AttachFolderID)
