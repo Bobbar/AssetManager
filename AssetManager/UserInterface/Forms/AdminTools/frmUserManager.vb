@@ -151,6 +151,7 @@ Public Class frmUserManager
         LoadUserData()
     End Sub
     Private Sub frmUserManager_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        myAdapter.Dispose()
         SQLComms.Dispose()
     End Sub
 End Class

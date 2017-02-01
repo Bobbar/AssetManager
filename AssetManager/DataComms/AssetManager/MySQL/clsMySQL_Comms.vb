@@ -91,9 +91,8 @@ Public Class clsMySQL_Comms : Implements IDisposable
     Public Function Return_Adapter(strSQLQry As String) As MySqlDataAdapter
         'Debug.Print("Command Hit " & Date.Now.Ticks)
         Try
-            Using adapter As New MySqlDataAdapter(strSQLQry, MySQLConnectString)
-                Return adapter
-            End Using
+            Dim adapter As New MySqlDataAdapter(strSQLQry, MySQLConnectString)
+            Return adapter
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
             Return Nothing
