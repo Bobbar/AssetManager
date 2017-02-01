@@ -497,14 +497,11 @@ Public Class MainForm
         FTP.ScanAttachements()
     End Sub
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
-        SendToGrid(Asset.DevicesBySup(Me))
-    End Sub
-
-    Private Sub ToolStrip1_Click(sender As Object, e As EventArgs) Handles ToolStrip1.Click
-
-    End Sub
-
-    Private Sub ToolStrip1_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles ToolStrip1.ItemClicked
-
+        Dim results As DataTable = Asset.DevicesBySup(Me)
+        If results IsNot Nothing Then
+            SendToGrid(results)
+        Else
+            'do nutzing
+        End If
     End Sub
 End Class

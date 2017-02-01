@@ -439,18 +439,22 @@ VALUES
     Public Function DevicesBySup(ParentForm As Form) As DataTable
         Dim SupInfo As Emp_Info
         Dim NewMunisSearch As New frmMunisUser(ParentForm)
-        SupInfo = NewMunisSearch.EmployeeInfo
-        Dim EmpList As DataTable = Munis.ListOfEmpBySup(SupInfo.Number)
-        Dim DeviceList As New DataTable
-        Using SQLComms As New clsMySQL_Comms
-            For Each r As DataRow In EmpList.Rows
-                Dim strQRY As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.Munis_Emp_Num & "='" & r.Item("a_employee_number") & "'"
-                Using tmpTable As DataTable = SQLComms.Return_SQLTable(strQRY)
-                    DeviceList.Merge(tmpTable)
-                End Using
-            Next
-            Return DeviceList
-        End Using
+        If NewMunisSearch.DialogResult = DialogResult.Yes Then
+            SupInfo = NewMunisSearch.EmployeeInfo
+            Dim EmpList As DataTable = Munis.ListOfEmpBySup(SupInfo.Number)
+            Dim DeviceList As New DataTable
+            Using SQLComms As New clsMySQL_Comms
+                For Each r As DataRow In EmpList.Rows
+                    Dim strQRY As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.Munis_Emp_Num & "='" & r.Item("a_employee_number") & "'"
+                    Using tmpTable As DataTable = SQLComms.Return_SQLTable(strQRY)
+                        DeviceList.Merge(tmpTable)
+                    End Using
+                Next
+                Return DeviceList
+            End Using
+        Else
+            Return Nothing
+        End If
     End Function
     Public Function CollectDeviceInfo(DeviceTable As DataTable) As Device_Info
         Try
