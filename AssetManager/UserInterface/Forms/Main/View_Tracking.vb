@@ -18,10 +18,6 @@ Public Class View_Tracking
     End Sub
     Private Sub ViewTrackingEntry(ByVal EntryUID As String, ByRef Device As Device_Info)
         Try
-            'If Not ConnectionReady() Then
-            '    ConnectionNotReady()
-            '    Exit Sub
-            'End If
             Waiting()
             Dim strQry = "Select * FROM " & trackable.TableName & " WHERE  " & trackable.UID & " = '" & EntryUID & "'"
             Using SQLComms As New clsMySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQry)

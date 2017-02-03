@@ -11,7 +11,6 @@ Public Class frmView
     Private MyLiveBox As New clsLiveBox(Me)
     Private PrevWindowState As Integer
     Private MyWindowList As WindowList
-    Private MyGridTheme As New Grid_Theme
     Private bolGridFilling As Boolean = False
     Private MyPing As New Net.NetworkInformation.Ping
     Private MyPingHostname As String = Nothing
@@ -20,15 +19,15 @@ Public Class frmView
         Public CanPing As Boolean
         Public Address As String
     End Structure
-    Sub New(ParentForm As Form, GridTheme As Grid_Theme, DeviceGUID As String)
+    Sub New(ParentForm As MyForm, DeviceGUID As String)
         InitializeComponent()
         AddHandler MyPing.PingCompleted, AddressOf PingComplete
-        MyGridTheme = GridTheme
         MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
         MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, "dev_description")
         Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
         Tag = ParentForm
         Icon = ParentForm.Icon
+        GridTheme = ParentForm.GridTheme
         RefreshCombos()
         grpNetTools.Visible = False
         ToolStrip1.BackColor = colAssetToolBarColor
@@ -490,7 +489,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             If Not TabControl1.TabPages.Contains(TrackingTab) Then TabControl1.TabPages.Insert(1, TrackingTab)
             SetGridStyle(DataGridHistory)
             SetGridStyle(TrackingGrid)
-            DataGridHistory.DefaultCellStyle.SelectionBackColor = MyGridTheme.CellSelectColor
+            DataGridHistory.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
             TrackingBox.Visible = True
             TrackingTool.Visible = bolEnabled
             CheckOutTool.Visible = Not bolCheckedOut
@@ -500,7 +499,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             TabControl1.TabPages.Remove(TrackingTab)
             SetGridStyle(DataGridHistory)
             SetGridStyle(TrackingGrid)
-            DataGridHistory.DefaultCellStyle.SelectionBackColor = MyGridTheme.CellSelectColor
+            DataGridHistory.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
             TrackingBox.Visible = False
         End If
     End Sub
@@ -757,7 +756,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen() Then
-            Dim NewAttachments As New frmAttachments(Me, MyGridTheme, CurrentViewDevice)
+            Dim NewAttachments As New frmAttachments(Me, CurrentViewDevice)
         Else
             ActivateFormByUID(CurrentViewDevice.strGUID)
         End If
@@ -906,7 +905,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         If SibiUID = "" Then
             Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
         Else
-            Dim sibiForm As New frmManageRequest(Me, MyGridTheme, SibiUID)
+            Dim sibiForm As New frmManageRequest(Me, SibiUID)
         End If
     End Sub
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
@@ -969,10 +968,10 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub DataGridHistory_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellEnter
         If Not bolGridFilling Then
-            HighlightRow(DataGridHistory, MyGridTheme, e.RowIndex)
+            HighlightRow(DataGridHistory, GridTheme, e.RowIndex)
         End If
     End Sub
     Private Sub DataGridHistory_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellLeave
-        LeaveRow(DataGridHistory, MyGridTheme, e.RowIndex)
+        LeaveRow(DataGridHistory, GridTheme, e.RowIndex)
     End Sub
 End Class

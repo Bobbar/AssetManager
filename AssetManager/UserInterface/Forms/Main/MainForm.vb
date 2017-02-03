@@ -18,7 +18,6 @@ Public Class MainForm
     Private strLastQry As String
     Private cmdLastCommand As MySqlCommand
     Private MyWindowList As WindowList
-    Private MyGridTheme As New Grid_Theme
     Private Sub MainForm_HandleCreated(sender As Object, e As EventArgs) Handles Me.HandleCreated
         LoadProgram()
     End Sub
@@ -61,9 +60,9 @@ Public Class MainForm
         DefGridSelCol = ResultGrid.DefaultCellStyle.SelectionBackColor
 
         ResultGrid.DefaultCellStyle.SelectionBackColor = colSelectColor
-        MyGridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
-        MyGridTheme.CellSelectColor = ResultGrid.DefaultCellStyle.SelectionBackColor
-        MyGridTheme.RowHighlightColor = colHighlightColor
+        GridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
+        GridTheme.CellSelectColor = ResultGrid.DefaultCellStyle.SelectionBackColor
+        GridTheme.RowHighlightColor = colHighlightColor
 
         Dim tmpStyle As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         tmpStyle.Alignment = ResultGrid.DefaultCellStyle.Alignment
@@ -253,7 +252,7 @@ Public Class MainForm
         If Not DeviceIsOpen(strGUID) Then
             ResultGrid.Enabled = False
             Waiting()
-            Dim NewView As New frmView(Me, MyGridTheme, strGUID)
+            Dim NewView As New frmView(Me, strGUID)
             DoneWaiting()
             ResultGrid.Enabled = True
         Else
@@ -412,7 +411,7 @@ Public Class MainForm
         End If
     End Sub
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
-        LeaveRow(ResultGrid, MyGridTheme, e.RowIndex)
+        LeaveRow(ResultGrid, GridTheme, e.RowIndex)
     End Sub
     Private Sub ResultGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ResultGrid.CellMouseDown
         On Error Resume Next
@@ -423,11 +422,11 @@ Public Class MainForm
     End Sub
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
         If Not bolGridFilling Then
-            HighlightRow(ResultGrid, MyGridTheme, e.RowIndex)
+            HighlightRow(ResultGrid, GridTheme, e.RowIndex)
         End If
     End Sub
     Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
-        Dim ViewAttachments As New frmAttachments(Me, MyGridTheme)
+        Dim ViewAttachments As New frmAttachments(Me)
         ViewAttachments.bolAdminMode = CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel)
         ViewAttachments.ListAttachments()
         ViewAttachments.Text = ViewAttachments.Text & " - MANAGE ALL ATTACHMENTS"

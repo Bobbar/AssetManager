@@ -24,12 +24,11 @@ Class frmAttachments
     Private AttachType As Entry_Type
     Public AttachFolderID As String
     Private AttachTable As String
-    Private MyGridTheme As New Grid_Theme
-    Sub New(ParentForm As Form, GridTheme As Grid_Theme, Optional AttachInfo As Object = Nothing)
+    Sub New(ParentForm As MyForm, Optional AttachInfo As Object = Nothing)
         InitializeComponent()
         Tag = ParentForm
         Icon = ParentForm.Icon
-        MyGridTheme = GridTheme
+        GridTheme = ParentForm.GridTheme
         ExtendedMethods.DoubleBuffered(AttachGrid, True)
         StatusBar("Idle...")
         If Not IsNothing(AttachInfo) Then
@@ -91,10 +90,6 @@ Class frmAttachments
         End If
     End Sub
     Private Sub UploadFile(Files() As String)
-        'If Not ConnectionReady() Then
-        '    ConnectionNotReady()
-        '    Exit Sub
-        'End If
         If Not UploadWorker.IsBusy Then
             StatusBar("Starting Upload...")
             WorkerFeedback(True)
@@ -174,18 +169,13 @@ Class frmAttachments
         Return table
     End Function
     Public Sub ListAttachments()
-        'If Not ConnectionReady() Then
-        '    Exit Sub
-        'End If
         Waiting()
         Try
-            'Dim results As New DataTable
             Dim table As New DataTable
             Dim strQry As String
             strQry = GetQry()
             table = GetTable()
             Using SQLComms As New clsMySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQry)
-                '  results = SQLComms.Return_SQLTable(strQry)
                 Dim strFullFilename As String
                 Dim strFileSizeHuman As String
                 Dim NewAttachment As New Attach_Info
@@ -208,7 +198,6 @@ Class frmAttachments
                     AttachIndex.Add(NewAttachment)
                 Next
             End Using
-            'results.Dispose()
             bolGridFilling = True
             AttachGrid.DataSource = table
             AttachGrid.Columns("Filename").DefaultCellStyle.Font = New Font("Consolas", 9.75, FontStyle.Bold)
@@ -218,7 +207,6 @@ Class frmAttachments
             Me.Show()
             AttachGrid.ClearSelection()
             bolGridFilling = False
-
         Catch ex As Exception
             DoneWaiting()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
@@ -241,10 +229,6 @@ Class frmAttachments
         Return -1
     End Function
     Private Sub OpenAttachment(AttachUID As String)
-        'If Not ConnectionReady() Then
-        '    ConnectionNotReady()
-        '    Exit Sub
-        'End If
         If Not DownloadWorker.IsBusy Then
             StatusBar("Starting Download...")
             WorkerFeedback(True)
@@ -633,7 +617,7 @@ VALUES(@" & dev_attachments.FKey & ",
         ProgressBar1.Value = intProgress
     End Sub
     Private Sub AttachGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellLeave
-        LeaveRow(AttachGrid, MyGridTheme, e.RowIndex)
+        LeaveRow(AttachGrid, GridTheme, e.RowIndex)
     End Sub
     Private Sub AttachGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellDoubleClick
         OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
@@ -643,7 +627,7 @@ VALUES(@" & dev_attachments.FKey & ",
     End Sub
     Private Sub AttachGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellEnter
         If Not bolGridFilling Then
-            HighlightRow(AttachGrid, MyGridTheme, e.RowIndex)
+            HighlightRow(AttachGrid, GridTheme, e.RowIndex)
         End If
     End Sub
     Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -666,7 +650,6 @@ VALUES(@" & dev_attachments.FKey & ",
             ListAttachments()
             strSelectedFolder = GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
         End If
-
     End Sub
     Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub

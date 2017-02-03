@@ -211,6 +211,9 @@
     <Compile Include="UserInterface\Forms\Main\frmMunisUser.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\MyControls\MyForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\MyControls\MyDialog.Designer.vb">
       <DependentUpon>MyDialog.vb</DependentUpon>
     </Compile>

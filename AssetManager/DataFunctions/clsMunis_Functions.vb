@@ -139,40 +139,24 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
         Return priv_Comms.Return_MSSQLTable(strQRY)
     End Function
     Public Sub NewMunisView_NameSearch(Name As String, Optional Parent As Form = Nothing)
-        'If Not ConnectionReady() Then
-        '    ConnectionNotReady()
-        '    Exit Sub
-        'End If
         Waiting()
         Dim NewMunis As New View_Munis(Parent, True)
         NewMunis.LoadMunisEmployeeByLastName(Name)
         DoneWaiting()
     End Sub
     Public Sub NewMunisView_POSearch(PO As String, Optional Parent As Form = Nothing)
-        'If Not ConnectionReady() Then
-        '    ConnectionNotReady()
-        '    Exit Sub
-        'End If
         Waiting()
         Dim NewMunis As New View_Munis(Parent, True)
         NewMunis.LoadMunisRequisitionGridByReqNo(Get_ReqNumber_From_PO(PO), Get_FY_From_PO(PO)) 'LoadMunisRequisitionGridByPO(PO, FY)
         DoneWaiting()
     End Sub
     Public Sub NewMunisView_ReqSearch(ReqNumber As String, FY As String, Optional Parent As Form = Nothing)
-        'If Not ConnectionReady() Then
-        '    ConnectionNotReady()
-        '    Exit Sub
-        'End If
         Waiting()
         Dim NewMunis As New View_Munis(Parent, True)
         NewMunis.LoadMunisRequisitionGridByReqNo(ReqNumber, FY)
         DoneWaiting()
     End Sub
     Public Sub NewMunisView_Device(Device As Device_Info, Optional Parent As Form = Nothing)
-        'If Not ConnectionReady() Then
-        '    ConnectionNotReady()
-        '    Exit Sub
-        'End If
         Waiting()
         Dim NewMunis As New View_Munis(Parent)
         NewMunis.LoadMunisInfoByDevice(Device)

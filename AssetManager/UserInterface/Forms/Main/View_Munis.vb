@@ -4,10 +4,17 @@
     Public bolSelectMod As Boolean = False
     Private CurrentMunisDevice As Device_Info
     Private MunisComms As New clsMunis_Comms
-    Sub New(ParentForm As Form, Optional Hide_FA As Boolean = False)
+    Public ReadOnly Property UnitPrice As String
+        Get
+            Return SelectedUnitPrice
+        End Get
+    End Property
+    Private SelectedUnitPrice As String
+    Sub New(ParentForm As MyForm, Optional Hide_FA As Boolean = False)
         InitializeComponent()
         Tag = ParentForm
         Icon = ParentForm.Icon
+        GridTheme = ParentForm.GridTheme
         If Hide_FA Then HideFixedAssetGrid()
     End Sub
     Public Sub LoadDevice(Device As Device_Info)
@@ -130,50 +137,24 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         pnlRequisition.Top = pnlMaster.Top
         pnlRequisition.Height = pnlMaster.Height
     End Sub
-    Private Sub HighlightCurrentRow(Row As Integer)
-        On Error Resume Next
-        If Not bolGridFilling Then
-            Dim BackColor As Color = DefGridBC
-            Dim SelectColor As Color = DefGridSelCol
-            Dim c1 As Color = colHighlightColor 'highlight color
-            If Row > -1 Then
-                For Each cell As DataGridViewCell In DataGridMunis_Requisition.Rows(Row).Cells
-                    Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
-                    Dim BlendColor As Color
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                    cell.Style.SelectionBackColor = BlendColor
-                    c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                    cell.Style.BackColor = BlendColor
-                Next
-            End If
-        End If
-    End Sub
     Private Sub DataGridMunis_Requisition_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridMunis_Requisition.CellLeave
-        Dim BackColor As Color = DefGridBC
-        Dim SelectColor As Color = DefGridSelCol
-        If e.RowIndex > -1 Then
-            For Each cell As DataGridViewCell In DataGridMunis_Requisition.Rows(e.RowIndex).Cells
-                cell.Style.SelectionBackColor = SelectColor
-                cell.Style.BackColor = BackColor
-            Next
-        End If
+        LeaveRow(DataGridMunis_Requisition, GridTheme, e.RowIndex)
     End Sub
     Private Sub DataGridMunis_Requisition_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridMunis_Requisition.CellEnter
-        HighlightCurrentRow(e.RowIndex)
+        If Not bolGridFilling Then
+            HighlightRow(DataGridMunis_Requisition, GridTheme, e.RowIndex)
+        End If
     End Sub
-    Public ReadOnly Property UnitPrice As String
-        Get
-            Return SelectedUnitPrice
-        End Get
-    End Property
-    Private SelectedUnitPrice As String
+    Private Sub DataGridMunis_Inventory_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridMunis_Inventory.CellEnter
+        If Not bolGridFilling Then
+            HighlightRow(DataGridMunis_Inventory, GridTheme, e.RowIndex)
+        End If
+    End Sub
+
+    Private Sub DataGridMunis_Inventory_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridMunis_Inventory.CellLeave
+        LeaveRow(DataGridMunis_Inventory, GridTheme, e.RowIndex)
+    End Sub
+
     Private Sub DataGridMunis_Requisition_CellMouseDoubleClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridMunis_Requisition.CellMouseDoubleClick
         If Me.Modal Then
             SelectedUnitPrice = DataGridMunis_Requisition.Item(GetColIndex(DataGridMunis_Requisition, "rqdt_uni_pr"), DataGridMunis_Requisition.CurrentRow.Index).Value.ToString

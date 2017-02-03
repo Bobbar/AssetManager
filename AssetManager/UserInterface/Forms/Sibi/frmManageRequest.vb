@@ -9,19 +9,18 @@ Public Class frmManageRequest
     Private MyText As String
     Private bolNewRequest As Boolean = False
     Private MyWindowList As WindowList
-    Private MyGridTheme As New Grid_Theme
     Private bolDragging As Boolean = False
-    Sub New(ParentForm As Form, GridTheme As Grid_Theme, RequestUID As String)
+    Sub New(ParentForm As MyForm, RequestUID As String)
         Waiting()
         InitializeComponent()
-        MyGridTheme = GridTheme
+        GridTheme = ParentForm.GridTheme
         InitForm(ParentForm)
         OpenRequest(RequestUID)
         DoneWaiting()
     End Sub
-    Sub New(ParentForm As Form)
+    Sub New(ParentForm As MyForm)
         InitializeComponent()
-        MyGridTheme = DefaultSibiTheme
+        GridTheme = ParentForm.GridTheme
         InitForm(ParentForm)
         Text += " - *New Request*"
         NewRequest()
@@ -727,7 +726,7 @@ VALUES
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         If Not AttachmentsIsOpen(CurrentRequest.strUID) Then
             If CurrentRequest.strUID <> "" Then
-                Dim NewAttach As New frmAttachments(Me, MyGridTheme, CurrentRequest)
+                Dim NewAttach As New frmAttachments(Me, CurrentRequest)
             End If
         Else
             ActivateFormByUID(CurrentRequest.strUID)
@@ -874,19 +873,19 @@ VALUES
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
         If Not bolGridFilling Then
-            HighlightRow(RequestItemsGrid, MyGridTheme, Row)
+            HighlightRow(RequestItemsGrid, GridTheme, Row)
         End If
     End Sub
     Private Sub RequestItemsGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
     End Sub
     Private Sub RequestItemsGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellLeave
-        LeaveRow(RequestItemsGrid, MyGridTheme, e.RowIndex)
+        LeaveRow(RequestItemsGrid, GridTheme, e.RowIndex)
     End Sub
     Private Sub LookupDevice(Device As Device_Info)
         If Not DeviceIsOpen(Device.strGUID) Then
             Waiting()
-            Dim NewView As New frmView(Me, MyGridTheme, Device.strGUID)
+            Dim NewView As New frmView(Me, Device.strGUID)
             DoneWaiting()
         Else
             ActivateFormByUID(Device.strGUID)

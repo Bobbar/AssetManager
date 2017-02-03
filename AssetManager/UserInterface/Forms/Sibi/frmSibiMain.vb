@@ -4,7 +4,6 @@ Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
     Private MyWindowList As WindowList
     Private LastCmd As MySqlCommand
-    Private MyGridTheme As New Grid_Theme
     Private bolRebuildingCombo As Boolean = False
     Public Sub RefreshResults()
         ExecuteCmd(LastCmd)
@@ -33,9 +32,9 @@ Public Class frmSibiMain
         ExtendedMethods.DoubleBuffered(ResultGrid, True)
         If SetDisplayYears() Then
             ShowAll("All")
-            MyGridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
-            MyGridTheme.CellSelectColor = colSibiSelectColor
-            MyGridTheme.RowHighlightColor = colHighlightBlue
+            GridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
+            GridTheme.CellSelectColor = colSibiSelectColor
+            GridTheme.RowHighlightColor = colHighlightBlue
             MyWindowList = New WindowList(Me, tsdSelectWindow)
         Else
             Me.Dispose()
@@ -162,12 +161,8 @@ Public Class frmSibiMain
         OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub OpenRequest(strUID As String)
-        'If Not ConnectionReady() Then
-        '    ConnectionNotReady()
-        '    Exit Sub
-        'End If
         If Not RequestIsOpen(strUID) Then
-            Dim ManRequest As New frmManageRequest(Me, MyGridTheme, strUID)
+            Dim ManRequest As New frmManageRequest(Me, strUID)
         Else
             ActivateFormByUID(strUID)
         End If
@@ -236,14 +231,14 @@ Public Class frmSibiMain
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
         If Not bolGridFilling Then
-            HighlightRow(ResultGrid, MyGridTheme, Row)
+            HighlightRow(ResultGrid, GridTheme, Row)
         End If
     End Sub
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
     End Sub
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
-        LeaveRow(ResultGrid, MyGridTheme, e.RowIndex)
+        LeaveRow(ResultGrid, GridTheme, e.RowIndex)
     End Sub
     Private Sub cmbDisplayYear_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbDisplayYear.SelectedIndexChanged
         If cmbDisplayYear.Text IsNot Nothing And Not bolRebuildingCombo Then
