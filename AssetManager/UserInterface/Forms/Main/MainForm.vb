@@ -140,23 +140,23 @@ Public Class MainForm
             table.Columns.Add("OS Version", GetType(String))
             table.Columns.Add("Location", GetType(String))
             table.Columns.Add("PO Number", GetType(String))
-            table.Columns.Add("Purchase Date", GetType(String))
+            table.Columns.Add("Purchase Date", GetType(Date))
             table.Columns.Add("Replace Year", GetType(String))
-            table.Columns.Add("Modified", GetType(String))
+            table.Columns.Add("Modified", GetType(Date))
             table.Columns.Add("GUID", GetType(String))
             For Each r As DataRow In Results.Rows
-                table.Rows.Add(NoNull(r.Item(devices.CurrentUser)),
-                               NoNull(r.Item(devices.AssetTag)),
-                               NoNull(r.Item(devices.Serial)),
-                               GetHumanValue(DeviceIndex.EquipType, NoNull(r.Item(devices.EQType))),
-                               NoNull(r.Item(devices.Description)),
-                               GetHumanValue(DeviceIndex.OSType, NoNull(r.Item(devices.OSVersion))),
-                               GetHumanValue(DeviceIndex.Locations, NoNull(r.Item(devices.Location))),
-                               NoNull(r.Item(devices.PO)),
-                               NoNull(r.Item(devices.PurchaseDate)),
-                               NoNull(r.Item(devices.ReplacementYear)),
-                               NoNull(r.Item(devices.LastMod_Date)),
-                               NoNull(r.Item(devices.DeviceUID)))
+                table.Rows.Add(r.Item(devices.CurrentUser),
+                              r.Item(devices.AssetTag),
+                              r.Item(devices.Serial),
+                               GetHumanValue(DeviceIndex.EquipType, r.Item(devices.EQType)),
+                               r.Item(devices.Description),
+                               GetHumanValue(DeviceIndex.OSType, r.Item(devices.OSVersion)),
+                               GetHumanValue(DeviceIndex.Locations, r.Item(devices.Location)),
+                               r.Item(devices.PO),
+                               r.Item(devices.PurchaseDate),
+                              r.Item(devices.ReplacementYear),
+                              r.Item(devices.LastMod_Date),
+                              r.Item(devices.DeviceUID))
             Next
             bolGridFilling = True
             ResultGrid.DataSource = table
