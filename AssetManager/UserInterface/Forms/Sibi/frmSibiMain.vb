@@ -26,7 +26,6 @@ Public Class frmSibiMain
         If SetDisplayYears() Then
             ShowAll()
         End If
-
     End Sub
     Private Sub frmSibiMain_Load(sender As Object, e As EventArgs) Handles Me.Load
         ExtendedMethods.DoubleBuffered(ResultGrid, True)

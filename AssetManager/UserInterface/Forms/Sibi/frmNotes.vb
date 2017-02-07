@@ -14,8 +14,10 @@ Public Class frmNotes
         MyRequest = Request
         ShowDialog(ParentForm)
     End Sub
-    Sub New(NoteUID As String)
+    Sub New(ParentForm As Form, NoteUID As String)
         InitializeComponent()
+        Tag = ParentForm
+        Icon = ParentForm.Icon
         ViewNote(NoteUID)
     End Sub
     Private Sub ClearAll()
@@ -24,8 +26,15 @@ Public Class frmNotes
     Private Sub ViewNote(NoteUID As String)
         cmdOK.Visible = False
         rtbNotes.Clear()
-        rtbNotes.Text = Asset.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.Note)
+        Dim NoteText As String = Asset.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.Note)
+        Select Case GetStringFormat(NoteText)
+            Case DataFormats.Rtf
+                rtbNotes.Rtf = NoteText
+            Case DataFormats.Text
+                rtbNotes.Text = NoteText
+        End Select
         rtbNotes.ReadOnly = True
+        rtbNotes.BackColor = Color.White
         Show()
         Activate()
     End Sub
@@ -40,4 +49,11 @@ Public Class frmNotes
     Private Sub rtbNotes_LinkClicked(sender As Object, e As LinkClickedEventArgs) Handles rtbNotes.LinkClicked
         Process.Start(e.LinkText)
     End Sub
+    Private Function GetStringFormat(text As String) As String
+        If text.StartsWith("{\rtf") Then
+            Return DataFormats.Rtf
+        Else
+            Return DataFormats.Text
+        End If
+    End Function
 End Class

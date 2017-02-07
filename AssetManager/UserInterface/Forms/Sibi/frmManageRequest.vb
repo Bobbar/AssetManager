@@ -630,14 +630,26 @@ VALUES
             table.Columns.Add("Preview")
             table.Columns.Add("UID")
             For Each r As DataRow In Results.Rows
+                Dim NoteText As String = RTFToPlainText(r.Item(sibi_notes.Note))
                 table.Rows.Add(r.Item(sibi_notes.DateStamp),
-                               IIf(Len(r.Item(sibi_notes.Note)) > intPreviewChars, NotePreview(r.Item(sibi_notes.Note).ToString), r.Item(sibi_notes.Note)),
+                               IIf(Len(NoteText) > intPreviewChars, NotePreview(NoteText), NoteText),
                                r.Item(sibi_notes.Note_UID))
             Next
             dgvNotes.DataSource = table
             dgvNotes.ClearSelection()
         End Using
     End Sub
+    Private Function RTFToPlainText(strRTF As String) As String
+        Try
+            Using rtBox As New RichTextBox
+                rtBox.Rtf = strRTF
+                Return rtBox.Text
+            End Using
+        Catch ex As ArgumentException
+            'If we get an argument error, that means the text is not RTF so we return the plain text.
+            Return strRTF
+        End Try
+    End Function
     Private Function DeleteItem_FromSQL(ItemUID As String, ItemColumnName As String, Table As String) As Integer
         Try
             Dim rows As Integer
@@ -836,7 +848,7 @@ VALUES
         If CurrentRequest.strUID <> "" Then
             Dim NewNote As New frmNotes(Me, CurrentRequest)
             If NewNote.DialogResult = DialogResult.OK Then
-                AddNewNote(NewNote.Request.strUID, Trim(NewNote.rtbNotes.Text))
+                AddNewNote(NewNote.Request.strUID, Trim(NewNote.rtbNotes.Rtf))
                 RefreshRequest()
             End If
         End If
@@ -845,7 +857,7 @@ VALUES
         OpenRequest(CurrentRequest.strUID)
     End Sub
     Private Sub dgvNotes_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvNotes.CellDoubleClick
-        Dim ViewNote As New frmNotes(dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString)
+        Dim ViewNote As New frmNotes(Me, dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
