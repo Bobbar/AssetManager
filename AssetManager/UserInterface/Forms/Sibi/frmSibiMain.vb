@@ -35,6 +35,7 @@ Public Class frmSibiMain
             GridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
             GridTheme.CellSelectColor = colSibiSelectColor
             GridTheme.RowHighlightColor = colHighlightBlue
+            ToolStrip1.BackColor = colSibiToolBarColor
             MyWindowList = New WindowList(Me, tsdSelectWindow)
         Else
             Me.Dispose()

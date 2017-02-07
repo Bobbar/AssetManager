@@ -17,7 +17,7 @@
     Public colFormBackColor As Color = Color.FromArgb(232, 232, 232)
     Public colStatusBarProblem As Color = ColorTranslator.FromHtml("#FF9696")
     Public colAssetToolBarColor As Color = Color.FromArgb(249, 226, 166)
-    Public colSibiToolBarColor As Color = Color.FromArgb(148, 213, 255)
+    Public colSibiToolBarColor As Color = Color.FromArgb(185, 205, 255) '(148, 213, 255)
     Public DefGridBC As Color, DefGridSelCol As Color
     Public DefaultSibiTheme As New Grid_Theme(colHighlightBlue, colSibiSelectColor, Color.FromArgb(64, 64, 64))
 

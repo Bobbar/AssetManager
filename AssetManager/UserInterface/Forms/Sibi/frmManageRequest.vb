@@ -13,26 +13,26 @@ Public Class frmManageRequest
     Sub New(ParentForm As MyForm, RequestUID As String)
         Waiting()
         InitializeComponent()
-        GridTheme = ParentForm.GridTheme
         InitForm(ParentForm)
         OpenRequest(RequestUID)
         DoneWaiting()
     End Sub
     Sub New(ParentForm As MyForm)
         InitializeComponent()
-        GridTheme = ParentForm.GridTheme
         InitForm(ParentForm)
         Text += " - *New Request*"
         NewRequest()
         Show()
     End Sub
-    Private Sub InitForm(ParentForm As Form)
+    Private Sub InitForm(ParentForm As MyForm)
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
         Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip, 5)
         MyWindowList = New WindowList(Me, tsdSelectWindow)
-        dgvNotes.DefaultCellStyle.SelectionBackColor = colSibiSelectColor
         Tag = ParentForm
         Icon = ParentForm.Icon
+        GridTheme = ParentForm.GridTheme
+        dgvNotes.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
+        ToolStrip.BackColor = colSibiToolBarColor
     End Sub
     Public Sub SetAttachCount()
         cmdAttachments.Text = "(" + Asset.GetAttachmentCount(CurrentRequest).ToString + ")"
