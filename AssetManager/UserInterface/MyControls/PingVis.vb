@@ -14,6 +14,8 @@ Public Class PingVis : Implements IDisposable
     Private intBarHeight As Integer = 4
     Private intMinBarLen As Integer = 2
     Private curPos As Integer = 1
+    Private intInitialScale As Single = 4
+    Private intPrevMax As Integer = 0
     Public AvgPingTime As Single = 0
     Sub New(ByRef DestControl As Control, HostName As String)
         MyControl = DestControl
@@ -53,12 +55,12 @@ Public Class PingVis : Implements IDisposable
     Private Sub DrawBars(ByRef DestControl As Control)
         Dim bm As Drawing.Bitmap = New Drawing.Bitmap(DestControl.Width, DestControl.Height)
         Dim gfx As Graphics = Graphics.FromImage(bm)
-        gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        ' gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
         Try
             Dim intImgHeight As Integer = DestControl.ClientSize.Height
             Dim intImgWidth As Integer = DestControl.ClientSize.Width
             Dim intMaxBars As Integer = CInt((intImgHeight - 1) / (intBarHeight + intBarGap))
-            Dim brushGreen As Brush = Brushes.Green
+            Dim brushGreen As Brush = New SolidBrush(Color.FromArgb(15, 130, 21)) '94, 178, 98)) ' Brushes.Green
             Dim MyBrush As Brush
             Dim LB, UB As Integer
             If pngResults.Count > intMaxBars Then
@@ -75,24 +77,55 @@ Public Class PingVis : Implements IDisposable
                     BarLen = intImgWidth - 2
                 Else
                     MyBrush = brushGreen
-                    BarRatio = (Timeout / 6) / pngResults(i).RoundtripTime
+                    BarRatio = (Timeout / intInitialScale) / pngResults(i).RoundtripTime
                     BarLen = (intImgWidth / BarRatio) + intMinBarLen '* 2
                 End If
-                'gfx.DrawLine(Pens.Black, New Point(0, curPos), New Point(intImgWidth, curPos))
+
                 gfx.FillRectangle(MyBrush, 1, curPos, BarLen, intBarHeight)
+                '  gfx.DrawLine(Pens.Gray, New Point(1, curPos), New Point(BarLen, curPos))
                 curPos += intBarHeight + intBarGap
             Next
-            Dim Title As String = "P" & vbCrLf & "i" & vbCrLf & "n" & vbCrLf & "g" '"Ping" & vbCrLf & "Vis"
-            Dim TextSize As SizeF = gfx.MeasureString(Title, New Font("Consolas", 6))
-            gfx.DrawString(Title, New Font("Consolas", 6), Brushes.Black, New Point(intImgWidth - (TextSize.Width + 1), (intImgHeight / 2) - TextSize.Height / 2)) '(intImgWidth / 2) - TextSize.Width / 2
+            Dim InfoText As String = AvgPingTime & "ms" '"P" & vbCrLf & "i" & vbCrLf & "n" & vbCrLf & "g" '"Ping" & vbCrLf & "Vis"
+            Dim InfoFont As Font = New Font("Consolas", 7, FontStyle.Regular)
+            Dim TextSize As SizeF = gfx.MeasureString(InfoText, InfoFont)
+            gfx.DrawString(InfoText, InfoFont, Brushes.White, New Point((intImgWidth / 2) - TextSize.Width / 2 - 4, (intImgHeight) - (TextSize.Height + 3))) '(intImgWidth / 2) - TextSize.Width / 2
             curPos = 1
             SetAvgPing()
+            SetScale()
             SetControlImage(DestControl, bm)
         Catch
         Finally
             ' GC.Collect()
         End Try
     End Sub
+    Private Sub SetScale()
+        Dim MaxPing As Integer = pngResults.OrderByDescending(Function(p) p.RoundtripTime).FirstOrDefault.RoundtripTime
+        Debug.Print(MaxPing)
+        If MaxPing <> intPrevMax Then
+            If MaxPing * 2 >= (Timeout / intInitialScale) Then
+                'intInitialScale -= 1
+                Do Until intInitialScale <= 0 Or MaxPing * 2 < (Timeout / intInitialScale)
+                    intInitialScale -= 0.1
+                Loop
+
+            ElseIf MaxPing < ((Timeout / intInitialScale) / 2) AndAlso intInitialScale >= 0 Then
+                '  intInitialScale += 1
+                Do Until intInitialScale >= 15 Or MaxPing > ((Timeout / intInitialScale) / 2)
+                    intInitialScale += 0.1
+                Loop
+
+
+
+
+            End If
+            intPrevMax = MaxPing
+
+        End If
+
+
+        Debug.Print(intInitialScale)
+    End Sub
+
     Private Sub SetControlImage(ByRef DestControl As Control, Image As Bitmap)
         Select Case True
             Case TypeOf DestControl Is Form
@@ -118,7 +151,7 @@ Public Class PingVis : Implements IDisposable
                 TotalPingTime += Timeout
             End If
         Next
-        AvgPingTime = Math.Round((TotalPingTime / pngResults.Count), 2)
+        AvgPingTime = Math.Round((TotalPingTime / pngResults.Count), 0)
     End Sub
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls
@@ -159,3 +192,4 @@ Public Class PingVis : Implements IDisposable
     End Sub
 #End Region
 End Class
+

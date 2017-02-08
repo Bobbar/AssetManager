@@ -837,12 +837,12 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub SetupNetTools(PingResults As Ping_Results)
         If Not grpNetTools.Visible And PingResults.CanPing Then
             cmdShowIP.Tag = PingResults.Address
-            MyPingVis = New PingVis(PingBox, PingResults.Address)
+            MyPingVis = New PingVis(cmdShowIP, PingResults.Address)
             grpNetTools.Visible = True
         End If
-        If grpNetTools.Visible Then
-            ToolTip1.SetToolTip(PingBox, "Avg ping: " & MyPingVis.AvgPingTime & " ms")
-        End If
+        'If grpNetTools.Visible Then
+        '    ToolTip1.SetToolTip(PingBox, "Avg ping: " & MyPingVis.AvgPingTime & " ms")
+        'End If
     End Sub
     Private Sub CheckRDP()
         Try
