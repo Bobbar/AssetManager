@@ -98,6 +98,7 @@ Partial Class frmView
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.PingBox = New System.Windows.Forms.PictureBox()
         Me.DeviceInfoBox.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
@@ -111,6 +112,7 @@ Partial Class frmView
         Me.StatusStrip1.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
+        CType(Me.PingBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'DeviceInfoBox
@@ -178,14 +180,15 @@ Partial Class frmView
         '
         'grpNetTools
         '
+        Me.grpNetTools.Controls.Add(Me.PingBox)
         Me.grpNetTools.Controls.Add(Me.cmdShowIP)
         Me.grpNetTools.Controls.Add(Me.cmdBrowseFiles)
         Me.grpNetTools.Controls.Add(Me.cmdRDP)
         Me.grpNetTools.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.grpNetTools.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.grpNetTools.Location = New System.Drawing.Point(431, 197)
+        Me.grpNetTools.Location = New System.Drawing.Point(392, 197)
         Me.grpNetTools.Name = "grpNetTools"
-        Me.grpNetTools.Size = New System.Drawing.Size(138, 67)
+        Me.grpNetTools.Size = New System.Drawing.Size(189, 67)
         Me.grpNetTools.TabIndex = 52
         Me.grpNetTools.TabStop = False
         Me.grpNetTools.Text = "Remote Mgmt"
@@ -197,7 +200,7 @@ Partial Class frmView
         Me.cmdShowIP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdShowIP.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdShowIP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdShowIP.Location = New System.Drawing.Point(92, 19)
+        Me.cmdShowIP.Location = New System.Drawing.Point(90, 19)
         Me.cmdShowIP.Name = "cmdShowIP"
         Me.cmdShowIP.Size = New System.Drawing.Size(40, 40)
         Me.cmdShowIP.TabIndex = 53
@@ -210,7 +213,7 @@ Partial Class frmView
         Me.cmdBrowseFiles.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdBrowseFiles.BackgroundImage = CType(resources.GetObject("cmdBrowseFiles.BackgroundImage"), System.Drawing.Image)
         Me.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.cmdBrowseFiles.Location = New System.Drawing.Point(8, 19)
+        Me.cmdBrowseFiles.Location = New System.Drawing.Point(6, 19)
         Me.cmdBrowseFiles.Name = "cmdBrowseFiles"
         Me.cmdBrowseFiles.Size = New System.Drawing.Size(40, 40)
         Me.cmdBrowseFiles.TabIndex = 52
@@ -223,7 +226,7 @@ Partial Class frmView
         Me.cmdRDP.BackgroundImage = CType(resources.GetObject("cmdRDP.BackgroundImage"), System.Drawing.Image)
         Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRDP.Location = New System.Drawing.Point(50, 19)
+        Me.cmdRDP.Location = New System.Drawing.Point(48, 19)
         Me.cmdRDP.Name = "cmdRDP"
         Me.cmdRDP.Size = New System.Drawing.Size(40, 40)
         Me.cmdRDP.TabIndex = 46
@@ -923,6 +926,15 @@ Partial Class frmView
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 37)
         Me.ToolStripSeparator2.Visible = False
         '
+        'PingBox
+        '
+        Me.PingBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PingBox.Location = New System.Drawing.Point(136, 18)
+        Me.PingBox.Name = "PingBox"
+        Me.PingBox.Size = New System.Drawing.Size(40, 40)
+        Me.PingBox.TabIndex = 54
+        Me.PingBox.TabStop = False
+        '
         'frmView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -956,6 +968,7 @@ Partial Class frmView
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
+        CType(Me.PingBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1037,4 +1050,5 @@ Partial Class frmView
     Friend WithEvents AssetDisposalFormToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmdShowIP As Button
     Friend WithEvents tsdSelectWindow As ToolStripDropDownButton
+    Friend WithEvents PingBox As PictureBox
 End Class

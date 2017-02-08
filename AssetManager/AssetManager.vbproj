@@ -330,6 +330,7 @@
       <SubType>Component</SubType>
       <CustomToolNamespace>NoScrollPanel</CustomToolNamespace>
     </Compile>
+    <Compile Include="UserInterface\MyControls\PingVis.vb" />
     <Compile Include="UserInterface\MyControls\WindowList.vb" />
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,7 @@ Public Class frmView
     Private MyPing As New Net.NetworkInformation.Ping
     Private MyPingHostname As String = Nothing
     Private MyPingRunning As Boolean = False
+    Private MyPingVis As PingVis
     Private Structure Ping_Results
         Public CanPing As Boolean
         Public Address As String
@@ -834,9 +835,13 @@ VALUES (@" & historical_dev.ChangeType & ",
         TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
     End Sub
     Private Sub SetupNetTools(PingResults As Ping_Results)
-        grpNetTools.Visible = PingResults.CanPing
-        If PingResults.CanPing Then
+        If Not grpNetTools.Visible And PingResults.CanPing Then
             cmdShowIP.Tag = PingResults.Address
+            MyPingVis = New PingVis(PingBox, PingResults.Address)
+            grpNetTools.Visible = True
+        End If
+        If grpNetTools.Visible Then
+            ToolTip1.SetToolTip(PingBox, "Avg ping: " & MyPingVis.AvgPingTime & " ms")
         End If
     End Sub
     Private Sub CheckRDP()
@@ -850,7 +855,6 @@ VALUES (@" & historical_dev.ChangeType & ",
                 MyPingRunning = True
             End If
         Catch ex As Exception
-
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
