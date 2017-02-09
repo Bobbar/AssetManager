@@ -829,6 +829,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         MyLiveBox.Dispose()
         CloseChildren(Me)
+        If MyPingVis IsNot Nothing Then MyPingVis.Dispose()
     End Sub
     Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint
         On Error Resume Next

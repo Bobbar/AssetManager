@@ -21,12 +21,12 @@ Partial Class frmView
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmView))
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
+        Me.PingBox = New System.Windows.Forms.PictureBox()
         Me.lblGUID = New System.Windows.Forms.Label()
         Me.cmdMunisSearch = New System.Windows.Forms.Button()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
-        Me.PingBox = New System.Windows.Forms.PictureBox()
         Me.cmdShowIP = New System.Windows.Forms.Button()
         Me.cmdBrowseFiles = New System.Windows.Forms.Button()
         Me.cmdRDP = New System.Windows.Forms.Button()
@@ -100,8 +100,8 @@ Partial Class frmView
         Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeviceInfoBox.SuspendLayout()
-        Me.grpNetTools.SuspendLayout()
         CType(Me.PingBox, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.grpNetTools.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.RightClickMenu.SuspendLayout()
         Me.TabControl1.SuspendLayout()
@@ -156,6 +156,16 @@ Partial Class frmView
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
         '
+        'PingBox
+        '
+        Me.PingBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PingBox.Location = New System.Drawing.Point(299, 206)
+        Me.PingBox.Name = "PingBox"
+        Me.PingBox.Size = New System.Drawing.Size(40, 40)
+        Me.PingBox.TabIndex = 54
+        Me.PingBox.TabStop = False
+        Me.PingBox.Visible = False
+        '
         'lblGUID
         '
         Me.lblGUID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -194,28 +204,17 @@ Partial Class frmView
         Me.grpNetTools.Text = "Remote Mgmt"
         Me.grpNetTools.Visible = False
         '
-        'PingBox
-        '
-        Me.PingBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PingBox.Location = New System.Drawing.Point(299, 206)
-        Me.PingBox.Name = "PingBox"
-        Me.PingBox.Size = New System.Drawing.Size(40, 40)
-        Me.PingBox.TabIndex = 54
-        Me.PingBox.TabStop = False
-        Me.PingBox.Visible = False
-        '
         'cmdShowIP
         '
-        Me.cmdShowIP.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.cmdShowIP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdShowIP.BackColor = System.Drawing.Color.Black
+        Me.cmdShowIP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdShowIP.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdShowIP.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdShowIP.ForeColor = System.Drawing.Color.White
-        Me.cmdShowIP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.cmdShowIP.Location = New System.Drawing.Point(120, 19)
         Me.cmdShowIP.Name = "cmdShowIP"
         Me.cmdShowIP.Size = New System.Drawing.Size(50, 50)
         Me.cmdShowIP.TabIndex = 53
-        Me.cmdShowIP.Text = "IP"
         Me.cmdShowIP.TextAlign = System.Drawing.ContentAlignment.TopRight
         Me.ToolTip1.SetToolTip(Me.cmdShowIP, "Show IP")
         Me.cmdShowIP.UseVisualStyleBackColor = False
@@ -559,15 +558,15 @@ Partial Class frmView
         Me.DataGridHistory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridHistory.ContextMenuStrip = Me.RightClickMenu
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(10)
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridHistory.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.Padding = New System.Windows.Forms.Padding(10)
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridHistory.DefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridHistory.Location = New System.Drawing.Point(6, 6)
         Me.DataGridHistory.Name = "DataGridHistory"
@@ -954,8 +953,8 @@ Partial Class frmView
         Me.Text = "View"
         Me.DeviceInfoBox.ResumeLayout(False)
         Me.DeviceInfoBox.PerformLayout()
-        Me.grpNetTools.ResumeLayout(False)
         CType(Me.PingBox, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.grpNetTools.ResumeLayout(False)
         Me.pnlOtherFunctions.ResumeLayout(False)
         Me.RightClickMenu.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
