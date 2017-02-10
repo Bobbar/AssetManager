@@ -28,7 +28,7 @@ Public Class PingVis : Implements IDisposable
 #Region "Colors"
     Private brushGoodPing As Brush = New SolidBrush(Color.FromArgb(15, 130, 21))
     Private brushOKPing As Brush = New SolidBrush(Color.FromArgb(175, 131, 0))
-    Private brushBadPing As Brush = Brushes.DimGray
+    Private brushBadPing As Brush = Brushes.Red
 #End Region
 
 #End Region
@@ -118,7 +118,7 @@ Public Class PingVis : Implements IDisposable
         If pngResults.Last.Status = IPStatus.Success Then
             InfoText = pngResults.Last.RoundtripTime & "ms"
         Else
-            InfoText = "Fail"
+            InfoText = "T/O" '"Fail"
         End If
         Dim InfoFont As Font = New Font("Tahoma", InfoFontSize, FontStyle.Bold)
         Dim TextSize As SizeF = gfx.MeasureString(InfoText, InfoFont)
@@ -243,7 +243,6 @@ Public Class PingVis : Implements IDisposable
         End Using
         Return destImage
     End Function
-
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls
 

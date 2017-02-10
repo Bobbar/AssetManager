@@ -16,6 +16,7 @@ Public Class frmView
     Private MyPingHostname As String = Nothing
     Private MyPingRunning As Boolean = False
     Private MyPingVis As PingVis
+    Private intFailedPings As Integer = 0
     Private Structure Ping_Results
         Public CanPing As Boolean
         Public Address As String
@@ -827,6 +828,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         NewMunisView(CurrentViewDevice)
     End Sub
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        MyWindowList = Nothing
         MyLiveBox.Dispose()
         CloseChildren(Me)
         If MyPingVis IsNot Nothing Then MyPingVis.Dispose()
@@ -836,10 +838,19 @@ VALUES (@" & historical_dev.ChangeType & ",
         TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
     End Sub
     Private Sub SetupNetTools(PingResults As Ping_Results)
+        If Not PingResults.CanPing Then
+            intFailedPings += 1
+        Else
+            intFailedPings = 0
+        End If
         If Not grpNetTools.Visible And PingResults.CanPing Then
             cmdShowIP.Tag = PingResults.Address
             MyPingVis = New PingVis(cmdShowIP, PingResults.Address)
             grpNetTools.Visible = True
+        End If
+        If intFailedPings > 20 Then
+            MyPingVis.Dispose()
+            grpNetTools.Visible = False
         End If
         'If grpNetTools.Visible Then
         '    ToolTip1.SetToolTip(PingBox, "Avg ping: " & MyPingVis.AvgPingTime & " ms")
