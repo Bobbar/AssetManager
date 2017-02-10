@@ -4,6 +4,7 @@ Imports System.Net
 Imports System.ComponentModel
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
+Imports System.Drawing
 Public Class PingVis : Implements IDisposable
     Private MyPing As New Ping
     Private pngResults As New List(Of PingReply)
@@ -27,7 +28,7 @@ Public Class PingVis : Implements IDisposable
 #Region "Colors"
     Private brushGoodPing As Brush = New SolidBrush(Color.FromArgb(15, 130, 21))
     Private brushOKPing As Brush = New SolidBrush(Color.FromArgb(175, 131, 0))
-    Private brushBadPing As Brush = Brushes.Maroon
+    Private brushBadPing As Brush = Brushes.DimGray
 #End Region
 
 #End Region
@@ -54,7 +55,8 @@ Public Class PingVis : Implements IDisposable
     Private Sub PingTimer_Tick(sender As Object, e As EventArgs)
         Try
             StartPing()
-        Catch
+        Catch ex As Exception
+            Debug.Print(ex.Message)
         End Try
     End Sub
     Private Sub StartPing()
@@ -102,8 +104,8 @@ Public Class PingVis : Implements IDisposable
             SetAvgPing() 'Set public property containing current average round trip time
             SetScale()
             'The bitmap is scaled back to control size using high quality transformations.
-            'This improves the effect of anti-aliasing.
-            'bm.Save("C:\Temp\test.bmp")
+            'This improves the effect of anti-aliasing and therefore readability.
+            '  bm.Save("C:\Temp\test.bmp")
             bm = ResizeImage(bm, DestControl.ClientSize.Width, DestControl.ClientSize.Height)
             SetControlImage(DestControl, bm)
         Catch
@@ -116,13 +118,13 @@ Public Class PingVis : Implements IDisposable
         If pngResults.Last.Status = IPStatus.Success Then
             InfoText = pngResults.Last.RoundtripTime & "ms"
         Else
-            InfoText = "Fail!"
+            InfoText = "Fail"
         End If
         Dim InfoFont As Font = New Font("Tahoma", InfoFontSize, FontStyle.Bold)
         Dim TextSize As SizeF = gfx.MeasureString(InfoText, InfoFont)
         gfx.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
         gfx.TextContrast = 0
-        gfx.DrawString(InfoText, InfoFont, Brushes.White, New PointF((intImgWidth / 2) - (TextSize.Width / 2), (intImgHeight / 2) - (TextSize.Height / 2))) '(intImgWidth / 2) - TextSize.Width / 2
+        gfx.DrawString(InfoText, InfoFont, Brushes.White, New PointF((intImgWidth / 2) - (TextSize.Width / 2) - 2, (intImgHeight / 2) - (TextSize.Height / 2))) '(intImgWidth / 2) - TextSize.Width / 2
     End Sub
     Private Sub DrawPingBars()
         Dim MyBrush As Brush
@@ -132,83 +134,39 @@ Public Class PingVis : Implements IDisposable
             Dim BarRatio As Single
             Dim BarLen As Single
             If pngResults(i).Status <> Net.NetworkInformation.IPStatus.Success Then
-                ' MyBrush = brushBadPing
+                MyBrush = brushBadPing
                 BarLen = intImgWidth - 2
             Else
-                'MyBrush = brushGoodPing
+                MyBrush = GetBarBrush(pngResults(i).RoundtripTime)
                 BarRatio = (Timeout / intInitialScale) / pngResults(i).RoundtripTime
                 BarLen = (intImgWidth / BarRatio) + intMinBarLen '* 2
             End If
-            MyBrush = GetBarBrush(pngResults(i).RoundtripTime)
             gfx.FillRectangle(MyBrush, 1, curPos, BarLen, BarHeight)
-            Dim CapPen As Pen = New Pen(Color.Lime, 2)
+            Dim CapPen As Pen = New Pen(Color.ForestGreen, 2)
             gfx.DrawLine(CapPen, New PointF(BarLen, curPos), New PointF(BarLen, curPos + BarHeight))
             curPos += BarHeight + intBarGap
         Next
     End Sub
     Private Function GetBarBrush(RoundTrip As Integer) As Brush
-        'Select Case RoundTrip
-        '    Case < 50
-        '        Return brushGoodPing
-        '    Case > 100
-        '        Return brushOKPing
-        'End Select
-        Dim CalcColor As Integer
-        Dim ColorsRGB As Integer = 255
-        Dim RGBMulti As Integer = 4
-        Dim BColor As Color
-        CalcColor = ColorsRGB - (RoundTrip * RGBMulti)
-
-        BColor = Color.FromArgb(CalcColor, 255, 255)
-        Return New SolidBrush(BColor)
-
-
-
-
-
-        '    Private Sub GetFadeColor()
-        '    Dim FadeColor As Long
-        '    Dim Color1, Color2
-        '    FadeColor = GetRealColor(Frame3.BackColor)
-        '    ColorCodeToRGB FadeColor, iRed, iGreen, iBlue
-        'Color1 = RGB(iRed, iGreen, iBlue)
-        '    r1 = Color1 And (Not &HFFFFFF00)
-        '    g1 = (Color1 And (Not &HFFFF00FF)) \ &H100&
-        '    b1 = (Color1 And (Not &HFF00FFFF)) \ &HFFFF&
-        '    FadeColor = GetRealColor(&HFF00&)
-        '    ColorCodeToRGB FadeColor, iRed, iGreen, iBlue
-        'Color2 = RGB(iRed, iGreen, iBlue)
-        '    r2 = Color2 And (Not &HFFFFFF00)
-        '    g2 = (Color2 And (Not &HFFFF00FF)) \ &H100&
-        '    b2 = (Color2 And (Not &HFF00FFFF)) \ &HFFFF&
-        'End Sub
-
-        'Private Sub tmrButtonFlasher_Timer()
-        '    Dim iSteps As Integer
-        '    Dim FadeColor As Long
-        '    Dim intLongInterval As Integer, intShortInterval As Integer
-        '    intLongInterval = 1000
-        '    intShortInterval = 50
-        '    iSteps = 255
-        '    If cmdSubmit.Enabled = True Then
-        '        tmrButtonFlasher.Interval = intShortInterval
-        '        If iStep <= 0 Then iStep = iSteps
-        '        FadeColor = RGB(r1 + (r2 - r1) / iSteps * iStep, g1 + (g2 - g1) / iSteps * iStep, b1 + (b2 - b1) / iSteps * iStep)
-        '        pbSubmitBox.FillColor = FadeColor
-        '        pbSubmitBox.ForeColor = FadeColor
-        '        RoundRect pbSubmitBox.hdc, 7, 5, 145, 50, 10, 10
-        '    iStep = iStep - 8
-        '    Else
-        '        tmrButtonFlasher.Interval = intLongInterval
-        '        iStep = 0
-        '        pbSubmitBox.FillColor = pbSubmitBox.BackColor
-        '        pbSubmitBox.ForeColor = pbSubmitBox.BackColor
-        '        RoundRect pbSubmitBox.hdc, 7, 5, 145, 50, 10, 10
-        '    pbSubmitBox.Cls
-        '    End If
-        'End Sub
-
-
+        'Alpha blending two colors. As ping times go up, the returned color becomes more red.
+        Dim FadeColor As Long
+        Dim Color1, Color2
+        Dim r1, g1, b1, r2, g2, b2 As Long
+        FadeColor = Color.Green.ToArgb 'low ping color
+        Color1 = FadeColor
+        r1 = Color1 And (Not &HFFFFFF00)
+        g1 = (Color1 And (Not &HFFFF00FF)) \ &H100&
+        b1 = (Color1 And (Not &HFF00FFFF)) \ &HFFFF&
+        FadeColor = Color.Blue.ToArgb 'high ping color (invert of desired color Blue = Orange)
+        Color2 = FadeColor
+        r2 = Color2 And (Not &HFFFFFF00)
+        g2 = (Color2 And (Not &HFFFF00FF)) \ &H100&
+        b2 = (Color2 And (Not &HFF00FFFF)) \ &HFFFF&
+        Dim iSteps As Integer = 255
+        Dim iStep As Integer = CInt(255 / ((Timeout / 3) / RoundTrip)) 'Convert ping time to ratio of 255. 255 being the maximum levels of blending.
+        If iStep > iSteps Then iStep = iSteps
+        FadeColor = RGB(r1 + (r2 - r1) / iSteps * iStep, g1 + (g2 - g1) / iSteps * iStep, b1 + (b2 - b1) / iSteps * iStep)
+        Return New SolidBrush(ColorTranslator.FromOle(FadeColor))
     End Function
     Private Sub DrawScaleLines()
         Dim ScaleLineLoc As Integer = 0
@@ -240,7 +198,6 @@ Public Class PingVis : Implements IDisposable
             intPrevMax = MaxPing
         End If
     End Sub
-
     Private Sub SetControlImage(ByRef DestControl As Control, Image As Bitmap)
         Select Case True
             Case TypeOf DestControl Is Form
@@ -260,14 +217,14 @@ Public Class PingVis : Implements IDisposable
     Private Sub SetAvgPing()
         Dim TotalPingTime As Integer = 0
         For Each reply As PingReply In pngResults
-            If reply.Status = IPStatus.Success Then
-                TotalPingTime += reply.RoundtripTime
-            Else
-                TotalPingTime += Timeout
-            End If
-        Next
-        CurrentAverageRoundTripTime = Math.Round((TotalPingTime / pngResults.Count), 0)
-    End Sub
+                If reply.Status = IPStatus.Success Then
+                    TotalPingTime += reply.RoundtripTime
+                Else
+                    TotalPingTime += Timeout
+                End If
+            Next
+            CurrentAverageRoundTripTime = Math.Round((TotalPingTime / pngResults.Count), 0)
+           End Sub
     Public Shared Function ResizeImage(image As Image, width As Integer, height As Integer) As Bitmap
         Dim destRect = New Rectangle(0, 0, width, height)
         Dim destImage = New Bitmap(width, height)
