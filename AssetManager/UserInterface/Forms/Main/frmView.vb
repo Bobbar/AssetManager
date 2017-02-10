@@ -39,7 +39,7 @@ Public Class frmView
         ViewDevice(DeviceGUID)
     End Sub
     Private Sub frmView_Load(sender As Object, e As EventArgs) Handles Me.Load
-        MyWindowList = New WindowList(Me, tsdSelectWindow)
+        MyWindowList = New WindowList(Me, ToolStrip1)
     End Sub
     Public Sub SetAttachCount()
         AttachmentTool.Text = "(" + Asset.GetAttachmentCount(CurrentViewDevice).ToString + ")"

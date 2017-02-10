@@ -27,7 +27,7 @@ Public Class frmManageRequest
     Private Sub InitForm(ParentForm As MyForm)
         ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
         Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip, 5)
-        MyWindowList = New WindowList(Me, tsdSelectWindow)
+        MyWindowList = New WindowList(Me, ToolStrip)
         Tag = ParentForm
         Icon = ParentForm.Icon
         GridTheme = ParentForm.GridTheme

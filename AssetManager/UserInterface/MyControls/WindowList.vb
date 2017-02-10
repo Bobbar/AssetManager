@@ -1,16 +1,21 @@
 ﻿Public Class WindowList
     Private WithEvents RefreshTimer As Timer
     Private MyParentForm As Form
-    Private DropDownControl As ToolStripDropDownButton
+    Private DropDownControl As New ToolStripDropDownButton
     Private intFormCount As Integer
-    Sub New(ParentForm As Form, DropDownCtl As ToolStripDropDownButton)
+    Sub New(ParentForm As Form, TargetToolStrip As MyToolStrip)
         MyParentForm = ParentForm
-        DropDownControl = DropDownCtl
-        DropDownControl.Visible = False
-        Init()
+        Init(TargetToolStrip)
     End Sub
-    Private Sub Init()
+    Private Sub Init(TargetToolStrip As MyToolStrip)
+        InitializeDropDownButton(TargetToolStrip)
         InitializeTimer()
+    End Sub
+    Private Sub InitializeDropDownButton(TargetToolStrip As MyToolStrip)
+        DropDownControl.Visible = False
+        DropDownControl.Text = "Select Window"
+        DropDownControl.Image = AssetManager.My.Resources.Resources.application_cascade_512
+        TargetToolStrip.Items.Insert(TargetToolStrip.Items.Count, DropDownControl)
     End Sub
     Private Sub InitializeTimer()
         RefreshTimer = New Timer

@@ -77,7 +77,6 @@ Partial Class frmManageRequest
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
         Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
-        Me.tsdSelectWindow = New System.Windows.Forms.ToolStripDropDownButton()
         Me.PopupMenuItems.SuspendLayout()
         Me.PopupMenuNotes.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -598,7 +597,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(185, Byte), Integer), CType(CType(205, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.cmdAttachments, Me.tsdSelectWindow})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.cmdAttachments})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
@@ -650,15 +649,6 @@ Partial Class frmManageRequest
         Me.cmdAttachments.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdAttachments.Size = New System.Drawing.Size(136, 34)
         Me.cmdAttachments.Text = "Attachments"
-        '
-        'tsdSelectWindow
-        '
-        Me.tsdSelectWindow.Image = Global.AssetManager.My.Resources.Resources.application_cascade_512
-        Me.tsdSelectWindow.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.tsdSelectWindow.Name = "tsdSelectWindow"
-        Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.tsdSelectWindow.Size = New System.Drawing.Size(171, 34)
-        Me.tsdSelectWindow.Text = "Select Window"
         '
         'frmManageRequest
         '
@@ -747,6 +737,5 @@ Partial Class frmManageRequest
     Friend WithEvents Panel2 As Panel
     Friend WithEvents dgvNotes As DataGridView
     Friend WithEvents ContentPanel As ToolStripContentPanel
-    Friend WithEvents tsdSelectWindow As ToolStripDropDownButton
     Friend WithEvents chkAllowDrag As CheckBox
 End Class

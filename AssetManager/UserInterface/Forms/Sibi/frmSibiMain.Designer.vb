@@ -40,7 +40,6 @@ Partial Class frmSibiMain
         Me.ToolStrip1 = New AssetManager.MyToolStrip()
         Me.cmdManage = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.tsdSelectWindow = New System.Windows.Forms.ToolStripDropDownButton()
         Me.Panel1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -239,7 +238,7 @@ Partial Class frmSibiMain
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(148, Byte), Integer), CType(CType(213, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdManage, Me.ToolStripSeparator1, Me.tsdSelectWindow})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdManage, Me.ToolStripSeparator1})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
@@ -261,15 +260,6 @@ Partial Class frmSibiMain
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
-        '
-        'tsdSelectWindow
-        '
-        Me.tsdSelectWindow.Image = Global.AssetManager.My.Resources.Resources.application_cascade_512
-        Me.tsdSelectWindow.Name = "tsdSelectWindow"
-        Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(10, 0, 10, 0)
-        Me.tsdSelectWindow.Size = New System.Drawing.Size(143, 29)
-        Me.tsdSelectWindow.Text = "Select Window"
-        Me.tsdSelectWindow.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'frmSibiMain
         '
@@ -303,7 +293,6 @@ Partial Class frmSibiMain
     Friend WithEvents Label2 As Label
     Friend WithEvents cmbDisplayYear As ComboBox
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
-    Friend WithEvents tsdSelectWindow As ToolStripDropDownButton
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents Label3 As Label

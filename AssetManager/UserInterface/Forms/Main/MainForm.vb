@@ -38,7 +38,7 @@ Public Class MainForm
             SetGridStyle(ResultGrid)
             ConnectionWatchDog.RunWorkerAsync()
             Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip1, 2)
-            MyWindowList = New WindowList(Me, tsdSelectWindow)
+            MyWindowList = New WindowList(Me, ToolStrip1)
             InitLiveBox()
             Clear_All()
         Catch ex As Exception

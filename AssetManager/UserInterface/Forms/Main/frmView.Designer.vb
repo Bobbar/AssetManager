@@ -93,7 +93,6 @@ Partial Class frmView
         Me.tsmAssetInputForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.AssetDisposalFormToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsdSelectWindow = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAccept_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
@@ -783,7 +782,7 @@ Partial Class frmView
         Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.tsbNewNote, Me.tsbDeleteDevice, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.tsdSelectWindow, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.tsbNewNote, Me.tsbDeleteDevice, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
@@ -883,17 +882,6 @@ Partial Class frmView
         Me.AssetDisposalFormToolStripMenuItem.Name = "AssetDisposalFormToolStripMenuItem"
         Me.AssetDisposalFormToolStripMenuItem.Size = New System.Drawing.Size(230, 32)
         Me.AssetDisposalFormToolStripMenuItem.Text = "Asset Disposal Form"
-        '
-        'tsdSelectWindow
-        '
-        Me.tsdSelectWindow.AutoSize = False
-        Me.tsdSelectWindow.Image = Global.AssetManager.My.Resources.Resources.application_cascade_512
-        Me.tsdSelectWindow.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.tsdSelectWindow.Name = "tsdSelectWindow"
-        Me.tsdSelectWindow.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
-        Me.tsdSelectWindow.Size = New System.Drawing.Size(171, 34)
-        Me.tsdSelectWindow.Text = "Select Window"
-        Me.tsdSelectWindow.Visible = False
         '
         'ToolStripSeparator1
         '
@@ -1049,6 +1037,5 @@ Partial Class frmView
     Friend WithEvents lblGUID As Label
     Friend WithEvents AssetDisposalFormToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmdShowIP As Button
-    Friend WithEvents tsdSelectWindow As ToolStripDropDownButton
     Friend WithEvents PingBox As PictureBox
 End Class
