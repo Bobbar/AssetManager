@@ -424,7 +424,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Public Sub StatusBar(Text As String)
         StatusLabel.Text = Text
-        Application.DoEvents()
+        StatusLabel.Invalidate()
     End Sub
     Public Sub ViewTracking(strGUID As String)
         Dim strQry = "Select * FROM " & trackable.TableName & ", " & devices.TableName & " WHERE " & trackable.DeviceUID & " = " & devices.DeviceUID & " And " & trackable.DeviceUID & " = '" & strGUID & "' ORDER BY " & trackable.DateStamp & " DESC"

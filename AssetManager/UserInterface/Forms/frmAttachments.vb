@@ -245,7 +245,7 @@ Class frmAttachments
     End Sub
     Public Sub StatusBar(Text As String)
         StatusLabel.Text = Text
-        Application.DoEvents()
+        StatusLabel.Invalidate()
     End Sub
     Private Sub FillFolderCombos()
         FillComboBox(SibiIndex.AttachFolder, cmbFolder)

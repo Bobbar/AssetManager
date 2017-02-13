@@ -278,9 +278,8 @@ Public Class MainForm
         StatusBar("Idle...")
     End Sub
     Public Sub StatusBar(Text As String)
-        On Error Resume Next
         StatusLabel.Text = Text
-        Application.DoEvents()
+        StatusLabel.Invalidate()
     End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
         Using LocalSQLComm As New clsMySQL_Comms,
@@ -294,11 +293,11 @@ Public Class MainForm
             da.Fill(ds)
             e.Result = ds.Tables(0)
         End Using
-        DoneWaiting()
     End Sub
     Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
         If e.Error Is Nothing Then
             If e.Result IsNot Nothing Then
+                DoneWaiting()
                 BigQueryDone(e.Result)
             Else
                 DoneWaiting()
