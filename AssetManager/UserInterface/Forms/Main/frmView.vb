@@ -848,8 +848,8 @@ VALUES (@" & historical_dev.ChangeType & ",
             MyPingVis = New PingVis(cmdShowIP, PingResults.Address)
             grpNetTools.Visible = True
         End If
-        If intFailedPings > 20 Then
-            MyPingVis.Dispose()
+        If intFailedPings > 20 And grpNetTools.Visible Then
+            If MyPingVis IsNot Nothing Then MyPingVis.Dispose()
             grpNetTools.Visible = False
         End If
         'If grpNetTools.Visible Then
