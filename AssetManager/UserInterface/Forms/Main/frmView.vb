@@ -848,7 +848,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             MyPingVis = New PingVis(cmdShowIP, PingResults.Address)
             grpNetTools.Visible = True
         End If
-        If intFailedPings > 20 And grpNetTools.Visible Then
+        If intFailedPings > 10 And grpNetTools.Visible Then
             If MyPingVis IsNot Nothing Then MyPingVis.Dispose()
             grpNetTools.Visible = False
         End If
@@ -880,8 +880,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                 Else
                     PingResults.CanPing = False
                 End If
-                Dim IPEntry As IPHostEntry = Dns.GetHostEntry(MyPingHostname)
-                PingResults.Address = IPEntry.AddressList(IPEntry.AddressList.Count - 1).ToString
+                PingResults.Address = e.Reply.Address.ToString
             Else
                 PingResults.CanPing = False
                 PingResults.Address = Nothing
