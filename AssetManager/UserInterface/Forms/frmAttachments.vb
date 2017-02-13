@@ -450,8 +450,12 @@ VALUES(@" & dev_attachments.FKey & ",
                     End If
                 Else
                     DoneWaiting()
-                    If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
-                    Message("File upload failed.", MessageBoxButtons.OK + MessageBoxIcon.Exclamation, "Failed", Me)
+                    If TypeOf e.Error Is BackgroundWorkerCancelledException Then
+                        Message("File upload was cancelled.", vbOKOnly + vbInformation, "Cancelled", Me)
+                    Else
+                        If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
+                        Message("File upload failed.", MessageBoxButtons.OK + MessageBoxIcon.Exclamation, "Failed", Me)
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -475,7 +479,6 @@ VALUES(@" & dev_attachments.FKey & ",
         End Try
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
-        Dim LocalSQLComm As New clsMySQL_Comms
         Dim LocalFTPComm As New clsFTP_Comms
         Dim strTimeStamp As String = Now.ToString("_hhmmss")
         Dim Foldername As String = Nothing
@@ -490,17 +493,19 @@ VALUES(@" & dev_attachments.FKey & ",
         DownloadWorker.ReportProgress(1, "Connecting...")
         Dim strFilename As String, strFiletype As String, strFullPath As String = Nothing
         Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
-        results = LocalSQLComm.Return_SQLTable(strQry)
+        Using LocalSQLComm As New clsMySQL_Comms
+            results = LocalSQLComm.Return_SQLTable(strQry)
+        End Using
         For Each r As DataRow In results.Rows
-                strFilename = r.Item(main_attachments.FileName) & strTimeStamp
-                strFiletype = r.Item(main_attachments.FileType)
-                strFullPath = strTempPath & strFilename & strFiletype
-                Foldername = r.Item(main_attachments.FKey)
-                FileExpectedHash = r.Item(main_attachments.FileHash)
-                FileUID = r.Item(main_attachments.FileUID)
-            Next
-            'FTP STUFF
-            Dim buffer(1023) As Byte
+            strFilename = r.Item(main_attachments.FileName) & strTimeStamp
+            strFiletype = r.Item(main_attachments.FileType)
+            strFullPath = strTempPath & strFilename & strFiletype
+            Foldername = r.Item(main_attachments.FKey)
+            FileExpectedHash = r.Item(main_attachments.FileHash)
+            FileUID = r.Item(main_attachments.FileUID)
+        Next
+        'FTP STUFF
+        Dim buffer(1023) As Byte
             Dim bytesIn As Integer
             Dim totalBytesIn As Integer
             Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID

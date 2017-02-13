@@ -17,6 +17,8 @@
             End With
         Catch ex As Exception
             Return request.GetResponse
+        Finally
+            request = Nothing
         End Try
     End Function
     Public Function Return_FTPRequestStream(strUri As String, Method As String) As IO.Stream

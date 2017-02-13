@@ -130,6 +130,7 @@ Public Class MainForm
         Try
             If Results Is Nothing Then Exit Sub
             StatusBar(strLoadingGridMessage)
+            Application.DoEvents()
             Dim table As New DataTable
             table.Columns.Add("User", GetType(String))
             table.Columns.Add("Asset ID", GetType(String))
@@ -297,7 +298,6 @@ Public Class MainForm
     Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
         If e.Error Is Nothing Then
             If e.Result IsNot Nothing Then
-                DoneWaiting()
                 BigQueryDone(e.Result)
             Else
                 DoneWaiting()
