@@ -76,17 +76,14 @@ Public Class PingVis : Implements IDisposable
     End Sub
     Private Sub PingComplete(ByVal sender As Object, ByVal e As System.Net.NetworkInformation.PingCompletedEventArgs)
         bolPingRunning = False
-        If e.Error Is Nothing Then
-            Dim MyPingResults As Net.NetworkInformation.PingReply = e.Reply
-            If MyPingResults.Status = Net.NetworkInformation.IPStatus.Success Then
+        If Not e.Cancelled Then
+            If e.Error Is Nothing Then
                 pngResults.Add(e.Reply)
             Else
-                pngResults.Add(e.Reply)
+                Debug.Print(e.Reply.ToString)
             End If
-        Else
-            Debug.Print(e.Reply.ToString)
+            DrawBars(MyControl)
         End If
-        DrawBars(MyControl)
     End Sub
     Private Sub DrawBars(ByRef DestControl As Control)
         'Set image to double the size of the control
