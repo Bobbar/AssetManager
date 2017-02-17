@@ -52,6 +52,7 @@ Partial Class AddNew
         Me.txtAssetTag_REQ = New System.Windows.Forms.TextBox()
         Me.txtSerial_REQ = New System.Windows.Forms.TextBox()
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.Label12 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -59,6 +60,7 @@ Partial Class AddNew
         'GroupBox1
         '
         Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.GroupBox1.Controls.Add(Me.Label12)
         Me.GroupBox1.Controls.Add(Me.cmdUserSearch)
         Me.GroupBox1.Controls.Add(Me.chkNoClear)
         Me.GroupBox1.Controls.Add(Me.chkTrackable)
@@ -383,6 +385,17 @@ Partial Class AddNew
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
+        'Label12
+        '
+        Me.Label12.Font = New System.Drawing.Font("Tahoma", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label12.Location = New System.Drawing.Point(13, 148)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(112, 13)
+        Me.Label12.TabIndex = 51
+        Me.Label12.Text = "(""NA"" if not available.)"
+        Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'AddNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -433,4 +446,5 @@ Partial Class AddNew
     Friend WithEvents chkNoClear As CheckBox
     Friend WithEvents fieldErrorIcon As ErrorProvider
     Friend WithEvents cmdUserSearch As Button
+    Friend WithEvents Label12 As Label
 End Class

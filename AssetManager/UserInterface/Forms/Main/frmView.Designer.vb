@@ -746,7 +746,6 @@ Partial Class frmView
         '
         Me.ToolTip1.AutoPopDelay = 5000
         Me.ToolTip1.InitialDelay = 100
-        Me.ToolTip1.IsBalloon = True
         Me.ToolTip1.ReshowDelay = 100
         '
         'StatusStrip1

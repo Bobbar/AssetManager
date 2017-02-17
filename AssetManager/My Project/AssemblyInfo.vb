@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("Fairfield County Board of DD")>
 <Assembly: AssemblyProduct("AssetManager")>
-<Assembly: AssemblyCopyright("Copyright © FCBDD 2016")>
+<Assembly: AssemblyCopyright("Copyright © FCBDD 2017")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: ComVisible(False)>
 'The following GUID is for the ID of the typelib if this project is exposed to COM
@@ -24,5 +24,5 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
-<Assembly: AssemblyVersion("4.1.0.4")>
-<Assembly: AssemblyFileVersion("4.1.0.4")>
+<Assembly: AssemblyVersion("4.4.3.0")>
+<Assembly: AssemblyFileVersion("4.4.3.0")>

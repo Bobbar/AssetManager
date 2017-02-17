@@ -236,13 +236,15 @@ Partial Class frmSibiMain
         '
         'ToolStrip1
         '
+        Me.ToolStrip1.AutoSize = False
         Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(148, Byte), Integer), CType(CType(213, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdManage, Me.ToolStripSeparator1})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ToolStrip1.Size = New System.Drawing.Size(1188, 32)
+        Me.ToolStrip1.Size = New System.Drawing.Size(1188, 37)
         Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 2
         Me.ToolStrip1.Text = "ToolStrip1"
@@ -252,14 +254,14 @@ Partial Class frmSibiMain
         Me.cmdManage.Image = Global.AssetManager.My.Resources.Resources.Add
         Me.cmdManage.Name = "cmdManage"
         Me.cmdManage.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.cmdManage.Size = New System.Drawing.Size(115, 29)
+        Me.cmdManage.Size = New System.Drawing.Size(141, 34)
         Me.cmdManage.Text = "New Request"
         Me.cmdManage.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 32)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 37)
         '
         'frmSibiMain
         '
@@ -282,7 +284,6 @@ Partial Class frmSibiMain
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents Panel1 As Panel

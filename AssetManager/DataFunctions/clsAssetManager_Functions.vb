@@ -2,16 +2,21 @@
 Public Class clsAssetManager_Functions
 
     Public Function DeviceExists(Device As Device_Info) As Boolean
+        Dim bolAsset As Boolean
+        Dim bolSerial As Boolean
         Try
-            Dim CheckAsset As String = Get_SQLValue(devices.TableName, devices.AssetTag, Device.strAssetTag, devices.AssetTag)
-            Dim bolAsset As Boolean
-            If CheckAsset <> "" Then
-                bolAsset = True
-            Else
+            If Device.strAssetTag = "NA" Then 'Allow NA value because users do not always have an Asset Tag for new devices.
                 bolAsset = False
+            Else
+                Dim CheckAsset As String = Get_SQLValue(devices.TableName, devices.AssetTag, Device.strAssetTag, devices.AssetTag)
+                If CheckAsset <> "" Then
+                    bolAsset = True
+                Else
+                    bolAsset = False
+                End If
             End If
+
             Dim CheckSerial As String = Get_SQLValue(devices.TableName, devices.Serial, Device.strSerial, devices.Serial)
-            Dim bolSerial As Boolean
             If CheckSerial <> "" Then
                 bolSerial = True
             Else

@@ -204,7 +204,9 @@ Public Class AddNew
     Private Sub cmdUserSearch_Click(sender As Object, e As EventArgs) Handles cmdUserSearch.Click
         Dim NewMunisSearch As New frmMunisUser(Me)
         MunisUser = NewMunisSearch.EmployeeInfo
-        txtCurUser_REQ.Text = MunisUser.Name
-        txtCurUser_REQ.ReadOnly = True
+        If MunisUser.Number <> "" Then
+            txtCurUser_REQ.Text = MunisUser.Name
+            txtCurUser_REQ.ReadOnly = True
+        End If
     End Sub
 End Class

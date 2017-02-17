@@ -98,37 +98,6 @@ Public Class clsMySQL_Comms : Implements IDisposable
             Return Nothing
         End Try
     End Function
-    Public Function ConnectionReady() As Boolean
-        Select Case Connection.State
-            Case ConnectionState.Closed
-                Return False
-            Case ConnectionState.Open
-                Return True
-            Case ConnectionState.Connecting
-                Return False
-            Case Else
-                Return False
-        End Select
-    End Function
-    Public Function CheckConnection() As Boolean
-        Try
-            Using ds As New DataSet, da As New MySqlDataAdapter
-                Dim rows As Integer
-                da.SelectCommand = New MySqlCommand("SELECT NOW()")
-                da.SelectCommand.Connection = Connection
-                da.Fill(ds)
-                rows = ds.Tables(0).Rows.Count
-                If rows > 0 Then
-                    Return True
-                Else
-                    Return False
-                End If
-            End Using
-        Catch ex As MySqlException
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-            Return False
-        End Try
-    End Function
     Private Function NewConnection() As MySqlConnection
         Return New MySqlConnection(MySQLConnectString)
     End Function
