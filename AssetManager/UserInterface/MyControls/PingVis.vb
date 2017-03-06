@@ -23,7 +23,7 @@ Public Class PingVis : Implements IDisposable
 
 #Region "Bar Parameters"
     Private Const intBarGap As Integer = 0
-    Private Const intMaxBars As Integer = 10
+    Private Const intMaxBars As Integer = 15
     Private Const intMinBarLen As Integer = 2
 #Region "Colors"
     Private brushGoodPing As Brush = New SolidBrush(Color.FromArgb(15, 130, 21))

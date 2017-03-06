@@ -11,8 +11,8 @@ Public Class AddNew
     End Sub
     Private Sub AddDevice()
         Try
-            If Not CheckFields() Then
-                Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
+            If Not CheckFields(Me, True) Then
+                Dim blah = Message("Some required fields are missing or invalid.  Please fill and/or verify all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
                 bolCheckFields = True
                 Exit Sub
             Else
@@ -40,28 +40,32 @@ Public Class AddNew
             Dim blah = Message("Unable to add new device.", vbOKOnly + vbExclamation, "Error", Me)
         End Try
     End Sub
-    Private Function CheckFields() As Boolean
-        Dim bolMissingField As Boolean
-        bolMissingField = False
-        Dim c As Control
-        For Each c In GroupBox1.Controls
+    Private Function CheckFields(Parent As Control, bolValidFields As Boolean) As Boolean
+        For Each ctl As Control In Parent.Controls
             Select Case True
-                Case TypeOf c Is TextBox
-                    If c.Name.Contains("REQ") Then
-                        If Trim(c.Text) = "" Then
-                            bolMissingField = True
-                            c.BackColor = colMissingField
-                            AddErrorIcon(c)
+                Case TypeOf ctl Is TextBox
+                    If ctl.Tag = True Then
+                        If Trim(ctl.Text) = "" Then
+                            bolValidFields = False
+                            ctl.BackColor = colMissingField
+                            AddErrorIcon(ctl)
                         Else
-                            c.BackColor = Color.Empty
-                            ClearErrorIcon(c)
+                            ctl.BackColor = Color.Empty
+                            ClearErrorIcon(ctl)
                         End If
                     End If
-                Case TypeOf c Is ComboBox
-                    Dim cmb As ComboBox = c
-                    If cmb.Name.Contains("REQ") Then
+                    If ctl Is txtPhoneNumber Then
+                        If Trim(txtPhoneNumber.Text) <> "" And Not ValidPhoneNumber(txtPhoneNumber.Text) Then
+                            bolValidFields = False
+                            AddErrorIcon(ctl)
+                            Message("Invalid phone number.", vbOKOnly + vbExclamation, "Error", Me)
+                        End If
+                    End If
+                Case TypeOf ctl Is ComboBox
+                    Dim cmb As ComboBox = ctl
+                    If ctl.Tag = True Then
                         If cmb.SelectedIndex = -1 Then
-                            bolMissingField = True
+                            bolValidFields = False
                             cmb.BackColor = colMissingField
                             AddErrorIcon(cmb)
                         Else
@@ -70,8 +74,11 @@ Public Class AddNew
                         End If
                     End If
             End Select
+            If ctl.HasChildren Then
+                bolValidFields = CheckFields(ctl, bolValidFields)
+            End If
         Next
-        Return Not bolMissingField 'if fields are missing return false to trigger a message if needed
+        Return bolValidFields 'if fields are missing return false to trigger a message if needed
     End Function
     Private Sub AddErrorIcon(ctl As Control)
         If fieldErrorIcon.GetError(ctl) Is String.Empty Then
@@ -87,7 +94,7 @@ Public Class AddNew
         ClearAll()
     End Sub
     Private Function GetDBValues() As Device_Info 'cleanup user input for db
-        Dim tmpDevice As Device_Info
+        Dim tmpDevice As New Device_Info
         With tmpDevice
             .strSerial = Trim(txtSerial_REQ.Text)
             .strDescription = Trim(txtDescription_REQ.Text)
@@ -102,6 +109,7 @@ Public Class AddNew
             End If
             .strNote = Trim(txtNotes.Text)
             .strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex)
+            .strPhoneNumber = PhoneNumberToDB(txtPhoneNumber.Text)
             .strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_REQ.SelectedIndex)
             .strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
             .bolTrackable = chkTrackable.Checked
@@ -118,10 +126,10 @@ Public Class AddNew
     End Sub
     Private Sub ClearAll()
         RefreshCombos()
-        ClearFields()
+        ClearFields(Me)
         dtPurchaseDate_REQ.Value = Now
         cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, "INSRV")
-        ResetBackColors()
+        ResetBackColors(Me)
         chkTrackable.Checked = False
         chkNoClear.Checked = False
         bolCheckFields = False
@@ -133,58 +141,58 @@ Public Class AddNew
         FillComboBox(DeviceIndex.OSType, cmbOSType_REQ)
         FillComboBox(DeviceIndex.StatusType, cmbStatus_REQ)
     End Sub
-    Private Sub ResetBackColors()
-        Dim c As Control
-        For Each c In GroupBox1.Controls
+    Private Sub ResetBackColors(Parent As Control)
+        For Each ctl As Control In Parent.Controls
             Select Case True
-                Case TypeOf c Is TextBox
-                    c.BackColor = Color.Empty
-                Case TypeOf c Is ComboBox
-                    c.BackColor = Color.Empty
+                Case TypeOf ctl Is TextBox
+                    ctl.BackColor = Color.Empty
+                Case TypeOf ctl Is ComboBox
+                    ctl.BackColor = Color.Empty
             End Select
+            If ctl.HasChildren Then ResetBackColors(ctl)
         Next
     End Sub
-    Private Sub ClearFields()
+    Private Sub ClearFields(Parent As Control)
         MunisUser = Nothing
-        Dim c As Control
-        For Each c In GroupBox1.Controls
-            If TypeOf c Is TextBox Then
-                Dim txt As TextBox = c
+        For Each ctl As Control In Parent.Controls
+            If TypeOf ctl Is TextBox Then
+                Dim txt As TextBox = ctl
                 txt.Text = ""
                 txt.ReadOnly = False
             End If
-            If TypeOf c Is ComboBox Then
-                Dim cmb As ComboBox = c
+            If TypeOf ctl Is ComboBox Then
+                Dim cmb As ComboBox = ctl
                 cmb.SelectedIndex = -1
             End If
+            If ctl.HasChildren Then ClearFields(ctl)
         Next
     End Sub
     Private Sub txtSerial_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtSerial_REQ.TextChanged
-        If bolCheckFields Then CheckFields()
+        If bolCheckFields Then CheckFields(Me, False)
     End Sub
     Private Sub txtCurUser_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser_REQ.TextChanged
-        If bolCheckFields Then CheckFields()
+        If bolCheckFields Then CheckFields(Me, False)
     End Sub
     Private Sub cmbLocation_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbLocation_REQ.SelectedIndexChanged
-        If bolCheckFields Then CheckFields()
+        If bolCheckFields Then CheckFields(Me, False)
     End Sub
     Private Sub cmbEquipType_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbEquipType_REQ.SelectedIndexChanged
-        If bolCheckFields Then CheckFields()
+        If bolCheckFields Then CheckFields(Me, False)
     End Sub
     Private Sub cmbStatus_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbStatus_REQ.SelectedIndexChanged
-        If bolCheckFields Then CheckFields()
+        If bolCheckFields Then CheckFields(Me, False)
     End Sub
     Private Sub txtAssetTag_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag_REQ.TextChanged
-        If bolCheckFields Then CheckFields()
+        If bolCheckFields Then CheckFields(Me, False)
     End Sub
     Private Sub txtDescription_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtDescription_REQ.TextChanged
-        If bolCheckFields Then CheckFields()
+        If bolCheckFields Then CheckFields(Me, False)
     End Sub
     Private Sub dtPurchaseDate_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_REQ.ValueChanged
-        If bolCheckFields Then CheckFields()
+        If bolCheckFields Then CheckFields(Me, False)
     End Sub
     Private Sub cmbOSType_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbOSType_REQ.SelectedIndexChanged
-        If bolCheckFields Then CheckFields()
+        If bolCheckFields Then CheckFields(Me, False)
     End Sub
     Private Sub cmbLocation_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbLocation_REQ.DropDown
         AdjustComboBoxWidth(sender, e)
@@ -208,5 +216,8 @@ Public Class AddNew
             txtCurUser_REQ.Text = MunisUser.Name
             txtCurUser_REQ.ReadOnly = True
         End If
+    End Sub
+    Private Sub txtPhoneNumber_LostFocus(sender As Object, e As EventArgs) Handles txtPhoneNumber.LostFocus
+        txtPhoneNumber.Text = FormatPhoneNumber(txtPhoneNumber.Text)
     End Sub
 End Class

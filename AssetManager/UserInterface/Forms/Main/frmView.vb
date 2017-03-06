@@ -16,6 +16,7 @@ Public Class frmView
     Private MyPingHostname As String = Nothing
     Private MyPingRunning As Boolean = False
     Private MyPingVis As PingVis
+    Private PingResults As New Ping_Results
     Private intFailedPings As Integer = 0
     Private Structure Ping_Results
         Public CanPing As Boolean
@@ -73,6 +74,7 @@ Public Class frmView
             .dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
             .strReplaceYear = Trim(txtReplacementYear_View.Text)
             .strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSVersion_REQ.SelectedIndex)
+            .strPhoneNumber = PhoneNumberToDB(txtPhoneNumber.Text)
             .strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
             .strNote = UpdateInfo.strNote
             .bolTrackable = chkTrackable.Checked
@@ -168,6 +170,7 @@ Public Class frmView
                 ", " & devices.PurchaseDate & "=@" & devices.PurchaseDate &
                 ", " & devices.ReplacementYear & "=@" & devices.ReplacementYear &
                 ", " & devices.OSVersion & "=@" & devices.OSVersion &
+                ", " & devices.PhoneNumber & "=@" & devices.PhoneNumber &
                 ", " & devices.EQType & "=@" & devices.EQType &
                 ", " & devices.Status & "=@" & devices.Status &
                 ", " & devices.Trackable & "=@" & devices.Trackable &
@@ -188,6 +191,7 @@ Public Class frmView
                 cmd.Parameters.AddWithValue("@" & devices.PurchaseDate, NewData.dtPurchaseDate)
                 cmd.Parameters.AddWithValue("@" & devices.ReplacementYear, NewData.strReplaceYear)
                 cmd.Parameters.AddWithValue("@" & devices.OSVersion, NewData.strOSVersion)
+                cmd.Parameters.AddWithValue("@" & devices.PhoneNumber, NewData.strPhoneNumber)
                 cmd.Parameters.AddWithValue("@" & devices.EQType, NewData.strEqType)
                 cmd.Parameters.AddWithValue("@" & devices.Status, NewData.strStatus)
                 cmd.Parameters.AddWithValue("@" & devices.Trackable, Convert.ToInt32(NewData.bolTrackable))
@@ -334,6 +338,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             dtPurchaseDate_View_REQ.Value = .dtPurchaseDate
             txtReplacementYear_View.Text = .strReplaceYear
             cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.OSType, .strOSVersion)
+            txtPhoneNumber.Text = FormatPhoneNumber(.strPhoneNumber)
             cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, .strStatus)
             lblGUID.Text = .strGUID
             chkTrackable.Checked = CBool(.bolTrackable)
@@ -526,6 +531,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Function CheckFields() As Boolean
         Dim bolMissingField As Boolean
         bolMissingField = False
+        fieldErrorIcon.Clear()
         Dim c As Control
         For Each c In DeviceInfoBox.Controls
             Select Case True
@@ -538,6 +544,13 @@ VALUES (@" & historical_dev.ChangeType & ",
                         Else
                             c.BackColor = Color.Empty
                             ClearErrorIcon(c)
+                        End If
+                    End If
+                    If c Is txtPhoneNumber Then
+                        If Trim(txtPhoneNumber.Text) <> "" And Not ValidPhoneNumber(txtPhoneNumber.Text) Then
+                            bolMissingField = True
+                            AddErrorIcon(c)
+                            Message("Invalid phone number.", vbOKOnly + vbExclamation, "Error", Me)
                         End If
                     End If
                 Case TypeOf c Is ComboBox
@@ -579,7 +592,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs)
         If Not CheckFields() Then
-            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
+            Dim blah = Message("Some required fields are missing or invalid.  Please fill and or validate all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
             bolCheckFields = True
             Exit Sub
         End If
@@ -872,7 +885,6 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub PingComplete(ByVal sender As Object, ByVal e As System.Net.NetworkInformation.PingCompletedEventArgs)
         Try
-            Dim PingResults As New Ping_Results
             If e.Error Is Nothing Then
                 Dim MyPingResults As Net.NetworkInformation.PingReply = e.Reply
                 If MyPingResults.Status = Net.NetworkInformation.IPStatus.Success Then
@@ -989,4 +1001,59 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub DataGridHistory_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellLeave
         LeaveRow(DataGridHistory, GridTheme, e.RowIndex)
     End Sub
+    Private Sub txtPhoneNumber_LostFocus(sender As Object, e As EventArgs) Handles txtPhoneNumber.LostFocus
+        txtPhoneNumber.Text = FormatPhoneNumber(txtPhoneNumber.Text)
+    End Sub
+    Private Sub cmdRestart_Click(sender As Object, e As EventArgs) Handles cmdRestart.Click
+        Dim blah = Message("Click 'Yes' to reboot this device.", vbYesNo + vbQuestion, "Are you sure?")
+        If blah = vbYes Then
+            Dim IP As String = PingResults.Address
+            Dim DeviceName As String = "D" & CurrentViewDevice.strSerial
+            If ConnectAdmin(IP, DeviceName) Then
+                If SendRestart(IP, DeviceName) Then
+                    Message("Success", vbOKOnly + vbInformation, "Restart Device", Me)
+                Else
+                    Message("Failed", vbOKOnly + vbInformation, "Restart Device", Me)
+                End If
+            Else
+                Message("Failed", vbOKOnly + vbInformation, "Restart Device", Me)
+            End If
+        End If
+    End Sub
+    Private Function ConnectAdmin(IP As String, DeviceName As String) As Boolean
+        Dim p As Process = New Process
+        p.StartInfo.UseShellExecute = False
+        p.StartInfo.RedirectStandardOutput = True
+        p.StartInfo.RedirectStandardError = True
+        p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized
+        p.StartInfo.FileName = "net.exe"
+        p.StartInfo.Arguments = "USE \\" & IP & "\IPC$ 057|750 /USER:" & DeviceName & "\Administrator"
+        p.Start()
+        Dim output As String
+        output = p.StandardError.ReadToEnd
+        p.WaitForExit()
+        If Trim(output) = "" Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+    Private Function SendRestart(IP As String, DeviceName As String) As Boolean
+        Dim p As Process = New Process
+        p.StartInfo.UseShellExecute = False
+        p.StartInfo.RedirectStandardOutput = True
+        p.StartInfo.RedirectStandardError = True
+        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        p.StartInfo.FileName = "shutdown.exe"
+        p.StartInfo.Arguments = "/m \\" & IP & " /f /r /t 0"
+        p.Start()
+        Dim output As String
+        output = p.StandardError.ReadToEnd
+        p.WaitForExit()
+        If Trim(output) = "" Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
 End Class
