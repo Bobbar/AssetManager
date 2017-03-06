@@ -9,6 +9,7 @@
     Public Const ReplacementYear As String = "dev_replacement_year"
     Public Const PO As String = "dev_po"
     Public Const OSVersion As String = "dev_osversion"
+    Public Const PhoneNumber As String = "dev_phone_number"
     Public Const EQType As String = "dev_eq_type"
     Public Const Status As String = "dev_status"
     Public Const Trackable As String = "dev_trackable"

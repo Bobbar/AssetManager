@@ -21,6 +21,7 @@ Public Structure Device_Info
     Public dtPurchaseDate As Date
     Public strReplaceYear As String
     Public strOSVersion As String
+    Public strPhoneNumber As String
     Public strGUID As String
     Public strPO As String
     Public strStatus As String

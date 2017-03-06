@@ -48,6 +48,7 @@ Public Class clsAssetManager_Functions
 " & devices.ReplacementYear & ",
 " & devices.EQType & ",
 " & devices.OSVersion & ",
+" & devices.PhoneNumber & ",
 " & devices.Status & ",
 " & devices.LastMod_User & ",
 " & devices.LastMod_Date & ",
@@ -64,6 +65,7 @@ VALUES(@" & devices.DeviceUID & ",
 @" & devices.ReplacementYear & ",
 @" & devices.EQType & ",
 @" & devices.OSVersion & ",
+@" & devices.PhoneNumber & ",
 @" & devices.Status & ",
 @" & devices.LastMod_User & ",
 @" & devices.LastMod_Date & ",
@@ -82,6 +84,7 @@ VALUES(@" & devices.DeviceUID & ",
                 cmd.Parameters.AddWithValue("@" & devices.ReplacementYear, DeviceInfo.strReplaceYear)
                 cmd.Parameters.AddWithValue("@" & devices.EQType, DeviceInfo.strEqType)
                 cmd.Parameters.AddWithValue("@" & devices.OSVersion, DeviceInfo.strOSVersion)
+                cmd.Parameters.AddWithValue("@" & devices.PhoneNumber, DeviceInfo.strPhoneNumber)
                 cmd.Parameters.AddWithValue("@" & devices.Status, DeviceInfo.strStatus)
                 cmd.Parameters.AddWithValue("@" & devices.LastMod_User, strLocalUser)
                 cmd.Parameters.AddWithValue("@" & devices.LastMod_Date, Now)
@@ -476,6 +479,7 @@ VALUES
                 .strReplaceYear = NoNull(DeviceTable.Rows(0).Item(devices.ReplacementYear))
                 .strPO = NoNull(DeviceTable.Rows(0).Item(devices.PO))
                 .strOSVersion = NoNull(DeviceTable.Rows(0).Item(devices.OSVersion))
+                .strPhoneNumber = NoNull(DeviceTable.Rows(0).Item(devices.PhoneNumber))
                 .strEqType = NoNull(DeviceTable.Rows(0).Item(devices.EQType))
                 .strStatus = NoNull(DeviceTable.Rows(0).Item(devices.Status))
                 .bolTrackable = CBool(DeviceTable.Rows(0).Item(devices.Trackable))
