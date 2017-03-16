@@ -876,12 +876,31 @@ VALUES
             RequestItemsGrid.Rows(e.RowIndex).Selected = True
             RequestItemsGrid.CurrentCell = RequestItemsGrid(e.ColumnIndex, e.RowIndex)
         End If
-        If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value.ToString IsNot "" Or RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value.ToString IsNot "" Then
+        If ValidColumn() Then
             tsmLookupDevice.Visible = True
+            tsmSeparator.Visible = True
         Else
             tsmLookupDevice.Visible = False
+            tsmSeparator.Visible = False
         End If
     End Sub
+    Private Function ValidColumn() As Boolean
+        If RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
+            Select Case True
+                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
+                    Return True
+                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
+                    Return True
+                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Asset")
+                    Return True
+                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Serial")
+                    Return True
+                Case Else
+                    Return False
+            End Select
+        End If
+        Return False
+    End Function
     Private Sub HighlightCurrentRow(Row As Integer)
         On Error Resume Next
         If Not bolGridFilling Then
@@ -904,11 +923,17 @@ VALUES
         End If
     End Sub
     Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click
-        If RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value.ToString IsNot "" Then
-            LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Asset"), RequestItemsGrid.CurrentRow.Index).Value.ToString))
-        ElseIf RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value.ToString IsNot "" Then
-            LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Replace Serial"), RequestItemsGrid.CurrentRow.Index).Value.ToString))
-        End If
+        Dim ColIndex As Integer = RequestItemsGrid.CurrentCell.ColumnIndex
+        Select Case True
+            Case ColIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
+                LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
+            Case ColIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
+                LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
+            Case ColIndex = GetColIndex(RequestItemsGrid, "New Asset")
+                LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
+            Case ColIndex = GetColIndex(RequestItemsGrid, "New Serial")
+                LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
+        End Select
     End Sub
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
         If Not ValidateFields() Then Exit Sub

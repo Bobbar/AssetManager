@@ -44,6 +44,10 @@ Public Enum LiveBoxType
     SelectValue
     UserSelect
 End Enum
+Public Enum FindDevType
+    AssetTag
+    Serial
+End Enum
 Public Class SearchVal
     Public Property FieldName As String
     Public Property Value As Object

@@ -26,8 +26,9 @@ Partial Class frmManageRequest
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmSeparator = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.txtRTNumber = New System.Windows.Forms.TextBox()
         Me.txtCreateDate = New System.Windows.Forms.TextBox()
@@ -96,15 +97,9 @@ Partial Class frmManageRequest
         '
         'PopupMenuItems
         '
-        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmDeleteItem, Me.tsmLookupDevice})
+        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmLookupDevice, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 48)
-        '
-        'tsmDeleteItem
-        '
-        Me.tsmDeleteItem.Name = "tsmDeleteItem"
-        Me.tsmDeleteItem.Size = New System.Drawing.Size(152, 22)
-        Me.tsmDeleteItem.Text = "Delete Item"
+        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 76)
         '
         'tsmLookupDevice
         '
@@ -112,6 +107,17 @@ Partial Class frmManageRequest
         Me.tsmLookupDevice.Size = New System.Drawing.Size(152, 22)
         Me.tsmLookupDevice.Text = "Lookup Device"
         Me.tsmLookupDevice.Visible = False
+        '
+        'tsmSeparator
+        '
+        Me.tsmSeparator.Name = "tsmSeparator"
+        Me.tsmSeparator.Size = New System.Drawing.Size(149, 6)
+        '
+        'tsmDeleteItem
+        '
+        Me.tsmDeleteItem.Name = "tsmDeleteItem"
+        Me.tsmDeleteItem.Size = New System.Drawing.Size(152, 22)
+        Me.tsmDeleteItem.Text = "Delete Item"
         '
         'ToolTip
         '
@@ -738,4 +744,5 @@ Partial Class frmManageRequest
     Friend WithEvents dgvNotes As DataGridView
     Friend WithEvents ContentPanel As ToolStripContentPanel
     Friend WithEvents chkAllowDrag As CheckBox
+    Friend WithEvents tsmSeparator As ToolStripSeparator
 End Class

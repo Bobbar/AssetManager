@@ -355,12 +355,12 @@ VALUES(@" & historical_dev.ChangeType & ",
         User.intAccessLevel = AccessLevel
         Update_SQLValue(users.TableName, users.AccessLevel, User.intAccessLevel, users.UID, User.strUID)
     End Sub
-    Public Function FindDevice(Optional AssetTag As String = "", Optional Serial As String = "") As Device_Info
+    Public Function FindDevice(SearchVal As String, Type As FindDevType) As Device_Info
         Using SQLComms As New clsMySQL_Comms
-            If AssetTag IsNot "" Then
-                Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.AssetTag & "='" & AssetTag & "'"))
-            ElseIf Serial IsNot "" Then
-                Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.Serial & "='" & Serial & "'"))
+            If Type = FindDevType.AssetTag Then
+                Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.AssetTag & "='" & SearchVal & "'"))
+            ElseIf Type = FindDevType.Serial Then
+                Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.Serial & "='" & SearchVal & "'"))
             End If
         End Using
     End Function
