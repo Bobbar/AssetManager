@@ -32,4 +32,19 @@ Public Class clsMunis_Comms
             Return Nothing
         End Try
     End Function
+    Public Async Function Return_MSSQLValueAsync(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As Task(Of String)
+        Dim sqlQRY As String = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
+        Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)
+        Try
+            Dim cmd As New SqlCommand
+            cmd.Connection = conn
+            cmd.CommandText = sqlQRY
+            conn.Open()
+            Dim Value = Await cmd.ExecuteScalarAsync
+            Return Value.ToString
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return Nothing
+        End Try
+    End Function
 End Class

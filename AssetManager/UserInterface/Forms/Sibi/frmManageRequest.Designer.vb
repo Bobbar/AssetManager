@@ -51,6 +51,7 @@ Partial Class frmManageRequest
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.lblPOStatus = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReqNumber = New System.Windows.Forms.TextBox()
@@ -99,7 +100,7 @@ Partial Class frmManageRequest
         '
         Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmLookupDevice, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 76)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 54)
         '
         'tsmLookupDevice
         '
@@ -131,7 +132,7 @@ Partial Class frmManageRequest
         '
         Me.txtRTNumber.Cursor = System.Windows.Forms.Cursors.Hand
         Me.txtRTNumber.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtRTNumber.Location = New System.Drawing.Point(20, 119)
+        Me.txtRTNumber.Location = New System.Drawing.Point(20, 127)
         Me.txtRTNumber.Name = "txtRTNumber"
         Me.txtRTNumber.Size = New System.Drawing.Size(137, 22)
         Me.txtRTNumber.TabIndex = 8
@@ -326,6 +327,7 @@ Partial Class frmManageRequest
         'GroupBox2
         '
         Me.GroupBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Controls.Add(Me.lblPOStatus)
         Me.GroupBox2.Controls.Add(Me.Label9)
         Me.GroupBox2.Controls.Add(Me.txtRTNumber)
         Me.GroupBox2.Controls.Add(Me.Label6)
@@ -339,10 +341,21 @@ Partial Class frmManageRequest
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Add'l Info"
         '
+        'lblPOStatus
+        '
+        Me.lblPOStatus.AutoSize = True
+        Me.lblPOStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPOStatus.ForeColor = System.Drawing.Color.DimGray
+        Me.lblPOStatus.Location = New System.Drawing.Point(19, 54)
+        Me.lblPOStatus.Name = "lblPOStatus"
+        Me.lblPOStatus.Size = New System.Drawing.Size(115, 12)
+        Me.lblPOStatus.TabIndex = 10
+        Me.lblPOStatus.Text = "PO Status: 8 - Printed"
+        '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(17, 103)
+        Me.Label9.Location = New System.Drawing.Point(17, 111)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(36, 15)
         Me.Label9.TabIndex = 9
@@ -351,7 +364,7 @@ Partial Class frmManageRequest
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(17, 63)
+        Me.Label6.Location = New System.Drawing.Point(17, 71)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(82, 15)
         Me.Label6.TabIndex = 7
@@ -361,7 +374,7 @@ Partial Class frmManageRequest
         '
         Me.txtReqNumber.Cursor = System.Windows.Forms.Cursors.Hand
         Me.txtReqNumber.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtReqNumber.Location = New System.Drawing.Point(20, 79)
+        Me.txtReqNumber.Location = New System.Drawing.Point(20, 87)
         Me.txtReqNumber.Name = "txtReqNumber"
         Me.txtReqNumber.Size = New System.Drawing.Size(137, 22)
         Me.txtReqNumber.TabIndex = 6
@@ -369,7 +382,7 @@ Partial Class frmManageRequest
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(17, 25)
+        Me.Label5.Location = New System.Drawing.Point(17, 16)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(75, 15)
         Me.Label5.TabIndex = 5
@@ -379,7 +392,7 @@ Partial Class frmManageRequest
         '
         Me.txtPO.Cursor = System.Windows.Forms.Cursors.Hand
         Me.txtPO.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPO.Location = New System.Drawing.Point(20, 41)
+        Me.txtPO.Location = New System.Drawing.Point(20, 32)
         Me.txtPO.Name = "txtPO"
         Me.txtPO.Size = New System.Drawing.Size(137, 22)
         Me.txtPO.TabIndex = 4
@@ -745,4 +758,5 @@ Partial Class frmManageRequest
     Friend WithEvents ContentPanel As ToolStripContentPanel
     Friend WithEvents chkAllowDrag As CheckBox
     Friend WithEvents tsmSeparator As ToolStripSeparator
+    Friend WithEvents lblPOStatus As Label
 End Class

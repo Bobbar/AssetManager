@@ -611,6 +611,7 @@ VALUES
                 SetAttachCount()
                 Me.Show()
                 Me.Activate()
+                SetPOStatus(CurrentRequest.strPO)
             End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
@@ -1067,6 +1068,18 @@ VALUES
         Else
             RequestItemsGrid.SelectionMode = DataGridViewSelectionMode.CellSelect
             RequestItemsGrid.MultiSelect = True
+        End If
+    End Sub
+    Private Async Sub SetPOStatus(PO As String)
+        If PO <> "" Then
+            Dim GetStatusString As String = Await Munis.Get_PO_Status(PO)
+            If GetStatusString <> "" Then
+                lblPOStatus.Text = "PO Status: " & GetStatusString
+            Else
+                lblPOStatus.Text = "PO Status: NA"
+            End If
+        Else
+            lblPOStatus.Text = "PO Status: NA"
         End If
     End Sub
 End Class
