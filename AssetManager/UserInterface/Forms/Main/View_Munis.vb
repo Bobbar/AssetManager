@@ -35,6 +35,24 @@
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
+    Public Sub LoadMunisPOGridByPONo(PONum As String)
+        Try
+            If PONum = "" Then Exit Sub
+            Dim strQRY As String = "SELECT TOP " & intMaxResults & " pohd_pur_no, pohd_fsc_yr, pohd_req_no, pohd_gen_cm, pohd_buy_id, pohd_pre_dt, pohd_exp_dt, pohd_sta_cd, pohd_vnd_cd, pohd_dep_cd, pohd_shp_cd, pohd_tot_amt, pohd_serial
+FROM poheader
+WHERE pohd_pur_no ='" & PONum & "'"
+            lblFAInfo.Text = "PO Info:"
+            ProcessMunisQuery(DataGridMunis_Inventory, strQRY)
+            LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(PONum), Munis.Get_FY_From_PO(PONum))
+            If Not Modal Then
+                Me.Show()
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        End Try
+    End Sub
+
+
     Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String, Optional Modal As Boolean = False)
         Try
             If ReqNumber = "" Or FiscalYr = "" Then Exit Sub
@@ -127,6 +145,8 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         ExtendedMethods.DoubleBuffered(DataGridMunis_Requisition, True)
         DataGridMunis_Inventory.DefaultCellStyle = GridStyles
         DataGridMunis_Requisition.DefaultCellStyle = GridStyles
+        DataGridMunis_Inventory.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
+        DataGridMunis_Requisition.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         If CurrentMunisDevice.strGUID IsNot Nothing Then
             Me.Text = Me.Text + FormTitle(CurrentMunisDevice)
         End If

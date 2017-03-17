@@ -146,8 +146,8 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
     End Sub
     Public Sub NewMunisView_POSearch(PO As String, Optional Parent As Form = Nothing)
         Waiting()
-        Dim NewMunis As New View_Munis(Parent, True)
-        NewMunis.LoadMunisRequisitionGridByReqNo(Get_ReqNumber_From_PO(PO), Get_FY_From_PO(PO)) 'LoadMunisRequisitionGridByPO(PO, FY)
+        Dim NewMunis As New View_Munis(Parent, False)
+        NewMunis.LoadMunisPOGridByPONo(PO)
         DoneWaiting()
     End Sub
     Public Sub NewMunisView_ReqSearch(ReqNumber As String, FY As String, Optional Parent As Form = Nothing)
