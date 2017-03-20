@@ -162,7 +162,7 @@ Partial Class frmView
         Me.txtPhoneNumber.Location = New System.Drawing.Point(612, 183)
         Me.txtPhoneNumber.Name = "txtPhoneNumber"
         Me.txtPhoneNumber.Size = New System.Drawing.Size(169, 23)
-        Me.txtPhoneNumber.TabIndex = 55
+        Me.txtPhoneNumber.TabIndex = 12
         '
         'Label14
         '
@@ -192,7 +192,7 @@ Partial Class frmView
         Me.cmdMunisSearch.Location = New System.Drawing.Point(20, 160)
         Me.cmdMunisSearch.Name = "cmdMunisSearch"
         Me.cmdMunisSearch.Size = New System.Drawing.Size(134, 23)
-        Me.cmdMunisSearch.TabIndex = 53
+        Me.cmdMunisSearch.TabIndex = 3
         Me.cmdMunisSearch.Text = "Munis Search"
         Me.cmdMunisSearch.UseVisualStyleBackColor = True
         Me.cmdMunisSearch.Visible = False
@@ -252,7 +252,7 @@ Partial Class frmView
         Me.txtPONumber.Location = New System.Drawing.Point(612, 138)
         Me.txtPONumber.Name = "txtPONumber"
         Me.txtPONumber.Size = New System.Drawing.Size(169, 23)
-        Me.txtPONumber.TabIndex = 47
+        Me.txtPONumber.TabIndex = 11
         '
         'chkTrackable
         '
@@ -261,7 +261,7 @@ Partial Class frmView
         Me.chkTrackable.Location = New System.Drawing.Point(651, 216)
         Me.chkTrackable.Name = "chkTrackable"
         Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
-        Me.chkTrackable.TabIndex = 45
+        Me.chkTrackable.TabIndex = 13
         Me.chkTrackable.Text = "Trackable"
         Me.chkTrackable.UseVisualStyleBackColor = True
         '
@@ -281,7 +281,7 @@ Partial Class frmView
         Me.txtAssetTag_View_REQ.Location = New System.Drawing.Point(21, 87)
         Me.txtAssetTag_View_REQ.Name = "txtAssetTag_View_REQ"
         Me.txtAssetTag_View_REQ.Size = New System.Drawing.Size(134, 23)
-        Me.txtAssetTag_View_REQ.TabIndex = 19
+        Me.txtAssetTag_View_REQ.TabIndex = 1
         '
         'Label10
         '
@@ -299,7 +299,7 @@ Partial Class frmView
         Me.txtSerial_View_REQ.Location = New System.Drawing.Point(21, 42)
         Me.txtSerial_View_REQ.Name = "txtSerial_View_REQ"
         Me.txtSerial_View_REQ.Size = New System.Drawing.Size(134, 23)
-        Me.txtSerial_View_REQ.TabIndex = 21
+        Me.txtSerial_View_REQ.TabIndex = 0
         '
         'Label2
         '
@@ -327,7 +327,7 @@ Partial Class frmView
         Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(21, 132)
         Me.txtCurUser_View_REQ.Name = "txtCurUser_View_REQ"
         Me.txtCurUser_View_REQ.Size = New System.Drawing.Size(134, 23)
-        Me.txtCurUser_View_REQ.TabIndex = 23
+        Me.txtCurUser_View_REQ.TabIndex = 2
         '
         'cmbStatus_REQ
         '
@@ -336,7 +336,7 @@ Partial Class frmView
         Me.cmbStatus_REQ.Location = New System.Drawing.Point(398, 135)
         Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
         Me.cmbStatus_REQ.Size = New System.Drawing.Size(177, 23)
-        Me.cmbStatus_REQ.TabIndex = 38
+        Me.cmbStatus_REQ.TabIndex = 8
         '
         'Label3
         '
@@ -364,7 +364,7 @@ Partial Class frmView
         Me.txtDescription_View_REQ.Location = New System.Drawing.Point(186, 42)
         Me.txtDescription_View_REQ.Name = "txtDescription_View_REQ"
         Me.txtDescription_View_REQ.Size = New System.Drawing.Size(389, 23)
-        Me.txtDescription_View_REQ.TabIndex = 25
+        Me.txtDescription_View_REQ.TabIndex = 4
         '
         'cmbOSVersion_REQ
         '
@@ -373,7 +373,7 @@ Partial Class frmView
         Me.cmbOSVersion_REQ.Location = New System.Drawing.Point(186, 135)
         Me.cmbOSVersion_REQ.Name = "cmbOSVersion_REQ"
         Me.cmbOSVersion_REQ.Size = New System.Drawing.Size(177, 23)
-        Me.cmbOSVersion_REQ.TabIndex = 36
+        Me.cmbOSVersion_REQ.TabIndex = 6
         '
         'Label4
         '
@@ -392,7 +392,7 @@ Partial Class frmView
         Me.cmbLocation_View_REQ.Location = New System.Drawing.Point(398, 90)
         Me.cmbLocation_View_REQ.Name = "cmbLocation_View_REQ"
         Me.cmbLocation_View_REQ.Size = New System.Drawing.Size(177, 23)
-        Me.cmbLocation_View_REQ.TabIndex = 27
+        Me.cmbLocation_View_REQ.TabIndex = 7
         '
         'Label13
         '
@@ -421,7 +421,7 @@ Partial Class frmView
         Me.cmbEquipType_View_REQ.Location = New System.Drawing.Point(186, 87)
         Me.cmbEquipType_View_REQ.Name = "cmbEquipType_View_REQ"
         Me.cmbEquipType_View_REQ.Size = New System.Drawing.Size(177, 23)
-        Me.cmbEquipType_View_REQ.TabIndex = 33
+        Me.cmbEquipType_View_REQ.TabIndex = 5
         '
         'dtPurchaseDate_View_REQ
         '
@@ -431,7 +431,7 @@ Partial Class frmView
         Me.dtPurchaseDate_View_REQ.Location = New System.Drawing.Point(614, 43)
         Me.dtPurchaseDate_View_REQ.Name = "dtPurchaseDate_View_REQ"
         Me.dtPurchaseDate_View_REQ.Size = New System.Drawing.Size(168, 23)
-        Me.dtPurchaseDate_View_REQ.TabIndex = 29
+        Me.dtPurchaseDate_View_REQ.TabIndex = 9
         '
         'Label7
         '
@@ -459,7 +459,7 @@ Partial Class frmView
         Me.txtReplacementYear_View.Location = New System.Drawing.Point(612, 90)
         Me.txtReplacementYear_View.Name = "txtReplacementYear_View"
         Me.txtReplacementYear_View.Size = New System.Drawing.Size(169, 23)
-        Me.txtReplacementYear_View.TabIndex = 31
+        Me.txtReplacementYear_View.TabIndex = 10
         '
         'grpNetTools
         '
@@ -607,7 +607,7 @@ Partial Class frmView
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1130, 234)
+        Me.TrackingTab.Size = New System.Drawing.Size(1132, 275)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True

@@ -57,7 +57,6 @@ Partial Class frmManageRequest
         Me.txtReqNumber = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.txtPO = New System.Windows.Forms.TextBox()
-        Me.chkPlanned = New System.Windows.Forms.CheckBox()
         Me.cmbType = New System.Windows.Forms.ComboBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.dtNeedBy = New System.Windows.Forms.DateTimePicker()
@@ -135,7 +134,7 @@ Partial Class frmManageRequest
         Me.txtRTNumber.Location = New System.Drawing.Point(20, 127)
         Me.txtRTNumber.Name = "txtRTNumber"
         Me.txtRTNumber.Size = New System.Drawing.Size(137, 22)
-        Me.txtRTNumber.TabIndex = 8
+        Me.txtRTNumber.TabIndex = 7
         Me.ToolTip.SetToolTip(Me.txtRTNumber, "Click to open RT Ticket.")
         '
         'txtCreateDate
@@ -208,7 +207,6 @@ Partial Class frmManageRequest
         Me.GroupBox1.Controls.Add(Me.cmbStatus)
         Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.GroupBox2)
-        Me.GroupBox1.Controls.Add(Me.chkPlanned)
         Me.GroupBox1.Controls.Add(Me.cmbType)
         Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.dtNeedBy)
@@ -284,7 +282,7 @@ Partial Class frmManageRequest
         Me.cmdAddNew.Location = New System.Drawing.Point(9, 8)
         Me.cmdAddNew.Name = "cmdAddNew"
         Me.cmdAddNew.Size = New System.Drawing.Size(119, 41)
-        Me.cmdAddNew.TabIndex = 12
+        Me.cmdAddNew.TabIndex = 8
         Me.cmdAddNew.Text = "Create Request"
         Me.cmdAddNew.UseVisualStyleBackColor = True
         '
@@ -306,6 +304,7 @@ Partial Class frmManageRequest
         Me.txtRequestNum.ReadOnly = True
         Me.txtRequestNum.Size = New System.Drawing.Size(86, 21)
         Me.txtRequestNum.TabIndex = 15
+        Me.txtRequestNum.TabStop = False
         '
         'cmbStatus
         '
@@ -313,7 +312,7 @@ Partial Class frmManageRequest
         Me.cmbStatus.Location = New System.Drawing.Point(15, 201)
         Me.cmbStatus.Name = "cmbStatus"
         Me.cmbStatus.Size = New System.Drawing.Size(137, 23)
-        Me.cmbStatus.TabIndex = 14
+        Me.cmbStatus.TabIndex = 3
         '
         'Label7
         '
@@ -395,17 +394,7 @@ Partial Class frmManageRequest
         Me.txtPO.Location = New System.Drawing.Point(20, 32)
         Me.txtPO.Name = "txtPO"
         Me.txtPO.Size = New System.Drawing.Size(137, 22)
-        Me.txtPO.TabIndex = 4
-        '
-        'chkPlanned
-        '
-        Me.chkPlanned.AutoSize = True
-        Me.chkPlanned.Location = New System.Drawing.Point(180, 124)
-        Me.chkPlanned.Name = "chkPlanned"
-        Me.chkPlanned.Size = New System.Drawing.Size(79, 19)
-        Me.chkPlanned.TabIndex = 10
-        Me.chkPlanned.Text = "Planned?"
-        Me.chkPlanned.UseVisualStyleBackColor = True
+        Me.txtPO.TabIndex = 5
         '
         'cmbType
         '
@@ -413,7 +402,7 @@ Partial Class frmManageRequest
         Me.cmbType.Location = New System.Drawing.Point(15, 122)
         Me.cmbType.Name = "cmbType"
         Me.cmbType.Size = New System.Drawing.Size(137, 23)
-        Me.cmbType.TabIndex = 9
+        Me.cmbType.TabIndex = 2
         '
         'Label4
         '
@@ -429,7 +418,7 @@ Partial Class frmManageRequest
         Me.dtNeedBy.Location = New System.Drawing.Point(15, 162)
         Me.dtNeedBy.Name = "dtNeedBy"
         Me.dtNeedBy.Size = New System.Drawing.Size(180, 21)
-        Me.dtNeedBy.TabIndex = 6
+        Me.dtNeedBy.TabIndex = 3
         '
         'Label3
         '
@@ -454,7 +443,7 @@ Partial Class frmManageRequest
         Me.txtUser.Location = New System.Drawing.Point(15, 83)
         Me.txtUser.Name = "txtUser"
         Me.txtUser.Size = New System.Drawing.Size(137, 21)
-        Me.txtUser.TabIndex = 2
+        Me.txtUser.TabIndex = 1
         '
         'Label1
         '
@@ -560,6 +549,7 @@ Partial Class frmManageRequest
         Me.chkAllowDrag.Name = "chkAllowDrag"
         Me.chkAllowDrag.Size = New System.Drawing.Size(96, 19)
         Me.chkAllowDrag.TabIndex = 20
+        Me.chkAllowDrag.TabStop = False
         Me.chkAllowDrag.Text = "Allow Drag"
         Me.chkAllowDrag.UseVisualStyleBackColor = True
         '
@@ -743,7 +733,6 @@ Partial Class frmManageRequest
     Friend WithEvents txtReqNumber As TextBox
     Friend WithEvents Label5 As Label
     Friend WithEvents txtPO As TextBox
-    Friend WithEvents chkPlanned As CheckBox
     Friend WithEvents cmbType As ComboBox
     Friend WithEvents Label4 As Label
     Friend WithEvents dtNeedBy As DateTimePicker

@@ -114,7 +114,7 @@ Partial Class AddNew
         Me.txtCurUser_REQ.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
         Me.txtCurUser_REQ.Name = "txtCurUser_REQ"
         Me.txtCurUser_REQ.Size = New System.Drawing.Size(178, 25)
-        Me.txtCurUser_REQ.TabIndex = 1
+        Me.txtCurUser_REQ.TabIndex = 2
         Me.txtCurUser_REQ.Tag = "True"
         Me.txtCurUser_REQ.Text = "txtCurUser"
         '
@@ -169,7 +169,7 @@ Partial Class AddNew
         Me.txtAssetTag_REQ.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
         Me.txtAssetTag_REQ.Name = "txtAssetTag_REQ"
         Me.txtAssetTag_REQ.Size = New System.Drawing.Size(178, 25)
-        Me.txtAssetTag_REQ.TabIndex = 6
+        Me.txtAssetTag_REQ.TabIndex = 1
         Me.txtAssetTag_REQ.Tag = "True"
         Me.txtAssetTag_REQ.Text = "txtAssetTag"
         '
@@ -180,7 +180,7 @@ Partial Class AddNew
         Me.chkNoClear.Location = New System.Drawing.Point(732, 392)
         Me.chkNoClear.Name = "chkNoClear"
         Me.chkNoClear.Size = New System.Drawing.Size(91, 20)
-        Me.chkNoClear.TabIndex = 49
+        Me.chkNoClear.TabIndex = 15
         Me.chkNoClear.Text = "Don't clear"
         Me.chkNoClear.UseVisualStyleBackColor = True
         '
@@ -191,7 +191,7 @@ Partial Class AddNew
         Me.chkTrackable.Location = New System.Drawing.Point(30, 95)
         Me.chkTrackable.Name = "chkTrackable"
         Me.chkTrackable.Size = New System.Drawing.Size(135, 20)
-        Me.chkTrackable.TabIndex = 48
+        Me.chkTrackable.TabIndex = 12
         Me.chkTrackable.Text = "Trackable Device"
         Me.chkTrackable.UseVisualStyleBackColor = True
         '
@@ -201,7 +201,7 @@ Partial Class AddNew
         Me.cmdClear.Location = New System.Drawing.Point(693, 427)
         Me.cmdClear.Name = "cmdClear"
         Me.cmdClear.Size = New System.Drawing.Size(170, 23)
-        Me.cmdClear.TabIndex = 13
+        Me.cmdClear.TabIndex = 16
         Me.cmdClear.Text = "Clear"
         Me.cmdClear.UseVisualStyleBackColor = True
         '
@@ -224,7 +224,7 @@ Partial Class AddNew
         Me.cmbStatus_REQ.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
         Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
         Me.cmbStatus_REQ.Size = New System.Drawing.Size(251, 26)
-        Me.cmbStatus_REQ.TabIndex = 5
+        Me.cmbStatus_REQ.TabIndex = 7
         Me.cmbStatus_REQ.Tag = "True"
         '
         'Label10
@@ -246,7 +246,7 @@ Partial Class AddNew
         Me.cmbOSType_REQ.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
         Me.cmbOSType_REQ.Name = "cmbOSType_REQ"
         Me.cmbOSType_REQ.Size = New System.Drawing.Size(251, 26)
-        Me.cmbOSType_REQ.TabIndex = 9
+        Me.cmbOSType_REQ.TabIndex = 5
         Me.cmbOSType_REQ.Tag = "True"
         '
         'Label9
@@ -299,7 +299,7 @@ Partial Class AddNew
         Me.txtNotes.Multiline = True
         Me.txtNotes.Name = "txtNotes"
         Me.txtNotes.Size = New System.Drawing.Size(366, 86)
-        Me.txtNotes.TabIndex = 11
+        Me.txtNotes.TabIndex = 13
         '
         'cmdAdd
         '
@@ -307,7 +307,7 @@ Partial Class AddNew
         Me.cmdAdd.Location = New System.Drawing.Point(693, 342)
         Me.cmdAdd.Name = "cmdAdd"
         Me.cmdAdd.Size = New System.Drawing.Size(170, 44)
-        Me.cmdAdd.TabIndex = 12
+        Me.cmdAdd.TabIndex = 14
         Me.cmdAdd.Text = "Add Device"
         Me.cmdAdd.UseVisualStyleBackColor = True
         '
@@ -329,7 +329,7 @@ Partial Class AddNew
         Me.txtReplaceYear.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
         Me.txtReplaceYear.Name = "txtReplaceYear"
         Me.txtReplaceYear.Size = New System.Drawing.Size(170, 25)
-        Me.txtReplaceYear.TabIndex = 3
+        Me.txtReplaceYear.TabIndex = 9
         Me.txtReplaceYear.Text = "txtReplaceYear"
         '
         'lbPurchaseDate
@@ -376,7 +376,7 @@ Partial Class AddNew
         Me.cmbLocation_REQ.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
         Me.cmbLocation_REQ.Name = "cmbLocation_REQ"
         Me.cmbLocation_REQ.Size = New System.Drawing.Size(251, 26)
-        Me.cmbLocation_REQ.TabIndex = 2
+        Me.cmbLocation_REQ.TabIndex = 6
         Me.cmbLocation_REQ.Tag = "True"
         Me.cmbLocation_REQ.Text = "cmbLocation"
         '
@@ -398,7 +398,7 @@ Partial Class AddNew
         Me.txtDescription_REQ.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
         Me.txtDescription_REQ.Name = "txtDescription_REQ"
         Me.txtDescription_REQ.Size = New System.Drawing.Size(251, 25)
-        Me.txtDescription_REQ.TabIndex = 7
+        Me.txtDescription_REQ.TabIndex = 3
         Me.txtDescription_REQ.Tag = "True"
         Me.txtDescription_REQ.Text = "Description"
         '
@@ -461,7 +461,7 @@ Partial Class AddNew
         Me.txtPhoneNumber.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
         Me.txtPhoneNumber.Name = "txtPhoneNumber"
         Me.txtPhoneNumber.Size = New System.Drawing.Size(170, 25)
-        Me.txtPhoneNumber.TabIndex = 49
+        Me.txtPhoneNumber.TabIndex = 11
         '
         'Label13
         '
