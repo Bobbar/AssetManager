@@ -80,8 +80,11 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         Try
             lblReqInfo.Text = "MUNIS Info:"
             HideFixedAssetGrid()
-            Dim strColumns As String = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short"
-            Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
+            Dim strColumns As String = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last"
+            Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " 
+FROM pr_employee_master e
+INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number
+WHERE e.a_name_last LIKE '%" & UCase(Name) & "%' OR e.a_name_first LIKE '%" & UCase(Name) & "%'"
             ProcessMunisQuery(DataGridMunis_Requisition, strQRY)
             Me.Show()
         Catch ex As Exception
