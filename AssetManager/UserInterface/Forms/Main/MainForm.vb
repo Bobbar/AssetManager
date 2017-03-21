@@ -369,30 +369,6 @@ Public Class MainForm
             e.Result = CanPing
         End If
     End Sub
-    Private Sub ConnectionWatchDog_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles ConnectionWatchDog.ProgressChanged
-        Select Case e.ProgressPercentage 'hack alert!
-            Case 1 'status message
-                StatusBar(e.UserState)
-            Case 2 'custom connnect state red
-                ConnectStatus(e.UserState, Color.Red)
-                StatusStrip1.BackColor = colStatusBarProblem
-            Case 5 'pass connect state
-                Dim State As ConnectionState = e.UserState
-                Select Case State
-                    Case ConnectionState.Closed
-                        ConnectStatus("Disconnected", Color.Red)
-                    Case ConnectionState.Open
-                        ConnectStatus("Connected", Color.Green)
-                        StatusStrip1.BackColor = colFormBackColor
-                    Case ConnectionState.Connecting
-                        ConnectStatus("Connecting", Color.Black)
-                    Case ConnectionState.Executing
-                        ConnectStatus("Executing", Color.Green)
-                    Case Else
-                        ConnectStatus("Disconnected", Color.Red)
-                End Select
-        End Select
-    End Sub
     Private Sub ConnectionWatchDog_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles ConnectionWatchDog.RunWorkerCompleted
         Dim CanPing As Boolean = False
         If e.Error Is Nothing Then

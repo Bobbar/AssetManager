@@ -875,7 +875,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                 Dim Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
                 Dim options As New Net.NetworkInformation.PingOptions
                 options.DontFragment = True
-                MyPingHostname = "D" & CurrentViewDevice.strSerial & "." & Domain
+                MyPingHostname = "D" & CurrentViewDevice.strSerial & "." ' & Domain
                 If Not MyPingRunning Then MyPing.SendAsync(MyPingHostname, 1000, options)
                 MyPingRunning = True
             End If
