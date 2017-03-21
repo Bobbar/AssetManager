@@ -14,10 +14,13 @@ Public Class frmView
     Private bolGridFilling As Boolean = False
     Private MyPing As New Net.NetworkInformation.Ping
     Private MyPingHostname As String = Nothing
+    Private DeviceHostname As String = Nothing
+    Private DeviceHostnameAlternate As String = Nothing
     Private MyPingRunning As Boolean = False
     Private MyPingVis As PingVis
     Private PingResults As New Ping_Results
     Private intFailedPings As Integer = 0
+    Private Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
     Private Structure Ping_Results
         Public CanPing As Boolean
         Public Address As String
@@ -280,7 +283,8 @@ VALUES (@" & historical_dev.ChangeType & ",
                 Me.Show()
                 DataGridHistory.ClearSelection()
                 bolGridFilling = False
-                CheckRDP()
+                DeviceHostname = "D" & CurrentViewDevice.strSerial & "." & Domain
+                DeviceHostnameAlternate = "D" & CurrentViewDevice.strSerial & "."
                 tmr_RDPRefresher.Enabled = True
             Else
                 Me.Dispose()
@@ -869,13 +873,23 @@ VALUES (@" & historical_dev.ChangeType & ",
         '    ToolTip1.SetToolTip(PingBox, "Avg ping: " & MyPingVis.AvgPingTime & " ms")
         'End If
     End Sub
+    Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
+        If Not PingResults.CanPing Then
+            If MyPingHostname = DeviceHostname Then
+                MyPingHostname = DeviceHostnameAlternate
+            ElseIf MyPingHostname = DeviceHostnameAlternate Then
+                MyPingHostname = DeviceHostname
+            Else
+                MyPingHostname = DeviceHostname
+            End If
+        End If
+        CheckRDP()
+    End Sub
     Private Sub CheckRDP()
         Try
             If CurrentViewDevice.strOSVersion.Contains("WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
-                Dim Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
                 Dim options As New Net.NetworkInformation.PingOptions
                 options.DontFragment = True
-                MyPingHostname = "D" & CurrentViewDevice.strSerial & "." ' & Domain
                 If Not MyPingRunning Then MyPing.SendAsync(MyPingHostname, 1000, options)
                 MyPingRunning = True
             End If
@@ -902,9 +916,6 @@ VALUES (@" & historical_dev.ChangeType & ",
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
-    End Sub
-    Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
-        CheckRDP()
     End Sub
     Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub

@@ -42,10 +42,8 @@ Module ErrorHandling
             Case TypeOf ex Is NoPingException
                 ErrorResult = handleNoPingException(ex, strOrigSub)
             Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
+                UnHandledError(ex, ex.HResult, strOrigSub)
                 ErrorResult = False
-                EndProgram()
         End Select
         If Not IsNothing(ex.InnerException) Then ErrHandle(ex.InnerException, strOrigSub)
         Return ErrorResult
@@ -57,9 +55,7 @@ Module ErrorHandling
                 Dim blah = Message("Network path not found.", vbOKOnly + vbExclamation, "Network Error")
                 Return True
             Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                EndProgram()
+                UnHandledError(ex, ex.HResult, strOrigSub)
         End Select
         Return False
     End Function
@@ -69,9 +65,7 @@ Module ErrorHandling
             Case -2146233033
                 Return True
             Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                EndProgram()
+                UnHandledError(ex, ex.HResult, strOrigSub)
         End Select
         Return False
     End Function
@@ -93,9 +87,7 @@ Module ErrorHandling
                 Dim blah = Message("Something went wrong with the SQL command. See log for details.  Log: " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
                 Return True
             Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                EndProgram()
+                UnHandledError(ex, ex.Number, strOrigSub)
         End Select
         Return False
     End Function
@@ -104,21 +96,16 @@ Module ErrorHandling
             Case -2146233079
                 Return False
             Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                EndProgram()
+                UnHandledError(ex, ex.HResult, strOrigSub)
         End Select
     End Function
     Private Function handleOperationException(ex As InvalidOperationException, strOrigSub As String) As Boolean
-
         Select Case ex.HResult
             Case -2146233079
                 Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
                 Return False
             Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                EndProgram()
+                UnHandledError(ex, ex.HResult, strOrigSub)
         End Select
     End Function
     Private Function handleWebException(ex As Net.WebException, strOrigSub As String) As Boolean
@@ -134,9 +121,7 @@ Module ErrorHandling
                         Message("Could not connect to FTP server.", vbOKOnly + vbExclamation, "Connection Failure")
                         Return True
                 End Select
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                EndProgram()
+                UnHandledError(ex, ex.HResult, strOrigSub)
         End Select
         Return False
     End Function
@@ -150,9 +135,7 @@ Module ErrorHandling
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
                 Return True
             Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                EndProgram()
+                UnHandledError(ex, ex.HResult, strOrigSub)
         End Select
         Return False
     End Function
@@ -174,13 +157,10 @@ Module ErrorHandling
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
                 Dim blah = Message("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Disconnected")
                 Return True
-
             Case 11001 'host not found.
                 Return False
             Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                EndProgram()
+                UnHandledError(ex, ex.SocketErrorCode, strOrigSub)
         End Select
     End Function
     Private Function handleSQLException(ex As SqlException, strOrigSub As String) As Boolean
@@ -206,9 +186,7 @@ Module ErrorHandling
                 Dim blah = Message("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "ERROR")
                 Return False
             Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                EndProgram()
+                UnHandledError(ex, ex.Number, strOrigSub)
         End Select
     End Function
     Private Function handleNoPingException(ex As NoPingException, strOrigSub As String) As Boolean
@@ -218,9 +196,12 @@ Module ErrorHandling
                 Dim blah = Message("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbExclamation, "Connection Lost")
                 Return True
             Case Else
-                Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-                Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbCritical, "ERROR")
-                EndProgram()
+                UnHandledError(ex, ex.HResult, strOrigSub)
         End Select
     End Function
+    Private Sub UnHandledError(ex As Exception, ErrorCode As Integer, strOrigSub As String)
+        Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+        Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message & vbCrLf & vbCrLf & strLogPath, vbOKOnly + vbCritical, "ERROR")
+        EndProgram()
+    End Sub
 End Module
