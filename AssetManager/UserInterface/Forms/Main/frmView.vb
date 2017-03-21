@@ -285,6 +285,8 @@ VALUES (@" & historical_dev.ChangeType & ",
                 bolGridFilling = False
                 DeviceHostname = "D" & CurrentViewDevice.strSerial & "." & Domain
                 DeviceHostnameAlternate = "D" & CurrentViewDevice.strSerial & "."
+                MyPingHostname = DeviceHostname
+                CheckRDP()
                 tmr_RDPRefresher.Enabled = True
             Else
                 Me.Dispose()
