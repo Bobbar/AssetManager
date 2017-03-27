@@ -606,7 +606,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(185, Byte), Integer), CType(CType(205, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.cmdAttachments})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAttachments, Me.cmdAddNote})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
@@ -645,7 +645,7 @@ Partial Class frmManageRequest
         'cmdAddNote
         '
         Me.cmdAddNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.note_icon_27942
+        Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.add_note_icon
         Me.cmdAddNote.Name = "cmdAddNote"
         Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdAddNote.Size = New System.Drawing.Size(39, 34)
