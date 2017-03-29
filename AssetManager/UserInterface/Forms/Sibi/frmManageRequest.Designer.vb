@@ -76,8 +76,8 @@ Partial Class frmManageRequest
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
-        Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
+        Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
         Me.PopupMenuItems.SuspendLayout()
         Me.PopupMenuNotes.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -99,10 +99,11 @@ Partial Class frmManageRequest
         '
         Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmLookupDevice, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 54)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 76)
         '
         'tsmLookupDevice
         '
+        Me.tsmLookupDevice.Image = Global.AssetManager.My.Resources.Resources.Find
         Me.tsmLookupDevice.Name = "tsmLookupDevice"
         Me.tsmLookupDevice.Size = New System.Drawing.Size(152, 22)
         Me.tsmLookupDevice.Text = "Lookup Device"
@@ -115,6 +116,7 @@ Partial Class frmManageRequest
         '
         'tsmDeleteItem
         '
+        Me.tsmDeleteItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
         Me.tsmDeleteItem.Name = "tsmDeleteItem"
         Me.tsmDeleteItem.Size = New System.Drawing.Size(152, 22)
         Me.tsmDeleteItem.Text = "Delete Item"
@@ -161,6 +163,7 @@ Partial Class frmManageRequest
         '
         'cmdNewNote
         '
+        Me.cmdNewNote.Image = Global.AssetManager.My.Resources.Resources.add_note_icon
         Me.cmdNewNote.Name = "cmdNewNote"
         Me.cmdNewNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdNewNote.Text = "Add Note"
@@ -172,6 +175,7 @@ Partial Class frmManageRequest
         '
         'cmdDeleteNote
         '
+        Me.cmdDeleteNote.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
         Me.cmdDeleteNote.Name = "cmdDeleteNote"
         Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
@@ -642,6 +646,14 @@ Partial Class frmManageRequest
         Me.cmdDelete.Size = New System.Drawing.Size(39, 34)
         Me.cmdDelete.Text = "Delete"
         '
+        'cmdAttachments
+        '
+        Me.cmdAttachments.Image = Global.AssetManager.My.Resources.Resources.clip_512
+        Me.cmdAttachments.Name = "cmdAttachments"
+        Me.cmdAttachments.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.cmdAttachments.Size = New System.Drawing.Size(136, 34)
+        Me.cmdAttachments.Text = "Attachments"
+        '
         'cmdAddNote
         '
         Me.cmdAddNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -650,14 +662,6 @@ Partial Class frmManageRequest
         Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdAddNote.Size = New System.Drawing.Size(39, 34)
         Me.cmdAddNote.Text = "Add Note"
-        '
-        'cmdAttachments
-        '
-        Me.cmdAttachments.Image = Global.AssetManager.My.Resources.Resources.clip_512
-        Me.cmdAttachments.Name = "cmdAttachments"
-        Me.cmdAttachments.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
-        Me.cmdAttachments.Size = New System.Drawing.Size(136, 34)
-        Me.cmdAttachments.Text = "Attachments"
         '
         'frmManageRequest
         '

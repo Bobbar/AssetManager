@@ -2,6 +2,7 @@
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.Net
+Imports System.Net.NetworkInformation
 Public Class frmView
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
@@ -18,7 +19,6 @@ Public Class frmView
     Private DeviceHostnameAlternate As String = Nothing
     Private MyPingRunning As Boolean = False
     Private MyPingVis As PingVis
-    Private PingResults As New Ping_Results
     Private intFailedPings As Integer = 0
     Private Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
     Private Structure Ping_Results
@@ -27,7 +27,6 @@ Public Class frmView
     End Structure
     Sub New(ParentForm As MyForm, DeviceGUID As String)
         InitializeComponent()
-        AddHandler MyPing.PingCompleted, AddressOf PingComplete
         MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
         MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, "dev_description")
         Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
@@ -856,72 +855,54 @@ VALUES (@" & historical_dev.ChangeType & ",
         On Error Resume Next
         TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
     End Sub
-    Private Sub SetupNetTools(PingResults As Ping_Results)
-        If Not PingResults.CanPing Then
+    Private Sub SetupNetTools(PingResults As PingReply)
+        If PingResults.Status <> IPStatus.Success Then
             intFailedPings += 1
         Else
             intFailedPings = 0
         End If
-        If Not grpNetTools.Visible And PingResults.CanPing Then
+        If Not grpNetTools.Visible And PingResults.Status = IPStatus.Success Then
+            intFailedPings = 0
             cmdShowIP.Tag = PingResults.Address
-            MyPingVis = New PingVis(cmdShowIP, PingResults.Address)
             grpNetTools.Visible = True
         End If
         If intFailedPings > 10 And grpNetTools.Visible Then
-            If MyPingVis IsNot Nothing Then MyPingVis.Dispose()
             grpNetTools.Visible = False
         End If
-        'If grpNetTools.Visible Then
-        '    ToolTip1.SetToolTip(PingBox, "Avg ping: " & MyPingVis.AvgPingTime & " ms")
-        'End If
     End Sub
     Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
-        If Not PingResults.CanPing Then
-            If MyPingHostname = DeviceHostname Then
-                MyPingHostname = DeviceHostnameAlternate
-            ElseIf MyPingHostname = DeviceHostnameAlternate Then
-                MyPingHostname = DeviceHostname
-            Else
-                MyPingHostname = DeviceHostname
+        If MyPingVis IsNot Nothing And MyPingVis.CurrentResult IsNot Nothing Then
+            If Not MyPingVis.CurrentResult.Status = IPStatus.Success Then
+                If MyPingHostname = DeviceHostname Then
+                    MyPingHostname = DeviceHostnameAlternate
+                ElseIf MyPingHostname = DeviceHostnameAlternate Then
+                    MyPingHostname = DeviceHostname
+                Else
+                    MyPingHostname = DeviceHostname
+                End If
             End If
+            CheckRDP()
         End If
-        CheckRDP()
     End Sub
     Private Sub CheckRDP()
         Try
             If CurrentViewDevice.strOSVersion.Contains("WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
-                Dim options As New Net.NetworkInformation.PingOptions
-                options.DontFragment = True
-                If Not MyPingRunning Then MyPing.SendAsync(MyPingHostname, 1000, options)
-                MyPingRunning = True
-            End If
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
-        End Try
-    End Sub
-    Private Sub PingComplete(ByVal sender As Object, ByVal e As System.Net.NetworkInformation.PingCompletedEventArgs)
-        Try
-            If e.Error Is Nothing Then
-                Dim MyPingResults As Net.NetworkInformation.PingReply = e.Reply
-                If MyPingResults.Status = Net.NetworkInformation.IPStatus.Success Then
-                    PingResults.CanPing = True
-                Else
-                    PingResults.CanPing = False
+
+                If MyPingVis Is Nothing Then MyPingVis = New PingVis(cmdShowIP, MyPingHostname)
+                If MyPingVis.CurrentResult IsNot Nothing Then
+                    If MyPingVis.CurrentResult.Status = NetworkInformation.IPStatus.Success Then
+                        SetupNetTools(MyPingVis.CurrentResult)
+                    End If
                 End If
-                PingResults.Address = e.Reply.Address.ToString
-            Else
-                PingResults.CanPing = False
-                PingResults.Address = Nothing
             End If
-            SetupNetTools(PingResults)
-            MyPingRunning = False
+
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
     End Sub
     Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
-        OpenSibiLink(CurrentViewDevice) '.strPO)
+        OpenSibiLink(CurrentViewDevice)
     End Sub
     Private Sub LinkSibi()
         Dim f As New frmSibiSelector(Me)
@@ -1020,7 +1001,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub cmdRestart_Click(sender As Object, e As EventArgs) Handles cmdRestart.Click
         Dim blah = Message("Click 'Yes' to reboot this device.", vbYesNo + vbQuestion, "Are you sure?")
         If blah = vbYes Then
-            Dim IP As String = PingResults.Address
+            Dim IP As String = MyPingVis.CurrentResult.Address.ToString
             Dim DeviceName As String = "D" & CurrentViewDevice.strSerial
             If ConnectAdmin(IP, DeviceName) Then
                 If SendRestart(IP, DeviceName) Then

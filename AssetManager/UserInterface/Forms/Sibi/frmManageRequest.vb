@@ -915,12 +915,16 @@ VALUES
         LeaveRow(RequestItemsGrid, GridTheme, e.RowIndex)
     End Sub
     Private Sub LookupDevice(Device As Device_Info)
-        If Not DeviceIsOpen(Device.strGUID) Then
-            Waiting()
-            Dim NewView As New frmView(Me, Device.strGUID)
-            DoneWaiting()
+        If Device.strGUID IsNot Nothing Then
+            If Not DeviceIsOpen(Device.strGUID) Then
+                Waiting()
+                Dim NewView As New frmView(Me, Device.strGUID)
+                DoneWaiting()
+            Else
+                ActivateFormByUID(Device.strGUID)
+            End If
         Else
-            ActivateFormByUID(Device.strGUID)
+            Message("Device not found.", vbOKOnly + vbExclamation, "Error", Me)
         End If
     End Sub
     Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click

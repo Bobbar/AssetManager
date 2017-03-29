@@ -16,6 +16,7 @@ Public Class PingVis : Implements IDisposable
     Private gfx As Graphics
     Private intImgWidth As Integer
     Private intImgHeight As Integer
+    Public CurrentResult As PingReply
 #Region "Ping Parameters"
     Private bolStopWhenNotFocused As Boolean = False 'Set to True to pause the pinging until focus is returned to the parent form.
     Private Timeout As Integer = 1000
@@ -79,8 +80,9 @@ Public Class PingVis : Implements IDisposable
         If Not e.Cancelled Then
             If e.Error Is Nothing Then
                 pngResults.Add(e.Reply)
+                CurrentResult = e.Reply
             Else
-                Debug.Print(e.Reply.ToString)
+                Debug.Print(e.Error.Message)
             End If
             DrawBars(MyControl)
         End If

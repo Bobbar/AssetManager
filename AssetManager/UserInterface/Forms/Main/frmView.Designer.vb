@@ -789,7 +789,7 @@ Partial Class frmView
         '
         'tmr_RDPRefresher
         '
-        Me.tmr_RDPRefresher.Interval = 2000
+        Me.tmr_RDPRefresher.Interval = 250
         '
         'fieldErrorIcon
         '
