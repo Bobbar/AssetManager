@@ -774,8 +774,7 @@ VALUES
     Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
         Try
             If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-            Dim blah As MsgBoxResult
-            blah = Message("Delete selected row?", vbYesNo + vbQuestion, "Delete Item Row", Me)
+            Dim blah = Message("Delete selected row?", vbYesNo + vbQuestion, "Delete Item Row", Me)
             If blah = vbYes Then
                 If IsNewRow(RequestItemsGrid.CurrentRow.Index) Then
                     If DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index) Then
