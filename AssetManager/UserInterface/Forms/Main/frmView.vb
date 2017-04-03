@@ -3,6 +3,7 @@ Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.Net
 Imports System.Net.NetworkInformation
+Imports System.IO
 Public Class frmView
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
@@ -1050,4 +1051,78 @@ VALUES (@" & historical_dev.ChangeType & ",
             Return False
         End If
     End Function
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim ServerName As String = "10.10.0.184" '"ddad-svr-fs01"
+        Dim pServer As Process = New Process
+        pServer.StartInfo.UseShellExecute = False
+        pServer.StartInfo.RedirectStandardOutput = True
+        pServer.StartInfo.RedirectStandardError = True
+        pServer.StartInfo.WindowStyle = ProcessWindowStyle.Minimized
+        pServer.StartInfo.FileName = "net.exe"
+        pServer.StartInfo.Arguments = "USE \\" & ServerName & "\c$ C4nt533M333 /USER:la_rl12184"
+        pServer.Start()
+        Dim output As String
+        output = pServer.StandardError.ReadToEnd
+        pServer.WaitForExit()
+        Debug.Print(output)
+
+
+
+        Dim pClient As Process = New Process
+        pClient.StartInfo.UseShellExecute = False
+        pClient.StartInfo.RedirectStandardOutput = True
+        pClient.StartInfo.RedirectStandardError = True
+        pClient.StartInfo.WindowStyle = ProcessWindowStyle.Minimized
+        pClient.StartInfo.FileName = "net.exe"
+        pClient.StartInfo.Arguments = "USE \\D" & CurrentViewDevice.strSerial & "\c$ C4nt533M333 /USER:la_rl12184"
+        pClient.Start()
+        ' Dim output As String
+        output = pClient.StandardError.ReadToEnd
+        pClient.WaitForExit()
+        Debug.Print(output)
+
+
+
+
+
+
+
+
+        Dim sourceDir As String = "\\" & ServerName & "\c$\PSi\Gatekeeper"
+        Dim targetDir As String = "\\D" & CurrentViewDevice.strSerial & "\c$\PSi\Gatekeeper"
+        For Each file__1 In Directory.GetFiles(sourceDir)
+            Debug.Print("Copying: " & file__1)
+            File.Copy(file__1, Path.Combine(targetDir, Path.GetFileName(file__1)), True)
+        Next
+
+
+
+        'If Trim(output) = "" Then
+
+        '    '  Return True
+        'Else
+
+        '    '  Return False
+        'End If
+
+
+        '    Try
+        '        Dim User, Pass As String
+        '        Dim NewDialog As New MyDialog(Parent)
+        '        With NewDialog
+        '            .Text = "Creds"
+        '            .AddTextBox("txtUser", "Username:")
+        '            .AddTextBox("txtPass", "Password:")
+        '            .ShowDialog()
+        '            If .DialogResult = DialogResult.OK Then
+        '                User = NewDialog.GetControlValue("txtUser")
+        '                Pass = NewDialog.GetControlValue("txtPass")
+        '                Dim GKUpdate As New GK_Updater(User, Pass)
+        '            End If
+        '        End With
+        '    Catch ex As Exception
+        '        ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+        '    End Try
+    End Sub
 End Class

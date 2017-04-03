@@ -56,6 +56,7 @@ Partial Class frmView
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.cmdRestart = New System.Windows.Forms.Button()
         Me.cmdShowIP = New System.Windows.Forms.Button()
         Me.cmdBrowseFiles = New System.Windows.Forms.Button()
@@ -365,6 +366,7 @@ Partial Class frmView
         Me.txtDescription_View_REQ.Name = "txtDescription_View_REQ"
         Me.txtDescription_View_REQ.Size = New System.Drawing.Size(389, 23)
         Me.txtDescription_View_REQ.TabIndex = 4
+        Me.txtDescription_View_REQ.UseSystemPasswordChar = True
         '
         'cmbOSVersion_REQ
         '
@@ -463,6 +465,7 @@ Partial Class frmView
         '
         'grpNetTools
         '
+        Me.grpNetTools.Controls.Add(Me.Button1)
         Me.grpNetTools.Controls.Add(Me.cmdRestart)
         Me.grpNetTools.Controls.Add(Me.cmdShowIP)
         Me.grpNetTools.Controls.Add(Me.cmdBrowseFiles)
@@ -477,12 +480,25 @@ Partial Class frmView
         Me.grpNetTools.Text = "Remote Mgmt"
         Me.grpNetTools.Visible = False
         '
+        'Button1
+        '
+        Me.Button1.BackgroundImage = CType(resources.GetObject("Button1.BackgroundImage"), System.Drawing.Image)
+        Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.Button1.Location = New System.Drawing.Point(12, 34)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(1)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(50, 50)
+        Me.Button1.TabIndex = 55
+        Me.ToolTip1.SetToolTip(Me.Button1, "Update Gatekeeper")
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'cmdRestart
         '
         Me.cmdRestart.BackgroundImage = CType(resources.GetObject("cmdRestart.BackgroundImage"), System.Drawing.Image)
         Me.cmdRestart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdRestart.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRestart.Location = New System.Drawing.Point(82, 37)
+        Me.cmdRestart.Location = New System.Drawing.Point(116, 34)
+        Me.cmdRestart.Margin = New System.Windows.Forms.Padding(1)
         Me.cmdRestart.Name = "cmdRestart"
         Me.cmdRestart.Size = New System.Drawing.Size(50, 50)
         Me.cmdRestart.TabIndex = 54
@@ -496,7 +512,7 @@ Partial Class frmView
         Me.cmdShowIP.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdShowIP.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdShowIP.ForeColor = System.Drawing.Color.White
-        Me.cmdShowIP.Location = New System.Drawing.Point(215, 14)
+        Me.cmdShowIP.Location = New System.Drawing.Point(224, 15)
         Me.cmdShowIP.Name = "cmdShowIP"
         Me.cmdShowIP.Size = New System.Drawing.Size(90, 90)
         Me.cmdShowIP.TabIndex = 53
@@ -508,7 +524,8 @@ Partial Class frmView
         '
         Me.cmdBrowseFiles.BackgroundImage = CType(resources.GetObject("cmdBrowseFiles.BackgroundImage"), System.Drawing.Image)
         Me.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.cmdBrowseFiles.Location = New System.Drawing.Point(26, 37)
+        Me.cmdBrowseFiles.Location = New System.Drawing.Point(64, 34)
+        Me.cmdBrowseFiles.Margin = New System.Windows.Forms.Padding(1)
         Me.cmdBrowseFiles.Name = "cmdBrowseFiles"
         Me.cmdBrowseFiles.Size = New System.Drawing.Size(50, 50)
         Me.cmdBrowseFiles.TabIndex = 52
@@ -520,7 +537,8 @@ Partial Class frmView
         Me.cmdRDP.BackgroundImage = CType(resources.GetObject("cmdRDP.BackgroundImage"), System.Drawing.Image)
         Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRDP.Location = New System.Drawing.Point(138, 37)
+        Me.cmdRDP.Location = New System.Drawing.Point(168, 34)
+        Me.cmdRDP.Margin = New System.Windows.Forms.Padding(1)
         Me.cmdRDP.Name = "cmdRDP"
         Me.cmdRDP.Size = New System.Drawing.Size(50, 50)
         Me.cmdRDP.TabIndex = 46
@@ -1060,4 +1078,5 @@ Partial Class frmView
     Friend WithEvents txtPhoneNumber As TextBox
     Friend WithEvents Label14 As Label
     Friend WithEvents cmdRestart As Button
+    Friend WithEvents Button1 As Button
 End Class
