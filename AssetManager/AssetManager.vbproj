@@ -215,6 +215,12 @@
     <Compile Include="UserInterface\Forms\Main\frmMunisUser.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\GKProgress.Designer.vb">
+      <DependentUpon>GKProgress.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\GKProgress.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\MyControls\MyForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -352,6 +358,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\frmMunisUser.resx">
       <DependentUpon>frmMunisUser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\GKProgress.resx">
+      <DependentUpon>GKProgress.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\MyControls\MyDialog.resx">
       <DependentUpon>MyDialog.vb</DependentUpon>

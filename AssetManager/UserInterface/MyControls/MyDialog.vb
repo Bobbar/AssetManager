@@ -128,9 +128,9 @@ Public Class MyDialog
                 Case TypeOf ctl Is TextBox
                     Dim txt As TextBox = ctl
                     Dim smPanel As FlowLayoutPanel = ControlPanel()
-                    'If txt.Name.Contains("pass") Then
-                    '    txt.
-                    'End If
+                    If txt.Name.Contains("pass") Then
+                        txt.UseSystemPasswordChar = True
+                    End If
                     smPanel.Controls.Add(NewControlLabel(txt.Tag))
                     txt.Width = 150
                     smPanel.Controls.Add(txt)

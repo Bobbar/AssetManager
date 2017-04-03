@@ -366,7 +366,6 @@ Partial Class frmView
         Me.txtDescription_View_REQ.Name = "txtDescription_View_REQ"
         Me.txtDescription_View_REQ.Size = New System.Drawing.Size(389, 23)
         Me.txtDescription_View_REQ.TabIndex = 4
-        Me.txtDescription_View_REQ.UseSystemPasswordChar = True
         '
         'cmbOSVersion_REQ
         '

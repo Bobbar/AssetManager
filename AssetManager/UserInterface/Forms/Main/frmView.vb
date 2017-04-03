@@ -1053,34 +1053,37 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Function
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim ServerName As String = "10.10.0.184" '"ddad-svr-fs01"
-        Dim pServer As Process = New Process
-        pServer.StartInfo.UseShellExecute = False
-        pServer.StartInfo.RedirectStandardOutput = True
-        pServer.StartInfo.RedirectStandardError = True
-        pServer.StartInfo.WindowStyle = ProcessWindowStyle.Minimized
-        pServer.StartInfo.FileName = "net.exe"
-        pServer.StartInfo.Arguments = "USE \\" & ServerName & "\c$ C4nt533M333 /USER:la_rl12184"
-        pServer.Start()
-        Dim output As String
-        output = pServer.StandardError.ReadToEnd
-        pServer.WaitForExit()
-        Debug.Print(output)
+        Dim NewGKUpdate As New GKProgress(CurrentViewDevice.strSerial)
+
+
+        'Dim ServerName As String = "10.10.0.184" '"ddad-svr-fs01"
+        'Dim pServer As Process = New Process
+        'pServer.StartInfo.UseShellExecute = False
+        'pServer.StartInfo.RedirectStandardOutput = True
+        'pServer.StartInfo.RedirectStandardError = True
+        'pServer.StartInfo.WindowStyle = ProcessWindowStyle.Minimized
+        'pServer.StartInfo.FileName = "net.exe"
+        'pServer.StartInfo.Arguments = "USE \\" & ServerName & "\c$ C4nt533M333 /USER:la_rl12184"
+        'pServer.Start()
+        'Dim output As String
+        'output = pServer.StandardError.ReadToEnd
+        'pServer.WaitForExit()
+        'Debug.Print(output)
 
 
 
-        Dim pClient As Process = New Process
-        pClient.StartInfo.UseShellExecute = False
-        pClient.StartInfo.RedirectStandardOutput = True
-        pClient.StartInfo.RedirectStandardError = True
-        pClient.StartInfo.WindowStyle = ProcessWindowStyle.Minimized
-        pClient.StartInfo.FileName = "net.exe"
-        pClient.StartInfo.Arguments = "USE \\D" & CurrentViewDevice.strSerial & "\c$ C4nt533M333 /USER:la_rl12184"
-        pClient.Start()
-        ' Dim output As String
-        output = pClient.StandardError.ReadToEnd
-        pClient.WaitForExit()
-        Debug.Print(output)
+        'Dim pClient As Process = New Process
+        'pClient.StartInfo.UseShellExecute = False
+        'pClient.StartInfo.RedirectStandardOutput = True
+        'pClient.StartInfo.RedirectStandardError = True
+        'pClient.StartInfo.WindowStyle = ProcessWindowStyle.Minimized
+        'pClient.StartInfo.FileName = "net.exe"
+        'pClient.StartInfo.Arguments = "USE \\D" & CurrentViewDevice.strSerial & "\c$ C4nt533M333 /USER:la_rl12184"
+        'pClient.Start()
+        '' Dim output As String
+        'output = pClient.StandardError.ReadToEnd
+        'pClient.WaitForExit()
+        'Debug.Print(output)
 
 
 
@@ -1089,12 +1092,12 @@ VALUES (@" & historical_dev.ChangeType & ",
 
 
 
-        Dim sourceDir As String = "\\" & ServerName & "\c$\PSi\Gatekeeper"
-        Dim targetDir As String = "\\D" & CurrentViewDevice.strSerial & "\c$\PSi\Gatekeeper"
-        For Each file__1 In Directory.GetFiles(sourceDir)
-            Debug.Print("Copying: " & file__1)
-            File.Copy(file__1, Path.Combine(targetDir, Path.GetFileName(file__1)), True)
-        Next
+        'Dim sourceDir As String = "\\" & ServerName & "\c$\PSi\Gatekeeper"
+        'Dim targetDir As String = "\\D" & CurrentViewDevice.strSerial & "\c$\PSi\Gatekeeper"
+        'For Each file__1 In Directory.GetFiles(sourceDir)
+        '    Debug.Print("Copying: " & file__1)
+        '    File.Copy(file__1, Path.Combine(targetDir, Path.GetFileName(file__1)), True)
+        'Next
 
 
 
