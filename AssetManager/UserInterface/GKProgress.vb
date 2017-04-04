@@ -4,18 +4,11 @@ Imports System.ComponentModel
 Public Class GKProgress
     Private WithEvents CopyWorker As BackgroundWorker
     Private ReadOnly GKPath As String = "\PSi\Gatekeeper"
-    Private ReadOnly ServerName As String = "10.10.0.184"
-    '"ddad-svr-fs01"
-    Private ReadOnly ShareName As String = "\c$"
-
     Private AdmPassword As String
     Private AdmUsername As String
     Private ClientPath As String
-    Private CurrentFileIdx As Integer = 0
     Private CurrentStatus As Status_Stats
-    Private MaxFiles As Integer = 1
     Private MyDevice As Device_Info
-    Private PrevFile As String = ""
     Private ServerPath As String
     Sub New(ParentForm As MyForm, Device As Device_Info)
         ' This call is required by the designer.
@@ -24,13 +17,12 @@ Public Class GKProgress
         Tag = ParentForm
         Icon = ParentForm.Icon
         MyDevice = Device
-        ServerPath = "\\" & ServerName & "\c$"
+        ServerPath = "C:" '"\\" & ServerName & "\c$"
         ClientPath = "\\D" & MyDevice.strSerial & "\c$"
         Text = Text + " - " + MyDevice.strCurrentUser
         InitWorker()
         Show()
     End Sub
-
     Public Sub CopyFiles()
         Try
             If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync()
@@ -105,39 +97,70 @@ Public Class GKProgress
         Dim CurFileIdx As Integer = 0
         Dim sourceDir As String = ServerPath & GKPath
         Dim targetDir As String = ClientPath & GKPath
-        Dim files As String() = Directory.GetFiles(sourceDir)
+
+
+        'Get array of full paths of all files in source dir and sub-dirs
+        Dim files() = Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories)
+
+        'Loop through file array
         For Each file__1 In files
+
+            'Counter for progress
             CurFileIdx += 1
-            Dim Status As New Status_Stats(files.Count, CurFileIdx, file__1)
+
+            'Modify source path to target path
+            Dim cPath As String = Replace(file__1, sourceDir, targetDir)
+
+            'Record status for UI updates
+            Dim Status As New Status_Stats(files.Count, CurFileIdx, cPath, file__1)
+
+            'Report status
             CopyWorker.ReportProgress(1, Status)
-            'Debug.Print("Copying: " & file__1)
-            File.Copy(file__1, Path.Combine(targetDir, Path.GetFileName(file__1)), True)
+
+            'Check is file extists on target. Then check if file is read-only and try to change attribs
+            If File.Exists(cPath) Then
+                Dim FileAttrib As FileAttributes = File.GetAttributes(cPath)
+                If (FileAttrib And FileAttributes.ReadOnly) = FileAttrib.ReadOnly Then
+                    CopyWorker.ReportProgress(99, "File is read-only. Changing attributes...")
+                    FileAttrib = FileAttrib And (Not FileAttributes.ReadOnly)
+                    File.SetAttributes(cPath, FileAttrib)
+                End If
+                'Else
+            End If
+
+            'Copy source to target, overwritting
+            File.Copy(file__1, cPath, True)
+
+
         Next
     End Sub
 
     Private Sub CopyWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
-        CurrentStatus = DirectCast(e.UserState, Status_Stats)
-        pbarProgress.Maximum = CurrentStatus.TotFiles
-        pbarProgress.Value = CurrentStatus.CurFileIdx
-        Dim CurrentFile = CurrentStatus.CurFileName
-        lblCurrentFile.Text = CurrentFile
-        If PrevFile <> CurrentFile Then
-            GKLog(CurrentStatus.CurFileIdx & " of " & CurrentStatus.TotFiles & ": " & CurrentFile)
-            PrevFile = CurrentFile
+        If e.ProgressPercentage = 1 Then
+            CurrentStatus = DirectCast(e.UserState, Status_Stats)
+            pbarProgress.Maximum = CurrentStatus.TotFiles
+            pbarProgress.Value = CurrentStatus.CurFileIdx
+            Dim CurrentFile = CurrentStatus.CurFileName
+            lblCurrentFile.Text = CurrentFile
+            GKLog(CurrentStatus.CurFileIdx & " of " & CurrentStatus.TotFiles)
+            GKLog("Source: " & CurrentStatus.SourceFileName)
+            GKLog("Dest: " & CurrentStatus.CurFileName)
+        Else
+            GKLog(e.UserState.ToString)
         End If
-        Application.DoEvents()
+
     End Sub
 
     Private Sub CopyWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
         If e.Error Is Nothing Then
             GKLog("Copy successful!")
             GKLog("Disconnecting Maps...")
-            GKLog("Server Map: Disconnecting...")
-            If RemoveServerDrive() Then
-                GKLog("Server Map: Disconnected")
-            Else
-                GKLog("Server Map Disconnect Failed!")
-            End If
+            'GKLog("Server Map: Disconnecting...")
+            'If RemoveServerDrive() Then
+            '    GKLog("Server Map: Disconnected")
+            'Else
+            '    GKLog("Server Map Disconnect Failed!")
+            'End If
             GKLog("Client Map: Disconnecting...")
             If RemoveClientDrive() Then
                 GKLog("Client Map: Disconnected")
@@ -157,9 +180,10 @@ Public Class GKProgress
 
     Private Sub GKLog(Message As String)
         lstLog.Items.Add(Message)
-        lstLog.TopIndex = lstLog.Items.Count - 1
         Logger(Message)
-        Application.DoEvents()
+        lstLog.TopIndex = lstLog.Items.Count - 1
+        lstLog.Refresh()
+        Invalidate()
     End Sub
 
     Private Sub InitWorker()
@@ -241,13 +265,13 @@ Public Class GKProgress
             cmdGo.Enabled = False
             AdmUsername = Trim(txtUsername.Text)
             AdmPassword = Trim(txtPassword.Text)
-            GKLog("Server Map: Connecting...")
-            If ConnectServerDrive() Then
-                GKLog("Server Map: Connected!")
-            Else
-                GKLog("Server Map Failed!")
-                Exit Sub
-            End If
+            'GKLog("Server Map: Connecting...")
+            'If ConnectServerDrive() Then
+            '    GKLog("Server Map: Connected!")
+            'Else
+            '    GKLog("Server Map Failed!")
+            '    Exit Sub
+            'End If
             GKLog("Client Map: Connecting...")
             If ConnectClientDrive() Then
                 GKLog("Client Map: Connected!")
@@ -266,12 +290,14 @@ Public Class GKProgress
 
     Private Structure Status_Stats
         Public CurFileIdx As Integer
+        Public SourceFileName As String
         Public CurFileName As String
         Public TotFiles As Integer
-        Sub New(tFiles As Integer, CurFIdx As Integer, CurFName As String)
+        Sub New(tFiles As Integer, CurFIdx As Integer, CurFName As String, sFileName As String)
             TotFiles = tFiles
             CurFileIdx = CurFIdx
             CurFileName = CurFName
+            SourceFileName = sFileName
         End Sub
     End Structure
 End Class
