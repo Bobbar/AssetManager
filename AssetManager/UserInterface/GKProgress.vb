@@ -105,6 +105,11 @@ Public Class GKProgress
         'Loop through file array
         For Each file__1 In files
 
+            If CopyWorker.CancellationPending Then
+                e.Cancel = True
+                Exit Sub
+            End If
+
             'Counter for progress
             CurFileIdx += 1
 
@@ -121,11 +126,15 @@ Public Class GKProgress
             If File.Exists(cPath) Then
                 Dim FileAttrib As FileAttributes = File.GetAttributes(cPath)
                 If (FileAttrib And FileAttributes.ReadOnly) = FileAttrib.ReadOnly Then
-                    CopyWorker.ReportProgress(99, "File is read-only. Changing attributes...")
+                    CopyWorker.ReportProgress(99, "******* File is read-only. Changing attributes...")
                     FileAttrib = FileAttrib And (Not FileAttributes.ReadOnly)
                     File.SetAttributes(cPath, FileAttrib)
                 End If
-                'Else
+            Else
+                If Not Directory.Exists(Path.GetDirectoryName(cPath)) Then
+                    CopyWorker.ReportProgress(99, "******* Creating Missing Directory: " & Path.GetDirectoryName(cPath))
+                    Directory.CreateDirectory(Path.GetDirectoryName(cPath))
+                End If
             End If
 
             'Copy source to target, overwritting
@@ -153,28 +162,46 @@ Public Class GKProgress
 
     Private Sub CopyWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
         If e.Error Is Nothing Then
-            GKLog("Copy successful!")
+            If Not e.Cancelled Then
+                GKLog("Copy successful!")
+                GKLog("Disconnecting Maps...")
+                'GKLog("Server Map: Disconnecting...")
+                'If RemoveServerDrive() Then
+                '    GKLog("Server Map: Disconnected")
+                'Else
+                '    GKLog("Server Map Disconnect Failed!")
+                'End If
+                GKLog("Client Map: Disconnecting...")
+                If RemoveClientDrive() Then
+                    GKLog("Client Map: Disconnected")
+                Else
+                    GKLog("Client Map Disconnect Failed!")
+                End If
+                GKLog("All done!")
+                GKLog("------------------------------------------------")
+                Text = Text + " - *COMPLETE*"
+            Else
+                GKLog("Cancelled by user!")
+                GKLog("Disconnecting Maps...")
+                GKLog("Client Map: Disconnecting...")
+                If RemoveClientDrive() Then
+                    GKLog("Client Map: Disconnected")
+                Else
+                    GKLog("Client Map Disconnect Failed!")
+                End If
+            End If
+        Else
+            Text = Text + " - *ERRORS!*"
+            GKLog("------------------------------------------------")
+            GKLog("Errors during copy!")
+            GKLog(e.Error.Message)
             GKLog("Disconnecting Maps...")
-            'GKLog("Server Map: Disconnecting...")
-            'If RemoveServerDrive() Then
-            '    GKLog("Server Map: Disconnected")
-            'Else
-            '    GKLog("Server Map Disconnect Failed!")
-            'End If
             GKLog("Client Map: Disconnecting...")
             If RemoveClientDrive() Then
                 GKLog("Client Map: Disconnected")
             Else
                 GKLog("Client Map Disconnect Failed!")
             End If
-            GKLog("All done!")
-            GKLog("------------------------------------------------")
-            Text = Text + " - *COMPLETE*"
-        Else
-            Text = Text + " - *ERRORS!*"
-            GKLog("------------------------------------------------")
-            GKLog("Errors during copy!")
-            GKLog(e.Error.Message)
         End If
     End Sub
 
@@ -300,4 +327,14 @@ Public Class GKProgress
             SourceFileName = sFileName
         End Sub
     End Structure
+
+    Private Sub txtPassword_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPassword.KeyDown
+        If e.KeyCode = Keys.Return Then
+            RunUpdate()
+        End If
+    End Sub
+
+    Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
+        CopyWorker.CancelAsync()
+    End Sub
 End Class

@@ -35,6 +35,7 @@ Partial Class GKProgress
         Me.Label3 = New System.Windows.Forms.Label()
         Me.pbarProgress = New System.Windows.Forms.ProgressBar()
         Me.lstLog = New System.Windows.Forms.ListBox()
+        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
@@ -43,6 +44,7 @@ Partial Class GKProgress
         '
         Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.cmdCancel)
         Me.GroupBox1.Controls.Add(Me.cmdGo)
         Me.GroupBox1.Controls.Add(Me.txtPassword)
         Me.GroupBox1.Controls.Add(Me.txtUsername)
@@ -58,7 +60,7 @@ Partial Class GKProgress
         'cmdGo
         '
         Me.cmdGo.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.cmdGo.Location = New System.Drawing.Point(339, 80)
+        Me.cmdGo.Location = New System.Drawing.Point(348, 48)
         Me.cmdGo.Name = "cmdGo"
         Me.cmdGo.Size = New System.Drawing.Size(145, 35)
         Me.cmdGo.TabIndex = 4
@@ -169,6 +171,16 @@ Partial Class GKProgress
         Me.lstLog.Size = New System.Drawing.Size(545, 274)
         Me.lstLog.TabIndex = 0
         '
+        'cmdCancel
+        '
+        Me.cmdCancel.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.cmdCancel.Location = New System.Drawing.Point(348, 101)
+        Me.cmdCancel.Name = "cmdCancel"
+        Me.cmdCancel.Size = New System.Drawing.Size(145, 35)
+        Me.cmdCancel.TabIndex = 5
+        Me.cmdCancel.Text = "Cancel"
+        Me.cmdCancel.UseVisualStyleBackColor = True
+        '
         'GKProgress
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -204,4 +216,5 @@ Partial Class GKProgress
     Friend WithEvents pbarProgress As ProgressBar
     Friend WithEvents lstLog As ListBox
     Friend WithEvents Label4 As Label
+    Friend WithEvents cmdCancel As Button
 End Class
