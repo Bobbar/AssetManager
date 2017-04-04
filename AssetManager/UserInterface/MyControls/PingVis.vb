@@ -84,7 +84,7 @@ Public Class PingVis : Implements IDisposable
             Else
                 Debug.Print(e.Error.Message)
             End If
-            DrawBars(MyControl)
+            If pngResults.Count > 0 Then DrawBars(MyControl)
         End If
     End Sub
     Private Sub DrawBars(ByRef DestControl As Control)
@@ -114,7 +114,7 @@ Public Class PingVis : Implements IDisposable
     Private Sub DrawPingText()
         Dim InfoFontSize As Single = 20
         Dim InfoText As String
-        If pngResults.Last.Status = IPStatus.Success Then
+        If pngResults.Count > 0 AndAlso pngResults.Last.Status = IPStatus.Success Then
             InfoText = pngResults.Last.RoundtripTime & "ms"
         Else
             InfoText = "T/O" '"Fail"
