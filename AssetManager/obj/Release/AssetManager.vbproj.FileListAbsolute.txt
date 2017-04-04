@@ -36,3 +36,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreen1.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.GKProgress.resources
