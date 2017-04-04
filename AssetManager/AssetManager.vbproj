@@ -167,7 +167,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
-    <Compile Include="Business\GK_Updater.vb" />
     <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="Classes\DataColumns.vb" />
     <Compile Include="Classes\MyExceptions.vb" />
