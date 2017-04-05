@@ -872,7 +872,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Sub
     Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
-        If MyPingVis IsNot Nothing And MyPingVis.CurrentResult IsNot Nothing Then
+        If MyPingVis IsNot Nothing AndAlso MyPingVis.CurrentResult IsNot Nothing Then
             If Not MyPingVis.CurrentResult.Status = IPStatus.Success Then
                 If MyPingHostname = DeviceHostname Then
                     MyPingHostname = DeviceHostnameAlternate
