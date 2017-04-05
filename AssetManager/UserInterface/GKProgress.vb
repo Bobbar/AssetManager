@@ -25,7 +25,9 @@ Public Class GKProgress
     End Sub
     Public Sub CopyFiles()
         Try
-            If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync()
+            Dim WorkArgs As New Worker_Args
+            WorkArgs.StartIndex = 0
+            If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(WorkArgs)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
         End Try
@@ -94,17 +96,18 @@ Public Class GKProgress
     End Function
 
     Private Sub CopyWorker_DoWork(sender As Object, e As DoWorkEventArgs)
-        Dim CurFileIdx As Integer = 0
+
         Dim sourceDir As String = ServerPath & GKPath
         Dim targetDir As String = ClientPath & GKPath
-
-
+        Dim Args As Worker_Args = DirectCast(e.Argument, Worker_Args)
+        Dim StartIdx As Integer = Args.StartIndex
+        Dim CurFileIdx As Integer = Args.StartIndex
         'Get array of full paths of all files in source dir and sub-dirs
         Dim files() = Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories)
 
         'Loop through file array
-        For Each file__1 In files
-
+        For i As Integer = StartIdx To UBound(files) ' In files
+            Dim file__1 = files(i)
             If CopyWorker.CancellationPending Then
                 e.Cancel = True
                 Exit Sub
@@ -112,7 +115,7 @@ Public Class GKProgress
 
             'Counter for progress
             CurFileIdx += 1
-
+            Args.CurrentIndex = CurFileIdx
             'Modify source path to target path
             Dim cPath As String = Replace(file__1, sourceDir, targetDir)
 
@@ -121,7 +124,7 @@ Public Class GKProgress
 
             'Report status
             CopyWorker.ReportProgress(1, Status)
-
+            e.Result = Args
             'Check is file extists on target. Then check if file is read-only and try to change attribs
             If File.Exists(cPath) Then
                 Dim FileAttrib As FileAttributes = File.GetAttributes(cPath)
@@ -142,9 +145,13 @@ Public Class GKProgress
 
 
         Next
+
+
+
     End Sub
 
     Private Sub CopyWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
+
         If e.ProgressPercentage = 1 Then
             CurrentStatus = DirectCast(e.UserState, Status_Stats)
             pbarProgress.Maximum = CurrentStatus.TotFiles
@@ -171,36 +178,34 @@ Public Class GKProgress
                 'Else
                 '    GKLog("Server Map Disconnect Failed!")
                 'End If
-                GKLog("Client Map: Disconnecting...")
-                If RemoveClientDrive() Then
-                    GKLog("Client Map: Disconnected")
-                Else
-                    GKLog("Client Map Disconnect Failed!")
-                End If
+                If Not RemoveClientDrive() Then Exit Sub
+
                 GKLog("All done!")
                 GKLog("------------------------------------------------")
                 Text = Text + " - *COMPLETE*"
             Else
                 GKLog("Cancelled by user!")
                 GKLog("Disconnecting Maps...")
-                GKLog("Client Map: Disconnecting...")
-                If RemoveClientDrive() Then
-                    GKLog("Client Map: Disconnected")
-                Else
-                    GKLog("Client Map Disconnect Failed!")
-                End If
+                If Not RemoveClientDrive() Then Exit Sub
             End If
         Else
-            Text = Text + " - *ERRORS!*"
-            GKLog("------------------------------------------------")
-            GKLog("Errors during copy!")
-            GKLog(e.Error.Message)
-            GKLog("Disconnecting Maps...")
-            GKLog("Client Map: Disconnecting...")
-            If RemoveClientDrive() Then
-                GKLog("Client Map: Disconnected")
+
+            If e.Error.HResult = -2147024864 Then
+                GKLog("******** File in-use error! Resuming next files.")
+                ' Dim OldArgs As Worker_Args = DirectCast(e.Result, Worker_Args)
+                Dim NewArgs As Worker_Args
+                NewArgs.StartIndex = CurrentStatus.CurFileIdx ' + 1
+                If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(NewArgs)
+
             Else
-                GKLog("Client Map Disconnect Failed!")
+
+
+                Text = Text + " - *ERRORS!*"
+                GKLog("------------------------------------------------")
+                GKLog("Errors during copy!")
+                GKLog(e.Error.Message)
+                GKLog("Disconnecting Maps...")
+                If Not RemoveClientDrive() Then Exit Sub
             End If
         End If
     End Sub
@@ -226,6 +231,7 @@ Public Class GKProgress
 
     Private Function RemoveClientDrive() As Boolean
         Try
+            GKLog("Client Map: Disconnecting...")
             TopMost = True
             Dim pClient As Process = New Process
             pClient.StartInfo.UseShellExecute = False
@@ -241,8 +247,10 @@ Public Class GKProgress
             TopMost = False
             Debug.Print(output)
             If Trim(output) = "" Then
+                GKLog("Client Map: Disconnected")
                 Return True
             Else
+                GKLog("Client Map Disconnect Failed!")
                 GKLog(output)
                 Return False
             End If
@@ -326,6 +334,11 @@ Public Class GKProgress
             CurFileName = CurFName
             SourceFileName = sFileName
         End Sub
+    End Structure
+
+    Private Structure Worker_Args
+        Public StartIndex As Integer
+        Public CurrentIndex As Integer
     End Structure
 
     Private Sub txtPassword_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPassword.KeyDown
