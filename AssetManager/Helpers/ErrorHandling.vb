@@ -49,15 +49,9 @@ Module ErrorHandling
         Return ErrorResult
     End Function
     Private Function handleWin32Exception(ex As Win32Exception, strOrigSub As String) As Boolean
-        Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-        Select Case ex.HResult
-            Case -2147467259
-                Dim blah = Message("Network path not found.", vbOKOnly + vbExclamation, "Network Error")
-                Return True
-            Case Else
-                UnHandledError(ex, ex.HResult, strOrigSub)
-        End Select
-        Return False
+        Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message)
+        Dim blah = Message("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
+        Return True
     End Function
     Private Function handleFormatException(ex As FormatException, strOrigSub As String) As Boolean
         Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
@@ -141,23 +135,23 @@ Module ErrorHandling
     End Function
     Private Function handleSocketException(ex As SocketException, strOrigSub As String) As Boolean
         Select Case ex.SocketErrorCode                               'FTPSocket timeout
-            Case 10060
+            Case SocketError.TimedOut '10060
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
                 Dim blah = Message("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Timeout")
                 Return True
-            Case 10065 'host unreachable
+            Case SocketError.HostUnreachable '10065 'host unreachable
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
                 'Dim blah = Message("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Timeout")
                 Return True
-            Case 10053
+            Case SocketError.ConnectionAborted '10053
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
                 Dim blah = Message("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Disconnected")
                 Return True
-            Case 10054 'connection reset
+            Case SocketError.ConnectionReset '10054 'connection reset
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
                 Dim blah = Message("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Disconnected")
                 Return True
-            Case 11001 'host not found.
+            Case SocketError.HostNotFound '11001 'host not found.
                 Return False
             Case Else
                 UnHandledError(ex, ex.SocketErrorCode, strOrigSub)

@@ -45,7 +45,7 @@ Public Class frmUserManager
             End If
         Next
         For i As Integer = 0 To clbItemStates.Count - 1
-            clbModules.SetItemChecked(i, clbItemStates(i))
+            clbModules.SetItemCheckState(i, clbItemStates(i))
         Next
         UpdateAccessLabel()
         AutoSizeCLBColumns(clbModules)

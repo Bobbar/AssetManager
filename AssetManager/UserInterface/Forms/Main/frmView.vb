@@ -695,7 +695,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Function DeleteHistoryEntry(ByVal strGUID As String) As Integer
         Try
-            Dim rows
+            Dim rows As Integer
             Dim strSQLQry As String = "DELETE FROM " & historical_dev.TableName & " WHERE " & historical_dev.History_Entry_UID & "='" & strGUID & "'"
             Using SQLComms As New clsMySQL_Comms
                 rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
@@ -717,7 +717,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         Dim c1 As Color = ColorTranslator.FromHtml("#8BCEE8") 'highlight color
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
         TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-        If TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value = strCheckIn Then
+        If TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value.ToString = strCheckIn Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckIn
             Dim c2 As Color = Color.FromArgb(colCheckIn.R, colCheckIn.G, colCheckIn.B)
             Dim BlendColor As Color

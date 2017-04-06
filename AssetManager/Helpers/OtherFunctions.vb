@@ -217,7 +217,7 @@ Module OtherFunctions
             End If
         Next
         If ActiveTransfers.Count > 0 Then
-            Dim blah As MsgBoxResult = Message("There are " & ActiveTransfers.Count.ToString & " active uploads/downloads. Do you wish to cancel the current operations?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
+            Dim blah = Message("There are " & ActiveTransfers.Count.ToString & " active uploads/downloads. Do you wish to cancel the current operations?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
             If blah = vbYes Then
                 For Each AttachForm As frmAttachments In ActiveTransfers
                     If AttachForm.UploadWorker.IsBusy Then AttachForm.UploadWorker.CancelAsync()
