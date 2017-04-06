@@ -24,18 +24,18 @@ Partial Class GKProgress
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(GKProgress))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.cmdGo = New System.Windows.Forms.Button()
         Me.txtPassword = New System.Windows.Forms.TextBox()
         Me.txtUsername = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.rtbLog = New System.Windows.Forms.RichTextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lblCurrentFile = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.pbarProgress = New System.Windows.Forms.ProgressBar()
-        Me.lstLog = New System.Windows.Forms.ListBox()
-        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
@@ -56,6 +56,16 @@ Partial Class GKProgress
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "LA Credentials"
+        '
+        'cmdCancel
+        '
+        Me.cmdCancel.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.cmdCancel.Location = New System.Drawing.Point(348, 101)
+        Me.cmdCancel.Name = "cmdCancel"
+        Me.cmdCancel.Size = New System.Drawing.Size(145, 35)
+        Me.cmdCancel.TabIndex = 5
+        Me.cmdCancel.Text = "Cancel"
+        Me.cmdCancel.UseVisualStyleBackColor = True
         '
         'cmdGo
         '
@@ -109,11 +119,11 @@ Partial Class GKProgress
         Me.GroupBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Controls.Add(Me.rtbLog)
         Me.GroupBox2.Controls.Add(Me.Label4)
         Me.GroupBox2.Controls.Add(Me.lblCurrentFile)
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Controls.Add(Me.pbarProgress)
-        Me.GroupBox2.Controls.Add(Me.lstLog)
         Me.GroupBox2.Location = New System.Drawing.Point(13, 199)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(579, 430)
@@ -121,10 +131,26 @@ Partial Class GKProgress
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Status"
         '
+        'rtbLog
+        '
+        Me.rtbLog.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.rtbLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.rtbLog.DetectUrls = False
+        Me.rtbLog.HideSelection = False
+        Me.rtbLog.Location = New System.Drawing.Point(18, 121)
+        Me.rtbLog.Name = "rtbLog"
+        Me.rtbLog.ReadOnly = True
+        Me.rtbLog.Size = New System.Drawing.Size(544, 294)
+        Me.rtbLog.TabIndex = 5
+        Me.rtbLog.Text = ""
+        Me.rtbLog.WordWrap = False
+        '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(18, 112)
+        Me.Label4.Location = New System.Drawing.Point(15, 103)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(28, 15)
         Me.Label4.TabIndex = 4
@@ -159,28 +185,6 @@ Partial Class GKProgress
         Me.pbarProgress.Size = New System.Drawing.Size(545, 30)
         Me.pbarProgress.TabIndex = 1
         '
-        'lstLog
-        '
-        Me.lstLog.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lstLog.FormattingEnabled = True
-        Me.lstLog.ItemHeight = 15
-        Me.lstLog.Location = New System.Drawing.Point(18, 130)
-        Me.lstLog.Name = "lstLog"
-        Me.lstLog.Size = New System.Drawing.Size(545, 274)
-        Me.lstLog.TabIndex = 0
-        '
-        'cmdCancel
-        '
-        Me.cmdCancel.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.cmdCancel.Location = New System.Drawing.Point(348, 101)
-        Me.cmdCancel.Name = "cmdCancel"
-        Me.cmdCancel.Size = New System.Drawing.Size(145, 35)
-        Me.cmdCancel.TabIndex = 5
-        Me.cmdCancel.Text = "Cancel"
-        Me.cmdCancel.UseVisualStyleBackColor = True
-        '
         'GKProgress
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -214,7 +218,7 @@ Partial Class GKProgress
     Friend WithEvents lblCurrentFile As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents pbarProgress As ProgressBar
-    Friend WithEvents lstLog As ListBox
     Friend WithEvents Label4 As Label
     Friend WithEvents cmdCancel As Button
+    Friend WithEvents rtbLog As RichTextBox
 End Class
