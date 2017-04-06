@@ -13,23 +13,20 @@ Public Class NetworkConnection
 
         _networkName = networkName
 
-            Dim netResource = New NetResource() With {
+        Dim netResource = New NetResource() With {
             .Scope = ResourceScope.GlobalNetwork,
             .ResourceType = ResourceType.Disk,
             .DisplayType = ResourceDisplaytype.Share,
             .RemoteName = networkName
         }
 
-            Dim userName = If(String.IsNullOrEmpty(credentials.Domain), credentials.UserName, String.Format("{0}\{1}", credentials.Domain, credentials.UserName))
+        Dim userName = If(String.IsNullOrEmpty(credentials.Domain), credentials.UserName, String.Format("{0}\{1}", credentials.Domain, credentials.UserName))
 
-            Dim result = WNetAddConnection2(netResource, credentials.Password, userName, 0)
+        Dim result = WNetAddConnection2(netResource, credentials.Password, userName, 0)
 
         If result <> 0 Then
-            Dim errmsg As String = New Win32Exception(result).Message
-            Throw New Win32Exception(result, "Error connecting to remote share")
+            Throw New Win32Exception(result)
         End If
-
-
     End Sub
 
     Protected Overrides Sub Finalize()
