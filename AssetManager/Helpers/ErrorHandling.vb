@@ -49,15 +49,9 @@ Module ErrorHandling
         Return ErrorResult
     End Function
     Private Function handleWin32Exception(ex As Win32Exception, strOrigSub As String) As Boolean
-        Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-        Select Case ex.HResult
-            Case -2147467259
-                Dim blah = Message("Network path not found.", vbOKOnly + vbExclamation, "Network Error")
-                Return True
-            Case Else
-                UnHandledError(ex, ex.HResult, strOrigSub)
-        End Select
-        Return False
+        Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message)
+        Dim blah = Message("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
+        Return True
     End Function
     Private Function handleFormatException(ex As FormatException, strOrigSub As String) As Boolean
         Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
