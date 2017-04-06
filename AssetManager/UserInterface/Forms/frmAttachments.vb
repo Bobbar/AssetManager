@@ -180,7 +180,7 @@ Class frmAttachments
                 Dim strFileSizeHuman As String
                 Dim NewAttachment As New Attach_Info
                 For Each r As DataRow In results.Rows
-                    strFileSizeHuman = Math.Round((r.Item(main_attachments.FileSize) / 1024), 1) & " KB"
+                    strFileSizeHuman = Math.Round((CInt(r.Item(main_attachments.FileSize)) / 1024), 1) & " KB"
                     strFullFilename = r.Item(main_attachments.FileName) & r.Item(main_attachments.FileType)
                     If AttachType = Entry_Type.Sibi Then
                         table.Rows.Add(GetFileIcon(r.Item(sibi_attachments.FileType)), strFullFilename, strFileSizeHuman, r.Item(sibi_attachments.TimeStamp), GetHumanValue(SibiIndex.AttachFolder, r.Item(sibi_attachments.Folder)), r.Item(sibi_attachments.FileUID), r.Item(sibi_attachments.FileHash))
@@ -275,8 +275,7 @@ Class frmAttachments
         Dim strFilename As String
         Dim i As Integer = GetIndexFromUID(AttachUID)
         strFilename = AttachIndex(i).Filename & AttachIndex(i).Extention
-        Dim blah
-        blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete", Me)
+        Dim blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete", Me)
         If blah = vbYes Then
             Waiting()
             If Asset.DeleteSQLAttachment(AttachIndex(i).FileUID, AttachType) > 0 Then
@@ -665,7 +664,7 @@ VALUES(@" & dev_attachments.FKey & ",
         Dim strCurrentFileName As String = Asset.Get_SQLValue(AttachTable, main_attachments.FileUID, AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString, main_attachments.FileName) 'AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value.ToString
         Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
         Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
-        If blah Is "" Then
+        If blah = "" Then
             blah = strCurrentFileName
         Else
             RenameAttachement(strAttachUID, Trim(blah))

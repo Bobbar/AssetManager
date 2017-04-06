@@ -61,32 +61,34 @@ Public Class PingVis : Implements IDisposable
         End Try
     End Sub
     Private Sub StartPing()
+
         Dim options As New Net.NetworkInformation.PingOptions
-        options.DontFragment = True
-        If Not bolPingRunning Then
-            If Not bolStopWhenNotFocused Then
-                MyPing.SendAsync(MyPingHostname, Timeout, options)
-                bolPingRunning = True
-            Else
-                If Form.ActiveForm Is MyControl.FindForm Then
+            options.DontFragment = True
+            If Not bolPingRunning Then
+                If Not bolStopWhenNotFocused Then
                     MyPing.SendAsync(MyPingHostname, Timeout, options)
                     bolPingRunning = True
+                Else
+                    If Form.ActiveForm Is MyControl.FindForm Then
+                        MyPing.SendAsync(MyPingHostname, Timeout, options)
+                        bolPingRunning = True
+                    End If
                 End If
             End If
-        End If
+
     End Sub
     Private Sub PingComplete(ByVal sender As Object, ByVal e As System.Net.NetworkInformation.PingCompletedEventArgs)
         bolPingRunning = False
         If Not e.Cancelled Then
-            If e.Error Is Nothing Then
-                pngResults.Add(e.Reply)
-                CurrentResult = e.Reply
-            Else
-                Debug.Print(e.Error.Message)
+                If e.Error Is Nothing Then
+                    pngResults.Add(e.Reply)
+                    CurrentResult = e.Reply
+                Else
+                'Debug.Print(e.Error.Message)
             End If
-            If pngResults.Count > 0 Then DrawBars(MyControl)
-        End If
-    End Sub
+                If pngResults.Count > 0 Then DrawBars(MyControl)
+            End If
+         End Sub
     Private Sub DrawBars(ByRef DestControl As Control)
         'Set image to double the size of the control
         intImgWidth = DestControl.ClientSize.Width * 2
@@ -148,8 +150,8 @@ Public Class PingVis : Implements IDisposable
     End Sub
     Private Function GetBarBrush(RoundTrip As Integer) As Brush
         'Alpha blending two colors. As ping times go up, the returned color becomes more red.
-        Dim FadeColor As Long
-        Dim Color1, Color2
+        Dim FadeColor As Integer
+        Dim Color1, Color2 As Integer
         Dim r1, g1, b1, r2, g2, b2 As Long
         FadeColor = Color.Green.ToArgb 'low ping color
         Color1 = FadeColor
@@ -222,8 +224,8 @@ Public Class PingVis : Implements IDisposable
                     TotalPingTime += Timeout
                 End If
             Next
-            CurrentAverageRoundTripTime = Math.Round((TotalPingTime / pngResults.Count), 0)
-           End Sub
+        If pngResults.Count > 0 Then CurrentAverageRoundTripTime = Math.Round((TotalPingTime / pngResults.Count), 0)
+    End Sub
     Public Shared Function ResizeImage(image As Image, width As Integer, height As Integer) As Bitmap
         Dim destRect = New Rectangle(0, 0, width, height)
         Dim destImage = New Bitmap(width, height)

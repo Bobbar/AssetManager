@@ -99,7 +99,7 @@ Public Class PDFFormFilling
         End Try
     End Sub
     Private Function FlattenPrompt() As Boolean
-        Dim blah As Object = Message("Select 'Yes' to save the PDF as an editable form. Select 'No' to save the PDF as a flattened, ready to print document.", vbQuestion + vbYesNo, "PDF Type")
+        Dim blah = Message("Select 'Yes' to save the PDF as an editable form. Select 'No' to save the PDF as a flattened, ready to print document.", vbQuestion + vbYesNo, "PDF Type")
         If blah = vbYes Then
             Return False
         Else

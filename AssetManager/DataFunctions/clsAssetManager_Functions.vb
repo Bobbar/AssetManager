@@ -170,7 +170,7 @@ VALUES(@" & historical_dev.ChangeType & ",
     End Function
     Public Function DeleteSQLAttachment(AttachUID As String, Type As Entry_Type) As Integer
         Try
-            Dim rows
+            Dim rows As Integer
             Dim strDeviceID As String = ""
             Dim strSQLIDQry As String = ""
             If Type = Entry_Type.Device Then
@@ -282,7 +282,7 @@ VALUES(@" & historical_dev.ChangeType & ",
     End Function
     Public Function Delete_SQLMasterEntry(ByVal strGUID As String, Type As Entry_Type) As Integer
         Try
-            Dim rows
+            Dim rows As Integer
             Dim strSQLQry As String
             Select Case Type
                 Case Entry_Type.Device
