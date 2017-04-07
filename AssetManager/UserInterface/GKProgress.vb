@@ -12,6 +12,7 @@ Public Class GKProgress
     Private ServerPath As String
     Private CtlDown As Boolean
     Private ErrList As New List(Of String)
+    Private TestValue As Integer = 0
     Sub New(ParentForm As MyForm, Device As Device_Info)
         ' This call is required by the designer.
         InitializeComponent()
@@ -222,5 +223,13 @@ Public Class GKProgress
 
     Private Sub rtbLog_KeyUp(sender As Object, e As KeyEventArgs) Handles rtbLog.KeyUp
         CtlDown = False
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Debug.Print(TestValue)
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim newTest As New Test_Class(TestValue)
     End Sub
 End Class

@@ -1,17 +1,20 @@
-﻿Public Class Test_Class
+﻿Imports System.Collections.Generic
+Imports System.Threading
+Public Class Test_Class
     Sub New(ByRef ValueToUpdate As Integer)
         ReturnNumbers(ValueToUpdate)
 
     End Sub
 
 
-    Private Function ReturnNumbers(ByRef Value As Integer)
+    Private Sub ReturnNumbers(ByRef Value As Integer)
         For i As Integer = 0 To 20
 
-            Return i
-
+            Value = i
+            Thread.Sleep(250)
+            Application.DoEvents()
         Next
 
 
-    End Function
+    End Sub
 End Class

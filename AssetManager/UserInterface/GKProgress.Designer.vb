@@ -22,6 +22,7 @@ Partial Class GKProgress
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(GKProgress))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.cmdCancel = New System.Windows.Forms.Button()
@@ -36,6 +37,8 @@ Partial Class GKProgress
         Me.lblCurrentFile = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.pbarProgress = New System.Windows.Forms.ProgressBar()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
@@ -44,6 +47,7 @@ Partial Class GKProgress
         '
         Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.cmdCancel)
         Me.GroupBox1.Controls.Add(Me.cmdGo)
         Me.GroupBox1.Controls.Add(Me.txtPassword)
@@ -185,6 +189,19 @@ Partial Class GKProgress
         Me.pbarProgress.Size = New System.Drawing.Size(545, 30)
         Me.pbarProgress.TabIndex = 1
         '
+        'Timer1
+        '
+        Me.Timer1.Enabled = True
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(302, 32)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(40, 20)
+        Me.Button1.TabIndex = 6
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'GKProgress
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -221,4 +238,6 @@ Partial Class GKProgress
     Friend WithEvents Label4 As Label
     Friend WithEvents cmdCancel As Button
     Friend WithEvents rtbLog As RichTextBox
+    Friend WithEvents Timer1 As Timer
+    Friend WithEvents Button1 As Button
 End Class
