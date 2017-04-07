@@ -96,4 +96,3 @@ Public Enum ResourceDisplaytype As Integer
     Tree = &HA
     Ndscontainer = &HB
 End Enum
-
