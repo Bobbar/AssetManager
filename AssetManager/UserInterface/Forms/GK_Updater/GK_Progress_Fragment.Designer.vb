@@ -64,7 +64,9 @@ Partial Class GK_Progress_Fragment
         '
         Me.lblInfo.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblInfo.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblInfo.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.lblInfo.Font = New System.Drawing.Font("Consolas", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblInfo.ForeColor = System.Drawing.Color.Blue
         Me.lblInfo.Location = New System.Drawing.Point(1, 3)
         Me.lblInfo.Name = "lblInfo"
         Me.lblInfo.Size = New System.Drawing.Size(397, 19)
@@ -91,6 +93,7 @@ Partial Class GK_Progress_Fragment
         '
         Me.lblShowHide.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblShowHide.AutoSize = True
+        Me.lblShowHide.Cursor = System.Windows.Forms.Cursors.Hand
         Me.lblShowHide.Font = New System.Drawing.Font("Consolas", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblShowHide.Location = New System.Drawing.Point(373, 60)
         Me.lblShowHide.Name = "lblShowHide"
@@ -106,6 +109,7 @@ Partial Class GK_Progress_Fragment
         'pbRestart
         '
         Me.pbRestart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pbRestart.Cursor = System.Windows.Forms.Cursors.Hand
         Me.pbRestart.Image = Global.AssetManager.My.Resources.Resources._012_restart_2_512
         Me.pbRestart.Location = New System.Drawing.Point(351, 1)
         Me.pbRestart.Name = "pbRestart"
@@ -118,6 +122,7 @@ Partial Class GK_Progress_Fragment
         'pbCancelClose
         '
         Me.pbCancelClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pbCancelClose.Cursor = System.Windows.Forms.Cursors.Hand
         Me.pbCancelClose.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
         Me.pbCancelClose.Location = New System.Drawing.Point(377, 1)
         Me.pbCancelClose.Name = "pbCancelClose"

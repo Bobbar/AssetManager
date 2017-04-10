@@ -65,3 +65,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GKProgress.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Get_Credentials.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GK_Progress_Fragment.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GKUpdater_Form.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
