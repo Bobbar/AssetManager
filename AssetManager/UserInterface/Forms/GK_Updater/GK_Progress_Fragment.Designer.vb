@@ -26,13 +26,15 @@ Partial Class GK_Progress_Fragment
         Me.pbarProgress = New System.Windows.Forms.ProgressBar()
         Me.lblCurrentFile = New System.Windows.Forms.Label()
         Me.lblInfo = New System.Windows.Forms.Label()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.rtbLog = New System.Windows.Forms.RichTextBox()
         Me.lblShowHide = New System.Windows.Forms.Label()
         Me.UI_Timer = New System.Windows.Forms.Timer(Me.components)
         Me.MyToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.lblSeq = New System.Windows.Forms.Label()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pbRestart = New System.Windows.Forms.PictureBox()
+        Me.pbCancelClose = New System.Windows.Forms.PictureBox()
+        CType(Me.pbRestart, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbCancelClose, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pbarProgress
@@ -66,18 +68,6 @@ Partial Class GK_Progress_Fragment
         Me.lblInfo.Text = "[Computer Info]"
         Me.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.MyToolTip.SetToolTip(Me.lblInfo, "Click to view device.")
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
-        Me.PictureBox1.Location = New System.Drawing.Point(380, 0)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(20, 20)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.PictureBox1.TabIndex = 3
-        Me.PictureBox1.TabStop = False
-        Me.MyToolTip.SetToolTip(Me.PictureBox1, "Cancel/Close")
         '
         'rtbLog
         '
@@ -118,13 +108,38 @@ Partial Class GK_Progress_Fragment
         Me.lblSeq.TabIndex = 6
         Me.lblSeq.Text = "[Seq]"
         '
+        'pbRestart
+        '
+        Me.pbRestart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pbRestart.Image = Global.AssetManager.My.Resources.Resources._012_restart_2_512
+        Me.pbRestart.Location = New System.Drawing.Point(354, 0)
+        Me.pbRestart.Name = "pbRestart"
+        Me.pbRestart.Size = New System.Drawing.Size(20, 20)
+        Me.pbRestart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbRestart.TabIndex = 7
+        Me.pbRestart.TabStop = False
+        Me.MyToolTip.SetToolTip(Me.pbRestart, "Restart Update")
+        '
+        'pbCancelClose
+        '
+        Me.pbCancelClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pbCancelClose.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
+        Me.pbCancelClose.Location = New System.Drawing.Point(380, 0)
+        Me.pbCancelClose.Name = "pbCancelClose"
+        Me.pbCancelClose.Size = New System.Drawing.Size(20, 20)
+        Me.pbCancelClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbCancelClose.TabIndex = 3
+        Me.pbCancelClose.TabStop = False
+        Me.MyToolTip.SetToolTip(Me.pbCancelClose, "Cancel/Close")
+        '
         'GK_Progress_Fragment
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
+        Me.Controls.Add(Me.pbRestart)
         Me.Controls.Add(Me.lblSeq)
         Me.Controls.Add(Me.lblShowHide)
-        Me.Controls.Add(Me.PictureBox1)
+        Me.Controls.Add(Me.pbCancelClose)
         Me.Controls.Add(Me.rtbLog)
         Me.Controls.Add(Me.lblCurrentFile)
         Me.Controls.Add(Me.pbarProgress)
@@ -135,7 +150,8 @@ Partial Class GK_Progress_Fragment
         Me.MinimumSize = New System.Drawing.Size(400, 87)
         Me.Name = "GK_Progress_Fragment"
         Me.Size = New System.Drawing.Size(400, 87)
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbRestart, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbCancelClose, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -144,10 +160,11 @@ Partial Class GK_Progress_Fragment
     Friend WithEvents pbarProgress As ProgressBar
     Friend WithEvents lblCurrentFile As Label
     Friend WithEvents lblInfo As Label
-    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents pbCancelClose As PictureBox
     Friend WithEvents rtbLog As RichTextBox
     Friend WithEvents lblShowHide As Label
     Friend WithEvents UI_Timer As Timer
     Friend WithEvents MyToolTip As ToolTip
     Friend WithEvents lblSeq As Label
+    Friend WithEvents pbRestart As PictureBox
 End Class

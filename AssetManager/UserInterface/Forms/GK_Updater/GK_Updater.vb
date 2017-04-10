@@ -9,10 +9,10 @@ Public Class GK_Updater : Implements IDisposable
     Private ClientPath As String
     Private CurrentFileIndex As Integer = 0
     Private CurrentStatus As Status_Stats
-    Private ErrList As New List(Of String)
+    Public ErrList As New List(Of String)
     Private ServerPath As String = "C:"
     Private UpdateDevice As Device_Info
-    Sub New(Device As Device_Info, AdminCredentials As NetworkCredential)
+    Sub New(ByVal Device As Device_Info, ByVal AdminCredentials As NetworkCredential)
         UpdateDevice = Device
         AdmCredentials = AdminCredentials
         ClientPath = "\\D" & UpdateDevice.strSerial & "\c$"
@@ -47,7 +47,6 @@ Public Class GK_Updater : Implements IDisposable
     Protected Overridable Sub OnLogEvent(e As LogEvents)
         RaiseEvent LogEvent(Me, e)
     End Sub
-
     Protected Overridable Sub OnStatusUpdate(e As GKUpdateEvents)
         RaiseEvent StatusUpdate(Me, e)
     End Sub
@@ -147,7 +146,7 @@ Public Class GK_Updater : Implements IDisposable
                 GKLog("------------------------------------------------")
                 GKLog("Unexpected erors during copy!")
                 GKLog(e.Error.Message, True)
-                OnUpdateComplete(New GKUpdateCompleteEvents(True))
+                OnUpdateComplete(New GKUpdateCompleteEvents(True, e.Error))
             End If
         End If
     End Sub
@@ -208,12 +207,19 @@ Public Class GK_Updater : Implements IDisposable
     End Structure
     Public Class GKUpdateCompleteEvents : Inherits EventArgs
         Private Errs As Boolean
-        Public Sub New(ByVal Errs As Boolean)
+        Private ErrExeption As Exception
+        Public Sub New(ByVal Errs As Boolean, Optional ByVal Ex As Exception = Nothing)
             Me.Errs = Errs
+            Me.ErrExeption = Ex
         End Sub
-        Public ReadOnly Property Errors As Boolean
+        Public ReadOnly Property HasErrors As Boolean
             Get
                 Return Errs
+            End Get
+        End Property
+        Public ReadOnly Property Errors As Exception
+            Get
+                Return ErrExeption
             End Get
         End Property
     End Class

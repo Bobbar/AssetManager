@@ -57,7 +57,7 @@ Public Class GKProgress
         Invalidate()
     End Sub
     Private Sub GKUpdate_Complete(sender As Object, e As GK_Updater.GKUpdateCompleteEvents)
-        If e.Errors Then
+        If e.HasErrors Then
             Text = Text + " - *ERRORS!*"
             lblCurrentFile.Text = "ERROR"
         Else
