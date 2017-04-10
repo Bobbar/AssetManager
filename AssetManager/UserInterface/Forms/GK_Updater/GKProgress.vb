@@ -19,13 +19,27 @@ Public Class GKProgress
         Text = Text + " - " + MyDevice.strCurrentUser
         Show()
     End Sub
-
     Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
         MyGKUpdater.CancelUpdate()
     End Sub
 
     Private Sub cmdGo_Click(sender As Object, e As EventArgs) Handles cmdGo.Click
-        RunUpdate()
+
+        txtUsername.ReadOnly = True
+        txtPassword.ReadOnly = True
+        cmdGo.Enabled = False
+        AdmUsername = Trim(txtUsername.Text)
+        AdmPassword = Trim(txtPassword.Text)
+        Dim creds As New NetworkCredential()
+        creds.Password = AdmPassword
+        creds.UserName = AdmUsername
+        creds.Domain = Environment.UserDomainName
+        MyGKUpdater = New GK_Updater(MyDevice, creds)
+        GKUpdater_Form.AddUpdate(MyGKUpdater)
+        GKUpdater_Form.Show()
+
+
+        'RunUpdate()
     End Sub
     Private Sub GKLogEvent(sender As Object, e As GK_Updater.LogEvents)
         rtbLog.AppendText(e.LogData.Message + vbCrLf)

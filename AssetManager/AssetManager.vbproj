@@ -169,7 +169,7 @@
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="Classes\DataColumns.vb" />
-    <Compile Include="Classes\GK_Updater.vb" />
+    <Compile Include="UserInterface\Forms\GK_Updater\GK_Updater.vb" />
     <Compile Include="Classes\MyExceptions.vb" />
     <Compile Include="Classes\NetworkConnection.vb" />
     <Compile Include="Classes\Test_Class.vb" />
@@ -185,6 +185,12 @@
     <Compile Include="Classes\Paths.vb" />
     <Compile Include="DataComms\AssetManager\FTP\clsFTP_Comms.vb" />
     <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
+    <Compile Include="UserInterface\Forms\GK_Updater\Get_Credentials.Designer.vb">
+      <DependentUpon>Get_Credentials.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\Get_Credentials.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Form_Control.vb" />
     <Compile Include="DataFunctions\clsAssetManager_Functions.vb" />
     <Compile Include="UserInterface\Forms\frmAttachments.Designer.vb">
@@ -217,10 +223,10 @@
     <Compile Include="UserInterface\Forms\Main\frmMunisUser.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\GKProgress.Designer.vb">
+    <Compile Include="UserInterface\Forms\GK_Updater\GKProgress.Designer.vb">
       <DependentUpon>GKProgress.vb</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\GKProgress.vb">
+    <Compile Include="UserInterface\Forms\GK_Updater\GKProgress.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\MyControls\MyForm.vb">
@@ -343,11 +349,26 @@
       <CustomToolNamespace>NoScrollPanel</CustomToolNamespace>
     </Compile>
     <Compile Include="UserInterface\MyControls\PingVis.vb" />
+    <Compile Include="UserInterface\Forms\GK_Updater\GK_Progress_Fragment.Designer.vb">
+      <DependentUpon>GK_Progress_Fragment.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\GK_Progress_Fragment.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserInterface\MyControls\WindowList.vb" />
+    <Compile Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.Designer.vb">
+      <DependentUpon>GKUpdater_Form.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UserInterface\Forms\frmAttachments.resx">
       <DependentUpon>frmAttachments.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\Get_Credentials.resx">
+      <DependentUpon>Get_Credentials.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
@@ -361,7 +382,7 @@
     <EmbeddedResource Include="UserInterface\Forms\Main\frmMunisUser.resx">
       <DependentUpon>frmMunisUser.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\GKProgress.resx">
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKProgress.resx">
       <DependentUpon>GKProgress.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\MyControls\MyDialog.resx">
@@ -411,6 +432,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\View_Entry.resx">
       <DependentUpon>View_Entry.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GK_Progress_Fragment.resx">
+      <DependentUpon>GK_Progress_Fragment.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.resx">
+      <DependentUpon>GKUpdater_Form.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -1054,5 +1054,8 @@ VALUES (@" & historical_dev.ChangeType & ",
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Dim NewGKUpdate As New GKProgress(Me, CurrentViewDevice)
+        '  Dim newTEst As New Updater_Test
+        '  newTEst.Show()
+
     End Sub
 End Class

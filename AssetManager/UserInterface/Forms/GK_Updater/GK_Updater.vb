@@ -22,7 +22,17 @@ Public Class GK_Updater : Implements IDisposable
     Public Event LogEvent As EventHandler
     Public Event StatusUpdate As EventHandler
     Public Event UpdateComplete As EventHandler
-
+    Public Event UpdateCancelled As EventHandler
+    Public ReadOnly Property CurDevice As Device_Info
+        Get
+            Return UpdateDevice
+        End Get
+    End Property
+    Public ReadOnly Property IsDisposed As Boolean
+        Get
+            Return disposedValue
+        End Get
+    End Property
     Public Sub CancelUpdate()
         CopyWorker.CancelAsync()
     End Sub
@@ -44,6 +54,9 @@ Public Class GK_Updater : Implements IDisposable
     Protected Overridable Sub OnUpdateComplete(e As GKUpdateCompleteEvents)
         RaiseEvent UpdateComplete(Me, e)
     End Sub
+    Protected Overridable Sub OnUpdateCancelled(e As EventArgs)
+        RaiseEvent UpdateCancelled(Me, e)
+    End Sub
 
     Private Sub CopyWorker_DoWork(sender As Object, e As DoWorkEventArgs)
         Using NetCon As New NetworkConnection(ClientPath, AdmCredentials)
@@ -63,6 +76,7 @@ Public Class GK_Updater : Implements IDisposable
                 End If
                 'Counter for progress
                 CurFileIdx += 1
+                CurrentFileIndex = CurFileIdx
                 Args.CurrentIndex = CurFileIdx
                 'Modify source path to target path
                 Dim cPath As String = Replace(file__1, sourceDir, targetDir)
@@ -120,6 +134,7 @@ Public Class GK_Updater : Implements IDisposable
                 GKLog("------------------------------------------------")
                 OnUpdateComplete(New GKUpdateCompleteEvents(False))
             Else
+                OnUpdateCancelled(New EventArgs)
                 GKLog("Cancelled by user!")
             End If
         Else

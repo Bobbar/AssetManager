@@ -470,6 +470,21 @@ Public Class MainForm
     Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
         FTP.ScanAttachements()
     End Sub
+
+    Private Sub tsmAddGKUpdate_Click(sender As Object, e As EventArgs) Handles tsmAddGKUpdate.Click
+        If AdminCreds Is Nothing Then
+            Get_Credentials.ShowDialog()
+        End If
+        Using Comms As New clsMySQL_Comms
+            Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString
+            Dim SelectedDevice As Device_Info = Asset.CollectDeviceInfo(Comms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & DevUID & "'"))
+            Dim NewGKUpdater As New GK_Updater(SelectedDevice, AdminCreds)
+            GKUpdater_Form.AddUpdate(NewGKUpdater)
+            GKUpdater_Form.Show()
+
+        End Using
+    End Sub
+
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
         Dim results As DataTable = Asset.DevicesBySup(Me)
         If results IsNot Nothing Then
