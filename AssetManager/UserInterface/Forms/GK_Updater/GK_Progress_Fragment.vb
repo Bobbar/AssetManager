@@ -15,7 +15,7 @@ Public Class GK_Progress_Fragment
         ' Add any initialization after the InitializeComponent() call.
         Me.Size = Me.MinimumSize
         MyUpdater = Updater
-        lblInfo.Text = MyUpdater.CurDevice.strSerial
+        lblInfo.Text = MyUpdater.CurDevice.strSerial & " - " & MyUpdater.CurDevice.strCurrentUser
         lblCurrentFile.Text = "Queued..."
         ProgStatus = Progress_Status.Queued
         If Seq > 0 Then
@@ -88,7 +88,7 @@ Public Class GK_Progress_Fragment
 
             'Check for invalid credentials error and fire critical stop event.
             'We want to stop all updates if the credtials are wrong as to avoid locking the account.
-            If err.NativeErrorCode = 1326 Then
+            If err.NativeErrorCode = 1326 Or err.NativeErrorCode = 86 Then
                 OnCriticalStopError(New EventArgs())
             End If
         Else

@@ -1,21 +1,30 @@
 ﻿Public Class GKUpdater_Form
     Private MyUpdates As New List(Of GK_Progress_Fragment)
-    Private MaxSimUpdates As Integer = 4
+    Private MaxSimUpdates As Integer = 1
     Private bolRunQueue As Boolean = True
     Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
-
+        MaxUpdates.Value = MaxSimUpdates
         ' Add any initialization after the InitializeComponent() call.
         Show()
 
     End Sub
     Private Sub CriticalStop()
         bolRunQueue = False
-
-
-
+        Message("The queue was stopped because of an access error. Please re-enter your credentials.", vbExclamation + vbOKOnly, "Queue Stopped", Me)
+        AdminCreds = Nothing
+        Dim NewGetCreds As New Get_Credentials
+        NewGetCreds.ShowDialog()
+        If NewGetCreds.DialogResult <> DialogResult.OK Then
+            If AdminCreds IsNot Nothing Then
+                NewGetCreds.Dispose()
+                Exit Sub
+                bolRunQueue = True
+            End If
+        End If
+        NewGetCreds.Dispose()
     End Sub
     Public Sub AddUpdate(ByRef Updater As GK_Updater)
 
@@ -104,5 +113,19 @@
 
     Private Sub QueueChecker_Tick(sender As Object, e As EventArgs) Handles QueueChecker.Tick
         ProcessUpdates()
+    End Sub
+
+    Private Sub cmdPauseResume_Click(sender As Object, e As EventArgs) Handles cmdPauseResume.Click
+        If bolRunQueue Then
+            bolRunQueue = False
+            cmdPauseResume.Text = "Resume Queue"
+        Else
+            bolRunQueue = True
+            cmdPauseResume.Text = "Pause Queue"
+        End If
+    End Sub
+
+    Private Sub MaxUpdates_ValueChanged(sender As Object, e As EventArgs) Handles MaxUpdates.ValueChanged
+        MaxSimUpdates = MaxUpdates.Value
     End Sub
 End Class

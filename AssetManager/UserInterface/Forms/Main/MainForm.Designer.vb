@@ -28,6 +28,7 @@ Partial Class MainForm
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmAddGKUpdate = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblRecords = New System.Windows.Forms.Label()
@@ -85,7 +86,6 @@ Partial Class MainForm
         Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
-        Me.tsmAddGKUpdate = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -170,25 +170,31 @@ Partial Class MainForm
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.tsmAddGKUpdate, Me.ToolStripSeparator3, Me.CopyTool})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(158, 98)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 76)
         '
         'ViewToolStripMenuItem
         '
         Me.ViewToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ViewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.View_Details
         Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
-        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(157, 22)
+        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(179, 22)
         Me.ViewToolStripMenuItem.Text = "View"
+        '
+        'tsmAddGKUpdate
+        '
+        Me.tsmAddGKUpdate.Name = "tsmAddGKUpdate"
+        Me.tsmAddGKUpdate.Size = New System.Drawing.Size(179, 22)
+        Me.tsmAddGKUpdate.Text = "Enqueue GK Update"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(154, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(176, 6)
         '
         'CopyTool
         '
         Me.CopyTool.Name = "CopyTool"
-        Me.CopyTool.Size = New System.Drawing.Size(157, 22)
+        Me.CopyTool.Size = New System.Drawing.Size(179, 22)
         Me.CopyTool.Text = "Copy Text"
         '
         'lblRecords
@@ -731,12 +737,6 @@ Partial Class MainForm
         Me.cmdSibi.Size = New System.Drawing.Size(226, 34)
         Me.cmdSibi.Text = "Sibi Aquisition Manager"
         Me.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'tsmAddGKUpdate
-        '
-        Me.tsmAddGKUpdate.Name = "tsmAddGKUpdate"
-        Me.tsmAddGKUpdate.Size = New System.Drawing.Size(157, 22)
-        Me.tsmAddGKUpdate.Text = "Start GK Update"
         '
         'MainForm
         '

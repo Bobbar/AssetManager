@@ -472,17 +472,40 @@ Public Class MainForm
     End Sub
 
     Private Sub tsmAddGKUpdate_Click(sender As Object, e As EventArgs) Handles tsmAddGKUpdate.Click
+        EnqueueGKUpdate()
+    End Sub
+    Private Sub EnqueueGKUpdate()
         If AdminCreds Is Nothing Then
-            Get_Credentials.ShowDialog()
+            Dim NewGetCreds As New Get_Credentials
+            NewGetCreds.ShowDialog()
+            If NewGetCreds.DialogResult <> DialogResult.OK Then
+                NewGetCreds.Dispose()
+                Exit Sub
+            End If
+            NewGetCreds.Dispose()
         End If
-        Using Comms As New clsMySQL_Comms
-            Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString
-            Dim SelectedDevice As Device_Info = Asset.CollectDeviceInfo(Comms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & DevUID & "'"))
-            Dim NewGKUpdater As New GK_Updater(SelectedDevice, AdminCreds)
-            GKUpdater_Form.AddUpdate(NewGKUpdater)
-            GKUpdater_Form.Show()
 
-        End Using
+
+        For Each cell As DataGridViewCell In ResultGrid.SelectedCells
+            '  cell.co
+            Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), cell.RowIndex).Value.ToString
+
+            ' Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString
+            Dim SelectedDevice = Asset.Get_DeviceInfo_From_UID(DevUID)
+            Dim NewGKUpdater As New GK_Updater(SelectedDevice) ', AdminCreds)
+            GKUpdater_Form.AddUpdate(NewGKUpdater)
+            If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
+        Next
+
+        ' Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString
+        'Dim SelectedDevice = Asset.Get_DeviceInfo_From_UID(DevUID)
+        'Dim NewGKUpdater As New GK_Updater(SelectedDevice, AdminCreds)
+        '    GKUpdater_Form.AddUpdate(NewGKUpdater)
+        '    GKUpdater_Form.Show()
+
+
+
+
     End Sub
 
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click

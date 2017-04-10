@@ -34,7 +34,7 @@ Public Class GKProgress
         creds.Password = AdmPassword
         creds.UserName = AdmUsername
         creds.Domain = Environment.UserDomainName
-        MyGKUpdater = New GK_Updater(MyDevice, creds)
+        MyGKUpdater = New GK_Updater(MyDevice) ', creds)
         GKUpdater_Form.AddUpdate(MyGKUpdater)
         GKUpdater_Form.Show()
 
@@ -97,7 +97,7 @@ Public Class GKProgress
             creds.Password = AdmPassword
             creds.UserName = AdmUsername
             creds.Domain = Environment.UserDomainName
-            MyGKUpdater = New GK_Updater(MyDevice, creds)
+            MyGKUpdater = New GK_Updater(MyDevice) ', creds)
             AddHandler MyGKUpdater.LogEvent, AddressOf GKLogEvent
             AddHandler MyGKUpdater.StatusUpdate, AddressOf GKStatusUpdateEvent
             AddHandler MyGKUpdater.UpdateComplete, AddressOf GKUpdate_Complete

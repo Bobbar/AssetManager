@@ -12,9 +12,9 @@ Public Class GK_Updater : Implements IDisposable
     Public ErrList As New List(Of String)
     Private ServerPath As String = "C:"
     Private UpdateDevice As Device_Info
-    Sub New(ByVal Device As Device_Info, ByVal AdminCredentials As NetworkCredential)
+    Sub New(ByVal Device As Device_Info) ', ByVal AdminCredentials As NetworkCredential)
         UpdateDevice = Device
-        AdmCredentials = AdminCredentials
+        'AdmCredentials = AdminCreds
         ClientPath = "\\D" & UpdateDevice.strSerial & "\c$"
         InitWorker()
 
@@ -37,9 +37,11 @@ Public Class GK_Updater : Implements IDisposable
         CopyWorker.CancelAsync()
     End Sub
     Public Sub StartUpdate()
+        AdmCredentials = AdminCreds
         GKLog("------------------------------------------------")
         GKLog("Starting GK Update to: " & UpdateDevice.strSerial)
-        GKLog("Copying files...")
+        GKLog("Starting Update...")
+        ErrList.Clear()
         Dim WorkArgs As New Worker_Args
         WorkArgs.StartIndex = 0
         If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(WorkArgs)
