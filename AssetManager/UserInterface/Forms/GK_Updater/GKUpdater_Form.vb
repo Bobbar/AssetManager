@@ -18,14 +18,20 @@ Public Class GKUpdater_Form
     Public Sub AddUpdate(ByRef Updater As GK_Updater)
 
         Updater_Table.RowStyles.Clear()
-        Dim NewProgCtl As New GK_Progress_Fragment(Updater, MyUpdates.Count + 1)
+        Dim NewProgCtl As New GK_Progress_Fragment(Me, Updater, MyUpdates.Count + 1)
         Updater_Table.Controls.Add(NewProgCtl)
         MyUpdates.Add(NewProgCtl)
         AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
 
         ProcessUpdates()
     End Sub
-
+    Private Sub CancelAll()
+        For Each upd As GK_Progress_Fragment In MyUpdates
+            If upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Running Then
+                upd.CancelUpdate()
+            End If
+        Next
+    End Sub
     Private Function ActiveUpdates() As Boolean
         For Each upd As GK_Progress_Fragment In MyUpdates
             If upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Running Then Return True
@@ -41,11 +47,7 @@ Public Class GKUpdater_Form
             Dim RunningUpdates As Integer = 0
             For Each upd As GK_Progress_Fragment In MyUpdates
                 If upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Running Or upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Starting Then
-                    If Not upd.IsDisposed Then
-                        RunningUpdates += 1
-                    Else
-                        MyUpdates.Remove(upd)
-                    End If
+                    If Not upd.IsDisposed Then RunningUpdates += 1
                 End If
             Next
             If RunningUpdates < MaxSimUpdates Then Return True
@@ -55,16 +57,21 @@ Public Class GKUpdater_Form
 
     Private Sub cmdPauseResume_Click(sender As Object, e As EventArgs) Handles cmdPauseResume.Click
         If bolRunQueue Then
-            bolRunQueue = False
-            cmdPauseResume.Text = "Resume Queue"
+            StopQueue()
         Else
-            bolRunQueue = True
-            cmdPauseResume.Text = "Pause Queue"
+            StartQueue()
         End If
     End Sub
-
-    Private Sub CriticalStop()
+    Private Sub StopQueue()
         bolRunQueue = False
+        cmdPauseResume.Text = "Resume Queue"
+    End Sub
+    Private Sub StartQueue()
+        bolRunQueue = True
+        cmdPauseResume.Text = "Pause Queue"
+    End Sub
+    Private Sub CriticalStop()
+        StopQueue()
         Message("The queue was stopped because of an access error. Please re-enter your credentials.", vbExclamation + vbOKOnly, "Queue Stopped", Me)
         AdminCreds = Nothing
         Dim NewGetCreds As New Get_Credentials
@@ -143,5 +150,9 @@ Public Class GKUpdater_Form
                 Exit Sub
             End If
         Next
+    End Sub
+
+    Private Sub cmdCancelAll_Click(sender As Object, e As EventArgs) Handles cmdCancelAll.Click
+        CancelAll()
     End Sub
 End Class

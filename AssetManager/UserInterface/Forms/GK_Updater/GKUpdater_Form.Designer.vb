@@ -36,6 +36,7 @@ Partial Class GKUpdater_Form
         Me.lblRunning = New System.Windows.Forms.Label()
         Me.lblQueued = New System.Windows.Forms.Label()
         Me.QueueChecker = New System.Windows.Forms.Timer(Me.components)
+        Me.cmdCancelAll = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -93,6 +94,7 @@ Partial Class GKUpdater_Form
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.cmdCancelAll)
         Me.GroupBox3.Controls.Add(Me.Label1)
         Me.GroupBox3.Controls.Add(Me.MaxUpdates)
         Me.GroupBox3.Controls.Add(Me.cmdPauseResume)
@@ -102,7 +104,7 @@ Partial Class GKUpdater_Form
         Me.GroupBox3.Controls.Add(Me.lblQueued)
         Me.GroupBox3.Location = New System.Drawing.Point(6, 35)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(275, 174)
+        Me.GroupBox3.Size = New System.Drawing.Size(275, 203)
         Me.GroupBox3.TabIndex = 0
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Queue Control"
@@ -187,6 +189,16 @@ Partial Class GKUpdater_Form
         Me.QueueChecker.Enabled = True
         Me.QueueChecker.Interval = 500
         '
+        'cmdCancelAll
+        '
+        Me.cmdCancelAll.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdCancelAll.Location = New System.Drawing.Point(81, 163)
+        Me.cmdCancelAll.Name = "cmdCancelAll"
+        Me.cmdCancelAll.Size = New System.Drawing.Size(120, 27)
+        Me.cmdCancelAll.TabIndex = 7
+        Me.cmdCancelAll.Text = "Cancel All"
+        Me.cmdCancelAll.UseVisualStyleBackColor = True
+        '
         'GKUpdater_Form
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
@@ -221,4 +233,5 @@ Partial Class GKUpdater_Form
     Friend WithEvents cmdPauseResume As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents MaxUpdates As NumericUpDown
+    Friend WithEvents cmdCancelAll As Button
 End Class

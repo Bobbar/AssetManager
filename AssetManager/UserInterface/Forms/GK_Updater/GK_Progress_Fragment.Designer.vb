@@ -34,18 +34,20 @@ Partial Class GK_Progress_Fragment
         Me.pbCancelClose = New System.Windows.Forms.PictureBox()
         Me.lblSeq = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.pbStatus = New System.Windows.Forms.PictureBox()
         CType(Me.pbRestart, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbCancelClose, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
+        CType(Me.pbStatus, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pbarProgress
         '
         Me.pbarProgress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pbarProgress.Location = New System.Drawing.Point(19, 25)
+        Me.pbarProgress.Location = New System.Drawing.Point(36, 25)
         Me.pbarProgress.Name = "pbarProgress"
-        Me.pbarProgress.Size = New System.Drawing.Size(356, 31)
+        Me.pbarProgress.Size = New System.Drawing.Size(327, 31)
         Me.pbarProgress.TabIndex = 0
         '
         'lblCurrentFile
@@ -150,6 +152,7 @@ Partial Class GK_Progress_Fragment
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BackColor = System.Drawing.Color.Silver
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.pbStatus)
         Me.Panel1.Controls.Add(Me.lblSeq)
         Me.Panel1.Controls.Add(Me.pbRestart)
         Me.Panel1.Controls.Add(Me.lblShowHide)
@@ -162,6 +165,14 @@ Partial Class GK_Progress_Fragment
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(400, 300)
         Me.Panel1.TabIndex = 8
+        '
+        'pbStatus
+        '
+        Me.pbStatus.Location = New System.Drawing.Point(-1, 25)
+        Me.pbStatus.Name = "pbStatus"
+        Me.pbStatus.Size = New System.Drawing.Size(37, 30)
+        Me.pbStatus.TabIndex = 8
+        Me.pbStatus.TabStop = False
         '
         'GK_Progress_Fragment
         '
@@ -178,6 +189,7 @@ Partial Class GK_Progress_Fragment
         CType(Me.pbCancelClose, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        CType(Me.pbStatus, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -193,4 +205,5 @@ Partial Class GK_Progress_Fragment
     Friend WithEvents lblSeq As Label
     Friend WithEvents pbRestart As PictureBox
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents pbStatus As PictureBox
 End Class

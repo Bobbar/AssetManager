@@ -7,16 +7,18 @@ Public Class GK_Progress_Fragment
     Private bolShow As Boolean = False
     Private CurrentStatus As GK_Updater.Status_Stats
     Private LogBuff As String = ""
-    Sub New(ByRef Updater As GK_Updater, Optional Seq As Integer = 0)
+    Private ParentForm As Form
+    Sub New(ParentForm As Form, ByRef Updater As GK_Updater, Optional Seq As Integer = 0)
 
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
         Me.Size = Me.MinimumSize
         MyUpdater = Updater
+        Me.ParentForm = ParentForm
         lblInfo.Text = MyUpdater.CurDevice.strSerial & " - " & MyUpdater.CurDevice.strCurrentUser
         lblCurrentFile.Text = "Queued..."
-        ProgStatus = Progress_Status.Queued
+        SetStatus(Progress_Status.Queued)
         If Seq > 0 Then
             lblSeq.Text = "#" & Seq
         Else
@@ -40,12 +42,26 @@ Public Class GK_Progress_Fragment
     End Enum
 
     Public Sub StartUpdate()
-        If ProgStatus <> Progress_Status.Running Then
-            LogBuff = ""
-            ProgStatus = Progress_Status.Starting
-            lblCurrentFile.Text = "Starting..."
-            MyUpdater.StartUpdate()
-        End If
+        Try
+            If ProgStatus <> Progress_Status.Running Then
+                LogBuff = ""
+                SetStatus(Progress_Status.Starting)
+                lblCurrentFile.Text = "Starting..."
+                MyUpdater.StartUpdate()
+            End If
+        Catch ex As Exception
+            SetStatus(Progress_Status.Errors)
+            If TypeOf ex Is Win32Exception Then
+                Dim err = DirectCast(ex, Win32Exception)
+                'Check for invalid credentials error and fire critical stop event.
+                'We want to stop all updates if the credtials are wrong as to avoid locking the account.
+                If err.NativeErrorCode = 1326 Or err.NativeErrorCode = 86 Then
+                    OnCriticalStopError(New EventArgs())
+                End If
+            Else
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            End If
+        End Try
     End Sub
 
     Protected Overridable Sub OnCriticalStopError(e As EventArgs)
@@ -62,25 +78,23 @@ Public Class GK_Progress_Fragment
         LogBuff += e.LogData.Message + vbCrLf
     End Sub
     Private Sub GKStatusUpdateEvent(sender As Object, e As GK_Updater.GKUpdateEvents)
-        ProgStatus = Progress_Status.Running
+        SetStatus(Progress_Status.Running)
         CurrentStatus = e.CurrentStatus
         pbarProgress.Maximum = CurrentStatus.TotFiles
         pbarProgress.Value = CurrentStatus.CurFileIdx
         Dim CurrentFile = CurrentStatus.CurFileName
         lblCurrentFile.Text = CurrentFile
         lblCurrentFile.Refresh()
-        ' Invalidate()
     End Sub
     Private Sub GKUpdate_Cancelled(sender As Object, e As EventArgs)
         lblCurrentFile.Text = "Cancelled!"
-        ProgStatus = Progress_Status.Cancelled
-        ' MyUpdater.Dispose()
+        SetStatus(Progress_Status.Cancelled)
     End Sub
 
     Private Sub GKUpdate_Complete(sender As Object, e As GK_Updater.GKUpdateCompleteEvents)
         If e.HasErrors Then
             lblCurrentFile.Text = "ERROR!"
-            ProgStatus = Progress_Status.Errors
+            SetStatus(Progress_Status.Errors)
             If TypeOf e.Errors Is Win32Exception Then
                 Dim err = DirectCast(e.Errors, Win32Exception)
                 'Check for invalid credentials error and fire critical stop event.
@@ -91,9 +105,8 @@ Public Class GK_Progress_Fragment
             End If
         Else
             lblCurrentFile.Text = "Complete! Errors: " & MyUpdater.ErrList.Count
-            ProgStatus = Progress_Status.Complete
+            SetStatus(Progress_Status.Complete)
         End If
-        ' MyUpdater.Dispose()
     End Sub
     Private Sub lblInfo_Click(sender As Object, e As EventArgs) Handles lblInfo.Click
         LookupDevice(MainForm, MyUpdater.CurDevice)
@@ -120,14 +133,24 @@ Public Class GK_Progress_Fragment
                 Me.Dispose()
             End If
         Else
-            ' MyUpdater.Dispose()
             Me.Dispose()
         End If
 
     End Sub
+    Public Sub CancelUpdate()
+        If Not MyUpdater.IsDisposed Then MyUpdater.CancelUpdate()
+    End Sub
 
     Private Sub pbRestart_Click(sender As Object, e As EventArgs) Handles pbRestart.Click
-        StartUpdate()
+        If ProgStatus <> Progress_Status.Queued Then
+            StartUpdate()
+        Else
+            Dim blah = Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", vbYesNo + vbQuestion, "Warning", ParentForm)
+            If blah = MsgBoxResult.Yes Then
+                StartUpdate()
+            End If
+        End If
+
     End Sub
     ''' <summary>
     ''' Timer that updates the rtbLog control with chunks of data from the log buffer.
@@ -138,5 +161,33 @@ Public Class GK_Progress_Fragment
             rtbLog.Refresh()
             LogBuff = ""
         End If
+    End Sub
+    Private Sub SetStatus(Status As Progress_Status)
+        ProgStatus = Status
+        SetStatusLight(Status)
+    End Sub
+    Private Sub SetStatusLight(Status As Progress_Status)
+        Select Case Status
+            Case Progress_Status.Running, Progress_Status.Starting
+                DrawLight(Color.LimeGreen)
+            Case Progress_Status.Queued
+                DrawLight(Color.Yellow)
+            Case Else
+                DrawLight(Color.Red)
+        End Select
+    End Sub
+    Private Sub DrawLight(Color As Color)
+        Dim MyBrush As New SolidBrush(Color)
+        Dim StrokePen As New Pen(Color.Black, 1.5)
+        Dim bm As New Bitmap(pbStatus.Width, pbStatus.Height) '(CInt(pic_scale * Render.Width), CInt(pic_scale * Render.Height))
+        Dim gr As Graphics = Graphics.FromImage(bm)
+        gr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        Dim XLoc, YLoc, Size As Single
+        Size = 20
+        XLoc = pbStatus.Width / 2 - Size / 2
+        YLoc = pbStatus.Height / 2 - Size / 2
+        gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size)
+        gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size)
+        pbStatus.Image = bm
     End Sub
 End Class

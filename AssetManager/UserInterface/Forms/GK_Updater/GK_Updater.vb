@@ -7,7 +7,6 @@ Imports System.Text
 Public Class GK_Updater : Implements IDisposable
     Private WithEvents CopyWorker As BackgroundWorker
     Private ReadOnly GKPath As String = "\PSi\Gatekeeper"
-    Private AdmCredentials As NetworkCredential
     Private ClientPath As String
     Private CurrentFileIndex As Integer = 0
     Private CurrentStatus As Status_Stats
@@ -39,7 +38,10 @@ Public Class GK_Updater : Implements IDisposable
         CopyWorker.CancelAsync()
     End Sub
     Public Sub StartUpdate()
-        AdmCredentials = AdminCreds
+        If AdminCreds Is Nothing Then
+            Throw New Win32Exception(1326)
+            Exit Sub
+        End If
         GKLog("------------------------------------------------")
         GKLog("Starting GK Update to: " & UpdateDevice.strSerial)
         GKLog("Starting Update...")
@@ -89,7 +91,7 @@ Public Class GK_Updater : Implements IDisposable
         If Not CanPing() Then
             Throw New Exception("Cannot ping device.")
         End If
-        Using NetCon As New NetworkConnection(ClientPath, AdmCredentials)
+        Using NetCon As New NetworkConnection(ClientPath, AdminCreds)
             Dim sourceDir As String = ServerPath & GKPath
             Dim targetDir As String = ClientPath & GKPath
             Dim Args As Worker_Args = DirectCast(e.Argument, Worker_Args)
@@ -296,7 +298,6 @@ Public Class GK_Updater : Implements IDisposable
                 ' TODO: dispose managed state (managed objects).
             End If
             CopyWorker.Dispose()
-            AdmCredentials = Nothing
 
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
             ' TODO: set large fields to null.
