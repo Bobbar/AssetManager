@@ -487,25 +487,12 @@ Public Class MainForm
 
 
         For Each cell As DataGridViewCell In ResultGrid.SelectedCells
-            '  cell.co
             Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), cell.RowIndex).Value.ToString
-
-            ' Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString
             Dim SelectedDevice = Asset.Get_DeviceInfo_From_UID(DevUID)
-            Dim NewGKUpdater As New GK_Updater(SelectedDevice) ', AdminCreds)
+            Dim NewGKUpdater As New GK_Updater(SelectedDevice)
             GKUpdater_Form.AddUpdate(NewGKUpdater)
-            If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
         Next
-
-        ' Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString
-        'Dim SelectedDevice = Asset.Get_DeviceInfo_From_UID(DevUID)
-        'Dim NewGKUpdater As New GK_Updater(SelectedDevice, AdminCreds)
-        '    GKUpdater_Form.AddUpdate(NewGKUpdater)
-        '    GKUpdater_Form.Show()
-
-
-
-
+        If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
     End Sub
 
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click

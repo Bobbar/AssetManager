@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class GKUpdater_Form
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,14 +20,14 @@ Partial Class GKUpdater_Form
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(GKUpdater_Form))
-        Me.Updater_Table = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.cmdCancelAll = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.MaxUpdates = New System.Windows.Forms.NumericUpDown()
         Me.cmdPauseResume = New System.Windows.Forms.Button()
@@ -36,36 +36,12 @@ Partial Class GKUpdater_Form
         Me.lblRunning = New System.Windows.Forms.Label()
         Me.lblQueued = New System.Windows.Forms.Label()
         Me.QueueChecker = New System.Windows.Forms.Timer(Me.components)
-        Me.cmdCancelAll = New System.Windows.Forms.Button()
+        Me.Updater_Table = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         CType(Me.MaxUpdates, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'Updater_Table
-        '
-        Me.Updater_Table.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Updater_Table.AutoScroll = True
-        Me.Updater_Table.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.Updater_Table.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.InsetDouble
-        Me.Updater_Table.ColumnCount = 2
-        Me.Updater_Table.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.Updater_Table.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.Updater_Table.Location = New System.Drawing.Point(7, 20)
-        Me.Updater_Table.Name = "Updater_Table"
-        Me.Updater_Table.RowCount = 1
-        Me.Updater_Table.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.Updater_Table.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 562.0!))
-        Me.Updater_Table.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 562.0!))
-        Me.Updater_Table.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 562.0!))
-        Me.Updater_Table.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 562.0!))
-        Me.Updater_Table.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 562.0!))
-        Me.Updater_Table.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 562.0!))
-        Me.Updater_Table.Size = New System.Drawing.Size(727, 565)
-        Me.Updater_Table.TabIndex = 1
         '
         'GroupBox1
         '
@@ -75,7 +51,7 @@ Partial Class GKUpdater_Form
         Me.GroupBox1.Controls.Add(Me.Updater_Table)
         Me.GroupBox1.Location = New System.Drawing.Point(311, 13)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(741, 592)
+        Me.GroupBox1.Size = New System.Drawing.Size(880, 592)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Current Updates"
@@ -108,6 +84,16 @@ Partial Class GKUpdater_Form
         Me.GroupBox3.TabIndex = 0
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Queue Control"
+        '
+        'cmdCancelAll
+        '
+        Me.cmdCancelAll.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdCancelAll.Location = New System.Drawing.Point(81, 163)
+        Me.cmdCancelAll.Name = "cmdCancelAll"
+        Me.cmdCancelAll.Size = New System.Drawing.Size(120, 27)
+        Me.cmdCancelAll.TabIndex = 7
+        Me.cmdCancelAll.Text = "Cancel All"
+        Me.cmdCancelAll.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -189,21 +175,23 @@ Partial Class GKUpdater_Form
         Me.QueueChecker.Enabled = True
         Me.QueueChecker.Interval = 500
         '
-        'cmdCancelAll
+        'Updater_Table
         '
-        Me.cmdCancelAll.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCancelAll.Location = New System.Drawing.Point(81, 163)
-        Me.cmdCancelAll.Name = "cmdCancelAll"
-        Me.cmdCancelAll.Size = New System.Drawing.Size(120, 27)
-        Me.cmdCancelAll.TabIndex = 7
-        Me.cmdCancelAll.Text = "Cancel All"
-        Me.cmdCancelAll.UseVisualStyleBackColor = True
+        Me.Updater_Table.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Updater_Table.AutoScroll = True
+        Me.Updater_Table.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Updater_Table.Location = New System.Drawing.Point(9, 21)
+        Me.Updater_Table.Name = "Updater_Table"
+        Me.Updater_Table.Size = New System.Drawing.Size(863, 561)
+        Me.Updater_Table.TabIndex = 2
         '
         'GKUpdater_Form
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1066, 618)
+        Me.ClientSize = New System.Drawing.Size(1205, 618)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.DoubleBuffered = True
@@ -221,7 +209,6 @@ Partial Class GKUpdater_Form
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents Updater_Table As TableLayoutPanel
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents QueueChecker As Timer
@@ -234,4 +221,5 @@ Partial Class GKUpdater_Form
     Friend WithEvents Label1 As Label
     Friend WithEvents MaxUpdates As NumericUpDown
     Friend WithEvents cmdCancelAll As Button
+    Friend WithEvents Updater_Table As FlowLayoutPanel
 End Class

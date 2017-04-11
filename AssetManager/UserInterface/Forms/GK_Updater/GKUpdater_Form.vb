@@ -12,12 +12,12 @@ Public Class GKUpdater_Form
         ' Add any initialization after the InitializeComponent() call.
 
         DoubleBufferedTableLayout(Updater_Table, True)
-        Show()
+
+        ' Show()
 
     End Sub
     Public Sub AddUpdate(ByRef Updater As GK_Updater)
 
-        Updater_Table.RowStyles.Clear()
         Dim NewProgCtl As New GK_Progress_Fragment(Me, Updater, MyUpdates.Count + 1)
         Updater_Table.Controls.Add(NewProgCtl)
         MyUpdates.Add(NewProgCtl)

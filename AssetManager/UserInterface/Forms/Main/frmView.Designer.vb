@@ -488,7 +488,7 @@ Partial Class frmView
         Me.cmdGKUpdate.Name = "cmdGKUpdate"
         Me.cmdGKUpdate.Size = New System.Drawing.Size(50, 50)
         Me.cmdGKUpdate.TabIndex = 55
-        Me.ToolTip1.SetToolTip(Me.cmdGKUpdate, "Update Gatekeeper")
+        Me.ToolTip1.SetToolTip(Me.cmdGKUpdate, "Enqueue GK Update")
         Me.cmdGKUpdate.UseVisualStyleBackColor = True
         '
         'cmdRestart

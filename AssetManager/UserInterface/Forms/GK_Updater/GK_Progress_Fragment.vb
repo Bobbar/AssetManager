@@ -16,6 +16,7 @@ Public Class GK_Progress_Fragment
         Me.Size = Me.MinimumSize
         MyUpdater = Updater
         Me.ParentForm = ParentForm
+        Me.DoubleBuffered = True
         lblInfo.Text = MyUpdater.CurDevice.strSerial & " - " & MyUpdater.CurDevice.strCurrentUser
         lblCurrentFile.Text = "Queued..."
         SetStatus(Progress_Status.Queued)
@@ -28,6 +29,7 @@ Public Class GK_Progress_Fragment
         AddHandler MyUpdater.StatusUpdate, AddressOf GKStatusUpdateEvent
         AddHandler MyUpdater.UpdateComplete, AddressOf GKUpdate_Complete
         AddHandler MyUpdater.UpdateCancelled, AddressOf GKUpdate_Cancelled
+        DoubleBufferedPanel(Panel1, True)
     End Sub
 
     Public Event CriticalStopError As EventHandler

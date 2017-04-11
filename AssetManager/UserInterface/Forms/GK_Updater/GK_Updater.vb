@@ -18,7 +18,6 @@ Public Class GK_Updater : Implements IDisposable
         'AdmCredentials = AdminCreds
         ClientPath = "\\D" & UpdateDevice.strSerial & "\c$"
         InitWorker()
-
     End Sub
     Public Event LogEvent As EventHandler
     Public Event StatusUpdate As EventHandler

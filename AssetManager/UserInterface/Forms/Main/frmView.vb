@@ -1051,7 +1051,6 @@ VALUES (@" & historical_dev.ChangeType & ",
             Return False
         End If
     End Function
-
     Private Sub cmdGKUpdate_Click(sender As Object, e As EventArgs) Handles cmdGKUpdate.Click
         If AdminCreds Is Nothing Then
             Dim NewGetCreds As New Get_Credentials

@@ -108,7 +108,7 @@ Partial Class MainForm
         Me.GroupBox1.Controls.Add(Me.lblRecords)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 267)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1215, 358)
+        Me.GroupBox1.Size = New System.Drawing.Size(1215, 504)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         '
@@ -162,7 +162,7 @@ Partial Class MainForm
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1194, 320)
+        Me.ResultGrid.Size = New System.Drawing.Size(1194, 466)
         Me.ResultGrid.TabIndex = 17
         Me.ResultGrid.VirtualMode = True
         '
@@ -182,6 +182,7 @@ Partial Class MainForm
         '
         'tsmAddGKUpdate
         '
+        Me.tsmAddGKUpdate.Image = CType(resources.GetObject("tsmAddGKUpdate.Image"), System.Drawing.Image)
         Me.tsmAddGKUpdate.Name = "tsmAddGKUpdate"
         Me.tsmAddGKUpdate.Size = New System.Drawing.Size(179, 22)
         Me.tsmAddGKUpdate.Text = "Enqueue GK Update"
@@ -202,7 +203,7 @@ Partial Class MainForm
         Me.lblRecords.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblRecords.ForeColor = System.Drawing.Color.FromArgb(CType(CType(53, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(53, Byte), Integer))
-        Me.lblRecords.Location = New System.Drawing.Point(15, 342)
+        Me.lblRecords.Location = New System.Drawing.Point(15, 488)
         Me.lblRecords.Name = "lblRecords"
         Me.lblRecords.Size = New System.Drawing.Size(1188, 13)
         Me.lblRecords.TabIndex = 18
@@ -574,7 +575,7 @@ Partial Class MainForm
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel4, Me.DateTimeLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 632)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 778)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1240, 22)
         Me.StatusStrip1.TabIndex = 5
@@ -743,7 +744,7 @@ Partial Class MainForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1240, 654)
+        Me.ClientSize = New System.Drawing.Size(1240, 800)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.StatusStrip1)
