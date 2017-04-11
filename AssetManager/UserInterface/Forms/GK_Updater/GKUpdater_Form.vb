@@ -1,4 +1,5 @@
-﻿Public Class GKUpdater_Form
+﻿Imports System.ComponentModel
+Public Class GKUpdater_Form
     Private MyUpdates As New List(Of GK_Progress_Fragment)
     Private MaxSimUpdates As Integer = 1
     Private bolRunQueue As Boolean = True
@@ -11,6 +12,12 @@
         Show()
 
     End Sub
+    Private Function ActiveUpdates() As Boolean
+        For Each upd As GK_Progress_Fragment In MyUpdates
+            If upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Running Then Return True
+        Next
+        Return False
+    End Function
     Private Sub CriticalStop()
         bolRunQueue = False
         Message("The queue was stopped because of an access error. Please re-enter your credentials.", vbExclamation + vbOKOnly, "Queue Stopped", Me)
@@ -127,5 +134,12 @@
 
     Private Sub MaxUpdates_ValueChanged(sender As Object, e As EventArgs) Handles MaxUpdates.ValueChanged
         MaxSimUpdates = MaxUpdates.Value
+    End Sub
+
+    Private Sub GKUpdater_Form_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        If ActiveUpdates() Then
+            e.Cancel = True
+            Message("There are still updates running!  Cancel the updates or wait for them to finish.", vbOKOnly + vbExclamation, "Close Aborted", Me)
+        End If
     End Sub
 End Class

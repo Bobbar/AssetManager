@@ -1,6 +1,8 @@
 ﻿Imports System.Net
+Imports System.Net.NetworkInformation
 Imports System.IO
 Imports System.ComponentModel
+Imports System.Text
 
 Public Class GK_Updater : Implements IDisposable
     Private WithEvents CopyWorker As BackgroundWorker
@@ -59,7 +61,34 @@ Public Class GK_Updater : Implements IDisposable
         RaiseEvent UpdateCancelled(Me, e)
     End Sub
 
+    ''' <summary>
+    ''' Pings the current device. One success returns True. Five failures return False.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function CanPing() As Boolean
+        Try
+            Dim MyPing As New Ping
+            Dim options As New Net.NetworkInformation.PingOptions
+            Dim Hostname As String = "D" & CurDevice.strSerial
+            Dim Timeout As Integer = 1000
+            Dim buff As Byte() = Encoding.ASCII.GetBytes("pingpingpingpingping")
+            options.DontFragment = True
+            For i = 1 To 5
+                Dim reply As PingReply = MyPing.Send(Hostname, Timeout, buff, options)
+                If reply.Status = IPStatus.Success Then
+                    Return True
+                Else
+                End If
+            Next
+            Return False
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
     Private Sub CopyWorker_DoWork(sender As Object, e As DoWorkEventArgs)
+        If Not CanPing() Then
+            Throw New Exception("Cannot ping device.")
+        End If
         Using NetCon As New NetworkConnection(ClientPath, AdmCredentials)
             Dim sourceDir As String = ServerPath & GKPath
             Dim targetDir As String = ClientPath & GKPath

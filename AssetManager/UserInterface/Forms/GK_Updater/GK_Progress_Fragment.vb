@@ -84,12 +84,13 @@ Public Class GK_Progress_Fragment
         If e.HasErrors Then
             lblCurrentFile.Text = "ERROR!"
             ProgStatus = Progress_Status.Errors
-            Dim err = DirectCast(e.Errors, Win32Exception)
-
-            'Check for invalid credentials error and fire critical stop event.
-            'We want to stop all updates if the credtials are wrong as to avoid locking the account.
-            If err.NativeErrorCode = 1326 Or err.NativeErrorCode = 86 Then
-                OnCriticalStopError(New EventArgs())
+            If TypeOf e.Errors Is Win32Exception Then
+                Dim err = DirectCast(e.Errors, Win32Exception)
+                'Check for invalid credentials error and fire critical stop event.
+                'We want to stop all updates if the credtials are wrong as to avoid locking the account.
+                If err.NativeErrorCode = 1326 Or err.NativeErrorCode = 86 Then
+                    OnCriticalStopError(New EventArgs())
+                End If
             End If
         Else
             lblCurrentFile.Text = "Complete! Errors: " & MyUpdater.ErrList.Count

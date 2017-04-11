@@ -56,7 +56,7 @@ Partial Class frmView
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.cmdGKUpdate = New System.Windows.Forms.Button()
         Me.cmdRestart = New System.Windows.Forms.Button()
         Me.cmdShowIP = New System.Windows.Forms.Button()
         Me.cmdBrowseFiles = New System.Windows.Forms.Button()
@@ -464,7 +464,7 @@ Partial Class frmView
         '
         'grpNetTools
         '
-        Me.grpNetTools.Controls.Add(Me.Button1)
+        Me.grpNetTools.Controls.Add(Me.cmdGKUpdate)
         Me.grpNetTools.Controls.Add(Me.cmdRestart)
         Me.grpNetTools.Controls.Add(Me.cmdShowIP)
         Me.grpNetTools.Controls.Add(Me.cmdBrowseFiles)
@@ -479,17 +479,17 @@ Partial Class frmView
         Me.grpNetTools.Text = "Remote Mgmt"
         Me.grpNetTools.Visible = False
         '
-        'Button1
+        'cmdGKUpdate
         '
-        Me.Button1.BackgroundImage = CType(resources.GetObject("Button1.BackgroundImage"), System.Drawing.Image)
-        Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.Button1.Location = New System.Drawing.Point(12, 34)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(1)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(50, 50)
-        Me.Button1.TabIndex = 55
-        Me.ToolTip1.SetToolTip(Me.Button1, "Update Gatekeeper")
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.cmdGKUpdate.BackgroundImage = CType(resources.GetObject("cmdGKUpdate.BackgroundImage"), System.Drawing.Image)
+        Me.cmdGKUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdGKUpdate.Location = New System.Drawing.Point(12, 34)
+        Me.cmdGKUpdate.Margin = New System.Windows.Forms.Padding(1)
+        Me.cmdGKUpdate.Name = "cmdGKUpdate"
+        Me.cmdGKUpdate.Size = New System.Drawing.Size(50, 50)
+        Me.cmdGKUpdate.TabIndex = 55
+        Me.ToolTip1.SetToolTip(Me.cmdGKUpdate, "Update Gatekeeper")
+        Me.cmdGKUpdate.UseVisualStyleBackColor = True
         '
         'cmdRestart
         '
@@ -1077,5 +1077,5 @@ Partial Class frmView
     Friend WithEvents txtPhoneNumber As TextBox
     Friend WithEvents Label14 As Label
     Friend WithEvents cmdRestart As Button
-    Friend WithEvents Button1 As Button
+    Friend WithEvents cmdGKUpdate As Button
 End Class

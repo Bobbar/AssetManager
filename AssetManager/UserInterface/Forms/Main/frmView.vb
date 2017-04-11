@@ -1052,10 +1052,18 @@ VALUES (@" & historical_dev.ChangeType & ",
         End If
     End Function
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim NewGKUpdate As New GKProgress(Me, CurrentViewDevice)
-        '  Dim newTEst As New Updater_Test
-        '  newTEst.Show()
-
+    Private Sub cmdGKUpdate_Click(sender As Object, e As EventArgs) Handles cmdGKUpdate.Click
+        If AdminCreds Is Nothing Then
+            Dim NewGetCreds As New Get_Credentials
+            NewGetCreds.ShowDialog()
+            If NewGetCreds.DialogResult <> DialogResult.OK Then
+                NewGetCreds.Dispose()
+                Exit Sub
+            End If
+            NewGetCreds.Dispose()
+        End If
+        Dim NewGKUpdater As New GK_Updater(CurrentViewDevice)
+        GKUpdater_Form.AddUpdate(NewGKUpdater)
+        If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
     End Sub
 End Class
