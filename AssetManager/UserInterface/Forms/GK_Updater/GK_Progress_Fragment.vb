@@ -11,7 +11,6 @@ Public Class GK_Progress_Fragment
 
         ' This call is required by the designer.
         InitializeComponent()
-
         ' Add any initialization after the InitializeComponent() call.
         Me.Size = Me.MinimumSize
         MyUpdater = Updater
@@ -27,8 +26,6 @@ Public Class GK_Progress_Fragment
         AddHandler MyUpdater.StatusUpdate, AddressOf GKStatusUpdateEvent
         AddHandler MyUpdater.UpdateComplete, AddressOf GKUpdate_Complete
         AddHandler MyUpdater.UpdateCancelled, AddressOf GKUpdate_Cancelled
-        'MyUpdater.StartUpdate()
-
     End Sub
 
     Public Event CriticalStopError As EventHandler
@@ -114,10 +111,6 @@ Public Class GK_Progress_Fragment
         End If
     End Sub
 
-    Private Sub pbRestart_Click(sender As Object, e As EventArgs) Handles pbRestart.Click
-        StartUpdate()
-    End Sub
-
     Private Sub pbCancelClose_Click(sender As Object, e As EventArgs) Handles pbCancelClose.Click
 
         If ProgStatus = Progress_Status.Running Then
@@ -133,6 +126,9 @@ Public Class GK_Progress_Fragment
 
     End Sub
 
+    Private Sub pbRestart_Click(sender As Object, e As EventArgs) Handles pbRestart.Click
+        StartUpdate()
+    End Sub
     ''' <summary>
     ''' Timer that updates the rtbLog control with chunks of data from the log buffer.
     ''' </summary>

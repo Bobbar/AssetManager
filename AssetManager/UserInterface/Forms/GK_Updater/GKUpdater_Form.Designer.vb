@@ -63,7 +63,7 @@ Partial Class GKUpdater_Form
         Me.Updater_Table.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 562.0!))
         Me.Updater_Table.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 562.0!))
         Me.Updater_Table.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 562.0!))
-        Me.Updater_Table.Size = New System.Drawing.Size(850, 565)
+        Me.Updater_Table.Size = New System.Drawing.Size(727, 565)
         Me.Updater_Table.TabIndex = 1
         '
         'GroupBox1
@@ -72,9 +72,9 @@ Partial Class GKUpdater_Form
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.Updater_Table)
-        Me.GroupBox1.Location = New System.Drawing.Point(392, 13)
+        Me.GroupBox1.Location = New System.Drawing.Point(311, 13)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(864, 592)
+        Me.GroupBox1.Size = New System.Drawing.Size(741, 592)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Current Updates"
@@ -86,7 +86,7 @@ Partial Class GKUpdater_Form
         Me.GroupBox2.Controls.Add(Me.GroupBox3)
         Me.GroupBox2.Location = New System.Drawing.Point(14, 13)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(369, 592)
+        Me.GroupBox2.Size = New System.Drawing.Size(291, 592)
         Me.GroupBox2.TabIndex = 3
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Manage Updates"
@@ -100,9 +100,9 @@ Partial Class GKUpdater_Form
         Me.GroupBox3.Controls.Add(Me.lblComplete)
         Me.GroupBox3.Controls.Add(Me.lblRunning)
         Me.GroupBox3.Controls.Add(Me.lblQueued)
-        Me.GroupBox3.Location = New System.Drawing.Point(17, 33)
+        Me.GroupBox3.Location = New System.Drawing.Point(6, 35)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(332, 185)
+        Me.GroupBox3.Size = New System.Drawing.Size(275, 174)
         Me.GroupBox3.TabIndex = 0
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Queue Control"
@@ -111,7 +111,7 @@ Partial Class GKUpdater_Form
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(219, 28)
+        Me.Label1.Location = New System.Drawing.Point(148, 53)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(105, 14)
         Me.Label1.TabIndex = 6
@@ -120,18 +120,18 @@ Partial Class GKUpdater_Form
         'MaxUpdates
         '
         Me.MaxUpdates.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MaxUpdates.Location = New System.Drawing.Point(223, 44)
+        Me.MaxUpdates.Location = New System.Drawing.Point(167, 69)
         Me.MaxUpdates.Maximum = New Decimal(New Integer() {10, 0, 0, 0})
         Me.MaxUpdates.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.MaxUpdates.Name = "MaxUpdates"
-        Me.MaxUpdates.Size = New System.Drawing.Size(92, 22)
+        Me.MaxUpdates.Size = New System.Drawing.Size(59, 22)
         Me.MaxUpdates.TabIndex = 5
         Me.MaxUpdates.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'cmdPauseResume
         '
         Me.cmdPauseResume.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdPauseResume.Location = New System.Drawing.Point(103, 139)
+        Me.cmdPauseResume.Location = New System.Drawing.Point(81, 130)
         Me.cmdPauseResume.Name = "cmdPauseResume"
         Me.cmdPauseResume.Size = New System.Drawing.Size(120, 27)
         Me.cmdPauseResume.TabIndex = 4
@@ -142,9 +142,10 @@ Partial Class GKUpdater_Form
         '
         Me.lblTotUpdates.AutoSize = True
         Me.lblTotUpdates.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTotUpdates.Location = New System.Drawing.Point(37, 28)
+        Me.lblTotUpdates.Location = New System.Drawing.Point(8, 23)
         Me.lblTotUpdates.Name = "lblTotUpdates"
-        Me.lblTotUpdates.Size = New System.Drawing.Size(84, 14)
+        Me.lblTotUpdates.Padding = New System.Windows.Forms.Padding(5)
+        Me.lblTotUpdates.Size = New System.Drawing.Size(94, 24)
         Me.lblTotUpdates.TabIndex = 3
         Me.lblTotUpdates.Text = "[# Updates]"
         '
@@ -152,9 +153,10 @@ Partial Class GKUpdater_Form
         '
         Me.lblComplete.AutoSize = True
         Me.lblComplete.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblComplete.Location = New System.Drawing.Point(37, 100)
+        Me.lblComplete.Location = New System.Drawing.Point(8, 95)
         Me.lblComplete.Name = "lblComplete"
-        Me.lblComplete.Size = New System.Drawing.Size(77, 14)
+        Me.lblComplete.Padding = New System.Windows.Forms.Padding(5)
+        Me.lblComplete.Size = New System.Drawing.Size(87, 24)
         Me.lblComplete.TabIndex = 2
         Me.lblComplete.Text = "[Complete]"
         '
@@ -162,9 +164,10 @@ Partial Class GKUpdater_Form
         '
         Me.lblRunning.AutoSize = True
         Me.lblRunning.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblRunning.Location = New System.Drawing.Point(37, 75)
+        Me.lblRunning.Location = New System.Drawing.Point(8, 71)
         Me.lblRunning.Name = "lblRunning"
-        Me.lblRunning.Size = New System.Drawing.Size(70, 14)
+        Me.lblRunning.Padding = New System.Windows.Forms.Padding(5)
+        Me.lblRunning.Size = New System.Drawing.Size(80, 24)
         Me.lblRunning.TabIndex = 1
         Me.lblRunning.Text = "[Running]"
         '
@@ -172,9 +175,10 @@ Partial Class GKUpdater_Form
         '
         Me.lblQueued.AutoSize = True
         Me.lblQueued.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblQueued.Location = New System.Drawing.Point(37, 52)
+        Me.lblQueued.Location = New System.Drawing.Point(8, 47)
         Me.lblQueued.Name = "lblQueued"
-        Me.lblQueued.Size = New System.Drawing.Size(63, 14)
+        Me.lblQueued.Padding = New System.Windows.Forms.Padding(5)
+        Me.lblQueued.Size = New System.Drawing.Size(73, 24)
         Me.lblQueued.TabIndex = 0
         Me.lblQueued.Text = "[Queued]"
         '
@@ -187,7 +191,7 @@ Partial Class GKUpdater_Form
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1270, 618)
+        Me.ClientSize = New System.Drawing.Size(1066, 618)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.DoubleBuffered = True
