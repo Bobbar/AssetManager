@@ -116,18 +116,23 @@ Public Class GK_Progress_Fragment
 
     Private Sub lblShowHide_Click(sender As Object, e As EventArgs) Handles lblShowHide.Click
         If Not bolShow Then
-            Me.Size = Me.MaximumSize
-            bolShow = True
-            lblShowHide.Text = "r" '"-"
+            ShowLog()
         Else
-            Me.Size = Me.MinimumSize
-            bolShow = False
-            lblShowHide.Text = "s" '"+"
+            HideLog()
         End If
     End Sub
-
+    Private Sub ShowLog()
+        UpdateLogBox()
+        Me.Size = Me.MaximumSize
+        bolShow = True
+        lblShowHide.Text = "r" '"-"
+    End Sub
+    Private Sub HideLog()
+        Me.Size = Me.MinimumSize
+        bolShow = False
+        lblShowHide.Text = "s" '"+"
+    End Sub
     Private Sub pbCancelClose_Click(sender As Object, e As EventArgs) Handles pbCancelClose.Click
-
         If ProgStatus = Progress_Status.Running Then
             If Not MyUpdater.IsDisposed Then
                 MyUpdater.CancelUpdate()
@@ -158,11 +163,21 @@ Public Class GK_Progress_Fragment
     ''' Timer that updates the rtbLog control with chunks of data from the log buffer.
     ''' </summary>
     Private Sub UI_Timer_Tick(sender As Object, e As EventArgs) Handles UI_Timer.Tick
-        If LogBuff <> "" Then
-            rtbLog.AppendText(LogBuff)
-            rtbLog.Refresh()
-            LogBuff = ""
+        If bolShow And LogBuff <> "" Then
+            UpdateLogBox()
         End If
+        If ProgStatus = Progress_Status.Running Then
+            pbarFileProgress.Value = MyUpdater.intFileProgress
+            If MyUpdater.intFileProgress > 1 Then pbarFileProgress.Value = pbarFileProgress.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
+            pbarFileProgress.Value = MyUpdater.intFileProgress
+            pbarFileProgress.Refresh()
+            ' pbarFileProgress.Value = MyUpdater.intFileProgress
+        End If
+    End Sub
+    Private Sub UpdateLogBox()
+        rtbLog.AppendText(LogBuff)
+        rtbLog.Refresh()
+        LogBuff = ""
     End Sub
     Private Sub SetStatus(Status As Progress_Status)
         ProgStatus = Status
@@ -192,4 +207,5 @@ Public Class GK_Progress_Fragment
         gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size)
         pbStatus.Image = bm
     End Sub
+
 End Class

@@ -23,7 +23,7 @@ Partial Class GK_Progress_Fragment
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.pbarProgress = New System.Windows.Forms.ProgressBar()
+        Me.pbarFileProgress = New System.Windows.Forms.ProgressBar()
         Me.lblCurrentFile = New System.Windows.Forms.Label()
         Me.lblInfo = New System.Windows.Forms.Label()
         Me.rtbLog = New System.Windows.Forms.RichTextBox()
@@ -34,6 +34,7 @@ Partial Class GK_Progress_Fragment
         Me.pbCancelClose = New System.Windows.Forms.PictureBox()
         Me.lblSeq = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.pbarProgress = New System.Windows.Forms.ProgressBar()
         Me.pbStatus = New System.Windows.Forms.PictureBox()
         CType(Me.pbRestart, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbCancelClose, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -41,14 +42,14 @@ Partial Class GK_Progress_Fragment
         CType(Me.pbStatus, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'pbarProgress
+        'pbarFileProgress
         '
-        Me.pbarProgress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.pbarFileProgress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pbarProgress.Location = New System.Drawing.Point(36, 25)
-        Me.pbarProgress.Name = "pbarProgress"
-        Me.pbarProgress.Size = New System.Drawing.Size(327, 31)
-        Me.pbarProgress.TabIndex = 0
+        Me.pbarFileProgress.Location = New System.Drawing.Point(71, 50)
+        Me.pbarFileProgress.Name = "pbarFileProgress"
+        Me.pbarFileProgress.Size = New System.Drawing.Size(254, 12)
+        Me.pbarFileProgress.TabIndex = 0
         '
         'lblCurrentFile
         '
@@ -109,6 +110,7 @@ Partial Class GK_Progress_Fragment
         'UI_Timer
         '
         Me.UI_Timer.Enabled = True
+        Me.UI_Timer.Interval = 50
         '
         'pbRestart
         '
@@ -153,6 +155,7 @@ Partial Class GK_Progress_Fragment
         Me.Panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.Panel1.BackColor = System.Drawing.Color.Silver
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.pbarProgress)
         Me.Panel1.Controls.Add(Me.pbStatus)
         Me.Panel1.Controls.Add(Me.lblSeq)
         Me.Panel1.Controls.Add(Me.pbRestart)
@@ -160,12 +163,21 @@ Partial Class GK_Progress_Fragment
         Me.Panel1.Controls.Add(Me.pbCancelClose)
         Me.Panel1.Controls.Add(Me.rtbLog)
         Me.Panel1.Controls.Add(Me.lblCurrentFile)
-        Me.Panel1.Controls.Add(Me.pbarProgress)
+        Me.Panel1.Controls.Add(Me.pbarFileProgress)
         Me.Panel1.Controls.Add(Me.lblInfo)
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(400, 300)
         Me.Panel1.TabIndex = 8
+        '
+        'pbarProgress
+        '
+        Me.pbarProgress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pbarProgress.Location = New System.Drawing.Point(39, 27)
+        Me.pbarProgress.Name = "pbarProgress"
+        Me.pbarProgress.Size = New System.Drawing.Size(327, 20)
+        Me.pbarProgress.TabIndex = 9
         '
         'pbStatus
         '
@@ -196,7 +208,7 @@ Partial Class GK_Progress_Fragment
 
     End Sub
 
-    Friend WithEvents pbarProgress As ProgressBar
+    Friend WithEvents pbarFileProgress As ProgressBar
     Friend WithEvents lblCurrentFile As Label
     Friend WithEvents lblInfo As Label
     Friend WithEvents pbCancelClose As PictureBox
@@ -208,4 +220,5 @@ Partial Class GK_Progress_Fragment
     Friend WithEvents pbRestart As PictureBox
     Friend WithEvents Panel1 As Panel
     Friend WithEvents pbStatus As PictureBox
+    Friend WithEvents pbarProgress As ProgressBar
 End Class

@@ -13,6 +13,8 @@ Public Class GK_Updater : Implements IDisposable
     Public ErrList As New List(Of String)
     Private ServerPath As String = "C:"
     Private UpdateDevice As Device_Info
+    Public intFileProgress As Integer
+    Private lngBytesMoved As Integer
     Sub New(ByVal Device As Device_Info) ', ByVal AdminCredentials As NetworkCredential)
         UpdateDevice = Device
         'AdmCredentials = AdminCreds
@@ -131,7 +133,32 @@ Public Class GK_Updater : Implements IDisposable
                     End If
                 End If
                 'Copy source to target, overwriting
-                File.Copy(file__1, cPath, True)
+                Dim BufferSize As Integer = 2048
+                Dim perc As Short = 0
+                Dim buffer(BufferSize) As Byte
+                Dim bytesIn As Integer = 1
+                Dim totalBytesIn As Integer
+                Dim CurrentFile As New FileInfo(file__1)
+                Using fStream As System.IO.FileStream = CurrentFile.OpenRead(),
+                        destFile As System.IO.Stream = New FileStream(cPath, FileMode.OpenOrCreate),
+                    bufStream As New BufferedStream(destFile, BufferSize)
+                    lngBytesMoved = 0
+                    intFileProgress = 1
+                    totalBytesIn = 0
+                    Dim flLength As Integer = fStream.Length
+                    Do Until bytesIn < 1 Or CopyWorker.CancellationPending
+                        bytesIn = fStream.Read(buffer, 0, BufferSize)
+                        If bytesIn > 0 Then
+                            bufStream.Write(buffer, 0, bytesIn)
+                            totalBytesIn += bytesIn
+                            lngBytesMoved += bytesIn
+                            If flLength > 0 Then
+                                perc = (totalBytesIn / flLength) * 100
+                                intFileProgress = perc
+                            End If
+                        End If
+                    Loop
+                End Using
             Next
         End Using
     End Sub
@@ -169,7 +196,7 @@ Public Class GK_Updater : Implements IDisposable
                 GKLog("Cancelled by user!")
             End If
         Else
-            If e.Error.HResult = -2147024864 Then
+            If e.Error.HResult = -2147024864 Or e.Error.HResult = -2147024891 Then
                 GKLog("******** File in-use error! Resuming next files.", True)
                 Dim NewArgs As Worker_Args
                 NewArgs.StartIndex = CurrentFileIndex
