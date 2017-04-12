@@ -100,7 +100,7 @@ Public Class GK_Progress_Fragment
             If TypeOf e.Errors Is Win32Exception Then
                 Dim err = DirectCast(e.Errors, Win32Exception)
                 'Check for invalid credentials error and fire critical stop event.
-                'We want to stop all updates if the credtials are wrong as to avoid locking the account.
+                'We want to stop all updates if the credentials are wrong as to avoid locking the account.
                 If err.NativeErrorCode = 1326 Or err.NativeErrorCode = 86 Then
                     OnCriticalStopError(New EventArgs())
                 End If
@@ -118,11 +118,11 @@ Public Class GK_Progress_Fragment
         If Not bolShow Then
             Me.Size = Me.MaximumSize
             bolShow = True
-            lblShowHide.Text = "-"
+            lblShowHide.Text = "r" '"-"
         Else
             Me.Size = Me.MinimumSize
             bolShow = False
-            lblShowHide.Text = "+"
+            lblShowHide.Text = "s" '"+"
         End If
     End Sub
 
@@ -181,7 +181,7 @@ Public Class GK_Progress_Fragment
     Private Sub DrawLight(Color As Color)
         Dim MyBrush As New SolidBrush(Color)
         Dim StrokePen As New Pen(Color.Black, 1.5)
-        Dim bm As New Bitmap(pbStatus.Width, pbStatus.Height) '(CInt(pic_scale * Render.Width), CInt(pic_scale * Render.Height))
+        Dim bm As New Bitmap(pbStatus.Width, pbStatus.Height)
         Dim gr As Graphics = Graphics.FromImage(bm)
         gr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
         Dim XLoc, YLoc, Size As Single

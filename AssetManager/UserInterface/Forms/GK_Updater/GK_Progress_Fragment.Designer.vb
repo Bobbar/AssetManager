@@ -98,12 +98,12 @@ Partial Class GK_Progress_Fragment
         Me.lblShowHide.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblShowHide.AutoSize = True
         Me.lblShowHide.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.lblShowHide.Font = New System.Drawing.Font("Consolas", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblShowHide.Location = New System.Drawing.Point(373, 60)
+        Me.lblShowHide.Font = New System.Drawing.Font("Wingdings 3", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.lblShowHide.Location = New System.Drawing.Point(370, 67)
         Me.lblShowHide.Name = "lblShowHide"
-        Me.lblShowHide.Size = New System.Drawing.Size(22, 24)
+        Me.lblShowHide.Size = New System.Drawing.Size(25, 17)
         Me.lblShowHide.TabIndex = 5
-        Me.lblShowHide.Text = "+"
+        Me.lblShowHide.Text = "s"
         Me.MyToolTip.SetToolTip(Me.lblShowHide, "Show/Hide Log")
         '
         'UI_Timer
