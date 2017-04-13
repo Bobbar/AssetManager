@@ -6,25 +6,27 @@ Imports System.Text
 
 Public Class GK_Updater : Implements IDisposable
     Private WithEvents CopyWorker As BackgroundWorker
+    Private WithEvents SpeedTimer As Timer
+    Public CurrentStatus As Status_Stats
+    Public ErrList As New List(Of String)
     Private ReadOnly GKPath As String = "\PSi\Gatekeeper"
     Private ClientPath As String
     Private CurrentFileIndex As Integer = 0
-    Private CurrentStatus As Status_Stats
-    Public ErrList As New List(Of String)
-    Private ServerPath As String = "C:"
-    Private UpdateDevice As Device_Info
-    Public intFileProgress As Integer
     Private lngBytesMoved As Integer
-    Sub New(ByVal Device As Device_Info) ', ByVal AdminCredentials As NetworkCredential)
+    Private progIts As Integer = 0
+    Private ServerPath As String = "C:"
+    Private stpSpeed As New Stopwatch
+    Private UpdateDevice As Device_Info
+    Sub New(ByVal Device As Device_Info)
         UpdateDevice = Device
-        'AdmCredentials = AdminCreds
         ClientPath = "\\D" & UpdateDevice.strSerial & "\c$"
         InitWorker()
+        InitializeTimer()
     End Sub
     Public Event LogEvent As EventHandler
     Public Event StatusUpdate As EventHandler
-    Public Event UpdateComplete As EventHandler
     Public Event UpdateCancelled As EventHandler
+    Public Event UpdateComplete As EventHandler
     Public ReadOnly Property CurDevice As Device_Info
         Get
             Return UpdateDevice
@@ -57,15 +59,14 @@ Public Class GK_Updater : Implements IDisposable
     Protected Overridable Sub OnStatusUpdate(e As GKUpdateEvents)
         RaiseEvent StatusUpdate(Me, e)
     End Sub
-    Protected Overridable Sub OnUpdateComplete(e As GKUpdateCompleteEvents)
-        RaiseEvent UpdateComplete(Me, e)
-    End Sub
     Protected Overridable Sub OnUpdateCancelled(e As EventArgs)
         RaiseEvent UpdateCancelled(Me, e)
     End Sub
-
+    Protected Overridable Sub OnUpdateComplete(e As GKUpdateCompleteEvents)
+        RaiseEvent UpdateComplete(Me, e)
+    End Sub
     ''' <summary>
-    ''' Pings the current device. One success returns True. Five failures return False.
+    ''' Pings the current device. Success returns True. All failures return False.
     ''' </summary>
     ''' <returns></returns>
     Private Function CanPing() As Boolean
@@ -76,13 +77,10 @@ Public Class GK_Updater : Implements IDisposable
             Dim Timeout As Integer = 1000
             Dim buff As Byte() = Encoding.ASCII.GetBytes("pingpingpingpingping")
             options.DontFragment = True
-            For i = 1 To 5
-                Dim reply As PingReply = MyPing.Send(Hostname, Timeout, buff, options)
-                If reply.Status = IPStatus.Success Then
-                    Return True
-                Else
-                End If
-            Next
+            Dim reply As PingReply = MyPing.Send(Hostname, Timeout, buff, options)
+            If reply.Status = IPStatus.Success Then
+                Return True
+            End If
             Return False
         Catch ex As Exception
             Return False
@@ -101,6 +99,7 @@ Public Class GK_Updater : Implements IDisposable
             'Get array of full paths of all files in source dir and sub-dirs
             Dim files() = Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories)
             'Loop through file array
+            lngBytesMoved = 0
             For i As Integer = StartIdx To UBound(files)
                 Dim file__1 = files(i)
                 If CopyWorker.CancellationPending Then
@@ -114,7 +113,7 @@ Public Class GK_Updater : Implements IDisposable
                 'Modify source path to target path
                 Dim cPath As String = Replace(file__1, sourceDir, targetDir)
                 'Record status for UI updates
-                Dim Status As New Status_Stats(files.Count, CurFileIdx, cPath, file__1)
+                Dim Status As New Status_Stats(files.Count, CurFileIdx, cPath, file__1, CurrentStatus.CurFileProgress, CurrentStatus.CurTransferRate)
                 'Report status
                 CopyWorker.ReportProgress(1, Status)
                 e.Result = Args
@@ -133,28 +132,36 @@ Public Class GK_Updater : Implements IDisposable
                     End If
                 End If
                 'Copy source to target, overwriting
-                Dim BufferSize As Integer = 2048
-                Dim perc As Short = 0
+                Dim BufferSize As Integer = 256000
+                Dim perc As Integer = 0
                 Dim buffer(BufferSize) As Byte
                 Dim bytesIn As Integer = 1
                 Dim totalBytesIn As Integer
                 Dim CurrentFile As New FileInfo(file__1)
+                stpSpeed.Start()
                 Using fStream As System.IO.FileStream = CurrentFile.OpenRead(),
-                        destFile As System.IO.Stream = New FileStream(cPath, FileMode.OpenOrCreate),
-                    bufStream As New BufferedStream(destFile, BufferSize)
-                    lngBytesMoved = 0
-                    intFileProgress = 1
+                        destFile As System.IO.Stream = New FileStream(cPath, FileMode.OpenOrCreate) ',
+                    ' bufStream As New BufferedStream(destFile, BufferSize)
+                    CurrentStatus.CurFileProgress = 1
                     totalBytesIn = 0
                     Dim flLength As Integer = fStream.Length
                     Do Until bytesIn < 1 Or CopyWorker.CancellationPending
                         bytesIn = fStream.Read(buffer, 0, BufferSize)
                         If bytesIn > 0 Then
-                            bufStream.Write(buffer, 0, bytesIn)
+
+                            destFile.Write(buffer, 0, bytesIn)
+                            ' bufStream.Write(buffer, 0, bytesIn)
                             totalBytesIn += bytesIn
                             lngBytesMoved += bytesIn
                             If flLength > 0 Then
-                                perc = (totalBytesIn / flLength) * 100
-                                intFileProgress = perc
+                                perc = CInt((totalBytesIn / flLength) * 100)
+
+                                CurrentStatus.CurFileProgress = perc
+                                'If perc = 100 Then
+                                '    Debug.Print(perc)
+                                'End If
+                                '  Debug.Print(perc)
+                                ' Threading.Thread.Sleep(100)
                             End If
                         End If
                     Loop
@@ -173,6 +180,8 @@ Public Class GK_Updater : Implements IDisposable
             GKLog("Dest: " & CurrentStatus.CurFileName)
         Else
             GKLog(e.UserState.ToString, True)
+            stpSpeed.Stop()
+            stpSpeed.Reset()
         End If
     End Sub
 
@@ -222,6 +231,12 @@ Public Class GK_Updater : Implements IDisposable
             ErrList.Add(ErrMsg)
         End If
     End Sub
+    Private Sub InitializeTimer()
+        SpeedTimer = New Timer
+        SpeedTimer.Interval = 100
+        SpeedTimer.Enabled = True
+        AddHandler SpeedTimer.Tick, AddressOf SpeedTimer_Tick
+    End Sub
 
     Private Sub InitWorker()
         CopyWorker = New BackgroundWorker
@@ -232,6 +247,23 @@ Public Class GK_Updater : Implements IDisposable
             .WorkerReportsProgress = True
             .WorkerSupportsCancellation = True
         End With
+    End Sub
+
+    Private Sub SpeedTimer_Tick()
+        Dim BytesPerSecond As Single
+        Dim ResetCounter As Integer = 40
+        If lngBytesMoved > 0 Then
+            progIts += 1
+            BytesPerSecond = Math.Round((lngBytesMoved / stpSpeed.ElapsedMilliseconds) / 1000, 2)
+            CurrentStatus.CurTransferRate = BytesPerSecond
+            If progIts > ResetCounter Then
+                progIts = 0
+                lngBytesMoved = 0 'BytesPerSecond * stpSpeed.ElapsedMilliseconds * 1000
+                stpSpeed.Restart()
+
+            End If
+        Else
+            End If
     End Sub
     Public Structure GK_Complete_Stats
         Public Errors As Boolean
@@ -250,13 +282,17 @@ Public Class GK_Updater : Implements IDisposable
     Public Structure Status_Stats
         Public CurFileIdx As Integer
         Public CurFileName As String
+        Public CurFileProgress As Integer
+        Public CurTransferRate As Single
         Public SourceFileName As String
         Public TotFiles As Integer
-        Sub New(tFiles As Integer, CurFIdx As Integer, CurFName As String, sFileName As String)
+        Sub New(tFiles As Integer, CurFIdx As Integer, CurFName As String, sFileName As String, CurFileProg As Integer, CurTransRate As Single)
             TotFiles = tFiles
             CurFileIdx = CurFIdx
             CurFileName = CurFName
             SourceFileName = sFileName
+            CurFileProgress = CurFileProg
+            CurTransferRate = CurTransRate
         End Sub
     End Structure
 
@@ -265,20 +301,21 @@ Public Class GK_Updater : Implements IDisposable
         Public StartIndex As Integer
     End Structure
     Public Class GKUpdateCompleteEvents : Inherits EventArgs
-        Private Errs As Boolean
         Private ErrExeption As Exception
+        Private Errs As Boolean
         Public Sub New(ByVal Errs As Boolean, Optional ByVal Ex As Exception = Nothing)
             Me.Errs = Errs
             Me.ErrExeption = Ex
         End Sub
-        Public ReadOnly Property HasErrors As Boolean
-            Get
-                Return Errs
-            End Get
-        End Property
         Public ReadOnly Property Errors As Exception
             Get
                 Return ErrExeption
+            End Get
+        End Property
+
+        Public ReadOnly Property HasErrors As Boolean
+            Get
+                Return Errs
             End Get
         End Property
     End Class

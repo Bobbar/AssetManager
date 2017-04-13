@@ -36,6 +36,7 @@ Partial Class GK_Progress_Fragment
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.pbarProgress = New System.Windows.Forms.ProgressBar()
         Me.pbStatus = New System.Windows.Forms.PictureBox()
+        Me.lblTransRate = New System.Windows.Forms.Label()
         CType(Me.pbRestart, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbCancelClose, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
@@ -46,7 +47,7 @@ Partial Class GK_Progress_Fragment
         '
         Me.pbarFileProgress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pbarFileProgress.Location = New System.Drawing.Point(71, 50)
+        Me.pbarFileProgress.Location = New System.Drawing.Point(71, 45)
         Me.pbarFileProgress.Name = "pbarFileProgress"
         Me.pbarFileProgress.Size = New System.Drawing.Size(254, 12)
         Me.pbarFileProgress.TabIndex = 0
@@ -56,9 +57,9 @@ Partial Class GK_Progress_Fragment
         Me.lblCurrentFile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblCurrentFile.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCurrentFile.Location = New System.Drawing.Point(0, 60)
+        Me.lblCurrentFile.Location = New System.Drawing.Point(0, 56)
         Me.lblCurrentFile.Name = "lblCurrentFile"
-        Me.lblCurrentFile.Size = New System.Drawing.Size(395, 19)
+        Me.lblCurrentFile.Size = New System.Drawing.Size(395, 15)
         Me.lblCurrentFile.TabIndex = 1
         Me.lblCurrentFile.Text = "[Status/File]"
         Me.lblCurrentFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -69,7 +70,7 @@ Partial Class GK_Progress_Fragment
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblInfo.Cursor = System.Windows.Forms.Cursors.Hand
         Me.lblInfo.Font = New System.Drawing.Font("Consolas", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblInfo.ForeColor = System.Drawing.Color.Blue
+        Me.lblInfo.ForeColor = System.Drawing.Color.Navy
         Me.lblInfo.Location = New System.Drawing.Point(1, 3)
         Me.lblInfo.Name = "lblInfo"
         Me.lblInfo.Size = New System.Drawing.Size(397, 19)
@@ -99,10 +100,10 @@ Partial Class GK_Progress_Fragment
         Me.lblShowHide.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblShowHide.AutoSize = True
         Me.lblShowHide.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.lblShowHide.Font = New System.Drawing.Font("Wingdings 3", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-        Me.lblShowHide.Location = New System.Drawing.Point(370, 67)
+        Me.lblShowHide.Font = New System.Drawing.Font("Wingdings 3", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.lblShowHide.Location = New System.Drawing.Point(371, 71)
         Me.lblShowHide.Name = "lblShowHide"
-        Me.lblShowHide.Size = New System.Drawing.Size(25, 17)
+        Me.lblShowHide.Size = New System.Drawing.Size(17, 12)
         Me.lblShowHide.TabIndex = 5
         Me.lblShowHide.Text = "s"
         Me.MyToolTip.SetToolTip(Me.lblShowHide, "Show/Hide Log")
@@ -155,6 +156,7 @@ Partial Class GK_Progress_Fragment
         Me.Panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.Panel1.BackColor = System.Drawing.Color.Silver
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.lblTransRate)
         Me.Panel1.Controls.Add(Me.pbarProgress)
         Me.Panel1.Controls.Add(Me.pbStatus)
         Me.Panel1.Controls.Add(Me.lblSeq)
@@ -174,18 +176,28 @@ Partial Class GK_Progress_Fragment
         '
         Me.pbarProgress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pbarProgress.Location = New System.Drawing.Point(39, 27)
+        Me.pbarProgress.Location = New System.Drawing.Point(39, 23)
         Me.pbarProgress.Name = "pbarProgress"
         Me.pbarProgress.Size = New System.Drawing.Size(327, 20)
         Me.pbarProgress.TabIndex = 9
         '
         'pbStatus
         '
-        Me.pbStatus.Location = New System.Drawing.Point(-1, 25)
+        Me.pbStatus.Location = New System.Drawing.Point(2, 25)
         Me.pbStatus.Name = "pbStatus"
         Me.pbStatus.Size = New System.Drawing.Size(37, 30)
         Me.pbStatus.TabIndex = 8
         Me.pbStatus.TabStop = False
+        '
+        'lblTransRate
+        '
+        Me.lblTransRate.AutoSize = True
+        Me.lblTransRate.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTransRate.Location = New System.Drawing.Point(328, 46)
+        Me.lblTransRate.Name = "lblTransRate"
+        Me.lblTransRate.Size = New System.Drawing.Size(43, 13)
+        Me.lblTransRate.TabIndex = 10
+        Me.lblTransRate.Text = "[MBps]"
         '
         'GK_Progress_Fragment
         '
@@ -221,4 +233,5 @@ Partial Class GK_Progress_Fragment
     Friend WithEvents Panel1 As Panel
     Friend WithEvents pbStatus As PictureBox
     Friend WithEvents pbarProgress As ProgressBar
+    Friend WithEvents lblTransRate As Label
 End Class

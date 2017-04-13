@@ -122,11 +122,13 @@ Public Class GKUpdater_Form
 
     Private Sub SetStats()
         Dim intQueued, intRunning, intComplete As Integer
+        Dim TransferRateSum As Single
         For Each upd As GK_Progress_Fragment In MyUpdates
             Select Case upd.ProgStatus
                 Case GK_Progress_Fragment.Progress_Status.Queued
                     intQueued += 1
                 Case GK_Progress_Fragment.Progress_Status.Running
+                    TransferRateSum += upd.MyUpdater.CurrentStatus.CurTransferRate
                     intRunning += 1
                 Case GK_Progress_Fragment.Progress_Status.Complete
                     intComplete += 1
@@ -138,7 +140,7 @@ Public Class GKUpdater_Form
         lblRunning.Text = "Running: " & intRunning
         lblComplete.Text = "Complete: " & intComplete
         lblTotUpdates.Text = "Tot Updates: " & MyUpdates.Count
-
+        lblTransferRate.Text = "Transfer Rate: " & TransferRateSum.ToString("0.00") & " MB/s"
     End Sub
     ''' <summary>
     ''' Starts the next update that has a queued status.

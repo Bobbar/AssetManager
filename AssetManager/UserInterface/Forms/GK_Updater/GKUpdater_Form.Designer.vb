@@ -36,6 +36,7 @@ Partial Class GKUpdater_Form
         Me.lblRunning = New System.Windows.Forms.Label()
         Me.lblQueued = New System.Windows.Forms.Label()
         Me.QueueChecker = New System.Windows.Forms.Timer(Me.components)
+        Me.lblTransferRate = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         CType(Me.MaxUpdates, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -175,11 +176,21 @@ Partial Class GKUpdater_Form
         Me.QueueChecker.Enabled = True
         Me.QueueChecker.Interval = 500
         '
+        'lblTransferRate
+        '
+        Me.lblTransferRate.AutoSize = True
+        Me.lblTransferRate.Location = New System.Drawing.Point(698, 52)
+        Me.lblTransferRate.Name = "lblTransferRate"
+        Me.lblTransferRate.Size = New System.Drawing.Size(112, 14)
+        Me.lblTransferRate.TabIndex = 3
+        Me.lblTransferRate.Text = "[Transfer Rate]"
+        '
         'GKUpdater_Form
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1065, 638)
+        Me.Controls.Add(Me.lblTransferRate)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox1)
         Me.DoubleBuffered = True
@@ -188,12 +199,14 @@ Partial Class GKUpdater_Form
         Me.MinimumSize = New System.Drawing.Size(1010, 428)
         Me.Name = "GKUpdater_Form"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Gatekeeper Updater"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
         CType(Me.MaxUpdates, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
@@ -208,4 +221,5 @@ Partial Class GKUpdater_Form
     Friend WithEvents MaxUpdates As NumericUpDown
     Friend WithEvents cmdCancelAll As Button
     Friend WithEvents Updater_Table As FlowLayoutPanel
+    Friend WithEvents lblTransferRate As Label
 End Class

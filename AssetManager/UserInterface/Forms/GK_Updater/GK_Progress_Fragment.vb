@@ -2,12 +2,12 @@
 Public Class GK_Progress_Fragment
     Implements IDisposable
 
-    Private WithEvents MyUpdater As GK_Updater
+    Public WithEvents MyUpdater As GK_Updater
     Public ProgStatus As Progress_Status
     Private bolShow As Boolean = False
     Private CurrentStatus As GK_Updater.Status_Stats
     Private LogBuff As String = ""
-    Private ParentForm As Form
+    Private MyParentForm As Form
     Sub New(ParentForm As Form, ByRef Updater As GK_Updater, Optional Seq As Integer = 0)
 
         ' This call is required by the designer.
@@ -15,10 +15,11 @@ Public Class GK_Progress_Fragment
         ' Add any initialization after the InitializeComponent() call.
         Me.Size = Me.MinimumSize
         MyUpdater = Updater
-        Me.ParentForm = ParentForm
+        MyParentForm = ParentForm
         Me.DoubleBuffered = True
         lblInfo.Text = MyUpdater.CurDevice.strSerial & " - " & MyUpdater.CurDevice.strCurrentUser
         lblCurrentFile.Text = "Queued..."
+        lblTransRate.Text = "0.00MB/s"
         SetStatus(Progress_Status.Queued)
         If Seq > 0 Then
             lblSeq.Text = "#" & Seq
@@ -152,12 +153,11 @@ Public Class GK_Progress_Fragment
         If ProgStatus <> Progress_Status.Queued Then
             StartUpdate()
         Else
-            Dim blah = Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", vbYesNo + vbQuestion, "Warning", ParentForm)
+            Dim blah = Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", vbYesNo + vbQuestion, "Warning", MyParentForm)
             If blah = MsgBoxResult.Yes Then
                 StartUpdate()
             End If
         End If
-
     End Sub
     ''' <summary>
     ''' Timer that updates the rtbLog control with chunks of data from the log buffer.
@@ -167,11 +167,13 @@ Public Class GK_Progress_Fragment
             UpdateLogBox()
         End If
         If ProgStatus = Progress_Status.Running Then
-            pbarFileProgress.Value = MyUpdater.intFileProgress
-            If MyUpdater.intFileProgress > 1 Then pbarFileProgress.Value = pbarFileProgress.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
-            pbarFileProgress.Value = MyUpdater.intFileProgress
+            'pbarFileProgress.Value = MyUpdater.CurrentStatus.CurFileProgress
+            'If MyUpdater.CurrentStatus.CurFileProgress > 1 Then pbarFileProgress.Value = pbarFileProgress.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
+            ' Debug.Print(MyUpdater.CurrentStatus.CurFileProgress)
+            pbarFileProgress.Value = MyUpdater.CurrentStatus.CurFileProgress
             pbarFileProgress.Refresh()
-            ' pbarFileProgress.Value = MyUpdater.intFileProgress
+            lblTransRate.Text = MyUpdater.CurrentStatus.CurTransferRate.ToString("0.00") & "MB/s"
+            lblTransRate.Refresh()
         End If
     End Sub
     Private Sub UpdateLogBox()
