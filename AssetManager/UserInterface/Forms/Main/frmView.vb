@@ -927,7 +927,11 @@ VALUES (@" & historical_dev.ChangeType & ",
         If SibiUID = "" Then
             Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
         Else
-            Dim sibiForm As New frmManageRequest(Me, SibiUID)
+            If Not RequestIsOpen(SibiUID) Then
+                Dim ManRequest As New frmManageRequest(Me, SibiUID)
+            Else
+                ActivateFormByUID(SibiUID)
+            End If
         End If
     End Sub
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click

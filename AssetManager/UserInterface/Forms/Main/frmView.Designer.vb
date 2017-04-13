@@ -624,7 +624,7 @@ Partial Class frmView
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1132, 275)
+        Me.TrackingTab.Size = New System.Drawing.Size(1132, 288)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -650,7 +650,7 @@ Partial Class frmView
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1274, 586)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1120, 276)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
