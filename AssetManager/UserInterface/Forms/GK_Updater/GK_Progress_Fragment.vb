@@ -167,9 +167,6 @@ Public Class GK_Progress_Fragment
             UpdateLogBox()
         End If
         If ProgStatus = Progress_Status.Running Then
-            'pbarFileProgress.Value = MyUpdater.CurrentStatus.CurFileProgress
-            'If MyUpdater.CurrentStatus.CurFileProgress > 1 Then pbarFileProgress.Value = pbarFileProgress.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
-            ' Debug.Print(MyUpdater.CurrentStatus.CurFileProgress)
             pbarFileProgress.Value = MyUpdater.CurrentStatus.CurFileProgress
             pbarFileProgress.Refresh()
             lblTransRate.Text = MyUpdater.CurrentStatus.CurTransferRate.ToString("0.00") & "MB/s"

@@ -37,6 +37,7 @@ Partial Class GKUpdater_Form
         Me.lblQueued = New System.Windows.Forms.Label()
         Me.QueueChecker = New System.Windows.Forms.Timer(Me.components)
         Me.lblTransferRate = New System.Windows.Forms.Label()
+        Me.cmdSort = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         CType(Me.MaxUpdates, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -51,7 +52,7 @@ Partial Class GKUpdater_Form
         Me.GroupBox1.Controls.Add(Me.Updater_Table)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 90)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1039, 528)
+        Me.GroupBox1.Size = New System.Drawing.Size(1068, 528)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
         '
@@ -64,8 +65,9 @@ Partial Class GKUpdater_Form
         Me.Updater_Table.BackColor = System.Drawing.SystemColors.Control
         Me.Updater_Table.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Updater_Table.Location = New System.Drawing.Point(9, 21)
+        Me.Updater_Table.Margin = New System.Windows.Forms.Padding(10)
         Me.Updater_Table.Name = "Updater_Table"
-        Me.Updater_Table.Size = New System.Drawing.Size(1022, 497)
+        Me.Updater_Table.Size = New System.Drawing.Size(1051, 497)
         Me.Updater_Table.TabIndex = 2
         '
         'GroupBox3
@@ -174,22 +176,33 @@ Partial Class GKUpdater_Form
         'QueueChecker
         '
         Me.QueueChecker.Enabled = True
-        Me.QueueChecker.Interval = 500
+        Me.QueueChecker.Interval = 250
         '
         'lblTransferRate
         '
         Me.lblTransferRate.AutoSize = True
-        Me.lblTransferRate.Location = New System.Drawing.Point(698, 52)
+        Me.lblTransferRate.Location = New System.Drawing.Point(633, 47)
         Me.lblTransferRate.Name = "lblTransferRate"
         Me.lblTransferRate.Size = New System.Drawing.Size(112, 14)
         Me.lblTransferRate.TabIndex = 3
         Me.lblTransferRate.Text = "[Transfer Rate]"
         '
+        'cmdSort
+        '
+        Me.cmdSort.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdSort.Location = New System.Drawing.Point(994, 67)
+        Me.cmdSort.Name = "cmdSort"
+        Me.cmdSort.Size = New System.Drawing.Size(86, 24)
+        Me.cmdSort.TabIndex = 4
+        Me.cmdSort.Text = "Sort"
+        Me.cmdSort.UseVisualStyleBackColor = True
+        '
         'GKUpdater_Form
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1065, 638)
+        Me.ClientSize = New System.Drawing.Size(1094, 638)
+        Me.Controls.Add(Me.cmdSort)
         Me.Controls.Add(Me.lblTransferRate)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox1)
@@ -222,4 +235,5 @@ Partial Class GKUpdater_Form
     Friend WithEvents cmdCancelAll As Button
     Friend WithEvents Updater_Table As FlowLayoutPanel
     Friend WithEvents lblTransferRate As Label
+    Friend WithEvents cmdSort As Button
 End Class

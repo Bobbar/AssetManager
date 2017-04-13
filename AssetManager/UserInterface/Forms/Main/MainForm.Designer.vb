@@ -86,6 +86,7 @@ Partial Class MainForm
         Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
+        Me.tsmGKUpdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -671,7 +672,7 @@ Partial Class MainForm
         '
         'AdminDropDown
         '
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem})
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater})
         Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.Name = "AdminDropDown"
@@ -738,6 +739,12 @@ Partial Class MainForm
         Me.cmdSibi.Size = New System.Drawing.Size(226, 34)
         Me.cmdSibi.Text = "Sibi Aquisition Manager"
         Me.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'tsmGKUpdater
+        '
+        Me.tsmGKUpdater.Name = "tsmGKUpdater"
+        Me.tsmGKUpdater.Size = New System.Drawing.Size(227, 26)
+        Me.tsmGKUpdater.Text = "GK Updater"
         '
         'MainForm
         '
@@ -836,4 +843,5 @@ Partial Class MainForm
     Friend WithEvents cmdSupDevSearch As Button
     Friend WithEvents chkHistorical As CheckBox
     Friend WithEvents tsmAddGKUpdate As ToolStripMenuItem
+    Friend WithEvents tsmGKUpdater As ToolStripMenuItem
 End Class

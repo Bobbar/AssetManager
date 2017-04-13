@@ -2,12 +2,14 @@
 Imports System.Net.NetworkInformation
 Public Class GKUpdater_Form
     Private bolRunQueue As Boolean = True
-    Private MaxSimUpdates As Integer = 2
+    Private MaxSimUpdates As Integer = 4
     Private MyUpdates As New List(Of GK_Progress_Fragment)
+    Private bolStarting As Boolean = True
     Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
+        bolStarting = False
         MaxUpdates.Value = MaxSimUpdates
         ' Add any initialization after the InitializeComponent() call.
 
@@ -25,6 +27,13 @@ Public Class GKUpdater_Form
 
         ProcessUpdates()
     End Sub
+    Private Function ActiveUpdates() As Boolean
+        For Each upd As GK_Progress_Fragment In MyUpdates
+            If upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Running Then Return True
+        Next
+        Return False
+    End Function
+
     Private Sub CancelAll()
         For Each upd As GK_Progress_Fragment In MyUpdates
             If upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Running Then
@@ -32,12 +41,6 @@ Public Class GKUpdater_Form
             End If
         Next
     End Sub
-    Private Function ActiveUpdates() As Boolean
-        For Each upd As GK_Progress_Fragment In MyUpdates
-            If upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Running Then Return True
-        Next
-        Return False
-    End Function
     ''' <summary>
     ''' Returns True if number of running updates is less than the maximum simultaneous allowed updates and RunQueue is True.
     ''' </summary>
@@ -55,6 +58,12 @@ Public Class GKUpdater_Form
         Return False
     End Function
 
+    Private Sub cmdCancelAll_Click(sender As Object, e As EventArgs) Handles cmdCancelAll.Click
+        CancelAll()
+        StopQueue()
+
+    End Sub
+
     Private Sub cmdPauseResume_Click(sender As Object, e As EventArgs) Handles cmdPauseResume.Click
         If bolRunQueue Then
             StopQueue()
@@ -62,14 +71,10 @@ Public Class GKUpdater_Form
             StartQueue()
         End If
     End Sub
-    Private Sub StopQueue()
-        bolRunQueue = False
-        cmdPauseResume.Text = "Resume Queue"
+    Private Sub cmdSort_Click(sender As Object, e As EventArgs) Handles cmdSort.Click
+        SortUpdates()
     End Sub
-    Private Sub StartQueue()
-        bolRunQueue = True
-        cmdPauseResume.Text = "Pause Queue"
-    End Sub
+
     Private Sub CriticalStop()
         StopQueue()
         Message("The queue was stopped because of an access error. Please re-enter your credentials.", vbExclamation + vbOKOnly, "Queue Stopped", Me)
@@ -85,6 +90,7 @@ Public Class GKUpdater_Form
         End If
         NewGetCreds.Dispose()
     End Sub
+
     Private Sub GKUpdater_Form_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If ActiveUpdates() Then
             e.Cancel = True
@@ -93,7 +99,8 @@ Public Class GKUpdater_Form
     End Sub
 
     Private Sub MaxUpdates_ValueChanged(sender As Object, e As EventArgs) Handles MaxUpdates.ValueChanged
-        MaxSimUpdates = MaxUpdates.Value
+
+        If Not bolStarting Then MaxSimUpdates = MaxUpdates.Value
     End Sub
 
     Private Sub ProcessUpdates()
@@ -103,6 +110,7 @@ Public Class GKUpdater_Form
         SetStats()
 
     End Sub
+
     ''' <summary>
     ''' Removes disposed update fragments from list.
     ''' </summary>
@@ -142,6 +150,28 @@ Public Class GKUpdater_Form
         lblTotUpdates.Text = "Tot Updates: " & MyUpdates.Count
         lblTransferRate.Text = "Transfer Rate: " & TransferRateSum.ToString("0.00") & " MB/s"
     End Sub
+
+    Private Sub SortUpdates()
+
+        Dim sortUpdates As New List(Of GK_Progress_Fragment)
+
+        For Each upd As GK_Progress_Fragment In MyUpdates
+            If upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Running Then sortUpdates.Add(upd)
+        Next
+
+        For Each upd As GK_Progress_Fragment In MyUpdates
+            If upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Queued Then sortUpdates.Add(upd)
+        Next
+        For Each upd As GK_Progress_Fragment In MyUpdates
+            Select Case upd.ProgStatus
+                Case GK_Progress_Fragment.Progress_Status.Complete, GK_Progress_Fragment.Progress_Status.Errors, GK_Progress_Fragment.Progress_Status.Cancelled
+                    sortUpdates.Add(upd)
+            End Select
+        Next
+        Updater_Table.Controls.Clear()
+        Updater_Table.Controls.AddRange(sortUpdates.ToArray)
+    End Sub
+
     ''' <summary>
     ''' Starts the next update that has a queued status.
     ''' </summary>
@@ -154,7 +184,13 @@ Public Class GKUpdater_Form
         Next
     End Sub
 
-    Private Sub cmdCancelAll_Click(sender As Object, e As EventArgs) Handles cmdCancelAll.Click
-        CancelAll()
+    Private Sub StartQueue()
+        bolRunQueue = True
+        cmdPauseResume.Text = "Pause Queue"
+    End Sub
+
+    Private Sub StopQueue()
+        bolRunQueue = False
+        cmdPauseResume.Text = "Resume Queue"
     End Sub
 End Class

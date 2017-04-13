@@ -495,6 +495,14 @@ Public Class MainForm
         If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
     End Sub
 
+    Private Sub tsmGKUpdater_Click(sender As Object, e As EventArgs) Handles tsmGKUpdater.Click
+        If Not GKUpdater_Form.Visible Then
+            GKUpdater_Form.Show()
+        Else
+            GKUpdater_Form.Activate()
+        End If
+    End Sub
+
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
         Dim results As DataTable = Asset.DevicesBySup(Me)
         If results IsNot Nothing Then
