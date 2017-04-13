@@ -92,13 +92,15 @@ Module OtherFunctions
         stpw.Start()
     End Sub
     Private intTimerHits As Integer = 0
-    Public Sub StopTimer()
+    Public Function StopTimer()
         stpw.Stop()
         intTimerHits += 1
-        Debug.Print(intTimerHits & "  Stopwatch: MS:" & stpw.ElapsedMilliseconds & " Ticks: " & stpw.ElapsedTicks)
-    End Sub
+        Dim Results As String = intTimerHits & "  Stopwatch: MS:" & stpw.ElapsedMilliseconds & " Ticks: " & stpw.ElapsedTicks
+        Debug.Print(Results)
+        Return Results
+    End Function
     Public Sub Logger(Message As String)
-        Dim MaxLogSizeKiloBytes As Short = 100
+        Dim MaxLogSizeKiloBytes As Short = 500
         Dim DateStamp As String = DateTime.Now.ToString
         Dim infoReader As FileInfo
         infoReader = My.Computer.FileSystem.GetFileInfo(strLogPath)
@@ -145,10 +147,12 @@ Module OtherFunctions
         Dim blah = Message("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
     End Sub
     Public Sub EndProgram()
-        ProgramEnding = True
-        Logger("Ending Program...")
-        PurgeTempDir()
-        Application.Exit()
+        If OKToEnd() Then
+            ProgramEnding = True
+            Logger("Ending Program...")
+            PurgeTempDir()
+            Application.Exit()
+        End If
     End Sub
     Public Sub PurgeTempDir()
         On Error Resume Next
@@ -204,6 +208,11 @@ Module OtherFunctions
     Public Function Message(ByVal Prompt As String, Optional ByVal Buttons As Integer = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As MsgBoxResult
         Dim NewMessage As New MyDialog(ParentFrm)
         Return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
+    End Function
+    Public Function OKToEnd() As Boolean
+        If CheckForActiveTransfers() Then Return False
+        If GKUpdater_Form.UpdatesRunning() Then Return False
+        Return True
     End Function
     Public Function CheckForActiveTransfers() As Boolean
         Dim CancelClose As Boolean = False

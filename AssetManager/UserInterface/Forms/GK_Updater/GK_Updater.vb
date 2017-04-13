@@ -132,44 +132,38 @@ Public Class GK_Updater : Implements IDisposable
                     End If
                 End If
                 'Copy source to target, overwriting
-                Dim BufferSize As Integer = 256000
-                Dim perc As Integer = 0
-                Dim buffer(BufferSize) As Byte
-                Dim bytesIn As Integer = 1
-                Dim totalBytesIn As Integer
-                Dim CurrentFile As New FileInfo(file__1)
-                stpSpeed.Start()
-                Using fStream As System.IO.FileStream = CurrentFile.OpenRead(),
-                        destFile As System.IO.Stream = New FileStream(cPath, FileMode.OpenOrCreate) ',
-                    ' bufStream As New BufferedStream(destFile, BufferSize)
-                    CurrentStatus.CurFileProgress = 1
-                    totalBytesIn = 0
-                    Dim flLength As Integer = fStream.Length
-                    Do Until bytesIn < 1 Or CopyWorker.CancellationPending
-                        bytesIn = fStream.Read(buffer, 0, BufferSize)
-                        If bytesIn > 0 Then
-
-                            destFile.Write(buffer, 0, bytesIn)
-                            ' bufStream.Write(buffer, 0, bytesIn)
-                            totalBytesIn += bytesIn
-                            lngBytesMoved += bytesIn
-                            If flLength > 0 Then
-                                perc = CInt((totalBytesIn / flLength) * 100)
-
-                                CurrentStatus.CurFileProgress = perc
-                                'If perc = 100 Then
-                                '    Debug.Print(perc)
-                                'End If
-                                '  Debug.Print(perc)
-                                ' Threading.Thread.Sleep(100)
-                            End If
-                        End If
-                    Loop
-                End Using
+                CopyFile(file__1, cPath)
             Next
         End Using
     End Sub
 
+    Private Sub CopyFile(Source As String, Dest As String)
+        Dim BufferSize As Integer = 256000
+        Dim perc As Integer = 0
+        Dim buffer(BufferSize) As Byte
+        Dim bytesIn As Integer = 1
+        Dim totalBytesIn As Integer
+        Dim CurrentFile As New FileInfo(Source)
+        stpSpeed.Start()
+        Using fStream As System.IO.FileStream = CurrentFile.OpenRead(),
+                destFile As System.IO.Stream = New FileStream(Dest, FileMode.OpenOrCreate)
+            CurrentStatus.CurFileProgress = 1
+            totalBytesIn = 0
+            Dim flLength As Integer = fStream.Length
+            Do Until bytesIn < 1 Or CopyWorker.CancellationPending
+                bytesIn = fStream.Read(buffer, 0, BufferSize)
+                If bytesIn > 0 Then
+                    destFile.Write(buffer, 0, bytesIn)
+                    totalBytesIn += bytesIn
+                    lngBytesMoved += bytesIn
+                    If flLength > 0 Then
+                        perc = CInt((totalBytesIn / flLength) * 100)
+                        CurrentStatus.CurFileProgress = perc
+                    End If
+                End If
+            Loop
+        End Using
+    End Sub
     Private Sub CopyWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
 
         If e.ProgressPercentage = 1 Then

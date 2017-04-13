@@ -34,7 +34,6 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreen1.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Get_Credentials.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.GK_Progress_Fragment.resources

@@ -92,12 +92,17 @@ Public Class GKUpdater_Form
     End Sub
 
     Private Sub GKUpdater_Form_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If ActiveUpdates() Then
-            e.Cancel = True
-            Message("There are still updates running!  Cancel the updates or wait for them to finish.", vbOKOnly + vbExclamation, "Close Aborted", Me)
-        End If
+        If UpdatesRunning() Then e.Cancel = True
     End Sub
-
+    Public Function UpdatesRunning() As Boolean
+        If ActiveUpdates() Then
+            Me.Activate()
+            Me.WindowState = FormWindowState.Normal
+            Message("There are still updates running!  Cancel the updates or wait for them to finish.", vbOKOnly + vbExclamation, "Close Aborted", Me)
+            Return True
+        End If
+        Return False
+    End Function
     Private Sub MaxUpdates_ValueChanged(sender As Object, e As EventArgs) Handles MaxUpdates.ValueChanged
 
         If Not bolStarting Then MaxSimUpdates = MaxUpdates.Value

@@ -90,8 +90,7 @@ Public Class MainForm
         RefreshCombos()
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        Dim CancelClose As Boolean = CheckForActiveTransfers()
-        If CancelClose Then
+        If Not OKToEnd() Then
             e.Cancel = True
         Else
             MyLiveBox.Dispose()
