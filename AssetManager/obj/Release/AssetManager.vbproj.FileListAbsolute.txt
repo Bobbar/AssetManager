@@ -38,3 +38,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreen1.resou
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Get_Credentials.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.GK_Progress_Fragment.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.GKUpdater_Form.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.vbprojResolveAssemblyReference.cache

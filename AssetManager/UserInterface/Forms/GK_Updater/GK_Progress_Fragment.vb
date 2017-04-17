@@ -44,6 +44,10 @@ Public Class GK_Progress_Fragment
         Errors
     End Enum
 
+    Public Sub CancelUpdate()
+        If Not MyUpdater.IsDisposed Then MyUpdater.CancelUpdate()
+    End Sub
+
     Public Sub StartUpdate()
         Try
             If ProgStatus <> Progress_Status.Running Then
@@ -70,6 +74,21 @@ Public Class GK_Progress_Fragment
     Protected Overridable Sub OnCriticalStopError(e As EventArgs)
         RaiseEvent CriticalStopError(Me, e)
     End Sub
+    Private Sub DrawLight(Color As Color)
+        Dim MyBrush As New SolidBrush(Color)
+        Dim StrokePen As New Pen(Color.Black, 1.5)
+        Dim bm As New Bitmap(pbStatus.Width, pbStatus.Height)
+        Dim gr As Graphics = Graphics.FromImage(bm)
+        gr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        Dim XLoc, YLoc, Size As Single
+        Size = 20
+        XLoc = pbStatus.Width / 2 - Size / 2
+        YLoc = pbStatus.Height / 2 - Size / 2
+        gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size)
+        gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size)
+        pbStatus.Image = bm
+    End Sub
+
     Private Sub GK_Progress_Fragment_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         MyUpdater.Dispose()
     End Sub
@@ -85,8 +104,7 @@ Public Class GK_Progress_Fragment
         CurrentStatus = e.CurrentStatus
         pbarProgress.Maximum = CurrentStatus.TotFiles
         pbarProgress.Value = CurrentStatus.CurFileIdx
-        Dim CurrentFile = CurrentStatus.CurFileName
-        lblCurrentFile.Text = CurrentFile
+        lblCurrentFile.Text = CurrentStatus.CurFileName
         lblCurrentFile.Refresh()
     End Sub
     Private Sub GKUpdate_Cancelled(sender As Object, e As EventArgs)
@@ -107,10 +125,22 @@ Public Class GK_Progress_Fragment
                 End If
             End If
         Else
-            lblCurrentFile.Text = "Complete! Errors: " & MyUpdater.ErrList.Count
+            lblCurrentFile.Text = "Complete! Errors: " & MyUpdater.ErrorList.Count
             SetStatus(Progress_Status.Complete)
         End If
     End Sub
+    Private Sub HideLog()
+        Me.Size = Me.MinimumSize
+        bolShow = False
+        lblShowHide.Text = "s" '"+"
+    End Sub
+    Private Sub ShowLog()
+        UpdateLogBox()
+        Me.Size = Me.MaximumSize
+        bolShow = True
+        lblShowHide.Text = "r" '"-"
+    End Sub
+
     Private Sub lblInfo_Click(sender As Object, e As EventArgs) Handles lblInfo.Click
         LookupDevice(MainForm, MyUpdater.CurDevice)
     End Sub
@@ -121,17 +151,6 @@ Public Class GK_Progress_Fragment
         Else
             HideLog()
         End If
-    End Sub
-    Private Sub ShowLog()
-        UpdateLogBox()
-        Me.Size = Me.MaximumSize
-        bolShow = True
-        lblShowHide.Text = "r" '"-"
-    End Sub
-    Private Sub HideLog()
-        Me.Size = Me.MinimumSize
-        bolShow = False
-        lblShowHide.Text = "s" '"+"
     End Sub
     Private Sub pbCancelClose_Click(sender As Object, e As EventArgs) Handles pbCancelClose.Click
         If ProgStatus = Progress_Status.Running Then
@@ -145,9 +164,6 @@ Public Class GK_Progress_Fragment
         End If
 
     End Sub
-    Public Sub CancelUpdate()
-        If Not MyUpdater.IsDisposed Then MyUpdater.CancelUpdate()
-    End Sub
 
     Private Sub pbRestart_Click(sender As Object, e As EventArgs) Handles pbRestart.Click
         If ProgStatus <> Progress_Status.Queued Then
@@ -159,29 +175,12 @@ Public Class GK_Progress_Fragment
             End If
         End If
     End Sub
-    ''' <summary>
-    ''' Timer that updates the rtbLog control with chunks of data from the log buffer.
-    ''' </summary>
-    Private Sub UI_Timer_Tick(sender As Object, e As EventArgs) Handles UI_Timer.Tick
-        If bolShow And LogBuff <> "" Then
-            UpdateLogBox()
-        End If
-        If ProgStatus = Progress_Status.Running Then
-            pbarFileProgress.Value = MyUpdater.CurrentStatus.CurFileProgress
-            pbarFileProgress.Refresh()
-            lblTransRate.Text = MyUpdater.CurrentStatus.CurTransferRate.ToString("0.00") & "MB/s"
-            lblTransRate.Refresh()
-        End If
-    End Sub
-    Private Sub UpdateLogBox()
-        rtbLog.AppendText(LogBuff)
-        rtbLog.Refresh()
-        LogBuff = ""
-    End Sub
+
     Private Sub SetStatus(Status As Progress_Status)
         ProgStatus = Status
         SetStatusLight(Status)
     End Sub
+
     Private Sub SetStatusLight(Status As Progress_Status)
         Select Case Status
             Case Progress_Status.Running, Progress_Status.Starting
@@ -192,19 +191,24 @@ Public Class GK_Progress_Fragment
                 DrawLight(Color.Red)
         End Select
     End Sub
-    Private Sub DrawLight(Color As Color)
-        Dim MyBrush As New SolidBrush(Color)
-        Dim StrokePen As New Pen(Color.Black, 1.5)
-        Dim bm As New Bitmap(pbStatus.Width, pbStatus.Height)
-        Dim gr As Graphics = Graphics.FromImage(bm)
-        gr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-        Dim XLoc, YLoc, Size As Single
-        Size = 20
-        XLoc = pbStatus.Width / 2 - Size / 2
-        YLoc = pbStatus.Height / 2 - Size / 2
-        gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size)
-        gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size)
-        pbStatus.Image = bm
-    End Sub
 
+    ''' <summary>
+    ''' Timer that updates the rtbLog control with chunks of data from the log buffer.
+    ''' </summary>
+    Private Sub UI_Timer_Tick(sender As Object, e As EventArgs) Handles UI_Timer.Tick
+        If bolShow And LogBuff <> "" Then
+            UpdateLogBox()
+        End If
+        If ProgStatus = Progress_Status.Running Then
+            pbarFileProgress.Value = MyUpdater.UpdateStatus.CurFileProgress
+            pbarFileProgress.Refresh()
+            lblTransRate.Text = MyUpdater.UpdateStatus.CurTransferRate.ToString("0.00") & "MB/s"
+            lblTransRate.Refresh()
+        End If
+    End Sub
+    Private Sub UpdateLogBox()
+        rtbLog.AppendText(LogBuff)
+        rtbLog.Refresh()
+        LogBuff = ""
+    End Sub
 End Class

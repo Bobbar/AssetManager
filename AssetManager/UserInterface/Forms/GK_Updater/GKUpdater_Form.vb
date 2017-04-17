@@ -15,7 +15,6 @@ Public Class GKUpdater_Form
 
         DoubleBufferedTableLayout(Updater_Table, True)
 
-        ' Show()
 
     End Sub
     Public Sub AddUpdate(ByRef Updater As GK_Updater)
@@ -141,7 +140,7 @@ Public Class GKUpdater_Form
                 Case GK_Progress_Fragment.Progress_Status.Queued
                     intQueued += 1
                 Case GK_Progress_Fragment.Progress_Status.Running
-                    TransferRateSum += upd.MyUpdater.CurrentStatus.CurTransferRate
+                    TransferRateSum += upd.MyUpdater.UpdateStatus.CurTransferRate
                     intRunning += 1
                 Case GK_Progress_Fragment.Progress_Status.Complete
                     intComplete += 1

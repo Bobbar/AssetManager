@@ -128,7 +128,7 @@ Partial Class GK_Progress_Fragment
         Me.pbRestart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pbRestart.TabIndex = 7
         Me.pbRestart.TabStop = False
-        Me.MyToolTip.SetToolTip(Me.pbRestart, "Restart Update")
+        Me.MyToolTip.SetToolTip(Me.pbRestart, "Start/Restart Update")
         '
         'pbCancelClose
         '

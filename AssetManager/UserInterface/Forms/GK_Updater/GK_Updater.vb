@@ -5,10 +5,11 @@ Imports System.ComponentModel
 Imports System.Text
 
 Public Class GK_Updater : Implements IDisposable
+#Region "Members"
     Private WithEvents CopyWorker As BackgroundWorker
     Private WithEvents SpeedTimer As Timer
-    Public CurrentStatus As Status_Stats
-    Public ErrList As New List(Of String)
+    Private CurrentStatus As Status_Stats
+    Private ErrList As New List(Of String)
     Private ReadOnly GKPath As String = "\PSi\Gatekeeper"
     Private ClientPath As String
     Private CurrentFileIndex As Integer = 0
@@ -17,16 +18,40 @@ Public Class GK_Updater : Implements IDisposable
     Private ServerPath As String = "C:"
     Private stpSpeed As New Stopwatch
     Private UpdateDevice As Device_Info
+    Private CancelWatch As New Stopwatch
+#End Region
+
+#Region "Constructors"
     Sub New(ByVal Device As Device_Info)
         UpdateDevice = Device
         ClientPath = "\\D" & UpdateDevice.strSerial & "\c$"
         InitWorker()
         InitializeTimer()
     End Sub
+#End Region
+
+#Region "Event Handlers"
     Public Event LogEvent As EventHandler
     Public Event StatusUpdate As EventHandler
     Public Event UpdateCancelled As EventHandler
     Public Event UpdateComplete As EventHandler
+    Protected Overridable Sub OnLogEvent(e As LogEvents)
+        RaiseEvent LogEvent(Me, e)
+    End Sub
+    Protected Overridable Sub OnStatusUpdate(e As GKUpdateEvents)
+        RaiseEvent StatusUpdate(Me, e)
+    End Sub
+    Protected Overridable Sub OnUpdateCancelled(e As EventArgs)
+        RaiseEvent UpdateCancelled(Me, e)
+    End Sub
+    Protected Overridable Sub OnUpdateComplete(e As GKUpdateCompleteEvents)
+        RaiseEvent UpdateComplete(Me, e)
+    End Sub
+
+
+#End Region
+
+#Region "Properties"
     Public ReadOnly Property CurDevice As Device_Info
         Get
             Return UpdateDevice
@@ -37,6 +62,20 @@ Public Class GK_Updater : Implements IDisposable
             Return disposedValue
         End Get
     End Property
+    Public ReadOnly Property ErrorList As List(Of String)
+        Get
+            Return ErrList
+        End Get
+    End Property
+    Public ReadOnly Property UpdateStatus As Status_Stats
+        Get
+            Return CurrentStatus
+        End Get
+    End Property
+
+#End Region
+
+#Region "Methods"
     Public Sub CancelUpdate()
         CopyWorker.CancelAsync()
     End Sub
@@ -53,18 +92,7 @@ Public Class GK_Updater : Implements IDisposable
         WorkArgs.StartIndex = 0
         If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(WorkArgs)
     End Sub
-    Protected Overridable Sub OnLogEvent(e As LogEvents)
-        RaiseEvent LogEvent(Me, e)
-    End Sub
-    Protected Overridable Sub OnStatusUpdate(e As GKUpdateEvents)
-        RaiseEvent StatusUpdate(Me, e)
-    End Sub
-    Protected Overridable Sub OnUpdateCancelled(e As EventArgs)
-        RaiseEvent UpdateCancelled(Me, e)
-    End Sub
-    Protected Overridable Sub OnUpdateComplete(e As GKUpdateCompleteEvents)
-        RaiseEvent UpdateComplete(Me, e)
-    End Sub
+
     ''' <summary>
     ''' Pings the current device. Success returns True. All failures return False.
     ''' </summary>
@@ -86,6 +114,34 @@ Public Class GK_Updater : Implements IDisposable
             Return False
         End Try
     End Function
+    Private Sub CopyFile(Source As String, Dest As String)
+        Dim BufferSize As Integer = 256000
+        Dim perc As Integer = 0
+        Dim buffer(BufferSize) As Byte
+        Dim bytesIn As Integer = 1
+        Dim totalBytesIn As Integer
+        Dim CurrentFile As New FileInfo(Source)
+        stpSpeed.Start()
+        Using fStream As System.IO.FileStream = CurrentFile.OpenRead(),
+                destFile As System.IO.FileStream = New FileStream(Dest, FileMode.OpenOrCreate)
+            CurrentStatus.CurFileProgress = 1
+            totalBytesIn = 0
+            Dim flLength As Integer = fStream.Length
+            Do Until bytesIn < 1 Or CopyWorker.CancellationPending
+                bytesIn = fStream.Read(buffer, 0, BufferSize)
+                If bytesIn > 0 Then
+                    destFile.Write(buffer, 0, bytesIn)
+                    totalBytesIn += bytesIn
+                    lngBytesMoved += bytesIn
+                    If flLength > 0 Then
+                        perc = CInt((totalBytesIn / flLength) * 100)
+                        CurrentStatus.CurFileProgress = perc
+                    End If
+                End If
+            Loop
+        End Using
+    End Sub
+
     Private Sub CopyWorker_DoWork(sender As Object, e As DoWorkEventArgs)
         If Not CanPing() Then
             Throw New Exception("Cannot ping device.")
@@ -136,34 +192,6 @@ Public Class GK_Updater : Implements IDisposable
             Next
         End Using
     End Sub
-
-    Private Sub CopyFile(Source As String, Dest As String)
-        Dim BufferSize As Integer = 256000
-        Dim perc As Integer = 0
-        Dim buffer(BufferSize) As Byte
-        Dim bytesIn As Integer = 1
-        Dim totalBytesIn As Integer
-        Dim CurrentFile As New FileInfo(Source)
-        stpSpeed.Start()
-        Using fStream As System.IO.FileStream = CurrentFile.OpenRead(),
-                destFile As System.IO.Stream = New FileStream(Dest, FileMode.OpenOrCreate)
-            CurrentStatus.CurFileProgress = 1
-            totalBytesIn = 0
-            Dim flLength As Integer = fStream.Length
-            Do Until bytesIn < 1 Or CopyWorker.CancellationPending
-                bytesIn = fStream.Read(buffer, 0, BufferSize)
-                If bytesIn > 0 Then
-                    destFile.Write(buffer, 0, bytesIn)
-                    totalBytesIn += bytesIn
-                    lngBytesMoved += bytesIn
-                    If flLength > 0 Then
-                        perc = CInt((totalBytesIn / flLength) * 100)
-                        CurrentStatus.CurFileProgress = perc
-                    End If
-                End If
-            Loop
-        End Using
-    End Sub
     Private Sub CopyWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
 
         If e.ProgressPercentage = 1 Then
@@ -206,7 +234,7 @@ Public Class GK_Updater : Implements IDisposable
                 If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(NewArgs)
             Else
                 GKLog("------------------------------------------------")
-                GKLog("Unexpected erors during copy!")
+                GKLog("Unexpected errors during copy!")
                 GKLog(e.Error.Message, True)
                 OnUpdateComplete(New GKUpdateCompleteEvents(True, e.Error))
             End If
@@ -257,8 +285,11 @@ Public Class GK_Updater : Implements IDisposable
 
             End If
         Else
-            End If
+        End If
     End Sub
+#End Region
+
+#Region "Structures And Classes"
     Public Structure GK_Complete_Stats
         Public Errors As Boolean
     End Structure
@@ -337,6 +368,8 @@ Public Class GK_Updater : Implements IDisposable
             End Get
         End Property
     End Class
+#End Region
+
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls
 
