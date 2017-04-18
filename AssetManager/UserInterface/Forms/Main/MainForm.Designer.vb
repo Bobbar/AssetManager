@@ -28,6 +28,7 @@ Partial Class MainForm
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmAddGKUpdate = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblRecords = New System.Windows.Forms.Label()
@@ -83,6 +84,7 @@ Partial Class MainForm
         Me.tsmUserManager = New System.Windows.Forms.ToolStripMenuItem()
         Me.TextEnCrypterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmGKUpdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
         Me.GroupBox1.SuspendLayout()
@@ -107,7 +109,7 @@ Partial Class MainForm
         Me.GroupBox1.Controls.Add(Me.lblRecords)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 267)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1215, 358)
+        Me.GroupBox1.Size = New System.Drawing.Size(1356, 513)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         '
@@ -161,33 +163,40 @@ Partial Class MainForm
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1194, 320)
+        Me.ResultGrid.Size = New System.Drawing.Size(1335, 475)
         Me.ResultGrid.TabIndex = 17
         Me.ResultGrid.VirtualMode = True
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.ToolStripSeparator3, Me.CopyTool})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.tsmAddGKUpdate, Me.ToolStripSeparator3, Me.CopyTool})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(127, 54)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 76)
         '
         'ViewToolStripMenuItem
         '
         Me.ViewToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ViewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.View_Details
         Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
-        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(126, 22)
+        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(179, 22)
         Me.ViewToolStripMenuItem.Text = "View"
+        '
+        'tsmAddGKUpdate
+        '
+        Me.tsmAddGKUpdate.Image = CType(resources.GetObject("tsmAddGKUpdate.Image"), System.Drawing.Image)
+        Me.tsmAddGKUpdate.Name = "tsmAddGKUpdate"
+        Me.tsmAddGKUpdate.Size = New System.Drawing.Size(179, 22)
+        Me.tsmAddGKUpdate.Text = "Enqueue GK Update"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(123, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(176, 6)
         '
         'CopyTool
         '
         Me.CopyTool.Name = "CopyTool"
-        Me.CopyTool.Size = New System.Drawing.Size(126, 22)
+        Me.CopyTool.Size = New System.Drawing.Size(179, 22)
         Me.CopyTool.Text = "Copy Text"
         '
         'lblRecords
@@ -195,9 +204,9 @@ Partial Class MainForm
         Me.lblRecords.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblRecords.ForeColor = System.Drawing.Color.FromArgb(CType(CType(53, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(53, Byte), Integer))
-        Me.lblRecords.Location = New System.Drawing.Point(15, 342)
+        Me.lblRecords.Location = New System.Drawing.Point(15, 497)
         Me.lblRecords.Name = "lblRecords"
-        Me.lblRecords.Size = New System.Drawing.Size(1188, 13)
+        Me.lblRecords.Size = New System.Drawing.Size(1329, 13)
         Me.lblRecords.TabIndex = 18
         Me.lblRecords.Text = "Records: 0"
         Me.lblRecords.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -567,9 +576,9 @@ Partial Class MainForm
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel4, Me.DateTimeLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 632)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 787)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1240, 22)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1381, 22)
         Me.StatusStrip1.TabIndex = 5
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -589,7 +598,7 @@ Partial Class MainForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(963, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(1104, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ConnStatusLabel
@@ -647,7 +656,7 @@ Partial Class MainForm
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ToolStrip1.Size = New System.Drawing.Size(1240, 37)
+        Me.ToolStrip1.Size = New System.Drawing.Size(1381, 37)
         Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 6
         Me.ToolStrip1.Text = "ToolStrip1"
@@ -663,7 +672,7 @@ Partial Class MainForm
         '
         'AdminDropDown
         '
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem})
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater})
         Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.Name = "AdminDropDown"
@@ -715,6 +724,12 @@ Partial Class MainForm
         Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(227, 26)
         Me.ScanAttachmentToolStripMenuItem.Text = "Scan Attachments"
         '
+        'tsmGKUpdater
+        '
+        Me.tsmGKUpdater.Name = "tsmGKUpdater"
+        Me.tsmGKUpdater.Size = New System.Drawing.Size(227, 26)
+        Me.tsmGKUpdater.Text = "GK Updater"
+        '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
@@ -736,7 +751,7 @@ Partial Class MainForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1240, 654)
+        Me.ClientSize = New System.Drawing.Size(1381, 809)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.StatusStrip1)
@@ -747,7 +762,6 @@ Partial Class MainForm
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Asset Manager - Main"
-        Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.GroupBox1.ResumeLayout(False)
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ContextMenuStrip1.ResumeLayout(False)
@@ -827,4 +841,6 @@ Partial Class MainForm
     Friend WithEvents ScanAttachmentToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmdSupDevSearch As Button
     Friend WithEvents chkHistorical As CheckBox
+    Friend WithEvents tsmAddGKUpdate As ToolStripMenuItem
+    Friend WithEvents tsmGKUpdater As ToolStripMenuItem
 End Class

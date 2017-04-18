@@ -248,6 +248,11 @@ VALUES(@" & historical_dev.ChangeType & ",
             Return Nothing
         End Try
     End Function
+    Public Function Get_DeviceInfo_From_UID(GUID As String) As Device_Info
+        Using SQLComms As New clsMySQL_Comms
+            Return Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & GUID & "'"))
+        End Using
+    End Function
     Public Function Get_EntryInfo(ByVal strGUID As String) As Device_Info
         Try
             Dim tmpInfo As New Device_Info

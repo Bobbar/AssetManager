@@ -90,8 +90,7 @@ Public Class MainForm
         RefreshCombos()
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        Dim CancelClose As Boolean = CheckForActiveTransfers()
-        If CancelClose Then
+        If Not OKToEnd() Then
             e.Cancel = True
         Else
             MyLiveBox.Dispose()
@@ -470,6 +469,38 @@ Public Class MainForm
     Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
         FTP.ScanAttachements()
     End Sub
+
+    Private Sub tsmAddGKUpdate_Click(sender As Object, e As EventArgs) Handles tsmAddGKUpdate.Click
+        EnqueueGKUpdate()
+    End Sub
+    Private Sub EnqueueGKUpdate()
+        If AdminCreds Is Nothing Then
+            Dim NewGetCreds As New Get_Credentials
+            NewGetCreds.ShowDialog()
+            If NewGetCreds.DialogResult <> DialogResult.OK Then
+                NewGetCreds.Dispose()
+                Exit Sub
+            End If
+            NewGetCreds.Dispose()
+        End If
+
+
+        For Each cell As DataGridViewCell In ResultGrid.SelectedCells
+            Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), cell.RowIndex).Value.ToString
+            Dim SelectedDevice = Asset.Get_DeviceInfo_From_UID(DevUID)
+            GKUpdater_Form.AddUpdate(SelectedDevice)
+        Next
+        If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
+    End Sub
+
+    Private Sub tsmGKUpdater_Click(sender As Object, e As EventArgs) Handles tsmGKUpdater.Click
+        If Not GKUpdater_Form.Visible Then
+            GKUpdater_Form.Show()
+        Else
+            GKUpdater_Form.Activate()
+        End If
+    End Sub
+
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
         Dim results As DataTable = Asset.DevicesBySup(Me)
         If results IsNot Nothing Then

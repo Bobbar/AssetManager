@@ -117,4 +117,15 @@
         Next
         Return False
     End Function
+    Public Sub LookupDevice(ParentForm As MyForm, Device As Device_Info)
+        If Device.strGUID IsNot Nothing Then
+            If Not DeviceIsOpen(Device.strGUID) Then
+                Dim NewView As New frmView(ParentForm, Device.strGUID)
+            Else
+                ActivateFormByUID(Device.strGUID)
+            End If
+        Else
+            Message("Device not found.", vbOKOnly + vbExclamation, "Error", ParentForm)
+        End If
+    End Sub
 End Module
