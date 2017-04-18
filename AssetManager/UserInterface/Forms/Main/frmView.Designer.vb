@@ -56,6 +56,7 @@ Partial Class frmView
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
+        Me.cmdGKUpdate = New System.Windows.Forms.Button()
         Me.cmdRestart = New System.Windows.Forms.Button()
         Me.cmdShowIP = New System.Windows.Forms.Button()
         Me.cmdBrowseFiles = New System.Windows.Forms.Button()
@@ -151,7 +152,7 @@ Partial Class frmView
         Me.DeviceInfoBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DeviceInfoBox.Location = New System.Drawing.Point(12, 46)
         Me.DeviceInfoBox.Name = "DeviceInfoBox"
-        Me.DeviceInfoBox.Size = New System.Drawing.Size(810, 295)
+        Me.DeviceInfoBox.Size = New System.Drawing.Size(810, 282)
         Me.DeviceInfoBox.TabIndex = 39
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
@@ -201,7 +202,7 @@ Partial Class frmView
         '
         Me.pnlOtherFunctions.Controls.Add(Me.cmdMunisInfo)
         Me.pnlOtherFunctions.Controls.Add(Me.cmdSibiLink)
-        Me.pnlOtherFunctions.Location = New System.Drawing.Point(433, 213)
+        Me.pnlOtherFunctions.Location = New System.Drawing.Point(398, 204)
         Me.pnlOtherFunctions.Name = "pnlOtherFunctions"
         Me.pnlOtherFunctions.Size = New System.Drawing.Size(116, 61)
         Me.pnlOtherFunctions.TabIndex = 51
@@ -463,6 +464,7 @@ Partial Class frmView
         '
         'grpNetTools
         '
+        Me.grpNetTools.Controls.Add(Me.cmdGKUpdate)
         Me.grpNetTools.Controls.Add(Me.cmdRestart)
         Me.grpNetTools.Controls.Add(Me.cmdShowIP)
         Me.grpNetTools.Controls.Add(Me.cmdBrowseFiles)
@@ -471,18 +473,31 @@ Partial Class frmView
         Me.grpNetTools.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.grpNetTools.Location = New System.Drawing.Point(828, 46)
         Me.grpNetTools.Name = "grpNetTools"
-        Me.grpNetTools.Size = New System.Drawing.Size(320, 113)
+        Me.grpNetTools.Size = New System.Drawing.Size(320, 96)
         Me.grpNetTools.TabIndex = 52
         Me.grpNetTools.TabStop = False
         Me.grpNetTools.Text = "Remote Mgmt"
         Me.grpNetTools.Visible = False
+        '
+        'cmdGKUpdate
+        '
+        Me.cmdGKUpdate.BackgroundImage = CType(resources.GetObject("cmdGKUpdate.BackgroundImage"), System.Drawing.Image)
+        Me.cmdGKUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdGKUpdate.Location = New System.Drawing.Point(14, 29)
+        Me.cmdGKUpdate.Margin = New System.Windows.Forms.Padding(1)
+        Me.cmdGKUpdate.Name = "cmdGKUpdate"
+        Me.cmdGKUpdate.Size = New System.Drawing.Size(50, 50)
+        Me.cmdGKUpdate.TabIndex = 55
+        Me.ToolTip1.SetToolTip(Me.cmdGKUpdate, "Enqueue GK Update")
+        Me.cmdGKUpdate.UseVisualStyleBackColor = True
         '
         'cmdRestart
         '
         Me.cmdRestart.BackgroundImage = CType(resources.GetObject("cmdRestart.BackgroundImage"), System.Drawing.Image)
         Me.cmdRestart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdRestart.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRestart.Location = New System.Drawing.Point(82, 37)
+        Me.cmdRestart.Location = New System.Drawing.Point(118, 29)
+        Me.cmdRestart.Margin = New System.Windows.Forms.Padding(1)
         Me.cmdRestart.Name = "cmdRestart"
         Me.cmdRestart.Size = New System.Drawing.Size(50, 50)
         Me.cmdRestart.TabIndex = 54
@@ -496,9 +511,9 @@ Partial Class frmView
         Me.cmdShowIP.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdShowIP.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdShowIP.ForeColor = System.Drawing.Color.White
-        Me.cmdShowIP.Location = New System.Drawing.Point(215, 14)
+        Me.cmdShowIP.Location = New System.Drawing.Point(236, 11)
         Me.cmdShowIP.Name = "cmdShowIP"
-        Me.cmdShowIP.Size = New System.Drawing.Size(90, 90)
+        Me.cmdShowIP.Size = New System.Drawing.Size(80, 80)
         Me.cmdShowIP.TabIndex = 53
         Me.cmdShowIP.TextAlign = System.Drawing.ContentAlignment.TopRight
         Me.ToolTip1.SetToolTip(Me.cmdShowIP, "Show IP")
@@ -508,7 +523,8 @@ Partial Class frmView
         '
         Me.cmdBrowseFiles.BackgroundImage = CType(resources.GetObject("cmdBrowseFiles.BackgroundImage"), System.Drawing.Image)
         Me.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.cmdBrowseFiles.Location = New System.Drawing.Point(26, 37)
+        Me.cmdBrowseFiles.Location = New System.Drawing.Point(66, 29)
+        Me.cmdBrowseFiles.Margin = New System.Windows.Forms.Padding(1)
         Me.cmdBrowseFiles.Name = "cmdBrowseFiles"
         Me.cmdBrowseFiles.Size = New System.Drawing.Size(50, 50)
         Me.cmdBrowseFiles.TabIndex = 52
@@ -520,7 +536,8 @@ Partial Class frmView
         Me.cmdRDP.BackgroundImage = CType(resources.GetObject("cmdRDP.BackgroundImage"), System.Drawing.Image)
         Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRDP.Location = New System.Drawing.Point(138, 37)
+        Me.cmdRDP.Location = New System.Drawing.Point(170, 29)
+        Me.cmdRDP.Margin = New System.Windows.Forms.Padding(1)
         Me.cmdRDP.Name = "cmdRDP"
         Me.cmdRDP.Size = New System.Drawing.Size(50, 50)
         Me.cmdRDP.TabIndex = 46
@@ -549,10 +566,10 @@ Partial Class frmView
         Me.TabControl1.Controls.Add(Me.TrackingTab)
         Me.TabControl1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TabControl1.ItemSize = New System.Drawing.Size(61, 21)
-        Me.TabControl1.Location = New System.Drawing.Point(12, 347)
+        Me.TabControl1.Location = New System.Drawing.Point(12, 334)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1140, 304)
+        Me.TabControl1.Size = New System.Drawing.Size(1140, 317)
         Me.TabControl1.TabIndex = 40
         '
         'HistoryTab
@@ -561,7 +578,7 @@ Partial Class frmView
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1132, 275)
+        Me.HistoryTab.Size = New System.Drawing.Size(1132, 288)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -596,7 +613,7 @@ Partial Class frmView
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1120, 263)
+        Me.DataGridHistory.Size = New System.Drawing.Size(1120, 276)
         Me.DataGridHistory.TabIndex = 40
         Me.DataGridHistory.TabStop = False
         Me.DataGridHistory.VirtualMode = True
@@ -607,7 +624,7 @@ Partial Class frmView
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1132, 275)
+        Me.TrackingTab.Size = New System.Drawing.Size(1132, 288)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -633,7 +650,7 @@ Partial Class frmView
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1274, 586)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1120, 276)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
@@ -650,7 +667,7 @@ Partial Class frmView
         Me.TrackingBox.Controls.Add(Me.txtCheckOut)
         Me.TrackingBox.Controls.Add(Me.Label11)
         Me.TrackingBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TrackingBox.Location = New System.Drawing.Point(828, 161)
+        Me.TrackingBox.Location = New System.Drawing.Point(828, 148)
         Me.TrackingBox.Name = "TrackingBox"
         Me.TrackingBox.Size = New System.Drawing.Size(320, 180)
         Me.TrackingBox.TabIndex = 41
@@ -1060,4 +1077,5 @@ Partial Class frmView
     Friend WithEvents txtPhoneNumber As TextBox
     Friend WithEvents Label14 As Label
     Friend WithEvents cmdRestart As Button
+    Friend WithEvents cmdGKUpdate As Button
 End Class

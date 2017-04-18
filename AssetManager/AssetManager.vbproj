@@ -35,7 +35,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>23</ApplicationRevision>
+    <ApplicationRevision>40</ApplicationRevision>
     <ApplicationVersion>4.4.3.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -139,13 +139,11 @@
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -172,6 +170,7 @@
     <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="Classes\DataColumns.vb" />
     <Compile Include="Classes\MyExceptions.vb" />
+    <Compile Include="Classes\Test_Class.vb" />
     <Compile Include="Classes\Type_Classes.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -184,6 +183,12 @@
     <Compile Include="Classes\Paths.vb" />
     <Compile Include="DataComms\AssetManager\FTP\clsFTP_Comms.vb" />
     <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
+    <Compile Include="UserInterface\Forms\GK_Updater\Get_Credentials.Designer.vb">
+      <DependentUpon>Get_Credentials.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\Get_Credentials.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Form_Control.vb" />
     <Compile Include="DataFunctions\clsAssetManager_Functions.vb" />
     <Compile Include="UserInterface\Forms\frmAttachments.Designer.vb">
@@ -336,11 +341,26 @@
       <CustomToolNamespace>NoScrollPanel</CustomToolNamespace>
     </Compile>
     <Compile Include="UserInterface\MyControls\PingVis.vb" />
+    <Compile Include="UserInterface\Forms\GK_Updater\GK_Progress_Fragment.Designer.vb">
+      <DependentUpon>GK_Progress_Fragment.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\GK_Progress_Fragment.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserInterface\MyControls\WindowList.vb" />
+    <Compile Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.Designer.vb">
+      <DependentUpon>GKUpdater_Form.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UserInterface\Forms\frmAttachments.resx">
       <DependentUpon>frmAttachments.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\Get_Credentials.resx">
+      <DependentUpon>Get_Credentials.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
@@ -401,6 +421,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\View_Entry.resx">
       <DependentUpon>View_Entry.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GK_Progress_Fragment.resx">
+      <DependentUpon>GK_Progress_Fragment.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.resx">
+      <DependentUpon>GKUpdater_Form.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -481,6 +507,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\add-note-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\012_restart-2-512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GK_Updater_Module\GK_Updater_Module.vbproj">
+      <Project>{583f28b2-c2f5-4422-bac8-e3d15cb61df0}</Project>
+      <Name>GK_Updater_Module</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

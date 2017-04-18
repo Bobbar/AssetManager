@@ -913,30 +913,18 @@ VALUES
     Private Sub RequestItemsGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellLeave
         LeaveRow(RequestItemsGrid, GridTheme, e.RowIndex)
     End Sub
-    Private Sub LookupDevice(Device As Device_Info)
-        If Device.strGUID IsNot Nothing Then
-            If Not DeviceIsOpen(Device.strGUID) Then
-                Waiting()
-                Dim NewView As New frmView(Me, Device.strGUID)
-                DoneWaiting()
-            Else
-                ActivateFormByUID(Device.strGUID)
-            End If
-        Else
-            Message("Device not found.", vbOKOnly + vbExclamation, "Error", Me)
-        End If
-    End Sub
+
     Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click
         Dim ColIndex As Integer = RequestItemsGrid.CurrentCell.ColumnIndex
         Select Case True
             Case ColIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
-                LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
+                LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
             Case ColIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
-                LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
+                LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
             Case ColIndex = GetColIndex(RequestItemsGrid, "New Asset")
-                LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
+                LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
             Case ColIndex = GetColIndex(RequestItemsGrid, "New Serial")
-                LookupDevice(Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
+                LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
         End Select
     End Sub
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
