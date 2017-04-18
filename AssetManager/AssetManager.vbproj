@@ -184,6 +184,18 @@
     <Compile Include="Classes\Paths.vb" />
     <Compile Include="DataComms\AssetManager\FTP\clsFTP_Comms.vb" />
     <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
+    <Compile Include="UserInterface\Forms\GK_Updater\Get_Credentials.Designer.vb">
+      <DependentUpon>Get_Credentials.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\Get_Credentials.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.Designer.vb">
+      <DependentUpon>GKUpdater_Form.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Form_Control.vb" />
     <Compile Include="DataFunctions\clsAssetManager_Functions.vb" />
     <Compile Include="UserInterface\Forms\frmAttachments.Designer.vb">
@@ -347,6 +359,12 @@
     <EmbeddedResource Include="UserInterface\Forms\frmAttachments.resx">
       <DependentUpon>frmAttachments.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\Get_Credentials.resx">
+      <DependentUpon>Get_Credentials.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.resx">
+      <DependentUpon>GKUpdater_Form.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
@@ -491,9 +509,9 @@
     <None Include="Resources\012_restart-2-512.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GK_Updater_Module\GKUpdaterLib.vbproj">
+    <ProjectReference Include="..\GK_Updater_Module\GK_Updater_Module.vbproj">
       <Project>{583f28b2-c2f5-4422-bac8-e3d15cb61df0}</Project>
-      <Name>GKUpdaterLib</Name>
+      <Name>GK_Updater_Module</Name>
     </ProjectReference>
     <ProjectReference Include="..\PingVis_Library\PingVisLib.vbproj">
       <Project>{bc3270c0-62ba-42e4-8db3-8adcfe61dbc4}</Project>

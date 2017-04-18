@@ -7,6 +7,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "AssetManager", "AssetManage
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "GK_Updater_Module", "GK_Updater_Module\GK_Updater_Module.vbproj", "{583F28B2-C2F5-4422-BAC8-E3D15CB61DF0}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PingVisLib", "PingVis_Library\PingVisLib.vbproj", "{BC3270C0-62BA-42E4-8DB3-8ADCFE61DBC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{583F28B2-C2F5-4422-BAC8-E3D15CB61DF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{583F28B2-C2F5-4422-BAC8-E3D15CB61DF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{583F28B2-C2F5-4422-BAC8-E3D15CB61DF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3270C0-62BA-42E4-8DB3-8ADCFE61DBC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3270C0-62BA-42E4-8DB3-8ADCFE61DBC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3270C0-62BA-42E4-8DB3-8ADCFE61DBC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3270C0-62BA-42E4-8DB3-8ADCFE61DBC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

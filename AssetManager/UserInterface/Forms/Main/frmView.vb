@@ -4,6 +4,7 @@ Imports MySql.Data.MySqlClient
 Imports System.Net
 Imports System.Net.NetworkInformation
 Imports System.IO
+Imports PingVisLib
 Public Class frmView
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
