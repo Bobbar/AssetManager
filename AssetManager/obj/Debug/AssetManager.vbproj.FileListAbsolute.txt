@@ -1,0 +1,70 @@
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\AssetManager.exe.config
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\AssetManager.exe
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\AssetManager.pdb
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\AssetManager.xml
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\Microsoft.ReportViewer.WinForms.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\Microsoft.SqlServer.Types.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\de\Microsoft.SqlServer.Types.resources.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\es\Microsoft.SqlServer.Types.resources.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\fr\Microsoft.SqlServer.Types.resources.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\it\Microsoft.SqlServer.Types.resources.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\ja\Microsoft.SqlServer.Types.resources.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\ko\Microsoft.SqlServer.Types.resources.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\pt\Microsoft.SqlServer.Types.resources.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\ru\Microsoft.SqlServer.Types.resources.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\zh-Hans\Microsoft.SqlServer.Types.resources.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\zh-Hant\Microsoft.SqlServer.Types.resources.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.Form1.resources
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.Resources.resources
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.vbproj.GenerateResource.Cache
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.exe
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.xml
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\MySql.Data.Entity.dll
+\\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.config
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.manifest
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.application
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\itextsharp.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.xml
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmAttachments.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmEncrypter.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmUserManager.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmMunisUser.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MyDialog.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmNotes.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmManageRequest.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmSibiMain.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MainForm.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmSibiSelector.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Tracking.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Munis.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Tracking.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.UpdateDev.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MunisToolsMenu.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Resources.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmView.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Entry.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbproj.GenerateResource.Cache
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.TrustInfo.xml
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe.manifest
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.application
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.SplashScreen1.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Get_Credentials.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GK_Progress_Fragment.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GKUpdater_Form.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
+C:\GitHub\AssetManager\AssetManager\bin\Debug\GK_Updater_Module.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\GK_Updater_Module.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Debug\GK_Updater_Module.xml

@@ -3,12 +3,7 @@ Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.Net
 Imports System.Net.NetworkInformation
-<<<<<<< Updated upstream
-=======
 Imports System.IO
-Imports PingVisLib
-
->>>>>>> Stashed changes
 Public Class frmView
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info
@@ -932,7 +927,11 @@ VALUES (@" & historical_dev.ChangeType & ",
         If SibiUID = "" Then
             Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
         Else
-            Dim sibiForm As New frmManageRequest(Me, SibiUID)
+            If Not RequestIsOpen(SibiUID) Then
+                Dim ManRequest As New frmManageRequest(Me, SibiUID)
+            Else
+                ActivateFormByUID(SibiUID)
+            End If
         End If
     End Sub
     Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
@@ -1056,4 +1055,17 @@ VALUES (@" & historical_dev.ChangeType & ",
             Return False
         End If
     End Function
+    Private Sub cmdGKUpdate_Click(sender As Object, e As EventArgs) Handles cmdGKUpdate.Click
+        If AdminCreds Is Nothing Then
+            Dim NewGetCreds As New Get_Credentials
+            NewGetCreds.ShowDialog()
+            If NewGetCreds.DialogResult <> DialogResult.OK Then
+                NewGetCreds.Dispose()
+                Exit Sub
+            End If
+            NewGetCreds.Dispose()
+        End If
+        GKUpdater_Form.AddUpdate(CurrentViewDevice)
+        If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
+    End Sub
 End Class
