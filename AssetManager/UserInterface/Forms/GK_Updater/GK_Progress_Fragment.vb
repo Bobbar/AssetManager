@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports GK_Updater_Module
 Public Class GK_Progress_Fragment
     Implements IDisposable
 
@@ -6,18 +7,19 @@ Public Class GK_Progress_Fragment
     Public ProgStatus As Progress_Status
     Private bolShow As Boolean = False
     Private CurrentStatus As GK_Updater.Status_Stats
+    Private CurDevice As Device_Info
     Private LogBuff As String = ""
     Private MyParentForm As Form
-    Sub New(ParentForm As Form, ByRef Updater As GK_Updater, Optional Seq As Integer = 0)
-
+    Sub New(ParentForm As Form, ByVal Device As Device_Info, Optional Seq As Integer = 0)
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
         Me.Size = Me.MinimumSize
-        MyUpdater = Updater
         MyParentForm = ParentForm
+        CurDevice = Device
+        MyUpdater = New GK_Updater("D" & CurDevice.strSerial)
         Me.DoubleBuffered = True
-        lblInfo.Text = MyUpdater.CurDevice.strSerial & " - " & MyUpdater.CurDevice.strCurrentUser
+        lblInfo.Text = CurDevice.strSerial & " - " & CurDevice.strCurrentUser
         lblCurrentFile.Text = "Queued..."
         lblTransRate.Text = "0.00MB/s"
         SetStatus(Progress_Status.Queued)
@@ -54,7 +56,7 @@ Public Class GK_Progress_Fragment
                 LogBuff = ""
                 SetStatus(Progress_Status.Starting)
                 lblCurrentFile.Text = "Starting..."
-                MyUpdater.StartUpdate()
+                MyUpdater.StartUpdate(AdminCreds)
             End If
         Catch ex As Exception
             SetStatus(Progress_Status.Errors)
@@ -142,7 +144,7 @@ Public Class GK_Progress_Fragment
     End Sub
 
     Private Sub lblInfo_Click(sender As Object, e As EventArgs) Handles lblInfo.Click
-        LookupDevice(MainForm, MyUpdater.CurDevice)
+        LookupDevice(MainForm, CurDevice)
     End Sub
 
     Private Sub lblShowHide_Click(sender As Object, e As EventArgs) Handles lblShowHide.Click

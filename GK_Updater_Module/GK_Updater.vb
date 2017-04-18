@@ -3,6 +3,8 @@ Imports System.Net.NetworkInformation
 Imports System.IO
 Imports System.ComponentModel
 Imports System.Text
+Imports System.Windows.Forms
+
 
 Public Class GK_Updater : Implements IDisposable
 #Region "Members"
@@ -12,19 +14,21 @@ Public Class GK_Updater : Implements IDisposable
     Private ErrList As New List(Of String)
     Private ReadOnly GKPath As String = "\PSi\Gatekeeper"
     Private ClientPath As String
+    Private ClientHostName As String
+    Private CurrentCreds As NetworkCredential
     Private CurrentFileIndex As Integer = 0
     Private lngBytesMoved As Integer
     Private progIts As Integer = 0
     Private ServerPath As String = "C:"
     Private stpSpeed As New Stopwatch
-    Private UpdateDevice As Device_Info
     Private CancelWatch As New Stopwatch
 #End Region
 
 #Region "Constructors"
-    Sub New(ByVal Device As Device_Info)
-        UpdateDevice = Device
-        ClientPath = "\\D" & UpdateDevice.strSerial & "\c$"
+    Sub New(ByVal HostName As String)
+
+        ClientHostName = HostName
+        ClientPath = "\\" & HostName & "\c$"
         InitWorker()
         InitializeTimer()
     End Sub
@@ -48,15 +52,9 @@ Public Class GK_Updater : Implements IDisposable
         RaiseEvent UpdateComplete(Me, e)
     End Sub
 
-
 #End Region
 
 #Region "Properties"
-    Public ReadOnly Property CurDevice As Device_Info
-        Get
-            Return UpdateDevice
-        End Get
-    End Property
     Public ReadOnly Property IsDisposed As Boolean
         Get
             Return disposedValue
@@ -79,17 +77,19 @@ Public Class GK_Updater : Implements IDisposable
     Public Sub CancelUpdate()
         CopyWorker.CancelAsync()
     End Sub
-    Public Sub StartUpdate()
-        If AdminCreds Is Nothing Then
+    Public Sub StartUpdate(Creds As NetworkCredential)
+        If Creds Is Nothing Then
             Throw New Win32Exception(1326)
             Exit Sub
         End If
         GKLog("------------------------------------------------")
-        GKLog("Starting GK Update to: " & UpdateDevice.strSerial)
+        GKLog("Starting GK Update to: " & ClientHostName)
         GKLog("Starting Update...")
         ErrList.Clear()
         Dim WorkArgs As New Worker_Args
         WorkArgs.StartIndex = 0
+        WorkArgs.Credentials = Creds
+        CurrentCreds = Creds
         If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(WorkArgs)
     End Sub
 
@@ -101,7 +101,7 @@ Public Class GK_Updater : Implements IDisposable
         Try
             Dim MyPing As New Ping
             Dim options As New Net.NetworkInformation.PingOptions
-            Dim Hostname As String = "D" & CurDevice.strSerial
+            Dim Hostname As String = ClientHostName
             Dim Timeout As Integer = 1000
             Dim buff As Byte() = Encoding.ASCII.GetBytes("pingpingpingpingping")
             options.DontFragment = True
@@ -126,7 +126,7 @@ Public Class GK_Updater : Implements IDisposable
                 destFile As System.IO.FileStream = New FileStream(Dest, FileMode.OpenOrCreate)
             CurrentStatus.CurFileProgress = 1
             totalBytesIn = 0
-            Dim flLength As Integer = fStream.Length
+            Dim flLength As Long = fStream.Length
             Do Until bytesIn < 1 Or CopyWorker.CancellationPending
                 bytesIn = fStream.Read(buffer, 0, BufferSize)
                 If bytesIn > 0 Then
@@ -146,10 +146,10 @@ Public Class GK_Updater : Implements IDisposable
         If Not CanPing() Then
             Throw New Exception("Cannot ping device.")
         End If
-        Using NetCon As New NetworkConnection(ClientPath, AdminCreds)
+        Dim Args As Worker_Args = DirectCast(e.Argument, Worker_Args)
+        Using NetCon As New NetworkConnection(ClientPath, Args.Credentials)
             Dim sourceDir As String = ServerPath & GKPath
             Dim targetDir As String = ClientPath & GKPath
-            Dim Args As Worker_Args = DirectCast(e.Argument, Worker_Args)
             Dim StartIdx As Integer = Args.StartIndex
             Dim CurFileIdx As Integer = Args.StartIndex
             'Get array of full paths of all files in source dir and sub-dirs
@@ -231,6 +231,7 @@ Public Class GK_Updater : Implements IDisposable
                 GKLog("******** File in-use error! Resuming next files.", True)
                 Dim NewArgs As Worker_Args
                 NewArgs.StartIndex = CurrentFileIndex
+                NewArgs.Credentials = CurrentCreds
                 If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(NewArgs)
             Else
                 GKLog("------------------------------------------------")
@@ -271,8 +272,8 @@ Public Class GK_Updater : Implements IDisposable
         End With
     End Sub
 
-    Private Sub SpeedTimer_Tick()
-        Dim BytesPerSecond As Single
+    Private Sub SpeedTimer_Tick(sender As Object, e As EventArgs)
+        Dim BytesPerSecond As Double
         Dim ResetCounter As Integer = 40
         If lngBytesMoved > 0 Then
             progIts += 1
@@ -308,10 +309,10 @@ Public Class GK_Updater : Implements IDisposable
         Public CurFileIdx As Integer
         Public CurFileName As String
         Public CurFileProgress As Integer
-        Public CurTransferRate As Single
+        Public CurTransferRate As Double
         Public SourceFileName As String
         Public TotFiles As Integer
-        Sub New(tFiles As Integer, CurFIdx As Integer, CurFName As String, sFileName As String, CurFileProg As Integer, CurTransRate As Single)
+        Sub New(tFiles As Integer, CurFIdx As Integer, CurFName As String, sFileName As String, CurFileProg As Integer, CurTransRate As Double)
             TotFiles = tFiles
             CurFileIdx = CurFIdx
             CurFileName = CurFName
@@ -324,6 +325,7 @@ Public Class GK_Updater : Implements IDisposable
     Private Structure Worker_Args
         Public CurrentIndex As Integer
         Public StartIndex As Integer
+        Public Credentials As NetworkCredential
     End Structure
     Public Class GKUpdateCompleteEvents : Inherits EventArgs
         Private ErrExeption As Exception

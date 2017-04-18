@@ -17,13 +17,11 @@ Public Class GKUpdater_Form
 
 
     End Sub
-    Public Sub AddUpdate(ByRef Updater As GK_Updater)
-
-        Dim NewProgCtl As New GK_Progress_Fragment(Me, Updater, MyUpdates.Count + 1)
+    Public Sub AddUpdate(ByVal Device As Device_Info)
+        Dim NewProgCtl As New GK_Progress_Fragment(Me, Device, MyUpdates.Count + 1)
         Updater_Table.Controls.Add(NewProgCtl)
         MyUpdates.Add(NewProgCtl)
         AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
-
         ProcessUpdates()
     End Sub
     Private Function ActiveUpdates() As Boolean

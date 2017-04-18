@@ -488,8 +488,7 @@ Public Class MainForm
         For Each cell As DataGridViewCell In ResultGrid.SelectedCells
             Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), cell.RowIndex).Value.ToString
             Dim SelectedDevice = Asset.Get_DeviceInfo_From_UID(DevUID)
-            Dim NewGKUpdater As New GK_Updater(SelectedDevice)
-            GKUpdater_Form.AddUpdate(NewGKUpdater)
+            GKUpdater_Form.AddUpdate(SelectedDevice)
         Next
         If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
     End Sub

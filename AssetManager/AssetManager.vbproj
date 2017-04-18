@@ -169,9 +169,7 @@
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="Classes\DataColumns.vb" />
-    <Compile Include="UserInterface\Forms\GK_Updater\GK_Updater.vb" />
     <Compile Include="Classes\MyExceptions.vb" />
-    <Compile Include="Classes\NetworkConnection.vb" />
     <Compile Include="Classes\Test_Class.vb" />
     <Compile Include="Classes\Type_Classes.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
@@ -512,6 +510,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\012_restart-2-512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GK_Updater_Module\GK_Updater_Module.vbproj">
+      <Project>{583f28b2-c2f5-4422-bac8-e3d15cb61df0}</Project>
+      <Name>GK_Updater_Module</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

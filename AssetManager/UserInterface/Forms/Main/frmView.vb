@@ -1065,8 +1065,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             End If
             NewGetCreds.Dispose()
         End If
-        Dim NewGKUpdater As New GK_Updater(CurrentViewDevice)
-        GKUpdater_Form.AddUpdate(NewGKUpdater)
+        GKUpdater_Form.AddUpdate(CurrentViewDevice)
         If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
     End Sub
 End Class
