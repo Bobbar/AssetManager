@@ -3,6 +3,12 @@ Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Imports System.Net
 Imports System.Net.NetworkInformation
+<<<<<<< Updated upstream
+=======
+Imports System.IO
+Imports PingVisLib
+
+>>>>>>> Stashed changes
 Public Class frmView
     Private bolCheckFields As Boolean
     Public CurrentViewDevice As Device_Info

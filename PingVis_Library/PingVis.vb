@@ -5,6 +5,7 @@ Imports System.ComponentModel
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
 Imports System.Drawing
+Imports System.Windows.Forms
 Public Class PingVis : Implements IDisposable
     Private MyPing As New Ping
     Private pngResults As New List(Of PingReply)
@@ -16,7 +17,7 @@ Public Class PingVis : Implements IDisposable
     Private gfx As Graphics
     Private intImgWidth As Integer
     Private intImgHeight As Integer
-    Public CurrentResult As PingReply
+    Private LastReply As PingReply
 #Region "Ping Parameters"
     Private bolStopWhenNotFocused As Boolean = False 'Set to True to pause the pinging until focus is returned to the parent form.
     Private Timeout As Integer = 1000
@@ -36,6 +37,11 @@ Public Class PingVis : Implements IDisposable
     Private intInitialScale As Single = 4
     Private intPrevMax As Integer = 1000
     Private CurrentAverageRoundTripTime As Integer = 0
+    Public ReadOnly Property CurrentResult As PingReply
+        Get
+            Return LastReply
+        End Get
+    End Property
     Public ReadOnly Property AvgPingTime As Single
         Get
             Return CurrentAverageRoundTripTime
@@ -82,8 +88,8 @@ Public Class PingVis : Implements IDisposable
         If Not e.Cancelled Then
                 If e.Error Is Nothing Then
                     pngResults.Add(e.Reply)
-                    CurrentResult = e.Reply
-                Else
+                LastReply = e.Reply
+            Else
                 'Debug.Print(e.Error.Message)
             End If
                 If pngResults.Count > 0 Then DrawBars(MyControl)

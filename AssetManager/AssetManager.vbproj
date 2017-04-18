@@ -35,7 +35,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>23</ApplicationRevision>
+    <ApplicationRevision>41</ApplicationRevision>
     <ApplicationVersion>4.4.3.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -335,7 +335,12 @@
       <SubType>Component</SubType>
       <CustomToolNamespace>NoScrollPanel</CustomToolNamespace>
     </Compile>
-    <Compile Include="UserInterface\MyControls\PingVis.vb" />
+    <Compile Include="UserInterface\Forms\GK_Updater\GK_Progress_Fragment.Designer.vb">
+      <DependentUpon>GK_Progress_Fragment.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\GK_Progress_Fragment.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserInterface\MyControls\WindowList.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -481,6 +486,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\add-note-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\012_restart-2-512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GK_Updater_Module\GKUpdaterLib.vbproj">
+      <Project>{583f28b2-c2f5-4422-bac8-e3d15cb61df0}</Project>
+      <Name>GKUpdaterLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PingVis_Library\PingVisLib.vbproj">
+      <Project>{bc3270c0-62ba-42e4-8db3-8adcfe61dbc4}</Project>
+      <Name>PingVisLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

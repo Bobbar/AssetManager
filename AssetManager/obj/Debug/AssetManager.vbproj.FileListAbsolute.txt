@@ -62,3 +62,12 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.SplashScreen1.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
+<<<<<<< Updated upstream
+=======
+C:\GitHub\AssetManager\AssetManager\bin\Debug\PingVisLib.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\PingVisLib.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Debug\PingVisLib.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.xml
+>>>>>>> Stashed changes
