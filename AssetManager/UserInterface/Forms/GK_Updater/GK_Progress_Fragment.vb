@@ -10,6 +10,12 @@ Public Class GK_Progress_Fragment
     Private CurDevice As Device_Info
     Private LogBuff As String = ""
     Private MyParentForm As Form
+    Public ReadOnly Property Device As Device_Info
+        Get
+            Return CurDevice
+        End Get
+    End Property
+
     Sub New(ParentForm As Form, ByVal Device As Device_Info, Optional Seq As Integer = 0)
         ' This call is required by the designer.
         InitializeComponent()

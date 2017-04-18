@@ -5,6 +5,7 @@ Public Class GKUpdater_Form
     Private MaxSimUpdates As Integer = 4
     Private MyUpdates As New List(Of GK_Progress_Fragment)
     Private bolStarting As Boolean = True
+    Private bolCheckForDups As Boolean = True
     Sub New()
 
         ' This call is required by the designer.
@@ -18,12 +19,30 @@ Public Class GKUpdater_Form
 
     End Sub
     Public Sub AddUpdate(ByVal Device As Device_Info)
-        Dim NewProgCtl As New GK_Progress_Fragment(Me, Device, MyUpdates.Count + 1)
-        Updater_Table.Controls.Add(NewProgCtl)
-        MyUpdates.Add(NewProgCtl)
-        AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
-        ProcessUpdates()
+        If bolCheckForDups AndAlso Not Exists(Device) Then
+            Dim NewProgCtl As New GK_Progress_Fragment(Me, Device, MyUpdates.Count + 1)
+            Updater_Table.Controls.Add(NewProgCtl)
+            MyUpdates.Add(NewProgCtl)
+            AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
+            ProcessUpdates()
+        Else
+            Dim blah = Message("An update for device " & Device.strSerial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
+            If blah = vbOK Then
+                StartUpdateByDevice(Device)
+            End If
+        End If
     End Sub
+    Private Sub StartUpdateByDevice(Device As Device_Info)
+        For Each upd As GK_Progress_Fragment In MyUpdates
+            If upd.Device.strGUID = Device.strGUID Then upd.StartUpdate()
+        Next
+    End Sub
+    Private Function Exists(Device As Device_Info)
+        For Each upd As GK_Progress_Fragment In MyUpdates
+            If upd.Device.strGUID = Device.strGUID Then Return True
+        Next
+        Return False
+    End Function
     Private Function ActiveUpdates() As Boolean
         For Each upd As GK_Progress_Fragment In MyUpdates
             If upd.ProgStatus = GK_Progress_Fragment.Progress_Status.Running Then Return True

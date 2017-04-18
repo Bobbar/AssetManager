@@ -21,7 +21,6 @@ Public Class GK_Updater : Implements IDisposable
     Private progIts As Integer = 0
     Private ServerPath As String = "C:"
     Private stpSpeed As New Stopwatch
-    Private CancelWatch As New Stopwatch
 #End Region
 
 #Region "Constructors"
