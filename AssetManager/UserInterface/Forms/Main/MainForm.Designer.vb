@@ -84,9 +84,9 @@ Partial Class MainForm
         Me.tsmUserManager = New System.Windows.Forms.ToolStripMenuItem()
         Me.TextEnCrypterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmGKUpdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
-        Me.tsmGKUpdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -109,7 +109,7 @@ Partial Class MainForm
         Me.GroupBox1.Controls.Add(Me.lblRecords)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 267)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1215, 504)
+        Me.GroupBox1.Size = New System.Drawing.Size(1356, 513)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         '
@@ -163,7 +163,7 @@ Partial Class MainForm
         Me.ResultGrid.ShowCellErrors = False
         Me.ResultGrid.ShowCellToolTips = False
         Me.ResultGrid.ShowEditingIcon = False
-        Me.ResultGrid.Size = New System.Drawing.Size(1194, 466)
+        Me.ResultGrid.Size = New System.Drawing.Size(1335, 475)
         Me.ResultGrid.TabIndex = 17
         Me.ResultGrid.VirtualMode = True
         '
@@ -204,9 +204,9 @@ Partial Class MainForm
         Me.lblRecords.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblRecords.ForeColor = System.Drawing.Color.FromArgb(CType(CType(53, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(53, Byte), Integer))
-        Me.lblRecords.Location = New System.Drawing.Point(15, 488)
+        Me.lblRecords.Location = New System.Drawing.Point(15, 497)
         Me.lblRecords.Name = "lblRecords"
-        Me.lblRecords.Size = New System.Drawing.Size(1188, 13)
+        Me.lblRecords.Size = New System.Drawing.Size(1329, 13)
         Me.lblRecords.TabIndex = 18
         Me.lblRecords.Text = "Records: 0"
         Me.lblRecords.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -576,9 +576,9 @@ Partial Class MainForm
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel4, Me.DateTimeLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 778)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 787)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1240, 22)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1381, 22)
         Me.StatusStrip1.TabIndex = 5
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -598,7 +598,7 @@ Partial Class MainForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(963, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(1104, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ConnStatusLabel
@@ -656,7 +656,7 @@ Partial Class MainForm
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ToolStrip1.Size = New System.Drawing.Size(1240, 37)
+        Me.ToolStrip1.Size = New System.Drawing.Size(1381, 37)
         Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 6
         Me.ToolStrip1.Text = "ToolStrip1"
@@ -724,6 +724,12 @@ Partial Class MainForm
         Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(227, 26)
         Me.ScanAttachmentToolStripMenuItem.Text = "Scan Attachments"
         '
+        'tsmGKUpdater
+        '
+        Me.tsmGKUpdater.Name = "tsmGKUpdater"
+        Me.tsmGKUpdater.Size = New System.Drawing.Size(227, 26)
+        Me.tsmGKUpdater.Text = "GK Updater"
+        '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
@@ -740,18 +746,12 @@ Partial Class MainForm
         Me.cmdSibi.Text = "Sibi Aquisition Manager"
         Me.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'tsmGKUpdater
-        '
-        Me.tsmGKUpdater.Name = "tsmGKUpdater"
-        Me.tsmGKUpdater.Size = New System.Drawing.Size(227, 26)
-        Me.tsmGKUpdater.Text = "GK Updater"
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1240, 800)
+        Me.ClientSize = New System.Drawing.Size(1381, 809)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.StatusStrip1)
@@ -762,7 +762,6 @@ Partial Class MainForm
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Asset Manager - Main"
-        Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.GroupBox1.ResumeLayout(False)
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ContextMenuStrip1.ResumeLayout(False)
