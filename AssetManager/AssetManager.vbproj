@@ -509,9 +509,9 @@
     <None Include="Resources\012_restart-2-512.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GK_Updater_Module\GK_Updater_Module.vbproj">
+    <ProjectReference Include="..\GK_Updater_Module\GKUpdaterLib.vbproj">
       <Project>{583f28b2-c2f5-4422-bac8-e3d15cb61df0}</Project>
-      <Name>GK_Updater_Module</Name>
+      <Name>GKUpdaterLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\PingVis_Library\PingVisLib.vbproj">
       <Project>{bc3270c0-62ba-42e4-8db3-8adcfe61dbc4}</Project>

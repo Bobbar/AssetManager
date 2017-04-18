@@ -1,5 +1,5 @@
 ﻿Imports System.ComponentModel
-Imports GK_Updater_Module
+Imports GKUpdaterLib
 Public Class GK_Progress_Fragment
     Implements IDisposable
 

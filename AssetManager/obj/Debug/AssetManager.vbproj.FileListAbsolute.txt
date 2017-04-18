@@ -64,9 +64,9 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.SplashScreen1.resourc
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Get_Credentials.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GKUpdater_Form.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
-C:\GitHub\AssetManager\AssetManager\bin\Debug\GK_Updater_Module.dll
-C:\GitHub\AssetManager\AssetManager\bin\Debug\GK_Updater_Module.pdb
-C:\GitHub\AssetManager\AssetManager\bin\Debug\GK_Updater_Module.xml
 C:\GitHub\AssetManager\AssetManager\bin\Debug\PingVisLib.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\PingVisLib.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Debug\PingVisLib.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.xml
