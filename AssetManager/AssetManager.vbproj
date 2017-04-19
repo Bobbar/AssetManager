@@ -137,6 +137,9 @@
     <Reference Include="itextsharp">
       <HintPath>..\..\..\Users\rl12184\Downloads\itextsharp-all-5.5.9\itextsharp-dll-core\itextsharp.dll</HintPath>
     </Reference>
+    <Reference Include="MyDialogLib">
+      <HintPath>..\..\MyDialog\MyDialog\bin\Release\MyDialogLib.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -229,12 +232,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\MyControls\MyForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\MyControls\MyDialog.Designer.vb">
-      <DependentUpon>MyDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\MyControls\MyDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Sibi\frmNotes.Designer.vb">
@@ -376,9 +373,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\frmMunisUser.resx">
       <DependentUpon>frmMunisUser.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\MyControls\MyDialog.resx">
-      <DependentUpon>MyDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\frmNotes.resx">
       <DependentUpon>frmNotes.vb</DependentUpon>

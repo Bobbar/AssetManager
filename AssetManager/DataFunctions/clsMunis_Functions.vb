@@ -1,4 +1,5 @@
-﻿Public Class clsMunis_Functions
+﻿Imports MyDialogLib
+Public Class clsMunis_Functions
     Private priv_Comms As New clsMunis_Comms
     Public Function Get_ReqNumber_From_PO(PO As String) As String
         If Not IsNothing(PO) Then

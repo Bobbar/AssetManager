@@ -7,6 +7,7 @@ Imports System.IO
 Imports System.Collections
 Imports System.ComponentModel
 Imports System.Text
+Imports MyDialogLib
 Public Class PDFFormFilling
     Private ParentForm As Form
     Private CurrentDevice As Device_Info
@@ -222,8 +223,12 @@ Public Class PDFFormFilling
         Dim newDialog As New MyDialog(ParentForm)
         With newDialog
             .Text = "Additional Input Required"
-            .AddComboBox("cmbFromLoc", "Transfer FROM:", DeviceIndex.Locations)
-            .AddComboBox("cmbToLoc", "Transfer TO:", DeviceIndex.Locations)
+            Dim cmbFrom As New ComboBox
+            FillComboBox(DeviceIndex.Locations, cmbFrom)
+            .AddCustomControl("cmbFromLoc", "Transfer FROM:", cmbFrom)
+            Dim cmbTo As New ComboBox
+            FillComboBox(DeviceIndex.Locations, cmbTo)
+            .AddCustomControl("cmbToLoc", "Transfer TO:", cmbTo)
             .AddLabel("Reason For Transfer-Check One:", True)
             .AddCheckBox("chkBetterU", "Better Use of asset:")
             .AddCheckBox("chkTradeIn", "Trade-in or exchange:")

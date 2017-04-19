@@ -2,6 +2,7 @@
 Imports System.Environment
 Imports System.IO
 Imports System.Runtime.InteropServices
+Imports MyDialogLib
 Module OtherFunctions
     Public GridStyles As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
