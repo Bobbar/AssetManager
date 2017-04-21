@@ -23,7 +23,6 @@ Partial Class frmView
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmView))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
-        Me.txtPhoneNumber = New System.Windows.Forms.TextBox()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.lblGUID = New System.Windows.Forms.Label()
         Me.cmdMunisSearch = New System.Windows.Forms.Button()
@@ -101,6 +100,7 @@ Partial Class frmView
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.txtPhoneNumber = New System.Windows.Forms.MaskedTextBox()
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
@@ -156,14 +156,6 @@ Partial Class frmView
         Me.DeviceInfoBox.TabIndex = 39
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
-        '
-        'txtPhoneNumber
-        '
-        Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPhoneNumber.Location = New System.Drawing.Point(612, 183)
-        Me.txtPhoneNumber.Name = "txtPhoneNumber"
-        Me.txtPhoneNumber.Size = New System.Drawing.Size(169, 23)
-        Me.txtPhoneNumber.TabIndex = 12
         '
         'Label14
         '
@@ -961,6 +953,15 @@ Partial Class frmView
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 37)
         Me.ToolStripSeparator2.Visible = False
         '
+        'txtPhoneNumber
+        '
+        Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPhoneNumber.Location = New System.Drawing.Point(612, 183)
+        Me.txtPhoneNumber.Mask = "(999) 000-0000"
+        Me.txtPhoneNumber.Name = "txtPhoneNumber"
+        Me.txtPhoneNumber.Size = New System.Drawing.Size(169, 23)
+        Me.txtPhoneNumber.TabIndex = 57
+        '
         'frmView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1074,8 +1075,8 @@ Partial Class frmView
     Friend WithEvents lblGUID As Label
     Friend WithEvents AssetDisposalFormToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmdShowIP As Button
-    Friend WithEvents txtPhoneNumber As TextBox
     Friend WithEvents Label14 As Label
     Friend WithEvents cmdRestart As Button
     Friend WithEvents cmdGKUpdate As Button
+    Friend WithEvents txtPhoneNumber As MaskedTextBox
 End Class

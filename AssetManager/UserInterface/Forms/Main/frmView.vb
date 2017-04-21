@@ -96,6 +96,9 @@ Public Class frmView
                     If txt.Name <> "txtGUID" Then
                         txt.ReadOnly = False
                     End If
+                Case TypeOf c Is MaskedTextBox
+                    Dim txt As MaskedTextBox = c
+                    txt.ReadOnly = False
                 Case TypeOf c Is ComboBox
                     Dim cmb As ComboBox = c
                     cmb.Enabled = True
@@ -131,6 +134,9 @@ Public Class frmView
             Select Case True
                 Case TypeOf c Is TextBox
                     Dim txt As TextBox = c
+                    txt.ReadOnly = True
+                Case TypeOf c Is MaskedTextBox
+                    Dim txt As MaskedTextBox = c
                     txt.ReadOnly = True
                 Case TypeOf c Is ComboBox
                     Dim cmb As ComboBox = c
@@ -1000,9 +1006,6 @@ VALUES (@" & historical_dev.ChangeType & ",
     End Sub
     Private Sub DataGridHistory_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellLeave
         LeaveRow(DataGridHistory, GridTheme, e.RowIndex)
-    End Sub
-    Private Sub txtPhoneNumber_LostFocus(sender As Object, e As EventArgs) Handles txtPhoneNumber.LostFocus
-        txtPhoneNumber.Text = FormatPhoneNumber(txtPhoneNumber.Text)
     End Sub
     Private Sub cmdRestart_Click(sender As Object, e As EventArgs) Handles cmdRestart.Click
         Dim blah = Message("Click 'Yes' to reboot this device.", vbYesNo + vbQuestion, "Are you sure?")
