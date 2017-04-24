@@ -194,8 +194,8 @@ Module ErrorHandling
         End Select
     End Function
     Private Sub UnHandledError(ex As Exception, ErrorCode As Integer, strOrigSub As String)
-        Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-        Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message & vbCrLf & vbCrLf & strLogPath, vbOKOnly + vbCritical, "ERROR")
+        Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ErrorCode & "  Message:" & ex.Message)
+        Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ErrorCode & "  Message:" & ex.Message & vbCrLf & vbCrLf & strLogPath, vbOKOnly + vbCritical, "ERROR")
         EndProgram()
     End Sub
 End Module
