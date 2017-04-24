@@ -23,6 +23,7 @@ Partial Class frmView
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmView))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
+        Me.txtPhoneNumber = New System.Windows.Forms.MaskedTextBox()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.lblGUID = New System.Windows.Forms.Label()
         Me.cmdMunisSearch = New System.Windows.Forms.Button()
@@ -83,24 +84,30 @@ Partial Class frmView
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.ToolStrip1 = New AssetManager.MyToolStrip()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.tsbNewNote = New System.Windows.Forms.ToolStripButton()
-        Me.tsbDeleteDevice = New System.Windows.Forms.ToolStripButton()
-        Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
-        Me.TrackingTool = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsdAssetControl = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.tsmAssetInputForm = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AssetDisposalFormToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsSaveModify = New AssetManager.MyToolStrip()
         Me.cmdAccept_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.txtPhoneNumber = New System.Windows.Forms.MaskedTextBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ToolStripContainer1 = New System.Windows.Forms.ToolStripContainer()
+        Me.ToolStrip1 = New AssetManager.MyToolStrip()
+        Me.tsbModify = New System.Windows.Forms.ToolStripButton()
+        Me.tsbNewNote = New System.Windows.Forms.ToolStripButton()
+        Me.tsbDeleteDevice = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripDropDownButton2 = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.tsmAssetInputForm = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AssetDisposalForm = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsTracking = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
@@ -113,7 +120,13 @@ Partial Class frmView
         Me.TrackingBox.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tsSaveModify.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.ToolStripContainer1.ContentPanel.SuspendLayout()
+        Me.ToolStripContainer1.TopToolStripPanel.SuspendLayout()
+        Me.ToolStripContainer1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
+        Me.tsTracking.SuspendLayout()
         Me.SuspendLayout()
         '
         'DeviceInfoBox
@@ -150,12 +163,21 @@ Partial Class frmView
         Me.DeviceInfoBox.Controls.Add(Me.Label6)
         Me.DeviceInfoBox.Controls.Add(Me.txtReplacementYear_View)
         Me.DeviceInfoBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DeviceInfoBox.Location = New System.Drawing.Point(12, 46)
+        Me.DeviceInfoBox.Location = New System.Drawing.Point(4, 3)
         Me.DeviceInfoBox.Name = "DeviceInfoBox"
         Me.DeviceInfoBox.Size = New System.Drawing.Size(810, 282)
         Me.DeviceInfoBox.TabIndex = 39
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
+        '
+        'txtPhoneNumber
+        '
+        Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPhoneNumber.Location = New System.Drawing.Point(612, 183)
+        Me.txtPhoneNumber.Mask = "(999) 000-0000"
+        Me.txtPhoneNumber.Name = "txtPhoneNumber"
+        Me.txtPhoneNumber.Size = New System.Drawing.Size(169, 23)
+        Me.txtPhoneNumber.TabIndex = 57
         '
         'Label14
         '
@@ -456,6 +478,7 @@ Partial Class frmView
         '
         'grpNetTools
         '
+        Me.grpNetTools.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.grpNetTools.Controls.Add(Me.cmdGKUpdate)
         Me.grpNetTools.Controls.Add(Me.cmdRestart)
         Me.grpNetTools.Controls.Add(Me.cmdShowIP)
@@ -463,7 +486,7 @@ Partial Class frmView
         Me.grpNetTools.Controls.Add(Me.cmdRDP)
         Me.grpNetTools.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.grpNetTools.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.grpNetTools.Location = New System.Drawing.Point(828, 46)
+        Me.grpNetTools.Location = New System.Drawing.Point(819, 3)
         Me.grpNetTools.Name = "grpNetTools"
         Me.grpNetTools.Size = New System.Drawing.Size(320, 96)
         Me.grpNetTools.TabIndex = 52
@@ -558,10 +581,10 @@ Partial Class frmView
         Me.TabControl1.Controls.Add(Me.TrackingTab)
         Me.TabControl1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TabControl1.ItemSize = New System.Drawing.Size(61, 21)
-        Me.TabControl1.Location = New System.Drawing.Point(12, 334)
+        Me.TabControl1.Location = New System.Drawing.Point(11, 302)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1140, 317)
+        Me.TabControl1.Size = New System.Drawing.Size(1139, 362)
         Me.TabControl1.TabIndex = 40
         '
         'HistoryTab
@@ -570,7 +593,7 @@ Partial Class frmView
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1132, 288)
+        Me.HistoryTab.Size = New System.Drawing.Size(1131, 333)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -605,7 +628,7 @@ Partial Class frmView
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1120, 276)
+        Me.DataGridHistory.Size = New System.Drawing.Size(1119, 321)
         Me.DataGridHistory.TabIndex = 40
         Me.DataGridHistory.TabStop = False
         Me.DataGridHistory.VirtualMode = True
@@ -616,7 +639,7 @@ Partial Class frmView
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1132, 288)
+        Me.TrackingTab.Size = New System.Drawing.Size(1131, 259)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -642,11 +665,12 @@ Partial Class frmView
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1120, 276)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1119, 723)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
         '
+        Me.TrackingBox.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.TrackingBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.TrackingBox.Controls.Add(Me.txtCheckLocation)
         Me.TrackingBox.Controls.Add(Me.Label16)
@@ -659,7 +683,7 @@ Partial Class frmView
         Me.TrackingBox.Controls.Add(Me.txtCheckOut)
         Me.TrackingBox.Controls.Add(Me.Label11)
         Me.TrackingBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TrackingBox.Location = New System.Drawing.Point(828, 148)
+        Me.TrackingBox.Location = New System.Drawing.Point(819, 104)
         Me.TrackingBox.Name = "TrackingBox"
         Me.TrackingBox.Size = New System.Drawing.Size(320, 180)
         Me.TrackingBox.TabIndex = 41
@@ -783,7 +807,7 @@ Partial Class frmView
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 654)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 713)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1161, 22)
         Me.StatusStrip1.TabIndex = 45
@@ -806,30 +830,107 @@ Partial Class frmView
         Me.fieldErrorIcon.ContainerControl = Me
         Me.fieldErrorIcon.Icon = CType(resources.GetObject("fieldErrorIcon.Icon"), System.Drawing.Icon)
         '
+        'tsSaveModify
+        '
+        Me.tsSaveModify.BackColor = System.Drawing.Color.FromArgb(CType(CType(88, Byte), Integer), CType(CType(237, Byte), Integer), CType(CType(118, Byte), Integer))
+        Me.tsSaveModify.CanOverflow = False
+        Me.tsSaveModify.Dock = System.Windows.Forms.DockStyle.None
+        Me.tsSaveModify.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tsSaveModify.ImageScalingSize = New System.Drawing.Size(25, 25)
+        Me.tsSaveModify.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
+        Me.tsSaveModify.Location = New System.Drawing.Point(747, 0)
+        Me.tsSaveModify.Name = "tsSaveModify"
+        Me.tsSaveModify.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.tsSaveModify.Size = New System.Drawing.Size(343, 37)
+        Me.tsSaveModify.TabIndex = 44
+        Me.tsSaveModify.Text = "ToolStrip1"
+        '
+        'cmdAccept_Tool
+        '
+        Me.cmdAccept_Tool.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdAccept_Tool.Image = CType(resources.GetObject("cmdAccept_Tool.Image"), System.Drawing.Image)
+        Me.cmdAccept_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.cmdAccept_Tool.Name = "cmdAccept_Tool"
+        Me.cmdAccept_Tool.Padding = New System.Windows.Forms.Padding(50, 5, 5, 0)
+        Me.cmdAccept_Tool.Size = New System.Drawing.Size(146, 34)
+        Me.cmdAccept_Tool.Text = "Accept"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 37)
+        '
+        'cmdCancel_Tool
+        '
+        Me.cmdCancel_Tool.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdCancel_Tool.Image = CType(resources.GetObject("cmdCancel_Tool.Image"), System.Drawing.Image)
+        Me.cmdCancel_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.cmdCancel_Tool.Name = "cmdCancel_Tool"
+        Me.cmdCancel_Tool.Padding = New System.Windows.Forms.Padding(50, 5, 5, 0)
+        Me.cmdCancel_Tool.Size = New System.Drawing.Size(142, 34)
+        Me.cmdCancel_Tool.Text = "Cancel"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 37)
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.grpNetTools)
+        Me.Panel1.Controls.Add(Me.TrackingBox)
+        Me.Panel1.Controls.Add(Me.DeviceInfoBox)
+        Me.Panel1.Location = New System.Drawing.Point(7, 3)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(1146, 299)
+        Me.Panel1.TabIndex = 53
+        '
+        'ToolStripContainer1
+        '
+        Me.ToolStripContainer1.BottomToolStripPanelVisible = False
+        '
+        'ToolStripContainer1.ContentPanel
+        '
+        Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.TabControl1)
+        Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.Panel1)
+        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1161, 676)
+        Me.ToolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ToolStripContainer1.LeftToolStripPanelVisible = False
+        Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStripContainer1.Name = "ToolStripContainer1"
+        Me.ToolStripContainer1.RightToolStripPanelVisible = False
+        Me.ToolStripContainer1.Size = New System.Drawing.Size(1161, 713)
+        Me.ToolStripContainer1.TabIndex = 54
+        Me.ToolStripContainer1.Text = "ToolStripContainer1"
+        '
+        'ToolStripContainer1.TopToolStripPanel
+        '
+        Me.ToolStripContainer1.TopToolStripPanel.BackColor = System.Drawing.Color.Silver
+        Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.ToolStrip1)
+        Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.tsTracking)
+        Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.tsSaveModify)
+        '
         'ToolStrip1
         '
-        Me.ToolStrip1.AutoSize = False
-        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(166, Byte), Integer))
+        Me.ToolStrip1.Dock = System.Windows.Forms.DockStyle.None
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.tsbNewNote, Me.tsbDeleteDevice, Me.AttachmentTool, Me.TrackingTool, Me.tsdAssetControl, Me.ToolStripSeparator1, Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
-        Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbModify, Me.tsbNewNote, Me.tsbDeleteDevice, Me.ToolStripSeparator1, Me.AttachmentTool, Me.ToolStripSeparator7, Me.ToolStripDropDownButton2, Me.ToolStripSeparator9})
+        Me.ToolStrip1.Location = New System.Drawing.Point(3, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ToolStrip1.Size = New System.Drawing.Size(1161, 37)
-        Me.ToolStrip1.Stretch = True
-        Me.ToolStrip1.TabIndex = 44
-        Me.ToolStrip1.Text = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(375, 37)
+        Me.ToolStrip1.TabIndex = 45
+        Me.ToolStrip1.Text = "MyToolStrip1"
         '
-        'ToolStripButton1
+        'tsbModify
         '
-        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
-        Me.ToolStripButton1.Size = New System.Drawing.Size(39, 34)
-        Me.ToolStripButton1.Text = "Modify"
+        Me.tsbModify.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.tsbModify.Image = CType(resources.GetObject("tsbModify.Image"), System.Drawing.Image)
+        Me.tsbModify.Name = "tsbModify"
+        Me.tsbModify.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.tsbModify.Size = New System.Drawing.Size(39, 34)
+        Me.tsbModify.Text = "Modify"
         '
         'tsbNewNote
         '
@@ -849,48 +950,31 @@ Partial Class frmView
         Me.tsbDeleteDevice.Size = New System.Drawing.Size(39, 34)
         Me.tsbDeleteDevice.Text = "Delete Device"
         '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 37)
+        '
         'AttachmentTool
         '
         Me.AttachmentTool.Image = CType(resources.GetObject("AttachmentTool.Image"), System.Drawing.Image)
         Me.AttachmentTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AttachmentTool.Name = "AttachmentTool"
         Me.AttachmentTool.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
-        Me.AttachmentTool.Size = New System.Drawing.Size(136, 34)
-        Me.AttachmentTool.Text = "Attachments"
+        Me.AttachmentTool.Size = New System.Drawing.Size(39, 34)
         '
-        'TrackingTool
+        'ToolStripSeparator7
         '
-        Me.TrackingTool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckOutTool, Me.CheckInTool})
-        Me.TrackingTool.Image = CType(resources.GetObject("TrackingTool.Image"), System.Drawing.Image)
-        Me.TrackingTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.TrackingTool.Name = "TrackingTool"
-        Me.TrackingTool.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.TrackingTool.Size = New System.Drawing.Size(116, 34)
-        Me.TrackingTool.Text = "Tracking"
+        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(6, 37)
         '
-        'CheckOutTool
+        'ToolStripDropDownButton2
         '
-        Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckOutTool.Image = CType(resources.GetObject("CheckOutTool.Image"), System.Drawing.Image)
-        Me.CheckOutTool.Name = "CheckOutTool"
-        Me.CheckOutTool.Size = New System.Drawing.Size(144, 32)
-        Me.CheckOutTool.Text = "Check Out"
-        '
-        'CheckInTool
-        '
-        Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckInTool.Image = CType(resources.GetObject("CheckInTool.Image"), System.Drawing.Image)
-        Me.CheckInTool.Name = "CheckInTool"
-        Me.CheckInTool.Size = New System.Drawing.Size(144, 32)
-        Me.CheckInTool.Text = "Check In"
-        '
-        'tsdAssetControl
-        '
-        Me.tsdAssetControl.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAssetInputForm, Me.tsmAssetTransferForm, Me.AssetDisposalFormToolStripMenuItem})
-        Me.tsdAssetControl.Image = CType(resources.GetObject("tsdAssetControl.Image"), System.Drawing.Image)
-        Me.tsdAssetControl.Name = "tsdAssetControl"
-        Me.tsdAssetControl.Size = New System.Drawing.Size(189, 34)
-        Me.tsdAssetControl.Text = "Asset Control Forms"
+        Me.ToolStripDropDownButton2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAssetInputForm, Me.tsmAssetTransferForm, Me.AssetDisposalForm})
+        Me.ToolStripDropDownButton2.Image = CType(resources.GetObject("ToolStripDropDownButton2.Image"), System.Drawing.Image)
+        Me.ToolStripDropDownButton2.Name = "ToolStripDropDownButton2"
+        Me.ToolStripDropDownButton2.Size = New System.Drawing.Size(189, 34)
+        Me.ToolStripDropDownButton2.Text = "Asset Control Forms"
         '
         'tsmAssetInputForm
         '
@@ -906,74 +990,70 @@ Partial Class frmView
         Me.tsmAssetTransferForm.Size = New System.Drawing.Size(230, 32)
         Me.tsmAssetTransferForm.Text = "Asset Transfer Form"
         '
-        'AssetDisposalFormToolStripMenuItem
+        'AssetDisposalForm
         '
-        Me.AssetDisposalFormToolStripMenuItem.Image = CType(resources.GetObject("AssetDisposalFormToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.AssetDisposalFormToolStripMenuItem.Name = "AssetDisposalFormToolStripMenuItem"
-        Me.AssetDisposalFormToolStripMenuItem.Size = New System.Drawing.Size(230, 32)
-        Me.AssetDisposalFormToolStripMenuItem.Text = "Asset Disposal Form"
+        Me.AssetDisposalForm.Image = CType(resources.GetObject("AssetDisposalForm.Image"), System.Drawing.Image)
+        Me.AssetDisposalForm.Name = "AssetDisposalForm"
+        Me.AssetDisposalForm.Size = New System.Drawing.Size(230, 32)
+        Me.AssetDisposalForm.Text = "Asset Disposal Form"
         '
-        'ToolStripSeparator1
+        'ToolStripSeparator9
         '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 37)
-        Me.ToolStripSeparator1.Visible = False
+        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 37)
         '
-        'cmdAccept_Tool
+        'tsTracking
         '
-        Me.cmdAccept_Tool.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAccept_Tool.Image = CType(resources.GetObject("cmdAccept_Tool.Image"), System.Drawing.Image)
-        Me.cmdAccept_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.cmdAccept_Tool.Name = "cmdAccept_Tool"
-        Me.cmdAccept_Tool.Padding = New System.Windows.Forms.Padding(100, 0, 0, 0)
-        Me.cmdAccept_Tool.Size = New System.Drawing.Size(178, 34)
-        Me.cmdAccept_Tool.Text = "Accept"
-        Me.cmdAccept_Tool.Visible = False
+        Me.tsTracking.Dock = System.Windows.Forms.DockStyle.None
+        Me.tsTracking.ImageScalingSize = New System.Drawing.Size(25, 25)
+        Me.tsTracking.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripDropDownButton1, Me.ToolStripSeparator4})
+        Me.tsTracking.Location = New System.Drawing.Point(457, 0)
+        Me.tsTracking.Name = "tsTracking"
+        Me.tsTracking.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.tsTracking.Size = New System.Drawing.Size(134, 37)
+        Me.tsTracking.TabIndex = 46
         '
-        'ToolStripSeparator3
+        'ToolStripDropDownButton1
         '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 37)
-        Me.ToolStripSeparator3.Visible = False
+        Me.ToolStripDropDownButton1.AutoSize = False
+        Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckOutTool, Me.CheckInTool})
+        Me.ToolStripDropDownButton1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripDropDownButton1.Image = CType(resources.GetObject("ToolStripDropDownButton1.Image"), System.Drawing.Image)
+        Me.ToolStripDropDownButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
+        Me.ToolStripDropDownButton1.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
+        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(116, 34)
+        Me.ToolStripDropDownButton1.Text = "Tracking"
         '
-        'cmdCancel_Tool
+        'CheckOutTool
         '
-        Me.cmdCancel_Tool.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCancel_Tool.Image = CType(resources.GetObject("cmdCancel_Tool.Image"), System.Drawing.Image)
-        Me.cmdCancel_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.cmdCancel_Tool.Name = "cmdCancel_Tool"
-        Me.cmdCancel_Tool.Padding = New System.Windows.Forms.Padding(50, 0, 0, 0)
-        Me.cmdCancel_Tool.Size = New System.Drawing.Size(126, 34)
-        Me.cmdCancel_Tool.Text = "Cancel"
-        Me.cmdCancel_Tool.Visible = False
+        Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckOutTool.Image = CType(resources.GetObject("CheckOutTool.Image"), System.Drawing.Image)
+        Me.CheckOutTool.Name = "CheckOutTool"
+        Me.CheckOutTool.Size = New System.Drawing.Size(135, 22)
+        Me.CheckOutTool.Text = "Check Out"
         '
-        'ToolStripSeparator2
+        'CheckInTool
         '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 37)
-        Me.ToolStripSeparator2.Visible = False
+        Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckInTool.Image = CType(resources.GetObject("CheckInTool.Image"), System.Drawing.Image)
+        Me.CheckInTool.Name = "CheckInTool"
+        Me.CheckInTool.Size = New System.Drawing.Size(135, 22)
+        Me.CheckInTool.Text = "Check In"
         '
-        'txtPhoneNumber
+        'ToolStripSeparator4
         '
-        Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPhoneNumber.Location = New System.Drawing.Point(612, 183)
-        Me.txtPhoneNumber.Mask = "(999) 000-0000"
-        Me.txtPhoneNumber.Name = "txtPhoneNumber"
-        Me.txtPhoneNumber.Size = New System.Drawing.Size(169, 23)
-        Me.txtPhoneNumber.TabIndex = 57
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 37)
         '
         'frmView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1161, 676)
+        Me.ClientSize = New System.Drawing.Size(1161, 735)
+        Me.Controls.Add(Me.ToolStripContainer1)
         Me.Controls.Add(Me.StatusStrip1)
-        Me.Controls.Add(Me.grpNetTools)
-        Me.Controls.Add(Me.ToolStrip1)
-        Me.Controls.Add(Me.TrackingBox)
-        Me.Controls.Add(Me.TabControl1)
-        Me.Controls.Add(Me.DeviceInfoBox)
         Me.DoubleBuffered = True
         Me.MinimumSize = New System.Drawing.Size(1177, 478)
         Me.Name = "frmView"
@@ -994,8 +1074,18 @@ Partial Class frmView
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tsSaveModify.ResumeLayout(False)
+        Me.tsSaveModify.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.ToolStripContainer1.ContentPanel.ResumeLayout(False)
+        Me.ToolStripContainer1.TopToolStripPanel.ResumeLayout(False)
+        Me.ToolStripContainer1.TopToolStripPanel.PerformLayout()
+        Me.ToolStripContainer1.ResumeLayout(False)
+        Me.ToolStripContainer1.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
+        Me.tsTracking.ResumeLayout(False)
+        Me.tsTracking.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1042,21 +1132,12 @@ Partial Class frmView
     Friend WithEvents txtDueBack As TextBox
     Friend WithEvents lblDueBack As Label
     Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents ToolStrip1 As MyToolStrip
-    Friend WithEvents ToolStripButton1 As ToolStripButton
-    Friend WithEvents tsbNewNote As ToolStripButton
-    Friend WithEvents tsbDeleteDevice As ToolStripButton
-    Friend WithEvents TrackingTool As ToolStripDropDownButton
-    Friend WithEvents CheckOutTool As ToolStripMenuItem
-    Friend WithEvents CheckInTool As ToolStripMenuItem
-    Friend WithEvents AttachmentTool As ToolStripButton
+    Friend WithEvents tsSaveModify As MyToolStrip
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
     Friend WithEvents cmdCancel_Tool As ToolStripButton
     Friend WithEvents cmdAccept_Tool As ToolStripButton
-    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
-    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents cmdMunisInfo As Button
     Friend WithEvents cmdRDP As Button
     Friend WithEvents Label12 As Label
@@ -1068,15 +1149,31 @@ Partial Class frmView
     Friend WithEvents fieldErrorIcon As ErrorProvider
     Friend WithEvents cmdBrowseFiles As Button
     Friend WithEvents grpNetTools As GroupBox
-    Friend WithEvents tsdAssetControl As ToolStripDropDownButton
-    Friend WithEvents tsmAssetInputForm As ToolStripMenuItem
-    Friend WithEvents tsmAssetTransferForm As ToolStripMenuItem
     Friend WithEvents cmdMunisSearch As Button
     Friend WithEvents lblGUID As Label
-    Friend WithEvents AssetDisposalFormToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmdShowIP As Button
     Friend WithEvents Label14 As Label
     Friend WithEvents cmdRestart As Button
     Friend WithEvents cmdGKUpdate As Button
     Friend WithEvents txtPhoneNumber As MaskedTextBox
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents ToolStripContainer1 As ToolStripContainer
+    Friend WithEvents ToolStrip1 As MyToolStrip
+    Friend WithEvents tsbModify As ToolStripButton
+    Friend WithEvents tsbNewNote As ToolStripButton
+    Friend WithEvents tsbDeleteDevice As ToolStripButton
+    Friend WithEvents AttachmentTool As ToolStripButton
+    Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
+    Friend WithEvents ToolStripDropDownButton2 As ToolStripDropDownButton
+    Friend WithEvents tsmAssetInputForm As ToolStripMenuItem
+    Friend WithEvents tsmAssetTransferForm As ToolStripMenuItem
+    Friend WithEvents AssetDisposalForm As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator9 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents tsTracking As ToolStrip
+    Friend WithEvents ToolStripDropDownButton1 As ToolStripDropDownButton
+    Friend WithEvents CheckOutTool As ToolStripMenuItem
+    Friend WithEvents CheckInTool As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
 End Class

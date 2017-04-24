@@ -37,7 +37,7 @@ Public Class frmView
         GridTheme = ParentForm.GridTheme
         RefreshCombos()
         grpNetTools.Visible = False
-        ToolStrip1.BackColor = colAssetToolBarColor
+        '    ToolStrip1.BackColor = colAssetToolBarColor
         lblGUID.BackColor = SetBarColor(DeviceGUID)
         lblGUID.ForeColor = GetFontColor(lblGUID.BackColor)
         ExtendedMethods.DoubleBuffered(DataGridHistory, True)
@@ -117,16 +117,8 @@ Public Class frmView
         cmdSetSibi.Visible = True
         cmdMunisSearch.Visible = True
         Me.Text = "*View - MODIFYING*"
-        ToolStrip1.BackColor = colEditColor
-        For Each t As ToolStripItem In ToolStrip1.Items
-            If TypeOf t IsNot ToolStripSeparator Then
-                t.Visible = False
-            Else
-                t.Visible = True
-            End If
-        Next
-        cmdAccept_Tool.Visible = True
-        cmdCancel_Tool.Visible = True
+        tsSaveModify.Visible = True
+
     End Sub
     Private Sub DisableControls()
         Dim c As Control
@@ -156,17 +148,8 @@ Public Class frmView
         cmdSetSibi.Visible = False
         cmdMunisSearch.Visible = False
         Me.Text = "View"
-        ToolStrip1.BackColor = colAssetToolBarColor
-        For Each t As ToolStripItem In ToolStrip1.Items
-            If TypeOf t IsNot ToolStripSeparator Then
-                t.Visible = True
-            Else
-                t.Visible = False
-            End If
-        Next
-        TrackingTool.Visible = False
-        cmdAccept_Tool.Visible = False
-        cmdCancel_Tool.Visible = False
+        tsSaveModify.Visible = False
+        tsTracking.Visible = False
     End Sub
     Public Sub UpdateDevice(UpdateInfo As Update_Info)
         Try
@@ -511,11 +494,11 @@ VALUES (@" & historical_dev.ChangeType & ",
             SetGridStyle(TrackingGrid)
             DataGridHistory.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
             TrackingBox.Visible = True
-            TrackingTool.Visible = bolEnabled
+            tsTracking.Visible = bolEnabled
             CheckOutTool.Visible = Not bolCheckedOut
             CheckInTool.Visible = bolCheckedOut
         Else
-            TrackingTool.Visible = bolEnabled
+            tsTracking.Visible = bolEnabled
             TabControl1.TabPages.Remove(TrackingTab)
             SetGridStyle(DataGridHistory)
             SetGridStyle(TrackingGrid)
@@ -748,7 +731,7 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub TrackingGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellDoubleClick
         NewTrackingView(TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value.ToString)
     End Sub
-    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+    Private Sub tsbModify_Click(sender As Object, e As EventArgs) Handles tsbModify.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         ModifyDevice()
     End Sub
@@ -996,7 +979,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             End If
         End If
     End Sub
-    Private Sub AssetDisposalFormToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AssetDisposalFormToolStripMenuItem.Click
+    Private Sub AssetDisposalFormToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AssetDisposalForm.Click
         Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.DisposeForm)
     End Sub
     Private Sub DataGridHistory_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellEnter
