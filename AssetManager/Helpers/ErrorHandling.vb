@@ -145,11 +145,15 @@ Module ErrorHandling
                 Return True
             Case SocketError.ConnectionAborted '10053
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
-                Dim blah = Message("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Disconnected")
+                Dim blah = Message("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Connection Aborted")
                 Return True
             Case SocketError.ConnectionReset '10054 'connection reset
                 Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
-                Dim blah = Message("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Disconnected")
+                Dim blah = Message("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Connection Reset")
+                Return True
+            Case SocketError.NetworkUnreachable
+                Logger("ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
+                Dim blah = Message("Could not connect to server.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Unreachable")
                 Return True
             Case SocketError.HostNotFound '11001 'host not found.
                 Return False
@@ -194,8 +198,8 @@ Module ErrorHandling
         End Select
     End Function
     Private Sub UnHandledError(ex As Exception, ErrorCode As Integer, strOrigSub As String)
-        Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
-        Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message & vbCrLf & vbCrLf & strLogPath, vbOKOnly + vbCritical, "ERROR")
+        Logger("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ErrorCode & "  Message:" & ex.Message)
+        Dim blah = Message("UNHANDLED ERROR:  MethodName=" & strOrigSub & "  Type: " & TypeName(ex) & "  #:" & ErrorCode & "  Message:" & ex.Message & vbCrLf & vbCrLf & strLogPath, vbOKOnly + vbCritical, "ERROR")
         EndProgram()
     End Sub
 End Module
