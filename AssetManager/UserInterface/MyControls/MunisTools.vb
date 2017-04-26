@@ -11,7 +11,7 @@
                 AddSeperators(TargetToolStrip, TargetToolStrip.Items.Count - 1)
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub AddSeperators(ByRef TargetToolStrip As MyToolStrip, LocationIndex As Integer)

@@ -56,7 +56,7 @@ Public Class PDFFormFilling
                 UnitPrice = Nothing
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub FillForm(Type As PDFFormType)
@@ -96,7 +96,7 @@ Public Class PDFFormFilling
             pdfStamper.Close()
             Process.Start(newFile)
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Function FlattenPrompt() As Boolean

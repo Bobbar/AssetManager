@@ -32,7 +32,7 @@
             End If
             If intRows < 1 Then Exit Sub
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Public Sub LoadMunisPOGridByPONo(PONum As String)
@@ -48,7 +48,7 @@ WHERE pohd_pur_no ='" & PONum & "'"
                 Me.Show()
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
 
@@ -73,7 +73,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
                 Me.Show()
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Public Sub LoadMunisEmployeeByLastName(Name As String)
@@ -88,7 +88,7 @@ WHERE e.a_name_last LIKE '%" & UCase(Name) & "%' OR e.a_name_first LIKE '%" & UC
             ProcessMunisQuery(DataGridMunis_Requisition, strQRY)
             Me.Show()
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Function ProcessMunisQuery(Grid As DataGridView, Query As String) As Integer
@@ -105,7 +105,7 @@ WHERE e.a_name_last LIKE '%" & UCase(Name) & "%' OR e.a_name_first LIKE '%" & UC
             results.Dispose()
             Return intRows
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
     Public Sub LoadMunisInfoByDevice(Device As Device_Info)

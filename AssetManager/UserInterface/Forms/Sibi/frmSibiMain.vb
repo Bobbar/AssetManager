@@ -84,7 +84,7 @@ Public Class frmSibiMain
                 SendToGrid(ds.Tables(0))
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             ' ConnectionReady()
         End Try
     End Sub
@@ -121,7 +121,7 @@ Public Class frmSibiMain
             bolGridFilling = False
             table.Dispose()
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Function SetDisplayYears() As Boolean
@@ -140,7 +140,7 @@ Public Class frmSibiMain
                 Return True
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
         End Try
     End Function

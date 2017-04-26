@@ -42,7 +42,7 @@ Public Class frmSibiSelector
             ResultGrid.ClearSelection()
             table.Dispose()
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub ShowAll()

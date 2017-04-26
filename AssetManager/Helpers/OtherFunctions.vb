@@ -50,7 +50,7 @@ Module OtherFunctions
             DestroyIcon(shinfo.hIcon) ' must destroy icon to avoid GDI leak!
             Return bmp ' return icon as a bitmap
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
     Public Sub AdjustComboBoxWidth(ByVal sender As Object, ByVal e As EventArgs)
@@ -168,7 +168,7 @@ Module OtherFunctions
         Try
             Return IIf(IsDBNull(DBVal), "", DBVal.ToString).ToString
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return ""
         End Try
     End Function

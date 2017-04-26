@@ -347,7 +347,7 @@ Public Class frmManageRequest
             info.RequstItems = DBTable
             Return info
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             EndProgram()
         End Try
     End Function
@@ -415,7 +415,7 @@ VALUES
             End If
             OpenRequest(RequestData.strUID)
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 bolNewRequest = False
                 Exit Sub
             Else
@@ -475,7 +475,7 @@ WHERE " & sibi_requests.UID & " ='" & RequestData.strUID & "'"
             ' Message("Success!")
             OpenRequest(CurrentRequest.strUID)
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
             Else
                 EndProgram()
             End If
@@ -576,7 +576,7 @@ VALUES
                 End If
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 Return False
             End If
         End Try
@@ -614,7 +614,7 @@ VALUES
                 SetPOStatus(CurrentRequest.strPO)
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 Dispose()
             Else
                 EndProgram()
@@ -660,7 +660,7 @@ VALUES
                 Return rows
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
             Else
                 EndProgram()
             End If
@@ -672,7 +672,7 @@ VALUES
             RequestItemsGrid.Rows.Remove(RequestItemsGrid.Rows(RowIndex))
             Return True
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
             Else
                 Return False
                 EndProgram()
@@ -704,7 +704,7 @@ VALUES
             RequestItemsGrid.ClearSelection()
             bolGridFilling = False
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub cmdClearAll_Click(sender As Object, e As EventArgs)
@@ -788,7 +788,7 @@ VALUES
             Else
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Function IsNewRow(RowIndex As Integer) As Boolean
@@ -800,7 +800,7 @@ VALUES
                 Return True
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
     Private Sub txtRTNumber_Click(sender As Object, e As EventArgs) Handles txtRTNumber.Click
@@ -971,7 +971,7 @@ VALUES
                 .RequstItems = RequestItemsResults
             End With
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub frmManageRequest_Resize(sender As Object, e As EventArgs) Handles Me.Resize

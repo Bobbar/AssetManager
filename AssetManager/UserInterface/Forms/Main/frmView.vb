@@ -255,7 +255,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             End If
             Exit Sub
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 ViewDevice(CurrentViewDevice.strGUID)
                 Exit Sub
             Else
@@ -284,7 +284,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             DoneWaiting()
         Catch ex As Exception
             DoneWaiting()
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
@@ -311,7 +311,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             End Using
         Catch ex As Exception
             DoneWaiting()
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             HistoricalResults.Dispose()
             DeviceResults.Dispose()
             Return False
@@ -377,7 +377,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             End If
         Catch ex As Exception
             table.Dispose()
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub SendToTrackGrid(Grid As DataGridView, tblResults As DataTable)
@@ -412,7 +412,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             End If
         Catch ex As Exception
             table.Dispose()
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub Waiting()
@@ -443,7 +443,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                 SetTracking(CurrentViewDevice.bolTrackable, CurrentViewDevice.Tracking.bolCheckedOut)
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             DoneWaiting()
         End Try
     End Sub
@@ -693,7 +693,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                 Return rows
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
             Else
                 EndProgram()
             End If
@@ -888,7 +888,7 @@ VALUES (@" & historical_dev.ChangeType & ",
             End If
 
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
@@ -931,7 +931,7 @@ VALUES (@" & historical_dev.ChangeType & ",
         Try
             Process.Start("\\D" & CurrentViewDevice.strSerial & "\c$")
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub tsmAssetInputForm_Click(sender As Object, e As EventArgs) Handles tsmAssetInputForm.Click

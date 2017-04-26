@@ -10,7 +10,7 @@
                 Return False
             End If
         Catch ex As Exception
-            Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
     Public Function Has_FTPFolder(ItemUID As String) As Boolean
@@ -55,7 +55,7 @@
                 Return False
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
         End Try
     End Function
@@ -120,7 +120,7 @@
             End While
             Return files
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
@@ -165,7 +165,7 @@
             Logger("**********End Scan Results*********")
             Logger("***********************************")
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub CleanFiles(DirList As List(Of String))
@@ -199,7 +199,7 @@
                 End If
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
         End Try
     End Function
