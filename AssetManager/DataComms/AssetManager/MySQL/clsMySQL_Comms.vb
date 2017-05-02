@@ -60,7 +60,7 @@ Public Class clsMySQL_Comms : Implements IDisposable
                 Return ds.Tables(0)
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
@@ -71,7 +71,7 @@ Public Class clsMySQL_Comms : Implements IDisposable
                 Return cmd.ExecuteReader
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
@@ -84,7 +84,7 @@ Public Class clsMySQL_Comms : Implements IDisposable
                 Return cmd
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
@@ -94,7 +94,7 @@ Public Class clsMySQL_Comms : Implements IDisposable
             Dim adapter As New MySqlDataAdapter(strSQLQry, MySQLConnectString)
             Return adapter
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function

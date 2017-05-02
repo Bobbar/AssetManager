@@ -7,6 +7,7 @@ Imports System.IO
 Imports System.Collections
 Imports System.ComponentModel
 Imports System.Text
+Imports MyDialogLib
 Public Class PDFFormFilling
     Private ParentForm As Form
     Private CurrentDevice As Device_Info
@@ -43,19 +44,12 @@ Public Class PDFFormFilling
     Private Sub PriceFromMunis()
         Try
             Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
-            Dim f As New View_Munis(ParentForm, True)
-            f.Text = "Select a Line Item"
-            f.LoadDevice(CurrentDevice)
-            f.LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(CurrentDevice.strPO), Munis.Get_FY_From_PO(CurrentDevice.strPO), True)
-            f.ShowDialog(ParentForm)
-            If f.DialogResult = DialogResult.OK Then
-                UnitPrice = f.UnitPrice
-                CurrentDialog.SetControlValue(UnitPriceTxtName, UnitPrice)
-            Else
-                UnitPrice = Nothing
-            End If
+            Dim SelectedPrice = Munis.NewMunisView_ReqSearch(Munis.Get_ReqNumber_From_PO(CurrentDevice.strPO), Munis.Get_FY_From_PO(CurrentDevice.strPO), ParentForm, True)
+            Dim decPrice As Decimal = Convert.ToDecimal(SelectedPrice)
+            Dim SelectedUnitPrice = decPrice.ToString("C")
+            CurrentDialog.SetControlValue(UnitPriceTxtName, SelectedUnitPrice)
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub FillForm(Type As PDFFormType)
@@ -95,7 +89,7 @@ Public Class PDFFormFilling
             pdfStamper.Close()
             Process.Start(newFile)
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Function FlattenPrompt() As Boolean
@@ -222,8 +216,12 @@ Public Class PDFFormFilling
         Dim newDialog As New MyDialog(ParentForm)
         With newDialog
             .Text = "Additional Input Required"
-            .AddComboBox("cmbFromLoc", "Transfer FROM:", DeviceIndex.Locations)
-            .AddComboBox("cmbToLoc", "Transfer TO:", DeviceIndex.Locations)
+            Dim cmbFrom As New ComboBox
+            FillComboBox(DeviceIndex.Locations, cmbFrom)
+            .AddCustomControl("cmbFromLoc", "Transfer FROM:", cmbFrom)
+            Dim cmbTo As New ComboBox
+            FillComboBox(DeviceIndex.Locations, cmbTo)
+            .AddCustomControl("cmbToLoc", "Transfer TO:", cmbTo)
             .AddLabel("Reason For Transfer-Check One:", True)
             .AddCheckBox("chkBetterU", "Better Use of asset:")
             .AddCheckBox("chkTradeIn", "Trade-in or exchange:")

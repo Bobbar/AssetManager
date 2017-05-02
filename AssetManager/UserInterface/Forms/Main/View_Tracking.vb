@@ -46,7 +46,7 @@ Public Class View_Tracking
             End Using
             DoneWaiting()
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
             Else
                 Exit Sub
             End If

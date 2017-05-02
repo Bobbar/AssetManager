@@ -14,7 +14,7 @@ Public Class GKUpdater_Form
         MaxUpdates.Value = MaxSimUpdates
         ' Add any initialization after the InitializeComponent() call.
 
-        DoubleBufferedTableLayout(Updater_Table, True)
+        DoubleBufferedFlowLayout(Updater_Table, True)
 
 
     End Sub

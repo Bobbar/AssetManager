@@ -14,7 +14,7 @@ Public Class clsMunis_Comms
         Catch ex As Exception
             da.Dispose()
             ds.Dispose()
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
@@ -28,7 +28,7 @@ Public Class clsMunis_Comms
             conn.Open()
             Return Convert.ToString(cmd.ExecuteScalar)
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
@@ -43,8 +43,8 @@ Public Class clsMunis_Comms
             Dim Value = Await cmd.ExecuteScalarAsync
             If Value IsNot Nothing Then Return Value.ToString
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
         End Try
-        Return Nothing
     End Function
 End Class

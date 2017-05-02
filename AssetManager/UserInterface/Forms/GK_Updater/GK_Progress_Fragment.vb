@@ -74,7 +74,7 @@ Public Class GK_Progress_Fragment
                     OnCriticalStopError(New EventArgs())
                 End If
             Else
-                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             End If
         End Try
     End Sub

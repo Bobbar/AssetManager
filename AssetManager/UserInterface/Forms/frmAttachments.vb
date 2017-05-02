@@ -29,7 +29,7 @@ Class frmAttachments
         Tag = ParentForm
         Icon = ParentForm.Icon
         GridTheme = ParentForm.GridTheme
-        ExtendedMethods.DoubleBuffered(AttachGrid, True)
+        ExtendedMethods.DoubleBufferedDataGrid(AttachGrid, True)
         StatusBar("Idle...")
         If Not IsNothing(AttachInfo) Then
             If TypeOf AttachInfo Is Request_Info Then
@@ -209,7 +209,7 @@ Class frmAttachments
             bolGridFilling = False
         Catch ex As Exception
             DoneWaiting()
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Exit Sub
         End Try
     End Sub
@@ -452,13 +452,13 @@ VALUES(@" & dev_attachments.FKey & ",
                     If TypeOf e.Error Is BackgroundWorkerCancelledException Then
                         Message("File upload was cancelled.", vbOKOnly + vbInformation, "Cancelled", Me)
                     Else
-                        If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
+                        If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod()) Then EndProgram()
                         Message("File upload failed.", MessageBoxButtons.OK + MessageBoxIcon.Exclamation, "Failed", Me)
                     End If
                 End If
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
@@ -474,7 +474,7 @@ VALUES(@" & dev_attachments.FKey & ",
             Asset.Update_SQLValue(AttachTable, main_attachments.FileName, NewFileName, main_attachments.FileUID, AttachUID)
             ListAttachments()
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
@@ -505,60 +505,60 @@ VALUES(@" & dev_attachments.FKey & ",
         Next
         'FTP STUFF
         Dim buffer(1023) As Byte
-            Dim bytesIn As Integer
-            Dim totalBytesIn As Integer
-            Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID
-            'get file size
-            Dim flLength As Int64 = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
-            'setup download
-            Using resp = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile),
+        Dim bytesIn As Integer
+        Dim totalBytesIn As Integer
+        Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID
+        'get file size
+        Dim flLength As Int64 = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
+        'setup download
+        Using resp = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile),
                 respStream = resp.GetResponseStream,
                 outputStream = IO.File.Create(strFullPath),
                 memStream As New IO.MemoryStream
-                'ftp download
-                ProgTimer.Enabled = True
-                DownloadWorker.ReportProgress(1, "Downloading...")
-                bytesIn = 1
-                Dim perc As Integer = 0
-                stpSpeed.Start()
-                Do Until bytesIn < 1 Or DownloadWorker.CancellationPending
-                    bytesIn = respStream.Read(buffer, 0, 1024)
-                    If bytesIn > 0 Then
-                        memStream.Write(buffer, 0, bytesIn) 'download data to memory before saving to disk
-                        totalBytesIn += bytesIn 'downloaded bytes
-                        lngBytesMoved += bytesIn
-                        If flLength > 0 Then
-                            perc = (totalBytesIn / flLength) * 100
-                            'report progress
-                            intProgress = perc
-                        End If
+            'ftp download
+            ProgTimer.Enabled = True
+            DownloadWorker.ReportProgress(1, "Downloading...")
+            bytesIn = 1
+            Dim perc As Integer = 0
+            stpSpeed.Start()
+            Do Until bytesIn < 1 Or DownloadWorker.CancellationPending
+                bytesIn = respStream.Read(buffer, 0, 1024)
+                If bytesIn > 0 Then
+                    memStream.Write(buffer, 0, bytesIn) 'download data to memory before saving to disk
+                    totalBytesIn += bytesIn 'downloaded bytes
+                    lngBytesMoved += bytesIn
+                    If flLength > 0 Then
+                        perc = (totalBytesIn / flLength) * 100
+                        'report progress
+                        intProgress = perc
                     End If
-                Loop
-                e.Cancel = DownloadWorker.CancellationPending
-                If Not e.Cancel Then
-                    DownloadWorker.ReportProgress(2, "Verifying file...")
-                    Dim FileResultHash As String = GetHashOfIOStream(memStream)
-                    If FileResultHash = FileExpectedHash Then
-                        memStream.CopyTo(outputStream) 'once data is verified we go ahead and copy it to disk
-                        outputStream.Close()
-                        If bolDragging Then
-                            strDragFilePath = strFullPath
-                            e.Result = True
-                        Else
-                            Process.Start(strFullPath)
-                            e.Result = True
-                        End If
+                End If
+            Loop
+            e.Cancel = DownloadWorker.CancellationPending
+            If Not e.Cancel Then
+                DownloadWorker.ReportProgress(2, "Verifying file...")
+                Dim FileResultHash As String = GetHashOfIOStream(memStream)
+                If FileResultHash = FileExpectedHash Then
+                    memStream.CopyTo(outputStream) 'once data is verified we go ahead and copy it to disk
+                    outputStream.Close()
+                    If bolDragging Then
+                        strDragFilePath = strFullPath
+                        e.Result = True
                     Else
-                        'something is very wrong
-                        Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
-                        Dim blah = Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch", Me)
-                        PurgeTempDir()
-                        e.Result = False
+                        Process.Start(strFullPath)
+                        e.Result = True
                     End If
                 Else
+                    'something is very wrong
+                    Logger("FILE VERIFICATION FAILURE: Device:" & Foldername & "  Filepath: " & strFullPath & "  FileUID: " & FileUID & " | Expected hash:" & FileExpectedHash & " Result hash:" & FileResultHash)
+                    Dim blah = Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch", Me)
                     PurgeTempDir()
+                    e.Result = False
                 End If
-            End Using
+            Else
+                PurgeTempDir()
+            End If
+        End Using
     End Sub
     Private Sub DownloadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles DownloadWorker.RunWorkerCompleted
         Try
@@ -574,10 +574,10 @@ VALUES(@" & dev_attachments.FKey & ",
                     'Message("The download was cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 End If
             Else
-                If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then EndProgram()
+                If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod()) Then EndProgram()
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
@@ -783,7 +783,7 @@ VALUES(@" & dev_attachments.FKey & ",
             output.Dispose()
             Return strFullPath
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
     Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
@@ -801,7 +801,7 @@ VALUES(@" & dev_attachments.FKey & ",
             End Select
         Catch ex As Exception
             Return Nothing
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
 

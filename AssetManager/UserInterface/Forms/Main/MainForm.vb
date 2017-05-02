@@ -28,7 +28,7 @@ Public Class MainForm
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             DateTimeLabel.Text = Now.ToString
             ToolStrip1.BackColor = colAssetToolBarColor
-            ExtendedMethods.DoubleBuffered(ResultGrid, True)
+            ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
             If CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel) Then
                 AdminDropDown.Visible = True
             Else
@@ -42,7 +42,7 @@ Public Class MainForm
             InitLiveBox()
             Clear_All()
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             EndProgram()
         End Try
     End Sub
@@ -165,7 +165,7 @@ Public Class MainForm
             table.Dispose()
             DoneWaiting()
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Function BuildSearchListNew() As List(Of SearchVal)
@@ -302,7 +302,7 @@ Public Class MainForm
                 DoneWaiting()
             End If
         Else
-            ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod())
         End If
     End Sub
     Private Sub BigQueryWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BigQueryWorker.ProgressChanged

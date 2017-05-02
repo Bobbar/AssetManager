@@ -155,7 +155,7 @@ VALUES(@" & trackable.CheckType & ",
                 DoneWaiting()
                 Exit Sub
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 DoneWaiting()
                 Exit Try
             Else
@@ -212,7 +212,7 @@ VALUES (@" & trackable.CheckType & ",
             DoneWaiting()
             Exit Sub
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 DoneWaiting()
                 Exit Try
             Else

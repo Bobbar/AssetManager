@@ -2,6 +2,7 @@
 Imports System.Environment
 Imports System.IO
 Imports System.Runtime.InteropServices
+Imports MyDialogLib
 Module OtherFunctions
     Public GridStyles As System.Windows.Forms.DataGridViewCellStyle ' = New System.Windows.Forms.DataGridViewCellStyle()
     Public GridFont As Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -11,6 +12,16 @@ Module OtherFunctions
     Private Const SHGFI_ICON As Int32 = &H100
     Private Const SHGFI_USEFILEATTRIBUTES As Int32 = &H10
     Private Const FILE_ATTRIBUTE_NORMAL As Int32 = &H80
+    Public Function SelectedCellValue(ByRef GridRow As DataGridViewRow, Optional Column As String = Nothing) As String
+        For Each cell As DataGridViewCell In GridRow.Cells
+            If Column = "" Then
+                If cell.Selected Then Return cell.Value.ToString
+            Else
+                If cell.OwningColumn.Name = Column Then Return cell.Value.ToString
+            End If
+        Next
+        Return Nothing
+    End Function
     Public Sub SetGridStyle(Grid As DataGridView)
         Grid.BackgroundColor = DefGridBC
         Grid.DefaultCellStyle = GridStyles
@@ -49,7 +60,7 @@ Module OtherFunctions
             DestroyIcon(shinfo.hIcon) ' must destroy icon to avoid GDI leak!
             Return bmp ' return icon as a bitmap
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
     Public Sub AdjustComboBoxWidth(ByVal sender As Object, ByVal e As EventArgs)
@@ -167,7 +178,7 @@ Module OtherFunctions
         Try
             Return IIf(IsDBNull(DBVal), "", DBVal.ToString).ToString
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return ""
         End Try
     End Function
