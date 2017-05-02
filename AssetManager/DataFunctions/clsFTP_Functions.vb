@@ -132,6 +132,7 @@
             Logger("***********************************")
             Logger("******Attachment Scan Results******")
             files = ListDirectory("ftp://" & strServerIP & "/attachments/")
+            intOrphanFolders = CheckForMissingDir(files)
             For Each file In files
                 Dim FolderScan As FTPScan_Parms = FTPFolderIsOrphan(file)
                 If FolderScan.IsOrphan Then
@@ -168,6 +169,44 @@
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+    Private Function CheckForMissingDir(FTPFolderUIDs As List(Of String)) As Integer
+        Dim DBFolders As New List(Of String)
+        Dim DevQry As String = "SELECT DISTINCT attach_fkey_uid  FROM dev_attachments"
+        Dim SibiQry As String = "SELECT DISTINCT attach_fkey_uid  FROM sibi_attachments"
+        Using MyComms As New clsMySQL_Comms
+            For Each row As DataRow In MyComms.Return_SQLTable(DevQry).Rows
+                DBFolders.Add(row.Item("attach_fkey_UID").ToString)
+            Next
+            For Each row As DataRow In MyComms.Return_SQLTable(SibiQry).Rows
+                DBFolders.Add(row.Item("attach_fkey_UID").ToString)
+            Next
+
+        End Using
+        Dim ExpectedDirCount As Integer = DBFolders.Count
+        Dim DirCount As Integer = 0
+        Dim MissingDirs As New List(Of String)
+        For Each DBFolder In DBFolders
+            If DirInList(FTPFolderUIDs, DBFolder) Then
+                DirCount += 1
+            Else
+                MissingDirs.Add(DBFolder)
+            End If
+        Next
+        If ExpectedDirCount <> DirCount Then
+            Logger("Orphan FOLDER(s) Found: ")
+            For Each sDir In MissingDirs
+                Logger(sDir)
+            Next
+            Return MissingDirs.Count
+        End If
+        Return 0
+    End Function
+    Private Function DirInList(DirList As List(Of String), CompDir As String) As Boolean
+        For Each sDir In DirList
+            If sDir = CompDir Then Return True
+        Next
+        Return False
+    End Function
     Private Sub CleanFiles(DirList As List(Of String))
         Dim intSuccesses As Integer = 0
         For Each item In DirList
