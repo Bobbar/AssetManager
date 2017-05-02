@@ -41,7 +41,7 @@ Public Class clsMunis_Comms
             cmd.CommandText = sqlQRY
             conn.Open()
             Dim Value = Await cmd.ExecuteScalarAsync
-            Return Value.ToString
+            If Value IsNot Nothing Then Return Value.ToString
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing

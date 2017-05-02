@@ -137,9 +137,6 @@
     <Reference Include="itextsharp">
       <HintPath>..\..\..\Users\rl12184\Downloads\itextsharp-all-5.5.9\itextsharp-dll-core\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="MyDialogLib">
-      <HintPath>..\..\MyDialog\MyDialog\bin\Release\MyDialogLib.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -503,6 +500,10 @@
     <None Include="Resources\012_restart-2-512.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MyDialog\MyDialog\MyDialogLib.vbproj">
+      <Project>{5a65f4bf-4b06-44e4-ae55-5935e03955f6}</Project>
+      <Name>MyDialogLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GK_Updater_Module\GKUpdaterLib.vbproj">
       <Project>{583f28b2-c2f5-4422-bac8-e3d15cb61df0}</Project>
       <Name>GKUpdaterLib</Name>
