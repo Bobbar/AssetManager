@@ -19,7 +19,6 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiMain.resourc
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MainForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiSelector.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Tracking.resources
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Munis.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.UpdateDev.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MunisToolsMenu.resources
@@ -46,3 +45,4 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\PingVisLib.xml
 C:\GitHub\AssetManager\AssetManager\bin\Release\MyDialogLib.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\MyDialogLib.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Release\MyDialogLib.xml
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.GridForm.resources
