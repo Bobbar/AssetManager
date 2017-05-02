@@ -28,7 +28,7 @@ Public Class frmSibiMain
         End If
     End Sub
     Private Sub frmSibiMain_Load(sender As Object, e As EventArgs) Handles Me.Load
-        ExtendedMethods.DoubleBuffered(ResultGrid, True)
+        ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
         If SetDisplayYears() Then
             ShowAll("All")
             GridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor

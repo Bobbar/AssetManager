@@ -40,8 +40,8 @@ Public Class frmView
         '    ToolStrip1.BackColor = colAssetToolBarColor
         lblGUID.BackColor = SetBarColor(DeviceGUID)
         lblGUID.ForeColor = GetFontColor(lblGUID.BackColor)
-        ExtendedMethods.DoubleBuffered(DataGridHistory, True)
-        ExtendedMethods.DoubleBuffered(TrackingGrid, True)
+        ExtendedMethods.DoubleBufferedDataGrid(DataGridHistory, True)
+        ExtendedMethods.DoubleBufferedDataGrid(TrackingGrid, True)
         ViewDevice(DeviceGUID)
     End Sub
     Private Sub frmView_Load(sender As Object, e As EventArgs) Handles Me.Load

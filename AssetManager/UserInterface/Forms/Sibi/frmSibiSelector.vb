@@ -12,7 +12,7 @@ Public Class frmSibiSelector
         ShowDialog(ParentForm)
     End Sub
     Private Sub frmSibiSelector_Load(sender As Object, e As EventArgs) Handles Me.Load
-        ExtendedMethods.DoubleBuffered(ResultGrid, True)
+        ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
         ShowAll()
     End Sub
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)

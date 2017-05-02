@@ -44,7 +44,6 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmSibiMain.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MainForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.frmSibiSelector.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.Tracking.resources
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Munis.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.View_Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.UpdateDev.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.MunisToolsMenu.resources
@@ -72,3 +71,4 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.xml
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.xml
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GridForm.resources

@@ -28,12 +28,13 @@ Partial Class MunisToolsMenu
         Me.tsmUserOrgObLookup = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmPOLookUp = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmReqNumLookUp = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmOrgObLookup = New System.Windows.Forms.ToolStripMenuItem()
 
         'Me.SuspendLayout()
         '
         'MunisTools
         '
-        Me.MunisTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmUserOrgObLookup, Me.tsmPOLookUp, Me.tsmReqNumLookUp, Me.tsmDeviceLookUp})
+        Me.MunisTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmUserOrgObLookup, Me.tsmPOLookUp, Me.tsmReqNumLookUp, Me.tsmDeviceLookUp, Me.tsmOrgObLookup})
         Me.MunisTools.Image = Global.AssetManager.My.Resources.Resources.Find
         Me.MunisTools.Name = "MunisTools"
         Me.MunisTools.Size = New System.Drawing.Size(87, 29)
@@ -51,7 +52,13 @@ Partial Class MunisToolsMenu
         '
         Me.tsmUserOrgObLookup.Name = "tsmUserOrgObLookup"
         Me.tsmUserOrgObLookup.Size = New System.Drawing.Size(186, 22)
-        Me.tsmUserOrgObLookup.Text = "User Org/Ob Lookup"
+        Me.tsmUserOrgObLookup.Text = "User Lookup"
+        '
+        'tsmUserOrgObLookup
+        '
+        Me.tsmOrgObLookup.Name = "tsmOrgObLookup"
+        Me.tsmOrgObLookup.Size = New System.Drawing.Size(186, 22)
+        Me.tsmOrgObLookup.Text = "Org/Obj Lookup"
         '
         'tsmPOLookUp
         '
@@ -77,5 +84,5 @@ Partial Class MunisToolsMenu
     Friend WithEvents tsmUserOrgObLookup As ToolStripMenuItem
     Friend WithEvents tsmPOLookUp As ToolStripMenuItem
     Friend WithEvents tsmReqNumLookUp As ToolStripMenuItem
-
+    Friend WithEvents tsmOrgObLookup As ToolStripMenuItem
 End Class

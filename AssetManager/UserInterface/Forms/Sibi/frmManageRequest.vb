@@ -25,7 +25,7 @@ Public Class frmManageRequest
         Show()
     End Sub
     Private Sub InitForm(ParentForm As MyForm)
-        ExtendedMethods.DoubleBuffered(RequestItemsGrid, True)
+        ExtendedMethods.DoubleBufferedDataGrid(RequestItemsGrid, True)
         Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip)
         MyWindowList = New WindowList(Me, ToolStrip)
         Tag = ParentForm

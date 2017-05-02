@@ -29,7 +29,7 @@ Class frmAttachments
         Tag = ParentForm
         Icon = ParentForm.Icon
         GridTheme = ParentForm.GridTheme
-        ExtendedMethods.DoubleBuffered(AttachGrid, True)
+        ExtendedMethods.DoubleBufferedDataGrid(AttachGrid, True)
         StatusBar("Idle...")
         If Not IsNothing(AttachInfo) Then
             If TypeOf AttachInfo Is Request_Info Then

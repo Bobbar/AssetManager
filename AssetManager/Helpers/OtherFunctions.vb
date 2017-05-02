@@ -12,6 +12,16 @@ Module OtherFunctions
     Private Const SHGFI_ICON As Int32 = &H100
     Private Const SHGFI_USEFILEATTRIBUTES As Int32 = &H10
     Private Const FILE_ATTRIBUTE_NORMAL As Int32 = &H80
+    Public Function SelectedCellValue(ByRef GridRow As DataGridViewRow, Optional Column As String = Nothing) As String
+        For Each cell As DataGridViewCell In GridRow.Cells
+            If Column = "" Then
+                If cell.Selected Then Return cell.Value.ToString
+            Else
+                If cell.OwningColumn.Name = Column Then Return cell.Value.ToString
+            End If
+        Next
+        Return Nothing
+    End Function
     Public Sub SetGridStyle(Grid As DataGridView)
         Grid.BackgroundColor = DefGridBC
         Grid.DefaultCellStyle = GridStyles

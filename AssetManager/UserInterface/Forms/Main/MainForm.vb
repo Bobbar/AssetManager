@@ -28,7 +28,7 @@ Public Class MainForm
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             DateTimeLabel.Text = Now.ToString
             ToolStrip1.BackColor = colAssetToolBarColor
-            ExtendedMethods.DoubleBuffered(ResultGrid, True)
+            ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
             If CanAccess(AccessGroup.IsAdmin, UserAccess.intAccessLevel) Then
                 AdminDropDown.Visible = True
             Else

@@ -199,6 +199,12 @@
     <Compile Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\Forms\GridForm.Designer.vb">
+      <DependentUpon>GridForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GridForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Form_Control.vb" />
     <Compile Include="DataFunctions\clsAssetManager_Functions.vb" />
     <Compile Include="UserInterface\Forms\frmAttachments.Designer.vb">
@@ -269,12 +275,6 @@
       <DependentUpon>Tracking.vb</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\Forms\Main\Tracking.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Main\View_Munis.Designer.vb">
-      <DependentUpon>View_Munis.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Main\View_Munis.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Main\View_Tracking.Designer.vb">
@@ -362,6 +362,9 @@
     <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.resx">
       <DependentUpon>GKUpdater_Form.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GridForm.resx">
+      <DependentUpon>GridForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
@@ -391,9 +394,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\Tracking.resx">
       <DependentUpon>Tracking.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\Main\View_Munis.resx">
-      <DependentUpon>View_Munis.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\View_Tracking.resx">
       <DependentUpon>View_Tracking.vb</DependentUpon>
