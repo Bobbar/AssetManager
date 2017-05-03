@@ -173,6 +173,7 @@
     <Compile Include="Classes\DataColumns.vb" />
     <Compile Include="Classes\MyExceptions.vb" />
     <Compile Include="Classes\Type_Classes.vb" />
+    <Compile Include="DataComms\NetDriveMapper\NetworkConnection.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

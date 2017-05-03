@@ -995,52 +995,39 @@ VALUES (@" & historical_dev.ChangeType & ",
         If blah = vbYes Then
             Dim IP As String = MyPingVis.CurrentResult.Address.ToString
             Dim DeviceName As String = "D" & CurrentViewDevice.strSerial
-            If ConnectAdmin(IP, DeviceName) Then
-                If SendRestart(IP, DeviceName) Then
-                    Message("Success", vbOKOnly + vbInformation, "Restart Device", Me)
-                Else
-                    Message("Failed", vbOKOnly + vbInformation, "Restart Device", Me)
-                End If
+            If SendRestart(IP, DeviceName) Then
+                Message("Success", vbOKOnly + vbInformation, "Restart Device", Me)
             Else
                 Message("Failed", vbOKOnly + vbInformation, "Restart Device", Me)
             End If
         End If
     End Sub
-    Private Function ConnectAdmin(IP As String, DeviceName As String) As Boolean
-        Dim p As Process = New Process
-        p.StartInfo.UseShellExecute = False
-        p.StartInfo.RedirectStandardOutput = True
-        p.StartInfo.RedirectStandardError = True
-        p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized
-        p.StartInfo.FileName = "net.exe"
-        p.StartInfo.Arguments = "USE \\" & IP & "\IPC$ 057|750 /USER:" & DeviceName & "\Administrator"
-        p.Start()
-        Dim output As String
-        output = p.StandardError.ReadToEnd
-        p.WaitForExit()
-        If Trim(output) = "" Then
-            Return True
-        Else
-            Return False
-        End If
-    End Function
     Private Function SendRestart(IP As String, DeviceName As String) As Boolean
-        Dim p As Process = New Process
-        p.StartInfo.UseShellExecute = False
-        p.StartInfo.RedirectStandardOutput = True
-        p.StartInfo.RedirectStandardError = True
-        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        p.StartInfo.FileName = "shutdown.exe"
-        p.StartInfo.Arguments = "/m \\" & IP & " /f /r /t 0"
-        p.Start()
-        Dim output As String
-        output = p.StandardError.ReadToEnd
-        p.WaitForExit()
-        If Trim(output) = "" Then
-            Return True
-        Else
-            Return False
-        End If
+        Try
+            Dim FullPath As String = "\\" & IP & "\IPC$"
+            Dim Creds As New NetworkCredential(DeviceName & "\Administrator", "057|750")
+            Using NetCon As New NetworkConnection(FullPath, Creds)
+                Dim p As Process = New Process
+                p.StartInfo.UseShellExecute = False
+                p.StartInfo.RedirectStandardOutput = True
+                p.StartInfo.RedirectStandardError = True
+                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                p.StartInfo.FileName = "shutdown.exe"
+                p.StartInfo.Arguments = "/m \\" & IP & " /f /r /t 0"
+                p.Start()
+                Dim output As String
+                output = p.StandardError.ReadToEnd
+                p.WaitForExit()
+                If Trim(output) = "" Then
+                    Return True
+                Else
+                    Return False
+                End If
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
+        Return False
     End Function
     Private Sub cmdGKUpdate_Click(sender As Object, e As EventArgs) Handles cmdGKUpdate.Click
         If AdminCreds Is Nothing Then
