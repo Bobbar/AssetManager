@@ -149,7 +149,7 @@ VALUES(@" & historical_dev.ChangeType & ",
                 Return False
             End If
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 Return False
             Else
                 EndProgram()
@@ -164,7 +164,7 @@ VALUES(@" & historical_dev.ChangeType & ",
                 Return cmd.ExecuteNonQuery()
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
@@ -206,7 +206,7 @@ VALUES(@" & historical_dev.ChangeType & ",
                 End If
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 Exit Try
             Else
                 EndProgram()
@@ -229,7 +229,7 @@ VALUES(@" & historical_dev.ChangeType & ",
                 Return bolHasRows
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
             Else
                 EndProgram()
             End If
@@ -243,7 +243,7 @@ VALUES(@" & historical_dev.ChangeType & ",
                 Return Convert.ToString(cmd.ExecuteScalar)
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Throw ex
             Return Nothing
         End Try
@@ -270,7 +270,7 @@ VALUES(@" & historical_dev.ChangeType & ",
                 Return tmpInfo
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
             Else
                 EndProgram()
             End If
@@ -300,7 +300,7 @@ VALUES(@" & historical_dev.ChangeType & ",
                 Return rows
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
             Else
                 EndProgram()
             End If
@@ -332,7 +332,7 @@ VALUES(@" & historical_dev.ChangeType & ",
                 Return tmpArray
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 Return Nothing
             Else
                 EndProgram()
@@ -389,7 +389,7 @@ VALUES
                 End Using
             End If
         Catch ex As MySqlException
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Public Function EmpIsInDB(EmpNum As String) As Boolean
@@ -416,7 +416,7 @@ VALUES
                 End If
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Public Sub GetAccessLevels()
@@ -435,7 +435,7 @@ VALUES
                 Next
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Public Function DeleteMaster(ByVal strGUID As String, Type As Entry_Type) As Boolean
@@ -446,7 +446,7 @@ VALUES
                 Return Delete_SQLMasterEntry(strGUID, Type) 'delete sql records
             End If
         Catch ex As Exception
-            Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
     Public Function DevicesBySup(ParentForm As Form) As DataTable
@@ -494,7 +494,7 @@ VALUES
             End With
             Return newDeviceInfo
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
@@ -514,7 +514,7 @@ VALUES
                 Return tmpList
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
     Public Function GetAttachmentCount(AttachInfo As Object) As Integer
@@ -531,7 +531,7 @@ VALUES
                 Return cmd.ExecuteScalar
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name) Then
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
             Else
                 EndProgram()
             End If

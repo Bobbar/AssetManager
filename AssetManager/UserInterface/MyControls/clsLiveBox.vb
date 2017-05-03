@@ -94,7 +94,7 @@ Public Class clsLiveBox : Implements IDisposable
             DrawLiveBox(e.Result)
             LiveBoxResults = e.Result
         Else
-            ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod())
         End If
     End Sub
     Private Sub DrawLiveBox(dtResults As DataTable)

@@ -33,7 +33,7 @@
                 Return .GetRequestStream
             End With
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function

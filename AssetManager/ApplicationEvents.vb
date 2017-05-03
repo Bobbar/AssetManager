@@ -28,7 +28,7 @@
                 Status("Ready!")
                 System.Threading.Thread.Sleep(1000)
             Catch ex As Exception
-                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
                 e.Cancel = True
                 EndProgram()
             End Try

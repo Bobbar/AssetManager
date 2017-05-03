@@ -36,7 +36,7 @@ Public Class AddNew
                 Exit Sub
             End If
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Dim blah = Message("Unable to add new device.", vbOKOnly + vbExclamation, "Error", Me)
         End Try
     End Sub

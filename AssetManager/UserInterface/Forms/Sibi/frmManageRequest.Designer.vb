@@ -78,6 +78,8 @@ Partial Class frmManageRequest
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.PopupMenuItems.SuspendLayout()
         Me.PopupMenuNotes.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -99,7 +101,7 @@ Partial Class frmManageRequest
         '
         Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmLookupDevice, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 76)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 54)
         '
         'tsmLookupDevice
         '
@@ -610,7 +612,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(185, Byte), Integer), CType(CType(205, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAttachments, Me.cmdAddNote})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
@@ -662,6 +664,16 @@ Partial Class frmManageRequest
         Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdAddNote.Size = New System.Drawing.Size(39, 34)
         Me.cmdAddNote.Text = "Add Note"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 37)
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 37)
         '
         'frmManageRequest
         '
@@ -752,4 +764,6 @@ Partial Class frmManageRequest
     Friend WithEvents chkAllowDrag As CheckBox
     Friend WithEvents tsmSeparator As ToolStripSeparator
     Friend WithEvents lblPOStatus As Label
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
 End Class

@@ -30,7 +30,7 @@ Public Class frmMunisUser
             MunisResults.DataSource = results
             MunisResults.ClearSelection()
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Sub MunisUser_Load(sender As Object, e As EventArgs) Handles MyBase.Load

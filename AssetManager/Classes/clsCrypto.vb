@@ -51,7 +51,7 @@ Public NotInheritable Class Simple3Des
             ' Convert the plaintext stream to a string.
             Return System.Text.Encoding.Unicode.GetString(ms.ToArray)
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name)
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function

@@ -13,14 +13,12 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AddNew.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmEncrypter.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmUserManager.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmMunisUser.resources
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MyDialog.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmNotes.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmManageRequest.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiMain.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MainForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiSelector.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Tracking.resources
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Munis.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.UpdateDev.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MunisToolsMenu.resources
@@ -44,3 +42,7 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\GKUpdaterLib.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Release\GKUpdaterLib.xml
 C:\GitHub\AssetManager\AssetManager\bin\Release\PingVisLib.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Release\PingVisLib.xml
+C:\GitHub\AssetManager\AssetManager\bin\Release\MyDialogLib.dll
+C:\GitHub\AssetManager\AssetManager\bin\Release\MyDialogLib.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Release\MyDialogLib.xml
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.GridForm.resources

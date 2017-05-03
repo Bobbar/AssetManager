@@ -21,7 +21,7 @@
     <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
     <AssemblyFileVersionSettings>MonthStamp.YearStamp.DeltaDayStamp.Increment</AssemblyFileVersionSettings>
     <TargetFrameworkProfile />
-    <PublishUrl>\\ddad-svr-fs01\dd_files\Information Technology\Software\Asset Manager\</PublishUrl>
+    <PublishUrl>\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Asset Manager\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -35,7 +35,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>44</ApplicationRevision>
+    <ApplicationRevision>46</ApplicationRevision>
     <ApplicationVersion>4.4.3.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -196,6 +196,12 @@
     <Compile Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\Forms\GridForm.Designer.vb">
+      <DependentUpon>GridForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GridForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Form_Control.vb" />
     <Compile Include="DataFunctions\clsAssetManager_Functions.vb" />
     <Compile Include="UserInterface\Forms\frmAttachments.Designer.vb">
@@ -229,12 +235,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\MyControls\MyForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\MyControls\MyDialog.Designer.vb">
-      <DependentUpon>MyDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\MyControls\MyDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Sibi\frmNotes.Designer.vb">
@@ -272,12 +272,6 @@
       <DependentUpon>Tracking.vb</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\Forms\Main\Tracking.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Main\View_Munis.Designer.vb">
-      <DependentUpon>View_Munis.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Main\View_Munis.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Main\View_Tracking.Designer.vb">
@@ -365,6 +359,9 @@
     <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.resx">
       <DependentUpon>GKUpdater_Form.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GridForm.resx">
+      <DependentUpon>GridForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\AddNew.resx">
       <DependentUpon>AddNew.vb</DependentUpon>
     </EmbeddedResource>
@@ -376,9 +373,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\frmMunisUser.resx">
       <DependentUpon>frmMunisUser.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\MyControls\MyDialog.resx">
-      <DependentUpon>MyDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\frmNotes.resx">
       <DependentUpon>frmNotes.vb</DependentUpon>
@@ -397,9 +391,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\Tracking.resx">
       <DependentUpon>Tracking.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\Main\View_Munis.resx">
-      <DependentUpon>View_Munis.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\View_Tracking.resx">
       <DependentUpon>View_Tracking.vb</DependentUpon>
@@ -509,6 +500,10 @@
     <None Include="Resources\012_restart-2-512.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MyDialog\MyDialog\MyDialogLib.vbproj">
+      <Project>{5a65f4bf-4b06-44e4-ae55-5935e03955f6}</Project>
+      <Name>MyDialogLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GK_Updater_Module\GKUpdaterLib.vbproj">
       <Project>{583f28b2-c2f5-4422-bac8-e3d15cb61df0}</Project>
       <Name>GKUpdaterLib</Name>
