@@ -76,9 +76,9 @@ Partial Class frmManageRequest
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
-        Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.PopupMenuItems.SuspendLayout()
         Me.PopupMenuNotes.SuspendLayout()
@@ -353,9 +353,9 @@ Partial Class frmManageRequest
         Me.lblPOStatus.ForeColor = System.Drawing.Color.DimGray
         Me.lblPOStatus.Location = New System.Drawing.Point(19, 54)
         Me.lblPOStatus.Name = "lblPOStatus"
-        Me.lblPOStatus.Size = New System.Drawing.Size(115, 12)
+        Me.lblPOStatus.Size = New System.Drawing.Size(79, 12)
         Me.lblPOStatus.TabIndex = 10
-        Me.lblPOStatus.Text = "PO Status: 8 - Printed"
+        Me.lblPOStatus.Text = "PO Status: NA"
         '
         'Label9
         '
@@ -648,14 +648,6 @@ Partial Class frmManageRequest
         Me.cmdDelete.Size = New System.Drawing.Size(39, 34)
         Me.cmdDelete.Text = "Delete"
         '
-        'cmdAttachments
-        '
-        Me.cmdAttachments.Image = Global.AssetManager.My.Resources.Resources.clip_512
-        Me.cmdAttachments.Name = "cmdAttachments"
-        Me.cmdAttachments.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
-        Me.cmdAttachments.Size = New System.Drawing.Size(136, 34)
-        Me.cmdAttachments.Text = "Attachments"
-        '
         'cmdAddNote
         '
         Me.cmdAddNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -669,6 +661,14 @@ Partial Class frmManageRequest
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 37)
+        '
+        'cmdAttachments
+        '
+        Me.cmdAttachments.Image = Global.AssetManager.My.Resources.Resources.clip_512
+        Me.cmdAttachments.Name = "cmdAttachments"
+        Me.cmdAttachments.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.cmdAttachments.Size = New System.Drawing.Size(136, 34)
+        Me.cmdAttachments.Text = "Attachments"
         '
         'ToolStripSeparator3
         '
