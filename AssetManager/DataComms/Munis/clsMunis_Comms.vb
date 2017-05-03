@@ -32,7 +32,7 @@ Public Class clsMunis_Comms
             Return Nothing
         End Try
     End Function
-    Public Async Function Return_MSSQLValueAsync(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As Task(Of String)
+    Public Async Function Return_MSSQLValueAsync(table As String, fieldIN As Object, valueIN As Object, fieldOUT As String) As Task(Of String)
         Try
             Dim sqlQRY As String = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
             Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)

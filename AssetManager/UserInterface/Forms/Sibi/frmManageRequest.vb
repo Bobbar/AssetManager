@@ -1062,8 +1062,9 @@ VALUES
         End If
     End Sub
     Private Async Sub SetPOStatus(PO As String)
-        If PO <> "" Then
-            Dim GetStatusString As String = Await Munis.Get_PO_Status(PO)
+        Dim intPO As Integer = 0
+        If PO <> "" And Int32.TryParse(PO, intPO) Then
+            Dim GetStatusString As String = Await Munis.Get_PO_Status(intPO)
             If GetStatusString <> "" Then
                 lblPOStatus.Text = "PO Status: " & GetStatusString
             Else

@@ -58,7 +58,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
         Dim strFYyy As String = Left(PO, 2)
         Return "20" + strFYyy
     End Function
-    Public Async Function Get_PO_Status(PO As String) As Task(Of String)
+    Public Async Function Get_PO_Status(PO As Integer) As Task(Of String)
         Dim StatusString As String
         Dim StatusCode As String = Await priv_Comms.Return_MSSQLValueAsync("poheader", "pohd_pur_no", PO, "pohd_sta_cd")
         If StatusCode <> "" Then
