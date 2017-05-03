@@ -62,7 +62,9 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
         Dim StatusString As String
         Dim StatusCode As String = Await priv_Comms.Return_MSSQLValueAsync("poheader", "pohd_pur_no", PO, "pohd_sta_cd")
         If StatusCode <> "" Then
-            StatusString = StatusCode.ToString & " - " & POStatusCodeToLong(StatusCode)
+            Dim ParseCode As Integer = -1
+            If Not Int32.TryParse(StatusCode, ParseCode) Then Return Nothing
+            StatusString = StatusCode.ToString & " - " & POStatusCodeToLong(ParseCode)
             Return StatusString
         End If
         Return Nothing
