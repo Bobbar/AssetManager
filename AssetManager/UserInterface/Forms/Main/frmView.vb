@@ -743,6 +743,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                 CancelModify()
                 Exit Sub
             End If
+            GetCurrentValues()
             GetNewValues(UpdateDia.UpdateInfo)
             UpdateDevice(UpdateDia.UpdateInfo)
         Else
