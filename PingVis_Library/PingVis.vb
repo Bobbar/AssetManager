@@ -13,32 +13,36 @@ Public Class PingVis : Implements IDisposable
     Private bolPingRunning As Boolean = False
     Private WithEvents PingTimer As New Timer
     Private MyControl As Control
-    Private bm As Drawing.Bitmap
-    Private gfx As Graphics
     Private intImgWidth As Integer
     Private intImgHeight As Integer
     Private LastReply As PingReply
     Private bolScrolling As Boolean = False
     Private intTopIndex As Integer = 0
+    Private mOverInfo As MouseOverInfoStruct
+    Private LastDraw As Integer = 0
+    Private ScrollingBars As List(Of PingBar)
+    Private intPrevMax As Integer = 1000
+    Private CurrentAverageRoundTripTime As Integer = 0
+
 #Region "Ping Parameters"
-    Private bolStopWhenNotFocused As Boolean = False 'Set to True to pause the pinging until focus is returned to the parent form.
-    Private Timeout As Integer = 1000
+    Private Const bolStopWhenNotFocused As Boolean = False 'Set to True to pause the pinging until focus is returned to the parent form.
+    Private Const Timeout As Integer = 1000
+    Private Const PingInterval As Integer = 1000
 #End Region
 
 #Region "Bar Parameters"
     Private Const intBarGap As Integer = 0
     Private Const intMaxBars As Integer = 15
     Private Const intMinBarLen As Integer = 2
-#Region "Colors"
-    Private brushGoodPing As Brush = New SolidBrush(Color.FromArgb(15, 130, 21))
-    Private brushOKPing As Brush = New SolidBrush(Color.FromArgb(175, 131, 0))
     Private brushBadPing As Brush = Brushes.Red
 #End Region
 
-#End Region
+#Region "Misc PingVis Variables"
     Private intInitialScale As Single = 4
-    Private intPrevMax As Integer = 1000
-    Private CurrentAverageRoundTripTime As Integer = 0
+    Private Const intMaxStoredResults As Integer = 3000
+    Private Const MaxDrawRate As Integer = 20
+    Private ScaleMulti As Integer = 2
+#End Region
     Public ReadOnly Property CurrentResult As PingReply
         Get
             Return LastReply
@@ -53,12 +57,13 @@ Public Class PingVis : Implements IDisposable
         MyControl = DestControl
         AddHandler MyControl.MouseWheel, AddressOf ControlMouseWheel
         AddHandler MyControl.MouseLeave, AddressOf ControlMouseLeave
+        AddHandler MyControl.MouseMove, AddressOf ControlMouseMove
         MyPingHostname = HostName
         Init()
     End Sub
     Private Sub Init()
         AddHandler MyPing.PingCompleted, AddressOf PingComplete
-        PingTimer.Interval = 1000
+        PingTimer.Interval = PingInterval
         PingTimer.Enabled = True
         AddHandler PingTimer.Tick, AddressOf PingTimer_Tick
         StartPing()
@@ -71,30 +76,29 @@ Public Class PingVis : Implements IDisposable
         End Try
     End Sub
     Private Sub StartPing()
-
         Dim options As New Net.NetworkInformation.PingOptions
-            options.DontFragment = True
-            If Not bolPingRunning Then
-                If Not bolStopWhenNotFocused Then
+        options.DontFragment = True
+        If Not bolPingRunning Then
+            If Not bolStopWhenNotFocused Then
+                MyPing.SendAsync(MyPingHostname, Timeout, options)
+                bolPingRunning = True
+            Else
+                If Form.ActiveForm Is MyControl.FindForm Then
                     MyPing.SendAsync(MyPingHostname, Timeout, options)
                     bolPingRunning = True
-                Else
-                    If Form.ActiveForm Is MyControl.FindForm Then
-                        MyPing.SendAsync(MyPingHostname, Timeout, options)
-                        bolPingRunning = True
-                    End If
                 End If
             End If
-
+        End If
     End Sub
     Private Sub ControlMouseLeave(sender As Object, e As EventArgs)
         bolScrolling = False
-        If pngResults.Count > 0 Then DrawBars(MyControl)
+        mOverInfo = Nothing
+        DrawBars(MyControl, GetPingBars, mOverInfo)
     End Sub
     Private Sub ControlMouseWheel(sender As Object, e As MouseEventArgs)
         If pngResults.Count > intMaxBars Then
             bolScrolling = True
-            If e.Delta > 0 Then 'scroll up
+            If e.Delta < 0 Then 'scroll up
                 Dim NewIdx As Integer = intTopIndex + 1
                 If NewIdx > pngResults.Count - intMaxBars Then 'if the scroll index returns to the end (bottom) of the results, disable scrolling and return to normal display
                     intTopIndex = pngResults.Count - intMaxBars
@@ -102,7 +106,7 @@ Public Class PingVis : Implements IDisposable
                 Else
                     intTopIndex = NewIdx
                 End If
-            ElseIf e.Delta < 0 Then 'scroll down
+            ElseIf e.Delta > 0 Then 'scroll down
                 Dim NewIdx As Integer = intTopIndex - 1
                 If NewIdx < 0 Then 'clamp the scroll index to always be greater than 0
                     intTopIndex = 0
@@ -110,9 +114,27 @@ Public Class PingVis : Implements IDisposable
                     intTopIndex = NewIdx
                 End If
             End If
-            If pngResults.Count > 0 Then DrawBars(MyControl)
+            DrawBars(MyControl, GetPingBars)
         End If
     End Sub
+    Private Sub ControlMouseMove(sender As Object, e As MouseEventArgs)
+        If bolScrolling Then
+            mOverInfo = GetMouseOverPing(e.Location)
+            DrawBars(MyControl, ScrollingBars, mOverInfo)
+        End If
+    End Sub
+    Private Function GetMouseOverPing(mPos As Point) As MouseOverInfoStruct
+        Dim mScalePoint As New Point(mPos.X * ScaleMulti, mPos.Y * ScaleMulti)
+        ScrollingBars = GetPingBars()
+        For Each r As PingBar In ScrollingBars
+            If r.Rectangle.Contains(mScalePoint) Then
+                r.Brush = New SolidBrush(Color.Navy) 'Highlight MoveOver bar
+                Return New MouseOverInfoStruct(mScalePoint, r.PingResult)
+            End If
+        Next
+        Return Nothing
+    End Function
+
     Private Sub PingComplete(ByVal sender As Object, ByVal e As System.Net.NetworkInformation.PingCompletedEventArgs)
         bolPingRunning = False
         If Not e.Cancelled Then
@@ -122,37 +144,65 @@ Public Class PingVis : Implements IDisposable
             Else
                 'Debug.Print(e.Error.Message)
             End If
-            If pngResults.Count > 0 Then DrawBars(MyControl)
+            If Not bolScrolling Then DrawBars(MyControl, GetPingBars, mOverInfo)
         End If
     End Sub
-    Private Sub DrawBars(ByRef DestControl As Control)
-        'Set image to double the size of the control
-        intImgWidth = DestControl.ClientSize.Width * 2
-        intImgHeight = DestControl.ClientSize.Height * 2
-        bm = New Drawing.Bitmap(intImgWidth, intImgHeight)
-        gfx = Graphics.FromImage(bm)
-        gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+    Private Sub DrawBars(ByRef DestControl As Control, ByRef Bars As List(Of PingBar), Optional MouseOverInfo As MouseOverInfoStruct = Nothing)
+        If pngResults.Count < 1 Or Not CanDraw(Environment.TickCount) Then Exit Sub
         Try
-            gfx.Clear(DestControl.BackColor)
-            DrawScaleLines() 'Draw scale lines
-            DrawPingBars() 'Draw ping bars
-            DrawPingText() 'Draw last ping round trip time
-            SetAvgPing() 'Set public property containing current average round trip time
-            SetScale()
-            'The bitmap is scaled back to control size using high quality transformations.
-            'This improves the effect of anti-aliasing and therefore readability.
-            '  bm.Save("C:\Temp\test.bmp")
-            bm = ResizeImage(bm, DestControl.ClientSize.Width, DestControl.ClientSize.Height)
-            SetControlImage(DestControl, bm)
+            'Set image to double the size of the control
+            intImgWidth = DestControl.ClientSize.Width * ScaleMulti
+            intImgHeight = DestControl.ClientSize.Height * ScaleMulti
+            Using bm = New Drawing.Bitmap(intImgWidth, intImgHeight), gfx = Graphics.FromImage(bm)
+                gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+                If Not bolScrolling Then
+                    gfx.Clear(DestControl.BackColor)
+                Else
+                    gfx.Clear(Color.FromArgb(48, 53, 61))
+                End If
+                SetScale()
+                DrawScaleLines(gfx) 'Draw scale lines
+                DrawPingBars(gfx, Bars) 'Draw ping bars
+                DrawPingText(gfx, MouseOverInfo) 'Draw last ping round trip time
+                SetAvgPing() 'Set public property containing current average round trip time
+                TrimPingList()
+                'The bitmap is scaled back to control size using high quality transformations.
+                'This improves the effect of anti-aliasing and therefore readability.
+                '  bm.Save("C:\Temp\test.bmp")
+                Dim bmRz = ResizeImage(bm, DestControl.ClientSize.Width, DestControl.ClientSize.Height)
+                SetControlImage(DestControl, bmRz)
+            End Using
         Catch
         Finally
         End Try
+
     End Sub
-    Private Sub DrawPingText()
+    Private Function CanDraw(TimeStamp As Integer) As Boolean
+        Dim ElapTime As Integer = TimeStamp - LastDraw
+        If ElapTime >= MaxDrawRate Then
+            LastDraw = TimeStamp
+            Return True
+        End If
+        Return False
+    End Function
+    Private Sub DrawPingText(ByRef gfx As Graphics, Optional MouseOverInfo As MouseOverInfoStruct = Nothing)
+        Dim InfoFontSize As Single = 15
+        Dim OverInfoFontSize As Single = 14
+        If MouseOverInfo IsNot Nothing Then
+            Dim OverInfoText As String
+            If MouseOverInfo.PingReply.Status = IPStatus.Success Then
+                OverInfoText = MouseOverInfo.PingReply.RoundtripTime & "ms"
+            Else
+                OverInfoText = "T/O"
+            End If
+            Dim OverFont As Font = New Font("Tahoma", OverInfoFontSize, FontStyle.Regular)
+            gfx.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
+            gfx.TextContrast = 0
+            gfx.DrawString(OverInfoText, OverFont, Brushes.White, New PointF(MouseOverInfo.MouseLoc.X + 20, MouseOverInfo.MouseLoc.Y - 10)) '(intImgWidth / 2) - TextSize.Width / 2
+        End If
         If Not bolScrolling Then
-            Dim InfoFontSize As Single = 20
             Dim InfoText As String
-            If pngResults.Count > 0 AndAlso pngResults.Last.Status = IPStatus.Success Then
+            If pngResults.Last.Status = IPStatus.Success Then
                 InfoText = pngResults.Last.RoundtripTime & "ms"
             Else
                 InfoText = "T/O" '"Fail"
@@ -161,30 +211,37 @@ Public Class PingVis : Implements IDisposable
             Dim TextSize As SizeF = gfx.MeasureString(InfoText, InfoFont)
             gfx.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
             gfx.TextContrast = 0
-            gfx.DrawString(InfoText, InfoFont, Brushes.White, New PointF((intImgWidth / 2) - (TextSize.Width / 2) - 2, (intImgHeight / 2) - (TextSize.Height / 2))) '(intImgWidth / 2) - TextSize.Width / 2
+            gfx.DrawString(InfoText, InfoFont, Brushes.White, New PointF((intImgWidth - 5) - (TextSize.Width), (intImgHeight) - (TextSize.Height))) '(intImgWidth / 2) - TextSize.Width / 2
         End If
     End Sub
-    Private Sub DrawPingBars()
-        Dim MyBrush As Brush
-        Dim curPos As Single = -1 '0
+    Private Sub DrawPingBars(ByRef gfx As Graphics, ByRef Bars As List(Of PingBar))
+        For Each bar As PingBar In Bars
+            gfx.FillRectangle(bar.Brush, bar.Rectangle)
+            Dim CapPen As Pen = New Pen(Color.ForestGreen, 2)
+            gfx.DrawLine(CapPen, New PointF(bar.Length, bar.PositionY), New PointF(bar.Length, bar.PositionY + bar.Rectangle.Height))
+        Next
+    End Sub
+    Private Function GetPingBars() As List(Of PingBar)
+        Dim NewPBars As New List(Of PingBar)
+        Dim curPos As Single = -1
         Dim BarHeight As Single = intImgHeight / intMaxBars
-        For i As Integer = FirstDrawIndex(pngResults.Count) To LastDrawIndex(pngResults.Count)
+        For Each result As PingReply In CurrentDisplayResults()
             Dim BarRatio As Single
             Dim BarLen As Single
-            If pngResults(i).Status <> Net.NetworkInformation.IPStatus.Success Then
+            Dim MyBrush As Brush
+            If result.Status <> Net.NetworkInformation.IPStatus.Success Then
                 MyBrush = brushBadPing
                 BarLen = intImgWidth - 2
             Else
-                MyBrush = GetBarBrush(pngResults(i).RoundtripTime)
-                BarRatio = (Timeout / intInitialScale) / pngResults(i).RoundtripTime
+                MyBrush = GetBarBrush(result.RoundtripTime)
+                BarRatio = (Timeout / intInitialScale) / result.RoundtripTime
                 BarLen = (intImgWidth / BarRatio) + intMinBarLen '* 2
             End If
-            gfx.FillRectangle(MyBrush, 1, curPos, BarLen, BarHeight)
-            Dim CapPen As Pen = New Pen(Color.ForestGreen, 2)
-            gfx.DrawLine(CapPen, New PointF(BarLen, curPos), New PointF(BarLen, curPos + BarHeight))
+            NewPBars.Add(New PingBar(BarLen, MyBrush, New Rectangle(1, curPos, BarLen, BarHeight), curPos, result))
             curPos += BarHeight + intBarGap
         Next
-    End Sub
+        Return NewPBars
+    End Function
     Private Function LastDrawIndex(BarCount As Integer) As Integer
         If Not bolScrolling Then
             Return BarCount - 1
@@ -211,31 +268,27 @@ Public Class PingVis : Implements IDisposable
         End If
     End Function
     Private Function GetBarBrush(RoundTrip As Integer) As Brush
-        If Not bolScrolling Then
-            'Alpha blending two colors. As ping times go up, the returned color becomes more red.
-            Dim FadeColor As Integer
-            Dim Color1, Color2 As Integer
-            Dim r1, g1, b1, r2, g2, b2 As Long
-            FadeColor = Color.Green.ToArgb 'low ping color
-            Color1 = FadeColor
-            r1 = Color1 And (Not &HFFFFFF00)
-            g1 = (Color1 And (Not &HFFFF00FF)) \ &H100&
-            b1 = (Color1 And (Not &HFF00FFFF)) \ &HFFFF&
-            FadeColor = Color.Blue.ToArgb 'high ping color (invert of desired color Blue = Orange)
-            Color2 = FadeColor
-            r2 = Color2 And (Not &HFFFFFF00)
-            g2 = (Color2 And (Not &HFFFF00FF)) \ &H100&
-            b2 = (Color2 And (Not &HFF00FFFF)) \ &HFFFF&
-            Dim iSteps As Integer = 255
-            Dim iStep As Integer = CInt(255 / ((Timeout / 3) / RoundTrip)) 'Convert ping time to ratio of 255. 255 being the maximum levels of blending.
-            If iStep > iSteps Then iStep = iSteps
-            FadeColor = RGB(r1 + (r2 - r1) / iSteps * iStep, g1 + (g2 - g1) / iSteps * iStep, b1 + (b2 - b1) / iSteps * iStep)
-            Return New SolidBrush(ColorTranslator.FromOle(FadeColor))
-        Else
-            Return New SolidBrush(Color.Gray)
-        End If
+        'Alpha blending two colors. As ping times go up, the returned color becomes more red.
+        Dim FadeColor As Integer
+        Dim Color1, Color2 As Integer
+        Dim r1, g1, b1, r2, g2, b2 As Long
+        FadeColor = Color.Green.ToArgb 'low ping color
+        Color1 = FadeColor
+        r1 = Color1 And (Not &HFFFFFF00)
+        g1 = (Color1 And (Not &HFFFF00FF)) \ &H100&
+        b1 = (Color1 And (Not &HFF00FFFF)) \ &HFFFF&
+        FadeColor = Color.Blue.ToArgb 'high ping color (invert of desired color Blue = Orange)
+        Color2 = FadeColor
+        r2 = Color2 And (Not &HFFFFFF00)
+        g2 = (Color2 And (Not &HFFFF00FF)) \ &H100&
+        b2 = (Color2 And (Not &HFF00FFFF)) \ &HFFFF&
+        Dim iSteps As Integer = 255
+        Dim iStep As Integer = CInt(255 / ((Timeout / 3) / RoundTrip)) 'Convert ping time to ratio of 255. 255 being the maximum levels of blending.
+        If iStep > iSteps Then iStep = iSteps
+        FadeColor = RGB(r1 + (r2 - r1) / iSteps * iStep, g1 + (g2 - g1) / iSteps * iStep, b1 + (b2 - b1) / iSteps * iStep)
+        Return New SolidBrush(ColorTranslator.FromOle(FadeColor))
     End Function
-    Private Sub DrawScaleLines()
+    Private Sub DrawScaleLines(ByRef gfx As Graphics)
         Dim ScaleLineLoc As Integer = 0
         Dim NumOfLines As Integer = Timeout / 10
         Dim StepSize As Integer = 0
@@ -246,8 +299,8 @@ Public Class PingVis : Implements IDisposable
         Next
     End Sub
     Private Sub TrimPingList()
-        If pngResults.Count > intMaxBars Then
-            pngResults = pngResults.GetRange(pngResults.Count - intMaxBars, intMaxBars)
+        If pngResults.Count > intMaxStoredResults Then
+            pngResults = pngResults.GetRange(pngResults.Count - intMaxStoredResults, intMaxStoredResults)
         End If
     End Sub
     Private Sub SetScale()
@@ -272,18 +325,21 @@ Public Class PingVis : Implements IDisposable
             Return pngResults
         End If
     End Function
-    Private Sub SetControlImage(ByRef DestControl As Control, Image As Bitmap)
+    Private Sub SetControlImage(ByRef DestControl As Control, ByRef Image As Bitmap)
         Select Case True
             Case TypeOf DestControl Is Form
                 Dim frm As Form = DestControl
+                If frm.BackgroundImage IsNot Nothing Then frm.BackgroundImage.Dispose()
                 frm.BackgroundImage = Image
                 frm.Invalidate()
             Case TypeOf DestControl Is Button
                 Dim but As Button = DestControl
+                If but.Image IsNot Nothing Then but.Image.Dispose()
                 but.Image = Image
                 but.Invalidate()
             Case TypeOf DestControl Is PictureBox
                 Dim pic As PictureBox = DestControl
+                If pic.Image IsNot Nothing Then pic.Image.Dispose()
                 pic.Image = Image
                 pic.Refresh()
         End Select
@@ -291,13 +347,13 @@ Public Class PingVis : Implements IDisposable
     Private Sub SetAvgPing()
         Dim TotalPingTime As Integer = 0
         For Each reply As PingReply In pngResults
-                If reply.Status = IPStatus.Success Then
-                    TotalPingTime += reply.RoundtripTime
-                Else
-                    TotalPingTime += Timeout
-                End If
-            Next
-        If pngResults.Count > 0 Then CurrentAverageRoundTripTime = Math.Round((TotalPingTime / pngResults.Count), 0)
+            If reply.Status = IPStatus.Success Then
+                TotalPingTime += reply.RoundtripTime
+            Else
+                TotalPingTime += Timeout
+            End If
+        Next
+        CurrentAverageRoundTripTime = Math.Round((TotalPingTime / pngResults.Count), 0)
     End Sub
     Public Shared Function ResizeImage(image As Image, width As Integer, height As Integer) As Bitmap
         Dim destRect = New Rectangle(0, 0, width, height)
@@ -355,5 +411,56 @@ Public Class PingVis : Implements IDisposable
         ' GC.SuppressFinalize(Me)
     End Sub
 #End Region
+    Private Class PingBar
+        Private len As Single
+        Private br As Brush
+        Private rec As Rectangle
+        Private pos As Single
+        Private pInfo As PingReply
+        Public ReadOnly Property Length As Single
+            Get
+                Return len
+            End Get
+        End Property
+        Public Property Brush As Brush
+            Get
+                Return br
+            End Get
+            Set(value As Brush)
+                br = value
+            End Set
+        End Property
+        Public ReadOnly Property Rectangle As Rectangle
+            Get
+                Return rec
+            End Get
+        End Property
+        Public ReadOnly Property PositionY As Single
+            Get
+                Return pos
+            End Get
+        End Property
+        Public ReadOnly Property PingResult As PingReply
+            Get
+                Return pInfo
+            End Get
+        End Property
+        Sub New(Length As Single, ByRef Brush As Brush, Rect As Rectangle, PosY As Single, ByVal PingInfo As PingReply)
+            len = Length
+            br = Brush
+            rec = Rect
+            pos = PosY
+            pInfo = PingInfo
+        End Sub
+    End Class
+    Private Class MouseOverInfoStruct
+        Public MouseLoc As Point
+        Public PingReply As PingReply
+        Sub New(mLoc As Point, pReply As PingReply)
+            MouseLoc = mLoc
+            PingReply = pReply
+        End Sub
+    End Class
 End Class
+
 

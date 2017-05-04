@@ -531,7 +531,6 @@ Partial Class frmView
         Me.cmdShowIP.Size = New System.Drawing.Size(80, 80)
         Me.cmdShowIP.TabIndex = 53
         Me.cmdShowIP.TextAlign = System.Drawing.ContentAlignment.TopRight
-        Me.ToolTip1.SetToolTip(Me.cmdShowIP, "Show IP")
         Me.cmdShowIP.UseVisualStyleBackColor = False
         '
         'cmdBrowseFiles
@@ -584,7 +583,7 @@ Partial Class frmView
         Me.TabControl1.Location = New System.Drawing.Point(11, 302)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1139, 362)
+        Me.TabControl1.Size = New System.Drawing.Size(1139, 288)
         Me.TabControl1.TabIndex = 40
         '
         'HistoryTab
@@ -593,7 +592,7 @@ Partial Class frmView
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1131, 333)
+        Me.HistoryTab.Size = New System.Drawing.Size(1131, 259)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -628,7 +627,7 @@ Partial Class frmView
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1119, 321)
+        Me.DataGridHistory.Size = New System.Drawing.Size(1119, 247)
         Me.DataGridHistory.TabIndex = 40
         Me.DataGridHistory.TabStop = False
         Me.DataGridHistory.VirtualMode = True
@@ -665,7 +664,7 @@ Partial Class frmView
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1119, 723)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1119, 797)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
@@ -838,10 +837,10 @@ Partial Class frmView
         Me.tsSaveModify.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tsSaveModify.ImageScalingSize = New System.Drawing.Size(25, 25)
         Me.tsSaveModify.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdAccept_Tool, Me.ToolStripSeparator3, Me.cmdCancel_Tool, Me.ToolStripSeparator2})
-        Me.tsSaveModify.Location = New System.Drawing.Point(747, 0)
+        Me.tsSaveModify.Location = New System.Drawing.Point(3, 0)
         Me.tsSaveModify.Name = "tsSaveModify"
         Me.tsSaveModify.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.tsSaveModify.Size = New System.Drawing.Size(343, 37)
+        Me.tsSaveModify.Size = New System.Drawing.Size(312, 37)
         Me.tsSaveModify.TabIndex = 44
         Me.tsSaveModify.Text = "ToolStrip1"
         '
@@ -893,7 +892,7 @@ Partial Class frmView
         '
         Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.TabControl1)
         Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.Panel1)
-        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1161, 676)
+        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1161, 602)
         Me.ToolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ToolStripContainer1.LeftToolStripPanelVisible = False
         Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 0)
@@ -916,7 +915,7 @@ Partial Class frmView
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbModify, Me.tsbNewNote, Me.tsbDeleteDevice, Me.ToolStripSeparator1, Me.AttachmentTool, Me.ToolStripSeparator7, Me.ToolStripDropDownButton2, Me.ToolStripSeparator9})
-        Me.ToolStrip1.Location = New System.Drawing.Point(3, 0)
+        Me.ToolStrip1.Location = New System.Drawing.Point(3, 74)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.ToolStrip1.Size = New System.Drawing.Size(375, 37)
@@ -1007,7 +1006,7 @@ Partial Class frmView
         Me.tsTracking.Dock = System.Windows.Forms.DockStyle.None
         Me.tsTracking.ImageScalingSize = New System.Drawing.Size(25, 25)
         Me.tsTracking.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripDropDownButton1, Me.ToolStripSeparator4})
-        Me.tsTracking.Location = New System.Drawing.Point(457, 0)
+        Me.tsTracking.Location = New System.Drawing.Point(16, 37)
         Me.tsTracking.Name = "tsTracking"
         Me.tsTracking.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.tsTracking.Size = New System.Drawing.Size(134, 37)
