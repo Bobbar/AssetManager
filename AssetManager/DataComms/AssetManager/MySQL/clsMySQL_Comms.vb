@@ -34,8 +34,9 @@ Public Class clsMySQL_Comms : Implements IDisposable
     End Sub
 #End Region
     Private Const strDatabase As String = "asset_manager"
+    Private Const strTestDatabase As String = "test_db"
     Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
-    Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";database=" & strDatabase & ";ConnectionTimeout=5"
+    Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5" & ";database="
     Private ConnectionException As Exception
     Public Connection As MySqlConnection = NewConnection()
     Sub New()
@@ -99,7 +100,14 @@ Public Class clsMySQL_Comms : Implements IDisposable
         End Try
     End Function
     Private Function NewConnection() As MySqlConnection
-        Return New MySqlConnection(MySQLConnectString)
+        Return New MySqlConnection(GetConnectString)
+    End Function
+    Private Function GetConnectString() As String
+        If Not bolUseTestDatabase Then
+            Return MySQLConnectString & strDatabase
+        Else
+            Return MySQLConnectString & strTestDatabase
+        End If
     End Function
     Public Function OpenConnection() As Boolean
         Try

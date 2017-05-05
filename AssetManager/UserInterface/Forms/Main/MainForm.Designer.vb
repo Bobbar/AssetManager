@@ -640,7 +640,7 @@ Partial Class MainForm
         Me.GroupBox2.Controls.Add(Me.SearchGroup)
         Me.GroupBox2.Controls.Add(Me.InstantGroup)
         Me.GroupBox2.Controls.Add(Me.cmdShowAll)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 35)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 40)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(1215, 226)
         Me.GroupBox2.TabIndex = 7

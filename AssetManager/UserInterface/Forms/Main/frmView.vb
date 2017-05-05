@@ -812,9 +812,10 @@ VALUES (@" & historical_dev.ChangeType & ",
             If Not ConcurrencyCheck() Then
                 CancelModify()
                 Exit Sub
+            Else
+                GetNewValues(UpdateDia.UpdateInfo)
+                UpdateDevice(UpdateDia.UpdateInfo)
             End If
-            GetNewValues(UpdateDia.UpdateInfo)
-            UpdateDevice(UpdateDia.UpdateInfo)
         Else
             CancelModify()
         End If

@@ -41,6 +41,7 @@ Public Class MainForm
             MyWindowList = New WindowList(Me, ToolStrip1)
             InitLiveBox()
             Clear_All()
+            TestDBWarning()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             EndProgram()
@@ -52,6 +53,13 @@ Public Class MainForm
         MyLiveBox.AddControl(txtCurUser, LiveBoxType.DynamicSearch, devices.CurrentUser)
         MyLiveBox.AddControl(txtSerial, LiveBoxType.InstaLoad, devices.Serial)
         MyLiveBox.AddControl(txtAssetTag, LiveBoxType.InstaLoad, devices.AssetTag)
+    End Sub
+    Private Sub TestDBWarning()
+        If bolUseTestDatabase Then
+            Message("TEST DATABASE IN USE", vbOKOnly + vbExclamation, "WARNING", Me)
+            Me.BackColor = Color.DarkRed
+            Me.Text += " - ****TEST DATABASE****"
+        End If
     End Sub
     Private Sub GetGridStyles()
         'set colors
