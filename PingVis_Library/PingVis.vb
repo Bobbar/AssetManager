@@ -31,9 +31,11 @@ Public Class PingVis : Implements IDisposable
 #End Region
 
 #Region "Bar Parameters"
-    Private Const intBarGap As Integer = 0
-    Private Const intMaxBars As Integer = 15
+    Private Const BarGap As Single = 0
+    Private Const intMaxBars As Integer = 10
     Private Const intMinBarLen As Integer = 2
+    Private Const BarTopPadding As Single = 0
+    Private Const BarBottomPadding As Single = 5
     Private brushBadPing As Brush = Brushes.Red
 #End Region
 
@@ -54,14 +56,20 @@ Public Class PingVis : Implements IDisposable
         End Get
     End Property
     Sub New(ByRef DestControl As Control, HostName As String)
+        InitMyControl(DestControl)
+        MyPingHostname = HostName
+        InitPing()
+    End Sub
+    Private Sub InitMyControl(DestControl As Control)
         MyControl = DestControl
+        'Set image to double the size of the control
+        intImgWidth = MyControl.ClientSize.Width * ScaleMulti
+        intImgHeight = MyControl.ClientSize.Height * ScaleMulti
         AddHandler MyControl.MouseWheel, AddressOf ControlMouseWheel
         AddHandler MyControl.MouseLeave, AddressOf ControlMouseLeave
         AddHandler MyControl.MouseMove, AddressOf ControlMouseMove
-        MyPingHostname = HostName
-        Init()
     End Sub
-    Private Sub Init()
+    Private Sub InitPing()
         AddHandler MyPing.PingCompleted, AddressOf PingComplete
         PingTimer.Interval = PingInterval
         PingTimer.Enabled = True
@@ -150,9 +158,6 @@ Public Class PingVis : Implements IDisposable
     Private Sub DrawBars(ByRef DestControl As Control, ByRef Bars As List(Of PingBar), Optional MouseOverInfo As MouseOverInfoStruct = Nothing)
         If pngResults.Count < 1 Or Not CanDraw(Environment.TickCount) Then Exit Sub
         Try
-            'Set image to double the size of the control
-            intImgWidth = DestControl.ClientSize.Width * ScaleMulti
-            intImgHeight = DestControl.ClientSize.Height * ScaleMulti
             Using bm = New Drawing.Bitmap(intImgWidth, intImgHeight), gfx = Graphics.FromImage(bm)
                 gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
                 If Not bolScrolling Then
@@ -162,7 +167,9 @@ Public Class PingVis : Implements IDisposable
                 End If
                 SetScale()
                 DrawScaleLines(gfx) 'Draw scale lines
+                gfx.SmoothingMode = Drawing2D.SmoothingMode.None
                 DrawPingBars(gfx, Bars) 'Draw ping bars
+                gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
                 DrawPingText(gfx, MouseOverInfo) 'Draw last ping round trip time
                 SetAvgPing() 'Set public property containing current average round trip time
                 TrimPingList()
@@ -175,7 +182,6 @@ Public Class PingVis : Implements IDisposable
         Catch
         Finally
         End Try
-
     End Sub
     Private Function CanDraw(TimeStamp As Integer) As Boolean
         Dim ElapTime As Integer = TimeStamp - LastDraw
@@ -223,8 +229,8 @@ Public Class PingVis : Implements IDisposable
     End Sub
     Private Function GetPingBars() As List(Of PingBar)
         Dim NewPBars As New List(Of PingBar)
-        Dim curPos As Single = -1
-        Dim BarHeight As Single = intImgHeight / intMaxBars
+        Dim curPos As Single = BarTopPadding
+        Dim BarHeight As Single = (intImgHeight - BarBottomPadding - BarTopPadding - (BarGap * intMaxBars)) / intMaxBars
         For Each result As PingReply In CurrentDisplayResults()
             Dim BarRatio As Single
             Dim BarLen As Single
@@ -238,7 +244,7 @@ Public Class PingVis : Implements IDisposable
                 BarLen = (intImgWidth / BarRatio) + intMinBarLen '* 2
             End If
             NewPBars.Add(New PingBar(BarLen, MyBrush, New Rectangle(1, curPos, BarLen, BarHeight), curPos, result))
-            curPos += BarHeight + intBarGap
+            curPos += BarHeight + BarGap
         Next
         Return NewPBars
     End Function
