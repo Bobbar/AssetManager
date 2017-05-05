@@ -41,7 +41,7 @@ Public Class PingVis : Implements IDisposable
 
 #Region "Misc PingVis Variables"
     Private intInitialScale As Single = 4
-    Private Const intMaxStoredResults As Integer = 3000
+    Private Const intMaxStoredResults As Integer = 1000000
     Private Const MaxDrawRate As Integer = 20
     Private ScaleMulti As Integer = 2
 #End Region
@@ -98,6 +98,18 @@ Public Class PingVis : Implements IDisposable
             End If
         End If
     End Sub
+    Private Sub PingComplete(ByVal sender As Object, ByVal e As System.Net.NetworkInformation.PingCompletedEventArgs)
+        bolPingRunning = False
+        If Not e.Cancelled Then
+            If e.Error Is Nothing Then
+                pngResults.Add(e.Reply)
+                LastReply = e.Reply
+            Else
+                'Debug.Print(e.Error.Message)
+            End If
+            If Not bolScrolling Then DrawBars(MyControl, GetPingBars, mOverInfo)
+        End If
+    End Sub
     Private Sub ControlMouseLeave(sender As Object, e As EventArgs)
         bolScrolling = False
         mOverInfo = Nothing
@@ -142,19 +154,6 @@ Public Class PingVis : Implements IDisposable
         Next
         Return Nothing
     End Function
-
-    Private Sub PingComplete(ByVal sender As Object, ByVal e As System.Net.NetworkInformation.PingCompletedEventArgs)
-        bolPingRunning = False
-        If Not e.Cancelled Then
-            If e.Error Is Nothing Then
-                pngResults.Add(e.Reply)
-                LastReply = e.Reply
-            Else
-                'Debug.Print(e.Error.Message)
-            End If
-            If Not bolScrolling Then DrawBars(MyControl, GetPingBars, mOverInfo)
-        End If
-    End Sub
     Private Sub DrawBars(ByRef DestControl As Control, ByRef Bars As List(Of PingBar), Optional MouseOverInfo As MouseOverInfoStruct = Nothing)
         If pngResults.Count < 1 Or Not CanDraw(Environment.TickCount) Then Exit Sub
         Try
