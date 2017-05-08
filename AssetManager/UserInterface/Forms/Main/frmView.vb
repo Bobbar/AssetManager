@@ -301,6 +301,7 @@ VALUES (@" & historical_dev.ChangeType & ",
                 End If
                 CurrentViewDevice = Asset.CollectDeviceInfo(DeviceResults)
                 FillDeviceInfo()
+                FillDBFields(DeviceResults)
                 HistoricalResults = SQLComms.Return_SQLTable("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
                 SendToHistGrid(DataGridHistory, HistoricalResults)
                 HistoricalResults.Dispose()
@@ -317,29 +318,61 @@ VALUES (@" & historical_dev.ChangeType & ",
             Return False
         End Try
     End Function
+    Private Sub FillDBFields(Data As DataTable)
+        Dim DBCtlList As New List(Of Control)
+        GetDBControls(Me, DBCtlList)
+        Dim Row As DataRow = Data.Rows(0)
+        For Each ctl As Control In DBCtlList
+            Select Case True
+                Case TypeOf ctl Is DB_TextBox
+                    Dim dbTxt As DB_TextBox = ctl
+                    dbTxt.Text = Row.Item(dbTxt.DataColumn)
+            End Select
+
+
+
+        Next
+
+    End Sub
     Private Sub FillDeviceInfo()
+
+        'For Each ctl As Control In DBCtlList
+        '    Debug.Print(ctl.Name)
+        'Next
+
         With CurrentViewDevice
-            txtAssetTag_View_REQ.Text = .strAssetTag
-            txtDescription_View_REQ.Text = .strDescription
+            ' txtAssetTag_View_REQ.Text = .strAssetTag
+            '  txtDescription_View_REQ.Text = .strDescription
             cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.EquipType, .strEqType)
-            txtSerial_View_REQ.Text = .strSerial
+            '  txtSerial_View_REQ.Text = .strSerial
             cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.Locations, .strLocation)
-            txtCurUser_View_REQ.Text = .strCurrentUser
+            ' txtCurUser_View_REQ.Text = .strCurrentUser
             ToolTip1.SetToolTip(txtCurUser_View_REQ, "")
             If .strCurrentUserEmpNum <> "" Then
                 txtCurUser_View_REQ.BackColor = colEditColor
                 ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee")
             End If
-            txtCurUser_View_REQ.Text = .strCurrentUser
             dtPurchaseDate_View_REQ.Value = .dtPurchaseDate
-            txtReplacementYear_View.Text = .strReplaceYear
+            ' txtReplacementYear_View.Text = .strReplaceYear
             cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.OSType, .strOSVersion)
             txtPhoneNumber.Text = FormatPhoneNumber(.strPhoneNumber)
             cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, .strStatus)
             lblGUID.Text = .strGUID
             chkTrackable.Checked = CBool(.bolTrackable)
-            txtPONumber.Text = .strPO
+            ' txtPONumber.Text = .strPO
         End With
+    End Sub
+    Private Sub GetDBControls(Parent As Control, ByRef ControlList As List(Of Control))
+        For Each ctl As Control In Parent.Controls
+            Select Case True
+                Case TypeOf ctl Is DB_TextBox
+                    ControlList.Add(ctl)
+            End Select
+
+
+            If ctl.HasChildren Then GetDBControls(ctl, ControlList)
+
+        Next
     End Sub
     Private Sub SendToHistGrid(Grid As DataGridView, tblResults As DataTable)
         Dim table As New DataTable

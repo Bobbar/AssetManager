@@ -32,19 +32,19 @@ Partial Class frmView
         Me.cmdSibiLink = New System.Windows.Forms.Button()
         Me.cmdSetSibi = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
-        Me.txtPONumber = New System.Windows.Forms.TextBox()
+        Me.txtPONumber = New DB_TextBox(devices.PO, False)
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.txtAssetTag_View_REQ = New System.Windows.Forms.TextBox()
+        Me.txtAssetTag_View_REQ = New DB_TextBox(devices.AssetTag, True)
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.txtSerial_View_REQ = New System.Windows.Forms.TextBox()
+        Me.txtSerial_View_REQ = New DB_TextBox(devices.Serial, True)
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
-        Me.txtCurUser_View_REQ = New System.Windows.Forms.TextBox()
+        Me.txtCurUser_View_REQ = New DB_TextBox(devices.CurrentUser, True)
         Me.cmbStatus_REQ = New System.Windows.Forms.ComboBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.txtDescription_View_REQ = New System.Windows.Forms.TextBox()
+        Me.txtDescription_View_REQ = New DB_TextBox(devices.Description, True)
         Me.cmbOSVersion_REQ = New System.Windows.Forms.ComboBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.cmbLocation_View_REQ = New System.Windows.Forms.ComboBox()
@@ -54,7 +54,7 @@ Partial Class frmView
         Me.dtPurchaseDate_View_REQ = New System.Windows.Forms.DateTimePicker()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
+        Me.txtReplacementYear_View = New DB_TextBox(devices.ReplacementYear, False)
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
         Me.cmdGKUpdate = New System.Windows.Forms.Button()
         Me.cmdRestart = New System.Windows.Forms.Button()
@@ -1097,19 +1097,19 @@ Partial Class frmView
     Friend WithEvents Label13 As Label
     Friend WithEvents cmbEquipType_View_REQ As ComboBox
     Friend WithEvents Label7 As Label
-    Friend WithEvents txtReplacementYear_View As TextBox
+    Friend WithEvents txtReplacementYear_View As DB_TextBox
     Friend WithEvents Label6 As Label
     Friend WithEvents dtPurchaseDate_View_REQ As DateTimePicker
     Friend WithEvents Label5 As Label
     Friend WithEvents cmbLocation_View_REQ As ComboBox
     Friend WithEvents Label4 As Label
-    Friend WithEvents txtDescription_View_REQ As TextBox
+    Friend WithEvents txtDescription_View_REQ As DB_TextBox
     Friend WithEvents Label3 As Label
-    Friend WithEvents txtCurUser_View_REQ As TextBox
+    Friend WithEvents txtCurUser_View_REQ As DB_TextBox
     Friend WithEvents Label2 As Label
-    Friend WithEvents txtSerial_View_REQ As TextBox
+    Friend WithEvents txtSerial_View_REQ As DB_TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents txtAssetTag_View_REQ As TextBox
+    Friend WithEvents txtAssetTag_View_REQ As DB_TextBox
     Friend WithEvents Label10 As Label
     Friend WithEvents RightClickMenu As ContextMenuStrip
     Friend WithEvents DeleteEntryToolStripMenuItem As ToolStripMenuItem
@@ -1140,7 +1140,7 @@ Partial Class frmView
     Friend WithEvents cmdMunisInfo As Button
     Friend WithEvents cmdRDP As Button
     Friend WithEvents Label12 As Label
-    Friend WithEvents txtPONumber As TextBox
+    Friend WithEvents txtPONumber As DB_TextBox
     Friend WithEvents tmr_RDPRefresher As Timer
     Friend WithEvents cmdSibiLink As Button
     Friend WithEvents cmdSetSibi As Button

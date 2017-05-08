@@ -235,6 +235,12 @@
     <Compile Include="UserInterface\Forms\Main\frmMunisUser.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\MyControls\DB_TextBox.Designer.vb">
+      <DependentUpon>DB_TextBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\MyControls\DB_TextBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserInterface\MyControls\MyForm.vb">
       <SubType>Form</SubType>
     </Compile>
