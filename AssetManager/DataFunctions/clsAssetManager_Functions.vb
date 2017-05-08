@@ -1,6 +1,11 @@
 ﻿Imports MySql.Data.MySqlClient
 Public Class clsAssetManager_Functions
 
+    Public Function Get_EmptyTable(Table As String) As DataTable
+        Using SQLComms As New clsMySQL_Comms
+            Return SQLComms.Return_SQLTable("SELECT * FROM " & Table & " LIMIT 0")
+        End Using
+    End Function
     Public Function DeviceExists(Device As Device_Info) As Boolean
         Dim bolAsset As Boolean
         Dim bolSerial As Boolean

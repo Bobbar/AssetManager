@@ -46,12 +46,31 @@ Public Class frmView
         ViewDevice(DeviceGUID)
     End Sub
     Private Sub InitDBControls()
-        txtPONumber.SetDBProps(devices.PO, False)
-        txtAssetTag_View_REQ.SetDBProps(devices.AssetTag, True)
-        txtSerial_View_REQ.SetDBProps(devices.Serial, True)
-        txtCurUser_View_REQ.SetDBProps(devices.CurrentUser, True)
-        txtDescription_View_REQ.SetDBProps(devices.Description, True)
-        txtReplacementYear_View.SetDBProps(devices.ReplacementYear, False)
+        txtPONumber.Tag = New DBControlInfo(devices.PO, False)
+        txtAssetTag_View_REQ.Tag = New DBControlInfo(devices.AssetTag, True)
+        txtSerial_View_REQ.Tag = New DBControlInfo(devices.Serial, True)
+        txtCurUser_View_REQ.Tag = New DBControlInfo(devices.CurrentUser, True)
+        txtDescription_View_REQ.Tag = New DBControlInfo(devices.Description, True)
+        txtReplacementYear_View.Tag = New DBControlInfo(devices.ReplacementYear, False)
+        txtPhoneNumber.Tag = New DBControlInfo(devices.PhoneNumber, False)
+
+        lblGUID.Tag = New DBControlInfo(devices.DeviceUID, False)
+
+        dtPurchaseDate_View_REQ.Tag = New DBControlInfo(devices.PurchaseDate, True)
+
+        cmbEquipType_View_REQ.Tag = New DBControlInfo(devices.EQType, DeviceIndex.EquipType, True)
+        cmbLocation_View_REQ.Tag = New DBControlInfo(devices.Location, DeviceIndex.Locations, True)
+        cmbOSVersion_REQ.Tag = New DBControlInfo(devices.OSVersion, DeviceIndex.OSType, True)
+        cmbStatus_REQ.Tag = New DBControlInfo(devices.Status, DeviceIndex.StatusType, True)
+
+        chkTrackable.Tag = New DBControlInfo(devices.Trackable, False)
+
+        'txtPONumber.SetDBProps(devices.PO, False)
+        'txtAssetTag_View_REQ.SetDBProps(devices.AssetTag, True)
+        'txtSerial_View_REQ.SetDBProps(devices.Serial, True)
+        'txtCurUser_View_REQ.SetDBProps(devices.CurrentUser, True)
+        'txtDescription_View_REQ.SetDBProps(devices.Description, True)
+        'txtReplacementYear_View.SetDBProps(devices.ReplacementYear, False)
     End Sub
     Private Sub frmView_Load(sender As Object, e As EventArgs) Handles Me.Load
         MyWindowList = New WindowList(Me, ToolStrip1)
@@ -66,30 +85,73 @@ Public Class frmView
         End Using
     End Sub
     Private Function ReturnUpdateTable() As DataTable
-        Dim tmpTable As New DataTable
+        Dim tmpTable As DataTable = Asset.Get_EmptyTable(devices.TableName)
         Dim DBCtlList As New List(Of Control)
         GetDBControls(Me, DBCtlList)
         ' tmpTable.NewRow()
         Dim DBRow = tmpTable.NewRow
         For Each ctl As Control In DBCtlList
-
+            Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
             Select Case True
-                Case TypeOf ctl Is DB_TextBox
-                    Dim dbTxt As DB_TextBox = ctl
-                    tmpTable.Columns.Add(New DataColumn(dbTxt.DataColumn, GetType(String)))
-                    DBRow(dbTxt.DataColumn) = Trim(dbTxt.Text)
-                    ' tmpTable.Rows(tmpTable.Rows.Count).Item(dbTxt.DataColumn) = Trim(dbTxt.Text)
+                Case TypeOf ctl Is TextBox
+                    Dim dbTxt As TextBox = ctl
+                    ' tmpTable.Columns.Add(New DataColumn(DBInfo.DataColumn, dbTxt.Text.GetType))
+                    DBRow(DBInfo.DataColumn) = Trim(dbTxt.Text)
+
+                Case TypeOf ctl Is DateTimePicker
+                    Dim dbDtPick As DateTimePicker = ctl
+                    '   tmpTable.Columns.Add(New DataColumn(DBInfo.DataColumn, dbDtPick.Value.GetType))
+                    DBRow(DBInfo.DataColumn) = dbDtPick.Value
+
+
+                Case TypeOf ctl Is ComboBox
+                    Dim dbCmb As ComboBox = ctl
+                    '   tmpTable.Columns.Add(New DataColumn(DBInfo.DataColumn, GetType(String)))
+                    DBRow(DBInfo.DataColumn) = GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex)
+
+
+                'Case TypeOf ctl Is Label
+                '    Dim dbLbl As Label = ctl
+
+
+                Case TypeOf ctl Is CheckBox
+                    Dim dbChk As CheckBox = ctl
+                    '  tmpTable.Columns.Add(New DataColumn(DBInfo.DataColumn, dbChk.Checked.GetType))
+                    DBRow(DBInfo.DataColumn) = dbChk.Checked
+
             End Select
 
 
 
         Next
+
+        'Add Add'l info
+
+        If Not IsNothing(MunisUser.Number) Then
+            DBRow(devices.CurrentUser) = MunisUser.Name
+            DBRow(devices.Munis_Emp_Num) = MunisUser.Number
+        Else
+            If OldData.strCurrentUser <> Trim(txtCurUser_View_REQ.Text) Then
+                DBRow(devices.CurrentUser) = Trim(txtCurUser_View_REQ.Text)
+                DBRow(devices.Munis_Emp_Num) = ""
+            Else
+                DBRow(devices.CurrentUser) = OldData.strCurrentUser
+                DBRow(devices.Munis_Emp_Num) = OldData.strCurrentUserEmpNum
+            End If
+        End If
+
+        DBRow(devices.CheckSum) = GetHashOfDevice(NewData)
+
+
+
+
         tmpTable.Rows.Add(DBRow)
 
         Return tmpTable
 
 
     End Function
+
     Private Sub GetNewValues(UpdateInfo As Update_Info)
         Dim tbl = ReturnUpdateTable()
 
@@ -360,11 +422,26 @@ VALUES (@" & historical_dev.ChangeType & ",
 
         Dim Row As DataRow = Data.Rows(0)
         For Each ctl As Control In DBCtlList
-
+            Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
             Select Case True
-                Case TypeOf ctl Is DB_TextBox
-                    Dim dbTxt As DB_TextBox = ctl
-                    dbTxt.Text = Row.Item(dbTxt.DataColumn)
+                Case TypeOf ctl Is TextBox
+                    Dim dbTxt As TextBox = ctl
+                    dbTxt.Text = Row.Item(DBInfo.DataColumn).ToString
+
+                Case TypeOf ctl Is DateTimePicker
+                    Dim dbDtPick As DateTimePicker = ctl
+                    dbDtPick.Value = Row.Item(DBInfo.DataColumn)
+                Case TypeOf ctl Is ComboBox
+                    Dim dbCmb As ComboBox = ctl
+                    dbCmb.SelectedIndex = GetComboIndexFromShort(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn))
+
+                Case TypeOf ctl Is Label
+                    Dim dbLbl As Label = ctl
+                    dbLbl.Text = Row.Item(DBInfo.DataColumn).ToString
+
+                Case TypeOf ctl Is CheckBox
+                    Dim dbChk As CheckBox = ctl
+                    dbChk.Checked = Row.Item(DBInfo.DataColumn)
             End Select
 
 
@@ -381,29 +458,29 @@ VALUES (@" & historical_dev.ChangeType & ",
         With CurrentViewDevice
             ' txtAssetTag_View_REQ.Text = .strAssetTag
             '  txtDescription_View_REQ.Text = .strDescription
-            cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.EquipType, .strEqType)
+            '  cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.EquipType, .strEqType)
             '  txtSerial_View_REQ.Text = .strSerial
-            cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.Locations, .strLocation)
+            '  cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.Locations, .strLocation)
             ' txtCurUser_View_REQ.Text = .strCurrentUser
             ToolTip1.SetToolTip(txtCurUser_View_REQ, "")
             If .strCurrentUserEmpNum <> "" Then
                 txtCurUser_View_REQ.BackColor = colEditColor
                 ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee")
             End If
-            dtPurchaseDate_View_REQ.Value = .dtPurchaseDate
+            '    dtPurchaseDate_View_REQ.Value = .dtPurchaseDate
             ' txtReplacementYear_View.Text = .strReplaceYear
-            cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.OSType, .strOSVersion)
-            txtPhoneNumber.Text = FormatPhoneNumber(.strPhoneNumber)
-            cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, .strStatus)
-            lblGUID.Text = .strGUID
-            chkTrackable.Checked = CBool(.bolTrackable)
+            '   cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.OSType, .strOSVersion)
+            '  txtPhoneNumber.Text = FormatPhoneNumber(.strPhoneNumber)
+            '  cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, .strStatus)
+            '  lblGUID.Text = .strGUID
+            '  chkTrackable.Checked = CBool(.bolTrackable)
             ' txtPONumber.Text = .strPO
         End With
     End Sub
     Private Sub GetDBControls(Parent As Control, ByRef ControlList As List(Of Control))
         For Each ctl As Control In Parent.Controls
             Select Case True
-                Case TypeOf ctl Is DB_TextBox
+                Case TypeOf ctl.Tag Is DBControlInfo
                     ControlList.Add(ctl)
             End Select
 

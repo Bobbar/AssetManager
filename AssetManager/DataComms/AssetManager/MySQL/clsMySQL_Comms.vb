@@ -54,11 +54,12 @@ Public Class clsMySQL_Comms : Implements IDisposable
         'Debug.Print("Table Hit " & Date.Now.Ticks)
         Try
             Using ds As New DataSet, da As New MySqlDataAdapter
+                Dim NewTable As New DataTable
                 da.SelectCommand = New MySqlCommand(strSQLQry)
                 da.SelectCommand.Connection = Connection
-                da.Fill(ds)
+                da.Fill(NewTable) 'ds)
                 da.Dispose()
-                Return ds.Tables(0)
+                Return NewTable 'ds.Tables(0)
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
