@@ -886,7 +886,7 @@ VALUES
         End If
     End Sub
     Private Function ValidColumn() As Boolean
-        If RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
+        If RequestItemsGrid.CurrentCell.Value IsNot Nothing AndAlso RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
             Select Case True
                 Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
                     Return True
