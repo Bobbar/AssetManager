@@ -29,6 +29,7 @@ Public Class frmView
     End Structure
     Sub New(ParentForm As MyForm, DeviceGUID As String)
         InitializeComponent()
+        InitDBControls()
         MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
         MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, "dev_description")
         Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
@@ -43,6 +44,14 @@ Public Class frmView
         ExtendedMethods.DoubleBufferedDataGrid(DataGridHistory, True)
         ExtendedMethods.DoubleBufferedDataGrid(TrackingGrid, True)
         ViewDevice(DeviceGUID)
+    End Sub
+    Private Sub InitDBControls()
+        txtPONumber.SetDBProps(devices.PO, False)
+        txtAssetTag_View_REQ.SetDBProps(devices.AssetTag, True)
+        txtSerial_View_REQ.SetDBProps(devices.Serial, True)
+        txtCurUser_View_REQ.SetDBProps(devices.CurrentUser, True)
+        txtDescription_View_REQ.SetDBProps(devices.Description, True)
+        txtReplacementYear_View.SetDBProps(devices.ReplacementYear, False)
     End Sub
     Private Sub frmView_Load(sender As Object, e As EventArgs) Handles Me.Load
         MyWindowList = New WindowList(Me, ToolStrip1)
@@ -321,8 +330,10 @@ VALUES (@" & historical_dev.ChangeType & ",
     Private Sub FillDBFields(Data As DataTable)
         Dim DBCtlList As New List(Of Control)
         GetDBControls(Me, DBCtlList)
+
         Dim Row As DataRow = Data.Rows(0)
         For Each ctl As Control In DBCtlList
+
             Select Case True
                 Case TypeOf ctl Is DB_TextBox
                     Dim dbTxt As DB_TextBox = ctl

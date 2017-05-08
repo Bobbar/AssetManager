@@ -19,24 +19,16 @@
         End Set
     End Property
     Sub New()
-
+        MyBase.New
         ' This call is required by the designer.
         InitializeComponent()
 
         db_required = False
-
+        db_column = ""
         ' Add any initialization after the InitializeComponent() call.
-
     End Sub
-    Sub New(DataColumn As String, Optional Required As Boolean = False)
-
-        ' This call is required by the designer.
-        InitializeComponent()
-
+    Public Sub SetDBProps(ByVal DataColumn As String, Optional Required As Boolean = False)
         db_column = DataColumn
         db_required = Required
-        ' Add any initialization after the InitializeComponent() call.
-
     End Sub
-
 End Class
