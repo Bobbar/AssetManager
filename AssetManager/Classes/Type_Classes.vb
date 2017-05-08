@@ -117,3 +117,31 @@ Public Class Grid_Theme
     Public CellSelectColor As Color
     Public BackColor As Color
 End Class
+Public Class DBControlInfo
+    Private db_column As String
+    Private db_required As Boolean
+    Public Property DataColumn As String
+        Get
+            Return db_column
+        End Get
+        Set(value As String)
+            db_column = value
+        End Set
+    End Property
+    Public Property Required As Boolean
+        Get
+            Return db_required
+        End Get
+        Set(value As Boolean)
+            db_required = value
+        End Set
+    End Property
+    Sub New()
+        db_column = ""
+        db_required = False
+    End Sub
+    Sub New(DataColumn As String, Optional Required As Boolean = False)
+        db_column = DataColumn
+        db_required = Required
+    End Sub
+End Class

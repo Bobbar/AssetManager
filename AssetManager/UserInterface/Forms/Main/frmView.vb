@@ -65,7 +65,34 @@ Public Class frmView
             OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
         End Using
     End Sub
-    Public Sub GetNewValues(UpdateInfo As Update_Info)
+    Private Function ReturnUpdateTable() As DataTable
+        Dim tmpTable As New DataTable
+        Dim DBCtlList As New List(Of Control)
+        GetDBControls(Me, DBCtlList)
+        ' tmpTable.NewRow()
+        Dim DBRow = tmpTable.NewRow
+        For Each ctl As Control In DBCtlList
+
+            Select Case True
+                Case TypeOf ctl Is DB_TextBox
+                    Dim dbTxt As DB_TextBox = ctl
+                    tmpTable.Columns.Add(New DataColumn(dbTxt.DataColumn, GetType(String)))
+                    DBRow(dbTxt.DataColumn) = Trim(dbTxt.Text)
+                    ' tmpTable.Rows(tmpTable.Rows.Count).Item(dbTxt.DataColumn) = Trim(dbTxt.Text)
+            End Select
+
+
+
+        Next
+        tmpTable.Rows.Add(DBRow)
+
+        Return tmpTable
+
+
+    End Function
+    Private Sub GetNewValues(UpdateInfo As Update_Info)
+        Dim tbl = ReturnUpdateTable()
+
         With NewData
             .strAssetTag = Trim(txtAssetTag_View_REQ.Text)
             .strDescription = Trim(txtDescription_View_REQ.Text)
