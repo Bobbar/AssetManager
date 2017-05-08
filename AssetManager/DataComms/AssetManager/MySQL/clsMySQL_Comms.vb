@@ -93,7 +93,7 @@ Public Class clsMySQL_Comms : Implements IDisposable
     Public Function Return_Adapter(strSQLQry As String) As MySqlDataAdapter
         'Debug.Print("Command Hit " & Date.Now.Ticks)
         Try
-            Dim adapter As New MySqlDataAdapter(strSQLQry, MySQLConnectString)
+            Dim adapter As New MySqlDataAdapter(strSQLQry, GetConnectString)
             Return adapter
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
