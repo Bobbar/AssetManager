@@ -92,6 +92,7 @@ Public Class clsMySQL_Comms : Implements IDisposable
         'Debug.Print("Command Hit " & Date.Now.Ticks)
         Try
             Dim adapter As New MySqlDataAdapter(strSQLQry, GetConnectString)
+            Dim CmdBuilder As New MySqlCommandBuilder(adapter)
             Return adapter
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

@@ -178,6 +178,7 @@ Partial Class frmView
         Me.txtPhoneNumber.Name = "txtPhoneNumber"
         Me.txtPhoneNumber.Size = New System.Drawing.Size(169, 23)
         Me.txtPhoneNumber.TabIndex = 57
+        Me.txtPhoneNumber.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
         'Label14
         '
@@ -905,9 +906,9 @@ Partial Class frmView
         'ToolStripContainer1.TopToolStripPanel
         '
         Me.ToolStripContainer1.TopToolStripPanel.BackColor = System.Drawing.Color.Silver
-        Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.ToolStrip1)
-        Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.tsTracking)
         Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.tsSaveModify)
+        Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.tsTracking)
+        Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.ToolStrip1)
         '
         'ToolStrip1
         '

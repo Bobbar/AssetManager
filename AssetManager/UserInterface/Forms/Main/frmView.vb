@@ -65,6 +65,7 @@ Public Class frmView
 
         chkTrackable.Tag = New DBControlInfo(devices_main.Trackable, False)
 
+
         'txtPONumber.SetDBProps(devices.PO, False)
         'txtAssetTag_View_REQ.SetDBProps(devices.AssetTag, True)
         'txtSerial_View_REQ.SetDBProps(devices.Serial, True)
@@ -119,21 +120,22 @@ Public Class frmView
         Using SQLComm As New clsMySQL_Comms
             tmpTable = SQLComm.Return_SQLTable(SelectQry) '"SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "' LIMIT 1")
         End Using
-        Dim NewTable As New DataTable
-        NewTable = tmpTable.Clone
-        NewTable.Rows.Clear()
+        'Dim NewTable As New DataTable
+        ' NewTable = tmpTable.Clone
+        'NewTable.Rows.Clear()
+        tmpTable.Rows.Add()
         Dim DBRow = GetDBControlRow(tmpTable.Rows(0))
-        tmpTable.Rows.Clear()
+        '  tmpTable.Rows.Clear()
         ' Dim DBNewRow = 
         'Add Add'l info
         DBRow(historical_dev.ChangeType) = NewData.UpdateInfo.strChangeType
         DBRow(historical_dev.Notes) = NewData.UpdateInfo.strNote
         DBRow(historical_dev.ActionUser) = strLocalUser
-
+        DBRow(historical_dev.DeviceUID) = CurrentViewDevice.strGUID
         '   tmpTable.Rows.Clear()
-        NewTable.Rows.Add(DBRow)
+        '  NewTable.Rows.Add(DBRow)
 
-        Return NewTable
+        Return tmpTable
 
     End Function
 
@@ -147,6 +149,10 @@ Public Class frmView
                 Case TypeOf ctl Is TextBox
                     Dim dbTxt As TextBox = ctl
                     DBRow(DBInfo.DataColumn) = Trim(dbTxt.Text)
+
+                Case TypeOf ctl Is MaskedTextBox
+                    Dim dbMaskTxt As MaskedTextBox = ctl
+                    DBRow(DBInfo.DataColumn) = dbMaskTxt.Text
 
                 Case TypeOf ctl Is DateTimePicker
                     Dim dbDtPick As DateTimePicker = ctl
@@ -350,7 +356,7 @@ Public Class frmView
                 Dim UpdateAdapter = SQLComms.Return_Adapter(SelectQry)
                 rows += UpdateAdapter.Update(ReturnUpdateTable(SelectQry))
 
-                Dim InsertQry As String = "SELECT * FROM " & historical_dev.TableName & " LIMIT 1"
+                Dim InsertQry As String = "SELECT * FROM " & historical_dev.TableName & " LIMIT 0"
                 Dim InsertAdapter = SQLComms.Return_Adapter(InsertQry)
                 rows += InsertAdapter.Update(ReturnInsertTable(InsertQry))
 
