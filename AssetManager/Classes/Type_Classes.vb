@@ -117,47 +117,4 @@ Public Class Grid_Theme
     Public CellSelectColor As Color
     Public BackColor As Color
 End Class
-Public Class DBControlInfo
-    Private db_column As String
-    Private db_required As Boolean
-    Private db_attrib_index As Combo_Data()
-    Public Property DataColumn As String
-        Get
-            Return db_column
-        End Get
-        Set(value As String)
-            db_column = value
-        End Set
-    End Property
-    Public Property Required As Boolean
-        Get
-            Return db_required
-        End Get
-        Set(value As Boolean)
-            db_required = value
-        End Set
-    End Property
-    Public Property AttribIndex As Combo_Data()
-        Get
-            Return db_attrib_index
-        End Get
-        Set(value As Combo_Data())
-            db_attrib_index = value
-        End Set
-    End Property
-    Sub New()
-        db_column = ""
-        db_required = False
-        db_attrib_index = Nothing
-    End Sub
-    Sub New(DataColumn As String, Optional Required As Boolean = False)
-        db_column = DataColumn
-        db_required = Required
-        db_attrib_index = Nothing
-    End Sub
-    Sub New(DataColumn As String, AttribIndex As Combo_Data(), Optional Required As Boolean = False)
-        db_column = DataColumn
-        db_required = Required
-        db_attrib_index = AttribIndex
-    End Sub
-End Class
+

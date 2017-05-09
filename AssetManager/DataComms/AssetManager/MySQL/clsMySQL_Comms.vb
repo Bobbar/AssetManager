@@ -75,7 +75,7 @@ Public Class clsMySQL_Comms : Implements IDisposable
             Return Nothing
         End Try
     End Function
-    Public Function Return_SQLCommand(strSQLQry As String) As MySqlCommand
+    Public Function Return_SQLCommand(Optional strSQLQry As String = "") As MySqlCommand
         'Debug.Print("Command Hit " & Date.Now.Ticks)
         Try
             Using cmd As New MySqlCommand

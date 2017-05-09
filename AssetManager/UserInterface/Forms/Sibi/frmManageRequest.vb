@@ -10,6 +10,7 @@ Public Class frmManageRequest
     Private bolNewRequest As Boolean = False
     Private MyWindowList As WindowList
     Private bolDragging As Boolean = False
+    Private DataParser As New DBControlParser
     Sub New(ParentForm As MyForm, RequestUID As String)
         Waiting()
         InitializeComponent()
@@ -25,6 +26,7 @@ Public Class frmManageRequest
         Show()
     End Sub
     Private Sub InitForm(ParentForm As MyForm)
+        InitDBControls()
         ExtendedMethods.DoubleBufferedDataGrid(RequestItemsGrid, True)
         Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip)
         MyWindowList = New WindowList(Me, ToolStrip)
@@ -33,6 +35,19 @@ Public Class frmManageRequest
         GridTheme = ParentForm.GridTheme
         dgvNotes.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         ToolStrip.BackColor = colSibiToolBarColor
+    End Sub
+    Private Sub InitDBControls()
+        txtDescription.Tag = New DBControlInfo(sibi_requests.Description, True)
+        txtUser.Tag = New DBControlInfo(sibi_requests.RequestUser, True)
+        cmbType.Tag = New DBControlInfo(sibi_requests.Type, SibiIndex.RequestType, True)
+        dtNeedBy.Tag = New DBControlInfo(sibi_requests.NeedBy, True)
+        cmbStatus.Tag = New DBControlInfo(sibi_requests.Status, SibiIndex.StatusType, True)
+        txtPO.Tag = New DBControlInfo(sibi_requests.PO, False)
+        txtReqNumber.Tag = New DBControlInfo(sibi_requests.RequisitionNumber, False)
+        txtRequestNum.Tag = New DBControlInfo(sibi_requests.RequestNumber, False)
+        txtRTNumber.Tag = New DBControlInfo(sibi_requests.RT_Number, False)
+        txtCreateDate.Tag = New DBControlInfo(sibi_requests.DateStamp, ParseType.DisplayOnly, False)
+
     End Sub
     Public Sub SetAttachCount()
         cmdAttachments.Text = "(" + Asset.GetAttachmentCount(CurrentRequest).ToString + ")"
@@ -211,7 +226,7 @@ Public Class frmManageRequest
         RequestItemsGrid.Tag = True
     End Sub
     Private Function ValidateFields() As Boolean
-        SetFieldTags()
+        '    SetFieldTags()
         bolFieldsValid = True
         Dim ValidateResults As Boolean = CheckFields(Me, bolFieldsValid)
         If Not ValidateResults Then
@@ -223,7 +238,9 @@ Public Class frmManageRequest
     Private Function CheckFields(parent As Control, FieldsValid As Boolean) As Boolean
         Dim c As Control
         For Each c In parent.Controls
-            If Not IsNothing(c.Tag) And c.Tag = True Then
+            Dim DBInfo As New DBControlInfo
+            If c.Tag IsNot Nothing Then DBInfo = DirectCast(c.Tag, DBControlInfo)
+            If DBInfo.Required Then 'Not IsNothing(c.Tag) And c.Tag = True Then
                 Select Case True
                     Case TypeOf c Is TextBox
                         If Trim(c.Text) = "" Then
@@ -244,35 +261,37 @@ Public Class frmManageRequest
                             cmb.BackColor = Color.Empty
                             ClearErrorIcon(cmb)
                         End If
-                    Case TypeOf c Is DataGridView
-                        For Each row As DataGridViewRow In RequestItemsGrid.Rows
-                            If Not row.IsNewRow Then
-                                For Each dcell As DataGridViewCell In row.Cells
-                                    If dcell.OwningColumn.CellType.Name = "DataGridViewComboBoxCell" Then
-                                        If dcell.Value Is Nothing Then
-                                            bolFieldsValid = False
-                                            dcell.ErrorText = "Required Field!"
-                                        Else
-                                            dcell.ErrorText = Nothing
-                                        End If
-                                    End If
-                                    If dcell.OwningColumn.Name = "Qty" Then
-                                        If IsDBNull(dcell.Value) Then
-                                            bolFieldsValid = False
-                                            dcell.ErrorText = "Required Field!"
-                                        Else
-                                            dcell.ErrorText = Nothing
-                                        End If
-                                    End If
-                                Next
-                            End If
-                        Next
                 End Select
             End If
             If c.HasChildren Then CheckFields(c, bolFieldsValid)
         Next
+        ValidateRequestItems()
         Return bolFieldsValid 'if fields are missing return false to trigger a message if needed
     End Function
+    Private Sub ValidateRequestItems()
+        For Each row As DataGridViewRow In RequestItemsGrid.Rows
+            If Not row.IsNewRow Then
+                For Each dcell As DataGridViewCell In row.Cells
+                    If dcell.OwningColumn.CellType.Name = "DataGridViewComboBoxCell" Then
+                        If dcell.Value Is Nothing Then
+                            bolFieldsValid = False
+                            dcell.ErrorText = "Required Field!"
+                        Else
+                            dcell.ErrorText = Nothing
+                        End If
+                    End If
+                    If dcell.OwningColumn.Name = "Qty" Then
+                        If IsDBNull(dcell.Value) Then
+                            bolFieldsValid = False
+                            dcell.ErrorText = "Required Field!"
+                        Else
+                            dcell.ErrorText = Nothing
+                        End If
+                    End If
+                Next
+            End If
+        Next
+    End Sub
     Private Sub AddErrorIcon(ctl As Control)
         If fieldErrorIcon.GetError(ctl) Is String.Empty Then
             fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight)
@@ -361,45 +380,51 @@ Public Class frmManageRequest
         RequestData.strUID = Guid.NewGuid.ToString
         Try
             Dim rows As Integer
-            Dim strSqlQry1 = "INSERT INTO " & sibi_requests.TableName & "
-(" & sibi_requests.UID & ",
-" & sibi_requests.RequestUser & ",
-" & sibi_requests.Description & ",
-" & sibi_requests.NeedBy & ",
-" & sibi_requests.Status & ",
-" & sibi_requests.Type & ",
-" & sibi_requests.PO & ",
-" & sibi_requests.RequisitionNumber & ",
-" & sibi_requests.Replace_Asset & ",
-" & sibi_requests.Replace_Serial & ",
-" & sibi_requests.RT_Number & ")
-VALUES
-(@" & sibi_requests.UID & ",
-@" & sibi_requests.RequestUser & ",
-@" & sibi_requests.Description & ",
-@" & sibi_requests.NeedBy & ",
-@" & sibi_requests.Status & ",
-@" & sibi_requests.Type & ",
-@" & sibi_requests.PO & ",
-@" & sibi_requests.RequisitionNumber & ",
-@" & sibi_requests.Replace_Asset & ",
-@" & sibi_requests.Replace_Serial & ",
-@" & sibi_requests.RT_Number & ")"
-            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
+            '            Dim strSqlQry1 = "INSERT INTO " & sibi_requests.TableName & "
+            '(" & sibi_requests.UID & ",
+            '" & sibi_requests.RequestUser & ",
+            '" & sibi_requests.Description & ",
+            '" & sibi_requests.NeedBy & ",
+            '" & sibi_requests.Status & ",
+            '" & sibi_requests.Type & ",
+            '" & sibi_requests.PO & ",
+            '" & sibi_requests.RequisitionNumber & ",
+            '" & sibi_requests.Replace_Asset & ",
+            '" & sibi_requests.Replace_Serial & ",
+            '" & sibi_requests.RT_Number & ")
+            'VALUES
+            '(@" & sibi_requests.UID & ",
+            '@" & sibi_requests.RequestUser & ",
+            '@" & sibi_requests.Description & ",
+            '@" & sibi_requests.NeedBy & ",
+            '@" & sibi_requests.Status & ",
+            '@" & sibi_requests.Type & ",
+            '@" & sibi_requests.PO & ",
+            '@" & sibi_requests.RequisitionNumber & ",
+            '@" & sibi_requests.Replace_Asset & ",
+            '@" & sibi_requests.Replace_Serial & ",
+            '@" & sibi_requests.RT_Number & ")"
+            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand()
+
+                Dim InsertRequestQry As String = "SELECT * FROM " & sibi_requests.TableName & " LIMIT 0"
+                Dim InsertAdapter = SQLComms.Return_Adapter(InsertRequestQry)
+                rows += InsertAdapter.Update(GetInsertTable(InsertRequestQry, RequestData.strUID))
+
+
                 '     Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.UID, RequestData.strUID)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.Status, RequestData.strStatus)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.Type, RequestData.strType)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.PO, RequestData.strPO)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.RequisitionNumber, RequestData.strRequisitionNumber)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Asset, RequestData.strReplaceAsset)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Serial, RequestData.strReplaceSerial)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
-                rows = rows + cmd.ExecuteNonQuery()
-                cmd.Parameters.Clear()
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.UID, RequestData.strUID)
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.Status, RequestData.strStatus)
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.Type, RequestData.strType)
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.PO, RequestData.strPO)
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.RequisitionNumber, RequestData.strRequisitionNumber)
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Asset, RequestData.strReplaceAsset)
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Serial, RequestData.strReplaceSerial)
+                'cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
+                'rows = rows + cmd.ExecuteNonQuery()
+                'cmd.Parameters.Clear()
                 For Each row As DataRow In RequestData.RequstItems.Rows
                     InsertRequestItem(row, cmd, RequestData)
                     rows = rows + cmd.ExecuteNonQuery()
@@ -423,38 +448,69 @@ VALUES
             End If
         End Try
     End Sub
+    Private Function GetUpdateTable(SelectQry As String) As DataTable
+        Dim tmpTable = DataParser.ReturnUpdateTable(Me, SelectQry)
+        Dim DBRow = tmpTable.Rows(0)
+        'Add Add'l info
+        Return tmpTable
+    End Function
+    Private Function GetInsertTable(SelectQry As String, UID As String) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(Me, SelectQry)
+        Dim DBRow = tmpTable.Rows(0)
+        'Add Add'l info
+
+        DBRow(sibi_requests.UID) = UID
+        'DBRow(historical_dev.Notes) = UpdateInfo.strNote
+        'DBRow(historical_dev.ActionUser) = strLocalUser
+        'DBRow(historical_dev.DeviceUID) = CurrentViewDevice.strGUID
+        Return tmpTable
+    End Function
     Private Sub UpdateRequest()
         Try
             Dim RequestData As Request_Info = CollectData()
             RequestData.strUID = CurrentRequest.strUID
             If RequestData.RequstItems Is Nothing Then Exit Sub
             Dim rows As Integer
-            Dim strRequestQRY As String = "UPDATE " & sibi_requests.TableName & "
-SET
-" & sibi_requests.RequestUser & " = @" & sibi_requests.RequestUser & " ,
-" & sibi_requests.Description & " = @" & sibi_requests.Description & " ,
-" & sibi_requests.NeedBy & " = @" & sibi_requests.NeedBy & " ,
-" & sibi_requests.Status & " = @" & sibi_requests.Status & " ,
-" & sibi_requests.Type & " = @" & sibi_requests.Type & " ,
-" & sibi_requests.PO & " = @" & sibi_requests.PO & " ,
-" & sibi_requests.RequisitionNumber & " = @" & sibi_requests.RequisitionNumber & " ,
-" & sibi_requests.Replace_Asset & " = @" & sibi_requests.Replace_Asset & " ,
-" & sibi_requests.Replace_Serial & " = @" & sibi_requests.Replace_Serial & " ,
-" & sibi_requests.RT_Number & " = @" & sibi_requests.RT_Number & " 
-WHERE " & sibi_requests.UID & " ='" & RequestData.strUID & "'"
-            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strRequestQRY)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.Status, RequestData.strStatus)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.Type, RequestData.strType)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.PO, RequestData.strPO)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.RequisitionNumber, RequestData.strRequisitionNumber)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Asset, RequestData.strReplaceAsset)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Serial, RequestData.strReplaceSerial)
-                cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
-                rows += cmd.ExecuteNonQuery()
-                cmd.Parameters.Clear()
+
+
+            '            Dim strRequestQRY As String = "UPDATE " & sibi_requests.TableName & "
+            'SET
+            '" & sibi_requests.RequestUser & " = @" & sibi_requests.RequestUser & " ,
+            '" & sibi_requests.Description & " = @" & sibi_requests.Description & " ,
+            '" & sibi_requests.NeedBy & " = @" & sibi_requests.NeedBy & " ,
+            '" & sibi_requests.Status & " = @" & sibi_requests.Status & " ,
+            '" & sibi_requests.Type & " = @" & sibi_requests.Type & " ,
+            '" & sibi_requests.PO & " = @" & sibi_requests.PO & " ,
+            '" & sibi_requests.RequisitionNumber & " = @" & sibi_requests.RequisitionNumber & " ,
+            '" & sibi_requests.Replace_Asset & " = @" & sibi_requests.Replace_Asset & " ,
+            '" & sibi_requests.Replace_Serial & " = @" & sibi_requests.Replace_Serial & " ,
+            '" & sibi_requests.RT_Number & " = @" & sibi_requests.RT_Number & " 
+            'WHERE " & sibi_requests.UID & " ='" & RequestData.strUID & "'"
+            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand() 'strRequestQRY)
+                '    cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
+                '    cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
+                '    cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
+                '    cmd.Parameters.AddWithValue("@" & sibi_requests.Status, RequestData.strStatus)
+                '    cmd.Parameters.AddWithValue("@" & sibi_requests.Type, RequestData.strType)
+                '    cmd.Parameters.AddWithValue("@" & sibi_requests.PO, RequestData.strPO)
+                '    cmd.Parameters.AddWithValue("@" & sibi_requests.RequisitionNumber, RequestData.strRequisitionNumber)
+                '    cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Asset, RequestData.strReplaceAsset)
+                '    cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Serial, RequestData.strReplaceSerial)
+                '    cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
+                '    rows += cmd.ExecuteNonQuery()
+                ' cmd.Parameters.Clear()
+
+
+                Dim RequestUpdateQry As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & " = '" & CurrentRequest.strUID & "'"
+                Dim RequestUpdateAdapter = SQLComms.Return_Adapter(RequestUpdateQry)
+                rows += RequestUpdateAdapter.Update(GetUpdateTable(RequestUpdateQry))
+
+
+
+
+
+
+
                 For Each row As DataRow In RequestData.RequstItems.Rows
                     If row.Item("Item UID").ToString <> "" Then
                         SetRequestItemParameters(row, cmd, RequestData, False)
@@ -591,18 +647,7 @@ VALUES
                 Dim RequestItemsResults As DataTable = SQLComms.Return_SQLTable(strRequestItemsQRY)
                 ClearAll()
                 CollectRequestInfo(RequestResults, RequestItemsResults)
-                With RequestResults.Rows(0)
-                    txtDescription.Text = NoNull(.Item(sibi_requests.Description))
-                    txtUser.Text = NoNull(.Item(sibi_requests.RequestUser))
-                    cmbType.SelectedIndex = GetComboIndexFromShort(SibiIndex.RequestType, NoNull(.Item(sibi_requests.Type)))
-                    dtNeedBy.Value = NoNull(.Item(sibi_requests.NeedBy))
-                    cmbStatus.SelectedIndex = GetComboIndexFromShort(SibiIndex.StatusType, NoNull(.Item(sibi_requests.Status)))
-                    txtPO.Text = NoNull(.Item(sibi_requests.PO))
-                    txtReqNumber.Text = NoNull(.Item(sibi_requests.RequisitionNumber))
-                    txtRequestNum.Text = NoNull(.Item(sibi_requests.RequestNumber))
-                    txtRTNumber.Text = NoNull(.Item(sibi_requests.RT_Number))
-                    txtCreateDate.Text = NoNull(.Item(sibi_requests.DateStamp))
-                End With
+                DataParser.FillDBFields(Me, RequestResults)
                 SendToGrid(RequestItemsResults)
                 LoadNotes(CurrentRequest.strUID)
                 'RequestItemsGrid.ReadOnly = True
