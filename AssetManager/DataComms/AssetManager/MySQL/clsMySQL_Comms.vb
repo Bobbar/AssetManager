@@ -53,12 +53,11 @@ Public Class clsMySQL_Comms : Implements IDisposable
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
         'Debug.Print("Table Hit " & Date.Now.Ticks)
         Try
-            Using ds As New DataSet, da As New MySqlDataAdapter
+            Using da As New MySqlDataAdapter, tmpTable As New DataTable
                 da.SelectCommand = New MySqlCommand(strSQLQry)
                 da.SelectCommand.Connection = Connection
-                da.Fill(ds)
-                da.Dispose()
-                Return ds.Tables(0)
+                da.Fill(tmpTable)
+                Return tmpTable
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
