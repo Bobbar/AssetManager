@@ -2,7 +2,7 @@
 Imports MySql.Data.MySqlClient
 Public Class View_Tracking
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
-    Private CurrentViewTrackDevice As Device_Info
+    Private CurrentViewTrackDevice As New Device_Info
     Sub New(ParentForm As Form, EntryGUID As String, Device As Device_Info)
         InitializeComponent()
         Tag = ParentForm

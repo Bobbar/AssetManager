@@ -1,7 +1,7 @@
 ﻿Option Explicit On
 Imports MySql.Data.MySqlClient
 Public Class Tracking
-    Private CurrentTrackingDevice As Device_Info
+    Private CurrentTrackingDevice As New Device_Info
     Private MyParent As frmView
     Private CheckData As CheckStruct
     Sub New(ByRef Device As Device_Info, ParentForm As Form)

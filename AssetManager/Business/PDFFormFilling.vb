@@ -10,7 +10,7 @@ Imports System.Text
 Imports MyDialogLib
 Public Class PDFFormFilling
     Private ParentForm As Form
-    Private CurrentDevice As Device_Info
+    Private CurrentDevice As New Device_Info
     Private UnitPrice As String
     Private CurrentDialog As MyDialog
     Private UnitPriceTxtName As String = "txtUnitPrice"

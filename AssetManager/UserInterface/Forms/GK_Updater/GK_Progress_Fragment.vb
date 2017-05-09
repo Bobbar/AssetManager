@@ -7,7 +7,7 @@ Public Class GK_Progress_Fragment
     Public ProgStatus As Progress_Status
     Private bolShow As Boolean = False
     Private CurrentStatus As GK_Updater.Status_Stats
-    Private CurDevice As Device_Info
+    Private CurDevice As New Device_Info
     Private LogBuff As String = ""
     Private MyParentForm As Form
     Public ReadOnly Property Device As Device_Info

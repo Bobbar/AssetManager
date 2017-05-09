@@ -9,7 +9,7 @@ Public Structure Combo_Data
     Public strShort As String
     Public strID As String
 End Structure
-Public Structure Device_Info
+Public Class Device_Info
     Public strAssetTag As String
     Public strDescription As String
     Public strEqType As String
@@ -31,7 +31,7 @@ Public Structure Device_Info
     Public CheckSum As String
     Public Tracking As Track_Info
     Public Historical As Hist_Info
-End Structure
+End Class
 Public Structure Request_Info
     Public strUID As String
     Public strUser As String
@@ -115,5 +115,8 @@ Public Structure Attach_Info
     Public MD5 As String
     Public FileUID As String
 End Structure
-
+Public Class NewInfoClass
+    Inherits Device_Info
+    Public UpdateInfo As Update_Info
+End Class
 

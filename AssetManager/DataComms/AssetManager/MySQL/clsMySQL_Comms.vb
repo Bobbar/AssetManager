@@ -53,13 +53,13 @@ Public Class clsMySQL_Comms : Implements IDisposable
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
         'Debug.Print("Table Hit " & Date.Now.Ticks)
         Try
-            Using ds As New DataSet, da As New MySqlDataAdapter
+            Using da As New MySqlDataAdapter
                 Dim NewTable As New DataTable
                 da.SelectCommand = New MySqlCommand(strSQLQry)
                 da.SelectCommand.Connection = Connection
-                da.Fill(NewTable) 'ds)
+                da.Fill(NewTable)
                 da.Dispose()
-                Return NewTable 'ds.Tables(0)
+                Return NewTable
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -93,7 +93,9 @@ Public Class clsMySQL_Comms : Implements IDisposable
     Public Function Return_Adapter(strSQLQry As String) As MySqlDataAdapter
         'Debug.Print("Command Hit " & Date.Now.Ticks)
         Try
+
             Dim adapter As New MySqlDataAdapter(strSQLQry, GetConnectString)
+            Dim cmdBuilder As New MySqlCommandBuilder(adapter)
             Return adapter
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

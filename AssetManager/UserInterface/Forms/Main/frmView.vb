@@ -7,10 +7,10 @@ Imports System.IO
 Imports PingVisLib
 Public Class frmView
     Private bolCheckFields As Boolean
-    Public CurrentViewDevice As Device_Info
+    Public CurrentViewDevice As New Device_Info
     Public MunisUser As Emp_Info = Nothing
-    Private OldData As Device_Info
-    Public NewData As Device_Info
+    Private OldData As New Device_Info
+    Public NewData As New NewInfoClass
     Private MyLiveBox As New clsLiveBox(Me)
     Private PrevWindowState As Integer
     Private MyWindowList As WindowList
@@ -46,24 +46,24 @@ Public Class frmView
         ViewDevice(DeviceGUID)
     End Sub
     Private Sub InitDBControls()
-        txtPONumber.Tag = New DBControlInfo(devices.PO, False)
-        txtAssetTag_View_REQ.Tag = New DBControlInfo(devices.AssetTag, True)
-        txtSerial_View_REQ.Tag = New DBControlInfo(devices.Serial, True)
-        txtCurUser_View_REQ.Tag = New DBControlInfo(devices.CurrentUser, True)
-        txtDescription_View_REQ.Tag = New DBControlInfo(devices.Description, True)
-        txtReplacementYear_View.Tag = New DBControlInfo(devices.ReplacementYear, False)
-        txtPhoneNumber.Tag = New DBControlInfo(devices.PhoneNumber, False)
+        txtPONumber.Tag = New DBControlInfo(devices_main.PO, False)
+        txtAssetTag_View_REQ.Tag = New DBControlInfo(devices_main.AssetTag, True)
+        txtSerial_View_REQ.Tag = New DBControlInfo(devices_main.Serial, True)
+        txtCurUser_View_REQ.Tag = New DBControlInfo(devices_main.CurrentUser, True)
+        txtDescription_View_REQ.Tag = New DBControlInfo(devices_main.Description, True)
+        txtReplacementYear_View.Tag = New DBControlInfo(devices_main.ReplacementYear, False)
+        txtPhoneNumber.Tag = New DBControlInfo(devices_main.PhoneNumber, False)
 
-        lblGUID.Tag = New DBControlInfo(devices.DeviceUID, False)
+        lblGUID.Tag = New DBControlInfo(devices_main.DeviceUID, False)
 
-        dtPurchaseDate_View_REQ.Tag = New DBControlInfo(devices.PurchaseDate, True)
+        dtPurchaseDate_View_REQ.Tag = New DBControlInfo(devices_main.PurchaseDate, True)
 
-        cmbEquipType_View_REQ.Tag = New DBControlInfo(devices.EQType, DeviceIndex.EquipType, True)
-        cmbLocation_View_REQ.Tag = New DBControlInfo(devices.Location, DeviceIndex.Locations, True)
-        cmbOSVersion_REQ.Tag = New DBControlInfo(devices.OSVersion, DeviceIndex.OSType, True)
-        cmbStatus_REQ.Tag = New DBControlInfo(devices.Status, DeviceIndex.StatusType, True)
+        cmbEquipType_View_REQ.Tag = New DBControlInfo(devices_main.EQType, DeviceIndex.EquipType, True)
+        cmbLocation_View_REQ.Tag = New DBControlInfo(devices_main.Location, DeviceIndex.Locations, True)
+        cmbOSVersion_REQ.Tag = New DBControlInfo(devices_main.OSVersion, DeviceIndex.OSType, True)
+        cmbStatus_REQ.Tag = New DBControlInfo(devices_main.Status, DeviceIndex.StatusType, True)
 
-        chkTrackable.Tag = New DBControlInfo(devices.Trackable, False)
+        chkTrackable.Tag = New DBControlInfo(devices_main.Trackable, False)
 
         'txtPONumber.SetDBProps(devices.PO, False)
         'txtAssetTag_View_REQ.SetDBProps(devices.AssetTag, True)
@@ -84,49 +84,15 @@ Public Class frmView
             OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
         End Using
     End Sub
-    Private Function ReturnUpdateTable() As DataTable
-        Dim tmpTable As DataTable = Asset.Get_EmptyTable(devices.TableName)
-        Dim DBCtlList As New List(Of Control)
-        GetDBControls(Me, DBCtlList)
-        ' tmpTable.NewRow()
-        Dim DBRow = tmpTable.NewRow
-        For Each ctl As Control In DBCtlList
-            Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
-            Select Case True
-                Case TypeOf ctl Is TextBox
-                    Dim dbTxt As TextBox = ctl
-                    ' tmpTable.Columns.Add(New DataColumn(DBInfo.DataColumn, dbTxt.Text.GetType))
-                    DBRow(DBInfo.DataColumn) = Trim(dbTxt.Text)
+    Private Function ReturnUpdateTable(SelectQry As String) As DataTable
+        Dim tmpTable As DataTable
+        Using SQLComm As New clsMySQL_Comms
+            tmpTable = SQLComm.Return_SQLTable(SelectQry) '"SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "' LIMIT 1")
+        End Using
 
-                Case TypeOf ctl Is DateTimePicker
-                    Dim dbDtPick As DateTimePicker = ctl
-                    '   tmpTable.Columns.Add(New DataColumn(DBInfo.DataColumn, dbDtPick.Value.GetType))
-                    DBRow(DBInfo.DataColumn) = dbDtPick.Value
-
-
-                Case TypeOf ctl Is ComboBox
-                    Dim dbCmb As ComboBox = ctl
-                    '   tmpTable.Columns.Add(New DataColumn(DBInfo.DataColumn, GetType(String)))
-                    DBRow(DBInfo.DataColumn) = GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex)
-
-
-                'Case TypeOf ctl Is Label
-                '    Dim dbLbl As Label = ctl
-
-
-                Case TypeOf ctl Is CheckBox
-                    Dim dbChk As CheckBox = ctl
-                    '  tmpTable.Columns.Add(New DataColumn(DBInfo.DataColumn, dbChk.Checked.GetType))
-                    DBRow(DBInfo.DataColumn) = dbChk.Checked
-
-            End Select
-
-
-
-        Next
+        Dim DBRow = GetDBControlRow(tmpTable.Rows(0))
 
         'Add Add'l info
-
         If Not IsNothing(MunisUser.Number) Then
             DBRow(devices.CurrentUser) = MunisUser.Name
             DBRow(devices.Munis_Emp_Num) = MunisUser.Number
@@ -141,47 +107,97 @@ Public Class frmView
         End If
 
         DBRow(devices.CheckSum) = GetHashOfDevice(NewData)
-
-
-
-
-        tmpTable.Rows.Add(DBRow)
+        DBRow(devices.Sibi_Link_UID) = NewData.strSibiLink
+        DBRow(devices.LastMod_User) = strLocalUser
+        DBRow(devices.LastMod_Date) = Now
 
         Return tmpTable
 
+    End Function
+    Private Function ReturnInsertTable(SelectQry As String) As DataTable
+        Dim tmpTable As DataTable
+        Using SQLComm As New clsMySQL_Comms
+            tmpTable = SQLComm.Return_SQLTable(SelectQry) '"SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "' LIMIT 1")
+        End Using
+        Dim NewTable As New DataTable
+        NewTable = tmpTable.Clone
+        NewTable.Rows.Clear()
+        Dim DBRow = GetDBControlRow(tmpTable.Rows(0))
+        tmpTable.Rows.Clear()
+        ' Dim DBNewRow = 
+        'Add Add'l info
+        DBRow(historical_dev.ChangeType) = NewData.UpdateInfo.strChangeType
+        DBRow(historical_dev.Notes) = NewData.UpdateInfo.strNote
+        DBRow(historical_dev.ActionUser) = strLocalUser
+
+        '   tmpTable.Rows.Clear()
+        NewTable.Rows.Add(DBRow)
+
+        Return NewTable
 
     End Function
 
+
+    Private Function GetDBControlRow(ByRef DBRow As DataRow) As DataRow
+        Dim DBCtlList As New List(Of Control)
+        GetDBControls(Me, DBCtlList)
+        For Each ctl As Control In DBCtlList
+            Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
+            Select Case True
+                Case TypeOf ctl Is TextBox
+                    Dim dbTxt As TextBox = ctl
+                    DBRow(DBInfo.DataColumn) = Trim(dbTxt.Text)
+
+                Case TypeOf ctl Is DateTimePicker
+                    Dim dbDtPick As DateTimePicker = ctl
+                    DBRow(DBInfo.DataColumn) = dbDtPick.Value
+
+                Case TypeOf ctl Is ComboBox
+                    Dim dbCmb As ComboBox = ctl
+                    DBRow(DBInfo.DataColumn) = GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex)
+
+                Case TypeOf ctl Is CheckBox
+                    Dim dbChk As CheckBox = ctl
+                    DBRow(DBInfo.DataColumn) = dbChk.Checked
+
+            End Select
+
+        Next
+
+        Return DBRow
+
+    End Function
     Private Sub GetNewValues(UpdateInfo As Update_Info)
-        Dim tbl = ReturnUpdateTable()
+        ' Dim tbl = ReturnUpdateTable()
 
         With NewData
-            .strAssetTag = Trim(txtAssetTag_View_REQ.Text)
-            .strDescription = Trim(txtDescription_View_REQ.Text)
-            .strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_View_REQ.SelectedIndex)
-            .strSerial = Trim(txtSerial_View_REQ.Text)
-            .strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_View_REQ.SelectedIndex)
-            If Not IsNothing(MunisUser.Number) Then
-                .strCurrentUser = MunisUser.Name
-                .strCurrentUserEmpNum = MunisUser.Number
-            Else
-                If OldData.strCurrentUser <> Trim(txtCurUser_View_REQ.Text) Then
-                    .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
-                    .strCurrentUserEmpNum = ""
-                Else
-                    .strCurrentUser = OldData.strCurrentUser
-                    .strCurrentUserEmpNum = OldData.strCurrentUserEmpNum
-                End If
-            End If
-            .dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
-            .strReplaceYear = Trim(txtReplacementYear_View.Text)
-            .strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSVersion_REQ.SelectedIndex)
-            .strPhoneNumber = PhoneNumberToDB(txtPhoneNumber.Text)
-            .strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
-            .strNote = UpdateInfo.strNote
-            .bolTrackable = chkTrackable.Checked
-            .strPO = Trim(txtPONumber.Text)
-            .CheckSum = GetHashOfDevice(NewData)
+            '.strAssetTag = Trim(txtAssetTag_View_REQ.Text)
+            '.strDescription = Trim(txtDescription_View_REQ.Text)
+            '.strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_View_REQ.SelectedIndex)
+            '.strSerial = Trim(txtSerial_View_REQ.Text)
+            '.strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_View_REQ.SelectedIndex)
+            'If Not IsNothing(MunisUser.Number) Then
+            '    .strCurrentUser = MunisUser.Name
+            '    .strCurrentUserEmpNum = MunisUser.Number
+            'Else
+            '    If OldData.strCurrentUser <> Trim(txtCurUser_View_REQ.Text) Then
+            '        .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
+            '        .strCurrentUserEmpNum = ""
+            '    Else
+            '        .strCurrentUser = OldData.strCurrentUser
+            '        .strCurrentUserEmpNum = OldData.strCurrentUserEmpNum
+            '    End If
+            'End If
+            '.dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
+            '.strReplaceYear = Trim(txtReplacementYear_View.Text)
+            '.strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSVersion_REQ.SelectedIndex)
+            '.strPhoneNumber = PhoneNumberToDB(txtPhoneNumber.Text)
+            '.strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
+            '.strNote = UpdateInfo.strNote
+            '   .bolTrackable = chkTrackable.Checked
+            '.strPO = Trim(txtPONumber.Text)
+            ' .CheckSum = GetHashOfDevice(NewData)
+            .UpdateInfo = UpdateInfo
         End With
         MunisUser = Nothing
     End Sub
@@ -252,97 +268,113 @@ Public Class frmView
     Public Sub UpdateDevice(UpdateInfo As Update_Info)
         Try
             Dim rows As Integer
+
+
+
             'Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable, dev_po=@dev_po, dev_lastmod_user=@dev_lastmod_user, dev_lastmod_date=@dev_lastmod_date, dev_cur_user_emp_num=@dev_cur_user_emp_num WHERE dev_UID='" & CurrentViewDevice.strGUID & "'"
-            Dim strSQLQry1 = "UPDATE " & devices.TableName & " SET " & devices.Description & "=@" & devices.Description &
-                "," & devices.Location & "=@" & devices.Location &
-                ", " & devices.CurrentUser & "=@" & devices.CurrentUser &
-                ", " & devices.Serial & "=@" & devices.Serial &
-                ", " & devices.AssetTag & "=@" & devices.AssetTag &
-                ", " & devices.PurchaseDate & "=@" & devices.PurchaseDate &
-                ", " & devices.ReplacementYear & "=@" & devices.ReplacementYear &
-                ", " & devices.OSVersion & "=@" & devices.OSVersion &
-                ", " & devices.PhoneNumber & "=@" & devices.PhoneNumber &
-                ", " & devices.EQType & "=@" & devices.EQType &
-                ", " & devices.Status & "=@" & devices.Status &
-                ", " & devices.Trackable & "=@" & devices.Trackable &
-                ", " & devices.PO & "=@" & devices.PO &
-                ", " & devices.LastMod_User & "=@" & devices.LastMod_User &
-                ", " & devices.LastMod_Date & "=@" & devices.LastMod_Date &
-                ", " & devices.Munis_Emp_Num & "=@" & devices.Munis_Emp_Num &
-                ", " & devices.CheckSum & "=@" & devices.CheckSum &
-                ", " & devices.Sibi_Link_UID & "=@" & devices.Sibi_Link_UID &
-                " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
-            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
-                cmd.Parameters.AddWithValue("@" & devices.Description, NewData.strDescription)
-                cmd.Parameters.AddWithValue("@" & devices.Location, NewData.strLocation)
-                cmd.Parameters.AddWithValue("@" & devices.CurrentUser, NewData.strCurrentUser)
-                cmd.Parameters.AddWithValue("@" & devices.Munis_Emp_Num, NewData.strCurrentUserEmpNum)
-                cmd.Parameters.AddWithValue("@" & devices.Serial, NewData.strSerial)
-                cmd.Parameters.AddWithValue("@" & devices.AssetTag, NewData.strAssetTag)
-                cmd.Parameters.AddWithValue("@" & devices.PurchaseDate, NewData.dtPurchaseDate)
-                cmd.Parameters.AddWithValue("@" & devices.ReplacementYear, NewData.strReplaceYear)
-                cmd.Parameters.AddWithValue("@" & devices.OSVersion, NewData.strOSVersion)
-                cmd.Parameters.AddWithValue("@" & devices.PhoneNumber, NewData.strPhoneNumber)
-                cmd.Parameters.AddWithValue("@" & devices.EQType, NewData.strEqType)
-                cmd.Parameters.AddWithValue("@" & devices.Status, NewData.strStatus)
-                cmd.Parameters.AddWithValue("@" & devices.Trackable, Convert.ToInt32(NewData.bolTrackable))
-                cmd.Parameters.AddWithValue("@" & devices.PO, NewData.strPO)
-                cmd.Parameters.AddWithValue("@" & devices.LastMod_User, strLocalUser)
-                cmd.Parameters.AddWithValue("@" & devices.LastMod_Date, Now)
-                cmd.Parameters.AddWithValue("@" & devices.CheckSum, NewData.CheckSum)
-                cmd.Parameters.AddWithValue("@" & devices.Sibi_Link_UID, NewData.strSibiLink)
-                rows = rows + cmd.ExecuteNonQuery()
-                Dim strSqlQry2 = "INSERT INTO " & historical_dev.TableName & " (" & historical_dev.ChangeType & ",
-" & historical_dev.Notes & ",
-" & historical_dev.Serial & ",
-" & historical_dev.Description & ",
-" & historical_dev.Location & ",
-" & historical_dev.CurrentUser & ",
-" & historical_dev.AssetTag & ",
-" & historical_dev.PurchaseDate & ",
-" & historical_dev.ReplacementYear & ",
-" & historical_dev.OSVersion & ",
-" & historical_dev.DeviceUID & ",
-" & historical_dev.ActionUser & ",
-" & historical_dev.EQType & ",
-" & historical_dev.Status & ",
-" & historical_dev.Trackable & ",
-" & historical_dev.PO & ")
-VALUES (@" & historical_dev.ChangeType & ",
-@" & historical_dev.Notes & ",
-@" & historical_dev.Serial & ",
-@" & historical_dev.Description & ",
-@" & historical_dev.Location & ",
-@" & historical_dev.CurrentUser & ",
-@" & historical_dev.AssetTag & ",
-@" & historical_dev.PurchaseDate & ",
-@" & historical_dev.ReplacementYear & ",
-@" & historical_dev.OSVersion & ",
-@" & historical_dev.DeviceUID & ",
-@" & historical_dev.ActionUser & ",
-@" & historical_dev.EQType & ",
-@" & historical_dev.Status & ",
-@" & historical_dev.Trackable & ",
-@" & historical_dev.PO & ")"
-                cmd.CommandText = strSqlQry2
-                cmd.Parameters.Clear()
-                cmd.Parameters.AddWithValue("@" & historical_dev.ChangeType, UpdateInfo.strChangeType) 'GetDBValue(ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
-                cmd.Parameters.AddWithValue("@" & historical_dev.Notes, NewData.strNote)
-                cmd.Parameters.AddWithValue("@" & historical_dev.Serial, NewData.strSerial)
-                cmd.Parameters.AddWithValue("@" & historical_dev.Description, NewData.strDescription)
-                cmd.Parameters.AddWithValue("@" & historical_dev.Location, NewData.strLocation)
-                cmd.Parameters.AddWithValue("@" & historical_dev.CurrentUser, NewData.strCurrentUser)
-                cmd.Parameters.AddWithValue("@" & historical_dev.AssetTag, NewData.strAssetTag)
-                cmd.Parameters.AddWithValue("@" & historical_dev.PurchaseDate, NewData.dtPurchaseDate)
-                cmd.Parameters.AddWithValue("@" & historical_dev.ReplacementYear, NewData.strReplaceYear)
-                cmd.Parameters.AddWithValue("@" & historical_dev.OSVersion, NewData.strOSVersion)
-                cmd.Parameters.AddWithValue("@" & historical_dev.DeviceUID, CurrentViewDevice.strGUID)
-                cmd.Parameters.AddWithValue("@" & historical_dev.ActionUser, strLocalUser)
-                cmd.Parameters.AddWithValue("@" & historical_dev.EQType, NewData.strEqType)
-                cmd.Parameters.AddWithValue("@" & historical_dev.Status, NewData.strStatus)
-                cmd.Parameters.AddWithValue("@" & historical_dev.Trackable, Convert.ToInt32(NewData.bolTrackable))
-                cmd.Parameters.AddWithValue("@" & historical_dev.PO, NewData.strPO)
-                rows = rows + cmd.ExecuteNonQuery()
+            '            Dim strSQLQry1 = "UPDATE " & devices.TableName & " SET " & devices.Description & "=@" & devices.Description &
+            '                "," & devices.Location & "=@" & devices.Location &
+            '                ", " & devices.CurrentUser & "=@" & devices.CurrentUser &
+            '                ", " & devices.Serial & "=@" & devices.Serial &
+            '                ", " & devices.AssetTag & "=@" & devices.AssetTag &
+            '                ", " & devices.PurchaseDate & "=@" & devices.PurchaseDate &
+            '                ", " & devices.ReplacementYear & "=@" & devices.ReplacementYear &
+            '                ", " & devices.OSVersion & "=@" & devices.OSVersion &
+            '                ", " & devices.PhoneNumber & "=@" & devices.PhoneNumber &
+            '                ", " & devices.EQType & "=@" & devices.EQType &
+            '                ", " & devices.Status & "=@" & devices.Status &
+            '                ", " & devices.Trackable & "=@" & devices.Trackable &
+            '                ", " & devices.PO & "=@" & devices.PO &
+            '                ", " & devices.LastMod_User & "=@" & devices.LastMod_User &
+            '                ", " & devices.LastMod_Date & "=@" & devices.LastMod_Date &
+            '                ", " & devices.Munis_Emp_Num & "=@" & devices.Munis_Emp_Num &
+            '                ", " & devices.CheckSum & "=@" & devices.CheckSum &
+            '                ", " & devices.Sibi_Link_UID & "=@" & devices.Sibi_Link_UID &
+            '                " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
+            '   Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
+            '                cmd.Parameters.AddWithValue("@" & devices.Description, NewData.strDescription)
+            '                cmd.Parameters.AddWithValue("@" & devices.Location, NewData.strLocation)
+            '                cmd.Parameters.AddWithValue("@" & devices.CurrentUser, NewData.strCurrentUser)
+            '                cmd.Parameters.AddWithValue("@" & devices.Munis_Emp_Num, NewData.strCurrentUserEmpNum)
+            '                cmd.Parameters.AddWithValue("@" & devices.Serial, NewData.strSerial)
+            '                cmd.Parameters.AddWithValue("@" & devices.AssetTag, NewData.strAssetTag)
+            '                cmd.Parameters.AddWithValue("@" & devices.PurchaseDate, NewData.dtPurchaseDate)
+            '                cmd.Parameters.AddWithValue("@" & devices.ReplacementYear, NewData.strReplaceYear)
+            '                cmd.Parameters.AddWithValue("@" & devices.OSVersion, NewData.strOSVersion)
+            '                cmd.Parameters.AddWithValue("@" & devices.PhoneNumber, NewData.strPhoneNumber)
+            '                cmd.Parameters.AddWithValue("@" & devices.EQType, NewData.strEqType)
+            '                cmd.Parameters.AddWithValue("@" & devices.Status, NewData.strStatus)
+            '                cmd.Parameters.AddWithValue("@" & devices.Trackable, Convert.ToInt32(NewData.bolTrackable))
+            '                cmd.Parameters.AddWithValue("@" & devices.PO, NewData.strPO)
+            '                cmd.Parameters.AddWithValue("@" & devices.LastMod_User, strLocalUser)
+            '                cmd.Parameters.AddWithValue("@" & devices.LastMod_Date, Now)
+            '                cmd.Parameters.AddWithValue("@" & devices.CheckSum, NewData.CheckSum)
+            '                cmd.Parameters.AddWithValue("@" & devices.Sibi_Link_UID, NewData.strSibiLink)
+            '                rows = rows + cmd.ExecuteNonQuery()
+            'Dim strSqlQry2 = "INSERT INTO " & historical_dev.TableName & " (" & historical_dev.ChangeType & ",
+            '    " & historical_dev.Notes & ",
+            '    " & historical_dev.Serial & ",
+            '    " & historical_dev.Description & ",
+            '    " & historical_dev.Location & ",
+            '    " & historical_dev.CurrentUser & ",
+            '    " & historical_dev.AssetTag & ",
+            '    " & historical_dev.PurchaseDate & ",
+            '    " & historical_dev.ReplacementYear & ",
+            '    " & historical_dev.OSVersion & ",
+            '    " & historical_dev.DeviceUID & ",
+            '    " & historical_dev.ActionUser & ",
+            '    " & historical_dev.EQType & ",
+            '    " & historical_dev.Status & ",
+            '    " & historical_dev.Trackable & ",
+            '    " & historical_dev.PO & ")
+            '    VALUES (@" & historical_dev.ChangeType & ",
+            '    @" & historical_dev.Notes & ",
+            '    @" & historical_dev.Serial & ",
+            '    @" & historical_dev.Description & ",
+            '    @" & historical_dev.Location & ",
+            '    @" & historical_dev.CurrentUser & ",
+            '    @" & historical_dev.AssetTag & ",
+            '    @" & historical_dev.PurchaseDate & ",
+            '    @" & historical_dev.ReplacementYear & ",
+            '    @" & historical_dev.OSVersion & ",
+            '    @" & historical_dev.DeviceUID & ",
+            '    @" & historical_dev.ActionUser & ",
+            '    @" & historical_dev.EQType & ",
+            '    @" & historical_dev.Status & ",
+            '    @" & historical_dev.Trackable & ",
+            '    @" & historical_dev.PO & ")"
+            Using SQLComms As New clsMySQL_Comms ', cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry2)
+
+
+                Dim SelectQry As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
+                Dim UpdateAdapter = SQLComms.Return_Adapter(SelectQry)
+                rows += UpdateAdapter.Update(ReturnUpdateTable(SelectQry))
+
+                Dim InsertQry As String = "SELECT * FROM " & historical_dev.TableName & " LIMIT 1"
+                Dim InsertAdapter = SQLComms.Return_Adapter(InsertQry)
+                rows += InsertAdapter.Update(ReturnInsertTable(InsertQry))
+
+                '   UpdA.Dispose()
+
+                ' cmd.CommandText = strSqlQry2
+                'cmd.Parameters.Clear()
+                'cmd.Parameters.AddWithValue("@" & historical_dev.ChangeType, UpdateInfo.strChangeType) 'GetDBValue(ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
+                'cmd.Parameters.AddWithValue("@" & historical_dev.Notes, NewData.strNote)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.Serial, NewData.strSerial)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.Description, NewData.strDescription)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.Location, NewData.strLocation)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.CurrentUser, NewData.strCurrentUser)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.AssetTag, NewData.strAssetTag)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.PurchaseDate, NewData.dtPurchaseDate)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.ReplacementYear, NewData.strReplaceYear)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.OSVersion, NewData.strOSVersion)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.DeviceUID, CurrentViewDevice.strGUID)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.ActionUser, strLocalUser)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.EQType, NewData.strEqType)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.Status, NewData.strStatus)
+                'cmd.Parameters.AddWithValue("@" & historical_dev.Trackable, Convert.ToInt32(NewData.bolTrackable))
+                'cmd.Parameters.AddWithValue("@" & historical_dev.PO, NewData.strPO)
+                'rows = rows + cmd.ExecuteNonQuery()
             End Using
             If rows = 2 Then
                 ViewDevice(CurrentViewDevice.strGUID)
@@ -1192,4 +1224,5 @@ VALUES (@" & historical_dev.ChangeType & ",
         GKUpdater_Form.AddUpdate(CurrentViewDevice)
         If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
     End Sub
+
 End Class

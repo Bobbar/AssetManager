@@ -3,7 +3,7 @@ Public Class clsAssetManager_Functions
 
     Public Function Get_EmptyTable(Table As String) As DataTable
         Using SQLComms As New clsMySQL_Comms
-            Return SQLComms.Return_SQLTable("SELECT * FROM " & Table & " LIMIT 0")
+            Return SQLComms.Return_SQLTable(Table) '"SELECT * FROM " & Table & " LIMIT 0")
         End Using
     End Function
     Public Function DeviceExists(Device As Device_Info) As Boolean
@@ -476,7 +476,7 @@ VALUES
     End Function
     Public Function CollectDeviceInfo(DeviceTable As DataTable) As Device_Info
         Try
-            Dim newDeviceInfo As Device_Info
+            Dim newDeviceInfo As New Device_Info
             With newDeviceInfo
                 .strGUID = NoNull(DeviceTable.Rows(0).Item(devices.DeviceUID))
                 .strDescription = NoNull(DeviceTable.Rows(0).Item(devices.Description))

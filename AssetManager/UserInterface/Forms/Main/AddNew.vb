@@ -2,7 +2,7 @@
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class AddNew
-    Private Device As Device_Info
+    Private Device As New Device_Info
     Private bolCheckFields As Boolean
     Private MyLiveBox As New clsLiveBox(Me)
     Public MunisUser As Emp_Info = Nothing

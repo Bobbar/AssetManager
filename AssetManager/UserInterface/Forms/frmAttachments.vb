@@ -20,7 +20,7 @@ Class frmAttachments
     Private bolAllowDrag As Boolean = False
     Private strDragFilePath As String
     Private AttachRequest As Request_Info
-    Private AttachDevice As Device_Info
+    Private AttachDevice As New Device_Info
     Private AttachType As Entry_Type
     Public AttachFolderID As String
     Private AttachTable As String
