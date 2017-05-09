@@ -6,14 +6,14 @@ Public Class clsAssetManager_Functions
             Return SQLComms.Return_SQLTable(Table) '"SELECT * FROM " & Table & " LIMIT 0")
         End Using
     End Function
-    Public Function DeviceExists(Device As Device_Info) As Boolean
+    Public Function DeviceExists(AssetTag As String, Serial As String) As Boolean
         Dim bolAsset As Boolean
         Dim bolSerial As Boolean
         Try
-            If Device.strAssetTag = "NA" Then 'Allow NA value because users do not always have an Asset Tag for new devices.
+            If AssetTag = "NA" Then 'Allow NA value because users do not always have an Asset Tag for new devices.
                 bolAsset = False
             Else
-                Dim CheckAsset As String = Get_SQLValue(devices.TableName, devices.AssetTag, Device.strAssetTag, devices.AssetTag)
+                Dim CheckAsset As String = Get_SQLValue(devices.TableName, devices.AssetTag, AssetTag, devices.AssetTag)
                 If CheckAsset <> "" Then
                     bolAsset = True
                 Else
@@ -21,7 +21,7 @@ Public Class clsAssetManager_Functions
                 End If
             End If
 
-            Dim CheckSerial As String = Get_SQLValue(devices.TableName, devices.Serial, Device.strSerial, devices.Serial)
+            Dim CheckSerial As String = Get_SQLValue(devices.TableName, devices.Serial, Serial, devices.Serial)
             If CheckSerial <> "" Then
                 bolSerial = True
             Else
@@ -37,130 +37,7 @@ Public Class clsAssetManager_Functions
             Return False
         End Try
     End Function
-    Public Function AddNewDevice(DeviceInfo As Device_Info, MunisEmp As Emp_Info) As Boolean
-        Try
-            Dim strUID As String = Guid.NewGuid.ToString
-            Dim rows As Integer
-            Dim strSqlQry1 = "INSERT INTO " & devices.TableName &
-" (" & devices.DeviceUID & ",
-" & devices.Description & ",
-" & devices.Location & ",
-" & devices.CurrentUser & ",
-" & devices.Serial & ",
-" & devices.AssetTag & ",
-" & devices.PurchaseDate & ",
-" & devices.PO & ",
-" & devices.ReplacementYear & ",
-" & devices.EQType & ",
-" & devices.OSVersion & ",
-" & devices.PhoneNumber & ",
-" & devices.Status & ",
-" & devices.LastMod_User & ",
-" & devices.LastMod_Date & ",
-" & devices.Trackable & ",
-" & devices.Munis_Emp_Num & ") 
-VALUES(@" & devices.DeviceUID & ",
-@" & devices.Description & ",
-@" & devices.Location & ",
-@" & devices.CurrentUser & ",
-@" & devices.Serial & ",
-@" & devices.AssetTag & ",
-@" & devices.PurchaseDate & ",
-@" & devices.PO & ",
-@" & devices.ReplacementYear & ",
-@" & devices.EQType & ",
-@" & devices.OSVersion & ",
-@" & devices.PhoneNumber & ",
-@" & devices.Status & ",
-@" & devices.LastMod_User & ",
-@" & devices.LastMod_Date & ",
-@" & devices.Trackable & ",
-@" & devices.Munis_Emp_Num & ")"
-            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
-                cmd.Parameters.AddWithValue("@" & devices.DeviceUID, strUID)
-                cmd.Parameters.AddWithValue("@" & devices.Description, DeviceInfo.strDescription)
-                cmd.Parameters.AddWithValue("@" & devices.Location, DeviceInfo.strLocation)
-                cmd.Parameters.AddWithValue("@" & devices.CurrentUser, DeviceInfo.strCurrentUser)
-                cmd.Parameters.AddWithValue("@" & devices.Munis_Emp_Num, MunisEmp.Number)
-                cmd.Parameters.AddWithValue("@" & devices.Serial, DeviceInfo.strSerial)
-                cmd.Parameters.AddWithValue("@" & devices.AssetTag, DeviceInfo.strAssetTag)
-                cmd.Parameters.AddWithValue("@" & devices.PurchaseDate, DeviceInfo.dtPurchaseDate)
-                cmd.Parameters.AddWithValue("@" & devices.PO, DeviceInfo.strPO)
-                cmd.Parameters.AddWithValue("@" & devices.ReplacementYear, DeviceInfo.strReplaceYear)
-                cmd.Parameters.AddWithValue("@" & devices.EQType, DeviceInfo.strEqType)
-                cmd.Parameters.AddWithValue("@" & devices.OSVersion, DeviceInfo.strOSVersion)
-                cmd.Parameters.AddWithValue("@" & devices.PhoneNumber, DeviceInfo.strPhoneNumber)
-                cmd.Parameters.AddWithValue("@" & devices.Status, DeviceInfo.strStatus)
-                cmd.Parameters.AddWithValue("@" & devices.LastMod_User, strLocalUser)
-                cmd.Parameters.AddWithValue("@" & devices.LastMod_Date, Now)
-                cmd.Parameters.AddWithValue("@" & devices.Trackable, Convert.ToInt32(DeviceInfo.bolTrackable))
-                rows = rows + cmd.ExecuteNonQuery()
-                Dim strSqlQry2 = "INSERT INTO " & historical_dev.TableName & "
-(" & historical_dev.ChangeType & ",
-" & historical_dev.Notes & ",
-" & historical_dev.Serial & ", 
-" & historical_dev.Description & ", 
-" & historical_dev.Location & ",
-" & historical_dev.CurrentUser & ", 
-" & historical_dev.AssetTag & ", 
-" & historical_dev.PurchaseDate & ", 
-" & historical_dev.ReplacementYear & ", 
-" & historical_dev.PO & ",
-" & historical_dev.OSVersion & ", 
-" & historical_dev.DeviceUID & ",
-" & historical_dev.ActionUser & ", 
-" & historical_dev.EQType & ", 
-" & historical_dev.Status & ",
-" & historical_dev.Trackable & ") 
-VALUES(@" & historical_dev.ChangeType & ",
-@" & historical_dev.Notes & ",
-@" & historical_dev.Serial & ",
-@" & historical_dev.Description & ",
-@" & historical_dev.Location & ",
-@" & historical_dev.CurrentUser & ",
-@" & historical_dev.AssetTag & ",
-@" & historical_dev.PurchaseDate & ", 
-@" & historical_dev.ReplacementYear & ",
-@" & historical_dev.PO & ",
-@" & historical_dev.OSVersion & ", 
-@" & historical_dev.DeviceUID & ",
-@" & historical_dev.ActionUser & ", 
-@" & historical_dev.EQType & ",
-@" & historical_dev.Status & ",
-@" & historical_dev.Trackable & ")"
-                cmd.Parameters.Clear()
-                cmd.Parameters.AddWithValue("@" & historical_dev.ChangeType, "NEWD")
-                cmd.Parameters.AddWithValue("@" & historical_dev.Notes, DeviceInfo.strNote)
-                cmd.Parameters.AddWithValue("@" & historical_dev.Serial, DeviceInfo.strSerial)
-                cmd.Parameters.AddWithValue("@" & historical_dev.Description, DeviceInfo.strDescription)
-                cmd.Parameters.AddWithValue("@" & historical_dev.Location, DeviceInfo.strLocation)
-                cmd.Parameters.AddWithValue("@" & historical_dev.CurrentUser, DeviceInfo.strCurrentUser)
-                cmd.Parameters.AddWithValue("@" & historical_dev.AssetTag, DeviceInfo.strAssetTag)
-                cmd.Parameters.AddWithValue("@" & historical_dev.PurchaseDate, DeviceInfo.dtPurchaseDate)
-                cmd.Parameters.AddWithValue("@" & historical_dev.ReplacementYear, DeviceInfo.strReplaceYear)
-                cmd.Parameters.AddWithValue("@" & historical_dev.PO, DeviceInfo.strPO)
-                cmd.Parameters.AddWithValue("@" & historical_dev.OSVersion, DeviceInfo.strOSVersion)
-                cmd.Parameters.AddWithValue("@" & historical_dev.DeviceUID, strUID)
-                cmd.Parameters.AddWithValue("@" & historical_dev.ActionUser, strLocalUser)
-                cmd.Parameters.AddWithValue("@" & historical_dev.EQType, DeviceInfo.strEqType)
-                cmd.Parameters.AddWithValue("@" & historical_dev.Status, DeviceInfo.strStatus)
-                cmd.Parameters.AddWithValue("@" & historical_dev.Trackable, Convert.ToInt32(DeviceInfo.bolTrackable))
-                cmd.CommandText = strSqlQry2
-                rows = rows + cmd.ExecuteNonQuery()
-            End Using
-            If rows = 2 Then
-                Return True
-            Else
-                Return False
-            End If
-        Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                Return False
-            Else
-                EndProgram()
-            End If
-        End Try
-    End Function
+
     Public Function Update_SQLValue(table As String, fieldIN As String, valueIN As String, idField As String, idValue As String) As Integer
         Try
             Dim sqlUpdateQry As String = "UPDATE " & table & " SET " & fieldIN & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"

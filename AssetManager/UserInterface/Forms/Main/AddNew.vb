@@ -6,6 +6,8 @@ Public Class AddNew
     Private bolCheckFields As Boolean
     Private MyLiveBox As New clsLiveBox(Me)
     Public MunisUser As Emp_Info = Nothing
+    Private DataParser As New DBControlParser
+    Private NewUID As String
     Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
         AddDevice()
     End Sub
@@ -16,14 +18,13 @@ Public Class AddNew
                 bolCheckFields = True
                 Exit Sub
             Else
-                Dim NewDevice As Device_Info = GetDBValues()
-                If Asset.DeviceExists(NewDevice) Then
+                If Asset.DeviceExists(Trim(txtAssetTag_REQ.Text), Trim(txtSerial_REQ.Text)) Then
                     Dim blah = Message("A device with that serial and/or asset tag already exists.", vbOKOnly + vbExclamation, "Duplicate Device", Me)
                     Exit Sub
                 Else
                     'proceed
                 End If
-                Dim Success As Boolean = Asset.AddNewDevice(NewDevice, MunisUser)
+                Dim Success As Boolean = AddNewDevice()
                 If Success Then
                     Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete", Me)
                     If Not chkNoClear.Checked Then ClearAll()
@@ -40,11 +41,62 @@ Public Class AddNew
             Dim blah = Message("Unable to add new device.", vbOKOnly + vbExclamation, "Error", Me)
         End Try
     End Sub
+    Private Function DeviceInsertTable(SelectQry As String) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(Me, SelectQry)
+        Dim DBRow = tmpTable.Rows(0)
+        'Add Add'l info
+        If MunisUser.Number IsNot Nothing Then
+            DBRow(devices.CurrentUser) = MunisUser.Name
+            DBRow(devices.Munis_Emp_Num) = MunisUser.Number
+        End If
+        DBRow(devices.LastMod_User) = strLocalUser
+        DBRow(devices.LastMod_Date) = Now
+        DBRow(devices.DeviceUID) = NewUID
+        DBRow(devices.CheckedOut) = False
+        Return tmpTable
+    End Function
+    Private Function HistoryInsertTable(SelectQry As String) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(Me, SelectQry)
+        Dim DBRow = tmpTable.Rows(0)
+        'Add Add'l info
+        DBRow(historical_dev.ChangeType) = "NEWD"
+        DBRow(historical_dev.Notes) = Trim(txtNotes.Text)
+        DBRow(historical_dev.ActionUser) = strLocalUser
+        DBRow(historical_dev.DeviceUID) = NewUID
+        Return tmpTable
+    End Function
+    Private Function AddNewDevice() As Boolean
+        Try
+            NewUID = Guid.NewGuid.ToString
+            Dim rows As Integer = 0
+            Dim DeviceInsertQry As String = "SELECT * FROM " & devices.TableName & " LIMIT 0"
+            Dim HistoryInsertQry As String = "SELECT * FROM " & historical_dev.TableName & " LIMIT 0"
+            Using SQLComms As New clsMySQL_Comms,
+                DeviceInsertAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(DeviceInsertQry),
+                 HistoryInsertAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(HistoryInsertQry)
+                rows += DeviceInsertAdapter.Update(DeviceInsertTable(DeviceInsertQry))
+                rows += HistoryInsertAdapter.Update(HistoryInsertTable(HistoryInsertQry))
+            End Using
+            If rows = 2 Then
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
+                Return False
+            Else
+                EndProgram()
+            End If
+        End Try
+    End Function
     Private Function CheckFields(Parent As Control, bolValidFields As Boolean) As Boolean
         For Each ctl As Control In Parent.Controls
+            Dim DBInfo As New DBControlInfo
+            If ctl.Tag IsNot Nothing Then DBInfo = DirectCast(ctl.Tag, DBControlInfo)
             Select Case True
                 Case TypeOf ctl Is TextBox
-                    If ctl.Tag = True Then
+                    If DBInfo.Required Then
                         If Trim(ctl.Text) = "" Then
                             bolValidFields = False
                             ctl.BackColor = colMissingField
@@ -63,7 +115,7 @@ Public Class AddNew
                     End If
                 Case TypeOf ctl Is ComboBox
                     Dim cmb As ComboBox = ctl
-                    If ctl.Tag = True Then
+                    If DBInfo.Required Then
                         If cmb.SelectedIndex = -1 Then
                             bolValidFields = False
                             cmb.BackColor = colMissingField
@@ -93,36 +145,30 @@ Public Class AddNew
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
         ClearAll()
     End Sub
-    Private Function GetDBValues() As Device_Info 'cleanup user input for db
-        Dim tmpDevice As New Device_Info
-        With tmpDevice
-            .strSerial = Trim(txtSerial_REQ.Text)
-            .strDescription = Trim(txtDescription_REQ.Text)
-            .strAssetTag = Trim(txtAssetTag_REQ.Text)
-            .dtPurchaseDate = dtPurchaseDate_REQ.Text
-            .strReplaceYear = Trim(txtReplaceYear.Text)
-            .strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_REQ.SelectedIndex)
-            If IsNothing(MunisUser.Number) Then
-                .strCurrentUser = Trim(txtCurUser_REQ.Text)
-            Else
-                .strCurrentUser = MunisUser.Name
-            End If
-            .strNote = Trim(txtNotes.Text)
-            .strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex)
-            .strPhoneNumber = PhoneNumberToDB(txtPhoneNumber.Text)
-            .strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_REQ.SelectedIndex)
-            .strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
-            .bolTrackable = chkTrackable.Checked
-            .strPO = Trim(txtPO.Text)
-        End With
-        Return tmpDevice
-    End Function
+
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
         ClearAll()
+        InitDBControls()
         MyLiveBox.AddControl(txtCurUser_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
         MyLiveBox.AddControl(txtDescription_REQ, LiveBoxType.SelectValue, devices.Description)
         Icon = MainForm.Icon
         Tag = MainForm
+    End Sub
+    Private Sub InitDBControls()
+        txtDescription_REQ.Tag = New DBControlInfo(devices_main.Description, True)
+        txtAssetTag_REQ.Tag = New DBControlInfo(devices_main.AssetTag, True)
+        txtSerial_REQ.Tag = New DBControlInfo(devices_main.Serial, True)
+        dtPurchaseDate_REQ.Tag = New DBControlInfo(devices_main.PurchaseDate, True)
+        txtReplaceYear.Tag = New DBControlInfo(devices_main.ReplacementYear, False)
+        cmbLocation_REQ.Tag = New DBControlInfo(devices_main.Location, DeviceIndex.Locations, True)
+        txtCurUser_REQ.Tag = New DBControlInfo(devices_main.CurrentUser, True)
+        ' txtNotes.Tag = New DBControlInfo(historical_dev.Notes, False)
+        cmbOSType_REQ.Tag = New DBControlInfo(devices_main.OSVersion, DeviceIndex.OSType, True)
+        txtPhoneNumber.Tag = New DBControlInfo(devices_main.PhoneNumber, False)
+        cmbEquipType_REQ.Tag = New DBControlInfo(devices_main.EQType, DeviceIndex.EquipType, True)
+        cmbStatus_REQ.Tag = New DBControlInfo(devices_main.Status, DeviceIndex.StatusType, True)
+        chkTrackable.Tag = New DBControlInfo(devices_main.Trackable, False)
+        txtPO.Tag = New DBControlInfo(devices_main.PO, False)
     End Sub
     Private Sub ClearAll()
         RefreshCombos()
@@ -217,7 +263,10 @@ Public Class AddNew
             txtCurUser_REQ.ReadOnly = True
         End If
     End Sub
-    Private Sub txtPhoneNumber_LostFocus(sender As Object, e As EventArgs) Handles txtPhoneNumber.LostFocus
-        txtPhoneNumber.Text = FormatPhoneNumber(txtPhoneNumber.Text)
+    Private Sub txtPhoneNumber_Leave(sender As Object, e As EventArgs) Handles txtPhoneNumber.Leave
+        If Trim(txtPhoneNumber.Text) <> "" And Not ValidPhoneNumber(txtPhoneNumber.Text) Then
+            Message("Invalid phone number.", vbOKOnly + vbExclamation, "Error", Me)
+            txtPhoneNumber.Focus()
+        End If
     End Sub
 End Class

@@ -55,10 +55,10 @@ Partial Class AddNew
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
-        Me.txtPhoneNumber = New System.Windows.Forms.TextBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.GroupBox6 = New System.Windows.Forms.GroupBox()
         Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.txtPhoneNumber = New System.Windows.Forms.MaskedTextBox()
         Me.GroupBox2.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox3.SuspendLayout()
@@ -93,7 +93,6 @@ Partial Class AddNew
         Me.txtSerial_REQ.Name = "txtSerial_REQ"
         Me.txtSerial_REQ.Size = New System.Drawing.Size(178, 25)
         Me.txtSerial_REQ.TabIndex = 0
-        Me.txtSerial_REQ.Tag = "True"
         Me.txtSerial_REQ.Text = "txtSerial"
         '
         'Label1
@@ -115,7 +114,6 @@ Partial Class AddNew
         Me.txtCurUser_REQ.Name = "txtCurUser_REQ"
         Me.txtCurUser_REQ.Size = New System.Drawing.Size(178, 25)
         Me.txtCurUser_REQ.TabIndex = 2
-        Me.txtCurUser_REQ.Tag = "True"
         Me.txtCurUser_REQ.Text = "txtCurUser"
         '
         'cmdUserSearch
@@ -170,7 +168,6 @@ Partial Class AddNew
         Me.txtAssetTag_REQ.Name = "txtAssetTag_REQ"
         Me.txtAssetTag_REQ.Size = New System.Drawing.Size(178, 25)
         Me.txtAssetTag_REQ.TabIndex = 1
-        Me.txtAssetTag_REQ.Tag = "True"
         Me.txtAssetTag_REQ.Text = "txtAssetTag"
         '
         'chkNoClear
@@ -225,7 +222,6 @@ Partial Class AddNew
         Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
         Me.cmbStatus_REQ.Size = New System.Drawing.Size(251, 26)
         Me.cmbStatus_REQ.TabIndex = 7
-        Me.cmbStatus_REQ.Tag = "True"
         '
         'Label10
         '
@@ -247,7 +243,6 @@ Partial Class AddNew
         Me.cmbOSType_REQ.Name = "cmbOSType_REQ"
         Me.cmbOSType_REQ.Size = New System.Drawing.Size(251, 26)
         Me.cmbOSType_REQ.TabIndex = 5
-        Me.cmbOSType_REQ.Tag = "True"
         '
         'Label9
         '
@@ -289,7 +284,6 @@ Partial Class AddNew
         Me.cmbEquipType_REQ.Name = "cmbEquipType_REQ"
         Me.cmbEquipType_REQ.Size = New System.Drawing.Size(251, 26)
         Me.cmbEquipType_REQ.TabIndex = 4
-        Me.cmbEquipType_REQ.Tag = "True"
         '
         'txtNotes
         '
@@ -353,7 +347,6 @@ Partial Class AddNew
         Me.dtPurchaseDate_REQ.Name = "dtPurchaseDate_REQ"
         Me.dtPurchaseDate_REQ.Size = New System.Drawing.Size(171, 25)
         Me.dtPurchaseDate_REQ.TabIndex = 8
-        Me.dtPurchaseDate_REQ.Tag = "True"
         Me.dtPurchaseDate_REQ.Value = New Date(2016, 4, 14, 0, 0, 0, 0)
         '
         'Label5
@@ -377,7 +370,6 @@ Partial Class AddNew
         Me.cmbLocation_REQ.Name = "cmbLocation_REQ"
         Me.cmbLocation_REQ.Size = New System.Drawing.Size(251, 26)
         Me.cmbLocation_REQ.TabIndex = 6
-        Me.cmbLocation_REQ.Tag = "True"
         Me.cmbLocation_REQ.Text = "cmbLocation"
         '
         'Label4
@@ -399,7 +391,6 @@ Partial Class AddNew
         Me.txtDescription_REQ.Name = "txtDescription_REQ"
         Me.txtDescription_REQ.Size = New System.Drawing.Size(251, 25)
         Me.txtDescription_REQ.TabIndex = 3
-        Me.txtDescription_REQ.Tag = "True"
         Me.txtDescription_REQ.Text = "Description"
         '
         'fieldErrorIcon
@@ -454,15 +445,6 @@ Partial Class AddNew
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "Misc"
         '
-        'txtPhoneNumber
-        '
-        Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPhoneNumber.Location = New System.Drawing.Point(14, 48)
-        Me.txtPhoneNumber.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
-        Me.txtPhoneNumber.Name = "txtPhoneNumber"
-        Me.txtPhoneNumber.Size = New System.Drawing.Size(170, 25)
-        Me.txtPhoneNumber.TabIndex = 11
-        '
         'Label13
         '
         Me.Label13.AutoSize = True
@@ -493,6 +475,16 @@ Partial Class AddNew
         Me.GroupBox7.Size = New System.Drawing.Size(547, 151)
         Me.GroupBox7.TabIndex = 57
         Me.GroupBox7.TabStop = False
+        '
+        'txtPhoneNumber
+        '
+        Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPhoneNumber.Location = New System.Drawing.Point(14, 50)
+        Me.txtPhoneNumber.Mask = "(999) 000-0000"
+        Me.txtPhoneNumber.Name = "txtPhoneNumber"
+        Me.txtPhoneNumber.Size = New System.Drawing.Size(169, 25)
+        Me.txtPhoneNumber.TabIndex = 58
+        Me.txtPhoneNumber.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
         'AddNew
         '
@@ -564,8 +556,8 @@ Partial Class AddNew
     Friend WithEvents GroupBox7 As GroupBox
     Friend WithEvents GroupBox6 As GroupBox
     Friend WithEvents GroupBox5 As GroupBox
-    Friend WithEvents txtPhoneNumber As TextBox
     Friend WithEvents Label13 As Label
     Friend WithEvents GroupBox4 As GroupBox
     Friend WithEvents GroupBox3 As GroupBox
+    Friend WithEvents txtPhoneNumber As MaskedTextBox
 End Class
