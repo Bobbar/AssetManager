@@ -115,8 +115,5 @@ Public Structure Attach_Info
     Public MD5 As String
     Public FileUID As String
 End Structure
-Public Class NewInfoClass
-    Inherits Device_Info
-    Public UpdateInfo As Update_Info
-End Class
+
 

@@ -10,7 +10,6 @@ Public Class frmView
     Public CurrentViewDevice As New Device_Info
     Public MunisUser As Emp_Info = Nothing
     Private OldData As New Device_Info
-    Public NewData As New NewInfoClass
     Private MyLiveBox As New clsLiveBox(Me)
     Private PrevWindowState As Integer
     Private MyWindowList As WindowList
@@ -46,32 +45,23 @@ Public Class frmView
         ViewDevice(DeviceGUID)
     End Sub
     Private Sub InitDBControls()
-        txtPONumber.Tag = New DBControlInfo(devices_main.PO, False)
+        'Required Fields
         txtAssetTag_View_REQ.Tag = New DBControlInfo(devices_main.AssetTag, True)
         txtSerial_View_REQ.Tag = New DBControlInfo(devices_main.Serial, True)
         txtCurUser_View_REQ.Tag = New DBControlInfo(devices_main.CurrentUser, True)
         txtDescription_View_REQ.Tag = New DBControlInfo(devices_main.Description, True)
-        txtReplacementYear_View.Tag = New DBControlInfo(devices_main.ReplacementYear, False)
-        txtPhoneNumber.Tag = New DBControlInfo(devices_main.PhoneNumber, False)
-
-        lblGUID.Tag = New DBControlInfo(devices_main.DeviceUID, False)
-
         dtPurchaseDate_View_REQ.Tag = New DBControlInfo(devices_main.PurchaseDate, True)
-
         cmbEquipType_View_REQ.Tag = New DBControlInfo(devices_main.EQType, DeviceIndex.EquipType, True)
         cmbLocation_View_REQ.Tag = New DBControlInfo(devices_main.Location, DeviceIndex.Locations, True)
         cmbOSVersion_REQ.Tag = New DBControlInfo(devices_main.OSVersion, DeviceIndex.OSType, True)
         cmbStatus_REQ.Tag = New DBControlInfo(devices_main.Status, DeviceIndex.StatusType, True)
 
+        'Non-required and Misc Fields
+        txtPONumber.Tag = New DBControlInfo(devices_main.PO, False)
+        txtReplacementYear_View.Tag = New DBControlInfo(devices_main.ReplacementYear, False)
+        txtPhoneNumber.Tag = New DBControlInfo(devices_main.PhoneNumber, False)
+        lblGUID.Tag = New DBControlInfo(devices_main.DeviceUID, False)
         chkTrackable.Tag = New DBControlInfo(devices_main.Trackable, False)
-
-
-        'txtPONumber.SetDBProps(devices.PO, False)
-        'txtAssetTag_View_REQ.SetDBProps(devices.AssetTag, True)
-        'txtSerial_View_REQ.SetDBProps(devices.Serial, True)
-        'txtCurUser_View_REQ.SetDBProps(devices.CurrentUser, True)
-        'txtDescription_View_REQ.SetDBProps(devices.Description, True)
-        'txtReplacementYear_View.SetDBProps(devices.ReplacementYear, False)
     End Sub
     Private Sub frmView_Load(sender As Object, e As EventArgs) Handles Me.Load
         MyWindowList = New WindowList(Me, ToolStrip1)
@@ -86,13 +76,12 @@ Public Class frmView
         End Using
     End Sub
     Private Function ReturnUpdateTable(SelectQry As String) As DataTable
-        Dim tmpTable As DataTable
+        Dim tmpTable As New DataTable
         Using SQLComm As New clsMySQL_Comms
-            tmpTable = SQLComm.Return_SQLTable(SelectQry) '"SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "' LIMIT 1")
+            tmpTable = SQLComm.Return_SQLTable(SelectQry)
         End Using
-
+        tmpTable.TableName = "DeviceUpdate"
         Dim DBRow = GetDBControlRow(tmpTable.Rows(0))
-
         'Add Add'l info
         If Not IsNothing(MunisUser.Number) Then
             DBRow(devices.CurrentUser) = MunisUser.Name
@@ -107,39 +96,27 @@ Public Class frmView
             End If
         End If
 
-        DBRow(devices.CheckSum) = GetHashOfDevice(NewData)
-        DBRow(devices.Sibi_Link_UID) = NewData.strSibiLink
+        DBRow(devices.Sibi_Link_UID) = CurrentViewDevice.strSibiLink
         DBRow(devices.LastMod_User) = strLocalUser
         DBRow(devices.LastMod_Date) = Now
-
+        DBRow(devices.CheckSum) = GetHashOfTable(tmpTable)
+        MunisUser = Nothing
         Return tmpTable
-
     End Function
-    Private Function ReturnInsertTable(SelectQry As String) As DataTable
+    Private Function ReturnInsertTable(SelectQry As String, UpdateInfo As Update_Info) As DataTable
         Dim tmpTable As DataTable
         Using SQLComm As New clsMySQL_Comms
-            tmpTable = SQLComm.Return_SQLTable(SelectQry) '"SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "' LIMIT 1")
+            tmpTable = SQLComm.Return_SQLTable(SelectQry)
         End Using
-        'Dim NewTable As New DataTable
-        ' NewTable = tmpTable.Clone
-        'NewTable.Rows.Clear()
         tmpTable.Rows.Add()
         Dim DBRow = GetDBControlRow(tmpTable.Rows(0))
-        '  tmpTable.Rows.Clear()
-        ' Dim DBNewRow = 
         'Add Add'l info
-        DBRow(historical_dev.ChangeType) = NewData.UpdateInfo.strChangeType
-        DBRow(historical_dev.Notes) = NewData.UpdateInfo.strNote
+        DBRow(historical_dev.ChangeType) = UpdateInfo.strChangeType
+        DBRow(historical_dev.Notes) = UpdateInfo.strNote
         DBRow(historical_dev.ActionUser) = strLocalUser
         DBRow(historical_dev.DeviceUID) = CurrentViewDevice.strGUID
-        '   tmpTable.Rows.Clear()
-        '  NewTable.Rows.Add(DBRow)
-
         Return tmpTable
-
     End Function
-
-
     Private Function GetDBControlRow(ByRef DBRow As DataRow) As DataRow
         Dim DBCtlList As New List(Of Control)
         GetDBControls(Me, DBCtlList)
@@ -165,48 +142,10 @@ Public Class frmView
                 Case TypeOf ctl Is CheckBox
                     Dim dbChk As CheckBox = ctl
                     DBRow(DBInfo.DataColumn) = dbChk.Checked
-
             End Select
-
         Next
-
         Return DBRow
-
     End Function
-    Private Sub GetNewValues(UpdateInfo As Update_Info)
-        ' Dim tbl = ReturnUpdateTable()
-
-        With NewData
-            '.strAssetTag = Trim(txtAssetTag_View_REQ.Text)
-            '.strDescription = Trim(txtDescription_View_REQ.Text)
-            '.strEqType = GetDBValue(DeviceIndex.EquipType, cmbEquipType_View_REQ.SelectedIndex)
-            '.strSerial = Trim(txtSerial_View_REQ.Text)
-            '.strLocation = GetDBValue(DeviceIndex.Locations, cmbLocation_View_REQ.SelectedIndex)
-            'If Not IsNothing(MunisUser.Number) Then
-            '    .strCurrentUser = MunisUser.Name
-            '    .strCurrentUserEmpNum = MunisUser.Number
-            'Else
-            '    If OldData.strCurrentUser <> Trim(txtCurUser_View_REQ.Text) Then
-            '        .strCurrentUser = Trim(txtCurUser_View_REQ.Text)
-            '        .strCurrentUserEmpNum = ""
-            '    Else
-            '        .strCurrentUser = OldData.strCurrentUser
-            '        .strCurrentUserEmpNum = OldData.strCurrentUserEmpNum
-            '    End If
-            'End If
-            '.dtPurchaseDate = dtPurchaseDate_View_REQ.Value.ToString(strDBDateFormat)
-            '.strReplaceYear = Trim(txtReplacementYear_View.Text)
-            '.strOSVersion = GetDBValue(DeviceIndex.OSType, cmbOSVersion_REQ.SelectedIndex)
-            '.strPhoneNumber = PhoneNumberToDB(txtPhoneNumber.Text)
-            '.strStatus = GetDBValue(DeviceIndex.StatusType, cmbStatus_REQ.SelectedIndex)
-            '.strNote = UpdateInfo.strNote
-            '   .bolTrackable = chkTrackable.Checked
-            '.strPO = Trim(txtPONumber.Text)
-            ' .CheckSum = GetHashOfDevice(NewData)
-            .UpdateInfo = UpdateInfo
-        End With
-        MunisUser = Nothing
-    End Sub
     Private Sub EnableControls()
         Dim c As Control
         For Each c In DeviceInfoBox.Controls
@@ -273,114 +212,16 @@ Public Class frmView
     End Sub
     Public Sub UpdateDevice(UpdateInfo As Update_Info)
         Try
-            Dim rows As Integer
-
-
-
-            'Dim strSQLQry1 = "UPDATE devices SET dev_description=@dev_description, dev_location=@dev_location, dev_cur_user=@dev_cur_user, dev_serial=@dev_serial, dev_asset_tag=@dev_asset_tag, dev_purchase_date=@dev_purchase_date, dev_replacement_year=@dev_replacement_year, dev_osversion=@dev_osversion, dev_eq_type=@dev_eq_type, dev_status=@dev_status, dev_trackable=@dev_trackable, dev_po=@dev_po, dev_lastmod_user=@dev_lastmod_user, dev_lastmod_date=@dev_lastmod_date, dev_cur_user_emp_num=@dev_cur_user_emp_num WHERE dev_UID='" & CurrentViewDevice.strGUID & "'"
-            '            Dim strSQLQry1 = "UPDATE " & devices.TableName & " SET " & devices.Description & "=@" & devices.Description &
-            '                "," & devices.Location & "=@" & devices.Location &
-            '                ", " & devices.CurrentUser & "=@" & devices.CurrentUser &
-            '                ", " & devices.Serial & "=@" & devices.Serial &
-            '                ", " & devices.AssetTag & "=@" & devices.AssetTag &
-            '                ", " & devices.PurchaseDate & "=@" & devices.PurchaseDate &
-            '                ", " & devices.ReplacementYear & "=@" & devices.ReplacementYear &
-            '                ", " & devices.OSVersion & "=@" & devices.OSVersion &
-            '                ", " & devices.PhoneNumber & "=@" & devices.PhoneNumber &
-            '                ", " & devices.EQType & "=@" & devices.EQType &
-            '                ", " & devices.Status & "=@" & devices.Status &
-            '                ", " & devices.Trackable & "=@" & devices.Trackable &
-            '                ", " & devices.PO & "=@" & devices.PO &
-            '                ", " & devices.LastMod_User & "=@" & devices.LastMod_User &
-            '                ", " & devices.LastMod_Date & "=@" & devices.LastMod_Date &
-            '                ", " & devices.Munis_Emp_Num & "=@" & devices.Munis_Emp_Num &
-            '                ", " & devices.CheckSum & "=@" & devices.CheckSum &
-            '                ", " & devices.Sibi_Link_UID & "=@" & devices.Sibi_Link_UID &
-            '                " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
-            '   Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
-            '                cmd.Parameters.AddWithValue("@" & devices.Description, NewData.strDescription)
-            '                cmd.Parameters.AddWithValue("@" & devices.Location, NewData.strLocation)
-            '                cmd.Parameters.AddWithValue("@" & devices.CurrentUser, NewData.strCurrentUser)
-            '                cmd.Parameters.AddWithValue("@" & devices.Munis_Emp_Num, NewData.strCurrentUserEmpNum)
-            '                cmd.Parameters.AddWithValue("@" & devices.Serial, NewData.strSerial)
-            '                cmd.Parameters.AddWithValue("@" & devices.AssetTag, NewData.strAssetTag)
-            '                cmd.Parameters.AddWithValue("@" & devices.PurchaseDate, NewData.dtPurchaseDate)
-            '                cmd.Parameters.AddWithValue("@" & devices.ReplacementYear, NewData.strReplaceYear)
-            '                cmd.Parameters.AddWithValue("@" & devices.OSVersion, NewData.strOSVersion)
-            '                cmd.Parameters.AddWithValue("@" & devices.PhoneNumber, NewData.strPhoneNumber)
-            '                cmd.Parameters.AddWithValue("@" & devices.EQType, NewData.strEqType)
-            '                cmd.Parameters.AddWithValue("@" & devices.Status, NewData.strStatus)
-            '                cmd.Parameters.AddWithValue("@" & devices.Trackable, Convert.ToInt32(NewData.bolTrackable))
-            '                cmd.Parameters.AddWithValue("@" & devices.PO, NewData.strPO)
-            '                cmd.Parameters.AddWithValue("@" & devices.LastMod_User, strLocalUser)
-            '                cmd.Parameters.AddWithValue("@" & devices.LastMod_Date, Now)
-            '                cmd.Parameters.AddWithValue("@" & devices.CheckSum, NewData.CheckSum)
-            '                cmd.Parameters.AddWithValue("@" & devices.Sibi_Link_UID, NewData.strSibiLink)
-            '                rows = rows + cmd.ExecuteNonQuery()
-            'Dim strSqlQry2 = "INSERT INTO " & historical_dev.TableName & " (" & historical_dev.ChangeType & ",
-            '    " & historical_dev.Notes & ",
-            '    " & historical_dev.Serial & ",
-            '    " & historical_dev.Description & ",
-            '    " & historical_dev.Location & ",
-            '    " & historical_dev.CurrentUser & ",
-            '    " & historical_dev.AssetTag & ",
-            '    " & historical_dev.PurchaseDate & ",
-            '    " & historical_dev.ReplacementYear & ",
-            '    " & historical_dev.OSVersion & ",
-            '    " & historical_dev.DeviceUID & ",
-            '    " & historical_dev.ActionUser & ",
-            '    " & historical_dev.EQType & ",
-            '    " & historical_dev.Status & ",
-            '    " & historical_dev.Trackable & ",
-            '    " & historical_dev.PO & ")
-            '    VALUES (@" & historical_dev.ChangeType & ",
-            '    @" & historical_dev.Notes & ",
-            '    @" & historical_dev.Serial & ",
-            '    @" & historical_dev.Description & ",
-            '    @" & historical_dev.Location & ",
-            '    @" & historical_dev.CurrentUser & ",
-            '    @" & historical_dev.AssetTag & ",
-            '    @" & historical_dev.PurchaseDate & ",
-            '    @" & historical_dev.ReplacementYear & ",
-            '    @" & historical_dev.OSVersion & ",
-            '    @" & historical_dev.DeviceUID & ",
-            '    @" & historical_dev.ActionUser & ",
-            '    @" & historical_dev.EQType & ",
-            '    @" & historical_dev.Status & ",
-            '    @" & historical_dev.Trackable & ",
-            '    @" & historical_dev.PO & ")"
-            Using SQLComms As New clsMySQL_Comms ', cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry2)
-
-
+            Dim rows As Integer = 0
+            Using SQLComms As New clsMySQL_Comms
                 Dim SelectQry As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
                 Dim UpdateAdapter = SQLComms.Return_Adapter(SelectQry)
                 rows += UpdateAdapter.Update(ReturnUpdateTable(SelectQry))
 
                 Dim InsertQry As String = "SELECT * FROM " & historical_dev.TableName & " LIMIT 0"
                 Dim InsertAdapter = SQLComms.Return_Adapter(InsertQry)
-                rows += InsertAdapter.Update(ReturnInsertTable(InsertQry))
+                rows += InsertAdapter.Update(ReturnInsertTable(InsertQry, UpdateInfo))
 
-                '   UpdA.Dispose()
-
-                ' cmd.CommandText = strSqlQry2
-                'cmd.Parameters.Clear()
-                'cmd.Parameters.AddWithValue("@" & historical_dev.ChangeType, UpdateInfo.strChangeType) 'GetDBValue(ChangeType, UpdateDev.cmbUpdate_ChangeType.SelectedIndex))
-                'cmd.Parameters.AddWithValue("@" & historical_dev.Notes, NewData.strNote)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.Serial, NewData.strSerial)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.Description, NewData.strDescription)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.Location, NewData.strLocation)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.CurrentUser, NewData.strCurrentUser)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.AssetTag, NewData.strAssetTag)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.PurchaseDate, NewData.dtPurchaseDate)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.ReplacementYear, NewData.strReplaceYear)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.OSVersion, NewData.strOSVersion)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.DeviceUID, CurrentViewDevice.strGUID)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.ActionUser, strLocalUser)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.EQType, NewData.strEqType)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.Status, NewData.strStatus)
-                'cmd.Parameters.AddWithValue("@" & historical_dev.Trackable, Convert.ToInt32(NewData.bolTrackable))
-                'cmd.Parameters.AddWithValue("@" & historical_dev.PO, NewData.strPO)
-                'rows = rows + cmd.ExecuteNonQuery()
             End Using
             If rows = 2 Then
                 ViewDevice(CurrentViewDevice.strGUID)
@@ -436,8 +277,9 @@ Public Class frmView
                     Return False
                 End If
                 CurrentViewDevice = Asset.CollectDeviceInfo(DeviceResults)
-                FillDeviceInfo()
+                ' FillDeviceInfo()
                 FillDBFields(DeviceResults)
+                SetMunisEmpStatus()
                 HistoricalResults = SQLComms.Return_SQLTable("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
                 SendToHistGrid(DataGridHistory, HistoricalResults)
                 HistoricalResults.Dispose()
@@ -466,6 +308,10 @@ Public Class frmView
                     Dim dbTxt As TextBox = ctl
                     dbTxt.Text = Row.Item(DBInfo.DataColumn).ToString
 
+                Case TypeOf ctl Is MaskedTextBox
+                    Dim dbMaskTxt As MaskedTextBox = ctl
+                    dbMaskTxt.Text = Row.Item(DBInfo.DataColumn).ToString
+
                 Case TypeOf ctl Is DateTimePicker
                     Dim dbDtPick As DateTimePicker = ctl
                     dbDtPick.Value = Row.Item(DBInfo.DataColumn)
@@ -487,34 +333,41 @@ Public Class frmView
         Next
 
     End Sub
-    Private Sub FillDeviceInfo()
-
-        'For Each ctl As Control In DBCtlList
-        '    Debug.Print(ctl.Name)
-        'Next
-
-        With CurrentViewDevice
-            ' txtAssetTag_View_REQ.Text = .strAssetTag
-            '  txtDescription_View_REQ.Text = .strDescription
-            '  cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.EquipType, .strEqType)
-            '  txtSerial_View_REQ.Text = .strSerial
-            '  cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.Locations, .strLocation)
-            ' txtCurUser_View_REQ.Text = .strCurrentUser
-            ToolTip1.SetToolTip(txtCurUser_View_REQ, "")
-            If .strCurrentUserEmpNum <> "" Then
-                txtCurUser_View_REQ.BackColor = colEditColor
-                ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee")
-            End If
-            '    dtPurchaseDate_View_REQ.Value = .dtPurchaseDate
-            ' txtReplacementYear_View.Text = .strReplaceYear
-            '   cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.OSType, .strOSVersion)
-            '  txtPhoneNumber.Text = FormatPhoneNumber(.strPhoneNumber)
-            '  cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, .strStatus)
-            '  lblGUID.Text = .strGUID
-            '  chkTrackable.Checked = CBool(.bolTrackable)
-            ' txtPONumber.Text = .strPO
-        End With
+    Private Sub SetMunisEmpStatus()
+        ToolTip1.SetToolTip(txtCurUser_View_REQ, "")
+        If CurrentViewDevice.strCurrentUserEmpNum <> "" Then
+            txtCurUser_View_REQ.BackColor = colEditColor
+            ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee")
+        End If
     End Sub
+    'Private Sub FillDeviceInfo()
+
+    '    'For Each ctl As Control In DBCtlList
+    '    '    Debug.Print(ctl.Name)
+    '    'Next
+
+    '    With CurrentViewDevice
+    '        ' txtAssetTag_View_REQ.Text = .strAssetTag
+    '        '  txtDescription_View_REQ.Text = .strDescription
+    '        '  cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.EquipType, .strEqType)
+    '        '  txtSerial_View_REQ.Text = .strSerial
+    '        '  cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.Locations, .strLocation)
+    '        ' txtCurUser_View_REQ.Text = .strCurrentUser
+    '        ToolTip1.SetToolTip(txtCurUser_View_REQ, "")
+    '        If .strCurrentUserEmpNum <> "" Then
+    '            txtCurUser_View_REQ.BackColor = colEditColor
+    '            ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee")
+    '        End If
+    '        '    dtPurchaseDate_View_REQ.Value = .dtPurchaseDate
+    '        ' txtReplacementYear_View.Text = .strReplaceYear
+    '        '   cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.OSType, .strOSVersion)
+    '        '  txtPhoneNumber.Text = FormatPhoneNumber(.strPhoneNumber)
+    '        '  cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, .strStatus)
+    '        '  lblGUID.Text = .strGUID
+    '        '  chkTrackable.Checked = CBool(.bolTrackable)
+    '        ' txtPONumber.Text = .strPO
+    '    End With
+    'End Sub
     Private Sub GetDBControls(Parent As Control, ByRef ControlList As List(Of Control))
         For Each ctl As Control In Parent.Controls
             Select Case True
@@ -716,9 +569,10 @@ Public Class frmView
         fieldErrorIcon.Clear()
         Dim c As Control
         For Each c In DeviceInfoBox.Controls
+            Dim DBInfo As DBControlInfo = DirectCast(c.Tag, DBControlInfo)
             Select Case True
                 Case TypeOf c Is TextBox
-                    If c.Name.Contains("REQ") Then
+                    If DBInfo.Required Then
                         If Trim(c.Text) = "" Then
                             bolMissingField = True
                             c.BackColor = colMissingField
@@ -728,16 +582,9 @@ Public Class frmView
                             ClearErrorIcon(c)
                         End If
                     End If
-                    If c Is txtPhoneNumber Then
-                        If Trim(txtPhoneNumber.Text) <> "" And Not ValidPhoneNumber(txtPhoneNumber.Text) Then
-                            bolMissingField = True
-                            AddErrorIcon(c)
-                            Message("Invalid phone number.", vbOKOnly + vbExclamation, "Error", Me)
-                        End If
-                    End If
                 Case TypeOf c Is ComboBox
                     Dim cmb As ComboBox = c
-                    If cmb.Name.Contains("REQ") Then
+                    If DBInfo.Required Then
                         If cmb.SelectedIndex = -1 Then
                             bolMissingField = True
                             cmb.BackColor = colMissingField
@@ -930,7 +777,7 @@ Public Class frmView
                 Exit Sub
             End If
             GetCurrentValues()
-            GetNewValues(UpdateDia.UpdateInfo)
+            ' GetNewValues(UpdateDia.UpdateInfo)
             UpdateDevice(UpdateDia.UpdateInfo)
         Else
             CancelModify()
@@ -999,7 +846,7 @@ Public Class frmView
                 CancelModify()
                 Exit Sub
             Else
-                GetNewValues(UpdateDia.UpdateInfo)
+                '   GetNewValues(UpdateDia.UpdateInfo)
                 UpdateDevice(UpdateDia.UpdateInfo)
             End If
         Else
@@ -1086,7 +933,7 @@ Public Class frmView
     Private Sub LinkSibi()
         Dim f As New frmSibiSelector(Me)
         If f.DialogResult = DialogResult.OK Then
-            NewData.strSibiLink = f.SibiUID
+            CurrentViewDevice.strSibiLink = f.SibiUID
             Message("Sibi Link Set.", vbOKOnly + vbInformation, "Success", Me)
         End If
     End Sub
@@ -1112,7 +959,7 @@ Public Class frmView
             End If
         End If
     End Sub
-    Private Sub Button1_Click_3(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
+    Private Sub cmdSetSibi_Click(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
         LinkSibi()
     End Sub
     Private Sub cmdBrowseFiles_Click(sender As Object, e As EventArgs) Handles cmdBrowseFiles.Click
@@ -1230,5 +1077,10 @@ Public Class frmView
         GKUpdater_Form.AddUpdate(CurrentViewDevice)
         If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
     End Sub
-
+    Private Sub txtPhoneNumber_Leave(sender As Object, e As EventArgs) Handles txtPhoneNumber.Leave
+        If Trim(txtPhoneNumber.Text) <> "" And Not ValidPhoneNumber(txtPhoneNumber.Text) Then
+            Message("Invalid phone number.", vbOKOnly + vbExclamation, "Error", Me)
+            txtPhoneNumber.Focus()
+        End If
+    End Sub
 End Class

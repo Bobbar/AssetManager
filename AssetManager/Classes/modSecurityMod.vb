@@ -20,15 +20,6 @@ Module modSecurityMod
         Dim hash As Byte() = SHA.ComputeHash(serializedData)
         Return Convert.ToBase64String(hash)
     End Function
-    Public Function GetHashOfDevice(Device As NewInfoClass) As String
-        Dim serializer = New DataContractSerializer(GetType(NewInfoClass))
-        Dim memoryStream = New MemoryStream()
-        serializer.WriteObject(memoryStream, Device)
-        Dim serializedData As Byte() = memoryStream.ToArray()
-        Dim SHA = New SHA1CryptoServiceProvider()
-        Dim hash As Byte() = SHA.ComputeHash(serializedData)
-        Return Convert.ToBase64String(hash)
-    End Function
     Public Function GetHashOfFile(Path As String) As String
         Dim hash As MD5
         hash = MD5.Create
