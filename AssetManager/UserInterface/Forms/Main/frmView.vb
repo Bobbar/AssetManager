@@ -21,6 +21,7 @@ Public Class frmView
     Private MyPingRunning As Boolean = False
     Private MyPingVis As PingVis
     Private intFailedPings As Integer = 0
+    Private DataParser As New DBControlParser
     Private Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
     Private Structure Ping_Results
         Public CanPing As Boolean
@@ -75,13 +76,9 @@ Public Class frmView
             OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
         End Using
     End Sub
-    Private Function ReturnUpdateTable(SelectQry As String) As DataTable
-        Dim tmpTable As New DataTable
-        Using SQLComm As New clsMySQL_Comms
-            tmpTable = SQLComm.Return_SQLTable(SelectQry)
-        End Using
-        tmpTable.TableName = "DeviceUpdate"
-        Dim DBRow = GetDBControlRow(tmpTable.Rows(0))
+    Private Function GetUpdateTable(SelectQry As String) As DataTable
+        Dim tmpTable = DataParser.ReturnUpdateTable(Me, SelectQry)
+        Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         If Not IsNothing(MunisUser.Number) Then
             DBRow(devices.CurrentUser) = MunisUser.Name
@@ -95,7 +92,6 @@ Public Class frmView
                 DBRow(devices.Munis_Emp_Num) = OldData.strCurrentUserEmpNum
             End If
         End If
-
         DBRow(devices.Sibi_Link_UID) = CurrentViewDevice.strSibiLink
         DBRow(devices.LastMod_User) = strLocalUser
         DBRow(devices.LastMod_Date) = Now
@@ -103,13 +99,9 @@ Public Class frmView
         MunisUser = Nothing
         Return tmpTable
     End Function
-    Private Function ReturnInsertTable(SelectQry As String, UpdateInfo As Update_Info) As DataTable
-        Dim tmpTable As DataTable
-        Using SQLComm As New clsMySQL_Comms
-            tmpTable = SQLComm.Return_SQLTable(SelectQry)
-        End Using
-        tmpTable.Rows.Add()
-        Dim DBRow = GetDBControlRow(tmpTable.Rows(0))
+    Private Function GetInsertTable(SelectQry As String, UpdateInfo As Update_Info) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(Me, SelectQry)
+        Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         DBRow(historical_dev.ChangeType) = UpdateInfo.strChangeType
         DBRow(historical_dev.Notes) = UpdateInfo.strNote
@@ -117,35 +109,7 @@ Public Class frmView
         DBRow(historical_dev.DeviceUID) = CurrentViewDevice.strGUID
         Return tmpTable
     End Function
-    Private Function GetDBControlRow(ByRef DBRow As DataRow) As DataRow
-        Dim DBCtlList As New List(Of Control)
-        GetDBControls(Me, DBCtlList)
-        For Each ctl As Control In DBCtlList
-            Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
-            Select Case True
-                Case TypeOf ctl Is TextBox
-                    Dim dbTxt As TextBox = ctl
-                    DBRow(DBInfo.DataColumn) = Trim(dbTxt.Text)
 
-                Case TypeOf ctl Is MaskedTextBox
-                    Dim dbMaskTxt As MaskedTextBox = ctl
-                    DBRow(DBInfo.DataColumn) = dbMaskTxt.Text
-
-                Case TypeOf ctl Is DateTimePicker
-                    Dim dbDtPick As DateTimePicker = ctl
-                    DBRow(DBInfo.DataColumn) = dbDtPick.Value
-
-                Case TypeOf ctl Is ComboBox
-                    Dim dbCmb As ComboBox = ctl
-                    DBRow(DBInfo.DataColumn) = GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex)
-
-                Case TypeOf ctl Is CheckBox
-                    Dim dbChk As CheckBox = ctl
-                    DBRow(DBInfo.DataColumn) = dbChk.Checked
-            End Select
-        Next
-        Return DBRow
-    End Function
     Private Sub EnableControls()
         Dim c As Control
         For Each c In DeviceInfoBox.Controls
@@ -216,11 +180,11 @@ Public Class frmView
             Using SQLComms As New clsMySQL_Comms
                 Dim SelectQry As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
                 Dim UpdateAdapter = SQLComms.Return_Adapter(SelectQry)
-                rows += UpdateAdapter.Update(ReturnUpdateTable(SelectQry))
+                rows += UpdateAdapter.Update(GetUpdateTable(SelectQry))
 
                 Dim InsertQry As String = "SELECT * FROM " & historical_dev.TableName & " LIMIT 0"
                 Dim InsertAdapter = SQLComms.Return_Adapter(InsertQry)
-                rows += InsertAdapter.Update(ReturnInsertTable(InsertQry, UpdateInfo))
+                rows += InsertAdapter.Update(GetInsertTable(InsertQry, UpdateInfo))
 
             End Using
             If rows = 2 Then
@@ -278,7 +242,7 @@ Public Class frmView
                 End If
                 CurrentViewDevice = Asset.CollectDeviceInfo(DeviceResults)
                 ' FillDeviceInfo()
-                FillDBFields(DeviceResults)
+                DataParser.FillDBFields(Me, DeviceResults)
                 SetMunisEmpStatus()
                 HistoricalResults = SQLComms.Return_SQLTable("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
                 SendToHistGrid(DataGridHistory, HistoricalResults)
@@ -296,43 +260,7 @@ Public Class frmView
             Return False
         End Try
     End Function
-    Private Sub FillDBFields(Data As DataTable)
-        Dim DBCtlList As New List(Of Control)
-        GetDBControls(Me, DBCtlList)
 
-        Dim Row As DataRow = Data.Rows(0)
-        For Each ctl As Control In DBCtlList
-            Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
-            Select Case True
-                Case TypeOf ctl Is TextBox
-                    Dim dbTxt As TextBox = ctl
-                    dbTxt.Text = Row.Item(DBInfo.DataColumn).ToString
-
-                Case TypeOf ctl Is MaskedTextBox
-                    Dim dbMaskTxt As MaskedTextBox = ctl
-                    dbMaskTxt.Text = Row.Item(DBInfo.DataColumn).ToString
-
-                Case TypeOf ctl Is DateTimePicker
-                    Dim dbDtPick As DateTimePicker = ctl
-                    dbDtPick.Value = Row.Item(DBInfo.DataColumn)
-                Case TypeOf ctl Is ComboBox
-                    Dim dbCmb As ComboBox = ctl
-                    dbCmb.SelectedIndex = GetComboIndexFromShort(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn))
-
-                Case TypeOf ctl Is Label
-                    Dim dbLbl As Label = ctl
-                    dbLbl.Text = Row.Item(DBInfo.DataColumn).ToString
-
-                Case TypeOf ctl Is CheckBox
-                    Dim dbChk As CheckBox = ctl
-                    dbChk.Checked = Row.Item(DBInfo.DataColumn)
-            End Select
-
-
-
-        Next
-
-    End Sub
     Private Sub SetMunisEmpStatus()
         ToolTip1.SetToolTip(txtCurUser_View_REQ, "")
         If CurrentViewDevice.strCurrentUserEmpNum <> "" Then
@@ -340,46 +268,7 @@ Public Class frmView
             ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee")
         End If
     End Sub
-    'Private Sub FillDeviceInfo()
 
-    '    'For Each ctl As Control In DBCtlList
-    '    '    Debug.Print(ctl.Name)
-    '    'Next
-
-    '    With CurrentViewDevice
-    '        ' txtAssetTag_View_REQ.Text = .strAssetTag
-    '        '  txtDescription_View_REQ.Text = .strDescription
-    '        '  cmbEquipType_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.EquipType, .strEqType)
-    '        '  txtSerial_View_REQ.Text = .strSerial
-    '        '  cmbLocation_View_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.Locations, .strLocation)
-    '        ' txtCurUser_View_REQ.Text = .strCurrentUser
-    '        ToolTip1.SetToolTip(txtCurUser_View_REQ, "")
-    '        If .strCurrentUserEmpNum <> "" Then
-    '            txtCurUser_View_REQ.BackColor = colEditColor
-    '            ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee")
-    '        End If
-    '        '    dtPurchaseDate_View_REQ.Value = .dtPurchaseDate
-    '        ' txtReplacementYear_View.Text = .strReplaceYear
-    '        '   cmbOSVersion_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.OSType, .strOSVersion)
-    '        '  txtPhoneNumber.Text = FormatPhoneNumber(.strPhoneNumber)
-    '        '  cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, .strStatus)
-    '        '  lblGUID.Text = .strGUID
-    '        '  chkTrackable.Checked = CBool(.bolTrackable)
-    '        ' txtPONumber.Text = .strPO
-    '    End With
-    'End Sub
-    Private Sub GetDBControls(Parent As Control, ByRef ControlList As List(Of Control))
-        For Each ctl As Control In Parent.Controls
-            Select Case True
-                Case TypeOf ctl.Tag Is DBControlInfo
-                    ControlList.Add(ctl)
-            End Select
-
-
-            If ctl.HasChildren Then GetDBControls(ctl, ControlList)
-
-        Next
-    End Sub
     Private Sub SendToHistGrid(Grid As DataGridView, tblResults As DataTable)
         Dim table As New DataTable
         Try

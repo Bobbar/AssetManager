@@ -9,7 +9,7 @@ Public Structure Combo_Data
     Public strShort As String
     Public strID As String
 End Structure
-Public Class Device_Info
+Public Structure Device_Info
     Public strAssetTag As String
     Public strDescription As String
     Public strEqType As String
@@ -31,7 +31,7 @@ Public Class Device_Info
     Public CheckSum As String
     Public Tracking As Track_Info
     Public Historical As Hist_Info
-End Class
+End Structure
 Public Structure Request_Info
     Public strUID As String
     Public strUser As String
