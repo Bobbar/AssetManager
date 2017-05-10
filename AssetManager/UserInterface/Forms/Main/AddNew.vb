@@ -41,8 +41,8 @@ Public Class AddNew
             Dim blah = Message("Unable to add new device.", vbOKOnly + vbExclamation, "Error", Me)
         End Try
     End Sub
-    Private Function DeviceInsertTable(SelectQry As String) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Me, SelectQry)
+    Private Function DeviceInsertTable(Adapter As MySqlDataAdapter) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(Me, Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         If MunisUser.Number IsNot Nothing Then
@@ -55,8 +55,8 @@ Public Class AddNew
         DBRow(devices.CheckedOut) = False
         Return tmpTable
     End Function
-    Private Function HistoryInsertTable(SelectQry As String) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Me, SelectQry)
+    Private Function HistoryInsertTable(Adapter As MySqlDataAdapter) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(Me, Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         DBRow(historical_dev.ChangeType) = "NEWD"
@@ -74,8 +74,8 @@ Public Class AddNew
             Using SQLComms As New clsMySQL_Comms,
                 DeviceInsertAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(DeviceInsertQry),
                  HistoryInsertAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(HistoryInsertQry)
-                rows += DeviceInsertAdapter.Update(DeviceInsertTable(DeviceInsertQry))
-                rows += HistoryInsertAdapter.Update(HistoryInsertTable(HistoryInsertQry))
+                rows += DeviceInsertAdapter.Update(DeviceInsertTable(DeviceInsertAdapter))
+                rows += HistoryInsertAdapter.Update(HistoryInsertTable(HistoryInsertAdapter))
             End Using
             If rows = 2 Then
                 Return True

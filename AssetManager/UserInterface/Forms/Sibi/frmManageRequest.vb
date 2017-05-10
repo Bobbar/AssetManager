@@ -380,51 +380,11 @@ Public Class frmManageRequest
         RequestData.strUID = Guid.NewGuid.ToString
         Try
             Dim rows As Integer
-            '            Dim strSqlQry1 = "INSERT INTO " & sibi_requests.TableName & "
-            '(" & sibi_requests.UID & ",
-            '" & sibi_requests.RequestUser & ",
-            '" & sibi_requests.Description & ",
-            '" & sibi_requests.NeedBy & ",
-            '" & sibi_requests.Status & ",
-            '" & sibi_requests.Type & ",
-            '" & sibi_requests.PO & ",
-            '" & sibi_requests.RequisitionNumber & ",
-            '" & sibi_requests.Replace_Asset & ",
-            '" & sibi_requests.Replace_Serial & ",
-            '" & sibi_requests.RT_Number & ")
-            'VALUES
-            '(@" & sibi_requests.UID & ",
-            '@" & sibi_requests.RequestUser & ",
-            '@" & sibi_requests.Description & ",
-            '@" & sibi_requests.NeedBy & ",
-            '@" & sibi_requests.Status & ",
-            '@" & sibi_requests.Type & ",
-            '@" & sibi_requests.PO & ",
-            '@" & sibi_requests.RequisitionNumber & ",
-            '@" & sibi_requests.Replace_Asset & ",
-            '@" & sibi_requests.Replace_Serial & ",
-            '@" & sibi_requests.RT_Number & ")"
-            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand()
-
-                Dim InsertRequestQry As String = "SELECT * FROM " & sibi_requests.TableName & " LIMIT 0"
-                Dim InsertAdapter = SQLComms.Return_Adapter(InsertRequestQry)
-                rows += InsertAdapter.Update(GetInsertTable(InsertRequestQry, RequestData.strUID))
-
-
-                '     Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSqlQry1)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.UID, RequestData.strUID)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.Status, RequestData.strStatus)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.Type, RequestData.strType)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.PO, RequestData.strPO)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.RequisitionNumber, RequestData.strRequisitionNumber)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Asset, RequestData.strReplaceAsset)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Serial, RequestData.strReplaceSerial)
-                'cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
-                'rows = rows + cmd.ExecuteNonQuery()
-                'cmd.Parameters.Clear()
+            Dim InsertRequestQry As String = "SELECT * FROM " & sibi_requests.TableName & " LIMIT 0"
+            Using SQLComms As New clsMySQL_Comms,
+                cmd As MySqlCommand = SQLComms.Return_SQLCommand(),
+                InsertAdapter = SQLComms.Return_Adapter(InsertRequestQry)
+                rows += InsertAdapter.Update(GetInsertTable(InsertAdapter, RequestData.strUID))
                 For Each row As DataRow In RequestData.RequstItems.Rows
                     InsertRequestItem(row, cmd, RequestData)
                     rows = rows + cmd.ExecuteNonQuery()
@@ -448,21 +408,17 @@ Public Class frmManageRequest
             End If
         End Try
     End Sub
-    Private Function GetUpdateTable(SelectQry As String) As DataTable
-        Dim tmpTable = DataParser.ReturnUpdateTable(Me, SelectQry)
+    Private Function GetUpdateTable(Adapter As MySqlDataAdapter) As DataTable
+        Dim tmpTable = DataParser.ReturnUpdateTable(Me, Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         Return tmpTable
     End Function
-    Private Function GetInsertTable(SelectQry As String, UID As String) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Me, SelectQry)
+    Private Function GetInsertTable(Adapter As MySqlDataAdapter, UID As String) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(Me, Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
-
         DBRow(sibi_requests.UID) = UID
-        'DBRow(historical_dev.Notes) = UpdateInfo.strNote
-        'DBRow(historical_dev.ActionUser) = strLocalUser
-        'DBRow(historical_dev.DeviceUID) = CurrentViewDevice.strGUID
         Return tmpTable
     End Function
     Private Sub UpdateRequest()
@@ -470,47 +426,12 @@ Public Class frmManageRequest
             Dim RequestData As Request_Info = CollectData()
             RequestData.strUID = CurrentRequest.strUID
             If RequestData.RequstItems Is Nothing Then Exit Sub
-            Dim rows As Integer
-
-
-            '            Dim strRequestQRY As String = "UPDATE " & sibi_requests.TableName & "
-            'SET
-            '" & sibi_requests.RequestUser & " = @" & sibi_requests.RequestUser & " ,
-            '" & sibi_requests.Description & " = @" & sibi_requests.Description & " ,
-            '" & sibi_requests.NeedBy & " = @" & sibi_requests.NeedBy & " ,
-            '" & sibi_requests.Status & " = @" & sibi_requests.Status & " ,
-            '" & sibi_requests.Type & " = @" & sibi_requests.Type & " ,
-            '" & sibi_requests.PO & " = @" & sibi_requests.PO & " ,
-            '" & sibi_requests.RequisitionNumber & " = @" & sibi_requests.RequisitionNumber & " ,
-            '" & sibi_requests.Replace_Asset & " = @" & sibi_requests.Replace_Asset & " ,
-            '" & sibi_requests.Replace_Serial & " = @" & sibi_requests.Replace_Serial & " ,
-            '" & sibi_requests.RT_Number & " = @" & sibi_requests.RT_Number & " 
-            'WHERE " & sibi_requests.UID & " ='" & RequestData.strUID & "'"
-            Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand() 'strRequestQRY)
-                '    cmd.Parameters.AddWithValue("@" & sibi_requests.RequestUser, RequestData.strUser)
-                '    cmd.Parameters.AddWithValue("@" & sibi_requests.Description, RequestData.strDescription)
-                '    cmd.Parameters.AddWithValue("@" & sibi_requests.NeedBy, RequestData.dtNeedBy)
-                '    cmd.Parameters.AddWithValue("@" & sibi_requests.Status, RequestData.strStatus)
-                '    cmd.Parameters.AddWithValue("@" & sibi_requests.Type, RequestData.strType)
-                '    cmd.Parameters.AddWithValue("@" & sibi_requests.PO, RequestData.strPO)
-                '    cmd.Parameters.AddWithValue("@" & sibi_requests.RequisitionNumber, RequestData.strRequisitionNumber)
-                '    cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Asset, RequestData.strReplaceAsset)
-                '    cmd.Parameters.AddWithValue("@" & sibi_requests.Replace_Serial, RequestData.strReplaceSerial)
-                '    cmd.Parameters.AddWithValue("@" & sibi_requests.RT_Number, RequestData.strRTNumber)
-                '    rows += cmd.ExecuteNonQuery()
-                ' cmd.Parameters.Clear()
-
-
-                Dim RequestUpdateQry As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & " = '" & CurrentRequest.strUID & "'"
-                Dim RequestUpdateAdapter = SQLComms.Return_Adapter(RequestUpdateQry)
-                rows += RequestUpdateAdapter.Update(GetUpdateTable(RequestUpdateQry))
-
-
-
-
-
-
-
+            Dim rows As Integer = 0
+            Dim RequestUpdateQry As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & " = '" & CurrentRequest.strUID & "'"
+            Using SQLComms As New clsMySQL_Comms,
+                cmd As MySqlCommand = SQLComms.Return_SQLCommand(),
+                RequestUpdateAdapter = SQLComms.Return_Adapter(RequestUpdateQry)
+                rows += RequestUpdateAdapter.Update(GetUpdateTable(RequestUpdateAdapter))
                 For Each row As DataRow In RequestData.RequstItems.Rows
                     If row.Item("Item UID").ToString <> "" Then
                         SetRequestItemParameters(row, cmd, RequestData, False)

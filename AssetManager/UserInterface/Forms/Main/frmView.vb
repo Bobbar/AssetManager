@@ -76,8 +76,8 @@ Public Class frmView
             OldData = Asset.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
         End Using
     End Sub
-    Private Function GetUpdateTable(SelectQry As String) As DataTable
-        Dim tmpTable = DataParser.ReturnUpdateTable(Me, SelectQry)
+    Private Function GetUpdateTable(Adapter As MySqlDataAdapter) As DataTable
+        Dim tmpTable = DataParser.ReturnUpdateTable(Me, Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         If Not IsNothing(MunisUser.Number) Then
@@ -99,8 +99,8 @@ Public Class frmView
         MunisUser = Nothing
         Return tmpTable
     End Function
-    Private Function GetInsertTable(SelectQry As String, UpdateInfo As Update_Info) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Me, SelectQry)
+    Private Function GetInsertTable(Adapter As MySqlDataAdapter, UpdateInfo As Update_Info) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(Me, Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         DBRow(historical_dev.ChangeType) = UpdateInfo.strChangeType
@@ -177,15 +177,13 @@ Public Class frmView
     Public Sub UpdateDevice(UpdateInfo As Update_Info)
         Try
             Dim rows As Integer = 0
-            Using SQLComms As New clsMySQL_Comms
-                Dim SelectQry As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
-                Dim UpdateAdapter = SQLComms.Return_Adapter(SelectQry)
-                rows += UpdateAdapter.Update(GetUpdateTable(SelectQry))
-
-                Dim InsertQry As String = "SELECT * FROM " & historical_dev.TableName & " LIMIT 0"
-                Dim InsertAdapter = SQLComms.Return_Adapter(InsertQry)
-                rows += InsertAdapter.Update(GetInsertTable(InsertQry, UpdateInfo))
-
+            Dim SelectQry As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
+            Dim InsertQry As String = "SELECT * FROM " & historical_dev.TableName & " LIMIT 0"
+            Using SQLComms As New clsMySQL_Comms,
+                    UpdateAdapter = SQLComms.Return_Adapter(SelectQry),
+                    InsertAdapter = SQLComms.Return_Adapter(InsertQry)
+                rows += UpdateAdapter.Update(GetUpdateTable(UpdateAdapter))
+                rows += InsertAdapter.Update(GetInsertTable(InsertAdapter, UpdateInfo))
             End Using
             If rows = 2 Then
                 ViewDevice(CurrentViewDevice.strGUID)
@@ -241,7 +239,6 @@ Public Class frmView
                     Return False
                 End If
                 CurrentViewDevice = Asset.CollectDeviceInfo(DeviceResults)
-                ' FillDeviceInfo()
                 DataParser.FillDBFields(Me, DeviceResults)
                 SetMunisEmpStatus()
                 HistoricalResults = SQLComms.Return_SQLTable("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
@@ -735,7 +732,6 @@ Public Class frmView
                 CancelModify()
                 Exit Sub
             Else
-                '   GetNewValues(UpdateDia.UpdateInfo)
                 UpdateDevice(UpdateDia.UpdateInfo)
             End If
         Else

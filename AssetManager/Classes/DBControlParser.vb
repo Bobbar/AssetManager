@@ -1,4 +1,15 @@
 ﻿Public Class DBControlParser
+    ''' <summary>
+    ''' Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="GetDBControlRow(Form, ByRef DataRow)"/>
+    ''' </summary>
+    ''' <remarks>
+    ''' The SQL SELECT statement should return a single row only. This is will be the table row that you wish to update.
+    ''' </remarks>
+    ''' <param name="ParentForm">This form and its containing controls will be traveresd recursively via <see cref="GetDBControls(Control, ByRef List(Of Control))"/> </param>
+    ''' <param name="SelectQry">A SQL Select query string that will return the table row that is to be updated.</param>
+    ''' <returns>
+    ''' Returns a DataTable modified by the controls identified by <see cref="GetDBControls(Control, ByRef List(Of Control))"/>
+    ''' </returns>
     Public Function ReturnUpdateTable(ParentForm As Form, SelectQry As String) As DataTable
         Dim tmpTable As New DataTable
         Using SQLComm As New clsMySQL_Comms
@@ -8,6 +19,17 @@
         Dim DBRow = GetDBControlRow(ParentForm, tmpTable.Rows(0))
         Return tmpTable
     End Function
+    ''' <summary>
+    ''' Collects an EMPTY DataTable via a SQL Select statement and adds a new row for SQL Insertion.
+    ''' </summary>
+    ''' <remarks>
+    ''' The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="GetDBControlRow(Form, ByRef DataRow)"/>
+    ''' </remarks>
+    ''' <param name="ParentForm">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
+    ''' <param name="SelectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
+    ''' <returns>
+    ''' Returns a DataTable with a new row added via <see cref="GetDBControlRow(Form, ByRef DataRow)"/>
+    ''' </returns>
     Public Function ReturnInsertTable(ParentForm As Form, SelectQry As String) As DataTable
         Dim tmpTable As DataTable
         Using SQLComm As New clsMySQL_Comms
@@ -17,6 +39,12 @@
         Dim DBRow = GetDBControlRow(ParentForm, tmpTable.Rows(0))
         Return tmpTable
     End Function
+    ''' <summary>
+    ''' Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControls(Control, ByRef List(Of Control))"/>
+    ''' </summary>
+    ''' <param name="ParentForm">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
+    ''' <param name="DBRow">DataRow to be modified.</param>
+    ''' <returns></returns>
     Private Function GetDBControlRow(ParentForm As Form, ByRef DBRow As DataRow) As DataRow
         Dim DBCtlList As New List(Of Control)
         GetDBControls(ParentForm, DBCtlList)
@@ -48,6 +76,11 @@
         Next
         Return DBRow
     End Function
+    ''' <summary>
+    ''' Recursively collects list of controls initiated with <see cref="DBControlInfo"/> tags within Parent control.
+    ''' </summary>
+    ''' <param name="Parent">Parent control. Usually a Form to being.</param>
+    ''' <param name="ControlList">Blank List of Control to be filled.</param>
     Private Sub GetDBControls(Parent As Control, ByRef ControlList As List(Of Control))
         For Each ctl As Control In Parent.Controls
             Select Case True
@@ -57,6 +90,11 @@
             If ctl.HasChildren Then GetDBControls(ctl, ControlList)
         Next
     End Sub
+    ''' <summary>
+    ''' Populates all Controls in the ParentForm that have been initiated via <see cref="DBControlInfo"/> with their corresponding column names.
+    ''' </summary>
+    ''' <param name="ParentForm">Form that contains controls initiated with <see cref="DBControlInfo"/></param>
+    ''' <param name="Data">DataTable that contains the rows and columns associated with the controls.</param>
     Public Sub FillDBFields(ParentForm As Form, Data As DataTable)
         Dim DBCtlList As New List(Of Control)
         GetDBControls(ParentForm, DBCtlList)
@@ -92,11 +130,19 @@
 
     End Sub
 End Class
+
+''' <summary>
+''' Instantiate and assign to <see cref="Control.Tag"/> property to enable DBParsing functions.
+''' </summary>
 Public Class DBControlInfo
     Private db_column As String
     Private db_required As Boolean
     Private db_attrib_index As Combo_Data()
     Private db_parse_type As ParseType
+    ''' <summary>
+    ''' Gets or sets <seealso cref="ParseType"/>
+    ''' </summary>
+    ''' <returns></returns>
     Public Property ParseType As ParseType
         Get
             Return db_parse_type
@@ -105,6 +151,10 @@ Public Class DBControlInfo
             db_parse_type = value
         End Set
     End Property
+    ''' <summary>
+    ''' Gets or sets the Database Column used to update and/or populate the assigned control.
+    ''' </summary>
+    ''' <returns></returns>
     Public Property DataColumn As String
         Get
             Return db_column
@@ -113,6 +163,10 @@ Public Class DBControlInfo
             db_column = value
         End Set
     End Property
+    ''' <summary>
+    ''' Is the Control a required field?
+    ''' </summary>
+    ''' <returns></returns>
     Public Property Required As Boolean
         Get
             Return db_required
@@ -121,6 +175,10 @@ Public Class DBControlInfo
             db_required = value
         End Set
     End Property
+    ''' <summary>
+    ''' Gets or sets the <see cref="Combo_Data"/> index for <see cref="ComboBox"/> controls.
+    ''' </summary>
+    ''' <returns></returns>
     Public Property AttribIndex As Combo_Data()
         Get
             Return db_attrib_index
