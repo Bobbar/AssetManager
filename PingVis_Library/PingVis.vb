@@ -71,6 +71,7 @@ Public Class PingVis : Implements IDisposable
     End Sub
     Private Sub InitPing()
         AddHandler MyPing.PingCompleted, AddressOf PingComplete
+        ServicePointManager.DnsRefreshTimeout = 0
         PingTimer.Interval = PingInterval
         PingTimer.Enabled = True
         AddHandler PingTimer.Tick, AddressOf PingTimer_Tick

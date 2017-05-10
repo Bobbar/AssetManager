@@ -14,10 +14,8 @@ Public Class frmView
     Private PrevWindowState As Integer
     Private MyWindowList As WindowList
     Private bolGridFilling As Boolean = False
-    Private MyPing As New Net.NetworkInformation.Ping
     Private MyPingHostname As String = Nothing
     Private DeviceHostname As String = Nothing
-    Private DeviceHostnameAlternate As String = Nothing
     Private MyPingRunning As Boolean = False
     Private MyPingVis As PingVis
     Private intFailedPings As Integer = 0
@@ -213,7 +211,6 @@ Public Class frmView
                 DataGridHistory.ClearSelection()
                 bolGridFilling = False
                 DeviceHostname = "D" & CurrentViewDevice.strSerial & "." & Domain
-                DeviceHostnameAlternate = "D" & CurrentViewDevice.strSerial & "."
                 MyPingHostname = DeviceHostname
                 CheckRDP()
                 tmr_RDPRefresher.Enabled = True
@@ -663,7 +660,6 @@ Public Class frmView
                 Exit Sub
             End If
             GetCurrentValues()
-            ' GetNewValues(UpdateDia.UpdateInfo)
             UpdateDevice(UpdateDia.UpdateInfo)
         Else
             CancelModify()
@@ -782,23 +778,11 @@ Public Class frmView
         End If
     End Sub
     Private Sub tmr_RDPRefresher_Tick(sender As Object, e As EventArgs) Handles tmr_RDPRefresher.Tick
-        If MyPingVis IsNot Nothing AndAlso MyPingVis.CurrentResult IsNot Nothing Then
-            If Not MyPingVis.CurrentResult.Status = IPStatus.Success Then
-                If MyPingHostname = DeviceHostname Then
-                    MyPingHostname = DeviceHostnameAlternate
-                ElseIf MyPingHostname = DeviceHostnameAlternate Then
-                    MyPingHostname = DeviceHostname
-                Else
-                    MyPingHostname = DeviceHostname
-                End If
-            End If
-            CheckRDP()
-        End If
+        CheckRDP()
     End Sub
     Private Sub CheckRDP()
         Try
             If CurrentViewDevice.strOSVersion.Contains("WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
-
                 If MyPingVis Is Nothing Then MyPingVis = New PingVis(cmdShowIP, MyPingHostname)
                 If MyPingVis.CurrentResult IsNot Nothing Then
                     If MyPingVis.CurrentResult.Status = NetworkInformation.IPStatus.Success Then
@@ -806,7 +790,6 @@ Public Class frmView
                     End If
                 End If
             End If
-
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
