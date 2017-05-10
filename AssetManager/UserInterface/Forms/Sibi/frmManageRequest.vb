@@ -44,7 +44,7 @@ Public Class frmManageRequest
         cmbStatus.Tag = New DBControlInfo(sibi_requests.Status, SibiIndex.StatusType, True)
         txtPO.Tag = New DBControlInfo(sibi_requests.PO, False)
         txtReqNumber.Tag = New DBControlInfo(sibi_requests.RequisitionNumber, False)
-        txtRequestNum.Tag = New DBControlInfo(sibi_requests.RequestNumber, False)
+        txtRequestNum.Tag = New DBControlInfo(sibi_requests.RequestNumber, ParseType.DisplayOnly, False)
         txtRTNumber.Tag = New DBControlInfo(sibi_requests.RT_Number, False)
         txtCreateDate.Tag = New DBControlInfo(sibi_requests.DateStamp, ParseType.DisplayOnly, False)
 
