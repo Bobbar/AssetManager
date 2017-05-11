@@ -213,6 +213,10 @@ Public Class AddNew
             If ctl.HasChildren Then ClearFields(ctl)
         Next
     End Sub
+    Private Sub SetReplacementYear(PurDate As Date)
+        Dim ReplaceYear As Integer = PurDate.Year + intReplacementSched
+        txtReplaceYear.Text = ReplaceYear.ToString
+    End Sub
     Private Sub txtSerial_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtSerial_REQ.TextChanged
         If bolCheckFields Then CheckFields(Me, False)
     End Sub
@@ -236,6 +240,7 @@ Public Class AddNew
     End Sub
     Private Sub dtPurchaseDate_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_REQ.ValueChanged
         If bolCheckFields Then CheckFields(Me, False)
+        SetReplacementYear(dtPurchaseDate_REQ.Value)
     End Sub
     Private Sub cmbOSType_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbOSType_REQ.SelectedIndexChanged
         If bolCheckFields Then CheckFields(Me, False)
