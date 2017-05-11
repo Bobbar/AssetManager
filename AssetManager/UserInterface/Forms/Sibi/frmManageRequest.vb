@@ -143,7 +143,7 @@ Public Class frmManageRequest
             Select Case True
                 Case TypeOf c Is TextBox
                     Dim txt As TextBox = c
-                    If txt.Name <> "txtRequestNum" Then
+                    If txt IsNot txtRequestNum And txt IsNot txtCreateDate Then
                         txt.ReadOnly = False
                     End If
                 Case TypeOf c Is ComboBox
@@ -578,6 +578,7 @@ VALUES
                 Me.Show()
                 Me.Activate()
                 SetPOStatus(CurrentRequest.strPO)
+                SetReqStatus(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year)
             End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
@@ -1033,12 +1034,28 @@ VALUES
         If PO <> "" And Int32.TryParse(PO, intPO) Then
             Dim GetStatusString As String = Await Munis.Get_PO_Status(intPO)
             If GetStatusString <> "" Then
-                lblPOStatus.Text = "PO Status: " & GetStatusString
+                lblPOStatus.Text = "Status: " & GetStatusString
             Else
-                lblPOStatus.Text = "PO Status: NA"
+                lblPOStatus.Text = "Status: NA"
             End If
         Else
-            lblPOStatus.Text = "PO Status: NA"
+            lblPOStatus.Text = "Status: NA"
         End If
     End Sub
+    Private Async Sub SetReqStatus(ReqNum As String, FY As Integer)
+        Dim intReq As Integer = 0
+        If FY > 0 Then
+            If ReqNum <> "" And Int32.TryParse(ReqNum, intReq) Then
+                Dim GetStatusString As String = Await Munis.Get_Req_Status(ReqNum, FY)
+                If GetStatusString <> "" Then
+                    lblReqStatus.Text = "Status: " & GetStatusString
+                Else
+                    lblReqStatus.Text = "Status: NA"
+                End If
+            Else
+                lblReqStatus.Text = "Status: NA"
+            End If
+        End If
+    End Sub
+
 End Class

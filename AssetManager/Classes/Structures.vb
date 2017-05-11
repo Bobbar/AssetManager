@@ -36,8 +36,8 @@ Public Structure Request_Info
     Public strUID As String
     Public strUser As String
     Public strDescription As String
-    Public dtDateStamp As Object
-    Public dtNeedBy As Object
+    Public dtDateStamp As Date
+    Public dtNeedBy As Date
     Public strStatus As String
     Public strType As String
     Public strPO As String

@@ -2,46 +2,51 @@
 Public Class clsMunis_Comms
     Private Const MSSQLConnectString As String = "server=svr-munis5.core.co.fairfield.oh.us; database=mu_live; trusted_connection=True;"
     Public Function Return_MSSQLTable(strSQLQry As String) As DataTable
-        Dim ds As New DataSet
-        Dim da As New SqlDataAdapter
-        Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)
         Try
-            da.SelectCommand = New SqlCommand(strSQLQry)
-            da.SelectCommand.Connection = conn
-            da.Fill(ds)
-            da.Dispose()
-            Return ds.Tables(0)
+            Using conn As SqlConnection = New SqlConnection(MSSQLConnectString),
+                    NewTable As New DataTable,
+                    da As New SqlDataAdapter
+                da.SelectCommand = New SqlCommand(strSQLQry)
+                da.SelectCommand.Connection = conn
+                da.Fill(NewTable)
+                Return NewTable
+            End Using
         Catch ex As Exception
-            da.Dispose()
-            ds.Dispose()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
     Public Function Return_MSSQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
         Dim sqlQRY As String = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
-        Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)
         Try
-            Dim cmd As New SqlCommand
-            cmd.Connection = conn
-            cmd.CommandText = sqlQRY
-            conn.Open()
-            Return Convert.ToString(cmd.ExecuteScalar)
+            Using cmd As New SqlCommand,
+                    conn As SqlConnection = New SqlConnection(MSSQLConnectString)
+                cmd.Connection = conn
+                cmd.CommandText = sqlQRY
+                conn.Open()
+                Return Convert.ToString(cmd.ExecuteScalar)
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
-    Public Async Function Return_MSSQLValueAsync(table As String, fieldIN As Object, valueIN As Object, fieldOUT As String) As Task(Of String)
+    Public Async Function Return_MSSQLValueAsync(table As String, fieldIN As Object, valueIN As Object, fieldOUT As String, Optional fieldIN2 As Object = Nothing, Optional ValueIN2 As Object = Nothing) As Task(Of String)
         Try
-            Dim sqlQRY As String = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
-            Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)
-            Dim cmd As New SqlCommand
-            cmd.Connection = conn
-            cmd.CommandText = sqlQRY
-            Await conn.OpenAsync()
-            Dim Value = Await cmd.ExecuteScalarAsync
-            If Value IsNot Nothing Then Return Value.ToString
+            Dim sqlQRY As String
+            If fieldIN2 IsNot Nothing And ValueIN2 IsNot Nothing Then
+                sqlQRY = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "' AND " & fieldIN2 & " = '" & ValueIN2 & "'"
+            Else
+                sqlQRY = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
+            End If
+            Using conn As SqlConnection = New SqlConnection(MSSQLConnectString),
+            cmd As New SqlCommand
+                cmd.Connection = conn
+                cmd.CommandText = sqlQRY
+                Await conn.OpenAsync()
+                Dim Value = Await cmd.ExecuteScalarAsync
+                If Value IsNot Nothing Then Return Value.ToString
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try

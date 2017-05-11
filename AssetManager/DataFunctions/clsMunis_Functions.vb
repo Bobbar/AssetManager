@@ -69,6 +69,17 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
         End If
         Return Nothing
     End Function
+    Public Async Function Get_Req_Status(ReqNum As Integer, FY As Integer) As Task(Of String)
+        Dim StatusString As String
+        Dim StatusCode As String = Await priv_Comms.Return_MSSQLValueAsync("rqheader", "rqhd_req_no", ReqNum, "rqhd_sta_cd", "rqhd_fsc_yr", FY)
+        If StatusCode <> "" Then
+            Dim ParseCode As Integer = -1
+            If Not Int32.TryParse(StatusCode, ParseCode) Then Return Nothing
+            StatusString = StatusCode.ToString & " - " & ReqStatusCodeToLong(ParseCode)
+            Return StatusString
+        End If
+        Return Nothing
+    End Function
     Private Function POStatusCodeToLong(Code As Integer) As String
         Select Case Code
             Case 0
@@ -91,6 +102,23 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
                 Return "Canceled"
             Case 11
                 Return "Closed"
+        End Select
+        Return Nothing
+    End Function
+    Private Function ReqStatusCodeToLong(Code As Integer) As String
+        Select Case Code
+            Case 0
+                Return "Converted"
+            Case 1
+                Return "Rejected"
+            Case 2
+                Return "Created"
+            Case 4
+                Return "Allocated"
+            Case 6
+                Return "Released"
+            Case Else
+                Return "NA"
         End Select
         Return Nothing
     End Function

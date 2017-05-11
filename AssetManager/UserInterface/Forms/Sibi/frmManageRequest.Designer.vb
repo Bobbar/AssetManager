@@ -70,7 +70,6 @@ Partial Class frmManageRequest
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.chkAllowDrag = New System.Windows.Forms.CheckBox()
-        Me.Label10 = New System.Windows.Forms.Label()
         Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
         Me.ToolStrip = New AssetManager.MyToolStrip()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
@@ -80,6 +79,8 @@ Partial Class frmManageRequest
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.lblReqStatus = New System.Windows.Forms.Label()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.PopupMenuItems.SuspendLayout()
         Me.PopupMenuNotes.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -95,6 +96,7 @@ Partial Class frmManageRequest
         Me.Panel1.SuspendLayout()
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'PopupMenuItems
@@ -134,8 +136,8 @@ Partial Class frmManageRequest
         'txtRTNumber
         '
         Me.txtRTNumber.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.txtRTNumber.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtRTNumber.Location = New System.Drawing.Point(20, 127)
+        Me.txtRTNumber.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtRTNumber.Location = New System.Drawing.Point(17, 144)
         Me.txtRTNumber.Name = "txtRTNumber"
         Me.txtRTNumber.Size = New System.Drawing.Size(137, 22)
         Me.txtRTNumber.TabIndex = 7
@@ -145,14 +147,14 @@ Partial Class frmManageRequest
         '
         Me.txtCreateDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtCreateDate.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtCreateDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCreateDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCreateDate.ForeColor = System.Drawing.Color.Silver
-        Me.txtCreateDate.Location = New System.Drawing.Point(451, 60)
+        Me.txtCreateDate.Location = New System.Drawing.Point(452, 61)
         Me.txtCreateDate.Name = "txtCreateDate"
         Me.txtCreateDate.ReadOnly = True
-        Me.txtCreateDate.Size = New System.Drawing.Size(134, 13)
+        Me.txtCreateDate.Size = New System.Drawing.Size(137, 14)
         Me.txtCreateDate.TabIndex = 23
-        Me.txtCreateDate.Text = "2016-07-29 15:42:16"
+        Me.txtCreateDate.Text = "[CREATE DATE]"
         Me.txtCreateDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.ToolTip.SetToolTip(Me.txtCreateDate, "Create Date")
         Me.txtCreateDate.WordWrap = False
@@ -201,7 +203,7 @@ Partial Class frmManageRequest
         Me.Panel4.Controls.Add(Me.GroupBox3)
         Me.Panel4.Location = New System.Drawing.Point(8, 40)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1040, 259)
+        Me.Panel4.Size = New System.Drawing.Size(1061, 272)
         Me.Panel4.TabIndex = 5
         '
         'GroupBox1
@@ -224,7 +226,7 @@ Partial Class frmManageRequest
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(5, 4)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(600, 250)
+        Me.GroupBox1.Size = New System.Drawing.Size(600, 264)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Request Info"
@@ -236,7 +238,7 @@ Partial Class frmManageRequest
         Me.Panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.Panel3.Controls.Add(Me.pnlEditButtons)
         Me.Panel3.Controls.Add(Me.pnlCreate)
-        Me.Panel3.Location = New System.Drawing.Point(265, 93)
+        Me.Panel3.Location = New System.Drawing.Point(229, 102)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(148, 148)
         Me.Panel3.TabIndex = 22
@@ -315,7 +317,8 @@ Partial Class frmManageRequest
         'cmbStatus
         '
         Me.cmbStatus.FormattingEnabled = True
-        Me.cmbStatus.Location = New System.Drawing.Point(15, 201)
+        Me.cmbStatus.Location = New System.Drawing.Point(18, 227)
+        Me.cmbStatus.Margin = New System.Windows.Forms.Padding(2)
         Me.cmbStatus.Name = "cmbStatus"
         Me.cmbStatus.Size = New System.Drawing.Size(137, 23)
         Me.cmbStatus.TabIndex = 3
@@ -323,7 +326,8 @@ Partial Class frmManageRequest
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(12, 185)
+        Me.Label7.Location = New System.Drawing.Point(15, 208)
+        Me.Label7.Margin = New System.Windows.Forms.Padding(2, 3, 2, 2)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(44, 15)
         Me.Label7.TabIndex = 13
@@ -331,7 +335,9 @@ Partial Class frmManageRequest
         '
         'GroupBox2
         '
-        Me.GroupBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Controls.Add(Me.lblReqStatus)
         Me.GroupBox2.Controls.Add(Me.lblPOStatus)
         Me.GroupBox2.Controls.Add(Me.Label9)
         Me.GroupBox2.Controls.Add(Me.txtRTNumber)
@@ -339,28 +345,28 @@ Partial Class frmManageRequest
         Me.GroupBox2.Controls.Add(Me.txtReqNumber)
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Controls.Add(Me.txtPO)
-        Me.GroupBox2.Location = New System.Drawing.Point(419, 87)
+        Me.GroupBox2.Location = New System.Drawing.Point(419, 82)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(175, 157)
+        Me.GroupBox2.Size = New System.Drawing.Size(175, 175)
         Me.GroupBox2.TabIndex = 11
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Add'l Info"
+        Me.GroupBox2.Text = "Add'l Info (Click to View)"
         '
         'lblPOStatus
         '
         Me.lblPOStatus.AutoSize = True
         Me.lblPOStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPOStatus.ForeColor = System.Drawing.Color.DimGray
-        Me.lblPOStatus.Location = New System.Drawing.Point(19, 54)
+        Me.lblPOStatus.Location = New System.Drawing.Point(16, 59)
         Me.lblPOStatus.Name = "lblPOStatus"
-        Me.lblPOStatus.Size = New System.Drawing.Size(79, 12)
+        Me.lblPOStatus.Size = New System.Drawing.Size(61, 12)
         Me.lblPOStatus.TabIndex = 10
-        Me.lblPOStatus.Text = "PO Status: NA"
+        Me.lblPOStatus.Text = "Status: NA"
         '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(17, 111)
+        Me.Label9.Location = New System.Drawing.Point(14, 128)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(36, 15)
         Me.Label9.TabIndex = 9
@@ -369,7 +375,7 @@ Partial Class frmManageRequest
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(17, 71)
+        Me.Label6.Location = New System.Drawing.Point(14, 74)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(82, 15)
         Me.Label6.TabIndex = 7
@@ -378,8 +384,8 @@ Partial Class frmManageRequest
         'txtReqNumber
         '
         Me.txtReqNumber.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.txtReqNumber.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtReqNumber.Location = New System.Drawing.Point(20, 87)
+        Me.txtReqNumber.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtReqNumber.Location = New System.Drawing.Point(17, 90)
         Me.txtReqNumber.Name = "txtReqNumber"
         Me.txtReqNumber.Size = New System.Drawing.Size(137, 22)
         Me.txtReqNumber.TabIndex = 6
@@ -387,17 +393,18 @@ Partial Class frmManageRequest
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(17, 16)
+        Me.Label5.Location = New System.Drawing.Point(14, 21)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(75, 15)
+        Me.Label5.Size = New System.Drawing.Size(37, 15)
         Me.Label5.TabIndex = 5
-        Me.Label5.Text = "PO Number:"
+        Me.Label5.Text = "PO #:"
         '
         'txtPO
         '
         Me.txtPO.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.txtPO.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPO.Location = New System.Drawing.Point(20, 32)
+        Me.txtPO.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPO.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtPO.Location = New System.Drawing.Point(17, 37)
         Me.txtPO.Name = "txtPO"
         Me.txtPO.Size = New System.Drawing.Size(137, 22)
         Me.txtPO.TabIndex = 5
@@ -405,7 +412,8 @@ Partial Class frmManageRequest
         'cmbType
         '
         Me.cmbType.FormattingEnabled = True
-        Me.cmbType.Location = New System.Drawing.Point(15, 122)
+        Me.cmbType.Location = New System.Drawing.Point(18, 135)
+        Me.cmbType.Margin = New System.Windows.Forms.Padding(2)
         Me.cmbType.Name = "cmbType"
         Me.cmbType.Size = New System.Drawing.Size(137, 23)
         Me.cmbType.TabIndex = 2
@@ -413,7 +421,8 @@ Partial Class frmManageRequest
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(12, 106)
+        Me.Label4.Location = New System.Drawing.Point(15, 116)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(2, 3, 2, 2)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(36, 15)
         Me.Label4.TabIndex = 8
@@ -421,7 +430,8 @@ Partial Class frmManageRequest
         '
         'dtNeedBy
         '
-        Me.dtNeedBy.Location = New System.Drawing.Point(15, 162)
+        Me.dtNeedBy.Location = New System.Drawing.Point(18, 182)
+        Me.dtNeedBy.Margin = New System.Windows.Forms.Padding(2)
         Me.dtNeedBy.Name = "dtNeedBy"
         Me.dtNeedBy.Size = New System.Drawing.Size(180, 21)
         Me.dtNeedBy.TabIndex = 3
@@ -429,7 +439,8 @@ Partial Class frmManageRequest
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(12, 146)
+        Me.Label3.Location = New System.Drawing.Point(15, 163)
+        Me.Label3.Margin = New System.Windows.Forms.Padding(2, 3, 2, 2)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(56, 15)
         Me.Label3.TabIndex = 5
@@ -438,7 +449,8 @@ Partial Class frmManageRequest
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 67)
+        Me.Label2.Location = New System.Drawing.Point(15, 71)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(2, 3, 2, 2)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(85, 15)
         Me.Label2.TabIndex = 3
@@ -446,7 +458,8 @@ Partial Class frmManageRequest
         '
         'txtUser
         '
-        Me.txtUser.Location = New System.Drawing.Point(15, 83)
+        Me.txtUser.Location = New System.Drawing.Point(18, 90)
+        Me.txtUser.Margin = New System.Windows.Forms.Padding(2)
         Me.txtUser.Name = "txtUser"
         Me.txtUser.Size = New System.Drawing.Size(137, 21)
         Me.txtUser.TabIndex = 1
@@ -454,7 +467,8 @@ Partial Class frmManageRequest
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 28)
+        Me.Label1.Location = New System.Drawing.Point(15, 27)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(121, 15)
         Me.Label1.TabIndex = 1
@@ -462,7 +476,8 @@ Partial Class frmManageRequest
         '
         'txtDescription
         '
-        Me.txtDescription.Location = New System.Drawing.Point(15, 44)
+        Me.txtDescription.Location = New System.Drawing.Point(18, 45)
+        Me.txtDescription.Margin = New System.Windows.Forms.Padding(2)
         Me.txtDescription.Name = "txtDescription"
         Me.txtDescription.Size = New System.Drawing.Size(382, 21)
         Me.txtDescription.TabIndex = 0
@@ -475,7 +490,7 @@ Partial Class frmManageRequest
         Me.GroupBox3.Controls.Add(Me.Panel2)
         Me.GroupBox3.Location = New System.Drawing.Point(611, 4)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(426, 250)
+        Me.GroupBox3.Size = New System.Drawing.Size(447, 264)
         Me.GroupBox3.TabIndex = 4
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Notes"
@@ -488,7 +503,7 @@ Partial Class frmManageRequest
         Me.Panel2.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel2.Location = New System.Drawing.Point(6, 13)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(415, 231)
+        Me.Panel2.Size = New System.Drawing.Size(436, 244)
         Me.Panel2.TabIndex = 0
         '
         'dgvNotes
@@ -530,7 +545,7 @@ Partial Class frmManageRequest
         Me.dgvNotes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.dgvNotes.ShowCellErrors = False
         Me.dgvNotes.ShowCellToolTips = False
-        Me.dgvNotes.Size = New System.Drawing.Size(409, 225)
+        Me.dgvNotes.Size = New System.Drawing.Size(430, 238)
         Me.dgvNotes.TabIndex = 19
         '
         'Panel1
@@ -538,36 +553,24 @@ Partial Class frmManageRequest
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Controls.Add(Me.chkAllowDrag)
-        Me.Panel1.Controls.Add(Me.Label10)
-        Me.Panel1.Controls.Add(Me.RequestItemsGrid)
+        Me.Panel1.Controls.Add(Me.GroupBox4)
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel1.Location = New System.Drawing.Point(8, 310)
+        Me.Panel1.Location = New System.Drawing.Point(8, 314)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1039, 363)
+        Me.Panel1.Size = New System.Drawing.Size(1061, 371)
         Me.Panel1.TabIndex = 1
         '
         'chkAllowDrag
         '
         Me.chkAllowDrag.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkAllowDrag.AutoSize = True
-        Me.chkAllowDrag.Location = New System.Drawing.Point(940, 4)
+        Me.chkAllowDrag.Location = New System.Drawing.Point(956, 13)
         Me.chkAllowDrag.Name = "chkAllowDrag"
         Me.chkAllowDrag.Size = New System.Drawing.Size(96, 19)
         Me.chkAllowDrag.TabIndex = 20
         Me.chkAllowDrag.TabStop = False
         Me.chkAllowDrag.Text = "Allow Drag"
         Me.chkAllowDrag.UseVisualStyleBackColor = True
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(3, 0)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(49, 15)
-        Me.Label10.TabIndex = 19
-        Me.Label10.Text = "Items:"
         '
         'RequestItemsGrid
         '
@@ -590,7 +593,7 @@ Partial Class frmManageRequest
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.RequestItemsGrid.DefaultCellStyle = DataGridViewCellStyle1
         Me.RequestItemsGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
-        Me.RequestItemsGrid.Location = New System.Drawing.Point(3, 29)
+        Me.RequestItemsGrid.Location = New System.Drawing.Point(6, 32)
         Me.RequestItemsGrid.Name = "RequestItemsGrid"
         Me.RequestItemsGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
@@ -604,7 +607,7 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.RequestItemsGrid.ShowCellToolTips = False
-        Me.RequestItemsGrid.Size = New System.Drawing.Size(1033, 331)
+        Me.RequestItemsGrid.Size = New System.Drawing.Size(1046, 327)
         Me.RequestItemsGrid.TabIndex = 18
         '
         'ToolStrip
@@ -616,7 +619,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ToolStrip.Size = New System.Drawing.Size(1058, 37)
+        Me.ToolStrip.Size = New System.Drawing.Size(1079, 37)
         Me.ToolStrip.TabIndex = 6
         Me.ToolStrip.Text = "ToolStrip1"
         '
@@ -675,11 +678,36 @@ Partial Class frmManageRequest
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 37)
         '
+        'lblReqStatus
+        '
+        Me.lblReqStatus.AutoSize = True
+        Me.lblReqStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblReqStatus.ForeColor = System.Drawing.Color.DimGray
+        Me.lblReqStatus.Location = New System.Drawing.Point(16, 112)
+        Me.lblReqStatus.Name = "lblReqStatus"
+        Me.lblReqStatus.Size = New System.Drawing.Size(61, 12)
+        Me.lblReqStatus.TabIndex = 11
+        Me.lblReqStatus.Text = "Status: NA"
+        '
+        'GroupBox4
+        '
+        Me.GroupBox4.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox4.Controls.Add(Me.RequestItemsGrid)
+        Me.GroupBox4.Controls.Add(Me.chkAllowDrag)
+        Me.GroupBox4.Location = New System.Drawing.Point(0, 3)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(1058, 365)
+        Me.GroupBox4.TabIndex = 21
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Items"
+        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1058, 685)
+        Me.ClientSize = New System.Drawing.Size(1079, 697)
         Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel4)
@@ -703,10 +731,11 @@ Partial Class frmManageRequest
         Me.Panel2.ResumeLayout(False)
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ToolStrip.ResumeLayout(False)
         Me.ToolStrip.PerformLayout()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -727,7 +756,6 @@ Partial Class frmManageRequest
     Friend WithEvents cmdAddNote As ToolStripButton
     Friend WithEvents cmdAttachments As ToolStripButton
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents Label10 As Label
     Friend WithEvents RequestItemsGrid As DataGridView
     Friend WithEvents Panel4 As Panel
     Friend WithEvents GroupBox1 As GroupBox
@@ -766,4 +794,6 @@ Partial Class frmManageRequest
     Friend WithEvents lblPOStatus As Label
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents lblReqStatus As Label
+    Friend WithEvents GroupBox4 As GroupBox
 End Class
