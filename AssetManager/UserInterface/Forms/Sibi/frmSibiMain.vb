@@ -229,10 +229,12 @@ Public Class frmSibiMain
         Return Color.FromArgb(d, d, d)
     End Function
     Private Sub HighlightCurrentRow(Row As Integer)
-        On Error Resume Next
-        If Not bolGridFilling Then
-            HighlightRow(ResultGrid, GridTheme, Row)
-        End If
+        Try
+            If Not bolGridFilling Then
+                HighlightRow(ResultGrid, GridTheme, Row)
+            End If
+        Catch
+        End Try
     End Sub
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)

@@ -330,31 +330,6 @@ Public Class MainForm
     Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
         Clipboard.SetDataObject(Me.ResultGrid.GetClipboardContent())
     End Sub
-    Private Sub HighlightCurrentRow(Row As Integer)
-        On Error Resume Next
-        If Not bolGridFilling Then
-            Dim BackColor As Color = DefGridBC
-            Dim SelectColor As Color = DefGridSelCol
-            Dim c1 As Color = colHighlightColor 'highlight color
-            If Row > -1 Then
-                For Each cell As DataGridViewCell In ResultGrid.Rows(Row).Cells
-                    Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
-                    Dim BlendColor As Color
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                    cell.Style.SelectionBackColor = BlendColor
-                    c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
-                    cell.Style.BackColor = BlendColor
-                Next
-            End If
-        End If
-    End Sub
     Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatcher.Tick
         If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
         If Not ConnectionWatchDog.IsBusy Then ConnectionWatchDog.RunWorkerAsync()
@@ -396,10 +371,11 @@ Public Class MainForm
         LeaveRow(ResultGrid, GridTheme, e.RowIndex)
     End Sub
     Private Sub ResultGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ResultGrid.CellMouseDown
-        On Error Resume Next
-        If e.Button = MouseButtons.Right And Not ResultGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
-            ResultGrid.Rows(e.RowIndex).Selected = True
-            ResultGrid.CurrentCell = ResultGrid(e.ColumnIndex, e.RowIndex)
+        If e.ColumnIndex > 0 And e.RowIndex > 0 Then
+            If e.Button = MouseButtons.Right And Not ResultGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
+                ResultGrid.Rows(e.RowIndex).Selected = True
+                ResultGrid.CurrentCell = ResultGrid(e.ColumnIndex, e.RowIndex)
+            End If
         End If
     End Sub
     Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter

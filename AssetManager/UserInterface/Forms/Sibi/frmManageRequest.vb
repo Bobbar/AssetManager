@@ -188,30 +188,35 @@ Public Class frmManageRequest
         RequestItemsGrid.RowHeadersWidth = 57
     End Sub
     Private Sub SetupGrid()
-        RequestItemsGrid.DataSource = Nothing
-        RequestItemsGrid.Rows.Clear()
-        RequestItemsGrid.Columns.Clear()
-        Dim intQty As New DataGridViewColumn
-        intQty.Name = "Qty"
-        intQty.HeaderText = "Qty"
-        intQty.ValueType = GetType(Integer)
-        intQty.CellTemplate = New DataGridViewTextBoxCell
-        With RequestItemsGrid.Columns
-            .Add("User", "User")
-            .Add("Description", "Description")
-            .Add(intQty) '"Qty", "Qty")
-            .Add(DataGridCombo(DeviceIndex.Locations, "Location", Attrib_Type.Location)) '.Add("Location")
-            .Add(DataGridCombo(SibiIndex.ItemStatusType, "Status", Attrib_Type.SibiItemStatusType))
-            .Add("Replace Asset", "Replace Asset")
-            .Add("Replace Serial", "Replace Serial")
-            .Add("New Asset", "New Asset")
-            .Add("New Serial", "New Serial")
-            .Add("Org Code", "Org Code")
-            .Add("Object Code", "Object Code")
-            .Add("Item UID", "Item UID")
-        End With
-        SetColumnWidths()
-        RequestItemsGrid.Columns.Item("Item UID").ReadOnly = True
+        Try
+            RequestItemsGrid.DataSource = Nothing
+            RequestItemsGrid.Rows.Clear()
+            RequestItemsGrid.Columns.Clear()
+            Dim intQty As New DataGridViewColumn
+            intQty.Name = "Qty"
+            intQty.HeaderText = "Qty"
+            intQty.ValueType = GetType(Integer)
+            intQty.CellTemplate = New DataGridViewTextBoxCell
+            intQty.SortMode = DataGridViewColumnSortMode.Automatic
+            With RequestItemsGrid.Columns
+                .Add("User", "User")
+                .Add("Description", "Description")
+                .Add(intQty) '"Qty", "Qty")
+                .Add(DataGridCombo(DeviceIndex.Locations, "Location", Attrib_Type.Location)) '.Add("Location")
+                .Add(DataGridCombo(SibiIndex.ItemStatusType, "Status", Attrib_Type.SibiItemStatusType))
+                .Add("Replace Asset", "Replace Asset")
+                .Add("Replace Serial", "Replace Serial")
+                .Add("New Asset", "New Asset")
+                .Add("New Serial", "New Serial")
+                .Add("Org Code", "Org Code")
+                .Add("Object Code", "Object Code")
+                .Add("Item UID", "Item UID")
+            End With
+            SetColumnWidths()
+            RequestItemsGrid.Columns.Item("Item UID").ReadOnly = True
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Sub FillCombos()
         FillComboBox(SibiIndex.StatusType, cmbStatus)
@@ -320,6 +325,7 @@ Public Class frmManageRequest
         tmpCombo.HeaderText = HeaderText
         tmpCombo.Name = Name
         tmpCombo.Width = 200
+        tmpCombo.SortMode = DataGridViewColumnSortMode.Automatic
         Dim myList As New List(Of String)
         For Each ComboItem As Combo_Data In IndexType
             myList.Add(ComboItem.strLong)
@@ -409,17 +415,25 @@ Public Class frmManageRequest
         End Try
     End Sub
     Private Function GetUpdateTable(Adapter As MySqlDataAdapter) As DataTable
-        Dim tmpTable = DataParser.ReturnUpdateTable(Me, Adapter.SelectCommand.CommandText)
-        Dim DBRow = tmpTable.Rows(0)
-        'Add Add'l info
-        Return tmpTable
+        Try
+            Dim tmpTable = DataParser.ReturnUpdateTable(Me, Adapter.SelectCommand.CommandText)
+            Dim DBRow = tmpTable.Rows(0)
+            'Add Add'l info
+            Return tmpTable
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Function
     Private Function GetInsertTable(Adapter As MySqlDataAdapter, UID As String) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Me, Adapter.SelectCommand.CommandText)
-        Dim DBRow = tmpTable.Rows(0)
-        'Add Add'l info
-        DBRow(sibi_requests.UID) = UID
-        Return tmpTable
+        Try
+            Dim tmpTable = DataParser.ReturnInsertTable(Me, Adapter.SelectCommand.CommandText)
+            Dim DBRow = tmpTable.Rows(0)
+            'Add Add'l info
+            DBRow(sibi_requests.UID) = UID
+            Return tmpTable
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Function
     Private Sub UpdateRequest()
         Try
@@ -548,9 +562,8 @@ VALUES
                 cmd.Parameters.AddWithValue("@" & sibi_notes.Note, Note)
                 If cmd.ExecuteNonQuery() > 0 Then
                     Return True
-                Else
-                    Return False
                 End If
+                Return False
             End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
@@ -591,21 +604,25 @@ VALUES
         End Try
     End Sub
     Private Sub LoadNotes(RequestUID As String)
-        Dim strPullNotesQry As String = "SELECT * FROM " & sibi_notes.TableName & " WHERE " & sibi_notes.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_notes.DateStamp & " DESC"
-        Using SQLComms As New clsMySQL_Comms, table As New DataTable, Results As DataTable = SQLComms.Return_SQLTable(strPullNotesQry)
-            Dim intPreviewChars As Integer = 50
-            table.Columns.Add("Date Stamp")
-            table.Columns.Add("Preview")
-            table.Columns.Add("UID")
-            For Each r As DataRow In Results.Rows
-                Dim NoteText As String = RTFToPlainText(r.Item(sibi_notes.Note))
-                table.Rows.Add(r.Item(sibi_notes.DateStamp),
-                               IIf(Len(NoteText) > intPreviewChars, NotePreview(NoteText), NoteText),
-                               r.Item(sibi_notes.Note_UID))
-            Next
-            dgvNotes.DataSource = table
-            dgvNotes.ClearSelection()
-        End Using
+        Try
+            Dim strPullNotesQry As String = "SELECT * FROM " & sibi_notes.TableName & " WHERE " & sibi_notes.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_notes.DateStamp & " DESC"
+            Using SQLComms As New clsMySQL_Comms, table As New DataTable, Results As DataTable = SQLComms.Return_SQLTable(strPullNotesQry)
+                Dim intPreviewChars As Integer = 50
+                table.Columns.Add("Date Stamp")
+                table.Columns.Add("Preview")
+                table.Columns.Add("UID")
+                For Each r As DataRow In Results.Rows
+                    Dim NoteText As String = RTFToPlainText(r.Item(sibi_notes.Note))
+                    table.Rows.Add(r.Item(sibi_notes.DateStamp),
+                                   IIf(Len(NoteText) > intPreviewChars, NotePreview(NoteText), NoteText),
+                                   r.Item(sibi_notes.Note_UID))
+                Next
+                dgvNotes.DataSource = table
+                dgvNotes.ClearSelection()
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Function RTFToPlainText(strRTF As String) As String
         Try
@@ -763,18 +780,21 @@ VALUES
             Dim GUID As String = RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RowIndex).Value
             If GUID <> "" Then
                 Return False
-            Else
-                Return True
             End If
+            Return True
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
     Private Sub txtRTNumber_Click(sender As Object, e As EventArgs) Handles txtRTNumber.Click
-        Dim RTNum As String = Trim(txtRTNumber.Text)
-        If Not bolUpdating And RTNum <> "" Then
-            Process.Start("http://rt.co.fairfield.oh.us/rt/Ticket/Display.html?id=" & RTNum)
-        End If
+        Try
+            Dim RTNum As String = Trim(txtRTNumber.Text)
+            If Not bolUpdating And RTNum <> "" Then
+                Process.Start("http://rt.co.fairfield.oh.us/rt/Ticket/Display.html?id=" & RTNum)
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
         Dim ReqNum As String = Trim(txtReqNumber.Text)
@@ -783,48 +803,60 @@ VALUES
         End If
     End Sub
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
-        If Not CheckForAccess(AccessGroup.Sibi_Delete) Then Exit Sub
-        If IsNothing(CurrentRequest.RequstItems) Then Exit Sub
-        Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING", Me)
-        If blah = vbYes Then
-            Waiting()
-            If Asset.DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
-                Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
-                CurrentRequest = Nothing
-                If TypeOf Me.Tag Is frmSibiMain Then
-                    Dim ParentForm As frmSibiMain = Me.Tag
-                    ParentForm.RefreshResults()
+        Try
+            If Not CheckForAccess(AccessGroup.Sibi_Delete) Then Exit Sub
+            If IsNothing(CurrentRequest.RequstItems) Then Exit Sub
+            Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING", Me)
+            If blah = vbYes Then
+                Waiting()
+                If Asset.DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
+                    Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
+                    CurrentRequest = Nothing
+                    If TypeOf Me.Tag Is frmSibiMain Then
+                        Dim ParentForm As frmSibiMain = Me.Tag
+                        ParentForm.RefreshResults()
+                    End If
+                    DoneWaiting()
+                    Me.Dispose()
+                Else
+                    Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)
+                    Dim blah2 = Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
+                    CurrentRequest = Nothing
+                    Me.Dispose()
                 End If
-                DoneWaiting()
-                Me.Dispose()
             Else
-                Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)
-                Dim blah2 = Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
-                CurrentRequest = Nothing
-                Me.Dispose()
+                Exit Sub
             End If
-        Else
-            Exit Sub
-        End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Sub cmdAddNote_Click(sender As Object, e As EventArgs) Handles cmdAddNote.Click
         AddNote()
     End Sub
     Private Sub AddNote()
-        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        If CurrentRequest.strUID <> "" Then
-            Dim NewNote As New frmNotes(Me, CurrentRequest)
-            If NewNote.DialogResult = DialogResult.OK Then
-                AddNewNote(NewNote.Request.strUID, Trim(NewNote.rtbNotes.Rtf))
-                RefreshRequest()
+        Try
+            If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+            If CurrentRequest.strUID <> "" Then
+                Dim NewNote As New frmNotes(Me, CurrentRequest)
+                If NewNote.DialogResult = DialogResult.OK Then
+                    AddNewNote(NewNote.Request.strUID, Trim(NewNote.rtbNotes.Rtf))
+                    RefreshRequest()
+                End If
             End If
-        End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Sub RefreshRequest()
         OpenRequest(CurrentRequest.strUID)
     End Sub
     Private Sub dgvNotes_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvNotes.CellDoubleClick
-        Dim ViewNote As New frmNotes(Me, dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString)
+        Try
+            Dim ViewNote As New frmNotes(Me, dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString)
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
@@ -838,42 +870,52 @@ VALUES
         End If
     End Sub
     Private Sub RequestItemsGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles RequestItemsGrid.CellMouseDown
-        If e.ColumnIndex > 0 And e.RowIndex > 0 Then
-            If e.Button = MouseButtons.Right And Not RequestItemsGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
-                RequestItemsGrid.Rows(e.RowIndex).Selected = True
-                RequestItemsGrid.CurrentCell = RequestItemsGrid(e.ColumnIndex, e.RowIndex)
+        Try
+            If e.ColumnIndex > 0 And e.RowIndex > 0 Then
+                If e.Button = MouseButtons.Right And Not RequestItemsGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
+                    RequestItemsGrid.Rows(e.RowIndex).Selected = True
+                    RequestItemsGrid.CurrentCell = RequestItemsGrid(e.ColumnIndex, e.RowIndex)
+                End If
+                If ValidColumn() Then
+                    tsmLookupDevice.Visible = True
+                    tsmSeparator.Visible = True
+                Else
+                    tsmLookupDevice.Visible = False
+                    tsmSeparator.Visible = False
+                End If
             End If
-            If ValidColumn() Then
-                tsmLookupDevice.Visible = True
-                tsmSeparator.Visible = True
-            Else
-                tsmLookupDevice.Visible = False
-                tsmSeparator.Visible = False
-            End If
-        End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Function ValidColumn() As Boolean
-        If RequestItemsGrid.CurrentCell.Value IsNot Nothing AndAlso RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
-            Select Case True
-                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
-                    Return True
-                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
-                    Return True
-                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Asset")
-                    Return True
-                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Serial")
-                    Return True
-                Case Else
-                    Return False
-            End Select
-        End If
-        Return False
+        Try
+            If RequestItemsGrid.CurrentCell.Value IsNot Nothing AndAlso RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
+                Select Case True
+                    Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
+                        Return True
+                    Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
+                        Return True
+                    Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Asset")
+                        Return True
+                    Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Serial")
+                        Return True
+                    Case Else
+                        Return False
+                End Select
+            End If
+            Return False
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Function
     Private Sub HighlightCurrentRow(Row As Integer)
-        On Error Resume Next
-        If Not bolGridFilling Then
-            HighlightRow(RequestItemsGrid, GridTheme, Row)
-        End If
+        Try
+            If Not bolGridFilling Then
+                HighlightRow(RequestItemsGrid, GridTheme, Row)
+            End If
+        Catch
+        End Try
     End Sub
     Private Sub RequestItemsGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellEnter
         HighlightCurrentRow(e.RowIndex)
@@ -881,19 +923,22 @@ VALUES
     Private Sub RequestItemsGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.CellLeave
         LeaveRow(RequestItemsGrid, GridTheme, e.RowIndex)
     End Sub
-
     Private Sub tsmLookupDevice_Click(sender As Object, e As EventArgs) Handles tsmLookupDevice.Click
-        Dim ColIndex As Integer = RequestItemsGrid.CurrentCell.ColumnIndex
-        Select Case True
-            Case ColIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
-                LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
-            Case ColIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
-                LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
-            Case ColIndex = GetColIndex(RequestItemsGrid, "New Asset")
-                LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
-            Case ColIndex = GetColIndex(RequestItemsGrid, "New Serial")
-                LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
-        End Select
+        Try
+            Dim ColIndex As Integer = RequestItemsGrid.CurrentCell.ColumnIndex
+            Select Case True
+                Case ColIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
+                    LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
+                Case ColIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
+                    LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
+                Case ColIndex = GetColIndex(RequestItemsGrid, "New Asset")
+                    LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
+                Case ColIndex = GetColIndex(RequestItemsGrid, "New Serial")
+                    LookupDevice(Me, Asset.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
+            End Select
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
         If Not ValidateFields() Then Exit Sub

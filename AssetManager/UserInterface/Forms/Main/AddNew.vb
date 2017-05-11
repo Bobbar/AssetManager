@@ -31,7 +31,7 @@ Public Class AddNew
                     If blah = vbNo Then Me.Hide()
                     MainForm.RefreshCurrent()
                 Else
-                    Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
+                    Dim blah = Message("Something went wrong while adding a new device.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
                 End If
 
                 Exit Sub

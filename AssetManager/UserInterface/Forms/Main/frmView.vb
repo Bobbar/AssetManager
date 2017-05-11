@@ -759,8 +759,10 @@ Public Class frmView
         If MyPingVis IsNot Nothing Then MyPingVis.Dispose()
     End Sub
     Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint
-        On Error Resume Next
-        TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
+        Try
+            TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
+        Catch
+        End Try
     End Sub
     Private Sub SetupNetTools(PingResults As PingReply)
         If PingResults.Status <> IPStatus.Success Then
