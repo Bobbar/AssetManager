@@ -1,6 +1,6 @@
 ﻿Public Class DBControlParser
     ''' <summary>
-    ''' Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="GetDBControlRow(Form, ByRef DataRow)"/>
+    ''' Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="UpdateDBControlRow(Form, ByRef DataRow)"/>
     ''' </summary>
     ''' <remarks>
     ''' The SQL SELECT statement should return a single row only. This is will be the table row that you wish to update.
@@ -16,19 +16,19 @@
             tmpTable = SQLComm.Return_SQLTable(SelectQry)
         End Using
         tmpTable.TableName = "UpdateTable"
-        Dim DBRow = GetDBControlRow(ParentForm, tmpTable.Rows(0))
+        UpdateDBControlRow(ParentForm, tmpTable.Rows(0))
         Return tmpTable
     End Function
     ''' <summary>
     ''' Collects an EMPTY DataTable via a SQL Select statement and adds a new row for SQL Insertion.
     ''' </summary>
     ''' <remarks>
-    ''' The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="GetDBControlRow(Form, ByRef DataRow)"/>
+    ''' The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="UpdateDBControlRow(Form, ByRef DataRow)"/>
     ''' </remarks>
     ''' <param name="ParentForm">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
     ''' <param name="SelectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
     ''' <returns>
-    ''' Returns a DataTable with a new row added via <see cref="GetDBControlRow(Form, ByRef DataRow)"/>
+    ''' Returns a DataTable with a new row added via <see cref="UpdateDBControlRow(Form, ByRef DataRow)"/>
     ''' </returns>
     Public Function ReturnInsertTable(ParentForm As Form, SelectQry As String) As DataTable
         Dim tmpTable As DataTable
@@ -36,7 +36,7 @@
             tmpTable = SQLComm.Return_SQLTable(SelectQry)
         End Using
         tmpTable.Rows.Add()
-        Dim DBRow = GetDBControlRow(ParentForm, tmpTable.Rows(0))
+        UpdateDBControlRow(ParentForm, tmpTable.Rows(0))
         Return tmpTable
     End Function
     ''' <summary>
@@ -45,7 +45,7 @@
     ''' <param name="ParentForm">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
     ''' <param name="DBRow">DataRow to be modified.</param>
     ''' <returns></returns>
-    Private Function GetDBControlRow(ParentForm As Form, ByRef DBRow As DataRow) As DataRow
+    Private Sub UpdateDBControlRow(ParentForm As Form, ByRef DBRow As DataRow)
         Dim DBCtlList As New List(Of Control)
         GetDBControls(ParentForm, DBCtlList)
         For Each ctl As Control In DBCtlList
@@ -74,8 +74,7 @@
                 End Select
             End If
         Next
-        Return DBRow
-    End Function
+    End Sub
     ''' <summary>
     ''' Recursively collects list of controls initiated with <see cref="DBControlInfo"/> tags within Parent control.
     ''' </summary>
