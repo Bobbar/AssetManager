@@ -124,7 +124,6 @@ Partial Class MainForm
         Me.ResultGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -171,7 +170,7 @@ Partial Class MainForm
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.tsmAddGKUpdate, Me.ToolStripSeparator3, Me.CopyTool})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 76)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 98)
         '
         'ViewToolStripMenuItem
         '
@@ -195,9 +194,10 @@ Partial Class MainForm
         '
         'CopyTool
         '
+        Me.CopyTool.Image = Global.AssetManager.My.Resources.Resources.copy_icon
         Me.CopyTool.Name = "CopyTool"
         Me.CopyTool.Size = New System.Drawing.Size(179, 22)
-        Me.CopyTool.Text = "Copy Text"
+        Me.CopyTool.Text = "Copy Selected"
         '
         'lblRecords
         '

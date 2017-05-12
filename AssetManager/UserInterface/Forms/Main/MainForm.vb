@@ -328,7 +328,9 @@ Public Class MainForm
         End If
     End Sub
     Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
+        ResultGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         Clipboard.SetDataObject(Me.ResultGrid.GetClipboardContent())
+        ResultGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
     End Sub
     Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatcher.Tick
         If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime

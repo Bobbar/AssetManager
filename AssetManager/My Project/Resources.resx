@@ -121,8 +121,8 @@
   <data name="close-delete-cancel-del-ui-round-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\close-delete-cancel-del-ui-round-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="checked_checkbox-red" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\checked_checkbox-red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="View_Details" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\View_Details.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -132,6 +132,9 @@
   </data>
   <data name="delete-icon-red" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\delete-icon-red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Find" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Find.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -151,6 +154,9 @@
   <data name="note-icon-27942" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\note-icon-27942.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="012_restart-2-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\012_restart-2-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="err_exclamation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\err_exclamation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -160,20 +166,20 @@
   <data name="import_document_mail_save-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\import_document_mail_save-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="delete_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\delete-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="err_information_crop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\err_information_crop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Form2-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Form2-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon_box" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icon-box.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Exh_K_02_Asset_Disposal_Form" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Exh_K-02_Asset_Disposal_Form.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon_box" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon-box.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="critical_funny_crop_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\critical_funny_crop_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -187,17 +193,14 @@
   <data name="exclamation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\exclamation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="check-out" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\check-out.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="inv_box_large" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\inv_box_large.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="checked_checkbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\checked_checkbox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="delete_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\delete-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="checked_checkbox-red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\checked_checkbox-red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="err_question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\err_question.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -208,8 +211,8 @@
   <data name="add-note-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add-note-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="check-out" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\check-out.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="application_cascade-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\application_cascade-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -220,7 +223,7 @@
   <data name="trash-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trash-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="012_restart-2-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\012_restart-2-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="copy-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\copy-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

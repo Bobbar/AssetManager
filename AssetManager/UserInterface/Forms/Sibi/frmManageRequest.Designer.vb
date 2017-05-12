@@ -26,6 +26,7 @@ Partial Class frmManageRequest
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.tsmCopyText = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -51,6 +52,7 @@ Partial Class frmManageRequest
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.lblReqStatus = New System.Windows.Forms.Label()
         Me.lblPOStatus = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -69,8 +71,9 @@ Partial Class frmManageRequest
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.dgvNotes = New System.Windows.Forms.DataGridView()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.chkAllowDrag = New System.Windows.Forms.CheckBox()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
+        Me.chkAllowDrag = New System.Windows.Forms.CheckBox()
         Me.ToolStrip = New AssetManager.MyToolStrip()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
@@ -79,8 +82,6 @@ Partial Class frmManageRequest
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.lblReqStatus = New System.Windows.Forms.Label()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.PopupMenuItems.SuspendLayout()
         Me.PopupMenuNotes.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -94,16 +95,23 @@ Partial Class frmManageRequest
         Me.Panel2.SuspendLayout()
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'PopupMenuItems
         '
-        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmLookupDevice, Me.tsmSeparator, Me.tsmDeleteItem})
+        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmLookupDevice, Me.tsmCopyText, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 54)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 98)
+        '
+        'tsmCopyText
+        '
+        Me.tsmCopyText.Image = Global.AssetManager.My.Resources.Resources.copy_icon
+        Me.tsmCopyText.Name = "tsmCopyText"
+        Me.tsmCopyText.Size = New System.Drawing.Size(152, 22)
+        Me.tsmCopyText.Text = "Copy Selected"
         '
         'tsmLookupDevice
         '
@@ -352,6 +360,17 @@ Partial Class frmManageRequest
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Add'l Info (Click to View)"
         '
+        'lblReqStatus
+        '
+        Me.lblReqStatus.AutoSize = True
+        Me.lblReqStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblReqStatus.ForeColor = System.Drawing.Color.DimGray
+        Me.lblReqStatus.Location = New System.Drawing.Point(16, 112)
+        Me.lblReqStatus.Name = "lblReqStatus"
+        Me.lblReqStatus.Size = New System.Drawing.Size(61, 12)
+        Me.lblReqStatus.TabIndex = 11
+        Me.lblReqStatus.Text = "Status: NA"
+        '
         'lblPOStatus
         '
         Me.lblPOStatus.AutoSize = True
@@ -560,17 +579,19 @@ Partial Class frmManageRequest
         Me.Panel1.Size = New System.Drawing.Size(1061, 371)
         Me.Panel1.TabIndex = 1
         '
-        'chkAllowDrag
+        'GroupBox4
         '
-        Me.chkAllowDrag.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.chkAllowDrag.AutoSize = True
-        Me.chkAllowDrag.Location = New System.Drawing.Point(956, 13)
-        Me.chkAllowDrag.Name = "chkAllowDrag"
-        Me.chkAllowDrag.Size = New System.Drawing.Size(96, 19)
-        Me.chkAllowDrag.TabIndex = 20
-        Me.chkAllowDrag.TabStop = False
-        Me.chkAllowDrag.Text = "Allow Drag"
-        Me.chkAllowDrag.UseVisualStyleBackColor = True
+        Me.GroupBox4.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox4.Controls.Add(Me.RequestItemsGrid)
+        Me.GroupBox4.Controls.Add(Me.chkAllowDrag)
+        Me.GroupBox4.Location = New System.Drawing.Point(0, 3)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(1058, 365)
+        Me.GroupBox4.TabIndex = 21
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Items"
         '
         'RequestItemsGrid
         '
@@ -581,7 +602,6 @@ Partial Class frmManageRequest
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.RequestItemsGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.RequestItemsGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.RequestItemsGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.RequestItemsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.RequestItemsGrid.ContextMenuStrip = Me.PopupMenuItems
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
@@ -609,6 +629,18 @@ Partial Class frmManageRequest
         Me.RequestItemsGrid.ShowCellToolTips = False
         Me.RequestItemsGrid.Size = New System.Drawing.Size(1046, 327)
         Me.RequestItemsGrid.TabIndex = 18
+        '
+        'chkAllowDrag
+        '
+        Me.chkAllowDrag.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkAllowDrag.AutoSize = True
+        Me.chkAllowDrag.Location = New System.Drawing.Point(956, 13)
+        Me.chkAllowDrag.Name = "chkAllowDrag"
+        Me.chkAllowDrag.Size = New System.Drawing.Size(96, 19)
+        Me.chkAllowDrag.TabIndex = 20
+        Me.chkAllowDrag.TabStop = False
+        Me.chkAllowDrag.Text = "Allow Drag"
+        Me.chkAllowDrag.UseVisualStyleBackColor = True
         '
         'ToolStrip
         '
@@ -678,31 +710,6 @@ Partial Class frmManageRequest
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 37)
         '
-        'lblReqStatus
-        '
-        Me.lblReqStatus.AutoSize = True
-        Me.lblReqStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblReqStatus.ForeColor = System.Drawing.Color.DimGray
-        Me.lblReqStatus.Location = New System.Drawing.Point(16, 112)
-        Me.lblReqStatus.Name = "lblReqStatus"
-        Me.lblReqStatus.Size = New System.Drawing.Size(61, 12)
-        Me.lblReqStatus.TabIndex = 11
-        Me.lblReqStatus.Text = "Status: NA"
-        '
-        'GroupBox4
-        '
-        Me.GroupBox4.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox4.Controls.Add(Me.RequestItemsGrid)
-        Me.GroupBox4.Controls.Add(Me.chkAllowDrag)
-        Me.GroupBox4.Location = New System.Drawing.Point(0, 3)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(1058, 365)
-        Me.GroupBox4.TabIndex = 21
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Items"
-        '
         'frmManageRequest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -731,11 +738,11 @@ Partial Class frmManageRequest
         Me.Panel2.ResumeLayout(False)
         CType(Me.dgvNotes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         CType(Me.RequestItemsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ToolStrip.ResumeLayout(False)
         Me.ToolStrip.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -796,4 +803,5 @@ Partial Class frmManageRequest
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents lblReqStatus As Label
     Friend WithEvents GroupBox4 As GroupBox
+    Friend WithEvents tsmCopyText As ToolStripMenuItem
 End Class
