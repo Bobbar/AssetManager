@@ -56,12 +56,16 @@ Partial Class View_Entry
         Me.txtCurrentUser = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtChangeType = New System.Windows.Forms.TextBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.txtPhoneNumber = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
         Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.GroupBox1.Controls.Add(Me.Label18)
+        Me.GroupBox1.Controls.Add(Me.txtPhoneNumber)
         Me.GroupBox1.Controls.Add(Me.chkTrackable)
         Me.GroupBox1.Controls.Add(Me.Label17)
         Me.GroupBox1.Controls.Add(Me.txtEntryGUID)
@@ -110,7 +114,7 @@ Partial Class View_Entry
         Me.chkTrackable.AutoSize = True
         Me.chkTrackable.Enabled = False
         Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(617, 181)
+        Me.chkTrackable.Location = New System.Drawing.Point(643, 225)
         Me.chkTrackable.Name = "chkTrackable"
         Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
         Me.chkTrackable.TabIndex = 35
@@ -467,6 +471,26 @@ Partial Class View_Entry
         Me.txtChangeType.Size = New System.Drawing.Size(110, 23)
         Me.txtChangeType.TabIndex = 0
         '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(61, 162)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(50, 16)
+        Me.Label18.TabIndex = 37
+        Me.Label18.Text = "Phone:"
+        '
+        'txtPhoneNumber
+        '
+        Me.txtPhoneNumber.BackColor = System.Drawing.SystemColors.Window
+        Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPhoneNumber.Location = New System.Drawing.Point(64, 181)
+        Me.txtPhoneNumber.Name = "txtPhoneNumber"
+        Me.txtPhoneNumber.ReadOnly = True
+        Me.txtPhoneNumber.Size = New System.Drawing.Size(108, 23)
+        Me.txtPhoneNumber.TabIndex = 36
+        '
         'View_Entry
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -521,4 +545,6 @@ Partial Class View_Entry
     Friend WithEvents Label17 As Label
     Friend WithEvents txtEntryGUID As TextBox
     Friend WithEvents chkTrackable As CheckBox
+    Friend WithEvents Label18 As Label
+    Friend WithEvents txtPhoneNumber As TextBox
 End Class

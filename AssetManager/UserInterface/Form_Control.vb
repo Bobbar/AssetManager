@@ -112,7 +112,7 @@
         For Each frm As Form In My.Application.OpenForms
             If TypeOf frm Is View_Entry Then
                 Dim vw As View_Entry = frm
-                If vw.MyEntryGUID = EntryUID Then Return True
+                If vw.EntryGUID = EntryUID Then Return True
             End If
         Next
         Return False

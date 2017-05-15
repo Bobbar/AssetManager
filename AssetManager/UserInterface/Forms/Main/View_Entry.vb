@@ -1,15 +1,20 @@
 ﻿Option Explicit On
 Imports MySql.Data.MySqlClient
 Public Class View_Entry
-    Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
-    Public MyEntryGUID As String
+    Private MyEntryGUID As String
+    Private DataParser As New DBControlParser
+    Public ReadOnly Property EntryGUID As String
+        Get
+            Return MyEntryGUID
+        End Get
+    End Property
     Sub New(ParentForm As Form, EntryUID As String)
         InitializeComponent()
+        InitDBControls()
         MyEntryGUID = EntryUID
         Tag = ParentForm
         Icon = ParentForm.Icon
         ViewEntry(EntryUID)
-
     End Sub
     Private Sub Waiting()
         SetCursor(Cursors.WaitCursor)
@@ -17,32 +22,37 @@ Public Class View_Entry
     Private Sub DoneWaiting()
         SetCursor(Cursors.Default)
     End Sub
+    Private Sub InitDBControls()
+        txtEntryTime.Tag = New DBControlInfo(historical_dev.ActionDateTime, ParseType.DisplayOnly, False)
+        txtActionUser.Tag = New DBControlInfo(historical_dev.ActionUser, ParseType.DisplayOnly, False)
+        txtChangeType.Tag = New DBControlInfo(historical_dev.ChangeType, DeviceIndex.ChangeType, ParseType.DisplayOnly, False)
+        txtDescription.Tag = New DBControlInfo(historical_dev.Description, ParseType.DisplayOnly, False)
+        txtGUID.Tag = New DBControlInfo(historical_dev.DeviceUID, ParseType.DisplayOnly, False)
+        txtCurrentUser.Tag = New DBControlInfo(historical_dev.CurrentUser, ParseType.DisplayOnly, False)
+        txtLocation.Tag = New DBControlInfo(historical_dev.Location, DeviceIndex.Locations, ParseType.DisplayOnly, False)
+        txtPONumber.Tag = New DBControlInfo(historical_dev.PO, ParseType.DisplayOnly, False)
+        txtAssetTag.Tag = New DBControlInfo(historical_dev.AssetTag, ParseType.DisplayOnly, False)
+        txtPurchaseDate.Tag = New DBControlInfo(historical_dev.PurchaseDate, ParseType.DisplayOnly, False)
+        txtOSVersion.Tag = New DBControlInfo(historical_dev.OSVersion, DeviceIndex.OSType, ParseType.DisplayOnly, False)
+        txtSerial.Tag = New DBControlInfo(historical_dev.Serial, ParseType.DisplayOnly, False)
+        txtReplaceYear.Tag = New DBControlInfo(historical_dev.ReplacementYear, ParseType.DisplayOnly, False)
+        txtEQType.Tag = New DBControlInfo(historical_dev.EQType, DeviceIndex.EquipType, ParseType.DisplayOnly, False)
+        txtNotes.Tag = New DBControlInfo(historical_dev.Notes, ParseType.DisplayOnly, False)
+        txtStatus.Tag = New DBControlInfo(historical_dev.Status, DeviceIndex.StatusType, ParseType.DisplayOnly, False)
+        txtEntryGUID.Tag = New DBControlInfo(historical_dev.History_Entry_UID, ParseType.DisplayOnly, False)
+        chkTrackable.Tag = New DBControlInfo(historical_dev.Trackable, ParseType.DisplayOnly, False)
+        txtPhoneNumber.Tag = New DBControlInfo(historical_dev.PhoneNumber, ParseType.DisplayOnly, False)
+    End Sub
+    Private Sub FillControls(Data As DataTable)
+        DataParser.FillDBFields(Me, Data)
+        Me.Text = Me.Text + " - " & NoNull(Data.Rows(0).Item(historical_dev.ActionDateTime))
+    End Sub
     Private Sub ViewEntry(ByVal EntryUID As String)
         Waiting()
         Try
             Dim strQry = "Select * FROM " & historical_dev.TableName & " WHERE  " & historical_dev.History_Entry_UID & " = '" & EntryUID & "'"
             Using SQLComms As New clsMySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQry)
-                For Each r As DataRow In results.Rows
-                    txtEntryTime.Text = NoNull(r.Item(historical_dev.ActionDateTime))
-                    txtActionUser.Text = NoNull(r.Item(historical_dev.ActionUser))
-                    txtChangeType.Text = GetHumanValue(DeviceIndex.ChangeType, r.Item(historical_dev.ChangeType).ToString)
-                    txtDescription.Text = NoNull(r.Item(historical_dev.Description))
-                    txtGUID.Text = NoNull(r.Item(historical_dev.DeviceUID))
-                    txtCurrentUser.Text = NoNull(r.Item(historical_dev.CurrentUser))
-                    txtLocation.Text = GetHumanValue(DeviceIndex.Locations, r.Item(historical_dev.Location).ToString)
-                    txtPONumber.Text = NoNull(r.Item(historical_dev.PO))
-                    txtAssetTag.Text = NoNull(r.Item(historical_dev.AssetTag))
-                    txtPurchaseDate.Text = NoNull(r.Item(historical_dev.PurchaseDate))
-                    txtOSVersion.Text = GetHumanValue(DeviceIndex.OSType, r.Item(historical_dev.OSVersion).ToString)
-                    txtSerial.Text = NoNull(r.Item(historical_dev.Serial))
-                    txtReplaceYear.Text = NoNull(r.Item(historical_dev.ReplacementYear))
-                    txtEQType.Text = GetHumanValue(DeviceIndex.EquipType, r.Item(historical_dev.EQType).ToString)
-                    txtNotes.Text = NoNull(r.Item(historical_dev.Notes))
-                    txtStatus.Text = GetHumanValue(DeviceIndex.StatusType, r.Item(historical_dev.Status).ToString)
-                    txtEntryGUID.Text = NoNull(r.Item(historical_dev.History_Entry_UID))
-                    chkTrackable.Checked = CBool(r.Item(historical_dev.Trackable))
-                    Me.Text = Me.Text + " - " & NoNull(r.Item(historical_dev.ActionDateTime))
-                Next
+                FillControls(results)
                 Show()
                 Activate()
                 DoneWaiting()

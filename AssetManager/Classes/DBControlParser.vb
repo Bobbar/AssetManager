@@ -44,7 +44,6 @@
     ''' </summary>
     ''' <param name="ParentForm">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
     ''' <param name="DBRow">DataRow to be modified.</param>
-    ''' <returns></returns>
     Private Sub UpdateDBControlRow(ParentForm As Form, ByRef DBRow As DataRow)
         Dim DBCtlList As New List(Of Control)
         GetDBControls(ParentForm, DBCtlList)
@@ -103,8 +102,11 @@
             Select Case True
                 Case TypeOf ctl Is TextBox
                     Dim dbTxt As TextBox = ctl
-                    dbTxt.Text = Row.Item(DBInfo.DataColumn).ToString
-
+                    If DBInfo.AttribIndex IsNot Nothing Then
+                        dbTxt.Text = GetHumanValue(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn))
+                    Else
+                        dbTxt.Text = Row.Item(DBInfo.DataColumn).ToString
+                    End If
                 Case TypeOf ctl Is MaskedTextBox
                     Dim dbMaskTxt As MaskedTextBox = ctl
                     dbMaskTxt.Text = Row.Item(DBInfo.DataColumn).ToString
@@ -204,8 +206,13 @@ Public Class DBControlInfo
         db_parse_type = ParseType.UpdateAndDisplay
         db_attrib_index = Nothing
     End Sub
-
     Sub New(DataColumn As String, AttribIndex As Combo_Data(), Optional Required As Boolean = False)
+        db_column = DataColumn
+        db_required = Required
+        db_parse_type = ParseType.UpdateAndDisplay
+        db_attrib_index = AttribIndex
+    End Sub
+    Sub New(DataColumn As String, AttribIndex As Combo_Data(), ParseType As ParseType, Optional Required As Boolean = False)
         db_column = DataColumn
         db_required = Required
         db_parse_type = ParseType.UpdateAndDisplay
