@@ -52,6 +52,16 @@ Module ErrorHandling
     End Function
     Private Function handleWin32Exception(ex As Win32Exception, Method As MethodBase) As Boolean
         Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message)
+        Select Case ex.NativeErrorCode
+            Case 1326 'Bad credentials error. Clear AdminCreds
+                Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
+                AdminCreds = Nothing
+                Return True
+            Case 86 'Bad credentials error. Clear AdminCreds
+                Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
+                AdminCreds = Nothing
+                Return True
+        End Select
         Dim blah = Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
         Return True
     End Function

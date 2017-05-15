@@ -187,10 +187,10 @@
     <Compile Include="Classes\Paths.vb" />
     <Compile Include="DataComms\AssetManager\FTP\clsFTP_Comms.vb" />
     <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
-    <Compile Include="UserInterface\Forms\GK_Updater\Get_Credentials.Designer.vb">
+    <Compile Include="UserInterface\Forms\Get_Credentials.Designer.vb">
       <DependentUpon>Get_Credentials.vb</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\GK_Updater\Get_Credentials.vb">
+    <Compile Include="UserInterface\Forms\Get_Credentials.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.Designer.vb">
@@ -356,7 +356,7 @@
     <EmbeddedResource Include="UserInterface\Forms\frmAttachments.resx">
       <DependentUpon>frmAttachments.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\Get_Credentials.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Get_Credentials.resx">
       <DependentUpon>Get_Credentials.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKUpdater_Form.resx">

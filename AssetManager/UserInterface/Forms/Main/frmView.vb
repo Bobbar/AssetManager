@@ -909,43 +909,37 @@ Public Class frmView
     End Sub
     Private Function SendRestart(IP As String, DeviceName As String) As Boolean
         Try
-            Dim FullPath As String = "\\" & IP & "\IPC$"
-            Dim Creds As New NetworkCredential(DeviceName & "\Administrator", "057|750")
-            Using NetCon As New NetworkConnection(FullPath, Creds)
-                Dim p As Process = New Process
-                p.StartInfo.UseShellExecute = False
-                p.StartInfo.RedirectStandardOutput = True
-                p.StartInfo.RedirectStandardError = True
-                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                p.StartInfo.FileName = "shutdown.exe"
-                p.StartInfo.Arguments = "/m \\" & IP & " /f /r /t 0"
-                p.Start()
-                Dim output As String
-                output = p.StandardError.ReadToEnd
-                p.WaitForExit()
-                If Trim(output) = "" Then
-                    Return True
-                Else
-                    Return False
-                End If
-            End Using
+            If VerifyAdminCreds() Then
+                Dim FullPath As String = "\\" & IP & "\IPC$"
+                Using NetCon As New NetworkConnection(FullPath, AdminCreds)
+                    Dim p As Process = New Process
+                    p.StartInfo.UseShellExecute = False
+                    p.StartInfo.RedirectStandardOutput = True
+                    p.StartInfo.RedirectStandardError = True
+                    p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                    p.StartInfo.FileName = "shutdown.exe"
+                    p.StartInfo.Arguments = "/m \\" & IP & " /f /r /t 0"
+                    p.Start()
+                    Dim output As String
+                    output = p.StandardError.ReadToEnd
+                    p.WaitForExit()
+                    If Trim(output) = "" Then
+                        Return True
+                    Else
+                        Return False
+                    End If
+                End Using
+            End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
         Return False
     End Function
     Private Sub cmdGKUpdate_Click(sender As Object, e As EventArgs) Handles cmdGKUpdate.Click
-        If AdminCreds Is Nothing Then
-            Dim NewGetCreds As New Get_Credentials
-            NewGetCreds.ShowDialog()
-            If NewGetCreds.DialogResult <> DialogResult.OK Then
-                NewGetCreds.Dispose()
-                Exit Sub
-            End If
-            NewGetCreds.Dispose()
+        If VerifyAdminCreds() Then
+            GKUpdater_Form.AddUpdate(CurrentViewDevice)
+            If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
         End If
-        GKUpdater_Form.AddUpdate(CurrentViewDevice)
-        If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
     End Sub
     Private Sub txtPhoneNumber_Leave(sender As Object, e As EventArgs) Handles txtPhoneNumber.Leave
         If Trim(txtPhoneNumber.Text) <> "" And Not ValidPhoneNumber(txtPhoneNumber.Text) Then

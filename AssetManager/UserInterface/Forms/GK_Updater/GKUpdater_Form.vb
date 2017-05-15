@@ -95,16 +95,9 @@ Public Class GKUpdater_Form
         StopQueue()
         Message("The queue was stopped because of an access error. Please re-enter your credentials.", vbExclamation + vbOKOnly, "Queue Stopped", Me)
         AdminCreds = Nothing
-        Dim NewGetCreds As New Get_Credentials
-        NewGetCreds.ShowDialog()
-        If NewGetCreds.DialogResult <> DialogResult.OK Then
-            If AdminCreds IsNot Nothing Then
-                NewGetCreds.Dispose()
-                Exit Sub
-                bolRunQueue = True
-            End If
+        If VerifyAdminCreds() Then
+            bolRunQueue = True
         End If
-        NewGetCreds.Dispose()
     End Sub
 
     Private Sub GKUpdater_Form_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing

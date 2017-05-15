@@ -4,9 +4,25 @@ Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Text
 Imports System.Runtime.Serialization
+Imports System.Net
 Module modSecurityMod
     Public AccessLevels() As Access_Info
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
+    Public AdminCreds As NetworkCredential = Nothing
+    Public Function VerifyAdminCreds() As Boolean
+        If AdminCreds Is Nothing Then
+            Using NewGetCreds As New Get_Credentials
+                NewGetCreds.ShowDialog()
+                If NewGetCreds.DialogResult = DialogResult.OK Then
+                    AdminCreds = NewGetCreds.Credentials
+                    Return True
+                End If
+            End Using
+        Else
+            Return True
+        End If
+        Return False
+    End Function
     Public Function DecodePassword(strCypher As String) As String
         Dim wrapper As New Simple3Des(CryptKey)
         Return wrapper.DecryptData(strCypher)

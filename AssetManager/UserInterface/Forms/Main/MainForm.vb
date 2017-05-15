@@ -460,23 +460,14 @@ Public Class MainForm
         EnqueueGKUpdate()
     End Sub
     Private Sub EnqueueGKUpdate()
-        If AdminCreds Is Nothing Then
-            Dim NewGetCreds As New Get_Credentials
-            NewGetCreds.ShowDialog()
-            If NewGetCreds.DialogResult <> DialogResult.OK Then
-                NewGetCreds.Dispose()
-                Exit Sub
-            End If
-            NewGetCreds.Dispose()
+        If VerifyAdminCreds() Then
+            For Each cell As DataGridViewCell In ResultGrid.SelectedCells
+                Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), cell.RowIndex).Value.ToString
+                Dim SelectedDevice = Asset.Get_DeviceInfo_From_UID(DevUID)
+                GKUpdater_Form.AddUpdate(SelectedDevice)
+            Next
+            If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
         End If
-
-
-        For Each cell As DataGridViewCell In ResultGrid.SelectedCells
-            Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), cell.RowIndex).Value.ToString
-            Dim SelectedDevice = Asset.Get_DeviceInfo_From_UID(DevUID)
-            GKUpdater_Form.AddUpdate(SelectedDevice)
-        Next
-        If Not GKUpdater_Form.Visible Then GKUpdater_Form.Show()
     End Sub
 
     Private Sub tsmGKUpdater_Click(sender As Object, e As EventArgs) Handles tsmGKUpdater.Click

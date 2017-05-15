@@ -25,7 +25,7 @@
                     End If
                 Case GetType(View_Entry)
                     Dim vw As View_Entry = frm
-                    If vw.MyEntryGUID = strGUID Then
+                    If vw.EntryGUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
