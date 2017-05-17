@@ -26,8 +26,8 @@ Partial Class frmManageRequest
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.tsmCopyText = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmCopyText = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
@@ -82,6 +82,7 @@ Partial Class frmManageRequest
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsbRefresh = New System.Windows.Forms.ToolStripButton()
         Me.PopupMenuItems.SuspendLayout()
         Me.PopupMenuNotes.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -104,14 +105,7 @@ Partial Class frmManageRequest
         '
         Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmLookupDevice, Me.tsmCopyText, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 98)
-        '
-        'tsmCopyText
-        '
-        Me.tsmCopyText.Image = Global.AssetManager.My.Resources.Resources.copy_icon
-        Me.tsmCopyText.Name = "tsmCopyText"
-        Me.tsmCopyText.Size = New System.Drawing.Size(152, 22)
-        Me.tsmCopyText.Text = "Copy Selected"
+        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 76)
         '
         'tsmLookupDevice
         '
@@ -120,6 +114,13 @@ Partial Class frmManageRequest
         Me.tsmLookupDevice.Size = New System.Drawing.Size(152, 22)
         Me.tsmLookupDevice.Text = "Lookup Device"
         Me.tsmLookupDevice.Visible = False
+        '
+        'tsmCopyText
+        '
+        Me.tsmCopyText.Image = Global.AssetManager.My.Resources.Resources.copy_icon
+        Me.tsmCopyText.Name = "tsmCopyText"
+        Me.tsmCopyText.Size = New System.Drawing.Size(152, 22)
+        Me.tsmCopyText.Text = "Copy Selected"
         '
         'tsmSeparator
         '
@@ -647,7 +648,7 @@ Partial Class frmManageRequest
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(185, Byte), Integer), CType(CType(205, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.tsbRefresh})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
@@ -709,6 +710,15 @@ Partial Class frmManageRequest
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 37)
+        '
+        'tsbRefresh
+        '
+        Me.tsbRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.tsbRefresh.Image = Global.AssetManager.My.Resources.Resources.refresh
+        Me.tsbRefresh.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.tsbRefresh.Name = "tsbRefresh"
+        Me.tsbRefresh.Size = New System.Drawing.Size(29, 34)
+        Me.tsbRefresh.ToolTipText = "Refresh"
         '
         'frmManageRequest
         '
@@ -804,4 +814,5 @@ Partial Class frmManageRequest
     Friend WithEvents lblReqStatus As Label
     Friend WithEvents GroupBox4 As GroupBox
     Friend WithEvents tsmCopyText As ToolStripMenuItem
+    Friend WithEvents tsbRefresh As ToolStripButton
 End Class

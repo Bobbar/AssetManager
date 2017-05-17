@@ -1109,4 +1109,8 @@ VALUES
         RequestItemsGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
         RequestItemsGrid.RowHeadersVisible = True
     End Sub
+
+    Private Sub tsbRefresh_Click(sender As Object, e As EventArgs) Handles tsbRefresh.Click
+        OpenRequest(CurrentRequest.strUID)
+    End Sub
 End Class
