@@ -23,15 +23,6 @@ Public Class Get_Credentials
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
         Accept()
     End Sub
-
-    Private Sub Get_Credentials_Closed(sender As Object, e As EventArgs) Handles Me.Closed
-        Debug.Print("Closed")
-    End Sub
-
-    Private Sub Get_Credentials_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        Debug.Print("Closing")
-    End Sub
-
     Private Sub txtPassword_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPassword.KeyDown
         If e.KeyCode = Keys.Enter Then
             Accept()
