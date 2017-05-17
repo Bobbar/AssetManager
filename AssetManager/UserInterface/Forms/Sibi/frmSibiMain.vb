@@ -91,16 +91,16 @@ Public Class frmSibiMain
     Public Sub SendToGrid(Results As DataTable)
         Try
             Dim table As New DataTable
-            table.Columns.Add("Request #", GetType(String))
+            table.Columns.Add("Request #", GetType(Integer))
             table.Columns.Add("Status", GetType(String))
             table.Columns.Add("Description", GetType(String))
             table.Columns.Add("Request User", GetType(String))
             table.Columns.Add("Request Type", GetType(String))
-            table.Columns.Add("Need By", GetType(String))
+            table.Columns.Add("Need By", GetType(Date))
             table.Columns.Add("PO Number", GetType(String))
             table.Columns.Add("Req. Number", GetType(String))
             table.Columns.Add("RT Number", GetType(String))
-            table.Columns.Add("Create Date", GetType(String))
+            table.Columns.Add("Create Date", GetType(Date))
             table.Columns.Add("UID", GetType(String))
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item(sibi_requests.RequestNumber)),
