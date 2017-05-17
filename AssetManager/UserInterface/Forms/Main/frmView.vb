@@ -28,8 +28,8 @@ Public Class frmView
     Sub New(ParentForm As MyForm, DeviceGUID As String)
         InitializeComponent()
         InitDBControls()
-        MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, "dev_cur_user", "dev_cur_user_emp_num")
-        MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, "dev_description")
+        MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
+        MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, devices.Description)
         Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
         Tag = ParentForm
         Icon = ParentForm.Icon
@@ -224,13 +224,12 @@ Public Class frmView
         End Try
     End Sub
     Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
-        Dim HistoricalResults, DeviceResults As New DataTable
         Try
-            Using SQLComms As New clsMySQL_Comms
-                DeviceResults = SQLComms.Return_SQLTable("Select * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & DeviceUID & "'")
+            Using SQLComms As New clsMySQL_Comms,
+                    DeviceResults = SQLComms.Return_SQLTable("Select * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & DeviceUID & "'"),
+                    HistoricalResults = SQLComms.Return_SQLTable("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
                 If DeviceResults.Rows.Count < 1 Then
                     CloseChildren(Me)
-                    DeviceResults.Dispose()
                     CurrentViewDevice = Nothing
                     Dim blah = Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found", Me)
                     Return False
@@ -238,10 +237,7 @@ Public Class frmView
                 CurrentViewDevice = Asset.CollectDeviceInfo(DeviceResults)
                 DataParser.FillDBFields(Me, DeviceResults)
                 SetMunisEmpStatus()
-                HistoricalResults = SQLComms.Return_SQLTable("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
                 SendToHistGrid(DataGridHistory, HistoricalResults)
-                HistoricalResults.Dispose()
-                DeviceResults.Dispose()
                 DisableControls()
                 SetAttachCount()
                 Return True
@@ -249,8 +245,6 @@ Public Class frmView
         Catch ex As Exception
             DoneWaiting()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            HistoricalResults.Dispose()
-            DeviceResults.Dispose()
             Return False
         End Try
     End Function
@@ -267,8 +261,8 @@ Public Class frmView
         Dim table As New DataTable
         Try
             If tblResults.Rows.Count > 0 Then
-                table.Columns.Add("Date", GetType(String))
-                table.Columns.Add("Action Type", GetType(String))
+                table.Columns.Add("Time Stamp", GetType(Date))
+                table.Columns.Add("Change Type", GetType(String))
                 table.Columns.Add("Action User", GetType(String))
                 table.Columns.Add("Note Peek", GetType(String))
                 table.Columns.Add("User", GetType(String))
@@ -276,7 +270,7 @@ Public Class frmView
                 table.Columns.Add("Serial", GetType(String))
                 table.Columns.Add("Description", GetType(String))
                 table.Columns.Add("Location", GetType(String))
-                table.Columns.Add("Purchase Date", GetType(String))
+                table.Columns.Add("Purchase Date", GetType(Date))
                 table.Columns.Add("GUID", GetType(String))
                 For Each r As DataRow In tblResults.Rows
                     table.Rows.Add(NoNull(r.Item(historical_dev.ActionDateTime)),
