@@ -27,12 +27,14 @@ Partial Class frmMunisUser
         Me.lblSelectedEmp = New System.Windows.Forms.Label()
         Me.cmdAccept = New System.Windows.Forms.Button()
         Me.pnlSearch = New System.Windows.Forms.GroupBox()
+        Me.pbWorking = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.cmdSearch = New System.Windows.Forms.Button()
         Me.txtSearchName = New System.Windows.Forms.TextBox()
         CType(Me.MunisResults, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.pnlSearch.SuspendLayout()
+        CType(Me.pbWorking, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'MunisResults
@@ -103,6 +105,7 @@ Partial Class frmMunisUser
         '
         Me.pnlSearch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pnlSearch.Controls.Add(Me.pbWorking)
         Me.pnlSearch.Controls.Add(Me.Label1)
         Me.pnlSearch.Controls.Add(Me.cmdSearch)
         Me.pnlSearch.Controls.Add(Me.txtSearchName)
@@ -113,6 +116,17 @@ Partial Class frmMunisUser
         Me.pnlSearch.TabIndex = 44
         Me.pnlSearch.TabStop = False
         Me.pnlSearch.Text = "Search"
+        '
+        'pbWorking
+        '
+        Me.pbWorking.Image = Global.AssetManager.My.Resources.Resources.loading
+        Me.pbWorking.Location = New System.Drawing.Point(178, 48)
+        Me.pbWorking.Name = "pbWorking"
+        Me.pbWorking.Size = New System.Drawing.Size(22, 22)
+        Me.pbWorking.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbWorking.TabIndex = 0
+        Me.pbWorking.TabStop = False
+        Me.pbWorking.Visible = False
         '
         'Label1
         '
@@ -125,7 +139,7 @@ Partial Class frmMunisUser
         '
         'cmdSearch
         '
-        Me.cmdSearch.Location = New System.Drawing.Point(201, 45)
+        Me.cmdSearch.Location = New System.Drawing.Point(213, 45)
         Me.cmdSearch.Name = "cmdSearch"
         Me.cmdSearch.Size = New System.Drawing.Size(131, 26)
         Me.cmdSearch.TabIndex = 1
@@ -155,6 +169,7 @@ Partial Class frmMunisUser
         Me.GroupBox1.ResumeLayout(False)
         Me.pnlSearch.ResumeLayout(False)
         Me.pnlSearch.PerformLayout()
+        CType(Me.pbWorking, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -167,4 +182,5 @@ Partial Class frmMunisUser
     Friend WithEvents cmdSearch As Button
     Friend WithEvents txtSearchName As TextBox
     Friend WithEvents lblSelectedEmp As Label
+    Friend WithEvents pbWorking As PictureBox
 End Class

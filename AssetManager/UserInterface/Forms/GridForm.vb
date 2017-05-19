@@ -36,7 +36,6 @@ Public Class GridForm
         Dim NewGrid = GetNewGrid(Name, Label)
         FillGrid(NewGrid, Data)
         GridList.Add(NewGrid)
-
     End Sub
     Private Function GetNewGrid(Name As String, Label As String) As DataGridView
         Dim NewGrid As New DataGridView
@@ -60,31 +59,16 @@ Public Class GridForm
         Return NewGrid
     End Function
     Private Sub FillGrid(Grid As DataGridView, Data As DataTable)
-
         If Data IsNot Nothing Then Grid.DataSource = Data
-
-
     End Sub
     Private Sub DisplayGrids()
-
         For Each grid As DataGridView In GridList
             Dim GridBox As New GroupBox
             GridBox.Text = grid.Tag
             GridBox.Dock = DockStyle.Fill
-
-            'Dim GridLabel As New Label
-            'GridLabel.Name = "lbl" + grid.Name
-            'GridLabel.Text = grid.Tag
-            'GridLabel.Font = New Font(GridLabel.Font, FontStyle.Bold)
-            'GridLabel.Padding = New Padding(0, 5, 0, 0)
-
-
-            'GridPanel.RowStyles.Add(New RowStyle(SizeType.AutoSize))
-            'GridPanel.Controls.Add(GridLabel)
             GridBox.Controls.Add(grid)
             GridPanel.RowStyles.Add(New RowStyle(SizeType.Percent, 100 / GridList.Count))
             GridPanel.Controls.Add(GridBox)
-
         Next
         bolGridFilling = False
     End Sub
@@ -103,10 +87,7 @@ Public Class GridForm
         Dim SenderGrid As DataGridView = DirectCast(sender, DataGridView)
         LastDoubleClickRow = SenderGrid.CurrentRow
         Me.DialogResult = DialogResult.OK
-        'Dim val As String = SenderGrid.CurrentCell.Value.ToString
-        'Debug.Print(val)
     End Sub
-
     Private Sub GridForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If Not Modal Then Me.Dispose()
     End Sub

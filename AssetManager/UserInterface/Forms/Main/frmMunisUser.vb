@@ -25,13 +25,18 @@ Public Class frmMunisUser
             Dim strColumns As String = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short"
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
             Dim MunisComms As New clsMunis_Comms
+            SetWorking(True)
             Dim results As DataTable = Await MunisComms.Return_MSSQLTableAsync(strQRY)
+            SetWorking(False)
             If results.Rows.Count < 1 Then Exit Sub
             MunisResults.DataSource = results
             MunisResults.ClearSelection()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
+    End Sub
+    Private Sub SetWorking(Working As Boolean)
+        pbWorking.Visible = Working
     End Sub
     Private Sub MunisUser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         MunisResults.DefaultCellStyle = GridStyles
