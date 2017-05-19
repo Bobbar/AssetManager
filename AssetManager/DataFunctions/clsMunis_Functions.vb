@@ -11,6 +11,15 @@ Public Class clsMunis_Functions
             End If
         End If
     End Function
+    Public Async Function Get_ReqNumber_From_PO_Async(PO As String) As Task(Of String)
+        If Not IsNothing(PO) Then
+            If PO <> "" Then
+                Return Await priv_Comms.Return_MSSQLValueAsync("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber")
+            Else
+                Return Nothing
+            End If
+        End If
+    End Function
     Public Function Get_PO_From_Asset(AssetTag As String) As String
         If Not IsNothing(AssetTag) Then
             If AssetTag <> "" Then
@@ -287,9 +296,9 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         End If
         DoneWaiting()
     End Function
-    Public Sub LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String, GridForm As GridForm)
+    Public Async Function LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String) As Task(Of DataTable)
         Try
-            If ReqNumber = "" Or FiscalYr = "" Then Exit Sub
+            If ReqNumber = "" Or FiscalYr = "" Then Return Nothing
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc, 
                          VEN.a_vendor_name, VEN.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr,
                          dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln
@@ -302,20 +311,23 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
 						 ) VEN 
 ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number
 WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ")" ' AND (dbo.ap_vendor.a_vendor_remit_seq = 0)"
-            GridForm.AddGrid("ReqGrid", "Requisition Info:", MunisComms.Return_MSSQLTable(strQRY))
+            Dim ReqTable = Await MunisComms.Return_MSSQLTableAsync(strQRY)
+            If ReqTable.Rows.Count > 0 Then
+                Return ReqTable
+            Else
+                Return Nothing
+            End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
-    End Sub
-    Public Sub LoadMunisInfoByDevice(Device As Device_Info, ParentForm As MyForm)
+    End Function
+    Public Async Sub LoadMunisInfoByDevice(Device As Device_Info, ParentForm As MyForm)
+        Dim ReqTable, InvTable As New DataTable
         If Device.strPO <> "" Then
-            Dim NewGridForm As New GridForm(ParentForm, "MUNIS Info")
             Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
-            LoadMunisInventoryGrid(Device, NewGridForm)
-            LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO), NewGridForm)
-            NewGridForm.Show()
+            InvTable = Await LoadMunisInventoryGrid(Device)
+            ReqTable = Await LoadMunisRequisitionGridByReqNo(Await Munis.Get_ReqNumber_From_PO_Async(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
         Else
-            Dim NewGridForm As New GridForm(ParentForm, "MUNIS Info")
             If Device.strPO = "" Then
                 Dim PO As String = Munis.Get_PO_From_Asset(Device.strAssetTag)
                 If PO <> "" Then
@@ -326,44 +338,49 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
                 End If
             End If
             If Device.strPO <> "" Then
-                LoadMunisInventoryGrid(Device, NewGridForm)
-                LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO), NewGridForm)
-                If NewGridForm.GridCount > 0 Then
-                    NewGridForm.Show()
-                Else
-                    NewGridForm.Dispose()
-                End If
+                InvTable = Await LoadMunisInventoryGrid(Device)
+                ReqTable = Await LoadMunisRequisitionGridByReqNo(Await Munis.Get_ReqNumber_From_PO_Async(Device.strPO), Munis.Get_FY_From_PO(Device.strPO))
             Else
-                Message("Could not pull resolve PO from Asset Tag or Serial.", vbOKOnly + vbInformation, "No Req. Record")
-                LoadMunisInventoryGrid(Device, NewGridForm)
-                LoadMunisRequisitionGridByReqNo(Munis.Get_ReqNumber_From_PO(Device.strPO), Munis.Get_FY_From_PO(Device.strPO), NewGridForm)
-                If NewGridForm.GridCount > 0 Then
-                    NewGridForm.Show()
-                Else
-                    NewGridForm.Dispose()
-                End If
+                InvTable = Await LoadMunisInventoryGrid(Device)
+                ReqTable = Nothing
             End If
         End If
+        If InvTable IsNot Nothing Or ReqTable IsNot Nothing Then
+            Dim NewGridForm As New GridForm(ParentForm, "MUNIS Info")
+            If InvTable Is Nothing Then
+                Message("Could not pull Munis Fixed Asset info.", vbOKOnly + vbInformation, "No FA Record")
+            Else
+                NewGridForm.AddGrid("InvGrid", "FA Info:", InvTable)
+            End If
+            If ReqTable Is Nothing Then
+                Message("Could not resolve PO from Asset Tag or Serial. Please add a valid PO if possible.", vbOKOnly + vbInformation, "No Req. Record")
+            Else
+                NewGridForm.AddGrid("ReqGrid", "Requisition Info:", ReqTable)
+            End If
+            NewGridForm.Show()
+        ElseIf InvTable Is Nothing And ReqTable Is Nothing Then
+            Message("Could not resolve any Req. or FA info.", vbOKOnly + vbInformation, "Nothing Found")
+        End If
     End Sub
-    Private Sub LoadMunisInventoryGrid(Device As Device_Info, GridForm As GridForm)
+    Private Async Function LoadMunisInventoryGrid(Device As Device_Info) As Task(Of DataTable)
         Try
             Dim GridData As New DataTable
             Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
             If Device.strSerial <> "" Then
-                GridData = MunisComms.Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_serial='" & Device.strSerial & "'")
-                If GridData.Rows.Count > 0 Then GridForm.AddGrid("InvGrid", "FA Info:", GridData)
-            End If
-            If GridData.Rows.Count < 1 And Device.strAssetTag <> "" Then
-                GridData = MunisComms.Return_MSSQLTable("SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.strAssetTag & "'")
-                If GridData.Rows.Count > 0 Then GridForm.AddGrid("InvGrid", "FA Info:", GridData)
-            End If
-            If GridData.Rows.Count < 1 Then
-                Message("Could not pull all Munis info. No FA info and/or no PO", vbOKOnly + vbInformation, "No FA Record")
+                GridData = Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_serial='" & Device.strSerial & "'")
+                If GridData.Rows.Count > 0 Then
+                    Return GridData
+                ElseIf GridData.Rows.Count < 1 AndAlso Device.strAssetTag <> "" Then
+                    GridData = Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.strAssetTag & "'")
+                    If GridData.Rows.Count < 1 Then
+                        Return Nothing
+                    End If
+                End If
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
-    End Sub
+    End Function
     Public Sub NewMunisView_Device(Device As Device_Info, Parent As Form)
         Waiting()
         LoadMunisInfoByDevice(Device, Parent)

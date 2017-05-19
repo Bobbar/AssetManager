@@ -16,6 +16,21 @@ Public Class clsMunis_Comms
             Return Nothing
         End Try
     End Function
+    Public Async Function Return_MSSQLTableAsync(strSQLQry As String) As Task(Of DataTable)
+        Try
+            Using conn As SqlConnection = New SqlConnection(MSSQLConnectString),
+                    NewTable As New DataTable,
+                cmd As New SqlCommand(strSQLQry, conn)
+                Await conn.OpenAsync
+                Dim dr As SqlDataReader = Await cmd.ExecuteReaderAsync
+                NewTable.Load(dr)
+                Return NewTable
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
+        End Try
+    End Function
     Public Function Return_MSSQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
         Dim sqlQRY As String = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
         Try

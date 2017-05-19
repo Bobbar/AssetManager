@@ -19,13 +19,13 @@ Public Class frmMunisUser
         Icon = ParentForm.Icon
         ShowDialog(ParentForm)
     End Sub
-    Private Sub EmpNameSearch(Name As String)
+    Private Async Sub EmpNameSearch(Name As String)
         Try
             MunisResults.DataSource = Nothing
             Dim strColumns As String = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short"
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
             Dim MunisComms As New clsMunis_Comms
-            Dim results As DataTable = MunisComms.Return_MSSQLTable(strQRY)
+            Dim results As DataTable = Await MunisComms.Return_MSSQLTableAsync(strQRY)
             If results.Rows.Count < 1 Then Exit Sub
             MunisResults.DataSource = results
             MunisResults.ClearSelection()
