@@ -322,6 +322,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         End Try
     End Function
     Public Async Sub LoadMunisInfoByDevice(Device As Device_Info, ParentForm As MyForm)
+        Waiting()
         Dim ReqTable, InvTable As New DataTable
         If Device.strPO <> "" Then
             Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
@@ -346,6 +347,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             End If
         End If
         If InvTable IsNot Nothing Or ReqTable IsNot Nothing Then
+            DoneWaiting()
             Dim NewGridForm As New GridForm(ParentForm, "MUNIS Info")
             If InvTable Is Nothing Then
                 Message("Could not pull Munis Fixed Asset info.", vbOKOnly + vbInformation, "No FA Record")
@@ -359,6 +361,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             End If
             NewGridForm.Show()
         ElseIf InvTable Is Nothing And ReqTable Is Nothing Then
+            DoneWaiting()
             Message("Could not resolve any Req. or FA info.", vbOKOnly + vbInformation, "Nothing Found")
         End If
     End Sub
@@ -382,14 +385,14 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         End Try
     End Function
     Public Sub NewMunisView_Device(Device As Device_Info, Parent As Form)
-        Waiting()
         LoadMunisInfoByDevice(Device, Parent)
-        DoneWaiting()
     End Sub
     Private Sub Waiting()
+        Application.UseWaitCursor = True
         SetCursor(Cursors.WaitCursor)
     End Sub
     Private Sub DoneWaiting()
+        Application.UseWaitCursor = False
         SetCursor(Cursors.Default)
     End Sub
 End Class

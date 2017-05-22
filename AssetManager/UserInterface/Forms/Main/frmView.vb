@@ -519,9 +519,7 @@ Public Class frmView
         DoneWaiting()
     End Sub
     Private Sub NewMunisView(Device As Device_Info)
-        Waiting()
         Munis.NewMunisView_Device(Device, Me)
-        DoneWaiting()
     End Sub
     Private Sub NewTrackingView(GUID As String)
         Waiting()
