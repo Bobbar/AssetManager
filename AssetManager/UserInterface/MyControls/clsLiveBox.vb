@@ -2,7 +2,6 @@
 Imports MySql.Data.MySqlClient
 Public Class clsLiveBox : Implements IDisposable
     Private RowLimit As Integer = 15
-    Private WithEvents LiveWorker As BackgroundWorker
     Private WithEvents HideTimer As Timer
     Private LiveBox As ListBox
     Private strPrevSearchString As String
@@ -16,18 +15,8 @@ Public Class clsLiveBox : Implements IDisposable
     End Structure
     Private CurrentLiveBoxArgs As LiveBoxArgs
     Sub New(ParentForm As Form)
-        InitializeWorker()
         InitializeControl(ParentForm)
         InitializeTimer()
-    End Sub
-    Private Sub InitializeWorker()
-        LiveWorker = New BackgroundWorker
-        AddHandler LiveWorker.DoWork, AddressOf LiveWorker_DoWork
-        AddHandler LiveWorker.RunWorkerCompleted, AddressOf LiveWorker_RunWorkerCompleted
-        With LiveWorker
-            .WorkerReportsProgress = False
-            .WorkerSupportsCancellation = False
-        End With
     End Sub
     Private Sub InitializeControl(ParentForm As Form)
         LiveBox = New ListBox
@@ -76,25 +65,24 @@ Public Class clsLiveBox : Implements IDisposable
         End Select
         HideLiveBox()
     End Sub
-    Private Sub LiveWorker_DoWork(sender As Object, e As DoWorkEventArgs)
-        Dim strSearchString As String = DirectCast(e.Argument, String)
-        strPrevSearchString = strSearchString
-        Dim strQry As String
-        strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
-        Using MySQLComms As New clsMySQL_Comms, Results As New DataTable, da As New MySqlDataAdapter, cmd As MySqlCommand = MySQLComms.Return_SQLCommand(strQry)
-            cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
-            da.SelectCommand = cmd
-            da.Fill(Results)
-            e.Result = Results
-        End Using
-    End Sub
-    Private Sub LiveWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
-        If e.Error Is Nothing Then
-            DrawLiveBox(e.Result)
-            LiveBoxResults = e.Result
-        Else
-            ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod())
-        End If
+    ''' <summary>
+    ''' Runs the DB query Asychronously.
+    ''' </summary>
+    ''' <param name="SearchString"></param>
+    Private Async Sub ProcessSearch(SearchString As String)
+        strPrevSearchString = SearchString
+        Dim Results = Await Task.Run(Function()
+                                         Dim strQry As String
+                                         strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
+                                         Using MySQLComms As New clsMySQL_Comms, tmpResults As New DataTable, da As New MySqlDataAdapter, cmd As MySqlCommand = MySQLComms.Return_SQLCommand(strQry)
+                                             cmd.Parameters.AddWithValue("@Search_Value", SearchString)
+                                             da.SelectCommand = cmd
+                                             da.Fill(tmpResults)
+                                             Return tmpResults
+                                         End Using
+                                     End Function)
+        DrawLiveBox(Results)
+        LiveBoxResults = Results
     End Sub
     Private Sub DrawLiveBox(dtResults As DataTable)
         Try
@@ -147,9 +135,7 @@ Public Class clsLiveBox : Implements IDisposable
         CurrentLiveBoxArgs = Args
         Dim strSearchString As String = Trim(CurrentLiveBoxArgs.Control.Text)
         If strSearchString <> "" Then
-            If Not LiveWorker.IsBusy Then
-                LiveWorker.RunWorkerAsync(strSearchString)
-            End If
+            ProcessSearch(strSearchString)
         Else
             HideLiveBox()
         End If
@@ -248,7 +234,7 @@ Public Class clsLiveBox : Implements IDisposable
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
-                LiveWorker.Dispose()
+                'LiveWorker.Dispose()
                 HideTimer.Dispose()
                 LiveBox.Dispose()
 
