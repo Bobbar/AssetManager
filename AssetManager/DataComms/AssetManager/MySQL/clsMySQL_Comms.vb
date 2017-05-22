@@ -39,8 +39,8 @@ Public Class clsMySQL_Comms : Implements IDisposable
     Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5" & ";database="
     Private ConnectionException As Exception
     Public Connection As MySqlConnection = NewConnection()
-    Sub New()
-        If bolServerPinging Then
+    Sub New(Optional PingOverride As Boolean = False)
+        If bolServerPinging Or PingOverride Then
             If Not OpenConnection() Then
                 Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
                 Dispose()

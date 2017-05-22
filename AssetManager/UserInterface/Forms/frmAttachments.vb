@@ -7,7 +7,6 @@ Imports System.Text
 Imports System.Threading
 Class frmAttachments
     Public bolAdminMode As Boolean = False
-    Private AttachQry As String
     Private Const FileSizeMBLimit As Short = 150
     Private intProgress As Short
     Private lngBytesMoved As Integer
@@ -15,7 +14,6 @@ Class frmAttachments
     Private bolGridFilling As Boolean
     Private progIts As Integer = 0
     Private strSelectedFolder As String
-    Private strMultiFileCount As String
     Private bolDragging As Boolean = False
     Private bolAllowDrag As Boolean = False
     Private strDragFilePath As String
@@ -434,7 +432,6 @@ VALUES(@" & dev_attachments.FKey & ",
             If Not Me.IsDisposed Then
                 WorkerFeedback(False)
                 If e.Error Is Nothing Then
-                    strMultiFileCount = ""
                     If Not e.Cancelled Then
                         If e.Result Then
                             ListAttachments()
@@ -462,7 +459,6 @@ VALUES(@" & dev_attachments.FKey & ",
         End Try
     End Sub
     Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
-        Dim Filename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value.ToString
         Asset.Update_SQLValue(sibi_attachments.TableName, sibi_attachments.Folder, Folder, sibi_attachments.FileUID, AttachUID)
         ListAttachments()
         cmbMoveFolder.SelectedIndex = -1
@@ -483,9 +479,7 @@ VALUES(@" & dev_attachments.FKey & ",
         Dim Foldername As String = Nothing
         Dim FileExpectedHash As String = Nothing
         Dim FileUID As String
-        Dim Success As Boolean = False
         Dim results As New DataTable
-        Dim table As New DataTable
         Dim AttachUID As String = DirectCast(e.Argument, String)
         Dim strQry As String
         strQry = "Select * FROM " & AttachTable & " WHERE " & main_attachments.FileUID & "='" & AttachUID & "'"
@@ -759,7 +753,6 @@ VALUES(@" & dev_attachments.FKey & ",
     End Sub
     Private Function CopyAttachement(AttachObject As IDataObject, DataFormat As String) As String()
         Try
-            Dim strTimeStamp As String = Now.ToString("_hhmmss")
             Dim streamFileData As New MemoryStream
             Dim FileName As String
             FileName = GetAttachFileName(AttachObject, DataFormat)
@@ -773,7 +766,6 @@ VALUES(@" & dev_attachments.FKey & ",
             Dim buffer(1023) As Byte
             Dim bytesIn As Integer = 1
             Dim totalBytesIn As Integer
-            Dim flLength As Int64 = streamFileData.Length
             Do Until bytesIn < 1
                 bytesIn = streamFileData.Read(buffer, 0, 1024)
                 If bytesIn > 0 Then

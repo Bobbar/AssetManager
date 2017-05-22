@@ -154,9 +154,6 @@ Module OtherFunctions
     Public Function GetCellValue(ByVal Grid As DataGridView, ColumnName As String) As String
         Return NoNull(Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value.ToString)
     End Function
-    Public Sub ConnectionNotReady()
-        Dim blah = Message("Not connected to server or connection is busy!", vbOKOnly + vbExclamation, "Cannot Connect")
-    End Sub
     Public Sub EndProgram()
         If OKToEnd() Then
             ProgramEnding = True
@@ -228,7 +225,6 @@ Module OtherFunctions
         Return True
     End Function
     Public Function CheckForActiveTransfers() As Boolean
-        Dim CancelClose As Boolean = False
         Dim ActiveTransfers As New List(Of frmAttachments)
         For Each frm As Form In My.Application.OpenForms
             If TypeOf frm Is frmAttachments Then
@@ -297,50 +293,6 @@ Module OtherFunctions
             Cursor.Current = CursorType
         End If
     End Sub
-    ''' <summary>
-    ''' Formats phone number string into desired format regardless of input format.
-    ''' </summary>
-    ''' <param name="PhoneNum"></param>
-    ''' <returns></returns>
-    Public Function FormatPhoneNumber(PhoneNum As String) As String
-        If Trim(PhoneNum) <> "" Then
-            Const nDigits As Integer = 10
-            Dim fPhoneNum As String = ""
-            Dim NumArray() As Char = PhoneNum.ToCharArray()
-            For Each num As Char In NumArray
-                If Char.IsDigit(num) Then fPhoneNum += num.ToString
-            Next
-            If Len(fPhoneNum) <> nDigits Then
-                Return "INVALID"
-            Else
-                Return String.Format("{0:(###) ###-####}", Long.Parse(fPhoneNum))
-            End If
-        Else
-            Return ""
-        End If
-    End Function
-    ''' <summary>
-    ''' Removes all formatting from phone number.
-    ''' </summary>
-    ''' <param name="FormattedPhoneNum"></param>
-    ''' <returns></returns>
-    Public Function PhoneNumberToDB(FormattedPhoneNum As String) As String
-        If Trim(FormattedPhoneNum) <> "" Then
-            Const nDigits As Integer = 10
-            Dim fPhoneNum As String = ""
-            Dim NumArray() As Char = FormattedPhoneNum.ToCharArray()
-            For Each num As Char In NumArray
-                If Char.IsDigit(num) Then fPhoneNum += num.ToString
-            Next
-            If Len(fPhoneNum) <> nDigits Then
-                Return "INVALID"
-            Else
-                Return fPhoneNum
-            End If
-        Else
-            Return ""
-        End If
-    End Function
     Public Function ValidPhoneNumber(PhoneNum As String) As Boolean
         If Trim(PhoneNum) <> "" Then
             Const nDigits As Integer = 10

@@ -11,12 +11,10 @@ Public Class frmView
     Public MunisUser As Emp_Info = Nothing
     Private OldData As New Device_Info
     Private MyLiveBox As New clsLiveBox(Me)
-    Private PrevWindowState As Integer
     Private MyWindowList As WindowList
     Private bolGridFilling As Boolean = False
     Private MyPingHostname As String = Nothing
     Private DeviceHostname As String = Nothing
-    Private MyPingRunning As Boolean = False
     Private MyPingVis As PingVis
     Private intFailedPings As Integer = 0
     Private DataParser As New DBControlParser
@@ -863,7 +861,6 @@ Public Class frmView
     Private Sub View_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         If Me.WindowState = FormWindowState.Minimized Then
             MinimizeChildren(Me)
-            PrevWindowState = Me.WindowState
         End If
     End Sub
     Private Sub lblGUID_Click(sender As Object, e As EventArgs) Handles lblGUID.Click

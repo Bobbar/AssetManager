@@ -51,8 +51,6 @@ Public Class frmUserManager
         AutoSizeCLBColumns(clbModules)
     End Sub
     Private Sub LoadModuleBoxes()
-        Dim i As Integer = 0
-        Dim intTopOffset As Integer = 0
         Dim chkModuleBox As CheckBox
         clbModules.Items.Clear()
         For Each ModuleBox As Access_Info In ModuleIndex

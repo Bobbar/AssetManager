@@ -6,16 +6,9 @@ Imports System.Threading
 Imports System.Deployment.Application
 Imports System.Net
 Public Class MainForm
-    Private strSearchString As String, strPrevSearchString As String
-    Private StartingControl As Control
-    Private strWorkerQry As String
     Private Const strShowAllQry As String = "SELECT * FROM " & devices.TableName & " ORDER BY " & devices.Input_DateTime & " DESC"
-    Dim dtResults As New DataTable
-    Private intPrevRow As Integer
     Private bolGridFilling As Boolean = False
-    Private ConnectAttempts As Integer = 0
     Private MyLiveBox As clsLiveBox
-    Private strLastQry As String
     Private cmdLastCommand As MySqlCommand
     Private MyWindowList As WindowList
     Private Sub MainForm_HandleCreated(sender As Object, e As EventArgs) Handles Me.HandleCreated
@@ -36,7 +29,7 @@ Public Class MainForm
             End If
             GetGridStyles()
             SetGridStyle(ResultGrid)
-            ConnectionWatchDog.RunWorkerAsync()
+            ConnectionWatchDog()
             Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip1, 2)
             MyWindowList = New WindowList(Me, ToolStrip1)
             InitLiveBox()
@@ -113,7 +106,6 @@ Public Class MainForm
     Private Sub ShowAll()
         Dim cmd As New MySqlCommand
         cmd.CommandText = strShowAllQry
-        strLastQry = strShowAllQry
         StartBigQuery(cmd)
     End Sub
     Public Sub RefreshCurrent()
@@ -200,7 +192,6 @@ Public Class MainForm
     End Sub
 
     Public Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
-        Dim table As New DataTable
         Dim cmd As New MySqlCommand
         Dim strStartQry As String
         If chkHistorical.Checked Then
@@ -249,7 +240,6 @@ Public Class MainForm
         If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
-        strLastQry = strQry
         cmd.CommandText = strQry
         StartBigQuery(cmd)
     End Sub
@@ -332,42 +322,37 @@ Public Class MainForm
         Clipboard.SetDataObject(Me.ResultGrid.GetClipboardContent())
         ResultGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
     End Sub
-    Private Sub ConnectionWatchDog_Tick(sender As Object, e As EventArgs) Handles ConnectionWatcher.Tick
-        If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
-        If Not ConnectionWatchDog.IsBusy Then ConnectionWatchDog.RunWorkerAsync()
-    End Sub
-    Private Sub ConnectionWatchDog_DoWork(sender As Object, e As DoWorkEventArgs) Handles ConnectionWatchDog.DoWork
-        Thread.Sleep(5000)
-        Dim CanPing As Boolean = My.Computer.Network.Ping(strServerIP)
-        bolServerPinging = CanPing
-        If CanPing Then
-            Using LocalSQLComm As New clsMySQL_Comms,
-                    ds As New DataSet,
-                    da As New MySqlDataAdapter
-                Dim rows As Integer
-                da.SelectCommand = LocalSQLComm.Return_SQLCommand("SELECT NOW()")
-                da.Fill(ds)
-                rows = ds.Tables(0).Rows.Count
-                strServerTime = ds.Tables(0).Rows(0).Item(0).ToString
-            End Using
-            e.Result = CanPing
-        End If
-    End Sub
-    Private Sub ConnectionWatchDog_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles ConnectionWatchDog.RunWorkerCompleted
-        Dim CanPing As Boolean = False
-        If e.Error Is Nothing Then
-            CanPing = CType(e.Result, Boolean)
-        Else
-            CanPing = False
-        End If
-        bolServerPinging = CanPing
-        If CanPing Then
-            ConnectStatus("Connected", Color.Green)
-            StatusStrip1.BackColor = colFormBackColor
-        Else
-            StatusStrip1.BackColor = colStatusBarProblem
-            ConnectStatus("Offline", Color.Red)
-        End If
+    Private Async Sub ConnectionWatchDog()
+        Try
+            Do Until ProgramEnding
+                bolServerPinging = Await Task.Run(Function()
+                                                      Thread.Sleep(5000)
+                                                      Try
+                                                          Dim CanPing As Boolean = My.Computer.Network.Ping(strServerIP)
+                                                          If CanPing Then
+                                                              Using LocalSQLComm As New clsMySQL_Comms(True) ',
+                                                                  Dim cmd = LocalSQLComm.Return_SQLCommand("SELECT NOW()")
+                                                                  Dim strTime As String = cmd.ExecuteScalar
+                                                                  strServerTime = strTime
+                                                              End Using
+                                                          End If
+                                                          Return True
+                                                      Catch
+                                                          Return False
+                                                      End Try
+                                                  End Function)
+                If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
+                If bolServerPinging Then
+                    ConnectStatus("Connected", Color.Green)
+                    StatusStrip1.BackColor = colFormBackColor
+                Else
+                    StatusStrip1.BackColor = colStatusBarProblem
+                    ConnectStatus("Offline", Color.Red)
+                End If
+            Loop
+        Catch
+            ConnectionWatchDog()
+        End Try
     End Sub
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
         LeaveRow(ResultGrid, GridTheme, e.RowIndex)

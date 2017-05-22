@@ -225,7 +225,6 @@ Public Class clsAssetManager_Functions
         Dim tmpList As New List(Of Access_Info)
         Using SQLComms As New clsMySQL_Comms,
             ModuleTable As DataTable = SQLComms.Return_SQLTable("SELECT * FROM " & security.TableName & " ORDER BY " & security.AccessLevel & "")
-            Dim i As Integer = 0
             For Each row As DataRow In ModuleTable.Rows
                 Dim tmpInfo As Access_Info
                 With tmpInfo

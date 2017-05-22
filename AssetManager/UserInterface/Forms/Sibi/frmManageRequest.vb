@@ -7,7 +7,6 @@ Public Class frmManageRequest
     Private bolGridFilling As Boolean = False
     Public CurrentRequest As Request_Info
     Private MyText As String
-    Private bolNewRequest As Boolean = False
     Private MyWindowList As WindowList
     Private bolDragging As Boolean = False
     Private DataParser As New DBControlParser
@@ -60,7 +59,6 @@ Public Class frmManageRequest
         Me.Text = MyText + " - " + CurrentRequest.strDescription
     End Sub
     Public Sub ClearAll()
-        bolNewRequest = False
         ClearControls(Me)
         ResetBackColors(Me)
         HideEditControls()
@@ -397,7 +395,6 @@ Public Class frmManageRequest
                     cmd.Parameters.Clear()
                 Next
             End Using
-            bolNewRequest = False
             pnlCreate.Visible = False
             Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
             If TypeOf Me.Tag Is frmSibiMain Then
@@ -407,7 +404,6 @@ Public Class frmManageRequest
             OpenRequest(RequestData.strUID)
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                bolNewRequest = False
                 Exit Sub
             Else
                 EndProgram()
@@ -417,7 +413,6 @@ Public Class frmManageRequest
     Private Function GetUpdateTable(Adapter As MySqlDataAdapter) As DataTable
         Try
             Dim tmpTable = DataParser.ReturnUpdateTable(Me, Adapter.SelectCommand.CommandText)
-            Dim DBRow = tmpTable.Rows(0)
             'Add Add'l info
             Return tmpTable
         Catch ex As Exception
@@ -743,7 +738,6 @@ VALUES
     Public Sub NewRequest()
         If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
         ClearAll()
-        bolNewRequest = True
         EnableControls(Me)
         pnlCreate.Visible = True
     End Sub

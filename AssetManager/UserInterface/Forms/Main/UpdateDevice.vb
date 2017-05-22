@@ -6,13 +6,11 @@ Public Class UpdateDev
             Return NewUpdateInfo
         End Get
     End Property
-    Private CurrentForm As Form
     Private NewUpdateInfo As Update_Info
-    Private MyParent As Form
     Sub New(ParentForm As Form, Optional bolNewNote As Boolean = False)
         InitializeComponent()
-        MyParent = ParentForm
         Icon = ParentForm.Icon
+        Me.Tag = ParentForm
         FillComboBox(DeviceIndex.ChangeType, cmbUpdate_ChangeType)
         If bolNewNote Then
             cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(DeviceIndex.ChangeType, "NOTE")

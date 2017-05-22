@@ -88,13 +88,13 @@ Public Class clsLiveBox : Implements IDisposable
         Try
             If dtResults.Rows.Count > 0 Then
                 Dim strQryRow As String
-                If TypeOf CurrentLiveBoxArgs.Control.Parent Is GroupBox Then
-                    Dim CntGroup As GroupBox
-                    CntGroup = CurrentLiveBoxArgs.Control.Parent
-                ElseIf TypeOf CurrentLiveBoxArgs.Control.Parent Is Panel Then
-                    Dim CntGroup As Panel
-                    CntGroup = CurrentLiveBoxArgs.Control.Parent
-                End If
+                'If TypeOf CurrentLiveBoxArgs.Control.Parent Is GroupBox Then
+                '    Dim CntGroup As GroupBox
+                '    CntGroup = CurrentLiveBoxArgs.Control.Parent
+                'ElseIf TypeOf CurrentLiveBoxArgs.Control.Parent Is Panel Then
+                '    Dim CntGroup As Panel
+                '    CntGroup = CurrentLiveBoxArgs.Control.Parent
+                'End If
                 strQryRow = CurrentLiveBoxArgs.ViewMember
                 LiveBox.Items.Clear()
                 For Each dr As DataRow In dtResults.Rows

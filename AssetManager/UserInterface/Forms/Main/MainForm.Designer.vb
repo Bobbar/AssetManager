@@ -72,8 +72,6 @@ Partial Class MainForm
         Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
-        Me.ConnectionWatcher = New System.Windows.Forms.Timer(Me.components)
-        Me.ConnectionWatchDog = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.ToolStrip1 = New AssetManager.MyToolStrip()
         Me.AddDeviceTool = New System.Windows.Forms.ToolStripButton()
@@ -170,7 +168,7 @@ Partial Class MainForm
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.tsmAddGKUpdate, Me.ToolStripSeparator3, Me.CopyTool})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 98)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 76)
         '
         'ViewToolStripMenuItem
         '
@@ -626,15 +624,6 @@ Partial Class MainForm
         '
         Me.BigQueryWorker.WorkerReportsProgress = True
         '
-        'ConnectionWatcher
-        '
-        Me.ConnectionWatcher.Enabled = True
-        Me.ConnectionWatcher.Interval = 500
-        '
-        'ConnectionWatchDog
-        '
-        Me.ConnectionWatchDog.WorkerReportsProgress = True
-        '
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.SearchGroup)
@@ -815,11 +804,9 @@ Partial Class MainForm
     Friend WithEvents AddDeviceTool As ToolStripButton
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents CopyTool As ToolStripMenuItem
-    Friend WithEvents ConnectionWatcher As Timer
     Friend WithEvents ConnStatusLabel As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents DateTimeLabel As ToolStripStatusLabel
-    Friend WithEvents ConnectionWatchDog As System.ComponentModel.BackgroundWorker
     Friend WithEvents AdminDropDown As ToolStripDropDownButton
     Friend WithEvents cmbDBs As ToolStripComboBox
     Friend WithEvents ManageAttachmentsToolStripMenuItem As ToolStripMenuItem

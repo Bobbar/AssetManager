@@ -49,7 +49,6 @@ Public Class frmSibiMain
         Return tmpList
     End Function
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
-        Dim table As New DataTable
         Dim cmd As New MySqlCommand
         Dim strStartQry As String
         strStartQry = "SELECT * FROM " & sibi_requests.TableName & " WHERE"
