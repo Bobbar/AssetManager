@@ -6,7 +6,6 @@ Public Class clsLiveBox : Implements IDisposable
     Private WithEvents HideTimer As Timer
     Private LiveBox As ListBox
     Private strPrevSearchString As String
-    Private dtLiveBoxData As DataTable
     Private LiveBoxResults As DataTable
     Private LiveBoxControls As New List(Of LiveBoxArgs)
     Private Structure LiveBoxArgs
@@ -55,7 +54,7 @@ Public Class clsLiveBox : Implements IDisposable
                 CurrentLiveBoxArgs.Control.Text = LiveBox.Text
                 MainForm.DynamicSearch()
             Case LiveBoxType.InstaLoad
-                MainForm.LoadDevice(dtLiveBoxData.Rows(LiveBox.SelectedIndex).Item(devices.DeviceUID).ToString)
+                MainForm.LoadDevice(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(devices.DeviceUID).ToString)
                 CurrentLiveBoxArgs.Control.Text = ""
             Case LiveBoxType.SelectValue
                 CurrentLiveBoxArgs.Control.Text = LiveBox.Text
@@ -82,11 +81,11 @@ Public Class clsLiveBox : Implements IDisposable
         strPrevSearchString = strSearchString
         Dim strQry As String
         strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
-        Using MySQLComms As New clsMySQL_Comms, ds As New DataSet, da As New MySqlDataAdapter, cmd As MySqlCommand = MySQLComms.Return_SQLCommand(strQry)
+        Using MySQLComms As New clsMySQL_Comms, Results As New DataTable, da As New MySqlDataAdapter, cmd As MySqlCommand = MySQLComms.Return_SQLCommand(strQry)
             cmd.Parameters.AddWithValue("@Search_Value", strSearchString)
             da.SelectCommand = cmd
-            da.Fill(ds)
-            e.Result = ds.Tables(0)
+            da.Fill(Results)
+            e.Result = Results
         End Using
     End Sub
     Private Sub LiveWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
@@ -118,7 +117,6 @@ Public Class clsLiveBox : Implements IDisposable
                 If strPrevSearchString <> Trim(CurrentLiveBoxArgs.Control.Text) Then
                     StartLiveSearch(CurrentLiveBoxArgs) 'if search string has changed since last completion, run again.
                 End If
-                dtLiveBoxData = dtResults
             Else
                 LiveBox.Visible = False
             End If
