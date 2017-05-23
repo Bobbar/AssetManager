@@ -27,8 +27,8 @@ Public Class frmView
     Sub New(ParentForm As MyForm, DeviceGUID As String)
         InitializeComponent()
         InitDBControls()
-        MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
-        MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, devices.Description)
+        MyLiveBox.AttachToControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
+        MyLiveBox.AttachToControl(txtDescription_View_REQ, LiveBoxType.SelectValue, devices.Description)
         MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6)
         MyWindowList.InsertWindowList(ToolStrip1)
         Tag = ParentForm
@@ -62,9 +62,6 @@ Public Class frmView
         lblGUID.Tag = New DBControlInfo(devices_main.DeviceUID, False)
         chkTrackable.Tag = New DBControlInfo(devices_main.Trackable, False)
     End Sub
-    'Private Sub frmView_Load(sender As Object, e As EventArgs) Handles Me.Load
-    '    MyWindowList = New WindowList(Me, ToolStrip1)
-    'End Sub
     Public Sub SetAttachCount()
         AttachmentTool.Text = "(" + Asset.GetAttachmentCount(CurrentViewDevice).ToString + ")"
         AttachmentTool.ToolTipText = "Attachments " + AttachmentTool.Text

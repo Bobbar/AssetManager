@@ -212,7 +212,7 @@ Public Class clsLiveBox : Implements IDisposable
             GiveLiveBoxFocus()
         End If
     End Sub
-    Public Sub AddControl(Control As Control, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
+    Public Sub AttachToControl(Control As Control, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
         Dim ControlArgs As New LiveBoxArgs
         ControlArgs.Control = Control
         ControlArgs.Type = Type

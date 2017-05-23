@@ -149,8 +149,8 @@ Public Class AddNew
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
         ClearAll()
         InitDBControls()
-        MyLiveBox.AddControl(txtCurUser_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
-        MyLiveBox.AddControl(txtDescription_REQ, LiveBoxType.SelectValue, devices.Description)
+        MyLiveBox.AttachToControl(txtCurUser_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
+        MyLiveBox.AttachToControl(txtDescription_REQ, LiveBoxType.SelectValue, devices.Description)
         Icon = MainForm.Icon
         Tag = MainForm
     End Sub

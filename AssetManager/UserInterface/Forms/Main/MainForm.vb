@@ -8,8 +8,9 @@ Imports System.Net
 Public Class MainForm
     Private Const strShowAllQry As String = "SELECT * FROM " & devices.TableName & " ORDER BY " & devices.Input_DateTime & " DESC"
     Private bolGridFilling As Boolean = False
-    Private MyLiveBox As clsLiveBox
+
     Private cmdLastCommand As MySqlCommand
+    Private MyLiveBox As New clsLiveBox(Me)
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyWindowList As New WindowList(Me)
     Private Sub MainForm_HandleCreated(sender As Object, e As EventArgs) Handles Me.HandleCreated
@@ -31,7 +32,6 @@ Public Class MainForm
             GetGridStyles()
             SetGridStyle(ResultGrid)
             ConnectionWatchDog()
-            ' = New WindowList(Me, ToolStrip1)
             MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2)
             MyWindowList.InsertWindowList(ToolStrip1)
             InitLiveBox()
@@ -43,11 +43,10 @@ Public Class MainForm
         End Try
     End Sub
     Private Sub InitLiveBox()
-        MyLiveBox = New clsLiveBox(Me)
-        MyLiveBox.AddControl(txtDescription, LiveBoxType.DynamicSearch, devices.Description)
-        MyLiveBox.AddControl(txtCurUser, LiveBoxType.DynamicSearch, devices.CurrentUser)
-        MyLiveBox.AddControl(txtSerial, LiveBoxType.InstaLoad, devices.Serial)
-        MyLiveBox.AddControl(txtAssetTag, LiveBoxType.InstaLoad, devices.AssetTag)
+        MyLiveBox.AttachToControl(txtDescription, LiveBoxType.DynamicSearch, devices.Description)
+        MyLiveBox.AttachToControl(txtCurUser, LiveBoxType.DynamicSearch, devices.CurrentUser)
+        MyLiveBox.AttachToControl(txtSerial, LiveBoxType.InstaLoad, devices.Serial)
+        MyLiveBox.AttachToControl(txtAssetTag, LiveBoxType.InstaLoad, devices.AssetTag)
     End Sub
     Private Sub TestDBWarning()
         If bolUseTestDatabase Then

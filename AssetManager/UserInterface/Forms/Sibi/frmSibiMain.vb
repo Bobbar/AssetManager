@@ -35,7 +35,7 @@ Public Class frmSibiMain
             GridTheme.CellSelectColor = colSibiSelectColor
             GridTheme.RowHighlightColor = colHighlightBlue
             ToolStrip1.BackColor = colSibiToolBarColor
-            MyWindowList.InsertWindowList(ToolStrip1) '= New WindowList(Me, ToolStrip1)
+            MyWindowList.InsertWindowList(ToolStrip1)
         Else
             Me.Dispose()
         End If
