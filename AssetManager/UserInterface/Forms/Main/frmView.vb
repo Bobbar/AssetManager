@@ -10,8 +10,6 @@ Public Class frmView
     Public CurrentViewDevice As New Device_Info
     Public MunisUser As Emp_Info = Nothing
     Private OldData As New Device_Info
-    Private MyLiveBox As New clsLiveBox(Me)
-    Private MyWindowList As New WindowList(Me)
     Private bolGridFilling As Boolean = False
     Private MyPingHostname As String = Nothing
     Private DeviceHostname As String = Nothing
@@ -20,6 +18,8 @@ Public Class frmView
     Private DataParser As New DBControlParser
     Private Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
     Private MyMunisToolBar As New MunisToolBar(Me)
+    Private MyLiveBox As New clsLiveBox(Me)
+    Private MyWindowList As New WindowList(Me)
     Private Structure Ping_Results
         Public CanPing As Boolean
         Public Address As String

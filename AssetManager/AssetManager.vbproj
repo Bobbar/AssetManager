@@ -332,13 +332,6 @@
     <Compile Include="UserInterface\MyControls\MyToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UserInterface\MyControls\PanelNoScrollOnFocus.Designer.vb">
-      <DependentUpon>PanelNoScrollOnFocus.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\MyControls\PanelNoScrollOnFocus.vb">
-      <SubType>Component</SubType>
-      <CustomToolNamespace>NoScrollPanel</CustomToolNamespace>
-    </Compile>
     <Compile Include="UserInterface\Forms\GK_Updater\GK_Progress_Fragment.Designer.vb">
       <DependentUpon>GK_Progress_Fragment.vb</DependentUpon>
     </Compile>

@@ -39,7 +39,7 @@ Partial Class MainForm
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.txtSerial = New System.Windows.Forms.TextBox()
         Me.SearchGroup = New System.Windows.Forms.GroupBox()
-        Me.PanelNoScrollOnFocus1 = New AssetManager.PanelNoScrollOnFocus()
+        Me.SearchPanel = New System.Windows.Forms.Panel()
         Me.chkHistorical = New System.Windows.Forms.CheckBox()
         Me.cmdSupDevSearch = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -91,7 +91,7 @@ Partial Class MainForm
         Me.InstantGroup.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SearchGroup.SuspendLayout()
-        Me.PanelNoScrollOnFocus1.SuspendLayout()
+        Me.SearchPanel.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
@@ -284,7 +284,7 @@ Partial Class MainForm
         '
         Me.SearchGroup.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.SearchGroup.Controls.Add(Me.PanelNoScrollOnFocus1)
+        Me.SearchGroup.Controls.Add(Me.SearchPanel)
         Me.SearchGroup.Controls.Add(Me.cmdSearch)
         Me.SearchGroup.Controls.Add(Me.cmdClear)
         Me.SearchGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -297,36 +297,36 @@ Partial Class MainForm
         '
         'PanelNoScrollOnFocus1
         '
-        Me.PanelNoScrollOnFocus1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.SearchPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.PanelNoScrollOnFocus1.AutoScrollMargin = New System.Drawing.Size(10, 20)
-        Me.PanelNoScrollOnFocus1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.PanelNoScrollOnFocus1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.chkHistorical)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmdSupDevSearch)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label6)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label4)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtReplaceYear)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtDescription)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbOSType)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label2)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label5)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label1)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label10)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbStatus)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.chkTrackables)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label12)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbEquipType)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtSerialSearch)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label3)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.cmbLocation)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtCurUser)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.txtAssetTagSearch)
-        Me.PanelNoScrollOnFocus1.Controls.Add(Me.Label11)
-        Me.PanelNoScrollOnFocus1.Location = New System.Drawing.Point(11, 20)
-        Me.PanelNoScrollOnFocus1.Name = "PanelNoScrollOnFocus1"
-        Me.PanelNoScrollOnFocus1.Size = New System.Drawing.Size(732, 173)
-        Me.PanelNoScrollOnFocus1.TabIndex = 52
+        Me.SearchPanel.AutoScrollMargin = New System.Drawing.Size(10, 20)
+        Me.SearchPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.SearchPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SearchPanel.Controls.Add(Me.chkHistorical)
+        Me.SearchPanel.Controls.Add(Me.cmdSupDevSearch)
+        Me.SearchPanel.Controls.Add(Me.Label6)
+        Me.SearchPanel.Controls.Add(Me.Label4)
+        Me.SearchPanel.Controls.Add(Me.txtReplaceYear)
+        Me.SearchPanel.Controls.Add(Me.txtDescription)
+        Me.SearchPanel.Controls.Add(Me.cmbOSType)
+        Me.SearchPanel.Controls.Add(Me.Label2)
+        Me.SearchPanel.Controls.Add(Me.Label5)
+        Me.SearchPanel.Controls.Add(Me.Label1)
+        Me.SearchPanel.Controls.Add(Me.Label10)
+        Me.SearchPanel.Controls.Add(Me.cmbStatus)
+        Me.SearchPanel.Controls.Add(Me.chkTrackables)
+        Me.SearchPanel.Controls.Add(Me.Label12)
+        Me.SearchPanel.Controls.Add(Me.cmbEquipType)
+        Me.SearchPanel.Controls.Add(Me.txtSerialSearch)
+        Me.SearchPanel.Controls.Add(Me.Label3)
+        Me.SearchPanel.Controls.Add(Me.cmbLocation)
+        Me.SearchPanel.Controls.Add(Me.txtCurUser)
+        Me.SearchPanel.Controls.Add(Me.txtAssetTagSearch)
+        Me.SearchPanel.Controls.Add(Me.Label11)
+        Me.SearchPanel.Location = New System.Drawing.Point(11, 20)
+        Me.SearchPanel.Name = "PanelNoScrollOnFocus1"
+        Me.SearchPanel.Size = New System.Drawing.Size(732, 173)
+        Me.SearchPanel.TabIndex = 52
         '
         'chkHistorical
         '
@@ -758,8 +758,8 @@ Partial Class MainForm
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.SearchGroup.ResumeLayout(False)
-        Me.PanelNoScrollOnFocus1.ResumeLayout(False)
-        Me.PanelNoScrollOnFocus1.PerformLayout()
+        Me.SearchPanel.ResumeLayout(False)
+        Me.SearchPanel.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
@@ -817,7 +817,7 @@ Partial Class MainForm
     Friend WithEvents Label5 As Label
     Friend WithEvents Label6 As Label
     Friend WithEvents txtReplaceYear As TextBox
-    Friend WithEvents PanelNoScrollOnFocus1 As AssetManager.PanelNoScrollOnFocus
+    Friend WithEvents SearchPanel As Panel
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
     Friend WithEvents cmdSibi As ToolStripButton

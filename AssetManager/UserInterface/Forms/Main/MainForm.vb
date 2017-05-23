@@ -8,7 +8,6 @@ Imports System.Net
 Public Class MainForm
     Private Const strShowAllQry As String = "SELECT * FROM " & devices.TableName & " ORDER BY " & devices.Input_DateTime & " DESC"
     Private bolGridFilling As Boolean = False
-
     Private cmdLastCommand As MySqlCommand
     Private MyLiveBox As New clsLiveBox(Me)
     Private MyMunisToolBar As New MunisToolBar(Me)
@@ -396,10 +395,10 @@ Public Class MainForm
     Private Sub cmbOSType_DropDown(sender As Object, e As EventArgs) Handles cmbOSType.DropDown
         AdjustComboBoxWidth(sender, e)
     End Sub
-    Private Sub PanelNoScrollOnFocus1_Scroll(sender As Object, e As ScrollEventArgs) Handles PanelNoScrollOnFocus1.Scroll
+    Private Sub PanelNoScrollOnFocus1_Scroll(sender As Object, e As ScrollEventArgs) Handles SearchPanel.Scroll
         MyLiveBox.HideLiveBox()
     End Sub
-    Private Sub PanelNoScrollOnFocus1_MouseWheel(sender As Object, e As MouseEventArgs) Handles PanelNoScrollOnFocus1.MouseWheel
+    Private Sub PanelNoScrollOnFocus1_MouseWheel(sender As Object, e As MouseEventArgs) Handles SearchPanel.MouseWheel
         MyLiveBox.HideLiveBox()
     End Sub
     Private Sub cmdSibi_Click(sender As Object, e As EventArgs) Handles cmdSibi.Click
