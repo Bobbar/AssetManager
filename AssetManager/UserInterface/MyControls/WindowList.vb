@@ -3,11 +3,10 @@
     Private MyParentForm As Form
     Private DropDownControl As New ToolStripDropDownButton
     Private intFormCount As Integer
-    Sub New(ParentForm As Form, TargetToolStrip As MyToolStrip)
+    Sub New(ParentForm As Form)
         MyParentForm = ParentForm
-        Init(TargetToolStrip)
     End Sub
-    Private Sub Init(TargetToolStrip As MyToolStrip)
+    Public Sub InsertWindowList(TargetToolStrip As MyToolStrip)
         InitializeDropDownButton(TargetToolStrip)
         InitializeTimer()
     End Sub

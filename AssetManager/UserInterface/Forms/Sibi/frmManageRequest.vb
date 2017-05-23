@@ -7,7 +7,7 @@ Public Class frmManageRequest
     Private bolGridFilling As Boolean = False
     Public CurrentRequest As Request_Info
     Private MyText As String
-    Private MyWindowList As WindowList
+    Private MyWindowList As New WindowList(Me)
     Private bolDragging As Boolean = False
     Private DataParser As New DBControlParser
     Private MyMunisToolBar As New MunisToolBar(Me)
@@ -29,7 +29,7 @@ Public Class frmManageRequest
         InitDBControls()
         ExtendedMethods.DoubleBufferedDataGrid(RequestItemsGrid, True)
         MyMunisToolBar.InsertMunisDropDown(ToolStrip)
-        MyWindowList = New WindowList(Me, ToolStrip)
+        MyWindowList.InsertWindowList(ToolStrip) ' = New WindowList(Me, ToolStrip)
         Tag = ParentForm
         Icon = ParentForm.Icon
         GridTheme = ParentForm.GridTheme

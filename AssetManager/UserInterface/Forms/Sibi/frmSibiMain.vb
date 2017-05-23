@@ -2,7 +2,7 @@
 Imports MySql.Data.MySqlClient
 Public Class frmSibiMain
     Private bolGridFilling As Boolean = False
-    Private MyWindowList As WindowList
+    Private MyWindowList As New WindowList(Me)
     Private LastCmd As MySqlCommand
     Private bolRebuildingCombo As Boolean = False
     Public Sub RefreshResults()
@@ -35,7 +35,7 @@ Public Class frmSibiMain
             GridTheme.CellSelectColor = colSibiSelectColor
             GridTheme.RowHighlightColor = colHighlightBlue
             ToolStrip1.BackColor = colSibiToolBarColor
-            MyWindowList = New WindowList(Me, ToolStrip1)
+            MyWindowList.InsertWindowList(ToolStrip1) '= New WindowList(Me, ToolStrip1)
         Else
             Me.Dispose()
         End If
