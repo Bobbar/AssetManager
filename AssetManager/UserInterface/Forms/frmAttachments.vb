@@ -709,7 +709,7 @@ VALUES(@" & dev_attachments.FKey & ",
     Private Sub AttachGrid_MouseMove(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseMove
         If bolAllowDrag And Not bolDragging Then
             If e.Button = MouseButtons.Left Then
-                If MouseIsDragging(, e.Location) And Not DownloadWorker.IsBusy Then
+                If MouseIsDragging(, e.Location) And Not DownloadWorker.IsBusy AndAlso AttachGrid.CurrentRow IsNot Nothing Then
                     bolDragging = True
                     DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
                     WaitForDownload()
