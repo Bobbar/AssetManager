@@ -585,8 +585,9 @@ VALUES
                 SetAttachCount()
                 Me.Show()
                 Me.Activate()
-                SetPOStatus(CurrentRequest.strPO)
                 SetReqStatus(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year)
+                CheckForPO()
+                SetPOStatus(CurrentRequest.strPO)
             End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
@@ -1095,6 +1096,27 @@ VALUES
                 lblReqStatus.Text = "Status: NA"
             End If
         End If
+    End Sub
+    Private Async Sub CheckForPO()
+        If CurrentRequest.strRequisitionNumber <> "" And CurrentRequest.strPO = "" Then
+            Dim GetPO As String = Await Munis.Get_PO_From_ReqNumber_Async(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year)
+            If GetPO.Length > 1 Then
+                Dim blah = Message("PO Number " & GetPO & " was detected in the Requisition. Do you wish to add it to this request?", vbQuestion + vbYesNo, "New PO Detected", Me)
+                If blah = MsgBoxResult.Yes Then
+                    InsertPONumber(GetPO)
+                    OpenRequest(CurrentRequest.strUID)
+                Else
+                    Exit Sub
+                End If
+            End If
+        End If
+    End Sub
+    Private Sub InsertPONumber(PO As String)
+        Try
+            Asset.Update_SQLValue(sibi_requests.TableName, sibi_requests.PO, PO, sibi_requests.UID, CurrentRequest.strUID)
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Sub tsmCopyText_Click(sender As Object, e As EventArgs) Handles tsmCopyText.Click
         RequestItemsGrid.RowHeadersVisible = False

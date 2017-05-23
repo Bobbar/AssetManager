@@ -15,10 +15,17 @@ Public Class clsMunis_Functions
         If Not IsNothing(PO) Then
             If PO <> "" Then
                 Return Await priv_Comms.Return_MSSQLValueAsync("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber")
-            Else
-                Return Nothing
             End If
         End If
+        Return Nothing
+    End Function
+    Public Async Function Get_PO_From_ReqNumber_Async(ReqNum As String, FY As String) As Task(Of String)
+        If Not IsNothing(ReqNum) Then
+            If ReqNum <> "" Then
+                Return Await priv_Comms.Return_MSSQLValueAsync("rqdetail", "rqdt_req_no", ReqNum, "rqdt_pur_no", "rqdt_fsc_yr", FY)
+            End If
+        End If
+        Return Nothing
     End Function
     Public Function Get_PO_From_Asset(AssetTag As String) As String
         If Not IsNothing(AssetTag) Then
