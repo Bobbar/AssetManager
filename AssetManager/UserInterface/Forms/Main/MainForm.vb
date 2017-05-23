@@ -312,11 +312,6 @@ Public Class MainForm
         AddNew.Activate()
         AddNew.WindowState = FormWindowState.Normal
     End Sub
-    Private Sub txtDescription_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDescription.KeyDown
-        If e.KeyCode = Keys.Down Then
-            MyLiveBox.GiveLiveBoxFocus()
-        End If
-    End Sub
     Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
         ResultGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         Clipboard.SetDataObject(Me.ResultGrid.GetClipboardContent())
@@ -426,11 +421,6 @@ Public Class MainForm
     Private Sub TextEnCrypterToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TextEnCrypterToolStripMenuItem.Click
         Dim NewEncryp As New frmEncrypter(Me)
     End Sub
-    Private Sub txtReplaceYear_KeyDown(sender As Object, e As KeyEventArgs) Handles txtReplaceYear.KeyDown
-        If e.KeyCode = Keys.Down Then
-            MyLiveBox.GiveLiveBoxFocus()
-        End If
-    End Sub
     Private Sub ResultGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles ResultGrid.KeyDown
         If e.KeyCode = Keys.Enter Then
             LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
@@ -440,7 +430,6 @@ Public Class MainForm
     Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
         FTP.ScanAttachements()
     End Sub
-
     Private Sub tsmAddGKUpdate_Click(sender As Object, e As EventArgs) Handles tsmAddGKUpdate.Click
         EnqueueGKUpdate()
     End Sub
