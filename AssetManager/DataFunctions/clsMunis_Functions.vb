@@ -285,8 +285,10 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         NewGridForm.AddGrid("ReqGrid", "Requisition Info:", MunisComms.Return_MSSQLTable(strQRY))
         If Not SelectMode Then
             NewGridForm.Show()
+            DoneWaiting()
             Return Nothing
         Else
+            DoneWaiting()
             NewGridForm.ShowDialog(Parent)
             If NewGridForm.DialogResult = DialogResult.OK Then
                 Return SelectedCellValue(NewGridForm.SelectedValue, "rqdt_uni_pr")

@@ -1,7 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
 Public Class clsLiveBox : Implements IDisposable
-    Private RowLimit As Integer = 15
+    Private RowLimit As Integer = 30
     Private WithEvents HideTimer As Timer
     Private LiveBox As ListBox
     Private strPrevSearchString As String
@@ -22,7 +22,6 @@ Public Class clsLiveBox : Implements IDisposable
         LiveBox = New ListBox
         LiveBox.Parent = ParentForm
         LiveBox.BringToFront()
-        LiveBox.Padding = New Padding(0, 0, 0, 10)
         'AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
         AddHandler LiveBox.MouseDown, AddressOf LiveBox_MouseDown
         AddHandler LiveBox.MouseMove, AddressOf LiveBox_MouseMove
@@ -88,13 +87,6 @@ Public Class clsLiveBox : Implements IDisposable
         Try
             If dtResults.Rows.Count > 0 Then
                 Dim strQryRow As String
-                'If TypeOf CurrentLiveBoxArgs.Control.Parent Is GroupBox Then
-                '    Dim CntGroup As GroupBox
-                '    CntGroup = CurrentLiveBoxArgs.Control.Parent
-                'ElseIf TypeOf CurrentLiveBoxArgs.Control.Parent Is Panel Then
-                '    Dim CntGroup As Panel
-                '    CntGroup = CurrentLiveBoxArgs.Control.Parent
-                'End If
                 strQryRow = CurrentLiveBoxArgs.ViewMember
                 LiveBox.Items.Clear()
                 For Each dr As DataRow In dtResults.Rows
@@ -181,6 +173,7 @@ Public Class clsLiveBox : Implements IDisposable
             .BorderStyle = BorderStyle.FixedSingle
             .Font = LiveBoxFont
             .ForeColor = Color.Black
+            .Padding = New Padding(0, 0, 0, 10)
         End With
     End Sub
     Private Sub HideTimer_Tick(sender As Object, e As EventArgs) Handles HideTimer.Tick
@@ -203,13 +196,15 @@ Public Class clsLiveBox : Implements IDisposable
         If e.KeyCode = Keys.Escape Then
             HideLiveBox()
         Else
-            For Each item As LiveBoxArgs In LiveBoxControls
-                If item.Control Is sender Then
-                    If Not item.Control.ReadOnly Then
-                        StartLiveSearch(item)
+            If e.KeyCode <> Keys.ShiftKey Then
+                For Each item As LiveBoxArgs In LiveBoxControls
+                    If item.Control Is sender Then
+                        If Not item.Control.ReadOnly Then
+                            StartLiveSearch(item)
+                        End If
                     End If
-                End If
-            Next
+                Next
+            End If
         End If
     End Sub
     Private Sub Control_KeyDown(sender As Object, e As KeyEventArgs)
