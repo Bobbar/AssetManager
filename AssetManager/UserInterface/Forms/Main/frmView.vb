@@ -19,6 +19,7 @@ Public Class frmView
     Private intFailedPings As Integer = 0
     Private DataParser As New DBControlParser
     Private Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
+    Private MyMunisToolBar As New MunisToolBar(Me)
     Private Structure Ping_Results
         Public CanPing As Boolean
         Public Address As String
@@ -28,7 +29,7 @@ Public Class frmView
         InitDBControls()
         MyLiveBox.AddControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
         MyLiveBox.AddControl(txtDescription_View_REQ, LiveBoxType.SelectValue, devices.Description)
-        Dim MyMunisMenu As New MunisToolsMenu(Me, ToolStrip1, 6)
+        MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6)
         Tag = ParentForm
         Icon = ParentForm.Icon
         GridTheme = ParentForm.GridTheme

@@ -10,6 +10,7 @@ Public Class frmManageRequest
     Private MyWindowList As WindowList
     Private bolDragging As Boolean = False
     Private DataParser As New DBControlParser
+    Private MyMunisToolBar As New MunisToolBar(Me)
     Sub New(ParentForm As MyForm, RequestUID As String)
         Waiting()
         InitializeComponent()
@@ -27,7 +28,7 @@ Public Class frmManageRequest
     Private Sub InitForm(ParentForm As MyForm)
         InitDBControls()
         ExtendedMethods.DoubleBufferedDataGrid(RequestItemsGrid, True)
-        Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip)
+        MyMunisToolBar.InsertMunisDropDown(ToolStrip)
         MyWindowList = New WindowList(Me, ToolStrip)
         Tag = ParentForm
         Icon = ParentForm.Icon

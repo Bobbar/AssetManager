@@ -237,6 +237,7 @@
     <Compile Include="UserInterface\Forms\Main\frmMunisUser.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\MyControls\MunisToolBar.vb" />
     <Compile Include="UserInterface\MyControls\MyForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -295,12 +296,6 @@
     <Compile Include="DataComms\AssetManager\MySQL\clsMySQL_Comms.vb" />
     <Compile Include="Classes\Structures.vb" />
     <Compile Include="Classes\modSecurityMod.vb" />
-    <Compile Include="UserInterface\MyControls\MunisTools.Designer.vb">
-      <DependentUpon>MunisTools.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\MyControls\MunisTools.vb">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="UserInterface\Forms\SplashScreen1.Designer.vb">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
     </Compile>
@@ -403,9 +398,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Main\UpdateDevice.resx">
       <DependentUpon>UpdateDevice.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\MyControls\MunisTools.resx">
-      <DependentUpon>MunisTools.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>

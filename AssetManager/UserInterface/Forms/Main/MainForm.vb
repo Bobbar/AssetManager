@@ -10,6 +10,7 @@ Public Class MainForm
     Private bolGridFilling As Boolean = False
     Private MyLiveBox As clsLiveBox
     Private cmdLastCommand As MySqlCommand
+    Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyWindowList As WindowList
     Private Sub MainForm_HandleCreated(sender As Object, e As EventArgs) Handles Me.HandleCreated
         LoadProgram()
@@ -30,8 +31,8 @@ Public Class MainForm
             GetGridStyles()
             SetGridStyle(ResultGrid)
             ConnectionWatchDog()
-            Dim MyMunisTools As New MunisToolsMenu(Me, ToolStrip1, 2)
             MyWindowList = New WindowList(Me, ToolStrip1)
+            MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2)
             InitLiveBox()
             Clear_All()
             TestDBWarning()
