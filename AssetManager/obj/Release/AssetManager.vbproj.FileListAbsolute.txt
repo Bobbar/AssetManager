@@ -19,7 +19,6 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmSibiSelector.res
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Tracking.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.UpdateDev.resources
-C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.MunisToolsMenu.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.Resources.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.frmView.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.View_Entry.resources
