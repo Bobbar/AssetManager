@@ -81,13 +81,13 @@ Public Class frmView
         Else
             If OldData.strCurrentUser <> Trim(txtCurUser_View_REQ.Text) Then
                 DBRow(devices.CurrentUser) = Trim(txtCurUser_View_REQ.Text)
-                DBRow(devices.Munis_Emp_Num) = ""
+                DBRow(devices.Munis_Emp_Num) = DBNull.Value
             Else
                 DBRow(devices.CurrentUser) = OldData.strCurrentUser
-                DBRow(devices.Munis_Emp_Num) = OldData.strCurrentUserEmpNum
+                DBRow(devices.Munis_Emp_Num) = CleanDBValue(OldData.strCurrentUserEmpNum)
             End If
         End If
-        DBRow(devices.Sibi_Link_UID) = CurrentViewDevice.strSibiLink
+        DBRow(devices.Sibi_Link_UID) = CleanDBValue(CurrentViewDevice.strSibiLink)
         DBRow(devices.LastMod_User) = strLocalUser
         DBRow(devices.LastMod_Date) = Now
         DBRow(devices.CheckSum) = GetHashOfTable(tmpTable)

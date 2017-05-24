@@ -173,14 +173,6 @@ Module OtherFunctions
         MainForm.ConnStatusLabel.ForeColor = FColor
         MainForm.Refresh()
     End Sub
-    Public Function NoNull(DBVal As Object) As String
-        Try
-            Return IIf(IsDBNull(DBVal), "", DBVal.ToString).ToString
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return ""
-        End Try
-    End Function
     Public Function YearFromDate(dtDate As Date) As String
         Return dtDate.Year.ToString
     End Function

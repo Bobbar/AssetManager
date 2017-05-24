@@ -1,5 +1,6 @@
 ﻿Option Explicit On
 Imports MySql.Data.MySqlClient
+Imports System.Text.RegularExpressions
 Public Module DBFunctions
     Public Const strCommMessage As String = "Communicating..."
     Public Const strLoadingGridMessage As String = "Building Grid..."
@@ -61,4 +62,21 @@ Public Module DBFunctions
             SibiIndex.AttachFolder = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiAttachFolder)
         End With
     End Sub
+    Public Function NoNull(DBVal As Object) As String
+        Try
+            Return IIf(IsDBNull(DBVal), "", DBVal.ToString).ToString
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return ""
+        End Try
+    End Function
+    ''' <summary>
+    ''' Trims, removes LF and CR chars and returns a DBNull if string is empty.
+    ''' </summary>
+    ''' <param name="Value"></param>
+    ''' <returns></returns>
+    Public Function CleanDBValue(Value As String) As Object
+        Dim CleanString As String = Regex.Replace(Trim(Value), "[/\r?\n|\r/g]+", String.Empty)
+        Return IIf(CleanString = String.Empty, DBNull.Value, CleanString)
+    End Function
 End Module

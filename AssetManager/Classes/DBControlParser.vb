@@ -53,11 +53,11 @@
                 Select Case True
                     Case TypeOf ctl Is TextBox
                         Dim dbTxt As TextBox = ctl
-                        DBRow(DBInfo.DataColumn) = Trim(dbTxt.Text)
+                        DBRow(DBInfo.DataColumn) = CleanDBValue(dbTxt.Text)
 
                     Case TypeOf ctl Is MaskedTextBox
                         Dim dbMaskTxt As MaskedTextBox = ctl
-                        DBRow(DBInfo.DataColumn) = dbMaskTxt.Text
+                        DBRow(DBInfo.DataColumn) = CleanDBValue(dbMaskTxt.Text)
 
                     Case TypeOf ctl Is DateTimePicker
                         Dim dbDtPick As DateTimePicker = ctl
