@@ -679,7 +679,7 @@ VALUES(@" & dev_attachments.FKey & ",
         End If
     End Sub
     Private Sub AttachGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseDown
-        If e.ColumnIndex > 0 And e.RowIndex > 0 Then
+        If e.ColumnIndex >= 0 And e.RowIndex >= 0 Then
             If e.Button = MouseButtons.Right And Not AttachGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
                 AttachGrid.Rows(e.RowIndex).Selected = True
                 AttachGrid.CurrentCell = AttachGrid(e.ColumnIndex, e.RowIndex)

@@ -867,7 +867,7 @@ VALUES
     End Sub
     Private Sub RequestItemsGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles RequestItemsGrid.CellMouseDown
         Try
-            If e.ColumnIndex > 0 And e.RowIndex > 0 Then
+            If e.ColumnIndex >= 0 And e.RowIndex >= 0 Then
                 If e.Button = MouseButtons.Right And Not RequestItemsGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
                     RequestItemsGrid.Rows(e.RowIndex).Selected = True
                     RequestItemsGrid.CurrentCell = RequestItemsGrid(e.ColumnIndex, e.RowIndex)
