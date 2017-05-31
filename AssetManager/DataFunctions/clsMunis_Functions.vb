@@ -231,25 +231,25 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
         Dim strQRY As String = "SELECT TOP 100 a_employee_number FROM pr_employee_master WHERE e_supervisor='" & SupEmpNum & "'"
         Return priv_Comms.Return_MSSQLTable(strQRY)
     End Function
-    Public Sub NewOrgObView(Org As String, Optional Obj As String = Nothing, Optional Parent As Form = Nothing)
+    Public Async Sub NewOrgObView(Org As String, Optional Obj As String = Nothing, Optional Parent As Form = Nothing)
         Waiting()
         Dim NewGridForm As New GridForm(Parent, "Org/Obj Info")
         Dim Columns As String = " glma_org, glma_obj, glma_desc, glma_seg5, glma_bud_yr, glma_orig_bud_cy, glma_rev_bud_cy, glma_encumb_cy, glma_memo_bal_cy, glma_rev_bud_cy-glma_encumb_cy-glma_memo_bal_cy AS 'Funds Available' "
         Dim Qry As String
         If Obj <> "" Then
             Qry = "Select " & intMaxResults & " " & Columns & "FROM glmaster WHERE glma_org = '" & Org & "' AND glma_obj = '" & Obj & "'"
-            NewGridForm.AddGrid("OrgGrid", "GL Info:", MunisComms.Return_MSSQLTable(Qry))
-            Dim RollUpCode As String = MunisComms.Return_MSSQLValue("gl_budget_rollup", "a_org", Org, "a_rollup_code")
-            NewGridForm.AddGrid("RollupGrid", "Rollup Info:", MunisComms.Return_MSSQLTable("SELECT TOP 100 * FROM gl_budget_rollup WHERE a_rollup_code = '" & RollUpCode & "'"))
+            NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.Return_MSSQLTableAsync(Qry))
+            Dim RollUpCode As String = Await MunisComms.Return_MSSQLValueAsync("gl_budget_rollup", "a_org", Org, "a_rollup_code")
+            NewGridForm.AddGrid("RollupGrid", "Rollup Info:", Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 100 * FROM gl_budget_rollup WHERE a_rollup_code = '" & RollUpCode & "'"))
         Else
             Qry = "Select TOP 100 " & Columns & "FROM glmaster WHERE glma_org = '" & Org & "'"
-            NewGridForm.AddGrid("OrgGrid", "GL Info:", MunisComms.Return_MSSQLTable(Qry))
-            NewGridForm.AddGrid("RollupGrid", "Rollup Info:", MunisComms.Return_MSSQLTable("SELECT TOP 100 * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
+            NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.Return_MSSQLTableAsync(Qry))
+            NewGridForm.AddGrid("RollupGrid", "Rollup Info:", Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 100 * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
         End If
         NewGridForm.Show()
         DoneWaiting()
     End Sub
-    Public Sub NewMunisView_NameSearch(Name As String, Optional Parent As Form = Nothing)
+    Public Async Sub NewMunisView_NameSearch(Name As String, Optional Parent As Form = Nothing)
         Waiting()
         Dim strColumns As String = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last"
         Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " 
@@ -257,9 +257,8 @@ FROM pr_employee_master e
 INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number
 WHERE e.a_name_last LIKE '%" & UCase(Name) & "%' OR e.a_name_first LIKE '%" & UCase(Name) & "%'"
         Dim NewGridForm As New GridForm(Parent, "MUNIS Employee Info")
-        NewGridForm.AddGrid("EmpGrid", "MUNIS Info:", MunisComms.Return_MSSQLTable(strQRY))
+        NewGridForm.AddGrid("EmpGrid", "MUNIS Info:", Await MunisComms.Return_MSSQLTableAsync(strQRY))
         NewGridForm.Show()
-
         DoneWaiting()
     End Sub
     Public Sub NewMunisView_POSearch(PO As String, Optional Parent As Form = Nothing)
