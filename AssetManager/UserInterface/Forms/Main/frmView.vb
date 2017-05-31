@@ -207,7 +207,7 @@ Public Class frmView
                 Me.Show()
                 DataGridHistory.ClearSelection()
                 bolGridFilling = False
-                DeviceHostname = "D" & CurrentViewDevice.strSerial & "." '& Domain
+                DeviceHostname = "D" & CurrentViewDevice.strSerial & "." & Domain
                 MyPingHostname = DeviceHostname
                 CheckRDP()
                 tmr_RDPRefresher.Enabled = True
