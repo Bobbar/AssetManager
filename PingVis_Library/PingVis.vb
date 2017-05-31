@@ -85,20 +85,24 @@ Public Class PingVis : Implements IDisposable
         End Try
     End Sub
     Private Async Sub StartPing()
-        Dim options As New Net.NetworkInformation.PingOptions
-        options.DontFragment = True
-        Dim IP = ReturnIPv4Address(Await Dns.GetHostAddressesAsync(MyPingHostname))
-        If Not bolPingRunning Then
-            If Not bolStopWhenNotFocused Then
-                MyPing.SendAsync(IP, Timeout, options)
-                bolPingRunning = True
-            Else
-                If Form.ActiveForm Is MyControl.FindForm Then
+        Try
+            Dim options As New Net.NetworkInformation.PingOptions
+            options.DontFragment = True
+            Dim IP = ReturnIPv4Address(Await Dns.GetHostAddressesAsync(MyPingHostname))
+            If Not bolPingRunning Then
+                If Not bolStopWhenNotFocused Then
                     MyPing.SendAsync(IP, Timeout, options)
                     bolPingRunning = True
+                Else
+                    If Form.ActiveForm Is MyControl.FindForm Then
+                        MyPing.SendAsync(IP, Timeout, options)
+                        bolPingRunning = True
+                    End If
                 End If
             End If
-        End If
+        Catch
+            Exit Sub
+        End Try
     End Sub
     Private Sub PingComplete(ByVal sender As Object, ByVal e As System.Net.NetworkInformation.PingCompletedEventArgs)
         bolPingRunning = False
