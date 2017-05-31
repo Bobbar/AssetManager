@@ -37,7 +37,7 @@ Public Class GKUpdater_Form
             If upd.Device.strGUID = Device.strGUID Then upd.StartUpdate()
         Next
     End Sub
-    Private Function Exists(Device As Device_Info)
+    Private Function Exists(Device As Device_Info) As Boolean
         For Each upd As GK_Progress_Fragment In MyUpdates
             If upd.Device.strGUID = Device.strGUID Then Return True
         Next
@@ -91,7 +91,7 @@ Public Class GKUpdater_Form
         SortUpdates()
     End Sub
 
-    Private Sub CriticalStop()
+    Private Sub CriticalStop(sender As Object, e As EventArgs)
         StopQueue()
         Message("The queue was stopped because of an access error. Please re-enter your credentials.", vbExclamation + vbOKOnly, "Queue Stopped", Me)
         AdminCreds = Nothing
@@ -113,18 +113,13 @@ Public Class GKUpdater_Form
         Return False
     End Function
     Private Sub MaxUpdates_ValueChanged(sender As Object, e As EventArgs) Handles MaxUpdates.ValueChanged
-
-        If Not bolStarting Then MaxSimUpdates = MaxUpdates.Value
+        If Not bolStarting Then MaxSimUpdates = CInt(MaxUpdates.Value)
     End Sub
-
     Private Sub ProcessUpdates()
-
         If CanRunMoreUpdates() Then StartNextUpdate()
         PruneQueue()
         SetStats()
-
     End Sub
-
     ''' <summary>
     ''' Removes disposed update fragments from list.
     ''' </summary>
@@ -144,7 +139,7 @@ Public Class GKUpdater_Form
 
     Private Sub SetStats()
         Dim intQueued, intRunning, intComplete As Integer
-        Dim TransferRateSum As Single
+        Dim TransferRateSum As Double
         For Each upd As GK_Progress_Fragment In MyUpdates
             Select Case upd.ProgStatus
                 Case GK_Progress_Fragment.Progress_Status.Queued
@@ -155,9 +150,7 @@ Public Class GKUpdater_Form
                 Case GK_Progress_Fragment.Progress_Status.Complete
                     intComplete += 1
             End Select
-
         Next
-
         lblQueued.Text = "Queued: " & intQueued
         lblRunning.Text = "Running: " & intRunning
         lblComplete.Text = "Complete: " & intComplete

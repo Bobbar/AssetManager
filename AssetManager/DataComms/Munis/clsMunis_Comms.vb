@@ -50,9 +50,9 @@ Public Class clsMunis_Comms
         Try
             Dim sqlQRY As String
             If fieldIN2 IsNot Nothing And ValueIN2 IsNot Nothing Then
-                sqlQRY = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "' AND " & fieldIN2 & " = '" & ValueIN2 & "'"
+                sqlQRY = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN.ToString & " = '" & valueIN.ToString & "' AND " & fieldIN2.ToString & " = '" & ValueIN2.ToString & "'"
             Else
-                sqlQRY = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "'"
+                sqlQRY = "SELECT TOP 1 " & fieldOUT & " FROM " & table & " WHERE " & fieldIN.ToString & " = '" & valueIN.ToString & "'"
             End If
             Using conn As SqlConnection = New SqlConnection(MSSQLConnectString),
             cmd As New SqlCommand

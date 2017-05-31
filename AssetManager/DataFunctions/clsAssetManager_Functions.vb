@@ -63,9 +63,9 @@ Public Class clsAssetManager_Functions
             Using SQLComms As New clsMySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strSQLIDQry)
                 For Each r As DataRow In results.Rows
                     If Type = Entry_Type.Device Then
-                        strDeviceID = r.Item(dev_attachments.FKey)
+                        strDeviceID = r.Item(dev_attachments.FKey).ToString
                     ElseIf Type = Entry_Type.Sibi Then
-                        strDeviceID = r.Item(sibi_attachments.FKey)
+                        strDeviceID = r.Item(sibi_attachments.FKey).ToString
                     End If
                 Next
                 'Delete FTP Attachment
@@ -98,7 +98,7 @@ Public Class clsAssetManager_Functions
     End Function
     Public Function Has_Attachments(strGUID As String, Type As Entry_Type) As Boolean
         Try
-            Dim strQRY As String
+            Dim strQRY As String = ""
             Select Case Type
                 Case Entry_Type.Device
                     strQRY = "SELECT " & dev_attachments.FKey & " FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FKey & "='" & strGUID & "'"
@@ -141,13 +141,13 @@ Public Class clsAssetManager_Functions
             Dim strQry = "SELECT * FROM " & historical_dev.TableName & " WHERE " & historical_dev.History_Entry_UID & "='" & strGUID & "'"
             Using SQLComms As New clsMySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQry)
                 For Each r As DataRow In results.Rows
-                    tmpInfo.Historical.strChangeType = GetHumanValue(DeviceIndex.ChangeType, r.Item(historical_dev.ChangeType))
-                    tmpInfo.strAssetTag = r.Item(historical_dev.AssetTag)
-                    tmpInfo.strCurrentUser = r.Item(historical_dev.CurrentUser)
-                    tmpInfo.strSerial = r.Item(historical_dev.Serial)
-                    tmpInfo.strDescription = r.Item(historical_dev.Description)
-                    tmpInfo.Historical.dtActionDateTime = r.Item(historical_dev.ActionDateTime)
-                    tmpInfo.Historical.strActionUser = r.Item(historical_dev.ActionUser)
+                    tmpInfo.Historical.strChangeType = GetHumanValue(DeviceIndex.ChangeType, r.Item(historical_dev.ChangeType).ToString)
+                    tmpInfo.strAssetTag = r.Item(historical_dev.AssetTag).ToString
+                    tmpInfo.strCurrentUser = r.Item(historical_dev.CurrentUser).ToString
+                    tmpInfo.strSerial = r.Item(historical_dev.Serial).ToString
+                    tmpInfo.strDescription = r.Item(historical_dev.Description).ToString
+                    tmpInfo.Historical.dtActionDateTime = DateTime.Parse(r.Item(historical_dev.ActionDateTime).ToString)
+                    tmpInfo.Historical.strActionUser = r.Item(historical_dev.ActionUser).ToString
                 Next
                 Return tmpInfo
             End Using
@@ -163,14 +163,14 @@ Public Class clsAssetManager_Functions
         Dim UID As String
         Dim strQry = "SELECT " & devices.DeviceUID & " from " & devices.TableName & " WHERE " & devices.AssetTag & " = '" & AssetTag & "' AND " & devices.Serial & " = '" & Serial & "' ORDER BY " & devices.Input_DateTime & ""
         Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strQry)
-            UID = cmd.ExecuteScalar
+            UID = cmd.ExecuteScalar.ToString
             Return UID
         End Using
     End Function
-    Public Function Delete_SQLMasterEntry(ByVal strGUID As String, Type As Entry_Type) As Integer
+    Public Function Delete_SQLMasterEntry(ByVal strGUID As String, Type As Entry_Type) As Boolean
         Try
             Dim rows As Integer
-            Dim strSQLQry As String
+            Dim strSQLQry As String = ""
             Select Case Type
                 Case Entry_Type.Device
                     strSQLQry = "DELETE FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & strGUID & "'"
@@ -179,14 +179,18 @@ Public Class clsAssetManager_Functions
             End Select
             Using SQLComms As New clsMySQL_Comms
                 rows = SQLComms.Return_SQLCommand(strSQLQry).ExecuteNonQuery
-                Return rows
+                If rows > 0 Then
+                    Return True
+                End If
             End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
+                Return False
             Else
                 EndProgram()
             End If
         End Try
+        Return False
     End Function
     Public Function BuildIndex(CodeType As String, TypeName As String) As Combo_Data()
         Try
@@ -199,17 +203,17 @@ Public Class clsAssetManager_Functions
                 For Each r As DataRow In results.Rows
                     row += 1
                     ReDim Preserve tmpArray(row)
-                    tmpArray(row).strID = r.Item(main_combocodes.ID)
+                    tmpArray(row).strID = r.Item(main_combocodes.ID).ToString
                     If r.Table.Columns.Contains("munis_code") Then
                         If Not IsDBNull(r.Item("munis_code")) Then
-                            tmpArray(row).strLong = r.Item(main_combocodes.HumanValue) & " - " & r.Item("munis_code")
+                            tmpArray(row).strLong = r.Item(main_combocodes.HumanValue).ToString & " - " & r.Item("munis_code").ToString
                         Else
-                            tmpArray(row).strLong = r.Item(main_combocodes.HumanValue)
+                            tmpArray(row).strLong = r.Item(main_combocodes.HumanValue).ToString
                         End If
                     Else
-                        tmpArray(row).strLong = r.Item(main_combocodes.HumanValue)
+                        tmpArray(row).strLong = r.Item(main_combocodes.HumanValue).ToString
                     End If
-                    tmpArray(row).strShort = r.Item(main_combocodes.DB_Value)
+                    tmpArray(row).strShort = r.Item(main_combocodes.DB_Value).ToString
                 Next
                 Return tmpArray
             End Using
@@ -220,6 +224,7 @@ Public Class clsAssetManager_Functions
                 EndProgram()
             End If
         End Try
+        Return Nothing
     End Function
     Public Function BuildModuleIndex() As List(Of Access_Info)
         Dim tmpList As New List(Of Access_Info)
@@ -228,9 +233,9 @@ Public Class clsAssetManager_Functions
             For Each row As DataRow In ModuleTable.Rows
                 Dim tmpInfo As Access_Info
                 With tmpInfo
-                    .intLevel = row.Item(security.AccessLevel)
-                    .strModule = row.Item(security.SecModule)
-                    .strDesc = row.Item(security.Description)
+                    .intLevel = CInt(row.Item(security.AccessLevel))
+                    .strModule = row.Item(security.SecModule).ToString
+                    .strDesc = row.Item(security.Description).ToString
                 End With
                 tmpList.Add(tmpInfo)
             Next
@@ -239,7 +244,7 @@ Public Class clsAssetManager_Functions
     End Function
     Public Sub UpdateUser(ByRef User As User_Info, AccessLevel As Integer)
         User.intAccessLevel = AccessLevel
-        Update_SQLValue(users.TableName, users.AccessLevel, User.intAccessLevel, users.UID, User.strUID)
+        Update_SQLValue(users.TableName, users.AccessLevel, User.intAccessLevel.ToString, users.UID, User.strUID)
     End Sub
     Public Function FindDevice(SearchVal As String, Type As FindDevType) As Device_Info
         Using SQLComms As New clsMySQL_Comms
@@ -249,6 +254,7 @@ Public Class clsAssetManager_Functions
                 Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.Serial & "='" & SearchVal & "'"))
             End If
         End Using
+        Return Nothing
     End Function
     Public Sub AddNewEmp(EmpInfo As Emp_Info)
         Try
@@ -287,10 +293,10 @@ VALUES
             Using SQLComms As New clsMySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQRY)
                 If results.Rows.Count > 0 Then
                     For Each r As DataRow In results.Rows
-                        UserAccess.strUsername = r.Item(users.UserName)
-                        UserAccess.strFullname = r.Item(users.FullName)
-                        UserAccess.intAccessLevel = r.Item(users.AccessLevel)
-                        UserAccess.strUID = r.Item(users.UID)
+                        UserAccess.strUsername = r.Item(users.UserName).ToString
+                        UserAccess.strFullname = r.Item(users.FullName).ToString
+                        UserAccess.intAccessLevel = CInt(r.Item(users.AccessLevel))
+                        UserAccess.strUID = r.Item(users.UID).ToString
                     Next
                 Else
                     UserAccess.intAccessLevel = 0
@@ -310,9 +316,9 @@ VALUES
                 For Each r As DataRow In results.Rows
                     rows += 1
                     ReDim Preserve AccessLevels(rows)
-                    AccessLevels(rows).intLevel = r.Item(security.AccessLevel)
-                    AccessLevels(rows).strModule = r.Item(security.SecModule)
-                    AccessLevels(rows).strDesc = r.Item(security.Description)
+                    AccessLevels(rows).intLevel = CInt(r.Item(security.AccessLevel))
+                    AccessLevels(rows).strModule = r.Item(security.SecModule).ToString
+                    AccessLevels(rows).strDesc = r.Item(security.Description).ToString
                 Next
             End Using
         Catch ex As Exception
@@ -329,6 +335,7 @@ VALUES
         Catch ex As Exception
             Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
+        Return False
     End Function
     Public Function DevicesBySup(ParentForm As Form) As DataTable
         Dim SupInfo As Emp_Info
@@ -339,7 +346,7 @@ VALUES
             Dim DeviceList As New DataTable
             Using SQLComms As New clsMySQL_Comms
                 For Each r As DataRow In EmpList.Rows
-                    Dim strQRY As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.Munis_Emp_Num & "='" & r.Item("a_employee_number") & "'"
+                    Dim strQRY As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.Munis_Emp_Num & "='" & r.Item("a_employee_number").ToString & "'"
                     Using tmpTable As DataTable = SQLComms.Return_SQLTable(strQRY)
                         DeviceList.Merge(tmpTable)
                     End Using
@@ -361,7 +368,7 @@ VALUES
                 .strCurrentUserEmpNum = NoNull(DeviceTable.Rows(0).Item(devices.Munis_Emp_Num))
                 .strSerial = NoNull(DeviceTable.Rows(0).Item(devices.Serial))
                 .strAssetTag = NoNull(DeviceTable.Rows(0).Item(devices.AssetTag))
-                .dtPurchaseDate = NoNull(DeviceTable.Rows(0).Item(devices.PurchaseDate))
+                .dtPurchaseDate = DateTime.Parse(NoNull(DeviceTable.Rows(0).Item(devices.PurchaseDate)))
                 .strReplaceYear = NoNull(DeviceTable.Rows(0).Item(devices.ReplacementYear))
                 .strPO = NoNull(DeviceTable.Rows(0).Item(devices.PO))
                 .strOSVersion = NoNull(DeviceTable.Rows(0).Item(devices.OSVersion))
@@ -386,10 +393,10 @@ VALUES
             Using SQLComms As New clsMySQL_Comms, Results As DataTable = SQLComms.Return_SQLTable(Qry)
                 For Each r As DataRow In Results.Rows
                     Dim tmpItem As User_Info
-                    tmpItem.strUsername = r.Item(users.UserName)
-                    tmpItem.strFullname = r.Item(users.FullName)
-                    tmpItem.intAccessLevel = r.Item(users.AccessLevel)
-                    tmpItem.strUID = r.Item(users.UID)
+                    tmpItem.strUsername = r.Item(users.UserName).ToString
+                    tmpItem.strFullname = r.Item(users.FullName).ToString
+                    tmpItem.intAccessLevel = CInt(r.Item(users.AccessLevel))
+                    tmpItem.strUID = r.Item(users.UID).ToString
                     tmpList.Add(tmpItem)
                 Next
                 Return tmpList
@@ -397,19 +404,20 @@ VALUES
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
+        Return Nothing
     End Function
     Public Function GetAttachmentCount(AttachInfo As Object) As Integer
         Try
             Dim strQRY As String = ""
             If TypeOf AttachInfo Is Device_Info Then
-                Dim Dev As Device_Info = AttachInfo
+                Dim Dev As Device_Info = DirectCast(AttachInfo, Device_Info)
                 strQRY = "SELECT COUNT(*) FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FKey & "='" & Dev.strGUID & "'"
             ElseIf TypeOf AttachInfo Is Request_Info Then
-                Dim Req As Request_Info = AttachInfo
+                Dim Req As Request_Info = DirectCast(AttachInfo, Request_Info)
                 strQRY = "SELECT COUNT(*) FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FKey & "='" & Req.strUID & "'"
             End If
             Using SQLComms As New clsMySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strQRY)
-                Return cmd.ExecuteScalar
+                Return CInt(cmd.ExecuteScalar)
             End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then

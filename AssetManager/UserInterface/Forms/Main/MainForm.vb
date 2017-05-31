@@ -147,10 +147,10 @@ Public Class MainForm
                 table.Rows.Add(r.Item(devices.CurrentUser),
                               r.Item(devices.AssetTag),
                               r.Item(devices.Serial),
-                               GetHumanValue(DeviceIndex.EquipType, r.Item(devices.EQType)),
+                               GetHumanValue(DeviceIndex.EquipType, r.Item(devices.EQType).ToString),
                                r.Item(devices.Description),
-                               GetHumanValue(DeviceIndex.OSType, r.Item(devices.OSVersion)),
-                               GetHumanValue(DeviceIndex.Locations, r.Item(devices.Location)),
+                               GetHumanValue(DeviceIndex.OSType, r.Item(devices.OSVersion).ToString),
+                               GetHumanValue(DeviceIndex.Locations, r.Item(devices.Location).ToString),
                                r.Item(devices.PO),
                                r.Item(devices.PurchaseDate),
                               r.Item(devices.ReplacementYear),
@@ -199,7 +199,7 @@ Public Class MainForm
         Else
             strStartQry = "SELECT * FROM " & devices.TableName & " WHERE "
         End If
-        Dim strDynaQry As String
+        Dim strDynaQry As String = ""
         Dim SearchValCol As List(Of SearchVal) = BuildSearchListNew()
         For Each fld As SearchVal In SearchValCol
             If Not IsNothing(fld.Value) Then
@@ -295,7 +295,7 @@ Public Class MainForm
     Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
         If e.Error Is Nothing Then
             If e.Result IsNot Nothing Then
-                BigQueryDone(e.Result)
+                BigQueryDone(DirectCast(e.Result, DataTable))
             Else
                 DoneWaiting()
             End If
@@ -327,7 +327,7 @@ Public Class MainForm
                                                           If CanPing Then
                                                               Using LocalSQLComm As New clsMySQL_Comms(True) ',
                                                                   Dim cmd = LocalSQLComm.Return_SQLCommand("SELECT NOW()")
-                                                                  Dim strTime As String = cmd.ExecuteScalar
+                                                                  Dim strTime As String = cmd.ExecuteScalar.ToString
                                                                   strServerTime = strTime
                                                               End Using
                                                           End If

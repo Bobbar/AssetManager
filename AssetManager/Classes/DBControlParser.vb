@@ -52,23 +52,23 @@
             If DBInfo.ParseType <> ParseType.DisplayOnly Then
                 Select Case True
                     Case TypeOf ctl Is TextBox
-                        Dim dbTxt As TextBox = ctl
+                        Dim dbTxt As TextBox = DirectCast(ctl, TextBox)
                         DBRow(DBInfo.DataColumn) = CleanDBValue(dbTxt.Text)
 
                     Case TypeOf ctl Is MaskedTextBox
-                        Dim dbMaskTxt As MaskedTextBox = ctl
+                        Dim dbMaskTxt As MaskedTextBox = DirectCast(ctl, MaskedTextBox)
                         DBRow(DBInfo.DataColumn) = CleanDBValue(dbMaskTxt.Text)
 
                     Case TypeOf ctl Is DateTimePicker
-                        Dim dbDtPick As DateTimePicker = ctl
+                        Dim dbDtPick As DateTimePicker = DirectCast(ctl, DateTimePicker)
                         DBRow(DBInfo.DataColumn) = dbDtPick.Value
 
                     Case TypeOf ctl Is ComboBox
-                        Dim dbCmb As ComboBox = ctl
+                        Dim dbCmb As ComboBox = DirectCast(ctl, ComboBox)
                         DBRow(DBInfo.DataColumn) = GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex)
 
                     Case TypeOf ctl Is CheckBox
-                        Dim dbChk As CheckBox = ctl
+                        Dim dbChk As CheckBox = DirectCast(ctl, CheckBox)
                         DBRow(DBInfo.DataColumn) = dbChk.Checked
                 End Select
             End If
@@ -101,30 +101,30 @@
             Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
             Select Case True
                 Case TypeOf ctl Is TextBox
-                    Dim dbTxt As TextBox = ctl
+                    Dim dbTxt As TextBox = DirectCast(ctl, TextBox)
                     If DBInfo.AttribIndex IsNot Nothing Then
-                        dbTxt.Text = GetHumanValue(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn))
+                        dbTxt.Text = GetHumanValue(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn).ToString)
                     Else
                         dbTxt.Text = Row.Item(DBInfo.DataColumn).ToString
                     End If
                 Case TypeOf ctl Is MaskedTextBox
-                    Dim dbMaskTxt As MaskedTextBox = ctl
+                    Dim dbMaskTxt As MaskedTextBox = DirectCast(ctl, MaskedTextBox)
                     dbMaskTxt.Text = Row.Item(DBInfo.DataColumn).ToString
 
                 Case TypeOf ctl Is DateTimePicker
-                    Dim dbDtPick As DateTimePicker = ctl
-                    dbDtPick.Value = Row.Item(DBInfo.DataColumn)
+                    Dim dbDtPick As DateTimePicker = DirectCast(ctl, DateTimePicker)
+                    dbDtPick.Value = DateTime.Parse(Row.Item(DBInfo.DataColumn).ToString)
                 Case TypeOf ctl Is ComboBox
-                    Dim dbCmb As ComboBox = ctl
-                    dbCmb.SelectedIndex = GetComboIndexFromShort(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn))
+                    Dim dbCmb As ComboBox = DirectCast(ctl, ComboBox)
+                    dbCmb.SelectedIndex = GetComboIndexFromShort(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn).ToString)
 
                 Case TypeOf ctl Is Label
-                    Dim dbLbl As Label = ctl
+                    Dim dbLbl As Label = DirectCast(ctl, Label)
                     dbLbl.Text = Row.Item(DBInfo.DataColumn).ToString
 
                 Case TypeOf ctl Is CheckBox
-                    Dim dbChk As CheckBox = ctl
-                    dbChk.Checked = Row.Item(DBInfo.DataColumn)
+                    Dim dbChk As CheckBox = DirectCast(ctl, CheckBox)
+                    dbChk.Checked = CBool(Row.Item(DBInfo.DataColumn))
             End Select
 
         Next

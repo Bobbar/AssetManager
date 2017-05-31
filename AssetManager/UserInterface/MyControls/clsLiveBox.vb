@@ -50,13 +50,13 @@ Public Class clsLiveBox : Implements IDisposable
                 CurrentLiveBoxArgs.Control.Text = LiveBox.Text
                 If TypeOf CurrentLiveBoxArgs.Control.FindForm Is frmView Then
                     If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
-                        Dim FrmSetData As frmView = CurrentLiveBoxArgs.Control.FindForm
+                        Dim FrmSetData As frmView = DirectCast(CurrentLiveBoxArgs.Control.FindForm, frmView)
                         FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember).ToString
                         FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember).ToString
                     End If
                 ElseIf TypeOf CurrentLiveBoxArgs.Control.FindForm Is AddNew Then
                     If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
-                        Dim FrmSetData As AddNew = CurrentLiveBoxArgs.Control.FindForm
+                        Dim FrmSetData As AddNew = DirectCast(CurrentLiveBoxArgs.Control.FindForm, AddNew)
                         FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember).ToString
                         FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember).ToString
                     End If
@@ -139,7 +139,7 @@ Public Class clsLiveBox : Implements IDisposable
         Catch
         End Try
     End Sub
-    Private Sub CollectLiveBoxArgs(Control As Control, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
+    Private Sub CollectLiveBoxArgs(Control As TextBox, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
         With CurrentLiveBoxArgs
             .Control = Control
             .Type = Type
@@ -197,13 +197,10 @@ Public Class clsLiveBox : Implements IDisposable
             HideLiveBox()
         Else
             If e.KeyCode <> Keys.ShiftKey Then
-                For Each item As LiveBoxArgs In LiveBoxControls
-                    If item.Control Is sender Then
-                        If Not item.Control.ReadOnly Then
-                            StartLiveSearch(item)
-                        End If
-                    End If
-                Next
+                Dim arg = GetSenderArgs(sender)
+                If Not arg.Control.ReadOnly Then
+                    StartLiveSearch(arg)
+                End If
             End If
         End If
     End Sub
@@ -212,7 +209,15 @@ Public Class clsLiveBox : Implements IDisposable
             GiveLiveBoxFocus()
         End If
     End Sub
-    Public Sub AttachToControl(Control As Control, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
+    Private Function GetSenderArgs(sender As Object) As LiveBoxArgs
+        For Each arg As LiveBoxArgs In LiveBoxControls
+            If arg.Control Is DirectCast(sender, TextBox) Then
+                Return arg
+            End If
+        Next
+        Return Nothing
+    End Function
+    Public Sub AttachToControl(Control As TextBox, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
         Dim ControlArgs As New LiveBoxArgs
         ControlArgs.Control = Control
         ControlArgs.Type = Type

@@ -62,6 +62,7 @@ Module OtherFunctions
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
+        Return Nothing
     End Function
     Public Sub AdjustComboBoxWidth(ByVal sender As Object, ByVal e As EventArgs)
         Dim senderComboBox = DirectCast(sender, ComboBox)
@@ -103,7 +104,7 @@ Module OtherFunctions
         stpw.Start()
     End Sub
     Private intTimerHits As Integer = 0
-    Public Function StopTimer()
+    Public Function StopTimer() As String
         stpw.Stop()
         intTimerHits += 1
         Dim Results As String = intTimerHits & "  Stopwatch: MS:" & stpw.ElapsedMilliseconds & " Ticks: " & stpw.ElapsedTicks
@@ -220,7 +221,7 @@ Module OtherFunctions
         Dim ActiveTransfers As New List(Of frmAttachments)
         For Each frm As Form In My.Application.OpenForms
             If TypeOf frm Is frmAttachments Then
-                Dim Attachments As frmAttachments = frm
+                Dim Attachments As frmAttachments = DirectCast(frm, frmAttachments)
                 If Attachments.UploadWorker.IsBusy Or Attachments.DownloadWorker.IsBusy Then
                     ActiveTransfers.Add(Attachments)
                 End If
@@ -254,16 +255,16 @@ Module OtherFunctions
                 For Each cell As DataGridViewCell In Grid.Rows(Row).Cells
                     Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)
                     Dim BlendColor As Color
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                    (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                    (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                    (CInt(c1.B) + CInt(c2.B)) / 2)
+                    BlendColor = Color.FromArgb(CInt((CInt(c1.A) + CInt(c2.A)) / 2),
+                                                    CInt((CInt(c1.R) + CInt(c2.R)) / 2),
+                                                    CInt((CInt(c1.G) + CInt(c2.G)) / 2),
+                                                    CInt((CInt(c1.B) + CInt(c2.B)) / 2))
                     cell.Style.SelectionBackColor = BlendColor
                     c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B)
-                    BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                    (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                    (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                    (CInt(c1.B) + CInt(c2.B)) / 2)
+                    BlendColor = Color.FromArgb(CInt((CInt(c1.A) + CInt(c2.A)) / 2),
+                                                    CInt((CInt(c1.R) + CInt(c2.R)) / 2),
+                                                    CInt((CInt(c1.G) + CInt(c2.G)) / 2),
+                                                    CInt((CInt(c1.B) + CInt(c2.B)) / 2))
                     cell.Style.BackColor = BlendColor
                 Next
             End If
