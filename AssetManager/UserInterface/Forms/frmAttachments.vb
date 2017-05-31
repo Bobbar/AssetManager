@@ -8,7 +8,7 @@ Imports System.Threading
 Class frmAttachments
     Public bolAdminMode As Boolean = False
     Private Const FileSizeMBLimit As Short = 150
-    Private intProgress As Short
+    Private intProgress As Double
     Private lngBytesMoved As Integer
     Private stpSpeed As New Stopwatch
     Private bolGridFilling As Boolean
@@ -32,7 +32,7 @@ Class frmAttachments
         If Not IsNothing(AttachInfo) Then
             If TypeOf AttachInfo Is Request_Info Then
                 AttachType = Entry_Type.Sibi
-                AttachRequest = AttachInfo
+                AttachRequest = DirectCast(AttachInfo, Request_Info)
                 AttachFolderID = AttachRequest.strUID
                 AttachTable = sibi_attachments.TableName
                 strSelectedFolder = GetHumanValueFromIndex(SibiIndex.AttachFolder, 0)
@@ -43,7 +43,7 @@ Class frmAttachments
                 FillSibiInfo()
             ElseIf TypeOf AttachInfo Is Device_Info Then
                 AttachType = Entry_Type.Device
-                AttachDevice = AttachInfo
+                AttachDevice = DirectCast(AttachInfo, Device_Info)
                 AttachFolderID = AttachDevice.strGUID
                 AttachTable = dev_attachments.TableName
                 Me.Text = "Device Attachements"
@@ -179,20 +179,20 @@ Class frmAttachments
                 Dim NewAttachment As New Attach_Info
                 For Each r As DataRow In results.Rows
                     strFileSizeHuman = Math.Round((CInt(r.Item(main_attachments.FileSize)) / 1024), 1) & " KB"
-                    strFullFilename = r.Item(main_attachments.FileName) & r.Item(main_attachments.FileType)
+                    strFullFilename = r.Item(main_attachments.FileName).ToString & r.Item(main_attachments.FileType).ToString
                     If AttachType = Entry_Type.Sibi Then
-                        table.Rows.Add(GetFileIcon(r.Item(sibi_attachments.FileType)), strFullFilename, strFileSizeHuman, r.Item(sibi_attachments.TimeStamp), GetHumanValue(SibiIndex.AttachFolder, r.Item(sibi_attachments.Folder)), r.Item(sibi_attachments.FileUID), r.Item(sibi_attachments.FileHash))
+                        table.Rows.Add(GetFileIcon(r.Item(sibi_attachments.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(sibi_attachments.TimeStamp), GetHumanValue(SibiIndex.AttachFolder, r.Item(sibi_attachments.Folder).ToString), r.Item(sibi_attachments.FileUID), r.Item(sibi_attachments.FileHash))
                     ElseIf AttachType = Entry_Type.Device Then
                         If bolAdminMode Then
                             table.Rows.Add(strFullFilename, strFileSizeHuman, r.Item(dev_attachments.TimeStamp), r.Item(devices.AssetTag), r.Item(dev_attachments.FileUID), r.Item(dev_attachments.FileHash))
                         Else
-                            table.Rows.Add(GetFileIcon(r.Item(dev_attachments.FileType)), strFullFilename, strFileSizeHuman, r.Item(dev_attachments.TimeStamp), r.Item(dev_attachments.FileUID), r.Item(dev_attachments.FileHash))
+                            table.Rows.Add(GetFileIcon(r.Item(dev_attachments.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(dev_attachments.TimeStamp), r.Item(dev_attachments.FileUID), r.Item(dev_attachments.FileHash))
                         End If
                     End If
-                    NewAttachment.Filename = r.Item(main_attachments.FileName)
-                    NewAttachment.Extention = r.Item(main_attachments.FileType)
-                    NewAttachment.FileSize = r.Item(main_attachments.FileSize)
-                    NewAttachment.FileUID = IIf(IsDBNull(r.Item(main_attachments.FileUID)), "", r.Item(main_attachments.FileUID)) '!UID
+                    NewAttachment.Filename = r.Item(main_attachments.FileName).ToString
+                    NewAttachment.Extention = r.Item(main_attachments.FileType).ToString
+                    NewAttachment.FileSize = CInt(r.Item(main_attachments.FileSize))
+                    NewAttachment.FileUID = IIf(IsDBNull(r.Item(main_attachments.FileUID)), "", r.Item(main_attachments.FileUID)).ToString '!UID
                     AttachIndex.Add(NewAttachment)
                 Next
             End Using
@@ -213,10 +213,10 @@ Class frmAttachments
     End Sub
     Private Sub RefreshAttachCount()
         If TypeOf Tag Is frmView Then
-            Dim vw As frmView = Tag
+            Dim vw As frmView = DirectCast(Tag, frmView)
             vw.SetAttachCount()
         ElseIf TypeOf Tag Is frmManageRequest Then
-            Dim req As frmManageRequest = Tag
+            Dim req As frmManageRequest = DirectCast(Tag, frmManageRequest)
             req.SetAttachCount()
         End If
     End Sub
@@ -304,7 +304,7 @@ Class frmAttachments
         Dim FileNumber As Integer = 1
         For Each file As String In Files
             Dim CurrentFile As New Attachment(file)
-            FileSizeMB = CurrentFile.Filesize / (1024 * 1024)
+            FileSizeMB = CInt(CurrentFile.Filesize / (1024 * 1024))
             If FileSizeMB > FileSizeMBLimit Then
                 e.Result = False
                 UploadWorker.ReportProgress(2, "Error!")
@@ -312,13 +312,14 @@ Class frmAttachments
                 Exit Sub
             End If
             UploadWorker.ReportProgress(1, "Connecting...")
-            Dim resp As Net.FtpWebResponse = Nothing
-            Using resp 'check if device folder exists. create directory if not.
-                resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
+            '   Dim resp As Net.FtpWebResponse = Nothing
+            Using resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails) 'check if device folder exists. create directory if not.
+                '  resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
                 Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
                 Dim s As String = sr.ReadToEnd()
                 If Not s.Contains(Foldername) Then
-                    resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
+                    Dim MkDirResp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
+                    MkDirResp.Dispose()
                 End If
             End Using
             'ftp upload
@@ -326,9 +327,9 @@ Class frmAttachments
             Dim bytesIn As Integer = 1
             Dim totalBytesIn As Integer
             Dim ftpStream As System.IO.FileStream = CurrentFile.FileInfo.OpenRead()
-            Dim flLength As Integer = ftpStream.Length
+            Dim flLength As Long = ftpStream.Length
             Dim reqfile As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & CurrentFile.FileUID, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
-            Dim perc As Short = 0
+            Dim perc As Double = 0
             stpSpeed.Start()
             UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
             lngBytesMoved = 0
@@ -411,7 +412,7 @@ VALUES(@" & dev_attachments.FKey & ",
     Private Sub UploadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles UploadWorker.ProgressChanged
         Select Case e.ProgressPercentage
             Case 1
-                StatusBar(e.UserState)
+                StatusBar(DirectCast(e.UserState, String))
             Case 2
                 stpSpeed.Stop()
                 stpSpeed.Reset()
@@ -420,10 +421,10 @@ VALUES(@" & dev_attachments.FKey & ",
                 ProgressBar1.Value = 0
                 ProgTimer.Enabled = False
                 Spinner.Visible = False
-                StatusBar(e.UserState)
+                StatusBar(DirectCast(e.UserState, String))
                 Me.Refresh()
             Case 3
-                StatusBar(e.UserState)
+                StatusBar(DirectCast(e.UserState, String))
                 ListAttachments()
         End Select
     End Sub
@@ -433,7 +434,7 @@ VALUES(@" & dev_attachments.FKey & ",
                 WorkerFeedback(False)
                 If e.Error Is Nothing Then
                     If Not e.Cancelled Then
-                        If e.Result Then
+                        If DirectCast(e.Result, Boolean) Then
                             ListAttachments()
                             ' MessageBox.Show("File uploaded successfully!",
                             '"Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
@@ -490,12 +491,12 @@ VALUES(@" & dev_attachments.FKey & ",
             results = LocalSQLComm.Return_SQLTable(strQry)
         End Using
         For Each r As DataRow In results.Rows
-            strFilename = r.Item(main_attachments.FileName) & strTimeStamp
-            strFiletype = r.Item(main_attachments.FileType)
+            strFilename = r.Item(main_attachments.FileName).ToString & strTimeStamp
+            strFiletype = r.Item(main_attachments.FileType).ToString
             strFullPath = strTempPath & strFilename & strFiletype
-            Foldername = r.Item(main_attachments.FKey)
-            FileExpectedHash = r.Item(main_attachments.FileHash)
-            FileUID = r.Item(main_attachments.FileUID)
+            Foldername = r.Item(main_attachments.FKey).ToString
+            FileExpectedHash = r.Item(main_attachments.FileHash).ToString
+            FileUID = r.Item(main_attachments.FileUID).ToString
         Next
         'FTP STUFF
         Dim buffer(1023) As Byte
@@ -513,7 +514,7 @@ VALUES(@" & dev_attachments.FKey & ",
             ProgTimer.Enabled = True
             DownloadWorker.ReportProgress(1, "Downloading...")
             bytesIn = 1
-            Dim perc As Integer = 0
+            Dim perc As Double = 0
             stpSpeed.Start()
             Do Until bytesIn < 1 Or DownloadWorker.CancellationPending
                 bytesIn = respStream.Read(buffer, 0, 1024)
@@ -582,7 +583,7 @@ VALUES(@" & dev_attachments.FKey & ",
     Private Sub DownloadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles DownloadWorker.ProgressChanged
         Select Case e.ProgressPercentage
             Case 1
-                StatusBar(e.UserState)
+                StatusBar(DirectCast(e.UserState, String))
             Case 2
                 stpSpeed.Stop()
                 stpSpeed.Reset()
@@ -591,12 +592,12 @@ VALUES(@" & dev_attachments.FKey & ",
                 ProgressBar1.Value = 0
                 ProgTimer.Enabled = False
                 Spinner.Visible = False
-                StatusBar(e.UserState)
+                StatusBar(DirectCast(e.UserState, String))
                 Me.Refresh()
         End Select
     End Sub
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
-        Dim BytesPerSecond As Single
+        Dim BytesPerSecond As Double
         Dim ResetCounter As Integer = 40
         If lngBytesMoved > 0 Then
             progIts += 1
@@ -610,9 +611,9 @@ VALUES(@" & dev_attachments.FKey & ",
         Else
             statMBPS.Text = Nothing
         End If
-        ProgressBar1.Value = intProgress
+        ProgressBar1.Value = CInt(intProgress)
         If intProgress > 1 Then ProgressBar1.Value = ProgressBar1.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
-        ProgressBar1.Value = intProgress
+        ProgressBar1.Value = CInt(intProgress)
     End Sub
     Private Sub AttachGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellLeave
         LeaveRow(AttachGrid, GridTheme, e.RowIndex)
@@ -756,7 +757,7 @@ VALUES(@" & dev_attachments.FKey & ",
             Dim streamFileData As New MemoryStream
             Dim FileName As String
             FileName = GetAttachFileName(AttachObject, DataFormat)
-            streamFileData = AttachObject.GetData("FileContents")
+            streamFileData = DirectCast(AttachObject.GetData("FileContents"), MemoryStream)
             streamFileData.Position = 0
             Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
             Dim output As IO.Stream
@@ -784,7 +785,7 @@ VALUES(@" & dev_attachments.FKey & ",
             Dim streamFileName As New MemoryStream
             Select Case DataFormat
                 Case "RenPrivateItem" '"FileGroupDescriptor"
-                    streamFileName = AttachObject.GetData("FileGroupDescriptor")
+                    streamFileName = DirectCast(AttachObject.GetData("FileGroupDescriptor"), MemoryStream)
                     streamFileName.Position = 0
                     Dim sr As New StreamReader(streamFileName)
                     Dim fullString As String = sr.ReadToEnd
