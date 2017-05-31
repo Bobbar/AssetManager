@@ -84,16 +84,17 @@ Public Class PingVis : Implements IDisposable
             Debug.Print(ex.Message)
         End Try
     End Sub
-    Private Sub StartPing()
+    Private Async Sub StartPing()
         Dim options As New Net.NetworkInformation.PingOptions
         options.DontFragment = True
+        Dim IP = ReturnIPv4Address(Await Dns.GetHostAddressesAsync(MyPingHostname))
         If Not bolPingRunning Then
             If Not bolStopWhenNotFocused Then
-                MyPing.SendAsync(MyPingHostname, Timeout, options)
+                MyPing.SendAsync(IP, Timeout, options)
                 bolPingRunning = True
             Else
                 If Form.ActiveForm Is MyControl.FindForm Then
-                    MyPing.SendAsync(MyPingHostname, Timeout, options)
+                    MyPing.SendAsync(IP, Timeout, options)
                     bolPingRunning = True
                 End If
             End If
@@ -111,6 +112,12 @@ Public Class PingVis : Implements IDisposable
             If Not bolScrolling Then DrawBars(MyControl, GetPingBars, mOverInfo)
         End If
     End Sub
+    Private Function ReturnIPv4Address(IPs() As IPAddress) As String
+        For Each ip In IPs
+            If ip.AddressFamily = Sockets.AddressFamily.InterNetwork Then Return ip.ToString
+        Next
+        Return Nothing
+    End Function
     Private Sub ControlMouseLeave(sender As Object, e As EventArgs)
         bolScrolling = False
         mOverInfo = Nothing
