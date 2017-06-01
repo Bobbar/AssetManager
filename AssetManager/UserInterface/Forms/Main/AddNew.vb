@@ -114,7 +114,7 @@ Public Class AddNew
                         End If
                     End If
                 Case TypeOf ctl Is ComboBox
-                    Dim cmb As ComboBox = ctl
+                    Dim cmb As ComboBox = DirectCast(ctl, ComboBox)
                     If DBInfo.Required Then
                         If cmb.SelectedIndex = -1 Then
                             bolValidFields = False
@@ -202,12 +202,12 @@ Public Class AddNew
         MunisUser = Nothing
         For Each ctl As Control In Parent.Controls
             If TypeOf ctl Is TextBox Then
-                Dim txt As TextBox = ctl
+                Dim txt As TextBox = DirectCast(ctl, TextBox)
                 txt.Text = ""
                 txt.ReadOnly = False
             End If
             If TypeOf ctl Is ComboBox Then
-                Dim cmb As ComboBox = ctl
+                Dim cmb As ComboBox = DirectCast(ctl, ComboBox)
                 cmb.SelectedIndex = -1
             End If
             If ctl.HasChildren Then ClearFields(ctl)

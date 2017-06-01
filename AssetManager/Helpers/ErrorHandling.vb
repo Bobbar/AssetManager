@@ -11,38 +11,61 @@ Module ErrorHandling
         Select Case True
             Case TypeOf ex Is BackgroundWorkerCancelledException
                 ErrorResult = True
+
             Case TypeOf ex Is Net.WebException
-                ErrorResult = handleWebException(ex, Method)
+                Dim WebEx = DirectCast(ex, Net.WebException)
+                ErrorResult = handleWebException(WebEx, Method)
+
             Case TypeOf ex Is IndexOutOfRangeException
-                Dim handEx As IndexOutOfRangeException = ex
+                Dim handEx As IndexOutOfRangeException = DirectCast(ex, IndexOutOfRangeException)
                 Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & handEx.HResult & "  Message:" & handEx.Message)
                 ErrorResult = True
+
             Case TypeOf ex Is MySqlException
-                ErrorResult = handleMySqlException(ex, Method)
+                Dim MySQLEx = DirectCast(ex, MySqlException)
+                ErrorResult = handleMySQLException(MySQLEx, Method)
+
             Case TypeOf ex Is SqlException
-                ErrorResult = handleSQLException(ex, Method)
+                Dim SQLEx = DirectCast(ex, SqlException)
+                ErrorResult = handleSQLException(SQLEx, Method)
+
             Case TypeOf ex Is InvalidCastException
-                Dim handEx As InvalidCastException = ex
+                Dim handEx As InvalidCastException = DirectCast(ex, InvalidCastException)
                 Logger("CAST ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & handEx.HResult & "  Message:" & handEx.Message)
                 Dim blah = Message("An object was cast to an unmatched type.  See log for details.  Log: " & strLogPath, vbOKOnly + vbExclamation, "Invalid Cast Error")
                 Select Case handEx.HResult
                     Case -2147467262 'DBNull to String type error. These are pretty ubiquitous and not a big deal. Move along.
                         ErrorResult = True
                 End Select
+
             Case TypeOf ex Is IOException
-                ErrorResult = handleIOException(ex, Method)
+                Dim IOEx = DirectCast(ex, IOException)
+                ErrorResult = handleIOException(IOEx, Method)
+
             Case TypeOf ex Is Net.NetworkInformation.PingException
-                ErrorResult = handlePingException(ex, Method)
+                Dim PingEx = DirectCast(ex, Net.NetworkInformation.PingException)
+                ErrorResult = handlePingException(PingEx, Method)
+
             Case TypeOf ex Is SocketException
-                ErrorResult = handleSocketException(ex, Method)
+                Dim SocketEx = DirectCast(ex, SocketException)
+                ErrorResult = handleSocketException(SocketEx, Method)
+
             Case TypeOf ex Is FormatException
-                ErrorResult = handleFormatException(ex, Method)
+                Dim FormatEx = DirectCast(ex, FormatException)
+                ErrorResult = handleFormatException(FormatEx, Method)
+
             Case TypeOf ex Is Win32Exception
-                ErrorResult = handleWin32Exception(ex, Method)
+                Dim Win32Ex = DirectCast(ex, Win32Exception)
+                ErrorResult = handleWin32Exception(Win32Ex, Method)
+
             Case TypeOf ex Is InvalidOperationException
-                ErrorResult = handleOperationException(ex, Method)
+                Dim InvalidOpEx = DirectCast(ex, InvalidOperationException)
+                ErrorResult = handleOperationException(InvalidOpEx, Method)
+
             Case TypeOf ex Is NoPingException
-                ErrorResult = handleNoPingException(ex, Method)
+                Dim NoPingEx = DirectCast(ex, NoPingException)
+                ErrorResult = handleNoPingException(NoPingEx, Method)
+
             Case Else
                 UnHandledError(ex, ex.HResult, Method)
                 ErrorResult = False
@@ -75,7 +98,7 @@ Module ErrorHandling
         End Select
         Return False
     End Function
-    Private Function handleMySqlException(ex As MySqlException, Method As MethodBase) As Boolean
+    Private Function handleMySQLException(ex As MySqlException, Method As MethodBase) As Boolean
         Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
         Select Case ex.Number
             Case 1042
@@ -118,7 +141,7 @@ Module ErrorHandling
         End Select
     End Function
     Private Function handleWebException(ex As Net.WebException, Method As MethodBase) As Boolean
-        Dim handResponse As Net.FtpWebResponse = ex.Response
+        Dim handResponse As Net.FtpWebResponse = DirectCast(ex.Response, Net.FtpWebResponse)
         Select Case handResponse.StatusCode
             Case Net.FtpStatusCode.ActionNotTakenFileUnavailable
                 Message("FTP File was not found, or access was denied.", vbOKOnly + vbExclamation, "Cannot Access FTP File")

@@ -78,26 +78,26 @@ Public Class frmManageRequest
     End Sub
     Private Sub ClearTextBoxes(ByVal control As Control)
         If TypeOf control Is TextBox Then
-            Dim txt As TextBox = control
+            Dim txt = DirectCast(control, TextBox)
             txt.Clear()
         End If
     End Sub
     Private Sub ClearCombos(ByVal control As Control)
         If TypeOf control Is ComboBox Then
-            Dim cmb As ComboBox = control
+            Dim cmb = DirectCast(control, ComboBox)
             cmb.SelectedIndex = -1
             cmb.Text = Nothing
         End If
     End Sub
     Private Sub ClearDTPicker(ByVal control As Control)
         If TypeOf control Is DateTimePicker Then
-            Dim dtp As DateTimePicker = control
+            Dim dtp = DirectCast(control, DateTimePicker)
             dtp.Value = Now
         End If
     End Sub
     Private Sub ClearCheckBox(ByVal control As Control)
         If TypeOf control Is CheckBox Then
-            Dim chk As CheckBox = control
+            Dim chk = DirectCast(control, CheckBox)
             chk.Checked = False
         End If
     End Sub
@@ -116,13 +116,13 @@ Public Class frmManageRequest
         For Each c As Control In control.Controls
             Select Case True
                 Case TypeOf c Is TextBox
-                    Dim txt As TextBox = c
+                    Dim txt = DirectCast(c, TextBox)
                     txt.ReadOnly = True
                 Case TypeOf c Is ComboBox
-                    Dim cmb As ComboBox = c
+                    Dim cmb = DirectCast(c, ComboBox)
                     cmb.Enabled = False
                 Case TypeOf c Is DateTimePicker
-                    Dim dtp As DateTimePicker = c
+                    Dim dtp = DirectCast(c, DateTimePicker)
                     dtp.Enabled = False
                 Case TypeOf c Is CheckBox
                     If c IsNot chkAllowDrag Then
@@ -141,15 +141,15 @@ Public Class frmManageRequest
         For Each c As Control In control.Controls
             Select Case True
                 Case TypeOf c Is TextBox
-                    Dim txt As TextBox = c
+                    Dim txt = DirectCast(c, TextBox)
                     If txt IsNot txtRequestNum And txt IsNot txtCreateDate Then
                         txt.ReadOnly = False
                     End If
                 Case TypeOf c Is ComboBox
-                    Dim cmb As ComboBox = c
+                    Dim cmb = DirectCast(c, ComboBox)
                     cmb.Enabled = True
                 Case TypeOf c Is DateTimePicker
-                    Dim dtp As DateTimePicker = c
+                    Dim dtp = DirectCast(c, DateTimePicker)
                     dtp.Enabled = True
                 Case TypeOf c Is CheckBox
                     c.Enabled = True
@@ -256,7 +256,7 @@ Public Class frmManageRequest
                             ClearErrorIcon(c)
                         End If
                     Case TypeOf c Is ComboBox
-                        Dim cmb As ComboBox = c
+                        Dim cmb = DirectCast(c, ComboBox)
                         If cmb.SelectedIndex = -1 Then
                             bolFieldsValid = False
                             cmb.BackColor = colMissingField
@@ -340,7 +340,7 @@ Public Class frmManageRequest
                 .strDescription = Trim(txtDescription.Text)
                 .strUser = Trim(txtUser.Text)
                 .strType = GetDBValue(SibiIndex.RequestType, cmbType.SelectedIndex)
-                .dtNeedBy = dtNeedBy.Value.ToString(strDBDateFormat)
+                .dtNeedBy = dtNeedBy.Value
                 .strStatus = GetDBValue(SibiIndex.StatusType, cmbStatus.SelectedIndex)
                 .strPO = Trim(txtPO.Text)
                 .strRequisitionNumber = Trim(txtReqNumber.Text)
@@ -357,12 +357,12 @@ Public Class frmManageRequest
                         If dcell.OwningColumn.CellType.Name = "DataGridViewComboBoxCell" Then
                             Select Case dcell.OwningColumn.Name
                                 Case Attrib_Type.Location
-                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(DeviceIndex.Locations, dcell.Value)
+                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(DeviceIndex.Locations, dcell.Value.ToString)
                                 Case Attrib_Type.SibiItemStatusType
-                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(SibiIndex.ItemStatusType, dcell.Value)
+                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(SibiIndex.ItemStatusType, dcell.Value.ToString)
                             End Select
                         Else
-                            NewRow(dcell.ColumnIndex) = Trim(dcell.Value)
+                            NewRow(dcell.ColumnIndex) = Trim(dcell.Value.ToString)
                         End If
                     Next
                     DBTable.Rows.Add(NewRow)
@@ -399,7 +399,7 @@ Public Class frmManageRequest
             pnlCreate.Visible = False
             Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
             If TypeOf Me.Tag Is frmSibiMain Then
-                Dim ParentForm As frmSibiMain = Me.Tag
+                Dim ParentForm As frmSibiMain = DirectCast(Me.Tag, frmSibiMain)
                 ParentForm.RefreshResults()
             End If
             OpenRequest(RequestData.strUID)
@@ -456,7 +456,7 @@ Public Class frmManageRequest
                 Next
             End Using
             If TypeOf Me.Tag Is frmSibiMain Then
-                Dim ParentForm As frmSibiMain = Me.Tag
+                Dim ParentForm As frmSibiMain = DirectCast(Me.Tag, frmSibiMain)
                 ParentForm.RefreshResults()
             End If
             ' Message("Success!")
@@ -609,7 +609,7 @@ VALUES
                 table.Columns.Add("Preview")
                 table.Columns.Add("UID")
                 For Each r As DataRow In Results.Rows
-                    Dim NoteText As String = RTFToPlainText(r.Item(sibi_notes.Note))
+                    Dim NoteText As String = RTFToPlainText(r.Item(sibi_notes.Note).ToString)
                     table.Rows.Add(r.Item(sibi_notes.DateStamp),
                                    IIf(Len(NoteText) > intPreviewChars, NotePreview(NoteText), NoteText),
                                    r.Item(sibi_notes.Note_UID))
@@ -773,7 +773,7 @@ VALUES
     End Sub
     Private Function IsNewRow(RowIndex As Integer) As Boolean
         Try
-            Dim GUID As String = RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RowIndex).Value
+            Dim GUID As String = RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RowIndex).Value.ToString
             If GUID <> "" Then
                 Return False
             End If
@@ -809,7 +809,7 @@ VALUES
                     Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                     CurrentRequest = Nothing
                     If TypeOf Me.Tag Is frmSibiMain Then
-                        Dim ParentForm As frmSibiMain = Me.Tag
+                        Dim ParentForm As frmSibiMain = DirectCast(Me.Tag, frmSibiMain)
                         ParentForm.RefreshResults()
                     End If
                     DoneWaiting()
@@ -968,8 +968,8 @@ VALUES
                 .strUID = NoNull(RequestResults.Rows(0).Item(sibi_requests.UID))
                 .strUser = NoNull(RequestResults.Rows(0).Item(sibi_requests.RequestUser))
                 .strDescription = NoNull(RequestResults.Rows(0).Item(sibi_requests.Description))
-                .dtDateStamp = NoNull(RequestResults.Rows(0).Item(sibi_requests.DateStamp))
-                .dtNeedBy = NoNull(RequestResults.Rows(0).Item(sibi_requests.NeedBy))
+                .dtDateStamp = DateTime.Parse(NoNull(RequestResults.Rows(0).Item(sibi_requests.DateStamp)))
+                .dtNeedBy = DateTime.Parse(NoNull(RequestResults.Rows(0).Item(sibi_requests.NeedBy)))
                 .strStatus = NoNull(RequestResults.Rows(0).Item(sibi_requests.Status))
                 .strType = NoNull(RequestResults.Rows(0).Item(sibi_requests.Type))
                 .strPO = NoNull(RequestResults.Rows(0).Item(sibi_requests.PO))
@@ -984,7 +984,7 @@ VALUES
         End Try
     End Sub
     Private Sub frmManageRequest_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        Dim f As Form = sender
+        Dim f As Form = DirectCast(sender, Form)
         If f.WindowState = FormWindowState.Minimized Then
             MinimizeChildren(Me)
             PrevWindowState = f.WindowState
@@ -994,7 +994,7 @@ VALUES
     End Sub
     Private PrevWindowState As Integer
     Private Sub frmManageRequest_ResizeBegin(sender As Object, e As EventArgs) Handles Me.ResizeBegin
-        Dim f As Form = sender
+        Dim f As Form = DirectCast(sender, Form)
         PrevWindowState = f.WindowState
     End Sub
     Private Sub frmManageRequest_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
@@ -1051,7 +1051,7 @@ VALUES
     Private Sub RequestItemsGrid_DragDrop(sender As Object, e As DragEventArgs) Handles RequestItemsGrid.DragDrop
         Try
             If bolUpdating Then
-                Dim R As DataGridViewRow = e.Data.GetData(GetType(DataGridViewRow)) 'get Row data then selectively add rows to grid.
+                Dim R As DataGridViewRow = DirectCast(e.Data.GetData(GetType(DataGridViewRow)), DataGridViewRow) 'get Row data then selectively add rows to grid.
                 RequestItemsGrid.Rows.Add(R.Cells(0).Value, R.Cells(1).Value, R.Cells(2).Value, R.Cells(3).Value, R.Cells(4).Value, R.Cells(5).Value, R.Cells(6).Value, R.Cells(7).Value, R.Cells(8).Value, R.Cells(9).Value, R.Cells(10).Value)
             Else
                 If Not bolDragging Then
@@ -1100,7 +1100,7 @@ VALUES
     End Sub
     Private Async Sub CheckForPO()
         If CurrentRequest.strRequisitionNumber <> "" And CurrentRequest.strPO = "" Then
-            Dim GetPO As String = Await Munis.Get_PO_From_ReqNumber_Async(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year)
+            Dim GetPO As String = Await Munis.Get_PO_From_ReqNumber_Async(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year.ToString)
             If GetPO.Length > 1 Then
                 Dim blah = Message("PO Number " & GetPO & " was detected in the Requisition. Do you wish to add it to this request?", vbQuestion + vbYesNo, "New PO Detected", Me)
                 If blah = MsgBoxResult.Yes Then

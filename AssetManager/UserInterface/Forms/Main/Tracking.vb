@@ -8,7 +8,7 @@ Public Class Tracking
         InitializeComponent()
         CurrentTrackingDevice = Device
         Tag = ParentForm
-        MyParent = ParentForm
+        MyParent = DirectCast(ParentForm, frmView)
         Icon = ParentForm.Icon
         ClearAll()
         SetDates()
@@ -63,12 +63,12 @@ Public Class Tracking
             If dt.Rows.Count > 0 Then
                 For Each dr In dt.Rows
                     With dr
-                        CurrentTrackingDevice.Tracking.strCheckOutTime = .Item(trackable.CheckOut_Time).ToString
-                        CurrentTrackingDevice.Tracking.strCheckInTime = .Item(trackable.CheckIn_Time).ToString
+                        CurrentTrackingDevice.Tracking.dtCheckOutTime = DateTime.Parse(.Item(trackable.CheckOut_Time).ToString)
+                        CurrentTrackingDevice.Tracking.dtCheckInTime = DateTime.Parse(.Item(trackable.CheckIn_Time).ToString)
                         CurrentTrackingDevice.Tracking.strUseLocation = .Item(trackable.UseLocation).ToString
                         CurrentTrackingDevice.Tracking.strCheckOutUser = .Item(trackable.CheckOut_User).ToString
                         CurrentTrackingDevice.Tracking.strCheckInUser = .Item(trackable.CheckIn_User).ToString
-                        CurrentTrackingDevice.Tracking.strDueBackTime = .Item(trackable.DueBackDate).ToString
+                        CurrentTrackingDevice.Tracking.dtDueBackTime = DateTime.Parse(.Item(trackable.DueBackDate).ToString)
                         CurrentTrackingDevice.Tracking.strUseReason = .Item(trackable.Notes).ToString
                     End With
                 Next
@@ -81,8 +81,8 @@ Public Class Tracking
         txtSerial.Text = CurrentTrackingDevice.strSerial
         txtDeviceType.Text = GetHumanValue(DeviceIndex.EquipType, CurrentTrackingDevice.strEqType)
         If CurrentTrackingDevice.Tracking.bolCheckedOut Then
-            dtCheckOut.Value = CurrentTrackingDevice.Tracking.strCheckOutTime
-            dtDueBack.Value = CurrentTrackingDevice.Tracking.strDueBackTime
+            dtCheckOut.Value = CurrentTrackingDevice.Tracking.dtCheckOutTime
+            dtDueBack.Value = CurrentTrackingDevice.Tracking.dtDueBackTime
             txtUseLocation.Text = CurrentTrackingDevice.Tracking.strUseLocation
             txtUseReason.Text = CurrentTrackingDevice.Tracking.strUseReason
         End If
@@ -94,7 +94,7 @@ Public Class Tracking
                 Dim gc As Control
                 For Each gc In c.Controls
                     If TypeOf gc Is TextBox Then
-                        Dim txt As TextBox = gc
+                        Dim txt As TextBox = DirectCast(gc, TextBox)
                         txt.Text = ""
                     End If
                 Next

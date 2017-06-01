@@ -75,7 +75,7 @@ Public Class frmUserManager
     End Function
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick
         If TypeOf UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value Is Integer Then
-            DisplayAccess(UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value.ToString)
+            DisplayAccess(CInt(UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value))
             GetUserInfo()
         Else
             DisplayAccess(0)
@@ -84,7 +84,7 @@ Public Class frmUserManager
     End Sub
     Private Sub GetUserInfo()
         With CurrentUser
-            .intAccessLevel = GetCellValue(UserGrid, users.AccessLevel)
+            .intAccessLevel = CInt(GetCellValue(UserGrid, users.AccessLevel))
             .strUsername = GetCellValue(UserGrid, users.UserName)
             .strUID = GetCellValue(UserGrid, users.UID)
             .strFullname = GetCellValue(UserGrid, users.FullName)
@@ -108,7 +108,7 @@ Public Class frmUserManager
     End Sub
     Private Sub AddGUIDs()
         For Each rows As DataGridViewRow In UserGrid.Rows
-            If rows.Cells(GetColIndex(UserGrid, users.UID)).EditedFormattedValue = "" Then
+            If rows.Cells(GetColIndex(UserGrid, users.UID)).EditedFormattedValue.ToString = "" Then
                 Dim UserUID As String = Guid.NewGuid.ToString
                 rows.Cells(GetColIndex(UserGrid, users.UID)).Value = UserUID
             End If
@@ -128,7 +128,7 @@ Public Class frmUserManager
             intTextSize = TextRenderer.MeasureText(item.Text, fntCheckBoxFont)
             If Size.Width > intMaxLen Then intMaxLen = Size.Width
         Next
-        CLB.ColumnWidth = intMaxLen / 4
+        CLB.ColumnWidth = CInt(intMaxLen / 4)
     End Sub
     Private Sub UpdateAccessLabel()
         lblAccessValue.Text = "Selected Access Level: " & CalcAccessLevel()

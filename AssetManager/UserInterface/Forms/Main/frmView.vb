@@ -110,18 +110,18 @@ Public Class frmView
         For Each c In DeviceInfoBox.Controls
             Select Case True
                 Case TypeOf c Is TextBox
-                    Dim txt As TextBox = c
+                    Dim txt As TextBox = DirectCast(c, TextBox)
                     If txt.Name <> "txtGUID" Then
                         txt.ReadOnly = False
                     End If
                 Case TypeOf c Is MaskedTextBox
-                    Dim txt As MaskedTextBox = c
+                    Dim txt As MaskedTextBox = DirectCast(c, MaskedTextBox)
                     txt.ReadOnly = False
                 Case TypeOf c Is ComboBox
-                    Dim cmb As ComboBox = c
+                    Dim cmb As ComboBox = DirectCast(c, ComboBox)
                     cmb.Enabled = True
                 Case TypeOf c Is DateTimePicker
-                    Dim dtp As DateTimePicker = c
+                    Dim dtp As DateTimePicker = DirectCast(c, DateTimePicker)
                     dtp.Enabled = True
                 Case TypeOf c Is CheckBox
                     c.Enabled = True
@@ -143,16 +143,16 @@ Public Class frmView
         For Each c In DeviceInfoBox.Controls
             Select Case True
                 Case TypeOf c Is TextBox
-                    Dim txt As TextBox = c
+                    Dim txt As TextBox = DirectCast(c, TextBox)
                     txt.ReadOnly = True
                 Case TypeOf c Is MaskedTextBox
-                    Dim txt As MaskedTextBox = c
+                    Dim txt As MaskedTextBox = DirectCast(c, MaskedTextBox)
                     txt.ReadOnly = True
                 Case TypeOf c Is ComboBox
-                    Dim cmb As ComboBox = c
+                    Dim cmb As ComboBox = DirectCast(c, ComboBox)
                     cmb.Enabled = False
                 Case TypeOf c Is DateTimePicker
-                    Dim dtp As DateTimePicker = c
+                    Dim dtp As DateTimePicker = DirectCast(c, DateTimePicker)
                     dtp.Enabled = False
                 Case TypeOf c Is CheckBox
                     c.Enabled = False
@@ -362,12 +362,12 @@ Public Class frmView
     End Sub
     Private Sub CollectCurrentTracking(Results As DataTable)
         With CurrentViewDevice
-            .Tracking.strCheckOutTime = NoNull(Results.Rows(0).Item(trackable.CheckOut_Time))
-            .Tracking.strCheckInTime = NoNull(Results.Rows(0).Item(trackable.CheckIn_Time))
+            .Tracking.dtCheckOutTime = DateTime.Parse(NoNull(Results.Rows(0).Item(trackable.CheckOut_Time))) 'TODO: Check these conversions
+            .Tracking.dtCheckInTime = DateTime.Parse(NoNull(Results.Rows(0).Item(trackable.CheckIn_Time)))
             .Tracking.strUseLocation = NoNull(Results.Rows(0).Item(trackable.UseLocation))
             .Tracking.strCheckOutUser = NoNull(Results.Rows(0).Item(trackable.CheckOut_User))
             .Tracking.strCheckInUser = NoNull(Results.Rows(0).Item(trackable.CheckIn_User))
-            .Tracking.strDueBackTime = NoNull(Results.Rows(0).Item(trackable.DueBackDate))
+            .Tracking.dtDueBackTime = DateTime.Parse(NoNull(Results.Rows(0).Item(trackable.DueBackDate)))
             .Tracking.strUseReason = NoNull(Results.Rows(0).Item(trackable.Notes))
         End With
     End Sub
@@ -382,17 +382,17 @@ Public Class frmView
             txtCheckOut.BackColor = colCheckOut
             txtCheckLocation.Text = CurrentViewDevice.Tracking.strUseLocation
             lblCheckTime.Text = "CheckOut Time:"
-            txtCheckTime.Text = CurrentViewDevice.Tracking.strCheckOutTime
+            txtCheckTime.Text = CurrentViewDevice.Tracking.dtCheckOutTime.ToString
             lblCheckUser.Text = "CheckOut User:"
             txtCheckUser.Text = CurrentViewDevice.Tracking.strCheckOutUser
             lblDueBack.Visible = True
             txtDueBack.Visible = True
-            txtDueBack.Text = CurrentViewDevice.Tracking.strDueBackTime
+            txtDueBack.Text = CurrentViewDevice.Tracking.dtDueBackTime.ToString
         Else
             txtCheckOut.BackColor = colCheckIn
             txtCheckLocation.Text = GetHumanValue(DeviceIndex.Locations, CurrentViewDevice.strLocation)
             lblCheckTime.Text = "CheckIn Time:"
-            txtCheckTime.Text = CurrentViewDevice.Tracking.strCheckInTime
+            txtCheckTime.Text = CurrentViewDevice.Tracking.dtCheckInTime.ToString
             lblCheckUser.Text = "CheckIn User:"
             txtCheckUser.Text = CurrentViewDevice.Tracking.strCheckInUser
             lblDueBack.Visible = False
@@ -427,11 +427,11 @@ Public Class frmView
         Dim c As Control
         For Each c In DeviceInfoBox.Controls
             If TypeOf c Is TextBox Then
-                Dim txt As TextBox = c
+                Dim txt As TextBox = DirectCast(c, TextBox)
                 txt.Text = ""
             End If
             If TypeOf c Is ComboBox Then
-                Dim cmb As ComboBox = c
+                Dim cmb As ComboBox = DirectCast(c, ComboBox)
                 cmb.SelectedIndex = -1
             End If
         Next
@@ -457,7 +457,7 @@ Public Class frmView
                         End If
                     End If
                 Case TypeOf c Is ComboBox
-                    Dim cmb As ComboBox = c
+                    Dim cmb As ComboBox = DirectCast(c, ComboBox)
                     If DBInfo.Required Then
                         If cmb.SelectedIndex = -1 Then
                             bolMissingField = True
@@ -617,19 +617,19 @@ Public Class frmView
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckIn
             Dim c2 As Color = Color.FromArgb(colCheckIn.R, colCheckIn.G, colCheckIn.B)
             Dim BlendColor As Color
-            BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+            BlendColor = Color.FromArgb(CInt((CInt(c1.A) + CInt(c2.A)) / 2),
+                                                CInt((CInt(c1.R) + CInt(c2.R)) / 2),
+                                                CInt((CInt(c1.G) + CInt(c2.G)) / 2),
+                                                CInt((CInt(c1.B) + CInt(c2.B)) / 2))
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = BlendColor
         ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value.ToString = strCheckOut Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
             Dim c2 As Color = Color.FromArgb(colCheckOut.R, colCheckOut.G, colCheckOut.B)
             Dim BlendColor As Color
-            BlendColor = Color.FromArgb((CInt(c1.A) + CInt(c2.A)) / 2,
-                                                (CInt(c1.R) + CInt(c2.R)) / 2,
-                                                (CInt(c1.G) + CInt(c2.G)) / 2,
-                                                (CInt(c1.B) + CInt(c2.B)) / 2)
+            BlendColor = Color.FromArgb(CInt((CInt(c1.A) + CInt(c2.A)) / 2),
+                                                CInt((CInt(c1.R) + CInt(c2.R)) / 2),
+                                                CInt((CInt(c1.G) + CInt(c2.G)) / 2),
+                                                CInt((CInt(c1.B) + CInt(c2.B)) / 2))
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = BlendColor
         End If
     End Sub
@@ -774,7 +774,7 @@ Public Class frmView
     Private Sub CheckRDP()
         Try
             If CurrentViewDevice.strOSVersion.Contains("WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
-                If MyPingVis Is Nothing Then MyPingVis = New PingVis(cmdShowIP, MyPingHostname)
+                If MyPingVis Is Nothing Then MyPingVis = New PingVis(DirectCast(cmdShowIP, Control), MyPingHostname)
                 If MyPingVis.CurrentResult IsNot Nothing Then
                     If MyPingVis.CurrentResult.Status = NetworkInformation.IPStatus.Success Then
                         SetupNetTools(MyPingVis.CurrentResult)

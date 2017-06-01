@@ -49,7 +49,7 @@ Public Class clsMunis_Functions
         Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_fisc_yr"))
     End Function
     Public Function Get_PODT_From_PO(PO As String) As String
-        Return YearFromDate(Trim(priv_Comms.Return_MSSQLValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate")))
+        Return YearFromDate(DateTime.Parse(Trim(priv_Comms.Return_MSSQLValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate"))))
     End Function
     Public Function Get_VendorName_From_PO(PO As String) As String
         Dim strQRY As String = "SELECT TOP 1       dbo.ap_vendor.a_vendor_number, dbo.ap_vendor.a_vendor_name
@@ -57,7 +57,7 @@ FROM            dbo.ap_vendor INNER JOIN
                          dbo.rqdetail ON dbo.ap_vendor.a_vendor_number = dbo.rqdetail.rqdt_sug_vn
 WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND (dbo.rqdetail.rqdt_fsc_yr = " & Get_FY_From_PO(PO) & ")"
         Dim table As DataTable = priv_Comms.Return_MSSQLTable(strQRY)
-        Return table(0).Item("a_vendor_name")
+        Return table(0).Item("a_vendor_name").ToString
     End Function
     Public Function Get_VendorNumber_From_ReqNumber(ReqNum As String, FY As String) As String
         Dim strQRY As String = "SELECT TOP 1       dbo.ap_vendor.a_vendor_number, dbo.ap_vendor.a_vendor_name
@@ -66,7 +66,7 @@ FROM            dbo.ap_vendor INNER JOIN
 WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_fsc_yr = " & FY & ")"
         Dim table As DataTable = priv_Comms.Return_MSSQLTable(strQRY)
         If table.Rows.Count > 0 Then
-            Return table(0).Item("a_vendor_number")
+            Return table(0).Item("a_vendor_number").ToString
         End If
         Return Nothing
     End Function
@@ -85,7 +85,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
         End If
         Return Nothing
     End Function
-    Public Async Function Get_Req_Status(ReqNum As Integer, FY As Integer) As Task(Of String)
+    Public Async Function Get_Req_Status(ReqNum As String, FY As Integer) As Task(Of String)
         Dim StatusString As String
         Dim StatusCode As String = Await priv_Comms.Return_MSSQLValueAsync("rqheader", "rqhd_req_no", ReqNum, "rqhd_sta_cd", "rqhd_fsc_yr", FY)
         If StatusCode <> "" Then
@@ -149,8 +149,8 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
                 .AddTextBox("txtSerial", "Serial:")
                 .ShowDialog()
                 If .DialogResult = DialogResult.OK Then
-                    Device.strAssetTag = Trim(NewDialog.GetControlValue("txtAsset"))
-                    Device.strSerial = Trim(NewDialog.GetControlValue("txtSerial"))
+                    Device.strAssetTag = Trim(NewDialog.GetControlValue("txtAsset").ToString)
+                    Device.strSerial = Trim(NewDialog.GetControlValue("txtSerial").ToString)
                     NewMunisView_Device(Device, Parent)
                 End If
             End With
@@ -165,7 +165,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
             .Text = "Org/Object Code Search"
             .AddTextBox("txtName", "First or Last Name:")
             .ShowDialog()
-            If .DialogResult = DialogResult.OK Then strName = NewDialog.GetControlValue("txtName")
+            If .DialogResult = DialogResult.OK Then strName = NewDialog.GetControlValue("txtName").ToString
         End With
         If Trim(strName) IsNot "" Then
             NewMunisView_NameSearch(strName, Parent)
@@ -181,8 +181,8 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
                 .AddTextBox("txtFY", "FY:")
                 .ShowDialog()
                 If .DialogResult = DialogResult.OK Then
-                    PO = NewDialog.GetControlValue("txtPO")
-                    FY = NewDialog.GetControlValue("txtFY")
+                    PO = NewDialog.GetControlValue("txtPO").ToString
+                    FY = NewDialog.GetControlValue("txtFY").ToString
                     NewMunisView_POSearch(PO, Parent)
                 End If
             End With
@@ -200,8 +200,8 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
                 .AddTextBox("txtFY", "FY:")
                 .ShowDialog()
                 If .DialogResult = DialogResult.OK Then
-                    ReqNumber = NewDialog.GetControlValue("txtReqNum")
-                    FY = NewDialog.GetControlValue("txtFY")
+                    ReqNumber = NewDialog.GetControlValue("txtReqNum").ToString
+                    FY = NewDialog.GetControlValue("txtFY").ToString
                     NewMunisView_ReqSearch(ReqNumber, FY, Parent)
                 End If
             End With
@@ -218,8 +218,8 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
             .AddTextBox("txtObj", "Object Code:")
             .ShowDialog()
             If .DialogResult = DialogResult.OK Then
-                strOrg = NewDialog.GetControlValue("txtOrg")
-                strObj = NewDialog.GetControlValue("txtObj")
+                strOrg = NewDialog.GetControlValue("txtOrg").ToString
+                strObj = NewDialog.GetControlValue("txtObj").ToString
             End If
         End With
         If Trim(strOrg) IsNot "" Then
@@ -329,7 +329,7 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
-    Public Async Sub LoadMunisInfoByDevice(Device As Device_Info, ParentForm As MyForm)
+    Public Async Sub LoadMunisInfoByDevice(Device As Device_Info, ParentForm As Form)
         Waiting()
         Dim ReqTable, InvTable As New DataTable
         If Device.strPO <> "" Then

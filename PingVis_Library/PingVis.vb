@@ -21,7 +21,7 @@ Public Class PingVis : Implements IDisposable
     Private mOverInfo As MouseOverInfoStruct
     Private LastDraw As Integer = 0
     Private ScrollingBars As List(Of PingBar)
-    Private intPrevMax As Integer = 1000
+    Private intPrevMax As Long = 1000
     Private CurrentAverageRoundTripTime As Integer = 0
 
 #Region "Ping Parameters"
@@ -254,7 +254,7 @@ Public Class PingVis : Implements IDisposable
                 BarRatio = (Timeout / intInitialScale) / result.RoundtripTime
                 BarLen = (intImgWidth / BarRatio) + intMinBarLen '* 2
             End If
-            NewPBars.Add(New PingBar(BarLen, MyBrush, New Rectangle(1, curPos, BarLen, BarHeight), curPos, result))
+            NewPBars.Add(New PingBar(BarLen, MyBrush, New Rectangle(1, CInt(curPos), CInt(BarLen), CInt(BarHeight)), curPos, result))
             curPos += BarHeight + BarGap
         Next
         Return NewPBars
@@ -284,7 +284,7 @@ Public Class PingVis : Implements IDisposable
             Return intTopIndex
         End If
     End Function
-    Private Function GetBarBrush(RoundTrip As Integer) As Brush
+    Private Function GetBarBrush(RoundTrip As Long) As Brush
         'Alpha blending two colors. As ping times go up, the returned color becomes more red.
         Dim FadeColor As Integer
         Dim Color1, Color2 As Integer
@@ -302,15 +302,15 @@ Public Class PingVis : Implements IDisposable
         Dim iSteps As Integer = 255
         Dim iStep As Integer = CInt(255 / ((Timeout / 3) / RoundTrip)) 'Convert ping time to ratio of 255. 255 being the maximum levels of blending.
         If iStep > iSteps Then iStep = iSteps
-        FadeColor = RGB(r1 + (r2 - r1) / iSteps * iStep, g1 + (g2 - g1) / iSteps * iStep, b1 + (b2 - b1) / iSteps * iStep)
+        FadeColor = RGB(CInt(r1 + (r2 - r1) / iSteps * iStep), CInt(g1 + (g2 - g1) / iSteps * iStep), CInt(b1 + (b2 - b1) / iSteps * iStep))
         Return New SolidBrush(ColorTranslator.FromOle(FadeColor))
     End Function
     Private Sub DrawScaleLines(ByRef gfx As Graphics)
         Dim ScaleLineLoc As Integer = 0
-        Dim NumOfLines As Integer = Timeout / 10
+        Dim NumOfLines As Integer = CInt(Timeout / 10)
         Dim StepSize As Integer = 0
         For a As Integer = 0 To NumOfLines
-            StepSize = (((Timeout / 4)) / NumOfLines) * intInitialScale
+            StepSize = CInt((((Timeout / 4)) / NumOfLines) * intInitialScale)
             gfx.DrawLine(Pens.LightSlateGray, New Point(ScaleLineLoc, 0), New Point(ScaleLineLoc, intImgHeight))
             ScaleLineLoc += StepSize
         Next
@@ -321,15 +321,15 @@ Public Class PingVis : Implements IDisposable
         End If
     End Sub
     Private Sub SetScale()
-        Dim MaxPing As Integer = CurrentDisplayResults.OrderByDescending(Function(p) p.RoundtripTime).FirstOrDefault.RoundtripTime
+        Dim MaxPing As Long = CurrentDisplayResults.OrderByDescending(Function(p) p.RoundtripTime).FirstOrDefault.RoundtripTime
         If MaxPing <> intPrevMax Then
             If MaxPing * 2 >= (Timeout / intInitialScale) Then
                 Do Until intInitialScale <= 0 Or MaxPing * 2 < (Timeout / intInitialScale)
-                    intInitialScale -= 0.1
+                    intInitialScale -= 0.1F
                 Loop
             ElseIf MaxPing < ((Timeout / intInitialScale) / 2) AndAlso intInitialScale >= 0 Then
                 Do Until intInitialScale >= 15 Or MaxPing > ((Timeout / intInitialScale) / 2)
-                    intInitialScale += 0.1
+                    intInitialScale += 0.1F
                 Loop
             End If
             intPrevMax = MaxPing
@@ -345,24 +345,24 @@ Public Class PingVis : Implements IDisposable
     Private Sub SetControlImage(ByRef DestControl As Control, ByRef Image As Bitmap)
         Select Case True
             Case TypeOf DestControl Is Form
-                Dim frm As Form = DestControl
+                Dim frm As Form = DirectCast(DestControl, Form)
                 If frm.BackgroundImage IsNot Nothing Then frm.BackgroundImage.Dispose()
                 frm.BackgroundImage = Image
                 frm.Invalidate()
             Case TypeOf DestControl Is Button
-                Dim but As Button = DestControl
+                Dim but As Button = DirectCast(DestControl, Button)
                 If but.Image IsNot Nothing Then but.Image.Dispose()
                 but.Image = Image
                 but.Invalidate()
             Case TypeOf DestControl Is PictureBox
-                Dim pic As PictureBox = DestControl
+                Dim pic As PictureBox = DirectCast(DestControl, PictureBox)
                 If pic.Image IsNot Nothing Then pic.Image.Dispose()
                 pic.Image = Image
                 pic.Refresh()
         End Select
     End Sub
     Private Sub SetAvgPing()
-        Dim TotalPingTime As Integer = 0
+        Dim TotalPingTime As Long = 0
         For Each reply As PingReply In pngResults
             If reply.Status = IPStatus.Success Then
                 TotalPingTime += reply.RoundtripTime
@@ -370,7 +370,7 @@ Public Class PingVis : Implements IDisposable
                 TotalPingTime += Timeout
             End If
         Next
-        CurrentAverageRoundTripTime = Math.Round((TotalPingTime / pngResults.Count), 0)
+        CurrentAverageRoundTripTime = CInt(Math.Round((TotalPingTime / pngResults.Count), 0))
     End Sub
     Public Shared Function ResizeImage(image As Image, width As Integer, height As Integer) As Bitmap
         Dim destRect = New Rectangle(0, 0, width, height)

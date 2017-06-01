@@ -16,8 +16,8 @@ Public Class GridForm
             Return GridList.Count
         End Get
     End Property
-    Sub New(ParentForm As MyForm, Optional Title As String = "", Optional SelectMode As Boolean = False)
-        MyParent = ParentForm
+    Sub New(ParentForm As Form, Optional Title As String = "", Optional SelectMode As Boolean = False)
+        MyParent = DirectCast(ParentForm, MyForm)
         Me.Tag = ParentForm
         Me.Icon = MyParent.Icon
         Me.GridTheme = MyParent.GridTheme
@@ -64,10 +64,10 @@ Public Class GridForm
     Private Sub DisplayGrids()
         For Each grid As DataGridView In GridList
             Dim GridBox As New GroupBox
-            GridBox.Text = grid.Tag
+            GridBox.Text = DirectCast(grid.Tag, String)
             GridBox.Dock = DockStyle.Fill
             GridBox.Controls.Add(grid)
-            GridPanel.RowStyles.Add(New RowStyle(SizeType.Percent, 100 / GridList.Count))
+            GridPanel.RowStyles.Add(New RowStyle(SizeType.Percent, Convert.ToSingle(100 / GridList.Count)))
             GridPanel.Controls.Add(GridBox)
         Next
         bolGridFilling = False

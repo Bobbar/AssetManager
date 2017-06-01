@@ -88,7 +88,7 @@ Public Class Attachment
             Return MyInfo.FileInfo.Extension
         End Get
     End Property
-    Public ReadOnly Property Filesize As Integer
+    Public ReadOnly Property Filesize As Long
         Get
             Return MyInfo.FileInfo.Length
         End Get

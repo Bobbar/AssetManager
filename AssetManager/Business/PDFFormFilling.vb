@@ -149,34 +149,34 @@ Public Class PDFFormFilling
             .SetField("topmostSubform[0].Page1[0].Mfg_serial_number_3[0]", "FCBDD")
             .SetField("topmostSubform[0].Page1[0].County_s_possession[0]", Now.ToString("MM/dd/yyyy"))
 #Region "Section 2"
-            .SetField("topmostSubform[0].Page1[0].Preparation_for_public_auction[0]", CheckValueToString(newDialog.GetControlValue("chkAuction")))
-            .SetField("topmostSubform[0].Page1[0].Functional_obsolescence[0]", CheckValueToString(newDialog.GetControlValue("chkObsolete")))
-            .SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange[0]", CheckValueToString(newDialog.GetControlValue("chkTradeIn")))
-            .SetField("topmostSubform[0].Page1[0].Asset_is_damaged_beyond_repair[0]", CheckValueToString(newDialog.GetControlValue("chkDamaged")))
-            .SetField("topmostSubform[0].Page1[0].Sold_as_scrap__not_at_a_public_sale[0]", CheckValueToString(newDialog.GetControlValue("chkScrap")))
-            .SetField("topmostSubform[0].Page1[0].Used_for_parts[0]", CheckValueToString(newDialog.GetControlValue("chkParts")))
-            .SetField("topmostSubform[0].Page1[0].undefined[0]", CheckValueToString(newDialog.GetControlValue("chkOther")))
-            .SetField("topmostSubform[0].Page1[0].Other__Please_explain_2[0]", newDialog.GetControlValue("rtbOther"))
+            .SetField("topmostSubform[0].Page1[0].Preparation_for_public_auction[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkAuction"))))
+            .SetField("topmostSubform[0].Page1[0].Functional_obsolescence[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkObsolete"))))
+            .SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkTradeIn"))))
+            .SetField("topmostSubform[0].Page1[0].Asset_is_damaged_beyond_repair[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkDamaged"))))
+            .SetField("topmostSubform[0].Page1[0].Sold_as_scrap__not_at_a_public_sale[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkScrap"))))
+            .SetField("topmostSubform[0].Page1[0].Used_for_parts[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkParts"))))
+            .SetField("topmostSubform[0].Page1[0].undefined[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkOther"))))
+            .SetField("topmostSubform[0].Page1[0].Other__Please_explain_2[0]", newDialog.GetControlValue("rtbOther").ToString)
 #End Region
 
 #Region "Section 3"
-            .SetField("topmostSubform[0].Page1[0].Method_of_asset_disposal_please_check_one[0]", CheckValueToString(newDialog.GetControlValue("chkHand")))
-            .SetField("topmostSubform[0].Page1[0].Hand_carried_by[0]", newDialog.GetControlValue("rtbHand"))
-            .SetField("topmostSubform[0].Page1[0]._1[0]", CheckValueToString(newDialog.GetControlValue("chkCarrier")))
-            .SetField("topmostSubform[0].Page1[0].Carrier_company[0]", newDialog.GetControlValue("rtbCarrier"))
-            .SetField("topmostSubform[0].Page1[0]._2[0]", CheckValueToString(newDialog.GetControlValue("chkShipping")))
-            .SetField("topmostSubform[0].Page1[0].Shipping_receipt_number[0]", newDialog.GetControlValue("rtbShipping"))
-            .SetField("topmostSubform[0].Page1[0]._3[0]", CheckValueToString(newDialog.GetControlValue("chkDisposed")))
-            .SetField("topmostSubform[0].Page1[0].Disposed_of_on_premises[0]", newDialog.GetControlValue("rtbDisposed"))
-            .SetField("topmostSubform[0].Page1[0]._4[0]", CheckValueToString(newDialog.GetControlValue("chkOtherMethod")))
-            .SetField("topmostSubform[0].Page1[0].Other__Please_explain_3[0]", newDialog.GetControlValue("rtpOtherMethod"))
+            .SetField("topmostSubform[0].Page1[0].Method_of_asset_disposal_please_check_one[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkHand"))))
+            .SetField("topmostSubform[0].Page1[0].Hand_carried_by[0]", newDialog.GetControlValue("rtbHand").ToString)
+            .SetField("topmostSubform[0].Page1[0]._1[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkCarrier"))))
+            .SetField("topmostSubform[0].Page1[0].Carrier_company[0]", newDialog.GetControlValue("rtbCarrier").ToString)
+            .SetField("topmostSubform[0].Page1[0]._2[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkShipping"))))
+            .SetField("topmostSubform[0].Page1[0].Shipping_receipt_number[0]", newDialog.GetControlValue("rtbShipping").ToString)
+            .SetField("topmostSubform[0].Page1[0]._3[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkDisposed"))))
+            .SetField("topmostSubform[0].Page1[0].Disposed_of_on_premises[0]", newDialog.GetControlValue("rtbDisposed").ToString)
+            .SetField("topmostSubform[0].Page1[0]._4[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkOtherMethod"))))
+            .SetField("topmostSubform[0].Page1[0].Other__Please_explain_3[0]", newDialog.GetControlValue("rtpOtherMethod").ToString)
 #End Region
 
 #Region "Section 4"
-            .SetField("topmostSubform[0].Page1[0].List_the_amount_of_proceeds_from_the_sale_of_the_disposed_asset__if_any[0]", newDialog.GetControlValue("txtSaleAmount"))
-            .SetField("topmostSubform[0].Page1[0].AssetTag_number_2[0]", newDialog.GetControlValue("txtAssetTag"))
-            .SetField("topmostSubform[0].Page1[0].Serial_number[0]", newDialog.GetControlValue("txtSerial"))
-            .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", newDialog.GetControlValue("txtDescription"))
+            .SetField("topmostSubform[0].Page1[0].List_the_amount_of_proceeds_from_the_sale_of_the_disposed_asset__if_any[0]", newDialog.GetControlValue("txtSaleAmount").ToString)
+            .SetField("topmostSubform[0].Page1[0].AssetTag_number_2[0]", newDialog.GetControlValue("txtAssetTag").ToString)
+            .SetField("topmostSubform[0].Page1[0].Serial_number[0]", newDialog.GetControlValue("txtSerial").ToString)
+            .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", newDialog.GetControlValue("txtDescription").ToString)
             .SetField("topmostSubform[0].Page1[0].Department_1[0]", "FCBDD")
             .SetField("topmostSubform[0].Page1[0].Date[0]", Now.ToString("MM/dd/yyyy"))
 #End Region
@@ -218,10 +218,10 @@ Public Class PDFFormFilling
             .Text = "Additional Input Required"
             Dim cmbFrom As New ComboBox
             FillComboBox(DeviceIndex.Locations, cmbFrom)
-            .AddCustomControl("cmbFromLoc", "Transfer FROM:", cmbFrom)
+            .AddCustomControl("cmbFromLoc", "Transfer FROM:", DirectCast(cmbFrom, Control))
             Dim cmbTo As New ComboBox
             FillComboBox(DeviceIndex.Locations, cmbTo)
-            .AddCustomControl("cmbToLoc", "Transfer TO:", cmbTo)
+            .AddCustomControl("cmbToLoc", "Transfer TO:", DirectCast(cmbTo, Control))
             .AddLabel("Reason For Transfer-Check One:", True)
             .AddCheckBox("chkBetterU", "Better Use of asset:")
             .AddCheckBox("chkTradeIn", "Trade-in or exchange:")
@@ -236,14 +236,14 @@ Public Class PDFFormFilling
             .SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.strSerial)
             .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
             .SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD - 5200")
-            .SetField("topmostSubform[0].Page1[0].Location[0]", GetHumanValueFromIndex(DeviceIndex.Locations, newDialog.GetControlValue("cmbFromLoc")))
+            .SetField("topmostSubform[0].Page1[0].Location[0]", GetHumanValueFromIndex(DeviceIndex.Locations, CInt(newDialog.GetControlValue("cmbFromLoc"))))
             .SetField("topmostSubform[0].Page1[0].Department_2[0]", "FCBDD - 5200")
-            .SetField("topmostSubform[0].Page1[0].Location_2[0]", GetHumanValueFromIndex(DeviceIndex.Locations, newDialog.GetControlValue("cmbToLoc")))
-            .SetField("topmostSubform[0].Page1[0].Better_utilization_of_assets[0]", CheckValueToString(newDialog.GetControlValue("chkBetterU")))
-            .SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]", CheckValueToString(newDialog.GetControlValue("chkTradeIn")))
-            .SetField("topmostSubform[0].Page1[0].Excess_assets[0]", CheckValueToString(newDialog.GetControlValue("chkExcess")))
-            .SetField("topmostSubform[0].Page1[0].undefined[0]", CheckValueToString(newDialog.GetControlValue("chkOther")))
-            .SetField("topmostSubform[0].Page1[0].Other__Please_explain_1[0]", newDialog.GetControlValue("rtbOther"))
+            .SetField("topmostSubform[0].Page1[0].Location_2[0]", GetHumanValueFromIndex(DeviceIndex.Locations, CInt(newDialog.GetControlValue("cmbToLoc"))))
+            .SetField("topmostSubform[0].Page1[0].Better_utilization_of_assets[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkBetterU"))))
+            .SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkTradeIn"))))
+            .SetField("topmostSubform[0].Page1[0].Excess_assets[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkExcess"))))
+            .SetField("topmostSubform[0].Page1[0].undefined[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkOther"))))
+            .SetField("topmostSubform[0].Page1[0].Other__Please_explain_1[0]", newDialog.GetControlValue("rtbOther").ToString)
             'key
             'topmostSubform[0].Page1[0].AssetTag_number[0]
             'topmostSubform[0].Page1[0].Serial_number[0]
@@ -276,8 +276,8 @@ Public Class PDFFormFilling
         newDialog.Dispose()
         Return tmpFields
     End Function
-    Private Function CheckValueToString(CheckValue As CheckState) As String
-        If CheckValue = CheckState.Checked Then
+    Private Function CheckValueToString(Checked As Boolean) As String
+        If Checked Then
             Return "X"
         Else
             Return ""

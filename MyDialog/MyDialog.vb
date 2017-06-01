@@ -176,7 +176,7 @@ Public Class MyDialog
                         Return txt.Text
                     Case TypeOf ctl Is CheckBox
                         Dim chk As CheckBox = ctl
-                        Return chk.CheckState
+                        Return chk.Checked
                 End Select
             End If
         Next

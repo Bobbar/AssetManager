@@ -56,9 +56,9 @@ Public Structure Hist_Info
     Public dtActionDateTime As Date
 End Structure
 Public Structure Track_Info
-    Public strCheckOutTime As String
-    Public strDueBackTime As String
-    Public strCheckInTime As String
+    Public dtCheckOutTime As Date
+    Public dtDueBackTime As Date
+    Public dtCheckInTime As Date
     Public strCheckOutUser As String
     Public strCheckInUser As String
     Public strUseLocation As String
@@ -109,7 +109,7 @@ End Structure
 Public Structure Attach_Info
     Public FileInfo As FileInfo
     Public Filename As String
-    Public FileSize As Integer
+    Public FileSize As Long
     Public Extention As String
     Public FolderGUID As String
     Public MD5 As String

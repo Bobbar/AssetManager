@@ -11,10 +11,10 @@ Public Class frmSibiMain
     Private Sub ClearAll(TopControl As Control.ControlCollection)
         For Each ctl As Control In TopControl
             If TypeOf ctl Is TextBox Then
-                Dim txt As TextBox = ctl
+                Dim txt As TextBox = DirectCast(ctl, TextBox)
                 txt.Clear()
             ElseIf TypeOf ctl Is ComboBox Then
-                Dim cmb As ComboBox = ctl
+                Dim cmb As ComboBox = DirectCast(ctl, ComboBox)
                 cmb.SelectedIndex = 0
             ElseIf ctl.Controls.Count > 0 Then
                 ClearAll(ctl.Controls)
@@ -210,10 +210,10 @@ Public Class frmSibiMain
     End Function
     Private Function ColorAlphaBlend(InColor As Color, BlendColor As Color) As Color 'blend colors with darker color so they aren't so intense
         Dim OutColor As Color
-        OutColor = Color.FromArgb((CInt(InColor.A) + CInt(BlendColor.A)) / 2,
-                                    (CInt(InColor.R) + CInt(BlendColor.R)) / 2,
-                                    (CInt(InColor.G) + CInt(BlendColor.G)) / 2,
-                                    (CInt(InColor.B) + CInt(BlendColor.B)) / 2)
+        OutColor = Color.FromArgb(CInt((CInt(InColor.A) + CInt(BlendColor.A)) / 2),
+                                    CInt((CInt(InColor.R) + CInt(BlendColor.R)) / 2),
+                                    CInt((CInt(InColor.G) + CInt(BlendColor.G)) / 2),
+                                    CInt((CInt(InColor.B) + CInt(BlendColor.B)) / 2))
         Return OutColor
     End Function
     Private Function GetFontColor(color As Color) As Color 'get contrasting font color

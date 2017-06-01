@@ -90,8 +90,8 @@ Public Class GK_Progress_Fragment
         gr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
         Dim XLoc, YLoc, Size As Single
         Size = 20
-        XLoc = pbStatus.Width / 2 - Size / 2
-        YLoc = pbStatus.Height / 2 - Size / 2
+        XLoc = Convert.ToSingle(pbStatus.Width / 2 - Size / 2)
+        YLoc = Convert.ToSingle(pbStatus.Height / 2 - Size / 2)
         gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size)
         gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size)
         pbStatus.Image = bm
@@ -104,12 +104,14 @@ Public Class GK_Progress_Fragment
     ''' <summary>
     ''' Log message event from GKUpdater.  This even can fire very rapidly. So the result is stored in a buffer to be added to the rtbLog control in a more controlled manner.
     ''' </summary>
-    Private Sub GKLogEvent(sender As Object, e As GK_Updater.LogEvents)
-        LogBuff += e.LogData.Message + vbCrLf
+    Private Sub GKLogEvent(sender As Object, e As EventArgs)
+        Dim LogEvent = DirectCast(e, GK_Updater.LogEvents)
+        LogBuff += LogEvent.LogData.Message + vbCrLf
     End Sub
-    Private Sub GKStatusUpdateEvent(sender As Object, e As GK_Updater.GKUpdateEvents)
+    Private Sub GKStatusUpdateEvent(sender As Object, e As EventArgs)
+        Dim UpdateEvent = DirectCast(e, GK_Updater.GKUpdateEvents)
         SetStatus(Progress_Status.Running)
-        CurrentStatus = e.CurrentStatus
+        CurrentStatus = UpdateEvent.CurrentStatus
         pbarProgress.Maximum = CurrentStatus.TotFiles
         pbarProgress.Value = CurrentStatus.CurFileIdx
         lblCurrentFile.Text = CurrentStatus.CurFileName
@@ -120,12 +122,13 @@ Public Class GK_Progress_Fragment
         SetStatus(Progress_Status.Cancelled)
     End Sub
 
-    Private Sub GKUpdate_Complete(sender As Object, e As GK_Updater.GKUpdateCompleteEvents)
-        If e.HasErrors Then
+    Private Sub GKUpdate_Complete(sender As Object, e As EventArgs)
+        Dim CompleteEvent = DirectCast(e, GK_Updater.GKUpdateCompleteEvents)
+        If CompleteEvent.HasErrors Then
             lblCurrentFile.Text = "ERROR!"
             SetStatus(Progress_Status.Errors)
-            If TypeOf e.Errors Is Win32Exception Then
-                Dim err = DirectCast(e.Errors, Win32Exception)
+            If TypeOf CompleteEvent.Errors Is Win32Exception Then
+                Dim err = DirectCast(CompleteEvent.Errors, Win32Exception)
                 'Check for invalid credentials error and fire critical stop event.
                 'We want to stop all updates if the credentials are wrong as to avoid locking the account.
                 If err.NativeErrorCode = 1326 Or err.NativeErrorCode = 86 Then

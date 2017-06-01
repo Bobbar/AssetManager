@@ -3,28 +3,28 @@
         For Each frm As Form In My.Application.OpenForms
             Select Case frm.GetType
                 Case GetType(frmView)
-                    Dim vw As frmView = frm
+                    Dim vw As frmView = DirectCast(frm, frmView)
                     If vw.CurrentViewDevice.strGUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
                 Case GetType(frmManageRequest)
-                    Dim vw As frmManageRequest = frm
+                    Dim vw As frmManageRequest = DirectCast(frm, frmManageRequest)
                     If vw.CurrentRequest.strUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
                 Case GetType(frmAttachments)
-                    Dim vw As frmAttachments = frm
+                    Dim vw As frmAttachments = DirectCast(frm, frmAttachments)
                     If vw.AttachFolderID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
                 Case GetType(View_Entry)
-                    Dim vw As View_Entry = frm
+                    Dim vw As View_Entry = DirectCast(frm, View_Entry)
                     If vw.EntryGUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
@@ -93,7 +93,7 @@
     Public Function DeviceIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
             If TypeOf frm Is frmView Then
-                Dim vw As frmView = frm
+                Dim vw As frmView = DirectCast(frm, frmView)
                 If vw.CurrentViewDevice.strGUID = strGUID Then Return True
             End If
         Next
@@ -102,7 +102,7 @@
     Public Function RequestIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
             If TypeOf frm Is frmManageRequest Then
-                Dim vw As frmManageRequest = frm
+                Dim vw As frmManageRequest = DirectCast(frm, frmManageRequest)
                 If vw.CurrentRequest.strUID = strGUID Then Return True
             End If
         Next
@@ -111,7 +111,7 @@
     Public Function EntryIsOpen(EntryUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
             If TypeOf frm Is View_Entry Then
-                Dim vw As View_Entry = frm
+                Dim vw As View_Entry = DirectCast(frm, View_Entry)
                 If vw.EntryGUID = EntryUID Then Return True
             End If
         Next
