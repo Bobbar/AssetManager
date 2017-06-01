@@ -5,6 +5,12 @@ Imports System.IO
 Imports MySql.Data.MySqlClient
 Imports System.Text
 Imports System.Threading
+Imports Delay
+'Imports System.Windows.Input
+'Imports System.Windows
+
+
+
 Class frmAttachments
     Public bolAdminMode As Boolean = False
     Private Const FileSizeMBLimit As Short = 150
@@ -708,17 +714,110 @@ VALUES(@" & dev_attachments.FKey & ",
         Return False
     End Function
     Private Sub AttachGrid_MouseMove(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseMove
+
+
+
         If bolAllowDrag And Not bolDragging Then
+
+
+
+
             If e.Button = MouseButtons.Left Then
                 If MouseIsDragging(, e.Location) And Not DownloadWorker.IsBusy AndAlso AttachGrid.CurrentRow IsNot Nothing Then
                     bolDragging = True
-                    DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
-                    WaitForDownload()
-                    Dim fileList As New Collections.Specialized.StringCollection
-                    fileList.Add(strDragFilePath)
-                    Dim dataObj As New DataObject
-                    dataObj.SetFileDropList(fileList)
-                    AttachGrid.DoDragDrop(dataObj, DragDropEffects.All)
+
+
+
+
+                    Dim LocalFTPComm As New clsFTP_Comms
+                    Dim strTimeStamp As String = Now.ToString("_hhmmss")
+                    Dim FtpRequestString As String = ""
+                    Dim strFilename As String = ""
+                    Dim strFiletype As String = ""
+                    '  Dim strFullPath As String = ""
+                    Dim AttachUID = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
+                    Using LocalSQLComm As New clsMySQL_Comms
+                        Dim strQry = "Select * FROM " & AttachTable & " WHERE " & main_attachments.FileUID & "='" & AttachUID & "'"
+                        Dim results = LocalSQLComm.Return_SQLTable(strQry)
+
+                        For Each r As DataRow In results.Rows
+                            strFilename = r.Item(main_attachments.FileName).ToString & strTimeStamp
+                            strFiletype = r.Item(main_attachments.FileType).ToString
+                            Dim strFullPath = strTempPath & strFilename & strFiletype
+                            Dim Foldername = r.Item(main_attachments.FKey).ToString
+                            Dim FileExpectedHash = r.Item(main_attachments.FileHash).ToString
+                            Dim FileUID = r.Item(main_attachments.FileUID).ToString
+
+
+
+                            FtpRequestString = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID
+                        Next
+                    End Using
+                    Dim flLength As Int64 = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
+                    'setup download
+                    'Dim resp = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile)
+                    ' Dim respStream = resp.GetResponseStream
+
+
+
+
+
+
+
+                    ' DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
+                    ' WaitForDownload()
+                    'VirtualFileDataObject.VirtualFileDataObject
+                    Dim blah As New VirtualFileDataObject(Nothing, Sub(vfdo)
+                                                                       Debug.Print(vfdo.PerformedDropEffect.ToString)
+                                                                   End Sub)
+
+                    Dim file As New VirtualFileDataObject.FileDescriptor
+                    file.Name = strFilename & strFiletype
+                    file.Length = flLength
+                    file.ChangeTimeUtc = DateTime.Now
+                    file.StreamContents = Sub(stream)
+                                              Dim BufferSize As Integer = 4096
+                                              Dim buffer(BufferSize - 1) As Byte
+                                              Dim bytesIn As Integer = 1
+                                              Using repStream = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile).GetResponseStream
+                                                  Dim totalBytesIn As Integer = 0
+                                                  Do Until bytesIn < 1 'Or DownloadWorker.CancellationPending
+                                                      bytesIn = repStream.Read(buffer, 0, BufferSize)
+                                                      stream.SetLength(flLength)
+                                                      If bytesIn > 0 Then
+                                                          stream.Write(buffer, 0, bytesIn) 'download data to memory before saving to disk
+                                                          totalBytesIn += bytesIn 'downloaded bytes
+                                                      End If
+                                                  Loop
+
+                                              End Using
+
+                                          End Sub
+
+
+                    blah.SetData(New VirtualFileDataObject.FileDescriptor() {file})
+
+
+
+
+                    ' AttachGrid.DoDragDrop(blah, DragDropEffects.All)
+
+                    VirtualFileDataObject.DoDragDrop(blah, DragDropEffects.All)
+
+                    Debug.Print("Dropped")
+
+
+
+
+
+
+
+                    'Dim fileList As New Collections.Specialized.StringCollection
+                    ''fileList.Add(strDragFilePath)
+                    'Dim dataObj As New DataObject
+                    'dataObj.SetFileDropList(fileList)
+                    'AttachGrid.DoDragDrop(dataObj, DragDropEffects.All)
+
                 End If
             End If
         End If

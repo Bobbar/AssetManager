@@ -69,3 +69,5 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GridForm.resources
+C:\GitHub\AssetManager\AssetManager\bin\Debug\VFDO.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\VFDO.pdb

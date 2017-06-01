@@ -43,3 +43,5 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\MyDialogLib.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\MyDialogLib.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Release\MyDialogLib.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.GridForm.resources
+C:\GitHub\AssetManager\AssetManager\bin\Release\VFDO.dll
+C:\GitHub\AssetManager\AssetManager\bin\Release\VFDO.pdb
