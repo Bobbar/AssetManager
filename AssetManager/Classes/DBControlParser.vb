@@ -1,50 +1,55 @@
 ﻿Public Class DBControlParser
+    Private ParentForm As Form
     ''' <summary>
-    ''' Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="UpdateDBControlRow(Form, ByRef DataRow)"/>
+    ''' Instantiate new instance of <see cref="DBControlParser"/>
+    ''' </summary>
+    ''' <param name="Parent">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
+    Sub New(Parent As Form)
+        ParentForm = Parent
+    End Sub
+    ''' <summary>
+    ''' Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="UpdateDBControlRow(ByRef DataRow)"/>
     ''' </summary>
     ''' <remarks>
     ''' The SQL SELECT statement should return a single row only. This is will be the table row that you wish to update.
     ''' </remarks>
-    ''' <param name="ParentForm">This form and its containing controls will be traveresd recursively via <see cref="GetDBControls(Control, ByRef List(Of Control))"/> </param>
     ''' <param name="SelectQry">A SQL Select query string that will return the table row that is to be updated.</param>
     ''' <returns>
     ''' Returns a DataTable modified by the controls identified by <see cref="GetDBControls(Control, ByRef List(Of Control))"/>
     ''' </returns>
-    Public Function ReturnUpdateTable(ParentForm As Form, SelectQry As String) As DataTable
+    Public Function ReturnUpdateTable(SelectQry As String) As DataTable
         Dim tmpTable As New DataTable
         Using SQLComm As New clsMySQL_Comms
             tmpTable = SQLComm.Return_SQLTable(SelectQry)
         End Using
         tmpTable.TableName = "UpdateTable"
-        UpdateDBControlRow(ParentForm, tmpTable.Rows(0))
+        UpdateDBControlRow(tmpTable.Rows(0))
         Return tmpTable
     End Function
     ''' <summary>
     ''' Collects an EMPTY DataTable via a SQL Select statement and adds a new row for SQL Insertion.
     ''' </summary>
     ''' <remarks>
-    ''' The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="UpdateDBControlRow(Form, ByRef DataRow)"/>
+    ''' The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="UpdateDBControlRow(ByRef DataRow)"/>
     ''' </remarks>
-    ''' <param name="ParentForm">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
     ''' <param name="SelectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
     ''' <returns>
-    ''' Returns a DataTable with a new row added via <see cref="UpdateDBControlRow(Form, ByRef DataRow)"/>
+    ''' Returns a DataTable with a new row added via <see cref="UpdateDBControlRow(ByRef DataRow)"/>
     ''' </returns>
-    Public Function ReturnInsertTable(ParentForm As Form, SelectQry As String) As DataTable
+    Public Function ReturnInsertTable(SelectQry As String) As DataTable
         Dim tmpTable As DataTable
         Using SQLComm As New clsMySQL_Comms
             tmpTable = SQLComm.Return_SQLTable(SelectQry)
         End Using
         tmpTable.Rows.Add()
-        UpdateDBControlRow(ParentForm, tmpTable.Rows(0))
+        UpdateDBControlRow(tmpTable.Rows(0))
         Return tmpTable
     End Function
     ''' <summary>
     ''' Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControls(Control, ByRef List(Of Control))"/>
     ''' </summary>
-    ''' <param name="ParentForm">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
     ''' <param name="DBRow">DataRow to be modified.</param>
-    Private Sub UpdateDBControlRow(ParentForm As Form, ByRef DBRow As DataRow)
+    Private Sub UpdateDBControlRow(ByRef DBRow As DataRow)
         Dim DBCtlList As New List(Of Control)
         GetDBControls(ParentForm, DBCtlList)
         For Each ctl As Control In DBCtlList
@@ -91,9 +96,8 @@
     ''' <summary>
     ''' Populates all Controls in the ParentForm that have been initiated via <see cref="DBControlInfo"/> with their corresponding column names.
     ''' </summary>
-    ''' <param name="ParentForm">Form that contains controls initiated with <see cref="DBControlInfo"/></param>
     ''' <param name="Data">DataTable that contains the rows and columns associated with the controls.</param>
-    Public Sub FillDBFields(ParentForm As Form, Data As DataTable)
+    Public Sub FillDBFields(Data As DataTable)
         Dim DBCtlList As New List(Of Control)
         GetDBControls(ParentForm, DBCtlList)
         Dim Row As DataRow = Data.Rows(0)

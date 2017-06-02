@@ -9,7 +9,7 @@ Public Class frmManageRequest
     Private MyText As String
     Private MyWindowList As New WindowList(Me)
     Private bolDragging As Boolean = False
-    Private DataParser As New DBControlParser
+    Private DataParser As New DBControlParser(Me)
     Private MyMunisToolBar As New MunisToolBar(Me)
     Sub New(ParentForm As MyForm, RequestUID As String)
         Waiting()
@@ -417,7 +417,7 @@ Public Class frmManageRequest
     End Sub
     Private Function GetUpdateTable(Adapter As MySqlDataAdapter) As DataTable
         Try
-            Dim tmpTable = DataParser.ReturnUpdateTable(Me, Adapter.SelectCommand.CommandText)
+            Dim tmpTable = DataParser.ReturnUpdateTable(Adapter.SelectCommand.CommandText)
             'Add Add'l info
             Return tmpTable
         Catch ex As Exception
@@ -426,7 +426,7 @@ Public Class frmManageRequest
     End Function
     Private Function GetInsertTable(Adapter As MySqlDataAdapter, UID As String) As DataTable
         Try
-            Dim tmpTable = DataParser.ReturnInsertTable(Me, Adapter.SelectCommand.CommandText)
+            Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
             Dim DBRow = tmpTable.Rows(0)
             'Add Add'l info
             DBRow(sibi_requests.UID) = UID
@@ -581,7 +581,7 @@ VALUES
                 Dim RequestItemsResults As DataTable = SQLComms.Return_SQLTable(strRequestItemsQRY)
                 ClearAll()
                 CollectRequestInfo(RequestResults, RequestItemsResults)
-                DataParser.FillDBFields(Me, RequestResults)
+                DataParser.FillDBFields(RequestResults)
                 SendToGrid(RequestItemsResults)
                 LoadNotes(CurrentRequest.strUID)
                 'RequestItemsGrid.ReadOnly = True

@@ -15,7 +15,7 @@ Public Class frmView
     Private DeviceHostname As String = Nothing
     Private MyPingVis As PingVis
     Private intFailedPings As Integer = 0
-    Private DataParser As New DBControlParser
+    Private DataParser As New DBControlParser(Me)
     Private Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyLiveBox As New clsLiveBox(Me)
@@ -72,7 +72,7 @@ Public Class frmView
         End Using
     End Sub
     Private Function GetUpdateTable(Adapter As MySqlDataAdapter) As DataTable
-        Dim tmpTable = DataParser.ReturnUpdateTable(Me, Adapter.SelectCommand.CommandText)
+        Dim tmpTable = DataParser.ReturnUpdateTable(Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         If Not IsNothing(MunisUser.Number) Then
@@ -95,7 +95,7 @@ Public Class frmView
         Return tmpTable
     End Function
     Private Function GetInsertTable(Adapter As MySqlDataAdapter, UpdateInfo As Update_Info) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Me, Adapter.SelectCommand.CommandText)
+        Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         DBRow(historical_dev.ChangeType) = UpdateInfo.strChangeType
@@ -232,7 +232,7 @@ Public Class frmView
                     Return False
                 End If
                 CurrentViewDevice = Asset.CollectDeviceInfo(DeviceResults)
-                DataParser.FillDBFields(Me, DeviceResults)
+                DataParser.FillDBFields(DeviceResults)
                 SetMunisEmpStatus()
                 SendToHistGrid(DataGridHistory, HistoricalResults)
                 DisableControls()

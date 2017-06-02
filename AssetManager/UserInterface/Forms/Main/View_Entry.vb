@@ -2,7 +2,7 @@
 Imports MySql.Data.MySqlClient
 Public Class View_Entry
     Private MyEntryGUID As String
-    Private DataParser As New DBControlParser
+    Private DataParser As New DBControlParser(Me)
     Public ReadOnly Property EntryGUID As String
         Get
             Return MyEntryGUID
@@ -44,7 +44,7 @@ Public Class View_Entry
         txtPhoneNumber.Tag = New DBControlInfo(historical_dev.PhoneNumber, ParseType.DisplayOnly, False)
     End Sub
     Private Sub FillControls(Data As DataTable)
-        DataParser.FillDBFields(Me, Data)
+        DataParser.FillDBFields(Data)
         Me.Text = Me.Text + " - " & NoNull(Data.Rows(0).Item(historical_dev.ActionDateTime))
     End Sub
     Private Sub ViewEntry(ByVal EntryUID As String)

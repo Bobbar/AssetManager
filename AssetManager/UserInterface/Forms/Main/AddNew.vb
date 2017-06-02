@@ -6,7 +6,7 @@ Public Class AddNew
     Private bolCheckFields As Boolean
     Private MyLiveBox As New clsLiveBox(Me)
     Public MunisUser As Emp_Info = Nothing
-    Private DataParser As New DBControlParser
+    Private DataParser As New DBControlParser(Me)
     Private NewUID As String
     Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
         AddDevice()
@@ -42,7 +42,7 @@ Public Class AddNew
         End Try
     End Sub
     Private Function DeviceInsertTable(Adapter As MySqlDataAdapter) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Me, Adapter.SelectCommand.CommandText)
+        Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         If MunisUser.Number IsNot Nothing Then
@@ -56,7 +56,7 @@ Public Class AddNew
         Return tmpTable
     End Function
     Private Function HistoryInsertTable(Adapter As MySqlDataAdapter) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Me, Adapter.SelectCommand.CommandText)
+        Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         DBRow(historical_dev.ChangeType) = "NEWD"
