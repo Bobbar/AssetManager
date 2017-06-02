@@ -313,12 +313,12 @@ Class frmAttachments
             End If
             UploadWorker.ReportProgress(1, "Connecting...")
             '   Dim resp As Net.FtpWebResponse = Nothing
-            Using resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails) 'check if device folder exists. create directory if not.
+            Using resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB, Net.WebRequestMethods.Ftp.ListDirectoryDetails) 'check if device folder exists. create directory if not.
                 '  resp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments", Net.WebRequestMethods.Ftp.ListDirectoryDetails)
                 Dim sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
                 Dim s As String = sr.ReadToEnd()
                 If Not s.Contains(Foldername) Then
-                    Dim MkDirResp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
+                    Dim MkDirResp = LocalFTPComm.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & Foldername, Net.WebRequestMethods.Ftp.MakeDirectory)
                     MkDirResp.Dispose()
                 End If
             End Using
@@ -328,7 +328,7 @@ Class frmAttachments
             Dim totalBytesIn As Integer
             Dim ftpStream As System.IO.FileStream = CurrentFile.FileInfo.OpenRead()
             Dim flLength As Long = ftpStream.Length
-            Dim reqfile As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & Foldername & "/" & CurrentFile.FileUID, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
+            Dim reqfile As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & Foldername & "/" & CurrentFile.FileUID, Net.WebRequestMethods.Ftp.UploadFile) 'request.GetRequestStream
             Dim perc As Double = 0
             stpSpeed.Start()
             UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
@@ -502,7 +502,7 @@ VALUES(@" & dev_attachments.FKey & ",
         Dim buffer(1023) As Byte
         Dim bytesIn As Integer
         Dim totalBytesIn As Integer
-        Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & Foldername & "/" & AttachUID
+        Dim FtpRequestString As String = "ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & Foldername & "/" & AttachUID
         'get file size
         Dim flLength As Int64 = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
         'setup download

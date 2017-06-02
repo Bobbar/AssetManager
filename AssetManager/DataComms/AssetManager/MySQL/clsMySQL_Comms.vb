@@ -104,8 +104,10 @@ Public Class clsMySQL_Comms : Implements IDisposable
     End Function
     Private Function GetConnectString() As String
         If Not bolUseTestDatabase Then
+            CurrentDB = strDatabase
             Return MySQLConnectString & strDatabase
         Else
+            CurrentDB = strTestDatabase
             Return MySQLConnectString & strTestDatabase
         End If
     End Function

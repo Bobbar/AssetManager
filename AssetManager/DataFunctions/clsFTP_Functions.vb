@@ -3,7 +3,7 @@
     Public Function DeleteFTPAttachment(AttachUID As String, DeviceUID As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Try
-            resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/" & AttachUID, Net.WebRequestMethods.Ftp.DeleteFile), Net.FtpWebResponse)
+            resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & DeviceUID & "/" & AttachUID, Net.WebRequestMethods.Ftp.DeleteFile), Net.FtpWebResponse)
             If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                 Return True
             Else
@@ -16,7 +16,7 @@
     Public Function Has_FTPFolder(ItemUID As String) As Boolean
         Dim files As New List(Of String)
         Try
-            Using resp As Net.FtpWebResponse = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & ItemUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
+            Using resp As Net.FtpWebResponse = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & ItemUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
                 Return True
             End Using
         Catch ex As Exception
@@ -27,7 +27,7 @@
         Dim resp As Net.FtpWebResponse = Nothing
         Dim files As List(Of String)
         Try
-            resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
+            resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & DeviceUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
             Dim responseStream As System.IO.Stream = resp.GetResponseStream
             files = New List(Of String)
             Dim reader As IO.StreamReader = New IO.StreamReader(responseStream)
@@ -41,7 +41,7 @@
                 If DeleteFTPAttachment(file, DeviceUID) Then i += 1
             Next
             If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
-                resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & DeviceUID, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
+                resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & DeviceUID, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
             End If
             If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                 Return True
@@ -125,7 +125,7 @@
         Try
             Logger("***********************************")
             Logger("******Attachment Scan Results******")
-            files = ListDirectory("ftp://" & strServerIP & "/attachments/")
+            files = ListDirectory("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/")
             intOrphanFolders = CheckForMissingDir(files)
             For Each file In files
                 Dim FolderScan As FTPScan_Parms = FTPFolderIsOrphan(file)
@@ -134,7 +134,7 @@
                     BadFiles.Add(file)
                     Logger("Orphan FOLDER Found: " & file)
                 Else
-                    Dim subfiles As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & file & "/")
+                    Dim subfiles As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & file & "/")
                     For Each sfile In subfiles
                         Dim FileScan As FTPScan_Parms = FTPFileIsOrphan(file, sfile)
                         If FileScan.IsOrphan Then
@@ -217,14 +217,14 @@
     End Sub
     Private Function DeleteDirectory(Directory As String) As Boolean
         Try
-            Dim FileList As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & Directory & "/")
+            Dim FileList As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & Directory & "/")
             Dim i As Integer
             For Each file In FileList
                 If DeleteFTPAttachment(file, Directory) Then i += 1
             Next
             If FileList.Count = i Then
                 Dim resp As Net.FtpWebResponse = Nothing
-                resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & Directory, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
+                resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & Directory, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
                 If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                     Return True
                 Else
