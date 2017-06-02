@@ -283,6 +283,7 @@ Module OtherFunctions
     End Sub
     Public Sub SetWaitCursor(Waiting As Boolean)
         Application.UseWaitCursor = Waiting
+        Application.DoEvents()
     End Sub
     Public Function ValidPhoneNumber(PhoneNum As String) As Boolean
         If Trim(PhoneNum) <> "" Then

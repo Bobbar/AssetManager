@@ -341,6 +341,7 @@ VALUES
         Dim SupInfo As Emp_Info
         Dim NewMunisSearch As New frmMunisUser(ParentForm)
         If NewMunisSearch.DialogResult = DialogResult.Yes Then
+            SetWaitCursor(True)
             SupInfo = NewMunisSearch.EmployeeInfo
             Dim EmpList As DataTable = Munis.ListOfEmpBySup(SupInfo.Number)
             Dim DeviceList As New DataTable
@@ -353,7 +354,9 @@ VALUES
                 Next
                 Return DeviceList
             End Using
+            SetWaitCursor(False)
         Else
+            SetWaitCursor(False)
             Return Nothing
         End If
     End Function

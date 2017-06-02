@@ -168,8 +168,9 @@ Public Class MainForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
-    Private Function BuildSearchListNew() As List(Of SearchVal)
+    Private Function BuildSearchList() As List(Of SearchVal)
         Dim tmpList As New List(Of SearchVal)
+        Dim CtlList As New List(Of Control)
         tmpList.Add(New SearchVal(devices.Serial, Trim(txtSerialSearch.Text)))
         tmpList.Add(New SearchVal(devices.AssetTag, Trim(txtAssetTagSearch.Text)))
         tmpList.Add(New SearchVal(devices.Description, Trim(txtDescription.Text)))
@@ -200,7 +201,7 @@ Public Class MainForm
             strStartQry = "SELECT * FROM " & devices.TableName & " WHERE "
         End If
         Dim strDynaQry As String = ""
-        Dim SearchValCol As List(Of SearchVal) = BuildSearchListNew()
+        Dim SearchValCol As List(Of SearchVal) = BuildSearchList()
         For Each fld As SearchVal In SearchValCol
             If Not IsNothing(fld.Value) Then
                 If fld.Value.ToString <> "" Then
@@ -451,8 +452,7 @@ Public Class MainForm
             GKUpdater_Form.Activate()
         End If
     End Sub
-
-    Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
+    Private Sub cmdSupDevSearch_Click(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
         Dim results As DataTable = Asset.DevicesBySup(Me)
         If results IsNot Nothing Then
             SendToGrid(results)
