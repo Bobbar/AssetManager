@@ -168,8 +168,8 @@ Public Class MyDialog
                         Return cmb.SelectedIndex
                     Case TypeOf ctl Is TextBox
                         Dim txt As TextBox = ctl
-                        Dim TxtVal As String = Trim(txt.Text)
-                        If TxtVal = "" Then Return Nothing
+                        'Dim TxtVal As String = Trim(txt.Text)
+                        'If TxtVal = "" Then Return Nothing
                         Return txt.Text
                     Case TypeOf ctl Is RichTextBox
                         Dim txt As RichTextBox = ctl

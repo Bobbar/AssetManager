@@ -57,18 +57,17 @@ Public Class Tracking
 
     Private Sub GetCurrentTracking(strGUID As String)
         Dim dt As DataTable
-        Dim dr As DataRow
         Using SQLComms As New clsMySQL_Comms
             dt = SQLComms.Return_SQLTable("SELECT * FROM " & trackable.TableName & " WHERE " & trackable.DeviceUID & "='" & strGUID & "' ORDER BY " & trackable.DateStamp & " DESC LIMIT 1") 'ds.Tables(0)
             If dt.Rows.Count > 0 Then
-                For Each dr In dt.Rows
+                For Each dr As DataRow In dt.Rows
                     With dr
-                        CurrentTrackingDevice.Tracking.dtCheckOutTime = DateTime.Parse(.Item(trackable.CheckOut_Time).ToString)
-                        CurrentTrackingDevice.Tracking.dtCheckInTime = DateTime.Parse(.Item(trackable.CheckIn_Time).ToString)
+                        DateTime.TryParse(.Item(trackable.CheckOut_Time).ToString, CurrentTrackingDevice.Tracking.dtCheckOutTime)
+                        DateTime.TryParse(.Item(trackable.CheckIn_Time).ToString, CurrentTrackingDevice.Tracking.dtCheckInTime)
                         CurrentTrackingDevice.Tracking.strUseLocation = .Item(trackable.UseLocation).ToString
                         CurrentTrackingDevice.Tracking.strCheckOutUser = .Item(trackable.CheckOut_User).ToString
                         CurrentTrackingDevice.Tracking.strCheckInUser = .Item(trackable.CheckIn_User).ToString
-                        CurrentTrackingDevice.Tracking.dtDueBackTime = DateTime.Parse(.Item(trackable.DueBackDate).ToString)
+                        DateTime.TryParse(.Item(trackable.DueBackDate).ToString, CurrentTrackingDevice.Tracking.dtDueBackTime)
                         CurrentTrackingDevice.Tracking.strUseReason = .Item(trackable.Notes).ToString
                     End With
                 Next

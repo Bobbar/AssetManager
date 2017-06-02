@@ -362,12 +362,12 @@ Public Class frmView
     End Sub
     Private Sub CollectCurrentTracking(Results As DataTable)
         With CurrentViewDevice
-            .Tracking.dtCheckOutTime = DateTime.Parse(NoNull(Results.Rows(0).Item(trackable.CheckOut_Time))) 'TODO: Check these conversions
-            .Tracking.dtCheckInTime = DateTime.Parse(NoNull(Results.Rows(0).Item(trackable.CheckIn_Time)))
+            DateTime.TryParse(NoNull(Results.Rows(0).Item(trackable.CheckOut_Time)), .Tracking.dtCheckOutTime)
+            DateTime.TryParse(NoNull(Results.Rows(0).Item(trackable.CheckIn_Time)), .Tracking.dtCheckInTime)
+            DateTime.TryParse(NoNull(Results.Rows(0).Item(trackable.DueBackDate)), .Tracking.dtDueBackTime)
             .Tracking.strUseLocation = NoNull(Results.Rows(0).Item(trackable.UseLocation))
             .Tracking.strCheckOutUser = NoNull(Results.Rows(0).Item(trackable.CheckOut_User))
             .Tracking.strCheckInUser = NoNull(Results.Rows(0).Item(trackable.CheckIn_User))
-            .Tracking.dtDueBackTime = DateTime.Parse(NoNull(Results.Rows(0).Item(trackable.DueBackDate)))
             .Tracking.strUseReason = NoNull(Results.Rows(0).Item(trackable.Notes))
         End With
     End Sub

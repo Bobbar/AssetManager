@@ -59,14 +59,14 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
         Dim table As DataTable = priv_Comms.Return_MSSQLTable(strQRY)
         Return table(0).Item("a_vendor_name").ToString
     End Function
-    Public Function Get_VendorNumber_From_ReqNumber(ReqNum As String, FY As String) As String
+    Public Function Get_VendorNumber_From_ReqNumber(ReqNum As String, FY As String) As Integer
         Dim strQRY As String = "SELECT TOP 1       dbo.ap_vendor.a_vendor_number, dbo.ap_vendor.a_vendor_name
 FROM            dbo.ap_vendor INNER JOIN
                          dbo.rqdetail ON dbo.ap_vendor.a_vendor_number = dbo.rqdetail.rqdt_sug_vn
 WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_fsc_yr = " & FY & ")"
         Dim table As DataTable = priv_Comms.Return_MSSQLTable(strQRY)
         If table.Rows.Count > 0 Then
-            Return table(0).Item("a_vendor_number").ToString
+            Return CInt(table(0).Item("a_vendor_number").ToString)
         End If
         Return Nothing
     End Function
@@ -274,19 +274,21 @@ WHERE pohd_pur_no ='" & PO & "'"
     End Sub
     Public Function NewMunisView_ReqSearch(ReqNumber As String, FY As String, Optional Parent As Form = Nothing, Optional SelectMode As Boolean = False) As String
         Waiting()
-        If ReqNumber = "" Or FY = "" Then Return Nothing
+        If ReqNumber = "" Or FY = "" Then
+            DoneWaiting()
+            Return Nothing
+        End If
         Dim strQRY As String = "SELECT TOP " & intMaxResults & " dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc, 
                          VEN.a_vendor_name, VEN.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr,
                          dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
             From            dbo.rq_gl_info INNER JOIN
                          dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr LEFT JOIN
-                          (
-						 SELECT TOP 1 a_vendor_number,a_vendor_name
-						 FROM ap_vendor
-						 WHERE a_vendor_number = " & Munis.Get_VendorNumber_From_ReqNumber(ReqNumber, FY) & "
-						 ) VEN 
+                          (SELECT TOP 1 a_vendor_number,a_vendor_name 
+FROM ap_vendor
+WHERE a_vendor_number = " & Munis.Get_VendorNumber_From_ReqNumber(ReqNumber, FY) & ") VEN 
 ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number
 WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FY & ")" ' AND (dbo.ap_vendor.a_vendor_remit_seq = 0)"
+        Debug.Print(strQRY)
         Dim NewGridForm As New GridForm(Parent, "MUNIS Requisition Info")
         NewGridForm.AddGrid("ReqGrid", "Requisition Info:", MunisComms.Return_MSSQLTable(strQRY))
         If Not SelectMode Then
@@ -373,19 +375,28 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             Message("Could not resolve any Req. or FA info.", vbOKOnly + vbInformation, "Nothing Found")
         End If
     End Sub
-    Private Async Function LoadMunisInventoryGrid(Device As Device_Info) As Task(Of DataTable)
+    Private Async Function LoadMunisInventoryGrid(Device As Device_Info) As Task(Of DataTable) 'TODO: Make this cleaner. 
         Try
             Dim GridData As New DataTable
             Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
-            If Device.strSerial <> "" Then
+            If Device.strSerial <> "" Then 'if serial is available, search FA by serial. Else, search by asset
                 GridData = Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_serial='" & Device.strSerial & "'")
-                If GridData.Rows.Count > 0 Then
+                If GridData.Rows.Count > 0 Then 'if serial returned results, return results. Else, try search by Asset
                     Return GridData
                 ElseIf GridData.Rows.Count < 1 AndAlso Device.strAssetTag <> "" Then
                     GridData = Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.strAssetTag & "'")
                     If GridData.Rows.Count < 1 Then
                         Return Nothing
+                    Else
+                        Return GridData
                     End If
+                End If
+            ElseIf Device.strSerial = "" AndAlso Device.strAssetTag <> "" Then
+                GridData = Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.strAssetTag & "'")
+                If GridData.Rows.Count < 1 Then
+                    Return Nothing
+                Else
+                    Return GridData
                 End If
             End If
         Catch ex As Exception

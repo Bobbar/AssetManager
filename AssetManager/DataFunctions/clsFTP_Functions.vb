@@ -16,14 +16,8 @@
     Public Function Has_FTPFolder(ItemUID As String) As Boolean
         Dim files As New List(Of String)
         Try
-            Using resp As Net.FtpWebResponse = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & ItemUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse),
-                responseStream As System.IO.Stream = resp.GetResponseStream,
-                reader As IO.StreamReader = New IO.StreamReader(responseStream)
-                If reader.ReadLine.ToString <> "" Then
-                    Return True
-                Else
-                    Return False
-                End If
+            Using resp As Net.FtpWebResponse = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & ItemUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
+                Return True
             End Using
         Catch ex As Exception
             Return False

@@ -362,7 +362,11 @@ Public Class frmManageRequest
                                     NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(SibiIndex.ItemStatusType, dcell.Value.ToString)
                             End Select
                         Else
-                            NewRow(dcell.ColumnIndex) = Trim(dcell.Value.ToString)
+                            If dcell.Value IsNot Nothing Then
+                                NewRow(dcell.ColumnIndex) = Trim(dcell.Value.ToString)
+                            Else
+                                NewRow(dcell.ColumnIndex) = Nothing
+                            End If
                         End If
                     Next
                     DBTable.Rows.Add(NewRow)
@@ -886,19 +890,21 @@ VALUES
     End Sub
     Private Function ValidColumn() As Boolean
         Try
-            If RequestItemsGrid.CurrentCell.Value IsNot Nothing AndAlso RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
-                Select Case True
-                    Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
-                        Return True
-                    Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
-                        Return True
-                    Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Asset")
-                        Return True
-                    Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Serial")
-                        Return True
-                    Case Else
-                        Return False
-                End Select
+            If RequestItemsGrid.CurrentCell IsNot Nothing Then
+                If RequestItemsGrid.CurrentCell.Value IsNot Nothing AndAlso RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
+                    Select Case True
+                        Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
+                            Return True
+                        Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
+                            Return True
+                        Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Asset")
+                            Return True
+                        Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Serial")
+                            Return True
+                        Case Else
+                            Return False
+                    End Select
+                End If
             End If
             Return False
         Catch ex As Exception
