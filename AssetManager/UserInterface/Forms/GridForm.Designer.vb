@@ -41,16 +41,17 @@ Partial Class GridForm
         Me.GridPanel.RowCount = 2
         Me.GridPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.GridPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.GridPanel.Size = New System.Drawing.Size(997, 607)
+        Me.GridPanel.Size = New System.Drawing.Size(1014, 576)
         Me.GridPanel.TabIndex = 0
         '
         'GridForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(997, 624)
+        Me.ClientSize = New System.Drawing.Size(1014, 593)
         Me.Controls.Add(Me.GridPanel)
         Me.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MinimumSize = New System.Drawing.Size(439, 282)
         Me.Name = "GridForm"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.Text = "GridForm"
