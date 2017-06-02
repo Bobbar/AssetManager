@@ -6,6 +6,7 @@ Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
 Imports System.Drawing
 Imports System.Windows.Forms
+Imports System.Net.Sockets
 Public Class PingVis : Implements IDisposable
     Private MyPing As New Ping
     Private pngResults As New List(Of PingReply)
@@ -28,6 +29,8 @@ Public Class PingVis : Implements IDisposable
     Private Const bolStopWhenNotFocused As Boolean = False 'Set to True to pause the pinging until focus is returned to the parent form.
     Private Const Timeout As Integer = 1000
     Private Const PingInterval As Integer = 1000
+    Private Const NoPingInterval As Integer = 5000
+    Private CurrentPingInterval As Integer = PingInterval
 #End Region
 
 #Region "Bar Parameters"
@@ -80,6 +83,7 @@ Public Class PingVis : Implements IDisposable
     Private Sub PingTimer_Tick(sender As Object, e As EventArgs)
         Try
             StartPing()
+            PingTimer.Interval = CurrentPingInterval
         Catch ex As Exception
             Debug.Print(ex.Message)
         End Try
@@ -100,7 +104,8 @@ Public Class PingVis : Implements IDisposable
                     End If
                 End If
             End If
-        Catch
+        Catch ex As SocketException
+            CurrentPingInterval = NoPingInterval
             Exit Sub
         End Try
     End Sub
@@ -108,9 +113,15 @@ Public Class PingVis : Implements IDisposable
         bolPingRunning = False
         If Not e.Cancelled Then
             If e.Error Is Nothing Then
+                If e.Reply.Status = IPStatus.Success Then
+                    CurrentPingInterval = PingInterval
+                Else
+                    CurrentPingInterval = NoPingInterval
+                End If
                 pngResults.Add(e.Reply)
                 LastReply = e.Reply
             Else
+                CurrentPingInterval = NoPingInterval
                 'Debug.Print(e.Error.Message)
             End If
             If Not bolScrolling Then DrawBars(MyControl, GetPingBars, mOverInfo)
