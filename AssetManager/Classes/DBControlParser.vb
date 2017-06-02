@@ -79,12 +79,37 @@
             End If
         Next
     End Sub
+    Public Function GetDBControlValue(DBControl As Control) As Object
+        Dim DBInfo = DirectCast(DBControl.Tag, DBControlInfo)
+        Select Case True
+            Case TypeOf DBControl Is TextBox
+                Dim dbTxt As TextBox = DirectCast(DBControl, TextBox)
+                Return CleanDBValue(dbTxt.Text)
+
+            Case TypeOf DBControl Is MaskedTextBox
+                Dim dbMaskTxt As MaskedTextBox = DirectCast(DBControl, MaskedTextBox)
+                Return CleanDBValue(dbMaskTxt.Text)
+
+            Case TypeOf DBControl Is DateTimePicker
+                Dim dbDtPick As DateTimePicker = DirectCast(DBControl, DateTimePicker)
+                Return dbDtPick.Value
+
+            Case TypeOf DBControl Is ComboBox
+                Dim dbCmb As ComboBox = DirectCast(DBControl, ComboBox)
+                Return GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex)
+
+            Case TypeOf DBControl Is CheckBox
+                Dim dbChk As CheckBox = DirectCast(DBControl, CheckBox)
+                Return dbChk.Checked
+        End Select
+        Return Nothing
+    End Function
     ''' <summary>
     ''' Recursively collects list of controls initiated with <see cref="DBControlInfo"/> tags within Parent control.
     ''' </summary>
     ''' <param name="Parent">Parent control. Usually a Form to being.</param>
     ''' <param name="ControlList">Blank List of Control to be filled.</param>
-    Private Sub GetDBControls(Parent As Control, ByRef ControlList As List(Of Control))
+    Public Sub GetDBControls(Parent As Control, ByRef ControlList As List(Of Control))
         For Each ctl As Control In Parent.Controls
             Select Case True
                 Case TypeOf ctl.Tag Is DBControlInfo
@@ -111,6 +136,7 @@
                     Else
                         dbTxt.Text = Row.Item(DBInfo.DataColumn).ToString
                     End If
+
                 Case TypeOf ctl Is MaskedTextBox
                     Dim dbMaskTxt As MaskedTextBox = DirectCast(ctl, MaskedTextBox)
                     dbMaskTxt.Text = Row.Item(DBInfo.DataColumn).ToString
@@ -118,6 +144,7 @@
                 Case TypeOf ctl Is DateTimePicker
                     Dim dbDtPick As DateTimePicker = DirectCast(ctl, DateTimePicker)
                     dbDtPick.Value = DateTime.Parse(Row.Item(DBInfo.DataColumn).ToString)
+
                 Case TypeOf ctl Is ComboBox
                     Dim dbCmb As ComboBox = DirectCast(ctl, ComboBox)
                     dbCmb.SelectedIndex = GetComboIndexFromShort(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn).ToString)

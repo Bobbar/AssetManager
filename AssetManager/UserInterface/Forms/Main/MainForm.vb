@@ -34,12 +34,25 @@ Public Class MainForm
             MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2)
             MyWindowList.InsertWindowList(ToolStrip1)
             InitLiveBox()
+            InitDBControls()
             Clear_All()
             TestDBWarning()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             EndProgram()
         End Try
+    End Sub
+    Private Sub InitDBControls()
+        txtSerialSearch.Tag = New DBControlInfo(devices.Serial)
+        txtAssetTagSearch.Tag = New DBControlInfo(devices.AssetTag)
+        txtDescription.Tag = New DBControlInfo(devices.Description)
+        cmbEquipType.Tag = New DBControlInfo(devices.EQType, DeviceIndex.EquipType)
+        txtReplaceYear.Tag = New DBControlInfo(devices.ReplacementYear)
+        cmbOSType.Tag = New DBControlInfo(devices.OSVersion, DeviceIndex.OSType)
+        cmbLocation.Tag = New DBControlInfo(devices.Location, DeviceIndex.Locations)
+        txtCurUser.Tag = New DBControlInfo(devices.CurrentUser)
+        cmbStatus.Tag = New DBControlInfo(devices.Status, DeviceIndex.StatusType)
+        chkTrackables.Tag = New DBControlInfo(devices.Trackable)
     End Sub
     Private Sub InitLiveBox()
         MyLiveBox.AttachToControl(txtDescription, LiveBoxType.DynamicSearch, devices.Description)
@@ -171,16 +184,12 @@ Public Class MainForm
     Private Function BuildSearchList() As List(Of SearchVal)
         Dim tmpList As New List(Of SearchVal)
         Dim CtlList As New List(Of Control)
-        tmpList.Add(New SearchVal(devices.Serial, Trim(txtSerialSearch.Text)))
-        tmpList.Add(New SearchVal(devices.AssetTag, Trim(txtAssetTagSearch.Text)))
-        tmpList.Add(New SearchVal(devices.Description, Trim(txtDescription.Text)))
-        tmpList.Add(New SearchVal(devices.EQType, GetDBValue(DeviceIndex.EquipType, cmbEquipType.SelectedIndex)))
-        tmpList.Add(New SearchVal(devices.ReplacementYear, Trim(txtReplaceYear.Text)))
-        tmpList.Add(New SearchVal(devices.OSVersion, GetDBValue(DeviceIndex.OSType, cmbOSType.SelectedIndex)))
-        tmpList.Add(New SearchVal(devices.Location, GetDBValue(DeviceIndex.Locations, cmbLocation.SelectedIndex)))
-        tmpList.Add(New SearchVal(devices.CurrentUser, Trim(txtCurUser.Text)))
-        tmpList.Add(New SearchVal(devices.Status, GetDBValue(DeviceIndex.StatusType, cmbStatus.SelectedIndex)))
-        tmpList.Add(New SearchVal(devices.Trackable, chkTrackables.Checked))
+        Dim DataParser As New DBControlParser(Me)
+        DataParser.GetDBControls(Me, CtlList)
+        For Each ctl In CtlList
+            Dim DBInfo = DirectCast(ctl.Tag, DBControlInfo)
+            tmpList.Add(New SearchVal(DBInfo.DataColumn, DataParser.GetDBControlValue(ctl)))
+        Next
         Return tmpList
     End Function
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
