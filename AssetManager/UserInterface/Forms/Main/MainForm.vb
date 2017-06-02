@@ -359,6 +359,10 @@ Public Class MainForm
             ConnectionWatchDog()
         End Try
     End Sub
+    Private Sub ConnectStatus(Message As String, FColor As Color)
+        ConnStatusLabel.Text = Message
+        ConnStatusLabel.ForeColor = FColor
+    End Sub
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
         LeaveRow(ResultGrid, GridTheme, e.RowIndex)
     End Sub

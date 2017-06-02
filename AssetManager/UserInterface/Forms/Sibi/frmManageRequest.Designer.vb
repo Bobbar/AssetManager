@@ -715,7 +715,6 @@ Partial Class frmManageRequest
         '
         Me.tsbRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.tsbRefresh.Image = Global.AssetManager.My.Resources.Resources.refresh
-        Me.tsbRefresh.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbRefresh.Name = "tsbRefresh"
         Me.tsbRefresh.Size = New System.Drawing.Size(29, 34)
         Me.tsbRefresh.ToolTipText = "Refresh"

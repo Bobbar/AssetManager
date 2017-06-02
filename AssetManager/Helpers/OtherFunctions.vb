@@ -169,11 +169,6 @@ Module OtherFunctions
         Catch
         End Try
     End Sub
-    Public Sub ConnectStatus(Message As String, FColor As Color)
-        MainForm.ConnStatusLabel.Text = Message
-        MainForm.ConnStatusLabel.ForeColor = FColor
-        MainForm.Refresh()
-    End Sub
     Public Function YearFromDate(dtDate As Date) As String
         Return dtDate.Year.ToString
     End Function

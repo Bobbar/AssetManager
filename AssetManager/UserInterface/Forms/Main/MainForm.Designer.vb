@@ -295,7 +295,7 @@ Partial Class MainForm
         Me.SearchGroup.TabStop = False
         Me.SearchGroup.Text = "Custom Search"
         '
-        'PanelNoScrollOnFocus1
+        'SearchPanel
         '
         Me.SearchPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -324,7 +324,7 @@ Partial Class MainForm
         Me.SearchPanel.Controls.Add(Me.txtAssetTagSearch)
         Me.SearchPanel.Controls.Add(Me.Label11)
         Me.SearchPanel.Location = New System.Drawing.Point(11, 20)
-        Me.SearchPanel.Name = "PanelNoScrollOnFocus1"
+        Me.SearchPanel.Name = "SearchPanel"
         Me.SearchPanel.Size = New System.Drawing.Size(732, 173)
         Me.SearchPanel.TabIndex = 52
         '
