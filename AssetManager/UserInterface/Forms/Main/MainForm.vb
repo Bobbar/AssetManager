@@ -267,11 +267,11 @@ Public Class MainForm
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub Waiting()
-        SetCursor(Cursors.WaitCursor)
+        SetWaitCursor(True)
         StatusBar("Processing...")
     End Sub
     Private Sub DoneWaiting()
-        SetCursor(Cursors.Default)
+        SetWaitCursor(False)
         StripSpinner.Visible = False
         StatusBar("Idle...")
     End Sub

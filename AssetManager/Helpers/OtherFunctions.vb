@@ -281,10 +281,8 @@ Module OtherFunctions
             Next
         End If
     End Sub
-    Public Sub SetCursor(CursorType As Cursor)
-        If Cursor.Current IsNot CursorType Then
-            Cursor.Current = CursorType
-        End If
+    Public Sub SetWaitCursor(Waiting As Boolean)
+        Application.UseWaitCursor = Waiting
     End Sub
     Public Function ValidPhoneNumber(PhoneNum As String) As Boolean
         If Trim(PhoneNum) <> "" Then
@@ -303,4 +301,5 @@ Module OtherFunctions
             Return True
         End If
     End Function
+
 End Module

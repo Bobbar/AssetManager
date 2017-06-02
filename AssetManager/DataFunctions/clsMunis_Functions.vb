@@ -407,11 +407,11 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
         LoadMunisInfoByDevice(Device, Parent)
     End Sub
     Private Sub Waiting()
-        Application.UseWaitCursor = True
-        SetCursor(Cursors.WaitCursor)
+        ' Application.UseWaitCursor = True
+        SetWaitCursor(True)
     End Sub
     Private Sub DoneWaiting()
-        Application.UseWaitCursor = False
-        SetCursor(Cursors.Default)
+        ' Application.UseWaitCursor = False
+        SetWaitCursor(False)
     End Sub
 End Class

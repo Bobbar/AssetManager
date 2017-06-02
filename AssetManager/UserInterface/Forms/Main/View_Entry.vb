@@ -17,10 +17,10 @@ Public Class View_Entry
         ViewEntry(EntryUID)
     End Sub
     Private Sub Waiting()
-        SetCursor(Cursors.WaitCursor)
+        SetWaitCursor(True)
     End Sub
     Private Sub DoneWaiting()
-        SetCursor(Cursors.Default)
+        SetWaitCursor(False)
     End Sub
     Private Sub InitDBControls()
         txtEntryTime.Tag = New DBControlInfo(historical_dev.ActionDateTime, ParseType.DisplayOnly, False)

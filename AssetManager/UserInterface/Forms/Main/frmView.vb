@@ -329,11 +329,11 @@ Public Class frmView
         End Try
     End Sub
     Private Sub Waiting()
-        SetCursor(Cursors.WaitCursor)
+        SetWaitCursor(True)
         StatusBar("Processing...")
     End Sub
     Private Sub DoneWaiting()
-        SetCursor(Cursors.Default)
+        SetWaitCursor(False)
         StatusBar("Idle...")
     End Sub
     Public Sub StatusBar(Text As String)

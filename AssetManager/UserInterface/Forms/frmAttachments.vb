@@ -96,7 +96,7 @@ Class frmAttachments
     End Sub
     Private Sub WorkerFeedback(WorkerRunning As Boolean)
         If WorkerRunning Then
-            SetCursor(Cursors.WaitCursor)
+            SetWaitCursor(True)
             intProgress = 0
             ProgressBar1.Value = 0
             ProgressBar1.Visible = True
@@ -105,7 +105,7 @@ Class frmAttachments
             ProgTimer.Enabled = True
         Else
             lngBytesMoved = 0
-            SetCursor(Cursors.Default)
+            SetWaitCursor(False)
             stpSpeed.Stop()
             stpSpeed.Reset()
             intProgress = 0
@@ -234,11 +234,11 @@ Class frmAttachments
         End If
     End Sub
     Private Sub Waiting()
-        SetCursor(Cursors.WaitCursor)
+        SetWaitCursor(True)
         StatusBar("Processing...")
     End Sub
     Private Sub DoneWaiting()
-        SetCursor(Cursors.Default)
+        SetWaitCursor(False)
         StatusBar("Idle...")
     End Sub
     Public Sub StatusBar(Text As String)
