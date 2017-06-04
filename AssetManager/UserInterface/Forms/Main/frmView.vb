@@ -20,10 +20,6 @@ Public Class frmView
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyLiveBox As New clsLiveBox(Me)
     Private MyWindowList As New WindowList(Me)
-    Private Structure Ping_Results
-        Public CanPing As Boolean
-        Public Address As String
-    End Structure
     Sub New(ParentForm As MyForm, DeviceGUID As String)
         InitializeComponent()
         InitDBControls()
