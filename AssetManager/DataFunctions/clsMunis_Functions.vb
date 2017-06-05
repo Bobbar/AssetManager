@@ -30,19 +30,21 @@ Public Class clsMunis_Functions
         If Not IsNothing(AssetTag) Then
             If AssetTag <> "" Then
                 Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_purch_memo").ToString)
-            Else
-                Return Nothing
             End If
         End If
+        Return Nothing
     End Function
     Public Function Get_PO_From_Serial(Serial As String) As String
-        If Not IsNothing(Serial) Then
-            If Serial <> "" Then
-                Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_serial", Serial, "fama_purch_memo").ToString)
-            Else
-                Return Nothing
+        Try
+            If Not IsNothing(Serial) Then
+                If Serial <> "" Then
+                    Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_serial", Serial, "fama_purch_memo").ToString)
+                End If
             End If
-        End If
+            Return Nothing
+        Catch
+            Return Nothing
+        End Try
     End Function
     Public Function Get_FY_From_Asset(AssetTag As String) As String
         Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_fisc_yr").ToString)
@@ -51,12 +53,8 @@ Public Class clsMunis_Functions
         Return YearFromDate(DateTime.Parse(Trim(priv_Comms.Return_MSSQLValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate").ToString)))
     End Function
     Public Function Get_VendorName_From_PO(PO As String) As String
-        Dim strQRY As String = "SELECT TOP 1       dbo.ap_vendor.a_vendor_number, dbo.ap_vendor.a_vendor_name
-FROM            dbo.ap_vendor INNER JOIN
-                         dbo.rqdetail ON dbo.ap_vendor.a_vendor_number = dbo.rqdetail.rqdt_sug_vn
-WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND (dbo.rqdetail.rqdt_fsc_yr = " & Get_FY_From_PO(PO) & ")"
-        Dim table As DataTable = priv_Comms.Return_MSSQLTable(strQRY)
-        Return table(0).Item("a_vendor_name").ToString
+        Dim VendorNumber = priv_Comms.Return_MSSQLValue("rqdetail", "rqdt_req_no", Get_ReqNumber_From_PO(PO), "rqdt_sug_vn", "rqdt_fsc_yr", Get_FY_From_PO(PO))
+        Return priv_Comms.Return_MSSQLValue("ap_vendor", "a_vendor_number", VendorNumber, "a_vendor_name").ToString
     End Function
     Public Function Get_VendorNumber_From_ReqNumber(ReqNum As String, FY As String) As Integer
         Return CInt(priv_Comms.Return_MSSQLValue("rqdetail", "rqdt_req_no", ReqNum, "rqdt_sug_vn", "rqdt_fsc_yr", FY).ToString)
@@ -217,7 +215,6 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
             NewOrgObView(strOrg, strObj, Parent)
         End If
     End Sub
-
     Public Function ListOfEmpBySup(SupEmpNum As String) As DataTable
         Dim strQRY As String = "SELECT TOP 100 a_employee_number FROM pr_employee_master WHERE e_supervisor='" & SupEmpNum & "'"
         Return priv_Comms.Return_MSSQLTable(strQRY)
