@@ -466,6 +466,7 @@ Public Class frmView
                     End If
             End Select
         Next
+        bolMissingField = Not ValidPhoneNumber(txtPhoneNumber.Text)
         Return Not bolMissingField 'if fields are missing return false to trigger a message if needed
     End Function
     Private Sub AddErrorIcon(ctl As Control)
