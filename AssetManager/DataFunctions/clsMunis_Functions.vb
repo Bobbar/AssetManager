@@ -5,11 +5,10 @@ Public Class clsMunis_Functions
     Public Function Get_ReqNumber_From_PO(PO As String) As String
         If Not IsNothing(PO) Then
             If PO <> "" Then
-                Return priv_Comms.Return_MSSQLValue("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber")
-            Else
-                Return Nothing
+                Return priv_Comms.Return_MSSQLValue("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber").ToString
             End If
         End If
+        Return Nothing
     End Function
     Public Async Function Get_ReqNumber_From_PO_Async(PO As String) As Task(Of String)
         If Not IsNothing(PO) Then
@@ -30,7 +29,7 @@ Public Class clsMunis_Functions
     Public Function Get_PO_From_Asset(AssetTag As String) As String
         If Not IsNothing(AssetTag) Then
             If AssetTag <> "" Then
-                Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_purch_memo"))
+                Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_purch_memo").ToString)
             Else
                 Return Nothing
             End If
@@ -39,17 +38,17 @@ Public Class clsMunis_Functions
     Public Function Get_PO_From_Serial(Serial As String) As String
         If Not IsNothing(Serial) Then
             If Serial <> "" Then
-                Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_serial", Serial, "fama_purch_memo"))
+                Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_serial", Serial, "fama_purch_memo").ToString)
             Else
                 Return Nothing
             End If
         End If
     End Function
     Public Function Get_FY_From_Asset(AssetTag As String) As String
-        Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_fisc_yr"))
+        Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_fisc_yr").ToString)
     End Function
     Public Function Get_PODT_From_PO(PO As String) As String
-        Return YearFromDate(DateTime.Parse(Trim(priv_Comms.Return_MSSQLValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate"))))
+        Return YearFromDate(DateTime.Parse(Trim(priv_Comms.Return_MSSQLValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate").ToString)))
     End Function
     Public Function Get_VendorName_From_PO(PO As String) As String
         Dim strQRY As String = "SELECT TOP 1       dbo.ap_vendor.a_vendor_number, dbo.ap_vendor.a_vendor_name
@@ -60,15 +59,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & Get_ReqNumber_From_PO(PO) & ") AND 
         Return table(0).Item("a_vendor_name").ToString
     End Function
     Public Function Get_VendorNumber_From_ReqNumber(ReqNum As String, FY As String) As Integer
-        Dim strQRY As String = "SELECT TOP 1       dbo.ap_vendor.a_vendor_number, dbo.ap_vendor.a_vendor_name
-FROM            dbo.ap_vendor INNER JOIN
-                         dbo.rqdetail ON dbo.ap_vendor.a_vendor_number = dbo.rqdetail.rqdt_sug_vn
-WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_fsc_yr = " & FY & ")"
-        Dim table As DataTable = priv_Comms.Return_MSSQLTable(strQRY)
-        If table.Rows.Count > 0 Then
-            Return CInt(table(0).Item("a_vendor_number").ToString)
-        End If
-        Return Nothing
+        Return CInt(priv_Comms.Return_MSSQLValue("rqdetail", "rqdt_req_no", ReqNum, "rqdt_sug_vn", "rqdt_fsc_yr", FY).ToString)
     End Function
     Public Function Get_FY_From_PO(PO As String) As String
         Dim strFYyy As String = Left(PO, 2)
@@ -151,7 +142,7 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
                 If .DialogResult = DialogResult.OK Then
                     Device.strAssetTag = Trim(NewDialog.GetControlValue("txtAsset").ToString)
                     Device.strSerial = Trim(NewDialog.GetControlValue("txtSerial").ToString)
-                    NewMunisView_Device(Device, Parent)
+                    LoadMunisInfoByDevice(Device, Parent)
                 End If
             End With
         Catch ex As Exception
@@ -235,16 +226,33 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
         Waiting()
         Dim NewGridForm As New GridForm(Parent, "Org/Obj Info")
         Dim Columns As String = " glma_org, glma_obj, glma_desc, glma_seg5, glma_bud_yr, glma_orig_bud_cy, glma_rev_bud_cy, glma_encumb_cy, glma_memo_bal_cy, glma_rev_bud_cy-glma_encumb_cy-glma_memo_bal_cy AS 'Funds Available' "
-        Dim Qry As String
-        If Obj <> "" Then
-            Qry = "Select " & intMaxResults & " " & Columns & "FROM glmaster WHERE glma_org = '" & Org & "' AND glma_obj = '" & Obj & "'"
-            NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.Return_MSSQLTableAsync(Qry))
+
+        If Obj <> "" Then 'Show Rollup info for Object
+
+            Dim GLMasterQry As String = "Select TOP " & intMaxResults & " " & Columns & "FROM glmaster"
             Dim RollUpCode As String = Await MunisComms.Return_MSSQLValueAsync("gl_budget_rollup", "a_org", Org, "a_rollup_code")
-            NewGridForm.AddGrid("RollupGrid", "Rollup Info:", Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 100 * FROM gl_budget_rollup WHERE a_rollup_code = '" & RollUpCode & "'"))
-        Else
-            Qry = "Select TOP 100 " & Columns & "FROM glmaster WHERE glma_org = '" & Org & "'"
-            NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.Return_MSSQLTableAsync(Qry))
-            NewGridForm.AddGrid("RollupGrid", "Rollup Info:", Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 100 * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
+            Dim RollUpQry As String = "SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_rollup_code = '" & RollUpCode & "'"
+
+            Dim Params As New List(Of SearchVal)
+            Params.Add(New SearchVal("glma_org", Org,, True))
+            Params.Add(New SearchVal("glma_obj", Obj,, True))
+
+            NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.Return_MSSQLTableFromCmdAsync(MunisComms.SQLParamCommand(GLMasterQry, Params))) 'MunisComms.Return_MSSQLTableAsync(Qry))
+            NewGridForm.AddGrid("RollupGrid", "Rollup Info:", Await MunisComms.Return_MSSQLTableAsync(RollUpQry))
+
+        Else ' Show Rollup info for all Objects in Org
+
+            Dim GLMasterQry As String = "Select TOP " & intMaxResults & " " & Columns & "FROM glmaster"
+            Dim RollUpQry As String = "SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup"
+
+            Dim GL_Params As New List(Of SearchVal)
+            GL_Params.Add(New SearchVal("glma_org", Org,, True))
+
+            Dim Roll_Params As New List(Of SearchVal)
+            Roll_Params.Add(New SearchVal("a_org", Org,, True))
+
+            NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.Return_MSSQLTableFromCmdAsync(MunisComms.SQLParamCommand(GLMasterQry, GL_Params))) 'MunisComms.Return_MSSQLTableAsync(Qry))
+            NewGridForm.AddGrid("RollupGrid", "Rollup Info:", Await MunisComms.Return_MSSQLTableFromCmdAsync(MunisComms.SQLParamCommand(RollUpQry, Roll_Params))) 'MunisComms.Return_MSSQLTableAsync("SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
         End If
         NewGridForm.Show()
         DoneWaiting()
@@ -254,43 +262,39 @@ WHERE        (dbo.rqdetail.rqdt_req_no = " & ReqNum & ") AND (dbo.rqdetail.rqdt_
         Dim strColumns As String = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last"
         Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " 
 FROM pr_employee_master e
-INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number
-WHERE e.a_name_last LIKE '%" & UCase(Name) & "%' OR e.a_name_first LIKE '%" & UCase(Name) & "%'"
+INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number"
+
+        Dim Params As New List(Of SearchVal)
+        Params.Add(New SearchVal("e.a_name_last", UCase(Name), "OR"))
+        Params.Add(New SearchVal("e.a_name_first", UCase(Name), "OR"))
+
         Dim NewGridForm As New GridForm(Parent, "MUNIS Employee Info")
-        NewGridForm.AddGrid("EmpGrid", "MUNIS Info:", Await MunisComms.Return_MSSQLTableAsync(strQRY))
+        NewGridForm.AddGrid("EmpGrid", "MUNIS Info:", Await MunisComms.Return_MSSQLTableFromCmdAsync(MunisComms.SQLParamCommand(strQRY, Params)))
         NewGridForm.Show()
         DoneWaiting()
     End Sub
-    Public Sub NewMunisView_POSearch(PO As String, Optional Parent As Form = Nothing)
+    Public Async Sub NewMunisView_POSearch(PO As String, Optional Parent As Form = Nothing)
         Waiting()
         If PO = "" Then Exit Sub
         Dim strQRY As String = "SELECT TOP " & intMaxResults & " pohd_pur_no, pohd_fsc_yr, pohd_req_no, pohd_gen_cm, pohd_buy_id, pohd_pre_dt, pohd_exp_dt, pohd_sta_cd, pohd_vnd_cd, pohd_dep_cd, pohd_shp_cd, pohd_tot_amt, pohd_serial
-FROM poheader
-WHERE pohd_pur_no ='" & PO & "'"
+FROM poheader"
+
+        Dim Params As New List(Of SearchVal)
+        Params.Add(New SearchVal("pohd_pur_no", PO,, True))
+
         Dim NewGridForm As New GridForm(Parent, "MUNIS PO Info")
-        NewGridForm.AddGrid("POGrid", "PO Info:", MunisComms.Return_MSSQLTable(strQRY))
+        NewGridForm.AddGrid("POGrid", "PO Info:", Await MunisComms.Return_MSSQLTableFromCmdAsync(MunisComms.SQLParamCommand(strQRY, Params)))
         NewGridForm.Show()
         DoneWaiting()
     End Sub
-    Public Function NewMunisView_ReqSearch(ReqNumber As String, FY As String, Optional Parent As Form = Nothing, Optional SelectMode As Boolean = False) As String
+    Public Async Function NewMunisView_ReqSearch(ReqNumber As String, FY As String, Optional Parent As Form = Nothing, Optional SelectMode As Boolean = False) As Task(Of String)
         Waiting()
         If ReqNumber = "" Or FY = "" Then
             DoneWaiting()
             Return Nothing
         End If
-        Dim strQRY As String = "SELECT TOP " & intMaxResults & " dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc, 
-                         VEN.a_vendor_name, VEN.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr,
-                         dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
-            From            dbo.rq_gl_info INNER JOIN
-                         dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr LEFT JOIN
-                          (SELECT TOP 1 a_vendor_number,a_vendor_name 
-FROM ap_vendor
-WHERE a_vendor_number = " & Munis.Get_VendorNumber_From_ReqNumber(ReqNumber, FY) & ") VEN 
-ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number
-WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FY & ")" ' AND (dbo.ap_vendor.a_vendor_remit_seq = 0)"
-        Debug.Print(strQRY)
         Dim NewGridForm As New GridForm(Parent, "MUNIS Requisition Info")
-        NewGridForm.AddGrid("ReqGrid", "Requisition Info:", MunisComms.Return_MSSQLTable(strQRY))
+        NewGridForm.AddGrid("ReqGrid", "Requisition Info:", Await LoadMunisRequisitionGridByReqNo(ReqNumber, FY)) ' MunisComms.Return_MSSQLTable(strQRY))
         If Not SelectMode Then
             NewGridForm.Show()
             DoneWaiting()
@@ -311,17 +315,19 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             If ReqNumber = "" Or FiscalYr = "" Then Return Nothing
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc, 
                          VEN.a_vendor_name, VEN.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr,
-                         dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln
+                         dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
             From            dbo.rq_gl_info INNER JOIN
                          dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr LEFT JOIN
                           (
-						 SELECT TOP 1 a_vendor_number,a_vendor_name
-						 FROM ap_vendor
-						 WHERE a_vendor_number = " & Munis.Get_VendorNumber_From_ReqNumber(ReqNumber, FiscalYr) & "
-						 ) VEN 
-ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number
-WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_gl_info.rg_fiscal_year = " & FiscalYr & ")" ' AND (dbo.ap_vendor.a_vendor_remit_seq = 0)"
-            Dim ReqTable = Await MunisComms.Return_MSSQLTableAsync(strQRY)
+SELECT TOP 1 a_vendor_number,a_vendor_name
+FROM ap_vendor
+WHERE a_vendor_number = " & Munis.Get_VendorNumber_From_ReqNumber(ReqNumber, FiscalYr) & "
+) VEN 
+ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
+            Dim Params As New List(Of SearchVal)
+            Params.Add(New SearchVal("dbo.rq_gl_info.a_requisition_no", ReqNumber,, True))
+            Params.Add(New SearchVal("dbo.rq_gl_info.rg_fiscal_year", FiscalYr,, True))
+            Dim ReqTable = Await MunisComms.Return_MSSQLTableFromCmdAsync(MunisComms.SQLParamCommand(strQRY, Params))
             If ReqTable.Rows.Count > 0 Then
                 Return ReqTable
             Else
@@ -403,9 +409,6 @@ WHERE        (dbo.rq_gl_info.a_requisition_no = " & ReqNumber & ") AND (dbo.rq_g
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
-    Public Sub NewMunisView_Device(Device As Device_Info, Parent As Form)
-        LoadMunisInfoByDevice(Device, Parent)
-    End Sub
     Private Sub Waiting()
         ' Application.UseWaitCursor = True
         SetWaitCursor(True)

@@ -51,9 +51,14 @@ End Enum
 Public Class SearchVal
     Public Property FieldName As String
     Public Property Value As Object
-    Public Sub New(ByVal strFieldName As String, ByVal obValue As Object)
-        FieldName = strFieldName
-        Value = obValue
+    Public Property IsExact As Boolean
+    Public Property OperatorString As String
+
+    Public Sub New(ByVal FieldName As String, ByVal Value As Object, Optional OperatorString As String = "AND", Optional IsExact As Boolean = False)
+        Me.FieldName = FieldName
+        Me.Value = Value
+        Me.IsExact = IsExact
+        Me.OperatorString = OperatorString
     End Sub
 End Class
 Public Class Attachment
