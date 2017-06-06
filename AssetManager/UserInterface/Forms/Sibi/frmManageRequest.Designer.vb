@@ -450,10 +450,12 @@ Partial Class frmManageRequest
         '
         'dtNeedBy
         '
+        Me.dtNeedBy.CustomFormat = "MM/dd/yyyy"
+        Me.dtNeedBy.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.dtNeedBy.Location = New System.Drawing.Point(18, 182)
         Me.dtNeedBy.Margin = New System.Windows.Forms.Padding(2)
         Me.dtNeedBy.Name = "dtNeedBy"
-        Me.dtNeedBy.Size = New System.Drawing.Size(180, 21)
+        Me.dtNeedBy.Size = New System.Drawing.Size(137, 21)
         Me.dtNeedBy.TabIndex = 3
         '
         'Label3
