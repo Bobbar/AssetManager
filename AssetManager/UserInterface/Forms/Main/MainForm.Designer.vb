@@ -254,7 +254,7 @@ Partial Class MainForm
         Me.Label8.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(12, 33)
+        Me.Label8.Location = New System.Drawing.Point(12, 31)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(73, 16)
         Me.Label8.TabIndex = 37
@@ -352,7 +352,7 @@ Partial Class MainForm
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(183, 109)
+        Me.Label6.Location = New System.Drawing.Point(183, 108)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(95, 16)
         Me.Label6.TabIndex = 54
@@ -402,7 +402,7 @@ Partial Class MainForm
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(183, 60)
+        Me.Label2.Location = New System.Drawing.Point(183, 59)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(79, 16)
         Me.Label2.TabIndex = 44
@@ -422,7 +422,7 @@ Partial Class MainForm
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(534, 60)
+        Me.Label1.Location = New System.Drawing.Point(534, 59)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(48, 16)
         Me.Label1.TabIndex = 42
@@ -432,7 +432,7 @@ Partial Class MainForm
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(354, 11)
+        Me.Label10.Location = New System.Drawing.Point(354, 12)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(110, 16)
         Me.Label10.TabIndex = 36
@@ -442,7 +442,7 @@ Partial Class MainForm
         '
         Me.cmbStatus.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbStatus.FormattingEnabled = True
-        Me.cmbStatus.Location = New System.Drawing.Point(537, 79)
+        Me.cmbStatus.Location = New System.Drawing.Point(537, 78)
         Me.cmbStatus.Name = "cmbStatus"
         Me.cmbStatus.Size = New System.Drawing.Size(165, 23)
         Me.cmbStatus.TabIndex = 41
@@ -463,7 +463,7 @@ Partial Class MainForm
         '
         Me.Label12.AutoSize = True
         Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(534, 11)
+        Me.Label12.Location = New System.Drawing.Point(534, 12)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(62, 16)
         Me.Label12.TabIndex = 40
@@ -473,7 +473,7 @@ Partial Class MainForm
         '
         Me.cmbEquipType.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbEquipType.FormattingEnabled = True
-        Me.cmbEquipType.Location = New System.Drawing.Point(357, 29)
+        Me.cmbEquipType.Location = New System.Drawing.Point(357, 30)
         Me.cmbEquipType.Name = "cmbEquipType"
         Me.cmbEquipType.Size = New System.Drawing.Size(159, 23)
         Me.cmbEquipType.TabIndex = 35
@@ -522,7 +522,7 @@ Partial Class MainForm
         'txtAssetTagSearch
         '
         Me.txtAssetTagSearch.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTagSearch.Location = New System.Drawing.Point(25, 29)
+        Me.txtAssetTagSearch.Location = New System.Drawing.Point(25, 30)
         Me.txtAssetTagSearch.MaxLength = 45
         Me.txtAssetTagSearch.Name = "txtAssetTagSearch"
         Me.txtAssetTagSearch.Size = New System.Drawing.Size(135, 23)
@@ -552,7 +552,7 @@ Partial Class MainForm
         'cmdClear
         '
         Me.cmdClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdClear.Location = New System.Drawing.Point(758, 122)
+        Me.cmdClear.Location = New System.Drawing.Point(758, 142)
         Me.cmdClear.Name = "cmdClear"
         Me.cmdClear.Size = New System.Drawing.Size(88, 32)
         Me.cmdClear.TabIndex = 18

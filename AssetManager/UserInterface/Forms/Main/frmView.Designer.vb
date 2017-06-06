@@ -91,6 +91,11 @@ Partial Class frmView
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ToolStripContainer1 = New System.Windows.Forms.ToolStripContainer()
+        Me.tsTracking = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStrip1 = New AssetManager.MyToolStrip()
         Me.tsbModify = New System.Windows.Forms.ToolStripButton()
         Me.tsbNewNote = New System.Windows.Forms.ToolStripButton()
@@ -103,11 +108,6 @@ Partial Class frmView
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.AssetDisposalForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.tsTracking = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
@@ -125,8 +125,8 @@ Partial Class frmView
         Me.ToolStripContainer1.ContentPanel.SuspendLayout()
         Me.ToolStripContainer1.TopToolStripPanel.SuspendLayout()
         Me.ToolStripContainer1.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
         Me.tsTracking.SuspendLayout()
+        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'DeviceInfoBox
@@ -205,9 +205,9 @@ Partial Class frmView
         'cmdMunisSearch
         '
         Me.cmdMunisSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdMunisSearch.Location = New System.Drawing.Point(20, 160)
+        Me.cmdMunisSearch.Location = New System.Drawing.Point(20, 164)
         Me.cmdMunisSearch.Name = "cmdMunisSearch"
-        Me.cmdMunisSearch.Size = New System.Drawing.Size(134, 23)
+        Me.cmdMunisSearch.Size = New System.Drawing.Size(135, 23)
         Me.cmdMunisSearch.TabIndex = 3
         Me.cmdMunisSearch.Text = "Munis Search"
         Me.cmdMunisSearch.UseVisualStyleBackColor = True
@@ -285,7 +285,7 @@ Partial Class frmView
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(18, 68)
+        Me.Label1.Location = New System.Drawing.Point(18, 71)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(73, 16)
         Me.Label1.TabIndex = 20
@@ -294,7 +294,7 @@ Partial Class frmView
         'txtAssetTag_View_REQ
         '
         Me.txtAssetTag_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAssetTag_View_REQ.Location = New System.Drawing.Point(21, 87)
+        Me.txtAssetTag_View_REQ.Location = New System.Drawing.Point(21, 90)
         Me.txtAssetTag_View_REQ.Name = "txtAssetTag_View_REQ"
         Me.txtAssetTag_View_REQ.Size = New System.Drawing.Size(134, 23)
         Me.txtAssetTag_View_REQ.TabIndex = 1
@@ -331,7 +331,7 @@ Partial Class frmView
         '
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(395, 116)
+        Me.Label9.Location = New System.Drawing.Point(395, 119)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(48, 16)
         Me.Label9.TabIndex = 39
@@ -340,7 +340,7 @@ Partial Class frmView
         'txtCurUser_View_REQ
         '
         Me.txtCurUser_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(21, 132)
+        Me.txtCurUser_View_REQ.Location = New System.Drawing.Point(21, 138)
         Me.txtCurUser_View_REQ.Name = "txtCurUser_View_REQ"
         Me.txtCurUser_View_REQ.Size = New System.Drawing.Size(134, 23)
         Me.txtCurUser_View_REQ.TabIndex = 2
@@ -349,7 +349,7 @@ Partial Class frmView
         '
         Me.cmbStatus_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbStatus_REQ.FormattingEnabled = True
-        Me.cmbStatus_REQ.Location = New System.Drawing.Point(398, 135)
+        Me.cmbStatus_REQ.Location = New System.Drawing.Point(398, 138)
         Me.cmbStatus_REQ.Name = "cmbStatus_REQ"
         Me.cmbStatus_REQ.Size = New System.Drawing.Size(177, 23)
         Me.cmbStatus_REQ.TabIndex = 8
@@ -358,7 +358,7 @@ Partial Class frmView
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(17, 113)
+        Me.Label3.Location = New System.Drawing.Point(17, 119)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(85, 16)
         Me.Label3.TabIndex = 24
@@ -368,7 +368,7 @@ Partial Class frmView
         '
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(183, 116)
+        Me.Label8.Location = New System.Drawing.Point(183, 119)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(79, 16)
         Me.Label8.TabIndex = 37
@@ -386,7 +386,7 @@ Partial Class frmView
         '
         Me.cmbOSVersion_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbOSVersion_REQ.FormattingEnabled = True
-        Me.cmbOSVersion_REQ.Location = New System.Drawing.Point(186, 135)
+        Me.cmbOSVersion_REQ.Location = New System.Drawing.Point(186, 138)
         Me.cmbOSVersion_REQ.Name = "cmbOSVersion_REQ"
         Me.cmbOSVersion_REQ.Size = New System.Drawing.Size(177, 23)
         Me.cmbOSVersion_REQ.TabIndex = 6
@@ -414,7 +414,7 @@ Partial Class frmView
         '
         Me.Label13.AutoSize = True
         Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.Location = New System.Drawing.Point(183, 68)
+        Me.Label13.Location = New System.Drawing.Point(183, 71)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(110, 16)
         Me.Label13.TabIndex = 34
@@ -434,7 +434,7 @@ Partial Class frmView
         '
         Me.cmbEquipType_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbEquipType_View_REQ.FormattingEnabled = True
-        Me.cmbEquipType_View_REQ.Location = New System.Drawing.Point(186, 87)
+        Me.cmbEquipType_View_REQ.Location = New System.Drawing.Point(186, 90)
         Me.cmbEquipType_View_REQ.Name = "cmbEquipType_View_REQ"
         Me.cmbEquipType_View_REQ.Size = New System.Drawing.Size(177, 23)
         Me.cmbEquipType_View_REQ.TabIndex = 5
@@ -444,7 +444,7 @@ Partial Class frmView
         Me.dtPurchaseDate_View_REQ.CustomFormat = "yyyy-MM-dd"
         Me.dtPurchaseDate_View_REQ.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtPurchaseDate_View_REQ.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtPurchaseDate_View_REQ.Location = New System.Drawing.Point(614, 43)
+        Me.dtPurchaseDate_View_REQ.Location = New System.Drawing.Point(614, 42)
         Me.dtPurchaseDate_View_REQ.Name = "dtPurchaseDate_View_REQ"
         Me.dtPurchaseDate_View_REQ.Size = New System.Drawing.Size(168, 23)
         Me.dtPurchaseDate_View_REQ.TabIndex = 9
@@ -463,7 +463,7 @@ Partial Class frmView
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(609, 24)
+        Me.Label6.Location = New System.Drawing.Point(609, 23)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(100, 16)
         Me.Label6.TabIndex = 30
@@ -910,6 +910,50 @@ Partial Class frmView
         Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.tsTracking)
         Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.ToolStrip1)
         '
+        'tsTracking
+        '
+        Me.tsTracking.Dock = System.Windows.Forms.DockStyle.None
+        Me.tsTracking.ImageScalingSize = New System.Drawing.Size(25, 25)
+        Me.tsTracking.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripDropDownButton1, Me.ToolStripSeparator4})
+        Me.tsTracking.Location = New System.Drawing.Point(16, 37)
+        Me.tsTracking.Name = "tsTracking"
+        Me.tsTracking.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.tsTracking.Size = New System.Drawing.Size(134, 37)
+        Me.tsTracking.TabIndex = 46
+        '
+        'ToolStripDropDownButton1
+        '
+        Me.ToolStripDropDownButton1.AutoSize = False
+        Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckOutTool, Me.CheckInTool})
+        Me.ToolStripDropDownButton1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripDropDownButton1.Image = CType(resources.GetObject("ToolStripDropDownButton1.Image"), System.Drawing.Image)
+        Me.ToolStripDropDownButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
+        Me.ToolStripDropDownButton1.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
+        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(116, 34)
+        Me.ToolStripDropDownButton1.Text = "Tracking"
+        '
+        'CheckOutTool
+        '
+        Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckOutTool.Image = CType(resources.GetObject("CheckOutTool.Image"), System.Drawing.Image)
+        Me.CheckOutTool.Name = "CheckOutTool"
+        Me.CheckOutTool.Size = New System.Drawing.Size(135, 22)
+        Me.CheckOutTool.Text = "Check Out"
+        '
+        'CheckInTool
+        '
+        Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckInTool.Image = CType(resources.GetObject("CheckInTool.Image"), System.Drawing.Image)
+        Me.CheckInTool.Name = "CheckInTool"
+        Me.CheckInTool.Size = New System.Drawing.Size(135, 22)
+        Me.CheckInTool.Text = "Check In"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 37)
+        '
         'ToolStrip1
         '
         Me.ToolStrip1.Dock = System.Windows.Forms.DockStyle.None
@@ -1002,50 +1046,6 @@ Partial Class frmView
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 37)
         '
-        'tsTracking
-        '
-        Me.tsTracking.Dock = System.Windows.Forms.DockStyle.None
-        Me.tsTracking.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.tsTracking.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripDropDownButton1, Me.ToolStripSeparator4})
-        Me.tsTracking.Location = New System.Drawing.Point(16, 37)
-        Me.tsTracking.Name = "tsTracking"
-        Me.tsTracking.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.tsTracking.Size = New System.Drawing.Size(134, 37)
-        Me.tsTracking.TabIndex = 46
-        '
-        'ToolStripDropDownButton1
-        '
-        Me.ToolStripDropDownButton1.AutoSize = False
-        Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckOutTool, Me.CheckInTool})
-        Me.ToolStripDropDownButton1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripDropDownButton1.Image = CType(resources.GetObject("ToolStripDropDownButton1.Image"), System.Drawing.Image)
-        Me.ToolStripDropDownButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
-        Me.ToolStripDropDownButton1.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(116, 34)
-        Me.ToolStripDropDownButton1.Text = "Tracking"
-        '
-        'CheckOutTool
-        '
-        Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckOutTool.Image = CType(resources.GetObject("CheckOutTool.Image"), System.Drawing.Image)
-        Me.CheckOutTool.Name = "CheckOutTool"
-        Me.CheckOutTool.Size = New System.Drawing.Size(135, 22)
-        Me.CheckOutTool.Text = "Check Out"
-        '
-        'CheckInTool
-        '
-        Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckInTool.Image = CType(resources.GetObject("CheckInTool.Image"), System.Drawing.Image)
-        Me.CheckInTool.Name = "CheckInTool"
-        Me.CheckInTool.Size = New System.Drawing.Size(135, 22)
-        Me.CheckInTool.Text = "Check In"
-        '
-        'ToolStripSeparator4
-        '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 37)
-        '
         'frmView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1082,10 +1082,10 @@ Partial Class frmView
         Me.ToolStripContainer1.TopToolStripPanel.PerformLayout()
         Me.ToolStripContainer1.ResumeLayout(False)
         Me.ToolStripContainer1.PerformLayout()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
         Me.tsTracking.ResumeLayout(False)
         Me.tsTracking.PerformLayout()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

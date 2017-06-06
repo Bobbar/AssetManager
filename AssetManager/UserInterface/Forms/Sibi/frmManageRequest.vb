@@ -71,8 +71,6 @@ Public Class frmManageRequest
         CurrentRequest = Nothing
         DisableControls(Me)
         ToolStrip.BackColor = colSibiToolBarColor
-        cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
-        cmdUpdate.Text = "Update"
         bolUpdating = False
         fieldErrorIcon.Clear()
     End Sub
@@ -354,12 +352,14 @@ Public Class frmManageRequest
                 If Not row.IsNewRow Then
                     Dim NewRow As DataRow = DBTable.NewRow()
                     For Each dcell As DataGridViewCell In row.Cells
-                        If dcell.OwningColumn.CellType.Name = "DataGridViewComboBoxCell" Then
+                        If dcell.OwningColumn.CellType Is GetType(DataGridViewComboBoxCell) Then
+                            Dim cmb = DirectCast(dcell, DataGridViewComboBoxCell)
+                            Dim SelectedIndex = cmb.Items.IndexOf(dcell.Value)
                             Select Case dcell.OwningColumn.Name
                                 Case Attrib_Type.Location
-                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(DeviceIndex.Locations, dcell.Value.ToString)
+                                    NewRow(dcell.ColumnIndex) = GetDBValue(DeviceIndex.Locations, SelectedIndex)
                                 Case Attrib_Type.SibiItemStatusType
-                                    NewRow(dcell.ColumnIndex) = GetDBValueFromHuman(SibiIndex.ItemStatusType, dcell.Value.ToString)
+                                    NewRow(dcell.ColumnIndex) = GetDBValue(SibiIndex.ItemStatusType, SelectedIndex)
                             End Select
                         Else
                             If dcell.Value IsNot Nothing Then
@@ -704,25 +704,19 @@ VALUES
         If Not Enable Then
             EnableControls(Me)
             ToolStrip.BackColor = colEditColor
-            cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Bold)
-            cmdUpdate.Text = "*Accept Changes*"
             ShowEditControls()
-            ' cmdUpdate.Image = My.Resources.checked_checkbox
             bolUpdating = True
         Else
             DisableControls(Me)
             ToolStrip.BackColor = colSibiToolBarColor
-            cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
-            cmdUpdate.Text = "Update"
             HideEditControls()
-            ' cmdUpdate.Image = My.Resources.Edit
             UpdateRequest()
             bolUpdating = False
         End If
     End Sub
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
-        If Not AttachmentsIsOpen(CurrentRequest.strUID) Then
+        If Not AttachmentsIsOpen() Then
             If CurrentRequest.strUID <> "" Then
                 Dim NewAttach As New frmAttachments(Me, CurrentRequest)
             End If
@@ -730,7 +724,7 @@ VALUES
             ActivateFormByUID(CurrentRequest.strUID)
         End If
     End Sub
-    Public Function AttachmentsIsOpen(strGUID As String) As Boolean
+    Public Function AttachmentsIsOpen() As Boolean
         For Each frm As Form In My.Application.OpenForms
             If TypeOf frm Is frmAttachments And frm.Tag Is Me Then
                 Return True
@@ -946,8 +940,6 @@ VALUES
         If Not ValidateFields() Then Exit Sub
         DisableControls(Me)
         ToolStrip.BackColor = colSibiToolBarColor
-        cmdUpdate.Font = New Font(cmdUpdate.Font, FontStyle.Regular)
-        cmdUpdate.Text = "Update"
         HideEditControls()
         UpdateRequest()
         bolUpdating = False
@@ -1132,7 +1124,6 @@ VALUES
         RequestItemsGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
         RequestItemsGrid.RowHeadersVisible = True
     End Sub
-
     Private Sub tsbRefresh_Click(sender As Object, e As EventArgs) Handles tsbRefresh.Click
         OpenRequest(CurrentRequest.strUID)
     End Sub
