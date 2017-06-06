@@ -193,6 +193,7 @@ Public Class PingVis : Implements IDisposable
                 DrawPingBars(gfx, Bars) 'Draw ping bars
                 gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
                 DrawPingText(gfx, MouseOverInfo) 'Draw last ping round trip time
+                DrawScrollBar(gfx)
                 SetAvgPing() 'Set public property containing current average round trip time
                 TrimPingList()
                 'The bitmap is scaled back to control size using high quality transformations.
@@ -200,10 +201,25 @@ Public Class PingVis : Implements IDisposable
                 '  bm.Save("C:\Temp\test.bmp")
                 Dim bmRz = ResizeImage(bm, DestControl.ClientSize.Width, DestControl.ClientSize.Height)
                 SetControlImage(DestControl, bmRz)
+                DisposeBarList(Bars)
             End Using
         Catch
         Finally
         End Try
+    End Sub
+    Private Sub DisposeBarList(ByRef Bars As List(Of PingBar))
+        For Each bar In Bars
+            bar.Brush.Dispose()
+        Next
+        Bars.Clear()
+    End Sub
+    Private Sub DrawScrollBar(ByRef gfx As Graphics)
+        If bolScrolling Then
+            Using ScrollBrush As New SolidBrush(Color.White)
+                Dim ScrollLocation As Integer = CInt(intImgHeight / (pngResults.Count / intTopIndex))
+                gfx.FillRectangle(ScrollBrush, New RectangleF(intImgWidth - 15, ScrollLocation, 10, 5))
+            End Using
+        End If
     End Sub
     Private Function CanDraw(TimeStamp As Integer) As Boolean
         Dim ElapTime As Integer = TimeStamp - LastDraw
