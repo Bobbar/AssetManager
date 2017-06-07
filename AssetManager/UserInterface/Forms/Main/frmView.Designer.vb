@@ -56,8 +56,8 @@ Partial Class frmView
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
+        Me.cmdRestart = New System.Windows.Forms.PictureBox()
         Me.cmdGKUpdate = New System.Windows.Forms.Button()
-        Me.cmdRestart = New System.Windows.Forms.Button()
         Me.cmdShowIP = New System.Windows.Forms.Button()
         Me.cmdBrowseFiles = New System.Windows.Forms.Button()
         Me.cmdRDP = New System.Windows.Forms.Button()
@@ -111,6 +111,7 @@ Partial Class frmView
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
+        CType(Me.cmdRestart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RightClickMenu.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.HistoryTab.SuspendLayout()
@@ -480,8 +481,8 @@ Partial Class frmView
         'grpNetTools
         '
         Me.grpNetTools.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.grpNetTools.Controls.Add(Me.cmdGKUpdate)
         Me.grpNetTools.Controls.Add(Me.cmdRestart)
+        Me.grpNetTools.Controls.Add(Me.cmdGKUpdate)
         Me.grpNetTools.Controls.Add(Me.cmdShowIP)
         Me.grpNetTools.Controls.Add(Me.cmdBrowseFiles)
         Me.grpNetTools.Controls.Add(Me.cmdRDP)
@@ -495,6 +496,18 @@ Partial Class frmView
         Me.grpNetTools.Text = "Remote Mgmt"
         Me.grpNetTools.Visible = False
         '
+        'cmdRestart
+        '
+        Me.cmdRestart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.cmdRestart.Image = Global.AssetManager.My.Resources.Resources._012_restart_2_512
+        Me.cmdRestart.Location = New System.Drawing.Point(118, 29)
+        Me.cmdRestart.Name = "cmdRestart"
+        Me.cmdRestart.Size = New System.Drawing.Size(50, 50)
+        Me.cmdRestart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.cmdRestart.TabIndex = 56
+        Me.cmdRestart.TabStop = False
+        Me.ToolTip1.SetToolTip(Me.cmdRestart, "Reboot Device")
+        '
         'cmdGKUpdate
         '
         Me.cmdGKUpdate.BackgroundImage = CType(resources.GetObject("cmdGKUpdate.BackgroundImage"), System.Drawing.Image)
@@ -506,19 +519,6 @@ Partial Class frmView
         Me.cmdGKUpdate.TabIndex = 55
         Me.ToolTip1.SetToolTip(Me.cmdGKUpdate, "Enqueue GK Update")
         Me.cmdGKUpdate.UseVisualStyleBackColor = True
-        '
-        'cmdRestart
-        '
-        Me.cmdRestart.BackgroundImage = CType(resources.GetObject("cmdRestart.BackgroundImage"), System.Drawing.Image)
-        Me.cmdRestart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.cmdRestart.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRestart.Location = New System.Drawing.Point(118, 29)
-        Me.cmdRestart.Margin = New System.Windows.Forms.Padding(1)
-        Me.cmdRestart.Name = "cmdRestart"
-        Me.cmdRestart.Size = New System.Drawing.Size(50, 50)
-        Me.cmdRestart.TabIndex = 54
-        Me.ToolTip1.SetToolTip(Me.cmdRestart, "Restart Device")
-        Me.cmdRestart.UseVisualStyleBackColor = True
         '
         'cmdShowIP
         '
@@ -1063,6 +1063,7 @@ Partial Class frmView
         Me.DeviceInfoBox.PerformLayout()
         Me.pnlOtherFunctions.ResumeLayout(False)
         Me.grpNetTools.ResumeLayout(False)
+        CType(Me.cmdRestart, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RightClickMenu.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.HistoryTab.ResumeLayout(False)
@@ -1153,7 +1154,6 @@ Partial Class frmView
     Friend WithEvents lblGUID As Label
     Friend WithEvents cmdShowIP As Button
     Friend WithEvents Label14 As Label
-    Friend WithEvents cmdRestart As Button
     Friend WithEvents cmdGKUpdate As Button
     Friend WithEvents txtPhoneNumber As MaskedTextBox
     Friend WithEvents Panel1 As Panel
@@ -1176,4 +1176,5 @@ Partial Class frmView
     Friend WithEvents CheckInTool As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents cmdRestart As PictureBox
 End Class

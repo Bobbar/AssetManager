@@ -880,42 +880,50 @@ Public Class frmView
     Private Sub DataGridHistory_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellLeave
         LeaveRow(DataGridHistory, GridTheme, e.RowIndex)
     End Sub
-    Private Sub cmdRestart_Click(sender As Object, e As EventArgs) Handles cmdRestart.Click
+    Private Async Sub cmdRestart_Click(sender As Object, e As EventArgs) Handles cmdRestart.Click
         Dim blah = Message("Click 'Yes' to reboot this device.", vbYesNo + vbQuestion, "Are you sure?")
         If blah = vbYes Then
             Dim IP As String = MyPingVis.CurrentResult.Address.ToString
             Dim DeviceName As String = "D" & CurrentViewDevice.strSerial
-            If SendRestart(IP, DeviceName) Then
+            If Await SendRestart(IP, DeviceName) Then
                 Message("Success", vbOKOnly + vbInformation, "Restart Device", Me)
             Else
                 Message("Failed", vbOKOnly + vbInformation, "Restart Device", Me)
             End If
         End If
     End Sub
-    Private Function SendRestart(IP As String, DeviceName As String) As Boolean
+
+    Private Async Function SendRestart(IP As String, DeviceName As String) As Task(Of Boolean)
+        Dim OrigButtonImage = cmdRestart.Image
         Try
             If VerifyAdminCreds() Then
+                cmdRestart.Image = My.Resources.loading
                 Dim FullPath As String = "\\" & IP & "\IPC$"
-                Using NetCon As New NetworkConnection(FullPath, AdminCreds)
-                    Dim p As Process = New Process
-                    p.StartInfo.UseShellExecute = False
-                    p.StartInfo.RedirectStandardOutput = True
-                    p.StartInfo.RedirectStandardError = True
-                    p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                    p.StartInfo.FileName = "shutdown.exe"
-                    p.StartInfo.Arguments = "/m \\" & IP & " /f /r /t 0"
-                    p.Start()
-                    Dim output As String
-                    output = p.StandardError.ReadToEnd
-                    p.WaitForExit()
-                    If Trim(output) = "" Then
-                        Return True
-                    Else
-                        Return False
-                    End If
-                End Using
+                Dim Success = Await Task.Run(Function()
+                                                 Using NetCon As New NetworkConnection(FullPath, AdminCreds)
+                                                     Dim p As Process = New Process
+                                                     p.StartInfo.UseShellExecute = False
+                                                     p.StartInfo.RedirectStandardOutput = True
+                                                     p.StartInfo.RedirectStandardError = True
+                                                     p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                                                     p.StartInfo.FileName = "shutdown.exe"
+                                                     p.StartInfo.Arguments = "/m \\" & IP & " /f /r /t 0"
+                                                     p.Start()
+                                                     Dim output As String
+                                                     output = p.StandardError.ReadToEnd
+                                                     p.WaitForExit()
+                                                     If Trim(output) = "" Then
+                                                         Return True
+                                                     Else
+                                                         Return False
+                                                     End If
+                                                 End Using
+                                             End Function)
+                cmdRestart.Image = OrigButtonImage
+                Return Success
             End If
         Catch ex As Exception
+            cmdRestart.Image = OrigButtonImage
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
         Return False
