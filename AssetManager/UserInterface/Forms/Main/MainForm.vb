@@ -341,7 +341,7 @@ Public Class MainForm
                                                                   strServerTime = strTime
                                                               End Using
                                                           End If
-                                                          Return True
+                                                          Return CanPing
                                                       Catch
                                                           Return False
                                                       End Try
