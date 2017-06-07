@@ -39,7 +39,6 @@ Public Class PingVis : Implements IDisposable
     Private Const intMinBarLen As Integer = 2
     Private Const BarTopPadding As Single = 0
     Private Const BarBottomPadding As Single = 5
-    Private brushBadPing As Brush = Brushes.Red
 #End Region
 
 #Region "Misc PingVis Variables"
@@ -274,6 +273,7 @@ Public Class PingVis : Implements IDisposable
             Dim BarLen As Single
             Dim MyBrush As Brush
             If result.Status <> Net.NetworkInformation.IPStatus.Success Then
+                Dim brushBadPing = New SolidBrush(Color.Red)
                 MyBrush = brushBadPing
                 BarLen = intImgWidth - 2
             Else
