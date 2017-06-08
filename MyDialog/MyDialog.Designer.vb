@@ -218,7 +218,6 @@ Partial Class MyDialog
         Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(477, 190)
         Me.Name = "MyDialog"
-        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.tblOkCancel.ResumeLayout(False)
         Me.tblYesNo.ResumeLayout(False)
