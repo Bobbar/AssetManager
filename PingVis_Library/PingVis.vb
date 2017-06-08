@@ -262,6 +262,7 @@ Public Class PingVis : Implements IDisposable
             gfx.FillRectangle(bar.Brush, bar.Rectangle)
             Dim CapPen As Pen = New Pen(Color.ForestGreen, 2)
             gfx.DrawLine(CapPen, New PointF(bar.Length, bar.PositionY), New PointF(bar.Length, bar.PositionY + bar.Rectangle.Height))
+            CapPen.Dispose()
         Next
     End Sub
     Private Function GetPingBars() As List(Of PingBar)
