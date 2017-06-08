@@ -339,26 +339,27 @@ VALUES
     End Function
     Public Function DevicesBySup(ParentForm As Form) As DataTable
         Dim SupInfo As Emp_Info
-        Dim NewMunisSearch As New frmMunisUser(ParentForm)
-        If NewMunisSearch.DialogResult = DialogResult.Yes Then
-            SetWaitCursor(True)
-            SupInfo = NewMunisSearch.EmployeeInfo
-            Dim EmpList As DataTable = Munis.ListOfEmpBySup(SupInfo.Number)
-            Dim DeviceList As New DataTable
-            Using SQLComms As New clsMySQL_Comms
-                For Each r As DataRow In EmpList.Rows
-                    Dim strQRY As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.Munis_Emp_Num & "='" & r.Item("a_employee_number").ToString & "'"
-                    Using tmpTable As DataTable = SQLComms.Return_SQLTable(strQRY)
-                        DeviceList.Merge(tmpTable)
-                    End Using
-                Next
-                Return DeviceList
-            End Using
-            SetWaitCursor(False)
-        Else
-            SetWaitCursor(False)
-            Return Nothing
-        End If
+        Using NewMunisSearch As New frmMunisUser(ParentForm)
+            If NewMunisSearch.DialogResult = DialogResult.Yes Then
+                SetWaitCursor(True)
+                SupInfo = NewMunisSearch.EmployeeInfo
+                Dim EmpList As DataTable = Munis.ListOfEmpBySup(SupInfo.Number)
+                Dim DeviceList As New DataTable
+                Using SQLComms As New clsMySQL_Comms
+                    For Each r As DataRow In EmpList.Rows
+                        Dim strQRY As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.Munis_Emp_Num & "='" & r.Item("a_employee_number").ToString & "'"
+                        Using tmpTable As DataTable = SQLComms.Return_SQLTable(strQRY)
+                            DeviceList.Merge(tmpTable)
+                        End Using
+                    Next
+                    Return DeviceList
+                End Using
+                SetWaitCursor(False)
+            Else
+                SetWaitCursor(False)
+                Return Nothing
+            End If
+        End Using
     End Function
     Public Function CollectDeviceInfo(DeviceTable As DataTable) As Device_Info
         Try

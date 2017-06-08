@@ -639,17 +639,18 @@ Public Class frmView
     End Sub
     Private Sub tsbNewNote_Click(sender As Object, e As EventArgs) Handles tsbNewNote.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
-        Dim UpdateDia As New UpdateDev(Me, True)
-        If UpdateDia.DialogResult = DialogResult.OK Then
-            If Not ConcurrencyCheck() Then
+        Using UpdateDia As New UpdateDev(Me, True)
+            If UpdateDia.DialogResult = DialogResult.OK Then
+                If Not ConcurrencyCheck() Then
+                    CancelModify()
+                    Exit Sub
+                End If
+                GetCurrentValues()
+                UpdateDevice(UpdateDia.UpdateInfo)
+            Else
                 CancelModify()
-                Exit Sub
             End If
-            GetCurrentValues()
-            UpdateDevice(UpdateDia.UpdateInfo)
-        Else
-            CancelModify()
-        End If
+        End Using
     End Sub
     Private Sub tsbDeleteDevice_Click(sender As Object, e As EventArgs) Handles tsbDeleteDevice.Click
         DeleteDevice()
@@ -708,17 +709,18 @@ Public Class frmView
             Exit Sub
         End If
         DisableControls()
-        Dim UpdateDia As New UpdateDev(Me)
-        If UpdateDia.DialogResult = DialogResult.OK Then
-            If Not ConcurrencyCheck() Then
-                CancelModify()
-                Exit Sub
+        Using UpdateDia As New UpdateDev(Me)
+            If UpdateDia.DialogResult = DialogResult.OK Then
+                If Not ConcurrencyCheck() Then
+                    CancelModify()
+                    Exit Sub
+                Else
+                    UpdateDevice(UpdateDia.UpdateInfo)
+                End If
             Else
-                UpdateDevice(UpdateDia.UpdateInfo)
+                CancelModify()
             End If
-        Else
-            CancelModify()
-        End If
+        End Using
     End Sub
     Private Function ConcurrencyCheck() As Boolean
         Dim InDBCheckSum As String = Asset.Get_SQLValue(devices.TableName, devices.DeviceUID, CurrentViewDevice.strGUID, devices.CheckSum)
@@ -787,11 +789,12 @@ Public Class frmView
         OpenSibiLink(CurrentViewDevice)
     End Sub
     Private Sub LinkSibi()
-        Dim f As New frmSibiSelector(Me)
-        If f.DialogResult = DialogResult.OK Then
-            CurrentViewDevice.strSibiLink = f.SibiUID
-            Message("Sibi Link Set.", vbOKOnly + vbInformation, "Success", Me)
-        End If
+        Using f As New frmSibiSelector(Me)
+            If f.DialogResult = DialogResult.OK Then
+                CurrentViewDevice.strSibiLink = f.SibiUID
+                Message("Sibi Link Set.", vbOKOnly + vbInformation, "Success", Me)
+            End If
+        End Using
     End Sub
     Private Sub OpenSibiLink(LinkDevice As Device_Info)
         Dim SibiUID As String

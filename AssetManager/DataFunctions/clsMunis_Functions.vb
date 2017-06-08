@@ -142,50 +142,53 @@ Public Class clsMunis_Functions
         Try
             Dim Device As New Device_Info
             Device.dtPurchaseDate = Nothing
-            Dim NewDialog As New MyDialog(Parent)
-            With NewDialog
-                .Text = "Asset Search"
-                .AddTextBox("txtAsset", "Asset:")
-                .AddTextBox("txtSerial", "Serial:")
-                .ShowDialog()
-                If .DialogResult = DialogResult.OK Then
-                    Device.strAssetTag = Trim(NewDialog.GetControlValue("txtAsset").ToString)
-                    Device.strSerial = Trim(NewDialog.GetControlValue("txtSerial").ToString)
-                    LoadMunisInfoByDevice(Device, Parent)
-                End If
-            End With
+            Using NewDialog As New MyDialog(Parent)
+                With NewDialog
+                    .Text = "Asset Search"
+                    .AddTextBox("txtAsset", "Asset:")
+                    .AddTextBox("txtSerial", "Serial:")
+                    .ShowDialog()
+                    If .DialogResult = DialogResult.OK Then
+                        Device.strAssetTag = Trim(NewDialog.GetControlValue("txtAsset").ToString)
+                        Device.strSerial = Trim(NewDialog.GetControlValue("txtSerial").ToString)
+                        LoadMunisInfoByDevice(Device, Parent)
+                    End If
+                End With
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Public Sub NameSearch(Parent As Form)
-        Dim NewDialog As New MyDialog(Parent)
-        Dim strName As String
-        With NewDialog
-            .Text = "Org/Object Code Search"
-            .AddTextBox("txtName", "First or Last Name:")
-            .ShowDialog()
-            If .DialogResult = DialogResult.OK Then strName = NewDialog.GetControlValue("txtName").ToString
-        End With
-        If Trim(strName) IsNot "" Then
-            NewMunisView_NameSearch(strName, Parent)
-        End If
+        Using NewDialog As New MyDialog(Parent)
+            Dim strName As String
+            With NewDialog
+                .Text = "Org/Object Code Search"
+                .AddTextBox("txtName", "First or Last Name:")
+                .ShowDialog()
+                If .DialogResult = DialogResult.OK Then strName = NewDialog.GetControlValue("txtName").ToString
+            End With
+            If Trim(strName) IsNot "" Then
+                NewMunisView_NameSearch(strName, Parent)
+            End If
+        End Using
     End Sub
     Public Sub POSearch(Parent As Form)
         Try
             Dim PO, FY As String
-            Dim NewDialog As New MyDialog(Parent)
-            With NewDialog
-                .Text = "PO Search"
-                .AddTextBox("txtPO", "PO #:")
-                .AddTextBox("txtFY", "FY:")
-                .ShowDialog()
-                If .DialogResult = DialogResult.OK Then
-                    PO = NewDialog.GetControlValue("txtPO").ToString
-                    FY = NewDialog.GetControlValue("txtFY").ToString
-                    NewMunisView_POSearch(PO, Parent)
-                End If
-            End With
+            Using NewDialog As New MyDialog(Parent)
+                With NewDialog
+                    .Text = "PO Search"
+                    .AddTextBox("txtPO", "PO #:")
+                    .AddTextBox("txtFY", "FY:")
+                    .ShowDialog()
+                    If .DialogResult = DialogResult.OK Then
+                        PO = NewDialog.GetControlValue("txtPO").ToString
+                        FY = NewDialog.GetControlValue("txtFY").ToString
+                        NewMunisView_POSearch(PO, Parent)
+                    End If
+                End With
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -193,38 +196,40 @@ Public Class clsMunis_Functions
     Public Sub ReqSearch(Parent As Form)
         Try
             Dim ReqNumber, FY As String
-            Dim NewDialog As New MyDialog(Parent)
-            With NewDialog
-                .Text = "Req Search"
-                .AddTextBox("txtReqNum", "Requisition #:")
-                .AddTextBox("txtFY", "FY:")
-                .ShowDialog()
-                If .DialogResult = DialogResult.OK Then
-                    ReqNumber = NewDialog.GetControlValue("txtReqNum").ToString
-                    FY = NewDialog.GetControlValue("txtFY").ToString
-                    NewMunisView_ReqSearch(ReqNumber, FY, Parent)
-                End If
-            End With
+            Using NewDialog As New MyDialog(Parent)
+                With NewDialog
+                    .Text = "Req Search"
+                    .AddTextBox("txtReqNum", "Requisition #:")
+                    .AddTextBox("txtFY", "FY:")
+                    .ShowDialog()
+                    If .DialogResult = DialogResult.OK Then
+                        ReqNumber = NewDialog.GetControlValue("txtReqNum").ToString
+                        FY = NewDialog.GetControlValue("txtFY").ToString
+                        NewMunisView_ReqSearch(ReqNumber, FY, Parent)
+                    End If
+                End With
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Public Sub OrgObSearch(Parent As Form)
-        Dim NewDialog As New MyDialog(Parent)
-        Dim strOrg, strObj As String
-        With NewDialog
-            .Text = "Org/Object Code Search"
-            .AddTextBox("txtOrg", "Org Code:")
-            .AddTextBox("txtObj", "Object Code:")
-            .ShowDialog()
-            If .DialogResult = DialogResult.OK Then
-                strOrg = NewDialog.GetControlValue("txtOrg").ToString
-                strObj = NewDialog.GetControlValue("txtObj").ToString
+        Using NewDialog As New MyDialog(Parent)
+            Dim strOrg, strObj As String
+            With NewDialog
+                .Text = "Org/Object Code Search"
+                .AddTextBox("txtOrg", "Org Code:")
+                .AddTextBox("txtObj", "Object Code:")
+                .ShowDialog()
+                If .DialogResult = DialogResult.OK Then
+                    strOrg = NewDialog.GetControlValue("txtOrg").ToString
+                    strObj = NewDialog.GetControlValue("txtObj").ToString
+                End If
+            End With
+            If Trim(strOrg) IsNot "" Then
+                NewOrgObView(strOrg, strObj, Parent)
             End If
-        End With
-        If Trim(strOrg) IsNot "" Then
-            NewOrgObView(strOrg, strObj, Parent)
-        End If
+        End Using
     End Sub
     Public Function ListOfEmpBySup(SupEmpNum As String) As DataTable
         Dim strQRY As String = "SELECT TOP 100 a_employee_number FROM pr_employee_master WHERE e_supervisor='" & SupEmpNum & "'"
@@ -301,21 +306,22 @@ FROM poheader"
             DoneWaiting()
             Return Nothing
         End If
-        Dim NewGridForm As New GridForm(Parent, "MUNIS Requisition Info")
-        NewGridForm.AddGrid("ReqGrid", "Requisition Info:", Await LoadMunisRequisitionGridByReqNo(ReqNumber, FY)) ' MunisComms.Return_MSSQLTable(strQRY))
-        If Not SelectMode Then
-            NewGridForm.Show()
-            DoneWaiting()
-            Return Nothing
-        Else
-            DoneWaiting()
-            NewGridForm.ShowDialog(Parent)
-            If NewGridForm.DialogResult = DialogResult.OK Then
-                Return SelectedCellValue(NewGridForm.SelectedValue, "rqdt_uni_pr")
-            Else
+        Using NewGridForm As New GridForm(Parent, "MUNIS Requisition Info")
+            NewGridForm.AddGrid("ReqGrid", "Requisition Info:", Await LoadMunisRequisitionGridByReqNo(ReqNumber, FY)) ' MunisComms.Return_MSSQLTable(strQRY))
+            If Not SelectMode Then
+                NewGridForm.Show()
+                DoneWaiting()
                 Return Nothing
+            Else
+                DoneWaiting()
+                NewGridForm.ShowDialog(Parent)
+                If NewGridForm.DialogResult = DialogResult.OK Then
+                    Return SelectedCellValue(NewGridForm.SelectedValue, "rqdt_uni_pr")
+                Else
+                    Return Nothing
+                End If
             End If
-        End If
+        End Using
         DoneWaiting()
     End Function
     Public Async Function LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String) As Task(Of DataTable)
