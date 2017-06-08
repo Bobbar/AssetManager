@@ -27,12 +27,16 @@ Public Class clsMunis_Functions
         Return Nothing
     End Function
     Public Function Get_PO_From_Asset(AssetTag As String) As String
-        If Not IsNothing(AssetTag) Then
-            If AssetTag <> "" Then
-                Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_purch_memo").ToString)
+        Try
+            If Not IsNothing(AssetTag) Then
+                If AssetTag <> "" Then
+                    Return Trim(priv_Comms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_purch_memo").ToString)
+                End If
             End If
-        End If
-        Return Nothing
+            Return Nothing
+        Catch
+            Return Nothing
+        End Try
     End Function
     Public Function Get_PO_From_Serial(Serial As String) As String
         Try
