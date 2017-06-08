@@ -466,14 +466,21 @@ Public Class frmView
                     End If
             End Select
         Next
-        bolMissingField = Not ValidPhoneNumber(txtPhoneNumber.Text)
+        If Not ValidPhoneNumber(txtPhoneNumber.Text) Then
+            bolMissingField = True
+            txtPhoneNumber.BackColor = colMissingField
+            AddErrorIcon(txtPhoneNumber)
+        Else
+            txtPhoneNumber.BackColor = Color.Empty
+            ClearErrorIcon(txtPhoneNumber)
+        End If
         Return Not bolMissingField 'if fields are missing return false to trigger a message if needed
     End Function
     Private Sub AddErrorIcon(ctl As Control)
         If fieldErrorIcon.GetError(ctl) Is String.Empty Then
             fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight)
             fieldErrorIcon.SetIconPadding(ctl, 4)
-            fieldErrorIcon.SetError(ctl, "Required Field")
+            fieldErrorIcon.SetError(ctl, "Required or Invalid Field")
         End If
     End Sub
     Private Sub ClearErrorIcon(ctl As Control)
@@ -489,14 +496,6 @@ Public Class frmView
                     c.BackColor = Color.Empty
             End Select
         Next
-    End Sub
-    Private Sub cmdUpdate_Click(sender As Object, e As EventArgs)
-        If Not CheckFields() Then
-            Dim blah = Message("Some required fields are missing or invalid.  Please fill and or validate all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
-            bolCheckFields = True
-            Exit Sub
-        End If
-        Dim UpdateDia As New UpdateDev(Me)
     End Sub
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Me.Dispose()
@@ -572,6 +571,9 @@ Public Class frmView
         If bolCheckFields Then CheckFields()
     End Sub
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
+        If bolCheckFields Then CheckFields()
+    End Sub
+    Private Sub txtPhoneNumber_TextChanged(sender As Object, e As EventArgs) Handles txtPhoneNumber.TextChanged
         If bolCheckFields Then CheckFields()
     End Sub
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
@@ -685,6 +687,7 @@ Public Class frmView
     End Function
     Public Sub CancelModify()
         bolCheckFields = False
+        fieldErrorIcon.Clear()
         DisableControls()
         ResetBackColors()
         Me.Refresh()
@@ -704,7 +707,7 @@ Public Class frmView
     End Sub
     Private Sub cmdAccept_Tool_Click(sender As Object, e As EventArgs) Handles cmdAccept_Tool.Click
         If Not CheckFields() Then
-            Dim blah = Message("Some required fields are missing.  Please fill in all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
+            Dim blah = Message("Some required fields are missing or invalid.  Please check and fill all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
             bolCheckFields = True
             Exit Sub
         End If
