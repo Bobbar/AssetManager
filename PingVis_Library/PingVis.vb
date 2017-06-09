@@ -1,7 +1,6 @@
 ﻿Option Explicit On
 Imports System.Net.NetworkInformation
 Imports System.Net
-Imports System.ComponentModel
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
 Imports System.Drawing
@@ -135,6 +134,7 @@ Public Class PingVis : Implements IDisposable
     Private Sub ControlMouseLeave(sender As Object, e As EventArgs)
         bolScrolling = False
         mOverInfo = Nothing
+        If ScrollingBars IsNot Nothing Then ScrollingBars.Clear()
         DrawBars(MyControl, GetPingBars, mOverInfo)
     End Sub
     Private Sub ControlMouseWheel(sender As Object, e As MouseEventArgs)
