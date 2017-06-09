@@ -432,6 +432,7 @@ Public Class PingVis : Implements IDisposable
                 MyPing.Dispose()
                 ' MyControl.Dispose()
                 pngResults.Clear()
+                ScrollingBars.Clear()
             End If
 
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
