@@ -1,6 +1,0 @@
-asset_manager_user
-A553tP455
-
-ftp:
-asset_manager
-DogWallFarmTree
