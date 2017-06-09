@@ -80,17 +80,16 @@ Module SecurityFunctions
             If Group.strModule = SecModule Then Return Group.intLevel
         Next
     End Function
-    Public Sub GetUserAccess() 'TODO: Make this a scalar query
+    Public Sub GetUserAccess()
         Try
-            Dim strQRY = "SELECT * FROM " & users.TableName & " WHERE " & users.UserName & "='" & strLocalUser & "'"
+            Dim strQRY = "SELECT * FROM " & users.TableName & " WHERE " & users.UserName & "='" & strLocalUser & "' LIMIT 1"
             Using SQLComms As New MySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQRY)
                 If results.Rows.Count > 0 Then
-                    For Each r As DataRow In results.Rows
-                        UserAccess.strUsername = r.Item(users.UserName).ToString
-                        UserAccess.strFullname = r.Item(users.FullName).ToString
-                        UserAccess.intAccessLevel = CInt(r.Item(users.AccessLevel))
-                        UserAccess.strUID = r.Item(users.UID).ToString
-                    Next
+                    Dim r As DataRow = results.Rows(0)
+                    UserAccess.strUsername = r.Item(users.UserName).ToString
+                    UserAccess.strFullname = r.Item(users.FullName).ToString
+                    UserAccess.intAccessLevel = CInt(r.Item(users.AccessLevel))
+                    UserAccess.strUID = r.Item(users.UID).ToString
                 Else
                     UserAccess.intAccessLevel = 0
                 End If
