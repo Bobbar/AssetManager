@@ -58,14 +58,14 @@
         For Each frm As Form In ListOfChilden(ParentForm)
             If HasChildren(frm) Then
                 Dim NewDropDown As ToolStripMenuItem = NewMenuItem(frm)
-                If TypeOf frm Is frmSibiMain Then
+                If TypeOf frm Is SibiMainForm Then
                     TargetMenuItem.Insert(0, NewDropDown)
                 Else
                     TargetMenuItem.Add(NewDropDown)
                 End If
                 BuildWindowList(frm, NewDropDown.DropDownItems)
             Else
-                If TypeOf frm Is frmSibiMain Then
+                If TypeOf frm Is SibiMainForm Then
                     TargetMenuItem.Insert(0, NewMenuItem(frm))
                 Else
                     TargetMenuItem.Add(NewMenuItem(frm))

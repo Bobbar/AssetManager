@@ -10,19 +10,19 @@
 
         Private Sub LoadSplash(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
             Try
-                SplashScreen1.Show()
+                SplashScreenForm.Show()
                 Logger("Starting AssetManager...")
                 Status("Checking Server Connection...")
-                Using SQLComms As New clsMySQL_Comms
+                Using SQLComms As New MySQL_Comms
                     'check connection
                 End Using
                 Status("Loading Indexes...")
                 BuildIndexes()
                 Status("Checking Access Level...")
-                Asset.GetAccessLevels()
-                Asset.GetUserAccess()
-                If Not CanAccess(AccessGroup.CanRun, UserAccess.intAccessLevel) Then
-                    Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", SplashScreen1)
+                GetAccessLevels()
+                GetUserAccess()
+                If Not CanAccess(AccessGroup.CanRun) Then
+                    Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", SplashScreenForm)
                     EndProgram()
                 End If
                 Status("Ready!")
@@ -34,8 +34,8 @@
             End Try
         End Sub
         Public Sub Status(Text As String)
-            SplashScreen1.lblStatus.Text = Text
-            SplashScreen1.Refresh()
+            SplashScreenForm.lblStatus.Text = Text
+            SplashScreenForm.Refresh()
         End Sub
     End Class
 End Namespace

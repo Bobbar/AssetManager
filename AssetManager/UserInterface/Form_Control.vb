@@ -2,29 +2,29 @@
     Public Sub ActivateFormByUID(strGUID As String)
         For Each frm As Form In My.Application.OpenForms
             Select Case frm.GetType
-                Case GetType(frmView)
-                    Dim vw As frmView = DirectCast(frm, frmView)
+                Case GetType(ViewDeviceForm)
+                    Dim vw As ViewDeviceForm = DirectCast(frm, ViewDeviceForm)
                     If vw.CurrentViewDevice.strGUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
-                Case GetType(frmManageRequest)
-                    Dim vw As frmManageRequest = DirectCast(frm, frmManageRequest)
+                Case GetType(SibiManageRequestForm)
+                    Dim vw As SibiManageRequestForm = DirectCast(frm, SibiManageRequestForm)
                     If vw.CurrentRequest.strUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
-                Case GetType(frmAttachments)
-                    Dim vw As frmAttachments = DirectCast(frm, frmAttachments)
+                Case GetType(AttachmentsForm)
+                    Dim vw As AttachmentsForm = DirectCast(frm, AttachmentsForm)
                     If vw.AttachFolderID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
                     End If
-                Case GetType(View_Entry)
-                    Dim vw As View_Entry = DirectCast(frm, View_Entry)
+                Case GetType(ViewHistoryForm)
+                    Dim vw As ViewHistoryForm = DirectCast(frm, ViewHistoryForm)
                     If vw.EntryGUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
@@ -85,15 +85,15 @@
         Children.Clear()
     End Sub
     Public Function SibiIsOpen() As Boolean
-        If Application.OpenForms.OfType(Of frmSibiMain).Any Then
+        If Application.OpenForms.OfType(Of SibiMainForm).Any Then
             Return True
         End If
         Return False
     End Function
     Public Function DeviceIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
-            If TypeOf frm Is frmView Then
-                Dim vw As frmView = DirectCast(frm, frmView)
+            If TypeOf frm Is ViewDeviceForm Then
+                Dim vw As ViewDeviceForm = DirectCast(frm, ViewDeviceForm)
                 If vw.CurrentViewDevice.strGUID = strGUID Then Return True
             End If
         Next
@@ -101,8 +101,8 @@
     End Function
     Public Function RequestIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
-            If TypeOf frm Is frmManageRequest Then
-                Dim vw As frmManageRequest = DirectCast(frm, frmManageRequest)
+            If TypeOf frm Is SibiManageRequestForm Then
+                Dim vw As SibiManageRequestForm = DirectCast(frm, SibiManageRequestForm)
                 If vw.CurrentRequest.strUID = strGUID Then Return True
             End If
         Next
@@ -110,8 +110,8 @@
     End Function
     Public Function EntryIsOpen(EntryUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
-            If TypeOf frm Is View_Entry Then
-                Dim vw As View_Entry = DirectCast(frm, View_Entry)
+            If TypeOf frm Is ViewHistoryForm Then
+                Dim vw As ViewHistoryForm = DirectCast(frm, ViewHistoryForm)
                 If vw.EntryGUID = EntryUID Then Return True
             End If
         Next
@@ -120,7 +120,7 @@
     Public Sub LookupDevice(ParentForm As MyForm, Device As Device_Info)
         If Device.strGUID IsNot Nothing Then
             If Not DeviceIsOpen(Device.strGUID) Then
-                Dim NewView As New frmView(ParentForm, Device.strGUID)
+                Dim NewView As New ViewDeviceForm(ParentForm, Device.strGUID)
             Else
                 ActivateFormByUID(Device.strGUID)
             End If

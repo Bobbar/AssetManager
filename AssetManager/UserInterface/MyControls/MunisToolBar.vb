@@ -34,11 +34,11 @@
     End Sub
     Private Sub InitToolItems(ParentForm As Form)
         Dim ToolItemList As New List(Of ToolStripMenuItem)
-        ToolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", Sub() Munis.NameSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", Sub() Munis.OrgObSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", Sub() Munis.POSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", Sub() Munis.ReqSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", Sub() Munis.AssetSearch(ParentForm)))
+        ToolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", Sub() MunisFunc.NameSearch(ParentForm)))
+        ToolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", Sub() MunisFunc.OrgObSearch(ParentForm)))
+        ToolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", Sub() MunisFunc.POSearch(ParentForm)))
+        ToolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", Sub() MunisFunc.ReqSearch(ParentForm)))
+        ToolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", Sub() MunisFunc.AssetSearch(ParentForm)))
         For Each item In ToolItemList
             AddToolItem(item)
         Next
