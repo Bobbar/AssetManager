@@ -746,6 +746,7 @@ VALUES
         If CancelClose Then
             e.Cancel = True
         Else
+            MyMunisToolBar.Dispose()
             MyWindowList.Dispose()
             CloseChildren(Me)
         End If

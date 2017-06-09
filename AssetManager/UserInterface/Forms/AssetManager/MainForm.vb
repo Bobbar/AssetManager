@@ -111,6 +111,7 @@ Public Class MainForm
             LastCommand.Dispose()
             MyLiveBox.Dispose()
             MyWindowList.Dispose()
+            MyMunisToolBar.Dispose()
             EndProgram()
         End If
     End Sub
