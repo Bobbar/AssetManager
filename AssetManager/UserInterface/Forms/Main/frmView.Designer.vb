@@ -665,7 +665,7 @@ Partial Class frmView
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1119, 797)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1119, 247)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
