@@ -747,7 +747,7 @@ Public Class ViewDeviceForm
         NewMunisView(CurrentViewDevice)
     End Sub
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
-        MyWindowList = Nothing
+        MyWindowList.Dispose()
         MyLiveBox.Dispose()
         CloseChildren(Me)
         If MyPingVis IsNot Nothing Then MyPingVis.Dispose()

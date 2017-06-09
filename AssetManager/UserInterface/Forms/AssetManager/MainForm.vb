@@ -9,7 +9,7 @@ Public Class MainForm
     Private Const strShowAllQry As String = "SELECT * FROM " & devices.TableName & " ORDER BY " & devices.Input_DateTime & " DESC"
     Private bolGridFilling As Boolean = False
     Private strServerTime As String = Now.ToString
-    Private cmdLastCommand As MySqlCommand
+    Private LastCommand As MySqlCommand
     Private MyLiveBox As New LiveBox(Me)
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyWindowList As New WindowList(Me)
@@ -108,7 +108,9 @@ Public Class MainForm
         If Not OKToEnd() Then
             e.Cancel = True
         Else
+            LastCommand.Dispose()
             MyLiveBox.Dispose()
+            MyWindowList.Dispose()
             EndProgram()
         End If
     End Sub
@@ -123,7 +125,7 @@ Public Class MainForm
         StartBigQuery(cmd)
     End Sub
     Public Sub RefreshCurrent()
-        StartBigQuery(cmdLastCommand)
+        StartBigQuery(LastCommand)
     End Sub
     Private Sub StartBigQuery(QryCommand As Object)
         If Not BigQueryWorker.IsBusy Then
@@ -295,7 +297,7 @@ Public Class MainForm
                 ds As New DataSet,
                 da As New MySqlDataAdapter,
                 QryComm As MySqlCommand = DirectCast(e.Argument, MySqlCommand)
-            cmdLastCommand = QryComm
+            LastCommand = QryComm
             QryComm.Connection = LocalSQLComm.Connection
             BigQueryWorker.ReportProgress(1)
             da.SelectCommand = QryComm

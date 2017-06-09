@@ -251,11 +251,10 @@ Public Class SibiMainForm
         If CancelClose Then
             e.Cancel = True
         Else
+            LastCmd.Dispose()
+            MyWindowList.Dispose()
             CloseChildren(Me)
         End If
-    End Sub
-    Private Sub frmSibiMain_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
-        CloseChildren(Me)
     End Sub
     Private Sub txtPO_TextChanged(sender As Object, e As EventArgs) Handles txtPO.TextChanged
         DynamicSearch()
