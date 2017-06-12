@@ -315,13 +315,14 @@ FROM poheader"
             DoneWaiting()
             Return Nothing
         End If
-        Using NewGridForm As New GridForm(Parent, "MUNIS Requisition Info")
-            NewGridForm.AddGrid("ReqGrid", "Requisition Info:", Await LoadMunisRequisitionGridByReqNo(ReqNumber, FY)) ' MunisComms.Return_MSSQLTable(strQRY))
-            If Not SelectMode Then
-                NewGridForm.Show()
-                DoneWaiting()
-                Return Nothing
-            Else
+        If Not SelectMode Then
+            Dim NewGridForm As New GridForm(Parent, "MUNIS Requisition Info")
+            NewGridForm.AddGrid("ReqGrid", "Requisition Info:", Await LoadMunisRequisitionGridByReqNo(ReqNumber, FY))
+            NewGridForm.Show()
+            DoneWaiting()
+            Return Nothing
+        Else
+            Using NewGridForm As New GridForm(Parent, "MUNIS Requisition Info")
                 DoneWaiting()
                 NewGridForm.ShowDialog(Parent)
                 If NewGridForm.DialogResult = DialogResult.OK Then
@@ -329,8 +330,8 @@ FROM poheader"
                 Else
                     Return Nothing
                 End If
-            End If
-        End Using
+            End Using
+        End If
         DoneWaiting()
     End Function
     Private Async Function LoadMunisRequisitionGridByReqNo(ReqNumber As String, FiscalYr As String) As Task(Of DataTable)
