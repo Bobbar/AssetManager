@@ -70,6 +70,7 @@ Public Class GridForm
             GridPanel.RowStyles.Add(New RowStyle(SizeType.Percent, Convert.ToSingle(100 / GridList.Count)))
             GridPanel.Controls.Add(GridBox)
         Next
+        ResizeGrids()
         bolGridFilling = False
     End Sub
     Private Sub GridForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
@@ -90,5 +91,14 @@ Public Class GridForm
     End Sub
     Private Sub GridForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If Not Modal Then Me.Dispose()
+    End Sub
+    Private Sub ResizeGrids()
+        For Each grid In GridList
+            For Each c As DataGridViewColumn In grid.Columns
+                c.Width = c.GetPreferredWidth(DataGridViewAutoSizeColumnMode.AllCells, True)
+            Next
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
+            grid.AllowUserToResizeColumns = True
+        Next
     End Sub
 End Class
