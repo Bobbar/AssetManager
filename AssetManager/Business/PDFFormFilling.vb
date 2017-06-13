@@ -55,9 +55,9 @@ Public Class PDFFormFilling
     End Sub
     Private Sub FillForm(Type As PDFFormType)
         Try
-            Dim di As DirectoryInfo = Directory.CreateDirectory(strTempPath)
+            Dim di As DirectoryInfo = Directory.CreateDirectory(DownloadPath)
             Dim strTimeStamp As String = Now.ToString("_hhmmss")
-            Dim newFile As String = strTempPath & CurrentDevice.strDescription & strTimeStamp & ".pdf"
+            Dim newFile As String = DownloadPath & CurrentDevice.strDescription & strTimeStamp & ".pdf"
             Dim pdfStamper As PdfStamper
             Select Case Type
                 Case PDFFormType.InputForm

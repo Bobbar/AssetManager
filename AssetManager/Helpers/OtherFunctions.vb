@@ -72,7 +72,7 @@ Module OtherFunctions
     End Sub
     Public Sub PurgeTempDir()
         Try
-            Directory.Delete(strTempPath, True)
+            Directory.Delete(DownloadPath, True)
         Catch
         End Try
     End Sub

@@ -428,7 +428,6 @@ Partial Class AttachmentsForm
         '
         'ProgTimer
         '
-        Me.ProgTimer.Interval = 50
         '
         'DeviceGroup
         '
@@ -515,7 +514,7 @@ Partial Class AttachmentsForm
         Me.Panel2.Size = New System.Drawing.Size(793, 116)
         Me.Panel2.TabIndex = 10
         '
-        'frmAttachments
+        'AttachmentsForm
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -527,7 +526,7 @@ Partial Class AttachmentsForm
         Me.Controls.Add(Me.Panel2)
         Me.DoubleBuffered = True
         Me.MinimumSize = New System.Drawing.Size(833, 370)
-        Me.Name = "frmAttachments"
+        Me.Name = "AttachmentsForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Attachments"
         Me.RightClickMenu.ResumeLayout(False)
