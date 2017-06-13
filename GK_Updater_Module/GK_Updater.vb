@@ -20,7 +20,8 @@ Public Class GK_Updater : Implements IDisposable
     Private lngBytesMoved As Integer
     Private progIts As Integer = 0
     Private ServerPath As String = "C:"
-    Private stpSpeed As New Stopwatch
+    Private ElapTime As New Stopwatch
+    Private Progress As New ProgressCounter
 #End Region
 
 #Region "Constructors"
@@ -89,6 +90,8 @@ Public Class GK_Updater : Implements IDisposable
         WorkArgs.StartIndex = 0
         WorkArgs.Credentials = Creds
         CurrentCreds = Creds
+        ElapTime = New Stopwatch
+        ElapTime.Start()
         If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(WorkArgs)
     End Sub
 
@@ -120,22 +123,18 @@ Public Class GK_Updater : Implements IDisposable
         Dim bytesIn As Integer = 1
         Dim totalBytesIn As Integer
         Dim CurrentFile As New FileInfo(Source)
-        stpSpeed.Start()
+        Progress.ResetProgress()
         Using fStream As System.IO.FileStream = CurrentFile.OpenRead(),
-                destFile As System.IO.FileStream = New FileStream(Dest, FileMode.OpenOrCreate)
+                destFile As System.IO.FileStream = New FileStream(Dest, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, BufferSize, FileOptions.WriteThrough)
             CurrentStatus.CurFileProgress = 1
             totalBytesIn = 0
+            Progress.BytesToTransfer = CInt(fStream.Length)
             Dim flLength As Long = fStream.Length
             Do Until bytesIn < 1 Or CopyWorker.CancellationPending
                 bytesIn = fStream.Read(buffer, 0, BufferSize)
                 If bytesIn > 0 Then
                     destFile.Write(buffer, 0, bytesIn)
-                    totalBytesIn += bytesIn
-                    lngBytesMoved += bytesIn
-                    If flLength > 0 Then
-                        perc = CInt((totalBytesIn / flLength) * 100)
-                        CurrentStatus.CurFileProgress = perc
-                    End If
+                    Progress.BytesMoved = bytesIn
                 End If
             Loop
         End Using
@@ -201,14 +200,13 @@ Public Class GK_Updater : Implements IDisposable
             GKLog("Dest: " & CurrentStatus.CurFileName)
         Else
             GKLog(e.UserState.ToString, True)
-            stpSpeed.Stop()
-            stpSpeed.Reset()
         End If
     End Sub
 
     Private Sub CopyWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
         If e.Error Is Nothing Then
             If Not e.Cancelled Then
+                ElapTime.Stop()
                 GKLog("Copy successful!  Errors: " & ErrList.Count)
                 If ErrList.Count > 0 Then
                     GKLog("Listing Errors: ")
@@ -219,6 +217,7 @@ Public Class GK_Updater : Implements IDisposable
                     Next
                 End If
                 GKLog("All done!")
+                GKLog("Elapsed time: " & (ElapTime.ElapsedMilliseconds / 1000) & "s")
                 GKLog("------------------------------------------------")
                 OnUpdateComplete(New GKUpdateCompleteEvents(False))
             Else
@@ -270,26 +269,75 @@ Public Class GK_Updater : Implements IDisposable
             .WorkerSupportsCancellation = True
         End With
     End Sub
-
     Private Sub SpeedTimer_Tick(sender As Object, e As EventArgs)
-        Dim BytesPerSecond As Double
         Dim ResetCounter As Integer = 40
-        If lngBytesMoved > 0 Then
-            progIts += 1
-            BytesPerSecond = Math.Round((lngBytesMoved / stpSpeed.ElapsedMilliseconds) / 1000, 2)
-            CurrentStatus.CurTransferRate = BytesPerSecond
-            If progIts > ResetCounter Then
-                progIts = 0
-                lngBytesMoved = 0 'BytesPerSecond * stpSpeed.ElapsedMilliseconds * 1000
-                stpSpeed.Restart()
-
-            End If
+        Progress.Tick()
+        If Progress.BytesMoved > 0 Then
+            CurrentStatus.CurTransferRate = Progress.Throughput
+            CurrentStatus.CurFileProgress = Progress.Percent
         Else
         End If
     End Sub
 #End Region
 
 #Region "Structures And Classes"
+    Private Class ProgressCounter
+        Private _progBytesMoved As Integer
+        Private _progTotalBytes As Integer
+        Private _speedBytesMoved As Integer
+        Private _currentTick As Integer
+        Private _prevTick As Integer
+        Private _speedThroughput As Double
+        Sub New()
+            _progBytesMoved = 0
+            _progTotalBytes = 0
+            _speedBytesMoved = 0
+            _currentTick = 0
+            _prevTick = 0
+            _speedThroughput = 0
+        End Sub
+        Public Property BytesToTransfer As Integer
+            Get
+                Return _progTotalBytes
+            End Get
+            Set(value As Integer)
+                _progTotalBytes = value
+            End Set
+        End Property
+        Public ReadOnly Property Percent As Integer
+            Get
+                Return CInt((_progBytesMoved / _progTotalBytes) * 100)
+            End Get
+        End Property
+        Public Property BytesMoved As Integer
+            Get
+                Return _progBytesMoved
+            End Get
+            Set(value As Integer)
+                _speedBytesMoved += value
+                _progBytesMoved += value
+            End Set
+        End Property
+        Public ReadOnly Property Throughput As Double
+            Get
+                Return _speedThroughput
+            End Get
+        End Property
+        Public Sub ResetProgress()
+            _progBytesMoved = 0
+        End Sub
+        Public Sub Tick()
+            _currentTick = Environment.TickCount
+            If _prevTick > 0 Then
+                Dim elapTime = _currentTick - _prevTick
+                _speedThroughput = Math.Round((_speedBytesMoved / elapTime) / 1000, 2)
+                _speedBytesMoved = 0
+                _prevTick = _currentTick
+            Else
+                _prevTick = _currentTick
+            End If
+        End Sub
+    End Class
     Public Structure GK_Complete_Stats
         Public Errors As Boolean
     End Structure
@@ -387,8 +435,9 @@ Public Class GK_Updater : Implements IDisposable
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
+                CopyWorker.Dispose()
+                SpeedTimer.Dispose()
             End If
-            CopyWorker.Dispose()
 
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
             ' TODO: set large fields to null.
