@@ -83,18 +83,20 @@ Public Class GKProgressControl
         RaiseEvent CriticalStopError(Me, e)
     End Sub
     Private Sub DrawLight(Color As Color)
-        Dim MyBrush As New SolidBrush(Color)
-        Dim StrokePen As New Pen(Color.Black, 1.5)
         Dim bm As New Bitmap(pbStatus.Width, pbStatus.Height)
-        Dim gr As Graphics = Graphics.FromImage(bm)
-        gr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-        Dim XLoc, YLoc, Size As Single
-        Size = 20
-        XLoc = Convert.ToSingle(pbStatus.Width / 2 - Size / 2)
-        YLoc = Convert.ToSingle(pbStatus.Height / 2 - Size / 2)
-        gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size)
-        gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size)
-        pbStatus.Image = bm
+        Using MyBrush As New SolidBrush(Color),
+            StrokePen As New Pen(Color.Black, 1.5),
+                       gr As Graphics = Graphics.FromImage(bm)
+
+            gr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+            Dim XLoc, YLoc, Size As Single
+            Size = 20
+            XLoc = Convert.ToSingle(pbStatus.Width / 2 - Size / 2)
+            YLoc = Convert.ToSingle(pbStatus.Height / 2 - Size / 2)
+            gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size)
+            gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size)
+            pbStatus.Image = bm
+        End Using
     End Sub
 
     Private Sub GK_Progress_Fragment_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed

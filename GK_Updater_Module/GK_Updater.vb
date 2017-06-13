@@ -90,6 +90,7 @@ Public Class GK_Updater : Implements IDisposable
         WorkArgs.StartIndex = 0
         WorkArgs.Credentials = Creds
         CurrentCreds = Creds
+        Progress = New ProgressCounter
         ElapTime = New Stopwatch
         ElapTime.Start()
         If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(WorkArgs)
@@ -119,7 +120,7 @@ Public Class GK_Updater : Implements IDisposable
     Private Sub CopyFile(Source As String, Dest As String)
         Dim BufferSize As Integer = 256000
         Dim perc As Integer = 0
-        Dim buffer(BufferSize) As Byte
+        Dim buffer(BufferSize - 1) As Byte
         Dim bytesIn As Integer = 1
         Dim totalBytesIn As Integer
         Dim CurrentFile As New FileInfo(Source)
@@ -286,14 +287,14 @@ Public Class GK_Updater : Implements IDisposable
         Private _progTotalBytes As Integer
         Private _speedBytesMoved As Integer
         Private _currentTick As Integer
-        Private _prevTick As Integer
+        Private _startTick As Integer
         Private _speedThroughput As Double
         Sub New()
             _progBytesMoved = 0
             _progTotalBytes = 0
             _speedBytesMoved = 0
             _currentTick = 0
-            _prevTick = 0
+            _startTick = 0
             _speedThroughput = 0
         End Sub
         Public Property BytesToTransfer As Integer
@@ -328,13 +329,13 @@ Public Class GK_Updater : Implements IDisposable
         End Sub
         Public Sub Tick()
             _currentTick = Environment.TickCount
-            If _prevTick > 0 Then
-                Dim elapTime = _currentTick - _prevTick
-                _speedThroughput = Math.Round((_speedBytesMoved / elapTime) / 1000, 2)
-                _speedBytesMoved = 0
-                _prevTick = _currentTick
+            If _startTick > 0 Then
+                If _speedBytesMoved > 0 Then
+                    Dim elapTime = _currentTick - _startTick
+                    _speedThroughput = Math.Round((_speedBytesMoved / elapTime) / 1000, 2)
+                End If
             Else
-                _prevTick = _currentTick
+                _startTick = _currentTick
             End If
         End Sub
     End Class
