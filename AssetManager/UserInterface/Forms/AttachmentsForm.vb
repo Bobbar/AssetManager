@@ -696,13 +696,14 @@ VALUES(@" & sibi_attachments.FKey & ",
                     Dim dataObj As New DataObject
                     dataObj.SetFileDropList(fileList)
                     AttachGrid.DoDragDrop(dataObj, DragDropEffects.All)
+                    bolDragging = False
                 End If
             End If
         End If
     End Sub
     Private Sub WaitForDownload()
         Do While DownloadWorker.IsBusy
-            Thread.Sleep(10)
+            Thread.Sleep(100)
             Application.DoEvents()
         Loop
     End Sub
