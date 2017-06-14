@@ -162,6 +162,9 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GK_Updater_Module\ProgressCounter.vb">
+      <Link>Classes\ProgressCounter.vb</Link>
+    </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="DataComms\AssetManager\MySQL\DataColumns.vb" />
