@@ -57,6 +57,13 @@ Public Class GKUpdaterForm
             End If
         Next
     End Sub
+    Private Sub DisposeUpdates()
+        For Each upd As GKProgressControl In MyUpdates
+            If Not upd.IsDisposed Then
+                upd.Dispose()
+            End If
+        Next
+    End Sub
     ''' <summary>
     ''' Returns True if number of running updates is less than the maximum simultaneous allowed updates and RunQueue is True.
     ''' </summary>
@@ -77,7 +84,6 @@ Public Class GKUpdaterForm
     Private Sub cmdCancelAll_Click(sender As Object, e As EventArgs) Handles cmdCancelAll.Click
         CancelAll()
         StopQueue()
-
     End Sub
 
     Private Sub cmdPauseResume_Click(sender As Object, e As EventArgs) Handles cmdPauseResume.Click
@@ -101,7 +107,12 @@ Public Class GKUpdaterForm
     End Sub
 
     Private Sub GKUpdater_Form_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If UpdatesRunning() Then e.Cancel = True
+        If UpdatesRunning() Then
+            e.Cancel = True
+        Else
+            DisposeUpdates()
+            Me.Dispose()
+        End If
     End Sub
     Public Function UpdatesRunning() As Boolean
         If ActiveUpdates() Then

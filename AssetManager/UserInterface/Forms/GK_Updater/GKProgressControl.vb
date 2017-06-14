@@ -100,7 +100,12 @@ Public Class GKProgressControl
     End Sub
 
     Private Sub GK_Progress_Fragment_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        RemoveHandler MyUpdater.LogEvent, AddressOf GKLogEvent
+        RemoveHandler MyUpdater.StatusUpdate, AddressOf GKStatusUpdateEvent
+        RemoveHandler MyUpdater.UpdateComplete, AddressOf GKUpdate_Complete
+        RemoveHandler MyUpdater.UpdateCancelled, AddressOf GKUpdate_Cancelled
         MyUpdater.Dispose()
+
     End Sub
 
     ''' <summary>
