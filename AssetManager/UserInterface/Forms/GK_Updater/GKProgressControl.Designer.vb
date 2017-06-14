@@ -121,7 +121,7 @@ Partial Class GKProgressControl
         '
         Me.pbRestart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pbRestart.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.pbRestart.Image = Global.AssetManager.My.Resources.Resources._012_restart_2_512
+        Me.pbRestart.Image = Global.AssetManager.My.Resources.Resources.RestartIcon
         Me.pbRestart.Location = New System.Drawing.Point(350, 2)
         Me.pbRestart.Name = "pbRestart"
         Me.pbRestart.Size = New System.Drawing.Size(20, 20)
@@ -134,7 +134,7 @@ Partial Class GKProgressControl
         '
         Me.pbCancelClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pbCancelClose.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.pbCancelClose.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
+        Me.pbCancelClose.Image = Global.AssetManager.My.Resources.Resources.CloseCancelDeleteIcon
         Me.pbCancelClose.Location = New System.Drawing.Point(376, 2)
         Me.pbCancelClose.Name = "pbCancelClose"
         Me.pbCancelClose.Size = New System.Drawing.Size(20, 20)

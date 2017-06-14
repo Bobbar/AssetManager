@@ -907,7 +907,7 @@ Public Class ViewDeviceForm
         Dim OrigButtonImage = cmdRestart.Image
         Try
             If VerifyAdminCreds() Then
-                cmdRestart.Image = My.Resources.loading
+                cmdRestart.Image = My.Resources.LoadingAni
                 Dim FullPath As String = "\\" & IP & "\IPC$"
                 Dim Success = Await Task.Run(Function()
                                                  Using NetCon As New NetworkConnection(FullPath, AdminCreds)

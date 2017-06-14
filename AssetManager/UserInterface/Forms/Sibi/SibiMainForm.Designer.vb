@@ -251,7 +251,7 @@ Partial Class SibiMainForm
         '
         'cmdManage
         '
-        Me.cmdManage.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.cmdManage.Image = Global.AssetManager.My.Resources.Resources.AddIcon
         Me.cmdManage.Name = "cmdManage"
         Me.cmdManage.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
         Me.cmdManage.Size = New System.Drawing.Size(141, 34)

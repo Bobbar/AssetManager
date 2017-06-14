@@ -26,7 +26,7 @@
         Return TSM
     End Function
     Private Sub InitDropDown()
-        MunisDropDown.Image = Global.AssetManager.My.Resources.Resources.Find
+        MunisDropDown.Image = Global.AssetManager.My.Resources.Resources.SearchIcon
         MunisDropDown.Name = "MunisTools"
         MunisDropDown.Size = New System.Drawing.Size(87, 29)
         MunisDropDown.Text = "MUNIS Tools"

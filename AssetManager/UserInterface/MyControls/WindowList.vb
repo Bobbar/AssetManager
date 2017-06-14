@@ -13,7 +13,7 @@
     Private Sub InitializeDropDownButton(TargetToolStrip As MyToolStrip)
         DropDownControl.Visible = False
         DropDownControl.Text = "Select Window"
-        DropDownControl.Image = AssetManager.My.Resources.Resources.application_cascade_512
+        DropDownControl.Image = AssetManager.My.Resources.Resources.CascadeIcon
         TargetToolStrip.Items.Insert(TargetToolStrip.Items.Count, DropDownControl)
     End Sub
     Private Sub InitializeTimer()

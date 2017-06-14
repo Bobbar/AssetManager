@@ -388,7 +388,7 @@ Partial Class AttachmentsForm
         '
         'Spinner
         '
-        Me.Spinner.Image = Global.AssetManager.My.Resources.Resources.loading
+        Me.Spinner.Image = Global.AssetManager.My.Resources.Resources.LoadingAni
         Me.Spinner.Name = "Spinner"
         Me.Spinner.Size = New System.Drawing.Size(16, 17)
         Me.Spinner.Visible = False
@@ -409,7 +409,7 @@ Partial Class AttachmentsForm
         'cmdCancel
         '
         Me.cmdCancel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCancel.Image = Global.AssetManager.My.Resources.Resources.close_delete_cancel_del_ui_round_512
+        Me.cmdCancel.Image = Global.AssetManager.My.Resources.Resources.CloseCancelDeleteIcon
         Me.cmdCancel.Name = "cmdCancel"
         Me.cmdCancel.ShowDropDownArrow = False
         Me.cmdCancel.Size = New System.Drawing.Size(63, 20)

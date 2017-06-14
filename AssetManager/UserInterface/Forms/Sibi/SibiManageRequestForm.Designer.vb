@@ -109,7 +109,7 @@ Partial Class SibiManageRequestForm
         '
         'tsmLookupDevice
         '
-        Me.tsmLookupDevice.Image = Global.AssetManager.My.Resources.Resources.Find
+        Me.tsmLookupDevice.Image = Global.AssetManager.My.Resources.Resources.SearchIcon
         Me.tsmLookupDevice.Name = "tsmLookupDevice"
         Me.tsmLookupDevice.Size = New System.Drawing.Size(152, 22)
         Me.tsmLookupDevice.Text = "Lookup Device"
@@ -117,7 +117,7 @@ Partial Class SibiManageRequestForm
         '
         'tsmCopyText
         '
-        Me.tsmCopyText.Image = Global.AssetManager.My.Resources.Resources.copy_icon
+        Me.tsmCopyText.Image = Global.AssetManager.My.Resources.Resources.CopyIcon
         Me.tsmCopyText.Name = "tsmCopyText"
         Me.tsmCopyText.Size = New System.Drawing.Size(152, 22)
         Me.tsmCopyText.Text = "Copy Selected"
@@ -129,7 +129,7 @@ Partial Class SibiManageRequestForm
         '
         'tsmDeleteItem
         '
-        Me.tsmDeleteItem.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
+        Me.tsmDeleteItem.Image = Global.AssetManager.My.Resources.Resources.DeleteRedIcon
         Me.tsmDeleteItem.Name = "tsmDeleteItem"
         Me.tsmDeleteItem.Size = New System.Drawing.Size(152, 22)
         Me.tsmDeleteItem.Text = "Delete Item"
@@ -176,7 +176,7 @@ Partial Class SibiManageRequestForm
         '
         'cmdNewNote
         '
-        Me.cmdNewNote.Image = Global.AssetManager.My.Resources.Resources.add_note_icon
+        Me.cmdNewNote.Image = Global.AssetManager.My.Resources.Resources.AddNoteIcon
         Me.cmdNewNote.Name = "cmdNewNote"
         Me.cmdNewNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdNewNote.Text = "Add Note"
@@ -188,7 +188,7 @@ Partial Class SibiManageRequestForm
         '
         'cmdDeleteNote
         '
-        Me.cmdDeleteNote.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
+        Me.cmdDeleteNote.Image = Global.AssetManager.My.Resources.Resources.DeleteRedIcon
         Me.cmdDeleteNote.Name = "cmdDeleteNote"
         Me.cmdDeleteNote.Size = New System.Drawing.Size(136, 22)
         Me.cmdDeleteNote.Text = "Delete Note"
@@ -661,7 +661,7 @@ Partial Class SibiManageRequestForm
         'cmdCreate
         '
         Me.cmdCreate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.cmdCreate.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.cmdCreate.Image = Global.AssetManager.My.Resources.Resources.AddIcon
         Me.cmdCreate.Name = "cmdCreate"
         Me.cmdCreate.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdCreate.Size = New System.Drawing.Size(39, 34)
@@ -670,7 +670,7 @@ Partial Class SibiManageRequestForm
         'cmdUpdate
         '
         Me.cmdUpdate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.cmdUpdate.Image = Global.AssetManager.My.Resources.Resources.Edit
+        Me.cmdUpdate.Image = Global.AssetManager.My.Resources.Resources.EditIcon
         Me.cmdUpdate.Name = "cmdUpdate"
         Me.cmdUpdate.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdUpdate.Size = New System.Drawing.Size(39, 34)
@@ -680,7 +680,7 @@ Partial Class SibiManageRequestForm
         'cmdDelete
         '
         Me.cmdDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.cmdDelete.Image = Global.AssetManager.My.Resources.Resources.delete_icon_red
+        Me.cmdDelete.Image = Global.AssetManager.My.Resources.Resources.DeleteRedIcon
         Me.cmdDelete.Name = "cmdDelete"
         Me.cmdDelete.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdDelete.Size = New System.Drawing.Size(39, 34)
@@ -689,7 +689,7 @@ Partial Class SibiManageRequestForm
         'cmdAddNote
         '
         Me.cmdAddNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.add_note_icon
+        Me.cmdAddNote.Image = Global.AssetManager.My.Resources.Resources.AddNoteIcon
         Me.cmdAddNote.Name = "cmdAddNote"
         Me.cmdAddNote.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdAddNote.Size = New System.Drawing.Size(39, 34)
@@ -702,7 +702,7 @@ Partial Class SibiManageRequestForm
         '
         'cmdAttachments
         '
-        Me.cmdAttachments.Image = Global.AssetManager.My.Resources.Resources.clip_512
+        Me.cmdAttachments.Image = Global.AssetManager.My.Resources.Resources.PaperClipIcon
         Me.cmdAttachments.Name = "cmdAttachments"
         Me.cmdAttachments.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.cmdAttachments.Size = New System.Drawing.Size(136, 34)
@@ -716,7 +716,7 @@ Partial Class SibiManageRequestForm
         'tsbRefresh
         '
         Me.tsbRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.tsbRefresh.Image = Global.AssetManager.My.Resources.Resources.refresh
+        Me.tsbRefresh.Image = Global.AssetManager.My.Resources.Resources.RefreshIcon
         Me.tsbRefresh.Name = "tsbRefresh"
         Me.tsbRefresh.Size = New System.Drawing.Size(29, 34)
         Me.tsbRefresh.ToolTipText = "Refresh"

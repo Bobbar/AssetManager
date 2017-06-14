@@ -168,19 +168,19 @@ Partial Class MainForm
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.tsmAddGKUpdate, Me.ToolStripSeparator3, Me.CopyTool})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 76)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 98)
         '
         'ViewToolStripMenuItem
         '
         Me.ViewToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ViewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.View_Details
+        Me.ViewToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.DetailsIcon
         Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
         Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(179, 22)
         Me.ViewToolStripMenuItem.Text = "View"
         '
         'tsmAddGKUpdate
         '
-        Me.tsmAddGKUpdate.Image = CType(resources.GetObject("tsmAddGKUpdate.Image"), System.Drawing.Image)
+        Me.tsmAddGKUpdate.Image = Global.AssetManager.My.Resources.Resources.GK_SmallIcon
         Me.tsmAddGKUpdate.Name = "tsmAddGKUpdate"
         Me.tsmAddGKUpdate.Size = New System.Drawing.Size(179, 22)
         Me.tsmAddGKUpdate.Text = "Enqueue GK Update"
@@ -192,7 +192,7 @@ Partial Class MainForm
         '
         'CopyTool
         '
-        Me.CopyTool.Image = Global.AssetManager.My.Resources.Resources.copy_icon
+        Me.CopyTool.Image = Global.AssetManager.My.Resources.Resources.CopyIcon
         Me.CopyTool.Name = "CopyTool"
         Me.CopyTool.Size = New System.Drawing.Size(179, 22)
         Me.CopyTool.Text = "Copy Selected"
@@ -588,7 +588,7 @@ Partial Class MainForm
         '
         'StripSpinner
         '
-        Me.StripSpinner.Image = Global.AssetManager.My.Resources.Resources.loading
+        Me.StripSpinner.Image = Global.AssetManager.My.Resources.Resources.LoadingAni
         Me.StripSpinner.Name = "StripSpinner"
         Me.StripSpinner.Size = New System.Drawing.Size(16, 17)
         Me.StripSpinner.Visible = False
@@ -652,7 +652,7 @@ Partial Class MainForm
         '
         'AddDeviceTool
         '
-        Me.AddDeviceTool.Image = Global.AssetManager.My.Resources.Resources.Add
+        Me.AddDeviceTool.Image = Global.AssetManager.My.Resources.Resources.AddIcon
         Me.AddDeviceTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AddDeviceTool.Name = "AddDeviceTool"
         Me.AddDeviceTool.Padding = New System.Windows.Forms.Padding(20, 0, 0, 0)
@@ -662,7 +662,7 @@ Partial Class MainForm
         'AdminDropDown
         '
         Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater})
-        Me.AdminDropDown.Image = CType(resources.GetObject("AdminDropDown.Image"), System.Drawing.Image)
+        Me.AdminDropDown.Image = Global.AssetManager.My.Resources.Resources.AdminIcon
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.Name = "AdminDropDown"
         Me.AdminDropDown.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
@@ -728,7 +728,7 @@ Partial Class MainForm
         '
         Me.cmdSibi.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.cmdSibi.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdSibi.Image = Global.AssetManager.My.Resources.Resources.inv_box_large
+        Me.cmdSibi.Image = Global.AssetManager.My.Resources.Resources.SibiIcon
         Me.cmdSibi.Name = "cmdSibi"
         Me.cmdSibi.Padding = New System.Windows.Forms.Padding(20, 0, 20, 0)
         Me.cmdSibi.Size = New System.Drawing.Size(226, 34)

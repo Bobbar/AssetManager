@@ -119,7 +119,7 @@ Partial Class MunisUserForm
         '
         'pbWorking
         '
-        Me.pbWorking.Image = Global.AssetManager.My.Resources.Resources.loading
+        Me.pbWorking.Image = Global.AssetManager.My.Resources.Resources.LoadingAni
         Me.pbWorking.Location = New System.Drawing.Point(178, 48)
         Me.pbWorking.Name = "pbWorking"
         Me.pbWorking.Size = New System.Drawing.Size(22, 22)

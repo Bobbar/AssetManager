@@ -20,8 +20,8 @@ Partial Class ViewDeviceForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ViewDeviceForm))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ViewDeviceForm))
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
         Me.txtPhoneNumber = New System.Windows.Forms.MaskedTextBox()
         Me.Label14 = New System.Windows.Forms.Label()
@@ -499,7 +499,7 @@ Partial Class ViewDeviceForm
         'cmdRestart
         '
         Me.cmdRestart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.cmdRestart.Image = Global.AssetManager.My.Resources.Resources._012_restart_2_512
+        Me.cmdRestart.Image = Global.AssetManager.My.Resources.Resources.RestartIcon
         Me.cmdRestart.Location = New System.Drawing.Point(118, 29)
         Me.cmdRestart.Name = "cmdRestart"
         Me.cmdRestart.Size = New System.Drawing.Size(50, 50)
@@ -510,7 +510,7 @@ Partial Class ViewDeviceForm
         '
         'cmdGKUpdate
         '
-        Me.cmdGKUpdate.BackgroundImage = CType(resources.GetObject("cmdGKUpdate.BackgroundImage"), System.Drawing.Image)
+        Me.cmdGKUpdate.BackgroundImage = Global.AssetManager.My.Resources.Resources.GK__UpdateIcon
         Me.cmdGKUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdGKUpdate.Location = New System.Drawing.Point(14, 29)
         Me.cmdGKUpdate.Margin = New System.Windows.Forms.Padding(1)
@@ -536,7 +536,7 @@ Partial Class ViewDeviceForm
         '
         'cmdBrowseFiles
         '
-        Me.cmdBrowseFiles.BackgroundImage = CType(resources.GetObject("cmdBrowseFiles.BackgroundImage"), System.Drawing.Image)
+        Me.cmdBrowseFiles.BackgroundImage = Global.AssetManager.My.Resources.Resources.FolderIcon
         Me.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdBrowseFiles.Location = New System.Drawing.Point(66, 29)
         Me.cmdBrowseFiles.Margin = New System.Windows.Forms.Padding(1)
@@ -548,7 +548,7 @@ Partial Class ViewDeviceForm
         '
         'cmdRDP
         '
-        Me.cmdRDP.BackgroundImage = CType(resources.GetObject("cmdRDP.BackgroundImage"), System.Drawing.Image)
+        Me.cmdRDP.BackgroundImage = Global.AssetManager.My.Resources.Resources.RDPIcon
         Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.cmdRDP.Location = New System.Drawing.Point(170, 29)
@@ -567,7 +567,7 @@ Partial Class ViewDeviceForm
         '
         'DeleteEntryToolStripMenuItem
         '
-        Me.DeleteEntryToolStripMenuItem.Image = CType(resources.GetObject("DeleteEntryToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.DeleteEntryToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.DeleteIcon
         Me.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem"
         Me.DeleteEntryToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
         Me.DeleteEntryToolStripMenuItem.Text = "Delete Entry"
@@ -848,7 +848,7 @@ Partial Class ViewDeviceForm
         'cmdAccept_Tool
         '
         Me.cmdAccept_Tool.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdAccept_Tool.Image = CType(resources.GetObject("cmdAccept_Tool.Image"), System.Drawing.Image)
+        Me.cmdAccept_Tool.Image = Global.AssetManager.My.Resources.Resources.CheckedBoxIcon
         Me.cmdAccept_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.cmdAccept_Tool.Name = "cmdAccept_Tool"
         Me.cmdAccept_Tool.Padding = New System.Windows.Forms.Padding(50, 5, 5, 0)
@@ -863,7 +863,7 @@ Partial Class ViewDeviceForm
         'cmdCancel_Tool
         '
         Me.cmdCancel_Tool.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCancel_Tool.Image = CType(resources.GetObject("cmdCancel_Tool.Image"), System.Drawing.Image)
+        Me.cmdCancel_Tool.Image = Global.AssetManager.My.Resources.Resources.CloseCancelDeleteIcon
         Me.cmdCancel_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.cmdCancel_Tool.Name = "cmdCancel_Tool"
         Me.cmdCancel_Tool.Padding = New System.Windows.Forms.Padding(50, 5, 5, 0)
@@ -918,7 +918,7 @@ Partial Class ViewDeviceForm
         Me.tsTracking.Location = New System.Drawing.Point(16, 37)
         Me.tsTracking.Name = "tsTracking"
         Me.tsTracking.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.tsTracking.Size = New System.Drawing.Size(134, 37)
+        Me.tsTracking.Size = New System.Drawing.Size(165, 37)
         Me.tsTracking.TabIndex = 46
         '
         'ToolStripDropDownButton1
@@ -926,7 +926,7 @@ Partial Class ViewDeviceForm
         Me.ToolStripDropDownButton1.AutoSize = False
         Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckOutTool, Me.CheckInTool})
         Me.ToolStripDropDownButton1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripDropDownButton1.Image = CType(resources.GetObject("ToolStripDropDownButton1.Image"), System.Drawing.Image)
+        Me.ToolStripDropDownButton1.Image = Global.AssetManager.My.Resources.Resources.CheckOutIcon
         Me.ToolStripDropDownButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
         Me.ToolStripDropDownButton1.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
@@ -936,7 +936,7 @@ Partial Class ViewDeviceForm
         'CheckOutTool
         '
         Me.CheckOutTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckOutTool.Image = CType(resources.GetObject("CheckOutTool.Image"), System.Drawing.Image)
+        Me.CheckOutTool.Image = Global.AssetManager.My.Resources.Resources.CheckedBoxRedIcon
         Me.CheckOutTool.Name = "CheckOutTool"
         Me.CheckOutTool.Size = New System.Drawing.Size(135, 22)
         Me.CheckOutTool.Text = "Check Out"
@@ -944,7 +944,7 @@ Partial Class ViewDeviceForm
         'CheckInTool
         '
         Me.CheckInTool.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckInTool.Image = CType(resources.GetObject("CheckInTool.Image"), System.Drawing.Image)
+        Me.CheckInTool.Image = Global.AssetManager.My.Resources.Resources.CheckedBoxGreenIcon
         Me.CheckInTool.Name = "CheckInTool"
         Me.CheckInTool.Size = New System.Drawing.Size(135, 22)
         Me.CheckInTool.Text = "Check In"
@@ -970,7 +970,7 @@ Partial Class ViewDeviceForm
         'tsbModify
         '
         Me.tsbModify.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.tsbModify.Image = CType(resources.GetObject("tsbModify.Image"), System.Drawing.Image)
+        Me.tsbModify.Image = Global.AssetManager.My.Resources.Resources.EditIcon
         Me.tsbModify.Name = "tsbModify"
         Me.tsbModify.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.tsbModify.Size = New System.Drawing.Size(39, 34)
@@ -979,7 +979,7 @@ Partial Class ViewDeviceForm
         'tsbNewNote
         '
         Me.tsbNewNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.tsbNewNote.Image = Global.AssetManager.My.Resources.Resources.add_note_icon
+        Me.tsbNewNote.Image = Global.AssetManager.My.Resources.Resources.AddNoteIcon
         Me.tsbNewNote.Name = "tsbNewNote"
         Me.tsbNewNote.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.tsbNewNote.Size = New System.Drawing.Size(39, 34)
@@ -988,7 +988,7 @@ Partial Class ViewDeviceForm
         'tsbDeleteDevice
         '
         Me.tsbDeleteDevice.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.tsbDeleteDevice.Image = CType(resources.GetObject("tsbDeleteDevice.Image"), System.Drawing.Image)
+        Me.tsbDeleteDevice.Image = Global.AssetManager.My.Resources.Resources.DeleteRedIcon
         Me.tsbDeleteDevice.Name = "tsbDeleteDevice"
         Me.tsbDeleteDevice.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.tsbDeleteDevice.Size = New System.Drawing.Size(39, 34)
@@ -1001,7 +1001,7 @@ Partial Class ViewDeviceForm
         '
         'AttachmentTool
         '
-        Me.AttachmentTool.Image = CType(resources.GetObject("AttachmentTool.Image"), System.Drawing.Image)
+        Me.AttachmentTool.Image = Global.AssetManager.My.Resources.Resources.PaperClipIcon
         Me.AttachmentTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AttachmentTool.Name = "AttachmentTool"
         Me.AttachmentTool.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
@@ -1015,28 +1015,28 @@ Partial Class ViewDeviceForm
         'ToolStripDropDownButton2
         '
         Me.ToolStripDropDownButton2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAssetInputForm, Me.tsmAssetTransferForm, Me.AssetDisposalForm})
-        Me.ToolStripDropDownButton2.Image = CType(resources.GetObject("ToolStripDropDownButton2.Image"), System.Drawing.Image)
+        Me.ToolStripDropDownButton2.Image = Global.AssetManager.My.Resources.Resources.FormIcon
         Me.ToolStripDropDownButton2.Name = "ToolStripDropDownButton2"
         Me.ToolStripDropDownButton2.Size = New System.Drawing.Size(189, 34)
         Me.ToolStripDropDownButton2.Text = "Asset Control Forms"
         '
         'tsmAssetInputForm
         '
-        Me.tsmAssetInputForm.Image = CType(resources.GetObject("tsmAssetInputForm.Image"), System.Drawing.Image)
+        Me.tsmAssetInputForm.Image = Global.AssetManager.My.Resources.Resources.ImportIcon
         Me.tsmAssetInputForm.Name = "tsmAssetInputForm"
         Me.tsmAssetInputForm.Size = New System.Drawing.Size(230, 32)
         Me.tsmAssetInputForm.Text = "Asset Input Form"
         '
         'tsmAssetTransferForm
         '
-        Me.tsmAssetTransferForm.Image = CType(resources.GetObject("tsmAssetTransferForm.Image"), System.Drawing.Image)
+        Me.tsmAssetTransferForm.Image = Global.AssetManager.My.Resources.Resources.TransferArrowsIcon
         Me.tsmAssetTransferForm.Name = "tsmAssetTransferForm"
         Me.tsmAssetTransferForm.Size = New System.Drawing.Size(230, 32)
         Me.tsmAssetTransferForm.Text = "Asset Transfer Form"
         '
         'AssetDisposalForm
         '
-        Me.AssetDisposalForm.Image = CType(resources.GetObject("AssetDisposalForm.Image"), System.Drawing.Image)
+        Me.AssetDisposalForm.Image = Global.AssetManager.My.Resources.Resources.TrashIcon
         Me.AssetDisposalForm.Name = "AssetDisposalForm"
         Me.AssetDisposalForm.Size = New System.Drawing.Size(230, 32)
         Me.AssetDisposalForm.Text = "Asset Disposal Form"
@@ -1046,7 +1046,7 @@ Partial Class ViewDeviceForm
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 37)
         '
-        'frmView
+        'ViewDeviceForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -1056,7 +1056,7 @@ Partial Class ViewDeviceForm
         Me.Controls.Add(Me.StatusStrip1)
         Me.DoubleBuffered = True
         Me.MinimumSize = New System.Drawing.Size(1177, 478)
-        Me.Name = "frmView"
+        Me.Name = "ViewDeviceForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View"
         Me.DeviceInfoBox.ResumeLayout(False)
