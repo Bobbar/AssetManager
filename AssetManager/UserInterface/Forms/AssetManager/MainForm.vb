@@ -19,7 +19,6 @@ Public Class MainForm
     Private Sub LoadProgram()
         Try
             ShowAll()
-            SplashScreenForm.Hide()
             DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             DateTimeLabel.Text = Now.ToString
             ToolStrip1.BackColor = colAssetToolBarColor
@@ -476,5 +475,8 @@ Public Class MainForm
         Else
             'do nutzing
         End If
+    End Sub
+    Private Sub MainForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        SplashScreenForm.Hide()
     End Sub
 End Class

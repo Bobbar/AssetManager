@@ -1,4 +1,6 @@
-﻿Namespace My
+﻿Imports Microsoft.VisualBasic.Devices
+
+Namespace My
     ' The following events are available for MyApplication:
     ' Startup: Raised when the application starts, before the startup form is created.
     ' Shutdown: Raised after all application forms are closed.  This event is not raised if the application terminates abnormally.
@@ -26,7 +28,6 @@
                     EndProgram()
                 End If
                 Status("Ready!")
-                System.Threading.Thread.Sleep(1000)
             Catch ex As Exception
                 ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
                 e.Cancel = True

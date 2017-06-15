@@ -138,5 +138,6 @@ Module OtherFunctions
     End Function
     Public Sub SetWaitCursor(Waiting As Boolean)
         Application.UseWaitCursor = Waiting
+        Application.DoEvents()
     End Sub
 End Module
