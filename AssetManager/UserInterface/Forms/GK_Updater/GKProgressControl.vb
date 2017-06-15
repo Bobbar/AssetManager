@@ -16,7 +16,7 @@ Public Class GKProgressControl
         End Get
     End Property
 
-    Sub New(ParentForm As Form, ByVal Device As Device_Info, Optional Seq As Integer = 0)
+    Sub New(ParentForm As Form, ByVal Device As Device_Info, CreateMissingDirs As Boolean, Optional Seq As Integer = 0)
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
@@ -24,6 +24,7 @@ Public Class GKProgressControl
         MyParentForm = ParentForm
         CurDevice = Device
         MyUpdater = New GK_Updater("D" & CurDevice.strSerial)
+        MyUpdater.CreateMissingDirectories = CreateMissingDirs
         Me.DoubleBuffered = True
         lblInfo.Text = CurDevice.strSerial & " - " & CurDevice.strCurrentUser
         lblCurrentFile.Text = "Queued..."
@@ -107,13 +108,15 @@ Public Class GKProgressControl
         MyUpdater.Dispose()
 
     End Sub
-
     ''' <summary>
     ''' Log message event from GKUpdater.  This even can fire very rapidly. So the result is stored in a buffer to be added to the rtbLog control in a more controlled manner.
     ''' </summary>
     Private Sub GKLogEvent(sender As Object, e As EventArgs)
         Dim LogEvent = DirectCast(e, GK_Updater.LogEvents)
-        LogBuff += LogEvent.LogData.Message + vbCrLf
+        Log(LogEvent.LogData.Message)
+    End Sub
+    Private Sub Log(Message As String)
+        LogBuff += Message + vbCrLf
     End Sub
     Private Sub GKStatusUpdateEvent(sender As Object, e As EventArgs)
         Dim UpdateEvent = DirectCast(e, GK_Updater.GKUpdateEvents)
@@ -141,6 +144,11 @@ Public Class GKProgressControl
                 If err.NativeErrorCode = 1326 Or err.NativeErrorCode = 86 Then
                     OnCriticalStopError(New EventArgs())
                 End If
+            Else
+                Select Case True
+                    Case TypeOf CompleteEvent.Errors Is GK_Updater.MissingDirectoryException
+                        Log("Enable Create Missing Directories option and re-enqueue this device to force creation.")
+                End Select
             End If
         Else
             lblCurrentFile.Text = "Complete! Errors: " & MyUpdater.ErrorList.Count

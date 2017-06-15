@@ -22,6 +22,7 @@ Public Class GK_Updater : Implements IDisposable
     Private ServerPath As String = "C:"
     Private ElapTime As New Stopwatch
     Private Progress As New ProgressCounter
+    Private bolCreateMissingDirectory As Boolean = True
 #End Region
 
 #Region "Constructors"
@@ -69,6 +70,14 @@ Public Class GK_Updater : Implements IDisposable
         Get
             Return CurrentStatus
         End Get
+    End Property
+    Public Property CreateMissingDirectories As Boolean
+        Get
+            Return bolCreateMissingDirectory
+        End Get
+        Set(value As Boolean)
+            bolCreateMissingDirectory = value
+        End Set
     End Property
 
 #End Region
@@ -182,8 +191,12 @@ Public Class GK_Updater : Implements IDisposable
                     End If
                 Else
                     If Not Directory.Exists(Path.GetDirectoryName(cPath)) Then
-                        CopyWorker.ReportProgress(99, "******* Creating Missing Directory: " & Path.GetDirectoryName(cPath))
-                        Directory.CreateDirectory(Path.GetDirectoryName(cPath))
+                        If bolCreateMissingDirectory Then
+                            CopyWorker.ReportProgress(99, "******* Creating Missing Directory: " & Path.GetDirectoryName(cPath))
+                            Directory.CreateDirectory(Path.GetDirectoryName(cPath))
+                        Else
+                            Throw New MissingDirectoryException
+                        End If
                     End If
                 End If
                 'Copy source to target, overwriting
@@ -361,6 +374,12 @@ Public Class GK_Updater : Implements IDisposable
                 Return MyLogInfo
             End Get
         End Property
+    End Class
+    Public Class MissingDirectoryException
+        Inherits Exception
+        Public Sub New()
+            MyBase.New("Directory not found on target.")
+        End Sub
     End Class
 #End Region
 

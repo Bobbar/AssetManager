@@ -38,9 +38,13 @@ Partial Class GKUpdaterForm
         Me.QueueChecker = New System.Windows.Forms.Timer(Me.components)
         Me.lblTransferRate = New System.Windows.Forms.Label()
         Me.cmdSort = New System.Windows.Forms.Button()
+        Me.MenuStrip = New System.Windows.Forms.MenuStrip()
+        Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmCreateDirs = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         CType(Me.MaxUpdates, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.MenuStrip.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -50,9 +54,9 @@ Partial Class GKUpdaterForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.BackColor = System.Drawing.SystemColors.Control
         Me.GroupBox1.Controls.Add(Me.Updater_Table)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 90)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 114)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1068, 528)
+        Me.GroupBox1.Size = New System.Drawing.Size(1068, 504)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
         '
@@ -67,7 +71,7 @@ Partial Class GKUpdaterForm
         Me.Updater_Table.Location = New System.Drawing.Point(9, 21)
         Me.Updater_Table.Margin = New System.Windows.Forms.Padding(10)
         Me.Updater_Table.Name = "Updater_Table"
-        Me.Updater_Table.Size = New System.Drawing.Size(1051, 497)
+        Me.Updater_Table.Size = New System.Drawing.Size(1051, 473)
         Me.Updater_Table.TabIndex = 2
         '
         'GroupBox3
@@ -80,7 +84,7 @@ Partial Class GKUpdaterForm
         Me.GroupBox3.Controls.Add(Me.lblComplete)
         Me.GroupBox3.Controls.Add(Me.lblRunning)
         Me.GroupBox3.Controls.Add(Me.lblQueued)
-        Me.GroupBox3.Location = New System.Drawing.Point(12, 12)
+        Me.GroupBox3.Location = New System.Drawing.Point(12, 36)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(577, 79)
         Me.GroupBox3.TabIndex = 0
@@ -181,7 +185,7 @@ Partial Class GKUpdaterForm
         'lblTransferRate
         '
         Me.lblTransferRate.AutoSize = True
-        Me.lblTransferRate.Location = New System.Drawing.Point(633, 47)
+        Me.lblTransferRate.Location = New System.Drawing.Point(630, 76)
         Me.lblTransferRate.Name = "lblTransferRate"
         Me.lblTransferRate.Size = New System.Drawing.Size(112, 14)
         Me.lblTransferRate.TabIndex = 3
@@ -190,14 +194,37 @@ Partial Class GKUpdaterForm
         'cmdSort
         '
         Me.cmdSort.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdSort.Location = New System.Drawing.Point(994, 67)
+        Me.cmdSort.Location = New System.Drawing.Point(986, 73)
         Me.cmdSort.Name = "cmdSort"
         Me.cmdSort.Size = New System.Drawing.Size(86, 24)
         Me.cmdSort.TabIndex = 4
         Me.cmdSort.Text = "Sort"
         Me.cmdSort.UseVisualStyleBackColor = True
         '
-        'GKUpdater_Form
+        'MenuStrip
+        '
+        Me.MenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem})
+        Me.MenuStrip.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip.Name = "MenuStrip"
+        Me.MenuStrip.Size = New System.Drawing.Size(1094, 24)
+        Me.MenuStrip.TabIndex = 5
+        Me.MenuStrip.Text = "MenuStrip1"
+        '
+        'OptionsToolStripMenuItem
+        '
+        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmCreateDirs})
+        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
+        Me.OptionsToolStripMenuItem.Text = "Options"
+        '
+        'tsmCreateDirs
+        '
+        Me.tsmCreateDirs.CheckOnClick = True
+        Me.tsmCreateDirs.Name = "tsmCreateDirs"
+        Me.tsmCreateDirs.Size = New System.Drawing.Size(211, 22)
+        Me.tsmCreateDirs.Text = "Create Missing Directories"
+        '
+        'GKUpdaterForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -206,11 +233,13 @@ Partial Class GKUpdaterForm
         Me.Controls.Add(Me.lblTransferRate)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.MenuStrip)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MainMenuStrip = Me.MenuStrip
         Me.MinimumSize = New System.Drawing.Size(1010, 428)
-        Me.Name = "GKUpdater_Form"
+        Me.Name = "GKUpdaterForm"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Gatekeeper Updater"
@@ -218,6 +247,8 @@ Partial Class GKUpdaterForm
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
         CType(Me.MaxUpdates, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.MenuStrip.ResumeLayout(False)
+        Me.MenuStrip.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -236,4 +267,7 @@ Partial Class GKUpdaterForm
     Friend WithEvents Updater_Table As FlowLayoutPanel
     Friend WithEvents lblTransferRate As Label
     Friend WithEvents cmdSort As Button
+    Friend WithEvents MenuStrip As MenuStrip
+    Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents tsmCreateDirs As ToolStripMenuItem
 End Class

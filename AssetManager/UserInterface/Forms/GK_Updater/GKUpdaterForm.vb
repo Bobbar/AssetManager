@@ -6,6 +6,7 @@ Public Class GKUpdaterForm
     Private MyUpdates As New List(Of GKProgressControl)
     Private bolStarting As Boolean = True
     Private bolCheckForDups As Boolean = True
+    Private bolCreateMissingDirs As Boolean = False
     Sub New()
 
         ' This call is required by the designer.
@@ -20,7 +21,7 @@ Public Class GKUpdaterForm
     End Sub
     Public Sub AddUpdate(ByVal Device As Device_Info)
         If bolCheckForDups AndAlso Not Exists(Device) Then
-            Dim NewProgCtl As New GKProgressControl(Me, Device, MyUpdates.Count + 1)
+            Dim NewProgCtl As New GKProgressControl(Me, Device, bolCreateMissingDirs, MyUpdates.Count + 1)
             Updater_Table.Controls.Add(NewProgCtl)
             MyUpdates.Add(NewProgCtl)
             AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
@@ -210,5 +211,8 @@ Public Class GKUpdaterForm
     Private Sub StopQueue()
         bolRunQueue = False
         cmdPauseResume.Text = "Resume Queue"
+    End Sub
+    Private Sub tsmCreateDirs_Click(sender As Object, e As EventArgs) Handles tsmCreateDirs.Click
+        bolCreateMissingDirs = tsmCreateDirs.Checked
     End Sub
 End Class
