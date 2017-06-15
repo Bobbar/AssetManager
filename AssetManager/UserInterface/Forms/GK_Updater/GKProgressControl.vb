@@ -10,6 +10,7 @@ Public Class GKProgressControl
     Private CurDevice As New Device_Info
     Private LogBuff As String = ""
     Private MyParentForm As Form
+    Private PrevColor As Color
     Public ReadOnly Property Device As Device_Info
         Get
             Return CurDevice
@@ -27,7 +28,6 @@ Public Class GKProgressControl
         MyUpdater.CreateMissingDirectories = CreateMissingDirs
         Me.DoubleBuffered = True
         lblInfo.Text = CurDevice.strSerial & " - " & CurDevice.strCurrentUser
-        lblCurrentFile.Text = "Queued..."
         lblTransRate.Text = "0.00MB/s"
         SetStatus(Progress_Status.Queued)
         If Seq > 0 Then
@@ -45,11 +45,12 @@ Public Class GKProgressControl
     Public Event CriticalStopError As EventHandler
     Public Enum Progress_Status
         Starting
-        Stopped
-        Complete
         Running
-        Cancelled
         Queued
+        Paused
+        Complete
+        CompleteWithErrors
+        Cancelled
         Errors
     End Enum
 
@@ -62,42 +63,34 @@ Public Class GKProgressControl
             If ProgStatus <> Progress_Status.Running Then
                 LogBuff = ""
                 SetStatus(Progress_Status.Starting)
-                lblCurrentFile.Text = "Starting..."
                 MyUpdater.StartUpdate(AdminCreds)
             End If
         Catch ex As Exception
             SetStatus(Progress_Status.Errors)
-            If TypeOf ex Is Win32Exception Then
-                Dim err = DirectCast(ex, Win32Exception)
-                'Check for invalid credentials error and fire critical stop event.
-                'We want to stop all updates if the credtials are wrong as to avoid locking the account.
-                If err.NativeErrorCode = 1326 Or err.NativeErrorCode = 86 Then
-                    OnCriticalStopError(New EventArgs())
-                End If
-            Else
-                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
-
     Protected Overridable Sub OnCriticalStopError(e As EventArgs)
         RaiseEvent CriticalStopError(Me, e)
     End Sub
     Private Sub DrawLight(Color As Color)
-        Dim bm As New Bitmap(pbStatus.Width, pbStatus.Height)
-        Using MyBrush As New SolidBrush(Color),
-            StrokePen As New Pen(Color.Black, 1.5),
-                       gr As Graphics = Graphics.FromImage(bm)
-
-            gr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-            Dim XLoc, YLoc, Size As Single
-            Size = 20
-            XLoc = Convert.ToSingle(pbStatus.Width / 2 - Size / 2)
-            YLoc = Convert.ToSingle(pbStatus.Height / 2 - Size / 2)
-            gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size)
-            gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size)
-            pbStatus.Image = bm
-        End Using
+        If Color <> PrevColor Then
+            PrevColor = Color
+            Dim bm As New Bitmap(pbStatus.Width, pbStatus.Height)
+            Using MyBrush As New SolidBrush(Color),
+                StrokePen As New Pen(Color.Black, 1.5),
+                           gr As Graphics = Graphics.FromImage(bm)
+                gr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+                Dim XLoc, YLoc, Size As Single
+                Size = 20
+                XLoc = Convert.ToSingle(pbStatus.Width / 2 - Size / 2)
+                YLoc = Convert.ToSingle(pbStatus.Height / 2 - Size / 2)
+                gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size)
+                gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size)
+                Debug.Print("Draw circle. " & Environment.TickCount)
+                pbStatus.Image = bm
+            End Using
+        End If
     End Sub
 
     Private Sub GK_Progress_Fragment_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
@@ -124,18 +117,16 @@ Public Class GKProgressControl
         CurrentStatus = UpdateEvent.CurrentStatus
         pbarProgress.Maximum = CurrentStatus.TotFiles
         pbarProgress.Value = CurrentStatus.CurFileIdx
-        lblCurrentFile.Text = CurrentStatus.CurFileName
-        lblCurrentFile.Refresh()
+        lblStatus.Text = CurrentStatus.CurFileName
+        lblStatus.Refresh()
     End Sub
     Private Sub GKUpdate_Cancelled(sender As Object, e As EventArgs)
-        lblCurrentFile.Text = "Cancelled!"
         SetStatus(Progress_Status.Cancelled)
     End Sub
 
     Private Sub GKUpdate_Complete(sender As Object, e As EventArgs)
         Dim CompleteEvent = DirectCast(e, GK_Updater.GKUpdateCompleteEvents)
         If CompleteEvent.HasErrors Then
-            lblCurrentFile.Text = "ERROR!"
             SetStatus(Progress_Status.Errors)
             If TypeOf CompleteEvent.Errors Is Win32Exception Then
                 Dim err = DirectCast(CompleteEvent.Errors, Win32Exception)
@@ -147,12 +138,15 @@ Public Class GKProgressControl
             Else
                 Select Case True
                     Case TypeOf CompleteEvent.Errors Is GK_Updater.MissingDirectoryException
-                        Log("Enable Create Missing Directories option and re-enqueue this device to force creation.")
+                        Log("Enable 'Create Missing Directories' option and re-enqueue this device to force creation.")
                 End Select
             End If
         Else
-            lblCurrentFile.Text = "Complete! Errors: " & MyUpdater.ErrorList.Count
-            SetStatus(Progress_Status.Complete)
+            If MyUpdater.ErrorList.Count = 0 Then
+                SetStatus(Progress_Status.Complete)
+            Else
+                SetStatus(Progress_Status.CompleteWithErrors)
+            End If
         End If
     End Sub
     Private Sub HideLog()
@@ -166,11 +160,9 @@ Public Class GKProgressControl
         bolShow = True
         lblShowHide.Text = "r" '"-"
     End Sub
-
     Private Sub lblInfo_Click(sender As Object, e As EventArgs) Handles lblInfo.Click
         LookupDevice(MainForm, CurDevice)
     End Sub
-
     Private Sub lblShowHide_Click(sender As Object, e As EventArgs) Handles lblShowHide.Click
         If Not bolShow Then
             ShowLog()
@@ -179,45 +171,82 @@ Public Class GKProgressControl
         End If
     End Sub
     Private Sub pbCancelClose_Click(sender As Object, e As EventArgs) Handles pbCancelClose.Click
-        If ProgStatus = Progress_Status.Running Then
+        If ProgStatus = Progress_Status.Running Or ProgStatus = Progress_Status.Paused Then
             If Not MyUpdater.IsDisposed Then
                 MyUpdater.CancelUpdate()
+                SetStatus(Progress_Status.Cancelled)
             Else
                 Me.Dispose()
             End If
         Else
             Me.Dispose()
         End If
-
     End Sub
 
     Private Sub pbRestart_Click(sender As Object, e As EventArgs) Handles pbRestart.Click
-        If ProgStatus <> Progress_Status.Queued Then
-            StartUpdate()
-        Else
-            Dim blah = Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", vbYesNo + vbQuestion, "Warning", MyParentForm)
-            If blah = MsgBoxResult.Yes Then
+        Select Case ProgStatus
+            Case Progress_Status.Paused
+                MyUpdater.ResumeUpdate()
+                SetStatus(Progress_Status.Running)
+            Case Progress_Status.Running
+                MyUpdater.PauseUpdate()
+                SetStatus(Progress_Status.Paused)
+            Case Progress_Status.Queued
+                Dim blah = Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", vbYesNo + vbQuestion, "Warning", MyParentForm)
+                If blah = MsgBoxResult.Yes Then
+                    StartUpdate()
+                End If
+            Case Else
                 StartUpdate()
-            End If
-        End If
+        End Select
     End Sub
-
     Private Sub SetStatus(Status As Progress_Status)
         ProgStatus = Status
         SetStatusLight(Status)
+        SetButtons(Status)
+        SetStatusLabel(Status)
     End Sub
-
     Private Sub SetStatusLight(Status As Progress_Status)
         Select Case Status
             Case Progress_Status.Running, Progress_Status.Starting
                 DrawLight(Color.LimeGreen)
-            Case Progress_Status.Queued
+            Case Progress_Status.Queued, Progress_Status.Paused
                 DrawLight(Color.Yellow)
             Case Else
                 DrawLight(Color.Red)
         End Select
     End Sub
-
+    Private Sub SetButtons(Status As Progress_Status)
+        Select Case Status
+            Case Progress_Status.Running
+                pbRestart.Image = My.Resources.PauseIcon
+                MyToolTip.SetToolTip(pbRestart, "Pause")
+            Case Progress_Status.Paused, Progress_Status.Queued
+                pbRestart.Image = My.Resources.PlayIcon
+                MyToolTip.SetToolTip(pbRestart, "Resume")
+            Case Else
+                pbRestart.Image = My.Resources.RestartIcon
+                MyToolTip.SetToolTip(pbRestart, "Restart")
+        End Select
+    End Sub
+    Private Sub SetStatusLabel(Status As Progress_Status)
+        Select Case Status
+            Case Progress_Status.Queued
+                lblStatus.Text = "Queued..."
+            Case Progress_Status.Cancelled
+                lblStatus.Text = "Cancelled!"
+            Case Progress_Status.Errors
+                lblStatus.Text = "ERROR!"
+            Case Progress_Status.CompleteWithErrors
+                lblStatus.Text = "Completed with errors: " & MyUpdater.ErrorList.Count
+            Case Progress_Status.Complete
+                lblStatus.Text = "Complete!"
+            Case Progress_Status.Starting
+                lblStatus.Text = "Starting..."
+            Case Progress_Status.Paused
+                lblStatus.Text = "Paused."
+        End Select
+    End Sub
     ''' <summary>
     ''' Timer that updates the rtbLog control with chunks of data from the log buffer.
     ''' </summary>

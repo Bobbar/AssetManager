@@ -56,7 +56,7 @@ Partial Class GKUpdaterForm
         Me.GroupBox1.Controls.Add(Me.Updater_Table)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 114)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1068, 504)
+        Me.GroupBox1.Size = New System.Drawing.Size(1070, 504)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
         '
@@ -71,7 +71,7 @@ Partial Class GKUpdaterForm
         Me.Updater_Table.Location = New System.Drawing.Point(9, 21)
         Me.Updater_Table.Margin = New System.Windows.Forms.Padding(10)
         Me.Updater_Table.Name = "Updater_Table"
-        Me.Updater_Table.Size = New System.Drawing.Size(1051, 473)
+        Me.Updater_Table.Size = New System.Drawing.Size(1053, 473)
         Me.Updater_Table.TabIndex = 2
         '
         'GroupBox3
@@ -185,7 +185,7 @@ Partial Class GKUpdaterForm
         'lblTransferRate
         '
         Me.lblTransferRate.AutoSize = True
-        Me.lblTransferRate.Location = New System.Drawing.Point(630, 76)
+        Me.lblTransferRate.Location = New System.Drawing.Point(655, 73)
         Me.lblTransferRate.Name = "lblTransferRate"
         Me.lblTransferRate.Size = New System.Drawing.Size(112, 14)
         Me.lblTransferRate.TabIndex = 3
@@ -194,7 +194,7 @@ Partial Class GKUpdaterForm
         'cmdSort
         '
         Me.cmdSort.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdSort.Location = New System.Drawing.Point(986, 73)
+        Me.cmdSort.Location = New System.Drawing.Point(996, 91)
         Me.cmdSort.Name = "cmdSort"
         Me.cmdSort.Size = New System.Drawing.Size(86, 24)
         Me.cmdSort.TabIndex = 4

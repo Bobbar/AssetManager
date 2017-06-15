@@ -24,7 +24,7 @@ Partial Class GKProgressControl
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.pbarFileProgress = New System.Windows.Forms.ProgressBar()
-        Me.lblCurrentFile = New System.Windows.Forms.Label()
+        Me.lblStatus = New System.Windows.Forms.Label()
         Me.lblInfo = New System.Windows.Forms.Label()
         Me.rtbLog = New System.Windows.Forms.RichTextBox()
         Me.lblShowHide = New System.Windows.Forms.Label()
@@ -54,16 +54,16 @@ Partial Class GKProgressControl
         '
         'lblCurrentFile
         '
-        Me.lblCurrentFile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.lblStatus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblCurrentFile.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCurrentFile.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.lblCurrentFile.Location = New System.Drawing.Point(2, 61)
-        Me.lblCurrentFile.Name = "lblCurrentFile"
-        Me.lblCurrentFile.Size = New System.Drawing.Size(395, 14)
-        Me.lblCurrentFile.TabIndex = 1
-        Me.lblCurrentFile.Text = "[Status/File]"
-        Me.lblCurrentFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblStatus.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblStatus.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.lblStatus.Location = New System.Drawing.Point(2, 61)
+        Me.lblStatus.Name = "lblCurrentFile"
+        Me.lblStatus.Size = New System.Drawing.Size(395, 14)
+        Me.lblStatus.TabIndex = 1
+        Me.lblStatus.Text = "[Status/File]"
+        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblInfo
         '
@@ -168,7 +168,7 @@ Partial Class GKProgressControl
         Me.Panel1.Controls.Add(Me.lblShowHide)
         Me.Panel1.Controls.Add(Me.pbCancelClose)
         Me.Panel1.Controls.Add(Me.rtbLog)
-        Me.Panel1.Controls.Add(Me.lblCurrentFile)
+        Me.Panel1.Controls.Add(Me.lblStatus)
         Me.Panel1.Controls.Add(Me.pbarFileProgress)
         Me.Panel1.Controls.Add(Me.lblInfo)
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
@@ -225,7 +225,7 @@ Partial Class GKProgressControl
     End Sub
 
     Friend WithEvents pbarFileProgress As ProgressBar
-    Friend WithEvents lblCurrentFile As Label
+    Friend WithEvents lblStatus As Label
     Friend WithEvents lblInfo As Label
     Friend WithEvents pbCancelClose As PictureBox
     Friend WithEvents rtbLog As RichTextBox

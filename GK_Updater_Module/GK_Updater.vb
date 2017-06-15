@@ -23,6 +23,7 @@ Public Class GK_Updater : Implements IDisposable
     Private ElapTime As New Stopwatch
     Private Progress As New ProgressCounter
     Private bolCreateMissingDirectory As Boolean = True
+    Private bolPaused As Boolean = False
 #End Region
 
 #Region "Constructors"
@@ -47,6 +48,7 @@ Public Class GK_Updater : Implements IDisposable
         RaiseEvent StatusUpdate(Me, e)
     End Sub
     Protected Overridable Sub OnUpdateCancelled(e As EventArgs)
+        GKLog("Cancelled by user!")
         RaiseEvent UpdateCancelled(Me, e)
     End Sub
     Protected Overridable Sub OnUpdateComplete(e As GKUpdateCompleteEvents)
@@ -84,7 +86,25 @@ Public Class GK_Updater : Implements IDisposable
 
 #Region "Methods"
     Public Sub CancelUpdate()
+        bolPaused = False
+        If CopyWorker.IsBusy Then
+            CopyWorker.CancelAsync()
+        Else
+            OnUpdateCancelled(New EventArgs)
+        End If
+        CurrentFileIndex = 0
+    End Sub
+    Public Sub PauseUpdate()
+        bolPaused = True
+        Progress = New ProgressCounter
         CopyWorker.CancelAsync()
+    End Sub
+    Public Sub ResumeUpdate()
+        bolPaused = False
+        Dim NewArgs As Worker_Args
+        NewArgs.StartIndex = CurrentFileIndex
+        NewArgs.Credentials = CurrentCreds
+        If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(NewArgs)
     End Sub
     Public Sub StartUpdate(Creds As NetworkCredential)
         If Creds Is Nothing Then
@@ -235,16 +255,14 @@ Public Class GK_Updater : Implements IDisposable
                 GKLog("------------------------------------------------")
                 OnUpdateComplete(New GKUpdateCompleteEvents(False))
             Else
-                OnUpdateCancelled(New EventArgs)
-                GKLog("Cancelled by user!")
+                If Not bolPaused Then
+                    OnUpdateCancelled(New EventArgs)
+                End If
             End If
         Else
             If e.Error.HResult = -2147024864 Or e.Error.HResult = -2147024891 Then
                 GKLog("******** File in-use error! Resuming next files.", True)
-                Dim NewArgs As Worker_Args
-                NewArgs.StartIndex = CurrentFileIndex
-                NewArgs.Credentials = CurrentCreds
-                If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(NewArgs)
+                ResumeUpdate()
             Else
                 GKLog("------------------------------------------------")
                 GKLog("Unexpected errors during copy!")
@@ -284,8 +302,7 @@ Public Class GK_Updater : Implements IDisposable
         End With
     End Sub
     Private Sub SpeedTimer_Tick(sender As Object, e As EventArgs)
-        Dim ResetCounter As Integer = 40
-        Progress.Tick()
+        If Not bolPaused Then Progress.Tick()
         If Progress.BytesMoved > 0 Then
             CurrentStatus.CurTransferRate = Progress.Throughput
             CurrentStatus.CurFileProgress = Progress.Percent

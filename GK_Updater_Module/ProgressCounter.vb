@@ -23,7 +23,11 @@
     End Property
     Public ReadOnly Property Percent As Integer
         Get
-            Return CInt((_progBytesMoved / _progTotalBytes) * 100)
+            If _progTotalBytes > 0 Then
+                Return CInt((_progBytesMoved / _progTotalBytes) * 100)
+            Else
+                Return 0
+            End If
         End Get
     End Property
     Public Property BytesMoved As Integer
