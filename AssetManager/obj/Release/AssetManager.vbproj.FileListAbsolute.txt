@@ -43,3 +43,4 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.ViewTrackingForm.re
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.SplashScreenForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.ViewDeviceForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.ViewHistoryForm.resources
+C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AdvancedSearchForm.resources
