@@ -342,6 +342,9 @@
     <Compile Include="UserInterface\Forms\GK_Updater\GKProgressControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserInterface\MyControls\MyTreeView.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserInterface\MyControls\WindowList.vb" />
   </ItemGroup>
   <ItemGroup>

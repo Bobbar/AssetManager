@@ -393,19 +393,16 @@ VALUES
 End Class
 Public Class AdvancedSearch
     Private _searchString As String
-    Private _searchTables As String()
-    Sub New(SearchString As String, ParamArray SearchTables As String())
+    Private _searchTables As List(Of TableInfo)
+    Sub New(SearchString As String, SearchTables As List(Of TableInfo))
         _searchString = SearchString
         _searchTables = SearchTables
     End Sub
     Public Function GetResults() As List(Of DataTable)
         Dim resultsList As New List(Of DataTable)
-        Dim Tables As New List(Of TableInfo)
         For Each table In _searchTables
-            Tables.Add(GetTableInfo(table))
-        Next
-        For Each table In Tables
-            Dim qry As String = "SELECT * FROM " & table.TableName & " WHERE "
+            'Dim qry As String = "SELECT * FROM " & table.TableName & " WHERE "
+            Dim qry As String = "SELECT " & BuildSelectString(table) & " FROM " & table.TableName & " WHERE "
             qry += BuildFieldString(table)
             Debug.Print(qry)
             Dim cmd As New MySqlCommand
@@ -423,6 +420,14 @@ Public Class AdvancedSearch
         Next
         Return resultsList
     End Function
+    Private Function BuildSelectString(table As TableInfo) As String
+        Dim SelectString As String = ""
+        For Each column In table.Columns
+            SelectString += column
+            If table.Columns.IndexOf(column) <> table.Columns.Count - 1 Then SelectString += ","
+        Next
+        Return SelectString
+    End Function
     Private Function BuildFieldString(table As TableInfo) As String
         Dim Fields As String = ""
         For Each col In table.Columns
@@ -436,7 +441,7 @@ Public Class AdvancedSearch
         Dim NewTable As New TableInfo(table, col)
         Return NewTable
     End Function
-    Private Function GetColumns(table As String) As List(Of String)
+    Public Function GetColumns(table As String) As List(Of String)
         Dim colList As New List(Of String)
         Using comms As New MySQL_Comms
             Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & CurrentDB & "' AND TABLE_NAME = '" & table & "'"
@@ -447,16 +452,12 @@ Public Class AdvancedSearch
         End Using
         Return colList
     End Function
-    Private Structure TableInfo
+    Public Structure TableInfo
         Public TableName As String
         Public TableKey As String
-        Public RefTable As String
-        Public RefFKey As String
         Public Columns As List(Of String)
         Sub New(Name As String, Cols As List(Of String))
             TableName = Name
-            RefTable = ""
-            RefFKey = ""
             Columns = Cols
         End Sub
     End Structure
