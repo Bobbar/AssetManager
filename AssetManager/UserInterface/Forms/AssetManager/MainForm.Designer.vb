@@ -83,6 +83,7 @@ Partial Class MainForm
         Me.TextEnCrypterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmGKUpdater = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AdvancedSearchMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
         Me.GroupBox1.SuspendLayout()
@@ -168,7 +169,7 @@ Partial Class MainForm
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.tsmAddGKUpdate, Me.ToolStripSeparator3, Me.CopyTool})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 98)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 76)
         '
         'ViewToolStripMenuItem
         '
@@ -661,7 +662,7 @@ Partial Class MainForm
         '
         'AdminDropDown
         '
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater})
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater, Me.AdvancedSearchMenuItem})
         Me.AdminDropDown.Image = Global.AssetManager.My.Resources.Resources.AdminIcon
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.Name = "AdminDropDown"
@@ -718,6 +719,12 @@ Partial Class MainForm
         Me.tsmGKUpdater.Name = "tsmGKUpdater"
         Me.tsmGKUpdater.Size = New System.Drawing.Size(227, 26)
         Me.tsmGKUpdater.Text = "GK Updater"
+        '
+        'AdvancedSearchMenuItem
+        '
+        Me.AdvancedSearchMenuItem.Name = "AdvancedSearchMenuItem"
+        Me.AdvancedSearchMenuItem.Size = New System.Drawing.Size(227, 26)
+        Me.AdvancedSearchMenuItem.Text = "Advanced Search"
         '
         'ToolStripSeparator5
         '
@@ -830,4 +837,5 @@ Partial Class MainForm
     Friend WithEvents chkHistorical As CheckBox
     Friend WithEvents tsmAddGKUpdate As ToolStripMenuItem
     Friend WithEvents tsmGKUpdater As ToolStripMenuItem
+    Friend WithEvents AdvancedSearchMenuItem As ToolStripMenuItem
 End Class

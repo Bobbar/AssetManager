@@ -187,6 +187,12 @@
     <Compile Include="GlobalModules\Paths.vb" />
     <Compile Include="DataComms\AssetManager\FTP\FTP_Comms.vb" />
     <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
+    <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.Designer.vb">
+      <DependentUpon>AdvancedSearchForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Forms\GetCredentialsForm.Designer.vb">
       <DependentUpon>GetCredentialsForm.vb</DependentUpon>
     </Compile>
@@ -339,6 +345,9 @@
     <Compile Include="UserInterface\MyControls\WindowList.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.resx">
+      <DependentUpon>AdvancedSearchForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\AttachmentsForm.resx">
       <DependentUpon>AttachmentsForm.vb</DependentUpon>
     </EmbeddedResource>

@@ -479,4 +479,7 @@ Public Class MainForm
     Private Sub MainForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         SplashScreenForm.Hide()
     End Sub
+    Private Sub AdvancedSearchMenuItem_Click(sender As Object, e As EventArgs) Handles AdvancedSearchMenuItem.Click
+        Dim NewAdvancedSearch As New AdvancedSearchForm(Me)
+    End Sub
 End Class
