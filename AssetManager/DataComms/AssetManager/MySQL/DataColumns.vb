@@ -50,6 +50,21 @@ Public Class trackable
     Public Const DeviceUID As String = "track_device_uid"
     Public Const DateStamp As String = "track_datestamp"
 End Class
+Public Class licensing
+    Public Const UID As String = "UID"
+    Public Const Name As String = "name"
+    Public Const Key As String = "key"
+    Public Const MaxAllocations As String = "max_alloc"
+    Public Const InputDate As String = "input_date"
+    Public Const PO As String = "po"
+    Public Const AddlInfo As String = "addl_info"
+End Class
+Public Class license_alloc
+    Public Const AllocUID As String = "alloc_UID"
+    Public Const LicenseUID As String = "license_UID"
+    Public Const DeviceUID As String = "device_UID"
+End Class
+
 Public Class main_attachments
     Public Const TimeStamp As String = "attach_timestamp"
     Public Const FKey As String = "attach_fkey_UID"
@@ -62,6 +77,10 @@ End Class
 Public Class dev_attachments
     Inherits main_attachments
     Public Const TableName As String = "dev_attachments"
+End Class
+Public Class license_attachments
+    Inherits main_attachments
+    Public Overrides ReadOnly Property TableName As String = "lic_attachments"
 End Class
 Public Class sibi_attachments
     Inherits main_attachments
