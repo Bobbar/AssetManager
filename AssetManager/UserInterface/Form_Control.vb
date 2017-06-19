@@ -18,7 +18,7 @@
                     End If
                 Case GetType(AttachmentsForm)
                     Dim vw As AttachmentsForm = DirectCast(frm, AttachmentsForm)
-                    If vw.AttachFolderID = strGUID Then
+                    If vw.AttachFolderUID = strGUID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()

@@ -55,29 +55,29 @@ End Class
 Public Class Sibi_Attachment
     Inherits Attachment
     Public Property SelectedFolder As String
-    Sub New(NewFile As String)
-        MyBase.New(NewFile)
+    Sub New(NewFile As String, AttachTable As main_attachments)
+        MyBase.New(NewFile, AttachTable)
     End Sub
-    Sub New(NewFile As String, FolderGUID As String)
-        MyBase.New(NewFile, FolderGUID)
+    Sub New(NewFile As String, FolderGUID As String, AttachTable As main_attachments)
+        MyBase.New(NewFile, FolderGUID, AttachTable)
     End Sub
-    Sub New(NewFile As String, FolderGUID As String, SelectedFolder As String)
-        MyBase.New(NewFile, FolderGUID)
+    Sub New(NewFile As String, FolderGUID As String, SelectedFolder As String, AttachTable As main_attachments)
+        MyBase.New(NewFile, FolderGUID, AttachTable)
         Me.SelectedFolder = SelectedFolder
     End Sub
-    Sub New(AttachInfoTable As DataTable, SelectedFolder As String)
-        MyBase.New(AttachInfoTable)
+    Sub New(AttachInfoTable As DataTable, SelectedFolder As String, AttachTable As main_attachments)
+        MyBase.New(AttachInfoTable, AttachTable)
         Me.SelectedFolder = SelectedFolder
     End Sub
 
 End Class
 Public Class Device_Attachment
     Inherits Attachment
-    Sub New(NewFile As String)
-        MyBase.New(NewFile)
+    Sub New(NewFile As String, AttachTable As main_attachments)
+        MyBase.New(NewFile, AttachTable)
     End Sub
-    Sub New(NewFile As String, FolderGUID As String)
-        MyBase.New(NewFile, FolderGUID)
+    Sub New(NewFile As String, FolderGUID As String, AttachTable As main_attachments)
+        MyBase.New(NewFile, FolderGUID, AttachTable)
     End Sub
 End Class
 
@@ -89,12 +89,13 @@ Public Class Attachment : Implements IDisposable
     Private _folderGUID As String
     Private _MD5 As String
     Private _fileUID As String
+    Private _attachTable As main_attachments
     Private _dataStream As Stream
     ''' <summary>
     ''' Create new Attachment from a file path.
     ''' </summary>
     ''' <param name="NewFile">Full path to file.</param>
-    Sub New(NewFile As String)
+    Sub New(NewFile As String, AttachTable As main_attachments)
         _fileInfo = New FileInfo(NewFile)
         _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name)
         _fileUID = Guid.NewGuid.ToString
@@ -102,9 +103,10 @@ Public Class Attachment : Implements IDisposable
         _fileSize = CInt(_fileInfo.Length)
         _extention = _fileInfo.Extension
         _folderGUID = String.Empty
+        _attachTable = AttachTable
         _dataStream = _fileInfo.OpenRead
     End Sub
-    Sub New(NewFile As String, FolderGUID As String)
+    Sub New(NewFile As String, FolderGUID As String, AttachTable As main_attachments)
         _fileInfo = New FileInfo(NewFile)
         _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name)
         _fileUID = Guid.NewGuid.ToString
@@ -112,19 +114,21 @@ Public Class Attachment : Implements IDisposable
         _fileSize = CInt(_fileInfo.Length)
         _extention = _fileInfo.Extension
         _folderGUID = FolderGUID
+        _attachTable = AttachTable
         _dataStream = _fileInfo.OpenRead
     End Sub
-    Sub New(AttachInfoTable As DataTable)
+    Sub New(AttachInfoTable As DataTable, AttachTable As main_attachments)
         Dim TableRow As DataRow = AttachInfoTable.Rows(0)
         _fileInfo = Nothing
         _dataStream = Nothing
+        _attachTable = AttachTable
         With TableRow
-            _fileName = .Item(main_attachments.FileName).ToString
-            _fileUID = .Item(main_attachments.FileUID).ToString
-            _MD5 = .Item(main_attachments.FileHash).ToString
-            _fileSize = CInt(.Item(main_attachments.FileSize))
-            _extention = .Item(main_attachments.FileType).ToString
-            _folderGUID = .Item(main_attachments.FKey).ToString
+            _fileName = .Item(AttachTable.FileName).ToString
+            _fileUID = .Item(AttachTable.FileUID).ToString
+            _MD5 = .Item(AttachTable.FileHash).ToString
+            _fileSize = CInt(.Item(AttachTable.FileSize))
+            _extention = .Item(AttachTable.FileType).ToString
+            _folderGUID = .Item(AttachTable.FKey).ToString
         End With
     End Sub
     Public ReadOnly Property FileInfo As FileInfo
@@ -181,6 +185,14 @@ Public Class Attachment : Implements IDisposable
         End Get
         Set(value As Stream)
             _dataStream = value
+        End Set
+    End Property
+    Public Property AttachTable As main_attachments
+        Get
+            Return _attachTable
+        End Get
+        Set(value As main_attachments)
+            _attachTable = value
         End Set
     End Property
     Private Function GetHash(Fileinfo As FileInfo) As String

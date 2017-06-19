@@ -383,7 +383,7 @@ Public Class MainForm
         End If
     End Sub
     Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
-        Dim ViewAttachments As New AttachmentsForm(Me)
+        Dim ViewAttachments As New AttachmentsForm(Me, New dev_attachments) 'TODO: Rework Attachments admin mode
         ViewAttachments.bolAdminMode = CanAccess(AccessGroup.IsAdmin)
         ViewAttachments.ListAttachments()
         ViewAttachments.Text = ViewAttachments.Text & " - MANAGE ALL ATTACHMENTS"

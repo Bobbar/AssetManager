@@ -23,11 +23,11 @@
             Return False
         End Try
     End Function
-    Public Function DeleteFTPFolder(DeviceUID As String, Type As Entry_Type) As Boolean
+    Public Function DeleteFTPFolder(FolderUID As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Dim files As List(Of String)
         Try
-            resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & DeviceUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
+            resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & FolderUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
             Dim responseStream As System.IO.Stream = resp.GetResponseStream
             files = New List(Of String)
             Dim reader As IO.StreamReader = New IO.StreamReader(responseStream)
@@ -38,10 +38,10 @@
             responseStream.Dispose()
             Dim i As Integer = 0
             For Each file As String In files  'delete each file counting for successes
-                If DeleteFTPAttachment(file, DeviceUID) Then i += 1
+                If DeleteFTPAttachment(file, FolderUID) Then i += 1
             Next
             If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
-                resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & DeviceUID, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
+                resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & FolderUID, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
             End If
             If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                 Return True
@@ -76,8 +76,10 @@
     Private Function FTPFileIsOrphan(FolderUID As String, FileUID As String) As FTPScan_Parms
         Dim ScanResults As New FTPScan_Parms
         Dim intHits As Integer = 0
-        Dim strQRYDev As String = "SELECT * FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FKey & " ='" & FolderUID & "' AND " & dev_attachments.FileUID & " = '" & FileUID & "'"
-        Dim strQRYSibi As String = "SELECT * FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FKey & " ='" & FolderUID & "' AND " & sibi_attachments.FileUID & "='" & FileUID & "'"
+        Dim DeviceTable As New dev_attachments
+        Dim SibiTable As New sibi_attachments
+        Dim strQRYDev As String = "SELECT * FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & " ='" & FolderUID & "' AND " & DeviceTable.FileUID & " = '" & FileUID & "'"
+        Dim strQRYSibi As String = "SELECT * FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & " ='" & FolderUID & "' AND " & SibiTable.FileUID & "='" & FileUID & "'"
         Using SQLComms As New MySQL_Comms
             Dim results As DataTable
             results = SQLComms.Return_SQLTable(strQRYDev)

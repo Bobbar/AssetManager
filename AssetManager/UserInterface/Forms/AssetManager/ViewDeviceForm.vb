@@ -62,7 +62,7 @@ Public Class ViewDeviceForm
         Return " - " + Device.strCurrentUser + " - " + Device.strAssetTag + " - " + Device.strDescription
     End Function
     Public Sub SetAttachCount()
-        AttachmentTool.Text = "(" + AssetFunc.GetAttachmentCount(CurrentViewDevice).ToString + ")"
+        AttachmentTool.Text = "(" + AssetFunc.GetAttachmentCount(CurrentViewDevice.strGUID, New dev_attachments).ToString + ")"
         AttachmentTool.ToolTipText = "Attachments " + AttachmentTool.Text
     End Sub
     Private Sub GetCurrentValues()
@@ -675,7 +675,7 @@ Public Class ViewDeviceForm
     Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen() Then
-            Dim NewAttachments As New AttachmentsForm(Me, CurrentViewDevice)
+            Dim NewAttachments As New AttachmentsForm(Me, New dev_attachments, CurrentViewDevice)
         Else
             ActivateFormByUID(CurrentViewDevice.strGUID)
         End If

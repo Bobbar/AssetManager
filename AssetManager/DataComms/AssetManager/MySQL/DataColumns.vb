@@ -51,22 +51,25 @@ Public Class trackable
     Public Const DateStamp As String = "track_datestamp"
 End Class
 Public Class main_attachments
-    Public Const TimeStamp As String = "attach_timestamp"
-    Public Const FKey As String = "attach_fkey_UID"
-    Public Const FileName As String = "attach_file_name"
-    Public Const FileType As String = "attach_file_type"
-    Public Const FileSize As String = "attach_file_size"
-    Public Const FileUID As String = "attach_file_UID"
-    Public Const FileHash As String = "attach_file_hash"
+
+    Public Overridable ReadOnly Property TableName As String = "attachments"
+    Public ReadOnly Property TimeStamp As String = "attach_timestamp"
+    Public ReadOnly Property FKey As String = "attach_fkey_UID"
+    Public ReadOnly Property FileName As String = "attach_file_name"
+    Public ReadOnly Property FileType As String = "attach_file_type"
+    Public ReadOnly Property FileSize As String = "attach_file_size"
+    Public ReadOnly Property FileUID As String = "attach_file_UID"
+    Public ReadOnly Property FileHash As String = "attach_file_hash"
+    Public Overridable ReadOnly Property Folder As String = "attach_folder"
 End Class
 Public Class dev_attachments
     Inherits main_attachments
-    Public Const TableName As String = "dev_attachments"
+    Public Overrides ReadOnly Property TableName As String = "dev_attachments"
 End Class
 Public Class sibi_attachments
     Inherits main_attachments
-    Public Const TableName As String = "sibi_attachments"
-    Public Const Folder As String = "attach_folder"
+    Public Overrides ReadOnly Property TableName As String = "sibi_attachments"
+    Public Overrides ReadOnly Property Folder As String = "attach_folder"
 End Class
 Public Class sibi_requests
     Public Const TableName As String = "sibi_requests"

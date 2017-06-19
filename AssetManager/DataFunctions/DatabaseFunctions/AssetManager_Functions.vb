@@ -47,33 +47,21 @@ Public Class AssetManager_Functions
             Return Nothing
         End Try
     End Function
-    Public Function DeleteSQLAttachment(AttachUID As String, Type As Entry_Type) As Integer
+    Public Function DeleteSQLAttachment(Attachment As Attachment) As Integer 'AttachUID As String, AttachTable As main_attachments) As Integer 'TODO: Change this to use Attachment class as propery
         Try
             Dim rows As Integer
             Dim strDeviceID As String = ""
             Dim strSQLIDQry As String = ""
-            If Type = Entry_Type.Device Then
-                strSQLIDQry = "SELECT " & dev_attachments.FKey & " FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FileUID & "='" & AttachUID & "'"
-            ElseIf Type = Entry_Type.Sibi Then
-                strSQLIDQry = "SELECT " & sibi_attachments.FKey & " FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FileUID & "='" & AttachUID & "'"
-            End If
+            strSQLIDQry = "SELECT " & Attachment.AttachTable.FKey & " FROM " & Attachment.AttachTable.TableName & " WHERE " & Attachment.AttachTable.FileUID & "='" & Attachment.FileUID & "'"
             Using SQLComms As New MySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strSQLIDQry)
                 For Each r As DataRow In results.Rows
-                    If Type = Entry_Type.Device Then
-                        strDeviceID = r.Item(dev_attachments.FKey).ToString
-                    ElseIf Type = Entry_Type.Sibi Then
-                        strDeviceID = r.Item(sibi_attachments.FKey).ToString
-                    End If
+                    strDeviceID = r.Item(Attachment.AttachTable.FKey).ToString
                 Next
                 'Delete FTP Attachment
-                If FTPFunc.DeleteFTPAttachment(AttachUID, strDeviceID) Then
+                If FTPFunc.DeleteFTPAttachment(Attachment.FileUID, strDeviceID) Then
                     'delete SQL entry
                     Dim strSQLDelQry As String = ""
-                    If Type = Entry_Type.Device Then
-                        strSQLDelQry = "DELETE FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FileUID & "='" & AttachUID & "'"
-                    ElseIf Type = Entry_Type.Sibi Then
-                        strSQLDelQry = "DELETE FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FileUID & "='" & AttachUID & "'"
-                    End If
+                    strSQLDelQry = "DELETE FROM " & Attachment.AttachTable.TableName & " WHERE " & Attachment.AttachTable.FileUID & "='" & Attachment.FileUID & "'"
                     rows = SQLComms.Return_SQLCommand(strSQLDelQry).ExecuteNonQuery
                     Return rows
                     'Else  'if file not found then we might as well remove the DB record.
@@ -92,28 +80,6 @@ Public Class AssetManager_Functions
             End If
         End Try
         Return -1
-    End Function
-    Public Function Has_Attachments(strGUID As String, Type As Entry_Type) As Boolean
-        Try
-            Dim strQRY As String = ""
-            Select Case Type
-                Case Entry_Type.Device
-                    strQRY = "SELECT " & dev_attachments.FKey & " FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FKey & "='" & strGUID & "'"
-                Case Entry_Type.Sibi
-                    strQRY = "SELECT " & sibi_attachments.FKey & " FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FKey & "='" & strGUID & "'"
-            End Select
-            Using SQLComms As New MySQL_Comms, reader As MySqlDataReader = SQLComms.Return_SQLReader(strQRY)
-                Dim bolHasRows As Boolean = reader.HasRows
-                reader.Close()
-                Return bolHasRows
-            End Using
-        Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-            Else
-                EndProgram()
-            End If
-            Return Nothing
-        End Try
     End Function
     Public Function Get_SQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
         Dim sqlQRY As String = "SELECT " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
@@ -287,7 +253,7 @@ VALUES
     Public Function DeleteMaster(ByVal strGUID As String, Type As Entry_Type) As Boolean
         Try
             If FTPFunc.Has_FTPFolder(strGUID) Then
-                If FTPFunc.DeleteFTPFolder(strGUID, Type) Then Return Delete_SQLMasterEntry(strGUID, Type) ' if has attachments, delete ftp directory, then delete the sql records.
+                If FTPFunc.DeleteFTPFolder(strGUID) Then Return Delete_SQLMasterEntry(strGUID, Type) ' if has attachments, delete ftp directory, then delete the sql records.
             Else
                 Return Delete_SQLMasterEntry(strGUID, Type) 'delete sql records
             End If
@@ -369,16 +335,10 @@ VALUES
         End Try
         Return Nothing
     End Function
-    Public Function GetAttachmentCount(AttachInfo As Object) As Integer
+    Public Function GetAttachmentCount(AttachFolderUID As String, AttachTable As main_attachments) As Integer
         Try
             Dim strQRY As String = ""
-            If TypeOf AttachInfo Is Device_Info Then
-                Dim Dev As Device_Info = DirectCast(AttachInfo, Device_Info)
-                strQRY = "SELECT COUNT(*) FROM " & dev_attachments.TableName & " WHERE " & dev_attachments.FKey & "='" & Dev.strGUID & "'"
-            ElseIf TypeOf AttachInfo Is Request_Info Then
-                Dim Req As Request_Info = DirectCast(AttachInfo, Request_Info)
-                strQRY = "SELECT COUNT(*) FROM " & sibi_attachments.TableName & " WHERE " & sibi_attachments.FKey & "='" & Req.strUID & "'"
-            End If
+            strQRY = "SELECT COUNT(*) FROM " & AttachTable.TableName & " WHERE " & AttachTable.FKey & "='" & AttachFolderUID & "'"
             Using SQLComms As New MySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strQRY)
                 Return CInt(cmd.ExecuteScalar)
             End Using

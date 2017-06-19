@@ -50,7 +50,7 @@ Public Class SibiManageRequestForm
 
     End Sub
     Public Sub SetAttachCount()
-        cmdAttachments.Text = "(" + AssetFunc.GetAttachmentCount(CurrentRequest).ToString + ")"
+        cmdAttachments.Text = "(" + AssetFunc.GetAttachmentCount(CurrentRequest.strUID, New sibi_attachments).ToString + ")"
         cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text
     End Sub
     Private Sub SetTitle()
@@ -718,7 +718,7 @@ VALUES
         If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         If Not AttachmentsIsOpen() Then
             If CurrentRequest.strUID <> "" Then
-                Dim NewAttach As New AttachmentsForm(Me, CurrentRequest)
+                Dim NewAttach As New AttachmentsForm(Me, New sibi_attachments, CurrentRequest)
             End If
         Else
             ActivateFormByUID(CurrentRequest.strUID)
