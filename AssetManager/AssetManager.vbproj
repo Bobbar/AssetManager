@@ -187,12 +187,6 @@
     <Compile Include="GlobalModules\Paths.vb" />
     <Compile Include="DataComms\AssetManager\FTP\FTP_Comms.vb" />
     <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
-    <Compile Include="UserInterface\Forms\AddNewLicenseForm.Designer.vb">
-      <DependentUpon>AddNewLicenseForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\Forms\AddNewLicenseForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.Designer.vb">
       <DependentUpon>AdvancedSearchForm.vb</DependentUpon>
     </Compile>
@@ -215,12 +209,6 @@
       <DependentUpon>GridForm.vb</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\Forms\GridForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\Forms\LicenseManagementForm.Designer.vb">
-      <DependentUpon>LicenseManagementForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\Forms\LicenseManagementForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Form_Control.vb" />
@@ -360,9 +348,6 @@
     <Compile Include="UserInterface\MyControls\WindowList.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="UserInterface\Forms\AddNewLicenseForm.resx">
-      <DependentUpon>AddNewLicenseForm.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.resx">
       <DependentUpon>AdvancedSearchForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -389,9 +374,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\AssetManager\MunisUserForm.resx">
       <DependentUpon>MunisUserForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\LicenseManagementForm.resx">
-      <DependentUpon>LicenseManagementForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\SibiNotesForm.resx">
       <DependentUpon>SibiNotesForm.vb</DependentUpon>
