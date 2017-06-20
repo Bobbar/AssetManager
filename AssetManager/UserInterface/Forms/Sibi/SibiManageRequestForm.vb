@@ -372,7 +372,7 @@ Public Class SibiManageRequestForm
                     DBTable.Rows.Add(NewRow)
                 End If
             Next
-            info.RequstItems = DBTable
+            info.RequestItems = DBTable
             Return info
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -394,7 +394,7 @@ Public Class SibiManageRequestForm
                 cmd As MySqlCommand = SQLComms.Return_SQLCommand(),
                 InsertAdapter = SQLComms.Return_Adapter(InsertRequestQry)
                 rows += InsertAdapter.Update(GetInsertTable(InsertAdapter, RequestData.strUID))
-                For Each row As DataRow In RequestData.RequstItems.Rows
+                For Each row As DataRow In RequestData.RequestItems.Rows
                     InsertRequestItem(row, cmd, RequestData)
                     rows = rows + cmd.ExecuteNonQuery()
                     cmd.Parameters.Clear()
@@ -439,14 +439,14 @@ Public Class SibiManageRequestForm
         Try
             Dim RequestData As Request_Info = CollectData()
             RequestData.strUID = CurrentRequest.strUID
-            If RequestData.RequstItems Is Nothing Then Exit Sub
+            If RequestData.RequestItems Is Nothing Then Exit Sub
             Dim rows As Integer = 0
             Dim RequestUpdateQry As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & " = '" & CurrentRequest.strUID & "'"
             Using SQLComms As New MySQL_Comms,
                 cmd As MySqlCommand = SQLComms.Return_SQLCommand(),
                 RequestUpdateAdapter = SQLComms.Return_Adapter(RequestUpdateQry)
                 rows += RequestUpdateAdapter.Update(GetUpdateTable(RequestUpdateAdapter))
-                For Each row As DataRow In RequestData.RequstItems.Rows
+                For Each row As DataRow In RequestData.RequestItems.Rows
                     If row.Item("Item UID").ToString <> "" Then
                         SetRequestItemParameters(row, cmd, RequestData, False)
                         cmd.CommandText = RequestItemUpdateQry(row)
@@ -539,7 +539,7 @@ VALUES
         cmd.Parameters.AddWithValue("@" & sibi_request_items.Org_Code, row.Item("Org Code"))
         cmd.Parameters.AddWithValue("@" & sibi_request_items.Object_Code, row.Item("Object Code"))
         cmd.Parameters.AddWithValue("@" & sibi_request_items.Qty, row.Item("Qty"))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.Sequence, RequestData.RequstItems.Rows.IndexOf(row) + 1)
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Sequence, RequestData.RequestItems.Rows.IndexOf(row) + 1)
     End Sub
     Private Sub InsertRequestItem(row As DataRow, ByRef cmd As MySqlCommand, RequestData As Request_Info)
         SetRequestItemParameters(row, cmd, RequestData, True)
@@ -801,7 +801,7 @@ VALUES
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
         Try
             If Not CheckForAccess(AccessGroup.Sibi_Delete) Then Exit Sub
-            If IsNothing(CurrentRequest.RequstItems) Then Exit Sub
+            If IsNothing(CurrentRequest.RequestItems) Then Exit Sub
             Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING", Me)
             If blah = vbYes Then
                 Waiting()
@@ -977,7 +977,7 @@ VALUES
                 .strReplaceAsset = NoNull(RequestResults.Rows(0).Item(sibi_requests.Replace_Asset))
                 .strReplaceSerial = NoNull(RequestResults.Rows(0).Item(sibi_requests.Replace_Serial))
                 .strRequestNumber = NoNull(RequestResults.Rows(0).Item(sibi_requests.RequestNumber))
-                .RequstItems = RequestItemsResults
+                .RequestItems = RequestItemsResults
             End With
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

@@ -13,7 +13,6 @@ Class AttachmentsForm
     Private strSelectedFolder As String
     Private bolDragging As Boolean = False
     Private bolAllowDrag As Boolean = False
-    Private strDragFilePath As String
     Private AttachRequest As Request_Info
     Private AttachDevice As Device_Info
     Private _attachTable As main_attachments
@@ -113,7 +112,7 @@ Class AttachmentsForm
     End Sub
     Private Function GetQry() As String
         Dim strQry As String = ""
-        If _attachTable.GetType Is GetType(sibi_attachments) Then
+        If TypeOf _attachTable Is sibi_attachments Then
             Select Case GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
                 Case "ALL"
                     strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachRequest.strUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
@@ -132,7 +131,7 @@ Class AttachmentsForm
     End Function
     Private Function GetTable() As DataTable
         Dim table As New DataTable
-        If _attachTable.GetType Is GetType(sibi_attachments) Then
+        If TypeOf _attachTable Is sibi_attachments Then
             table.Columns.Add(" ", GetType(Image))
             table.Columns.Add("Filename", GetType(String))
             table.Columns.Add("Size", GetType(String))
@@ -172,7 +171,7 @@ Class AttachmentsForm
                 For Each r As DataRow In results.Rows
                     strFileSizeHuman = Math.Round((CInt(r.Item(_attachTable.FileSize)) / 1024), 1) & " KB"
                     strFullFilename = r.Item(_attachTable.FileName).ToString & r.Item(_attachTable.FileType).ToString
-                    If _attachTable.GetType Is GetType(sibi_attachments) Then
+                    If TypeOf _attachTable Is sibi_attachments Then
                         table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.TimeStamp), GetHumanValue(SibiIndex.AttachFolder, r.Item(_attachTable.Folder).ToString), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                     Else
                         If bolAdminMode Then
@@ -281,7 +280,7 @@ Class AttachmentsForm
         Dim FileNumber As Integer = 1
         For Each file As String In Files
             Dim CurrentAttachment As Attachment
-            If _attachTable.GetType Is GetType(sibi_attachments) Then
+            If TypeOf _attachTable Is sibi_attachments Then
                 CurrentAttachment = New Sibi_Attachment(file, AttachFolderUID, strSelectedFolder, _attachTable)
             Else
                 CurrentAttachment = New Attachment(file, AttachFolderUID, _attachTable)
@@ -536,7 +535,13 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                     outputStream.Close()
                 End Using
                 If bolDragging Then
-                    strDragFilePath = strFullPath
+                    StatusBar("Drag/Drop...")
+                    Dim fileList As New Collections.Specialized.StringCollection
+                    fileList.Add(strFullPath)
+                    Dim dataObj As New DataObject()
+                    dataObj.SetFileDropList(fileList)
+                    AttachGrid.DoDragDrop(dataObj, DragDropEffects.All)
+                    bolDragging = False
                 Else
                     Process.Start(strFullPath)
                 End If
@@ -666,7 +671,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     End Sub
     Private MouseStartPos As Point
     Private Function MouseIsDragging(Optional NewStartPos As Point = Nothing, Optional CurrentPos As Point = Nothing) As Boolean
-        Dim intMouseMoveThreshold As Integer = 100
+        Dim intMouseMoveThreshold As Integer = 50
         If NewStartPos <> Nothing Then
             MouseStartPos = NewStartPos
         Else
@@ -685,22 +690,9 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                 If MouseIsDragging(, e.Location) And Not DownloadWorker.IsBusy AndAlso AttachGrid.CurrentRow IsNot Nothing Then
                     bolDragging = True
                     DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
-                    WaitForDownload()
-                    Dim fileList As New Collections.Specialized.StringCollection
-                    fileList.Add(strDragFilePath)
-                    Dim dataObj As New DataObject
-                    dataObj.SetFileDropList(fileList)
-                    AttachGrid.DoDragDrop(dataObj, DragDropEffects.All)
-                    bolDragging = False
                 End If
             End If
         End If
-    End Sub
-    Private Sub WaitForDownload()
-        Do While DownloadWorker.IsBusy
-            Thread.Sleep(100)
-            Application.DoEvents()
-        Loop
     End Sub
     Private Sub AttachGrid_DragOver(sender As Object, e As DragEventArgs) Handles AttachGrid.DragOver
         e.Effect = DragDropEffects.Copy

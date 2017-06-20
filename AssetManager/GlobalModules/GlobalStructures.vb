@@ -42,7 +42,7 @@ Public Structure Request_Info
     Public strReplaceSerial As String
     Public strRequestNumber As String
     Public strRTNumber As String
-    Public RequstItems As DataTable
+    Public RequestItems As DataTable
 End Structure
 Public Structure Hist_Info
     Public strChangeType As String
@@ -96,15 +96,6 @@ Public Structure CheckStruct
     Public strCheckOutUser As String
     Public strCheckInUser As String
     Public strCheckInTime As String
-End Structure
-Public Structure Attach_Info
-    Public FileInfo As FileInfo
-    Public Filename As String
-    Public FileSize As Long
-    Public Extention As String
-    Public FolderGUID As String
-    Public MD5 As String
-    Public FileUID As String
 End Structure
 
 
