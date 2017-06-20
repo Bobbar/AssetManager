@@ -8,6 +8,7 @@
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
+                        Exit For
                     End If
                 Case GetType(SibiManageRequestForm)
                     Dim vw As SibiManageRequestForm = DirectCast(frm, SibiManageRequestForm)
@@ -15,6 +16,7 @@
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
+                        Exit For
                     End If
                 Case GetType(AttachmentsForm)
                     Dim vw As AttachmentsForm = DirectCast(frm, AttachmentsForm)
@@ -22,6 +24,7 @@
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
+                        Exit For
                     End If
                 Case GetType(ViewHistoryForm)
                     Dim vw As ViewHistoryForm = DirectCast(frm, ViewHistoryForm)
@@ -29,6 +32,7 @@
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
+                        Exit For
                     End If
             End Select
         Next
