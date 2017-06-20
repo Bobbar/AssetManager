@@ -54,6 +54,7 @@ Partial Class GridForm
         Me.MinimumSize = New System.Drawing.Size(439, 282)
         Me.Name = "GridForm"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "GridForm"
         Me.ResumeLayout(False)
         Me.PerformLayout()
