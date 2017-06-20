@@ -84,10 +84,10 @@ Public Class UserManagerForm
     End Sub
     Private Sub GetUserInfo()
         With CurrentUser
-            .intAccessLevel = CInt(GetCellValue(UserGrid, users.AccessLevel))
-            .strUsername = GetCellValue(UserGrid, users.UserName)
-            .strUID = GetCellValue(UserGrid, users.UID)
-            .strFullname = GetCellValue(UserGrid, users.FullName)
+            .intAccessLevel = CInt(GetCurrentCellValue(UserGrid, users.AccessLevel))
+            .strUsername = GetCurrentCellValue(UserGrid, users.UserName)
+            .strUID = GetCurrentCellValue(UserGrid, users.UID)
+            .strFullname = GetCurrentCellValue(UserGrid, users.FullName)
         End With
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click

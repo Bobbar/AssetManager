@@ -59,7 +59,7 @@ Module OtherFunctions
             Return -1
         End Try
     End Function
-    Public Function GetCellValue(ByVal Grid As DataGridView, ColumnName As String) As String
+    Public Function GetCurrentCellValue(ByVal Grid As DataGridView, ColumnName As String) As String
         Return NoNull(Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value.ToString)
     End Function
     Public Sub EndProgram()

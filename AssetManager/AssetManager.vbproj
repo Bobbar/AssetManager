@@ -168,6 +168,7 @@
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="DataComms\AssetManager\MySQL\DataColumns.vb" />
+    <Compile Include="DataFunctions\DatabaseFunctions\AdvancedSearch.vb" />
     <Compile Include="DataFunctions\DBControlParser.vb" />
     <Compile Include="Classes\MyExceptions.vb" />
     <Compile Include="Classes\Type_Classes.vb" />
