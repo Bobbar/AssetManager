@@ -190,27 +190,27 @@ Public Class SibiManageRequestForm
             RequestItemsGrid.Rows.Clear()
             RequestItemsGrid.Columns.Clear()
             Dim intQty As New DataGridViewColumn
-            intQty.Name = "Qty"
+            intQty.Name = sibi_request_items.Qty
             intQty.HeaderText = "Qty"
             intQty.ValueType = GetType(Integer)
             intQty.CellTemplate = New DataGridViewTextBoxCell
             intQty.SortMode = DataGridViewColumnSortMode.Automatic
             With RequestItemsGrid.Columns
-                .Add("User", "User")
-                .Add("Description", "Description")
-                .Add(intQty) '"Qty", "Qty")
-                .Add(DataGridCombo(DeviceIndex.Locations, "Location", Attrib_Type.Location)) '.Add("Location")
-                .Add(DataGridCombo(SibiIndex.ItemStatusType, "Status", Attrib_Type.SibiItemStatusType))
-                .Add("Replace Asset", "Replace Asset")
-                .Add("Replace Serial", "Replace Serial")
-                .Add("New Asset", "New Asset")
-                .Add("New Serial", "New Serial")
-                .Add("Org Code", "Org Code")
-                .Add("Object Code", "Object Code")
-                .Add("Item UID", "Item UID")
+                .Add(sibi_request_items.User, "User")
+                .Add(sibi_request_items.Description, "Description")
+                .Add(intQty)
+                .Add(DataGridCombo(DeviceIndex.Locations, "Location", sibi_request_items.Location))
+                .Add(DataGridCombo(SibiIndex.ItemStatusType, "Status", sibi_request_items.Status))
+                .Add(sibi_request_items.Replace_Asset, "Replace Asset")
+                .Add(sibi_request_items.Replace_Serial, "Replace Serial")
+                .Add(sibi_request_items.New_Asset, "New Asset")
+                .Add(sibi_request_items.New_Serial, "New Serial")
+                .Add(sibi_request_items.Org_Code, "Org Code")
+                .Add(sibi_request_items.Object_Code, "Object Code")
+                .Add(sibi_request_items.Item_UID, "Item UID")
             End With
             SetColumnWidths()
-            RequestItemsGrid.Columns.Item("Item UID").ReadOnly = True
+            RequestItemsGrid.Columns.Item(sibi_request_items.Item_UID).ReadOnly = True
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -274,7 +274,7 @@ Public Class SibiManageRequestForm
         For Each row As DataGridViewRow In RequestItemsGrid.Rows
             If Not row.IsNewRow Then
                 For Each dcell As DataGridViewCell In row.Cells
-                    If dcell.OwningColumn.CellType.Name = "DataGridViewComboBoxCell" Then
+                    If dcell.OwningColumn.CellType Is GetType(DataGridViewComboBoxCell) Then
                         If dcell.Value Is Nothing Then
                             bolFieldsValid = False
                             dcell.ErrorText = "Required Field!"
@@ -282,7 +282,7 @@ Public Class SibiManageRequestForm
                             dcell.ErrorText = Nothing
                         End If
                     End If
-                    If dcell.OwningColumn.Name = "Qty" Then
+                    If dcell.OwningColumn.Name = sibi_request_items.Qty Then
                         If IsDBNull(dcell.Value) Then
                             bolFieldsValid = False
                             dcell.ErrorText = "Required Field!"
@@ -356,9 +356,9 @@ Public Class SibiManageRequestForm
                             Dim cmb = DirectCast(dcell, DataGridViewComboBoxCell)
                             Dim SelectedIndex = cmb.Items.IndexOf(dcell.Value)
                             Select Case dcell.OwningColumn.Name
-                                Case Attrib_Type.Location
+                                Case sibi_request_items.Location
                                     NewRow(dcell.ColumnIndex) = GetDBValue(DeviceIndex.Locations, SelectedIndex)
-                                Case Attrib_Type.SibiItemStatusType
+                                Case sibi_request_items.Status
                                     NewRow(dcell.ColumnIndex) = GetDBValue(SibiIndex.ItemStatusType, SelectedIndex)
                             End Select
                         Else
@@ -447,7 +447,7 @@ Public Class SibiManageRequestForm
                 RequestUpdateAdapter = SQLComms.Return_Adapter(RequestUpdateQry)
                 rows += RequestUpdateAdapter.Update(GetUpdateTable(RequestUpdateAdapter))
                 For Each row As DataRow In RequestData.RequestItems.Rows
-                    If row.Item("Item UID").ToString <> "" Then
+                    If row.Item(sibi_request_items.Item_UID).ToString <> "" Then
                         SetRequestItemParameters(row, cmd, RequestData, False)
                         cmd.CommandText = RequestItemUpdateQry(row)
                         cmd.ExecuteNonQuery()
@@ -486,7 +486,7 @@ Public Class SibiManageRequestForm
                     " & sibi_request_items.Org_Code & " = @" & sibi_request_items.Org_Code & ",
                     " & sibi_request_items.Object_Code & " = @" & sibi_request_items.Object_Code & ",
                     " & sibi_request_items.Qty & " = @" & sibi_request_items.Qty & "
-                    WHERE " & sibi_request_items.Item_UID & " ='" & row.Item("Item UID").ToString & "'"
+                    WHERE " & sibi_request_items.Item_UID & " ='" & row.Item(sibi_request_items.Item_UID).ToString & "'"
     End Function
     Private Function RequestItemInsertQry() As String
         Return "INSERT INTO " & sibi_request_items.TableName & "
@@ -528,17 +528,17 @@ VALUES
             cmd.Parameters.AddWithValue("@" & sibi_request_items.Item_UID, strItemUID)
             cmd.Parameters.AddWithValue("@" & sibi_request_items.Request_UID, RequestData.strUID)
         End If
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.User, row.Item("User"))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.Description, row.Item("Description"))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.Location, row.Item(Attrib_Type.Location))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.Status, row.Item(Attrib_Type.SibiItemStatusType))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Asset, row.Item("Replace Asset"))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Serial, row.Item("Replace Serial"))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Asset, row.Item("New Asset"))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Serial, row.Item("New Serial"))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.Org_Code, row.Item("Org Code"))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.Object_Code, row.Item("Object Code"))
-        cmd.Parameters.AddWithValue("@" & sibi_request_items.Qty, row.Item("Qty"))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.User, row.Item(sibi_request_items.User))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Description, row.Item(sibi_request_items.Description))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Location, row.Item(sibi_request_items.Location))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Status, row.Item(sibi_request_items.Status))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Asset, row.Item(sibi_request_items.Replace_Asset))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Replace_Serial, row.Item(sibi_request_items.Replace_Serial))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Asset, row.Item(sibi_request_items.New_Asset))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.New_Serial, row.Item(sibi_request_items.New_Serial))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Org_Code, row.Item(sibi_request_items.Org_Code))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Object_Code, row.Item(sibi_request_items.Object_Code))
+        cmd.Parameters.AddWithValue("@" & sibi_request_items.Qty, row.Item(sibi_request_items.Qty))
         cmd.Parameters.AddWithValue("@" & sibi_request_items.Sequence, RequestData.RequestItems.Rows.IndexOf(row) + 1)
     End Sub
     Private Sub InsertRequestItem(row As DataRow, ByRef cmd As MySqlCommand, RequestData As Request_Info)
@@ -762,7 +762,7 @@ VALUES
                         blah = Message("Failed to delete row.", vbExclamation + vbOKOnly, "Error", Me)
                     End If
                 Else
-                    blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RequestItemsGrid.CurrentRow.Index).Value.ToString, "sibi_items_uid", "sibi_request_items") & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me)
+                    blah = Message(DeleteItem_FromSQL(RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, sibi_request_items.Item_UID), RequestItemsGrid.CurrentRow.Index).Value.ToString, sibi_request_items.Item_UID, sibi_request_items.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me)
                     OpenRequest(CurrentRequest.strUID)
                 End If
             Else
@@ -773,7 +773,7 @@ VALUES
     End Sub
     Private Function IsNewRow(RowIndex As Integer) As Boolean
         Try
-            Dim GUID As String = RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, "Item UID"), RowIndex).Value.ToString
+            Dim GUID As String = RequestItemsGrid.Item(GetColIndex(RequestItemsGrid, sibi_request_items.Item_UID), RowIndex).Value.ToString
             If GUID <> "" Then
                 Return False
             End If
@@ -872,36 +872,41 @@ VALUES
                     RequestItemsGrid.Rows(e.RowIndex).Selected = True
                     RequestItemsGrid.CurrentCell = RequestItemsGrid(e.ColumnIndex, e.RowIndex)
                 End If
-                If ValidColumn() Then
-                    tsmLookupDevice.Visible = True
-                    tsmSeparator.Visible = True
-                Else
-                    tsmLookupDevice.Visible = False
-                    tsmSeparator.Visible = False
+                If RequestItemsGrid.CurrentCell IsNot Nothing Then
+                    If ValidColumn() Then
+                        tsmPopFA.Visible = True
+                        tsmSeparator.Visible = True
+                        If RequestItemsGrid.CurrentCell.Value IsNot Nothing AndAlso RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
+                            tsmLookupDevice.Visible = True
+                        Else
+                            tsmLookupDevice.Visible = False
+                        End If
+                    Else
+                        tsmPopFA.Visible = False
+                        tsmSeparator.Visible = False
+                        tsmLookupDevice.Visible = False
+                    End If
                 End If
             End If
+
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
     Private Function ValidColumn() As Boolean
         Try
-            If RequestItemsGrid.CurrentCell IsNot Nothing Then
-                If RequestItemsGrid.CurrentCell.Value IsNot Nothing AndAlso RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
-                    Select Case True
-                        Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
-                            Return True
-                        Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
-                            Return True
-                        Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Asset")
-                            Return True
-                        Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, "New Serial")
-                            Return True
-                        Case Else
-                            Return False
-                    End Select
-                End If
-            End If
+            Select Case True
+                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Replace_Asset)
+                    Return True
+                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Replace_Serial)
+                    Return True
+                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, sibi_request_items.New_Asset)
+                    Return True
+                Case RequestItemsGrid.CurrentCell.ColumnIndex = GetColIndex(RequestItemsGrid, sibi_request_items.New_Serial)
+                    Return True
+                Case Else
+                    Return False
+            End Select
             Return False
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -925,18 +930,61 @@ VALUES
         Try
             Dim ColIndex As Integer = RequestItemsGrid.CurrentCell.ColumnIndex
             Select Case True
-                Case ColIndex = GetColIndex(RequestItemsGrid, "Replace Asset")
+                Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Replace_Asset)
                     LookupDevice(Me, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
-                Case ColIndex = GetColIndex(RequestItemsGrid, "Replace Serial")
+                Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Replace_Serial)
                     LookupDevice(Me, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
-                Case ColIndex = GetColIndex(RequestItemsGrid, "New Asset")
+                Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.New_Asset)
                     LookupDevice(Me, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
-                Case ColIndex = GetColIndex(RequestItemsGrid, "New Serial")
+                Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.New_Serial)
                     LookupDevice(Me, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
             End Select
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
+    End Sub
+    Private Sub tsmPopFA_Click(sender As Object, e As EventArgs) Handles tsmPopFA.Click
+        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+        Try
+            If ValidColumn() Then
+                PopulateFromFA(RequestItemsGrid.CurrentCell.OwningColumn.Name)
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
+    End Sub
+    Private Sub PopulateFromFA(ColumnName As String)
+        Select Case ColumnName
+            Case sibi_request_items.New_Serial
+                Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
+                Dim Serial = MunisFunc.Get_SerialFromAsset(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.New_Asset))
+                If Serial <> "" Then
+                    AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.New_Serial, Serial, sibi_request_items.Item_UID, ItemUID)
+                    RefreshRequest()
+                End If
+            Case sibi_request_items.New_Asset
+                Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
+                Dim Asset = MunisFunc.Get_AssetFromSerial(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.New_Serial))
+                If Asset <> "" Then
+                    AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.New_Asset, Asset, sibi_request_items.Item_UID, ItemUID)
+                    RefreshRequest()
+                End If
+            Case sibi_request_items.Replace_Serial
+                Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
+                Dim Serial = MunisFunc.Get_SerialFromAsset(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Replace_Asset))
+                If Serial <> "" Then
+                    AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.Replace_Serial, Serial, sibi_request_items.Item_UID, ItemUID)
+                    RefreshRequest()
+                End If
+            Case sibi_request_items.Replace_Asset
+
+                Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
+                Dim Asset = MunisFunc.Get_AssetFromSerial(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Replace_Serial))
+                If Asset <> "" Then
+                    AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.Replace_Asset, Asset, sibi_request_items.Item_UID, ItemUID)
+                    RefreshRequest()
+                End If
+        End Select
     End Sub
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
         If Not ValidateFields() Then Exit Sub
@@ -960,7 +1008,7 @@ VALUES
         Dim blah = Message("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error", Me)
     End Sub
     Private Sub RequestItemsGrid_DefaultValuesNeeded(sender As Object, e As DataGridViewRowEventArgs) Handles RequestItemsGrid.DefaultValuesNeeded
-        e.Row.Cells("Qty").Value = 1
+        e.Row.Cells(sibi_request_items.Qty).Value = 1
     End Sub
     Private Sub CollectRequestInfo(RequestResults As DataTable, RequestItemsResults As DataTable)
         Try

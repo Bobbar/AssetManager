@@ -26,6 +26,7 @@ Partial Class SibiManageRequestForm
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.tsmPopFA = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmCopyText = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmSeparator = New System.Windows.Forms.ToolStripSeparator()
@@ -103,15 +104,22 @@ Partial Class SibiManageRequestForm
         '
         'PopupMenuItems
         '
-        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmLookupDevice, Me.tsmCopyText, Me.tsmSeparator, Me.tsmDeleteItem})
+        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmPopFA, Me.tsmLookupDevice, Me.tsmCopyText, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(153, 76)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(169, 120)
+        '
+        'tsmPopFA
+        '
+        Me.tsmPopFA.Image = Global.AssetManager.My.Resources.Resources.ImportIcon
+        Me.tsmPopFA.Name = "tsmPopFA"
+        Me.tsmPopFA.Size = New System.Drawing.Size(168, 22)
+        Me.tsmPopFA.Text = "Populate From FA"
         '
         'tsmLookupDevice
         '
         Me.tsmLookupDevice.Image = Global.AssetManager.My.Resources.Resources.SearchIcon
         Me.tsmLookupDevice.Name = "tsmLookupDevice"
-        Me.tsmLookupDevice.Size = New System.Drawing.Size(152, 22)
+        Me.tsmLookupDevice.Size = New System.Drawing.Size(168, 22)
         Me.tsmLookupDevice.Text = "Lookup Device"
         Me.tsmLookupDevice.Visible = False
         '
@@ -119,19 +127,19 @@ Partial Class SibiManageRequestForm
         '
         Me.tsmCopyText.Image = Global.AssetManager.My.Resources.Resources.CopyIcon
         Me.tsmCopyText.Name = "tsmCopyText"
-        Me.tsmCopyText.Size = New System.Drawing.Size(152, 22)
+        Me.tsmCopyText.Size = New System.Drawing.Size(168, 22)
         Me.tsmCopyText.Text = "Copy Selected"
         '
         'tsmSeparator
         '
         Me.tsmSeparator.Name = "tsmSeparator"
-        Me.tsmSeparator.Size = New System.Drawing.Size(149, 6)
+        Me.tsmSeparator.Size = New System.Drawing.Size(165, 6)
         '
         'tsmDeleteItem
         '
         Me.tsmDeleteItem.Image = Global.AssetManager.My.Resources.Resources.DeleteRedIcon
         Me.tsmDeleteItem.Name = "tsmDeleteItem"
-        Me.tsmDeleteItem.Size = New System.Drawing.Size(152, 22)
+        Me.tsmDeleteItem.Size = New System.Drawing.Size(168, 22)
         Me.tsmDeleteItem.Text = "Delete Item"
         '
         'ToolTip
@@ -721,7 +729,7 @@ Partial Class SibiManageRequestForm
         Me.tsbRefresh.Size = New System.Drawing.Size(29, 34)
         Me.tsbRefresh.ToolTipText = "Refresh"
         '
-        'frmManageRequest
+        'SibiManageRequestForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -730,7 +738,7 @@ Partial Class SibiManageRequestForm
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel4)
         Me.MinimumSize = New System.Drawing.Size(771, 443)
-        Me.Name = "frmManageRequest"
+        Me.Name = "SibiManageRequestForm"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Manage Request"
@@ -816,4 +824,5 @@ Partial Class SibiManageRequestForm
     Friend WithEvents GroupBox4 As GroupBox
     Friend WithEvents tsmCopyText As ToolStripMenuItem
     Friend WithEvents tsbRefresh As ToolStripButton
+    Friend WithEvents tsmPopFA As ToolStripMenuItem
 End Class

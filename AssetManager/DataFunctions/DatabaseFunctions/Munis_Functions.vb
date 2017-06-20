@@ -66,6 +66,20 @@ Public Class Munis_Functions
         Next
         Return Nothing
     End Function
+    Public Function Get_SerialFromAsset(AssetTag As String) As String
+        Dim value = MunisComms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_serial").ToString
+        If value IsNot Nothing Then
+            Return Trim(value)
+        End If
+        Return ""
+    End Function
+    Public Function Get_AssetFromSerial(Serial As String) As String
+        Dim value = MunisComms.Return_MSSQLValue("famaster", "fama_serial", Serial, "fama_tag") '.ToString
+        If value IsNot Nothing Then
+            Return Trim(value.ToString)
+        End If
+        Return ""
+    End Function
     Public Function Get_FY_From_Asset(AssetTag As String) As String
         Return Trim(MunisComms.Return_MSSQLValue("famaster", "fama_tag", AssetTag, "fama_fisc_yr").ToString)
     End Function
