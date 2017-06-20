@@ -11,7 +11,6 @@ Public Class ViewDeviceForm
     Public MunisUser As Emp_Info = Nothing
     Private OldData As New Device_Info
     Private bolGridFilling As Boolean = False
-    Private MyPingHostname As String = Nothing
     Private DeviceHostname As String = Nothing
     Private MyPingVis As PingVis
     Private intFailedPings As Integer = 0
@@ -207,7 +206,6 @@ Public Class ViewDeviceForm
                 DataGridHistory.ClearSelection()
                 bolGridFilling = False
                 DeviceHostname = "D" & CurrentViewDevice.strSerial & "." & Domain
-                MyPingHostname = DeviceHostname
                 CheckRDP()
                 tmr_RDPRefresher.Enabled = True
             Else
@@ -780,7 +778,7 @@ Public Class ViewDeviceForm
     Private Sub CheckRDP()
         Try
             If CurrentViewDevice.strOSVersion.Contains("WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
-                If MyPingVis Is Nothing Then MyPingVis = New PingVis(DirectCast(cmdShowIP, Control), MyPingHostname)
+                If MyPingVis Is Nothing Then MyPingVis = New PingVis(DirectCast(cmdShowIP, Control), DeviceHostname)
                 If MyPingVis.CurrentResult IsNot Nothing Then
                     If MyPingVis.CurrentResult.Status = NetworkInformation.IPStatus.Success Then
                         SetupNetTools(MyPingVis.CurrentResult)
