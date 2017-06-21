@@ -1,7 +1,13 @@
 ﻿Imports System.Environment
 Module Paths
-    Public strLogDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
+    Public strAppDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
     Public strLogName As String = "log.log"
-    Public strLogPath As String = strLogDir & strLogName
-    Public DownloadPath As String = strLogDir & "temp\"
+    Public strLogPath As String = strAppDir & strLogName
+    Public DownloadPath As String = strAppDir & "temp\"
+
+
+    Public ReadOnly strSQLiteDBName As String = "cache.db"
+    Public ReadOnly strSQLitePath As String = strAppDir & "SQLiteCache\" & strSQLiteDBName
+    Public ReadOnly strSQLiteDir As String = strAppDir & "SQLiteCache\"
+
 End Module

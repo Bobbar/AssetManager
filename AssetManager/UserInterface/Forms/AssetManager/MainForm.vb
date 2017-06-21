@@ -37,6 +37,7 @@ Public Class MainForm
             InitDBControls()
             Clear_All()
             TestDBWarning()
+            RefreshLocalDBCache()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             EndProgram()

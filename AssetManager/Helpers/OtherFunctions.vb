@@ -24,7 +24,7 @@ Module OtherFunctions
         Dim infoReader As FileInfo
         infoReader = My.Computer.FileSystem.GetFileInfo(strLogPath)
         If Not File.Exists(strLogPath) Then
-            Dim di As DirectoryInfo = Directory.CreateDirectory(strLogDir)
+            Dim di As DirectoryInfo = Directory.CreateDirectory(strAppDir)
             Using sw As StreamWriter = File.CreateText(strLogPath)
                 sw.WriteLine(DateStamp & ": Log Created...")
                 sw.WriteLine(DateStamp & ": " & Message)
