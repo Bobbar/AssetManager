@@ -17,4 +17,5 @@
     Public MunisFunc As New Munis_Functions
     Public AssetFunc As New AssetManager_Functions
     Public FTPFunc As New FTP_Functions
+    Public DBFunc As New DBWrapper
 End Module

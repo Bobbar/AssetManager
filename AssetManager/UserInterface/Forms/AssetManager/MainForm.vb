@@ -5,11 +5,12 @@ Imports System.DirectoryServices.AccountManagement
 Imports System.Threading
 Imports System.Deployment.Application
 Imports System.Net
+Imports System.Data.Common
 Public Class MainForm
     Private Const strShowAllQry As String = "SELECT * FROM " & devices.TableName & " ORDER BY " & devices.Input_DateTime & " DESC"
     Private bolGridFilling As Boolean = False
     Private strServerTime As String = Now.ToString
-    Private LastCommand As MySqlCommand
+    Private LastCommand As DbCommand
     Private MyLiveBox As New LiveBox(Me)
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyWindowList As New WindowList(Me)
@@ -37,7 +38,6 @@ Public Class MainForm
             InitDBControls()
             Clear_All()
             TestDBWarning()
-            RefreshLocalDBCache()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             EndProgram()
@@ -121,28 +121,27 @@ Public Class MainForm
         End If
     End Sub
     Private Sub ShowAll()
-        Dim cmd As New MySqlCommand
-        cmd.CommandText = strShowAllQry
+        Dim cmd = DBFunc.GetCommand(strShowAllQry)
         StartBigQuery(cmd)
     End Sub
     Public Sub RefreshCurrent()
         StartBigQuery(LastCommand)
     End Sub
-    Private Sub StartBigQuery(QryCommand As Object)
+    Private Sub StartBigQuery(QryCommand As DbCommand)
         If Not BigQueryWorker.IsBusy Then
             StatusBar("Request sent to background...")
             StripSpinner.Visible = True
             BigQueryWorker.RunWorkerAsync(QryCommand)
         End If
     End Sub
-    Private Sub BigQueryDone(Results As DataTable)
+    Private Sub BigQueryDone(ByRef Results As DataTable)
         SendToGrid(Results)
         DoneWaiting()
     End Sub
     Private Sub DisplayRecords(NumberOf As Integer)
         lblRecords.Text = "Records: " & NumberOf
     End Sub
-    Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
+    Private Sub SendToGrid(ByRef Results As DataTable) ' Data() As Device_Info)
         Try
             If Results Is Nothing Then Exit Sub
             StatusBar("Building Grid...")
@@ -180,6 +179,7 @@ Public Class MainForm
             bolGridFilling = False
             DisplayRecords(table.Rows.Count)
             table.Dispose()
+            Results.Dispose()
             DoneWaiting()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -206,56 +206,61 @@ Public Class MainForm
     End Sub
 
     Public Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
-        Dim cmd As New MySqlCommand
-        Dim strStartQry As String
-        If chkHistorical.Checked Then
-            strStartQry = "SELECT * FROM " & historical_dev.TableName & " WHERE "
-        Else
-            strStartQry = "SELECT * FROM " & devices.TableName & " WHERE "
-        End If
-        Dim strDynaQry As String = ""
-        Dim SearchValCol As List(Of SearchVal) = BuildSearchList()
-        For Each fld As SearchVal In SearchValCol
-            If Not IsNothing(fld.Value) Then
-                If fld.Value.ToString <> "" Then
-                    If TypeOf fld.Value Is Boolean Then  'trackable boolean. if false, dont add it.
-                        Dim bolTrackable As Boolean = CType(fld.Value, Boolean)
-                        If bolTrackable Then
-                            strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE CONCAT('%', @" + fld.FieldName + ", '%') AND"
-                            cmd.Parameters.AddWithValue("@" & fld.FieldName, Convert.ToInt32(fld.Value))
+        Try
+            Dim cmd = DBFunc.GetCommand()
+            Dim strStartQry As String
+            If chkHistorical.Checked Then
+                strStartQry = "SELECT * FROM " & historical_dev.TableName & " WHERE "
+            Else
+                strStartQry = "SELECT * FROM " & devices.TableName & " WHERE "
+            End If
+            Dim strDynaQry As String = ""
+            Dim SearchValCol As List(Of SearchVal) = BuildSearchList()
+            For Each fld As SearchVal In SearchValCol
+                If Not IsNothing(fld.Value) Then
+                    If fld.Value.ToString <> "" Then
+                        If TypeOf fld.Value Is Boolean Then  'trackable boolean. if false, dont add it.
+                            Dim bolTrackable As Boolean = CType(fld.Value, Boolean)
+                            If bolTrackable Then
+                                strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE @" + fld.FieldName + " AND"
+                                cmd.AddParameterWithValue("@" & fld.FieldName, Convert.ToInt32(fld.Value))
+                            End If
+                        Else
+                            Select Case fld.FieldName 'use the fixed fields with EQUALS operator instead of LIKE
+                                Case devices.OSVersion
+                                    strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                    cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
+                                Case devices.EQType
+                                    strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                    cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
+                                Case devices.Location
+                                    strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                    cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
+                                Case devices.Status
+                                    strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+                                    cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
+                                Case Else
+                                    strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE @" + fld.FieldName + " AND"
+                                    Dim Value As String = "%" & fld.Value.ToString & "%"
+                                    cmd.AddParameterWithValue("@" & fld.FieldName, Value)
+                            End Select
                         End If
-                    Else
-                        Select Case fld.FieldName 'use the fixed fields with EQUALS operator instead of LIKE
-                            Case devices.OSVersion
-                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case devices.EQType
-                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case devices.Location
-                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case devices.Status
-                                strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                            Case Else
-                                strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE CONCAT('%', @" + fld.FieldName + ", '%') AND"
-                                cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
-                        End Select
                     End If
                 End If
+            Next
+            If strDynaQry = "" Then
+                Dim blah = Message("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing", Me)
+                Exit Sub
             End If
-        Next
-        If strDynaQry = "" Then
-            Dim blah = Message("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing", Me)
-            Exit Sub
-        End If
-        Dim strQry = strStartQry & strDynaQry
-        If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
-            strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
-        End If
-        cmd.CommandText = strQry
-        StartBigQuery(cmd)
+            Dim strQry = strStartQry & strDynaQry
+            If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
+                strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
+            End If
+            cmd.CommandText = strQry
+            StartBigQuery(cmd)
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
@@ -294,16 +299,10 @@ Public Class MainForm
         StatusLabel.Invalidate()
     End Sub
     Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
-        Using LocalSQLComm As New MySQL_Comms,
-                ds As New DataSet,
-                da As New MySqlDataAdapter,
-                QryComm As MySqlCommand = DirectCast(e.Argument, MySqlCommand)
-            LastCommand = QryComm
-            QryComm.Connection = LocalSQLComm.Connection
+        Using QryComm = DirectCast(e.Argument, DbCommand)
             BigQueryWorker.ReportProgress(1)
-            da.SelectCommand = QryComm
-            da.Fill(ds)
-            e.Result = ds.Tables(0)
+            LastCommand = QryComm
+            e.Result = DBFunc.DataTableFromCommand(QryComm)
         End Using
     End Sub
     Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
@@ -339,7 +338,7 @@ Public Class MainForm
                                                       Try
                                                           Dim CanPing As Boolean = My.Computer.Network.Ping(strServerIP)
                                                           If CanPing Then
-                                                              Using LocalSQLComm As New MySQL_Comms(True) ',
+                                                              Using LocalSQLComm As New MySQL_Comms(True)
                                                                   Dim cmd = LocalSQLComm.Return_SQLCommand("SELECT NOW()")
                                                                   Dim strTime As String = cmd.ExecuteScalar.ToString
                                                                   strServerTime = strTime

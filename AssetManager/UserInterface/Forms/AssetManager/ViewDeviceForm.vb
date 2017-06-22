@@ -65,9 +65,7 @@ Public Class ViewDeviceForm
         AttachmentTool.ToolTipText = "Attachments " + AttachmentTool.Text
     End Sub
     Private Sub GetCurrentValues()
-        Using SQLComms As New MySQL_Comms
-            OldData = AssetFunc.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
-        End Using
+        OldData = AssetFunc.CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
     End Sub
     Private Function GetUpdateTable(Adapter As MySqlDataAdapter) As DataTable
         Dim tmpTable = DataParser.ReturnUpdateTable(Adapter.SelectCommand.CommandText)
@@ -219,9 +217,8 @@ Public Class ViewDeviceForm
     End Sub
     Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
         Try
-            Using SQLComms As New MySQL_Comms,
-                    DeviceResults = SQLComms.Return_SQLTable("Select * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & DeviceUID & "'"),
-                    HistoricalResults = SQLComms.Return_SQLTable("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
+            Using DeviceResults = DBFunc.DataTableFromQueryString("Select * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & DeviceUID & "'"),
+                    HistoricalResults = DBFunc.DataTableFromQueryString("Select * FROM " & historical_dev.TableName & " WHERE " & historical_dev.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & historical_dev.ActionDateTime & " DESC")
                 If DeviceResults.Rows.Count < 1 Then
                     CloseChildren(Me)
                     CurrentViewDevice = Nothing
@@ -340,7 +337,7 @@ Public Class ViewDeviceForm
     Public Sub ViewTracking(strGUID As String)
         Dim strQry = "Select * FROM " & trackable.TableName & ", " & devices.TableName & " WHERE " & trackable.DeviceUID & " = " & devices.DeviceUID & " And " & trackable.DeviceUID & " = '" & strGUID & "' ORDER BY " & trackable.DateStamp & " DESC"
         Try
-            Using SQLComms As New MySQL_Comms, Results As DataTable = SQLComms.Return_SQLTable(strQry)
+            Using Results As DataTable = DBFunc.DataTableFromQueryString(strQry)
                 If Results.Rows.Count > 0 Then
                     CollectCurrentTracking(Results)
                     SendToTrackGrid(TrackingGrid, Results)

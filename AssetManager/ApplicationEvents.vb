@@ -15,9 +15,16 @@ Namespace My
                 SplashScreenForm.Show()
                 Logger("Starting AssetManager...")
                 Status("Checking Server Connection...")
-                Using SQLComms As New MySQL_Comms
+                Using SQLComms As New MySQL_Comms(True)
+                    '   OfflineMode = Not SQLComms.OpenConnection
                     'check connection
                 End Using
+                If Not OfflineMode Then
+                    Status("Building Cache DB...")
+                    RefreshLocalDBCache()
+                Else
+                    'Notify user
+                End If
                 Status("Loading Indexes...")
                 BuildIndexes()
                 Status("Checking Access Level...")

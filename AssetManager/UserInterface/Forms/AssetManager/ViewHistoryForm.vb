@@ -51,7 +51,7 @@ Public Class ViewHistoryForm
         Waiting()
         Try
             Dim strQry = "Select * FROM " & historical_dev.TableName & " WHERE  " & historical_dev.History_Entry_UID & " = '" & EntryUID & "'"
-            Using SQLComms As New MySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQry)
+            Using results As DataTable = DBFunc.DataTableFromQueryString(strQry)
                 FillControls(results)
                 Show()
                 Activate()

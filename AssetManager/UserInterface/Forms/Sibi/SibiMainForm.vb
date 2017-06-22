@@ -1,9 +1,10 @@
 ﻿Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
+Imports System.Data.Common
 Public Class SibiMainForm
     Private bolGridFilling As Boolean = False
     Private MyWindowList As New WindowList(Me)
-    Private LastCmd As MySqlCommand
+    Private LastCmd As DbCommand
     Private bolRebuildingCombo As Boolean = False
     Public Sub RefreshResults()
         ExecuteCmd(LastCmd)
@@ -49,7 +50,7 @@ Public Class SibiMainForm
         Return tmpList
     End Function
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
-        Dim cmd As New MySqlCommand
+        Dim cmd = DBFunc.GetCommand()
         Dim strStartQry As String
         strStartQry = "SELECT * FROM " & sibi_requests.TableName & " WHERE"
         Dim strDynaQry As String = ""
@@ -57,8 +58,9 @@ Public Class SibiMainForm
         For Each fld As SearchVal In SearchValCol
             If Not IsNothing(fld.Value) Then
                 If fld.Value.ToString <> "" Then
-                    strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE CONCAT('%', @" + fld.FieldName + ", '%') AND"
-                    cmd.Parameters.AddWithValue("@" & fld.FieldName, fld.Value)
+                    strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE @" + fld.FieldName + " AND"
+                    Dim Value As String = "%" & fld.Value.ToString & "%"
+                    cmd.AddParameterWithValue("@" & fld.FieldName, Value)
                 End If
             End If
         Next
@@ -73,15 +75,11 @@ Public Class SibiMainForm
         cmd.CommandText = strQry
         ExecuteCmd(cmd)
     End Sub
-    Private Sub ExecuteCmd(cmd As MySqlCommand)
+    Private Sub ExecuteCmd(cmd As DbCommand)
         Try
             LastCmd = cmd
-            Using SQLComms As New MySQL_Comms, QryComm As MySqlCommand = cmd, ds As New DataSet, da As New MySqlDataAdapter
-                QryComm.Connection = SQLComms.Connection
-                da.SelectCommand = QryComm
-                da.Fill(ds)
-                SendToGrid(ds.Tables(0))
-            End Using
+            SendToGrid(DBFunc.DataTableFromCommand(cmd))
+
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             ' ConnectionReady()
@@ -126,14 +124,19 @@ Public Class SibiMainForm
     Private Function SetDisplayYears() As Boolean
         Try
             bolRebuildingCombo = True
-            Dim strQRY As String = "SELECT DISTINCT YEAR(" & sibi_requests.DateStamp & ") FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.DateStamp & " DESC"
-            Using SQLComms As New MySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQRY)
-                '  If Not SQLComms.ConnectionReady Then Return False
+            Dim strQRY As String = "SELECT DISTINCT " & sibi_requests.DateStamp & " FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.DateStamp & " DESC"
+            Debug.Print(strQRY)
+            Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
                 cmbDisplayYear.Items.Clear()
                 cmbDisplayYear.Items.Add("All")
+                Dim Years As New List(Of String)
                 For Each r As DataRow In results.Rows
-                    cmbDisplayYear.Items.Add(r.Item("YEAR(" & sibi_requests.DateStamp & ")"))
+                    Dim yr = YearFromDate(DateTime.Parse(r.Item(sibi_requests.DateStamp).ToString))
+                    If Not Years.Contains(yr) Then
+                        Years.Add(yr)
+                    End If
                 Next
+                cmbDisplayYear.DataSource = Years
                 cmbDisplayYear.SelectedIndex = 0
                 bolRebuildingCombo = False
                 Return True
@@ -144,14 +147,12 @@ Public Class SibiMainForm
         End Try
     End Function
     Private Sub ShowAll(Optional Year As String = "")
-        Using SQLComms As New MySQL_Comms
-            If Year = "" Then Year = cmbDisplayYear.Text
-            If Year = "All" Then
-                ExecuteCmd(SQLComms.Return_SQLCommand("SELECT * FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
-            Else
-                ExecuteCmd(SQLComms.Return_SQLCommand("SELECT * FROM " & sibi_requests.TableName & " WHERE YEAR(" & sibi_requests.DateStamp & ") = " & Year & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
-            End If
-        End Using
+        If Year = "" Then Year = cmbDisplayYear.Text
+        If Year = "All" Then
+            ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
+        Else
+            ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & sibi_requests.TableName & " WHERE YEAR(" & sibi_requests.DateStamp & ") = " & Year & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
+        End If
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
         Dim NewRequest As New SibiManageRequestForm(Me)
