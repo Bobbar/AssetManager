@@ -331,6 +331,10 @@ Public Class MainForm
         ResultGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
     End Sub
     Private Async Sub ConnectionWatchDog()
+        If OfflineMode Then
+            StatusStrip1.BackColor = colFormBackColor
+            ConnectStatus("Cached Mode", Color.Black)
+        End If
         Try
             Do Until ProgramEnding
                 bolServerPinging = Await Task.Run(Function()
@@ -350,13 +354,26 @@ Public Class MainForm
                                                       End Try
                                                   End Function)
                 If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
-                If bolServerPinging Then
+                If bolServerPinging And Not OfflineMode Then
                     ConnectStatus("Connected", Color.Green)
                     StatusStrip1.BackColor = colFormBackColor
-                Else
+                ElseIf Not bolServerPinging And Not OfflineMode Then
                     StatusStrip1.BackColor = colStatusBarProblem
                     ConnectStatus("Offline", Color.Red)
+                    OfflineMode = True
+                ElseIf Not bolServerPinging And OfflineMode Then
+                    StatusStrip1.BackColor = colFormBackColor
+                    ConnectStatus("Cached Mode", Color.Black)
                 End If
+                If OfflineMode And bolServerPinging Then
+                    OfflineMode = False
+                    ConnectStatus("Connected", Color.Green)
+                    StatusStrip1.BackColor = colFormBackColor
+                    StatusBar("Connection restored. Rebuilding DB Cache...")
+                    RefreshLocalDBCache()
+                    StatusBar("Idle...")
+                End If
+
             Loop
         Catch
             ConnectionWatchDog()

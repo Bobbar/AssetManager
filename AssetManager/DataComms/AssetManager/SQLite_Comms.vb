@@ -3,7 +3,7 @@ Imports System.IO
 Public Class SQLite_Comms : Implements IDisposable
     Private SQLiteConnectString As String = "Data Source=" & strSQLitePath
     Private ConnectionException As Exception
-    Public Connection As SQLiteConnection = NewConnection()
+    Public Connection As New SQLiteConnection ' = NewConnection()
     Sub New(Optional OpenConnectionOnCall As Boolean = True)
         If OpenConnectionOnCall Then
             If Not OpenConnection() Then
@@ -29,10 +29,12 @@ Public Class SQLite_Comms : Implements IDisposable
         Try
             Logger("Rebuilding local DB cache...")
             CloseConnection()
-            If File.Exists(strSQLiteDir) Then
-                File.Delete(strSQLitePath)
-            Else
+            GC.Collect()
+            If Not File.Exists(strSQLiteDir) Then
                 Dim di As DirectoryInfo = Directory.CreateDirectory(strSQLiteDir)
+            End If
+            If File.Exists(strSQLitePath) Then
+                File.Delete(strSQLitePath)
             End If
             SQLiteConnection.CreateFile(strSQLitePath)
             Connection = NewConnection()
@@ -42,6 +44,12 @@ Public Class SQLite_Comms : Implements IDisposable
             AddTable(trackable.TableName)
             AddTable(sibi_requests.TableName)
             AddTable(sibi_request_items.TableName)
+            AddTable(sibi_notes.TableName)
+            AddTable(dev_codes.TableName)
+            AddTable(sibi_codes.TableName)
+            AddTable("munis_codes")
+            AddTable(security.TableName)
+            AddTable(users.TableName)
             Logger("Local DB cache complete...")
         Catch ex As Exception
             Logger("Errors during cache rebuild!")
@@ -56,8 +64,7 @@ Public Class SQLite_Comms : Implements IDisposable
     Private Sub CreateCacheTable(TableName As String)
         Try
             Dim Statement = GetTableCreateStatement(TableName)
-            Debug.Print(Statement)
-            ' ConvertStatement(Statement)
+            ' Debug.Print(Statement)
 
             Dim qry As String = ConvertStatement(Statement)
             Using cmd As New SQLiteCommand(qry, Connection)
@@ -108,7 +115,7 @@ Public Class SQLite_Comms : Implements IDisposable
         Connection.Close()
         Connection.Dispose()
     End Sub
-    Private Function NewConnection() As SQLiteConnection
+    Public Function NewConnection() As SQLiteConnection
         Return New SQLiteConnection(SQLiteConnectString)
     End Function
     ''' <summary>

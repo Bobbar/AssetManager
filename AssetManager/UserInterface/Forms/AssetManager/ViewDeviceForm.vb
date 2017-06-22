@@ -61,8 +61,11 @@ Public Class ViewDeviceForm
         Return " - " + Device.strCurrentUser + " - " + Device.strAssetTag + " - " + Device.strDescription
     End Function
     Public Sub SetAttachCount()
-        AttachmentTool.Text = "(" + AssetFunc.GetAttachmentCount(CurrentViewDevice.strGUID, New dev_attachments).ToString + ")"
-        AttachmentTool.ToolTipText = "Attachments " + AttachmentTool.Text
+        If Not OfflineMode Then
+            AttachmentTool.Text = "(" + AssetFunc.GetAttachmentCount(CurrentViewDevice.strGUID, New dev_attachments).ToString + ")"
+            AttachmentTool.ToolTipText = "Attachments " + AttachmentTool.Text
+        End If
+
     End Sub
     Private Sub GetCurrentValues()
         OldData = AssetFunc.CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))

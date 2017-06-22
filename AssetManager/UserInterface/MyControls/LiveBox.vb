@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
+Imports System.Data.Common
 Public Class LiveBox : Implements IDisposable
     Private RowLimit As Integer = 30
     Private WithEvents HideTimer As Timer
@@ -73,9 +74,9 @@ Public Class LiveBox : Implements IDisposable
         strPrevSearchString = SearchString
         Dim Results = Await Task.Run(Function()
                                          Dim strQry As String
-                                         strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE CONCAT('%', @Search_Value, '%') GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
-                                         Using MySQLComms As New MySQL_Comms, tmpResults As New DataTable, da As New MySqlDataAdapter, cmd As MySqlCommand = MySQLComms.Return_SQLCommand(strQry)
-                                             cmd.Parameters.AddWithValue("@Search_Value", SearchString)
+                                         strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE  @Search_Value  GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
+                                         Using tmpResults As New DataTable, da = DBFunc.GetAdapter, cmd = DBFunc.GetCommand(strQry)
+                                             cmd.AddParameterWithValue("@Search_Value", "%" & SearchString & "%")
                                              da.SelectCommand = cmd
                                              da.Fill(tmpResults)
                                              Return tmpResults

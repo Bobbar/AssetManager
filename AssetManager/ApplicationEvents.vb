@@ -11,20 +11,40 @@ Namespace My
     Partial Friend Class MyApplication
 
         Private Sub LoadSplash(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
-            Try
-                SplashScreenForm.Show()
+            '  Try
+            SplashScreenForm.Show()
                 Logger("Starting AssetManager...")
                 Status("Checking Server Connection...")
-                Using SQLComms As New MySQL_Comms(True)
-                    '   OfflineMode = Not SQLComms.OpenConnection
-                    'check connection
+            Using SQLComms As New MySQL_Comms(False)
+                OfflineMode = Not SQLComms.OpenConnection
+                'check connection
+            End Using
+            If Not OfflineMode Then
+                Status("Building Cache DB...")
+                RefreshLocalDBCache()
+            Else
+                Status("Checking Local Cache...")
+                Using SQLiteComm As New SQLite_Comms(False)
+                    If SQLiteComm.OpenConnection Then
+                        CacheAvailable = True
+                    Else
+                        CacheAvailable = False
+
+                        '   OfflineMode = True
+                    End If
                 End Using
-                If Not OfflineMode Then
-                    Status("Building Cache DB...")
-                    RefreshLocalDBCache()
-                Else
-                    'Notify user
+
+                'Notify user
+            End If
+
+                If OfflineMode And Not CacheAvailable Then
+                    Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", vbOKOnly + vbExclamation, "No Connection")
+                    e.Cancel = True
+                    EndProgram()
+                ElseIf OfflineMode And CacheAvailable Then
+                    Message("Could not connect to server. Running from local DB cache.", vbOKOnly + vbExclamation, "Cached Mode")
                 End If
+
                 Status("Loading Indexes...")
                 BuildIndexes()
                 Status("Checking Access Level...")
@@ -35,11 +55,18 @@ Namespace My
                     EndProgram()
                 End If
                 Status("Ready!")
-            Catch ex As Exception
-                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-                e.Cancel = True
-                EndProgram()
-            End Try
+            'Catch ex As Exception
+            '    ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+
+            '    Using SQLiteComm As New SQLite_Comms(False)
+            '        If SQLiteComm.OpenConnection Then
+            '            OfflineMode = True
+            '        End If
+            '    End Using
+
+            '    'e.Cancel = True
+            '    'EndProgram()
+            'End Try
         End Sub
         Public Sub Status(Text As String)
             SplashScreenForm.lblStatus.Text = Text

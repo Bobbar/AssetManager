@@ -84,7 +84,7 @@ Public Class AssetManager_Functions
     Public Function Get_SQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
         Dim sqlQRY As String = "SELECT " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
         Try
-            Using SQLComms As New MySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(sqlQRY)
+            Using cmd = DBFunc.GetCommand(sqlQRY)
                 Return Convert.ToString(cmd.ExecuteScalar)
             End Using
         Catch ex As Exception
@@ -158,9 +158,10 @@ Public Class AssetManager_Functions
     Public Function BuildIndex(CodeType As String, TypeName As String) As Combo_Data()
         Try
             Dim tmpArray() As Combo_Data
-            Dim strQRY = "SELECT * FROM {OJ " & CodeType & " LEFT OUTER JOIN munis_codes on " & CodeType & ".db_value = munis_codes.asset_man_code} WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
+            'Dim strQRY = "SELECT * FROM {OJ " & CodeType & " LEFT OUTER JOIN munis_codes on " & CodeType & ".db_value = munis_codes.asset_man_code} WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
+            Dim strQRY = "SELECT * FROM " & CodeType & " LEFT OUTER JOIN munis_codes on " & CodeType & ".db_value = munis_codes.asset_man_code WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
             Dim row As Integer
-            Using SQLComms As New MySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQRY)
+            Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
                 ReDim tmpArray(0)
                 row = -1
                 For Each r As DataRow In results.Rows
@@ -210,13 +211,11 @@ Public Class AssetManager_Functions
         Update_SQLValue(users.TableName, users.AccessLevel, User.intAccessLevel.ToString, users.UID, User.strUID)
     End Sub
     Public Function FindDevice(SearchVal As String, Type As FindDevType) As Device_Info
-        Using SQLComms As New MySQL_Comms
-            If Type = FindDevType.AssetTag Then
-                Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.AssetTag & "='" & SearchVal & "'"))
-            ElseIf Type = FindDevType.Serial Then
-                Return CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.Serial & "='" & SearchVal & "'"))
-            End If
-        End Using
+        If Type = FindDevType.AssetTag Then
+            Return CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.AssetTag & "='" & SearchVal & "'"))
+        ElseIf Type = FindDevType.Serial Then
+            Return CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.Serial & "='" & SearchVal & "'"))
+        End If
         Return Nothing
     End Function
     Public Sub AddNewEmp(EmpInfo As Emp_Info)

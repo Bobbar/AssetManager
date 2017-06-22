@@ -65,6 +65,7 @@ Public Structure Access_Info
     Public strModule As String
     Public intLevel As Integer
     Public strDesc As String
+    Public bolAvailOffline As Boolean
 End Structure
 Public Structure Update_Info
     Public strNote As String

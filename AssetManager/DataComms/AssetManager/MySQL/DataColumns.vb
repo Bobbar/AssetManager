@@ -132,6 +132,7 @@ Public Class security
     Public Const SecModule As String = "sec_module"
     Public Const AccessLevel As String = "sec_access_level"
     Public Const Description As String = "sec_desc"
+    Public Const AvailOffline As String = "sec_availoffline"
 End Class
 Public Class users
     Public Const TableName As String = "users"

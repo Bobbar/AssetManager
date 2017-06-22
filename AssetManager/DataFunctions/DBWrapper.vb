@@ -8,16 +8,20 @@ Public Class DBWrapper
                 da.SelectCommand = GetCommand(Query)
                 da.Fill(results)
                 Return results
+                conn.Close()
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
-    Public Function DataTableFromCommand(Command As DbCommand) As DataTable
+    Public Function DataTableFromCommand(ByRef Command As DbCommand) As DataTable
         Try
             Using da As DbDataAdapter = GetAdapter(), results As New DataTable
                 da.SelectCommand = Command
                 da.Fill(results)
+                Command.Connection.Close()
+                Command.Connection.Dispose()
+                Command.Dispose()
                 Return results
             End Using
         Catch ex As Exception
@@ -45,8 +49,9 @@ Public Class DBWrapper
     Public Function GetConnection() As DbConnection
         Try
             If OfflineMode Then
-                Dim SQLiteComms As New SQLite_Comms
-                Return SQLiteComms.Connection
+                Dim SQLiteComms As New SQLite_Comms(False)
+
+                Return SQLiteComms.NewConnection
             Else
                 Using MySQLComms As New MySQL_Comms()
                     Return MySQLComms.Connection

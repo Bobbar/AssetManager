@@ -151,7 +151,7 @@ Public Class SibiMainForm
         If Year = "All" Then
             ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
         Else
-            ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & sibi_requests.TableName & " WHERE YEAR(" & sibi_requests.DateStamp & ") = " & Year & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
+            ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.DateStamp & " LIKE '%" & Year & "%' ORDER BY " & sibi_requests.RequestNumber & " DESC"))
         End If
     End Sub
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click

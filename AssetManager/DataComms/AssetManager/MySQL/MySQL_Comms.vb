@@ -39,8 +39,8 @@ Public Class MySQL_Comms : Implements IDisposable
     Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5" & ";database="
     Private ConnectionException As Exception
     Public Connection As MySqlConnection = NewConnection()
-    Sub New(Optional PingOverride As Boolean = False)
-        If bolServerPinging Or PingOverride Then
+    Sub New()
+        If bolServerPinging Then
             If Not OpenConnection() Then
                 Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
                 Dispose()
@@ -50,8 +50,17 @@ Public Class MySQL_Comms : Implements IDisposable
             '  Dispose()
         End If
     End Sub
+    Sub New(OpenConnectionOnCall As Boolean)
+        If OpenConnectionOnCall Then
+            If Not OpenConnection() Then
+                Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
+                Dispose()
+            End If
+        Else
+        End If
+    End Sub
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
-        'Debug.Print("Table Hit " & Date.Now.Ticks)
+        Debug.Print("Table Hit " & Date.Now.Ticks)
         Try
             Using da As New MySqlDataAdapter, tmpTable As New DataTable
                 da.SelectCommand = New MySqlCommand(strSQLQry)
@@ -65,7 +74,7 @@ Public Class MySQL_Comms : Implements IDisposable
         End Try
     End Function
     Public Function Return_SQLReader(strSQLQry As String) As MySqlDataReader
-        'Debug.Print("Reader Hit " & Date.Now.Ticks)
+        Debug.Print("Reader Hit " & Date.Now.Ticks)
         Try
             Using cmd As New MySqlCommand(strSQLQry, Connection)
                 Return cmd.ExecuteReader
@@ -76,7 +85,7 @@ Public Class MySQL_Comms : Implements IDisposable
         End Try
     End Function
     Public Function Return_SQLCommand(Optional strSQLQry As String = "") As MySqlCommand
-        'Debug.Print("Command Hit " & Date.Now.Ticks)
+        Debug.Print("Command Hit " & Date.Now.Ticks)
         Try
             Using cmd As New MySqlCommand
                 cmd.Connection = Connection
@@ -89,7 +98,7 @@ Public Class MySQL_Comms : Implements IDisposable
         End Try
     End Function
     Public Function Return_Adapter(strSQLQry As String) As MySqlDataAdapter
-        'Debug.Print("Command Hit " & Date.Now.Ticks)
+        Debug.Print("Adapter Hit " & Date.Now.Ticks)
         Try
             Dim adapter As New MySqlDataAdapter(strSQLQry, GetConnectString)
             Dim CmdBuilder As New MySqlCommandBuilder(adapter)

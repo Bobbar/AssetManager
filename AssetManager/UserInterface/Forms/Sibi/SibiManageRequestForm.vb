@@ -50,8 +50,10 @@ Public Class SibiManageRequestForm
 
     End Sub
     Public Sub SetAttachCount()
-        cmdAttachments.Text = "(" + AssetFunc.GetAttachmentCount(CurrentRequest.strUID, New sibi_attachments).ToString + ")"
-        cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text
+        If Not OfflineMode Then
+            cmdAttachments.Text = "(" + AssetFunc.GetAttachmentCount(CurrentRequest.strUID, New sibi_attachments).ToString + ")"
+            cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text
+        End If
     End Sub
     Private Sub SetTitle()
         If MyText = "" Then
@@ -576,10 +578,10 @@ VALUES
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT * FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_request_items.Sequence
-            Using SQLComms As New MySQL_Comms
-                Dim RequestResults As DataTable = SQLComms.Return_SQLTable(strRequestQRY)
-                Dim RequestItemsResults As DataTable = SQLComms.Return_SQLTable(strRequestItemsQRY)
-                ClearAll()
+            ' Using SQLComms As New MySQL_Comms
+            Dim RequestResults As DataTable = DBFunc.DataTableFromQueryString(strRequestQRY)
+            Dim RequestItemsResults As DataTable = DBFunc.DataTableFromQueryString(strRequestItemsQRY)
+            ClearAll()
                 CollectRequestInfo(RequestResults, RequestItemsResults)
                 DataParser.FillDBFields(RequestResults)
                 SendToGrid(RequestItemsResults)
@@ -593,7 +595,7 @@ VALUES
                 SetReqStatus(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year)
                 CheckForPO()
                 SetPOStatus(CurrentRequest.strPO)
-            End Using
+            ' End Using
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 Dispose()
@@ -607,7 +609,7 @@ VALUES
     Private Sub LoadNotes(RequestUID As String)
         Try
             Dim strPullNotesQry As String = "SELECT * FROM " & sibi_notes.TableName & " WHERE " & sibi_notes.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_notes.DateStamp & " DESC"
-            Using SQLComms As New MySQL_Comms, table As New DataTable, Results As DataTable = SQLComms.Return_SQLTable(strPullNotesQry)
+            Using table As New DataTable, Results As DataTable = DBFunc.DataTableFromQueryString(strPullNotesQry)
                 Dim intPreviewChars As Integer = 50
                 table.Columns.Add("Date Stamp")
                 table.Columns.Add("Preview")
@@ -715,7 +717,7 @@ VALUES
         End If
     End Sub
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
-        If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
+        If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen() Then
             If CurrentRequest.strUID <> "" Then
                 Dim NewAttach As New AttachmentsForm(Me, New sibi_attachments, CurrentRequest)

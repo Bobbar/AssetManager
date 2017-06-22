@@ -83,7 +83,7 @@ Module SecurityFunctions
     Public Sub GetUserAccess()
         Try
             Dim strQRY = "SELECT * FROM " & users.TableName & " WHERE " & users.UserName & "='" & strLocalUser & "' LIMIT 1"
-            Using SQLComms As New MySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQRY)
+            Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
                 If results.Rows.Count > 0 Then
                     Dim r As DataRow = results.Rows(0)
                     UserAccess.strUsername = r.Item(users.UserName).ToString
@@ -102,7 +102,7 @@ Module SecurityFunctions
         Try
             Dim strQRY = "SELECT * FROM " & security.TableName & " ORDER BY " & security.AccessLevel & "" ' WHERE usr_username='" & strLocalUser & "'"
             Dim rows As Integer
-            Using SQLComms As New MySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQRY)
+            Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
                 ReDim AccessLevels(0)
                 rows = -1
                 For Each r As DataRow In results.Rows
@@ -111,6 +111,7 @@ Module SecurityFunctions
                     AccessLevels(rows).intLevel = CInt(r.Item(security.AccessLevel))
                     AccessLevels(rows).strModule = r.Item(security.SecModule).ToString
                     AccessLevels(rows).strDesc = r.Item(security.Description).ToString
+                    AccessLevels(rows).bolAvailOffline = CBool(r.Item(security.AvailOffline))
                 Next
             End Using
         Catch ex As Exception
@@ -131,7 +132,15 @@ Module SecurityFunctions
             calc_level = UsrLevel And mask
             If calc_level <> 0 Then
                 If AccessLevels(levels).strModule = recModule Then
-                    Return True
+                    If OfflineMode Then
+                        If AccessLevels(levels).bolAvailOffline Then
+                            Return True
+                        Else
+                            Return False
+                        End If
+                    Else
+                        Return True
+                    End If
                 End If
             End If
             mask = mask << 1
@@ -140,7 +149,11 @@ Module SecurityFunctions
     End Function
     Public Function CheckForAccess(recModule As String) As Boolean
         If Not CanAccess(recModule) Then
-            Dim blah = Message("You do not have the required rights for this function. Must have access to '" & recModule & "'.", vbOKOnly + vbExclamation, "Access Denied")
+            If OfflineMode Then
+                Message("You cannot access this function. Some features are disabled while running in cached mode.", vbOKOnly + vbExclamation, "Access Denied/Disabled")
+            Else
+                Message("You do not have the required rights for this function. Must have access to '" & recModule & "'.", vbOKOnly + vbExclamation, "Access Denied")
+            End If
             Return False
         Else
             Return True
