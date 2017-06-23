@@ -221,6 +221,10 @@ Module ErrorHandling
                 Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
                 Dim blah = Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "ERROR")
                 Return False
+            Case 53
+                Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
+                Message("Could not connect to MUNIS database.", vbOKOnly + vbExclamation, "Network Error")
+                Return True
             Case Else
                 UnHandledError(ex, ex.Number, Method)
         End Select

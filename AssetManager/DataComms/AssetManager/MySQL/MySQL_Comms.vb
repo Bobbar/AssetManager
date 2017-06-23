@@ -38,7 +38,7 @@ Public Class MySQL_Comms : Implements IDisposable
     Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
     Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5" & ";database="
     Private ConnectionException As Exception
-    Public Connection As MySqlConnection = NewConnection()
+    Public Connection As MySqlConnection ' = NewConnection()
     Sub New()
         If bolServerPinging Then
             If Not OpenConnection() Then
@@ -108,7 +108,7 @@ Public Class MySQL_Comms : Implements IDisposable
             Return Nothing
         End Try
     End Function
-    Private Function NewConnection() As MySqlConnection
+    Public Function NewConnection() As MySqlConnection
         Return New MySqlConnection(GetConnectString)
     End Function
     Private Function GetConnectString() As String
@@ -122,6 +122,10 @@ Public Class MySQL_Comms : Implements IDisposable
     End Function
     Public Function OpenConnection() As Boolean
         Try
+            If Connection Is Nothing Then
+                Connection = NewConnection()
+                Connection.Open()
+            End If
             If Connection.State <> ConnectionState.Open Then
                 CloseConnection()
                 Connection = NewConnection()
@@ -140,8 +144,11 @@ Public Class MySQL_Comms : Implements IDisposable
         End Try
     End Function
     Public Sub CloseConnection()
-        Connection.Close()
-        Connection.Dispose()
+        If Connection IsNot Nothing Then
+            Connection.Close()
+            Connection.Dispose()
+        End If
+
     End Sub
 End Class
 

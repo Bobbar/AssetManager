@@ -84,9 +84,7 @@ Public Class AssetManager_Functions
     Public Function Get_SQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
         Dim sqlQRY As String = "SELECT " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
         Try
-            Using cmd = DBFunc.GetCommand(sqlQRY)
-                Return Convert.ToString(cmd.ExecuteScalar)
-            End Using
+            Return Convert.ToString(DBFunc.ExecuteScalarFromQueryString(sqlQRY).ToString)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Throw ex

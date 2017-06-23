@@ -578,24 +578,20 @@ VALUES
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT * FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_request_items.Sequence
-            ' Using SQLComms As New MySQL_Comms
             Dim RequestResults As DataTable = DBFunc.DataTableFromQueryString(strRequestQRY)
             Dim RequestItemsResults As DataTable = DBFunc.DataTableFromQueryString(strRequestItemsQRY)
             ClearAll()
-                CollectRequestInfo(RequestResults, RequestItemsResults)
-                DataParser.FillDBFields(RequestResults)
-                SendToGrid(RequestItemsResults)
-                LoadNotes(CurrentRequest.strUID)
-                'RequestItemsGrid.ReadOnly = True
-                DisableControls(Me)
-                SetTitle()
-                SetAttachCount()
-                Me.Show()
-                Me.Activate()
-                SetReqStatus(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year)
-                CheckForPO()
-                SetPOStatus(CurrentRequest.strPO)
-            ' End Using
+            CollectRequestInfo(RequestResults, RequestItemsResults)
+            DataParser.FillDBFields(RequestResults)
+            SendToGrid(RequestItemsResults)
+            LoadNotes(CurrentRequest.strUID)
+            'RequestItemsGrid.ReadOnly = True
+            DisableControls(Me)
+            SetTitle()
+            SetAttachCount()
+            Me.Show()
+            Me.Activate()
+            SetMunisStatus()
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 Dispose()
@@ -1118,6 +1114,13 @@ VALUES
         Else
             RequestItemsGrid.SelectionMode = DataGridViewSelectionMode.CellSelect
             RequestItemsGrid.MultiSelect = True
+        End If
+    End Sub
+    Private Sub SetMunisStatus()
+        If Not OfflineMode Then
+            SetReqStatus(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year)
+            CheckForPO()
+            SetPOStatus(CurrentRequest.strPO)
         End If
     End Sub
     Private Async Sub SetPOStatus(PO As String)

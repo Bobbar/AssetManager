@@ -103,6 +103,10 @@ Module OtherFunctions
         Return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
     End Function
     Public Function OKToEnd() As Boolean
+        If BuildingCache Then
+            Message("Still building DB Cache. Please wait and try again.", vbOKOnly + vbInformation, "Critical Function Running")
+            Return False
+        End If
         If CheckForActiveTransfers() Then Return False
         If GKUpdaterForm.UpdatesRunning() Then Return False
         Return True

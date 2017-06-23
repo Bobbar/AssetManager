@@ -342,8 +342,7 @@ Public Class MainForm
                                                       Try
                                                           Dim CanPing As Boolean = My.Computer.Network.Ping(strServerIP)
                                                           If CanPing Then
-                                                              Using LocalSQLComm As New MySQL_Comms(True)
-                                                                  Dim cmd = LocalSQLComm.Return_SQLCommand("SELECT NOW()")
+                                                              Using LocalSQLComm As New MySQL_Comms(True), cmd = LocalSQLComm.Return_SQLCommand("SELECT NOW()")
                                                                   Dim strTime As String = cmd.ExecuteScalar.ToString
                                                                   strServerTime = strTime
                                                               End Using
@@ -370,8 +369,11 @@ Public Class MainForm
                     ConnectStatus("Connected", Color.Green)
                     StatusStrip1.BackColor = colFormBackColor
                     StatusBar("Connection restored. Rebuilding DB Cache...")
-                    RefreshLocalDBCache()
-                    StatusBar("Idle...")
+                    If Await RefreshLocalDBCacheAsync() Then
+                        StatusBar("Idle...")
+                    Else
+                        StatusBar("Idle...")
+                    End If
                 End If
 
             Loop

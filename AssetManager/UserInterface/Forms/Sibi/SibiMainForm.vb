@@ -75,7 +75,7 @@ Public Class SibiMainForm
         cmd.CommandText = strQry
         ExecuteCmd(cmd)
     End Sub
-    Private Sub ExecuteCmd(cmd As DbCommand)
+    Private Sub ExecuteCmd(ByRef cmd As DbCommand)
         Try
             LastCmd = cmd
             SendToGrid(DBFunc.DataTableFromCommand(cmd))
