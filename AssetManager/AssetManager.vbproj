@@ -183,13 +183,13 @@
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="DataComms\AssetManager\MySQL\DataColumns.vb" />
-    <Compile Include="DataComms\AssetManager\SQLite_Comms.vb" />
+    <Compile Include="DataComms\AssetManager\SQLite\SQLite_Comms.vb" />
     <Compile Include="DataFunctions\DatabaseFunctions\AdvancedSearch.vb" />
     <Compile Include="DataFunctions\DBControlParser.vb" />
     <Compile Include="Classes\MyExceptions.vb" />
     <Compile Include="Classes\Type_Classes.vb" />
     <Compile Include="DataComms\NetDriveMapper\NetworkConnection.vb" />
-    <Compile Include="DataFunctions\DBWrapper.vb" />
+    <Compile Include="DataComms\AssetManager\DBWrapper.vb" />
     <Compile Include="DataFunctions\LocalFunctions\AttribIndexFunctions.vb" />
     <Compile Include="DataFunctions\LocalFunctions\DataConsistency.vb" />
     <Compile Include="GlobalModules\DBFunctions.vb" />

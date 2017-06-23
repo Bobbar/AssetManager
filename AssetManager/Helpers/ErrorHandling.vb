@@ -66,6 +66,10 @@ Module ErrorHandling
                 Dim NoPingEx = DirectCast(ex, NoPingException)
                 ErrorResult = handleNoPingException(NoPingEx, Method)
 
+            Case TypeOf ex Is NullReferenceException
+                Dim NullRefEx = DirectCast(ex, NullReferenceException)
+                ErrorResult = handleNullReferenceException(NullRefEx, Method)
+
             Case Else
                 UnHandledError(ex, ex.HResult, Method)
                 ErrorResult = False
@@ -238,6 +242,16 @@ Module ErrorHandling
             Case Else
                 UnHandledError(ex, ex.HResult, Method)
         End Select
+    End Function
+    Private Function handleNullReferenceException(ex As Exception, Method As MethodBase) As Boolean
+        If bolServerPinging Then
+            Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+            Dim blah = Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "ERROR")
+            EndProgram()
+        Else
+            Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+            Return True
+        End If
     End Function
     Private Sub UnHandledError(ex As Exception, ErrorCode As Integer, Method As MethodBase)
         Logger("UNHANDLED ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ErrorCode & "  Message:" & ex.Message)

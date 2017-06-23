@@ -16,11 +16,15 @@ Public Class DBWrapper
         End Try
     End Function
     Public Function ExecuteScalarFromQueryString(Query As String) As Object
-        Using cmd = GetCommand(Query), conn = GetConnection()
-            cmd.Connection = conn
-            cmd.Connection.Open()
-            Return cmd.ExecuteScalar
-        End Using
+        Try
+            Using cmd = GetCommand(Query), conn = GetConnection()
+                cmd.Connection = conn
+                cmd.Connection.Open()
+                Return cmd.ExecuteScalar
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Function
     Public Function DataTableFromCommand(ByRef Command As DbCommand) As DataTable
         Try
@@ -38,9 +42,9 @@ Public Class DBWrapper
     Public Function GetCommand(Optional QryString As String = "") As DbCommand
         Try
             If OfflineMode Then
-                Return New SQLiteCommand(QryString) ', DirectCast(GetConnection(), SQLiteConnection))
+                Return New SQLiteCommand(QryString)
             Else
-                Return New MySqlCommand(QryString) ', DirectCast(GetConnection(), MySqlConnection))
+                Return New MySqlCommand(QryString)
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -58,7 +62,6 @@ Public Class DBWrapper
             If OfflineMode Then
                 Dim SQLiteComms As New SQLite_Comms(False)
                 Return SQLiteComms.NewConnection
-                '   Return SQLiteComms.Connection
             Else
                 Dim MySQLComms As New MySQL_Comms(False)
                 Return MySQLComms.NewConnection

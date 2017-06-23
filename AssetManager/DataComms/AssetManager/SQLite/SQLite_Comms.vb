@@ -64,8 +64,6 @@ Public Class SQLite_Comms : Implements IDisposable
     Private Sub CreateCacheTable(TableName As String)
         Try
             Dim Statement = GetTableCreateStatement(TableName)
-            ' Debug.Print(Statement)
-
             Dim qry As String = ConvertStatement(Statement)
             Using cmd As New SQLiteCommand(qry, Connection)
                 cmd.ExecuteNonQuery()
@@ -79,7 +77,6 @@ Public Class SQLite_Comms : Implements IDisposable
         Using conn As New MySQL_Comms, results = conn.Return_SQLTable(qry)
             Return results.Rows(0).Item(1).ToString
         End Using
-
     End Function
     Private Sub ImportDatabase(TableName As String)
         Try

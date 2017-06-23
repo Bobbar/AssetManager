@@ -60,7 +60,7 @@ Public Class MySQL_Comms : Implements IDisposable
         End If
     End Sub
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
-        Debug.Print("Table Hit " & Date.Now.Ticks)
+        ' Debug.Print("Table Hit " & Date.Now.Ticks)
         Try
             Using da As New MySqlDataAdapter, tmpTable As New DataTable
                 da.SelectCommand = New MySqlCommand(strSQLQry)
@@ -74,7 +74,7 @@ Public Class MySQL_Comms : Implements IDisposable
         End Try
     End Function
     Public Function Return_SQLReader(strSQLQry As String) As MySqlDataReader
-        Debug.Print("Reader Hit " & Date.Now.Ticks)
+        '  Debug.Print("Reader Hit " & Date.Now.Ticks)
         Try
             Using cmd As New MySqlCommand(strSQLQry, Connection)
                 Return cmd.ExecuteReader
@@ -85,7 +85,7 @@ Public Class MySQL_Comms : Implements IDisposable
         End Try
     End Function
     Public Function Return_SQLCommand(Optional strSQLQry As String = "") As MySqlCommand
-        Debug.Print("Command Hit " & Date.Now.Ticks)
+        ' Debug.Print("Command Hit " & Date.Now.Ticks)
         Try
             Using cmd As New MySqlCommand
                 cmd.Connection = Connection
@@ -98,7 +98,7 @@ Public Class MySQL_Comms : Implements IDisposable
         End Try
     End Function
     Public Function Return_Adapter(strSQLQry As String) As MySqlDataAdapter
-        Debug.Print("Adapter Hit " & Date.Now.Ticks)
+        '  Debug.Print("Adapter Hit " & Date.Now.Ticks)
         Try
             Dim adapter As New MySqlDataAdapter(strSQLQry, GetConnectString)
             Dim CmdBuilder As New MySqlCommandBuilder(adapter)
