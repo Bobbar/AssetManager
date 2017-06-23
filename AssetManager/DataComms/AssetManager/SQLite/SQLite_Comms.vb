@@ -39,33 +39,43 @@ Public Class SQLite_Comms : Implements IDisposable
             SQLiteConnection.CreateFile(strSQLitePath)
             Connection = NewConnection()
             OpenConnection()
-            AddTable(devices.TableName)
-            AddTable(historical_dev.TableName)
-            AddTable(trackable.TableName)
-            AddTable(sibi_requests.TableName)
-            AddTable(sibi_request_items.TableName)
-            AddTable(sibi_notes.TableName)
-            AddTable(dev_codes.TableName)
-            AddTable(sibi_codes.TableName)
-            AddTable("munis_codes")
-            AddTable(security.TableName)
-            AddTable(users.TableName)
+            Using trans = Connection.BeginTransaction
+                For Each table In TableList()
+                    AddTable(table, trans)
+                Next
+                trans.Commit()
+            End Using
             Logger("Local DB cache complete...")
         Catch ex As Exception
             Logger("Errors during cache rebuild!")
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
-    Private Sub AddTable(TableName As String)
-        CreateCacheTable(TableName)
-        ImportDatabase(TableName)
-
+    Private Function TableList() As List(Of String)
+        Dim list As New List(Of String)
+        list.Add(devices.TableName)
+        list.Add(historical_dev.TableName)
+        list.Add(trackable.TableName)
+        list.Add(sibi_requests.TableName)
+        list.Add(sibi_request_items.TableName)
+        list.Add(sibi_notes.TableName)
+        list.Add(dev_codes.TableName)
+        list.Add(sibi_codes.TableName)
+        list.Add("munis_codes")
+        list.Add(security.TableName)
+        list.Add(users.TableName)
+        Return list
+    End Function
+    Private Sub AddTable(TableName As String, Transaction As SQLiteTransaction)
+        CreateCacheTable(TableName, Transaction)
+        ImportDatabase(TableName, Transaction)
     End Sub
-    Private Sub CreateCacheTable(TableName As String)
+    Private Sub CreateCacheTable(TableName As String, Transaction As SQLiteTransaction)
         Try
             Dim Statement = GetTableCreateStatement(TableName)
             Dim qry As String = ConvertStatement(Statement)
             Using cmd As New SQLiteCommand(qry, Connection)
+                cmd.Transaction = Transaction
                 cmd.ExecuteNonQuery()
             End Using
         Catch ex As Exception
@@ -78,14 +88,13 @@ Public Class SQLite_Comms : Implements IDisposable
             Return results.Rows(0).Item(1).ToString
         End Using
     End Function
-    Private Sub ImportDatabase(TableName As String)
+    Private Sub ImportDatabase(TableName As String, Transaction As SQLiteTransaction)
         Try
             OpenConnection()
-            Using cmd = Connection.CreateCommand, adapter = New SQLiteDataAdapter(cmd), builder As New SQLiteCommandBuilder(adapter), trans = Connection.BeginTransaction
-                cmd.Transaction = trans
+            Using cmd = Connection.CreateCommand, adapter = New SQLiteDataAdapter(cmd), builder As New SQLiteCommandBuilder(adapter)
+                cmd.Transaction = Transaction
                 cmd.CommandText = "SELECT * FROM " & TableName
                 adapter.Update(GetRemoteDBTable(TableName))
-                trans.Commit()
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
