@@ -8,7 +8,7 @@ Namespace My
     ' StartupNextInstance: Raised when launching a single-instance application and the application is already active. 
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
 
-    Partial Friend Class MyApplication
+    Partial  Friend Class MyApplication
 
         Private Sub LoadSplash(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
             '  Try
@@ -24,37 +24,28 @@ Namespace My
                 RefreshLocalDBCache()
             Else
                 Status("Checking Local Cache...")
-                Using SQLiteComm As New SQLite_Comms(False)
-                    If SQLiteComm.OpenConnection Then
-                        CacheAvailable = True
-                    Else
-                        CacheAvailable = False
-
-                        '   OfflineMode = True
-                    End If
-                End Using
-
-                'Notify user
+                CacheAvailable = VerifyLocalCache(False)
             End If
 
-                If OfflineMode And Not CacheAvailable Then
-                    Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", vbOKOnly + vbExclamation, "No Connection")
-                    e.Cancel = True
-                    EndProgram()
-                ElseIf OfflineMode And CacheAvailable Then
-                    Message("Could not connect to server. Running from local DB cache.", vbOKOnly + vbExclamation, "Cached Mode")
-                End If
+            If OfflineMode And Not CacheAvailable Then
+                Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", vbOKOnly + vbExclamation, "No Connection")
+                e.Cancel = True
+                EndProgram()
+                Exit Sub
+            ElseIf OfflineMode And CacheAvailable Then
+                Message("Could not connect to server. Running from local DB cache.", vbOKOnly + vbExclamation, "Cached Mode")
+            End If
 
-                Status("Loading Indexes...")
-                BuildIndexes()
-                Status("Checking Access Level...")
-                GetAccessLevels()
-                GetUserAccess()
-                If Not CanAccess(AccessGroup.CanRun) Then
-                    Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", SplashScreenForm)
-                    EndProgram()
-                End If
-                Status("Ready!")
+            Status("Loading Indexes...")
+            BuildIndexes()
+            Status("Checking Access Level...")
+            GetAccessLevels()
+            GetUserAccess()
+            If Not CanAccess(AccessGroup.CanRun) Then
+                Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", SplashScreenForm)
+                EndProgram()
+            End If
+            Status("Ready!")
             'Catch ex As Exception
             '    ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
 

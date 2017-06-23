@@ -36,11 +36,11 @@ Public Class MySQL_Comms : Implements IDisposable
     Private Const strDatabase As String = "asset_manager"
     Private Const strTestDatabase As String = "test_db"
     Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
-    Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5" & ";database="
+    Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database="
     Private ConnectionException As Exception
     Public Connection As MySqlConnection ' = NewConnection()
     Sub New()
-        If bolServerPinging Then
+        If ServerPinging Then
             If Not OpenConnection() Then
                 Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
                 Dispose()

@@ -12,6 +12,26 @@ Public Class SQLite_Comms : Implements IDisposable
             End If
         End If
     End Sub
+    Public Function GetSchemaVersion() As Integer
+        Using cmd As New SQLiteCommand("pragma schema_version;")
+            cmd.Connection = Connection
+            '     cmd.Connection.Open()
+            Return CInt(cmd.ExecuteScalar)
+        End Using
+    End Function
+    Private Function Return_SQLTable(strSQLQry As String) As DataTable
+        Try
+            Using da As New SQLiteDataAdapter, tmpTable As New DataTable
+                da.SelectCommand = New SQLiteCommand(strSQLQry)
+                da.SelectCommand.Connection = Connection
+                da.Fill(tmpTable)
+                Return tmpTable
+            End Using
+        Catch ex As Exception
+            '  ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
+        End Try
+    End Function
     Private Function GetRemoteDBTable(TableName As String) As DataTable
         Try
             Dim qry As String = "SELECT * FROM " & TableName
@@ -27,6 +47,8 @@ Public Class SQLite_Comms : Implements IDisposable
     End Function
     Public Sub RefreshSQLCache()
         Try
+            If SQLiteTableHashes IsNot Nothing AndAlso CheckLocalCacheHash() Then Exit Sub
+
             Logger("Rebuilding local DB cache...")
             CloseConnection()
             GC.Collect()
@@ -45,12 +67,29 @@ Public Class SQLite_Comms : Implements IDisposable
                 Next
                 trans.Commit()
             End Using
+            SQLiteTableHashes = LocalTableHashList()
+            RemoteTableHashes = RemoteTableHashList()
             Logger("Local DB cache complete...")
         Catch ex As Exception
             Logger("Errors during cache rebuild!")
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+    Public Function CheckLocalCacheHash() As Boolean
+        Dim RemoteHashes As New List(Of String)
+        RemoteHashes = RemoteTableHashList()
+        Return CompareTableHashes(RemoteHashes, SQLiteTableHashes)
+    End Function
+    Public Function CompareTableHashes(TableHashesA As List(Of String), TableHashesB As List(Of String)) As Boolean
+        Try
+            For i As Integer = 0 To TableHashesA.Count - 1
+                If TableHashesA(i) <> TableHashesB(i) Then Return False
+            Next
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
     Private Function TableList() As List(Of String)
         Dim list As New List(Of String)
         list.Add(devices.TableName)
@@ -65,6 +104,43 @@ Public Class SQLite_Comms : Implements IDisposable
         list.Add(security.TableName)
         list.Add(users.TableName)
         Return list
+    End Function
+    Public Function RemoteTableHashList() As List(Of String)
+        Dim hashList As New List(Of String)
+        Using MySQLConn As New MySQL_Comms
+            For Each table In TableList()
+                Using results = ToStringTable(MySQLConn.Return_SQLTable("SELECT * FROM " & table))
+                    results.TableName = table
+                    hashList.Add(GetHashOfTable(results))
+                End Using
+            Next
+            Return hashList
+        End Using
+    End Function
+    Public Function LocalTableHashList() As List(Of String)
+        Try
+            Dim hashList As New List(Of String)
+            For Each table In TableList()
+                Using results = ToStringTable(Return_SQLTable("SELECT * FROM " & table))
+                    results.TableName = table
+                    hashList.Add(GetHashOfTable(results))
+                End Using
+            Next
+            Return hashList
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+    Private Function ToStringTable(ByRef Table As DataTable) As DataTable
+        Dim tmpTable As DataTable = Table.Clone
+        For i = 0 To tmpTable.Columns.Count - 1
+            tmpTable.Columns(i).DataType = GetType(String)
+        Next
+        For Each row As DataRow In Table.Rows
+            tmpTable.ImportRow(row)
+        Next
+        Table.Dispose()
+        Return tmpTable
     End Function
     Private Sub AddTable(TableName As String, Transaction As SQLiteTransaction)
         CreateCacheTable(TableName, Transaction)

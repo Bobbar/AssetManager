@@ -336,50 +336,87 @@ Public Class MainForm
             ConnectStatus("Cached Mode", Color.Black)
         End If
         Try
+            Dim ItsTillHashCheck As Integer = 60
+            Dim Its As Integer = 0
+            Dim NoCacheMessageSent As Boolean = False
             Do Until ProgramEnding
-                bolServerPinging = Await Task.Run(Function()
-                                                      Thread.Sleep(5000)
-                                                      Try
-                                                          Dim CanPing As Boolean = My.Computer.Network.Ping(strServerIP)
-                                                          If CanPing Then
-                                                              Using LocalSQLComm As New MySQL_Comms(True), cmd = LocalSQLComm.Return_SQLCommand("SELECT NOW()")
-                                                                  Dim strTime As String = cmd.ExecuteScalar.ToString
-                                                                  strServerTime = strTime
-                                                              End Using
-                                                          End If
-                                                          Return CanPing
-                                                      Catch
-                                                          Return False
-                                                      End Try
-                                                  End Function)
+                ServerPinging = Await Task.Run(Function()
+                                                   Thread.Sleep(5000)
+                                                   Try
+                                                       Dim CanPing As Boolean = My.Computer.Network.Ping(strServerIP)
+                                                       If CanPing Then
+                                                           Using LocalSQLComm As New MySQL_Comms(True), cmd = LocalSQLComm.Return_SQLCommand("SELECT NOW()")
+                                                               Dim strTime As String = cmd.ExecuteScalar.ToString
+                                                               strServerTime = strTime
+                                                           End Using
+                                                       End If
+                                                       Return CanPing
+                                                   Catch
+                                                       Return False
+                                                   End Try
+                                               End Function)
+                CacheAvailable = Await VerifyLocalCacheAsync()
                 If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
-                If bolServerPinging And Not OfflineMode Then
+                If ServerPinging And Not OfflineMode Then
                     ConnectStatus("Connected", Color.Green)
                     StatusStrip1.BackColor = colFormBackColor
-                ElseIf Not bolServerPinging And Not OfflineMode Then
+                    If CacheAvailable Then
+                        Its += 1
+                        If Its >= ItsTillHashCheck Then
+                            Its = 0
+                            StatusBar("Rebuilding DB Cache...")
+                            RebuildCache()
+                        End If
+                    Else
+                        SQLiteTableHashes = Nothing
+                        RemoteTableHashes = Nothing
+                        NoCacheMessageSent = False
+                        StatusBar("Rebuilding DB Cache...")
+                        RebuildCache()
+                    End If
+
+                ElseIf Not ServerPinging And Not OfflineMode Then
                     StatusStrip1.BackColor = colStatusBarProblem
                     ConnectStatus("Offline", Color.Red)
-                    OfflineMode = True
-                ElseIf Not bolServerPinging And OfflineMode Then
-                    StatusStrip1.BackColor = colFormBackColor
+                    If CacheAvailable Then
+                        OfflineMode = True
+                        StatusStrip1.BackColor = colStatusBarProblem
+                        ConnectStatus("Cached Mode", Color.Black)
+                        Message("Cached mode enabled. Some functionality will be disabled.", vbOKOnly + vbInformation, "Cache Mode Enabled", Me)
+                    Else
+                        OfflineMode = False
+                        If Not NoCacheMessageSent Then
+                            Message("Connection to the server was lost, and the local DB cache could not be verified. All functionality disabled.", vbOKOnly + vbExclamation, "Cache Mode Failed", Me)
+                            NoCacheMessageSent = True
+                        End If
+                    End If
+
+                ElseIf Not ServerPinging And OfflineMode Then
+                    StatusStrip1.BackColor = colStatusBarProblem
                     ConnectStatus("Cached Mode", Color.Black)
                 End If
-                If OfflineMode And bolServerPinging Then
+
+                If OfflineMode And ServerPinging Then
                     OfflineMode = False
+                    NoCacheMessageSent = False
                     ConnectStatus("Connected", Color.Green)
                     StatusStrip1.BackColor = colFormBackColor
                     StatusBar("Connection restored. Rebuilding DB Cache...")
-                    If Await RefreshLocalDBCacheAsync() Then
-                        StatusBar("Idle...")
-                    Else
-                        StatusBar("Idle...")
-                    End If
+                    RebuildCache()
                 End If
 
             Loop
         Catch
             ConnectionWatchDog()
         End Try
+    End Sub
+    Private Async Sub RebuildCache()
+        'StatusBar("Connection restored. Rebuilding DB Cache...")
+        If Await RefreshLocalDBCacheAsync() Then
+            StatusBar("Idle...")
+        Else
+            StatusBar("Idle...")
+        End If
     End Sub
     Private Sub ConnectStatus(Message As String, FColor As Color)
         ConnStatusLabel.Text = Message

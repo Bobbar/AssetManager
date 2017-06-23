@@ -244,7 +244,7 @@ Module ErrorHandling
         End Select
     End Function
     Private Function handleNullReferenceException(ex As Exception, Method As MethodBase) As Boolean
-        If bolServerPinging Then
+        If ServerPinging Then
             Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
             Dim blah = Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "ERROR")
             EndProgram()
