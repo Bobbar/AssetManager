@@ -502,9 +502,11 @@ Public Class MainForm
         DoneWaiting()
     End Sub
     Private Sub tsmUserManager_Click(sender As Object, e As EventArgs) Handles tsmUserManager.Click
+        If Not CheckForAccess(AccessGroup.IsAdmin) Then Exit Sub
         Dim NewUserMan As New UserManagerForm(Me)
     End Sub
     Private Sub TextEnCrypterToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TextEnCrypterToolStripMenuItem.Click
+        If Not CheckForAccess(AccessGroup.IsAdmin) Then Exit Sub
         Dim NewEncryp As New CrypterForm(Me)
     End Sub
     Private Sub ResultGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles ResultGrid.KeyDown
@@ -514,6 +516,7 @@ Public Class MainForm
         End If
     End Sub
     Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
+        If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
         FTPFunc.ScanAttachements()
     End Sub
     Private Sub tsmAddGKUpdate_Click(sender As Object, e As EventArgs) Handles tsmAddGKUpdate.Click
@@ -549,6 +552,7 @@ Public Class MainForm
         SplashScreenForm.Hide()
     End Sub
     Private Sub AdvancedSearchMenuItem_Click(sender As Object, e As EventArgs) Handles AdvancedSearchMenuItem.Click
+        If Not CheckForAccess(AccessGroup.AdvancedSearch) Then Exit Sub
         Dim NewAdvancedSearch As New AdvancedSearchForm(Me)
     End Sub
 End Class

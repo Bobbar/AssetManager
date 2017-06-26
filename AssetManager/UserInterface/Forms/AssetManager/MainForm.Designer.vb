@@ -598,7 +598,7 @@ Partial Class MainForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(1057, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(1104, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ConnStatusLabel

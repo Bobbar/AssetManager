@@ -172,5 +172,6 @@ Module SecurityFunctions
         Public Const Sibi_Modify As String = "sibi_modify"
         Public Const Sibi_Delete As String = "sibi_delete"
         Public Const IsAdmin As String = "admin"
+        Public Const AdvancedSearch As String = "advanced_search"
     End Class
 End Module
