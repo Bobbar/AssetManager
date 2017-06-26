@@ -20,7 +20,6 @@ Public Class MainForm
     Private Sub LoadProgram()
         Try
             ShowAll()
-            DateTimeLabel.ToolTipText = My.Application.Info.Version.ToString
             DateTimeLabel.Text = Now.ToString
             ToolStrip1.BackColor = colAssetToolBarColor
             ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
@@ -141,7 +140,7 @@ Public Class MainForm
     Private Sub DisplayRecords(NumberOf As Integer)
         lblRecords.Text = "Records: " & NumberOf
     End Sub
-    Private Sub SendToGrid(ByRef Results As DataTable) ' Data() As Device_Info)
+    Private Sub SendToGrid(ByRef Results As DataTable)
         Try
             If Results Is Nothing Then Exit Sub
             StatusBar("Building Grid...")
@@ -333,7 +332,7 @@ Public Class MainForm
     Private Async Sub ConnectionWatchDog()
         If OfflineMode Then
             StatusStrip1.BackColor = colFormBackColor
-            ConnectStatus("Cached Mode", Color.Black)
+            ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
         End If
         Try
             Dim ItsTillHashCheck As Integer = 60
@@ -363,7 +362,7 @@ Public Class MainForm
                     Case ServerPinging And Not OfflineMode
                         'Everything is normal
 #Region "Server Online. Not In Cache Mode."
-                        ConnectStatus("Connected", Color.Green)
+                        ConnectStatus("Connected", Color.Green, "Connection OK")
                         StatusStrip1.BackColor = colFormBackColor
                         If CacheAvailable Then
                             Its += 1
@@ -385,12 +384,12 @@ Public Class MainForm
                         'Server offline. Verify cache and enable if possible.
 #Region "Server Offline. Not In Cache Mode."
                         StatusStrip1.BackColor = colStatusBarProblem
-                        ConnectStatus("Offline", Color.Red)
+                        ConnectStatus("Offline", Color.Red, "No connection. Cache unavailable.")
                         If CacheAvailable Then
                             OfflineMode = True
                             StatusStrip1.BackColor = colStatusBarProblem
-                            ConnectStatus("Cached Mode", Color.Black)
-                            Message("Cached mode enabled. Some functionality will be disabled.", vbOKOnly + vbInformation, "Cache Mode Enabled", Me)
+                            ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
+                            Message("Connection Lost, cached mode enabled. Some functionality will be disabled.", vbOKOnly + vbInformation, "Cache Mode Enabled", Me)
                         Else
                             OfflineMode = False
                             If Not NoCacheMessageSent Then
@@ -403,14 +402,14 @@ Public Class MainForm
                     Case Not ServerPinging And OfflineMode
                         'Notify user of cached mode.
                         StatusStrip1.BackColor = colStatusBarProblem
-                        ConnectStatus("Cached Mode", Color.Black)
+                        ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
 
                     Case ServerPinging And OfflineMode
                         'Connection Restored. Re-enable comms and rebuild cache.
 #Region "Server Online. Running In Cache Mode."
                         OfflineMode = False
                         NoCacheMessageSent = False
-                        ConnectStatus("Connected", Color.Green)
+                        ConnectStatus("Connected", Color.Green, "Connection OK")
                         StatusStrip1.BackColor = colFormBackColor
                         StatusBar("Connection restored. Rebuilding DB Cache...")
                         RebuildCache()
@@ -431,8 +430,9 @@ Public Class MainForm
             StatusBar("Idle...")
         End If
     End Sub
-    Private Sub ConnectStatus(Message As String, FColor As Color)
+    Private Sub ConnectStatus(Message As String, FColor As Color, Optional ToolTipText As String = "")
         ConnStatusLabel.Text = Message
+        ConnStatusLabel.ToolTipText = ToolTipText
         ConnStatusLabel.ForeColor = FColor
     End Sub
     Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave

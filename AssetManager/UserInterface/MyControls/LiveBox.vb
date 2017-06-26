@@ -8,6 +8,7 @@ Public Class LiveBox : Implements IDisposable
     Private strPrevSearchString As String
     Private LiveBoxResults As DataTable
     Private LiveBoxControls As New List(Of LiveBoxArgs)
+    Private QueryRunning As Boolean = False
     Private Structure LiveBoxArgs
         Public Control As TextBox
         Public Type As LiveBoxType
@@ -72,14 +73,28 @@ Public Class LiveBox : Implements IDisposable
     ''' <param name="SearchString"></param>
     Private Async Sub ProcessSearch(SearchString As String)
         strPrevSearchString = SearchString
+        If QueryRunning Then Exit Sub
+        Dim Errs As Exception = Nothing
         Dim Results = Await Task.Run(Function()
-                                         Dim strQry As String
-                                         strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE  @Search_Value  GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
-                                         Using cmd = DBFunc.GetCommand(strQry)
-                                             cmd.AddParameterWithValue("@Search_Value", "%" & SearchString & "%")
-                                             Return DBFunc.DataTableFromCommand(cmd)
-                                         End Using
+                                         Try
+                                             QueryRunning = True
+                                             Dim strQry As String
+                                             strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE  @Search_Value  GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
+                                             Using cmd = DBFunc.GetCommand(strQry)
+                                                 cmd.AddParameterWithValue("@Search_Value", "%" & SearchString & "%")
+                                                 Return DBFunc.DataTableFromCommand(cmd)
+                                             End Using
+                                         Catch ex As Exception
+                                             Errs = ex
+                                             Return Nothing
+                                         End Try
                                      End Function)
+        If Errs IsNot Nothing Then
+            ErrHandle(Errs, System.Reflection.MethodInfo.GetCurrentMethod())
+            QueryRunning = False
+            Exit Sub
+        End If
+        QueryRunning = False
         DrawLiveBox(Results)
         LiveBoxResults = Results
     End Sub

@@ -209,12 +209,16 @@ Public Class AssetManager_Functions
         Update_SQLValue(users.TableName, users.AccessLevel, User.intAccessLevel.ToString, users.UID, User.strUID)
     End Sub
     Public Function FindDevice(SearchVal As String, Type As FindDevType) As Device_Info
-        If Type = FindDevType.AssetTag Then
-            Return CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.AssetTag & "='" & SearchVal & "'"))
-        ElseIf Type = FindDevType.Serial Then
-            Return CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.Serial & "='" & SearchVal & "'"))
-        End If
-        Return Nothing
+        Try
+            If Type = FindDevType.AssetTag Then
+                Return CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.AssetTag & "='" & SearchVal & "'"))
+            ElseIf Type = FindDevType.Serial Then
+                Return CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.Serial & "='" & SearchVal & "'"))
+            End If
+            Return Nothing
+        Catch ex As MySqlException
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Function
     Public Sub AddNewEmp(EmpInfo As Emp_Info)
         Try

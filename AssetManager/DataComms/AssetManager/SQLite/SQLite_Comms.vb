@@ -15,7 +15,6 @@ Public Class SQLite_Comms : Implements IDisposable
     Public Function GetSchemaVersion() As Integer
         Using cmd As New SQLiteCommand("pragma schema_version;")
             cmd.Connection = Connection
-            '     cmd.Connection.Open()
             Return CInt(cmd.ExecuteScalar)
         End Using
     End Function

@@ -577,6 +577,7 @@ Partial Class MainForm
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.StripSpinner, Me.ToolStripStatusLabel1, Me.ConnStatusLabel, Me.ToolStripStatusLabel4, Me.DateTimeLabel})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 787)
         Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.ShowItemToolTips = True
         Me.StatusStrip1.Size = New System.Drawing.Size(1381, 22)
         Me.StatusStrip1.TabIndex = 5
         Me.StatusStrip1.Text = "StatusStrip1"
@@ -597,7 +598,7 @@ Partial Class MainForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(1104, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(1057, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ConnStatusLabel
@@ -620,6 +621,7 @@ Partial Class MainForm
         Me.DateTimeLabel.Name = "DateTimeLabel"
         Me.DateTimeLabel.Size = New System.Drawing.Size(76, 17)
         Me.DateTimeLabel.Text = "ServerTime"
+        Me.DateTimeLabel.ToolTipText = "Server Time"
         '
         'BigQueryWorker
         '

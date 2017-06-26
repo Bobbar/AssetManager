@@ -79,10 +79,8 @@ Public Class SibiMainForm
         Try
             LastCmd = cmd
             SendToGrid(DBFunc.DataTableFromCommand(cmd))
-
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            ' ConnectionReady()
         End Try
     End Sub
     Public Sub SendToGrid(Results As DataTable)
@@ -125,11 +123,9 @@ Public Class SibiMainForm
         Try
             bolRebuildingCombo = True
             Dim strQRY As String = "SELECT DISTINCT " & sibi_requests.DateStamp & " FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.DateStamp & " DESC"
-            Debug.Print(strQRY)
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
-                cmbDisplayYear.Items.Clear()
-                cmbDisplayYear.Items.Add("All")
                 Dim Years As New List(Of String)
+                Years.Add("All")
                 For Each r As DataRow In results.Rows
                     Dim yr = YearFromDate(DateTime.Parse(r.Item(sibi_requests.DateStamp).ToString))
                     If Not Years.Contains(yr) Then
@@ -143,7 +139,7 @@ Public Class SibiMainForm
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return False
+        Return False
         End Try
     End Function
     Private Sub ShowAll(Optional Year As String = "")
