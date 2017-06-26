@@ -29,12 +29,12 @@ Module SecurityFunctions
     End Function
     Public Function GetHashOfTable(Table As DataTable) As String
         Dim serializer = New DataContractSerializer(GetType(DataTable))
-        Dim memoryStream = New MemoryStream()
-        serializer.WriteObject(memoryStream, Table)
-        Dim serializedData As Byte() = memoryStream.ToArray()
-        Dim SHA = New SHA1CryptoServiceProvider()
-        Dim hash As Byte() = SHA.ComputeHash(serializedData)
-        Return Convert.ToBase64String(hash)
+        Using memoryStream = New MemoryStream(), SHA = New SHA1CryptoServiceProvider()
+            serializer.WriteObject(memoryStream, Table)
+            Dim serializedData As Byte() = memoryStream.ToArray()
+            Dim hash As Byte() = SHA.ComputeHash(serializedData)
+            Return Convert.ToBase64String(hash)
+        End Using
     End Function
     Public Function GetHashOfFile(Path As String) As String
         Dim hash As MD5
@@ -52,28 +52,30 @@ Module SecurityFunctions
         Return sBuilder.ToString
     End Function
     Public Function GetHashOfFileStream(ByRef MemStream As IO.FileStream) As String
-        Dim md5Hash As MD5 = MD5.Create
-        MemStream.Position = 0
-        Dim hash As Byte() = md5Hash.ComputeHash(MemStream)
-        Dim sBuilder As New StringBuilder
-        Dim i As Integer
-        For i = 0 To hash.Length - 1
-            sBuilder.Append(hash(i).ToString("x2"))
-        Next
-        MemStream.Position = 0
-        Return sBuilder.ToString
+        Using md5Hash As MD5 = MD5.Create
+            MemStream.Position = 0
+            Dim hash As Byte() = md5Hash.ComputeHash(MemStream)
+            Dim sBuilder As New StringBuilder
+            Dim i As Integer
+            For i = 0 To hash.Length - 1
+                sBuilder.Append(hash(i).ToString("x2"))
+            Next
+            MemStream.Position = 0
+            Return sBuilder.ToString
+        End Using
     End Function
     Public Function GetHashOfIOStream(ByVal MemStream As IO.MemoryStream) As String
-        Dim md5Hash As MD5 = MD5.Create
-        MemStream.Position = 0
-        Dim hash As Byte() = md5Hash.ComputeHash(MemStream)
-        Dim sBuilder As New StringBuilder
-        Dim i As Integer
-        For i = 0 To hash.Length - 1
-            sBuilder.Append(hash(i).ToString("x2"))
-        Next
-        MemStream.Position = 0
-        Return sBuilder.ToString
+        Using md5Hash As MD5 = MD5.Create
+            MemStream.Position = 0
+            Dim hash As Byte() = md5Hash.ComputeHash(MemStream)
+            Dim sBuilder As New StringBuilder
+            Dim i As Integer
+            For i = 0 To hash.Length - 1
+                sBuilder.Append(hash(i).ToString("x2"))
+            Next
+            MemStream.Position = 0
+            Return sBuilder.ToString
+        End Using
     End Function
     Public Function GetSecGroupValue(SecModule As String) As Integer
         For Each Group As Access_Info In AccessLevels
