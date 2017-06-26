@@ -687,6 +687,7 @@ Partial Class MainForm
         Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(227, 26)
         Me.ManageAttachmentsToolStripMenuItem.Text = "Manage Attachments"
         Me.ManageAttachmentsToolStripMenuItem.ToolTipText = "Manage ALL Attachments"
+        Me.ManageAttachmentsToolStripMenuItem.Visible = False
         '
         'txtGUID
         '

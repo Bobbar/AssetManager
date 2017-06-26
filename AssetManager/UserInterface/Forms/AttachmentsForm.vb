@@ -120,12 +120,12 @@ Class AttachmentsForm
                     strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex) & "' AND " & _attachTable.FKey & " ='" & AttachRequest.strUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
             End Select
         Else
-            If bolAdminMode Then 'TODO: include all attachment type tables for admin mode
+            'If bolAdminMode Then 'TODO: include all attachment type tables for admin mode
 
-                strQry = "Select * FROM " & _attachTable.TableName & "," & _attachTable.TableName & " WHERE " & devices.DeviceUID & " = " & _attachTable.FKey & " ORDER BY " & _attachTable.TimeStamp & " DESC"
-            ElseIf Not bolAdminMode Then
-                strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachDevice.strGUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
-            End If
+            '    strQry = "Select * FROM " & _attachTable.TableName & "," & _attachTable.TableName & " WHERE " & devices.DeviceUID & " = " & _attachTable.FKey & " ORDER BY " & _attachTable.TimeStamp & " DESC"
+            'ElseIf Not bolAdminMode Then
+            strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachDevice.strGUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
+            '  End If
         End If
         Return strQry
     End Function
@@ -140,21 +140,21 @@ Class AttachmentsForm
             table.Columns.Add("AttachUID", GetType(String))
             table.Columns.Add("MD5", GetType(String))
         Else
-            If bolAdminMode Then
-                table.Columns.Add("Filename", GetType(String))
-                table.Columns.Add("Size", GetType(String))
-                table.Columns.Add("Date", GetType(String))
-                table.Columns.Add("Device", GetType(String))
-                table.Columns.Add("AttachUID", GetType(String))
-                table.Columns.Add("MD5", GetType(String))
-            ElseIf Not bolAdminMode Then
-                table.Columns.Add(" ", GetType(Image))
-                table.Columns.Add("Filename", GetType(String))
-                table.Columns.Add("Size", GetType(String))
-                table.Columns.Add("Date", GetType(String))
-                table.Columns.Add("AttachUID", GetType(String))
-                table.Columns.Add("MD5", GetType(String))
-            End If
+            'If bolAdminMode Then
+            '    table.Columns.Add("Filename", GetType(String))
+            '    table.Columns.Add("Size", GetType(String))
+            '    table.Columns.Add("Date", GetType(String))
+            '    table.Columns.Add("Device", GetType(String))
+            '    table.Columns.Add("AttachUID", GetType(String))
+            '    table.Columns.Add("MD5", GetType(String))
+            'ElseIf Not bolAdminMode Then
+            table.Columns.Add(" ", GetType(Image))
+            table.Columns.Add("Filename", GetType(String))
+            table.Columns.Add("Size", GetType(String))
+            table.Columns.Add("Date", GetType(String))
+            table.Columns.Add("AttachUID", GetType(String))
+            table.Columns.Add("MD5", GetType(String))
+            '  End If
         End If
         Return table
     End Function
@@ -174,11 +174,11 @@ Class AttachmentsForm
                     If TypeOf _attachTable Is sibi_attachments Then
                         table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.TimeStamp), GetHumanValue(SibiIndex.AttachFolder, r.Item(_attachTable.Folder).ToString), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                     Else
-                        If bolAdminMode Then
-                            table.Rows.Add(strFullFilename, strFileSizeHuman, r.Item(_attachTable.TimeStamp), r.Item(devices.AssetTag), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
-                        Else
-                            table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.TimeStamp), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
-                        End If
+                        'If bolAdminMode Then
+                        '    table.Rows.Add(strFullFilename, strFileSizeHuman, r.Item(_attachTable.TimeStamp), r.Item(devices.AssetTag), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
+                        'Else
+                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.TimeStamp), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
+                        ' End If
                     End If
                 Next
             End Using
