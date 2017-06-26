@@ -46,9 +46,5 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.ViewHistoryForm.res
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.AdvancedSearchForm.resources
 C:\GitHub\AssetManager\AssetManager\bin\Release\x64\SQLite.Interop.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\x86\SQLite.Interop.dll
-C:\GitHub\AssetManager\AssetManager\bin\Release\EntityFramework.dll
-C:\GitHub\AssetManager\AssetManager\bin\Release\EntityFramework.SqlServer.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\System.Data.SQLite.dll
-C:\GitHub\AssetManager\AssetManager\bin\Release\EntityFramework.xml
-C:\GitHub\AssetManager\AssetManager\bin\Release\EntityFramework.SqlServer.xml
 C:\GitHub\AssetManager\AssetManager\bin\Release\System.Data.SQLite.xml

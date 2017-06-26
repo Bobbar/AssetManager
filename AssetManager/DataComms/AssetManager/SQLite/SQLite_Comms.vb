@@ -71,7 +71,7 @@ Public Class SQLite_Comms : Implements IDisposable
             Logger("Local DB cache complete...")
         Catch ex As Exception
             Logger("Errors during cache rebuild!")
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Logger("STACK TRACE: " & ex.ToString)
         End Try
     End Sub
     Public Function CheckLocalCacheHash() As Boolean
@@ -81,6 +81,9 @@ Public Class SQLite_Comms : Implements IDisposable
     End Function
     Public Function CompareTableHashes(TableHashesA As List(Of String), TableHashesB As List(Of String)) As Boolean
         Try
+            If TableHashesA Is Nothing Or TableHashesB Is Nothing Then
+                Return False
+            End If
             For i As Integer = 0 To TableHashesA.Count - 1
                 If TableHashesA(i) <> TableHashesB(i) Then Return False
             Next
