@@ -272,7 +272,7 @@ Public Class MainForm
             DoneWaiting()
             ResultGrid.Enabled = True
         Else
-            ActivateFormByUID(strGUID)
+            ActivateFormByUID(strGUID, Me)
         End If
     End Sub
     Private Sub RefreshCombos()

@@ -1,6 +1,10 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports System.Data.SQLite
 Imports System.Data.Common
+
+''' <summary>
+''' This class handles basic DB functions while switching between local and remote databases on the fly based on connectivity
+''' </summary>
 Public Class DBWrapper
     Public Function DataTableFromQueryString(Query As String) As DataTable
         Using results As New DataTable, da As DbDataAdapter = GetAdapter(), cmd = GetCommand(Query), conn = GetConnection()
@@ -36,6 +40,7 @@ Public Class DBWrapper
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
         End Try
     End Function
     Public Function GetAdapter() As DbDataAdapter
@@ -56,6 +61,7 @@ Public Class DBWrapper
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
         End Try
     End Function
 End Class

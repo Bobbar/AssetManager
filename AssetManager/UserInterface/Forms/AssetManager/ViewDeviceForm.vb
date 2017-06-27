@@ -506,7 +506,7 @@ Public Class ViewDeviceForm
         If Not EntryIsOpen(EntryUID) Then
             NewEntryView(EntryUID)
         Else
-            ActivateFormByUID(EntryUID)
+            ActivateFormByUID(EntryUID, Me)
         End If
     End Sub
     Private Sub NewEntryView(GUID As String)
@@ -675,7 +675,7 @@ Public Class ViewDeviceForm
         If Not AttachmentsIsOpen() Then
             Dim NewAttachments As New AttachmentsForm(Me, New dev_attachments, CurrentViewDevice)
         Else
-            ActivateFormByUID(CurrentViewDevice.strGUID)
+            ActivateFormByUID(CurrentViewDevice.strGUID, Me)
         End If
     End Sub
     Public Function AttachmentsIsOpen() As Boolean
@@ -819,7 +819,7 @@ Public Class ViewDeviceForm
             If Not RequestIsOpen(SibiUID) Then
                 Dim ManRequest As New SibiManageRequestForm(Me, SibiUID)
             Else
-                ActivateFormByUID(SibiUID)
+                ActivateFormByUID(SibiUID, Me)
             End If
         End If
     End Sub

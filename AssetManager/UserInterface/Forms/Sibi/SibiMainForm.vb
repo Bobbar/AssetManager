@@ -160,7 +160,7 @@ Public Class SibiMainForm
         If Not RequestIsOpen(strUID) Then
             Dim ManRequest As New SibiManageRequestForm(Me, strUID)
         Else
-            ActivateFormByUID(strUID)
+            ActivateFormByUID(strUID, Me)
         End If
     End Sub
     Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint

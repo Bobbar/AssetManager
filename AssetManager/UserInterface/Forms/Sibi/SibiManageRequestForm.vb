@@ -719,7 +719,7 @@ VALUES
                 Dim NewAttach As New AttachmentsForm(Me, New sibi_attachments, CurrentRequest)
             End If
         Else
-            ActivateFormByUID(CurrentRequest.strUID)
+            ActivateFormByUID(CurrentRequest.strUID, Me)
         End If
     End Sub
     Public Function AttachmentsIsOpen() As Boolean

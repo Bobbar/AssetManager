@@ -1,10 +1,10 @@
 ﻿Public Module Form_Control
-    Public Sub ActivateFormByUID(strGUID As String)
-        For Each frm As Form In My.Application.OpenForms
+    Public Sub ActivateFormByUID(UID As String, ParentForm As Form)
+        For Each frm As Form In GetChildren(ParentForm)
             Select Case frm.GetType
                 Case GetType(ViewDeviceForm)
                     Dim vw As ViewDeviceForm = DirectCast(frm, ViewDeviceForm)
-                    If vw.CurrentViewDevice.strGUID = strGUID Then
+                    If vw.CurrentViewDevice.strGUID = UID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
@@ -12,7 +12,7 @@
                     End If
                 Case GetType(SibiManageRequestForm)
                     Dim vw As SibiManageRequestForm = DirectCast(frm, SibiManageRequestForm)
-                    If vw.CurrentRequest.strUID = strGUID Then
+                    If vw.CurrentRequest.strUID = UID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
@@ -20,7 +20,7 @@
                     End If
                 Case GetType(AttachmentsForm)
                     Dim vw As AttachmentsForm = DirectCast(frm, AttachmentsForm)
-                    If vw.AttachFolderUID = strGUID Then
+                    If vw.AttachFolderUID = UID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
@@ -28,7 +28,7 @@
                     End If
                 Case GetType(ViewHistoryForm)
                     Dim vw As ViewHistoryForm = DirectCast(frm, ViewHistoryForm)
-                    If vw.EntryGUID = strGUID Then
+                    If vw.EntryGUID = UID Then
                         vw.Activate()
                         vw.WindowState = FormWindowState.Normal
                         vw.Show()
@@ -126,7 +126,7 @@
             If Not DeviceIsOpen(Device.strGUID) Then
                 Dim NewView As New ViewDeviceForm(ParentForm, Device.strGUID)
             Else
-                ActivateFormByUID(Device.strGUID)
+                ActivateFormByUID(Device.strGUID, ParentForm)
             End If
         Else
             Message("Device not found.", vbOKOnly + vbExclamation, "Error", ParentForm)
