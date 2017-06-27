@@ -6,6 +6,7 @@ Public Class SibiMainForm
     Private MyWindowList As New WindowList(Me)
     Private LastCmd As DbCommand
     Private bolRebuildingCombo As Boolean = False
+    Private StatusColors As List(Of StatusColorStruct)
     Public Sub RefreshResults()
         ExecuteCmd(LastCmd)
     End Sub
@@ -86,17 +87,10 @@ Public Class SibiMainForm
     Public Sub SendToGrid(Results As DataTable)
         Try
             Dim table As New DataTable
-            table.Columns.Add("Request #", GetType(Integer))
-            table.Columns.Add("Status", GetType(String))
-            table.Columns.Add("Description", GetType(String))
-            table.Columns.Add("Request User", GetType(String))
-            table.Columns.Add("Request Type", GetType(String))
-            table.Columns.Add("Need By", GetType(Date))
-            table.Columns.Add("PO Number", GetType(String))
-            table.Columns.Add("Req. Number", GetType(String))
-            table.Columns.Add("RT Number", GetType(String))
-            table.Columns.Add("Create Date", GetType(Date))
-            table.Columns.Add("UID", GetType(String))
+            For Each col As ColumnStruct In SibiTableColumns()
+                Dim column = table.Columns.Add(col.ColumnName, col.ColumnType)
+                column.Caption = col.ColumnCaption
+            Next
             For Each r As DataRow In Results.Rows
                 table.Rows.Add(NoNull(r.Item(sibi_requests.RequestNumber)),
                GetHumanValue(SibiIndex.StatusType, r.Item(sibi_requests.Status).ToString),
@@ -111,13 +105,43 @@ Public Class SibiMainForm
                NoNull(r.Item(sibi_requests.UID)))
             Next
             bolGridFilling = True
+            StatusColors = GetStatusColors(Results)
+            ResultGrid.DataSource = Nothing
             ResultGrid.DataSource = table
+            SetGridHeaders()
             ResultGrid.ClearSelection()
             bolGridFilling = False
             table.Dispose()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
+    End Sub
+    Private Function GetStatusColors(Results As DataTable) As List(Of StatusColorStruct)
+        Dim StatusList As New List(Of StatusColorStruct)
+        For Each row As DataRow In Results.Rows
+            StatusList.Add(New StatusColorStruct(row.Item(sibi_requests.RequestNumber).ToString, GetRowColor(row.Item(sibi_requests.Status).ToString)))
+        Next
+        Return StatusList
+    End Function
+    Private Function SibiTableColumns() As List(Of ColumnStruct)
+        Dim ColList As New List(Of ColumnStruct)
+        ColList.Add(New ColumnStruct(sibi_requests.RequestNumber, "Request #", GetType(Integer)))
+        ColList.Add(New ColumnStruct(sibi_requests.Status, "Status", GetType(String)))
+        ColList.Add(New ColumnStruct(sibi_requests.Description, "Description", GetType(String)))
+        ColList.Add(New ColumnStruct(sibi_requests.RequestUser, "Request User", GetType(String)))
+        ColList.Add(New ColumnStruct(sibi_requests.Type, "Request Type", GetType(String)))
+        ColList.Add(New ColumnStruct(sibi_requests.NeedBy, "Need By", GetType(Date)))
+        ColList.Add(New ColumnStruct(sibi_requests.PO, "PO Number", GetType(String)))
+        ColList.Add(New ColumnStruct(sibi_requests.RequisitionNumber, "Req. Number", GetType(String)))
+        ColList.Add(New ColumnStruct(sibi_requests.RT_Number, "RT Number", GetType(String)))
+        ColList.Add(New ColumnStruct(sibi_requests.DateStamp, "Create Date", GetType(Date)))
+        ColList.Add(New ColumnStruct(sibi_requests.UID, "UID", GetType(String)))
+        Return ColList
+    End Function
+    Private Sub SetGridHeaders()
+        For Each col As DataGridViewColumn In ResultGrid.Columns
+            col.HeaderText = DirectCast(ResultGrid.DataSource, DataTable).Columns(col.HeaderText).Caption
+        Next
     End Sub
     Private Function SetDisplayYears() As Boolean
         Try
@@ -139,7 +163,7 @@ Public Class SibiMainForm
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        Return False
+            Return False
         End Try
     End Function
     Private Sub ShowAll(Optional Year As String = "")
@@ -154,7 +178,7 @@ Public Class SibiMainForm
         Dim NewRequest As New SibiManageRequestForm(Me)
     End Sub
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
-        OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value.ToString)
+        If ResultGrid.CurrentRow.Index > -1 Then OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, sibi_requests.UID), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
     Private Sub OpenRequest(strUID As String)
         If Not RequestIsOpen(strUID) Then
@@ -165,20 +189,24 @@ Public Class SibiMainForm
     End Sub
     Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
         If e.RowIndex > -1 Then
-            Dim dvgCell As DataGridViewCell = ResultGrid.Rows(e.RowIndex).Cells("Status")
+            Dim dvgCell As DataGridViewCell = ResultGrid.Rows(e.RowIndex).Cells(sibi_requests.Status)
             Dim dvgRow As DataGridViewRow = ResultGrid.Rows(e.RowIndex)
             Dim BackCol, ForeCol As Color
-            BackCol = GetRowColor(dvgRow.Cells("Status").Value.ToString)
+            BackCol = GetRowColorFromID(dvgRow.Cells(sibi_requests.RequestNumber).Value.ToString)
             ForeCol = GetFontColor(BackCol)
             dvgCell.Style.BackColor = BackCol
             dvgCell.Style.ForeColor = ForeCol
             dvgCell.Style.SelectionBackColor = ColorAlphaBlend(BackCol, Color.FromArgb(87, 87, 87))
         End If
     End Sub
-    Private Function GetRowColor(Value As String) As Color 'TODO: Change this to stop referencing a "Human" DisplayValue
-        Dim DBVal As String = GetDBValueFromHuman(SibiIndex.StatusType, Value)
+    Private Function GetRowColorFromID(ReqID As String) As Color
+        For Each status In StatusColors
+            If status.StatusID = ReqID Then Return status.StatusColor
+        Next
+    End Function
+    Private Function GetRowColor(Value As String) As Color
         Dim DarkColor As Color = Color.FromArgb(222, 222, 222) 'gray color
-        Select Case DBVal
+        Select Case Value
             Case "NEW"
                 Return ColorAlphaBlend(Color.FromArgb(0, 255, 30), DarkColor)
             Case "QTN"

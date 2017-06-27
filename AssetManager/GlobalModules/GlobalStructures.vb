@@ -98,5 +98,23 @@ Public Structure CheckStruct
     Public strCheckInUser As String
     Public strCheckInTime As String
 End Structure
+Public Structure ColumnStruct
+    Public ColumnName As String
+    Public ColumnCaption As String
+    Public ColumnType As Type
+    Sub New(Name As String, Caption As String, Type As Type)
+        ColumnName = Name
+        ColumnCaption = Caption
+        ColumnType = Type
+    End Sub
+End Structure
+Public Structure StatusColorStruct
+    Public StatusID As String
+    Public StatusColor As Color
+    Sub New(ID As String, Color As Color)
+        StatusID = ID
+        StatusColor = Color
+    End Sub
+End Structure
 
 
