@@ -419,16 +419,18 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
             Message("Could not resolve any Req. or FA info.", vbOKOnly + vbInformation, "Nothing Found")
         End If
     End Sub
-    Private Async Function LoadMunisInventoryGrid(Device As Device_Info) As Task(Of DataTable) 'TODO: Make this cleaner. 
+    Private Async Function LoadMunisInventoryGrid(Device As Device_Info) As Task(Of DataTable)
         Try
             Dim GridData As New DataTable
             Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
+            Dim AssetTagQuery As String = "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.strAssetTag & "'"
+            Dim SerialQuery As String = "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_serial='" & Device.strSerial & "'"
             If Device.strSerial <> "" Then 'if serial is available, search FA by serial. Else, search by asset
-                GridData = Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_serial='" & Device.strSerial & "'")
+                GridData = Await MunisComms.Return_MSSQLTableAsync(SerialQuery)
                 If GridData.Rows.Count > 0 Then 'if serial returned results, return results. Else, try search by Asset
                     Return GridData
                 ElseIf GridData.Rows.Count < 1 AndAlso Device.strAssetTag <> "" Then
-                    GridData = Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.strAssetTag & "'")
+                    GridData = Await MunisComms.Return_MSSQLTableAsync(AssetTagQuery)
                     If GridData.Rows.Count < 1 Then
                         Return Nothing
                     Else
@@ -436,7 +438,7 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
                     End If
                 End If
             ElseIf Device.strSerial = "" AndAlso Device.strAssetTag <> "" Then
-                GridData = Await MunisComms.Return_MSSQLTableAsync("SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.strAssetTag & "'")
+                GridData = Await MunisComms.Return_MSSQLTableAsync(AssetTagQuery)
                 If GridData.Rows.Count < 1 Then
                     Return Nothing
                 Else
