@@ -37,19 +37,18 @@ Module SecurityFunctions
         End Using
     End Function
     Public Function GetHashOfFile(Path As String) As String
-        Dim hash As MD5
-        hash = MD5.Create
         Dim hashValue() As Byte
-        Dim fileStream As FileStream = File.OpenRead(Path)
-        fileStream.Position = 0
-        hashValue = hash.ComputeHash(fileStream)
-        Dim sBuilder As New StringBuilder
-        Dim i As Integer
-        For i = 0 To hashValue.Length - 1
-            sBuilder.Append(hashValue(i).ToString("x2"))
-        Next
-        fileStream.Close()
-        Return sBuilder.ToString
+        Using fStream As New FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read, 16 * 1024 * 1024), hash = MD5.Create
+            fStream.Position = 0
+            hashValue = hash.ComputeHash(fStream)
+            Dim sBuilder As New StringBuilder
+            Dim i As Integer
+            For i = 0 To hashValue.Length - 1
+                sBuilder.Append(hashValue(i).ToString("x2"))
+            Next
+            fStream.Close()
+            Return sBuilder.ToString
+        End Using
     End Function
     Public Function GetHashOfFileStream(ByRef MemStream As IO.FileStream) As String
         Using md5Hash As MD5 = MD5.Create

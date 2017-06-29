@@ -4,6 +4,7 @@ Imports System.IO
 Imports System.ComponentModel
 Imports System.Text
 Imports System.Windows.Forms
+Imports System.Environment
 
 
 Public Class GK_Updater : Implements IDisposable
@@ -12,14 +13,15 @@ Public Class GK_Updater : Implements IDisposable
     Private WithEvents SpeedTimer As Timer
     Private CurrentStatus As Status_Stats
     Private ErrList As New List(Of String)
-    Private ReadOnly GKPath As String = "\PSi\Gatekeeper"
+    Private ReadOnly GKPath As String = "\PSi\Gatekeeper\"
+    Private GKSourcePath As String
     Private ClientPath As String
     Private ClientHostName As String
     Private CurrentCreds As NetworkCredential
     Private CurrentFileIndex As Integer = 0
     Private lngBytesMoved As Integer
     Private progIts As Integer = 0
-    Private ServerPath As String = "C:"
+    '  Private ServerPath As String = "C:"
     Private ElapTime As New Stopwatch
     Private Progress As New ProgressCounter
     Private bolCreateMissingDirectory As Boolean = True
@@ -27,8 +29,8 @@ Public Class GK_Updater : Implements IDisposable
 #End Region
 
 #Region "Constructors"
-    Sub New(ByVal HostName As String)
-
+    Sub New(ByVal HostName As String, GatekeeperPath As String)
+        GKSourcePath = GatekeeperPath
         ClientHostName = HostName
         ClientPath = "\\" & HostName & "\c$"
         InitWorker()
@@ -176,7 +178,7 @@ Public Class GK_Updater : Implements IDisposable
         End If
         Dim Args As Worker_Args = DirectCast(e.Argument, Worker_Args)
         Using NetCon As New NetworkConnection(ClientPath, Args.Credentials)
-            Dim sourceDir As String = ServerPath & GKPath
+            Dim sourceDir As String = GKSourcePath
             Dim targetDir As String = ClientPath & GKPath
             Dim StartIdx As Integer = Args.StartIndex
             Dim CurFileIdx As Integer = Args.StartIndex

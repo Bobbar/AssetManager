@@ -17,14 +17,14 @@ Public Class GKProgressControl
         End Get
     End Property
 
-    Sub New(ParentForm As Form, ByVal Device As Device_Info, CreateMissingDirs As Boolean, Optional Seq As Integer = 0)
+    Sub New(ParentForm As Form, ByVal Device As Device_Info, CreateMissingDirs As Boolean, GKPath As String, Optional Seq As Integer = 0)
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
         Me.Size = Me.MinimumSize
         MyParentForm = ParentForm
         CurDevice = Device
-        MyUpdater = New GK_Updater("D" & CurDevice.strSerial)
+        MyUpdater = New GK_Updater("D" & CurDevice.strSerial, GKPath)
         MyUpdater.CreateMissingDirectories = CreateMissingDirs
         Me.DoubleBuffered = True
         lblInfo.Text = CurDevice.strSerial & " - " & CurDevice.strCurrentUser
@@ -87,7 +87,6 @@ Public Class GKProgressControl
                 YLoc = Convert.ToSingle(pbStatus.Height / 2 - Size / 2)
                 gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size)
                 gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size)
-                Debug.Print("Draw circle. " & Environment.TickCount)
                 pbStatus.Image = bm
             End Using
         End If

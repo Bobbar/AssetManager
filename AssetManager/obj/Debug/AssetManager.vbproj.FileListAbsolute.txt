@@ -74,3 +74,4 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\x64\SQLite.Interop.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\x86\SQLite.Interop.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\System.Data.SQLite.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\System.Data.SQLite.xml
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.PackFileForm.resources

@@ -23,7 +23,7 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Asset Manager\</PublishUrl>
+    <PublishUrl>\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Asset Manager_TEST\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -37,7 +37,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>95</ApplicationRevision>
+    <ApplicationRevision>101</ApplicationRevision>
     <ApplicationVersion>4.4.3.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -208,10 +208,18 @@
     <Compile Include="UserInterface\Forms\GetCredentialsForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\GZipCompress.vb" />
     <Compile Include="UserInterface\Forms\GK_Updater\GKUpdaterForm.Designer.vb">
       <DependentUpon>GKUpdaterForm.vb</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\Forms\GK_Updater\GKUpdaterForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\ManagePackFile.vb" />
+    <Compile Include="UserInterface\Forms\GK_Updater\PackFileForm.Designer.vb">
+      <DependentUpon>PackFileForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\GK_Updater\PackFileForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\GridForm.Designer.vb">
@@ -368,6 +376,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKUpdaterForm.resx">
       <DependentUpon>GKUpdaterForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\PackFileForm.resx">
+      <DependentUpon>PackFileForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GridForm.resx">
       <DependentUpon>GridForm.vb</DependentUpon>

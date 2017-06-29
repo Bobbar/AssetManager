@@ -1,12 +1,14 @@
 ﻿Imports System.ComponentModel
-Imports System.Net.NetworkInformation
 Public Class GKUpdaterForm
-    Private bolRunQueue As Boolean = True
+    Private bolRunQueue As Boolean = False
     Private MaxSimUpdates As Integer = 4
     Private MyUpdates As New List(Of GKProgressControl)
     Private bolStarting As Boolean = True
     Private bolCheckForDups As Boolean = True
     Private bolCreateMissingDirs As Boolean = False
+    Private PackFileReady As Boolean = False
+    Private PackFunc As New ManagePackFile
+
     Sub New()
 
         ' This call is required by the designer.
@@ -21,15 +23,19 @@ Public Class GKUpdaterForm
     End Sub
     Public Sub AddUpdate(ByVal Device As Device_Info)
         If bolCheckForDups AndAlso Not Exists(Device) Then
-            Dim NewProgCtl As New GKProgressControl(Me, Device, bolCreateMissingDirs, MyUpdates.Count + 1)
+            Dim NewProgCtl As New GKProgressControl(Me, Device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
             Updater_Table.Controls.Add(NewProgCtl)
             MyUpdates.Add(NewProgCtl)
             AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
             ProcessUpdates()
+            Me.WindowState = FormWindowState.Normal
+            Me.Activate()
         Else
             Dim blah = Message("An update for device " & Device.strSerial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
             If blah = vbOK Then
                 StartUpdateByDevice(Device)
+                Me.WindowState = FormWindowState.Normal
+                Me.Activate()
             End If
         End If
     End Sub
@@ -50,7 +56,6 @@ Public Class GKUpdaterForm
         Next
         Return False
     End Function
-
     Private Sub CancelAll()
         For Each upd As GKProgressControl In MyUpdates
             If upd.ProgStatus = GKProgressControl.Progress_Status.Running Then
@@ -128,7 +133,9 @@ Public Class GKUpdaterForm
         If Not bolStarting Then MaxSimUpdates = CInt(MaxUpdates.Value)
     End Sub
     Private Sub ProcessUpdates()
-        If CanRunMoreUpdates() Then StartNextUpdate()
+        If CanRunMoreUpdates() Then
+            StartNextUpdate()
+        End If
         PruneQueue()
         SetStats()
     End Sub
@@ -190,15 +197,17 @@ Public Class GKUpdaterForm
         Updater_Table.Controls.Clear()
         Updater_Table.Controls.AddRange(sortUpdates.ToArray)
     End Sub
-
     ''' <summary>
     ''' Starts the next update that has a queued status.
     ''' </summary>
     Private Sub StartNextUpdate()
         For Each upd As GKProgressControl In MyUpdates
             If upd.ProgStatus = GKProgressControl.Progress_Status.Queued Then
-                upd.StartUpdate()
-                Exit Sub
+                CheckPackFile()
+                If PackFileReady Then
+                    upd.StartUpdate()
+                    Exit Sub
+                End If
             End If
         Next
     End Sub
@@ -214,5 +223,26 @@ Public Class GKUpdaterForm
     End Sub
     Private Sub tsmCreateDirs_Click(sender As Object, e As EventArgs) Handles tsmCreateDirs.Click
         bolCreateMissingDirs = tsmCreateDirs.Checked
+    End Sub
+    Private Sub GKUpdaterForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        ProcessPackFile()
+    End Sub
+    Private Sub ProcessPackFile()
+        Using NewUnPack As New PackFileForm(False)
+            NewUnPack.ShowDialog(Me)
+            PackFileReady = NewUnPack.PackVerified
+            bolRunQueue = PackFileReady
+        End Using
+    End Sub
+    Private Async Sub CheckPackFile()
+        PackFileReady = Await PackFunc.VerifyPackFile
+        bolRunQueue = PackFileReady
+        If Not PackFileReady Then
+            ProcessPackFile()
+        End If
+    End Sub
+    Private Sub GKPackageVeriToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GKPackageVeriToolStripMenuItem.Click
+        Dim NewUnPack As New PackFileForm(True)
+        NewUnPack.Show()
     End Sub
 End Class

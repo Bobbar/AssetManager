@@ -41,6 +41,8 @@ Partial Class GKUpdaterForm
         Me.MenuStrip = New System.Windows.Forms.MenuStrip()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmCreateDirs = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FunctionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GKPackageVeriToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         CType(Me.MaxUpdates, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -203,7 +205,7 @@ Partial Class GKUpdaterForm
         '
         'MenuStrip
         '
-        Me.MenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem})
+        Me.MenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem, Me.FunctionsToolStripMenuItem})
         Me.MenuStrip.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip.Name = "MenuStrip"
         Me.MenuStrip.Size = New System.Drawing.Size(1094, 24)
@@ -223,6 +225,19 @@ Partial Class GKUpdaterForm
         Me.tsmCreateDirs.Name = "tsmCreateDirs"
         Me.tsmCreateDirs.Size = New System.Drawing.Size(211, 22)
         Me.tsmCreateDirs.Text = "Create Missing Directories"
+        '
+        'FunctionsToolStripMenuItem
+        '
+        Me.FunctionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GKPackageVeriToolStripMenuItem})
+        Me.FunctionsToolStripMenuItem.Name = "FunctionsToolStripMenuItem"
+        Me.FunctionsToolStripMenuItem.Size = New System.Drawing.Size(71, 20)
+        Me.FunctionsToolStripMenuItem.Text = "Functions"
+        '
+        'GKPackageVeriToolStripMenuItem
+        '
+        Me.GKPackageVeriToolStripMenuItem.Name = "GKPackageVeriToolStripMenuItem"
+        Me.GKPackageVeriToolStripMenuItem.Size = New System.Drawing.Size(182, 22)
+        Me.GKPackageVeriToolStripMenuItem.Text = "Manage GK Package"
         '
         'GKUpdaterForm
         '
@@ -270,4 +285,6 @@ Partial Class GKUpdaterForm
     Friend WithEvents MenuStrip As MenuStrip
     Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents tsmCreateDirs As ToolStripMenuItem
+    Friend WithEvents FunctionsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents GKPackageVeriToolStripMenuItem As ToolStripMenuItem
 End Class
