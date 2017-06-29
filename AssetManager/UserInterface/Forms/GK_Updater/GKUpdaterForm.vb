@@ -21,8 +21,10 @@ Public Class GKUpdaterForm
 
 
     End Sub
-    Public Sub AddUpdate(ByVal Device As Device_Info)
+    Public Async Sub AddUpdate(ByVal Device As Device_Info)
+
         If bolCheckForDups AndAlso Not Exists(Device) Then
+            Await CheckPackFile()
             Dim NewProgCtl As New GKProgressControl(Me, Device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
             Updater_Table.Controls.Add(NewProgCtl)
             MyUpdates.Add(NewProgCtl)
@@ -31,13 +33,15 @@ Public Class GKUpdaterForm
             Me.WindowState = FormWindowState.Normal
             Me.Activate()
         Else
-            Dim blah = Message("An update for device " & Device.strSerial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
-            If blah = vbOK Then
+                Dim blah = Message("An update for device " & Device.strSerial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
+                If blah = vbOK Then
+                Await CheckPackFile()
                 StartUpdateByDevice(Device)
                 Me.WindowState = FormWindowState.Normal
                 Me.Activate()
             End If
-        End If
+            End If
+
     End Sub
     Private Sub StartUpdateByDevice(Device As Device_Info)
         For Each upd As GKProgressControl In MyUpdates
@@ -203,11 +207,8 @@ Public Class GKUpdaterForm
     Private Sub StartNextUpdate()
         For Each upd As GKProgressControl In MyUpdates
             If upd.ProgStatus = GKProgressControl.Progress_Status.Queued Then
-                CheckPackFile()
-                If PackFileReady Then
-                    upd.StartUpdate()
-                    Exit Sub
-                End If
+                upd.StartUpdate()
+                Exit Sub
             End If
         Next
     End Sub
@@ -225,7 +226,7 @@ Public Class GKUpdaterForm
         bolCreateMissingDirs = tsmCreateDirs.Checked
     End Sub
     Private Sub GKUpdaterForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        ProcessPackFile()
+        '   ProcessPackFile()
     End Sub
     Private Sub ProcessPackFile()
         Using NewUnPack As New PackFileForm(False)
@@ -234,13 +235,16 @@ Public Class GKUpdaterForm
             bolRunQueue = PackFileReady
         End Using
     End Sub
-    Private Async Sub CheckPackFile()
+    Private Async Function CheckPackFile() As Task(Of Boolean)
         PackFileReady = Await PackFunc.VerifyPackFile
         bolRunQueue = PackFileReady
         If Not PackFileReady Then
+            CancelAll()
+            Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", vbOKOnly + vbExclamation, "Pack file out of date", Me)
             ProcessPackFile()
         End If
-    End Sub
+        Return True
+    End Function
     Private Sub GKPackageVeriToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GKPackageVeriToolStripMenuItem.Click
         Dim NewUnPack As New PackFileForm(True)
         NewUnPack.Show()
