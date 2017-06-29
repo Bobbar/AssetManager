@@ -335,7 +335,9 @@ Public Class MainForm
             ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
         End If
         Try
-            Dim ItsTillHashCheck As Integer = 60
+            Dim FailedPings As Integer = 0
+            Const MaxFailedPings As Integer = 3
+            Const ItsTillHashCheck As Integer = 60
             Dim Its As Integer = 0
             Dim NoCacheMessageSent As Boolean = False
             Do Until ProgramEnding
@@ -362,6 +364,7 @@ Public Class MainForm
                     Case ServerPinging And Not OfflineMode
                         'Everything is normal
 #Region "Server Online. Not In Cache Mode."
+                        FailedPings = 0
                         ConnectStatus("Connected", Color.Green, "Connection OK")
                         StatusStrip1.BackColor = colFormBackColor
                         If CacheAvailable Then
@@ -383,18 +386,22 @@ Public Class MainForm
                     Case Not ServerPinging And Not OfflineMode
                         'Server offline. Verify cache and enable if possible.
 #Region "Server Offline. Not In Cache Mode."
-                        StatusStrip1.BackColor = colStatusBarProblem
-                        ConnectStatus("Offline", Color.Red, "No connection. Cache unavailable.")
-                        If CacheAvailable Then
-                            OfflineMode = True
+                        FailedPings += 1
+                        If FailedPings >= MaxFailedPings Then
+                            FailedPings = 0
                             StatusStrip1.BackColor = colStatusBarProblem
-                            ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
-                            Message("Connection Lost, cached mode enabled. Some functionality will be disabled.", vbOKOnly + vbInformation, "Cache Mode Enabled", Me)
-                        Else
-                            OfflineMode = False
-                            If Not NoCacheMessageSent Then
-                                Message("Connection to the server was lost, and the local DB cache could not be verified. All functionality disabled.", vbOKOnly + vbExclamation, "Cache Mode Failed", Me)
-                                NoCacheMessageSent = True
+                            ConnectStatus("Offline", Color.Red, "No connection. Cache unavailable.")
+                            If CacheAvailable Then
+                                OfflineMode = True
+                                StatusStrip1.BackColor = colStatusBarProblem
+                                ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
+                                Message("Connection Lost, cached mode enabled. Some functionality will be disabled.", vbOKOnly + vbInformation, "Cache Mode Enabled", Me)
+                            Else
+                                OfflineMode = False
+                                If Not NoCacheMessageSent Then
+                                    Message("Connection to the server was lost, and the local DB cache could not be verified. All functionality disabled.", vbOKOnly + vbExclamation, "Cache Mode Failed", Me)
+                                    NoCacheMessageSent = True
+                                End If
                             End If
                         End If
 #End Region
@@ -405,6 +412,7 @@ Public Class MainForm
                         ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
 
                     Case ServerPinging And OfflineMode
+                        FailedPings = 0
                         'Connection Restored. Re-enable comms and rebuild cache.
 #Region "Server Online. Running In Cache Mode."
                         OfflineMode = False
@@ -416,7 +424,6 @@ Public Class MainForm
 #End Region
 
                 End Select
-
             Loop
         Catch
             ConnectionWatchDog()
