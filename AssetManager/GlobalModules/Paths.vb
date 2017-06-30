@@ -12,6 +12,7 @@ Module Paths
     Public ReadOnly strSQLiteDir As String = strAppDir & "SQLiteCache\"
 
     'Gatekeeper package paths
+    Public ReadOnly GKInstallDir As String = "C:\PSi\Gatekeeper"
     Public ReadOnly GKPackFileName As String = "GatekeeperPack.gz"
     Public ReadOnly GKPackHashName As String = "hash.md5"
     Public ReadOnly GKPackFileFDir As String = strAppDir & "GKUpdateFiles\PackFile\"

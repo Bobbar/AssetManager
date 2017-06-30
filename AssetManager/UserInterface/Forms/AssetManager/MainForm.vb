@@ -336,7 +336,7 @@ Public Class MainForm
         End If
         Try
             Dim FailedPings As Integer = 0
-            Const MaxFailedPings As Integer = 3
+            Const MaxFailedPings As Integer = 2
             Const ItsTillHashCheck As Integer = 60
             Dim Its As Integer = 0
             Dim NoCacheMessageSent As Boolean = False

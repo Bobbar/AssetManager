@@ -157,7 +157,7 @@ Public Class GK_Updater : Implements IDisposable
         Dim CurrentFile As New FileInfo(Source)
         Progress.ResetProgress()
         Using fStream As System.IO.FileStream = CurrentFile.OpenRead(),
-                destFile As System.IO.FileStream = New FileStream(Dest, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, BufferSize, FileOptions.WriteThrough)
+                destFile As System.IO.FileStream = New FileStream(Dest, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, BufferSize, FileOptions.None)
             CurrentStatus.CurFileProgress = 1
             totalBytesIn = 0
             Progress.BytesToTransfer = CInt(fStream.Length)
