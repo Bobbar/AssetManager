@@ -615,7 +615,7 @@ VALUES
     End Sub
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        If CurrentRequest.strUID <> "" Then UpdateMode(bolUpdating)
+        If CurrentRequest.strUID <> "" And Not bolUpdating Then UpdateMode(bolUpdating)
     End Sub
     Private Sub UpdateMode(Enable As Boolean)
         If Not Enable Then
@@ -654,6 +654,12 @@ VALUES
     End Sub
     Public Sub NewRequest()
         If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
+        If bolUpdating Then
+            Dim blah = Message("All current changes will be lost. Are you sure you want to create a new request?", vbOKCancel + vbQuestion, "Create New Request", Me)
+            If blah <> vbOK Then
+                Exit Sub
+            End If
+        End If
         ClearAll()
         CurrentRequest.strUID = Guid.NewGuid.ToString
         bolUpdating = True
@@ -745,7 +751,7 @@ VALUES
                 Dim NewNote As New SibiNotesForm(Me, CurrentRequest)
                 If NewNote.DialogResult = DialogResult.OK Then
                     AddNewNote(NewNote.Request.strUID, Trim(NewNote.rtbNotes.Rtf))
-                    RefreshRequest()
+                    LoadNotes(CurrentRequest.strUID)
                 End If
             End If
         Catch ex As Exception
@@ -910,8 +916,11 @@ VALUES
         bolUpdating = False
     End Sub
     Private Sub cmdDiscard_Click(sender As Object, e As EventArgs) Handles cmdDiscard.Click
-        HideEditControls()
-        OpenRequest(CurrentRequest.strUID)
+        Dim blah = Message("Are you sure you want to discard all changes?", vbOKCancel + vbQuestion, "Discard Changes", Me)
+        If blah = vbOK Then
+            HideEditControls()
+            OpenRequest(CurrentRequest.strUID)
+        End If
     End Sub
     Private Sub txtPO_Click(sender As Object, e As EventArgs) Handles txtPO.Click
         Dim PO As String = Trim(txtPO.Text)
