@@ -1,9 +1,9 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports System.IO
 Public Structure Combo_Data
-    Public strLong As String
-    Public strShort As String
-    Public strID As String
+    Public Property strLong As String
+    Public Property strShort As String
+    Public Property strID As String
 End Structure
 Public Structure Device_Info
     Public strAssetTag As String
@@ -102,10 +102,21 @@ Public Structure ColumnStruct
     Public ColumnName As String
     Public ColumnCaption As String
     Public ColumnType As Type
+    Public ColumnReadOnly As Boolean
+    Public ColumnVisible As Boolean
     Sub New(Name As String, Caption As String, Type As Type)
         ColumnName = Name
         ColumnCaption = Caption
         ColumnType = Type
+        ColumnReadOnly = False
+        ColumnVisible = True
+    End Sub
+    Sub New(Name As String, Caption As String, Type As Type, IsReadOnly As Boolean, Visible As Boolean)
+        ColumnName = Name
+        ColumnCaption = Caption
+        ColumnType = Type
+        ColumnReadOnly = IsReadOnly
+        ColumnVisible = Visible
     End Sub
 End Structure
 Public Structure StatusColorStruct

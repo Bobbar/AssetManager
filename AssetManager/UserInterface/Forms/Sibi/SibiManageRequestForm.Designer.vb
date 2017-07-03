@@ -106,7 +106,7 @@ Partial Class SibiManageRequestForm
         '
         Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmPopFA, Me.tsmLookupDevice, Me.tsmCopyText, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(169, 120)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(169, 98)
         '
         'tsmPopFA
         '

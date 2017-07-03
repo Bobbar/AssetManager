@@ -25,9 +25,9 @@ Public Class UserManagerForm
         UpdateAccessLabel()
     End Sub
     Private Sub ListUsers()
-        SendToGrid(AssetFunc.User_GetUserList) 'Comm.Return_SQLTable("SELECT * FROM users"))
+        SendToGrid()
     End Sub
-    Private Sub SendToGrid(Results As List(Of User_Info)) ' Data() As Device_Info)
+    Private Sub SendToGrid()
         Dim cmdBuilder As New MySqlCommandBuilder(myAdapter)
         Dim table As New DataTable
         table.Locale = System.Globalization.CultureInfo.InvariantCulture
