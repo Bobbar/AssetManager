@@ -787,32 +787,50 @@ VALUES
                     RequestItemsGrid.Rows(e.RowIndex).Selected = True
                     RequestItemsGrid.CurrentCell = RequestItemsGrid(ColIndex, e.RowIndex)
                 End If
-                If RequestItemsGrid.CurrentCell IsNot Nothing Then
-                    If ValidColumn() Then
-                        tsmPopFA.Visible = True
-                        tsmSeparator.Visible = True
-                        If RequestItemsGrid.CurrentCell.Value IsNot Nothing AndAlso RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
-                            tsmLookupDevice.Visible = True
-                        Else
-                            tsmLookupDevice.Visible = False
-                        End If
-                    Else
-                        tsmPopFA.Visible = False
-                        tsmSeparator.Visible = False
-                        tsmLookupDevice.Visible = False
-                    End If
-                    If bolUpdating Then
-                        tsmDeleteItem.Visible = True
-                    Else
-                        tsmDeleteItem.Visible = False
-                    End If
-                End If
+                SetToolStripItems()
             End If
 
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+    Private Sub SetToolStripItems()
+        If RequestItemsGrid.CurrentCell IsNot Nothing Then
+            If ValidColumn() Then
+                tsmPopFA.Visible = True
+                tsmSeparator.Visible = True
+                If RequestItemsGrid.CurrentCell.Value IsNot Nothing AndAlso RequestItemsGrid.CurrentCell.Value.ToString <> "" Then
+                    tsmLookupDevice.Visible = True
+                Else
+                    tsmLookupDevice.Visible = False
+                End If
+            Else
+                tsmPopFA.Visible = False
+                tsmSeparator.Visible = False
+                tsmLookupDevice.Visible = False
+            End If
+            If bolUpdating Then
+                tsmDeleteItem.Visible = True
+            Else
+                tsmDeleteItem.Visible = False
+            End If
+        End If
+        SetGLBudgetItems()
+    End Sub
+    Private Sub SetGLBudgetItems()
+        Dim ColIndex As Integer = RequestItemsGrid.CurrentCell.ColumnIndex
+        Select Case True
+            Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Object_Code), ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Org_Code)
+                If GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Object_Code) <> "" And GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Org_Code) <> "" Then
+                    tsmGLBudget.Visible = True
+                Else
+                    tsmGLBudget.Visible = False
+                End If
+            Case Else
+                tsmGLBudget.Visible = False
+        End Select
+    End Sub
+
     Private Function ValidColumn() As Boolean
         Try
             Select Case True
@@ -1142,4 +1160,14 @@ VALUES
         End Using
     End Sub
 
+    Private Sub tsmGLBudget_Click(sender As Object, e As EventArgs) Handles tsmGLBudget.Click
+        Try
+            Dim Org = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Org_Code)
+            Dim Obj = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Object_Code)
+            Dim FY = CurrentRequest.dtDateStamp.Year.ToString
+            MunisFunc.NewOrgObView(Org, Obj, FY, Me)
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
+    End Sub
 End Class

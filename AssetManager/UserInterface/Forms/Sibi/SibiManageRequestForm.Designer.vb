@@ -28,6 +28,7 @@ Partial Class SibiManageRequestForm
         Me.PopupMenuItems = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.tsmPopFA = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmGLBudget = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmCopyText = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -104,42 +105,51 @@ Partial Class SibiManageRequestForm
         '
         'PopupMenuItems
         '
-        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmPopFA, Me.tsmLookupDevice, Me.tsmCopyText, Me.tsmSeparator, Me.tsmDeleteItem})
+        Me.PopupMenuItems.ImageScalingSize = New System.Drawing.Size(20, 20)
+        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmPopFA, Me.tsmLookupDevice, Me.tsmGLBudget, Me.tsmCopyText, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(169, 98)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(179, 162)
         '
         'tsmPopFA
         '
         Me.tsmPopFA.Image = Global.AssetManager.My.Resources.Resources.ImportIcon
         Me.tsmPopFA.Name = "tsmPopFA"
-        Me.tsmPopFA.Size = New System.Drawing.Size(168, 22)
+        Me.tsmPopFA.Size = New System.Drawing.Size(178, 26)
         Me.tsmPopFA.Text = "Populate From FA"
         '
         'tsmLookupDevice
         '
         Me.tsmLookupDevice.Image = Global.AssetManager.My.Resources.Resources.SearchIcon
         Me.tsmLookupDevice.Name = "tsmLookupDevice"
-        Me.tsmLookupDevice.Size = New System.Drawing.Size(168, 22)
+        Me.tsmLookupDevice.Size = New System.Drawing.Size(178, 26)
         Me.tsmLookupDevice.Text = "Lookup Device"
         Me.tsmLookupDevice.Visible = False
+        '
+        'tsmGLBudget
+        '
+        Me.tsmGLBudget.Image = Global.AssetManager.My.Resources.Resources.MoneyCircle2Icon
+        Me.tsmGLBudget.Name = "tsmGLBudget"
+        Me.tsmGLBudget.Size = New System.Drawing.Size(178, 26)
+        Me.tsmGLBudget.Text = "Lookup GL/Budget"
+        Me.tsmGLBudget.Visible = False
         '
         'tsmCopyText
         '
         Me.tsmCopyText.Image = Global.AssetManager.My.Resources.Resources.CopyIcon
         Me.tsmCopyText.Name = "tsmCopyText"
-        Me.tsmCopyText.Size = New System.Drawing.Size(168, 22)
+        Me.tsmCopyText.Size = New System.Drawing.Size(178, 26)
         Me.tsmCopyText.Text = "Copy Selected"
         '
         'tsmSeparator
         '
         Me.tsmSeparator.Name = "tsmSeparator"
-        Me.tsmSeparator.Size = New System.Drawing.Size(165, 6)
+        Me.tsmSeparator.Size = New System.Drawing.Size(175, 6)
         '
         'tsmDeleteItem
         '
         Me.tsmDeleteItem.Image = Global.AssetManager.My.Resources.Resources.DeleteRedIcon
         Me.tsmDeleteItem.Name = "tsmDeleteItem"
-        Me.tsmDeleteItem.Size = New System.Drawing.Size(168, 22)
+        Me.tsmDeleteItem.Size = New System.Drawing.Size(178, 26)
         Me.tsmDeleteItem.Text = "Delete Item"
         '
         'ToolTip
@@ -825,4 +835,5 @@ Partial Class SibiManageRequestForm
     Friend WithEvents tsmCopyText As ToolStripMenuItem
     Friend WithEvents tsbRefresh As ToolStripButton
     Friend WithEvents tsmPopFA As ToolStripMenuItem
+    Friend WithEvents tsmGLBudget As ToolStripMenuItem
 End Class

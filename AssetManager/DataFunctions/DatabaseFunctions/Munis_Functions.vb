@@ -238,19 +238,22 @@ Public Class Munis_Functions
     End Sub
     Public Sub OrgObSearch(Parent As Form)
         Using NewDialog As New MyDialog(Parent)
-            Dim strOrg, strObj As String
+            Dim strOrg, strObj, strFY As String
             With NewDialog
                 .Text = "Org/Object Code Search"
                 .AddTextBox("txtOrg", "Org Code:")
                 .AddTextBox("txtObj", "Object Code:")
+                .AddTextBox("txtFY", "Fiscal Year:")
+                .SetControlValue("txtFY", Now.Year)
                 .ShowDialog()
                 If .DialogResult = DialogResult.OK Then
                     strOrg = NewDialog.GetControlValue("txtOrg").ToString
                     strObj = NewDialog.GetControlValue("txtObj").ToString
+                    strFY = NewDialog.GetControlValue("txtFY").ToString
                 End If
             End With
             If Trim(strOrg) IsNot "" Then
-                NewOrgObView(strOrg, strObj, Parent)
+                NewOrgObView(strOrg, strObj, strFY, Parent)
             End If
         End Using
     End Sub
@@ -258,7 +261,7 @@ Public Class Munis_Functions
         Dim strQRY As String = "SELECT TOP 100 a_employee_number FROM pr_employee_master WHERE e_supervisor='" & SupEmpNum & "'"
         Return MunisComms.Return_MSSQLTable(strQRY)
     End Function
-    Private Async Sub NewOrgObView(Org As String, Optional Obj As String = Nothing, Optional Parent As Form = Nothing)
+    Public Async Sub NewOrgObView(Org As String, Obj As String, FY As String, Parent As Form)
         Waiting()
         Dim NewGridForm As New GridForm(Parent, "Org/Obj Info")
         Dim Columns As String = " glma_org, glma_obj, glma_desc, glma_seg5, glma_bud_yr, glma_orig_bud_cy, glma_rev_bud_cy, glma_encumb_cy, glma_memo_bal_cy, glma_rev_bud_cy-glma_encumb_cy-glma_memo_bal_cy AS 'Funds Available' "
@@ -268,13 +271,20 @@ Public Class Munis_Functions
             Dim GLMasterQry As String = "Select TOP " & intMaxResults & " " & Columns & "FROM glmaster"
             Dim RollUpCode As String = Await MunisComms.Return_MSSQLValueAsync("gl_budget_rollup", "a_org", Org, "a_rollup_code")
             Dim RollUpQry As String = "SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_rollup_code = '" & RollUpCode & "'"
+            Dim BudgetQry As String = "SELECT TOP " & intMaxResults & " a_projection_no,a_org,a_object,db_line,db_bud_desc_line1,db_bud_reason_desc,db_bud_req_qty5,db_bud_unit_cost,db_bud_req_amt5,a_account_id FROM gl_budget_detail_2" ' WHERE a_projection_no='" & FY & "' AND a_org='" & Org & "' AND a_object='" & Obj & "'"
 
             Dim Params As New List(Of SearchVal)
             Params.Add(New SearchVal("glma_org", Org,, True))
             Params.Add(New SearchVal("glma_obj", Obj,, True))
 
-            NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.Return_MSSQLTableFromCmdAsync(MunisComms.SQLParamCommand(GLMasterQry, Params))) 'MunisComms.Return_MSSQLTableAsync(Qry))
+            Dim Budget_Params As New List(Of SearchVal)
+            Budget_Params.Add(New SearchVal("a_projection_no", FY,, True))
+            Budget_Params.Add(New SearchVal("a_org", Org,, True))
+            Budget_Params.Add(New SearchVal("a_object", Obj,, True))
+
+            NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.Return_MSSQLTableFromCmdAsync(MunisComms.SQLParamCommand(GLMasterQry, Params)))
             NewGridForm.AddGrid("RollupGrid", "Rollup Info:", Await MunisComms.Return_MSSQLTableAsync(RollUpQry))
+            NewGridForm.AddGrid("BudgetGrid", "Budget Info:", Await MunisComms.Return_MSSQLTableFromCmdAsync(MunisComms.SQLParamCommand(BudgetQry, Budget_Params)))
 
         Else ' Show Rollup info for all Objects in Org
 

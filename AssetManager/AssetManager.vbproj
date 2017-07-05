@@ -569,6 +569,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Resources\MoneyCircleIcon.png" />
+    <None Include="Resources\CoinIcon.png" />
+    <None Include="Resources\MoneyCircle2Icon.png" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
