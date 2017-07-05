@@ -12,7 +12,6 @@ Public Class AdvancedSearch
             'Dim qry As String = "SELECT * FROM " & table.TableName & " WHERE "
             Dim qry As String = "SELECT " & BuildSelectString(table) & " FROM " & table.TableName & " WHERE "
             qry += BuildFieldString(table)
-            Debug.Print(qry)
             Dim cmd As New MySqlCommand
             cmd.CommandText = qry
             cmd.Parameters.AddWithValue("@" & "SEARCHVAL", _searchString)

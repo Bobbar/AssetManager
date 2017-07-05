@@ -27,9 +27,9 @@ Public Class GridForm
         InitializeComponent()
         If Title <> "" Then Me.Text = Title
         ' Add any initialization after the InitializeComponent() call.
-        ' Me.Show()
-        DoubleBufferedTableLayout(GridPanel, True)
 
+        DoubleBufferedTableLayout(GridPanel, True)
+        DoubleBufferedPanel(Panel1, True)
         GridPanel.RowStyles.Clear()
     End Sub
     Public Sub AddGrid(Name As String, Label As String, Data As DataTable)
@@ -62,17 +62,29 @@ Public Class GridForm
         If Data IsNot Nothing Then Grid.DataSource = Data
     End Sub
     Private Sub DisplayGrids()
+        Me.SuspendLayout()
         For Each grid As DataGridView In GridList
             Dim GridBox As New GroupBox
             GridBox.Text = DirectCast(grid.Tag, String)
             GridBox.Dock = DockStyle.Fill
             GridBox.Controls.Add(grid)
-            GridPanel.RowStyles.Add(New RowStyle(SizeType.Percent, Convert.ToSingle(100 / GridList.Count)))
+            GridPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, GridHeight))
             GridPanel.Controls.Add(GridBox)
         Next
         ResizeGrids()
         bolGridFilling = False
+        Me.ResumeLayout()
     End Sub
+    Private Function GridHeight() As Integer
+        Dim iHeight As Integer = 0
+        Dim MinHeight As Integer = 200
+        Dim CalcHeight As Integer = CInt((Me.ClientSize.Height - 30) / GridList.Count)
+        If CalcHeight < MinHeight Then
+            Return MinHeight
+        Else
+            Return CalcHeight
+        End If
+    End Function
     Private Sub GridForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         DisplayGrids()
     End Sub
@@ -100,5 +112,15 @@ Public Class GridForm
             grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
             grid.AllowUserToResizeColumns = True
         Next
+    End Sub
+    Private Sub ResizeGridPanel()
+        Dim NewHeight = GridHeight()
+        For Each grid In GridList
+            Dim row = GridList.IndexOf(grid)
+            GridPanel.RowStyles(row).Height = NewHeight
+        Next
+    End Sub
+    Private Sub GridForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        If Not bolGridFilling Then ResizeGridPanel()
     End Sub
 End Class
