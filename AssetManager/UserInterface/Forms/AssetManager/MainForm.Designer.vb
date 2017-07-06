@@ -29,6 +29,7 @@ Partial Class MainForm
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmAddGKUpdate = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmSendToGridForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblRecords = New System.Windows.Forms.Label()
@@ -167,9 +168,9 @@ Partial Class MainForm
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.tsmAddGKUpdate, Me.ToolStripSeparator3, Me.CopyTool})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem, Me.tsmAddGKUpdate, Me.tsmSendToGridForm, Me.ToolStripSeparator3, Me.CopyTool})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 76)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(180, 98)
         '
         'ViewToolStripMenuItem
         '
@@ -185,6 +186,13 @@ Partial Class MainForm
         Me.tsmAddGKUpdate.Name = "tsmAddGKUpdate"
         Me.tsmAddGKUpdate.Size = New System.Drawing.Size(179, 22)
         Me.tsmAddGKUpdate.Text = "Enqueue GK Update"
+        '
+        'tsmSendToGridForm
+        '
+        Me.tsmSendToGridForm.Image = Global.AssetManager.My.Resources.Resources.TransferArrowsIcon
+        Me.tsmSendToGridForm.Name = "tsmSendToGridForm"
+        Me.tsmSendToGridForm.Size = New System.Drawing.Size(179, 22)
+        Me.tsmSendToGridForm.Text = "Send to Grid Form"
         '
         'ToolStripSeparator3
         '
@@ -841,4 +849,5 @@ Partial Class MainForm
     Friend WithEvents tsmAddGKUpdate As ToolStripMenuItem
     Friend WithEvents tsmGKUpdater As ToolStripMenuItem
     Friend WithEvents AdvancedSearchMenuItem As ToolStripMenuItem
+    Friend WithEvents tsmSendToGridForm As ToolStripMenuItem
 End Class

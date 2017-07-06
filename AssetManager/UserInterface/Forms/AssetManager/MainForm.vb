@@ -325,9 +325,7 @@ Public Class MainForm
         NewDeviceForm.WindowState = FormWindowState.Normal
     End Sub
     Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
-        ResultGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
-        Clipboard.SetDataObject(Me.ResultGrid.GetClipboardContent())
-        ResultGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
+        CopySelectedGridData(ResultGrid)
     End Sub
     Private Async Sub ConnectionWatchDog()
         If OfflineMode Then
@@ -561,5 +559,9 @@ Public Class MainForm
     Private Sub AdvancedSearchMenuItem_Click(sender As Object, e As EventArgs) Handles AdvancedSearchMenuItem.Click
         If Not CheckForAccess(AccessGroup.AdvancedSearch) Then Exit Sub
         Dim NewAdvancedSearch As New AdvancedSearchForm(Me)
+    End Sub
+
+    Private Sub tsmSendToGridForm_Click(sender As Object, e As EventArgs) Handles tsmSendToGridForm.Click
+        CopyToGridForm(ResultGrid, Me)
     End Sub
 End Class

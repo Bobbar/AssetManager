@@ -52,6 +52,7 @@ Public Class GridForm
         NewGrid.AllowUserToAddRows = False
         NewGrid.AllowUserToDeleteRows = False
         NewGrid.Padding = New Padding(0, 0, 0, 10)
+        NewGrid.ContextMenuStrip = PopUpMenu
         AddHandler NewGrid.CellLeave, AddressOf GridLeaveCell
         AddHandler NewGrid.CellEnter, AddressOf GridEnterCell
         AddHandler NewGrid.CellDoubleClick, AddressOf GridDoubleClickCell
@@ -84,6 +85,12 @@ Public Class GridForm
         Else
             Return CalcHeight
         End If
+    End Function
+    Private Function GetActiveGrid() As DataGridView
+        If TypeOf Me.ActiveControl Is DataGridView Then
+            Return DirectCast(Me.ActiveControl, DataGridView)
+        End If
+        Return Nothing
     End Function
     Private Sub GridForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         DisplayGrids()
@@ -122,5 +129,8 @@ Public Class GridForm
     End Sub
     Private Sub GridForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         If Not bolGridFilling Then ResizeGridPanel()
+    End Sub
+    Private Sub CopySelectedToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopySelectedToolStripMenuItem.Click
+        CopySelectedGridData(GetActiveGrid)
     End Sub
 End Class

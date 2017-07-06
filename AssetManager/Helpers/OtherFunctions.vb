@@ -140,6 +140,16 @@ Module OtherFunctions
             Return False
         End If
     End Function
+    Public Sub CopyToGridForm(Grid As DataGridView, Parent As Form)
+        Dim NewGridForm As New GridForm(Parent, "Search Results Copy")
+        NewGridForm.AddGrid("SearchGrid", "Results", DirectCast(Grid.DataSource, DataTable))
+        NewGridForm.Show()
+    End Sub
+    Public Sub CopySelectedGridData(Grid As DataGridView)
+        Grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
+        Clipboard.SetDataObject(Grid.GetClipboardContent())
+        Grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
+    End Sub
     Public Sub SetWaitCursor(Waiting As Boolean)
         Application.UseWaitCursor = Waiting
         Application.DoEvents()

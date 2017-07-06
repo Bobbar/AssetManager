@@ -1135,9 +1135,7 @@ VALUES
     End Sub
     Private Sub tsmCopyText_Click(sender As Object, e As EventArgs) Handles tsmCopyText.Click
         RequestItemsGrid.RowHeadersVisible = False
-        RequestItemsGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
-        Clipboard.SetDataObject(RequestItemsGrid.GetClipboardContent())
-        RequestItemsGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
+        CopySelectedGridData(RequestItemsGrid)
         RequestItemsGrid.RowHeadersVisible = True
     End Sub
     Private Sub tsbRefresh_Click(sender As Object, e As EventArgs) Handles tsbRefresh.Click

@@ -22,10 +22,14 @@ Partial Class GridForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.GridPanel = New System.Windows.Forms.TableLayoutPanel()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.PopUpMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.CopySelectedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1.SuspendLayout()
+        Me.PopUpMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'GridPanel
@@ -66,6 +70,19 @@ Partial Class GridForm
         Me.Panel1.Size = New System.Drawing.Size(1059, 530)
         Me.Panel1.TabIndex = 2
         '
+        'PopUpMenu
+        '
+        Me.PopUpMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopySelectedToolStripMenuItem})
+        Me.PopUpMenu.Name = "PopUpMenu"
+        Me.PopUpMenu.Size = New System.Drawing.Size(153, 48)
+        '
+        'CopySelectedToolStripMenuItem
+        '
+        Me.CopySelectedToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.CopyIcon
+        Me.CopySelectedToolStripMenuItem.Name = "CopySelectedToolStripMenuItem"
+        Me.CopySelectedToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CopySelectedToolStripMenuItem.Text = "Copy Selected"
+        '
         'GridForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -82,6 +99,7 @@ Partial Class GridForm
         Me.Text = "GridForm"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.PopUpMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -90,4 +108,6 @@ Partial Class GridForm
     Friend WithEvents GridPanel As TableLayoutPanel
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents PopUpMenu As ContextMenuStrip
+    Friend WithEvents CopySelectedToolStripMenuItem As ToolStripMenuItem
 End Class
