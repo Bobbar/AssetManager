@@ -292,7 +292,7 @@ Public Class MainForm
                                 OfflineMode = True
                                 StatusStrip1.BackColor = colStatusBarProblem
                                 ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
-                                Message("Connection Lost, cached mode enabled. Some functionality will be disabled.", vbOKOnly + vbInformation, "Cache Mode Enabled", Me)
+                                '   Message("Connection Lost, cached mode enabled. Some functionality will be disabled.", vbOKOnly + vbInformation, "Cache Mode Enabled", Me)
                             Else
                                 OfflineMode = False
                                 If Not NoCacheMessageSent Then

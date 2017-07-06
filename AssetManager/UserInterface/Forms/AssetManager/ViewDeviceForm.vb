@@ -778,7 +778,7 @@ Public Class ViewDeviceForm
         Try
             If VerifyAdminCreds() Then
                 cmdRestart.Image = My.Resources.LoadingAni
-                Dim FullPath As String = "\\" & IP & "\IPC$"
+                Dim FullPath As String = "\\" & IP
                 Dim Success = Await Task.Run(Function()
                                                  Using NetCon As New NetworkConnection(FullPath, AdminCreds)
                                                      Dim p As Process = New Process
@@ -787,7 +787,7 @@ Public Class ViewDeviceForm
                                                      p.StartInfo.RedirectStandardError = True
                                                      p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                                                      p.StartInfo.FileName = "shutdown.exe"
-                                                     p.StartInfo.Arguments = "/m \\" & IP & " /f /r /t 0"
+                                                     p.StartInfo.Arguments = "/m " & FullPath & " /f /r /t 0"
                                                      p.Start()
                                                      Dim output As String
                                                      output = p.StandardError.ReadToEnd
