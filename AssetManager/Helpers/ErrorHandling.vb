@@ -91,6 +91,11 @@ Module ErrorHandling
                 Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
                 AdminCreds = Nothing
                 Return True
+            Case 5 'Access denied error. Clear AdminCreds
+                Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
+                AdminCreds = Nothing
+                Return True
+
         End Select
         Dim blah = Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
         Return True

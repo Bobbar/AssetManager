@@ -345,13 +345,29 @@ Public Class ViewDeviceForm
             End If
         End Using
     End Sub
-
-    Private Sub cmdBrowseFiles_Click(sender As Object, e As EventArgs) Handles cmdBrowseFiles.Click
+    Private Async Sub BrowseFiles()
         Try
-            Process.Start("\\D" & CurrentViewDevice.strSerial & "\c$")
+            If VerifyAdminCreds() Then
+                Dim FullPath As String = "\\D" & CurrentViewDevice.strSerial & "\c$"
+                Await Task.Run(Sub()
+                                   Using NetCon As New NetworkConnection(FullPath, AdminCreds), p As Process = New Process
+                                       p.StartInfo.UseShellExecute = False
+                                       p.StartInfo.RedirectStandardOutput = True
+                                       p.StartInfo.RedirectStandardError = True
+                                       p.StartInfo.FileName = "explorer.exe"
+                                       p.StartInfo.Arguments = FullPath
+                                       p.Start()
+                                       p.WaitForExit()
+                                   End Using
+                               End Sub)
+            End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
+
+    End Sub
+    Private Sub cmdBrowseFiles_Click(sender As Object, e As EventArgs) Handles cmdBrowseFiles.Click
+        BrowseFiles()
     End Sub
 
     Private Sub cmdCancel_Tool_Click(sender As Object, e As EventArgs) Handles cmdCancel_Tool.Click
