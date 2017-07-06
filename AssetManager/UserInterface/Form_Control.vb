@@ -1,6 +1,6 @@
 ﻿Public Module Form_Control
-    Public Sub ActivateFormByUID(UID As String, ParentForm As Form)
-        For Each frm As Form In GetChildren(ParentForm)
+    Public Sub ActivateFormByUID(UID As String, ParentForm As Form, Optional IncludeParent As Boolean = False)
+        For Each frm As Form In GetChildren(ParentForm, IncludeParent)
             Select Case frm.GetType
                 Case GetType(ViewDeviceForm)
                     Dim vw As ViewDeviceForm = DirectCast(frm, ViewDeviceForm)
@@ -52,8 +52,9 @@
             frm.WindowState = FormWindowState.Normal
         Next
     End Sub
-    Public Function GetChildren(ParentForm As Form) As List(Of Form)
+    Public Function GetChildren(ParentForm As Form, Optional IncludeParent As Boolean = False) As List(Of Form)
         Dim Children As New List(Of Form)
+        If IncludeParent Then Children.Add(ParentForm)
         For Each frms As Form In My.Application.OpenForms
             If frms.Tag Is ParentForm Then
                 Children.Add(frms)
@@ -126,7 +127,7 @@
             If Not DeviceIsOpen(Device.strGUID) Then
                 Dim NewView As New ViewDeviceForm(ParentForm, Device.strGUID)
             Else
-                ActivateFormByUID(Device.strGUID, ParentForm)
+                ActivateFormByUID(Device.strGUID, ParentForm, True)
             End If
         Else
             Message("Device not found.", vbOKOnly + vbExclamation, "Error", ParentForm)
