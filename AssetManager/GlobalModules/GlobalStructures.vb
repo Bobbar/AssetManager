@@ -1,10 +1,9 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Public Structure Combo_Data
+﻿Public Structure Combo_Data
     Public Property strLong As String
     Public Property strShort As String
     Public Property strID As String
 End Structure
+
 Public Structure Device_Info
     Public strAssetTag As String
     Public strDescription As String
@@ -28,6 +27,7 @@ Public Structure Device_Info
     Public Tracking As Track_Info
     Public Historical As Hist_Info
 End Structure
+
 Public Structure Request_Info
     Public strUID As String
     Public strUser As String
@@ -44,6 +44,7 @@ Public Structure Request_Info
     Public strRTNumber As String
     Public RequestItems As DataTable
 End Structure
+
 Public Structure Hist_Info
     Public strChangeType As String
     Public strHistUID As String
@@ -51,6 +52,7 @@ Public Structure Hist_Info
     Public strActionUser As String
     Public dtActionDateTime As Date
 End Structure
+
 Public Structure Track_Info
     Public dtCheckOutTime As Date
     Public dtDueBackTime As Date
@@ -61,32 +63,40 @@ Public Structure Track_Info
     Public strUseReason As String
     Public bolCheckedOut As Boolean
 End Structure
+
 Public Structure Access_Info
     Public strModule As String
     Public intLevel As Integer
     Public strDesc As String
     Public bolAvailOffline As Boolean
 End Structure
+
 Public Structure Update_Info
     Public strNote As String
     Public strChangeType As String
 End Structure
+
 Public Structure User_Info
     Public strUsername As String
     Public strFullname As String
+
     'Public bolIsAdmin As Boolean
     Public intAccessLevel As Integer
+
     Public strUID As String
 End Structure
+
 Public Structure Emp_Info
     Public Number As String
     Public Name As String
     Public UID As String
 End Structure
+
 Public Structure FTPScan_Parms
     Public IsOrphan As Boolean
     Public strTable As String
 End Structure
+
 Public Structure CheckStruct
     Public strCheckOutTime As String
     Public strDueDate As String
@@ -98,12 +108,14 @@ Public Structure CheckStruct
     Public strCheckInUser As String
     Public strCheckInTime As String
 End Structure
+
 Public Structure ColumnStruct
     Public ColumnName As String
     Public ColumnCaption As String
     Public ColumnType As Type
     Public ColumnReadOnly As Boolean
     Public ColumnVisible As Boolean
+
     Sub New(Name As String, Caption As String, Type As Type)
         ColumnName = Name
         ColumnCaption = Caption
@@ -111,6 +123,7 @@ Public Structure ColumnStruct
         ColumnReadOnly = False
         ColumnVisible = True
     End Sub
+
     Sub New(Name As String, Caption As String, Type As Type, IsReadOnly As Boolean, Visible As Boolean)
         ColumnName = Name
         ColumnCaption = Caption
@@ -118,14 +131,16 @@ Public Structure ColumnStruct
         ColumnReadOnly = IsReadOnly
         ColumnVisible = Visible
     End Sub
+
 End Structure
+
 Public Structure StatusColorStruct
     Public StatusID As String
     Public StatusColor As Color
+
     Sub New(ID As String, Color As Color)
         StatusID = ID
         StatusColor = Color
     End Sub
+
 End Structure
-
-

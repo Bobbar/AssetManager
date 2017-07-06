@@ -1,10 +1,11 @@
 ﻿Option Explicit On
-Imports MySql.Data.MySqlClient
+
 Public Class ViewTrackingForm
     Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
     Private CurrentViewTrackDevice As New Device_Info
     Private Const strCheckOut As String = "OUT"
     Private Const strCheckIn As String = "IN"
+
     Sub New(ParentForm As Form, EntryGUID As String, Device As Device_Info)
         InitializeComponent()
         Tag = ParentForm
@@ -12,12 +13,15 @@ Public Class ViewTrackingForm
         ViewTrackingEntry(EntryGUID, Device)
         Show()
     End Sub
+
     Private Sub Waiting()
         SetWaitCursor(True)
     End Sub
+
     Private Sub DoneWaiting()
         SetWaitCursor(False)
     End Sub
+
     Private Sub ViewTrackingEntry(ByVal EntryUID As String, ByRef Device As Device_Info)
         Try
             Waiting()
@@ -54,10 +58,12 @@ Public Class ViewTrackingForm
             End If
         End Try
     End Sub
+
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click
         Me.Dispose()
         Me.Hide()
     End Sub
+
     Private Sub View_Tracking_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim c As Control
         For Each c In GroupBox1.Controls
@@ -66,4 +72,5 @@ Public Class ViewTrackingForm
             End If
         Next
     End Sub
+
 End Class

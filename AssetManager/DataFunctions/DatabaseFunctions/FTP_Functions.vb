@@ -1,5 +1,13 @@
 ﻿Public Class FTP_Functions
+
+#Region "Fields"
+
     Private FTPComms As New FTP_Comms
+
+#End Region
+
+#Region "Methods"
+
     Public Function DeleteFTPAttachment(AttachUID As String, DeviceUID As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Try
@@ -13,16 +21,7 @@
             Return ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
-    Public Function Has_FTPFolder(ItemUID As String) As Boolean
-        Dim files As New List(Of String)
-        Try
-            Using resp As Net.FtpWebResponse = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & ItemUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
-                Return True
-            End Using
-        Catch ex As Exception
-            Return False
-        End Try
-    End Function
+
     Public Function DeleteFTPFolder(FolderUID As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Dim files As List(Of String)
@@ -53,71 +52,15 @@
             Return False
         End Try
     End Function
-    Private Function FTPFolderIsOrphan(FolderUID As String) As FTPScan_Parms
-        Dim ScanResults As New FTPScan_Parms
-        Dim intHits As Integer = 0
-        Dim results As String
-        results = AssetFunc.Get_SQLValue(devices.TableName, devices.DeviceUID, FolderUID, devices.DeviceUID)
-        If results <> "" Then
-            intHits += 1
-        End If
-        results = AssetFunc.Get_SQLValue(sibi_requests.TableName, sibi_requests.UID, FolderUID, sibi_requests.UID)
-        If results <> "" Then
-            intHits += 1
-        End If
-        If intHits > 0 Then
-            ScanResults.IsOrphan = False
-            Return ScanResults
-        Else
-            ScanResults.IsOrphan = True
-            Return ScanResults
-        End If
-    End Function
-    Private Function FTPFileIsOrphan(FolderUID As String, FileUID As String) As FTPScan_Parms
-        Dim ScanResults As New FTPScan_Parms
-        Dim intHits As Integer = 0
-        Dim DeviceTable As New dev_attachments
-        Dim SibiTable As New sibi_attachments
-        Dim strQRYDev As String = "SELECT * FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & " ='" & FolderUID & "' AND " & DeviceTable.FileUID & " = '" & FileUID & "'"
-        Dim strQRYSibi As String = "SELECT * FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & " ='" & FolderUID & "' AND " & SibiTable.FileUID & "='" & FileUID & "'"
-        Using SQLComms As New MySQL_Comms
-            Dim results As DataTable
-            results = SQLComms.Return_SQLTable(strQRYDev)
-            If results.Rows.Count > 0 Then
-                intHits += 1
-            Else
-                ScanResults.strTable = "Device"
-            End If
-            results = SQLComms.Return_SQLTable(strQRYSibi)
-            If results.Rows.Count > 0 Then
-                intHits += 1
-            Else
-                ScanResults.strTable = "Sibi"
-            End If
-            If intHits > 0 Then
-                ScanResults.IsOrphan = False
-                Return ScanResults
-            Else
-                ScanResults.IsOrphan = True
-                Return ScanResults
-            End If
-        End Using
-    End Function
-    Private Function ListDirectory(Uri As String) As List(Of String)
-        Dim resp As Net.FtpWebResponse
-        Dim files As List(Of String)
+
+    Public Function Has_FTPFolder(ItemUID As String) As Boolean
+        Dim files As New List(Of String)
         Try
-            resp = DirectCast(FTPComms.Return_FTPResponse(Uri, Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse) '"ftp://" & strServerIP & "/attachments/"
-            Dim responseStream As System.IO.Stream = resp.GetResponseStream
-            files = New List(Of String)
-            Dim reader As IO.StreamReader = New IO.StreamReader(responseStream)
-            While Not reader.EndOfStream 'collect list of files in directory
-                files.Add(reader.ReadLine)
-            End While
-            Return files
+            Using resp As Net.FtpWebResponse = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & ItemUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
+                Return True
+            End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
+            Return False
         End Try
     End Function
     Public Sub ScanAttachements()
@@ -165,6 +108,7 @@
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Private Function CheckForMissingDir(FTPFolderUIDs As List(Of String)) As Integer
         Dim DBFolders As New List(Of String)
         Dim DevQry As String = "SELECT DISTINCT attach_fkey_uid  FROM dev_attachments"
@@ -197,12 +141,7 @@
         End If
         Return 0
     End Function
-    Private Function DirInList(DirList As List(Of String), CompDir As String) As Boolean
-        For Each sDir In DirList
-            If sDir = CompDir Then Return True
-        Next
-        Return False
-    End Function
+
     Private Sub CleanFiles(DirList As List(Of String))
         Dim intSuccesses As Integer = 0
         For Each item In DirList
@@ -217,6 +156,7 @@
         Next
         Dim blah = Message("Cleaned " & intSuccesses & " orphans.")
     End Sub
+
     Private Function DeleteDirectory(Directory As String) As Boolean
         Try
             Dim FileList As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & Directory & "/")
@@ -238,4 +178,83 @@
             Return False
         End Try
     End Function
+
+    Private Function DirInList(DirList As List(Of String), CompDir As String) As Boolean
+        For Each sDir In DirList
+            If sDir = CompDir Then Return True
+        Next
+        Return False
+    End Function
+
+    Private Function FTPFileIsOrphan(FolderUID As String, FileUID As String) As FTPScan_Parms
+        Dim ScanResults As New FTPScan_Parms
+        Dim intHits As Integer = 0
+        Dim DeviceTable As New dev_attachments
+        Dim SibiTable As New sibi_attachments
+        Dim strQRYDev As String = "SELECT * FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & " ='" & FolderUID & "' AND " & DeviceTable.FileUID & " = '" & FileUID & "'"
+        Dim strQRYSibi As String = "SELECT * FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & " ='" & FolderUID & "' AND " & SibiTable.FileUID & "='" & FileUID & "'"
+        Using SQLComms As New MySQL_Comms
+            Dim results As DataTable
+            results = SQLComms.Return_SQLTable(strQRYDev)
+            If results.Rows.Count > 0 Then
+                intHits += 1
+            Else
+                ScanResults.strTable = "Device"
+            End If
+            results = SQLComms.Return_SQLTable(strQRYSibi)
+            If results.Rows.Count > 0 Then
+                intHits += 1
+            Else
+                ScanResults.strTable = "Sibi"
+            End If
+            If intHits > 0 Then
+                ScanResults.IsOrphan = False
+                Return ScanResults
+            Else
+                ScanResults.IsOrphan = True
+                Return ScanResults
+            End If
+        End Using
+    End Function
+
+    Private Function FTPFolderIsOrphan(FolderUID As String) As FTPScan_Parms
+        Dim ScanResults As New FTPScan_Parms
+        Dim intHits As Integer = 0
+        Dim results As String
+        results = AssetFunc.Get_SQLValue(devices.TableName, devices.DeviceUID, FolderUID, devices.DeviceUID)
+        If results <> "" Then
+            intHits += 1
+        End If
+        results = AssetFunc.Get_SQLValue(sibi_requests.TableName, sibi_requests.UID, FolderUID, sibi_requests.UID)
+        If results <> "" Then
+            intHits += 1
+        End If
+        If intHits > 0 Then
+            ScanResults.IsOrphan = False
+            Return ScanResults
+        Else
+            ScanResults.IsOrphan = True
+            Return ScanResults
+        End If
+    End Function
+    Private Function ListDirectory(Uri As String) As List(Of String)
+        Dim resp As Net.FtpWebResponse
+        Dim files As List(Of String)
+        Try
+            resp = DirectCast(FTPComms.Return_FTPResponse(Uri, Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse) '"ftp://" & strServerIP & "/attachments/"
+            Dim responseStream As System.IO.Stream = resp.GetResponseStream
+            files = New List(Of String)
+            Dim reader As IO.StreamReader = New IO.StreamReader(responseStream)
+            While Not reader.EndOfStream 'collect list of files in directory
+                files.Add(reader.ReadLine)
+            End While
+            Return files
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
+        End Try
+    End Function
+
+#End Region
+
 End Class

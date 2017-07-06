@@ -1,11 +1,13 @@
-﻿Imports System.Drawing.Text
-Imports System.Deployment.Application
+﻿Imports System.Deployment.Application
+
 Public Class SplashScreenForm
+
     Public WriteOnly Property Status As String
         Set(value As String)
             SetStatus(value)
         End Set
     End Property
+
     Private Sub SplashScreen1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.FormBorderStyle = FormBorderStyle.None
         Using p As New Drawing2D.GraphicsPath()
@@ -27,11 +29,14 @@ Public Class SplashScreenForm
         End If
         Copyright.Text = My.Application.Info.Copyright
     End Sub
+
     Overloads Sub Hide()
         Me.Dispose()
     End Sub
+
     Private Sub SetStatus(Text As String)
         lblStatus.Text = Text
         Me.Refresh()
     End Sub
+
 End Class

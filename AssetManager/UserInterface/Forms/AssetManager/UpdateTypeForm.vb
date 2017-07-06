@@ -1,12 +1,15 @@
 ﻿Option Explicit On
-Imports System.ComponentModel
+
 Public Class UpdateDev
+
     Public ReadOnly Property UpdateInfo As Update_Info
         Get
             Return NewUpdateInfo
         End Get
     End Property
+
     Private NewUpdateInfo As Update_Info
+
     Sub New(ParentForm As Form, Optional bolNewNote As Boolean = False)
         InitializeComponent()
         Icon = ParentForm.Icon
@@ -20,6 +23,7 @@ Public Class UpdateDev
         End If
         ShowDialog(ParentForm)
     End Sub
+
     Private Sub cmdSubmit_Click(sender As Object, e As EventArgs) Handles cmdSubmit.Click
         If Not CheckFields() Then
             Dim blah = Message("Please select a change type.", vbOKOnly + vbExclamation, "Missing Field", Me)
@@ -31,6 +35,7 @@ Public Class UpdateDev
         cmbUpdate_ChangeType.Enabled = True
         Me.DialogResult = DialogResult.OK
     End Sub
+
     Private Function CheckFields() As Boolean
         If cmbUpdate_ChangeType.SelectedIndex = -1 Then
             Return False
@@ -38,4 +43,5 @@ Public Class UpdateDev
             Return True
         End If
     End Function
+
 End Class

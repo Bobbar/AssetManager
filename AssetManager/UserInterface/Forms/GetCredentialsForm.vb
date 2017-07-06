@@ -1,7 +1,8 @@
-﻿Imports System.ComponentModel
-Imports System.Net
+﻿Imports System.Net
+
 Public Class GetCredentialsForm
     Private MyCreds As NetworkCredential
+
     Public ReadOnly Property Credentials As NetworkCredential
         Get
             Return MyCreds
@@ -23,9 +24,11 @@ Public Class GetCredentialsForm
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
         Accept()
     End Sub
+
     Private Sub txtPassword_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPassword.KeyDown
         If e.KeyCode = Keys.Enter Then
             Accept()
         End If
     End Sub
+
 End Class

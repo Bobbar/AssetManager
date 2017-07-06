@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+
 Public Class GKUpdaterForm
     Private bolRunQueue As Boolean = False
     Private MaxSimUpdates As Integer = 4
@@ -19,8 +20,8 @@ Public Class GKUpdaterForm
 
         DoubleBufferedFlowLayout(Updater_Table, True)
 
-
     End Sub
+
     Public Async Sub AddUpdate(ByVal Device As Device_Info)
 
         If bolCheckForDups AndAlso Not Exists(Device) Then
@@ -33,33 +34,37 @@ Public Class GKUpdaterForm
             Me.WindowState = FormWindowState.Normal
             Me.Activate()
         Else
-                Dim blah = Message("An update for device " & Device.strSerial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
-                If blah = vbOK Then
+            Dim blah = Message("An update for device " & Device.strSerial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
+            If blah = vbOK Then
                 Await CheckPackFile()
                 StartUpdateByDevice(Device)
                 Me.WindowState = FormWindowState.Normal
                 Me.Activate()
             End If
-            End If
+        End If
 
     End Sub
+
     Private Sub StartUpdateByDevice(Device As Device_Info)
         For Each upd As GKProgressControl In MyUpdates
             If upd.Device.strGUID = Device.strGUID Then upd.StartUpdate()
         Next
     End Sub
+
     Private Function Exists(Device As Device_Info) As Boolean
         For Each upd As GKProgressControl In MyUpdates
             If upd.Device.strGUID = Device.strGUID Then Return True
         Next
         Return False
     End Function
+
     Private Function ActiveUpdates() As Boolean
         For Each upd As GKProgressControl In MyUpdates
             If upd.ProgStatus = GKProgressControl.Progress_Status.Running Then Return True
         Next
         Return False
     End Function
+
     Private Sub CancelAll()
         For Each upd As GKProgressControl In MyUpdates
             If upd.ProgStatus = GKProgressControl.Progress_Status.Running Then
@@ -67,6 +72,7 @@ Public Class GKUpdaterForm
             End If
         Next
     End Sub
+
     Private Sub DisposeUpdates()
         For Each upd As GKProgressControl In MyUpdates
             If Not upd.IsDisposed Then
@@ -74,6 +80,7 @@ Public Class GKUpdaterForm
             End If
         Next
     End Sub
+
     ''' <summary>
     ''' Returns True if number of running updates is less than the maximum simultaneous allowed updates and RunQueue is True.
     ''' </summary>
@@ -103,6 +110,7 @@ Public Class GKUpdaterForm
             StartQueue()
         End If
     End Sub
+
     Private Sub cmdSort_Click(sender As Object, e As EventArgs) Handles cmdSort.Click
         SortUpdates()
     End Sub
@@ -124,6 +132,7 @@ Public Class GKUpdaterForm
             Me.Dispose()
         End If
     End Sub
+
     Public Function UpdatesRunning() As Boolean
         If ActiveUpdates() Then
             Me.Activate()
@@ -133,9 +142,11 @@ Public Class GKUpdaterForm
         End If
         Return False
     End Function
+
     Private Sub MaxUpdates_ValueChanged(sender As Object, e As EventArgs) Handles MaxUpdates.ValueChanged
         If Not bolStarting Then MaxSimUpdates = CInt(MaxUpdates.Value)
     End Sub
+
     Private Sub ProcessUpdates()
         If CanRunMoreUpdates() Then
             StartNextUpdate()
@@ -143,6 +154,7 @@ Public Class GKUpdaterForm
         PruneQueue()
         SetStats()
     End Sub
+
     ''' <summary>
     ''' Removes disposed update fragments from list.
     ''' </summary>
@@ -201,6 +213,7 @@ Public Class GKUpdaterForm
         Updater_Table.Controls.Clear()
         Updater_Table.Controls.AddRange(sortUpdates.ToArray)
     End Sub
+
     ''' <summary>
     ''' Starts the next update that has a queued status.
     ''' </summary>
@@ -222,12 +235,15 @@ Public Class GKUpdaterForm
         bolRunQueue = False
         cmdPauseResume.Text = "Resume Queue"
     End Sub
+
     Private Sub tsmCreateDirs_Click(sender As Object, e As EventArgs) Handles tsmCreateDirs.Click
         bolCreateMissingDirs = tsmCreateDirs.Checked
     End Sub
+
     Private Sub GKUpdaterForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         '   ProcessPackFile()
     End Sub
+
     Private Sub ProcessPackFile()
         Using NewUnPack As New PackFileForm(False)
             NewUnPack.ShowDialog(Me)
@@ -235,6 +251,7 @@ Public Class GKUpdaterForm
             bolRunQueue = PackFileReady
         End Using
     End Sub
+
     Private Async Function CheckPackFile() As Task(Of Boolean)
         PackFileReady = Await PackFunc.VerifyPackFile
         bolRunQueue = PackFileReady
@@ -245,8 +262,10 @@ Public Class GKUpdaterForm
         End If
         Return True
     End Function
+
     Private Sub GKPackageVeriToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GKPackageVeriToolStripMenuItem.Click
         Dim NewUnPack As New PackFileForm(True)
         NewUnPack.Show()
     End Sub
+
 End Class

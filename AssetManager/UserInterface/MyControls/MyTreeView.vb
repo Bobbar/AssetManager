@@ -1,8 +1,6 @@
-﻿
-Imports System.Windows.Forms
-
-Public Class MyTreeView
+﻿Public Class MyTreeView
     Inherits TreeView
+
     Protected Overrides Sub WndProc(ByRef m As Message)
         ' Suppress WM_LBUTTONDBLCLK
         ' Fixes bug that has existed since Vista...  (╯°□°)╯︵ ┻━┻
@@ -12,5 +10,5 @@ Public Class MyTreeView
             MyBase.WndProc(m)
         End If
     End Sub
-End Class
 
+End Class

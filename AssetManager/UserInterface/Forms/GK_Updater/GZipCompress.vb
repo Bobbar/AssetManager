@@ -1,9 +1,10 @@
-﻿
-Imports System.Text
-Imports System.IO
+﻿Imports System.IO
 Imports System.IO.Compression
+Imports System.Text
+
 Public Class GZipCompress
     Private Progress As ProgressCounter
+
     Sub New(ByRef ProgressDel As ProgressCounter)
         Progress = ProgressDel
     End Sub
@@ -21,7 +22,6 @@ Public Class GZipCompress
         zipStream.Write(BitConverter.GetBytes(bytes.Length), 0, 4)
         zipStream.Write(bytes, 0, bytes.Length)
     End Sub
-
 
     Private Function DecompressFile(sDir As String, zipStream As GZipStream) As Boolean
         'Decompress file name
@@ -45,7 +45,6 @@ Public Class GZipCompress
         bytes = New Byte(4 - 1) {}
         zipStream.Read(bytes, 0, 4)
         Dim iFileLen As Integer = BitConverter.ToInt32(bytes, 0)
-
 
         bytes = New Byte(iFileLen - 1) {}
         zipStream.Read(bytes, 0, bytes.Length)
@@ -78,6 +77,7 @@ Public Class GZipCompress
             End Using
         End Using
     End Sub
+
     Public Sub DecompressToDirectory(sCompressedFile As String, sDir As String)
         Progress.BytesToTransfer = GetGzOriginalFileSize(sCompressedFile)
         Using inFile As New FileStream(sCompressedFile, FileMode.Open, FileAccess.Read, FileShare.None, 256000)
@@ -100,6 +100,7 @@ Public Class GZipCompress
     Public Shared Function GetGzOriginalFileSize(fi As String) As Integer
         Return GetGzOriginalFileSize(New FileInfo(fi))
     End Function
+
     ''' <summary>
     ''' Extracts the original filesize of the compressed file.
     ''' </summary>
@@ -131,5 +132,3 @@ Public Class GZipCompress
     End Function
 
 End Class
-
-

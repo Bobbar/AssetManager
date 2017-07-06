@@ -1,20 +1,24 @@
-﻿Imports System.ComponentModel
-Public Class SibiSelectorForm
+﻿Public Class SibiSelectorForm
+
     Public ReadOnly Property SibiUID As String
         Get
             Return SelectedUID
         End Get
     End Property
+
     Private SelectedUID As String
+
     Sub New(ParentForm As Form)
         InitializeComponent()
         Icon = ParentForm.Icon
         ShowDialog(ParentForm)
     End Sub
+
     Private Sub frmSibiSelector_Load(sender As Object, e As EventArgs) Handles Me.Load
         ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
         ShowAll()
     End Sub
+
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
             Dim table As New DataTable
@@ -45,13 +49,16 @@ Public Class SibiSelectorForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Private Sub ShowAll()
         Using SQLComms As New MySQL_Comms
             SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
         End Using
     End Sub
+
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
         SelectedUID = ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value.ToString
         Me.DialogResult = DialogResult.OK
     End Sub
+
 End Class

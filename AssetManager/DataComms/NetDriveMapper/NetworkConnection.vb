@@ -1,6 +1,6 @@
-﻿Imports System.Runtime.InteropServices
+﻿Imports System.ComponentModel
 Imports System.Net
-Imports System.ComponentModel
+Imports System.Runtime.InteropServices
 
 ''' <summary>
 ''' Credit to: http://stackoverflow.com/questions/295538/how-to-provide-user-name-and-password-when-connecting-to-a-network-share
@@ -53,6 +53,7 @@ Public Class NetworkConnection
     <DllImport("mpr.dll")>
     Private Shared Function WNetCancelConnection2(name As String, flags As Integer, force As Boolean) As Integer
     End Function
+
 End Class
 
 <StructLayout(LayoutKind.Sequential)>

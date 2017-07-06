@@ -1,6 +1,4 @@
-﻿Imports System.ComponentModel
-
-''' <summary>
+﻿''' <summary>
 ''' Custom form with added GridTheme property.
 ''' </summary>
 Public Class MyForm

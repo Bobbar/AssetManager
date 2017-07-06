@@ -1,5 +1,6 @@
 ﻿Public Class AdvancedSearchForm
     Private _parentForm As Form
+
     Sub New(ParentForm As Form)
         InitializeComponent()
         Tag = ParentForm
@@ -8,6 +9,7 @@
         PopulateTableTree()
         Me.Show()
     End Sub
+
     Private Sub PopulateTableTree()
         For Each table In GetTables()
             Dim parentNode As New TreeNode(table)
@@ -25,6 +27,7 @@
             TableTree.Nodes.Add(parentNode)
         Next
     End Sub
+
     Private Function GetTables() As List(Of String)
         Dim Tables As New List(Of String)
         Dim Qry = "SHOW TABLES IN " & CurrentDB
@@ -37,6 +40,7 @@
         Next
         Return Tables
     End Function
+
     Private Function GetColumns(table As String) As List(Of String)
         Dim colList As New List(Of String)
         Using comms As New MySQL_Comms
@@ -48,6 +52,7 @@
         End Using
         Return colList
     End Function
+
     Private Sub StartSearch()
         Dim AdvSearch As New AdvancedSearch(Trim(SearchStringTextBox.Text), GetSelectedTables) ' GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
         Dim DisplayGrid As New GridForm(_parentForm, "Advanced Search Results")
@@ -57,6 +62,7 @@
         Next
         DisplayGrid.Show()
     End Sub
+
     Private Function GetSelectedTables() As List(Of AdvancedSearch.TableInfo)
         Dim tables As New List(Of AdvancedSearch.TableInfo)
         For Each node As TreeNode In TableTree.Nodes
@@ -64,6 +70,7 @@
         Next
         Return tables
     End Function
+
     Private Function GetSelectedColumns(TableNode As TreeNode) As List(Of String)
         Dim columns As New List(Of String)
         For Each childNode As TreeNode In TableNode.Nodes
@@ -73,14 +80,17 @@
         Next
         Return columns
     End Function
+
     Private Sub SearchButton_Click(sender As Object, e As EventArgs) Handles SearchButton.Click
         StartSearch()
     End Sub
+
     Private Sub SearchStringTextBox_KeyDown(sender As Object, e As KeyEventArgs) Handles SearchStringTextBox.KeyDown
         If e.KeyCode = Keys.Return Then
             StartSearch()
         End If
     End Sub
+
     Private Sub TableTree_AfterCheck(sender As Object, e As TreeViewEventArgs) Handles TableTree.AfterCheck
         If e.Action <> TreeViewAction.Unknown Then
             If e.Node.Level > 0 Then
@@ -98,4 +108,5 @@
             End If
         End If
     End Sub
+
 End Class

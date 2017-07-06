@@ -1,21 +1,19 @@
 ﻿Imports System.ComponentModel
 
 Public Class GridForm
-    Private GridList As New List(Of DataGridView)
-    Private MyParent As MyForm
+
+#Region "Fields"
+
     Private bolGridFilling As Boolean = True
-    Private LastDoubleClickRow As DataGridViewRow
     Private bolSelectMode As Boolean
-    Public ReadOnly Property SelectedValue As DataGridViewRow
-        Get
-            Return LastDoubleClickRow
-        End Get
-    End Property
-    Public ReadOnly Property GridCount As Integer
-        Get
-            Return GridList.Count
-        End Get
-    End Property
+    Private GridList As New List(Of DataGridView)
+    Private LastDoubleClickRow As DataGridViewRow
+    Private MyParent As MyForm
+
+#End Region
+
+#Region "Constructors"
+
     Sub New(ParentForm As Form, Optional Title As String = "", Optional SelectMode As Boolean = False)
         MyParent = DirectCast(ParentForm, MyForm)
         Me.Tag = ParentForm
@@ -32,11 +30,63 @@ Public Class GridForm
         DoubleBufferedPanel(Panel1, True)
         GridPanel.RowStyles.Clear()
     End Sub
+
+#End Region
+
+#Region "Properties"
+
+    Public ReadOnly Property GridCount As Integer
+        Get
+            Return GridList.Count
+        End Get
+    End Property
+
+    Public ReadOnly Property SelectedValue As DataGridViewRow
+        Get
+            Return LastDoubleClickRow
+        End Get
+    End Property
+
+#End Region
+
+#Region "Methods"
+
     Public Sub AddGrid(Name As String, Label As String, Data As DataTable)
         Dim NewGrid = GetNewGrid(Name, Label)
         FillGrid(NewGrid, Data)
         GridList.Add(NewGrid)
     End Sub
+
+    Private Sub CopySelectedToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopySelectedToolStripMenuItem.Click
+        CopySelectedGridData(GetActiveGrid)
+    End Sub
+
+    Private Sub DisplayGrids()
+        Me.SuspendLayout()
+        For Each grid As DataGridView In GridList
+            Dim GridBox As New GroupBox
+            GridBox.Text = DirectCast(grid.Tag, String)
+            GridBox.Dock = DockStyle.Fill
+            GridBox.Controls.Add(grid)
+            GridPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, GridHeight))
+            GridPanel.Controls.Add(GridBox)
+        Next
+        ResizeGrids()
+        bolGridFilling = False
+        Me.ResumeLayout()
+    End Sub
+
+    Private Sub FillGrid(Grid As DataGridView, Data As DataTable)
+        If Data IsNot Nothing Then Grid.DataSource = Data
+    End Sub
+
+    Private Function GetActiveGrid() As DataGridView
+        If TypeOf Me.ActiveControl Is DataGridView Then
+            Return DirectCast(Me.ActiveControl, DataGridView)
+        End If
+        Return Nothing
+    End Function
+
     Private Function GetNewGrid(Name As String, Label As String) As DataGridView
         Dim NewGrid As New DataGridView
         NewGrid.Name = Name
@@ -59,23 +109,30 @@ Public Class GridForm
         DoubleBufferedDataGrid(NewGrid, True)
         Return NewGrid
     End Function
-    Private Sub FillGrid(Grid As DataGridView, Data As DataTable)
-        If Data IsNot Nothing Then Grid.DataSource = Data
+    Private Sub GridDoubleClickCell(sender As Object, e As EventArgs)
+        Dim SenderGrid As DataGridView = DirectCast(sender, DataGridView)
+        LastDoubleClickRow = SenderGrid.CurrentRow
+        Me.DialogResult = DialogResult.OK
     End Sub
-    Private Sub DisplayGrids()
-        Me.SuspendLayout()
-        For Each grid As DataGridView In GridList
-            Dim GridBox As New GroupBox
-            GridBox.Text = DirectCast(grid.Tag, String)
-            GridBox.Dock = DockStyle.Fill
-            GridBox.Controls.Add(grid)
-            GridPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, GridHeight))
-            GridPanel.Controls.Add(GridBox)
-        Next
-        ResizeGrids()
-        bolGridFilling = False
-        Me.ResumeLayout()
+
+    Private Sub GridEnterCell(sender As Object, e As DataGridViewCellEventArgs)
+        If Not bolGridFilling Then
+            HighlightRow(DirectCast(sender, DataGridView), Me.GridTheme, e.RowIndex)
+        End If
     End Sub
+
+    Private Sub GridForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        If Not Modal Then Me.Dispose()
+    End Sub
+
+    Private Sub GridForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        If Not bolGridFilling Then ResizeGridPanel()
+    End Sub
+
+    Private Sub GridForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        DisplayGrids()
+    End Sub
+
     Private Function GridHeight() As Integer
         Dim iHeight As Integer = 0
         Dim MinHeight As Integer = 200
@@ -86,31 +143,17 @@ Public Class GridForm
             Return CalcHeight
         End If
     End Function
-    Private Function GetActiveGrid() As DataGridView
-        If TypeOf Me.ActiveControl Is DataGridView Then
-            Return DirectCast(Me.ActiveControl, DataGridView)
-        End If
-        Return Nothing
-    End Function
-    Private Sub GridForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        DisplayGrids()
-    End Sub
     Private Sub GridLeaveCell(sender As Object, e As DataGridViewCellEventArgs)
         LeaveRow(DirectCast(sender, DataGridView), Me.GridTheme, e.RowIndex)
     End Sub
-    Private Sub GridEnterCell(sender As Object, e As DataGridViewCellEventArgs)
-        If Not bolGridFilling Then
-            HighlightRow(DirectCast(sender, DataGridView), Me.GridTheme, e.RowIndex)
-        End If
+    Private Sub ResizeGridPanel()
+        Dim NewHeight = GridHeight()
+        For Each grid In GridList
+            Dim row = GridList.IndexOf(grid)
+            GridPanel.RowStyles(row).Height = NewHeight
+        Next
     End Sub
-    Private Sub GridDoubleClickCell(sender As Object, e As EventArgs)
-        Dim SenderGrid As DataGridView = DirectCast(sender, DataGridView)
-        LastDoubleClickRow = SenderGrid.CurrentRow
-        Me.DialogResult = DialogResult.OK
-    End Sub
-    Private Sub GridForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If Not Modal Then Me.Dispose()
-    End Sub
+
     Private Sub ResizeGrids()
         For Each grid In GridList
             For Each c As DataGridViewColumn In grid.Columns
@@ -120,17 +163,7 @@ Public Class GridForm
             grid.AllowUserToResizeColumns = True
         Next
     End Sub
-    Private Sub ResizeGridPanel()
-        Dim NewHeight = GridHeight()
-        For Each grid In GridList
-            Dim row = GridList.IndexOf(grid)
-            GridPanel.RowStyles(row).Height = NewHeight
-        Next
-    End Sub
-    Private Sub GridForm_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        If Not bolGridFilling Then ResizeGridPanel()
-    End Sub
-    Private Sub CopySelectedToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopySelectedToolStripMenuItem.Click
-        CopySelectedGridData(GetActiveGrid)
-    End Sub
+
+#End Region
+
 End Class

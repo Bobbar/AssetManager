@@ -1,13 +1,15 @@
 ﻿Option Explicit On
-Imports MySql.Data.MySqlClient
+
 Public Class ViewHistoryForm
     Private MyEntryGUID As String
     Private DataParser As New DBControlParser(Me)
+
     Public ReadOnly Property EntryGUID As String
         Get
             Return MyEntryGUID
         End Get
     End Property
+
     Sub New(ParentForm As Form, EntryUID As String)
         InitializeComponent()
         InitDBControls()
@@ -16,12 +18,15 @@ Public Class ViewHistoryForm
         Icon = ParentForm.Icon
         ViewEntry(EntryUID)
     End Sub
+
     Private Sub Waiting()
         SetWaitCursor(True)
     End Sub
+
     Private Sub DoneWaiting()
         SetWaitCursor(False)
     End Sub
+
     Private Sub InitDBControls()
         txtEntryTime.Tag = New DBControlInfo(historical_dev.ActionDateTime, ParseType.DisplayOnly, False)
         txtActionUser.Tag = New DBControlInfo(historical_dev.ActionUser, ParseType.DisplayOnly, False)
@@ -43,10 +48,12 @@ Public Class ViewHistoryForm
         chkTrackable.Tag = New DBControlInfo(historical_dev.Trackable, ParseType.DisplayOnly, False)
         txtPhoneNumber.Tag = New DBControlInfo(historical_dev.PhoneNumber, ParseType.DisplayOnly, False)
     End Sub
+
     Private Sub FillControls(Data As DataTable)
         DataParser.FillDBFields(Data)
         Me.Text = Me.Text + " - " & NoNull(Data.Rows(0).Item(historical_dev.ActionDateTime))
     End Sub
+
     Private Sub ViewEntry(ByVal EntryUID As String)
         Waiting()
         Try
@@ -61,7 +68,9 @@ Public Class ViewHistoryForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click
         Me.Dispose()
     End Sub
+
 End Class

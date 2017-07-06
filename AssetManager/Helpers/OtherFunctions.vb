@@ -1,16 +1,18 @@
 ﻿Option Explicit On
-Imports System.Environment
+
 Imports System.IO
-Imports System.Runtime.InteropServices
 Imports MyDialogLib
+
 Module OtherFunctions
     Public stpw As New Stopwatch
     Private intTimerHits As Integer = 0
+
     Public Sub StartTimer()
         stpw.Stop()
         stpw.Reset()
         stpw.Start()
     End Sub
+
     Public Function StopTimer() As String
         stpw.Stop()
         intTimerHits += 1
@@ -18,6 +20,7 @@ Module OtherFunctions
         Debug.Print(Results)
         Return Results
     End Function
+
     Public Sub Logger(Message As String)
         Dim MaxLogSizeKiloBytes As Short = 500
         Dim DateStamp As String = DateTime.Now.ToString
@@ -43,6 +46,7 @@ Module OtherFunctions
             End If
         End If
     End Sub
+
     Private Function RotateLogs() As Boolean
         Try
             File.Copy(strLogPath, strLogPath + ".old", True)
@@ -52,6 +56,7 @@ Module OtherFunctions
             Return False
         End Try
     End Function
+
     Public Function GetColIndex(ByVal Grid As DataGridView, ByVal strColName As String) As Integer
         Try
             Return Grid.Columns.Item(strColName).Index
@@ -59,9 +64,11 @@ Module OtherFunctions
             Return -1
         End Try
     End Function
+
     Public Function GetCurrentCellValue(ByVal Grid As DataGridView, ColumnName As String) As String
         Return NoNull(Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value.ToString)
     End Function
+
     Public Sub EndProgram()
         If OKToEnd() Then
             ProgramEnding = True
@@ -70,12 +77,14 @@ Module OtherFunctions
             Application.Exit()
         End If
     End Sub
+
     Public Sub PurgeTempDir()
         Try
             Directory.Delete(DownloadPath, True)
         Catch
         End Try
     End Sub
+
     Public Sub AdjustComboBoxWidth(ByVal sender As Object, ByVal e As EventArgs)
         Dim senderComboBox = DirectCast(sender, ComboBox)
         Dim width As Integer = senderComboBox.DropDownWidth
@@ -91,6 +100,7 @@ Module OtherFunctions
         Next
         senderComboBox.DropDownWidth = width
     End Sub
+
     Public Function NotePreview(Note As String, Optional CharLimit As Integer = 50) As String
         If Note <> "" Then
             Return Strings.Left(Note, CharLimit) & IIf(Len(Note) > CharLimit, "...", "").ToString
@@ -98,10 +108,12 @@ Module OtherFunctions
             Return ""
         End If
     End Function
+
     Public Function Message(ByVal Prompt As String, Optional ByVal Buttons As Integer = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As MsgBoxResult
         Dim NewMessage As New MyDialog(ParentFrm)
         Return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
     End Function
+
     Public Function OKToEnd() As Boolean
         If BuildingCache Then
             Message("Still building DB Cache. Please wait and try again.", vbOKOnly + vbInformation, "Critical Function Running")
@@ -111,6 +123,7 @@ Module OtherFunctions
         If GKUpdaterForm.UpdatesRunning() Then Return False
         Return True
     End Function
+
     Public Function CheckForActiveTransfers() As Boolean
         Dim ActiveTransfers As New List(Of AttachmentsForm)
         For Each frm As Form In My.Application.OpenForms
@@ -140,18 +153,22 @@ Module OtherFunctions
             Return False
         End If
     End Function
+
     Public Sub CopyToGridForm(Grid As DataGridView, Parent As Form)
         Dim NewGridForm As New GridForm(Parent, "Search Results Copy")
         NewGridForm.AddGrid("SearchGrid", "Results", DirectCast(Grid.DataSource, DataTable))
         NewGridForm.Show()
     End Sub
+
     Public Sub CopySelectedGridData(Grid As DataGridView)
         Grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         Clipboard.SetDataObject(Grid.GetClipboardContent())
         Grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
     End Sub
+
     Public Sub SetWaitCursor(Waiting As Boolean)
         Application.UseWaitCursor = Waiting
         Application.DoEvents()
     End Sub
+
 End Module

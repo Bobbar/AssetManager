@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports GKUpdaterLib
+
 Public Class GKProgressControl
     Implements IDisposable
 
@@ -11,6 +12,7 @@ Public Class GKProgressControl
     Private LogBuff As String = ""
     Private MyParentForm As Form
     Private PrevColor As Color
+
     Public ReadOnly Property Device As Device_Info
         Get
             Return CurDevice
@@ -43,6 +45,7 @@ Public Class GKProgressControl
     End Sub
 
     Public Event CriticalStopError As EventHandler
+
     Public Enum Progress_Status
         Starting
         Running
@@ -70,9 +73,11 @@ Public Class GKProgressControl
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Protected Overridable Sub OnCriticalStopError(e As EventArgs)
         RaiseEvent CriticalStopError(Me, e)
     End Sub
+
     Private Sub DrawLight(Color As Color)
         If Color <> PrevColor Then
             PrevColor = Color
@@ -100,6 +105,7 @@ Public Class GKProgressControl
         MyUpdater.Dispose()
 
     End Sub
+
     ''' <summary>
     ''' Log message event from GKUpdater.  This even can fire very rapidly. So the result is stored in a buffer to be added to the rtbLog control in a more controlled manner.
     ''' </summary>
@@ -107,9 +113,11 @@ Public Class GKProgressControl
         Dim LogEvent = DirectCast(e, GK_Updater.LogEvents)
         Log(LogEvent.LogData.Message)
     End Sub
+
     Private Sub Log(Message As String)
         LogBuff += Message + vbCrLf
     End Sub
+
     Private Sub GKStatusUpdateEvent(sender As Object, e As EventArgs)
         Dim UpdateEvent = DirectCast(e, GK_Updater.GKUpdateEvents)
         SetStatus(Progress_Status.Running)
@@ -119,6 +127,7 @@ Public Class GKProgressControl
         lblStatus.Text = CurrentStatus.CurFileName
         lblStatus.Refresh()
     End Sub
+
     Private Sub GKUpdate_Cancelled(sender As Object, e As EventArgs)
         SetStatus(Progress_Status.Cancelled)
     End Sub
@@ -148,20 +157,24 @@ Public Class GKProgressControl
             End If
         End If
     End Sub
+
     Private Sub HideLog()
         Me.Size = Me.MinimumSize
         bolShow = False
         lblShowHide.Text = "s" '"+"
     End Sub
+
     Private Sub ShowLog()
         UpdateLogBox()
         Me.Size = Me.MaximumSize
         bolShow = True
         lblShowHide.Text = "r" '"-"
     End Sub
+
     Private Sub lblInfo_Click(sender As Object, e As EventArgs) Handles lblInfo.Click
         LookupDevice(MainForm, CurDevice)
     End Sub
+
     Private Sub lblShowHide_Click(sender As Object, e As EventArgs) Handles lblShowHide.Click
         If Not bolShow Then
             ShowLog()
@@ -169,6 +182,7 @@ Public Class GKProgressControl
             HideLog()
         End If
     End Sub
+
     Private Sub pbCancelClose_Click(sender As Object, e As EventArgs) Handles pbCancelClose.Click
         If ProgStatus = Progress_Status.Running Or ProgStatus = Progress_Status.Paused Then
             If Not MyUpdater.IsDisposed Then
@@ -199,12 +213,14 @@ Public Class GKProgressControl
                 StartUpdate()
         End Select
     End Sub
+
     Private Sub SetStatus(Status As Progress_Status)
         ProgStatus = Status
         SetStatusLight(Status)
         SetButtons(Status)
         SetStatusLabel(Status)
     End Sub
+
     Private Sub SetStatusLight(Status As Progress_Status)
         Select Case Status
             Case Progress_Status.Running, Progress_Status.Starting
@@ -215,6 +231,7 @@ Public Class GKProgressControl
                 DrawLight(Color.Red)
         End Select
     End Sub
+
     Private Sub SetButtons(Status As Progress_Status)
         Select Case Status
             Case Progress_Status.Running
@@ -228,6 +245,7 @@ Public Class GKProgressControl
                 MyToolTip.SetToolTip(pbRestart, "Restart")
         End Select
     End Sub
+
     Private Sub SetStatusLabel(Status As Progress_Status)
         Select Case Status
             Case Progress_Status.Queued
@@ -246,6 +264,7 @@ Public Class GKProgressControl
                 lblStatus.Text = "Paused."
         End Select
     End Sub
+
     ''' <summary>
     ''' Timer that updates the rtbLog control with chunks of data from the log buffer.
     ''' </summary>
@@ -262,9 +281,11 @@ Public Class GKProgressControl
             lblTransRate.Refresh()
         End If
     End Sub
+
     Private Sub UpdateLogBox()
         rtbLog.AppendText(LogBuff)
         rtbLog.Refresh()
         LogBuff = ""
     End Sub
+
 End Class

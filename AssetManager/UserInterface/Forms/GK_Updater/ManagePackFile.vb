@@ -1,12 +1,14 @@
-﻿Imports System.ComponentModel
-Imports System.IO
+﻿Imports System.IO
 Imports System.Threading
+
 Public Class ManagePackFile
     Public Progress As ProgressCounter
     Public Status As String = ""
+
     Sub New()
         Progress = New ProgressCounter
     End Sub
+
     ''' <summary>
     ''' Creates and cleans the pack file directories then downloads a new pack file from the server location.
     ''' </summary>
@@ -26,9 +28,10 @@ Public Class ManagePackFile
         Progress = New ProgressCounter
         Return Await CopyPackFile(GKRemotePackFilePath, GKPackFileFullPath)
     End Function
+
     ''' <summary>
     ''' Verifies directory structure, checks if pack file is present, then compares local and remote hashes of the pack file.
-    ''' 
+    '''
     ''' Returns False if directory or file is missing, or if the hashes mismatch.
     ''' </summary>
     ''' <returns></returns>
@@ -63,6 +66,7 @@ Public Class ManagePackFile
             Return False
         End Try
     End Function
+
     ''' <summary>
     ''' Returns the contents of the hash text file located in <see cref="GKRemotePackFileDir"/>
     ''' </summary>
@@ -72,6 +76,7 @@ Public Class ManagePackFile
             Return sr.ReadToEnd
         End Using
     End Function
+
     ''' <summary>
     ''' Copies a single file to the <paramref name="Dest"/> path.
     ''' </summary>
@@ -93,6 +98,7 @@ Public Class ManagePackFile
                                   End Try
                               End Function)
     End Function
+
     ''' <summary>
     ''' Performs a buffered file stream transfer.
     ''' </summary>
@@ -121,6 +127,7 @@ Public Class ManagePackFile
             fStream.Close()
         End Using
     End Sub
+
     ''' <summary>
     ''' Compresses the local Gatekeeper directory into a new pack file.
     ''' </summary>
@@ -155,6 +162,7 @@ Public Class ManagePackFile
             Return False
         End Try
     End Function
+
     ''' <summary>
     ''' Decompresses the pack file into a local working directory.
     ''' </summary>
@@ -181,6 +189,7 @@ Public Class ManagePackFile
             Return False
         End Try
     End Function
+
     ''' <summary>
     ''' Copies the pack file and hash file to the server directory.
     ''' </summary>
@@ -196,6 +205,7 @@ Public Class ManagePackFile
         Done = Await CopyPackFile(GKPackFileFDir & GKPackHashName, GKRemotePackFileDir & GKPackHashName)
         Return Done
     End Function
+
     ''' <summary>
     ''' Verifies the local pack file and downloads a new one if needed.
     ''' </summary>
@@ -223,6 +233,7 @@ Public Class ManagePackFile
         End If
 
     End Function
+
     ''' <summary>
     ''' Creates a new pack file and hash file and copies them to the server location.
     ''' </summary>
@@ -251,6 +262,7 @@ Public Class ManagePackFile
             Return False
         End Try
     End Function
+
     ''' <summary>
     ''' Creates a text file containing the hash string of the pack file.
     ''' </summary>
@@ -267,4 +279,5 @@ Public Class ManagePackFile
         End Using
         Return True
     End Function
+
 End Class

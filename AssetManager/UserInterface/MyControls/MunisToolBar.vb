@@ -1,9 +1,22 @@
 ﻿Public Class MunisToolBar : Implements IDisposable
+
+#Region "Fields"
+
     Private MunisDropDown As New ToolStripDropDownButton
+
+#End Region
+
+#Region "Constructors"
+
     Sub New(ParentForm As Form)
         InitDropDown()
         InitToolItems(ParentForm)
     End Sub
+
+#End Region
+
+#Region "Methods"
+
     ''' <summary>
     ''' Inserts the MunisToolBar into the specified toolstrip.
     ''' </summary>
@@ -18,40 +31,7 @@
             AddSeperators(TargetStrip, TargetStrip.Items.Count - 1)
         End If
     End Sub
-    Private Function NewToolItem(Name As String, Text As String, ClickMethod As Action) As ToolStripMenuItem
-        Dim TSM As New ToolStripMenuItem
-        TSM.Name = Name
-        TSM.Text = Text
-        TSM.Tag = ClickMethod
-        Return TSM
-    End Function
-    Private Sub InitDropDown()
-        MunisDropDown.Image = Global.AssetManager.My.Resources.Resources.SearchIcon
-        MunisDropDown.Name = "MunisTools"
-        MunisDropDown.Size = New System.Drawing.Size(87, 29)
-        MunisDropDown.Text = "MUNIS Tools"
-        MunisDropDown.AutoSize = True
-    End Sub
-    Private Sub InitToolItems(ParentForm As Form)
-        Dim ToolItemList As New List(Of ToolStripMenuItem)
-        ToolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", Sub() MunisFunc.NameSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", Sub() MunisFunc.OrgObSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", Sub() MunisFunc.POSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", Sub() MunisFunc.ReqSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", Sub() MunisFunc.AssetSearch(ParentForm)))
-        For Each item In ToolItemList
-            AddToolItem(item)
-        Next
-    End Sub
-    Private Sub AddToolItem(ToolItem As ToolStripMenuItem)
-        MunisDropDown.DropDownItems.Add(ToolItem)
-        AddHandler ToolItem.Click, AddressOf ToolItemClicked
-    End Sub
-    Private Sub ToolItemClicked(sender As Object, e As EventArgs)
-        Dim ClickedItem As ToolStripMenuItem = DirectCast(sender, ToolStripMenuItem)
-        Dim ClickAction As Action = DirectCast(ClickedItem.Tag, Action)
-        ClickAction()
-    End Sub
+
     Private Sub AddSeperators(ByRef TargetToolStrip As MyToolStrip, LocationIndex As Integer)
         If TargetToolStrip.Items.Count - 1 >= LocationIndex + 1 Then
             If TargetToolStrip.Items(LocationIndex + 1).GetType IsNot GetType(ToolStripSeparator) Then
@@ -70,8 +50,57 @@
         End If
     End Sub
 
+    Private Sub AddToolItem(ToolItem As ToolStripMenuItem)
+        MunisDropDown.DropDownItems.Add(ToolItem)
+        AddHandler ToolItem.Click, AddressOf ToolItemClicked
+    End Sub
+
+    Private Sub InitDropDown()
+        MunisDropDown.Image = Global.AssetManager.My.Resources.Resources.SearchIcon
+        MunisDropDown.Name = "MunisTools"
+        MunisDropDown.Size = New System.Drawing.Size(87, 29)
+        MunisDropDown.Text = "MUNIS Tools"
+        MunisDropDown.AutoSize = True
+    End Sub
+
+    Private Sub InitToolItems(ParentForm As Form)
+        Dim ToolItemList As New List(Of ToolStripMenuItem)
+        ToolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", Sub() MunisFunc.NameSearch(ParentForm)))
+        ToolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", Sub() MunisFunc.OrgObSearch(ParentForm)))
+        ToolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", Sub() MunisFunc.POSearch(ParentForm)))
+        ToolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", Sub() MunisFunc.ReqSearch(ParentForm)))
+        ToolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", Sub() MunisFunc.AssetSearch(ParentForm)))
+        For Each item In ToolItemList
+            AddToolItem(item)
+        Next
+    End Sub
+
+    Private Function NewToolItem(Name As String, Text As String, ClickMethod As Action) As ToolStripMenuItem
+        Dim TSM As New ToolStripMenuItem
+        TSM.Name = Name
+        TSM.Text = Text
+        TSM.Tag = ClickMethod
+        Return TSM
+    End Function
+    Private Sub ToolItemClicked(sender As Object, e As EventArgs)
+        Dim ClickedItem As ToolStripMenuItem = DirectCast(sender, ToolStripMenuItem)
+        Dim ClickAction As Action = DirectCast(ClickedItem.Tag, Action)
+        ClickAction()
+    End Sub
+
+#End Region
+
 #Region "IDisposable Support"
+
     Private disposedValue As Boolean ' To detect redundant calls
+
+    ' This code added by Visual Basic to correctly implement the disposable pattern.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+        Dispose(True)
+        ' TODO: uncomment the following line if Finalize() is overridden above.
+        ' GC.SuppressFinalize(Me)
+    End Sub
 
     ' IDisposable
     Protected Overridable Sub Dispose(disposing As Boolean)
@@ -93,13 +122,6 @@
     '    Dispose(False)
     '    MyBase.Finalize()
     'End Sub
-
-    ' This code added by Visual Basic to correctly implement the disposable pattern.
-    Public Sub Dispose() Implements IDisposable.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-        Dispose(True)
-        ' TODO: uncomment the following line if Finalize() is overridden above.
-        ' GC.SuppressFinalize(Me)
-    End Sub
 #End Region
+
 End Class

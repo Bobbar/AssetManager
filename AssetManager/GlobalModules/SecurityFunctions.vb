@@ -1,14 +1,17 @@
 ﻿Option Explicit On
+
 Imports System.IO
+Imports System.Net
+Imports System.Runtime.Serialization
 Imports System.Security.Cryptography
 Imports System.Text
-Imports System.Runtime.Serialization
-Imports System.Net
+
 Module SecurityFunctions
     Private AccessLevels() As Access_Info
     Private UserAccess As User_Info
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
     Public AdminCreds As NetworkCredential = Nothing
+
     Public Function VerifyAdminCreds() As Boolean
         If AdminCreds Is Nothing Then
             Using NewGetCreds As New GetCredentialsForm
@@ -23,10 +26,12 @@ Module SecurityFunctions
         End If
         Return False
     End Function
+
     Public Function DecodePassword(strCypher As String) As String
         Dim wrapper As New Simple3Des(CryptKey)
         Return wrapper.DecryptData(strCypher)
     End Function
+
     Public Function GetHashOfTable(Table As DataTable) As String
         Dim serializer = New DataContractSerializer(GetType(DataTable))
         Using memoryStream = New MemoryStream(), SHA = New SHA1CryptoServiceProvider()
@@ -36,6 +41,7 @@ Module SecurityFunctions
             Return Convert.ToBase64String(hash)
         End Using
     End Function
+
     Public Function GetHashOfFile(Path As String) As String
         Dim hashValue() As Byte
         Using fStream As New FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read, 16 * 1024 * 1024), hash = MD5.Create
@@ -50,6 +56,7 @@ Module SecurityFunctions
             Return sBuilder.ToString
         End Using
     End Function
+
     Public Function GetHashOfFileStream(ByRef MemStream As IO.FileStream) As String
         Using md5Hash As MD5 = MD5.Create
             MemStream.Position = 0
@@ -63,6 +70,7 @@ Module SecurityFunctions
             Return sBuilder.ToString
         End Using
     End Function
+
     Public Function GetHashOfIOStream(ByVal MemStream As IO.MemoryStream) As String
         Using md5Hash As MD5 = MD5.Create
             MemStream.Position = 0
@@ -76,11 +84,13 @@ Module SecurityFunctions
             Return sBuilder.ToString
         End Using
     End Function
+
     Public Function GetSecGroupValue(SecModule As String) As Integer
         For Each Group As Access_Info In AccessLevels
             If Group.strModule = SecModule Then Return Group.intLevel
         Next
     End Function
+
     Public Sub GetUserAccess()
         Try
             Dim strQRY = "SELECT * FROM " & users.TableName & " WHERE " & users.UserName & "='" & strLocalUser & "' LIMIT 1"
@@ -99,6 +109,7 @@ Module SecurityFunctions
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Public Sub GetAccessLevels()
         Try
             Dim strQRY = "SELECT * FROM " & security.TableName & " ORDER BY " & security.AccessLevel & "" ' WHERE usr_username='" & strLocalUser & "'"
@@ -119,6 +130,7 @@ Module SecurityFunctions
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Public Function CanAccess(recModule As String, Optional AccessLevel As Integer = -1) As Boolean 'bitwise access levels
         Dim mask As Integer = 1
         Dim calc_level As Integer
@@ -148,6 +160,7 @@ Module SecurityFunctions
         Next
         Return False
     End Function
+
     Public Function CheckForAccess(recModule As String) As Boolean
         If Not CanAccess(recModule) Then
             If OfflineMode Then
@@ -160,6 +173,7 @@ Module SecurityFunctions
             Return True
         End If
     End Function
+
     Public NotInheritable Class AccessGroup
         Public Const Add As String = "add"
         Public Const CanRun As String = "can_run"
@@ -175,4 +189,5 @@ Module SecurityFunctions
         Public Const IsAdmin As String = "admin"
         Public Const AdvancedSearch As String = "advanced_search"
     End Class
+
 End Module

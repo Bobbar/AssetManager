@@ -1,53 +1,29 @@
 ﻿Public Class WindowList : Implements IDisposable
+
+#Region "Fields"
+
     Private WithEvents RefreshTimer As Timer
-    Private MyParentForm As Form
     Private DropDownControl As New ToolStripDropDownButton
     Private intFormCount As Integer
+    Private MyParentForm As Form
+
+#End Region
+
+#Region "Constructors"
+
     Sub New(ParentForm As Form)
         MyParentForm = ParentForm
     End Sub
+
+#End Region
+
+#Region "Methods"
+
     Public Sub InsertWindowList(TargetToolStrip As MyToolStrip)
         InitializeDropDownButton(TargetToolStrip)
         InitializeTimer()
     End Sub
-    Private Sub InitializeDropDownButton(TargetToolStrip As MyToolStrip)
-        DropDownControl.Visible = False
-        DropDownControl.Text = "Select Window"
-        DropDownControl.Image = AssetManager.My.Resources.Resources.CascadeIcon
-        TargetToolStrip.Items.Insert(TargetToolStrip.Items.Count, DropDownControl)
-    End Sub
-    Private Sub InitializeTimer()
-        RefreshTimer = New Timer
-        RefreshTimer.Interval = 200
-        RefreshTimer.Enabled = True
-        AddHandler RefreshTimer.Tick, AddressOf RefreshTimer_Tick
-    End Sub
-    Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs) Handles RefreshTimer.Tick
-        If FormCount(MyParentForm) < 1 Then
-            DropDownControl.Visible = False
-        Else
-            DropDownControl.Visible = True
-        End If
-        If FormCount(MyParentForm) <> intFormCount Then
-            If Not DropDownControl.DropDown.Focused Then
-                DropDownControl.DropDownItems.Clear()
-                BuildWindowList(MyParentForm, DropDownControl.DropDownItems)
-                intFormCount = FormCount(MyParentForm)
-                DropDownControl.Text = CountText(intFormCount)
-            End If
-        End If
-    End Sub
-    Private Function FormCount(ParentForm As Form) As Integer
-        Dim i As Integer = 0
-        For Each frm As Form In My.Application.OpenForms
-            If Not frm.IsDisposed And Not frm.Modal And frm IsNot ParentForm Then
-                If frm.Tag Is ParentForm Then
-                    i += FormCount(frm) + 1
-                End If
-            End If
-        Next
-        Return i
-    End Function
+
     ''' <summary>
     ''' Recursively build ToolStripItemCollections of Forms and their Children and add them to the ToolStrip. Making sure to add SibiMain to the top of the list.
     ''' </summary>
@@ -72,15 +48,28 @@
             End If
         Next
     End Sub
-    Private Function NewMenuItem(frm As Form) As ToolStripMenuItem
-        Dim newitem As New ToolStripMenuItem
-        newitem.Text = frm.Text
-        newitem.Image = frm.Icon.ToBitmap
-        newitem.Tag = frm
-        newitem.ToolTipText = "Right-Click to close."
-        AddHandler newitem.MouseDown, AddressOf WindowClick
-        Return newitem
+
+    Private Function CountText(count As Integer) As String
+        Dim MainText As String = "Select Window"
+        If count > 0 Then
+            Return MainText & " (" & count & ")"
+        Else
+            Return MainText
+        End If
     End Function
+
+    Private Function FormCount(ParentForm As Form) As Integer
+        Dim i As Integer = 0
+        For Each frm As Form In My.Application.OpenForms
+            If Not frm.IsDisposed And Not frm.Modal And frm IsNot ParentForm Then
+                If frm.Tag Is ParentForm Then
+                    i += FormCount(frm) + 1
+                End If
+            End If
+        Next
+        Return i
+    End Function
+
     Private Function HasChildren(ParentForm As Form) As Boolean
         For Each frm As Form In My.Application.OpenForms
             If frm.Tag Is ParentForm And Not frm.IsDisposed Then
@@ -89,6 +78,21 @@
         Next
         Return False
     End Function
+
+    Private Sub InitializeDropDownButton(TargetToolStrip As MyToolStrip)
+        DropDownControl.Visible = False
+        DropDownControl.Text = "Select Window"
+        DropDownControl.Image = AssetManager.My.Resources.Resources.CascadeIcon
+        TargetToolStrip.Items.Insert(TargetToolStrip.Items.Count, DropDownControl)
+    End Sub
+
+    Private Sub InitializeTimer()
+        RefreshTimer = New Timer
+        RefreshTimer.Interval = 200
+        RefreshTimer.Enabled = True
+        AddHandler RefreshTimer.Tick, AddressOf RefreshTimer_Tick
+    End Sub
+
     Private Function ListOfChilden(ParentForm As Form) As List(Of Form)
         Dim tmpList As New List(Of Form)
         For Each frm As Form In My.Application.OpenForms
@@ -98,6 +102,32 @@
         Next
         Return tmpList
     End Function
+
+    Private Function NewMenuItem(frm As Form) As ToolStripMenuItem
+        Dim newitem As New ToolStripMenuItem
+        newitem.Text = frm.Text
+        newitem.Image = frm.Icon.ToBitmap
+        newitem.Tag = frm
+        newitem.ToolTipText = "Right-Click to close."
+        AddHandler newitem.MouseDown, AddressOf WindowClick
+        Return newitem
+    End Function
+
+    Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs) Handles RefreshTimer.Tick
+        If FormCount(MyParentForm) < 1 Then
+            DropDownControl.Visible = False
+        Else
+            DropDownControl.Visible = True
+        End If
+        If FormCount(MyParentForm) <> intFormCount Then
+            If Not DropDownControl.DropDown.Focused Then
+                DropDownControl.DropDownItems.Clear()
+                BuildWindowList(MyParentForm, DropDownControl.DropDownItems)
+                intFormCount = FormCount(MyParentForm)
+                DropDownControl.Text = CountText(intFormCount)
+            End If
+        End If
+    End Sub
     Private Sub WindowClick(sender As Object, e As MouseEventArgs)
         Dim item As ToolStripItem = CType(sender, ToolStripItem)
         If e.Button = MouseButtons.Right Then
@@ -119,17 +149,20 @@
             ActivateFormByHandle(CType(item.Tag, Form))
         End If
     End Sub
-    Private Function CountText(count As Integer) As String
-        Dim MainText As String = "Select Window"
-        If count > 0 Then
-            Return MainText & " (" & count & ")"
-        Else
-            Return MainText
-        End If
-    End Function
+
+#End Region
 
 #Region "IDisposable Support"
+
     Private disposedValue As Boolean ' To detect redundant calls
+
+    ' This code added by Visual Basic to correctly implement the disposable pattern.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+        Dispose(True)
+        ' TODO: uncomment the following line if Finalize() is overridden above.
+        ' GC.SuppressFinalize(Me)
+    End Sub
 
     ' IDisposable
     Protected Overridable Sub Dispose(disposing As Boolean)
@@ -152,13 +185,6 @@
     '    Dispose(False)
     '    MyBase.Finalize()
     'End Sub
-
-    ' This code added by Visual Basic to correctly implement the disposable pattern.
-    Public Sub Dispose() Implements IDisposable.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-        Dispose(True)
-        ' TODO: uncomment the following line if Finalize() is overridden above.
-        ' GC.SuppressFinalize(Me)
-    End Sub
 #End Region
+
 End Class

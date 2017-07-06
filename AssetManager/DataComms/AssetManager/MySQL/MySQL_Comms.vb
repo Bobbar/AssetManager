@@ -1,7 +1,18 @@
 ﻿Imports MySql.Data.MySqlClient
+
 Public Class MySQL_Comms : Implements IDisposable
+
 #Region "IDisposable Support"
+
     Private disposedValue As Boolean ' To detect redundant calls
+
+    ' This code added by Visual Basic to correctly implement the disposable pattern.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+        Dispose(True)
+        ' TODO: uncomment the following line if Finalize() is overridden above.
+        GC.SuppressFinalize(Me)
+    End Sub
 
     ' IDisposable
     Protected Overridable Sub Dispose(disposing As Boolean)
@@ -24,21 +35,23 @@ Public Class MySQL_Comms : Implements IDisposable
         Dispose(False)
         MyBase.Finalize()
     End Sub
-
-    ' This code added by Visual Basic to correctly implement the disposable pattern.
-    Public Sub Dispose() Implements IDisposable.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-        Dispose(True)
-        ' TODO: uncomment the following line if Finalize() is overridden above.
-        GC.SuppressFinalize(Me)
-    End Sub
 #End Region
+
+#Region "Fields"
+
+    Public Connection As MySqlConnection
+    Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
     Private Const strDatabase As String = "asset_manager"
     Private Const strTestDatabase As String = "test_db"
-    Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
-    Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database="
     Private ConnectionException As Exception
-    Public Connection As MySqlConnection ' = NewConnection()
+    Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database="
+
+#End Region
+
+    ' = NewConnection()
+
+#Region "Constructors"
+
     Sub New()
         If ServerPinging Then
             If Not OpenConnection() Then
@@ -50,6 +63,7 @@ Public Class MySQL_Comms : Implements IDisposable
             '  Dispose()
         End If
     End Sub
+
     Sub New(OpenConnectionOnCall As Boolean)
         If OpenConnectionOnCall Then
             If Not OpenConnection() Then
@@ -59,67 +73,23 @@ Public Class MySQL_Comms : Implements IDisposable
         Else
         End If
     End Sub
-    Public Function Return_SQLTable(strSQLQry As String) As DataTable
-        ' Debug.Print("Table Hit " & Date.Now.Ticks)
-        Try
-            Using da As New MySqlDataAdapter, tmpTable As New DataTable
-                da.SelectCommand = New MySqlCommand(strSQLQry)
-                da.SelectCommand.Connection = Connection
-                da.Fill(tmpTable)
-                Return tmpTable
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
-    End Function
-    Public Function Return_SQLReader(strSQLQry As String) As MySqlDataReader
-        '  Debug.Print("Reader Hit " & Date.Now.Ticks)
-        Try
-            Using cmd As New MySqlCommand(strSQLQry, Connection)
-                Return cmd.ExecuteReader
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
-    End Function
-    Public Function Return_SQLCommand(Optional strSQLQry As String = "") As MySqlCommand
-        ' Debug.Print("Command Hit " & Date.Now.Ticks)
-        Try
-            Using cmd As New MySqlCommand
-                cmd.Connection = Connection
-                cmd.CommandText = strSQLQry
-                Return cmd
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
-    End Function
-    Public Function Return_Adapter(strSQLQry As String) As MySqlDataAdapter
-        '  Debug.Print("Adapter Hit " & Date.Now.Ticks)
-        Try
-            Dim adapter As New MySqlDataAdapter(strSQLQry, GetConnectString)
-            Dim CmdBuilder As New MySqlCommandBuilder(adapter)
-            Return adapter
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
-    End Function
+
+#End Region
+
+#Region "Methods"
+
+    Public Sub CloseConnection()
+        If Connection IsNot Nothing Then
+            Connection.Close()
+            Connection.Dispose()
+        End If
+
+    End Sub
+
     Public Function NewConnection() As MySqlConnection
         Return New MySqlConnection(GetConnectString)
     End Function
-    Private Function GetConnectString() As String
-        If Not bolUseTestDatabase Then
-            CurrentDB = strDatabase
-            Return MySQLConnectString & strDatabase
-        Else
-            CurrentDB = strTestDatabase
-            Return MySQLConnectString & strTestDatabase
-        End If
-    End Function
+
     Public Function OpenConnection() As Boolean
         Try
             If Connection Is Nothing Then
@@ -143,12 +113,69 @@ Public Class MySQL_Comms : Implements IDisposable
             Return False
         End Try
     End Function
-    Public Sub CloseConnection()
-        If Connection IsNot Nothing Then
-            Connection.Close()
-            Connection.Dispose()
+
+    Public Function Return_Adapter(strSQLQry As String) As MySqlDataAdapter
+        '  Debug.Print("Adapter Hit " & Date.Now.Ticks)
+        Try
+            Dim adapter As New MySqlDataAdapter(strSQLQry, GetConnectString)
+            Dim CmdBuilder As New MySqlCommandBuilder(adapter)
+            Return adapter
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
+        End Try
+    End Function
+
+    Public Function Return_SQLCommand(Optional strSQLQry As String = "") As MySqlCommand
+        ' Debug.Print("Command Hit " & Date.Now.Ticks)
+        Try
+            Using cmd As New MySqlCommand
+                cmd.Connection = Connection
+                cmd.CommandText = strSQLQry
+                Return cmd
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
+        End Try
+    End Function
+
+    Public Function Return_SQLReader(strSQLQry As String) As MySqlDataReader
+        '  Debug.Print("Reader Hit " & Date.Now.Ticks)
+        Try
+            Using cmd As New MySqlCommand(strSQLQry, Connection)
+                Return cmd.ExecuteReader
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
+        End Try
+    End Function
+
+    Public Function Return_SQLTable(strSQLQry As String) As DataTable
+        ' Debug.Print("Table Hit " & Date.Now.Ticks)
+        Try
+            Using da As New MySqlDataAdapter, tmpTable As New DataTable
+                da.SelectCommand = New MySqlCommand(strSQLQry)
+                da.SelectCommand.Connection = Connection
+                da.Fill(tmpTable)
+                Return tmpTable
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
+        End Try
+    End Function
+    Private Function GetConnectString() As String
+        If Not bolUseTestDatabase Then
+            CurrentDB = strDatabase
+            Return MySQLConnectString & strDatabase
+        Else
+            CurrentDB = strTestDatabase
+            Return MySQLConnectString & strTestDatabase
         End If
+    End Function
 
-    End Sub
+#End Region
+
 End Class
-

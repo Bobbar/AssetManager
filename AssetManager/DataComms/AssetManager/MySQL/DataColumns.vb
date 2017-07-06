@@ -15,6 +15,7 @@
     Public Const Trackable As String = "dev_trackable"
     Public Const CheckSum As String = "dev_checksum"
 End Class
+
 Public Class devices
     Inherits devices_main
     Public Const TableName As String = "devices"
@@ -25,6 +26,7 @@ Public Class devices
     Public Const Sibi_Link_UID As String = "dev_sibi_link"
     Public Const Munis_Emp_Num As String = "dev_cur_user_emp_num"
 End Class
+
 Public Class historical_dev
     Inherits devices_main
     Public Const TableName As String = "dev_historical"
@@ -34,6 +36,7 @@ Public Class historical_dev
     Public Const ActionDateTime As String = "dev_lastmod_date" '"hist_action_datetime"
     Public Const ActionUser As String = "hist_action_user"
 End Class
+
 Public Class trackable
     Public Const TableName As String = "dev_trackable"
     Public Const UID As String = "track_uid"
@@ -50,6 +53,7 @@ Public Class trackable
     Public Const DeviceUID As String = "track_device_uid"
     Public Const DateStamp As String = "track_datestamp"
 End Class
+
 Public Class main_attachments
 
     Public Overridable ReadOnly Property TableName As String = "attachments"
@@ -62,15 +66,18 @@ Public Class main_attachments
     Public ReadOnly Property FileHash As String = "attach_file_hash"
     Public Overridable ReadOnly Property Folder As String = "attach_folder"
 End Class
+
 Public Class dev_attachments
     Inherits main_attachments
     Public Overrides ReadOnly Property TableName As String = "dev_attachments"
 End Class
+
 Public Class sibi_attachments
     Inherits main_attachments
     Public Overrides ReadOnly Property TableName As String = "sibi_attachments"
     Public Overrides ReadOnly Property Folder As String = "attach_folder"
 End Class
+
 Public Class sibi_requests
     Public Const TableName As String = "sibi_requests"
     Public Const UID As String = "sibi_uid"
@@ -87,6 +94,7 @@ Public Class sibi_requests
     Public Const RequestNumber As String = "sibi_request_number"
     Public Const RT_Number As String = "sibi_RT_number"
 End Class
+
 Public Class sibi_request_items
     Public Const TableName As String = "sibi_request_items"
     Public Const Item_UID As String = "sibi_items_uid"
@@ -104,6 +112,7 @@ Public Class sibi_request_items
     Public Const Qty As String = "sibi_items_qty"
     Public Const TimeStamp As String = "sibi_items_timestamp"
 End Class
+
 Public Class sibi_notes
     Public Const TableName As String = "sibi_notes"
     Public Const Request_UID As String = "sibi_request_uid"
@@ -111,21 +120,25 @@ Public Class sibi_notes
     Public Const DateStamp As String = "sibi_datestamp"
     Public Const Note As String = "sibi_note"
 End Class
+
 Public Class main_combocodes
     Public Const TypeName As String = "type_name"
     Public Const HumanValue As String = "human_value"
     Public Const DB_Value As String = "db_value"
     Public Const ID As String = "id"
 End Class
+
 Public Class dev_codes
     Inherits main_combocodes
     Public Const TableName As String = "dev_codes"
     Public Const MunisCode As String = "munis_code"
 End Class
+
 Public Class sibi_codes
     Inherits main_combocodes
     Public Const TableName As String = "sibi_codes"
 End Class
+
 Public Class security
     Public Const TableName As String = "security"
     Public Const SecModule As String = "sec_module"
@@ -133,6 +146,7 @@ Public Class security
     Public Const Description As String = "sec_desc"
     Public Const AvailOffline As String = "sec_availoffline"
 End Class
+
 Public Class users
     Public Const TableName As String = "users"
     Public Const UserName As String = "usr_username"
@@ -140,10 +154,10 @@ Public Class users
     Public Const AccessLevel As String = "usr_access_level"
     Public Const UID As String = "usr_UID"
 End Class
+
 Public Class employees
     Public Const TableName As String = "employees"
     Public Const Name As String = "emp_name"
     Public Const Number As String = "emp_number"
     Public Const UID As String = "emp_UID"
 End Class
-

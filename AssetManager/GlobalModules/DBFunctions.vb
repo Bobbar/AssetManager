@@ -1,4 +1,5 @@
 ﻿Module DBFunctions
+
     Public Sub RefreshLocalDBCache()
         Try
             BuildingCache = True
@@ -17,17 +18,17 @@
             Dim Done As Boolean = False
             BuildingCache = True
             Done = Await Task.Run(Function()
-                                          Try
-                                              Using conn As New SQLite_Comms(False)
-                                                  conn.RefreshSQLCache()
-                                              End Using
-                                              Return True
-                                          Catch ex As Exception
-                                              BuildingCache = False
-                                              Return False
-                                              ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-                                          End Try
-                                      End Function)
+                                      Try
+                                          Using conn As New SQLite_Comms(False)
+                                              conn.RefreshSQLCache()
+                                          End Using
+                                          Return True
+                                      Catch ex As Exception
+                                          BuildingCache = False
+                                          Return False
+                                          ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+                                      End Try
+                                  End Function)
             BuildingCache = False
             Return Done
         Catch ex As Exception
@@ -35,6 +36,7 @@
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Function
+
     Public Async Function VerifyLocalCacheHash() As Task(Of Boolean)
         Dim HashesMatch As Boolean = False
         HashesMatch = Await Task.Run(Function()
@@ -66,6 +68,7 @@
                                      End Function)
         Return HashesMatch
     End Function
+
     Public Function VerifyLocalCache(Optional CheckHashes As Boolean = True) As Boolean
         Try
             Using SQLiteComms As New SQLite_Comms
@@ -84,4 +87,5 @@
             Return False
         End Try
     End Function
+
 End Module

@@ -1,17 +1,24 @@
 ﻿Option Explicit On
+
 Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
+
 Public Class NewDeviceForm
-    Private Device As New Device_Info
-    Private bolCheckFields As Boolean
-    Private MyLiveBox As New LiveBox(Me)
+
+#Region "Fields"
+
     Public MunisUser As Emp_Info = Nothing
-    Private DataParser As New DBControlParser(Me)
-    Private NewUID As String
     Private ReadOnly intReplacementSched As Integer = 4
-    Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
-        AddDevice()
-    End Sub
+    Private bolCheckFields As Boolean
+    Private DataParser As New DBControlParser(Me)
+    Private Device As New Device_Info
+    Private MyLiveBox As New LiveBox(Me)
+    Private NewUID As String
+
+#End Region
+
+#Region "Methods"
+
     Private Sub AddDevice()
         Try
             If Not CheckFields(Me, True) Then
@@ -42,30 +49,28 @@ Public Class NewDeviceForm
             Dim blah = Message("Unable to add new device.", vbOKOnly + vbExclamation, "Error", Me)
         End Try
     End Sub
-    Private Function DeviceInsertTable(Adapter As MySqlDataAdapter) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
-        Dim DBRow = tmpTable.Rows(0)
-        'Add Add'l info
-        If MunisUser.Number IsNot Nothing Then
-            DBRow(devices.CurrentUser) = MunisUser.Name
-            DBRow(devices.Munis_Emp_Num) = MunisUser.Number
+
+    Private Sub AddErrorIcon(ctl As Control)
+        If fieldErrorIcon.GetError(ctl) Is String.Empty Then
+            fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight)
+            fieldErrorIcon.SetIconPadding(ctl, 4)
+            fieldErrorIcon.SetError(ctl, "Required Field")
         End If
-        DBRow(devices.LastMod_User) = strLocalUser
-        DBRow(devices.LastMod_Date) = Now
-        DBRow(devices.DeviceUID) = NewUID
-        DBRow(devices.CheckedOut) = False
-        Return tmpTable
-    End Function
-    Private Function HistoryInsertTable(Adapter As MySqlDataAdapter) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
-        Dim DBRow = tmpTable.Rows(0)
-        'Add Add'l info
-        DBRow(historical_dev.ChangeType) = "NEWD"
-        DBRow(historical_dev.Notes) = Trim(txtNotes.Text)
-        DBRow(historical_dev.ActionUser) = strLocalUser
-        DBRow(historical_dev.DeviceUID) = NewUID
-        Return tmpTable
-    End Function
+    End Sub
+
+    Private Sub AddNew_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        MyLiveBox.Dispose()
+    End Sub
+
+    Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ClearAll()
+        InitDBControls()
+        MyLiveBox.AttachToControl(txtCurUser_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
+        MyLiveBox.AttachToControl(txtDescription_REQ, LiveBoxType.SelectValue, devices.Description)
+        Icon = MainForm.Icon
+        Tag = MainForm
+    End Sub
+
     Private Function AddNewDevice() As Boolean
         Try
             NewUID = Guid.NewGuid.ToString
@@ -91,6 +96,7 @@ Public Class NewDeviceForm
             End If
         End Try
     End Function
+
     Private Function CheckFields(Parent As Control, bolValidFields As Boolean) As Boolean
         For Each ctl As Control In Parent.Controls
             Dim DBInfo As New DBControlInfo
@@ -133,28 +139,117 @@ Public Class NewDeviceForm
         Next
         Return bolValidFields 'if fields are missing return false to trigger a message if needed
     End Function
-    Private Sub AddErrorIcon(ctl As Control)
-        If fieldErrorIcon.GetError(ctl) Is String.Empty Then
-            fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight)
-            fieldErrorIcon.SetIconPadding(ctl, 4)
-            fieldErrorIcon.SetError(ctl, "Required Field")
-        End If
+
+    Private Sub ClearAll()
+        RefreshCombos()
+        ClearFields(Me)
+        dtPurchaseDate_REQ.Value = Now
+        cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, "INSRV")
+        ResetBackColors(Me)
+        chkTrackable.Checked = False
+        chkNoClear.Checked = False
+        bolCheckFields = False
+        fieldErrorIcon.Clear()
     End Sub
+
     Private Sub ClearErrorIcon(ctl As Control)
         fieldErrorIcon.SetError(ctl, String.Empty)
+    End Sub
+
+    Private Sub ClearFields(Parent As Control)
+        MunisUser = Nothing
+        For Each ctl As Control In Parent.Controls
+            If TypeOf ctl Is TextBox Then
+                Dim txt As TextBox = DirectCast(ctl, TextBox)
+                txt.Text = ""
+                txt.ReadOnly = False
+            End If
+            If TypeOf ctl Is ComboBox Then
+                Dim cmb As ComboBox = DirectCast(ctl, ComboBox)
+                cmb.SelectedIndex = -1
+            End If
+            If ctl.HasChildren Then ClearFields(ctl)
+        Next
+    End Sub
+
+    Private Sub cmbEquipType_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+
+    Private Sub cmbEquipType_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbEquipType_REQ.SelectedIndexChanged
+        If bolCheckFields Then CheckFields(Me, False)
+    End Sub
+
+    Private Sub cmbLocation_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbLocation_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+
+    Private Sub cmbLocation_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbLocation_REQ.SelectedIndexChanged
+        If bolCheckFields Then CheckFields(Me, False)
+    End Sub
+
+    Private Sub cmbOSType_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbOSType_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+
+    Private Sub cmbOSType_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbOSType_REQ.SelectedIndexChanged
+        If bolCheckFields Then CheckFields(Me, False)
+    End Sub
+
+    Private Sub cmbStatus_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbStatus_REQ.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+
+    Private Sub cmbStatus_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbStatus_REQ.SelectedIndexChanged
+        If bolCheckFields Then CheckFields(Me, False)
+    End Sub
+
+    Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
+        AddDevice()
     End Sub
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
         ClearAll()
     End Sub
 
-    Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
-        ClearAll()
-        InitDBControls()
-        MyLiveBox.AttachToControl(txtCurUser_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
-        MyLiveBox.AttachToControl(txtDescription_REQ, LiveBoxType.SelectValue, devices.Description)
-        Icon = MainForm.Icon
-        Tag = MainForm
+    Private Sub cmdUserSearch_Click(sender As Object, e As EventArgs) Handles cmdUserSearch.Click
+        Dim NewMunisSearch As New MunisUserForm(Me)
+        MunisUser = NewMunisSearch.EmployeeInfo
+        If MunisUser.Number <> "" Then
+            txtCurUser_REQ.Text = MunisUser.Name
+            txtCurUser_REQ.ReadOnly = True
+        End If
     End Sub
+
+    Private Function DeviceInsertTable(Adapter As MySqlDataAdapter) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
+        Dim DBRow = tmpTable.Rows(0)
+        'Add Add'l info
+        If MunisUser.Number IsNot Nothing Then
+            DBRow(devices.CurrentUser) = MunisUser.Name
+            DBRow(devices.Munis_Emp_Num) = MunisUser.Number
+        End If
+        DBRow(devices.LastMod_User) = strLocalUser
+        DBRow(devices.LastMod_Date) = Now
+        DBRow(devices.DeviceUID) = NewUID
+        DBRow(devices.CheckedOut) = False
+        Return tmpTable
+    End Function
+
+    Private Sub dtPurchaseDate_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_REQ.ValueChanged
+        If bolCheckFields Then CheckFields(Me, False)
+        SetReplacementYear(dtPurchaseDate_REQ.Value)
+    End Sub
+
+    Private Function HistoryInsertTable(Adapter As MySqlDataAdapter) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
+        Dim DBRow = tmpTable.Rows(0)
+        'Add Add'l info
+        DBRow(historical_dev.ChangeType) = "NEWD"
+        DBRow(historical_dev.Notes) = Trim(txtNotes.Text)
+        DBRow(historical_dev.ActionUser) = strLocalUser
+        DBRow(historical_dev.DeviceUID) = NewUID
+        Return tmpTable
+    End Function
     Private Sub InitDBControls()
         txtDescription_REQ.Tag = New DBControlInfo(devices_main.Description, True)
         txtAssetTag_REQ.Tag = New DBControlInfo(devices_main.AssetTag, True)
@@ -171,23 +266,13 @@ Public Class NewDeviceForm
         chkTrackable.Tag = New DBControlInfo(devices_main.Trackable, False)
         txtPO.Tag = New DBControlInfo(devices_main.PO, False)
     End Sub
-    Private Sub ClearAll()
-        RefreshCombos()
-        ClearFields(Me)
-        dtPurchaseDate_REQ.Value = Now
-        cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, "INSRV")
-        ResetBackColors(Me)
-        chkTrackable.Checked = False
-        chkNoClear.Checked = False
-        bolCheckFields = False
-        fieldErrorIcon.Clear()
-    End Sub
     Private Sub RefreshCombos()
         FillComboBox(DeviceIndex.Locations, cmbLocation_REQ)
         FillComboBox(DeviceIndex.EquipType, cmbEquipType_REQ)
         FillComboBox(DeviceIndex.OSType, cmbOSType_REQ)
         FillComboBox(DeviceIndex.StatusType, cmbStatus_REQ)
     End Sub
+
     Private Sub ResetBackColors(Parent As Control)
         For Each ctl As Control In Parent.Controls
             Select Case True
@@ -199,80 +284,34 @@ Public Class NewDeviceForm
             If ctl.HasChildren Then ResetBackColors(ctl)
         Next
     End Sub
-    Private Sub ClearFields(Parent As Control)
-        MunisUser = Nothing
-        For Each ctl As Control In Parent.Controls
-            If TypeOf ctl Is TextBox Then
-                Dim txt As TextBox = DirectCast(ctl, TextBox)
-                txt.Text = ""
-                txt.ReadOnly = False
-            End If
-            If TypeOf ctl Is ComboBox Then
-                Dim cmb As ComboBox = DirectCast(ctl, ComboBox)
-                cmb.SelectedIndex = -1
-            End If
-            If ctl.HasChildren Then ClearFields(ctl)
-        Next
-    End Sub
     Private Sub SetReplacementYear(PurDate As Date)
         Dim ReplaceYear As Integer = PurDate.Year + intReplacementSched
         txtReplaceYear.Text = ReplaceYear.ToString
     End Sub
-    Private Sub txtSerial_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtSerial_REQ.TextChanged
-        If bolCheckFields Then CheckFields(Me, False)
-    End Sub
-    Private Sub txtCurUser_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser_REQ.TextChanged
-        If bolCheckFields Then CheckFields(Me, False)
-    End Sub
-    Private Sub cmbLocation_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbLocation_REQ.SelectedIndexChanged
-        If bolCheckFields Then CheckFields(Me, False)
-    End Sub
-    Private Sub cmbEquipType_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbEquipType_REQ.SelectedIndexChanged
-        If bolCheckFields Then CheckFields(Me, False)
-    End Sub
-    Private Sub cmbStatus_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbStatus_REQ.SelectedIndexChanged
-        If bolCheckFields Then CheckFields(Me, False)
-    End Sub
+
     Private Sub txtAssetTag_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtAssetTag_REQ.TextChanged
         If bolCheckFields Then CheckFields(Me, False)
     End Sub
+
+    Private Sub txtCurUser_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtCurUser_REQ.TextChanged
+        If bolCheckFields Then CheckFields(Me, False)
+    End Sub
+
     Private Sub txtDescription_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtDescription_REQ.TextChanged
         If bolCheckFields Then CheckFields(Me, False)
     End Sub
-    Private Sub dtPurchaseDate_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_REQ.ValueChanged
-        If bolCheckFields Then CheckFields(Me, False)
-        SetReplacementYear(dtPurchaseDate_REQ.Value)
-    End Sub
-    Private Sub cmbOSType_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbOSType_REQ.SelectedIndexChanged
-        If bolCheckFields Then CheckFields(Me, False)
-    End Sub
-    Private Sub cmbLocation_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbLocation_REQ.DropDown
-        AdjustComboBoxWidth(sender, e)
-    End Sub
-    Private Sub cmbOSType_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbOSType_REQ.DropDown
-        AdjustComboBoxWidth(sender, e)
-    End Sub
-    Private Sub cmbStatus_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbStatus_REQ.DropDown
-        AdjustComboBoxWidth(sender, e)
-    End Sub
-    Private Sub cmbEquipType_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType_REQ.DropDown
-        AdjustComboBoxWidth(sender, e)
-    End Sub
-    Private Sub AddNew_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        MyLiveBox.Dispose()
-    End Sub
-    Private Sub cmdUserSearch_Click(sender As Object, e As EventArgs) Handles cmdUserSearch.Click
-        Dim NewMunisSearch As New MunisUserForm(Me)
-        MunisUser = NewMunisSearch.EmployeeInfo
-        If MunisUser.Number <> "" Then
-            txtCurUser_REQ.Text = MunisUser.Name
-            txtCurUser_REQ.ReadOnly = True
-        End If
-    End Sub
+
     Private Sub txtPhoneNumber_Leave(sender As Object, e As EventArgs) Handles txtPhoneNumber.Leave
         If Trim(txtPhoneNumber.Text) <> "" And Not ValidPhoneNumber(txtPhoneNumber.Text) Then
             Message("Invalid phone number.", vbOKOnly + vbExclamation, "Error", Me)
             txtPhoneNumber.Focus()
         End If
     End Sub
+
+    Private Sub txtSerial_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtSerial_REQ.TextChanged
+        If bolCheckFields Then CheckFields(Me, False)
+    End Sub
+
+#End Region
+
 End Class

@@ -1,6 +1,7 @@
 ﻿Module StyleFunctions
     Public GridStyles As DataGridViewCellStyle
     Public GridFont As Font = New Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+
     Public Function SetBarColor(UID As String) As Color
         Dim hash As Integer = UID.GetHashCode
         Dim r, g, b As Integer
@@ -9,6 +10,7 @@
         b = hash And &HFF
         Return Color.FromArgb(r, g, b)
     End Function
+
     Public Function GetFontColor(color As Color) As Color 'get contrasting font color
         Dim d As Integer = 0
         Dim a As Double
@@ -20,11 +22,13 @@
         End If
         Return Color.FromArgb(d, d, d)
     End Function
+
     Public Sub SetGridStyle(Grid As DataGridView)
         Grid.BackgroundColor = DefGridBC
         Grid.DefaultCellStyle = GridStyles
         Grid.DefaultCellStyle.Font = GridFont
     End Sub
+
     Public Sub HighlightRow(ByRef Grid As DataGridView, Theme As Grid_Theme, Row As Integer)
         Try
             Dim BackColor As Color = Theme.BackColor 'DefGridBC
@@ -50,6 +54,7 @@
         Catch
         End Try
     End Sub
+
     Public Sub LeaveRow(ByRef Grid As DataGridView, Theme As Grid_Theme, Row As Integer)
         Dim BackColor As Color = Theme.BackColor
         Dim SelectColor As Color = Theme.CellSelectColor
@@ -60,4 +65,5 @@
             Next
         End If
     End Sub
+
 End Module

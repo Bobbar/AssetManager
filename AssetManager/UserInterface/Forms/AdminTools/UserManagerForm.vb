@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports MySql.Data.MySqlClient
+
 Public Class UserManagerForm
     Private ModuleIndex As New List(Of Access_Info)
     Private CurrentUser As User_Info
@@ -8,15 +9,18 @@ Public Class UserManagerForm
     Private SQLComms As New MySQL_Comms
     Private myAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(Qry)
     Private SelectedRow As Integer
+
     Sub New(ParentForm As Form)
         InitializeComponent()
         Tag = ParentForm
         Icon = ParentForm.Icon
         Show()
     End Sub
+
     Private Sub frmUserManager_Load(sender As Object, e As EventArgs) Handles Me.Load
         LoadUserData()
     End Sub
+
     Private Sub LoadUserData()
         UserGrid.DataSource = DataBinder
         ListUsers()
@@ -24,9 +28,11 @@ Public Class UserManagerForm
         LoadModuleBoxes()
         UpdateAccessLabel()
     End Sub
+
     Private Sub ListUsers()
         SendToGrid()
     End Sub
+
     Private Sub SendToGrid()
         Dim cmdBuilder As New MySqlCommandBuilder(myAdapter)
         Dim table As New DataTable
@@ -35,6 +41,7 @@ Public Class UserManagerForm
         DataBinder.DataSource = table
         UserGrid.Columns(users.UID).ReadOnly = True
     End Sub
+
     Private Sub DisplayAccess(intAccessLevel As Integer)
         Dim clbItemStates(clbModules.Items.Count - 1) As CheckState
         For Each chkBox As CheckBox In clbModules.Items
@@ -50,6 +57,7 @@ Public Class UserManagerForm
         UpdateAccessLabel()
         AutoSizeCLBColumns(clbModules)
     End Sub
+
     Private Sub LoadModuleBoxes()
         Dim chkModuleBox As CheckBox
         clbModules.Items.Clear()
@@ -64,6 +72,7 @@ Public Class UserManagerForm
         Next
         AutoSizeCLBColumns(clbModules)
     End Sub
+
     Private Function CalcAccessLevel() As Integer
         Dim intAccessLevel As Integer = 0
         For Each chkBox As CheckBox In clbModules.Items
@@ -73,6 +82,7 @@ Public Class UserManagerForm
         Next
         Return intAccessLevel
     End Function
+
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick
         If TypeOf UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value Is Integer Then
             DisplayAccess(CInt(UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value))
@@ -82,6 +92,7 @@ Public Class UserManagerForm
         End If
         SelectedRow = e.RowIndex
     End Sub
+
     Private Sub GetUserInfo()
         With CurrentUser
             .intAccessLevel = CInt(GetCurrentCellValue(UserGrid, users.AccessLevel))
@@ -90,6 +101,7 @@ Public Class UserManagerForm
             .strFullname = GetCurrentCellValue(UserGrid, users.FullName)
         End With
     End Sub
+
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
         Try
             Dim blah = Message("Are you sure?  Committed changes cannot be undone.", vbYesNo + vbQuestion, "Commit Changes", Me)
@@ -106,6 +118,7 @@ Public Class UserManagerForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Private Sub AddGUIDs()
         For Each rows As DataGridViewRow In UserGrid.Rows
             If rows.Cells(GetColIndex(UserGrid, users.UID)).EditedFormattedValue.ToString = "" Then
@@ -114,12 +127,14 @@ Public Class UserManagerForm
             End If
         Next
     End Sub
+
     Private Sub AddAccessLevelToGrid()
         UserGrid.Rows(SelectedRow).Cells(GetColIndex(UserGrid, users.AccessLevel)).Selected = True
         UserGrid.BeginEdit(False)
         UserGrid.Rows(SelectedRow).Cells(GetColIndex(UserGrid, users.AccessLevel)).Value = CalcAccessLevel()
         UserGrid.EndEdit()
     End Sub
+
     Private Sub AutoSizeCLBColumns(CLB As CheckedListBox)
         Dim intMaxLen As Integer = 0
         Dim fntCheckBoxFont As Font = CLB.Font
@@ -130,26 +145,33 @@ Public Class UserManagerForm
         Next
         CLB.ColumnWidth = CInt(intMaxLen / 4)
     End Sub
+
     Private Sub UpdateAccessLabel()
         lblAccessValue.Text = "Selected Access Level: " & CalcAccessLevel()
     End Sub
+
     Private Sub clbModules_MouseUp(sender As Object, e As MouseEventArgs) Handles clbModules.MouseUp
         UpdateAccessLabel()
         AddAccessLevelToGrid()
     End Sub
+
     Private Sub UserGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles UserGrid.KeyDown
         If e.KeyCode = Keys.Delete Then
             UserGrid.Rows.RemoveAt(SelectedRow)
         End If
     End Sub
+
     Private Sub UserGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellDoubleClick
         UserGrid.BeginEdit(False)
     End Sub
+
     Private Sub cmdRefresh_Click(sender As Object, e As EventArgs) Handles cmdRefresh.Click
         LoadUserData()
     End Sub
+
     Private Sub frmUserManager_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         myAdapter.Dispose()
         SQLComms.Dispose()
     End Sub
+
 End Class

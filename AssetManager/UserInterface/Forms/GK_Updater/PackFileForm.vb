@@ -1,10 +1,10 @@
 ﻿Imports System.ComponentModel
-Imports System.IO
-Imports System.Threading
+
 Public Class PackFileForm
     Public Property PackVerified As Boolean = False
     Private Working As Boolean = False
     Private PackFunc As New ManagePackFile
+
     Sub New(ShowFunctions As Boolean)
         InitializeComponent()
         FunctionPanel.Visible = ShowFunctions
@@ -12,6 +12,7 @@ Public Class PackFileForm
             CheckPackFile()
         End If
     End Sub
+
     Private Async Sub CheckPackFile()
         Try
             Working = True
@@ -22,6 +23,7 @@ Public Class PackFileForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Private Sub ProgressTimer_Tick(sender As Object, e As EventArgs) Handles ProgressTimer.Tick
         Try
             If PackFunc.Progress.Percent > 0 Then
@@ -39,6 +41,7 @@ Public Class PackFileForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Private Sub VerifyPackButton_Click(sender As Object, e As EventArgs) Handles VerifyPackButton.Click
         Try
             CheckPackFile()
@@ -46,6 +49,7 @@ Public Class PackFileForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Private Async Sub NewPackFile()
         Try
             Working = True
@@ -57,6 +61,7 @@ Public Class PackFileForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Private Async Sub NewPackButton_Click(sender As Object, e As EventArgs) Handles NewPackButton.Click
         Try
             NewPackFile()
@@ -68,4 +73,5 @@ Public Class PackFileForm
     Private Sub PackFileForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         e.Cancel = Working
     End Sub
+
 End Class

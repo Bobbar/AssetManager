@@ -1,10 +1,12 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.ComponentModel
+Imports System.Data.SqlClient
 Imports System.IO
 Imports System.Net.Sockets
-Imports System.ComponentModel
-Imports System.Data.SqlClient
 Imports System.Reflection
+Imports MySql.Data.MySqlClient
+
 Module ErrorHandling
+
     Public Function ErrHandle(ex As Exception, Method As MethodBase) As Boolean 'Recursive error handler. Returns False for undesired or dangerous errors, True if safe to continue.
         Logger("ERR STACK TRACE: " & ex.ToString)
         Dim ErrorResult As Boolean
@@ -77,6 +79,7 @@ Module ErrorHandling
         If Not IsNothing(ex.InnerException) Then ErrHandle(ex.InnerException, Method)
         Return ErrorResult
     End Function
+
     Private Function handleWin32Exception(ex As Win32Exception, Method As MethodBase) As Boolean
         Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message)
         Select Case ex.NativeErrorCode
@@ -92,6 +95,7 @@ Module ErrorHandling
         Dim blah = Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
         Return True
     End Function
+
     Private Function handleFormatException(ex As FormatException, Method As MethodBase) As Boolean
         Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
         Select Case ex.HResult
@@ -102,6 +106,7 @@ Module ErrorHandling
         End Select
         Return False
     End Function
+
     Private Function handleMySQLException(ex As MySqlException, Method As MethodBase) As Boolean
         Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message)
         Select Case ex.Number
@@ -127,6 +132,7 @@ Module ErrorHandling
         End Select
         Return False
     End Function
+
     Private Function handlePingException(ex As Net.NetworkInformation.PingException, Method As MethodBase) As Boolean
         Select Case ex.HResult
             Case -2146233079
@@ -135,6 +141,7 @@ Module ErrorHandling
                 UnHandledError(ex, ex.HResult, Method)
         End Select
     End Function
+
     Private Function handleOperationException(ex As InvalidOperationException, Method As MethodBase) As Boolean
         Select Case ex.HResult
             Case -2146233079
@@ -144,6 +151,7 @@ Module ErrorHandling
                 UnHandledError(ex, ex.HResult, Method)
         End Select
     End Function
+
     Private Function handleWebException(ex As Net.WebException, Method As MethodBase) As Boolean
         Dim handResponse As Net.FtpWebResponse = DirectCast(ex.Response, Net.FtpWebResponse)
         Select Case handResponse.StatusCode
@@ -161,6 +169,7 @@ Module ErrorHandling
         End Select
         Return False
     End Function
+
     Private Function handleIOException(ex As IOException, Method As MethodBase) As Boolean
         Select Case ex.HResult
             Case -2147024864
@@ -175,6 +184,7 @@ Module ErrorHandling
         End Select
         Return False
     End Function
+
     Private Function handleSocketException(ex As SocketException, Method As MethodBase) As Boolean
         Select Case ex.SocketErrorCode                               'FTPSocket timeout
             Case SocketError.TimedOut '10060
@@ -203,6 +213,7 @@ Module ErrorHandling
                 UnHandledError(ex, ex.SocketErrorCode, Method)
         End Select
     End Function
+
     Private Function handleSQLException(ex As SqlException, Method As MethodBase) As Boolean
         Select Case ex.Number
             Case 18456
@@ -233,6 +244,7 @@ Module ErrorHandling
                 UnHandledError(ex, ex.Number, Method)
         End Select
     End Function
+
     Private Function handleNoPingException(ex As NoPingException, Method As MethodBase) As Boolean
         Select Case ex.HResult
             Case -2146233088
@@ -243,6 +255,7 @@ Module ErrorHandling
                 UnHandledError(ex, ex.HResult, Method)
         End Select
     End Function
+
     Private Function handleNullReferenceException(ex As Exception, Method As MethodBase) As Boolean
         If ServerPinging Then
             Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
@@ -253,9 +266,11 @@ Module ErrorHandling
             Return True
         End If
     End Function
+
     Private Sub UnHandledError(ex As Exception, ErrorCode As Integer, Method As MethodBase)
         Logger("UNHANDLED ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ErrorCode & "  Message:" & ex.Message)
         Dim blah = Message("UNHANDLED ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ErrorCode & "  Message:" & ex.Message & vbCrLf & vbCrLf & "file://" & strLogPath, vbOKOnly + vbCritical, "ERROR")
         EndProgram()
     End Sub
+
 End Module

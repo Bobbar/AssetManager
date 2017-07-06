@@ -1,11 +1,15 @@
 ﻿Imports System.Security.Cryptography
+
 Public NotInheritable Class Simple3Des
+
     Sub New(ByVal key As String)
         ' Initialize the crypto provider.
         TripleDes.Key = TruncateHash(key, TripleDes.KeySize \ 8)
         TripleDes.IV = TruncateHash("", TripleDes.BlockSize \ 8)
     End Sub
+
     Private TripleDes As New TripleDESCryptoServiceProvider
+
     Private Function TruncateHash(
     ByVal key As String,
     ByVal length As Integer) As Byte()
@@ -18,6 +22,7 @@ Public NotInheritable Class Simple3Des
         ReDim Preserve hash(length - 1)
         Return hash
     End Function
+
     Public Function EncryptData(
     ByVal plaintext As String) As String
         ' Convert the plaintext string to a byte array.
@@ -35,6 +40,7 @@ Public NotInheritable Class Simple3Des
         ' Convert the encrypted stream to a printable string.
         Return Convert.ToBase64String(ms.ToArray)
     End Function
+
     Public Function DecryptData(ByVal encryptedtext As String) As String
         Try
             ' Convert the encrypted text string to a byte array.
@@ -55,4 +61,5 @@ Public NotInheritable Class Simple3Des
             Return Nothing
         End Try
     End Function
+
 End Class
