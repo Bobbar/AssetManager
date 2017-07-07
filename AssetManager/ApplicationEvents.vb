@@ -17,12 +17,14 @@
                 OfflineMode = Not SQLComms.OpenConnection
                 'check connection
             End Using
+            Status("Checking Local Cache...")
             If Not OfflineMode Then
-                Status("Building Cache DB...")
-                RefreshLocalDBCache()
+                If Not VerifyLocalCache(OfflineMode) Then
+                    Status("Building Cache DB...")
+                    RefreshLocalDBCache()
+                End If
             Else
-                Status("Checking Local Cache...")
-                CacheAvailable = VerifyLocalCache(False)
+                CacheAvailable = VerifyLocalCache(OfflineMode)
             End If
 
             If OfflineMode And Not CacheAvailable Then

@@ -1,4 +1,5 @@
 ﻿Imports System.Environment
+Imports System.Deployment.Application
 
 Module Paths
 
@@ -10,7 +11,8 @@ Module Paths
     Public ReadOnly DownloadPath As String = strAppDir & "temp\"
 
     'SQLite DB paths
-    Public ReadOnly strSQLiteDBName As String = "cache.db"
+
+    Public ReadOnly strSQLiteDBName As String = "cache" & IIf(Not ApplicationDeployment.IsNetworkDeployed, "_DEBUG", "").ToString & ".db"
 
     Public ReadOnly strSQLitePath As String = strAppDir & "SQLiteCache\" & strSQLiteDBName
     Public ReadOnly strSQLiteDir As String = strAppDir & "SQLiteCache\"

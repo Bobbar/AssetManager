@@ -69,13 +69,14 @@
         Return HashesMatch
     End Function
 
-    Public Function VerifyLocalCache(Optional CheckHashes As Boolean = True) As Boolean
+    Public Function VerifyLocalCache(Optional OfflineMode As Boolean = False) As Boolean
         Try
             Using SQLiteComms As New SQLite_Comms
                 If SQLiteComms.GetSchemaVersion > 0 Then
-                    If CheckHashes Then
-                        Dim LocalHashes = SQLiteComms.LocalTableHashList
-                        Return SQLiteComms.CompareTableHashes(LocalHashes, RemoteTableHashes)
+                    If Not OfflineMode Then
+                        SQLiteTableHashes = SQLiteComms.LocalTableHashList
+                        RemoteTableHashes = SQLiteComms.RemoteTableHashList
+                        Return SQLiteComms.CompareTableHashes(SQLiteTableHashes, RemoteTableHashes)
                     Else
                         Return True
                     End If
