@@ -420,8 +420,8 @@ Public Class MainForm
     Private Sub InitLiveBox()
         MyLiveBox.AttachToControl(txtDescription, LiveBoxType.DynamicSearch, devices.Description)
         MyLiveBox.AttachToControl(txtCurUser, LiveBoxType.DynamicSearch, devices.CurrentUser)
-        MyLiveBox.AttachToControl(txtSerial, LiveBoxType.InstaLoad, devices.Serial)
-        MyLiveBox.AttachToControl(txtAssetTag, LiveBoxType.InstaLoad, devices.AssetTag)
+        MyLiveBox.AttachToControl(txtSerial, LiveBoxType.InstaLoad, devices.Serial, devices.DeviceUID)
+        MyLiveBox.AttachToControl(txtAssetTag, LiveBoxType.InstaLoad, devices.AssetTag, devices.DeviceUID)
     End Sub
 
     Private Sub LoadProgram()

@@ -2,11 +2,9 @@
 
 #Region "Fields"
 
-    Private WithEvents HideTimer As Timer
     Private CurrentLiveBoxArgs As LiveBoxArgs
     Private LiveBox As ListBox
     Private LiveBoxControls As New List(Of LiveBoxArgs)
-    Private LiveBoxResults As DataTable
     Private QueryRunning As Boolean = False
     Private RowLimit As Integer = 30
     Private strPrevSearchString As String
@@ -17,22 +15,23 @@
 
     Sub New(ParentForm As Form)
         InitializeControl(ParentForm)
-        InitializeTimer()
     End Sub
 
 #End Region
 
 #Region "Methods"
 
-    Public Sub AttachToControl(Control As TextBox, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
+    Public Sub AttachToControl(Control As TextBox, Type As LiveBoxType, DisplayMember As String, Optional ValueMember As String = Nothing)
         Dim ControlArgs As New LiveBoxArgs
         ControlArgs.Control = Control
         ControlArgs.Type = Type
-        ControlArgs.ViewMember = ViewMember
-        If Not IsNothing(DataMember) Then ControlArgs.DataMember = DataMember
+        ControlArgs.DisplayMember = DisplayMember
+        If Not IsNothing(ValueMember) Then ControlArgs.ValueMember = ValueMember
         LiveBoxControls.Add(ControlArgs)
         AddHandler ControlArgs.Control.KeyUp, AddressOf Control_KeyUp
         AddHandler ControlArgs.Control.KeyDown, AddressOf Control_KeyDown
+        AddHandler ControlArgs.Control.LostFocus, AddressOf Control_LostFocus
+        AddHandler ControlArgs.Control.ReadOnlyChanged, AddressOf Control_LostFocus
     End Sub
 
     Public Sub GiveLiveBoxFocus()
@@ -45,7 +44,7 @@
     Public Sub HideLiveBox()
         Try
             LiveBox.Visible = False
-            LiveBox.Items.Clear()
+            LiveBox.DataSource = Nothing
         Catch
         End Try
     End Sub
@@ -54,8 +53,8 @@
         With CurrentLiveBoxArgs
             .Control = Control
             .Type = Type
-            .ViewMember = ViewMember
-            If Not IsNothing(DataMember) Then .DataMember = DataMember
+            .DisplayMember = ViewMember
+            If Not IsNothing(DataMember) Then .ValueMember = DataMember
         End With
     End Sub
 
@@ -69,48 +68,20 @@
         If e.KeyCode = Keys.Escape Then
             HideLiveBox()
         Else
-            If e.KeyCode <> Keys.ShiftKey Then
-                Dim arg = GetSenderArgs(sender)
-                If Not arg.Control.ReadOnly Then
-                    StartLiveSearch(arg)
-                End If
-            End If
+            'don't respond to non-alpha keys
+            Select Case e.KeyCode
+                Case Keys.ShiftKey, Keys.Alt, Keys.ControlKey, Keys.Menu
+                    'do nothing
+                Case Else
+                    Dim arg = GetSenderArgs(sender)
+                    If Not arg.Control.ReadOnly Then
+                        StartLiveSearch(arg)
+                    End If
+            End Select
         End If
     End Sub
 
-    Private Sub DrawLiveBox(dtResults As DataTable)
-        Try
-            If dtResults.Rows.Count > 0 Then
-                Dim strQryRow As String
-                strQryRow = CurrentLiveBoxArgs.ViewMember
-                LiveBox.Items.Clear()
-                For Each dr As DataRow In dtResults.Rows
-                    LiveBox.Items.Add(dr.Item(strQryRow))
-                Next
-                PosistionLiveBox()
-                LiveBox.Visible = True
-                If strPrevSearchString <> Trim(CurrentLiveBoxArgs.Control.Text) Then
-                    StartLiveSearch(CurrentLiveBoxArgs) 'if search string has changed since last completion, run again.
-                End If
-            Else
-                LiveBox.Visible = False
-            End If
-        Catch
-            LiveBox.Visible = False
-            LiveBox.Items.Clear()
-        End Try
-    End Sub
-
-    Private Function GetSenderArgs(sender As Object) As LiveBoxArgs
-        For Each arg As LiveBoxArgs In LiveBoxControls
-            If arg.Control Is DirectCast(sender, TextBox) Then
-                Return arg
-            End If
-        Next
-        Return Nothing
-    End Function
-
-    Private Sub HideTimer_Tick(sender As Object, e As EventArgs) Handles HideTimer.Tick
+    Private Sub Control_LostFocus(sender As Object, e As EventArgs)
         If Not IsNothing(CurrentLiveBoxArgs.Control) Then
             If Not CurrentLiveBoxArgs.Control.Focused And Not LiveBox.Focused Then
                 If LiveBox.Visible Then HideLiveBox()
@@ -127,6 +98,34 @@
         End If
     End Sub
 
+    Private Sub DrawLiveBox(dtResults As DataTable)
+        Try
+            If dtResults.Rows.Count > 0 Then
+                LiveBox.DataSource = dtResults
+                LiveBox.DisplayMember = CurrentLiveBoxArgs.DisplayMember
+                LiveBox.ValueMember = CurrentLiveBoxArgs.ValueMember
+                PosistionLiveBox()
+                LiveBox.Visible = True
+                If strPrevSearchString <> Trim(CurrentLiveBoxArgs.Control.Text) Then
+                    StartLiveSearch(CurrentLiveBoxArgs) 'if search string has changed since last completion, run again.
+                End If
+            Else
+                LiveBox.Visible = False
+            End If
+        Catch
+            HideLiveBox()
+        End Try
+    End Sub
+
+    Private Function GetSenderArgs(sender As Object) As LiveBoxArgs
+        For Each arg As LiveBoxArgs In LiveBoxControls
+            If arg.Control Is DirectCast(sender, TextBox) Then
+                Return arg
+            End If
+        Next
+        Return Nothing
+    End Function
+
     Private Sub InitializeControl(ParentForm As Form)
         LiveBox = New ListBox
         LiveBox.Parent = ParentForm
@@ -138,13 +137,6 @@
         ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
         LiveBox.Visible = False
         SetStyle()
-    End Sub
-
-    Private Sub InitializeTimer()
-        HideTimer = New Timer
-        HideTimer.Interval = 250
-        HideTimer.Enabled = True
-        AddHandler HideTimer.Tick, AddressOf HideTimer_Tick
     End Sub
 
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs)
@@ -175,25 +167,20 @@
                 CurrentLiveBoxArgs.Control.Text = LiveBox.Text
                 MainForm.DynamicSearch()
             Case LiveBoxType.InstaLoad
-                MainForm.LoadDevice(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(devices.DeviceUID).ToString)
+                MainForm.LoadDevice(LiveBox.SelectedValue.ToString)
                 CurrentLiveBoxArgs.Control.Text = ""
             Case LiveBoxType.SelectValue
                 CurrentLiveBoxArgs.Control.Text = LiveBox.Text
             Case LiveBoxType.UserSelect
                 CurrentLiveBoxArgs.Control.Text = LiveBox.Text
                 If TypeOf CurrentLiveBoxArgs.Control.FindForm Is ViewDeviceForm Then
-                    If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
-                        Dim FrmSetData As ViewDeviceForm = DirectCast(CurrentLiveBoxArgs.Control.FindForm, ViewDeviceForm)
-                        FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember).ToString
-                        FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember).ToString
-                    End If
+                    Dim FrmSetData As ViewDeviceForm = DirectCast(CurrentLiveBoxArgs.Control.FindForm, ViewDeviceForm)
+                    FrmSetData.MunisUser.Name = LiveBox.Text
+                    FrmSetData.MunisUser.Number = LiveBox.SelectedValue.ToString
                 ElseIf TypeOf CurrentLiveBoxArgs.Control.FindForm Is NewDeviceForm Then
-                    If NoNull(LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember)) <> "" Then
-                        Dim FrmSetData As NewDeviceForm = DirectCast(CurrentLiveBoxArgs.Control.FindForm, NewDeviceForm)
-
-                        FrmSetData.MunisUser.Name = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.ViewMember).ToString
-                        FrmSetData.MunisUser.Number = LiveBoxResults.Rows(LiveBox.SelectedIndex).Item(CurrentLiveBoxArgs.DataMember).ToString
-                    End If
+                    Dim FrmSetData As NewDeviceForm = DirectCast(CurrentLiveBoxArgs.Control.FindForm, NewDeviceForm)
+                    FrmSetData.MunisUser.Name = LiveBox.Text
+                    FrmSetData.MunisUser.Number = LiveBox.SelectedValue.ToString
                 End If
         End Select
         HideLiveBox()
@@ -201,9 +188,9 @@
 
     Private Sub PosistionLiveBox()
         Dim ScreenPos As Point = LiveBox.Parent.PointToClient(CurrentLiveBoxArgs.Control.Parent.PointToScreen(CurrentLiveBoxArgs.Control.Location))
-        ScreenPos.Y = ScreenPos.Y + CurrentLiveBoxArgs.Control.Height
+        ScreenPos.Y += CurrentLiveBoxArgs.Control.Height - 1
         LiveBox.Location = ScreenPos
-        LiveBox.Width = CurrentLiveBoxArgs.Control.Width
+        LiveBox.Width = PreferredWidth()
         Dim FormBounds As Rectangle = LiveBox.Parent.ClientRectangle
         If LiveBox.PreferredHeight + LiveBox.Top > FormBounds.Bottom Then
             LiveBox.Height = FormBounds.Bottom - LiveBox.Top - LiveBox.Padding.Bottom
@@ -211,6 +198,24 @@
             LiveBox.Height = LiveBox.PreferredHeight
         End If
     End Sub
+
+    Private Function PreferredWidth() As Integer
+        Using gfx As Graphics = LiveBox.CreateGraphics
+            Dim BoxFont As Font = LiveBox.Font
+            Dim MaxLen As Integer = 0
+            For Each row As DataRowView In LiveBox.Items
+                Dim ItemLen As Integer = CInt(gfx.MeasureString(row.Item(CurrentLiveBoxArgs.DisplayMember).ToString, BoxFont).Width)
+                If ItemLen > MaxLen Then
+                    MaxLen = ItemLen
+                End If
+            Next
+            If MaxLen > CurrentLiveBoxArgs.Control.Width Then
+                Return MaxLen
+            Else
+                Return CurrentLiveBoxArgs.Control.Width
+            End If
+        End Using
+    End Function
 
     ''' <summary>
     ''' Runs the DB query Asychronously.
@@ -224,7 +229,7 @@
                                          Try
                                              QueryRunning = True
                                              Dim strQry As String
-                                             strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.DataMember), CurrentLiveBoxArgs.ViewMember, CurrentLiveBoxArgs.ViewMember & "," & CurrentLiveBoxArgs.DataMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.ViewMember & " LIKE  @Search_Value  GROUP BY " & CurrentLiveBoxArgs.ViewMember & " ORDER BY " & CurrentLiveBoxArgs.ViewMember & " LIMIT " & RowLimit
+                                             strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.ValueMember), CurrentLiveBoxArgs.DisplayMember, CurrentLiveBoxArgs.DisplayMember & "," & CurrentLiveBoxArgs.ValueMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.DisplayMember & " LIKE  @Search_Value  GROUP BY " & CurrentLiveBoxArgs.DisplayMember & " ORDER BY " & CurrentLiveBoxArgs.DisplayMember & " LIMIT " & RowLimit
                                              Using cmd = DBFunc.GetCommand(strQry)
                                                  cmd.AddParameterWithValue("@Search_Value", "%" & SearchString & "%")
                                                  Return DBFunc.DataTableFromCommand(cmd)
@@ -241,7 +246,6 @@
         End If
         QueryRunning = False
         DrawLiveBox(Results)
-        LiveBoxResults = Results
     End Sub
 
     Private Sub SetStyle()
@@ -274,9 +278,9 @@
 #Region "Fields"
 
         Public Control As TextBox
-        Public DataMember As String
+        Public DisplayMember As String
         Public Type As LiveBoxType
-        Public ViewMember As String
+        Public ValueMember As String
 
 #End Region
 
@@ -307,10 +311,7 @@
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
-                'LiveWorker.Dispose()
-                HideTimer.Dispose()
                 LiveBox.Dispose()
-
                 LiveBoxControls.Clear()
             End If
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
