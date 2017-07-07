@@ -104,6 +104,7 @@
                 LiveBox.DataSource = dtResults
                 LiveBox.DisplayMember = CurrentLiveBoxArgs.DisplayMember
                 LiveBox.ValueMember = CurrentLiveBoxArgs.ValueMember
+                LiveBox.ClearSelected()
                 PosistionLiveBox()
                 LiveBox.Visible = True
                 If strPrevSearchString <> Trim(CurrentLiveBoxArgs.Control.Text) Then
@@ -134,11 +135,14 @@
         AddHandler LiveBox.MouseDown, AddressOf LiveBox_MouseDown
         AddHandler LiveBox.MouseMove, AddressOf LiveBox_MouseMove
         AddHandler LiveBox.KeyDown, AddressOf LiveBox_KeyDown
+        AddHandler LiveBox.LostFocus, AddressOf LiveBox_LostFocus
         ExtendedMethods.DoubleBufferedListBox(LiveBox, True)
         LiveBox.Visible = False
         SetStyle()
     End Sub
-
+    Private Sub LiveBox_LostFocus(sender As Object, e As EventArgs)
+        HideLiveBox()
+    End Sub
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs)
         Select Case e.KeyCode
             Case Keys.Enter
