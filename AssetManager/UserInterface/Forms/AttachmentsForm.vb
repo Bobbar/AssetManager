@@ -844,30 +844,34 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
 
 #End Region
 
-#Region "Classes"
 
     Private Class FileIcon
-
-#Region "Fields"
-
-        Private Const FILE_ATTRIBUTE_NORMAL As Int32 = &H80
         Private Const MAX_PATH As Int32 = 260
         Private Const SHGFI_ICON As Int32 = &H100
         Private Const SHGFI_USEFILEATTRIBUTES As Int32 = &H10
-
-#End Region
-
-#Region "Enums"
-
+        Private Const FILE_ATTRIBUTE_NORMAL As Int32 = &H80
+        Private Structure SHFILEINFO
+            Public hIcon As IntPtr
+            Public iIcon As Int32
+            Public dwAttributes As Int32
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=MAX_PATH)>
+            Public szDisplayName As String
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=80)>
+            Public szTypeName As String
+        End Structure
         Private Enum IconSize
             SHGFI_LARGEICON = 0
             SHGFI_SMALLICON = 1
         End Enum
-
-#End Region
-
-#Region "Methods"
-
+        Private Declare Ansi Function SHGetFileInfo Lib "shell32.dll" (
+                    ByVal pszPath As String,
+                    ByVal dwFileAttributes As Int32,
+                    ByRef psfi As SHFILEINFO,
+                    ByVal cbFileInfo As Int32,
+                    ByVal uFlags As Int32) As IntPtr
+        '<DllImport("user32.dll", SetLastError:=True)>
+        Private Shared Function DestroyIcon(ByVal hIcon As IntPtr) As Boolean
+        End Function
         Public Shared Function GetFileIcon(ByVal fileExt As String) As Bitmap ', Optional ByVal ICOsize As IconSize = IconSize.SHGFI_SMALLICON
             Try
                 Dim ICOSize As IconSize = IconSize.SHGFI_SMALLICON
@@ -883,42 +887,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
             End Try
             Return Nothing
         End Function
-
-        '<DllImport("user32.dll", SetLastError:=True)>
-        Private Shared Function DestroyIcon(ByVal hIcon As IntPtr) As Boolean
-        End Function
-
-#End Region
-
-#Region "Structs"
-
-        Private Structure SHFILEINFO
-
-#Region "Fields"
-
-            Public dwAttributes As Int32
-            Public hIcon As IntPtr
-            Public iIcon As Int32
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=MAX_PATH)>
-            Public szDisplayName As String
-
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=80)>
-            Public szTypeName As String
-
-#End Region
-
-        End Structure
-
-#End Region
-
-        Private Declare Ansi Function SHGetFileInfo Lib "shell32.dll" (
-                    ByVal pszPath As String,
-                    ByVal dwFileAttributes As Int32,
-                    ByRef psfi As SHFILEINFO,
-                    ByVal cbFileInfo As Int32,
-                    ByVal uFlags As Int32) As IntPtr
     End Class
 
-#End Region
 
 End Class
