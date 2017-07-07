@@ -4,13 +4,10 @@
 
     Private Const EncFTPUserPass As String = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ="
     Private Const strFTPUser As String = "asset_manager"
-    Private FTPcreds As Net.NetworkCredential = New Net.NetworkCredential(strFTPUser, strFTPPass)
+    Private FTPcreds As Net.NetworkCredential = New Net.NetworkCredential(strFTPUser, DecodePassword(EncFTPUserPass))
     Private intSocketTimeout As Integer = 10000
-    Private strFTPPass As String = DecodePassword(EncFTPUserPass)
 
 #End Region
-
-    'timeout for FTP comms in MS
 
 #Region "Methods"
 
@@ -18,7 +15,6 @@
         Try
             Dim request As Net.FtpWebRequest = DirectCast(Net.FtpWebRequest.Create(strUri), Net.FtpWebRequest)
             With request
-                '.KeepAlive = True
                 .Proxy = New Net.WebProxy() 'set proxy to nothing to bypass .NET auto-detect process. This speeds up the initial connection greatly.
                 .Credentials = FTPcreds
                 .Method = Method
@@ -35,7 +31,6 @@
         Dim request As Net.FtpWebRequest = DirectCast(Net.FtpWebRequest.Create(strUri), Net.FtpWebRequest)
         Try
             With request
-                '.KeepAlive = True
                 .Proxy = New Net.WebProxy() 'set proxy to nothing to bypass .NET auto-detect process. This speeds up the initial connection greatly.
                 .Credentials = FTPcreds
                 .Method = Method
