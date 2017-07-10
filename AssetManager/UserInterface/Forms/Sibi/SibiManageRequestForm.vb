@@ -44,15 +44,6 @@ Public Class SibiManageRequestForm
 
 #Region "Methods"
 
-    Public Function AttachmentsIsOpen() As Boolean
-        For Each frm As Form In My.Application.OpenForms
-            If TypeOf frm Is AttachmentsForm And frm.Tag Is Me Then
-                Return True
-            End If
-        Next
-        Return False
-    End Function
-
     Public Sub ClearAll()
         ClearControls(Me)
         ResetBackColors(Me)
@@ -333,12 +324,10 @@ VALUES
 
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
-        If Not AttachmentsIsOpen() Then
+        If Not AttachmentsIsOpen(Me) Then
             If CurrentRequest.strUID <> "" Then
                 Dim NewAttach As New AttachmentsForm(Me, New sibi_attachments, CurrentRequest)
             End If
-        Else
-            ActivateFormByUID(CurrentRequest.strUID, Me)
         End If
     End Sub
 

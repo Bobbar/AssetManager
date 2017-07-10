@@ -199,8 +199,6 @@ Public Class SibiMainForm
     Private Sub OpenRequest(strUID As String)
         If Not RequestIsOpen(strUID) Then
             Dim ManRequest As New SibiManageRequestForm(Me, strUID)
-        Else
-            ActivateFormByUID(strUID, Me)
         End If
     End Sub
 

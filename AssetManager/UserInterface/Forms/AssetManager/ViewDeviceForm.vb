@@ -52,16 +52,7 @@ Public Class ViewDeviceForm
 
 #Region "Methods"
 
-    Public Function AttachmentsIsOpen() As Boolean
-        For Each frm As Form In My.Application.OpenForms
-            If TypeOf frm Is AttachmentsForm And frm.Tag Is Me Then
-                Return True
-            End If
-        Next
-        Return False
-    End Function
-
-    Public Sub CancelModify()
+    Private Sub CancelModify()
         bolCheckFields = False
         fieldErrorIcon.Clear()
         DisableControls()
@@ -78,7 +69,7 @@ Public Class ViewDeviceForm
 
     End Sub
 
-    Public Sub SetTracking(bolEnabled As Boolean, bolCheckedOut As Boolean)
+    Private Sub SetTracking(bolEnabled As Boolean, bolCheckedOut As Boolean)
         If bolEnabled Then
             If Not TabControl1.TabPages.Contains(TrackingTab) Then TabControl1.TabPages.Insert(1, TrackingTab)
             SetGridStyle(DataGridHistory)
@@ -98,12 +89,12 @@ Public Class ViewDeviceForm
         End If
     End Sub
 
-    Public Sub StatusBar(Text As String)
+    Private Sub StatusBar(Text As String)
         StatusLabel.Text = Text
         StatusLabel.Invalidate()
     End Sub
 
-    Public Sub UpdateDevice(UpdateInfo As Update_Info)
+    Private Sub UpdateDevice(UpdateInfo As Update_Info)
         Try
             Dim rows As Integer = 0
             Dim SelectQry As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
@@ -155,7 +146,7 @@ Public Class ViewDeviceForm
         End Try
     End Sub
 
-    Public Sub ViewTracking(strGUID As String)
+    Private Sub ViewTracking(strGUID As String)
         Dim strQry = "Select * FROM " & trackable.TableName & ", " & devices.TableName & " WHERE " & trackable.DeviceUID & " = " & devices.DeviceUID & " And " & trackable.DeviceUID & " = '" & strGUID & "' ORDER BY " & trackable.DateStamp & " DESC"
         Try
             Using Results As DataTable = DBFunc.DataTableFromQueryString(strQry)
@@ -190,10 +181,8 @@ Public Class ViewDeviceForm
 
     Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
-        If Not AttachmentsIsOpen() Then
+        If Not AttachmentsIsOpen(Me) Then
             Dim NewAttachments As New AttachmentsForm(Me, New dev_attachments, CurrentViewDevice)
-        Else
-            ActivateFormByUID(CurrentViewDevice.strGUID, Me)
         End If
     End Sub
 

@@ -44,6 +44,15 @@
             End Select
         Next
     End Sub
+    Public Function AttachmentsIsOpen(ParentForm As Form) As Boolean
+        For Each frm As Form In My.Application.OpenForms
+            If TypeOf frm Is AttachmentsForm And frm.Tag Is ParentForm Then
+                ActivateFormByHandle(frm)
+                Return True
+            End If
+        Next
+        Return False
+    End Function
     Public Sub CloseChildren(ParentForm As Form)
         Dim Children As List(Of Form) = GetChildren(ParentForm)
         If Children.Count > 0 Then
@@ -116,8 +125,11 @@
     Public Function RequestIsOpen(strGUID As String) As Boolean
         For Each frm As Form In My.Application.OpenForms
             If TypeOf frm Is SibiManageRequestForm Then
-                Dim vw As SibiManageRequestForm = DirectCast(frm, SibiManageRequestForm)
-                If vw.CurrentRequest.strUID = strGUID Then Return True
+                Dim sibi As SibiManageRequestForm = DirectCast(frm, SibiManageRequestForm)
+                If sibi.CurrentRequest.strUID = strGUID Then
+                    ActivateFormByHandle(sibi)
+                    Return True
+                End If
             End If
         Next
         Return False
