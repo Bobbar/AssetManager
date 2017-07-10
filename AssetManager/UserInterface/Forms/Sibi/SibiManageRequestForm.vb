@@ -705,11 +705,11 @@ VALUES
         InitDBControls()
         ExtendedMethods.DoubleBufferedDataGrid(RequestItemsGrid, True)
         MyMunisToolBar.InsertMunisDropDown(ToolStrip)
-        MyWindowList.InsertWindowList(ToolStrip) ' = New WindowList(Me, ToolStrip)
         Me.ParentForm = ParentForm
         Tag = ParentForm
         Icon = ParentForm.Icon
         GridTheme = ParentForm.GridTheme
+        MyWindowList.InsertWindowList(ToolStrip)
         dgvNotes.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         ToolStrip.BackColor = colSibiToolBarColor
     End Sub
@@ -1114,13 +1114,13 @@ VALUES
             Dim ColIndex As Integer = RequestItemsGrid.CurrentCell.ColumnIndex
             Select Case True
                 Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Replace_Asset)
-                    LookupDevice(ParentForm, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
+                    LookupDevice(Me, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
                 Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Replace_Serial)
-                    LookupDevice(ParentForm, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
+                    LookupDevice(Me, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
                 Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.New_Asset)
-                    LookupDevice(ParentForm, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
+                    LookupDevice(Me, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.AssetTag))
                 Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.New_Serial)
-                    LookupDevice(ParentForm, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
+                    LookupDevice(Me, AssetFunc.FindDevice(RequestItemsGrid.Item(ColIndex, RequestItemsGrid.CurrentRow.Index).Value.ToString, FindDevType.Serial))
             End Select
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

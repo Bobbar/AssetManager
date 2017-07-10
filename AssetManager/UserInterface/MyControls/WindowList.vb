@@ -23,6 +23,15 @@
         InitializeDropDownButton(TargetToolStrip)
         InitializeTimer()
     End Sub
+    Private Sub AddParentMenu()
+        If MyParentForm.Tag IsNot Nothing Then
+            Dim ParentDropDown As ToolStripMenuItem = NewMenuItem(GetFormFromTag(MyParentForm.Tag))
+            ParentDropDown.Text = "[Parent] " & ParentDropDown.Text
+            ParentDropDown.ToolTipText = "Parent Form"
+            DropDownControl.DropDownItems.Insert(0, ParentDropDown)
+            DropDownControl.DropDownItems.Add(New ToolStripSeparator)
+        End If
+    End Sub
 
     ''' <summary>
     ''' Recursively build ToolStripItemCollections of Forms and their Children and add them to the ToolStrip. Making sure to add SibiMain to the top of the list.
@@ -48,7 +57,11 @@
             End If
         Next
     End Sub
-
+    Private Function GetFormFromTag(Tag As Object) As Form
+        If TypeOf Tag Is Form Then
+            Return DirectCast(Tag, Form)
+        End If
+    End Function
     Private Function CountText(count As Integer) As String
         Dim MainText As String = "Select Window"
         If count > 0 Then
@@ -81,8 +94,10 @@
 
     Private Sub InitializeDropDownButton(TargetToolStrip As MyToolStrip)
         DropDownControl.Visible = False
+        DropDownControl.Font = TargetToolStrip.Font
         DropDownControl.Text = "Select Window"
         DropDownControl.Image = AssetManager.My.Resources.Resources.CascadeIcon
+        AddParentMenu()
         TargetToolStrip.Items.Insert(TargetToolStrip.Items.Count, DropDownControl)
     End Sub
 
@@ -105,6 +120,7 @@
 
     Private Function NewMenuItem(frm As Form) As ToolStripMenuItem
         Dim newitem As New ToolStripMenuItem
+        newitem.Font = DropDownControl.Font
         newitem.Text = frm.Text
         newitem.Image = frm.Icon.ToBitmap
         newitem.Tag = frm
@@ -112,9 +128,19 @@
         AddHandler newitem.MouseDown, AddressOf WindowClick
         Return newitem
     End Function
-
+    Private Function IsParentForm(Form As Form) As Boolean
+        If MyParentForm.Tag IsNot Nothing Then
+            If Form Is GetFormFromTag(MyParentForm.Tag) Then
+                Return True
+            Else
+                Return False
+            End If
+        Else
+            Return False
+        End If
+    End Function
     Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs) Handles RefreshTimer.Tick
-        If FormCount(MyParentForm) < 1 Then
+        If MyParentForm.Tag Is Nothing And FormCount(MyParentForm) < 1 Then
             DropDownControl.Visible = False
         Else
             DropDownControl.Visible = True
@@ -122,6 +148,7 @@
         If FormCount(MyParentForm) <> intFormCount Then
             If Not DropDownControl.DropDown.Focused Then
                 DropDownControl.DropDownItems.Clear()
+                AddParentMenu()
                 BuildWindowList(MyParentForm, DropDownControl.DropDownItems)
                 intFormCount = FormCount(MyParentForm)
                 DropDownControl.Text = CountText(intFormCount)
@@ -132,18 +159,20 @@
         Dim item As ToolStripItem = CType(sender, ToolStripItem)
         If e.Button = MouseButtons.Right Then
             Dim frm As Form = CType(item.Tag, Form)
-            frm.Dispose()
-            GC.Collect()
-            If DropDownControl.DropDownItems.Count < 1 Then
-                DropDownControl.Visible = False
-                DropDownControl.DropDownItems.Clear()
-                item.Dispose()
-            Else
-                item.Visible = False
-                item.Dispose()
-                DropDownControl.DropDownItems.Remove(item)
-                intFormCount = FormCount(MyParentForm)
-                DropDownControl.Text = CountText(intFormCount)
+            If Not IsParentForm(frm) Then
+                frm.Dispose()
+                GC.Collect()
+                If DropDownControl.DropDownItems.Count < 1 Then
+                    DropDownControl.Visible = False
+                    DropDownControl.DropDownItems.Clear()
+                    item.Dispose()
+                Else
+                    item.Visible = False
+                    item.Dispose()
+                    DropDownControl.DropDownItems.Remove(item)
+                    intFormCount = FormCount(MyParentForm)
+                    DropDownControl.Text = CountText(intFormCount)
+                End If
             End If
         ElseIf e.Button = MouseButtons.Left Then
             ActivateFormByHandle(CType(item.Tag, Form))

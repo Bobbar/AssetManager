@@ -34,10 +34,10 @@ Public Class ViewDeviceForm
         MyLiveBox.AttachToControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
         MyLiveBox.AttachToControl(txtDescription_View_REQ, LiveBoxType.SelectValue, devices.Description)
         MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6)
-        MyWindowList.InsertWindowList(ToolStrip1)
         Tag = ParentForm
         Icon = ParentForm.Icon
         GridTheme = ParentForm.GridTheme
+        MyWindowList.InsertWindowList(ToolStrip1)
         RefreshCombos()
         grpNetTools.Visible = False
         '    ToolStrip1.BackColor = colAssetToolBarColor
