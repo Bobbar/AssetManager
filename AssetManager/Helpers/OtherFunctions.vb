@@ -120,7 +120,7 @@ Module OtherFunctions
             Return False
         End If
         If CheckForActiveTransfers() Then Return False
-        If GKUpdaterForm.UpdatesRunning() Then Return False
+        If Not GKUpdaterForm.OKToClose() Then Return False
         Return True
     End Function
 

@@ -58,7 +58,7 @@ Public Class GKUpdaterForm
         Return False
     End Function
 
-    Private Function ActiveUpdates() As Boolean
+    Public Function ActiveUpdates() As Boolean
         For Each upd As GKProgressControl In MyUpdates
             If upd.ProgStatus = GKProgressControl.Progress_Status.Running Then Return True
         Next
@@ -125,23 +125,31 @@ Public Class GKUpdaterForm
     End Sub
 
     Private Sub GKUpdater_Form_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If UpdatesRunning() Then
+        If Not OKToClose() Then
             e.Cancel = True
         Else
             DisposeUpdates()
             Me.Dispose()
         End If
     End Sub
-
-    Public Function UpdatesRunning() As Boolean
+    Public Function OKToClose() As Boolean
         If ActiveUpdates() Then
+            Message("There are still updates running!  Cancel the updates or wait for them to finish.", vbOKOnly + vbExclamation, "Close Aborted", Me)
             Me.Activate()
             Me.WindowState = FormWindowState.Normal
-            Message("There are still updates running!  Cancel the updates or wait for them to finish.", vbOKOnly + vbExclamation, "Close Aborted", Me)
-            Return True
+            Return False
         End If
-        Return False
+        Return True
     End Function
+
+    'Public Function UpdatesRunning() As Boolean
+    '    If ActiveUpdates() Then
+    '        'Me.Activate()
+    '        'Me.WindowState = FormWindowState.Normal
+    '        Return True
+    '    End If
+    '    Return False
+    'End Function
 
     Private Sub MaxUpdates_ValueChanged(sender As Object, e As EventArgs) Handles MaxUpdates.ValueChanged
         If Not bolStarting Then MaxSimUpdates = CInt(MaxUpdates.Value)
@@ -264,8 +272,10 @@ Public Class GKUpdaterForm
     End Function
 
     Private Sub GKPackageVeriToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GKPackageVeriToolStripMenuItem.Click
-        Dim NewUnPack As New PackFileForm(True)
-        NewUnPack.Show()
+        If Not FormTypeIsOpen(GetType(PackFileForm)) Then
+            Dim NewUnPack As New PackFileForm(True)
+            NewUnPack.Show()
+        End If
     End Sub
 
 End Class

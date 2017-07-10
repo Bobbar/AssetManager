@@ -44,7 +44,11 @@ Public Class PackFileForm
 
     Private Sub VerifyPackButton_Click(sender As Object, e As EventArgs) Handles VerifyPackButton.Click
         Try
-            CheckPackFile()
+            If Not GKUpdaterForm.ActiveUpdates Then
+                CheckPackFile()
+            Else
+                Message("This process will interfere with the active running updates. Please stop all updates and try again.", vbOKOnly + vbExclamation, "Cannot Continue", Me)
+            End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try

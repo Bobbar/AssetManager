@@ -155,4 +155,10 @@
         End If
         Return False
     End Function
+    Public Function FormTypeIsOpen(FormType As Type) As Boolean
+        For Each frm As Form In My.Application.OpenForms
+            If frm.GetType = FormType Then Return True
+        Next
+        Return False
+    End Function
 End Module
