@@ -44,6 +44,7 @@ Class AttachmentsForm
             If TypeOf AttachInfo Is Request_Info Then
                 AttachRequest = DirectCast(AttachInfo, Request_Info)
                 AttachFolderUID = AttachRequest.strUID
+                FormUID = AttachFolderUID
                 strSelectedFolder = GetHumanValueFromIndex(SibiIndex.AttachFolder, 0)
                 Me.Text = "Sibi Attachements"
                 DeviceGroup.Visible = False
@@ -53,6 +54,7 @@ Class AttachmentsForm
             ElseIf TypeOf AttachInfo Is Device_Info Then
                 AttachDevice = DirectCast(AttachInfo, Device_Info)
                 AttachFolderUID = AttachDevice.strGUID
+                FormUID = AttachFolderUID
                 Me.Text = "Device Attachements"
                 SibiGroup.Visible = False
                 DeviceGroup.Dock = DockStyle.Top

@@ -1,21 +1,14 @@
 ﻿Option Explicit On
 
 Public Class ViewHistoryForm
-    Private MyEntryGUID As String
     Private DataParser As New DBControlParser(Me)
-
-    Public ReadOnly Property EntryGUID As String
-        Get
-            Return MyEntryGUID
-        End Get
-    End Property
 
     Sub New(ParentForm As Form, EntryUID As String)
         InitializeComponent()
         InitDBControls()
-        MyEntryGUID = EntryUID
         Tag = ParentForm
         Icon = ParentForm.Icon
+        FormUID = EntryUID
         ViewEntry(EntryUID)
     End Sub
 

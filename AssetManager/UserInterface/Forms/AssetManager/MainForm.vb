@@ -80,14 +80,10 @@ Public Class MainForm
     End Sub
 
     Public Sub LoadDevice(ByVal strGUID As String)
-        If Not DeviceIsOpen(strGUID) Then
+        If Not FormIsOpenByUID(GetType(ViewDeviceForm), strGUID) Then
             ResultGrid.Enabled = False
-            Waiting()
             Dim NewView As New ViewDeviceForm(Me, strGUID)
-            DoneWaiting()
             ResultGrid.Enabled = True
-        Else
-            ActivateFormByUID(strGUID, Me)
         End If
     End Sub
 

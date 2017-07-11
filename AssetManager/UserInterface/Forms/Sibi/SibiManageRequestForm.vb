@@ -17,7 +17,6 @@ Public Class SibiManageRequestForm
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyText As String
     Private MyWindowList As New WindowList(Me)
-    Private ParentForm As MyForm
     Private PrevWindowState As Integer
 
 #End Region
@@ -27,7 +26,7 @@ Public Class SibiManageRequestForm
     Sub New(ParentForm As MyForm, RequestUID As String)
         Waiting()
         InitializeComponent()
-        InitForm(ParentForm)
+        InitForm(ParentForm, RequestUID)
         OpenRequest(RequestUID)
         DoneWaiting()
     End Sub
@@ -70,6 +69,7 @@ Public Class SibiManageRequestForm
         End If
         ClearAll()
         CurrentRequest.strUID = Guid.NewGuid.ToString
+        Me.FormUID = CurrentRequest.strUID
         bolUpdating = True
         SetupGrid()
 
@@ -701,14 +701,14 @@ VALUES
 
     End Sub
 
-    Private Sub InitForm(ParentForm As MyForm)
+    Private Sub InitForm(ParentForm As MyForm, Optional UID As String = "")
         InitDBControls()
         ExtendedMethods.DoubleBufferedDataGrid(RequestItemsGrid, True)
         MyMunisToolBar.InsertMunisDropDown(ToolStrip)
-        Me.ParentForm = ParentForm
         Tag = ParentForm
         Icon = ParentForm.Icon
         GridTheme = ParentForm.GridTheme
+        Me.FormUID = UID
         MyWindowList.InsertWindowList(ToolStrip)
         dgvNotes.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         ToolStrip.BackColor = colSibiToolBarColor

@@ -4,6 +4,19 @@
 Public Class MyForm
     Inherits Form
     Private Theme As New Grid_Theme
+    Private _UID As String
+    ''' <summary>
+    ''' Unique identifying string used to locate sepcific instances of this form.
+    ''' </summary>
+    ''' <returns></returns>
+    Property FormUID As String
+        Get
+            Return _UID
+        End Get
+        Set(value As String)
+            _UID = value
+        End Set
+    End Property
 
     ''' <summary>
     ''' Gets or sets the Grid Theme for the DataGridView controls within the form.

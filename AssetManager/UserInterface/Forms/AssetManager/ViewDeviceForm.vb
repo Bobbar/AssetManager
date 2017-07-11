@@ -37,6 +37,7 @@ Public Class ViewDeviceForm
         Tag = ParentForm
         Icon = ParentForm.Icon
         GridTheme = ParentForm.GridTheme
+        FormUID = DeviceGUID
         MyWindowList.InsertWindowList(ToolStrip1)
         RefreshCombos()
         grpNetTools.Visible = False
@@ -438,10 +439,8 @@ Public Class ViewDeviceForm
 
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
         Dim EntryUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
-        If Not EntryIsOpen(EntryUID) Then
+        If Not FormIsOpenByUID(GetType(ViewHistoryForm), EntryUID) Then
             NewEntryView(EntryUID)
-        Else
-            ActivateFormByUID(EntryUID, Me)
         End If
     End Sub
 
@@ -735,11 +734,15 @@ Public Class ViewDeviceForm
         If SibiUID = "" Then
             Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
         Else
-            If Not RequestIsOpen(SibiUID) Then
-                Dim ManRequest As New SibiManageRequestForm(Me, SibiUID)
-            Else
-                ActivateFormByUID(SibiUID, Me)
+            If Not FormIsOpenByUID(GetType(SibiManageRequestForm), SibiUID) Then
+                Dim NewRequest As New SibiManageRequestForm(Me, SibiUID)
             End If
+
+            'If Not RequestIsOpen(SibiUID) Then
+            '    Dim ManRequest As New SibiManageRequestForm(Me, SibiUID)
+            'Else
+            '    ActivateFormByUID(SibiUID, Me)
+            'End If
         End If
     End Sub
 
