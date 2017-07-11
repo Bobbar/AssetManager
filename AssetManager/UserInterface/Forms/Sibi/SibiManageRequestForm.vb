@@ -7,8 +7,8 @@ Public Class SibiManageRequestForm
 
 #Region "Fields"
 
-    Public bolUpdating As Boolean = False
-    Public CurrentRequest As Request_Info
+    Private CurrentRequest As Request_Info
+    Private bolUpdating As Boolean = False
     Private bolDragging As Boolean = False
     Private bolFieldsValid As Boolean
     Private bolGridFilling As Boolean = False
@@ -43,7 +43,7 @@ Public Class SibiManageRequestForm
 
 #Region "Methods"
 
-    Public Sub ClearAll()
+    Private Sub ClearAll()
         ClearControls(Me)
         ResetBackColors(Me)
         HideEditControls()
@@ -59,7 +59,7 @@ Public Class SibiManageRequestForm
         fieldErrorIcon.Clear()
     End Sub
 
-    Public Sub NewRequest()
+    Private Sub NewRequest()
         If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
         If bolUpdating Then
             Dim blah = Message("All current changes will be lost. Are you sure you want to create a new request?", vbOKCancel + vbQuestion, "Create New Request", Me)
@@ -81,7 +81,7 @@ Public Class SibiManageRequestForm
         pnlCreate.Visible = True
     End Sub
 
-    Public Sub OpenRequest(RequestUID As String)
+    Private Sub OpenRequest(RequestUID As String)
         Waiting()
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & RequestUID & "'"
@@ -348,15 +348,16 @@ VALUES
             If blah = vbYes Then
                 Waiting()
                 If AssetFunc.DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
+                    DoneWaiting()
                     Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                     CurrentRequest = Nothing
                     If TypeOf Me.Tag Is SibiMainForm Then
                         Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
                         ParentForm.RefreshResults()
                     End If
-                    DoneWaiting()
                     Me.Dispose()
                 Else
+                    DoneWaiting()
                     Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)
                     Dim blah2 = Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
                     CurrentRequest = Nothing

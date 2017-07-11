@@ -10,8 +10,8 @@ Class AttachmentsForm
 
 #Region "Fields"
 
-    Public AttachFolderUID As String
-    Public bolAdminMode As Boolean = False
+    ' Public bolAdminMode As Boolean = False
+    Private AttachFolderUID As String
     Private Const FileSizeMBLimit As Short = 150
     Private _attachTable As main_attachments
     Private AttachDevice As Device_Info
@@ -92,14 +92,14 @@ Class AttachmentsForm
 
 #Region "Methods"
 
-    Public Sub FillSibiInfo()
+    Private Sub FillSibiInfo()
         txtUID.Text = AttachRequest.strUID
         txtRequestNum.Text = AttachRequest.strRequestNumber
         txtDescription.Text = AttachRequest.strDescription
         cmbFolder.SelectedIndex = 0
     End Sub
 
-    Public Sub ListAttachments()
+    Private Sub ListAttachments()
         Waiting()
         Try
             Dim table As New DataTable
@@ -139,7 +139,7 @@ Class AttachmentsForm
         End Try
     End Sub
 
-    Public Sub StatusBar(Text As String)
+    Private Sub StatusBar(Text As String)
         StatusLabel.Text = Text
         StatusLabel.Invalidate()
     End Sub

@@ -91,7 +91,7 @@ Public Class MainForm
         StartBigQuery(LastCommand)
     End Sub
 
-    Public Sub StatusBar(Text As String)
+    Private Sub StatusBar(Text As String)
         StatusLabel.Text = Text
         StatusLabel.Invalidate()
     End Sub

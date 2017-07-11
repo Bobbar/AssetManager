@@ -10,8 +10,8 @@ Public Class ViewDeviceForm
 
 #Region "Fields"
 
-    Public CurrentViewDevice As New Device_Info
     Public MunisUser As Emp_Info = Nothing
+    Private CurrentViewDevice As New Device_Info
     Private bolCheckFields As Boolean
     Private bolGridFilling As Boolean = False
     Private DataParser As New DBControlParser(Me)
