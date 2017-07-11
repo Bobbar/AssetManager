@@ -52,7 +52,7 @@ Public Class GridForm
 #Region "Methods"
 
     Public Sub AddGrid(Name As String, Label As String, Data As DataTable)
-        Dim NewGrid = GetNewGrid(Name, Label)
+        Dim NewGrid = GetNewGrid(Name, Label & " (" & Data.Rows.Count.ToString & " rows)")
         FillGrid(NewGrid, Data)
         GridList.Add(NewGrid)
     End Sub
