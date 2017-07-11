@@ -155,9 +155,11 @@ Module OtherFunctions
     End Function
 
     Public Sub CopyToGridForm(Grid As DataGridView, Parent As Form)
-        Dim NewGridForm As New GridForm(Parent, "Search Results Copy")
-        NewGridForm.AddGrid("SearchGrid", "Results", DirectCast(Grid.DataSource, DataTable))
-        NewGridForm.Show()
+        If Grid IsNot Nothing Then
+            Dim NewGridForm As New GridForm(Parent, Grid.Name & " Copy")
+            NewGridForm.AddGrid(Grid.Name, Grid.Name, DirectCast(Grid.DataSource, DataTable))
+            NewGridForm.Show()
+        End If
     End Sub
 
     Public Sub CopySelectedGridData(Grid As DataGridView)

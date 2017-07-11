@@ -28,6 +28,7 @@ Partial Class GridForm
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.PopUpMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CopySelectedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SendToNewGridForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1.SuspendLayout()
         Me.PopUpMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -72,16 +73,23 @@ Partial Class GridForm
         '
         'PopUpMenu
         '
-        Me.PopUpMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopySelectedToolStripMenuItem})
+        Me.PopUpMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopySelectedToolStripMenuItem, Me.SendToNewGridForm})
         Me.PopUpMenu.Name = "PopUpMenu"
-        Me.PopUpMenu.Size = New System.Drawing.Size(153, 48)
+        Me.PopUpMenu.Size = New System.Drawing.Size(167, 70)
         '
         'CopySelectedToolStripMenuItem
         '
         Me.CopySelectedToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.CopyIcon
         Me.CopySelectedToolStripMenuItem.Name = "CopySelectedToolStripMenuItem"
-        Me.CopySelectedToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CopySelectedToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.CopySelectedToolStripMenuItem.Text = "Copy Selected"
+        '
+        'SendToNewGridForm
+        '
+        Me.SendToNewGridForm.Image = Global.AssetManager.My.Resources.Resources.TransferArrowsIcon
+        Me.SendToNewGridForm.Name = "SendToNewGridForm"
+        Me.SendToNewGridForm.Size = New System.Drawing.Size(166, 22)
+        Me.SendToNewGridForm.Text = "Send to New Grid"
         '
         'GridForm
         '
@@ -110,4 +118,5 @@ Partial Class GridForm
     Friend WithEvents Panel1 As Panel
     Friend WithEvents PopUpMenu As ContextMenuStrip
     Friend WithEvents CopySelectedToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SendToNewGridForm As ToolStripMenuItem
 End Class

@@ -164,6 +164,10 @@ Public Class GridForm
         Next
     End Sub
 
+    Private Sub SendToNewGridForm_Click(sender As Object, e As EventArgs) Handles SendToNewGridForm.Click
+        CopyToGridForm(GetActiveGrid, MyParent)
+    End Sub
+
 #End Region
 
 End Class
