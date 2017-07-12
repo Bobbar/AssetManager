@@ -54,7 +54,7 @@
     End Function
 
     Private Sub StartSearch()
-        Dim AdvSearch As New AdvancedSearch(Trim(SearchStringTextBox.Text), GetSelectedTables) ' GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
+        Dim AdvSearch As New AdvancedSearch.Search(Trim(SearchStringTextBox.Text), GetSelectedTables) ' GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
         Dim DisplayGrid As New GridForm(_parentForm, "Advanced Search Results")
         Dim Tables As List(Of DataTable) = AdvSearch.GetResults
         For Each table In Tables
