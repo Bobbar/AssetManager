@@ -62,7 +62,7 @@ Public Class DBControlInfo
     Sub New(DataColumn As String, AttribIndex As Combo_Data(), ParseType As ParseType, Optional Required As Boolean = False)
         db_column = DataColumn
         db_required = Required
-        db_parse_type = ParseType.UpdateAndDisplay
+        db_parse_type = ParseType
         db_attrib_index = AttribIndex
     End Sub
 

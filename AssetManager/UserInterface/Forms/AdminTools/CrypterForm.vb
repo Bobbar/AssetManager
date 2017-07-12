@@ -11,11 +11,13 @@
         If Trim(txtString.Text) <> "" Then
             Dim CryptKey As String = Trim(txtKey.Text)
             Dim CryptString As String = Trim(txtString.Text)
-            Dim wrapper As New Simple3Des(CryptKey)
-            txtResult.Text = wrapper.EncryptData(CryptString)
+            Using wrapper As New Simple3Des(CryptKey)
+                txtResult.Text = wrapper.EncryptData(CryptString)
+            End Using
         ElseIf Trim(txtResult.Text) <> "" Then
-            Dim wrapper As New Simple3Des(Trim(txtKey.Text))
-            txtString.Text = wrapper.DecryptData(Trim(txtResult.Text))
+            Using wrapper As New Simple3Des(Trim(txtKey.Text))
+                txtString.Text = wrapper.DecryptData(Trim(txtResult.Text))
+            End Using
         End If
     End Sub
 

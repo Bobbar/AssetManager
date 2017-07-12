@@ -28,8 +28,9 @@ Module SecurityFunctions
     End Function
 
     Public Function DecodePassword(strCypher As String) As String
-        Dim wrapper As New Simple3Des(CryptKey)
-        Return wrapper.DecryptData(strCypher)
+        Using wrapper As New Simple3Des(CryptKey)
+            Return wrapper.DecryptData(strCypher)
+        End Using
     End Function
 
     Public Function GetHashOfTable(Table As DataTable) As String
