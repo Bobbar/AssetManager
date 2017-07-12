@@ -1,4 +1,4 @@
-﻿Public Class BackgroundWorkerCancelledException
+﻿Public Class BackgroundWorkerCanceledException
     Inherits Exception
 
     Public Sub New()

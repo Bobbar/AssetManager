@@ -7,7 +7,7 @@ Public Class TrackDeviceForm
     Private MyParent As ViewDeviceForm
     Private CheckData As CheckStruct
 
-    Sub New(ByRef Device As Device_Info, ParentForm As Form)
+    Sub New(Device As Device_Info, ParentForm As Form)
         InitializeComponent()
         CurrentTrackingDevice = Device
         Tag = ParentForm

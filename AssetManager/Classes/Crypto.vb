@@ -1,6 +1,6 @@
 ﻿Imports System.Security.Cryptography
 
-Public NotInheritable Class Simple3Des : Implements IDisposable
+Public Class Simple3Des : Implements IDisposable
 
     Sub New(ByVal key As String)
         ' Initialize the crypto provider.

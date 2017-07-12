@@ -25,7 +25,7 @@ Public Class DBWrapper
         End Using
     End Function
 
-    Public Function DataTableFromCommand(ByRef Command As DbCommand) As DataTable
+    Public Function DataTableFromCommand(Command As DbCommand) As DataTable
         Using da As DbDataAdapter = GetAdapter(), results As New DataTable, conn = GetConnection()
             Command.Connection = conn
             da.SelectCommand = Command

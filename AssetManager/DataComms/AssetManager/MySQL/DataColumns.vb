@@ -139,7 +139,7 @@ Public Class sibi_codes
     Public Const TableName As String = "sibi_codes"
 End Class
 
-Public Class security
+Public Class security_columns
     Public Const TableName As String = "security"
     Public Const SecModule As String = "sec_module"
     Public Const AccessLevel As String = "sec_access_level"

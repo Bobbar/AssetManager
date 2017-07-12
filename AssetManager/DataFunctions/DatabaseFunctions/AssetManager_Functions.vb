@@ -67,13 +67,13 @@ VALUES
     Public Function BuildModuleIndex() As List(Of Access_Info)
         Dim tmpList As New List(Of Access_Info)
         Using SQLComms As New MySQL_Comms,
-            ModuleTable As DataTable = SQLComms.Return_SQLTable("SELECT * FROM " & security.TableName & " ORDER BY " & security.AccessLevel & "")
+            ModuleTable As DataTable = SQLComms.Return_SQLTable("SELECT * FROM " & security_columns.TableName & " ORDER BY " & security_columns.AccessLevel & "")
             For Each row As DataRow In ModuleTable.Rows
                 Dim tmpInfo As Access_Info
                 With tmpInfo
-                    .intLevel = CInt(row.Item(security.AccessLevel))
-                    .strModule = row.Item(security.SecModule).ToString
-                    .strDesc = row.Item(security.Description).ToString
+                    .intLevel = CInt(row.Item(security_columns.AccessLevel))
+                    .strModule = row.Item(security_columns.SecModule).ToString
+                    .strDesc = row.Item(security_columns.Description).ToString
                 End With
                 tmpList.Add(tmpInfo)
             Next
@@ -351,10 +351,6 @@ VALUES
             Return Nothing
         End Try
     End Function
-    Public Sub UpdateUser(ByRef User As User_Info, AccessLevel As Integer)
-        User.intAccessLevel = AccessLevel
-        Update_SQLValue(users.TableName, users.AccessLevel, User.intAccessLevel.ToString, users.UID, User.strUID)
-    End Sub
     Public Function User_GetUserList() As List(Of User_Info)
         Dim Qry As String = "SELECT * FROM " & users.TableName
         Dim tmpList As New List(Of User_Info)

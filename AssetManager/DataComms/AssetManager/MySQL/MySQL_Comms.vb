@@ -100,8 +100,6 @@ Public Class MySQL_Comms : Implements IDisposable
                 CloseConnection()
                 Connection = NewConnection()
                 Connection.Open()
-                '  Else
-
             End If
             If Connection.State = ConnectionState.Open Then
                 Return True

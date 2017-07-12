@@ -1,4 +1,6 @@
-﻿Namespace My
+﻿Imports Microsoft.VisualBasic.ApplicationServices
+
+Namespace My
     ' The following events are available for MyApplication:
     ' Startup: Raised when the application starts, before the startup form is created.
     ' Shutdown: Raised after all application forms are closed.  This event is not raised if the application terminates abnormally.
@@ -60,9 +62,12 @@
             'End Try
         End Sub
 
-        Public Sub Status(Text As String)
-            SplashScreenForm.lblStatus.Text = Text
-            SplashScreenForm.Refresh()
+        Private Sub MyApplication_UnhandledException(sender As Object, e As UnhandledExceptionEventArgs) Handles Me.UnhandledException
+            ErrHandle(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Sub
+
+        Private Sub Status(Text As String)
+            SplashScreenForm.SetStatus(Text)
         End Sub
 
     End Class

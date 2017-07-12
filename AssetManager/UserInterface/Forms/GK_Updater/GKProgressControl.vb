@@ -53,7 +53,7 @@ Public Class GKProgressControl
         Paused
         Complete
         CompleteWithErrors
-        Cancelled
+        Canceled
         Errors
     End Enum
 
@@ -129,7 +129,7 @@ Public Class GKProgressControl
     End Sub
 
     Private Sub GKUpdate_Cancelled(sender As Object, e As EventArgs)
-        SetStatus(Progress_Status.Cancelled)
+        SetStatus(Progress_Status.Canceled)
     End Sub
 
     Private Sub GKUpdate_Complete(sender As Object, e As EventArgs)
@@ -187,7 +187,7 @@ Public Class GKProgressControl
         If ProgStatus = Progress_Status.Running Or ProgStatus = Progress_Status.Paused Then
             If Not MyUpdater.IsDisposed Then
                 MyUpdater.CancelUpdate()
-                SetStatus(Progress_Status.Cancelled)
+                SetStatus(Progress_Status.Canceled)
             Else
                 Me.Dispose()
             End If
@@ -250,7 +250,7 @@ Public Class GKProgressControl
         Select Case Status
             Case Progress_Status.Queued
                 lblStatus.Text = "Queued..."
-            Case Progress_Status.Cancelled
+            Case Progress_Status.Canceled
                 lblStatus.Text = "Cancelled!"
             Case Progress_Status.Errors
                 lblStatus.Text = "ERROR!"

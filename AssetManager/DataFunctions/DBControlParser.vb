@@ -196,7 +196,7 @@ Public Class DBControlParser
     ''' </summary>
     ''' <param name="Parent">Parent control. Usually a Form to being.</param>
     ''' <param name="ControlList">Blank List of Control to be filled.</param>
-    Public Sub GetDBControls(Parent As Control, ByRef ControlList As List(Of Control))
+    Public Sub GetDBControls(Parent As Control, ControlList As List(Of Control))
         For Each ctl As Control In Parent.Controls
             Select Case True
                 Case TypeOf ctl.Tag Is DBControlInfo

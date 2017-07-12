@@ -214,7 +214,7 @@ Public Class GKUpdaterForm
         Next
         For Each upd As GKProgressControl In MyUpdates
             Select Case upd.ProgStatus
-                Case GKProgressControl.Progress_Status.Complete, GKProgressControl.Progress_Status.Errors, GKProgressControl.Progress_Status.Cancelled
+                Case GKProgressControl.Progress_Status.Complete, GKProgressControl.Progress_Status.Errors, GKProgressControl.Progress_Status.Canceled
                     sortUpdates.Add(upd)
             End Select
         Next

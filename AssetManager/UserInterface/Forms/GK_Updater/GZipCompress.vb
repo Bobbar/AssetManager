@@ -5,7 +5,7 @@ Imports System.Text
 Public Class GZipCompress
     Private Progress As ProgressCounter
 
-    Sub New(ByRef ProgressDel As ProgressCounter)
+    Sub New(ProgressDel As ProgressCounter)
         Progress = ProgressDel
     End Sub
 

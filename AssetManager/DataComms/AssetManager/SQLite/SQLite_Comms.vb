@@ -289,7 +289,7 @@ Public Class SQLite_Comms : Implements IDisposable
         list.Add(dev_codes.TableName)
         list.Add(sibi_codes.TableName)
         list.Add("munis_codes")
-        list.Add(security.TableName)
+        list.Add(security_columns.TableName)
         list.Add(users.TableName)
         Return list
     End Function

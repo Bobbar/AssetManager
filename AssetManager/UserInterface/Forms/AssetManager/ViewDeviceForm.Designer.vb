@@ -822,7 +822,7 @@ Partial Class ViewDeviceForm
         '
         'tmr_RDPRefresher
         '
-        Me.tmr_RDPRefresher.Interval = 250
+        Me.tmr_RDPRefresher.Interval = 1000
         '
         'fieldErrorIcon
         '
@@ -918,7 +918,7 @@ Partial Class ViewDeviceForm
         Me.tsTracking.Location = New System.Drawing.Point(16, 37)
         Me.tsTracking.Name = "tsTracking"
         Me.tsTracking.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.tsTracking.Size = New System.Drawing.Size(165, 37)
+        Me.tsTracking.Size = New System.Drawing.Size(134, 37)
         Me.tsTracking.TabIndex = 46
         '
         'ToolStripDropDownButton1

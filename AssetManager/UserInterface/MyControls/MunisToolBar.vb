@@ -22,7 +22,7 @@
     ''' </summary>
     ''' <param name="TargetStrip"></param>
     ''' <param name="LocationIndex"></param>
-    Public Sub InsertMunisDropDown(ByRef TargetStrip As MyToolStrip, Optional LocationIndex As Integer = -1)
+    Public Sub InsertMunisDropDown(TargetStrip As MyToolStrip, Optional LocationIndex As Integer = -1)
         If LocationIndex >= 0 Then
             TargetStrip.Items.Insert(LocationIndex, MunisDropDown)
             AddSeperators(TargetStrip, LocationIndex)

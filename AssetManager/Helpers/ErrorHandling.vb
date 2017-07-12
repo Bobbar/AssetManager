@@ -11,7 +11,7 @@ Module ErrorHandling
         Logger("ERR STACK TRACE: " & ex.ToString)
         Dim ErrorResult As Boolean
         Select Case True
-            Case TypeOf ex Is BackgroundWorkerCancelledException
+            Case TypeOf ex Is BackgroundWorkerCanceledException
                 ErrorResult = True
 
             Case TypeOf ex Is Net.WebException

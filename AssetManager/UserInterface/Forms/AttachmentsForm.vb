@@ -707,7 +707,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
             If UploadWorker.CancellationPending Then
                 e.Cancel = True
                 FTPFunc.DeleteFTPAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID)
-                Throw New BackgroundWorkerCancelledException("The upload was cancelled.")
+                Throw New BackgroundWorkerCanceledException("The upload was cancelled.")
             End If
             'update sql table
             If Not UploadWorker.CancellationPending Then
@@ -772,7 +772,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                     End If
                 Else
                     DoneWaiting()
-                    If TypeOf e.Error Is BackgroundWorkerCancelledException Then
+                    If TypeOf e.Error Is BackgroundWorkerCanceledException Then
                         Message("File upload was cancelled.", vbOKOnly + vbInformation, "Cancelled", Me)
                     Else
                         If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod()) Then EndProgram()

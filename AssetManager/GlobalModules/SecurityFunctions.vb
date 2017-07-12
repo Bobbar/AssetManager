@@ -113,7 +113,7 @@ Module SecurityFunctions
 
     Public Sub GetAccessLevels()
         Try
-            Dim strQRY = "SELECT * FROM " & security.TableName & " ORDER BY " & security.AccessLevel & "" ' WHERE usr_username='" & strLocalUser & "'"
+            Dim strQRY = "SELECT * FROM " & security_columns.TableName & " ORDER BY " & security_columns.AccessLevel & "" ' WHERE usr_username='" & strLocalUser & "'"
             Dim rows As Integer
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
                 ReDim AccessLevels(0)
@@ -121,10 +121,10 @@ Module SecurityFunctions
                 For Each r As DataRow In results.Rows
                     rows += 1
                     ReDim Preserve AccessLevels(rows)
-                    AccessLevels(rows).intLevel = CInt(r.Item(security.AccessLevel))
-                    AccessLevels(rows).strModule = r.Item(security.SecModule).ToString
-                    AccessLevels(rows).strDesc = r.Item(security.Description).ToString
-                    AccessLevels(rows).bolAvailOffline = CBool(r.Item(security.AvailOffline))
+                    AccessLevels(rows).intLevel = CInt(r.Item(security_columns.AccessLevel))
+                    AccessLevels(rows).strModule = r.Item(security_columns.SecModule).ToString
+                    AccessLevels(rows).strDesc = r.Item(security_columns.Description).ToString
+                    AccessLevels(rows).bolAvailOffline = CBool(r.Item(security_columns.AvailOffline))
                 Next
             End Using
         Catch ex As Exception
