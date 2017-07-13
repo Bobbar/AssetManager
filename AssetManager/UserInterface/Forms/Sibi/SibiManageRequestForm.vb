@@ -48,7 +48,7 @@ Public Class SibiManageRequestForm
         ResetBackColors(Me)
         HideEditControls()
         dgvNotes.DataSource = Nothing
-        SetupGrid()
+        SetupGrid(RequestItemsGrid, RequestItemsColumns)
         FillCombos()
         EnableControls(Me)
         pnlCreate.Visible = False
@@ -71,10 +71,10 @@ Public Class SibiManageRequestForm
         CurrentRequest.strUID = Guid.NewGuid.ToString
         Me.FormUID = CurrentRequest.strUID
         bolUpdating = True
-        SetupGrid()
+        SetupGrid(RequestItemsGrid, RequestItemsColumns)
 
         Using Comms As New MySQL_Comms 'Set the datasource to a new empty DB table.
-            RequestItemsGrid.DataSource = Comms.Return_SQLTable("SELECT " & ColumnsString() & " FROM " & sibi_request_items.TableName & " LIMIT 0")
+            RequestItemsGrid.DataSource = Comms.Return_SQLTable("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " LIMIT 0")
         End Using
 
         EnableControls(Me)
@@ -85,7 +85,7 @@ Public Class SibiManageRequestForm
         Waiting()
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & RequestUID & "'"
-            Dim strRequestItemsQRY As String = "SELECT " & ColumnsString() & " FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_request_items.TimeStamp
+            Dim strRequestItemsQRY As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_request_items.TimeStamp
             Dim RequestResults As DataTable = DBFunc.DataTableFromQueryString(strRequestQRY)
             Dim RequestItemsResults As DataTable = DBFunc.DataTableFromQueryString(strRequestItemsQRY)
             RequestItemsResults.TableName = sibi_request_items.TableName
@@ -159,7 +159,7 @@ VALUES
         Dim RequestData As Request_Info = CollectData()
         Try
             Dim InsertRequestQry As String = "SELECT * FROM " & sibi_requests.TableName & " LIMIT 0"
-            Dim InsertRequestItemsQry As String = "SELECT " & ColumnsString() & " FROM " & sibi_request_items.TableName & " LIMIT 0"
+            Dim InsertRequestItemsQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " LIMIT 0"
             Using SQLComms As New MySQL_Comms,
                 cmd As MySqlCommand = SQLComms.Return_SQLCommand(),
                 InsertAdapter = SQLComms.Return_Adapter(InsertRequestQry),
@@ -458,29 +458,6 @@ VALUES
         End Try
     End Sub
 
-    Private Function ColumnsString() As String
-        Dim ColString As String = ""
-        For Each col In RequestItemsColumns()
-            ColString += col.ColumnName
-            If RequestItemsColumns.IndexOf(col) <> RequestItemsColumns.Count - 1 Then ColString += ","
-        Next
-        Return ColString
-    End Function
-
-    Private Function DataGridCombo(IndexType() As Combo_Data, HeaderText As String, Name As String) As DataGridViewComboBoxColumn
-        Dim NewCombo As New DataGridViewComboBoxColumn
-        NewCombo.Items.Clear()
-        NewCombo.HeaderText = HeaderText
-        NewCombo.DataPropertyName = Name
-        NewCombo.Name = Name
-        NewCombo.Width = 200
-        NewCombo.SortMode = DataGridViewColumnSortMode.Automatic
-        NewCombo.DisplayMember = "strLong"
-        NewCombo.ValueMember = "strShort"
-        NewCombo.DataSource = IndexType
-        Return NewCombo
-    End Function
-
     Private Function DeleteItem_FromLocal(RowIndex As Integer) As Boolean
         Try
             If Not RequestItemsGrid.Rows(RowIndex).IsNewRow Then
@@ -625,33 +602,6 @@ VALUES
         Dim f As Form = DirectCast(sender, Form)
         PrevWindowState = f.WindowState
     End Sub
-
-    Private Function GenericColumn(Column As ColumnStruct) As DataGridViewColumn
-        Dim NewCol As New DataGridViewColumn
-        NewCol.Name = Column.ColumnName
-        NewCol.DataPropertyName = Column.ColumnName
-        NewCol.HeaderText = Column.ColumnCaption
-        NewCol.ValueType = Column.ColumnType
-        NewCol.CellTemplate = New DataGridViewTextBoxCell
-        NewCol.SortMode = DataGridViewColumnSortMode.Automatic
-        NewCol.ReadOnly = Column.ColumnReadOnly
-        NewCol.Visible = Column.ColumnVisible
-        Return NewCol
-    End Function
-
-    Private Function GetColumn(Column As ColumnStruct) As DataGridViewColumn
-        Select Case Column.ColumnType
-            Case GetType(String), GetType(Integer)
-                Return GenericColumn(Column)
-            Case GetType(Combo_Data)
-                Select Case Column.ColumnName
-                    Case sibi_request_items.Location
-                        Return DataGridCombo(DeviceIndex.Locations, Column.ColumnCaption, Column.ColumnName)
-                    Case sibi_request_items.Status
-                        Return DataGridCombo(SibiIndex.ItemStatusType, Column.ColumnCaption, Column.ColumnName)
-                End Select
-        End Select
-    End Function
 
     Private Function GetInsertTable(Adapter As MySqlDataAdapter, UID As String) As DataTable
         Try
@@ -803,8 +753,8 @@ VALUES
         ColList.Add(New ColumnStruct(sibi_request_items.User, "User", GetType(String)))
         ColList.Add(New ColumnStruct(sibi_request_items.Description, "Description", GetType(String)))
         ColList.Add(New ColumnStruct(sibi_request_items.Qty, "Qty", GetType(Integer)))
-        ColList.Add(New ColumnStruct(sibi_request_items.Location, "Location", GetType(Combo_Data)))
-        ColList.Add(New ColumnStruct(sibi_request_items.Status, "Status", GetType(Combo_Data)))
+        ColList.Add(New ColumnStruct(sibi_request_items.Location, "Location", GetType(Combo_Data), DeviceIndex.Locations))
+        ColList.Add(New ColumnStruct(sibi_request_items.Status, "Status", GetType(Combo_Data), SibiIndex.ItemStatusType))
         ColList.Add(New ColumnStruct(sibi_request_items.Replace_Asset, "Replace Asset", GetType(String)))
         ColList.Add(New ColumnStruct(sibi_request_items.Replace_Serial, "Replace Serial", GetType(String)))
         ColList.Add(New ColumnStruct(sibi_request_items.New_Asset, "New Asset", GetType(String)))
@@ -1053,23 +1003,6 @@ VALUES
         SetGLBudgetItems()
     End Sub
 
-    Private Sub SetupGrid()
-        Try
-            bolGridFilling = True
-            RequestItemsGrid.DataSource = Nothing
-            RequestItemsGrid.Rows.Clear()
-            RequestItemsGrid.Columns.Clear()
-            RequestItemsGrid.AutoGenerateColumns = False
-
-            For Each col In RequestItemsColumns()
-                RequestItemsGrid.Columns.Add(GetColumn(col))
-            Next
-            bolGridFilling = False
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
-    End Sub
-
     Private Sub ShowEditControls()
         pnlEditButtons.Visible = True
     End Sub
@@ -1185,7 +1118,7 @@ VALUES
             RequestData.strUID = CurrentRequest.strUID
             If RequestData.RequestItems Is Nothing Then Exit Sub
             Dim RequestUpdateQry As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & " = '" & CurrentRequest.strUID & "'"
-            Dim RequestItemsUpdateQry As String = "SELECT " & ColumnsString() & " FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & " = '" & CurrentRequest.strUID & "'"
+            Dim RequestItemsUpdateQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & " = '" & CurrentRequest.strUID & "'"
             Using SQLComms As New MySQL_Comms,
                RequestUpdateAdapter = SQLComms.Return_Adapter(RequestUpdateQry),
                RequestItemsUpdateAdapter = SQLComms.Return_Adapter(RequestItemsUpdateQry)

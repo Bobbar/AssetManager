@@ -57,18 +57,6 @@ Module OtherFunctions
         End Try
     End Function
 
-    Public Function GetColIndex(ByVal Grid As DataGridView, ByVal strColName As String) As Integer
-        Try
-            Return Grid.Columns.Item(strColName).Index
-        Catch ex As Exception
-            Return -1
-        End Try
-    End Function
-
-    Public Function GetCurrentCellValue(ByVal Grid As DataGridView, ColumnName As String) As String
-        Return NoNull(Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value.ToString)
-    End Function
-
     Public Sub EndProgram()
         If OKToEnd() Then
             ProgramEnding = True
@@ -153,20 +141,6 @@ Module OtherFunctions
             Return False
         End If
     End Function
-
-    Public Sub CopyToGridForm(Grid As DataGridView, Parent As Form)
-        If Grid IsNot Nothing Then
-            Dim NewGridForm As New GridForm(Parent, Grid.Name & " Copy")
-            NewGridForm.AddGrid(Grid.Name, Grid.Name, DirectCast(Grid.DataSource, DataTable))
-            NewGridForm.Show()
-        End If
-    End Sub
-
-    Public Sub CopySelectedGridData(Grid As DataGridView)
-        Grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
-        Clipboard.SetDataObject(Grid.GetClipboardContent())
-        Grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
-    End Sub
 
     Public Sub SetWaitCursor(Waiting As Boolean)
         Application.UseWaitCursor = Waiting

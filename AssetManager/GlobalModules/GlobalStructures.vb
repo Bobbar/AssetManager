@@ -115,6 +115,7 @@ Public Structure ColumnStruct
     Public ColumnType As Type
     Public ColumnReadOnly As Boolean
     Public ColumnVisible As Boolean
+    Public ComboIndex As Combo_Data()
 
     Sub New(Name As String, Caption As String, Type As Type)
         ColumnName = Name
@@ -122,6 +123,16 @@ Public Structure ColumnStruct
         ColumnType = Type
         ColumnReadOnly = False
         ColumnVisible = True
+        ComboIndex = Nothing
+    End Sub
+
+    Sub New(Name As String, Caption As String, Type As Type, ComboIdx() As Combo_Data)
+        ColumnName = Name
+        ColumnCaption = Caption
+        ColumnType = Type
+        ColumnReadOnly = False
+        ColumnVisible = True
+        ComboIndex = ComboIdx
     End Sub
 
     Sub New(Name As String, Caption As String, Type As Type, IsReadOnly As Boolean, Visible As Boolean)
@@ -130,6 +141,7 @@ Public Structure ColumnStruct
         ColumnType = Type
         ColumnReadOnly = IsReadOnly
         ColumnVisible = Visible
+        ComboIndex = Nothing
     End Sub
 
 End Structure

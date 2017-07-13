@@ -260,7 +260,7 @@ Public Class DBControlParser
     ''' </remarks>
     ''' <param name="SelectQry">A SQL Select query string that will return the table row that is to be updated.</param>
     ''' <returns>
-    ''' Returns a DataTable modified by the controls identified by <see cref="GetDBControls(Control, ByRef List(Of Control))"/>
+    ''' Returns a DataTable modified by the controls identified by <see cref="GetDBControls(Control, List(Of Control))"/>
     ''' </returns>
     Public Function ReturnUpdateTable(SelectQry As String) As DataTable
         Dim tmpTable As New DataTable
@@ -272,7 +272,7 @@ Public Class DBControlParser
         Return tmpTable
     End Function
     ''' <summary>
-    ''' Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControls(Control, ByRef List(Of Control))"/>
+    ''' Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControls(Control, List(Of Control))"/>
     ''' </summary>
     ''' <param name="DBRow">DataRow to be modified.</param>
     Private Sub UpdateDBControlRow(ByRef DBRow As DataRow)
