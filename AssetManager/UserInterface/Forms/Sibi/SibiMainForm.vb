@@ -330,4 +330,7 @@ Public Class SibiMainForm
         SetWaitCursor(False)
     End Sub
 
+    Private Sub SibiMainForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        CloseChildren(Me)
+    End Sub
 End Class
