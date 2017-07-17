@@ -236,7 +236,7 @@ VALUES
     Private Async Sub CheckForPO()
         If CurrentRequest.strRequisitionNumber <> "" And CurrentRequest.strPO = "" Then
             Dim GetPO As String = Await MunisFunc.Get_PO_From_ReqNumber_Async(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year.ToString)
-            If GetPO.Length > 1 Then
+            If GetPO IsNot Nothing AndAlso GetPO.Length > 1 Then
                 Dim blah = Message("PO Number " & GetPO & " was detected in the Requisition. Do you wish to add it to this request?", vbQuestion + vbYesNo, "New PO Detected", Me)
                 If blah = MsgBoxResult.Yes Then
                     InsertPONumber(GetPO)
