@@ -9,13 +9,14 @@ Public Class SibiManageRequestForm
 
     Private CurrentRequest As Request_Info
     Private bolUpdating As Boolean = False
+    Private bolNewRequest As Boolean = False
     Private bolDragging As Boolean = False
     Private bolFieldsValid As Boolean
     Private bolGridFilling As Boolean = False
     Private DataParser As New DBControlParser(Me)
     Private MouseStartPos As Point
     Private MyMunisToolBar As New MunisToolBar(Me)
-    Private MyText As String
+    Private TitleText As String = "Manage Request"
     Private MyWindowList As New WindowList(Me)
     Private PrevWindowState As Integer
 
@@ -56,6 +57,7 @@ Public Class SibiManageRequestForm
         DisableControls(Me)
         ToolStrip.BackColor = colSibiToolBarColor
         bolUpdating = False
+        bolNewRequest = False
         fieldErrorIcon.Clear()
     End Sub
 
@@ -68,6 +70,8 @@ Public Class SibiManageRequestForm
             End If
         End If
         ClearAll()
+        bolNewRequest = True
+        SetTitle(True)
         CurrentRequest.strUID = Guid.NewGuid.ToString
         Me.FormUID = CurrentRequest.strUID
         bolUpdating = True
@@ -95,7 +99,7 @@ Public Class SibiManageRequestForm
             SendToGrid(RequestItemsResults)
             LoadNotes(CurrentRequest.strUID)
             DisableControls(Me)
-            SetTitle()
+            SetTitle(False)
             SetAttachCount()
             Me.Show()
             Me.Activate()
@@ -175,6 +179,7 @@ VALUES
                 ParentForm.RefreshResults()
             End If
             bolUpdating = False
+            bolNewRequest = False
             OpenRequest(CurrentRequest.strUID)
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
@@ -188,7 +193,7 @@ VALUES
     Private Sub AddNote()
         Try
             If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-            If CurrentRequest.strUID <> "" Then
+            If CurrentRequest.strUID <> "" And Not bolNewRequest Then
                 Dim NewNote As New SibiNotesForm(Me, CurrentRequest)
                 If NewNote.DialogResult = DialogResult.OK Then
                     AddNewNote(NewNote.Request.strUID, Trim(NewNote.rtbNotes.Rtf))
@@ -325,7 +330,7 @@ VALUES
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen(Me) Then
-            If CurrentRequest.strUID <> "" Then
+            If CurrentRequest.strUID <> "" And Not bolNewRequest Then
                 Dim NewAttach As New AttachmentsForm(Me, New sibi_attachments, CurrentRequest)
             End If
         End If
@@ -373,12 +378,14 @@ VALUES
 
     Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim blah = Message("Are you sure?", vbYesNo + vbQuestion, "Delete Note", Me)
-        If blah = vbYes Then
-            Dim NoteUID As String = dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString
-            If NoteUID <> "" Then
-                Message(DeleteItem_FromSQL(NoteUID, sibi_notes.Note_UID, sibi_notes.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me)
-                OpenRequest(CurrentRequest.strUID)
+        If dgvNotes.CurrentRow IsNot Nothing AndAlso dgvNotes.CurrentRow.Index > -1 Then
+            Dim blah = Message("Are you sure?", vbYesNo + vbQuestion, "Delete Note", Me)
+            If blah = vbYes Then
+                Dim NoteUID As String = dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString
+                If NoteUID <> "" Then
+                    Message(DeleteItem_FromSQL(NoteUID, sibi_notes.Note_UID, sibi_notes.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me)
+                    OpenRequest(CurrentRequest.strUID)
+                End If
             End If
         End If
     End Sub
@@ -798,24 +805,26 @@ VALUES
     End Sub
 
     Private Sub RequestItemsGrid_DragDrop(sender As Object, e As DragEventArgs) Handles RequestItemsGrid.DragDrop
-        'Drag-drop rows from other data grids, adding new UIDs and the currect FKey (RequestUID).
+        'Drag-drop rows from other data grids, adding new UIDs and the current FKey (RequestUID).
         'This was a tough nut to crack. In the end I just ended up building an item array and adding it to the receiving grids datasource.
         Try
             If bolUpdating Then
                 Dim R = DirectCast(e.Data.GetData(GetType(DataGridViewRow)), DataGridViewRow) 'Cast the DGVRow
-                Dim NewDataRow As DataRow = DirectCast(R.DataBoundItem, DataRowView).Row 'Get the databound row
-                Dim ItemArr As New List(Of Object)
-                For Each col As DataColumn In NewDataRow.Table.Columns 'Iterate through columns and build a new item list
-                    Select Case col.ColumnName
-                        Case sibi_request_items.Item_UID
-                            ItemArr.Add(Guid.NewGuid.ToString)
-                        Case sibi_request_items.Request_UID
-                            ItemArr.Add(CurrentRequest.strUID)
-                        Case Else
-                            ItemArr.Add(NewDataRow.Item(col))
-                    End Select
-                Next
-                DirectCast(RequestItemsGrid.DataSource, DataTable).Rows.Add(ItemArr.ToArray) 'Add the item list as an array
+                If R.DataBoundItem IsNot Nothing Then
+                    Dim NewDataRow As DataRow = DirectCast(R.DataBoundItem, DataRowView).Row 'Get the databound row
+                    Dim ItemArr As New List(Of Object)
+                    For Each col As DataColumn In NewDataRow.Table.Columns 'Iterate through columns and build a new item list
+                        Select Case col.ColumnName
+                            Case sibi_request_items.Item_UID
+                                ItemArr.Add(Guid.NewGuid.ToString)
+                            Case sibi_request_items.Request_UID
+                                ItemArr.Add(CurrentRequest.strUID)
+                            Case Else
+                                ItemArr.Add(NewDataRow.Item(col))
+                        End Select
+                    Next
+                    DirectCast(RequestItemsGrid.DataSource, DataTable).Rows.Add(ItemArr.ToArray) 'Add the item list as an array
+                End If
                 bolDragging = False
             Else
                 If Not bolDragging Then
@@ -823,6 +832,7 @@ VALUES
                 End If
             End If
         Catch ex As Exception
+            bolDragging = False
         End Try
     End Sub
 
@@ -974,11 +984,12 @@ VALUES
         End If
     End Sub
 
-    Private Sub SetTitle()
-        If MyText = "" Then
-            MyText = Me.Text
+    Private Sub SetTitle(Optional NewRequest As Boolean = False)
+        If Not NewRequest Then
+            Me.Text = TitleText + " - " + CurrentRequest.strDescription
+        Else
+            Me.Text = TitleText + " - *New Request*"
         End If
-        Me.Text = MyText + " - " + CurrentRequest.strDescription
     End Sub
 
     Private Sub SetToolStripItems()
@@ -1010,7 +1021,7 @@ VALUES
     End Sub
 
     Private Sub tsbRefresh_Click(sender As Object, e As EventArgs) Handles tsbRefresh.Click
-        OpenRequest(CurrentRequest.strUID)
+        If Not bolNewRequest Then OpenRequest(CurrentRequest.strUID)
     End Sub
 
     Private Sub tsmCopyText_Click(sender As Object, e As EventArgs) Handles tsmCopyText.Click
