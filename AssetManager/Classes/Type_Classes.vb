@@ -116,7 +116,7 @@ Public Class Attachment : Implements IDisposable
         _fileInfo = New FileInfo(NewFile)
         _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name)
         _fileUID = Guid.NewGuid.ToString
-        _MD5 = GetHash(_fileInfo)
+        _MD5 = Nothing
         _fileSize = CInt(_fileInfo.Length)
         _extention = _fileInfo.Extension
         _folderGUID = String.Empty
@@ -128,7 +128,7 @@ Public Class Attachment : Implements IDisposable
         _fileInfo = New FileInfo(NewFile)
         _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name)
         _fileUID = Guid.NewGuid.ToString
-        _MD5 = GetHash(_fileInfo)
+        _MD5 = Nothing
         _fileSize = CInt(_fileInfo.Length)
         _extention = _fileInfo.Extension
         _folderGUID = FolderGUID
@@ -196,7 +196,12 @@ Public Class Attachment : Implements IDisposable
 
     Public ReadOnly Property MD5 As String
         Get
-            Return _MD5
+            If _MD5 IsNot Nothing Then
+                Return _MD5
+            Else
+                _MD5 = GetHash(_fileInfo)
+                Return _MD5
+            End If
         End Get
     End Property
 
@@ -225,8 +230,9 @@ Public Class Attachment : Implements IDisposable
     End Property
 
     Private Function GetHash(Fileinfo As FileInfo) As String
-        Dim HashStream As FileStream = Fileinfo.OpenRead
-        Return GetHashOfFileStream(HashStream)
+        Using HashStream As FileStream = Fileinfo.OpenRead
+            Return GetHashOfFileStream(HashStream)
+        End Using
     End Function
 
 #Region "IDisposable Support"
