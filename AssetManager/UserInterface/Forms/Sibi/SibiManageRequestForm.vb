@@ -921,17 +921,19 @@ VALUES
     End Sub
 
     Private Sub SetGLBudgetItems()
-        Dim ColIndex As Integer = RequestItemsGrid.CurrentCell.ColumnIndex
-        Select Case True
-            Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Object_Code), ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Org_Code)
-                If GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Object_Code) <> "" And GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Org_Code) <> "" Then
-                    tsmGLBudget.Visible = True
-                Else
+        If RequestItemsGrid.CurrentCell IsNot Nothing Then
+            Dim ColIndex As Integer = RequestItemsGrid.CurrentCell.ColumnIndex
+            Select Case True
+                Case ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Object_Code), ColIndex = GetColIndex(RequestItemsGrid, sibi_request_items.Org_Code)
+                    If GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Object_Code) <> "" And GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Org_Code) <> "" Then
+                        tsmGLBudget.Visible = True
+                    Else
+                        tsmGLBudget.Visible = False
+                    End If
+                Case Else
                     tsmGLBudget.Visible = False
-                End If
-            Case Else
-                tsmGLBudget.Visible = False
-        End Select
+            End Select
+        End If
     End Sub
 
     Private Sub SetMunisStatus()
