@@ -1,7 +1,7 @@
 ﻿Imports System.ComponentModel
 
 Public Class GKUpdaterForm
-    Private bolRunQueue As Boolean = False
+    Private bolRunQueue As Boolean = True
     Private MaxSimUpdates As Integer = 4
     Private MyUpdates As New List(Of GKProgressControl)
     Private bolStarting As Boolean = True
@@ -46,23 +46,15 @@ Public Class GKUpdaterForm
     End Sub
 
     Private Sub StartUpdateByDevice(Device As Device_Info)
-        For Each upd As GKProgressControl In MyUpdates
-            If upd.Device.strGUID = Device.strGUID Then upd.StartUpdate()
-        Next
+        MyUpdates.Find(Function(upd) upd.Device.strGUID = Device.strGUID).StartUpdate()
     End Sub
 
     Private Function Exists(Device As Device_Info) As Boolean
-        For Each upd As GKProgressControl In MyUpdates
-            If upd.Device.strGUID = Device.strGUID Then Return True
-        Next
-        Return False
+        Return MyUpdates.Exists(Function(upd) upd.Device.strGUID = Device.strGUID)
     End Function
 
     Public Function ActiveUpdates() As Boolean
-        For Each upd As GKProgressControl In MyUpdates
-            If upd.ProgStatus = GKProgressControl.Progress_Status.Running Then Return True
-        Next
-        Return False
+        Return MyUpdates.Exists(Function(upd) upd.ProgStatus = GKProgressControl.Progress_Status.Running)
     End Function
 
     Private Sub CancelAll()
@@ -89,9 +81,10 @@ Public Class GKUpdaterForm
         If bolRunQueue Then
             Dim RunningUpdates As Integer = 0
             For Each upd As GKProgressControl In MyUpdates
-                If upd.ProgStatus = GKProgressControl.Progress_Status.Running Or upd.ProgStatus = GKProgressControl.Progress_Status.Starting Then
-                    If Not upd.IsDisposed Then RunningUpdates += 1
-                End If
+                Select Case upd.ProgStatus
+                    Case GKProgressControl.Progress_Status.Running, GKProgressControl.Progress_Status.Starting, GKProgressControl.Progress_Status.Paused
+                        If Not upd.IsDisposed Then RunningUpdates += 1
+                End Select
             Next
             If RunningUpdates < MaxSimUpdates Then Return True
         End If
@@ -142,15 +135,6 @@ Public Class GKUpdaterForm
         Return True
     End Function
 
-    'Public Function UpdatesRunning() As Boolean
-    '    If ActiveUpdates() Then
-    '        'Me.Activate()
-    '        'Me.WindowState = FormWindowState.Normal
-    '        Return True
-    '    End If
-    '    Return False
-    'End Function
-
     Private Sub MaxUpdates_ValueChanged(sender As Object, e As EventArgs) Handles MaxUpdates.ValueChanged
         If Not bolStarting Then MaxSimUpdates = CInt(MaxUpdates.Value)
     End Sub
@@ -167,13 +151,7 @@ Public Class GKUpdaterForm
     ''' Removes disposed update fragments from list.
     ''' </summary>
     Private Sub PruneQueue()
-        Dim tmpList As New List(Of GKProgressControl)
-        For Each upd As GKProgressControl In MyUpdates
-            If Not upd.IsDisposed Then
-                tmpList.Add(upd)
-            End If
-        Next
-        MyUpdates = tmpList
+        MyUpdates = MyUpdates.FindAll(Function(upd) Not upd.IsDisposed)
     End Sub
 
     Private Sub QueueChecker_Tick(sender As Object, e As EventArgs) Handles QueueChecker.Tick
@@ -201,22 +179,13 @@ Public Class GKUpdaterForm
         lblTransferRate.Text = "Transfer Rate: " & TransferRateSum.ToString("0.00") & " MB/s"
     End Sub
 
+    ''' <summary>
+    ''' Sorts all the GKProgressControls in order of the Progress_Status enum.
+    ''' </summary>
     Private Sub SortUpdates()
-
         Dim sortUpdates As New List(Of GKProgressControl)
-
-        For Each upd As GKProgressControl In MyUpdates
-            If upd.ProgStatus = GKProgressControl.Progress_Status.Running Then sortUpdates.Add(upd)
-        Next
-
-        For Each upd As GKProgressControl In MyUpdates
-            If upd.ProgStatus = GKProgressControl.Progress_Status.Queued Then sortUpdates.Add(upd)
-        Next
-        For Each upd As GKProgressControl In MyUpdates
-            Select Case upd.ProgStatus
-                Case GKProgressControl.Progress_Status.Complete, GKProgressControl.Progress_Status.Errors, GKProgressControl.Progress_Status.Canceled
-                    sortUpdates.Add(upd)
-            End Select
+        For Each status As GKProgressControl.Progress_Status In [Enum].GetValues(GetType(GKProgressControl.Progress_Status))
+            sortUpdates.AddRange(MyUpdates.FindAll(Function(upd) upd.ProgStatus = status))
         Next
         Updater_Table.Controls.Clear()
         Updater_Table.Controls.AddRange(sortUpdates.ToArray)
@@ -226,22 +195,24 @@ Public Class GKUpdaterForm
     ''' Starts the next update that has a queued status.
     ''' </summary>
     Private Sub StartNextUpdate()
-        For Each upd As GKProgressControl In MyUpdates
-            If upd.ProgStatus = GKProgressControl.Progress_Status.Queued Then
-                upd.StartUpdate()
-                Exit Sub
-            End If
-        Next
+        MyUpdates.Find(Function(upd) upd.ProgStatus = GKProgressControl.Progress_Status.Queued).StartUpdate()
     End Sub
 
     Private Sub StartQueue()
         bolRunQueue = True
-        cmdPauseResume.Text = "Pause Queue"
+        SetQueueButton()
     End Sub
 
     Private Sub StopQueue()
         bolRunQueue = False
-        cmdPauseResume.Text = "Resume Queue"
+        SetQueueButton()
+    End Sub
+    Private Sub SetQueueButton()
+        If bolRunQueue Then
+            cmdPauseResume.Text = "Pause Queue"
+        Else
+            cmdPauseResume.Text = "Resume Queue"
+        End If
     End Sub
 
     Private Sub tsmCreateDirs_Click(sender As Object, e As EventArgs) Handles tsmCreateDirs.Click
@@ -249,7 +220,7 @@ Public Class GKUpdaterForm
     End Sub
 
     Private Sub GKUpdaterForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        '   ProcessPackFile()
+        SetQueueButton()
     End Sub
 
     Private Sub ProcessPackFile()
@@ -257,12 +228,14 @@ Public Class GKUpdaterForm
             NewUnPack.ShowDialog(Me)
             PackFileReady = NewUnPack.PackVerified
             bolRunQueue = PackFileReady
+            SetQueueButton()
         End Using
     End Sub
 
     Private Async Function CheckPackFile() As Task(Of Boolean)
         PackFileReady = Await PackFunc.VerifyPackFile
-        bolRunQueue = PackFileReady
+        If bolRunQueue And Not PackFileReady Then bolRunQueue = False
+        SetQueueButton()
         If Not PackFileReady Then
             CancelAll()
             Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", vbOKOnly + vbExclamation, "Pack file out of date", Me)

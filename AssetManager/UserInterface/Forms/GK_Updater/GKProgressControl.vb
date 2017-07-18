@@ -49,8 +49,8 @@ Public Class GKProgressControl
     Public Enum Progress_Status
         Starting
         Running
-        Queued
         Paused
+        Queued
         Complete
         CompleteWithErrors
         Canceled
