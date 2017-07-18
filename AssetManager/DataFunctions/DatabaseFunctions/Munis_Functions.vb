@@ -375,6 +375,7 @@ FROM poheader"
         Else
             Using NewGridForm As New GridForm(Parent, "MUNIS Requisition Info")
                 DoneWaiting()
+                NewGridForm.AddGrid("ReqGrid", "Requisition Info:", Await LoadMunisRequisitionGridByReqNo(ReqNumber, FY))
                 NewGridForm.ShowDialog(Parent)
                 If NewGridForm.DialogResult = DialogResult.OK Then
                     Return SelectedCellValue(NewGridForm.SelectedValue, "rqdt_uni_pr")
