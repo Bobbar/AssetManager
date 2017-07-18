@@ -8,6 +8,7 @@ Public Class SibiManageRequestForm
 #Region "Fields"
 
     Private CurrentRequest As Request_Info
+    Private CurrentHash As String
     Private bolUpdating As Boolean = False
     Private bolNewRequest As Boolean = False
     Private bolDragging As Boolean = False
@@ -92,7 +93,9 @@ Public Class SibiManageRequestForm
             Dim strRequestItemsQRY As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & RequestUID & "' ORDER BY " & sibi_request_items.TimeStamp
             Dim RequestResults As DataTable = DBFunc.DataTableFromQueryString(strRequestQRY)
             Dim RequestItemsResults As DataTable = DBFunc.DataTableFromQueryString(strRequestItemsQRY)
+            RequestResults.TableName = sibi_requests.TableName
             RequestItemsResults.TableName = sibi_request_items.TableName
+            CurrentHash = GetHash(RequestResults, RequestItemsResults)
             ClearAll()
             CollectRequestInfo(RequestResults, RequestItemsResults)
             DataParser.FillDBFields(RequestResults)
@@ -106,6 +109,8 @@ Public Class SibiManageRequestForm
             SetMunisStatus()
             bolGridFilling = False
         Catch ex As Exception
+            DoneWaiting()
+            Message("An error occured while opening the request. It may have been deleted.", vbOKOnly + vbExclamation, "Error", Me)
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 Dispose()
             Else
@@ -115,7 +120,28 @@ Public Class SibiManageRequestForm
             DoneWaiting()
         End Try
     End Sub
-
+    Private Function GetHash(RequestTable As DataTable, ItemsTable As DataTable) As String
+        Dim RequestHash As String = GetHashOfTable(RequestTable)
+        Dim ItemHash As String = GetHashOfTable(ItemsTable)
+        Return RequestHash & ItemHash
+    End Function
+    Private Function ConcurrencyCheck() As Boolean
+        Try
+            Using comms As New MySQL_Comms
+                Dim RequestTable = comms.Return_SQLTable("SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & CurrentRequest.strUID & "'")
+                RequestTable.TableName = sibi_requests.TableName
+                Dim ItemTable = comms.Return_SQLTable("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & CurrentRequest.strUID & "' ORDER BY " & sibi_request_items.TimeStamp)
+                ItemTable.TableName = sibi_request_items.TableName
+                Dim DBHash As String = GetHash(RequestTable, ItemTable)
+                If DBHash <> CurrentHash Then
+                    Return False
+                End If
+            End Using
+            Return True
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
     Public Sub SetAttachCount()
         If Not OfflineMode Then
             cmdAttachments.Text = "(" + AssetFunc.GetAttachmentCount(CurrentRequest.strUID, New sibi_attachments).ToString + ")"
@@ -1112,6 +1138,10 @@ VALUES
 
     Private Sub UpdateMode(Enable As Boolean)
         If Not Enable Then
+            If Not ConcurrencyCheck() Then
+                RefreshRequest()
+                Message("This request has been modified since it's been open and has been refreshed with the current data.", vbOKOnly + vbInformation, "Concurrency Check", Me)
+            End If
             EnableControls(Me)
             ToolStrip.BackColor = colEditColor
             ShowEditControls()
@@ -1127,6 +1157,10 @@ VALUES
 
     Private Sub UpdateRequest()
         Try
+            If Not ConcurrencyCheck() Then
+                Message("It appears that someone else has modified this request. Please refresh and try again.", vbOKOnly + vbExclamation, "Concurrency Failure", Me)
+                Exit Sub
+            End If
             Dim RequestData As Request_Info = CollectData()
             RequestData.strUID = CurrentRequest.strUID
             If RequestData.RequestItems Is Nothing Then Exit Sub
