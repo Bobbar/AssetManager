@@ -167,6 +167,17 @@ Public Class Attachment : Implements IDisposable
         End Get
     End Property
 
+    Public ReadOnly Property FullFilename As String
+        Get
+            If _fileInfo IsNot Nothing Then
+                Return _fileInfo.Name
+            Else
+                Return _fileName & Extention
+            End If
+        End Get
+    End Property
+
+
     Public ReadOnly Property Extention As String
         Get
             If _fileInfo IsNot Nothing Then

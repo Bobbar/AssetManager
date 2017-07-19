@@ -117,7 +117,10 @@ Module OtherFunctions
         For Each frm As Form In My.Application.OpenForms
             If TypeOf frm Is AttachmentsForm Then
                 Dim Attachments As AttachmentsForm = DirectCast(frm, AttachmentsForm)
-                If Attachments.UploadWorker.IsBusy Or Attachments.DownloadWorker.IsBusy Then
+                If Attachments.ActiveTasks Then
+                    ActiveTransfers.Add(Attachments)
+                End If
+                If Attachments.UploadWorker.IsBusy Then
                     ActiveTransfers.Add(Attachments)
                 End If
             End If
@@ -127,7 +130,7 @@ Module OtherFunctions
             If blah = vbYes Then
                 For Each AttachForm As AttachmentsForm In ActiveTransfers
                     If AttachForm.UploadWorker.IsBusy Then AttachForm.UploadWorker.CancelAsync()
-                    If AttachForm.DownloadWorker.IsBusy Then AttachForm.DownloadWorker.CancelAsync()
+                    ' If AttachForm.DownloadWorker.IsBusy Then AttachForm.DownloadWorker.CancelAsync()
                 Next
                 Return False
             Else

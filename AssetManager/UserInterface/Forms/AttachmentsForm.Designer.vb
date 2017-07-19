@@ -26,6 +26,7 @@ Partial Class AttachmentsForm
         Me.cmdUpload = New System.Windows.Forms.Button()
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.OpenTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SaveToMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyTextTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.MoveStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmbMoveFolder = New System.Windows.Forms.ToolStripComboBox()
@@ -57,7 +58,6 @@ Partial Class AttachmentsForm
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.cmdCancel = New System.Windows.Forms.ToolStripDropDownButton()
         Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
-        Me.DownloadWorker = New System.ComponentModel.BackgroundWorker()
         Me.ProgTimer = New System.Windows.Forms.Timer(Me.components)
         Me.DeviceGroup = New System.Windows.Forms.GroupBox()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -90,15 +90,21 @@ Partial Class AttachmentsForm
         '
         'RightClickMenu
         '
-        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.CopyTextTool, Me.MoveStripMenuItem, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
+        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.SaveToMenuItem, Me.CopyTextTool, Me.MoveStripMenuItem, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(174, 120)
+        Me.RightClickMenu.Size = New System.Drawing.Size(174, 142)
         '
         'OpenTool
         '
         Me.OpenTool.Name = "OpenTool"
         Me.OpenTool.Size = New System.Drawing.Size(173, 22)
         Me.OpenTool.Text = "Open"
+        '
+        'SaveToMenuItem
+        '
+        Me.SaveToMenuItem.Name = "SaveToMenuItem"
+        Me.SaveToMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.SaveToMenuItem.Text = "Save To"
         '
         'CopyTextTool
         '
@@ -132,6 +138,7 @@ Partial Class AttachmentsForm
         '
         'DeleteAttachmentToolStripMenuItem
         '
+        Me.DeleteAttachmentToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.DeleteRedIcon
         Me.DeleteAttachmentToolStripMenuItem.Name = "DeleteAttachmentToolStripMenuItem"
         Me.DeleteAttachmentToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
         Me.DeleteAttachmentToolStripMenuItem.Text = "Delete Attachment"
@@ -403,7 +410,7 @@ Partial Class AttachmentsForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(696, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(434, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'cmdCancel
@@ -420,11 +427,6 @@ Partial Class AttachmentsForm
         '
         Me.UploadWorker.WorkerReportsProgress = True
         Me.UploadWorker.WorkerSupportsCancellation = True
-        '
-        'DownloadWorker
-        '
-        Me.DownloadWorker.WorkerReportsProgress = True
-        Me.DownloadWorker.WorkerSupportsCancellation = True
         '
         'ProgTimer
         '
@@ -564,7 +566,6 @@ Partial Class AttachmentsForm
     Friend WithEvents StatusLabel As ToolStripStatusLabel
     Friend WithEvents Spinner As ToolStripStatusLabel
     Friend WithEvents UploadWorker As System.ComponentModel.BackgroundWorker
-    Friend WithEvents DownloadWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents OpenTool As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ProgressBar1 As ToolStripProgressBar
@@ -591,4 +592,5 @@ Partial Class AttachmentsForm
     Friend WithEvents txtAssetTag As TextBox
     Friend WithEvents FolderPanel As Panel
     Friend WithEvents Panel2 As Panel
+    Friend WithEvents SaveToMenuItem As ToolStripMenuItem
 End Class

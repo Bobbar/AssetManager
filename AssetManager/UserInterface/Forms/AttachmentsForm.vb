@@ -5,6 +5,7 @@ Imports System.ComponentModel
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports MySql.Data.MySqlClient
+Imports System.Threading
 
 Class AttachmentsForm
 
@@ -19,6 +20,8 @@ Class AttachmentsForm
     Private bolAllowDrag As Boolean = False
     Private bolDragging As Boolean = False
     Private bolGridFilling As Boolean
+    Private taskCancelTokenSource As CancellationTokenSource
+    Private DownloadTask As Task(Of MemoryStream)
     ''' <summary>
     ''' "ftp://  strServerIP  /attachments/  CurrentDB  /"
     ''' </summary>
@@ -99,6 +102,18 @@ Class AttachmentsForm
         cmbFolder.SelectedIndex = 0
     End Sub
 
+    Public Function ActiveTasks() As Boolean
+        If DownloadTask IsNot Nothing Then
+            If DownloadTask.Status = TaskStatus.Running Then
+                Return True
+            Else
+                Return False
+            End If
+        Else
+            Return False
+        End If
+    End Function
+
     Private Sub ListAttachments()
         Waiting()
         Try
@@ -145,7 +160,7 @@ Class AttachmentsForm
     End Sub
 
     Private Sub AttachGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellDoubleClick
-        OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
+        DownloadAndOpenAttachment(SelectedAttachment)
     End Sub
 
     Private Sub AttachGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellEnter
@@ -192,21 +207,21 @@ Class AttachmentsForm
     Private Sub AttachGrid_MouseMove(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseMove
         If bolAllowDrag And Not bolDragging Then
             If e.Button = MouseButtons.Left Then
-                If MouseIsDragging(, e.Location) And Not DownloadWorker.IsBusy AndAlso AttachGrid.CurrentRow IsNot Nothing Then
+                If MouseIsDragging(, e.Location) AndAlso AttachGrid.CurrentRow IsNot Nothing Then
                     bolDragging = True
-                    DownloadWorker.RunWorkerAsync(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
+                    DownloadAndSaveAttachment(SelectedAttachment)
                 End If
             End If
         End If
     End Sub
 
     Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If UploadWorker.IsBusy Or DownloadWorker.IsBusy Then
+        If UploadWorker.IsBusy Or ActiveTasks() Then
             e.Cancel = True
             Dim blah = Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy", Me)
             If blah = vbYes Then
                 If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
-                If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
+                taskCancelTokenSource.Cancel()
             End If
         End If
         PurgeTempDir()
@@ -243,9 +258,7 @@ Class AttachmentsForm
     End Sub
 
     Private Sub cmdOpen_Click(sender As Object, e As EventArgs) Handles cmdOpen.Click
-        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString <> "" Then
-            OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
-        End If
+        DownloadAndOpenAttachment(SelectedAttachment)
     End Sub
 
     Private Sub cmdUpload_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
@@ -267,28 +280,15 @@ Class AttachmentsForm
 
     Private Function CopyAttachement(AttachObject As IDataObject, DataFormat As String) As String()
         Try
-            Dim streamFileData As New MemoryStream
-            Dim FileName As String
-            FileName = GetAttachFileName(AttachObject, DataFormat)
-            streamFileData = DirectCast(AttachObject.GetData("FileContents"), MemoryStream)
-            streamFileData.Position = 0
-            Dim di As DirectoryInfo = Directory.CreateDirectory(DownloadPath)
-            Dim output As IO.Stream
+            Dim FileName As String = GetAttachFileName(AttachObject, DataFormat)
             Dim strFullPath(0) As String
-            strFullPath(0) = DownloadPath & FileName ' & strTimeStamp
-            output = IO.File.Create(strFullPath(0))
-            Dim buffer(1023) As Byte
-            Dim bytesIn As Integer = 1
-            Dim totalBytesIn As Integer
-            Do Until bytesIn < 1
-                bytesIn = streamFileData.Read(buffer, 0, 1024)
-                If bytesIn > 0 Then
-                    output.Write(buffer, 0, bytesIn)
-                    totalBytesIn += bytesIn 'downloaded bytes
-                End If
-            Loop
-            output.Dispose()
-            Return strFullPath
+            strFullPath(0) = DownloadPath & FileName
+            Dim di As DirectoryInfo = Directory.CreateDirectory(DownloadPath)
+            Using streamFileData = DirectCast(AttachObject.GetData("FileContents"), MemoryStream),
+                     outputStream = IO.File.Create(strFullPath(0))
+                streamFileData.CopyTo(outputStream)
+                Return strFullPath
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -308,75 +308,51 @@ Class AttachmentsForm
         SetWaitCursor(False)
         StatusBar("Idle...")
     End Sub
-
-    Private Sub DownloadWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles DownloadWorker.DoWork
-        DownloadWorker.ReportProgress(1, "Connecting...")
+    Private Async Function DownloadAttachment(AttachUID As String) As Task(Of Attachment)
+        If DownloadTask IsNot Nothing AndAlso DownloadTask.Status = TaskStatus.Running Then Return Nothing
+        taskCancelTokenSource = New CancellationTokenSource
+        Dim cancelToken As CancellationToken = taskCancelTokenSource.Token
+        StatusBar("Connecting...")
         Dim LocalFTPComm As New FTP_Comms
-        Dim AttachUID As String = DirectCast(e.Argument, String)
-        Dim di As DirectoryInfo = Directory.CreateDirectory(DownloadPath)
         Dim dAttachment = GetSQLAttachment(AttachUID)
         Dim FtpRequestString As String = FTPUri & dAttachment.FolderGUID & "/" & AttachUID
         'get file size
         Progress = New ProgressCounter
         Progress.BytesToTransfer = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
         'setup download
-        Using respStream = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile).GetResponseStream
-            Dim memStream As New IO.MemoryStream
-            Dim buffer(1023) As Byte
-            Dim bytesIn As Integer
-            'ftp download
-            DownloadWorker.ReportProgress(1, "Downloading...")
-            bytesIn = 1
-            Do Until bytesIn < 1 Or DownloadWorker.CancellationPending
-                bytesIn = respStream.Read(buffer, 0, 1024)
-                If bytesIn > 0 Then
-                    memStream.Write(buffer, 0, bytesIn) 'download data to memory before saving to disk
-                    Progress.BytesMoved = bytesIn
-                End If
-            Loop
-            e.Cancel = DownloadWorker.CancellationPending
-            If Not e.Cancel Then
-                dAttachment.DataStream = memStream
-                e.Result = dAttachment 'memStream
+        StatusBar("Downloading...")
+        WorkerFeedback(True)
+        DownloadTask = Task.Run(Function()
+                                    Using respStream = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile).GetResponseStream
+                                        Dim memStream As New IO.MemoryStream
+                                        Dim buffer(1023) As Byte
+                                        Dim bytesIn As Integer
+                                        'ftp download
+                                        bytesIn = 1
+                                        Do Until bytesIn < 1 Or cancelToken.IsCancellationRequested
+                                            bytesIn = respStream.Read(buffer, 0, 1024)
+                                            If bytesIn > 0 Then
+                                                memStream.Write(buffer, 0, bytesIn) 'download data to memory before saving to disk
+                                                Progress.BytesMoved = bytesIn
+                                            End If
+                                        Loop
+                                        Return memStream
+                                    End Using
+                                End Function)
+        dAttachment.DataStream = Await DownloadTask
+        WorkerFeedback(False)
+        If Not cancelToken.IsCancellationRequested Then
+            If VerifyAttachment(dAttachment) Then
+                Return dAttachment
             Else
-                PurgeTempDir()
+                dAttachment.Dispose()
+                Return Nothing
             End If
-        End Using
-    End Sub
-
-    Private Sub DownloadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles DownloadWorker.ProgressChanged
-        Select Case e.ProgressPercentage
-            Case 1
-                StatusBar(DirectCast(e.UserState, String))
-            Case 2
-                statMBPS.Text = Nothing
-                ProgressBar1.Visible = False
-                ProgressBar1.Value = 0
-                ProgTimer.Enabled = False
-                Spinner.Visible = False
-                StatusBar(DirectCast(e.UserState, String))
-                Me.Refresh()
-        End Select
-    End Sub
-
-    Private Sub DownloadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles DownloadWorker.RunWorkerCompleted
-        Try
-            WorkerFeedback(False)
-            If e.Error Is Nothing Then
-                If Not e.Cancelled Then
-                    StatusBar("Verifying file...")
-                    VerifyAndOpenAttachment(DirectCast(e.Result, Attachment))
-                    StatusBar("Idle...")
-                Else
-                    'Message("The download was cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                End If
-            Else
-                If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod()) Then EndProgram()
-            End If
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
-    End Sub
+        Else
+            dAttachment.Dispose()
+            Return Nothing
+        End If
+    End Function
 
     Private Sub FillDeviceInfo()
         txtAssetTag.Text = AttachDevice.strAssetTag
@@ -518,10 +494,6 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         End Try
     End Function
 
-    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs)
-        OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
-    End Sub
-
     Private Sub MakeDirectory(FolderGUID As String)
         Dim LocalFTPComm As New FTP_Comms
         Using resp = LocalFTPComm.Return_FTPResponse(FTPUri, Net.WebRequestMethods.Ftp.ListDirectoryDetails), 'check if device folder exists. create directory if not.
@@ -565,21 +537,32 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         Return True
     End Function
 
-    Private Sub OpenAttachment(AttachUID As String)
-        If Not DownloadWorker.IsBusy Then
-            StatusBar("Starting Download...")
-            WorkerFeedback(True)
-            DownloadWorker.RunWorkerAsync(AttachUID)
-        End If
+    Private Async Sub DownloadAndOpenAttachment(AttachUID As String)
+        Try
+            If AttachUID = "" Then Exit Sub
+            Dim saveAttachment = Await DownloadAttachment(AttachUID)
+            If saveAttachment Is Nothing Then Exit Sub
+            Dim strFullPath As String = TempPathFilename(saveAttachment)
+            SaveAttachmentToDisk(saveAttachment, strFullPath)
+            Process.Start(strFullPath)
+            StatusBar("Idle...")
+            saveAttachment.Dispose()
+        Catch ex As Exception
+            StatusBar("Idle...")
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
+
+    Private Function TempPathFilename(attachment As Attachment) As String
+        Dim strTimeStamp As String = Now.ToString("_hhmmss")
+        Return DownloadPath & attachment.Filename & strTimeStamp & attachment.Extention
+    End Function
 
     Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
-        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString <> "" Then
-            OpenAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
-        End If
+        DownloadAndOpenAttachment(SelectedAttachment)
     End Sub
 
-    Private Sub ProcessDrop(AttachObject As IDataObject) ' As String()
+    Private Sub ProcessDrop(AttachObject As IDataObject)
         Dim File As Object
         Select Case True
             Case AttachObject.GetDataPresent("RenPrivateItem")
@@ -658,9 +641,9 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         End If
     End Sub
 
-    Private Sub ToolStripDropDownButton1_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
+    Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
         If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
-        If DownloadWorker.IsBusy Then DownloadWorker.CancelAsync()
+        taskCancelTokenSource.Cancel()
     End Sub
 
     Private Sub UploadFile(Files() As String)
@@ -785,37 +768,73 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         End Try
     End Sub
 
-    Private Sub VerifyAndOpenAttachment(ByRef Attachment As Attachment)
-        Dim strTimeStamp As String = Now.ToString("_hhmmss")
-        Dim strFullPath As String = DownloadPath & Attachment.Filename & strTimeStamp & Attachment.Extention
-        Using memStream = DirectCast(Attachment.DataStream, MemoryStream)
-            Dim FileResultHash As String = GetHashOfIOStream(memStream)
-            If FileResultHash = Attachment.MD5 Then
-                Using outputStream = IO.File.Create(strFullPath)
-                    memStream.CopyTo(outputStream) 'once data is verified we go ahead and copy it to disk
-                    outputStream.Close()
-                End Using
-                If bolDragging Then
-                    StatusBar("Drag/Drop...")
-                    Dim fileList As New Collections.Specialized.StringCollection
-                    fileList.Add(strFullPath)
-                    Dim dataObj As New DataObject()
-                    dataObj.SetFileDropList(fileList)
-                    AttachGrid.DoDragDrop(dataObj, DragDropEffects.All)
-                    bolDragging = False
-                Else
-                    Process.Start(strFullPath)
-                End If
-                Attachment.Dispose()
+    Private Async Sub DownloadAndSaveAttachment(AttachUID As String)
+        Try
+            If AttachUID = "" Then Exit Sub
+            Dim saveAttachment = Await DownloadAttachment(AttachUID)
+            If saveAttachment Is Nothing Then Exit Sub
+            StatusBar("Idle...")
+            If bolDragging Then
+                Dim strFullPath As String = TempPathFilename(saveAttachment)
+                SaveAttachmentToDisk(saveAttachment, strFullPath)
+                StatusBar("Drag/Drop...")
+                Dim fileList As New Collections.Specialized.StringCollection
+                fileList.Add(strFullPath)
+                Dim dataObj As New DataObject()
+                dataObj.SetFileDropList(fileList)
+                AttachGrid.DoDragDrop(dataObj, DragDropEffects.All)
+                bolDragging = False
             Else
-                'something is very wrong
-                Logger("FILE VERIFICATION FAILURE: Device:" & Attachment.FolderGUID & "  Filepath: " & strFullPath & "  FileUID: " & Attachment.FileUID & " | Expected hash:" & Attachment.MD5 & " Result hash:" & FileResultHash)
-                Dim blah = Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch", Me)
-                Attachment.Dispose()
-                PurgeTempDir()
+                Using saveDialog As New SaveFileDialog()
+                    saveDialog.Filter = "All files (*.*)|*.*"
+                    saveDialog.FileName = saveAttachment.FullFilename
+                    If saveDialog.ShowDialog() = DialogResult.OK Then
+                        SaveAttachmentToDisk(saveAttachment, saveDialog.FileName)
+                    End If
+                End Using
             End If
-        End Using
+
+
+            StatusBar("Idle...")
+            saveAttachment.Dispose()
+        Catch ex As Exception
+            StatusBar("Idle...")
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
+
+    Private Function SaveAttachmentToDisk(attachment As Attachment, savePath As String) As Boolean
+        Try
+            StatusBar("Saving to disk...")
+            Dim di As DirectoryInfo = Directory.CreateDirectory(DownloadPath)
+            Using outputStream = IO.File.Create(savePath),
+            memStream = DirectCast(attachment.DataStream, MemoryStream)
+                memStream.CopyTo(outputStream) 'once data is verified we go ahead and copy it to disk
+                outputStream.Close()
+            End Using
+            StatusBar("Idle...")
+            Return True
+        Catch ex As Exception
+            StatusBar("Idle...")
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return False
+        End Try
+    End Function
+
+    Private Function VerifyAttachment(attachment As Attachment) As Boolean
+        StatusBar("Verifying data...")
+        Dim FileResultHash = GetHashOfIOStream(DirectCast(attachment.DataStream, MemoryStream))
+        If FileResultHash = attachment.MD5 Then
+            Return True
+        Else
+            'something is very wrong
+            Logger("FILE VERIFICATION FAILURE: Device:" & attachment.FolderGUID & "  FileUID: " & attachment.FileUID & " | Expected hash:" & attachment.MD5 & " Result hash:" & FileResultHash)
+            Dim blah = Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch", Me)
+            attachment.Dispose()
+            PurgeTempDir()
+            Return False
+        End If
+    End Function
 
     Private Sub Waiting()
         SetWaitCursor(True)
@@ -844,6 +863,18 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         End If
     End Sub
 
+    Private Sub SaveToMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToMenuItem.Click
+        DownloadAndSaveAttachment(SelectedAttachment)
+    End Sub
+
+    Private Function SelectedAttachment() As String
+        Dim AttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
+        If AttachUID <> "" Then
+            Return AttachUID
+        Else
+            Throw New Exception("No Attachment Selected.")
+        End If
+    End Function
 #End Region
 
 
