@@ -161,14 +161,9 @@ VALUES(@" & trackable.CheckType & ",
             Me.Dispose()
             MyParent.ViewDevice(CurrentTrackingDevice.strGUID)
             DoneWaiting()
-            Exit Sub
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                DoneWaiting()
-                Exit Try
-            Else
-                EndProgram()
-            End If
+            DoneWaiting()
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
 
@@ -219,14 +214,9 @@ VALUES (@" & trackable.CheckType & ",
             Me.Dispose()
             MyParent.ViewDevice(CurrentTrackingDevice.strGUID)
             DoneWaiting()
-            Exit Sub
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                DoneWaiting()
-                Exit Try
-            Else
-                EndProgram()
-            End If
+            DoneWaiting()
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
 

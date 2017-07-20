@@ -55,13 +55,9 @@ VALUES
                 Return tmpArray
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                Return Nothing
-            Else
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
         End Try
-        Return Nothing
     End Function
 
     Public Function BuildModuleIndex() As List(Of Access_Info)
@@ -128,13 +124,9 @@ VALUES
                 End If
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                Return False
-            Else
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return False
         End Try
-        Return False
     End Function
 
     Public Function DeleteMaster(ByVal strGUID As String, Type As Entry_Type) As Boolean
@@ -176,13 +168,9 @@ VALUES
                 End If
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                Exit Try
-            Else
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return -1
         End Try
-        Return -1
     End Function
 
     Public Function DeviceExists(AssetTag As String, Serial As String) As Boolean
@@ -296,10 +284,7 @@ VALUES
                 Return tmpInfo
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-            Else
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
@@ -331,11 +316,8 @@ VALUES
                 Return CInt(cmd.ExecuteScalar)
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-            Else
-                EndProgram()
-            End If
-            Return Nothing
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return 0
         End Try
     End Function
 
@@ -348,7 +330,7 @@ VALUES
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
+            Return 0
         End Try
     End Function
     Public Function User_GetUserList() As List(Of User_Info)

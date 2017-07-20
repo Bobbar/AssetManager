@@ -89,11 +89,8 @@ Public Class NewDeviceForm
                 Return False
             End If
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                Return False
-            Else
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return False
         End Try
     End Function
 

@@ -195,7 +195,8 @@ Public Class GKUpdaterForm
     ''' Starts the next update that has a queued status.
     ''' </summary>
     Private Sub StartNextUpdate()
-        MyUpdates.Find(Function(upd) upd.ProgStatus = GKProgressControl.Progress_Status.Queued).StartUpdate()
+        Dim NextUpd = MyUpdates.Find(Function(upd) upd.ProgStatus = GKProgressControl.Progress_Status.Queued)
+        If NextUpd IsNot Nothing Then NextUpd.StartUpdate()
     End Sub
 
     Private Sub StartQueue()

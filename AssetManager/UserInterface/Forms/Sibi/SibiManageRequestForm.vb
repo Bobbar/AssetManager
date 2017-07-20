@@ -109,13 +109,9 @@ Public Class SibiManageRequestForm
             SetMunisStatus()
             bolGridFilling = False
         Catch ex As Exception
-            DoneWaiting()
             Message("An error occured while opening the request. It may have been deleted.", vbOKOnly + vbExclamation, "Error", Me)
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                Dispose()
-            Else
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Dispose()
         Finally
             DoneWaiting()
         End Try
@@ -208,11 +204,7 @@ VALUES
             bolNewRequest = False
             OpenRequest(CurrentRequest.strUID)
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                Exit Sub
-            Else
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
 
@@ -465,7 +457,7 @@ VALUES
             Return info
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            EndProgram()
+            Return Nothing
         End Try
     End Function
 
@@ -497,14 +489,11 @@ VALUES
                 RequestItemsGrid.Rows.Remove(RequestItemsGrid.Rows(RowIndex))
                 Return True
             End If
+            Return False
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-            Else
-                Return False
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return False
         End Try
-        Return False
     End Function
 
     Private Function DeleteItem_FromSQL(ItemUID As String, ItemColumnName As String, Table As String) As Integer
@@ -517,12 +506,9 @@ VALUES
             End Using
             UpdateRequest()
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-            Else
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return -1
         End Try
-        Return -1
     End Function
 
     Private Sub dgvNotes_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvNotes.CellDoubleClick
@@ -1178,10 +1164,7 @@ VALUES
             End If
             OpenRequest(CurrentRequest.strUID)
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-            Else
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
 

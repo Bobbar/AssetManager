@@ -57,7 +57,6 @@ Partial Class AttachmentsForm
         Me.statMBPS = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.cmdCancel = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.UploadWorker = New System.ComponentModel.BackgroundWorker()
         Me.ProgTimer = New System.Windows.Forms.Timer(Me.components)
         Me.DeviceGroup = New System.Windows.Forms.GroupBox()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -423,11 +422,6 @@ Partial Class AttachmentsForm
         Me.cmdCancel.Text = "Cancel"
         Me.cmdCancel.Visible = False
         '
-        'UploadWorker
-        '
-        Me.UploadWorker.WorkerReportsProgress = True
-        Me.UploadWorker.WorkerSupportsCancellation = True
-        '
         'ProgTimer
         '
         '
@@ -565,7 +559,6 @@ Partial Class AttachmentsForm
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
     Friend WithEvents Spinner As ToolStripStatusLabel
-    Friend WithEvents UploadWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents OpenTool As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ProgressBar1 As ToolStripProgressBar

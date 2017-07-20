@@ -255,13 +255,13 @@ Public Class Attachment : Implements IDisposable
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
-                _dataStream.Dispose()
+                If _dataStream IsNot Nothing Then _dataStream.Dispose()
                 _fileInfo = Nothing
-            End If
+                End If
 
-            ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
-            ' TODO: set large fields to null.
-        End If
+                ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
+                ' TODO: set large fields to null.
+            End If
         disposedValue = True
     End Sub
 

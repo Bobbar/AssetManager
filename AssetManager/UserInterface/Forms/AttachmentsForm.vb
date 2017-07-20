@@ -21,7 +21,7 @@ Class AttachmentsForm
     Private bolDragging As Boolean = False
     Private bolGridFilling As Boolean
     Private taskCancelTokenSource As CancellationTokenSource
-    Private DownloadTask As Task(Of MemoryStream)
+    Private TransferTaskRunning As Boolean = False
     ''' <summary>
     ''' "ftp://  strServerIP  /attachments/  CurrentDB  /"
     ''' </summary>
@@ -40,6 +40,7 @@ Class AttachmentsForm
         Tag = ParentForm
         Icon = ParentForm.Icon
         GridTheme = ParentForm.GridTheme
+        AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         ExtendedMethods.DoubleBufferedDataGrid(AttachGrid, True)
         StatusBar("Idle...")
         _attachTable = AttachTable
@@ -79,6 +80,7 @@ Class AttachmentsForm
             cmdDelete.Enabled = False
         End If
         ListAttachments()
+        Me.Show()
     End Sub
 
 #End Region
@@ -89,6 +91,7 @@ Class AttachmentsForm
         Success
         Failure
         FileTooLarge
+        Busy
     End Enum
 
 #End Region
@@ -102,17 +105,12 @@ Class AttachmentsForm
         cmbFolder.SelectedIndex = 0
     End Sub
 
-    Public Function ActiveTasks() As Boolean
-        If DownloadTask IsNot Nothing Then
-            If DownloadTask.Status = TaskStatus.Running Then
-                Return True
-            Else
-                Return False
-            End If
-        Else
-            Return False
-        End If
+    Public Function ActiveTransfer() As Boolean
+        Return TransferTaskRunning
     End Function
+    Public Sub CancelTransfers()
+        taskCancelTokenSource.Cancel()
+    End Sub
 
     Private Sub ListAttachments()
         Waiting()
@@ -144,13 +142,12 @@ Class AttachmentsForm
             table.Dispose()
             RefreshAttachCount()
             DoneWaiting()
-            Me.Show()
+
             AttachGrid.ClearSelection()
-            bolGridFilling = False
+            If Me.Visible Then bolGridFilling = False
         Catch ex As Exception
             DoneWaiting()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Exit Sub
         End Try
     End Sub
 
@@ -216,12 +213,11 @@ Class AttachmentsForm
     End Sub
 
     Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If UploadWorker.IsBusy Or ActiveTasks() Then
+        If ActiveTransfer() Then
             e.Cancel = True
             Dim blah = Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy", Me)
             If blah = vbYes Then
-                If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
-                taskCancelTokenSource.Cancel()
+                CancelTransfers()
             End If
         End If
         PurgeTempDir()
@@ -309,49 +305,56 @@ Class AttachmentsForm
         StatusBar("Idle...")
     End Sub
     Private Async Function DownloadAttachment(AttachUID As String) As Task(Of Attachment)
-        If DownloadTask IsNot Nothing AndAlso DownloadTask.Status = TaskStatus.Running Then Return Nothing
-        taskCancelTokenSource = New CancellationTokenSource
-        Dim cancelToken As CancellationToken = taskCancelTokenSource.Token
-        StatusBar("Connecting...")
-        Dim LocalFTPComm As New FTP_Comms
-        Dim dAttachment = GetSQLAttachment(AttachUID)
-        Dim FtpRequestString As String = FTPUri & dAttachment.FolderGUID & "/" & AttachUID
-        'get file size
-        Progress = New ProgressCounter
-        Progress.BytesToTransfer = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
-        'setup download
-        StatusBar("Downloading...")
-        WorkerFeedback(True)
-        DownloadTask = Task.Run(Function()
-                                    Using respStream = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile).GetResponseStream
-                                        Dim memStream As New IO.MemoryStream
-                                        Dim buffer(1023) As Byte
-                                        Dim bytesIn As Integer
-                                        'ftp download
-                                        bytesIn = 1
-                                        Do Until bytesIn < 1 Or cancelToken.IsCancellationRequested
-                                            bytesIn = respStream.Read(buffer, 0, 1024)
-                                            If bytesIn > 0 Then
-                                                memStream.Write(buffer, 0, bytesIn) 'download data to memory before saving to disk
-                                                Progress.BytesMoved = bytesIn
-                                            End If
-                                        Loop
-                                        Return memStream
-                                    End Using
-                                End Function)
-        dAttachment.DataStream = Await DownloadTask
-        WorkerFeedback(False)
-        If Not cancelToken.IsCancellationRequested Then
-            If VerifyAttachment(dAttachment) Then
-                Return dAttachment
-            Else
-                dAttachment.Dispose()
-                Return Nothing
+        If TransferTaskRunning Then Return Nothing
+        TransferTaskRunning = True
+        Dim dAttachment As Attachment
+        Try
+            taskCancelTokenSource = New CancellationTokenSource
+            Dim cancelToken As CancellationToken = taskCancelTokenSource.Token
+            StatusBar("Connecting...")
+            Dim LocalFTPComm As New FTP_Comms
+            dAttachment = GetSQLAttachment(AttachUID)
+            Dim FtpRequestString As String = FTPUri & dAttachment.FolderGUID & "/" & AttachUID
+            'get file size
+            Progress = New ProgressCounter
+            Progress.BytesToTransfer = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
+            'setup download
+            StatusBar("Downloading...")
+            WorkerFeedback(True)
+            dAttachment.DataStream = Await Task.Run(Function()
+                                                        Using respStream = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile).GetResponseStream
+                                                            Dim memStream As New IO.MemoryStream
+                                                            Dim buffer(1023) As Byte
+                                                            Dim bytesIn As Integer
+                                                            'ftp download
+                                                            bytesIn = 1
+                                                            Do Until bytesIn < 1 Or cancelToken.IsCancellationRequested
+                                                                bytesIn = respStream.Read(buffer, 0, 1024)
+                                                                If bytesIn > 0 Then
+                                                                    memStream.Write(buffer, 0, bytesIn) 'download data to memory before saving to disk
+                                                                    Progress.BytesMoved = bytesIn
+                                                                End If
+                                                            Loop
+                                                            Return memStream
+                                                        End Using
+
+                                                    End Function)
+            If Not cancelToken.IsCancellationRequested Then
+                If VerifyAttachment(dAttachment) Then
+                    Return dAttachment
+                End If
             End If
-        Else
             dAttachment.Dispose()
             Return Nothing
-        End If
+        Catch ex As Exception
+            If dAttachment IsNot Nothing Then dAttachment.Dispose()
+            Throw ex
+        Finally
+            If Not ProgramEnding Then
+                TransferTaskRunning = False
+                WorkerFeedback(False)
+            End If
+        End Try
     End Function
 
     Private Sub FillDeviceInfo()
@@ -441,7 +444,7 @@ Class AttachmentsForm
         Return table
     End Function
 
-    Private Function InsertSQLAttachment(Attachment As Attachment) As Boolean
+    Private Sub InsertSQLAttachment(Attachment As Attachment) ' As Boolean
         Try
             Dim SQL As String
             If TypeOf Attachment Is Sibi_Attachment Then
@@ -486,13 +489,14 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                 End If
                 cmd.ExecuteNonQuery()
                 cmd.Parameters.Clear()
-                Return True
+                ' Return True
             End Using
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return False
+            Throw ex
+            ' ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            ' Return False
         End Try
-    End Function
+    End Sub
 
     Private Sub MakeDirectory(FolderGUID As String)
         Dim LocalFTPComm As New FTP_Comms
@@ -562,20 +566,18 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         DownloadAndOpenAttachment(SelectedAttachment)
     End Sub
 
-    Private Sub ProcessDrop(AttachObject As IDataObject)
+    Private Async Sub ProcessDrop(AttachObject As IDataObject)
         Dim File As Object
         Select Case True
             Case AttachObject.GetDataPresent("RenPrivateItem")
                 File = CopyAttachement(AttachObject, "RenPrivateItem")
                 If Not IsNothing(File) Then
-                    WorkerFeedback(True)
-                    UploadWorker.RunWorkerAsync(File)
+                    Dim UploadStatus = Await UploadAttachments(DirectCast(File, String()))
                 End If
             Case AttachObject.GetDataPresent("FileDrop")
                 File = AttachObject.GetData("FileNameW")
                 If Not IsNothing(File) Then
-                    WorkerFeedback(True)
-                    UploadWorker.RunWorkerAsync(File)
+                    Dim UploadStatus = Await UploadAttachments(DirectCast(File, String()))
                 End If
         End Select
     End Sub
@@ -642,131 +644,80 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     End Sub
 
     Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
-        If UploadWorker.IsBusy Then UploadWorker.CancelAsync()
-        taskCancelTokenSource.Cancel()
+        CancelTransfers()
     End Sub
 
-    Private Sub UploadFile(Files() As String)
-        If Not UploadWorker.IsBusy Then
-            StatusBar("Starting Upload...")
-            WorkerFeedback(True)
-            UploadWorker.RunWorkerAsync(Files)
-        End If
-    End Sub
-
-    Private Sub UploadWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UploadWorker.DoWork
-        Dim LocalFTPComm As New FTP_Comms
-        Dim Files() As String = DirectCast(e.Argument, String())
-        Dim FileNumber As Integer = 1
-        For Each file As String In Files
-            Dim CurrentAttachment As Attachment
-            If TypeOf _attachTable Is sibi_attachments Then
-                CurrentAttachment = New Sibi_Attachment(file, AttachFolderUID, strSelectedFolder, _attachTable)
-            Else
-                CurrentAttachment = New Attachment(file, AttachFolderUID, _attachTable)
-            End If
-            If Not OKFileSize(CurrentAttachment) Then
-                e.Result = TransferReturnType.FileTooLarge
-                UploadWorker.ReportProgress(2, "Error!")
-                Exit Sub
-            End If
-            UploadWorker.ReportProgress(1, "Connecting...")
-            MakeDirectory(CurrentAttachment.FolderGUID)
-            Using FileStream As FileStream = DirectCast(CurrentAttachment.DataStream(), FileStream), 'CurrentAttachment.FileInfo.OpenRead(),
-                FTPStream As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream(FTPUri & CurrentAttachment.FolderGUID & "/" & CurrentAttachment.FileUID, Net.WebRequestMethods.Ftp.UploadFile)
-                Dim buffer(1023) As Byte
-                Dim bytesIn As Integer = 1
-                Progress = New ProgressCounter
-                Progress.BytesToTransfer = CInt(FileStream.Length)
-                UploadWorker.ReportProgress(1, "Uploading... " & FileNumber & " of " & Files.Count)
-                Do Until bytesIn < 1 Or UploadWorker.CancellationPending
-                    bytesIn = FileStream.Read(buffer, 0, 1024)
-                    If bytesIn > 0 Then
-                        FTPStream.Write(buffer, 0, bytesIn)
-                        Progress.BytesMoved = bytesIn
-                    End If
-                Loop
-            End Using
-            If UploadWorker.CancellationPending Then
-                e.Cancel = True
-                FTPFunc.DeleteFTPAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID)
-                Throw New BackgroundWorkerCanceledException("The upload was cancelled.")
-            End If
-            'update sql table
-            If Not UploadWorker.CancellationPending Then
-                If InsertSQLAttachment(CurrentAttachment) Then
-                    CurrentAttachment.Dispose()
-                    e.Result = TransferReturnType.Success
-                Else
-                    CurrentAttachment.Dispose()
-                    e.Result = TransferReturnType.Failure
-                End If
-            Else
-                CurrentAttachment.Dispose()
-                e.Result = TransferReturnType.Failure
-            End If
-            FileNumber += 1
-            UploadWorker.ReportProgress(3, "Idle...")
-        Next
-        UploadWorker.ReportProgress(3, "Idle...")
-    End Sub
-
-    Private Sub UploadWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles UploadWorker.ProgressChanged
-        Select Case e.ProgressPercentage
-            Case 1
-                StatusBar(DirectCast(e.UserState, String))
-            Case 2
-                statMBPS.Text = Nothing
-                ProgressBar1.Visible = False
-                ProgressBar1.Value = 0
-                ProgTimer.Enabled = False
-                Spinner.Visible = False
-                StatusBar(DirectCast(e.UserState, String))
-                Me.Refresh()
-            Case 3
-                StatusBar(DirectCast(e.UserState, String))
-                ListAttachments()
-        End Select
-    End Sub
-
-    Private Sub UploadWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles UploadWorker.RunWorkerCompleted
+    Private Async Sub UploadFile(Files() As String)
         Try
-            If Not Me.IsDisposed Then
-                WorkerFeedback(False)
-                If e.Error Is Nothing Then
-                    If Not e.Cancelled Then
-                        Dim UploadResult As TransferReturnType = DirectCast(e.Result, TransferReturnType)
-
-                        Select Case UploadResult
-
-                            Case TransferReturnType.Success
-                                ListAttachments()
-
-                            Case TransferReturnType.Failure
-                                Message("File upload failed.", MessageBoxButtons.OK + MessageBoxIcon.Exclamation, "Failed", Me)
-
-                            Case TransferReturnType.FileTooLarge
-                                Dim blah = Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded", Me)
-
-                        End Select
-                    Else
-                        '           MessageBox.Show("The upload was cancelled.",
-                        '"Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                    End If
-                Else
-                    DoneWaiting()
-                    If TypeOf e.Error Is BackgroundWorkerCanceledException Then
-                        Message("File upload was cancelled.", vbOKOnly + vbInformation, "Cancelled", Me)
-                    Else
-                        If Not ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod()) Then EndProgram()
-                        Message("File upload failed.", MessageBoxButtons.OK + MessageBoxIcon.Exclamation, "Failed", Me)
-                    End If
-                End If
-            End If
+            StatusBar("Starting Upload...")
+            Dim TransferStatus = Await UploadAttachments(Files)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
+    Private Async Function UploadAttachments(files As String()) As Task(Of TransferReturnType)
+        If TransferTaskRunning Then Return TransferReturnType.Busy
+        TransferTaskRunning = True
+        Dim CurrentAttachment As Attachment
+        Try
+            Dim LocalFTPComm As New FTP_Comms
+            Dim FileNumber As Integer = 1
+            taskCancelTokenSource = New CancellationTokenSource
+            Dim cancelToken As CancellationToken = taskCancelTokenSource.Token
+            WorkerFeedback(True)
+            For Each file As String In files
+                If TypeOf _attachTable Is sibi_attachments Then
+                    CurrentAttachment = New Sibi_Attachment(file, AttachFolderUID, strSelectedFolder, _attachTable)
+                Else
+                    CurrentAttachment = New Attachment(file, AttachFolderUID, _attachTable)
+                End If
+                If Not OKFileSize(CurrentAttachment) Then
+                    CurrentAttachment.Dispose()
+                    Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded", Me)
+                    Continue For
+                End If
+                StatusBar("Connecting...")
+                MakeDirectory(CurrentAttachment.FolderGUID)
+                StatusBar("Uploading... " & FileNumber & " of " & files.Count)
+                Progress = New ProgressCounter
+                Dim UploadComplete = Await Task.Run(Function()
+                                                        Using FileStream As FileStream = DirectCast(CurrentAttachment.DataStream(), FileStream),
+           FTPStream As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream(FTPUri & CurrentAttachment.FolderGUID & "/" & CurrentAttachment.FileUID, Net.WebRequestMethods.Ftp.UploadFile)
+                                                            Dim buffer(1023) As Byte
+                                                            Dim bytesIn As Integer = 1
+                                                            Progress.BytesToTransfer = CInt(FileStream.Length)
+                                                            Do Until bytesIn < 1 Or cancelToken.IsCancellationRequested
+                                                                bytesIn = FileStream.Read(buffer, 0, 1024)
+                                                                If bytesIn > 0 Then
+                                                                    FTPStream.Write(buffer, 0, bytesIn)
+                                                                    Progress.BytesMoved = bytesIn
+                                                                End If
+                                                            Loop
+                                                        End Using
+                                                        Return True
+                                                    End Function)
+                If cancelToken.IsCancellationRequested Then
+                    FTPFunc.DeleteFTPAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID)
+                Else
+                    InsertSQLAttachment(CurrentAttachment)
+                    FileNumber += 1
+                End If
+                CurrentAttachment.Dispose()
+            Next
+            Return TransferReturnType.Success
+        Catch ex As Exception
+            Throw ex
+        Finally
+            If Not ProgramEnding Then
+                TransferTaskRunning = False
+                If CurrentAttachment IsNot Nothing Then CurrentAttachment.Dispose()
+                StatusBar("Idle...")
+                WorkerFeedback(False)
+                ListAttachments()
+            End If
+        End Try
+    End Function
 
     Private Async Sub DownloadAndSaveAttachment(AttachUID As String)
         Try
@@ -842,24 +793,26 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     End Sub
 
     Private Sub WorkerFeedback(WorkerRunning As Boolean)
-        If WorkerRunning Then
-            ' SetWaitCursor(True)
-            ProgressBar1.Value = 0
-            ProgressBar1.Visible = True
-            cmdCancel.Visible = True
-            Spinner.Visible = True
-            ProgTimer.Enabled = True
-        Else
-            Progress = New ProgressCounter
-            SetWaitCursor(False)
-            ProgressBar1.Value = 0
-            ProgressBar1.Visible = False
-            cmdCancel.Visible = False
-            Spinner.Visible = False
-            ProgTimer.Enabled = False
-            statMBPS.Text = Nothing
-            StatusBar("Idle...")
-            DoneWaiting()
+        If Not ProgramEnding Then
+            If WorkerRunning Then
+                ' SetWaitCursor(True)
+                ProgressBar1.Value = 0
+                ProgressBar1.Visible = True
+                cmdCancel.Visible = True
+                Spinner.Visible = True
+                ProgTimer.Enabled = True
+            Else
+                Progress = New ProgressCounter
+                SetWaitCursor(False)
+                ProgressBar1.Value = 0
+                ProgressBar1.Visible = False
+                cmdCancel.Visible = False
+                Spinner.Visible = False
+                ProgTimer.Enabled = False
+                statMBPS.Text = Nothing
+                StatusBar("Idle...")
+                DoneWaiting()
+            End If
         End If
     End Sub
 
@@ -875,6 +828,11 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
             Throw New Exception("No Attachment Selected.")
         End If
     End Function
+
+    Private Sub AttachmentsForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        AttachGrid.ClearSelection()
+        bolGridFilling = False
+    End Sub
 #End Region
 
 

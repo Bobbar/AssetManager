@@ -58,12 +58,10 @@ Module OtherFunctions
     End Function
 
     Public Sub EndProgram()
-        If OKToEnd() Then
-            ProgramEnding = True
-            Logger("Ending Program...")
-            PurgeTempDir()
-            Application.Exit()
-        End If
+        ProgramEnding = True
+        Logger("Ending Program...")
+        PurgeTempDir()
+        Application.Exit()
     End Sub
 
     Public Sub PurgeTempDir()
@@ -108,7 +106,8 @@ Module OtherFunctions
             Return False
         End If
         If CheckForActiveTransfers() Then Return False
-        If Not GKUpdaterForm.OKToClose() Then Return False
+        Debug.Print(GKUpdaterForm.Visible.ToString)
+        If GKUpdaterForm.Visible AndAlso Not GKUpdaterForm.OKToClose() Then Return False
         Return True
     End Function
 
@@ -117,10 +116,7 @@ Module OtherFunctions
         For Each frm As Form In My.Application.OpenForms
             If TypeOf frm Is AttachmentsForm Then
                 Dim Attachments As AttachmentsForm = DirectCast(frm, AttachmentsForm)
-                If Attachments.ActiveTasks Then
-                    ActiveTransfers.Add(Attachments)
-                End If
-                If Attachments.UploadWorker.IsBusy Then
+                If Attachments.ActiveTransfer Then
                     ActiveTransfers.Add(Attachments)
                 End If
             End If
@@ -129,8 +125,7 @@ Module OtherFunctions
             Dim blah = Message("There are " & ActiveTransfers.Count.ToString & " active uploads/downloads. Do you wish to cancel the current operations?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
             If blah = vbYes Then
                 For Each AttachForm As AttachmentsForm In ActiveTransfers
-                    If AttachForm.UploadWorker.IsBusy Then AttachForm.UploadWorker.CancelAsync()
-                    ' If AttachForm.DownloadWorker.IsBusy Then AttachForm.DownloadWorker.CancelAsync()
+                    AttachForm.CancelTransfers()
                 Next
                 Return False
             Else

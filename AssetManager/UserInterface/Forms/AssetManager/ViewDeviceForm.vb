@@ -117,9 +117,6 @@ Public Class ViewDeviceForm
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
                 ViewDevice(CurrentViewDevice.strGUID)
-                Exit Sub
-            Else
-                EndProgram()
             End If
         End Try
     End Sub
@@ -486,7 +483,7 @@ Public Class ViewDeviceForm
         Dim Info As Device_Info = AssetFunc.Get_EntryInfo(strGUID)
         Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
-            Dim blah2 = Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results", Me)
+            Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results", Me)
             ViewDevice(CurrentViewDevice.strGUID)
         Else
             Exit Sub
@@ -502,10 +499,8 @@ Public Class ViewDeviceForm
                 Return rows
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-            Else
-                EndProgram()
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return 0
         End Try
     End Function
 
