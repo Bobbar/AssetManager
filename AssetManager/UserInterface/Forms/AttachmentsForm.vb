@@ -142,7 +142,6 @@ Class AttachmentsForm
             table.Dispose()
             RefreshAttachCount()
             DoneWaiting()
-
             AttachGrid.ClearSelection()
             If Me.Visible Then bolGridFilling = False
         Catch ex As Exception
@@ -444,7 +443,7 @@ Class AttachmentsForm
         Return table
     End Function
 
-    Private Sub InsertSQLAttachment(Attachment As Attachment) ' As Boolean
+    Private Sub InsertSQLAttachment(Attachment As Attachment)
         Try
             Dim SQL As String
             If TypeOf Attachment Is Sibi_Attachment Then
@@ -489,12 +488,9 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                 End If
                 cmd.ExecuteNonQuery()
                 cmd.Parameters.Clear()
-                ' Return True
             End Using
         Catch ex As Exception
             Throw ex
-            ' ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            ' Return False
         End Try
     End Sub
 
@@ -744,8 +740,6 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                     End If
                 End Using
             End If
-
-
             StatusBar("Idle...")
             saveAttachment.Dispose()
         Catch ex As Exception
