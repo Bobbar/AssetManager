@@ -46,4 +46,8 @@ Module DataConsistency
         Return dtDate.Year.ToString
     End Function
 
+    Public Function DeviceHostnameFormat(Serial As String) As String
+        Return "D" & Trim(Serial)
+    End Function
+
 End Module

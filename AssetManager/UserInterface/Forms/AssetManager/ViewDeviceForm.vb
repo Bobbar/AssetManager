@@ -131,7 +131,7 @@ Public Class ViewDeviceForm
                 Me.Show()
                 DataGridHistory.ClearSelection()
                 bolGridFilling = False
-                DeviceHostname = "D" & CurrentViewDevice.strSerial & "." & Domain
+                DeviceHostname = CurrentViewDevice.Hostname & "." & Domain
                 CheckRDP()
                 tmr_RDPRefresher.Enabled = True
             Else
@@ -248,7 +248,7 @@ Public Class ViewDeviceForm
 
     Private Sub CheckRDP()
         Try
-            If CurrentViewDevice.strOSVersion.Contains("WIN") Then 'CurrentDevice.strEqType = "DESK" Or CurrentDevice.strEqType = "LAPT" Then
+            If CurrentViewDevice.strOSVersion.Contains("WIN") Then
                 If MyPingVis Is Nothing Then MyPingVis = New PingVis(DirectCast(cmdShowIP, Control), DeviceHostname)
                 If MyPingVis.CurrentResult IsNot Nothing Then
                     If MyPingVis.CurrentResult.Status = NetworkInformation.IPStatus.Success Then
@@ -385,7 +385,7 @@ Public Class ViewDeviceForm
         Dim blah = Message("Click 'Yes' to reboot this device.", vbYesNo + vbQuestion, "Are you sure?")
         If blah = vbYes Then
             Dim IP As String = MyPingVis.CurrentResult.Address.ToString
-            Dim DeviceName As String = "D" & CurrentViewDevice.strSerial
+            Dim DeviceName As String = CurrentViewDevice.Hostname
             If Await SendRestart(IP, DeviceName) Then
                 Message("Success", vbOKOnly + vbInformation, "Restart Device", Me)
             Else
@@ -394,7 +394,7 @@ Public Class ViewDeviceForm
         End If
     End Sub
 
-    Private Sub cmdSetSibi_Click(sender As Object, e As EventArgs) Handles cmdSetSibi.Click
+    Private Sub cmdSetSibi_Click(sender As Object, e As EventArgs)
         LinkSibi()
     End Sub
 
@@ -529,7 +529,7 @@ Public Class ViewDeviceForm
         For Each c In pnlOtherFunctions.Controls
             If c.Name IsNot "cmdRDP" Then c.Visible = True
         Next
-        cmdSetSibi.Visible = False
+        ' cmdSetSibi.Visible = False
         cmdMunisSearch.Visible = False
         Me.Text = "View"
         tsSaveModify.Visible = False
@@ -579,7 +579,7 @@ Public Class ViewDeviceForm
         For Each c In pnlOtherFunctions.Controls
             c.Visible = False
         Next
-        cmdSetSibi.Visible = True
+        'cmdSetSibi.Visible = True
         cmdMunisSearch.Visible = True
         Me.Text = "*View - MODIFYING*"
         tsSaveModify.Visible = True
@@ -671,6 +671,7 @@ Public Class ViewDeviceForm
         txtPhoneNumber.Tag = New DBControlInfo(devices_main.PhoneNumber, False)
         lblGUID.Tag = New DBControlInfo(devices_main.DeviceUID, False)
         chkTrackable.Tag = New DBControlInfo(devices_main.Trackable, False)
+        txtHostname.Tag = New DBControlInfo(devices_main.Hostname, False)
     End Sub
     Private Sub LaunchRDP()
         Dim StartInfo As New ProcessStartInfo

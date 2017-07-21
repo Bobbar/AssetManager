@@ -24,6 +24,7 @@ Public Structure Device_Info
     Public bolTrackable As Boolean
     Public strSibiLink As String
     Public CheckSum As String
+    Public Hostname As String
     Public Tracking As Track_Info
     Public Historical As Hist_Info
 End Structure

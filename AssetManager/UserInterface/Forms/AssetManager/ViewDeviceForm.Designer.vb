@@ -30,7 +30,6 @@ Partial Class ViewDeviceForm
         Me.pnlOtherFunctions = New System.Windows.Forms.Panel()
         Me.cmdMunisInfo = New System.Windows.Forms.Button()
         Me.cmdSibiLink = New System.Windows.Forms.Button()
-        Me.cmdSetSibi = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.txtPONumber = New System.Windows.Forms.TextBox()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
@@ -108,6 +107,8 @@ Partial Class ViewDeviceForm
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.AssetDisposalForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.txtHostname = New System.Windows.Forms.TextBox()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
@@ -133,12 +134,13 @@ Partial Class ViewDeviceForm
         'DeviceInfoBox
         '
         Me.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.DeviceInfoBox.Controls.Add(Me.txtHostname)
+        Me.DeviceInfoBox.Controls.Add(Me.Label15)
         Me.DeviceInfoBox.Controls.Add(Me.txtPhoneNumber)
         Me.DeviceInfoBox.Controls.Add(Me.Label14)
         Me.DeviceInfoBox.Controls.Add(Me.lblGUID)
         Me.DeviceInfoBox.Controls.Add(Me.cmdMunisSearch)
         Me.DeviceInfoBox.Controls.Add(Me.pnlOtherFunctions)
-        Me.DeviceInfoBox.Controls.Add(Me.cmdSetSibi)
         Me.DeviceInfoBox.Controls.Add(Me.Label12)
         Me.DeviceInfoBox.Controls.Add(Me.txtPONumber)
         Me.DeviceInfoBox.Controls.Add(Me.chkTrackable)
@@ -196,9 +198,9 @@ Partial Class ViewDeviceForm
         Me.lblGUID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblGUID.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblGUID.Location = New System.Drawing.Point(22, 213)
+        Me.lblGUID.Location = New System.Drawing.Point(22, 240)
         Me.lblGUID.Name = "lblGUID"
-        Me.lblGUID.Size = New System.Drawing.Size(272, 34)
+        Me.lblGUID.Size = New System.Drawing.Size(272, 23)
         Me.lblGUID.TabIndex = 54
         Me.lblGUID.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.ToolTip1.SetToolTip(Me.lblGUID, "Click to copy GUID.")
@@ -218,7 +220,7 @@ Partial Class ViewDeviceForm
         '
         Me.pnlOtherFunctions.Controls.Add(Me.cmdMunisInfo)
         Me.pnlOtherFunctions.Controls.Add(Me.cmdSibiLink)
-        Me.pnlOtherFunctions.Location = New System.Drawing.Point(398, 204)
+        Me.pnlOtherFunctions.Location = New System.Drawing.Point(423, 194)
         Me.pnlOtherFunctions.Name = "pnlOtherFunctions"
         Me.pnlOtherFunctions.Size = New System.Drawing.Size(116, 61)
         Me.pnlOtherFunctions.TabIndex = 51
@@ -242,16 +244,6 @@ Partial Class ViewDeviceForm
         Me.cmdSibiLink.TabIndex = 49
         Me.cmdSibiLink.Text = "Sibi Info"
         Me.cmdSibiLink.UseVisualStyleBackColor = True
-        '
-        'cmdSetSibi
-        '
-        Me.cmdSetSibi.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdSetSibi.Location = New System.Drawing.Point(100, 250)
-        Me.cmdSetSibi.Name = "cmdSetSibi"
-        Me.cmdSetSibi.Size = New System.Drawing.Size(106, 23)
-        Me.cmdSetSibi.TabIndex = 50
-        Me.cmdSetSibi.Text = "Set Sibi Link"
-        Me.cmdSetSibi.UseVisualStyleBackColor = True
         '
         'Label12
         '
@@ -304,7 +296,7 @@ Partial Class ViewDeviceForm
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(18, 193)
+        Me.Label10.Location = New System.Drawing.Point(18, 220)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(90, 16)
         Me.Label10.TabIndex = 41
@@ -1046,6 +1038,24 @@ Partial Class ViewDeviceForm
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 37)
         '
+        'txtHostname
+        '
+        Me.txtHostname.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtHostname.Location = New System.Drawing.Point(186, 183)
+        Me.txtHostname.Name = "txtHostname"
+        Me.txtHostname.Size = New System.Drawing.Size(177, 23)
+        Me.txtHostname.TabIndex = 58
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(183, 164)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(73, 16)
+        Me.Label15.TabIndex = 59
+        Me.Label15.Text = "Hostname:"
+        '
         'ViewDeviceForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1145,7 +1155,6 @@ Partial Class ViewDeviceForm
     Friend WithEvents txtPONumber As TextBox
     Friend WithEvents tmr_RDPRefresher As Timer
     Friend WithEvents cmdSibiLink As Button
-    Friend WithEvents cmdSetSibi As Button
     Friend WithEvents pnlOtherFunctions As Panel
     Friend WithEvents fieldErrorIcon As ErrorProvider
     Friend WithEvents cmdBrowseFiles As Button
@@ -1177,4 +1186,6 @@ Partial Class ViewDeviceForm
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
     Friend WithEvents cmdRestart As PictureBox
+    Friend WithEvents txtHostname As TextBox
+    Friend WithEvents Label15 As Label
 End Class

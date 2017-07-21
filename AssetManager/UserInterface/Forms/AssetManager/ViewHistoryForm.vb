@@ -40,6 +40,7 @@ Public Class ViewHistoryForm
         txtEntryGUID.Tag = New DBControlInfo(historical_dev.History_Entry_UID, ParseType.DisplayOnly, False)
         chkTrackable.Tag = New DBControlInfo(historical_dev.Trackable, ParseType.DisplayOnly, False)
         txtPhoneNumber.Tag = New DBControlInfo(historical_dev.PhoneNumber, ParseType.DisplayOnly, False)
+        txtHostname.Tag = New DBControlInfo(historical_dev.Hostname, ParseType.DisplayOnly, False)
     End Sub
 
     Private Sub FillControls(Data As DataTable)

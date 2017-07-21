@@ -191,6 +191,7 @@ Public Class NewDeviceForm
 
     Private Sub cmbOSType_REQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbOSType_REQ.SelectedIndexChanged
         If bolCheckFields Then CheckFields(Me, False)
+        SetHostname()
     End Sub
 
     Private Sub cmbStatus_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbStatus_REQ.DropDown
@@ -262,6 +263,7 @@ Public Class NewDeviceForm
         cmbStatus_REQ.Tag = New DBControlInfo(devices_main.Status, DeviceIndex.StatusType, True)
         chkTrackable.Tag = New DBControlInfo(devices_main.Trackable, False)
         txtPO.Tag = New DBControlInfo(devices_main.PO, False)
+        txtHostname.Tag = New DBControlInfo(devices_main.Hostname, False)
     End Sub
     Private Sub RefreshCombos()
         FillComboBox(DeviceIndex.Locations, cmbLocation_REQ)
@@ -309,6 +311,17 @@ Public Class NewDeviceForm
         If bolCheckFields Then CheckFields(Me, False)
     End Sub
 
+    Private Sub SetHostname()
+        If GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex).Contains("WIN") Then
+            txtHostname.Text = DeviceHostnameFormat(txtSerial_REQ.Text)
+        Else
+            txtHostname.Text = String.Empty
+        End If
+    End Sub
+
+    Private Sub txtSerial_REQ_Leave(sender As Object, e As EventArgs) Handles txtSerial_REQ.Leave
+
+    End Sub
 #End Region
 
 End Class

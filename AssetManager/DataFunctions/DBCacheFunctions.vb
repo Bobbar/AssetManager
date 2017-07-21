@@ -1,4 +1,4 @@
-﻿Module DBFunctions
+﻿Module DBCacheFunctions
 
     Public Sub RefreshLocalDBCache()
         Try

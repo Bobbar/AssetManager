@@ -185,7 +185,7 @@
     <Compile Include="DataComms\AssetManager\DBWrapper.vb" />
     <Compile Include="DataFunctions\LocalFunctions\AttribIndexFunctions.vb" />
     <Compile Include="DataFunctions\LocalFunctions\DataConsistency.vb" />
-    <Compile Include="GlobalModules\DBFunctions.vb" />
+    <Compile Include="DataFunctions\DBCacheFunctions.vb" />
     <Compile Include="GlobalModules\GlobalVariables.vb" />
     <Compile Include="GlobalModules\StyleFunctions.vb" />
     <Compile Include="Helpers\GridFunctions.vb" />

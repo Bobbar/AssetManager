@@ -14,6 +14,7 @@
     Public Const Status As String = "dev_status"
     Public Const Trackable As String = "dev_trackable"
     Public Const CheckSum As String = "dev_checksum"
+    Public Const Hostname As String = "dev_hostname"
 End Class
 
 Public Class devices

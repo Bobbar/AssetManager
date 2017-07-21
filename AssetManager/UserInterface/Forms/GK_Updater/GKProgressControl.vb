@@ -26,7 +26,7 @@ Public Class GKProgressControl
         Me.Size = Me.MinimumSize
         MyParentForm = ParentForm
         CurDevice = Device
-        MyUpdater = New GK_Updater("D" & CurDevice.strSerial, GKPath)
+        MyUpdater = New GK_Updater(CurDevice.Hostname, GKPath)
         MyUpdater.CreateMissingDirectories = CreateMissingDirs
         Me.DoubleBuffered = True
         lblInfo.Text = CurDevice.strSerial & " - " & CurDevice.strCurrentUser

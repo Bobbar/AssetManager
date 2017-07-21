@@ -20,6 +20,8 @@ Partial Class ViewHistoryForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.txtPhoneNumber = New System.Windows.Forms.TextBox()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.txtEntryGUID = New System.Windows.Forms.TextBox()
@@ -56,14 +58,16 @@ Partial Class ViewHistoryForm
         Me.txtCurrentUser = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtChangeType = New System.Windows.Forms.TextBox()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.txtPhoneNumber = New System.Windows.Forms.TextBox()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.txtHostname = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
         Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.GroupBox1.Controls.Add(Me.Label19)
+        Me.GroupBox1.Controls.Add(Me.txtHostname)
         Me.GroupBox1.Controls.Add(Me.Label18)
         Me.GroupBox1.Controls.Add(Me.txtPhoneNumber)
         Me.GroupBox1.Controls.Add(Me.chkTrackable)
@@ -108,6 +112,26 @@ Partial Class ViewHistoryForm
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Device Info Snapshot"
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(14, 119)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(50, 16)
+        Me.Label18.TabIndex = 37
+        Me.Label18.Text = "Phone:"
+        '
+        'txtPhoneNumber
+        '
+        Me.txtPhoneNumber.BackColor = System.Drawing.SystemColors.Window
+        Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPhoneNumber.Location = New System.Drawing.Point(17, 138)
+        Me.txtPhoneNumber.Name = "txtPhoneNumber"
+        Me.txtPhoneNumber.ReadOnly = True
+        Me.txtPhoneNumber.Size = New System.Drawing.Size(155, 23)
+        Me.txtPhoneNumber.TabIndex = 36
         '
         'chkTrackable
         '
@@ -208,7 +232,7 @@ Partial Class ViewHistoryForm
         Me.txtActionUser.Location = New System.Drawing.Point(17, 94)
         Me.txtActionUser.Name = "txtActionUser"
         Me.txtActionUser.ReadOnly = True
-        Me.txtActionUser.Size = New System.Drawing.Size(108, 23)
+        Me.txtActionUser.Size = New System.Drawing.Size(155, 23)
         Me.txtActionUser.TabIndex = 26
         '
         'Label13
@@ -471,27 +495,27 @@ Partial Class ViewHistoryForm
         Me.txtChangeType.Size = New System.Drawing.Size(110, 23)
         Me.txtChangeType.TabIndex = 0
         '
-        'Label18
+        'Label19
         '
-        Me.Label18.AutoSize = True
-        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.Location = New System.Drawing.Point(61, 162)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(50, 16)
-        Me.Label18.TabIndex = 37
-        Me.Label18.Text = "Phone:"
+        Me.Label19.AutoSize = True
+        Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label19.Location = New System.Drawing.Point(14, 162)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(73, 16)
+        Me.Label19.TabIndex = 39
+        Me.Label19.Text = "Hostname:"
         '
-        'txtPhoneNumber
+        'txtHostname
         '
-        Me.txtPhoneNumber.BackColor = System.Drawing.SystemColors.Window
-        Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPhoneNumber.Location = New System.Drawing.Point(64, 181)
-        Me.txtPhoneNumber.Name = "txtPhoneNumber"
-        Me.txtPhoneNumber.ReadOnly = True
-        Me.txtPhoneNumber.Size = New System.Drawing.Size(108, 23)
-        Me.txtPhoneNumber.TabIndex = 36
+        Me.txtHostname.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHostname.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtHostname.Location = New System.Drawing.Point(17, 181)
+        Me.txtHostname.Name = "txtHostname"
+        Me.txtHostname.ReadOnly = True
+        Me.txtHostname.Size = New System.Drawing.Size(155, 23)
+        Me.txtHostname.TabIndex = 38
         '
-        'View_Entry
+        'ViewHistoryForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -500,7 +524,7 @@ Partial Class ViewHistoryForm
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
-        Me.Name = "View_Entry"
+        Me.Name = "ViewHistoryForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View Entry"
         Me.GroupBox1.ResumeLayout(False)
@@ -547,4 +571,6 @@ Partial Class ViewHistoryForm
     Friend WithEvents chkTrackable As CheckBox
     Friend WithEvents Label18 As Label
     Friend WithEvents txtPhoneNumber As TextBox
+    Friend WithEvents Label19 As Label
+    Friend WithEvents txtHostname As TextBox
 End Class

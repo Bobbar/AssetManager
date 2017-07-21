@@ -99,6 +99,7 @@ VALUES
                 .strSibiLink = NoNull(DeviceTable.Rows(0).Item(devices.Sibi_Link_UID))
                 .Tracking.bolCheckedOut = CBool(DeviceTable.Rows(0).Item(devices.CheckedOut))
                 .CheckSum = NoNull(DeviceTable.Rows(0).Item(devices.CheckSum))
+                .Hostname = NoNull(DeviceTable.Rows(0).Item(devices.Hostname))
             End With
             Return newDeviceInfo
         Catch ex As Exception
