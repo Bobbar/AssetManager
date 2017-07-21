@@ -335,7 +335,7 @@ Public Class ViewDeviceForm
     Private Async Sub BrowseFiles()
         Try
             If VerifyAdminCreds() Then
-                Dim FullPath As String = "\\D" & CurrentViewDevice.strSerial & "\c$"
+                Dim FullPath As String = "\\" & CurrentViewDevice.Hostname & "\c$"
                 Await Task.Run(Sub()
                                    Using NetCon As New NetworkConnection(FullPath, AdminCreds), p As Process = New Process
                                        p.StartInfo.UseShellExecute = False
@@ -676,7 +676,7 @@ Public Class ViewDeviceForm
     Private Sub LaunchRDP()
         Dim StartInfo As New ProcessStartInfo
         StartInfo.FileName = "mstsc.exe"
-        StartInfo.Arguments = "/v:D" & CurrentViewDevice.strSerial
+        StartInfo.Arguments = "/v:" & CurrentViewDevice.Hostname
         Process.Start(StartInfo)
     End Sub
 
