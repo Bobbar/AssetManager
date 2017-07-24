@@ -11,7 +11,6 @@ Namespace My
     Partial Friend Class MyApplication
 
         Private Sub LoadSplash(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
-            '  Try
             SplashScreenForm.Show()
             Logger("Starting AssetManager...")
             Status("Checking Server Connection...")
@@ -32,7 +31,6 @@ Namespace My
             If OfflineMode And Not CacheAvailable Then
                 Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", vbOKOnly + vbExclamation, "No Connection")
                 e.Cancel = True
-                EndProgram()
                 Exit Sub
             ElseIf OfflineMode And CacheAvailable Then
                 Message("Could not connect to server. Running from local DB cache.", vbOKOnly + vbExclamation, "Cached Mode")
@@ -45,21 +43,9 @@ Namespace My
             GetUserAccess()
             If Not CanAccess(AccessGroup.CanRun) Then
                 Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", SplashScreenForm)
-                EndProgram()
+                e.Cancel = True
             End If
             Status("Ready!")
-            'Catch ex As Exception
-            '    ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-
-            '    Using SQLiteComm As New SQLite_Comms(False)
-            '        If SQLiteComm.OpenConnection Then
-            '            OfflineMode = True
-            '        End If
-            '    End Using
-
-            '    'e.Cancel = True
-            '    'EndProgram()
-            'End Try
         End Sub
 
         Private Sub MyApplication_UnhandledException(sender As Object, e As UnhandledExceptionEventArgs) Handles Me.UnhandledException
