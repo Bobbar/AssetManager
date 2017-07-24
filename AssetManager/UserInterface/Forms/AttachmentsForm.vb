@@ -248,7 +248,7 @@ Class AttachmentsForm
 
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
         If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString <> "" Then
-            StartAttachDelete(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
+            DeleteAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
         End If
     End Sub
 
@@ -295,7 +295,7 @@ Class AttachmentsForm
 
     Private Sub DeleteAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteAttachmentToolStripMenuItem.Click
         If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString <> "" Then
-            StartAttachDelete(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
+            DeleteAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
         End If
     End Sub
 
@@ -522,11 +522,15 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     End Function
 
     Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
-        AssetFunc.Update_SQLValue(_attachTable.TableName, _attachTable.Folder, Folder, _attachTable.FileUID, AttachUID)
-        ListAttachments()
-        cmbMoveFolder.SelectedIndex = -1
-        cmbMoveFolder.Text = "Select a folder"
-        RightClickMenu.Close()
+        Try
+            AssetFunc.Update_SQLValue(_attachTable.TableName, _attachTable.Folder, Folder, _attachTable.FileUID, AttachUID)
+            ListAttachments()
+            cmbMoveFolder.SelectedIndex = -1
+            cmbMoveFolder.Text = "Select a folder"
+            RightClickMenu.Close()
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
 
     Private Function OKFileSize(File As Attachment) As Boolean
@@ -611,32 +615,40 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     End Sub
 
     Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
-        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim strCurrentFileName As String = AssetFunc.Get_SQLValue(_attachTable.TableName, _attachTable.FileUID, AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString, _attachTable.FileName)
-        Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
-        Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
-        If blah = "" Then
-            blah = strCurrentFileName
-        Else
-            RenameAttachement(strAttachUID, Trim(blah))
-        End If
+        Try
+            If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+            Dim strCurrentFileName As String = AssetFunc.Get_SQLValue(_attachTable.TableName, _attachTable.FileUID, AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString, _attachTable.FileName)
+            Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
+            Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
+            If blah = "" Then
+                blah = strCurrentFileName
+            Else
+                RenameAttachement(strAttachUID, Trim(blah))
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
 
-    Private Sub StartAttachDelete(AttachUID As String)
-        If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
-        Dim strFilename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value.ToString
-        Dim blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete", Me)
-        If blah = vbYes Then
-            Waiting()
-            If AssetFunc.DeleteSQLAttachment(GetSQLAttachment(AttachUID)) > 0 Then
-                ListAttachments()
-                DoneWaiting()
-                ' blah = Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
-            Else
-                DoneWaiting()
-                blah = Message("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results", Me)
+    Private Sub DeleteAttachment(AttachUID As String)
+        Try
+            If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
+            Dim strFilename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value.ToString
+            Dim blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete", Me)
+            If blah = vbYes Then
+                Waiting()
+                If AssetFunc.DeleteSQLAttachment(GetSQLAttachment(AttachUID)) > 0 Then
+                    ListAttachments()
+                    ' blah = Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
+                Else
+                    blah = Message("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results", Me)
+                End If
             End If
-        End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            DoneWaiting()
+        End Try
     End Sub
 
     Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click

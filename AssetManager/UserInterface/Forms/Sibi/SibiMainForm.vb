@@ -88,7 +88,13 @@ Public Class SibiMainForm
             LastCmd = cmd
             SendToGrid(DBFunc.DataTableFromCommand(cmd))
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            'InvalidCastException is expected when the last LastCmd was populated while in cached DB mode and now cached mode is currently false. 
+            'ShowAll will start a new connection and populate LastCmd with a correctly matching DBCommand. See DBWrapper.GetCommand()
+            If TypeOf ex Is InvalidCastException Then
+                ShowAll()
+            Else
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            End If
         End Try
     End Sub
 

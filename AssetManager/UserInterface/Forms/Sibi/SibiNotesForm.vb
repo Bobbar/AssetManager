@@ -28,21 +28,25 @@
     End Sub
 
     Private Sub ViewNote(NoteUID As String)
-        cmdOK.Visible = False
-        rtbNotes.Clear()
-        Dim NoteText As String = AssetFunc.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.Note)
-        Dim NoteTimeStamp As String = AssetFunc.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.DateStamp)
-        Me.Text += " - " & NoteTimeStamp
-        Select Case GetStringFormat(NoteText)
-            Case DataFormats.Rtf
-                rtbNotes.Rtf = NoteText
-            Case DataFormats.Text
-                rtbNotes.Text = NoteText
-        End Select
-        rtbNotes.ReadOnly = True
-        rtbNotes.BackColor = Color.White
-        Show()
-        Activate()
+        Try
+            cmdOK.Visible = False
+            rtbNotes.Clear()
+            Dim NoteText As String = AssetFunc.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.Note)
+            Dim NoteTimeStamp As String = AssetFunc.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.DateStamp)
+            Me.Text += " - " & NoteTimeStamp
+            Select Case GetStringFormat(NoteText)
+                Case DataFormats.Rtf
+                    rtbNotes.Rtf = NoteText
+                Case DataFormats.Text
+                    rtbNotes.Text = NoteText
+            End Select
+            rtbNotes.ReadOnly = True
+            rtbNotes.BackColor = Color.White
+            Show()
+            Activate()
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
 
     Private Sub cmdOK_Click(sender As Object, e As EventArgs) Handles cmdOK.Click

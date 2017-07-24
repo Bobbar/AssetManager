@@ -177,33 +177,28 @@ VALUES
     Public Function DeviceExists(AssetTag As String, Serial As String) As Boolean
         Dim bolAsset As Boolean
         Dim bolSerial As Boolean
-        Try
-            If AssetTag = "NA" Then 'Allow NA value because users do not always have an Asset Tag for new devices.
+        If AssetTag = "NA" Then 'Allow NA value because users do not always have an Asset Tag for new devices.
+            bolAsset = False
+        Else
+            Dim CheckAsset As String = Get_SQLValue(devices.TableName, devices.AssetTag, AssetTag, devices.AssetTag)
+            If CheckAsset <> "" Then
+                bolAsset = True
+            Else
                 bolAsset = False
-            Else
-                Dim CheckAsset As String = Get_SQLValue(devices.TableName, devices.AssetTag, AssetTag, devices.AssetTag)
-                If CheckAsset <> "" Then
-                    bolAsset = True
-                Else
-                    bolAsset = False
-                End If
             End If
+        End If
 
-            Dim CheckSerial As String = Get_SQLValue(devices.TableName, devices.Serial, Serial, devices.Serial)
-            If CheckSerial <> "" Then
-                bolSerial = True
-            Else
-                bolSerial = False
-            End If
-            If bolSerial Or bolAsset Then
-                Return True
-            Else
-                Return False
-            End If
-        Catch ex As Exception
-            Throw ex
+        Dim CheckSerial As String = Get_SQLValue(devices.TableName, devices.Serial, Serial, devices.Serial)
+        If CheckSerial <> "" Then
+            bolSerial = True
+        Else
+            bolSerial = False
+        End If
+        If bolSerial Or bolAsset Then
+            Return True
+        Else
             Return False
-        End Try
+        End If
     End Function
 
     Public Function DevicesBySup(ParentForm As Form) As DataTable
@@ -295,18 +290,12 @@ VALUES
     End Function
     Public Function Get_SQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
         Dim sqlQRY As String = "SELECT " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
-        Try
-            Dim Result = DBFunc.ExecuteScalarFromQueryString(sqlQRY)
-            If Result IsNot Nothing Then
-                Return Result.ToString
-            Else
-                Return ""
-            End If
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Throw ex
-            Return Nothing
-        End Try
+        Dim Result = DBFunc.ExecuteScalarFromQueryString(sqlQRY)
+        If Result IsNot Nothing Then
+            Return Result.ToString
+        Else
+            Return ""
+        End If
     End Function
 
     Public Function GetAttachmentCount(AttachFolderUID As String, AttachTable As main_attachments) As Integer
@@ -323,16 +312,11 @@ VALUES
     End Function
 
     Public Function Update_SQLValue(table As String, fieldIN As String, valueIN As String, idField As String, idValue As String) As Integer
-        Try
-            Dim sqlUpdateQry As String = "UPDATE " & table & " SET " & fieldIN & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"
-            Using SQLComms As New MySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(sqlUpdateQry)
-                cmd.Parameters.AddWithValue("@ValueIN", valueIN)
-                Return cmd.ExecuteNonQuery()
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return 0
-        End Try
+        Dim sqlUpdateQry As String = "UPDATE " & table & " SET " & fieldIN & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"
+        Using SQLComms As New MySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(sqlUpdateQry)
+            cmd.Parameters.AddWithValue("@ValueIN", valueIN)
+            Return cmd.ExecuteNonQuery()
+        End Using
     End Function
     Public Function User_GetUserList() As List(Of User_Info)
         Dim Qry As String = "SELECT * FROM " & users.TableName

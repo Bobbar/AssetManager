@@ -32,8 +32,9 @@
             BuildingCache = False
             Return Done
         Catch ex As Exception
-            BuildingCache = False
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            BuildingCache = False
         End Try
     End Function
 

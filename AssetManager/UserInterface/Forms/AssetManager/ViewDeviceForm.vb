@@ -317,24 +317,31 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub cmdAccept_Tool_Click(sender As Object, e As EventArgs) Handles cmdAccept_Tool.Click
-        If Not CheckFields() Then
-            Message("Some required fields are missing or invalid.  Please check and fill all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
-            bolCheckFields = True
-            Exit Sub
-        End If
-        DisableControls()
-        Using UpdateDia As New UpdateDev(Me)
-            If UpdateDia.DialogResult = DialogResult.OK Then
-                If Not ConcurrencyCheck() Then
-                    CancelModify()
-                    Exit Sub
-                Else
-                    UpdateDevice(UpdateDia.UpdateInfo)
-                End If
-            Else
-                CancelModify()
+        AcceptChanges()
+    End Sub
+    Private Sub AcceptChanges()
+        Try
+            If Not CheckFields() Then
+                Message("Some required fields are missing or invalid.  Please check and fill all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
+                bolCheckFields = True
+                Exit Sub
             End If
-        End Using
+            DisableControls()
+            Using UpdateDia As New UpdateDev(Me)
+                If UpdateDia.DialogResult = DialogResult.OK Then
+                    If Not ConcurrencyCheck() Then
+                        CancelModify()
+                        Exit Sub
+                    Else
+                        UpdateDevice(UpdateDia.UpdateInfo)
+                    End If
+                Else
+                    CancelModify()
+                End If
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
     Private Async Sub BrowseFiles()
         Try
@@ -412,7 +419,6 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub cmdSibiLink_Click(sender As Object, e As EventArgs) Handles cmdSibiLink.Click
-        If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
         OpenSibiLink(CurrentViewDevice)
     End Sub
 
@@ -720,30 +726,29 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub OpenSibiLink(LinkDevice As Device_Info)
-        Dim SibiUID As String
-        If LinkDevice.strSibiLink = "" Then
-            If LinkDevice.strPO = "" Then
-                Message("A valid PO Number or Sibi Link is required.", vbOKOnly + vbInformation, "Missing Info", Me)
-                Exit Sub
+        Try
+            If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
+            Dim SibiUID As String
+            If LinkDevice.strSibiLink = "" Then
+                If LinkDevice.strPO = "" Then
+                    Message("A valid PO Number or Sibi Link is required.", vbOKOnly + vbInformation, "Missing Info", Me)
+                    Exit Sub
+                Else
+                    SibiUID = AssetFunc.Get_SQLValue(sibi_requests.TableName, sibi_requests.PO, LinkDevice.strPO, sibi_requests.UID)
+                End If
             Else
-                SibiUID = AssetFunc.Get_SQLValue(sibi_requests.TableName, sibi_requests.PO, LinkDevice.strPO, sibi_requests.UID)
+                SibiUID = LinkDevice.strSibiLink
             End If
-        Else
-            SibiUID = LinkDevice.strSibiLink
-        End If
-        If SibiUID = "" Then
-            Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
-        Else
-            If Not FormIsOpenByUID(GetType(SibiManageRequestForm), SibiUID) Then
-                Dim NewRequest As New SibiManageRequestForm(Me, SibiUID)
+            If SibiUID = "" Then
+                Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
+            Else
+                If Not FormIsOpenByUID(GetType(SibiManageRequestForm), SibiUID) Then
+                    Dim NewRequest As New SibiManageRequestForm(Me, SibiUID)
+                End If
             End If
-
-            'If Not RequestIsOpen(SibiUID) Then
-            '    Dim ManRequest As New SibiManageRequestForm(Me, SibiUID)
-            'Else
-            '    ActivateFormByUID(SibiUID, Me)
-            'End If
-        End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
 
     Private Sub RefreshCombos()
@@ -955,19 +960,26 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub tsbNewNote_Click(sender As Object, e As EventArgs) Handles tsbNewNote.Click
-        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
-        Using UpdateDia As New UpdateDev(Me, True)
-            If UpdateDia.DialogResult = DialogResult.OK Then
-                If Not ConcurrencyCheck() Then
+        AddNewNote()
+    End Sub
+    Private Sub AddNewNote()
+        Try
+            If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
+            Using UpdateDia As New UpdateDev(Me, True)
+                If UpdateDia.DialogResult = DialogResult.OK Then
+                    If Not ConcurrencyCheck() Then
+                        CancelModify()
+                        Exit Sub
+                    End If
+                    GetCurrentValues()
+                    UpdateDevice(UpdateDia.UpdateInfo)
+                Else
                     CancelModify()
-                    Exit Sub
                 End If
-                GetCurrentValues()
-                UpdateDevice(UpdateDia.UpdateInfo)
-            Else
-                CancelModify()
-            End If
-        End Using
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
 
     Private Sub tsmAssetInputForm_Click(sender As Object, e As EventArgs) Handles tsmAssetInputForm.Click

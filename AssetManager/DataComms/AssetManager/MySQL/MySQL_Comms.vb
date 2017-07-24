@@ -48,8 +48,6 @@ Public Class MySQL_Comms : Implements IDisposable
 
 #End Region
 
-    ' = NewConnection()
-
 #Region "Constructors"
 
     Sub New()
@@ -114,55 +112,35 @@ Public Class MySQL_Comms : Implements IDisposable
 
     Public Function Return_Adapter(strSQLQry As String) As MySqlDataAdapter
         '  Debug.Print("Adapter Hit " & Date.Now.Ticks)
-        Try
-            Dim adapter As New MySqlDataAdapter(strSQLQry, GetConnectString)
-            Dim CmdBuilder As New MySqlCommandBuilder(adapter)
-            Return adapter
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+        Dim adapter As New MySqlDataAdapter(strSQLQry, GetConnectString)
+        Dim CmdBuilder As New MySqlCommandBuilder(adapter)
+        Return adapter
     End Function
 
     Public Function Return_SQLCommand(Optional strSQLQry As String = "") As MySqlCommand
         ' Debug.Print("Command Hit " & Date.Now.Ticks)
-        Try
-            Using cmd As New MySqlCommand
-                cmd.Connection = Connection
-                cmd.CommandText = strSQLQry
-                Return cmd
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+        Using cmd As New MySqlCommand
+            cmd.Connection = Connection
+            cmd.CommandText = strSQLQry
+            Return cmd
+        End Using
     End Function
 
     Public Function Return_SQLReader(strSQLQry As String) As MySqlDataReader
         '  Debug.Print("Reader Hit " & Date.Now.Ticks)
-        Try
-            Using cmd As New MySqlCommand(strSQLQry, Connection)
-                Return cmd.ExecuteReader
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+        Using cmd As New MySqlCommand(strSQLQry, Connection)
+            Return cmd.ExecuteReader
+        End Using
     End Function
 
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
         ' Debug.Print("Table Hit " & Date.Now.Ticks)
-        Try
-            Using da As New MySqlDataAdapter, tmpTable As New DataTable
-                da.SelectCommand = New MySqlCommand(strSQLQry)
-                da.SelectCommand.Connection = Connection
-                da.Fill(tmpTable)
-                Return tmpTable
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+        Using da As New MySqlDataAdapter, tmpTable As New DataTable, cmd = New MySqlCommand(strSQLQry)
+            da.SelectCommand = cmd
+            da.SelectCommand.Connection = Connection
+            da.Fill(tmpTable)
+            Return tmpTable
+        End Using
     End Function
     Private Function GetConnectString() As String
         If Not bolUseTestDatabase Then

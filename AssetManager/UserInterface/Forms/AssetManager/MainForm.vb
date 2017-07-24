@@ -81,9 +81,11 @@ Public Class MainForm
 
     Public Sub LoadDevice(ByVal strGUID As String)
         If Not FormIsOpenByUID(GetType(ViewDeviceForm), strGUID) Then
+            Waiting()
             ResultGrid.Enabled = False
             Dim NewView As New ViewDeviceForm(Me, strGUID)
             ResultGrid.Enabled = True
+            DoneWaiting()
         End If
     End Sub
 
@@ -129,12 +131,11 @@ Public Class MainForm
         If e.Error Is Nothing Then
             If e.Result IsNot Nothing Then
                 BigQueryDone(DirectCast(e.Result, DataTable))
-            Else
-                DoneWaiting()
             End If
         Else
             ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod())
         End If
+        DoneWaiting()
     End Sub
 
     Private Function BuildSearchList() As List(Of SearchVal)

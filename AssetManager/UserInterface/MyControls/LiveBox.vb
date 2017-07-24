@@ -226,11 +226,10 @@
     ''' </summary>
     ''' <param name="SearchString"></param>
     Private Async Sub ProcessSearch(SearchString As String)
-        strPrevSearchString = SearchString
-        If QueryRunning Then Exit Sub
-        Dim Errs As Exception = Nothing
-        Dim Results = Await Task.Run(Function()
-                                         Try
+        Try
+            strPrevSearchString = SearchString
+            If QueryRunning Then Exit Sub
+            Dim Results = Await Task.Run(Function()
                                              QueryRunning = True
                                              Dim strQry As String
                                              strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.ValueMember), CurrentLiveBoxArgs.DisplayMember, CurrentLiveBoxArgs.DisplayMember & "," & CurrentLiveBoxArgs.ValueMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.DisplayMember & " LIKE  @Search_Value  GROUP BY " & CurrentLiveBoxArgs.DisplayMember & " ORDER BY " & CurrentLiveBoxArgs.DisplayMember & " LIMIT " & RowLimit
@@ -238,18 +237,13 @@
                                                  cmd.AddParameterWithValue("@Search_Value", "%" & SearchString & "%")
                                                  Return DBFunc.DataTableFromCommand(cmd)
                                              End Using
-                                         Catch ex As Exception
-                                             Errs = ex
-                                             Return Nothing
-                                         End Try
-                                     End Function)
-        If Errs IsNot Nothing Then
-            ErrHandle(Errs, System.Reflection.MethodInfo.GetCurrentMethod())
+                                         End Function)
+            DrawLiveBox(Results)
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
             QueryRunning = False
-            Exit Sub
-        End If
-        QueryRunning = False
-        DrawLiveBox(Results)
+        End Try
     End Sub
 
     Private Sub SetStyle()
