@@ -65,7 +65,7 @@ Public Class MainForm
                 End If
             Next
             If strDynaQry = "" Then
-                Dim blah = Message("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing", Me)
+                Message("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing", Me)
                 Exit Sub
             End If
             Dim strQry = strStartQry & strDynaQry

@@ -108,10 +108,10 @@ Public Class ViewDeviceForm
             End Using
             If rows = 2 Then
                 ViewDevice(CurrentViewDevice.strGUID)
-                Dim blah = Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
+                Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
             Else
                 ViewDevice(CurrentViewDevice.strGUID)
-                Dim blah = Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
+                Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
             End If
             Exit Sub
         Catch ex As Exception
@@ -184,8 +184,12 @@ Public Class ViewDeviceForm
         End If
     End Sub
 
-    Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
-        NewMunisView(CurrentViewDevice)
+    Private Sub cmdMunisInfo_Click(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
+        Try
+            NewMunisView(CurrentViewDevice)
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
 
     Private Function CheckFields() As Boolean
@@ -314,7 +318,7 @@ Public Class ViewDeviceForm
 
     Private Sub cmdAccept_Tool_Click(sender As Object, e As EventArgs) Handles cmdAccept_Tool.Click
         If Not CheckFields() Then
-            Dim blah = Message("Some required fields are missing or invalid.  Please check and fill all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
+            Message("Some required fields are missing or invalid.  Please check and fill all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
             bolCheckFields = True
             Exit Sub
         End If
@@ -1030,7 +1034,7 @@ Public Class ViewDeviceForm
                 If DeviceResults.Rows.Count < 1 Then
                     CloseChildren(Me)
                     CurrentViewDevice = Nothing
-                    Dim blah = Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found", Me)
+                    Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found", Me)
                     Return False
                 End If
                 CurrentViewDevice = AssetFunc.CollectDeviceInfo(DeviceResults)

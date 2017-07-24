@@ -49,5 +49,11 @@ Module DataConsistency
     Public Function DeviceHostnameFormat(Serial As String) As String
         Return "D" & Trim(Serial)
     End Function
+    Public Function IsValidYear(Year As String) As Boolean
+        If Enumerable.Range(1900, 200).Contains(CInt(Year)) Then
+            Return True
+        End If
+        Return False
+    End Function
 
 End Module

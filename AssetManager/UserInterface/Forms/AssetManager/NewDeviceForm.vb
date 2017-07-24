@@ -22,12 +22,12 @@ Public Class NewDeviceForm
     Private Sub AddDevice()
         Try
             If Not CheckFields(Me, True) Then
-                Dim blah = Message("Some required fields are missing or invalid.  Please fill and/or verify all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
+                Message("Some required fields are missing or invalid.  Please fill and/or verify all highlighted fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
                 bolCheckFields = True
                 Exit Sub
             Else
                 If AssetFunc.DeviceExists(Trim(txtAssetTag_REQ.Text), Trim(txtSerial_REQ.Text)) Then
-                    Dim blah = Message("A device with that serial and/or asset tag already exists.", vbOKOnly + vbExclamation, "Duplicate Device", Me)
+                    Message("A device with that serial and/or asset tag already exists.", vbOKOnly + vbExclamation, "Duplicate Device", Me)
                     Exit Sub
                 Else
                     'proceed
@@ -39,14 +39,14 @@ Public Class NewDeviceForm
                     If blah = vbNo Then Me.Hide()
                     MainForm.RefreshCurrent()
                 Else
-                    Dim blah = Message("Something went wrong while adding a new device.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
+                    Message("Something went wrong while adding a new device.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
                 End If
 
                 Exit Sub
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Dim blah = Message("Unable to add new device.", vbOKOnly + vbExclamation, "Error", Me)
+            Message("Unable to add new device.", vbOKOnly + vbExclamation, "Error", Me)
         End Try
     End Sub
 

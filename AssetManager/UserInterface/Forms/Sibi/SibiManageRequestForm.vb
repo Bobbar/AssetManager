@@ -729,38 +729,52 @@ VALUES
         Return False
     End Function
 
-    Private Sub PopulateFromFA(ColumnName As String)
-        Select Case ColumnName
-            Case sibi_request_items.New_Serial
-                Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
-                Dim Serial = MunisFunc.Get_SerialFromAsset(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.New_Asset))
-                If Serial <> "" Then
-                    AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.New_Serial, Serial, sibi_request_items.Item_UID, ItemUID)
-                    RefreshRequest()
-                End If
-            Case sibi_request_items.New_Asset
-                Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
-                Dim Asset = MunisFunc.Get_AssetFromSerial(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.New_Serial))
-                If Asset <> "" Then
-                    AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.New_Asset, Asset, sibi_request_items.Item_UID, ItemUID)
-                    RefreshRequest()
-                End If
-            Case sibi_request_items.Replace_Serial
-                Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
-                Dim Serial = MunisFunc.Get_SerialFromAsset(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Replace_Asset))
-                If Serial <> "" Then
-                    AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.Replace_Serial, Serial, sibi_request_items.Item_UID, ItemUID)
-                    RefreshRequest()
-                End If
-            Case sibi_request_items.Replace_Asset
-
-                Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
-                Dim Asset = MunisFunc.Get_AssetFromSerial(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Replace_Serial))
-                If Asset <> "" Then
-                    AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.Replace_Asset, Asset, sibi_request_items.Item_UID, ItemUID)
-                    RefreshRequest()
-                End If
-        End Select
+    Private Async Sub PopulateFromFA(ColumnName As String)
+        Try
+            Waiting()
+            Select Case ColumnName
+                Case sibi_request_items.New_Serial
+                    Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
+                    Dim Serial = Await Task.Run(Function()
+                                                    Return MunisFunc.Get_SerialFromAsset(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.New_Asset))
+                                                End Function)
+                    If Serial <> "" Then
+                        AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.New_Serial, Serial, sibi_request_items.Item_UID, ItemUID)
+                        RefreshRequest()
+                    End If
+                Case sibi_request_items.New_Asset
+                    Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
+                    Dim Asset = Await Task.Run(Function()
+                                                   Return MunisFunc.Get_AssetFromSerial(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.New_Serial))
+                                               End Function)
+                    If Asset <> "" Then
+                        AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.New_Asset, Asset, sibi_request_items.Item_UID, ItemUID)
+                        RefreshRequest()
+                    End If
+                Case sibi_request_items.Replace_Serial
+                    Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
+                    Dim Serial = Await Task.Run(Function()
+                                                    Return MunisFunc.Get_SerialFromAsset(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Replace_Asset))
+                                                End Function)
+                    If Serial <> "" Then
+                        AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.Replace_Serial, Serial, sibi_request_items.Item_UID, ItemUID)
+                        RefreshRequest()
+                    End If
+                Case sibi_request_items.Replace_Asset
+                    Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Item_UID)
+                    Dim Asset = Await Task.Run(Function()
+                                                   Return MunisFunc.Get_AssetFromSerial(GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Replace_Serial))
+                                               End Function)
+                    If Asset <> "" Then
+                        AssetFunc.Update_SQLValue(sibi_request_items.TableName, sibi_request_items.Replace_Asset, Asset, sibi_request_items.Item_UID, ItemUID)
+                        RefreshRequest()
+                    End If
+            End Select
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            DoneWaiting()
+        End Try
     End Sub
 
     Private Sub RefreshRequest()
@@ -1105,10 +1119,17 @@ VALUES
     End Sub
 
     Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
-        Dim ReqNum As String = Trim(txtReqNumber.Text)
-        If Not bolUpdating And ReqNum <> "" Then
-            MunisFunc.NewMunisView_ReqSearch(ReqNum, YearFromDate(CurrentRequest.dtDateStamp), Me)
-        End If
+        Try
+            Waiting()
+            Dim ReqNum As String = Trim(txtReqNumber.Text)
+            If Not bolUpdating And ReqNum <> "" Then
+                MunisFunc.NewMunisView_ReqSearch(ReqNum, YearFromDate(CurrentRequest.dtDateStamp), Me)
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            DoneWaiting()
+        End Try
     End Sub
 
     Private Sub txtRTNumber_Click(sender As Object, e As EventArgs) Handles txtRTNumber.Click

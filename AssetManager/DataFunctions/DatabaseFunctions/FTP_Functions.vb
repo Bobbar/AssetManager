@@ -154,7 +154,7 @@
                 End If
             End If
         Next
-        Dim blah = Message("Cleaned " & intSuccesses & " orphans.")
+        Message("Cleaned " & intSuccesses & " orphans.")
     End Sub
 
     Private Function DeleteDirectory(Directory As String) As Boolean

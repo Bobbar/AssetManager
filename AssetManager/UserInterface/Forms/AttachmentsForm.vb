@@ -774,7 +774,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         Else
             'something is very wrong
             Logger("FILE VERIFICATION FAILURE: Device:" & attachment.FolderGUID & "  FileUID: " & attachment.FileUID & " | Expected hash:" & attachment.MD5 & " Result hash:" & FileResultHash)
-            Dim blah = Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch", Me)
+            Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", vbOKOnly + MessageBoxIcon.Stop, "Hash Value Mismatch", Me)
             attachment.Dispose()
             PurgeTempDir()
             Return False

@@ -24,86 +24,61 @@ Public Class Munis_Comms
     End Function
 
     Public Function Return_MSSQLTable(strSQLQry As String) As DataTable
-        Try
-            Using conn As SqlConnection = New SqlConnection(MSSQLConnectString),
+        Using conn As SqlConnection = New SqlConnection(MSSQLConnectString),
                     NewTable As New DataTable,
                     da As New SqlDataAdapter
-                da.SelectCommand = New SqlCommand(strSQLQry)
-                da.SelectCommand.Connection = conn
-                da.Fill(NewTable)
-                Return NewTable
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+            da.SelectCommand = New SqlCommand(strSQLQry)
+            da.SelectCommand.Connection = conn
+            da.Fill(NewTable)
+            Return NewTable
+        End Using
     End Function
 
     Public Async Function Return_MSSQLTableAsync(strSQLQry As String) As Task(Of DataTable)
-        Try
-            Using conn As SqlConnection = New SqlConnection(MSSQLConnectString),
+        Using conn As SqlConnection = New SqlConnection(MSSQLConnectString),
                     NewTable As New DataTable,
                 cmd As New SqlCommand(strSQLQry, conn)
-                Await conn.OpenAsync
-                Dim dr As SqlDataReader = Await cmd.ExecuteReaderAsync
-                NewTable.Load(dr)
-                Return NewTable
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+            Await conn.OpenAsync
+            Dim dr As SqlDataReader = Await cmd.ExecuteReaderAsync
+            NewTable.Load(dr)
+            Return NewTable
+        End Using
     End Function
 
     Public Function Return_MSSQLTableFromCmd(cmd As SqlCommand) As DataTable
-        Try
-            Using NewTable As New DataTable,
+        Using NewTable As New DataTable,
                     da As New SqlDataAdapter(cmd)
-                da.Fill(NewTable)
-                cmd.Dispose()
-                Return NewTable
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+            da.Fill(NewTable)
+            cmd.Dispose()
+            Return NewTable
+        End Using
     End Function
 
     Public Async Function Return_MSSQLTableFromCmdAsync(cmd As SqlCommand) As Task(Of DataTable)
-        Try
-            Using conn = cmd.Connection,
-                NewTable As New DataTable ',
-                Await conn.OpenAsync
-                Dim dr As SqlDataReader = Await cmd.ExecuteReaderAsync
-                NewTable.Load(dr)
-                cmd.Dispose()
-                Return NewTable
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+        Using conn = cmd.Connection,
+                NewTable As New DataTable
+            Await conn.OpenAsync
+            Dim dr As SqlDataReader = Await cmd.ExecuteReaderAsync
+            NewTable.Load(dr)
+            cmd.Dispose()
+            Return NewTable
+        End Using
     End Function
     Public Function Return_MSSQLValue(table As String, fieldIN As Object, valueIN As Object, fieldOUT As String, Optional fieldIN2 As Object = Nothing, Optional ValueIN2 As Object = Nothing) As Object
-        Try
-            Dim sqlQRY As String
-            Dim Params As New List(Of SearchVal)
-            If fieldIN2 IsNot Nothing And ValueIN2 IsNot Nothing Then
-                sqlQRY = "SELECT TOP 1 " & fieldOUT & " FROM " & table  ' & fieldIN.ToString & " = '" & valueIN.ToString & "' AND " & fieldIN2.ToString & " = '" & ValueIN2.ToString & "'"
-                Params.Add(New SearchVal(fieldIN.ToString, valueIN.ToString,, True))
-                Params.Add(New SearchVal(fieldIN2.ToString, ValueIN2.ToString,, True))
-            Else
-                sqlQRY = "SELECT TOP 1 " & fieldOUT & " FROM " & table ' & fieldIN.ToString & " = '" & valueIN.ToString & "'"
-                Params.Add(New SearchVal(fieldIN.ToString, valueIN.ToString,, True))
-            End If
-            Using cmd = SQLParamCommand(sqlQRY, Params)
-                cmd.Connection.Open()
-                Return cmd.ExecuteScalar
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
-        Return Nothing
+        Dim sqlQRY As String
+        Dim Params As New List(Of SearchVal)
+        If fieldIN2 IsNot Nothing And ValueIN2 IsNot Nothing Then
+            sqlQRY = "SELECT TOP 1 " & fieldOUT & " FROM " & table  ' & fieldIN.ToString & " = '" & valueIN.ToString & "' AND " & fieldIN2.ToString & " = '" & ValueIN2.ToString & "'"
+            Params.Add(New SearchVal(fieldIN.ToString, valueIN.ToString,, True))
+            Params.Add(New SearchVal(fieldIN2.ToString, ValueIN2.ToString,, True))
+        Else
+            sqlQRY = "SELECT TOP 1 " & fieldOUT & " FROM " & table ' & fieldIN.ToString & " = '" & valueIN.ToString & "'"
+            Params.Add(New SearchVal(fieldIN.ToString, valueIN.ToString,, True))
+        End If
+        Using cmd = SQLParamCommand(sqlQRY, Params)
+            cmd.Connection.Open()
+            Return cmd.ExecuteScalar
+        End Using
     End Function
 
     Public Async Function Return_MSSQLValueAsync(table As String, fieldIN As Object, valueIN As Object, fieldOUT As String, Optional fieldIN2 As Object = Nothing, Optional ValueIN2 As Object = Nothing) As Task(Of String)
