@@ -50,10 +50,16 @@ Module DataConsistency
         Return "D" & Trim(Serial)
     End Function
     Public Function IsValidYear(Year As String) As Boolean
-        If Enumerable.Range(1900, 200).Contains(CInt(Year)) Then
-            Return True
-        End If
-        Return False
+        Try
+            If Trim(Year) <> "" Then
+                If Enumerable.Range(1900, 200).Contains(CInt(Year)) Then
+                    Return True
+                End If
+            End If
+            Return False
+        Catch
+            Return False
+        End Try
     End Function
 
 End Module
