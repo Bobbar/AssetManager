@@ -227,16 +227,14 @@ Public Class Munis_Functions 'Be warned. This whole class is a horrible bastard.
 
     Public Sub POSearch(Parent As Form)
         Try
-            Dim PO, FY As String
+            Dim PO As String
             Using NewDialog As New MyDialog(Parent)
                 With NewDialog
                     .Text = "PO Search"
                     .AddTextBox("txtPO", "PO #:")
-                    .AddTextBox("txtFY", "FY:")
                     .ShowDialog()
                     If .DialogResult = DialogResult.OK Then
                         PO = NewDialog.GetControlValue("txtPO").ToString
-                        FY = NewDialog.GetControlValue("txtFY").ToString
                         NewMunisView_POSearch(PO, Parent)
                     End If
                 End With
