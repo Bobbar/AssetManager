@@ -287,11 +287,11 @@ Public Class Munis_Functions 'Be warned. This whole class is a horrible bastard.
                         strOrg = NewDialog.GetControlValue("txtOrg").ToString
                         strObj = NewDialog.GetControlValue("txtObj").ToString
                         strFY = NewDialog.GetControlValue("txtFY").ToString
+                        If Trim(strOrg) IsNot "" And IsValidYear(strFY) Then
+                            NewOrgObView(strOrg, strObj, strFY, Parent)
+                        End If
                     End If
                 End With
-                If Trim(strOrg) IsNot "" Then
-                    NewOrgObView(strOrg, strObj, strFY, Parent)
-                End If
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
