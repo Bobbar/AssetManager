@@ -443,7 +443,6 @@ FROM ap_vendor
 WHERE a_vendor_number = " & VendorNum & "
 ) VEN
 ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
-        Debug.Print(strQRY)
         Dim Params As New List(Of SearchVal)
         Params.Add(New SearchVal("dbo.rq_gl_info.a_requisition_no", ReqNumber,, True))
         Params.Add(New SearchVal("dbo.rq_gl_info.rg_fiscal_year", FiscalYr,, True))
