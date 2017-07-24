@@ -512,13 +512,18 @@ VALUES
     End Function
 
     Private Sub dgvNotes_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvNotes.CellDoubleClick
+        ViewNote()
+    End Sub
+    Private Sub ViewNote()
         Try
-            Dim ViewNote As New SibiNotesForm(Me, dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString)
+            Dim NoteUID = dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString
+            If Not FormIsOpenByUID(GetType(SibiNotesForm), NoteUID) Then
+                Dim ViewNote As New SibiNotesForm(Me, NoteUID)
+            End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
-
     Private Sub DisableControls(ByVal control As Control)
         For Each c As Control In control.Controls
             Select Case True

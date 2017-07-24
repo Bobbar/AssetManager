@@ -56,7 +56,7 @@ Partial Class SibiNotesForm
         Me.cmdOK.Text = "OK"
         Me.cmdOK.UseVisualStyleBackColor = True
         '
-        'frmNotes
+        'SibiNotesForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -66,10 +66,10 @@ Partial Class SibiNotesForm
         Me.Controls.Add(Me.rtbNotes)
         Me.MaximumSize = New System.Drawing.Size(981, 669)
         Me.MinimumSize = New System.Drawing.Size(253, 160)
-        Me.Name = "frmNotes"
+        Me.Name = "SibiNotesForm"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Notes"
+        Me.Text = "Sibi Note"
         Me.ResumeLayout(False)
 
     End Sub

@@ -19,6 +19,7 @@
         InitializeComponent()
         Tag = ParentForm
         Icon = ParentForm.Icon
+        FormUID = NoteUID
         ViewNote(NoteUID)
     End Sub
 
@@ -30,6 +31,8 @@
         cmdOK.Visible = False
         rtbNotes.Clear()
         Dim NoteText As String = AssetFunc.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.Note)
+        Dim NoteTimeStamp As String = AssetFunc.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.DateStamp)
+        Me.Text += " - " & NoteTimeStamp
         Select Case GetStringFormat(NoteText)
             Case DataFormats.Rtf
                 rtbNotes.Rtf = NoteText
