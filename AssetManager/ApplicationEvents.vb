@@ -20,12 +20,12 @@ Namespace My
             End Using
             Status("Checking Local Cache...")
             If Not OfflineMode Then
-                If Not VerifyLocalCache(OfflineMode) Then
+                If Not VerifyCacheHashes(OfflineMode) Then
                     Status("Building Cache DB...")
                     RefreshLocalDBCache()
                 End If
             Else
-                CacheAvailable = VerifyLocalCache(OfflineMode)
+                CacheAvailable = VerifyCacheHashes(OfflineMode)
             End If
 
             If OfflineMode And Not CacheAvailable Then

@@ -230,8 +230,8 @@ Public Class MainForm
             Dim Its As Integer = 0
             Dim NoCacheMessageSent As Boolean = False
             Do Until ProgramEnding
-                ServerPinging = Await Task.Run(Function()
-                                                   Thread.Sleep(5000)
+                ServerPinging = Await Task.Run(Async Function()
+                                                   Await Task.Delay(5000)
                                                    Try
                                                        Dim CanPing As Boolean = My.Computer.Network.Ping(strServerIP)
                                                        If CanPing Then
@@ -245,7 +245,7 @@ Public Class MainForm
                                                        Return False
                                                    End Try
                                                End Function)
-                CacheAvailable = Await VerifyLocalCacheAsync()
+                CacheAvailable = Await VerifyLocalCacheHashOnly()
                 If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
 
                 'Cache and connection handling.
@@ -262,14 +262,12 @@ Public Class MainForm
                             Its += 1
                             If Its >= ItsTillHashCheck Then
                                 Its = 0
-                                StatusBar("Rebuilding DB Cache...")
                                 RebuildCache()
                             End If
                         Else
                             SQLiteTableHashes = Nothing
                             RemoteTableHashes = Nothing
                             NoCacheMessageSent = False
-                            StatusBar("Rebuilding DB Cache...")
                             RebuildCache()
                         End If
 
@@ -285,6 +283,7 @@ Public Class MainForm
                             FailedPings = 0
                             StatusStrip1.BackColor = colStatusBarProblem
                             ConnectStatus("Offline", Color.Red, "No connection. Cache unavailable.")
+
                             If CacheAvailable Then
                                 OfflineMode = True
                                 StatusStrip1.BackColor = colStatusBarProblem
@@ -303,8 +302,19 @@ Public Class MainForm
 
                     Case Not ServerPinging And OfflineMode
                         'Notify user of cached mode.
-                        StatusStrip1.BackColor = colStatusBarProblem
-                        ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
+
+                        If CacheAvailable Then
+                            OfflineMode = True
+                            StatusStrip1.BackColor = colStatusBarProblem
+                            ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
+                            '   Message("Connection Lost, cached mode enabled. Some functionality will be disabled.", vbOKOnly + vbInformation, "Cache Mode Enabled", Me)
+                        Else
+                            OfflineMode = False
+                            If Not NoCacheMessageSent Then
+                                Message("Connection to the server was lost, and the local DB cache could not be verified. All functionality disabled.", vbOKOnly + vbExclamation, "Cache Mode Failed", Me)
+                                NoCacheMessageSent = True
+                            End If
+                        End If
 
                     Case ServerPinging And OfflineMode
                         FailedPings = 0
@@ -314,9 +324,8 @@ Public Class MainForm
 
                         OfflineMode = False
                         NoCacheMessageSent = False
-                        ConnectStatus("Connected", Color.Green, "Connection OK")
+                        ConnectStatus("Connection Restored!", Color.Green, "Connection OK")
                         StatusStrip1.BackColor = colFormBackColor
-                        StatusBar("Connection restored. Rebuilding DB Cache...")
                         RebuildCache()
 
 #End Region
@@ -473,12 +482,16 @@ Public Class MainForm
     End Sub
 
     Private Async Sub RebuildCache()
-        'StatusBar("Connection restored. Rebuilding DB Cache...")
-        If Await RefreshLocalDBCacheAsync() Then
+        Try
+            StatusBar("Rebuilding DB Cache...")
+            Await Task.Run(Sub()
+                               If Not VerifyCacheHashes() Then RefreshLocalDBCache()
+                           End Sub)
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
             StatusBar("Idle...")
-        Else
-            StatusBar("Idle...")
-        End If
+        End Try
     End Sub
 
     Private Sub RefreshCombos()

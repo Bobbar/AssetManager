@@ -219,30 +219,22 @@ Public Class SQLite_Comms : Implements IDisposable
     End Function
 
     Private Sub CreateCacheTable(TableName As String, Transaction As SQLiteTransaction)
-        Try
-            Dim Statement = GetTableCreateStatement(TableName)
-            Dim qry As String = ConvertStatement(Statement)
-            Using cmd As New SQLiteCommand(qry, Connection)
-                cmd.Transaction = Transaction
-                cmd.ExecuteNonQuery()
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
+        Dim Statement = GetTableCreateStatement(TableName)
+        Dim qry As String = ConvertStatement(Statement)
+        Using cmd As New SQLiteCommand(qry, Connection)
+            cmd.Transaction = Transaction
+            cmd.ExecuteNonQuery()
+        End Using
     End Sub
 
     Private Function GetRemoteDBTable(TableName As String) As DataTable
-        Try
-            Dim qry As String = "SELECT * FROM " & TableName
-            Using conn As New MySQL_Comms, results As New DataTable, adapter = conn.Return_Adapter(qry)
-                adapter.AcceptChangesDuringFill = False
-                adapter.Fill(results)
-                results.TableName = TableName
-                Return results
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
+        Dim qry As String = "SELECT * FROM " & TableName
+        Using conn As New MySQL_Comms, results As New DataTable, adapter = conn.Return_Adapter(qry)
+            adapter.AcceptChangesDuringFill = False
+            adapter.Fill(results)
+            results.TableName = TableName
+            Return results
+        End Using
     End Function
 
     Private Function GetTableCreateStatement(TableName As String) As String
@@ -253,30 +245,21 @@ Public Class SQLite_Comms : Implements IDisposable
     End Function
 
     Private Sub ImportDatabase(TableName As String, Transaction As SQLiteTransaction)
-        Try
-            OpenConnection()
-            Using cmd = Connection.CreateCommand, adapter = New SQLiteDataAdapter(cmd), builder As New SQLiteCommandBuilder(adapter)
-                cmd.Transaction = Transaction
-                cmd.CommandText = "SELECT * FROM " & TableName
-                adapter.Update(GetRemoteDBTable(TableName))
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
+        OpenConnection()
+        Using cmd = Connection.CreateCommand, adapter = New SQLiteDataAdapter(cmd), builder As New SQLiteCommandBuilder(adapter)
+            cmd.Transaction = Transaction
+            cmd.CommandText = "SELECT * FROM " & TableName
+            adapter.Update(GetRemoteDBTable(TableName))
+        End Using
     End Sub
 
     Private Function Return_SQLTable(strSQLQry As String) As DataTable
-        Try
-            Using da As New SQLiteDataAdapter, tmpTable As New DataTable
-                da.SelectCommand = New SQLiteCommand(strSQLQry)
-                da.SelectCommand.Connection = Connection
-                da.Fill(tmpTable)
-                Return tmpTable
-            End Using
-        Catch ex As Exception
-            '  ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+        Using da As New SQLiteDataAdapter, tmpTable As New DataTable
+            da.SelectCommand = New SQLiteCommand(strSQLQry)
+            da.SelectCommand.Connection = Connection
+            da.Fill(tmpTable)
+            Return tmpTable
+        End Using
     End Function
     Private Function TableList() As List(Of String)
         Dim list As New List(Of String)
