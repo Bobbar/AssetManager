@@ -4,10 +4,10 @@ Imports System.IO
 Public Class SQLite_Comms : Implements IDisposable
 
 #Region "Fields"
-
+    Private Const EncSQLitePass As String = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU"
     Public Connection As SQLiteConnection
     Private ConnectionException As Exception
-    Private SQLiteConnectString As String = "Data Source=" & strSQLitePath
+    Private SQLiteConnectString As String = "Data Source=" & strSQLitePath & ";Password=" & DecodePassword(EncSQLitePass)
 
 #End Region
 
@@ -116,6 +116,7 @@ Public Class SQLite_Comms : Implements IDisposable
             End If
             SQLiteConnection.CreateFile(strSQLitePath)
             Connection = NewConnection()
+            Connection.SetPassword(DecodePassword(EncSQLitePass))
             OpenConnection()
             Using trans = Connection.BeginTransaction
                 For Each table In TableList()

@@ -318,10 +318,6 @@ Public Class NewDeviceForm
             txtHostname.Text = String.Empty
         End If
     End Sub
-
-    Private Sub txtSerial_REQ_Leave(sender As Object, e As EventArgs) Handles txtSerial_REQ.Leave
-
-    End Sub
 #End Region
 
 End Class
