@@ -57,8 +57,9 @@
         Dim files As New List(Of String)
         Try
             Using resp As Net.FtpWebResponse = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & ItemUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
-                Return True
+                If resp.StatusCode = Net.FtpStatusCode.OpeningData Then Return True
             End Using
+            Return False
         Catch ex As Exception
             Return False
         End Try

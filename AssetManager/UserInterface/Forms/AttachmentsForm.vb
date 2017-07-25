@@ -85,17 +85,6 @@ Class AttachmentsForm
 
 #End Region
 
-#Region "Enums"
-
-    Private Enum TransferReturnType
-        Success
-        Failure
-        FileTooLarge
-        Busy
-    End Enum
-
-#End Region
-
 #Region "Methods"
 
     Private Sub FillSibiInfo()
@@ -243,13 +232,11 @@ Class AttachmentsForm
 
     Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString, GetDBValue(SibiIndex.AttachFolder, cmbMoveFolder.SelectedIndex))
+        If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(SelectedAttachment, GetDBValue(SibiIndex.AttachFolder, cmbMoveFolder.SelectedIndex))
     End Sub
 
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
-        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString <> "" Then
-            DeleteAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
-        End If
+        DeleteAttachment(SelectedAttachment)
     End Sub
 
     Private Sub cmdOpen_Click(sender As Object, e As EventArgs) Handles cmdOpen.Click
@@ -257,20 +244,24 @@ Class AttachmentsForm
     End Sub
 
     Private Sub cmdUpload_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
-        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        Dim fd As OpenFileDialog = New OpenFileDialog()
-        fd.ShowHelp = True
-        fd.Title = "Select File To Upload - " & FileSizeMBLimit & "MB Limit"
-        fd.InitialDirectory = "C:\"
-        fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*"
-        fd.FilterIndex = 2
-        fd.Multiselect = True
-        fd.RestoreDirectory = True
-        If fd.ShowDialog() = DialogResult.OK Then
-            UploadFile(fd.FileNames)
-        Else
-            Exit Sub
-        End If
+        Try
+            If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+            Dim fd As OpenFileDialog = New OpenFileDialog()
+            fd.ShowHelp = True
+            fd.Title = "Select File To Upload - " & FileSizeMBLimit & "MB Limit"
+            fd.InitialDirectory = "C:\"
+            fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*"
+            fd.FilterIndex = 2
+            fd.Multiselect = True
+            fd.RestoreDirectory = True
+            If fd.ShowDialog() = DialogResult.OK Then
+                UploadFile(fd.FileNames)
+            Else
+                Exit Sub
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
 
     Private Function CopyAttachement(AttachObject As IDataObject, DataFormat As String) As String()
@@ -294,9 +285,7 @@ Class AttachmentsForm
     End Sub
 
     Private Sub DeleteAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteAttachmentToolStripMenuItem.Click
-        If AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString <> "" Then
-            DeleteAttachment(AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString)
-        End If
+        DeleteAttachment(SelectedAttachment)
     End Sub
 
     Private Sub DoneWaiting()
@@ -336,8 +325,8 @@ Class AttachmentsForm
                                                             Loop
                                                             Return memStream
                                                         End Using
-
                                                     End Function)
+
             If Not cancelToken.IsCancellationRequested Then
                 If VerifyAttachment(dAttachment) Then
                     Return dAttachment
@@ -566,20 +555,24 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         DownloadAndOpenAttachment(SelectedAttachment)
     End Sub
 
-    Private Async Sub ProcessDrop(AttachObject As IDataObject)
-        Dim File As Object
-        Select Case True
-            Case AttachObject.GetDataPresent("RenPrivateItem")
-                File = CopyAttachement(AttachObject, "RenPrivateItem")
-                If Not IsNothing(File) Then
-                    Dim UploadStatus = Await UploadAttachments(DirectCast(File, String()))
-                End If
-            Case AttachObject.GetDataPresent("FileDrop")
-                File = AttachObject.GetData("FileNameW")
-                If Not IsNothing(File) Then
-                    Dim UploadStatus = Await UploadAttachments(DirectCast(File, String()))
-                End If
-        End Select
+    Private Sub ProcessDrop(AttachObject As IDataObject)
+        Try
+            Dim File As Object
+            Select Case True
+                Case AttachObject.GetDataPresent("RenPrivateItem")
+                    File = CopyAttachement(AttachObject, "RenPrivateItem")
+                    If Not IsNothing(File) Then
+                        UploadAttachments(DirectCast(File, String()))
+                    End If
+                Case AttachObject.GetDataPresent("FileDrop")
+                    File = AttachObject.GetData("FileNameW")
+                    If Not IsNothing(File) Then
+                        UploadAttachments(DirectCast(File, String()))
+                    End If
+            End Select
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
 
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
@@ -617,8 +610,8 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
         Try
             If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-            Dim strCurrentFileName As String = AssetFunc.Get_SQLValue(_attachTable.TableName, _attachTable.FileUID, AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString, _attachTable.FileName)
-            Dim strAttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
+            Dim strCurrentFileName As String = AssetFunc.Get_SQLValue(_attachTable.TableName, _attachTable.FileUID, SelectedAttachment, _attachTable.FileName)
+            Dim strAttachUID As String = SelectedAttachment()
             Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
             If blah = "" Then
                 blah = strCurrentFileName
@@ -655,17 +648,13 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         CancelTransfers()
     End Sub
 
-    Private Async Sub UploadFile(Files() As String)
-        Try
-            StatusBar("Starting Upload...")
-            Dim TransferStatus = Await UploadAttachments(Files)
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
+    Private Sub UploadFile(Files() As String)
+        StatusBar("Starting Upload...")
+        UploadAttachments(Files)
     End Sub
 
-    Private Async Function UploadAttachments(files As String()) As Task(Of TransferReturnType)
-        If TransferTaskRunning Then Return TransferReturnType.Busy
+    Private Async Sub UploadAttachments(files As String())
+        If TransferTaskRunning Then Exit Sub
         TransferTaskRunning = True
         Dim CurrentAttachment As Attachment
         Try
@@ -689,22 +678,21 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                 MakeDirectory(CurrentAttachment.FolderGUID)
                 StatusBar("Uploading... " & FileNumber & " of " & files.Count)
                 Progress = New ProgressCounter
-                Dim UploadComplete = Await Task.Run(Function()
-                                                        Using FileStream As FileStream = DirectCast(CurrentAttachment.DataStream(), FileStream),
+                Await Task.Run(Sub()
+                                   Using FileStream As FileStream = DirectCast(CurrentAttachment.DataStream(), FileStream),
            FTPStream As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream(FTPUri & CurrentAttachment.FolderGUID & "/" & CurrentAttachment.FileUID, Net.WebRequestMethods.Ftp.UploadFile)
-                                                            Dim buffer(1023) As Byte
-                                                            Dim bytesIn As Integer = 1
-                                                            Progress.BytesToTransfer = CInt(FileStream.Length)
-                                                            Do Until bytesIn < 1 Or cancelToken.IsCancellationRequested
-                                                                bytesIn = FileStream.Read(buffer, 0, 1024)
-                                                                If bytesIn > 0 Then
-                                                                    FTPStream.Write(buffer, 0, bytesIn)
-                                                                    Progress.BytesMoved = bytesIn
-                                                                End If
-                                                            Loop
-                                                        End Using
-                                                        Return True
-                                                    End Function)
+                                       Dim buffer(1023) As Byte
+                                       Dim bytesIn As Integer = 1
+                                       Progress.BytesToTransfer = CInt(FileStream.Length)
+                                       Do Until bytesIn < 1 Or cancelToken.IsCancellationRequested
+                                           bytesIn = FileStream.Read(buffer, 0, 1024)
+                                           If bytesIn > 0 Then
+                                               FTPStream.Write(buffer, 0, bytesIn)
+                                               Progress.BytesMoved = bytesIn
+                                           End If
+                                       Loop
+                                   End Using
+                               End Sub)
                 If cancelToken.IsCancellationRequested Then
                     FTPFunc.DeleteFTPAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID)
                 Else
@@ -713,9 +701,8 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                 End If
                 CurrentAttachment.Dispose()
             Next
-            Return TransferReturnType.Success
         Catch ex As Exception
-            Throw ex
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
             If Not ProgramEnding Then
                 TransferTaskRunning = False
@@ -725,7 +712,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                 ListAttachments()
             End If
         End Try
-    End Function
+    End Sub
 
     Private Async Sub DownloadAndSaveAttachment(AttachUID As String)
         Try

@@ -11,16 +11,11 @@ Public Class Munis_Comms
 #Region "Methods"
 
     Public Function Return_MSSQLCommand(strSQLQry As String) As SqlCommand
-        Try
-            Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)
-            Dim cmd As New SqlCommand
-            cmd.Connection = conn
-            cmd.CommandText = strSQLQry
-            Return cmd
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+        Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)
+        Dim cmd As New SqlCommand
+        cmd.Connection = conn
+        cmd.CommandText = strSQLQry
+        Return cmd
     End Function
 
     Public Function Return_MSSQLTable(strSQLQry As String) As DataTable
