@@ -17,16 +17,24 @@ Module DBCacheFunctions
     ''' <summary>
     ''' Builds local hash list and compares to previously built remote hash list. Returns False for mismatch.
     ''' </summary>
+    ''' <param name="OfflineMode">When true, only checks for Schema Version since a remote table hash will likely be unavailabe.</param>
     ''' <returns></returns>
-    Public Async Function VerifyLocalCacheHashOnly() As Task(Of Boolean)
-        If RemoteTableHashes Is Nothing Then Return False
-        Return Await Task.Run(Function()
-                                  Dim LocalHashes As New List(Of String)
-                                  Using SQLiteComms As New SQLite_Comms
-                                      LocalHashes = SQLiteComms.LocalTableHashList
-                                      Return SQLiteComms.CompareTableHashes(LocalHashes, RemoteTableHashes)
-                                  End Using
-                              End Function)
+    Public Async Function VerifyLocalCacheHashOnly(OfflineMode As Boolean) As Task(Of Boolean)
+        If Not OfflineMode Then
+            If RemoteTableHashes Is Nothing Then Return False
+            Return Await Task.Run(Function()
+                                      Dim LocalHashes As New List(Of String)
+                                      Using SQLiteComms As New SQLite_Comms
+                                          LocalHashes = SQLiteComms.LocalTableHashList
+                                          Return SQLiteComms.CompareTableHashes(LocalHashes, RemoteTableHashes)
+                                      End Using
+                                  End Function)
+        Else
+            Using SQLiteComms As New SQLite_Comms
+                If SQLiteComms.GetSchemaVersion > 0 Then Return True
+            End Using
+        End If
+        Return False
     End Function
 
     ''' <summary>

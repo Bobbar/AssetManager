@@ -245,7 +245,7 @@ Public Class MainForm
                                                        Return False
                                                    End Try
                                                End Function)
-                CacheAvailable = Await VerifyLocalCacheHashOnly()
+                CacheAvailable = Await VerifyLocalCacheHashOnly(OfflineMode)
                 If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
 
                 'Cache and connection handling.
