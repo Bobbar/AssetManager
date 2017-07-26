@@ -49,15 +49,6 @@
         End Try
     End Sub
 
-    Private Sub CollectLiveBoxArgs(Control As TextBox, Type As LiveBoxType, ViewMember As String, Optional DataMember As String = Nothing)
-        With CurrentLiveBoxArgs
-            .Control = Control
-            .Type = Type
-            .DisplayMember = ViewMember
-            If Not IsNothing(DataMember) Then .ValueMember = DataMember
-        End With
-    End Sub
-
     Private Sub Control_KeyDown(sender As Object, e As KeyEventArgs)
         If e.KeyCode = Keys.Down Then
             GiveLiveBoxFocus()

@@ -66,7 +66,7 @@ Public Class PackFileForm
         End Try
     End Sub
 
-    Private Async Sub NewPackButton_Click(sender As Object, e As EventArgs) Handles NewPackButton.Click
+    Private Sub NewPackButton_Click(sender As Object, e As EventArgs) Handles NewPackButton.Click
         Try
             NewPackFile()
         Catch ex As Exception

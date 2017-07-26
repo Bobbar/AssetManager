@@ -1,5 +1,4 @@
 ﻿Module Colors
-    Public colCurrentEntry As Color = ColorTranslator.FromHtml("#7AD1FF") '"#7AD1FF"
     Public colMissingField As Color = ColorTranslator.FromHtml("#ffcccc") '"#82C1FF") '"#FF9827") '"#75BAFF")
     Public colCheckIn As Color = ColorTranslator.FromHtml("#B6FCC0")
     Public colCheckOut As Color = ColorTranslator.FromHtml("#FCB6B6")

@@ -5,7 +5,6 @@ Public Class GridForm
 #Region "Fields"
 
     Private bolGridFilling As Boolean = True
-    Private bolSelectMode As Boolean
     Private GridList As New List(Of DataGridView)
     Private LastDoubleClickRow As DataGridViewRow
     Private MyParent As MyForm
@@ -14,12 +13,11 @@ Public Class GridForm
 
 #Region "Constructors"
 
-    Sub New(ParentForm As Form, Optional Title As String = "", Optional SelectMode As Boolean = False)
+    Sub New(ParentForm As Form, Optional Title As String = "")
         MyParent = DirectCast(ParentForm, MyForm)
         Me.Tag = ParentForm
         Me.Icon = MyParent.Icon
         Me.GridTheme = MyParent.GridTheme
-        bolSelectMode = SelectMode
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -134,7 +132,6 @@ Public Class GridForm
     End Sub
 
     Private Function GridHeight() As Integer
-        Dim iHeight As Integer = 0
         Dim MinHeight As Integer = 200
         Dim CalcHeight As Integer = CInt((Me.ClientSize.Height - 30) / GridList.Count)
         If CalcHeight < MinHeight Then

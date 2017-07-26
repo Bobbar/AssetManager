@@ -31,13 +31,11 @@
     Private Function GetTables() As List(Of String)
         Dim Tables As New List(Of String)
         Dim Qry = "SHOW TABLES IN " & CurrentDB
-        Dim Results As New DataTable
-        Using comms As New MySQL_Comms
-            Results = comms.Return_SQLTable(Qry)
+        Using comms As New MySQL_Comms, Results As DataTable = comms.Return_SQLTable(Qry)
+            For Each row As DataRow In Results.Rows
+                Tables.Add(row.Item(Results.Columns(0).ColumnName).ToString)
+            Next
         End Using
-        For Each row As DataRow In Results.Rows
-            Tables.Add(row.Item(Results.Columns(0).ColumnName).ToString)
-        Next
         Return Tables
     End Function
 

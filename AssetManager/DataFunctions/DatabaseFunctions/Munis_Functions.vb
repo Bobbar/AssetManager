@@ -209,16 +209,17 @@ Public Class Munis_Functions 'Be warned. This whole class is a horrible bastard.
     Public Sub NameSearch(Parent As Form)
         Try
             Using NewDialog As New MyDialog(Parent)
-                Dim strName As String
                 With NewDialog
                     .Text = "Org/Object Code Search"
                     .AddTextBox("txtName", "First or Last Name:")
                     .ShowDialog()
-                    If .DialogResult = DialogResult.OK Then strName = NewDialog.GetControlValue("txtName").ToString
+                    If .DialogResult = DialogResult.OK Then
+                        Dim strName = NewDialog.GetControlValue("txtName").ToString
+                        If Trim(strName) IsNot "" Then
+                            NewMunisView_NameSearch(strName, Parent)
+                        End If
+                    End If
                 End With
-                If Trim(strName) IsNot "" Then
-                    NewMunisView_NameSearch(strName, Parent)
-                End If
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -412,12 +413,11 @@ FROM poheader"
                     NewGridForm.ShowDialog(Parent)
                     If NewGridForm.DialogResult = DialogResult.OK Then
                         Return SelectedCellValue(NewGridForm.SelectedValue, "rqdt_uni_pr")
-                    Else
-                        Return Nothing
                     End If
                 End If
             End If
         End Using
+        Return Nothing
     End Function
     Private Function CheckResults(results As DataTable, ParentForm As Form) As Boolean
         If results IsNot Nothing AndAlso results.Rows.Count > 0 Then
@@ -514,20 +514,17 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
                 Return GridData
             ElseIf GridData.Rows.Count < 1 AndAlso Device.strAssetTag <> "" Then
                 GridData = Await MunisComms.Return_MSSQLTableAsync(AssetTagQuery)
-                If GridData.Rows.Count < 1 Then
-                    Return Nothing
-                Else
+                If GridData.Rows.Count > 0 Then
                     Return GridData
                 End If
             End If
         ElseIf Device.strSerial = "" AndAlso Device.strAssetTag <> "" Then
             GridData = Await MunisComms.Return_MSSQLTableAsync(AssetTagQuery)
-            If GridData.Rows.Count < 1 Then
-                Return Nothing
-            Else
+            If GridData.Rows.Count > 0 Then
                 Return GridData
             End If
         End If
+        Return Nothing
     End Function
 
     Private Sub Waiting()

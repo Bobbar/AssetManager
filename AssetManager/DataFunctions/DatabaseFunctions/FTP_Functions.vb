@@ -23,30 +23,27 @@
     End Function
 
     Public Function DeleteFTPFolder(FolderUID As String) As Boolean
-        Dim resp As Net.FtpWebResponse = Nothing
-        Dim files As List(Of String)
         Try
-            resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & FolderUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
-            Dim responseStream As System.IO.Stream = resp.GetResponseStream
-            files = New List(Of String)
-            Dim reader As IO.StreamReader = New IO.StreamReader(responseStream)
-            While Not reader.EndOfStream 'collect list of files in directory
-                files.Add(reader.ReadLine)
-            End While
-            reader.Close()
-            responseStream.Dispose()
-            Dim i As Integer = 0
-            For Each file As String In files  'delete each file counting for successes
-                If DeleteFTPAttachment(file, FolderUID) Then i += 1
-            Next
-            If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
-                resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & FolderUID, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
-            End If
-            If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
-                Return True
-            Else
-                Return False
-            End If
+            Using resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & FolderUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse),
+                responseStream As System.IO.Stream = resp.GetResponseStream,
+                reader As IO.StreamReader = New IO.StreamReader(responseStream)
+                Dim files = New List(Of String)
+                While Not reader.EndOfStream 'collect list of files in directory
+                    files.Add(reader.ReadLine)
+                End While
+                Dim i As Integer = 0
+                For Each file As String In files  'delete each file counting for successes
+                    If DeleteFTPAttachment(file, FolderUID) Then i += 1
+                Next
+                If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
+                    Using deleteResp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & FolderUID, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
+                        If deleteResp.StatusCode = Net.FtpStatusCode.FileActionOK Then
+                            Return True
+                        End If
+                    End Using
+                End If
+            End Using
+            Return False
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
@@ -54,7 +51,6 @@
     End Function
 
     Public Function Has_FTPFolder(ItemUID As String) As Boolean
-        Dim files As New List(Of String)
         Try
             Using resp As Net.FtpWebResponse = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & ItemUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
                 If resp.StatusCode = Net.FtpStatusCode.OpeningData Then Return True
@@ -93,15 +89,13 @@
             Next
             If intOrphanFiles > 0 Or intOrphanFolders > 0 Then
                 Dim blah = Message("Orphans found!  Folders:" & intOrphanFolders & "  Files:" & intOrphanFiles & vbCrLf & vbCrLf & "See log for details:" & Chr(34) & strLogPath & Chr(34) & vbCrLf & vbCrLf & "Press OK now to delete orphans.", vbOKCancel + vbExclamation, "Corruption Detected")
-                'Dim blah = Message("Orphans found!  Folders:" & intOrphanFolders & "  Files:" & intOrphanFiles & vbCrLf & "See log for details:" & strLogPath & vbCrLf & vbCrLf & "Press OK now to delete orphans.", vbOKCancel + vbCritical, "Corruption Detected")
                 If blah = vbOK Then
                     CleanFiles(BadFiles)
                     ScanAttachements()
                 End If
             Else
                 Logger("No Orphans Found.")
-                Dim blah = Message("No issues found.", vbOKOnly + vbInformation, "Scan OK")
-                'Dim blah = Message("No issues found.", vbOKOnly + vbInformation)
+                Message("No issues found.", vbOKOnly + vbInformation, "Scan OK")
             End If
             Logger("**********End Scan Results*********")
             Logger("***********************************")
@@ -170,10 +164,9 @@
                 resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & Directory, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
                 If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                     Return True
-                Else
-                    Return False
                 End If
             End If
+            Return Nothing
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False

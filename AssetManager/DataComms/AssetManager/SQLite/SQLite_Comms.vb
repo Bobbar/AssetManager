@@ -5,7 +5,7 @@ Public Class SQLite_Comms : Implements IDisposable
 
 #Region "Fields"
     Private Const EncSQLitePass As String = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU"
-    Public Connection As SQLiteConnection
+    Public Property Connection As SQLiteConnection
     Private ConnectionException As Exception
     Private SQLiteConnectString As String = "Data Source=" & strSQLitePath & ";Password=" & DecodePassword(EncSQLitePass)
 
@@ -109,7 +109,7 @@ Public Class SQLite_Comms : Implements IDisposable
             CloseConnection()
             GC.Collect()
             If Not File.Exists(strSQLiteDir) Then
-                Dim di As DirectoryInfo = Directory.CreateDirectory(strSQLiteDir)
+                Directory.CreateDirectory(strSQLiteDir)
             End If
             If File.Exists(strSQLitePath) Then
                 File.Delete(strSQLitePath)

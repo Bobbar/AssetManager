@@ -144,6 +144,7 @@ Module ErrorHandling
                 Return False
             Case Else
                 UnHandledError(ex, ex.HResult, Method)
+                Return False
         End Select
     End Function
 
@@ -154,6 +155,7 @@ Module ErrorHandling
                 Return False
             Case Else
                 UnHandledError(ex, ex.HResult, Method)
+                Return False
         End Select
     End Function
 
@@ -216,6 +218,7 @@ Module ErrorHandling
                 Return False
             Case Else
                 UnHandledError(ex, ex.SocketErrorCode, Method)
+                Return False
         End Select
     End Function
 
@@ -247,6 +250,7 @@ Module ErrorHandling
                 Return True
             Case Else
                 UnHandledError(ex, ex.Number, Method)
+                Return False
         End Select
     End Function
 
@@ -258,6 +262,7 @@ Module ErrorHandling
                 Return True
             Case Else
                 UnHandledError(ex, ex.HResult, Method)
+                Return False
         End Select
     End Function
 
@@ -266,6 +271,7 @@ Module ErrorHandling
             Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
             Message("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "ERROR")
             EndProgram()
+            Return False
         Else
             Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
             Return True

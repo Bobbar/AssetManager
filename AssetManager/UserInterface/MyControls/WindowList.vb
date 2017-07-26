@@ -61,6 +61,7 @@
         If TypeOf Tag Is Form Then
             Return DirectCast(Tag, Form)
         End If
+        Return Nothing
     End Function
     Private Function CountText(count As Integer) As String
         Dim MainText As String = "Select Window"
@@ -161,7 +162,6 @@
             Dim frm As Form = CType(item.Tag, Form)
             If Not IsParentForm(frm) Then
                 frm.Dispose()
-                GC.Collect()
                 If DropDownControl.DropDownItems.Count < 1 Then
                     DropDownControl.Visible = False
                     DropDownControl.DropDownItems.Clear()

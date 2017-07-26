@@ -42,13 +42,6 @@
         Return CodeIndex(index).strLong
     End Function
 
-    Public Function GetDBValueFromHuman(ByVal CodeIndex() As Combo_Data, ByVal LongVal As String) As String
-        For Each i As Combo_Data In CodeIndex
-            If i.strLong = LongVal Then Return i.strShort
-        Next
-        Return Nothing
-    End Function
-
     Public Function GetComboIndexFromShort(ByVal CodeIndex() As Combo_Data, ByVal ShortVal As String) As Integer
         For i As Integer = 0 To UBound(CodeIndex)
             If CodeIndex(i).strShort = ShortVal Then Return i

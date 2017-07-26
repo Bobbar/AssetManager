@@ -73,11 +73,6 @@ Namespace AdvancedSearch
             Next
             Return SelectString
         End Function
-        Private Function GetTableInfo(table As String) As TableInfo
-            Dim col = GetColumns(table)
-            Dim NewTable As New TableInfo(table, col)
-            Return NewTable
-        End Function
 
 #End Region
 
@@ -89,9 +84,9 @@ Namespace AdvancedSearch
 
 #Region "Fields"
 
-        Public Columns As List(Of String)
-        Public TableKey As String
-        Public TableName As String
+        Public Property Columns As List(Of String)
+        Public Property TableKey As String
+        Public Property TableName As String
 
 #End Region
 

@@ -104,11 +104,11 @@ Class AttachmentsForm
     Private Sub ListAttachments()
         Waiting()
         Try
-            Dim table As New DataTable
             Dim strQry As String
             strQry = GetQry()
-            table = GetTable()
-            Using SQLComms As New MySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQry)
+            Using SQLComms As New MySQL_Comms,
+                results As DataTable = SQLComms.Return_SQLTable(strQry),
+                table As DataTable = GetTable()
                 Dim strFullFilename As String
                 Dim strFileSizeHuman As String
                 For Each r As DataRow In results.Rows
@@ -124,18 +124,17 @@ Class AttachmentsForm
                         ' End If
                     End If
                 Next
+                bolGridFilling = True
+                AttachGrid.DataSource = table
             End Using
-            bolGridFilling = True
-            AttachGrid.DataSource = table
             AttachGrid.Columns("Filename").DefaultCellStyle.Font = New Font("Consolas", 9.75, FontStyle.Bold)
-            table.Dispose()
             RefreshAttachCount()
-            DoneWaiting()
             AttachGrid.ClearSelection()
             If Me.Visible Then bolGridFilling = False
         Catch ex As Exception
-            DoneWaiting()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            DoneWaiting()
         End Try
     End Sub
 
@@ -246,19 +245,20 @@ Class AttachmentsForm
     Private Sub cmdUpload_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
         Try
             If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-            Dim fd As OpenFileDialog = New OpenFileDialog()
-            fd.ShowHelp = True
-            fd.Title = "Select File To Upload - " & FileSizeMBLimit & "MB Limit"
-            fd.InitialDirectory = "C:\"
-            fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*"
-            fd.FilterIndex = 2
-            fd.Multiselect = True
-            fd.RestoreDirectory = True
-            If fd.ShowDialog() = DialogResult.OK Then
-                UploadFile(fd.FileNames)
-            Else
-                Exit Sub
-            End If
+            Using fd As OpenFileDialog = New OpenFileDialog()
+                fd.ShowHelp = True
+                fd.Title = "Select File To Upload - " & FileSizeMBLimit & "MB Limit"
+                fd.InitialDirectory = "C:\"
+                fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*"
+                fd.FilterIndex = 2
+                fd.Multiselect = True
+                fd.RestoreDirectory = True
+                If fd.ShowDialog() = DialogResult.OK Then
+                    UploadFile(fd.FileNames)
+                Else
+                    Exit Sub
+                End If
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -269,7 +269,7 @@ Class AttachmentsForm
             Dim FileName As String = GetAttachFileName(AttachObject, DataFormat)
             Dim strFullPath(0) As String
             strFullPath(0) = DownloadPath & FileName
-            Dim di As DirectoryInfo = Directory.CreateDirectory(DownloadPath)
+            Directory.CreateDirectory(DownloadPath)
             Using streamFileData = DirectCast(AttachObject.GetData("FileContents"), MemoryStream),
                      outputStream = IO.File.Create(strFullPath(0))
                 streamFileData.CopyTo(outputStream)
@@ -277,6 +277,7 @@ Class AttachmentsForm
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
         End Try
     End Function
 
@@ -295,7 +296,7 @@ Class AttachmentsForm
     Private Async Function DownloadAttachment(AttachUID As String) As Task(Of Attachment)
         If TransferTaskRunning Then Return Nothing
         TransferTaskRunning = True
-        Dim dAttachment As Attachment
+        Dim dAttachment As New Attachment
         Try
             taskCancelTokenSource = New CancellationTokenSource
             Dim cancelToken As CancellationToken = taskCancelTokenSource.Token
@@ -358,20 +359,21 @@ Class AttachmentsForm
 
     Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
         Try
-            Dim streamFileName As New MemoryStream
             Select Case DataFormat
                 Case "RenPrivateItem" '"FileGroupDescriptor"
-                    streamFileName = DirectCast(AttachObject.GetData("FileGroupDescriptor"), MemoryStream)
-                    streamFileName.Position = 0
-                    Dim sr As New StreamReader(streamFileName)
-                    Dim fullString As String = sr.ReadToEnd
-                    fullString = Replace(fullString, vbNullChar, "")
-                    fullString = Replace(fullString, ChrW(1), "")
-                    Return fullString
+                    Using streamFileName As MemoryStream = DirectCast(AttachObject.GetData("FileGroupDescriptor"), MemoryStream)
+                        streamFileName.Position = 0
+                        Dim sr As New StreamReader(streamFileName)
+                        Dim fullString As String = sr.ReadToEnd
+                        fullString = Replace(fullString, vbNullChar, "")
+                        fullString = Replace(fullString, ChrW(1), "")
+                        Return fullString
+                    End Using
             End Select
-        Catch ex As Exception
             Return Nothing
+        Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
         End Try
     End Function
 
@@ -433,10 +435,9 @@ Class AttachmentsForm
     End Function
 
     Private Sub InsertSQLAttachment(Attachment As Attachment)
-        Try
-            Dim SQL As String
-            If TypeOf Attachment Is Sibi_Attachment Then
-                SQL = "INSERT INTO " & Attachment.AttachTable.TableName & " (" & Attachment.AttachTable.FKey & ",
+        Dim SQL As String
+        If TypeOf Attachment Is Sibi_Attachment Then
+            SQL = "INSERT INTO " & Attachment.AttachTable.TableName & " (" & Attachment.AttachTable.FKey & ",
 " & Attachment.AttachTable.FileName & ",
 " & Attachment.AttachTable.FileType & ",
 " & Attachment.AttachTable.FileSize & ",
@@ -450,8 +451,8 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
 @" & Attachment.AttachTable.FileUID & ",
 @" & Attachment.AttachTable.FileHash & ",
 @" & Attachment.AttachTable.Folder & ")"
-            Else
-                SQL = "INSERT INTO " & Attachment.AttachTable.TableName & " (" & Attachment.AttachTable.FKey & ",
+        Else
+            SQL = "INSERT INTO " & Attachment.AttachTable.TableName & " (" & Attachment.AttachTable.FKey & ",
 " & Attachment.AttachTable.FileName & ",
 " & Attachment.AttachTable.FileType & ",
 " & Attachment.AttachTable.FileSize & ",
@@ -463,24 +464,21 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
 @" & Attachment.AttachTable.FileSize & ",
 @" & Attachment.AttachTable.FileUID & ",
 @" & Attachment.AttachTable.FileHash & ")"
+        End If
+        Using LocalSQLComm As New MySQL_Comms, cmd As MySqlCommand = LocalSQLComm.Return_SQLCommand(SQL)
+            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FKey, Attachment.FolderGUID)
+            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileName, Attachment.Filename)
+            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileType, Attachment.Extention)
+            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileSize, Attachment.Filesize)
+            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileUID, Attachment.FileUID)
+            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileHash, Attachment.MD5)
+            If TypeOf Attachment Is Sibi_Attachment Then
+                Dim SibiAttach = DirectCast(Attachment, Sibi_Attachment)
+                cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.Folder, SibiAttach.SelectedFolder)
             End If
-            Using LocalSQLComm As New MySQL_Comms, cmd As MySqlCommand = LocalSQLComm.Return_SQLCommand(SQL)
-                cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FKey, Attachment.FolderGUID)
-                cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileName, Attachment.Filename)
-                cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileType, Attachment.Extention)
-                cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileSize, Attachment.Filesize)
-                cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileUID, Attachment.FileUID)
-                cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileHash, Attachment.MD5)
-                If TypeOf Attachment Is Sibi_Attachment Then
-                    Dim SibiAttach = DirectCast(Attachment, Sibi_Attachment)
-                    cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.Folder, SibiAttach.SelectedFolder)
-                End If
-                cmd.ExecuteNonQuery()
-                cmd.Parameters.Clear()
-            End Using
-        Catch ex As Exception
-            Throw ex
-        End Try
+            cmd.ExecuteNonQuery()
+            cmd.Parameters.Clear()
+        End Using
     End Sub
 
     Private Sub MakeDirectory(FolderGUID As String)
@@ -656,7 +654,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     Private Async Sub UploadAttachments(files As String())
         If TransferTaskRunning Then Exit Sub
         TransferTaskRunning = True
-        Dim CurrentAttachment As Attachment
+        Dim CurrentAttachment As New Attachment
         Try
             Dim LocalFTPComm As New FTP_Comms
             Dim FileNumber As Integer = 1
@@ -750,11 +748,10 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     Private Function SaveAttachmentToDisk(attachment As Attachment, savePath As String) As Boolean
         Try
             StatusBar("Saving to disk...")
-            Dim di As DirectoryInfo = Directory.CreateDirectory(DownloadPath)
+            Directory.CreateDirectory(DownloadPath)
             Using outputStream = IO.File.Create(savePath),
             memStream = DirectCast(attachment.DataStream, MemoryStream)
                 memStream.CopyTo(outputStream) 'once data is verified we go ahead and copy it to disk
-                outputStream.Close()
             End Using
             StatusBar("Idle...")
             Return True

@@ -53,7 +53,6 @@ Module SecurityFunctions
             For i = 0 To hashValue.Length - 1
                 sBuilder.Append(hashValue(i).ToString("x2"))
             Next
-            fStream.Close()
             Return sBuilder.ToString
         End Using
     End Function
@@ -90,6 +89,7 @@ Module SecurityFunctions
         For Each Group As Access_Info In AccessLevels
             If Group.strModule = SecModule Then Return Group.intLevel
         Next
+        Return -1
     End Function
 
     Public Sub GetUserAccess()

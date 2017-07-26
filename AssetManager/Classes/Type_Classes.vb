@@ -108,6 +108,18 @@ Public Class Attachment : Implements IDisposable
     Private _attachTable As main_attachments
     Private _dataStream As Stream
 
+    Sub New()
+        _fileInfo = Nothing
+        _fileName = Nothing
+        _fileSize = Nothing
+        _extention = Nothing
+        _folderGUID = Nothing
+        _MD5 = Nothing
+        _fileUID = Nothing
+        _attachTable = Nothing
+        _dataStream = Nothing
+    End Sub
+
     ''' <summary>
     ''' Create new Attachment from a file path.
     ''' </summary>
@@ -296,7 +308,7 @@ Public Class Grid_Theme
 
     End Sub
 
-    Public RowHighlightColor As Color
-    Public CellSelectColor As Color
-    Public BackColor As Color
+    Public Property RowHighlightColor As Color
+    Public Property CellSelectColor As Color
+    Public Property BackColor As Color
 End Class

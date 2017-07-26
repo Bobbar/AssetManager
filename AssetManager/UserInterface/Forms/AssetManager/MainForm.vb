@@ -541,21 +541,21 @@ Public Class MainForm
             If Results Is Nothing Then Exit Sub
             StatusBar("Building Grid...")
             Application.DoEvents()
-            Dim table As New DataTable
-            table.Columns.Add("User", GetType(String))
-            table.Columns.Add("Asset ID", GetType(String))
-            table.Columns.Add("Serial", GetType(String))
-            table.Columns.Add("Device Type", GetType(String))
-            table.Columns.Add("Description", GetType(String))
-            table.Columns.Add("OS Version", GetType(String))
-            table.Columns.Add("Location", GetType(String))
-            table.Columns.Add("PO Number", GetType(String))
-            table.Columns.Add("Purchase Date", GetType(Date))
-            table.Columns.Add("Replace Year", GetType(String))
-            table.Columns.Add("Modified", GetType(Date))
-            table.Columns.Add("GUID", GetType(String))
-            For Each r As DataRow In Results.Rows
-                table.Rows.Add(r.Item(devices.CurrentUser),
+            Using table As New DataTable
+                table.Columns.Add("User", GetType(String))
+                table.Columns.Add("Asset ID", GetType(String))
+                table.Columns.Add("Serial", GetType(String))
+                table.Columns.Add("Device Type", GetType(String))
+                table.Columns.Add("Description", GetType(String))
+                table.Columns.Add("OS Version", GetType(String))
+                table.Columns.Add("Location", GetType(String))
+                table.Columns.Add("PO Number", GetType(String))
+                table.Columns.Add("Purchase Date", GetType(Date))
+                table.Columns.Add("Replace Year", GetType(String))
+                table.Columns.Add("Modified", GetType(Date))
+                table.Columns.Add("GUID", GetType(String))
+                For Each r As DataRow In Results.Rows
+                    table.Rows.Add(r.Item(devices.CurrentUser),
                               r.Item(devices.AssetTag),
                               r.Item(devices.Serial),
                                GetHumanValue(DeviceIndex.EquipType, r.Item(devices.EQType).ToString),
@@ -567,17 +567,18 @@ Public Class MainForm
                               r.Item(devices.ReplacementYear),
                               r.Item(devices.LastMod_Date),
                               r.Item(devices.DeviceUID))
-            Next
-            bolGridFilling = True
-            ResultGrid.DataSource = table
-            ResultGrid.ClearSelection()
-            bolGridFilling = False
-            DisplayRecords(table.Rows.Count)
-            table.Dispose()
-            Results.Dispose()
-            DoneWaiting()
+                Next
+                bolGridFilling = True
+                ResultGrid.DataSource = table
+                ResultGrid.ClearSelection()
+                bolGridFilling = False
+                DisplayRecords(table.Rows.Count)
+                Results.Dispose()
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            DoneWaiting()
         End Try
     End Sub
 

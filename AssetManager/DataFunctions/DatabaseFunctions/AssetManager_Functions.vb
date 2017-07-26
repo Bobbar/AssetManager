@@ -124,6 +124,7 @@ VALUES
                     Return True
                 End If
             End Using
+            Return False
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
@@ -168,6 +169,7 @@ VALUES
                     '    Return rows
                 End If
             End Using
+            Return -1
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return -1
@@ -245,6 +247,7 @@ VALUES
             Return Nothing
         Catch ex As MySqlException
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
         End Try
     End Function
 

@@ -1,9 +1,7 @@
 ﻿Imports System.Text.RegularExpressions
 
 Module DataConsistency
-    Public ReadOnly strDBDateTimeFormat As String = "yyyy-MM-dd HH:mm:ss"
-    Public ReadOnly strDBDateFormat As String = "yyyy-MM-dd"
-    Public ReadOnly dtDefaultDate As Date = DateTime.Parse("1/1/0001 12:00:00 AM")
+    Public Const strDBDateTimeFormat As String = "yyyy-MM-dd HH:mm:ss"
 
     Public Function NoNull(DBVal As Object) As String
         Try

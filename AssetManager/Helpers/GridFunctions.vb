@@ -22,6 +22,7 @@
             Case GetType(Combo_Data)
                 Return DataGridComboColumn(Column.ComboIndex, Column.ColumnCaption, Column.ColumnName)
         End Select
+        Return Nothing
     End Function
 
     Private Function GenericColumn(Column As ColumnStruct) As DataGridViewColumn

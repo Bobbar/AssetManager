@@ -41,6 +41,7 @@ Public Class PDFFormFilling
                 End If
             End With
         End Using
+        Return String.Empty
     End Function
 
     Private Async Sub PriceFromMunis()

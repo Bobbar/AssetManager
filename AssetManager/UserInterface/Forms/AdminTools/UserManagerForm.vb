@@ -136,14 +136,7 @@ Public Class UserManagerForm
     End Sub
 
     Private Sub AutoSizeCLBColumns(CLB As CheckedListBox)
-        Dim intMaxLen As Integer = 0
-        Dim fntCheckBoxFont As Font = CLB.Font
-        Dim intTextSize As Size
-        For Each item As CheckBox In CLB.Items
-            intTextSize = TextRenderer.MeasureText(item.Text, fntCheckBoxFont)
-            If Size.Width > intMaxLen Then intMaxLen = Size.Width
-        Next
-        CLB.ColumnWidth = CInt(intMaxLen / 4)
+        CLB.ColumnWidth = CInt(CLB.Width / 2)
     End Sub
 
     Private Sub UpdateAccessLabel()
@@ -169,9 +162,8 @@ Public Class UserManagerForm
         LoadUserData()
     End Sub
 
-    Private Sub frmUserManager_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+    Private Sub UserManagerForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         myAdapter.Dispose()
         SQLComms.Dispose()
     End Sub
-
 End Class

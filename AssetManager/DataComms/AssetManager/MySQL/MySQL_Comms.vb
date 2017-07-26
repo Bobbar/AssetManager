@@ -39,7 +39,7 @@ Public Class MySQL_Comms : Implements IDisposable
 
 #Region "Fields"
 
-    Public Connection As MySqlConnection
+    Public Property Connection As MySqlConnection
     Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
     Private Const strDatabase As String = "asset_manager"
     Private Const strTestDatabase As String = "test_db"

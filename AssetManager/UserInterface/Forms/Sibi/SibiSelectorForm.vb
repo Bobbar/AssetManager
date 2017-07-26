@@ -21,30 +21,30 @@
 
     Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
         Try
-            Dim table As New DataTable
-            table.Columns.Add("Request #", GetType(String))
-            table.Columns.Add("Status", GetType(String))
-            table.Columns.Add("Description", GetType(String))
-            table.Columns.Add("Request User", GetType(String))
-            table.Columns.Add("Request Type", GetType(String))
-            table.Columns.Add("Need By", GetType(String))
-            table.Columns.Add("PO Number", GetType(String))
-            table.Columns.Add("Req. Number", GetType(String))
-            table.Columns.Add("UID", GetType(String))
-            For Each r As DataRow In Results.Rows
-                table.Rows.Add(NoNull(r.Item("sibi_request_number")),
-                               GetHumanValue(SibiIndex.StatusType, r.Item("sibi_status").ToString),
-                               NoNull(r.Item("sibi_description")),
-                               NoNull(r.Item("sibi_request_user")),
-                               GetHumanValue(SibiIndex.RequestType, r.Item("sibi_type").ToString),
-                               NoNull(r.Item("sibi_need_by")),
-                               NoNull(r.Item("sibi_PO")),
-                               NoNull(r.Item("sibi_requisition_number")),
-                               NoNull(r.Item("sibi_uid")))
-            Next
-            ResultGrid.DataSource = table
-            ResultGrid.ClearSelection()
-            table.Dispose()
+            Using table As New DataTable
+                table.Columns.Add("Request #", GetType(String))
+                table.Columns.Add("Status", GetType(String))
+                table.Columns.Add("Description", GetType(String))
+                table.Columns.Add("Request User", GetType(String))
+                table.Columns.Add("Request Type", GetType(String))
+                table.Columns.Add("Need By", GetType(String))
+                table.Columns.Add("PO Number", GetType(String))
+                table.Columns.Add("Req. Number", GetType(String))
+                table.Columns.Add("UID", GetType(String))
+                For Each r As DataRow In Results.Rows
+                    table.Rows.Add(NoNull(r.Item("sibi_request_number")),
+                                   GetHumanValue(SibiIndex.StatusType, r.Item("sibi_status").ToString),
+                                   NoNull(r.Item("sibi_description")),
+                                   NoNull(r.Item("sibi_request_user")),
+                                   GetHumanValue(SibiIndex.RequestType, r.Item("sibi_type").ToString),
+                                   NoNull(r.Item("sibi_need_by")),
+                                   NoNull(r.Item("sibi_PO")),
+                                   NoNull(r.Item("sibi_requisition_number")),
+                                   NoNull(r.Item("sibi_uid")))
+                Next
+                ResultGrid.DataSource = table
+                ResultGrid.ClearSelection()
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try

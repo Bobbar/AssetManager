@@ -153,7 +153,6 @@ Public Class ViewDeviceForm
                     SendToTrackGrid(TrackingGrid, Results)
                     DisableSorting(TrackingGrid)
                 Else
-                    Results.Dispose()
                     TrackingGrid.DataSource = Nothing
                 End If
                 FillTrackingBox()
@@ -472,13 +471,13 @@ Public Class ViewDeviceForm
         Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
             If AssetFunc.DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device) Then
-                Dim blah2 = Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
+                Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                 CurrentViewDevice = Nothing
                 Me.Dispose()
                 MainForm.RefreshCurrent()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentViewDevice.strGUID)
-                Dim blah2 = Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
+                Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
                 CurrentViewDevice = Nothing
                 Me.Dispose()
             End If
@@ -807,22 +806,22 @@ Public Class ViewDeviceForm
     End Function
 
     Private Sub SendToHistGrid(Grid As DataGridView, tblResults As DataTable)
-        Dim table As New DataTable
         Try
-            If tblResults.Rows.Count > 0 Then
-                table.Columns.Add("Time Stamp", GetType(Date))
-                table.Columns.Add("Change Type", GetType(String))
-                table.Columns.Add("Action User", GetType(String))
-                table.Columns.Add("Note Peek", GetType(String))
-                table.Columns.Add("User", GetType(String))
-                table.Columns.Add("Asset ID", GetType(String))
-                table.Columns.Add("Serial", GetType(String))
-                table.Columns.Add("Description", GetType(String))
-                table.Columns.Add("Location", GetType(String))
-                table.Columns.Add("Purchase Date", GetType(Date))
-                table.Columns.Add("GUID", GetType(String))
-                For Each r As DataRow In tblResults.Rows
-                    table.Rows.Add(NoNull(r.Item(historical_dev.ActionDateTime)),
+            Using table As New DataTable
+                If tblResults.Rows.Count > 0 Then
+                    table.Columns.Add("Time Stamp", GetType(Date))
+                    table.Columns.Add("Change Type", GetType(String))
+                    table.Columns.Add("Action User", GetType(String))
+                    table.Columns.Add("Note Peek", GetType(String))
+                    table.Columns.Add("User", GetType(String))
+                    table.Columns.Add("Asset ID", GetType(String))
+                    table.Columns.Add("Serial", GetType(String))
+                    table.Columns.Add("Description", GetType(String))
+                    table.Columns.Add("Location", GetType(String))
+                    table.Columns.Add("Purchase Date", GetType(Date))
+                    table.Columns.Add("GUID", GetType(String))
+                    For Each r As DataRow In tblResults.Rows
+                        table.Rows.Add(NoNull(r.Item(historical_dev.ActionDateTime)),
                            GetHumanValue(DeviceIndex.ChangeType, NoNull(r.Item(historical_dev.ChangeType))),
                            NoNull(r.Item(historical_dev.ActionUser)),
                            NotePreview(NoNull(r.Item(historical_dev.Notes)), 25),
@@ -833,34 +832,32 @@ Public Class ViewDeviceForm
                            GetHumanValue(DeviceIndex.Locations, NoNull(r.Item(historical_dev.Location))),
                            NoNull(r.Item(historical_dev.PurchaseDate)),
                            NoNull(r.Item(historical_dev.History_Entry_UID)))
-                Next
-                Grid.DataSource = table
-                table.Dispose()
-            Else
-                table.Dispose()
-                Grid.DataSource = Nothing
-            End If
+                    Next
+                    Grid.DataSource = table
+                Else
+                    Grid.DataSource = Nothing
+                End If
+            End Using
         Catch ex As Exception
-            table.Dispose()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
 
     Private Sub SendToTrackGrid(Grid As DataGridView, tblResults As DataTable)
-        Dim table As New DataTable
         Try
-            If tblResults.Rows.Count > 0 Then
-                table.Columns.Add("Date", GetType(String))
-                table.Columns.Add("Check Type", GetType(String))
-                table.Columns.Add("Check Out User", GetType(String))
-                table.Columns.Add("Check In User", GetType(String))
-                table.Columns.Add("Check Out", GetType(String))
-                table.Columns.Add("Check In", GetType(String))
-                table.Columns.Add("Due Back", GetType(String))
-                table.Columns.Add("Location", GetType(String))
-                table.Columns.Add("GUID", GetType(String))
-                For Each r As DataRow In tblResults.Rows
-                    table.Rows.Add(NoNull(r.Item(trackable.DateStamp)),
+            Using table As New DataTable
+                If tblResults.Rows.Count > 0 Then
+                    table.Columns.Add("Date", GetType(String))
+                    table.Columns.Add("Check Type", GetType(String))
+                    table.Columns.Add("Check Out User", GetType(String))
+                    table.Columns.Add("Check In User", GetType(String))
+                    table.Columns.Add("Check Out", GetType(String))
+                    table.Columns.Add("Check In", GetType(String))
+                    table.Columns.Add("Due Back", GetType(String))
+                    table.Columns.Add("Location", GetType(String))
+                    table.Columns.Add("GUID", GetType(String))
+                    For Each r As DataRow In tblResults.Rows
+                        table.Rows.Add(NoNull(r.Item(trackable.DateStamp)),
                            NoNull(r.Item(trackable.CheckType)),
                            NoNull(r.Item(trackable.CheckOut_User)),
                            NoNull(r.Item(trackable.CheckIn_User)),
@@ -869,15 +866,13 @@ Public Class ViewDeviceForm
                            NoNull(r.Item(trackable.DueBackDate)),
                            NoNull(r.Item(trackable.UseLocation)),
                            NoNull(r.Item(trackable.UID)))
-                Next
-                Grid.DataSource = table
-                table.Dispose()
-            Else
-                table.Dispose()
-                Grid.DataSource = Nothing
-            End If
+                    Next
+                    Grid.DataSource = table
+                Else
+                    Grid.DataSource = Nothing
+                End If
+            End Using
         Catch ex As Exception
-            table.Dispose()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub

@@ -100,13 +100,13 @@ Public Class SibiMainForm
 
     Public Sub SendToGrid(Results As DataTable)
         Try
-            Dim table As New DataTable
-            For Each col As ColumnStruct In SibiTableColumns()
-                Dim column = table.Columns.Add(col.ColumnName, col.ColumnType)
-                column.Caption = col.ColumnCaption
-            Next
-            For Each r As DataRow In Results.Rows
-                table.Rows.Add(NoNull(r.Item(sibi_requests.RequestNumber)),
+            Using table As New DataTable
+                For Each col As ColumnStruct In SibiTableColumns()
+                    Dim column = table.Columns.Add(col.ColumnName, col.ColumnType)
+                    column.Caption = col.ColumnCaption
+                Next
+                For Each r As DataRow In Results.Rows
+                    table.Rows.Add(NoNull(r.Item(sibi_requests.RequestNumber)),
                GetHumanValue(SibiIndex.StatusType, r.Item(sibi_requests.Status).ToString),
                NoNull(r.Item(sibi_requests.Description)),
                NoNull(r.Item(sibi_requests.RequestUser)),
@@ -117,15 +117,15 @@ Public Class SibiMainForm
                NoNull(r.Item(sibi_requests.RT_Number)),
                NoNull(r.Item(sibi_requests.DateStamp)),
                NoNull(r.Item(sibi_requests.UID)))
-            Next
-            bolGridFilling = True
-            StatusColors = GetStatusColors(Results)
-            ResultGrid.DataSource = Nothing
-            ResultGrid.DataSource = table
-            SetGridHeaders()
-            ResultGrid.ClearSelection()
-            bolGridFilling = False
-            table.Dispose()
+                Next
+                bolGridFilling = True
+                StatusColors = GetStatusColors(Results)
+                ResultGrid.DataSource = Nothing
+                ResultGrid.DataSource = table
+                SetGridHeaders()
+                ResultGrid.ClearSelection()
+                bolGridFilling = False
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try

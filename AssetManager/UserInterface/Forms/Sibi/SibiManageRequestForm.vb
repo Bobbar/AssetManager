@@ -135,7 +135,7 @@ Public Class SibiManageRequestForm
             End Using
             Return True
         Catch ex As Exception
-            Throw ex
+            Throw
         End Try
     End Function
     Public Sub SetAttachCount()
@@ -174,9 +174,8 @@ VALUES
                 Return False
             End Using
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                Return False
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return False
         End Try
     End Function
 
@@ -195,7 +194,7 @@ VALUES
                 InsertItemsAdapter.Update(RequestData.RequestItems)
             End Using
             pnlCreate.Visible = False
-            Dim blah = Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
+            Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
             If TypeOf Me.Tag Is SibiMainForm Then
                 Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
                 ParentForm.RefreshResults()
@@ -223,7 +222,7 @@ VALUES
         End Try
     End Sub
 
-    Private Function CheckFields(parent As Control, FieldsValid As Boolean) As Boolean
+    Private Function CheckFields(parent As Control) As Boolean
         Dim c As Control
         For Each c In parent.Controls
             Dim DBInfo As New DBControlInfo
@@ -251,7 +250,7 @@ VALUES
                         End If
                 End Select
             End If
-            If c.HasChildren Then CheckFields(c, bolFieldsValid)
+            If c.HasChildren Then CheckFields(c)
         Next
         Return bolFieldsValid 'if fields are missing return false to trigger a message if needed
     End Function
@@ -372,7 +371,7 @@ VALUES
                 Waiting()
                 If AssetFunc.DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
                     DoneWaiting()
-                    Dim blah2 = Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
+                    Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                     CurrentRequest = Nothing
                     If TypeOf Me.Tag Is SibiMainForm Then
                         Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
@@ -382,7 +381,7 @@ VALUES
                 Else
                     DoneWaiting()
                     Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)
-                    Dim blah2 = Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
+                    Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
                     CurrentRequest = Nothing
                     Me.Dispose()
                 End If
@@ -636,6 +635,7 @@ VALUES
             Return tmpTable
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
         End Try
     End Function
 
@@ -646,6 +646,7 @@ VALUES
             Return tmpTable
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return Nothing
         End Try
     End Function
 
@@ -828,7 +829,7 @@ VALUES
     End Sub
 
     Private Sub RequestItemsGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles RequestItemsGrid.DataError
-        Dim blah = Message("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error", Me)
+        Message("DataGrid Error: " & Chr(34) & e.Exception.Message & Chr(34) & "   Col/Row:" & e.ColumnIndex & "/" & e.RowIndex, vbOKOnly + vbExclamation, "DataGrid Error", Me)
     End Sub
 
     Private Sub RequestItemsGrid_DefaultValuesNeeded(sender As Object, e As DataGridViewRowEventArgs) Handles RequestItemsGrid.DefaultValuesNeeded
@@ -1196,10 +1197,10 @@ VALUES
 
     Private Function ValidateFields() As Boolean
         bolFieldsValid = True
-        Dim ValidateResults As Boolean = CheckFields(Me, bolFieldsValid)
+        Dim ValidateResults As Boolean = CheckFields(Me)
         If ValidateResults Then ValidateResults = ValidateRequestItems()
         If Not ValidateResults Then
-            Dim blah = Message("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
+            Message("Some required fields are missing. Please enter data into all require fields.", vbOKOnly + vbExclamation, "Missing Data", Me)
         End If
         Return ValidateResults
     End Function
@@ -1254,6 +1255,7 @@ VALUES
             Return False
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Return False
         End Try
     End Function
 

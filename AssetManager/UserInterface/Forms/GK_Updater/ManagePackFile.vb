@@ -106,17 +106,13 @@ Public Class ManagePackFile
     ''' <param name="Dest"></param>
     Private Sub CopyFile(Source As String, Dest As String)
         Dim BufferSize As Integer = 256000
-        Dim perc As Integer = 0
         Dim buffer(BufferSize - 1) As Byte
         Dim bytesIn As Integer = 1
-        Dim totalBytesIn As Integer
         Dim CurrentFile As New FileInfo(Source)
         Progress.ResetProgress()
         Using fStream As System.IO.FileStream = CurrentFile.OpenRead(),
                 destFile As System.IO.FileStream = New FileStream(Dest, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, BufferSize, FileOptions.None)
-            totalBytesIn = 0
             Progress.BytesToTransfer = CInt(fStream.Length)
-            Dim flLength As Long = fStream.Length
             Do Until bytesIn < 1
                 bytesIn = fStream.Read(buffer, 0, BufferSize)
                 If bytesIn > 0 Then
@@ -143,20 +139,10 @@ Public Class ManagePackFile
             If File.Exists(GKPackFileFullPath) Then
                 File.Delete(GKPackFileFullPath)
             End If
-            Dim Errs As Exception
-            Dim PackTaskOK = Await Task.Run(Function()
-                                                Try
-                                                    CompDir.CompressDirectory(GKInstallDir, GKPackFileFullPath)
-                                                    Return True
-                                                Catch ex As Exception
-                                                    Errs = ex
-                                                    Return False
-                                                End Try
-                                            End Function)
-            If Errs IsNot Nothing Then
-                ErrHandle(Errs, System.Reflection.MethodInfo.GetCurrentMethod())
-            End If
-            Return PackTaskOK
+            Await Task.Run(Sub()
+                               CompDir.CompressDirectory(GKInstallDir, GKPackFileFullPath)
+                           End Sub)
+            Return True
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
@@ -170,22 +156,14 @@ Public Class ManagePackFile
     Private Async Function UnPackGKDir() As Task(Of Boolean)
         Try
             Status = "Unpacking...."
-            Dim Errs As Exception
             Progress = New ProgressCounter
             Dim CompDir As New GZipCompress(Progress)
             Await Task.Run(Sub()
-                               Try
-                                   CompDir.DecompressToDirectory(GKPackFileFullPath, GKExtractDir)
-                               Catch ex As Exception
-                                   Errs = ex
-                               End Try
+                               CompDir.DecompressToDirectory(GKPackFileFullPath, GKExtractDir)
                            End Sub)
-            If Errs Is Nothing Then
-                Return True
-            Else
-                Return False
-            End If
-        Catch
+            Return True
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
         End Try
     End Function
