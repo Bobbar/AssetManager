@@ -209,16 +209,12 @@ Missing Files: " & MissingSQLFiles.Count
         Dim MissingDirs As New List(Of AttachScanInfo)
         For Each SQLfile In SQLFiles
             Dim match As Boolean = False
-            For Each fDir In FTPDirs
-                If SQLfile.FKey = fDir Then
-                    match = True
-                End If
-            Next
+            FTPDirs.ForEach(Sub(f) If SQLfile.FKey = f Then match = True)
             If Not match Then
-                Logger("Orphan SQL Dir Found: " & SQLfile.FKey)
-                MissingDirs.Add(SQLfile)
+                If Not MissingDirs.Exists(Function(d) SQLfile.FKey = d.FKey) Then MissingDirs.Add(SQLfile)
             End If
         Next
+        MissingDirs.ForEach(Sub(d) Logger("Orphan SQL Dir Found: " & d.FKey))
         Return MissingDirs
     End Function
 
@@ -229,13 +225,8 @@ Missing Files: " & MissingSQLFiles.Count
     ''' <param name="FTPDirs"></param>
     ''' <returns></returns>
     Private Function ListMissingFTPDirs(SQLFiles As List(Of AttachScanInfo), FTPDirs As List(Of String)) As List(Of String)
-        Dim MissingDirs As New List(Of String)
-        For Each fDir In FTPDirs
-            If Not CheckForPrimaryItem(fDir) Then
-                Logger("Orphan FTP Dir Found: " & fDir)
-                MissingDirs.Add(fDir)
-            End If
-        Next
+        Dim MissingDirs = FTPDirs.FindAll(Function(f) Not CheckForPrimaryItem(f))
+        MissingDirs.ForEach(Sub(f) Logger("Orphan FTP Dir Found: " & f))
         Return MissingDirs
     End Function
 
@@ -246,20 +237,9 @@ Missing Files: " & MissingSQLFiles.Count
     ''' <param name="FTPFiles"></param>
     ''' <returns></returns>
     Private Function ListMissingSQLFiles(SQLFiles As List(Of AttachScanInfo), FTPFiles As List(Of AttachScanInfo)) As List(Of AttachScanInfo)
-        Dim MissingFiles As New List(Of AttachScanInfo)
-        For Each SQLfile In SQLFiles
-            Dim match As Boolean = False
-            For Each file In FTPFiles
-                If SQLfile.FileUID = file.FileUID Then
-                    match = True
-                End If
-            Next
-            If Not match Then
-                Logger("Orphan SQL File Found: " & SQLfile.FKey & "/" & SQLfile.FileUID)
-                MissingFiles.Add(SQLfile)
-            End If
-        Next
-        Return MissingFiles
+        Dim MissingFiles = SQLFiles.Except(FTPFiles).ToList
+        MissingFiles.ForEach(Sub(f) Logger("Orphan SQL File Found: " & f.FKey & "/" & f.FileUID))
+        Return SQLFiles.Except(FTPFiles).ToList
     End Function
 
     ''' <summary>
@@ -269,19 +249,8 @@ Missing Files: " & MissingSQLFiles.Count
     ''' <param name="FTPFiles"></param>
     ''' <returns></returns>
     Private Function ListMissingFTPFiles(SQLFiles As List(Of AttachScanInfo), FTPFiles As List(Of AttachScanInfo)) As List(Of AttachScanInfo)
-        Dim MissingFiles As New List(Of AttachScanInfo)
-        For Each file In FTPFiles
-            Dim match As Boolean = False
-            For Each SQLfile In SQLFiles
-                If file.FileUID = SQLfile.FileUID Then
-                    match = True
-                End If
-            Next
-            If Not match Then
-                Logger("Orphan FTP File Found: " & file.FKey & "/" & file.FileUID)
-                MissingFiles.Add(file)
-            End If
-        Next
+        Dim MissingFiles = FTPFiles.Except(SQLFiles).ToList
+        MissingFiles.ForEach(Sub(f) Logger("Orphan FTP File Found: " & f.FKey & "/" & f.FileUID))
         Return MissingFiles
     End Function
 
