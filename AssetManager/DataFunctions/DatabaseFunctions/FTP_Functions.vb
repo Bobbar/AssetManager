@@ -8,10 +8,10 @@
 
 #Region "Methods"
 
-    Public Function DeleteFTPAttachment(AttachUID As String, DeviceUID As String) As Boolean
+    Public Function DeleteFTPAttachment(FileUID As String, FKey As String) As Boolean
         Dim resp As Net.FtpWebResponse = Nothing
         Try
-            resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & DeviceUID & "/" & AttachUID, Net.WebRequestMethods.Ftp.DeleteFile), Net.FtpWebResponse)
+            resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & FKey & "/" & FileUID, Net.WebRequestMethods.Ftp.DeleteFile), Net.FtpWebResponse)
             If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                 Return True
             Else
@@ -24,25 +24,18 @@
 
     Public Function DeleteFTPFolder(FolderUID As String) As Boolean
         Try
-            Using resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & FolderUID & "/", Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse),
-                responseStream As System.IO.Stream = resp.GetResponseStream,
-                reader As IO.StreamReader = New IO.StreamReader(responseStream)
-                Dim files = New List(Of String)
-                While Not reader.EndOfStream 'collect list of files in directory
-                    files.Add(reader.ReadLine)
-                End While
-                Dim i As Integer = 0
-                For Each file As String In files  'delete each file counting for successes
-                    If DeleteFTPAttachment(file, FolderUID) Then i += 1
-                Next
-                If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
+            Dim files = ListDirectory("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & FolderUID & "/")
+            Dim i As Integer = 0
+            For Each file As String In files   'delete each file counting for successes
+                If DeleteFTPAttachment(file, FolderUID) Then i += 1
+            Next
+            If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
                     Using deleteResp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & FolderUID, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
                         If deleteResp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                             Return True
                         End If
                     End Using
                 End If
-            End Using
             Return False
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -60,37 +53,45 @@
             Return False
         End Try
     End Function
+
     Public Sub ScanAttachements()
-        Dim BadFiles As New List(Of String)
-        Dim files As List(Of String)
-        Dim intOrphanFolders, intOrphanFiles As Integer
         Try
             Logger("***********************************")
             Logger("******Attachment Scan Results******")
-            files = ListDirectory("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/")
-            intOrphanFolders = CheckForMissingDir(files)
-            For Each file In files
-                Dim FolderScan As FTPScan_Parms = FTPFolderIsOrphan(file)
-                If FolderScan.IsOrphan Then
-                    intOrphanFolders += 1
-                    BadFiles.Add(file)
-                    Logger("Orphan FOLDER Found: " & file)
-                Else
-                    Dim subfiles As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & file & "/")
-                    For Each sfile In subfiles
-                        Dim FileScan As FTPScan_Parms = FTPFileIsOrphan(file, sfile)
-                        If FileScan.IsOrphan Then
-                            intOrphanFiles += 1
-                            BadFiles.Add(file & "/" & sfile)
-                            Logger("Orphan FILE Found. Table:" & FileScan.strTable & "  Path: " & file & "/" & sfile)
-                        End If
-                    Next
-                End If
-            Next
-            If intOrphanFiles > 0 Or intOrphanFolders > 0 Then
-                Dim blah = Message("Orphans found!  Folders:" & intOrphanFolders & "  Files:" & intOrphanFiles & vbCrLf & vbCrLf & "See log for details:" & Chr(34) & strLogPath & Chr(34) & vbCrLf & vbCrLf & "Press OK now to delete orphans.", vbOKCancel + vbExclamation, "Corruption Detected")
-                If blah = vbOK Then
-                    CleanFiles(BadFiles)
+
+            Dim FTPDirs = ListDirectory("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/")
+            Dim FTPFiles = ListFTPFiles(FTPDirs)
+            Dim SQLFiles = ListSQLFiles()
+
+            Dim MissingFTPDirs = ListMissingFTPDirs(SQLFiles, FTPDirs)
+            Dim MissingSQLDirs = ListMissingSQLDirs(SQLFiles, FTPDirs)
+
+            Dim MissingFTPFiles = ListMissingFTPFiles(SQLFiles, FTPFiles)
+            Dim MissingSQLFiles = ListMissingSQLFiles(SQLFiles, FTPFiles)
+
+            If MissingFTPDirs.Count > 0 Or MissingSQLDirs.Count > 0 Or MissingFTPFiles.Count > 0 Or MissingSQLFiles.Count > 0 Then
+                Dim StatsText As String = ""
+                Logger("Orphan Files/Directories found!")
+                StatsText = "Orphan Files/Directories found!  Do you want to delete the corrupt SQL/FTP entries?
+
+FTP: 
+Missing Dirs: " & MissingFTPDirs.Count & "
+Missing Files: " & MissingFTPFiles.Count & "
+
+SQL:
+Missing Dirs: " & MissingSQLDirs.Count & "
+Missing Files: " & MissingSQLFiles.Count
+
+                Dim blah = Message(StatsText, vbYesNo + vbExclamation, "Orphans Found")
+                If blah = MsgBoxResult.Yes Then
+                    'clean it up
+                    Logger("Cleaning attachments...")
+                    Dim itemsCleaned As Integer = 0
+                    itemsCleaned += CleanFTPFiles(MissingFTPFiles)
+                    itemsCleaned += CleanFTPDirs(MissingFTPDirs)
+                    itemsCleaned += CleanSQLFiles(MissingSQLFiles)
+                    itemsCleaned += CleanSQLEntries(MissingSQLDirs)
+                    Message("Cleaned " & itemsCleaned & " orphans.")
                     ScanAttachements()
                 End If
             Else
@@ -104,151 +105,240 @@
         End Try
     End Sub
 
-    Private Function CheckForMissingDir(FTPFolderUIDs As List(Of String)) As Integer
-        Dim DBFolders As New List(Of String)
-        Dim DevQry As String = "SELECT DISTINCT attach_fkey_uid  FROM dev_attachments"
-        Dim SibiQry As String = "SELECT DISTINCT attach_fkey_uid  FROM sibi_attachments"
-        Using MyComms As New MySQL_Comms
-            For Each row As DataRow In MyComms.Return_SQLTable(DevQry).Rows
-                DBFolders.Add(row.Item("attach_fkey_UID").ToString)
-            Next
-            For Each row As DataRow In MyComms.Return_SQLTable(SibiQry).Rows
-                DBFolders.Add(row.Item("attach_fkey_UID").ToString)
-            Next
+    ''' <summary>
+    ''' Checks if supplied UID exists in Devices or Sibi tables.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function CheckForPrimaryItem(ItemUID As String) As Boolean
+        Dim exists As Boolean = False
+        If AssetFunc.Get_SQLValue(devices.TableName, devices.DeviceUID, ItemUID, devices.DeviceUID) <> "" Then exists = True
+        If AssetFunc.Get_SQLValue(sibi_requests.TableName, sibi_requests.UID, ItemUID, sibi_requests.UID) <> "" Then exists = True
+        Return exists
+    End Function
 
-        End Using
-        Dim ExpectedDirCount As Integer = DBFolders.Count
-        Dim DirCount As Integer = 0
-        Dim MissingDirs As New List(Of String)
-        For Each DBFolder In DBFolders
-            If DirInList(FTPFolderUIDs, DBFolder) Then
-                DirCount += 1
-            Else
-                MissingDirs.Add(DBFolder)
-            End If
-        Next
-        If ExpectedDirCount <> DirCount Then
-            Logger("Orphan FOLDER(s) Found: ")
-            For Each sDir In MissingDirs
-                Logger(sDir)
-            Next
-            Return MissingDirs.Count
+    Private Function CleanSQLFiles(MissingSQLFiles As List(Of AttachScanInfo)) As Integer
+        If MissingSQLFiles.Count > 0 Then
+            Dim DeviceTable As New dev_attachments
+            Dim SibiTable As New sibi_attachments
+            Using SQLComms As New MySQL_Comms
+
+                Dim deletions As Integer = 0
+                For Each sqlItem In MissingSQLFiles
+                    Using cmd = SQLComms.Return_SQLCommand("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FileUID & "='" & sqlItem.FileUID & "'")
+                        Dim rows = cmd.ExecuteNonQuery()
+                        If rows > 0 Then
+                            deletions += rows
+                            Logger("Deleted Device SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
+                        End If
+                    End Using
+
+                    Using cmd = SQLComms.Return_SQLCommand("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FileUID & "='" & sqlItem.FileUID & "'")
+                        Dim rows = cmd.ExecuteNonQuery()
+                        If rows > 0 Then
+                            deletions += rows
+                            Logger("Deleted Sibi SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
+                        End If
+                    End Using
+                Next
+                Return deletions
+            End Using
         End If
         Return 0
     End Function
 
-    Private Sub CleanFiles(DirList As List(Of String))
-        Dim intSuccesses As Integer = 0
-        For Each item In DirList
-            If item.Contains("/") Then ' if file and folder
-                Dim strBreakPath() As String = Split(item, "/")
-                If DeleteFTPAttachment(strBreakPath(1), strBreakPath(0)) Then intSuccesses += 1
-            Else  'if folder only
-                If DeleteDirectory(item) Then
-                    intSuccesses += 1
-                End If
+    Private Function CleanSQLEntries(MissingSQLDirs As List(Of AttachScanInfo)) As Integer
+        If MissingSQLDirs.Count > 0 Then
+            Dim DeviceTable As New dev_attachments
+            Dim SibiTable As New sibi_attachments
+            Using SQLComms As New MySQL_Comms
+                Dim deletions As Integer = 0
+                For Each sqlItem In MissingSQLDirs
+                    If Not CheckForPrimaryItem(sqlItem.FKey) Then
+                        Using cmd = SQLComms.Return_SQLCommand("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & "='" & sqlItem.FKey & "'")
+                            Dim rows = cmd.ExecuteNonQuery()
+                            If rows > 0 Then
+                                deletions += rows
+                                Logger("Deleted " & rows & " Device SQL Entries For: " & sqlItem.FKey)
+                            End If
+                        End Using
+
+                        Using cmd = SQLComms.Return_SQLCommand("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & "='" & sqlItem.FKey & "'")
+                            Dim rows = cmd.ExecuteNonQuery()
+                            If rows > 0 Then
+                                deletions += rows
+                                Logger("Deleted " & rows & " Sibi SQL Entries For: " & sqlItem.FKey)
+                            End If
+                        End Using
+                    End If
+                Next
+                Return deletions
+            End Using
+        End If
+        Return 0
+    End Function
+
+    Private Function CleanFTPFiles(MissingFTPFiles As List(Of AttachScanInfo)) As Integer
+        Dim deletions As Integer = 0
+        For Each file In MissingFTPFiles
+            If DeleteFTPAttachment(file.FileUID, file.FKey) Then
+                deletions += 1
+                Logger("Deleted SQL File: " & file.FKey & "/" & file.FileUID)
             End If
         Next
-        Message("Cleaned " & intSuccesses & " orphans.")
-    End Sub
+        Return deletions
+    End Function
 
-    Private Function DeleteDirectory(Directory As String) As Boolean
-        Try
-            Dim FileList As List(Of String) = ListDirectory("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & Directory & "/")
-            Dim i As Integer
-            For Each file In FileList
-                If DeleteFTPAttachment(file, Directory) Then i += 1
+    Private Function CleanFTPDirs(MissingFTPDirs As List(Of String)) As Integer
+        Dim deletions As Integer = 0
+        For Each fDir In MissingFTPDirs
+            If DeleteFTPFolder(fDir) Then
+                deletions += 1
+                Logger("Deleted SQL Directory: " & fDir)
+            End If
+        Next
+        Return deletions
+    End Function
+
+    ''' <summary>
+    ''' Returns list of SQL entries not found in FTP directory list.
+    ''' </summary>
+    ''' <param name="SQLFiles"></param>
+    ''' <param name="FTPDirs"></param>
+    ''' <returns></returns>
+    Private Function ListMissingSQLDirs(SQLFiles As List(Of AttachScanInfo), FTPDirs As List(Of String)) As List(Of AttachScanInfo)
+        Dim MissingDirs As New List(Of AttachScanInfo)
+        For Each SQLfile In SQLFiles
+            Dim match As Boolean = False
+            For Each fDir In FTPDirs
+                If SQLfile.FKey = fDir Then
+                    match = True
+                End If
             Next
-            If FileList.Count = i Then
-                Dim resp As Net.FtpWebResponse = Nothing
-                resp = DirectCast(FTPComms.Return_FTPResponse("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & Directory, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
-                If resp.StatusCode = Net.FtpStatusCode.FileActionOK Then
-                    Return True
-                End If
+            If Not match Then
+                Logger("Orphan SQL Dir Found: " & SQLfile.FKey)
+                MissingDirs.Add(SQLfile)
             End If
-            Return Nothing
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return False
-        End Try
-    End Function
-
-    Private Function DirInList(DirList As List(Of String), CompDir As String) As Boolean
-        For Each sDir In DirList
-            If sDir = CompDir Then Return True
         Next
-        Return False
+        Return MissingDirs
     End Function
 
-    Private Function FTPFileIsOrphan(FolderUID As String, FileUID As String) As FTPScan_Parms
-        Dim ScanResults As New FTPScan_Parms
-        Dim intHits As Integer = 0
+    ''' <summary>
+    ''' Returns list of FTP dirs not found in SQL file list.
+    ''' </summary>
+    ''' <param name="SQLFiles"></param>
+    ''' <param name="FTPDirs"></param>
+    ''' <returns></returns>
+    Private Function ListMissingFTPDirs(SQLFiles As List(Of AttachScanInfo), FTPDirs As List(Of String)) As List(Of String)
+        Dim MissingDirs As New List(Of String)
+        For Each fDir In FTPDirs
+            If Not CheckForPrimaryItem(fDir) Then
+                Logger("Orphan FTP Dir Found: " & fDir)
+                MissingDirs.Add(fDir)
+            End If
+        Next
+        Return MissingDirs
+    End Function
+
+    ''' <summary>
+    ''' Returns list of SQL files not found in FTP file list.
+    ''' </summary>
+    ''' <param name="SQLFiles"></param>
+    ''' <param name="FTPFiles"></param>
+    ''' <returns></returns>
+    Private Function ListMissingSQLFiles(SQLFiles As List(Of AttachScanInfo), FTPFiles As List(Of AttachScanInfo)) As List(Of AttachScanInfo)
+        Dim MissingFiles As New List(Of AttachScanInfo)
+        For Each SQLfile In SQLFiles
+            Dim match As Boolean = False
+            For Each file In FTPFiles
+                If SQLfile.FileUID = file.FileUID Then
+                    match = True
+                End If
+            Next
+            If Not match Then
+                Logger("Orphan SQL File Found: " & SQLfile.FKey & "/" & SQLfile.FileUID)
+                MissingFiles.Add(SQLfile)
+            End If
+        Next
+        Return MissingFiles
+    End Function
+
+    ''' <summary>
+    ''' Returns list of FTP files not found in SQL file list.
+    ''' </summary>
+    ''' <param name="SQLFiles"></param>
+    ''' <param name="FTPFiles"></param>
+    ''' <returns></returns>
+    Private Function ListMissingFTPFiles(SQLFiles As List(Of AttachScanInfo), FTPFiles As List(Of AttachScanInfo)) As List(Of AttachScanInfo)
+        Dim MissingFiles As New List(Of AttachScanInfo)
+        For Each file In FTPFiles
+            Dim match As Boolean = False
+            For Each SQLfile In SQLFiles
+                If file.FileUID = SQLfile.FileUID Then
+                    match = True
+                End If
+            Next
+            If Not match Then
+                Logger("Orphan FTP File Found: " & file.FKey & "/" & file.FileUID)
+                MissingFiles.Add(file)
+            End If
+        Next
+        Return MissingFiles
+    End Function
+
+    Private Function ListFTPFiles(FTPDirs As List(Of String)) As List(Of AttachScanInfo)
+        Dim FTPFileList As New List(Of AttachScanInfo)
+        For Each fDir In FTPDirs
+            For Each file In ListDirectory("ftp://" & strServerIP & "/attachments/" & CurrentDB & "/" & fDir & "/")
+                FTPFileList.Add(New AttachScanInfo(fDir, file))
+            Next
+        Next
+        Return FTPFileList
+    End Function
+
+    Private Function ListSQLFiles() As List(Of AttachScanInfo)
         Dim DeviceTable As New dev_attachments
         Dim SibiTable As New sibi_attachments
-        Dim strQRYDev As String = "SELECT * FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & " ='" & FolderUID & "' AND " & DeviceTable.FileUID & " = '" & FileUID & "'"
-        Dim strQRYSibi As String = "SELECT * FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & " ='" & FolderUID & "' AND " & SibiTable.FileUID & "='" & FileUID & "'"
+        Dim SQLFileList As New List(Of AttachScanInfo)
         Using SQLComms As New MySQL_Comms
-            Dim results As DataTable
-            results = SQLComms.Return_SQLTable(strQRYDev)
-            If results.Rows.Count > 0 Then
-                intHits += 1
-            Else
-                ScanResults.strTable = "Device"
-            End If
-            results = SQLComms.Return_SQLTable(strQRYSibi)
-            If results.Rows.Count > 0 Then
-                intHits += 1
-            Else
-                ScanResults.strTable = "Sibi"
-            End If
-            If intHits > 0 Then
-                ScanResults.IsOrphan = False
-                Return ScanResults
-            Else
-                ScanResults.IsOrphan = True
-                Return ScanResults
-            End If
+            Dim devFiles = SQLComms.Return_SQLTable("SELECT * FROM " & DeviceTable.TableName)
+            For Each file As DataRow In devFiles.Rows
+                SQLFileList.Add(New AttachScanInfo(file.Item(DeviceTable.FKey).ToString, file.Item(DeviceTable.FileUID).ToString))
+            Next
+
+            Dim sibiFiles = SQLComms.Return_SQLTable("SELECT * FROM " & SibiTable.TableName)
+            For Each file As DataRow In sibiFiles.Rows
+                SQLFileList.Add(New AttachScanInfo(file.Item(SibiTable.FKey).ToString, file.Item(SibiTable.FileUID).ToString))
+            Next
+
         End Using
+        Return SQLFileList
     End Function
 
-    Private Function FTPFolderIsOrphan(FolderUID As String) As FTPScan_Parms
-        Dim ScanResults As New FTPScan_Parms
-        Dim intHits As Integer = 0
-        Dim results As String
-        results = AssetFunc.Get_SQLValue(devices.TableName, devices.DeviceUID, FolderUID, devices.DeviceUID)
-        If results <> "" Then
-            intHits += 1
-        End If
-        results = AssetFunc.Get_SQLValue(sibi_requests.TableName, sibi_requests.UID, FolderUID, sibi_requests.UID)
-        If results <> "" Then
-            intHits += 1
-        End If
-        If intHits > 0 Then
-            ScanResults.IsOrphan = False
-            Return ScanResults
-        Else
-            ScanResults.IsOrphan = True
-            Return ScanResults
-        End If
-    End Function
     Private Function ListDirectory(Uri As String) As List(Of String)
-        Dim resp As Net.FtpWebResponse
-        Dim files As List(Of String)
         Try
-            resp = DirectCast(FTPComms.Return_FTPResponse(Uri, Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse) '"ftp://" & strServerIP & "/attachments/"
-            Dim responseStream As System.IO.Stream = resp.GetResponseStream
-            files = New List(Of String)
-            Dim reader As IO.StreamReader = New IO.StreamReader(responseStream)
-            While Not reader.EndOfStream 'collect list of files in directory
-                files.Add(reader.ReadLine)
-            End While
-            Return files
+            Using resp = DirectCast(FTPComms.Return_FTPResponse(Uri, Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse),
+                responseStream As System.IO.Stream = resp.GetResponseStream,
+                reader As IO.StreamReader = New IO.StreamReader(responseStream)
+                Dim files As New List(Of String)
+                While Not reader.EndOfStream 'collect list of files in directory
+                    files.Add(reader.ReadLine)
+                End While
+                Return files
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
     End Function
 
+    Private Structure AttachScanInfo
+        Public FKey As String
+        Public FileUID As String
+        Sub New(FKey As String, FileUID As String)
+            Me.FKey = FKey
+            Me.FileUID = FileUID
+        End Sub
+    End Structure
 #End Region
 
 End Class
