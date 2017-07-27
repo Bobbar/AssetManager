@@ -49,5 +49,3 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\x86\SQLite.Interop.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\System.Data.SQLite.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\System.Data.SQLite.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.PackFileForm.resources
-C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.exe.CodeAnalysisLog.xml
-C:\GitHub\AssetManager\AssetManager\bin\Release\AssetManager.exe.lastcodeanalysissucceeded
