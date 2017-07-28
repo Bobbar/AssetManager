@@ -75,3 +75,5 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.CodeAnalysisLog.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.lastcodeanalysissucceeded

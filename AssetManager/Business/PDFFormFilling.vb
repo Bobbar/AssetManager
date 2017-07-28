@@ -58,44 +58,32 @@ Public Class PDFFormFilling
 
     Private Sub FillForm(Type As PDFFormType)
         Try
-            Dim di As DirectoryInfo = Directory.CreateDirectory(DownloadPath)
+            Directory.CreateDirectory(DownloadPath)
             Dim strTimeStamp As String = Now.ToString("_hhmmss")
             Dim newFile As String = DownloadPath & CurrentDevice.strDescription & strTimeStamp & ".pdf"
-            Dim pdfStamper As PdfStamper
 
             Select Case Type
                 Case PDFFormType.InputForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_01_Asset_Input_Formnew)
-                    pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
-                    pdfStamper.FormFlattening = FlattenPrompt() 'False
-                    Dim pdfFormFields As AcroFields = InputFormFields(CurrentDevice, pdfStamper) 'pdfStamper.AcroFields
-                    If IsNothing(pdfFormFields) Then
-                        pdfStamper.Close()
-                        Exit Sub
-                    End If
+                    Using pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
+                        Dim pdfFormFields As AcroFields = InputFormFields(CurrentDevice, pdfStamper)
+                        pdfStamper.FormFlattening = FlattenPrompt()
+                    End Using
+
                 Case PDFFormType.TransferForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_03_Asset_Transfer_Form)
-                    pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
-                    pdfStamper.FormFlattening = FlattenPrompt() 'False
-                    Dim pdfFormFields As AcroFields = TransferFormFields(CurrentDevice, pdfStamper)
-                    If IsNothing(pdfFormFields) Then
-                        pdfStamper.Close()
-                        Exit Sub
-                    End If
+                    Using pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
+                        Dim pdfFormFields As AcroFields = TransferFormFields(CurrentDevice, pdfStamper)
+                        pdfStamper.FormFlattening = FlattenPrompt()
+                    End Using
                 Case PDFFormType.DisposeForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_02_Asset_Disposal_Form)
-                    pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
-                    pdfStamper.FormFlattening = FlattenPrompt() 'False
-                    Dim pdfFormFields As AcroFields = DisposalFormFields(CurrentDevice, pdfStamper)
-                    If IsNothing(pdfFormFields) Then
-                        pdfStamper.Close()
-                        Exit Sub
-                    End If
-
+                    Using pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
+                        Dim pdfFormFields As AcroFields = DisposalFormFields(CurrentDevice, pdfStamper)
+                        pdfStamper.FormFlattening = FlattenPrompt()
+                    End Using
             End Select
 
-            ' close the pdf
-            ' pdfStamper.Close()
             Process.Start(newFile)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

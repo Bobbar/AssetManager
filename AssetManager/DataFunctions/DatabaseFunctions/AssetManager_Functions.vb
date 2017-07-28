@@ -261,15 +261,6 @@ VALUES
         End Using
     End Function
 
-    Public Function Get_DeviceUID(ByVal AssetTag As String, ByVal Serial As String) As String
-        Dim UID As String
-        Dim strQry = "SELECT " & devices.DeviceUID & " from " & devices.TableName & " WHERE " & devices.AssetTag & " = '" & AssetTag & "' AND " & devices.Serial & " = '" & Serial & "' ORDER BY " & devices.Input_DateTime & ""
-        Using SQLComms As New MySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strQry)
-            UID = cmd.ExecuteScalar.ToString
-            Return UID
-        End Using
-    End Function
-
     Public Function Get_EntryInfo(ByVal strGUID As String) As Device_Info
         Try
             Dim tmpInfo As New Device_Info

@@ -126,13 +126,6 @@ Public Class MySQL_Comms : Implements IDisposable
         End Using
     End Function
 
-    Public Function Return_SQLReader(strSQLQry As String) As MySqlDataReader
-        '  Debug.Print("Reader Hit " & Date.Now.Ticks)
-        Using cmd As New MySqlCommand(strSQLQry, Connection)
-            Return cmd.ExecuteReader
-        End Using
-    End Function
-
     Public Function Return_SQLTable(strSQLQry As String) As DataTable
         ' Debug.Print("Table Hit " & Date.Now.Ticks)
         Using da As New MySqlDataAdapter, tmpTable As New DataTable, cmd = New MySqlCommand(strSQLQry)
@@ -142,6 +135,7 @@ Public Class MySQL_Comms : Implements IDisposable
             Return tmpTable
         End Using
     End Function
+
     Private Function GetConnectString() As String
         If Not bolUseTestDatabase Then
             CurrentDB = strDatabase
