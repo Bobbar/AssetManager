@@ -275,7 +275,7 @@ Partial Class SibiMainForm
         Me.Name = "frmSibiMain"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Sibi Acqusition Manager - Main"
+        Me.Text = "Sibi Acquisition Manager - Main"
         Me.Panel1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()

@@ -750,7 +750,7 @@ Partial Class MainForm
         Me.cmdSibi.Name = "cmdSibi"
         Me.cmdSibi.Padding = New System.Windows.Forms.Padding(20, 0, 20, 0)
         Me.cmdSibi.Size = New System.Drawing.Size(226, 34)
-        Me.cmdSibi.Text = "Sibi Aquisition Manager"
+        Me.cmdSibi.Text = "Sibi Acquisition Manager"
         Me.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'MainForm
