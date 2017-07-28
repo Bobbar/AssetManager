@@ -850,7 +850,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                     ByRef psfi As SHFILEINFO,
                     ByVal cbFileInfo As Int32,
                     ByVal uFlags As Int32) As IntPtr
-        '<DllImport("user32.dll", SetLastError:=True)>
+        <DllImport("user32.dll", SetLastError:=True)>
         Private Shared Function DestroyIcon(ByVal hIcon As IntPtr) As Boolean
         End Function
         Public Shared Function GetFileIcon(ByVal fileExt As String) As Bitmap ', Optional ByVal ICOsize As IconSize = IconSize.SHGFI_SMALLICON

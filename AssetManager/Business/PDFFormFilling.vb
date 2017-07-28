@@ -62,10 +62,12 @@ Public Class PDFFormFilling
             Dim strTimeStamp As String = Now.ToString("_hhmmss")
             Dim newFile As String = DownloadPath & CurrentDevice.strDescription & strTimeStamp & ".pdf"
             Dim pdfStamper As PdfStamper
+
             Select Case Type
                 Case PDFFormType.InputForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_01_Asset_Input_Formnew)
                     pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
+                    pdfStamper.FormFlattening = FlattenPrompt() 'False
                     Dim pdfFormFields As AcroFields = InputFormFields(CurrentDevice, pdfStamper) 'pdfStamper.AcroFields
                     If IsNothing(pdfFormFields) Then
                         pdfStamper.Close()
@@ -74,6 +76,7 @@ Public Class PDFFormFilling
                 Case PDFFormType.TransferForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_03_Asset_Transfer_Form)
                     pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
+                    pdfStamper.FormFlattening = FlattenPrompt() 'False
                     Dim pdfFormFields As AcroFields = TransferFormFields(CurrentDevice, pdfStamper)
                     If IsNothing(pdfFormFields) Then
                         pdfStamper.Close()
@@ -82,15 +85,17 @@ Public Class PDFFormFilling
                 Case PDFFormType.DisposeForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_02_Asset_Disposal_Form)
                     pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
+                    pdfStamper.FormFlattening = FlattenPrompt() 'False
                     Dim pdfFormFields As AcroFields = DisposalFormFields(CurrentDevice, pdfStamper)
                     If IsNothing(pdfFormFields) Then
                         pdfStamper.Close()
                         Exit Sub
                     End If
+
             End Select
-            pdfStamper.FormFlattening = FlattenPrompt() 'False
+
             ' close the pdf
-            pdfStamper.Close()
+            ' pdfStamper.Close()
             Process.Start(newFile)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -210,7 +215,7 @@ Public Class PDFFormFilling
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
         Dim strUnitPrice As String = GetUnitPrice()
         If strUnitPrice = "" Or IsNothing(strUnitPrice) Then
-            Exit Function
+            Return Nothing
         End If
         With tmpFields
             .SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD")
