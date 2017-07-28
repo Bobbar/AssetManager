@@ -7,8 +7,8 @@ Imports System.Security.Cryptography
 Imports System.Text
 
 Module SecurityFunctions
-    Private AccessLevels() As Access_Info
-    Private UserAccess As User_Info
+    Private AccessLevels() As AccessGroupStruct
+    Private UserAccess As LocalUserInfoStruct
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
     Public AdminCreds As NetworkCredential = Nothing
 
@@ -86,8 +86,8 @@ Module SecurityFunctions
     End Function
 
     Public Function GetSecGroupValue(SecModule As String) As Integer
-        For Each Group As Access_Info In AccessLevels
-            If Group.strModule = SecModule Then Return Group.intLevel
+        For Each Group As AccessGroupStruct In AccessLevels
+            If Group.AccessModule = SecModule Then Return Group.Level
         Next
         Return -1
     End Function
@@ -98,12 +98,12 @@ Module SecurityFunctions
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
                 If results.Rows.Count > 0 Then
                     Dim r As DataRow = results.Rows(0)
-                    UserAccess.strUsername = r.Item(users.UserName).ToString
-                    UserAccess.strFullname = r.Item(users.FullName).ToString
-                    UserAccess.intAccessLevel = CInt(r.Item(users.AccessLevel))
-                    UserAccess.strUID = r.Item(users.UID).ToString
+                    UserAccess.Username = r.Item(users.UserName).ToString
+                    UserAccess.Fullname = r.Item(users.FullName).ToString
+                    UserAccess.AccessLevel = CInt(r.Item(users.AccessLevel))
+                    UserAccess.GUID = r.Item(users.UID).ToString
                 Else
-                    UserAccess.intAccessLevel = 0
+                    UserAccess.AccessLevel = 0
                 End If
             End Using
         Catch ex As Exception
@@ -121,10 +121,10 @@ Module SecurityFunctions
                 For Each r As DataRow In results.Rows
                     rows += 1
                     ReDim Preserve AccessLevels(rows)
-                    AccessLevels(rows).intLevel = CInt(r.Item(security_columns.AccessLevel))
-                    AccessLevels(rows).strModule = r.Item(security_columns.SecModule).ToString
-                    AccessLevels(rows).strDesc = r.Item(security_columns.Description).ToString
-                    AccessLevels(rows).bolAvailOffline = CBool(r.Item(security_columns.AvailOffline))
+                    AccessLevels(rows).Level = CInt(r.Item(security_columns.AccessLevel))
+                    AccessLevels(rows).AccessModule = r.Item(security_columns.SecModule).ToString
+                    AccessLevels(rows).Description = r.Item(security_columns.Description).ToString
+                    AccessLevels(rows).AvailableOffline = CBool(r.Item(security_columns.AvailOffline))
                 Next
             End Using
         Catch ex As Exception
@@ -137,7 +137,7 @@ Module SecurityFunctions
         Dim calc_level As Integer
         Dim UsrLevel As Integer
         If AccessLevel = -1 Then
-            UsrLevel = UserAccess.intAccessLevel
+            UsrLevel = UserAccess.AccessLevel
         Else
             UsrLevel = AccessLevel
         End If
@@ -145,9 +145,9 @@ Module SecurityFunctions
         For levels = 0 To UBound(AccessLevels)
             calc_level = UsrLevel And mask
             If calc_level <> 0 Then
-                If AccessLevels(levels).strModule = recModule Then
+                If AccessLevels(levels).AccessModule = recModule Then
                     If OfflineMode Then
-                        If AccessLevels(levels).bolAvailOffline Then
+                        If AccessLevels(levels).AvailableOffline Then
                             Return True
                         Else
                             Return False

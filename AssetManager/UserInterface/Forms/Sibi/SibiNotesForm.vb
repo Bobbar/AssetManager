@@ -1,13 +1,13 @@
 ﻿Public Class SibiNotesForm
-    Private MyRequest As Request_Info
+    Private MyRequest As RequestStruct
 
-    Public ReadOnly Property Request As Request_Info
+    Public ReadOnly Property Request As RequestStruct
         Get
             Return MyRequest
         End Get
     End Property
 
-    Sub New(ParentForm As Form, Request As Request_Info)
+    Sub New(ParentForm As Form, Request As RequestStruct)
         InitializeComponent()
         Tag = ParentForm
         Icon = ParentForm.Icon

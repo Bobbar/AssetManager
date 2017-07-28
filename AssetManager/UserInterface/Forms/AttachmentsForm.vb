@@ -15,8 +15,8 @@ Class AttachmentsForm
     Private AttachFolderUID As String
     Private Const FileSizeMBLimit As Short = 150
     Private _attachTable As main_attachments
-    Private AttachDevice As Device_Info
-    Private AttachRequest As Request_Info
+    Private AttachDevice As DeviceStruct
+    Private AttachRequest As RequestStruct
     Private bolAllowDrag As Boolean = False
     Private bolDragging As Boolean = False
     Private bolGridFilling As Boolean
@@ -45,9 +45,9 @@ Class AttachmentsForm
         StatusBar("Idle...")
         _attachTable = AttachTable
         If Not IsNothing(AttachInfo) Then
-            If TypeOf AttachInfo Is Request_Info Then
-                AttachRequest = DirectCast(AttachInfo, Request_Info)
-                AttachFolderUID = AttachRequest.strUID
+            If TypeOf AttachInfo Is RequestStruct Then
+                AttachRequest = DirectCast(AttachInfo, RequestStruct)
+                AttachFolderUID = AttachRequest.GUID
                 FormUID = AttachFolderUID
                 strSelectedFolder = GetHumanValueFromIndex(SibiIndex.AttachFolder, 0)
                 Me.Text = "Sibi Attachements"
@@ -55,9 +55,9 @@ Class AttachmentsForm
                 SibiGroup.Dock = DockStyle.Top
                 FillFolderCombos()
                 FillSibiInfo()
-            ElseIf TypeOf AttachInfo Is Device_Info Then
-                AttachDevice = DirectCast(AttachInfo, Device_Info)
-                AttachFolderUID = AttachDevice.strGUID
+            ElseIf TypeOf AttachInfo Is DeviceStruct Then
+                AttachDevice = DirectCast(AttachInfo, DeviceStruct)
+                AttachFolderUID = AttachDevice.GUID
                 FormUID = AttachFolderUID
                 Me.Text = "Device Attachements"
                 SibiGroup.Visible = False
@@ -88,9 +88,9 @@ Class AttachmentsForm
 #Region "Methods"
 
     Private Sub FillSibiInfo()
-        txtUID.Text = AttachRequest.strUID
-        txtRequestNum.Text = AttachRequest.strRequestNumber
-        txtDescription.Text = AttachRequest.strDescription
+        txtUID.Text = AttachRequest.GUID
+        txtRequestNum.Text = AttachRequest.RequestNumber
+        txtDescription.Text = AttachRequest.Description
         cmbFolder.SelectedIndex = 0
     End Sub
 
@@ -347,9 +347,9 @@ Class AttachmentsForm
     End Function
 
     Private Sub FillDeviceInfo()
-        txtAssetTag.Text = AttachDevice.strAssetTag
-        txtSerial.Text = AttachDevice.strSerial
-        txtDeviceDescription.Text = AttachDevice.strDescription
+        txtAssetTag.Text = AttachDevice.AssetTag
+        txtSerial.Text = AttachDevice.Serial
+        txtDeviceDescription.Text = AttachDevice.Description
     End Sub
 
     Private Sub FillFolderCombos()
@@ -382,16 +382,16 @@ Class AttachmentsForm
         If TypeOf _attachTable Is sibi_attachments Then
             Select Case GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
                 Case "ALL"
-                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachRequest.strUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
+                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
                 Case Else
-                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex) & "' AND " & _attachTable.FKey & " ='" & AttachRequest.strUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
+                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex) & "' AND " & _attachTable.FKey & " ='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
             End Select
         Else
             'If bolAdminMode Then 'TODO: include all attachment type tables for admin mode
 
             '    strQry = "Select * FROM " & _attachTable.TableName & "," & _attachTable.TableName & " WHERE " & devices.DeviceUID & " = " & _attachTable.FKey & " ORDER BY " & _attachTable.TimeStamp & " DESC"
             'ElseIf Not bolAdminMode Then
-            strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachDevice.strGUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
+            strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachDevice.GUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
             '  End If
         End If
         Return strQry

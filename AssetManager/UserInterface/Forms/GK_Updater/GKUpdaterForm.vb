@@ -22,7 +22,7 @@ Public Class GKUpdaterForm
 
     End Sub
 
-    Public Async Sub AddUpdate(ByVal Device As Device_Info)
+    Public Async Sub AddUpdate(ByVal Device As DeviceStruct)
 
         If bolCheckForDups AndAlso Not Exists(Device) Then
             Await CheckPackFile()
@@ -34,7 +34,7 @@ Public Class GKUpdaterForm
             Me.WindowState = FormWindowState.Normal
             Me.Activate()
         Else
-            Dim blah = Message("An update for device " & Device.strSerial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
+            Dim blah = Message("An update for device " & Device.Serial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
             If blah = vbOK Then
                 Await CheckPackFile()
                 StartUpdateByDevice(Device)
@@ -45,12 +45,12 @@ Public Class GKUpdaterForm
 
     End Sub
 
-    Private Sub StartUpdateByDevice(Device As Device_Info)
-        MyUpdates.Find(Function(upd) upd.Device.strGUID = Device.strGUID).StartUpdate()
+    Private Sub StartUpdateByDevice(Device As DeviceStruct)
+        MyUpdates.Find(Function(upd) upd.Device.GUID = Device.GUID).StartUpdate()
     End Sub
 
-    Private Function Exists(Device As Device_Info) As Boolean
-        Return MyUpdates.Exists(Function(upd) upd.Device.strGUID = Device.strGUID)
+    Private Function Exists(Device As DeviceStruct) As Boolean
+        Return MyUpdates.Exists(Function(upd) upd.Device.GUID = Device.GUID)
     End Function
 
     Public Function ActiveUpdates() As Boolean

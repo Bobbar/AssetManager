@@ -2,13 +2,13 @@
 
 Public Class UpdateDev
 
-    Public ReadOnly Property UpdateInfo As Update_Info
+    Public ReadOnly Property UpdateInfo As DeviceUpdateInfoStruct
         Get
             Return NewUpdateInfo
         End Get
     End Property
 
-    Private NewUpdateInfo As Update_Info
+    Private NewUpdateInfo As DeviceUpdateInfoStruct
 
     Sub New(ParentForm As Form, Optional bolNewNote As Boolean = False)
         InitializeComponent()
@@ -29,8 +29,8 @@ Public Class UpdateDev
             Message("Please select a change type.", vbOKOnly + vbExclamation, "Missing Field", Me)
             Exit Sub
         End If
-        NewUpdateInfo.strNote = Trim(txtUpdate_Note.Text)
-        NewUpdateInfo.strChangeType = GetDBValue(DeviceIndex.ChangeType, cmbUpdate_ChangeType.SelectedIndex)
+        NewUpdateInfo.Note = Trim(txtUpdate_Note.Text)
+        NewUpdateInfo.ChangeType = GetDBValue(DeviceIndex.ChangeType, cmbUpdate_ChangeType.SelectedIndex)
         txtUpdate_Note.Text = ""
         cmbUpdate_ChangeType.Enabled = True
         Me.DialogResult = DialogResult.OK

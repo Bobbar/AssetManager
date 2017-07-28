@@ -10,8 +10,8 @@ Public Class ViewDeviceForm
 
 #Region "Fields"
 
-    Public MunisUser As Emp_Info = Nothing
-    Private CurrentViewDevice As New Device_Info
+    Public MunisUser As MunisEmployeeStruct = Nothing
+    Private CurrentViewDevice As New DeviceStruct
     Private bolCheckFields As Boolean
     Private bolGridFilling As Boolean = False
     Private DataParser As New DBControlParser(Me)
@@ -22,7 +22,7 @@ Public Class ViewDeviceForm
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyPingVis As PingVis
     Private MyWindowList As New WindowList(Me)
-    Private OldData As New Device_Info
+    Private OldData As New DeviceStruct
 
 #End Region
 
@@ -59,12 +59,12 @@ Public Class ViewDeviceForm
         DisableControls()
         ResetBackColors()
         Me.Refresh()
-        ViewDevice(CurrentViewDevice.strGUID)
+        ViewDevice(CurrentViewDevice.GUID)
     End Sub
 
     Public Sub SetAttachCount()
         If Not OfflineMode Then
-            AttachmentTool.Text = "(" + AssetFunc.GetAttachmentCount(CurrentViewDevice.strGUID, New dev_attachments).ToString + ")"
+            AttachmentTool.Text = "(" + AssetFunc.GetAttachmentCount(CurrentViewDevice.GUID, New dev_attachments).ToString + ")"
             AttachmentTool.ToolTipText = "Attachments " + AttachmentTool.Text
         End If
 
@@ -95,10 +95,10 @@ Public Class ViewDeviceForm
         StatusLabel.Invalidate()
     End Sub
 
-    Private Sub UpdateDevice(UpdateInfo As Update_Info)
+    Private Sub UpdateDevice(UpdateInfo As DeviceUpdateInfoStruct)
         Try
             Dim rows As Integer = 0
-            Dim SelectQry As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.strGUID & "'"
+            Dim SelectQry As String = "SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & CurrentViewDevice.GUID & "'"
             Dim InsertQry As String = "SELECT * FROM " & historical_dev.TableName & " LIMIT 0"
             Using SQLComms As New MySQL_Comms,
                     UpdateAdapter = SQLComms.Return_Adapter(SelectQry),
@@ -107,16 +107,16 @@ Public Class ViewDeviceForm
                 rows += InsertAdapter.Update(GetInsertTable(InsertAdapter, UpdateInfo))
             End Using
             If rows = 2 Then
-                ViewDevice(CurrentViewDevice.strGUID)
+                ViewDevice(CurrentViewDevice.GUID)
                 Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
             Else
-                ViewDevice(CurrentViewDevice.strGUID)
+                ViewDevice(CurrentViewDevice.GUID)
                 Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
             End If
             Exit Sub
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                ViewDevice(CurrentViewDevice.strGUID)
+                ViewDevice(CurrentViewDevice.GUID)
             End If
         End Try
     End Sub
@@ -126,7 +126,7 @@ Public Class ViewDeviceForm
             Waiting()
             bolGridFilling = True
             If ViewHistory(DeviceUID) Then
-                ViewTracking(CurrentViewDevice.strGUID)
+                ViewTracking(CurrentViewDevice.GUID)
                 Me.Text = Me.Text + FormTitle(CurrentViewDevice)
                 Me.Show()
                 DataGridHistory.ClearSelection()
@@ -156,7 +156,7 @@ Public Class ViewDeviceForm
                     TrackingGrid.DataSource = Nothing
                 End If
                 FillTrackingBox()
-                SetTracking(CurrentViewDevice.bolTrackable, CurrentViewDevice.Tracking.bolCheckedOut)
+                SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut)
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -251,7 +251,7 @@ Public Class ViewDeviceForm
 
     Private Sub CheckRDP()
         Try
-            If CurrentViewDevice.strOSVersion.Contains("WIN") Then
+            If CurrentViewDevice.OSVersion.Contains("WIN") Then
                 If MyPingVis Is Nothing Then MyPingVis = New PingVis(DirectCast(cmdShowIP, Control), DeviceHostname)
                 If MyPingVis.CurrentResult IsNot Nothing Then
                     If MyPingVis.CurrentResult.Status = NetworkInformation.IPStatus.Success Then
@@ -423,18 +423,18 @@ Public Class ViewDeviceForm
 
     Private Sub CollectCurrentTracking(Results As DataTable)
         With CurrentViewDevice
-            DateTime.TryParse(NoNull(Results.Rows(0).Item(trackable.CheckOut_Time)), .Tracking.dtCheckOutTime)
-            DateTime.TryParse(NoNull(Results.Rows(0).Item(trackable.CheckIn_Time)), .Tracking.dtCheckInTime)
-            DateTime.TryParse(NoNull(Results.Rows(0).Item(trackable.DueBackDate)), .Tracking.dtDueBackTime)
-            .Tracking.strUseLocation = NoNull(Results.Rows(0).Item(trackable.UseLocation))
-            .Tracking.strCheckOutUser = NoNull(Results.Rows(0).Item(trackable.CheckOut_User))
-            .Tracking.strCheckInUser = NoNull(Results.Rows(0).Item(trackable.CheckIn_User))
-            .Tracking.strUseReason = NoNull(Results.Rows(0).Item(trackable.Notes))
+            DateTime.TryParse(NoNull(Results.Rows(0).Item(trackable.CheckOut_Time)), .Tracking.CheckoutTime)
+            DateTime.TryParse(NoNull(Results.Rows(0).Item(trackable.CheckIn_Time)), .Tracking.CheckinTime)
+            DateTime.TryParse(NoNull(Results.Rows(0).Item(trackable.DueBackDate)), .Tracking.DueBackTime)
+            .Tracking.UseLocation = NoNull(Results.Rows(0).Item(trackable.UseLocation))
+            .Tracking.CheckoutUser = NoNull(Results.Rows(0).Item(trackable.CheckOut_User))
+            .Tracking.CheckinUser = NoNull(Results.Rows(0).Item(trackable.CheckIn_User))
+            .Tracking.UseReason = NoNull(Results.Rows(0).Item(trackable.Notes))
         End With
     End Sub
 
     Private Function ConcurrencyCheck() As Boolean
-        Dim InDBCheckSum As String = AssetFunc.Get_SQLValue(devices.TableName, devices.DeviceUID, CurrentViewDevice.strGUID, devices.CheckSum)
+        Dim InDBCheckSum As String = AssetFunc.Get_SQLValue(devices.TableName, devices.DeviceUID, CurrentViewDevice.GUID, devices.CheckSum)
         If InDBCheckSum = CurrentViewDevice.CheckSum Then
             Return True
         Else
@@ -470,13 +470,13 @@ Public Class ViewDeviceForm
         If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
         Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
-            If AssetFunc.DeleteMaster(CurrentViewDevice.strGUID, Entry_Type.Device) Then
+            If AssetFunc.DeleteMaster(CurrentViewDevice.GUID, Entry_Type.Device) Then
                 Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                 CurrentViewDevice = Nothing
                 Me.Dispose()
                 MainForm.RefreshCurrent()
             Else
-                Logger("*****DELETION ERROR******: " & CurrentViewDevice.strGUID)
+                Logger("*****DELETION ERROR******: " & CurrentViewDevice.GUID)
                 Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
                 CurrentViewDevice = Nothing
                 Me.Dispose()
@@ -489,11 +489,11 @@ Public Class ViewDeviceForm
     Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
         If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
-        Dim Info As Device_Info = AssetFunc.Get_EntryInfo(strGUID)
-        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.dtActionDateTime & " - " & Info.Historical.strChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
+        Dim Info As DeviceStruct = AssetFunc.Get_EntryInfo(strGUID)
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & Info.Historical.ChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
             Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results", Me)
-            ViewDevice(CurrentViewDevice.strGUID)
+            ViewDevice(CurrentViewDevice.GUID)
         Else
             Exit Sub
         End If
@@ -596,45 +596,45 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub FillTrackingBox()
-        If CBool(CurrentViewDevice.Tracking.bolCheckedOut) Then
+        If CBool(CurrentViewDevice.Tracking.IsCheckedOut) Then
             txtCheckOut.BackColor = colCheckOut
-            txtCheckLocation.Text = CurrentViewDevice.Tracking.strUseLocation
+            txtCheckLocation.Text = CurrentViewDevice.Tracking.UseLocation
             lblCheckTime.Text = "CheckOut Time:"
-            txtCheckTime.Text = CurrentViewDevice.Tracking.dtCheckOutTime.ToString
+            txtCheckTime.Text = CurrentViewDevice.Tracking.CheckoutTime.ToString
             lblCheckUser.Text = "CheckOut User:"
-            txtCheckUser.Text = CurrentViewDevice.Tracking.strCheckOutUser
+            txtCheckUser.Text = CurrentViewDevice.Tracking.CheckoutUser
             lblDueBack.Visible = True
             txtDueBack.Visible = True
-            txtDueBack.Text = CurrentViewDevice.Tracking.dtDueBackTime.ToString
+            txtDueBack.Text = CurrentViewDevice.Tracking.DueBackTime.ToString
         Else
             txtCheckOut.BackColor = colCheckIn
-            txtCheckLocation.Text = GetHumanValue(DeviceIndex.Locations, CurrentViewDevice.strLocation)
+            txtCheckLocation.Text = GetHumanValue(DeviceIndex.Locations, CurrentViewDevice.Location)
             lblCheckTime.Text = "CheckIn Time:"
-            txtCheckTime.Text = CurrentViewDevice.Tracking.dtCheckInTime.ToString
+            txtCheckTime.Text = CurrentViewDevice.Tracking.CheckinTime.ToString
             lblCheckUser.Text = "CheckIn User:"
-            txtCheckUser.Text = CurrentViewDevice.Tracking.strCheckInUser
+            txtCheckUser.Text = CurrentViewDevice.Tracking.CheckinUser
             lblDueBack.Visible = False
             txtDueBack.Visible = False
         End If
-        txtCheckOut.Text = IIf(CurrentViewDevice.Tracking.bolCheckedOut, "Checked Out", "Checked In").ToString
+        txtCheckOut.Text = IIf(CurrentViewDevice.Tracking.IsCheckedOut, "Checked Out", "Checked In").ToString
     End Sub
 
-    Private Function FormTitle(Device As Device_Info) As String
-        Return " - " + Device.strCurrentUser + " - " + Device.strAssetTag + " - " + Device.strDescription
+    Private Function FormTitle(Device As DeviceStruct) As String
+        Return " - " + Device.CurrentUser + " - " + Device.AssetTag + " - " + Device.Description
     End Function
 
     Private Sub GetCurrentValues()
-        OldData = AssetFunc.CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.strGUID & "'"))
+        OldData = AssetFunc.CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & " = '" & CurrentViewDevice.GUID & "'"))
     End Sub
 
-    Private Function GetInsertTable(Adapter As MySqlDataAdapter, UpdateInfo As Update_Info) As DataTable
+    Private Function GetInsertTable(Adapter As MySqlDataAdapter, UpdateInfo As DeviceUpdateInfoStruct) As DataTable
         Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
-        DBRow(historical_dev.ChangeType) = UpdateInfo.strChangeType
-        DBRow(historical_dev.Notes) = UpdateInfo.strNote
+        DBRow(historical_dev.ChangeType) = UpdateInfo.ChangeType
+        DBRow(historical_dev.Notes) = UpdateInfo.Note
         DBRow(historical_dev.ActionUser) = strLocalUser
-        DBRow(historical_dev.DeviceUID) = CurrentViewDevice.strGUID
+        DBRow(historical_dev.DeviceUID) = CurrentViewDevice.GUID
         Return tmpTable
     End Function
 
@@ -646,15 +646,15 @@ Public Class ViewDeviceForm
             DBRow(devices.CurrentUser) = MunisUser.Name
             DBRow(devices.Munis_Emp_Num) = MunisUser.Number
         Else
-            If OldData.strCurrentUser <> Trim(txtCurUser_View_REQ.Text) Then
+            If OldData.CurrentUser <> Trim(txtCurUser_View_REQ.Text) Then
                 DBRow(devices.CurrentUser) = Trim(txtCurUser_View_REQ.Text)
                 DBRow(devices.Munis_Emp_Num) = DBNull.Value
             Else
-                DBRow(devices.CurrentUser) = OldData.strCurrentUser
-                DBRow(devices.Munis_Emp_Num) = CleanDBValue(OldData.strCurrentUserEmpNum)
+                DBRow(devices.CurrentUser) = OldData.CurrentUser
+                DBRow(devices.Munis_Emp_Num) = CleanDBValue(OldData.CurrentUserEmpNum)
             End If
         End If
-        DBRow(devices.Sibi_Link_UID) = CleanDBValue(CurrentViewDevice.strSibiLink)
+        DBRow(devices.Sibi_Link_UID) = CleanDBValue(CurrentViewDevice.SibiLink)
         DBRow(devices.LastMod_User) = strLocalUser
         DBRow(devices.LastMod_Date) = Now
         DBRow(devices.CheckSum) = GetHashOfTable(tmpTable)
@@ -697,7 +697,7 @@ Public Class ViewDeviceForm
     Private Sub LinkSibi()
         Using f As New SibiSelectorForm(Me)
             If f.DialogResult = DialogResult.OK Then
-                CurrentViewDevice.strSibiLink = f.SibiUID
+                CurrentViewDevice.SibiLink = f.SibiUID
                 Message("Sibi Link Set.", vbOKOnly + vbInformation, "Success", Me)
             End If
         End Using
@@ -714,7 +714,7 @@ Public Class ViewDeviceForm
         DoneWaiting()
     End Sub
 
-    Private Sub NewMunisView(Device As Device_Info)
+    Private Sub NewMunisView(Device As DeviceStruct)
         MunisFunc.LoadMunisInfoByDevice(Device, Me)
     End Sub
 
@@ -724,19 +724,19 @@ Public Class ViewDeviceForm
         DoneWaiting()
     End Sub
 
-    Private Sub OpenSibiLink(LinkDevice As Device_Info)
+    Private Sub OpenSibiLink(LinkDevice As DeviceStruct)
         Try
             If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
             Dim SibiUID As String
-            If LinkDevice.strSibiLink = "" Then
-                If LinkDevice.strPO = "" Then
+            If LinkDevice.SibiLink = "" Then
+                If LinkDevice.PO = "" Then
                     Message("A valid PO Number or Sibi Link is required.", vbOKOnly + vbInformation, "Missing Info", Me)
                     Exit Sub
                 Else
-                    SibiUID = AssetFunc.Get_SQLValue(sibi_requests.TableName, sibi_requests.PO, LinkDevice.strPO, sibi_requests.UID)
+                    SibiUID = AssetFunc.Get_SQLValue(sibi_requests.TableName, sibi_requests.PO, LinkDevice.PO, sibi_requests.UID)
                 End If
             Else
-                SibiUID = LinkDevice.strSibiLink
+                SibiUID = LinkDevice.SibiLink
             End If
             If SibiUID = "" Then
                 Message("No Sibi request found with matching PO number.", vbOKOnly + vbInformation, "Not Found", Me)
@@ -879,7 +879,7 @@ Public Class ViewDeviceForm
 
     Private Sub SetMunisEmpStatus()
         ToolTip1.SetToolTip(txtCurUser_View_REQ, "")
-        If CurrentViewDevice.strCurrentUserEmpNum <> "" Then
+        If CurrentViewDevice.CurrentUserEmpNum <> "" Then
             txtCurUser_View_REQ.BackColor = colEditColor
             ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee")
         End If
@@ -978,7 +978,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub tsmAssetInputForm_Click(sender As Object, e As EventArgs) Handles tsmAssetInputForm.Click
-        If CurrentViewDevice.strPO <> "" Then
+        If CurrentViewDevice.PO <> "" Then
             Dim PDFForm As New PDFFormFilling(Me, CurrentViewDevice, PDFFormType.InputForm)
         Else
             Message("Please add a valid PO number to this device.", vbOKOnly + vbExclamation, "Missing Info", Me)

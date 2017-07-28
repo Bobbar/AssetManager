@@ -5,7 +5,7 @@ Public Class AssetManager_Functions
 
 #Region "Methods"
 
-    Public Sub AddNewEmp(EmpInfo As Emp_Info)
+    Public Sub AddNewEmp(EmpInfo As MunisEmployeeStruct)
         Try
             If Not EmpIsInDB(EmpInfo.Number) Then
                 Dim UID As String = Guid.NewGuid.ToString
@@ -29,9 +29,9 @@ VALUES
         End Try
     End Sub
 
-    Public Function BuildIndex(CodeType As String, TypeName As String) As Combo_Data()
+    Public Function BuildIndex(CodeType As String, TypeName As String) As ComboboxDataStruct()
         Try
-            Dim tmpArray() As Combo_Data
+            Dim tmpArray() As ComboboxDataStruct
             Dim strQRY = "SELECT * FROM " & CodeType & " LEFT OUTER JOIN munis_codes on " & CodeType & ".db_value = munis_codes.asset_man_code WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
             Dim row As Integer
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
@@ -60,16 +60,16 @@ VALUES
         End Try
     End Function
 
-    Public Function BuildModuleIndex() As List(Of Access_Info)
-        Dim tmpList As New List(Of Access_Info)
+    Public Function BuildModuleIndex() As List(Of AccessGroupStruct)
+        Dim tmpList As New List(Of AccessGroupStruct)
         Using SQLComms As New MySQL_Comms,
             ModuleTable As DataTable = SQLComms.Return_SQLTable("SELECT * FROM " & security_columns.TableName & " ORDER BY " & security_columns.AccessLevel & "")
             For Each row As DataRow In ModuleTable.Rows
-                Dim tmpInfo As Access_Info
+                Dim tmpInfo As AccessGroupStruct
                 With tmpInfo
-                    .intLevel = CInt(row.Item(security_columns.AccessLevel))
-                    .strModule = row.Item(security_columns.SecModule).ToString
-                    .strDesc = row.Item(security_columns.Description).ToString
+                    .Level = CInt(row.Item(security_columns.AccessLevel))
+                    .AccessModule = row.Item(security_columns.SecModule).ToString
+                    .Description = row.Item(security_columns.Description).ToString
                 End With
                 tmpList.Add(tmpInfo)
             Next
@@ -77,27 +77,27 @@ VALUES
         End Using
     End Function
 
-    Public Function CollectDeviceInfo(DeviceTable As DataTable) As Device_Info
+    Public Function CollectDeviceInfo(DeviceTable As DataTable) As DeviceStruct
         Try
-            Dim newDeviceInfo As New Device_Info
+            Dim newDeviceInfo As New DeviceStruct
             With newDeviceInfo
-                .strGUID = NoNull(DeviceTable.Rows(0).Item(devices.DeviceUID))
-                .strDescription = NoNull(DeviceTable.Rows(0).Item(devices.Description))
-                .strLocation = NoNull(DeviceTable.Rows(0).Item(devices.Location))
-                .strCurrentUser = NoNull(DeviceTable.Rows(0).Item(devices.CurrentUser))
-                .strCurrentUserEmpNum = NoNull(DeviceTable.Rows(0).Item(devices.Munis_Emp_Num))
-                .strSerial = NoNull(DeviceTable.Rows(0).Item(devices.Serial))
-                .strAssetTag = NoNull(DeviceTable.Rows(0).Item(devices.AssetTag))
-                .dtPurchaseDate = DateTime.Parse(NoNull(DeviceTable.Rows(0).Item(devices.PurchaseDate)))
-                .strReplaceYear = NoNull(DeviceTable.Rows(0).Item(devices.ReplacementYear))
-                .strPO = NoNull(DeviceTable.Rows(0).Item(devices.PO))
-                .strOSVersion = NoNull(DeviceTable.Rows(0).Item(devices.OSVersion))
-                .strPhoneNumber = NoNull(DeviceTable.Rows(0).Item(devices.PhoneNumber))
-                .strEqType = NoNull(DeviceTable.Rows(0).Item(devices.EQType))
-                .strStatus = NoNull(DeviceTable.Rows(0).Item(devices.Status))
-                .bolTrackable = CBool(DeviceTable.Rows(0).Item(devices.Trackable))
-                .strSibiLink = NoNull(DeviceTable.Rows(0).Item(devices.Sibi_Link_UID))
-                .Tracking.bolCheckedOut = CBool(DeviceTable.Rows(0).Item(devices.CheckedOut))
+                .GUID = NoNull(DeviceTable.Rows(0).Item(devices.DeviceUID))
+                .Description = NoNull(DeviceTable.Rows(0).Item(devices.Description))
+                .Location = NoNull(DeviceTable.Rows(0).Item(devices.Location))
+                .CurrentUser = NoNull(DeviceTable.Rows(0).Item(devices.CurrentUser))
+                .CurrentUserEmpNum = NoNull(DeviceTable.Rows(0).Item(devices.Munis_Emp_Num))
+                .Serial = NoNull(DeviceTable.Rows(0).Item(devices.Serial))
+                .AssetTag = NoNull(DeviceTable.Rows(0).Item(devices.AssetTag))
+                .PurchaseDate = DateTime.Parse(NoNull(DeviceTable.Rows(0).Item(devices.PurchaseDate)))
+                .ReplaceYear = NoNull(DeviceTable.Rows(0).Item(devices.ReplacementYear))
+                .PO = NoNull(DeviceTable.Rows(0).Item(devices.PO))
+                .OSVersion = NoNull(DeviceTable.Rows(0).Item(devices.OSVersion))
+                .PhoneNumber = NoNull(DeviceTable.Rows(0).Item(devices.PhoneNumber))
+                .EquipmentType = NoNull(DeviceTable.Rows(0).Item(devices.EQType))
+                .Status = NoNull(DeviceTable.Rows(0).Item(devices.Status))
+                .IsTrackable = CBool(DeviceTable.Rows(0).Item(devices.Trackable))
+                .SibiLink = NoNull(DeviceTable.Rows(0).Item(devices.Sibi_Link_UID))
+                .Tracking.IsCheckedOut = CBool(DeviceTable.Rows(0).Item(devices.CheckedOut))
                 .CheckSum = NoNull(DeviceTable.Rows(0).Item(devices.CheckSum))
                 .Hostname = NoNull(DeviceTable.Rows(0).Item(devices.Hostname))
             End With
@@ -204,7 +204,7 @@ VALUES
     End Function
 
     Public Function DevicesBySup(ParentForm As Form) As DataTable
-        Dim SupInfo As Emp_Info
+        Dim SupInfo As MunisEmployeeStruct
         Using NewMunisSearch As New MunisUserForm(ParentForm)
             If NewMunisSearch.DialogResult = DialogResult.Yes Then
                 SetWaitCursor(True)
@@ -237,7 +237,7 @@ VALUES
         End If
     End Function
 
-    Public Function FindDevice(SearchVal As String, Type As FindDevType) As Device_Info
+    Public Function FindDevice(SearchVal As String, Type As FindDevType) As DeviceStruct
         Try
             If Type = FindDevType.AssetTag Then
                 Dim Params As New List(Of DBQueryParameter)
@@ -255,25 +255,25 @@ VALUES
         End Try
     End Function
 
-    Public Function Get_DeviceInfo_From_UID(GUID As String) As Device_Info
+    Public Function Get_DeviceInfo_From_UID(GUID As String) As DeviceStruct
         Using SQLComms As New MySQL_Comms
             Return AssetFunc.CollectDeviceInfo(SQLComms.Return_SQLTable("SELECT * FROM " & devices.TableName & " WHERE " & devices.DeviceUID & "='" & GUID & "'"))
         End Using
     End Function
 
-    Public Function Get_EntryInfo(ByVal strGUID As String) As Device_Info
+    Public Function Get_EntryInfo(ByVal strGUID As String) As DeviceStruct
         Try
-            Dim tmpInfo As New Device_Info
+            Dim tmpInfo As New DeviceStruct
             Dim strQry = "SELECT * FROM " & historical_dev.TableName & " WHERE " & historical_dev.History_Entry_UID & "='" & strGUID & "'"
             Using SQLComms As New MySQL_Comms, results As DataTable = SQLComms.Return_SQLTable(strQry)
                 For Each r As DataRow In results.Rows
-                    tmpInfo.Historical.strChangeType = GetHumanValue(DeviceIndex.ChangeType, r.Item(historical_dev.ChangeType).ToString)
-                    tmpInfo.strAssetTag = r.Item(historical_dev.AssetTag).ToString
-                    tmpInfo.strCurrentUser = r.Item(historical_dev.CurrentUser).ToString
-                    tmpInfo.strSerial = r.Item(historical_dev.Serial).ToString
-                    tmpInfo.strDescription = r.Item(historical_dev.Description).ToString
-                    tmpInfo.Historical.dtActionDateTime = DateTime.Parse(r.Item(historical_dev.ActionDateTime).ToString)
-                    tmpInfo.Historical.strActionUser = r.Item(historical_dev.ActionUser).ToString
+                    tmpInfo.Historical.ChangeType = GetHumanValue(DeviceIndex.ChangeType, r.Item(historical_dev.ChangeType).ToString)
+                    tmpInfo.AssetTag = r.Item(historical_dev.AssetTag).ToString
+                    tmpInfo.CurrentUser = r.Item(historical_dev.CurrentUser).ToString
+                    tmpInfo.Serial = r.Item(historical_dev.Serial).ToString
+                    tmpInfo.Description = r.Item(historical_dev.Description).ToString
+                    tmpInfo.Historical.ActionDateTime = DateTime.Parse(r.Item(historical_dev.ActionDateTime).ToString)
+                    tmpInfo.Historical.ActionUser = r.Item(historical_dev.ActionUser).ToString
                 Next
                 Return tmpInfo
             End Using
@@ -353,17 +353,17 @@ VALUES
             Return cmd.ExecuteNonQuery()
         End Using
     End Function
-    Public Function User_GetUserList() As List(Of User_Info)
+    Public Function User_GetUserList() As List(Of LocalUserInfoStruct)
         Dim Qry As String = "SELECT * FROM " & users.TableName
-        Dim tmpList As New List(Of User_Info)
+        Dim tmpList As New List(Of LocalUserInfoStruct)
         Try
             Using SQLComms As New MySQL_Comms, Results As DataTable = SQLComms.Return_SQLTable(Qry)
                 For Each r As DataRow In Results.Rows
-                    Dim tmpItem As User_Info
-                    tmpItem.strUsername = r.Item(users.UserName).ToString
-                    tmpItem.strFullname = r.Item(users.FullName).ToString
-                    tmpItem.intAccessLevel = CInt(r.Item(users.AccessLevel))
-                    tmpItem.strUID = r.Item(users.UID).ToString
+                    Dim tmpItem As LocalUserInfoStruct
+                    tmpItem.Username = r.Item(users.UserName).ToString
+                    tmpItem.Fullname = r.Item(users.FullName).ToString
+                    tmpItem.AccessLevel = CInt(r.Item(users.AccessLevel))
+                    tmpItem.GUID = r.Item(users.UID).ToString
                     tmpList.Add(tmpItem)
                 Next
                 Return tmpList

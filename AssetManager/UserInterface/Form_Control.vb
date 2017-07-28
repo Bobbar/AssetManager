@@ -37,10 +37,10 @@
         Return Children
     End Function
 
-    Public Sub LookupDevice(ParentForm As MyForm, Device As Device_Info)
-        If Device.strGUID IsNot Nothing Then
-            If Not FormIsOpenByUID(GetType(ViewDeviceForm), Device.strGUID) Then
-                Dim NewView As New ViewDeviceForm(ParentForm, Device.strGUID)
+    Public Sub LookupDevice(ParentForm As MyForm, Device As DeviceStruct)
+        If Device.GUID IsNot Nothing Then
+            If Not FormIsOpenByUID(GetType(ViewDeviceForm), Device.GUID) Then
+                Dim NewView As New ViewDeviceForm(ParentForm, Device.GUID)
             End If
         Else
             Message("Device not found.", vbOKOnly + vbExclamation, "Error", ParentForm)

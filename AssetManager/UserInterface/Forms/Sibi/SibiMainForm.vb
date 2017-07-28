@@ -6,7 +6,7 @@ Public Class SibiMainForm
     Private MyWindowList As New WindowList(Me)
     Private LastCmd As DbCommand
     Private bolRebuildingCombo As Boolean = False
-    Private StatusColors As List(Of StatusColorStruct)
+    Private StatusColors As List(Of StatusColumnColorStruct)
 
     Public Sub RefreshResults()
         ExecuteCmd(LastCmd)
@@ -101,7 +101,7 @@ Public Class SibiMainForm
     Public Sub SendToGrid(Results As DataTable)
         Try
             Using table As New DataTable
-                For Each col As ColumnStruct In SibiTableColumns()
+                For Each col As DataGridColumnStruct In SibiTableColumns()
                     Dim column = table.Columns.Add(col.ColumnName, col.ColumnType)
                     column.Caption = col.ColumnCaption
                 Next
@@ -131,27 +131,27 @@ Public Class SibiMainForm
         End Try
     End Sub
 
-    Private Function GetStatusColors(Results As DataTable) As List(Of StatusColorStruct)
-        Dim StatusList As New List(Of StatusColorStruct)
+    Private Function GetStatusColors(Results As DataTable) As List(Of StatusColumnColorStruct)
+        Dim StatusList As New List(Of StatusColumnColorStruct)
         For Each row As DataRow In Results.Rows
-            StatusList.Add(New StatusColorStruct(row.Item(sibi_requests.RequestNumber).ToString, GetRowColor(row.Item(sibi_requests.Status).ToString)))
+            StatusList.Add(New StatusColumnColorStruct(row.Item(sibi_requests.RequestNumber).ToString, GetRowColor(row.Item(sibi_requests.Status).ToString)))
         Next
         Return StatusList
     End Function
 
-    Private Function SibiTableColumns() As List(Of ColumnStruct)
-        Dim ColList As New List(Of ColumnStruct)
-        ColList.Add(New ColumnStruct(sibi_requests.RequestNumber, "Request #", GetType(Integer)))
-        ColList.Add(New ColumnStruct(sibi_requests.Status, "Status", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_requests.Description, "Description", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_requests.RequestUser, "Request User", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_requests.Type, "Request Type", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_requests.NeedBy, "Need By", GetType(Date)))
-        ColList.Add(New ColumnStruct(sibi_requests.PO, "PO Number", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_requests.RequisitionNumber, "Req. Number", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_requests.RT_Number, "RT Number", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_requests.DateStamp, "Create Date", GetType(Date)))
-        ColList.Add(New ColumnStruct(sibi_requests.UID, "UID", GetType(String)))
+    Private Function SibiTableColumns() As List(Of DataGridColumnStruct)
+        Dim ColList As New List(Of DataGridColumnStruct)
+        ColList.Add(New DataGridColumnStruct(sibi_requests.RequestNumber, "Request #", GetType(Integer)))
+        ColList.Add(New DataGridColumnStruct(sibi_requests.Status, "Status", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_requests.Description, "Description", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_requests.RequestUser, "Request User", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_requests.Type, "Request Type", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_requests.NeedBy, "Need By", GetType(Date)))
+        ColList.Add(New DataGridColumnStruct(sibi_requests.PO, "PO Number", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_requests.RequisitionNumber, "Req. Number", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_requests.RT_Number, "RT Number", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_requests.DateStamp, "Create Date", GetType(Date)))
+        ColList.Add(New DataGridColumnStruct(sibi_requests.UID, "UID", GetType(String)))
         Return ColList
     End Function
 

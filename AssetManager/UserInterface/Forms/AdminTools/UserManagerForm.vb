@@ -2,8 +2,8 @@
 Imports MySql.Data.MySqlClient
 
 Public Class UserManagerForm
-    Private ModuleIndex As New List(Of Access_Info)
-    Private CurrentUser As User_Info
+    Private ModuleIndex As New List(Of AccessGroupStruct)
+    Private CurrentUser As LocalUserInfoStruct
     Private DataBinder As New BindingSource
     Private Qry As String = "SELECT * FROM " & users.TableName
     Private SQLComms As New MySQL_Comms
@@ -61,11 +61,11 @@ Public Class UserManagerForm
     Private Sub LoadModuleBoxes()
         Dim chkModuleBox As CheckBox
         clbModules.Items.Clear()
-        For Each ModuleBox As Access_Info In ModuleIndex
+        For Each ModuleBox As AccessGroupStruct In ModuleIndex
             chkModuleBox = New CheckBox
             With chkModuleBox
-                .Text = ModuleBox.strDesc
-                .Name = ModuleBox.strModule
+                .Text = ModuleBox.Description
+                .Name = ModuleBox.AccessModule
             End With
             clbModules.DisplayMember = "Text"
             clbModules.Items.Add(chkModuleBox)
@@ -95,10 +95,10 @@ Public Class UserManagerForm
 
     Private Sub GetUserInfo()
         With CurrentUser
-            .intAccessLevel = CInt(GetCurrentCellValue(UserGrid, users.AccessLevel))
-            .strUsername = GetCurrentCellValue(UserGrid, users.UserName)
-            .strUID = GetCurrentCellValue(UserGrid, users.UID)
-            .strFullname = GetCurrentCellValue(UserGrid, users.FullName)
+            .AccessLevel = CInt(GetCurrentCellValue(UserGrid, users.AccessLevel))
+            .Username = GetCurrentCellValue(UserGrid, users.UserName)
+            .GUID = GetCurrentCellValue(UserGrid, users.UID)
+            .Fullname = GetCurrentCellValue(UserGrid, users.FullName)
         End With
     End Sub
 

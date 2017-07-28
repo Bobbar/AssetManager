@@ -1,6 +1,6 @@
 ﻿Public Class MunisUserForm
 
-    Public ReadOnly Property EmployeeInfo As Emp_Info
+    Public ReadOnly Property EmployeeInfo As MunisEmployeeStruct
         Get
             Using Me
                 If DialogResult = DialogResult.Yes Then
@@ -11,7 +11,7 @@
         End Get
     End Property
 
-    Private SelectedEmpInfo As Emp_Info
+    Private SelectedEmpInfo As MunisEmployeeStruct
     Private Const intMaxResults As Integer = 50
 
     Sub New(ParentForm As Form)

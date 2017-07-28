@@ -1,122 +1,119 @@
-﻿Public Structure Combo_Data
+﻿Public Structure ComboboxDataStruct
     Public Property strLong As String
     Public Property strShort As String
     Public Property strID As String
 End Structure
 
-Public Structure Device_Info
-    Public strAssetTag As String
-    Public strDescription As String
-    Public strEqType As String
-    Public strSerial As String
-    Public strLocation As String
-    Public strCurrentUser As String
-    Public strCurrentUserEmpNum As String
-    Public strFiscalYear As String
-    Public dtPurchaseDate As Date
-    Public strReplaceYear As String
-    Public strOSVersion As String
-    Public strPhoneNumber As String
-    Public strGUID As String
-    Public strPO As String
-    Public strStatus As String
-    Public strNote As String
-    Public bolTrackable As Boolean
-    Public strSibiLink As String
+Public Structure DeviceStruct
+    Public AssetTag As String
+    Public Description As String
+    Public EquipmentType As String
+    Public Serial As String
+    Public Location As String
+    Public CurrentUser As String
+    Public CurrentUserEmpNum As String
+    Public FiscalYear As String
+    Public PurchaseDate As Date
+    Public ReplaceYear As String
+    Public OSVersion As String
+    Public PhoneNumber As String
+    Public GUID As String
+    Public PO As String
+    Public Status As String
+    Public Note As String
+    Public IsTrackable As Boolean
+    Public SibiLink As String
     Public CheckSum As String
     Public Hostname As String
-    Public Tracking As Track_Info
-    Public Historical As Hist_Info
+    Public Tracking As DeviceTrackingStruct
+    Public Historical As DeviceHistoricalStruct
 End Structure
 
-Public Structure Request_Info
-    Public strUID As String
-    Public strUser As String
-    Public strDescription As String
-    Public dtDateStamp As Date
-    Public dtNeedBy As Date
-    Public strStatus As String
-    Public strType As String
-    Public strPO As String
-    Public strRequisitionNumber As String
-    Public strReplaceAsset As String
-    Public strReplaceSerial As String
-    Public strRequestNumber As String
-    Public strRTNumber As String
+Public Structure RequestStruct
+    Public GUID As String
+    Public RequestUser As String
+    Public Description As String
+    Public DateStamp As Date
+    Public NeedByDate As Date
+    Public Status As String
+    Public Type As String
+    Public PO As String
+    Public RequisitionNumber As String
+    Public ReplaceAsset As String
+    Public ReplaceSerial As String
+    Public RequestNumber As String
+    Public RTNumber As String
     Public RequestItems As DataTable
 End Structure
 
-Public Structure Hist_Info
-    Public strChangeType As String
-    Public strHistUID As String
-    Public strNote As String
-    Public strActionUser As String
-    Public dtActionDateTime As Date
+Public Structure DeviceHistoricalStruct
+    Public ChangeType As String
+    Public GUID As String
+    Public Note As String
+    Public ActionUser As String
+    Public ActionDateTime As Date
 End Structure
 
-Public Structure Track_Info
-    Public dtCheckOutTime As Date
-    Public dtDueBackTime As Date
-    Public dtCheckInTime As Date
-    Public strCheckOutUser As String
-    Public strCheckInUser As String
-    Public strUseLocation As String
-    Public strUseReason As String
-    Public bolCheckedOut As Boolean
+Public Structure DeviceTrackingStruct
+    Public CheckoutTime As Date
+    Public DueBackTime As Date
+    Public CheckinTime As Date
+    Public CheckoutUser As String
+    Public CheckinUser As String
+    Public UseLocation As String
+    Public UseReason As String
+    Public IsCheckedOut As Boolean
+End Structure
+'TODO: Combine these two redundant structs into one.
+Public Structure CheckStruct
+    Public CheckoutTime As String
+    Public DueBackDate As String
+    Public UseLocation As String
+    Public UseReason As String
+    Public CheckinNotes As String
+    Public DeviceGUID As String
+    Public CheckoutUser As String
+    Public CheckinUser As String
+    Public CheckinTime As String
 End Structure
 
-Public Structure Access_Info
-    Public strModule As String
-    Public intLevel As Integer
-    Public strDesc As String
-    Public bolAvailOffline As Boolean
+Public Structure AccessGroupStruct
+    Public AccessModule As String
+    Public Level As Integer
+    Public Description As String
+    Public AvailableOffline As Boolean
 End Structure
 
-Public Structure Update_Info
-    Public strNote As String
-    Public strChangeType As String
+Public Structure DeviceUpdateInfoStruct
+    Public Note As String
+    Public ChangeType As String
 End Structure
 
-Public Structure User_Info
-    Public strUsername As String
-    Public strFullname As String
+Public Structure LocalUserInfoStruct
+    Public Username As String
+    Public Fullname As String
 
     'Public bolIsAdmin As Boolean
-    Public intAccessLevel As Integer
+    Public AccessLevel As Integer
 
-    Public strUID As String
+    Public GUID As String
 End Structure
 
-Public Structure Emp_Info
+Public Structure MunisEmployeeStruct
     Public Number As String
     Public Name As String
-    Public UID As String
+    Public GUID As String
 End Structure
 
-Public Structure FTPScan_Parms
-    Public IsOrphan As Boolean
-    Public strTable As String
-End Structure
 
-Public Structure CheckStruct
-    Public strCheckOutTime As String
-    Public strDueDate As String
-    Public strUseLocation As String
-    Public strUseReason As String
-    Public strCheckInNotes As String
-    Public strDeviceUID As String
-    Public strCheckOutUser As String
-    Public strCheckInUser As String
-    Public strCheckInTime As String
-End Structure
 
-Public Structure ColumnStruct
+Public Structure DataGridColumnStruct
     Public ColumnName As String
     Public ColumnCaption As String
     Public ColumnType As Type
     Public ColumnReadOnly As Boolean
     Public ColumnVisible As Boolean
-    Public ComboIndex As Combo_Data()
+    Public ComboIndex As ComboboxDataStruct()
 
     Sub New(Name As String, Caption As String, Type As Type)
         ColumnName = Name
@@ -127,7 +124,7 @@ Public Structure ColumnStruct
         ComboIndex = Nothing
     End Sub
 
-    Sub New(Name As String, Caption As String, Type As Type, ComboIdx() As Combo_Data)
+    Sub New(Name As String, Caption As String, Type As Type, ComboIdx() As ComboboxDataStruct)
         ColumnName = Name
         ColumnCaption = Caption
         ColumnType = Type
@@ -147,7 +144,7 @@ Public Structure ColumnStruct
 
 End Structure
 
-Public Structure StatusColorStruct
+Public Structure StatusColumnColorStruct
     Public StatusID As String
     Public StatusColor As Color
 

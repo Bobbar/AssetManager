@@ -259,8 +259,8 @@ Public Class Munis_Functions 'Be warned. This whole class is a horrible bastard.
 
     Public Sub AssetSearch(Parent As Form)
         Try
-            Dim Device As New Device_Info
-            Device.dtPurchaseDate = Nothing
+            Dim Device As New DeviceStruct
+            Device.PurchaseDate = Nothing
             Using NewDialog As New MyDialog(Parent)
                 With NewDialog
                     .Text = "Asset Search"
@@ -268,8 +268,8 @@ Public Class Munis_Functions 'Be warned. This whole class is a horrible bastard.
                     .AddTextBox("txtSerial", "Serial:")
                     .ShowDialog()
                     If .DialogResult = DialogResult.OK Then
-                        Device.strAssetTag = Trim(NewDialog.GetControlValue("txtAsset").ToString)
-                        Device.strSerial = Trim(NewDialog.GetControlValue("txtSerial").ToString)
+                        Device.AssetTag = Trim(NewDialog.GetControlValue("txtAsset").ToString)
+                        Device.Serial = Trim(NewDialog.GetControlValue("txtSerial").ToString)
                         LoadMunisInfoByDevice(Device, Parent)
                     End If
                 End With
@@ -527,27 +527,27 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
         End If
     End Function
 
-    Public Async Sub LoadMunisInfoByDevice(Device As Device_Info, ParentForm As Form)
+    Public Async Sub LoadMunisInfoByDevice(Device As DeviceStruct, ParentForm As Form)
         Try
             Waiting()
             Dim ReqTable, InvTable As New DataTable
-            If Device.strPO <> "" Then
-                Device.strFiscalYear = YearFromDate(Device.dtPurchaseDate)
+            If Device.PO <> "" Then
+                Device.FiscalYear = YearFromDate(Device.PurchaseDate)
                 InvTable = Await LoadMunisInventoryGrid(Device)
-                ReqTable = Await LoadMunisRequisitionGridByReqNo(Await Get_ReqNumber_From_PO_Async(Device.strPO), MunisFunc.Get_FY_From_PO(Device.strPO))
+                ReqTable = Await LoadMunisRequisitionGridByReqNo(Await Get_ReqNumber_From_PO_Async(Device.PO), MunisFunc.Get_FY_From_PO(Device.PO))
             Else
-                If Device.strPO = "" Then
-                    Dim PO As String = Get_PO_From_Asset(Device.strAssetTag)
+                If Device.PO = "" Then
+                    Dim PO As String = Get_PO_From_Asset(Device.AssetTag)
                     If PO <> "" Then
-                        Device.strPO = PO 'if some's missing -> try to find it by other means
+                        Device.PO = PO 'if some's missing -> try to find it by other means
                     Else
-                        PO = Get_PO_From_Serial(Device.strSerial)
-                        If PO <> "" Then Device.strPO = PO
+                        PO = Get_PO_From_Serial(Device.Serial)
+                        If PO <> "" Then Device.PO = PO
                     End If
                 End If
-                If Device.strPO <> "" Then
+                If Device.PO <> "" Then
                     InvTable = Await LoadMunisInventoryGrid(Device)
-                    ReqTable = Await LoadMunisRequisitionGridByReqNo(Await Get_ReqNumber_From_PO_Async(Device.strPO), MunisFunc.Get_FY_From_PO(Device.strPO))
+                    ReqTable = Await LoadMunisRequisitionGridByReqNo(Await Get_ReqNumber_From_PO_Async(Device.PO), MunisFunc.Get_FY_From_PO(Device.PO))
                 Else
                     InvTable = Await LoadMunisInventoryGrid(Device)
                     ReqTable = Nothing
@@ -576,22 +576,22 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
         End Try
     End Sub
 
-    Private Async Function LoadMunisInventoryGrid(Device As Device_Info) As Task(Of DataTable)
+    Private Async Function LoadMunisInventoryGrid(Device As DeviceStruct) As Task(Of DataTable)
         Dim GridData As New DataTable
         Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
-        Dim AssetTagQuery As String = "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.strAssetTag & "'"
-        Dim SerialQuery As String = "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_serial='" & Device.strSerial & "'"
-        If Device.strSerial <> "" Then 'if serial is available, search FA by serial. Else, search by asset
+        Dim AssetTagQuery As String = "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & Device.AssetTag & "'"
+        Dim SerialQuery As String = "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_serial='" & Device.Serial & "'"
+        If Device.Serial <> "" Then 'if serial is available, search FA by serial. Else, search by asset
             GridData = Await MunisComms.Return_MSSQLTableAsync(SerialQuery)
             If GridData.Rows.Count > 0 Then 'if serial returned results, return results. Else, try search by Asset
                 Return GridData
-            ElseIf GridData.Rows.Count < 1 AndAlso Device.strAssetTag <> "" Then
+            ElseIf GridData.Rows.Count < 1 AndAlso Device.AssetTag <> "" Then
                 GridData = Await MunisComms.Return_MSSQLTableAsync(AssetTagQuery)
                 If GridData.Rows.Count > 0 Then
                     Return GridData
                 End If
             End If
-        ElseIf Device.strSerial = "" AndAlso Device.strAssetTag <> "" Then
+        ElseIf Device.Serial = "" AndAlso Device.AssetTag <> "" Then
             GridData = Await MunisComms.Return_MSSQLTableAsync(AssetTagQuery)
             If GridData.Rows.Count > 0 Then
                 Return GridData

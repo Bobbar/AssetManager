@@ -7,12 +7,11 @@ Imports MyDialogLib
 
 Public Class PDFFormFilling
     Private ParentForm As Form
-    Private CurrentDevice As New Device_Info
-    Private UnitPrice As String
+    Private CurrentDevice As New DeviceStruct
     Private CurrentDialog As MyDialog
     Private UnitPriceTxtName As String = "txtUnitPrice"
 
-    Sub New(Parent As Form, DeviceInfo As Device_Info, Type As PDFFormType)
+    Sub New(Parent As Form, DeviceInfo As DeviceStruct, Type As PDFFormType)
         ParentForm = Parent
         CurrentDevice = DeviceInfo
         FillForm(Type)
@@ -47,7 +46,7 @@ Public Class PDFFormFilling
     Private Async Sub PriceFromMunis()
         Try
             Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
-            Dim SelectedPrice = Await MunisFunc.NewMunisView_ReqSearch(MunisFunc.Get_ReqNumber_From_PO(CurrentDevice.strPO), MunisFunc.Get_FY_From_PO(CurrentDevice.strPO), ParentForm, True)
+            Dim SelectedPrice = Await MunisFunc.NewMunisView_ReqSearch(MunisFunc.Get_ReqNumber_From_PO(CurrentDevice.PO), MunisFunc.Get_FY_From_PO(CurrentDevice.PO), ParentForm, True)
             Dim decPrice As Decimal = Convert.ToDecimal(SelectedPrice)
             Dim SelectedUnitPrice = decPrice.ToString("C")
             CurrentDialog.SetControlValue(UnitPriceTxtName, SelectedUnitPrice)
@@ -60,7 +59,7 @@ Public Class PDFFormFilling
         Try
             Directory.CreateDirectory(DownloadPath)
             Dim strTimeStamp As String = Now.ToString("_hhmmss")
-            Dim newFile As String = DownloadPath & CurrentDevice.strDescription & strTimeStamp & ".pdf"
+            Dim newFile As String = DownloadPath & CurrentDevice.Description & strTimeStamp & ".pdf"
 
             Select Case Type
                 Case PDFFormType.InputForm
@@ -99,7 +98,7 @@ Public Class PDFFormFilling
         End If
     End Function
 
-    Private Function DisposalFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
+    Private Function DisposalFormFields(Device As DeviceStruct, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
         Using newDialog As New MyDialog(ParentForm, True)
             With newDialog
@@ -149,9 +148,9 @@ Public Class PDFFormFilling
             End With
             If newDialog.DialogResult <> DialogResult.OK Then Return Nothing
             With tmpFields
-                .SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.strAssetTag)
-                .SetField("topmostSubform[0].Page1[0].Mfg_serial_number_1[0]", Device.strSerial)
-                .SetField("topmostSubform[0].Page1[0].Mfg_serial_number_2[0]", Device.strDescription)
+                .SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.AssetTag)
+                .SetField("topmostSubform[0].Page1[0].Mfg_serial_number_1[0]", Device.Serial)
+                .SetField("topmostSubform[0].Page1[0].Mfg_serial_number_2[0]", Device.Description)
                 .SetField("topmostSubform[0].Page1[0].Mfg_serial_number_3[0]", "FCBDD")
                 .SetField("topmostSubform[0].Page1[0].County_s_possession[0]", Now.ToString("MM/dd/yyyy"))
 
@@ -199,7 +198,7 @@ Public Class PDFFormFilling
         Return tmpFields
     End Function
 
-    Private Function InputFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
+    Private Function InputFormFields(Device As DeviceStruct, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
         Dim strUnitPrice As String = GetUnitPrice()
         If strUnitPrice = "" Or IsNothing(strUnitPrice) Then
@@ -208,26 +207,26 @@ Public Class PDFFormFilling
         With tmpFields
             .SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD")
             ' .SetField("topmostSubform[0].Page1[0].Asterisked_items_____must_be_completed_by_the_department[0]", CurrentDevice.strAssetTag)
-            .SetField("topmostSubform[0].Page1[0].undefined[0]", Device.strSerial)
-            .SetField("topmostSubform[0].Page1[0].undefined_2[0]", MunisFunc.Get_VendorName_From_PO(Device.strPO))
-            .SetField("topmostSubform[0].Page1[0].undefined_3[0]", Device.strDescription)
+            .SetField("topmostSubform[0].Page1[0].undefined[0]", Device.Serial)
+            .SetField("topmostSubform[0].Page1[0].undefined_2[0]", MunisFunc.Get_VendorName_From_PO(Device.PO))
+            .SetField("topmostSubform[0].Page1[0].undefined_3[0]", Device.Description)
             '.SetField("topmostSubform[0].Page1[0]._1[0]", "6")
             ' .SetField("topmostSubform[0].Page1[0]._2[0]", "7")
-            .SetField("topmostSubform[0].Page1[0].undefined_4[0]", Device.strPO)
-            .SetField("topmostSubform[0].Page1[0].undefined_5[0]", AssetFunc.Get_MunisCode_From_AssetCode(Device.strLocation))
+            .SetField("topmostSubform[0].Page1[0].undefined_4[0]", Device.PO)
+            .SetField("topmostSubform[0].Page1[0].undefined_5[0]", AssetFunc.Get_MunisCode_From_AssetCode(Device.Location))
             .SetField("topmostSubform[0].Page1[0].undefined_6[0]", "5200")
-            .SetField("topmostSubform[0].Page1[0].undefined_7[0]", AssetFunc.Get_MunisCode_From_AssetCode(Device.strEqType))
+            .SetField("topmostSubform[0].Page1[0].undefined_7[0]", AssetFunc.Get_MunisCode_From_AssetCode(Device.EquipmentType))
             .SetField("topmostSubform[0].Page1[0].undefined_8[0]", "GP")
             '.SetField("topmostSubform[0].Page1[0].undefined_9[0]", "13")
             .SetField("topmostSubform[0].Page1[0].undefined_10[0]", "1")
             .SetField("topmostSubform[0].Page1[0].undefined_11[0]", strUnitPrice)
-            .SetField("topmostSubform[0].Page1[0].undefined_12[0]", Device.dtPurchaseDate.ToString("MM/dd/yyyy"))
+            .SetField("topmostSubform[0].Page1[0].undefined_12[0]", Device.PurchaseDate.ToString("MM/dd/yyyy"))
             .SetField("topmostSubform[0].Page1[0].Date[0]", Now.ToString("MM/dd/yyyy"))
         End With
         Return tmpFields
     End Function
 
-    Private Function TransferFormFields(Device As Device_Info, ByRef pdfStamper As PdfStamper) As AcroFields
+    Private Function TransferFormFields(Device As DeviceStruct, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
         Using newDialog As New MyDialog(ParentForm)
             With newDialog
@@ -248,9 +247,9 @@ Public Class PDFFormFilling
             End With
             If newDialog.DialogResult <> DialogResult.OK Then Return Nothing
             With tmpFields
-                .SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.strAssetTag)
-                .SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.strSerial)
-                .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.strDescription)
+                .SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.AssetTag)
+                .SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.Serial)
+                .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.Description)
                 .SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD - 5200")
                 .SetField("topmostSubform[0].Page1[0].Location[0]", GetHumanValueFromIndex(DeviceIndex.Locations, CInt(newDialog.GetControlValue("cmbFromLoc"))))
                 .SetField("topmostSubform[0].Page1[0].Department_2[0]", "FCBDD - 5200")

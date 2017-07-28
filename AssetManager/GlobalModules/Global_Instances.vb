@@ -1,18 +1,18 @@
 ﻿Module Global_Instances
 
     Public Class Sibi_Indexes
-        Public StatusType() As Combo_Data
-        Public ItemStatusType() As Combo_Data
-        Public RequestType() As Combo_Data
-        Public AttachFolder() As Combo_Data
+        Public StatusType() As ComboboxDataStruct
+        Public ItemStatusType() As ComboboxDataStruct
+        Public RequestType() As ComboboxDataStruct
+        Public AttachFolder() As ComboboxDataStruct
     End Class
 
     Public Class Device_Indexes
-        Public Locations() As Combo_Data
-        Public ChangeType() As Combo_Data
-        Public EquipType() As Combo_Data
-        Public OSType() As Combo_Data
-        Public StatusType() As Combo_Data
+        Public Locations() As ComboboxDataStruct
+        Public ChangeType() As ComboboxDataStruct
+        Public EquipType() As ComboboxDataStruct
+        Public OSType() As ComboboxDataStruct
+        Public StatusType() As ComboboxDataStruct
     End Class
 
     Public DeviceIndex As New Device_Indexes

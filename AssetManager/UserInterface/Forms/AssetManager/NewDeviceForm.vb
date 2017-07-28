@@ -7,11 +7,11 @@ Public Class NewDeviceForm
 
 #Region "Fields"
 
-    Public MunisUser As Emp_Info = Nothing
+    Public MunisUser As MunisEmployeeStruct = Nothing
     Private ReadOnly intReplacementSched As Integer = 4
     Private bolCheckFields As Boolean
     Private DataParser As New DBControlParser(Me)
-    Private Device As New Device_Info
+    Private Device As New DeviceStruct
     Private MyLiveBox As New LiveBox(Me)
     Private NewUID As String
 

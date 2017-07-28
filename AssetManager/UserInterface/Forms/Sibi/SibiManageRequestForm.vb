@@ -7,7 +7,7 @@ Public Class SibiManageRequestForm
 
 #Region "Fields"
 
-    Private CurrentRequest As Request_Info
+    Private CurrentRequest As RequestStruct
     Private CurrentHash As String
     Private bolUpdating As Boolean = False
     Private bolNewRequest As Boolean = False
@@ -73,8 +73,8 @@ Public Class SibiManageRequestForm
         ClearAll()
         bolNewRequest = True
         SetTitle(True)
-        CurrentRequest.strUID = Guid.NewGuid.ToString
-        Me.FormUID = CurrentRequest.strUID
+        CurrentRequest.GUID = Guid.NewGuid.ToString
+        Me.FormUID = CurrentRequest.GUID
         bolUpdating = True
         SetupGrid(RequestItemsGrid, RequestItemsColumns)
 
@@ -100,7 +100,7 @@ Public Class SibiManageRequestForm
             CollectRequestInfo(RequestResults, RequestItemsResults)
             DataParser.FillDBFields(RequestResults)
             SendToGrid(RequestItemsResults)
-            LoadNotes(CurrentRequest.strUID)
+            LoadNotes(CurrentRequest.GUID)
             DisableControls(Me)
             SetTitle(False)
             SetAttachCount()
@@ -124,9 +124,9 @@ Public Class SibiManageRequestForm
     Private Function ConcurrencyCheck() As Boolean
         Try
             Using comms As New MySQL_Comms
-                Dim RequestTable = comms.Return_SQLTable("SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & CurrentRequest.strUID & "'")
+                Dim RequestTable = comms.Return_SQLTable("SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & "='" & CurrentRequest.GUID & "'")
                 RequestTable.TableName = sibi_requests.TableName
-                Dim ItemTable = comms.Return_SQLTable("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & CurrentRequest.strUID & "' ORDER BY " & sibi_request_items.TimeStamp)
+                Dim ItemTable = comms.Return_SQLTable("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & "='" & CurrentRequest.GUID & "' ORDER BY " & sibi_request_items.TimeStamp)
                 ItemTable.TableName = sibi_request_items.TableName
                 Dim DBHash As String = GetHash(RequestTable, ItemTable)
                 If DBHash <> CurrentHash Then
@@ -140,7 +140,7 @@ Public Class SibiManageRequestForm
     End Function
     Public Sub SetAttachCount()
         If Not OfflineMode Then
-            cmdAttachments.Text = "(" + AssetFunc.GetAttachmentCount(CurrentRequest.strUID, New sibi_attachments).ToString + ")"
+            cmdAttachments.Text = "(" + AssetFunc.GetAttachmentCount(CurrentRequest.GUID, New sibi_attachments).ToString + ")"
             cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text
         End If
     End Sub
@@ -181,7 +181,7 @@ VALUES
 
     Private Sub AddNewRequest()
         If Not ValidateFields() Then Exit Sub
-        Dim RequestData As Request_Info = CollectData()
+        Dim RequestData As RequestStruct = CollectData()
         Try
             Dim InsertRequestQry As String = "SELECT * FROM " & sibi_requests.TableName & " LIMIT 0"
             Dim InsertRequestItemsQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " LIMIT 0"
@@ -190,7 +190,7 @@ VALUES
                 InsertAdapter = SQLComms.Return_Adapter(InsertRequestQry),
                 InsertItemsAdapter = SQLComms.Return_Adapter(InsertRequestItemsQry)
 
-                InsertAdapter.Update(GetInsertTable(InsertAdapter, CurrentRequest.strUID))
+                InsertAdapter.Update(GetInsertTable(InsertAdapter, CurrentRequest.GUID))
                 InsertItemsAdapter.Update(RequestData.RequestItems)
             End Using
             pnlCreate.Visible = False
@@ -201,7 +201,7 @@ VALUES
             End If
             bolUpdating = False
             bolNewRequest = False
-            OpenRequest(CurrentRequest.strUID)
+            OpenRequest(CurrentRequest.GUID)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -210,11 +210,11 @@ VALUES
     Private Sub AddNote()
         Try
             If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-            If CurrentRequest.strUID <> "" And Not bolNewRequest Then
+            If CurrentRequest.GUID <> "" And Not bolNewRequest Then
                 Dim NewNote As New SibiNotesForm(Me, CurrentRequest)
                 If NewNote.DialogResult = DialogResult.OK Then
-                    AddNewNote(NewNote.Request.strUID, Trim(NewNote.rtbNotes.Rtf))
-                    LoadNotes(CurrentRequest.strUID)
+                    AddNewNote(NewNote.Request.GUID, Trim(NewNote.rtbNotes.Rtf))
+                    LoadNotes(CurrentRequest.GUID)
                 End If
             End If
         Catch ex As Exception
@@ -256,13 +256,13 @@ VALUES
     End Function
 
     Private Async Sub CheckForPO()
-        If CurrentRequest.strRequisitionNumber <> "" And CurrentRequest.strPO = "" Then
-            Dim GetPO As String = Await MunisFunc.Get_PO_From_ReqNumber_Async(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year.ToString)
+        If CurrentRequest.RequisitionNumber <> "" And CurrentRequest.PO = "" Then
+            Dim GetPO As String = Await MunisFunc.Get_PO_From_ReqNumber_Async(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year.ToString)
             If GetPO IsNot Nothing AndAlso GetPO.Length > 1 Then
                 Dim blah = Message("PO Number " & GetPO & " was detected in the Requisition. Do you wish to add it to this request?", vbQuestion + vbYesNo, "New PO Detected", Me)
                 If blah = MsgBoxResult.Yes Then
                     InsertPONumber(GetPO)
-                    OpenRequest(CurrentRequest.strUID)
+                    OpenRequest(CurrentRequest.GUID)
                 Else
                     Exit Sub
                 End If
@@ -347,7 +347,7 @@ VALUES
     Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen(Me) Then
-            If CurrentRequest.strUID <> "" And Not bolNewRequest Then
+            If CurrentRequest.GUID <> "" And Not bolNewRequest Then
                 Dim NewAttach As New AttachmentsForm(Me, New sibi_attachments, CurrentRequest)
             End If
         End If
@@ -369,7 +369,7 @@ VALUES
             Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING", Me)
             If blah = vbYes Then
                 Waiting()
-                If AssetFunc.DeleteMaster(CurrentRequest.strUID, Entry_Type.Sibi) Then
+                If AssetFunc.DeleteMaster(CurrentRequest.GUID, Entry_Type.Sibi) Then
                     DoneWaiting()
                     Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                     CurrentRequest = Nothing
@@ -380,7 +380,7 @@ VALUES
                     Me.Dispose()
                 Else
                     DoneWaiting()
-                    Logger("*****DELETION ERROR******: " & CurrentRequest.strUID)
+                    Logger("*****DELETION ERROR******: " & CurrentRequest.GUID)
                     Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
                     CurrentRequest = Nothing
                     Me.Dispose()
@@ -401,7 +401,7 @@ VALUES
                 Dim NoteUID As String = dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString
                 If NoteUID <> "" Then
                     Message(DeleteItem_FromSQL(NoteUID, sibi_notes.Note_UID, sibi_notes.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me)
-                    OpenRequest(CurrentRequest.strUID)
+                    OpenRequest(CurrentRequest.GUID)
                 End If
             End If
         End If
@@ -411,7 +411,7 @@ VALUES
         Dim blah = Message("Are you sure you want to discard all changes?", vbOKCancel + vbQuestion, "Discard Changes", Me)
         If blah = vbOK Then
             HideEditControls()
-            OpenRequest(CurrentRequest.strUID)
+            OpenRequest(CurrentRequest.GUID)
         End If
     End Sub
 
@@ -421,21 +421,21 @@ VALUES
 
     Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
         If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        If CurrentRequest.strUID <> "" And Not bolUpdating Then UpdateMode(bolUpdating)
+        If CurrentRequest.GUID <> "" And Not bolUpdating Then UpdateMode(bolUpdating)
     End Sub
 
-    Private Function CollectData() As Request_Info
+    Private Function CollectData() As RequestStruct
         Try
-            Dim info As New Request_Info
+            Dim info As New RequestStruct
             With info
-                .strDescription = Trim(txtDescription.Text)
-                .strUser = Trim(txtUser.Text)
-                .strType = GetDBValue(SibiIndex.RequestType, cmbType.SelectedIndex)
-                .dtNeedBy = dtNeedBy.Value
-                .strStatus = GetDBValue(SibiIndex.StatusType, cmbStatus.SelectedIndex)
-                .strPO = Trim(txtPO.Text)
-                .strRequisitionNumber = Trim(txtReqNumber.Text)
-                .strRTNumber = Trim(txtRTNumber.Text)
+                .Description = Trim(txtDescription.Text)
+                .RequestUser = Trim(txtUser.Text)
+                .Type = GetDBValue(SibiIndex.RequestType, cmbType.SelectedIndex)
+                .NeedByDate = dtNeedBy.Value
+                .Status = GetDBValue(SibiIndex.StatusType, cmbStatus.SelectedIndex)
+                .PO = Trim(txtPO.Text)
+                .RequisitionNumber = Trim(txtReqNumber.Text)
+                .RTNumber = Trim(txtRTNumber.Text)
             End With
             RequestItemsGrid.EndEdit()
             For Each row As DataGridViewRow In RequestItemsGrid.Rows
@@ -463,18 +463,18 @@ VALUES
     Private Sub CollectRequestInfo(RequestResults As DataTable, RequestItemsResults As DataTable)
         Try
             With CurrentRequest
-                .strUID = NoNull(RequestResults.Rows(0).Item(sibi_requests.UID))
-                .strUser = NoNull(RequestResults.Rows(0).Item(sibi_requests.RequestUser))
-                .strDescription = NoNull(RequestResults.Rows(0).Item(sibi_requests.Description))
-                .dtDateStamp = DateTime.Parse(NoNull(RequestResults.Rows(0).Item(sibi_requests.DateStamp)))
-                .dtNeedBy = DateTime.Parse(NoNull(RequestResults.Rows(0).Item(sibi_requests.NeedBy)))
-                .strStatus = NoNull(RequestResults.Rows(0).Item(sibi_requests.Status))
-                .strType = NoNull(RequestResults.Rows(0).Item(sibi_requests.Type))
-                .strPO = NoNull(RequestResults.Rows(0).Item(sibi_requests.PO))
-                .strRequisitionNumber = NoNull(RequestResults.Rows(0).Item(sibi_requests.RequisitionNumber))
-                .strReplaceAsset = NoNull(RequestResults.Rows(0).Item(sibi_requests.Replace_Asset))
-                .strReplaceSerial = NoNull(RequestResults.Rows(0).Item(sibi_requests.Replace_Serial))
-                .strRequestNumber = NoNull(RequestResults.Rows(0).Item(sibi_requests.RequestNumber))
+                .GUID = NoNull(RequestResults.Rows(0).Item(sibi_requests.UID))
+                .RequestUser = NoNull(RequestResults.Rows(0).Item(sibi_requests.RequestUser))
+                .Description = NoNull(RequestResults.Rows(0).Item(sibi_requests.Description))
+                .DateStamp = DateTime.Parse(NoNull(RequestResults.Rows(0).Item(sibi_requests.DateStamp)))
+                .NeedByDate = DateTime.Parse(NoNull(RequestResults.Rows(0).Item(sibi_requests.NeedBy)))
+                .Status = NoNull(RequestResults.Rows(0).Item(sibi_requests.Status))
+                .Type = NoNull(RequestResults.Rows(0).Item(sibi_requests.Type))
+                .PO = NoNull(RequestResults.Rows(0).Item(sibi_requests.PO))
+                .RequisitionNumber = NoNull(RequestResults.Rows(0).Item(sibi_requests.RequisitionNumber))
+                .ReplaceAsset = NoNull(RequestResults.Rows(0).Item(sibi_requests.Replace_Asset))
+                .ReplaceSerial = NoNull(RequestResults.Rows(0).Item(sibi_requests.Replace_Serial))
+                .RequestNumber = NoNull(RequestResults.Rows(0).Item(sibi_requests.RequestNumber))
                 .RequestItems = RequestItemsResults
             End With
         Catch ex As Exception
@@ -692,7 +692,7 @@ VALUES
 
     Private Sub InsertPONumber(PO As String)
         Try
-            AssetFunc.Update_SQLValue(sibi_requests.TableName, sibi_requests.PO, PO, sibi_requests.UID, CurrentRequest.strUID)
+            AssetFunc.Update_SQLValue(sibi_requests.TableName, sibi_requests.PO, PO, sibi_requests.UID, CurrentRequest.GUID)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -784,24 +784,24 @@ VALUES
     End Sub
 
     Private Sub RefreshRequest()
-        OpenRequest(CurrentRequest.strUID)
+        OpenRequest(CurrentRequest.GUID)
     End Sub
 
-    Private Function RequestItemsColumns() As List(Of ColumnStruct)
-        Dim ColList As New List(Of ColumnStruct)
-        ColList.Add(New ColumnStruct(sibi_request_items.User, "User", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_request_items.Description, "Description", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_request_items.Qty, "Qty", GetType(Integer)))
-        ColList.Add(New ColumnStruct(sibi_request_items.Location, "Location", GetType(Combo_Data), DeviceIndex.Locations))
-        ColList.Add(New ColumnStruct(sibi_request_items.Status, "Status", GetType(Combo_Data), SibiIndex.ItemStatusType))
-        ColList.Add(New ColumnStruct(sibi_request_items.Replace_Asset, "Replace Asset", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_request_items.Replace_Serial, "Replace Serial", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_request_items.New_Asset, "New Asset", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_request_items.New_Serial, "New Serial", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_request_items.Org_Code, "Org Code", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_request_items.Object_Code, "Object Code", GetType(String)))
-        ColList.Add(New ColumnStruct(sibi_request_items.Item_UID, "Item UID", GetType(String), True, True))
-        ColList.Add(New ColumnStruct(sibi_request_items.Request_UID, "Request UID", GetType(String), True, False))
+    Private Function RequestItemsColumns() As List(Of DataGridColumnStruct)
+        Dim ColList As New List(Of DataGridColumnStruct)
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.User, "User", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.Description, "Description", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.Qty, "Qty", GetType(Integer)))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.Location, "Location", GetType(ComboboxDataStruct), DeviceIndex.Locations))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.Status, "Status", GetType(ComboboxDataStruct), SibiIndex.ItemStatusType))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.Replace_Asset, "Replace Asset", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.Replace_Serial, "Replace Serial", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.New_Asset, "New Asset", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.New_Serial, "New Serial", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.Org_Code, "Org Code", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.Object_Code, "Object Code", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.Item_UID, "Item UID", GetType(String), True, True))
+        ColList.Add(New DataGridColumnStruct(sibi_request_items.Request_UID, "Request UID", GetType(String), True, False))
         Return ColList
     End Function
 
@@ -850,7 +850,7 @@ VALUES
                             Case sibi_request_items.Item_UID
                                 ItemArr.Add(Guid.NewGuid.ToString)
                             Case sibi_request_items.Request_UID
-                                ItemArr.Add(CurrentRequest.strUID)
+                                ItemArr.Add(CurrentRequest.GUID)
                             Case Else
                                 ItemArr.Add(NewDataRow.Item(col))
                         End Select
@@ -899,7 +899,7 @@ VALUES
 
     Private Sub RequestItemsGrid_RowEnter(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.RowEnter
         If Not bolGridFilling Then
-            RequestItemsGrid.Rows(e.RowIndex).Cells(sibi_request_items.Request_UID).Value = CurrentRequest.strUID
+            RequestItemsGrid.Rows(e.RowIndex).Cells(sibi_request_items.Request_UID).Value = CurrentRequest.GUID
             If RequestItemsGrid.Rows(e.RowIndex).Cells(sibi_request_items.Item_UID).Value Is Nothing Then RequestItemsGrid.Rows(e.RowIndex).Cells(sibi_request_items.Item_UID).Value = Guid.NewGuid.ToString
         End If
     End Sub
@@ -980,9 +980,9 @@ VALUES
 
     Private Sub SetMunisStatus()
         If Not OfflineMode Then
-            SetReqStatus(CurrentRequest.strRequisitionNumber, CurrentRequest.dtDateStamp.Year)
+            SetReqStatus(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year)
             CheckForPO()
-            SetPOStatus(CurrentRequest.strPO)
+            SetPOStatus(CurrentRequest.PO)
         End If
     End Sub
 
@@ -1018,7 +1018,7 @@ VALUES
 
     Private Sub SetTitle(Optional NewRequest As Boolean = False)
         If Not NewRequest Then
-            Me.Text = TitleText + " - " + CurrentRequest.strDescription
+            Me.Text = TitleText + " - " + CurrentRequest.Description
         Else
             Me.Text = TitleText + " - *New Request*"
         End If
@@ -1053,7 +1053,7 @@ VALUES
     End Sub
 
     Private Sub tsbRefresh_Click(sender As Object, e As EventArgs) Handles tsbRefresh.Click
-        If Not bolNewRequest Then OpenRequest(CurrentRequest.strUID)
+        If Not bolNewRequest Then OpenRequest(CurrentRequest.GUID)
     End Sub
 
     Private Sub tsmCopyText_Click(sender As Object, e As EventArgs) Handles tsmCopyText.Click
@@ -1081,7 +1081,7 @@ VALUES
         Try
             Dim Org = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Org_Code)
             Dim Obj = GetCurrentCellValue(RequestItemsGrid, sibi_request_items.Object_Code)
-            Dim FY = CurrentRequest.dtDateStamp.Year.ToString
+            Dim FY = CurrentRequest.DateStamp.Year.ToString
             MunisFunc.NewOrgObView(Org, Obj, FY, Me)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -1129,7 +1129,7 @@ VALUES
             Waiting()
             Dim ReqNum As String = Trim(txtReqNumber.Text)
             If Not bolUpdating And ReqNum <> "" Then
-                MunisFunc.NewMunisView_ReqSearch(ReqNum, YearFromDate(CurrentRequest.dtDateStamp), Me)
+                MunisFunc.NewMunisView_ReqSearch(ReqNum, YearFromDate(CurrentRequest.DateStamp), Me)
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -1174,11 +1174,11 @@ VALUES
                 Message("It appears that someone else has modified this request. Please refresh and try again.", vbOKOnly + vbExclamation, "Concurrency Failure", Me)
                 Exit Sub
             End If
-            Dim RequestData As Request_Info = CollectData()
-            RequestData.strUID = CurrentRequest.strUID
+            Dim RequestData As RequestStruct = CollectData()
+            RequestData.GUID = CurrentRequest.GUID
             If RequestData.RequestItems Is Nothing Then Exit Sub
-            Dim RequestUpdateQry As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & " = '" & CurrentRequest.strUID & "'"
-            Dim RequestItemsUpdateQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & " = '" & CurrentRequest.strUID & "'"
+            Dim RequestUpdateQry As String = "SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.UID & " = '" & CurrentRequest.GUID & "'"
+            Dim RequestItemsUpdateQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & sibi_request_items.TableName & " WHERE " & sibi_request_items.Request_UID & " = '" & CurrentRequest.GUID & "'"
             Using SQLComms As New MySQL_Comms,
                RequestUpdateAdapter = SQLComms.Return_Adapter(RequestUpdateQry),
                RequestItemsUpdateAdapter = SQLComms.Return_Adapter(RequestItemsUpdateQry)
@@ -1189,7 +1189,7 @@ VALUES
                 Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
                 ParentForm.RefreshResults()
             End If
-            OpenRequest(CurrentRequest.strUID)
+            OpenRequest(CurrentRequest.GUID)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try

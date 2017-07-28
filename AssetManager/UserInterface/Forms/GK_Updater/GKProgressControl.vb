@@ -8,18 +8,18 @@ Public Class GKProgressControl
     Public ProgStatus As Progress_Status
     Private bolShow As Boolean = False
     Private CurrentStatus As GK_Updater.Status_Stats
-    Private CurDevice As New Device_Info
+    Private CurDevice As New DeviceStruct
     Private LogBuff As String = ""
     Private MyParentForm As Form
     Private PrevColor As Color
 
-    Public ReadOnly Property Device As Device_Info
+    Public ReadOnly Property Device As DeviceStruct
         Get
             Return CurDevice
         End Get
     End Property
 
-    Sub New(ParentForm As Form, ByVal Device As Device_Info, CreateMissingDirs As Boolean, GKPath As String, Optional Seq As Integer = 0)
+    Sub New(ParentForm As Form, ByVal Device As DeviceStruct, CreateMissingDirs As Boolean, GKPath As String, Optional Seq As Integer = 0)
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
@@ -29,7 +29,7 @@ Public Class GKProgressControl
         MyUpdater = New GK_Updater(CurDevice.Hostname, GKPath)
         MyUpdater.CreateMissingDirectories = CreateMissingDirs
         Me.DoubleBuffered = True
-        lblInfo.Text = CurDevice.strSerial & " - " & CurDevice.strCurrentUser
+        lblInfo.Text = CurDevice.Serial & " - " & CurDevice.CurrentUser
         lblTransRate.Text = "0.00MB/s"
         SetStatus(Progress_Status.Queued)
         If Seq > 0 Then

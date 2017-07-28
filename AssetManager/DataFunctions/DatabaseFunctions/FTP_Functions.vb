@@ -63,7 +63,7 @@
             Dim FTPFiles = ListFTPFiles(FTPDirs)
             Dim SQLFiles = ListSQLFiles()
 
-            Dim MissingFTPDirs = ListMissingFTPDirs(SQLFiles, FTPDirs)
+            Dim MissingFTPDirs = ListMissingFTPDirs(FTPDirs)
             Dim MissingSQLDirs = ListMissingSQLDirs(SQLFiles, FTPDirs)
 
             Dim MissingFTPFiles = ListMissingFTPFiles(SQLFiles, FTPFiles)
@@ -219,12 +219,11 @@ Missing Files: " & MissingSQLFiles.Count
     End Function
 
     ''' <summary>
-    ''' Returns list of FTP dirs not found in SQL file list.
+    ''' Returns list of FTP dirs that do not have an associated Device or Sibi request.
     ''' </summary>
-    ''' <param name="SQLFiles"></param>
     ''' <param name="FTPDirs"></param>
     ''' <returns></returns>
-    Private Function ListMissingFTPDirs(SQLFiles As List(Of AttachScanInfo), FTPDirs As List(Of String)) As List(Of String)
+    Private Function ListMissingFTPDirs(FTPDirs As List(Of String)) As List(Of String)
         Dim MissingDirs = FTPDirs.FindAll(Function(f) Not CheckForPrimaryItem(f))
         MissingDirs.ForEach(Sub(f) Logger("Orphan FTP Dir Found: " & f))
         Return MissingDirs

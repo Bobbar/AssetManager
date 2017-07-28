@@ -3,11 +3,11 @@
 Imports MySql.Data.MySqlClient
 
 Public Class TrackDeviceForm
-    Private CurrentTrackingDevice As New Device_Info
+    Private CurrentTrackingDevice As New DeviceStruct
     Private MyParent As ViewDeviceForm
     Private CheckData As CheckStruct
 
-    Sub New(Device As Device_Info, ParentForm As Form)
+    Sub New(Device As DeviceStruct, ParentForm As Form)
         InitializeComponent()
         CurrentTrackingDevice = Device
         Tag = ParentForm
@@ -16,13 +16,13 @@ Public Class TrackDeviceForm
         ClearAll()
         SetDates()
         SetGroups()
-        GetCurrentTracking(CurrentTrackingDevice.strGUID)
+        GetCurrentTracking(CurrentTrackingDevice.GUID)
         LoadTracking()
         Show()
     End Sub
 
     Private Function GetCheckData() As Boolean
-        If Not CurrentTrackingDevice.Tracking.bolCheckedOut Then
+        If Not CurrentTrackingDevice.Tracking.IsCheckedOut Then
             Dim c As Control
             For Each c In CheckOutBox.Controls
                 If TypeOf c Is TextBox Then
@@ -46,15 +46,15 @@ Public Class TrackDeviceForm
             Next
         End If
         With CheckData
-            .strCheckOutTime = dtCheckOut.Value.ToString(strDBDateTimeFormat)
-            .strDueDate = dtDueBack.Value.ToString(strDBDateTimeFormat)
-            .strUseLocation = UCase(Trim(txtUseLocation.Text))
-            .strUseReason = UCase(Trim(txtUseReason.Text))
-            .strCheckInNotes = UCase(Trim(txtCheckInNotes.Text))
-            .strDeviceUID = CurrentTrackingDevice.strGUID
-            .strCheckOutUser = strLocalUser
-            .strCheckInTime = dtCheckIn.Value.ToString(strDBDateTimeFormat)
-            .strCheckInUser = strLocalUser
+            .CheckoutTime = dtCheckOut.Value.ToString(strDBDateTimeFormat)
+            .DueBackDate = dtDueBack.Value.ToString(strDBDateTimeFormat)
+            .UseLocation = UCase(Trim(txtUseLocation.Text))
+            .UseReason = UCase(Trim(txtUseReason.Text))
+            .CheckinNotes = UCase(Trim(txtCheckInNotes.Text))
+            .DeviceGUID = CurrentTrackingDevice.GUID
+            .CheckoutUser = strLocalUser
+            .CheckinTime = dtCheckIn.Value.ToString(strDBDateTimeFormat)
+            .CheckinUser = strLocalUser
         End With
         Return True
     End Function
@@ -66,13 +66,13 @@ Public Class TrackDeviceForm
             If dt.Rows.Count > 0 Then
                 For Each dr As DataRow In dt.Rows
                     With dr
-                        DateTime.TryParse(.Item(trackable.CheckOut_Time).ToString, CurrentTrackingDevice.Tracking.dtCheckOutTime)
-                        DateTime.TryParse(.Item(trackable.CheckIn_Time).ToString, CurrentTrackingDevice.Tracking.dtCheckInTime)
-                        CurrentTrackingDevice.Tracking.strUseLocation = .Item(trackable.UseLocation).ToString
-                        CurrentTrackingDevice.Tracking.strCheckOutUser = .Item(trackable.CheckOut_User).ToString
-                        CurrentTrackingDevice.Tracking.strCheckInUser = .Item(trackable.CheckIn_User).ToString
-                        DateTime.TryParse(.Item(trackable.DueBackDate).ToString, CurrentTrackingDevice.Tracking.dtDueBackTime)
-                        CurrentTrackingDevice.Tracking.strUseReason = .Item(trackable.Notes).ToString
+                        DateTime.TryParse(.Item(trackable.CheckOut_Time).ToString, CurrentTrackingDevice.Tracking.CheckoutTime)
+                        DateTime.TryParse(.Item(trackable.CheckIn_Time).ToString, CurrentTrackingDevice.Tracking.CheckinTime)
+                        CurrentTrackingDevice.Tracking.UseLocation = .Item(trackable.UseLocation).ToString
+                        CurrentTrackingDevice.Tracking.CheckoutUser = .Item(trackable.CheckOut_User).ToString
+                        CurrentTrackingDevice.Tracking.CheckinUser = .Item(trackable.CheckIn_User).ToString
+                        DateTime.TryParse(.Item(trackable.DueBackDate).ToString, CurrentTrackingDevice.Tracking.DueBackTime)
+                        CurrentTrackingDevice.Tracking.UseReason = .Item(trackable.Notes).ToString
                     End With
                 Next
             End If
@@ -80,15 +80,15 @@ Public Class TrackDeviceForm
     End Sub
 
     Private Sub LoadTracking()
-        txtAssetTag.Text = CurrentTrackingDevice.strAssetTag
-        txtDescription.Text = CurrentTrackingDevice.strDescription
-        txtSerial.Text = CurrentTrackingDevice.strSerial
-        txtDeviceType.Text = GetHumanValue(DeviceIndex.EquipType, CurrentTrackingDevice.strEqType)
-        If CurrentTrackingDevice.Tracking.bolCheckedOut Then
-            dtCheckOut.Value = CurrentTrackingDevice.Tracking.dtCheckOutTime
-            dtDueBack.Value = CurrentTrackingDevice.Tracking.dtDueBackTime
-            txtUseLocation.Text = CurrentTrackingDevice.Tracking.strUseLocation
-            txtUseReason.Text = CurrentTrackingDevice.Tracking.strUseReason
+        txtAssetTag.Text = CurrentTrackingDevice.AssetTag
+        txtDescription.Text = CurrentTrackingDevice.Description
+        txtSerial.Text = CurrentTrackingDevice.Serial
+        txtDeviceType.Text = GetHumanValue(DeviceIndex.EquipType, CurrentTrackingDevice.EquipmentType)
+        If CurrentTrackingDevice.Tracking.IsCheckedOut Then
+            dtCheckOut.Value = CurrentTrackingDevice.Tracking.CheckoutTime
+            dtDueBack.Value = CurrentTrackingDevice.Tracking.DueBackTime
+            txtUseLocation.Text = CurrentTrackingDevice.Tracking.UseLocation
+            txtUseReason.Text = CurrentTrackingDevice.Tracking.UseReason
         End If
     End Sub
 
@@ -115,8 +115,8 @@ Public Class TrackDeviceForm
     End Sub
 
     Private Sub SetGroups()
-        CheckInBox.Enabled = CurrentTrackingDevice.Tracking.bolCheckedOut
-        CheckOutBox.Enabled = Not CurrentTrackingDevice.Tracking.bolCheckedOut
+        CheckInBox.Enabled = CurrentTrackingDevice.Tracking.IsCheckedOut
+        CheckOutBox.Enabled = Not CurrentTrackingDevice.Tracking.IsCheckedOut
     End Sub
 
     Private Sub CheckOut()
@@ -124,7 +124,7 @@ Public Class TrackDeviceForm
             If Not GetCheckData() Then Exit Sub
             Waiting()
             Dim rows As Integer
-            Dim strSQLQry1 = "UPDATE " & devices.TableName & " SET " & devices.CheckedOut & "='1' WHERE " & devices.DeviceUID & "='" & CurrentTrackingDevice.strGUID & "'"
+            Dim strSQLQry1 = "UPDATE " & devices.TableName & " SET " & devices.CheckedOut & "='1' WHERE " & devices.DeviceUID & "='" & CurrentTrackingDevice.GUID & "'"
             Using SQLComms As New MySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
                 'Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
                 rows = rows + cmd.ExecuteNonQuery()
@@ -145,12 +145,12 @@ VALUES(@" & trackable.CheckType & ",
 @" & trackable.DeviceUID & ")"
                 cmd.CommandText = strSqlQry2
                 cmd.Parameters.AddWithValue("@" & trackable.CheckType, Check_Type.CheckOut)
-                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_Time, CheckData.strCheckOutTime)
-                cmd.Parameters.AddWithValue("@" & trackable.DueBackDate, CheckData.strDueDate)
-                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_User, CheckData.strCheckOutUser)
-                cmd.Parameters.AddWithValue("@" & trackable.UseLocation, CheckData.strUseLocation)
-                cmd.Parameters.AddWithValue("@" & trackable.Notes, CheckData.strUseReason)
-                cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.strDeviceUID)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_Time, CheckData.CheckoutTime)
+                cmd.Parameters.AddWithValue("@" & trackable.DueBackDate, CheckData.DueBackDate)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_User, CheckData.CheckoutUser)
+                cmd.Parameters.AddWithValue("@" & trackable.UseLocation, CheckData.UseLocation)
+                cmd.Parameters.AddWithValue("@" & trackable.Notes, CheckData.UseReason)
+                cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.DeviceGUID)
                 rows = rows + cmd.ExecuteNonQuery()
                 If rows = 2 Then
                     Message("Device Checked Out!", vbOKOnly + vbInformation, "Success", Me)
@@ -159,7 +159,7 @@ VALUES(@" & trackable.CheckType & ",
                 End If
             End Using
             Me.Dispose()
-            MyParent.ViewDevice(CurrentTrackingDevice.strGUID)
+            MyParent.ViewDevice(CurrentTrackingDevice.GUID)
             DoneWaiting()
         Catch ex As Exception
             DoneWaiting()
@@ -172,7 +172,7 @@ VALUES(@" & trackable.CheckType & ",
             If Not GetCheckData() Then Exit Sub
             Waiting()
             Dim rows As Integer
-            Dim strSQLQry1 = "UPDATE " & devices.TableName & " SET " & devices.CheckedOut & "='0' WHERE " & devices.DeviceUID & "='" & CurrentTrackingDevice.strGUID & "'"
+            Dim strSQLQry1 = "UPDATE " & devices.TableName & " SET " & devices.CheckedOut & "='0' WHERE " & devices.DeviceUID & "='" & CurrentTrackingDevice.GUID & "'"
             Using SQLComms As New MySQL_Comms, cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
                 rows = rows + cmd.ExecuteNonQuery()
                 Dim strSqlQry2 = "INSERT INTO " & trackable.TableName & "
@@ -196,14 +196,14 @@ VALUES (@" & trackable.CheckType & ",
 @" & trackable.DeviceUID & ")"
                 cmd.CommandText = strSqlQry2
                 cmd.Parameters.AddWithValue("@" & trackable.CheckType, Check_Type.CheckIn)
-                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_Time, CheckData.strCheckOutTime)
-                cmd.Parameters.AddWithValue("@" & trackable.DueBackDate, CheckData.strDueDate)
-                cmd.Parameters.AddWithValue("@" & trackable.CheckIn_Time, CheckData.strCheckInTime)
-                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_User, CheckData.strCheckOutUser)
-                cmd.Parameters.AddWithValue("@" & trackable.CheckIn_User, CheckData.strCheckInUser)
-                cmd.Parameters.AddWithValue("@" & trackable.UseLocation, CheckData.strUseLocation)
-                cmd.Parameters.AddWithValue("@" & trackable.Notes, CheckData.strCheckInNotes)
-                cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.strDeviceUID)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_Time, CheckData.CheckoutTime)
+                cmd.Parameters.AddWithValue("@" & trackable.DueBackDate, CheckData.DueBackDate)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckIn_Time, CheckData.CheckinTime)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckOut_User, CheckData.CheckoutUser)
+                cmd.Parameters.AddWithValue("@" & trackable.CheckIn_User, CheckData.CheckinUser)
+                cmd.Parameters.AddWithValue("@" & trackable.UseLocation, CheckData.UseLocation)
+                cmd.Parameters.AddWithValue("@" & trackable.Notes, CheckData.CheckinNotes)
+                cmd.Parameters.AddWithValue("@" & trackable.DeviceUID, CheckData.DeviceGUID)
                 rows = rows + cmd.ExecuteNonQuery()
                 If rows = 2 Then
                     Message("Device Checked In!", vbOKOnly + vbInformation, "Success", Me)
@@ -212,7 +212,7 @@ VALUES (@" & trackable.CheckType & ",
                 End If
             End Using
             Me.Dispose()
-            MyParent.ViewDevice(CurrentTrackingDevice.strGUID)
+            MyParent.ViewDevice(CurrentTrackingDevice.GUID)
             DoneWaiting()
         Catch ex As Exception
             DoneWaiting()
