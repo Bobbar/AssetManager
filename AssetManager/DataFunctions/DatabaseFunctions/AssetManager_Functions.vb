@@ -32,7 +32,6 @@ VALUES
     Public Function BuildIndex(CodeType As String, TypeName As String) As Combo_Data()
         Try
             Dim tmpArray() As Combo_Data
-            'Dim strQRY = "SELECT * FROM {OJ " & CodeType & " LEFT OUTER JOIN munis_codes on " & CodeType & ".db_value = munis_codes.asset_man_code} WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
             Dim strQRY = "SELECT * FROM " & CodeType & " LEFT OUTER JOIN munis_codes on " & CodeType & ".db_value = munis_codes.asset_man_code WHERE type_name ='" & TypeName & "' ORDER BY " & main_combocodes.HumanValue & ""
             Dim row As Integer
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
@@ -241,9 +240,13 @@ VALUES
     Public Function FindDevice(SearchVal As String, Type As FindDevType) As Device_Info
         Try
             If Type = FindDevType.AssetTag Then
-                Return CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.AssetTag & "='" & SearchVal & "'"))
+                Dim Params As New List(Of DBQueryParameter)
+                Params.Add(New DBQueryParameter(devices.AssetTag, SearchVal, True))
+                Return CollectDeviceInfo(DBFunc.DataTableFromCommand(SQLParamCommand("SELECT * FROM " & devices.TableName, Params)))
             ElseIf Type = FindDevType.Serial Then
-                Return CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & devices.TableName & " WHERE " & devices.Serial & "='" & SearchVal & "'"))
+                Dim Params As New List(Of DBQueryParameter)
+                Params.Add(New DBQueryParameter(devices.Serial, SearchVal, True))
+                Return CollectDeviceInfo(DBFunc.DataTableFromCommand(SQLParamCommand("SELECT * FROM " & devices.TableName, Params)))
             End If
             Return Nothing
         Catch ex As MySqlException
@@ -309,14 +312,14 @@ VALUES
     ''' Takes a partial query string without the WHERE operator, and a list of <see cref="DBQueryParameter"/> and returns a parameterized <see cref="DBCommand"/>.
     ''' </summary>
     ''' <param name="PartialQuery"></param>
-    ''' <param name="SearchVals"></param>
+    ''' <param name="Parameters"></param>
     ''' <returns></returns>
-    Private Function SQLParamCommand(PartialQuery As String, SearchVals As List(Of DBQueryParameter)) As DbCommand
+    Private Function SQLParamCommand(PartialQuery As String, Parameters As List(Of DBQueryParameter)) As DbCommand
         Dim cmd = DBFunc.GetCommand(PartialQuery)
         cmd.CommandText += " WHERE"
         Dim ParamString As String = ""
         Dim ValSeq As Integer = 1
-        For Each fld In SearchVals
+        For Each fld In Parameters
             Dim ValueName As String = "@Value" & ValSeq
             If fld.IsExact Then
                 ParamString += " " + fld.FieldName + "=" & ValueName & " " & fld.OperatorString
