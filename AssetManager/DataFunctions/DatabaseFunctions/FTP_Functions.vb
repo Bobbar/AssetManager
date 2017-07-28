@@ -285,14 +285,15 @@ Missing Files: " & MissingSQLFiles.Count
 
     Private Function ListDirectory(Uri As String) As List(Of String)
         Try
-            Using resp = DirectCast(FTPComms.Return_FTPResponse(Uri, Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse),
-                responseStream As System.IO.Stream = resp.GetResponseStream,
-                reader As IO.StreamReader = New IO.StreamReader(responseStream)
-                Dim files As New List(Of String)
-                While Not reader.EndOfStream 'collect list of files in directory
-                    files.Add(reader.ReadLine)
-                End While
-                Return files
+            Using resp = DirectCast(FTPComms.Return_FTPResponse(Uri, Net.WebRequestMethods.Ftp.ListDirectory), Net.FtpWebResponse)
+                Dim responseStream As System.IO.Stream = resp.GetResponseStream
+                Using reader As IO.StreamReader = New IO.StreamReader(responseStream)
+                    Dim files As New List(Of String)
+                    While Not reader.EndOfStream 'collect list of files in directory
+                        files.Add(reader.ReadLine)
+                    End While
+                    Return files
+                End Using
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

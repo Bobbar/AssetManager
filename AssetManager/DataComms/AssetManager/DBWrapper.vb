@@ -25,6 +25,18 @@ Public Class DBWrapper
         End Using
     End Function
 
+    Public Function ExecuteScalarFromCommand(Command As DbCommand) As Object
+        Try
+            Using conn = GetConnection()
+                Command.Connection = conn
+                Command.Connection.Open()
+                Return Command.ExecuteScalar
+            End Using
+        Finally
+            Command.Dispose()
+        End Try
+    End Function
+
     Public Function DataTableFromCommand(Command As DbCommand) As DataTable
         Using da As DbDataAdapter = GetAdapter(), results As New DataTable, conn = GetConnection()
             Command.Connection = conn

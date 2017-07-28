@@ -67,27 +67,23 @@ Public Class GZipCompress
         Dim iDirLen As Integer = If(sInDir(sInDir.Length - 1) = Path.DirectorySeparatorChar, sInDir.Length, sInDir.Length + 1)
         Progress.ResetProgress()
         Progress.BytesToTransfer = sFiles.Length - 1
-        Using outFile As New FileStream(sOutFile, FileMode.Create, FileAccess.Write, FileShare.None, 256000)
-            Using str As New GZipStream(outFile, CompressionLevel.Optimal)
-                For Each sFilePath As String In sFiles
-                    Progress.BytesMoved = 1
-                    Dim sRelativePath As String = sFilePath.Substring(iDirLen)
-                    CompressFile(sInDir, sRelativePath, str)
-                Next
-            End Using
+        Dim outFile As New FileStream(sOutFile, FileMode.Create, FileAccess.Write, FileShare.None, 256000)
+        Using str As New GZipStream(outFile, CompressionLevel.Optimal)
+            For Each sFilePath As String In sFiles
+                Progress.BytesMoved = 1
+                Dim sRelativePath As String = sFilePath.Substring(iDirLen)
+                CompressFile(sInDir, sRelativePath, str)
+            Next
         End Using
     End Sub
 
     Public Sub DecompressToDirectory(sCompressedFile As String, sDir As String)
         Progress.BytesToTransfer = GetGzOriginalFileSize(sCompressedFile)
-        Using inFile As New FileStream(sCompressedFile, FileMode.Open, FileAccess.Read, FileShare.None, 256000)
-            Using zipStream As New GZipStream(inFile, CompressionMode.Decompress, True)
-                While DecompressFile(sDir, zipStream)
+        Dim inFile As New FileStream(sCompressedFile, FileMode.Open, FileAccess.Read, FileShare.None, 256000)
+        Using zipStream As New GZipStream(inFile, CompressionMode.Decompress, True)
+            While DecompressFile(sDir, zipStream)
 
-                End While
-                zipStream.Close()
-                inFile.Close()
-            End Using
+            End While
         End Using
     End Sub
 
@@ -110,21 +106,17 @@ Public Class GZipCompress
     Public Shared Function GetGzOriginalFileSize(fi As FileInfo) As Integer
         Try
             Using fs As FileStream = fi.OpenRead()
-                Try
-                    Dim fh As Byte() = New Byte(2) {}
-                    fs.Read(fh, 0, 3)
-                    If fh(0) = 31 AndAlso fh(1) = 139 AndAlso fh(2) = 8 Then
-                        'If magic numbers are 31 and 139 and the deflation id is 8 then...
-                        Dim ba As Byte() = New Byte(3) {}
-                        fs.Seek(-4, SeekOrigin.[End])
-                        fs.Read(ba, 0, 4)
-                        Return BitConverter.ToInt32(ba, 0)
-                    Else
-                        Return -1
-                    End If
-                Finally
-                    fs.Close()
-                End Try
+                Dim fh As Byte() = New Byte(2) {}
+                fs.Read(fh, 0, 3)
+                If fh(0) = 31 AndAlso fh(1) = 139 AndAlso fh(2) = 8 Then
+                    'If magic numbers are 31 and 139 and the deflation id is 8 then...
+                    Dim ba As Byte() = New Byte(3) {}
+                    fs.Seek(-4, SeekOrigin.[End])
+                    fs.Read(ba, 0, 4)
+                    Return BitConverter.ToInt32(ba, 0)
+                Else
+                    Return -1
+                End If
             End Using
         Catch generatedExceptionName As Exception
             Return -1

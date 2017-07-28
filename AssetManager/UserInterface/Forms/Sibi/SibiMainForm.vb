@@ -47,12 +47,12 @@ Public Class SibiMainForm
         End If
     End Sub
 
-    Private Function BuildSearchListNew() As List(Of SearchVal)
-        Dim tmpList As New List(Of SearchVal)
-        tmpList.Add(New SearchVal(sibi_requests.RT_Number, Trim(txtRTNum.Text)))
-        tmpList.Add(New SearchVal(sibi_requests.Description, Trim(txtDescription.Text)))
-        tmpList.Add(New SearchVal(sibi_requests.PO, txtPO.Text))
-        tmpList.Add(New SearchVal(sibi_requests.RequisitionNumber, txtReq.Text))
+    Private Function BuildSearchListNew() As List(Of DBQueryParameter)
+        Dim tmpList As New List(Of DBQueryParameter)
+        tmpList.Add(New DBQueryParameter(sibi_requests.RT_Number, Trim(txtRTNum.Text), False))
+        tmpList.Add(New DBQueryParameter(sibi_requests.Description, Trim(txtDescription.Text), False))
+        tmpList.Add(New DBQueryParameter(sibi_requests.PO, txtPO.Text, False))
+        tmpList.Add(New DBQueryParameter(sibi_requests.RequisitionNumber, txtReq.Text, False))
         Return tmpList
     End Function
 
@@ -61,8 +61,8 @@ Public Class SibiMainForm
         Dim strStartQry As String
         strStartQry = "SELECT * FROM " & sibi_requests.TableName & " WHERE"
         Dim strDynaQry As String = ""
-        Dim SearchValCol As List(Of SearchVal) = BuildSearchListNew()
-        For Each fld As SearchVal In SearchValCol
+        Dim SearchValCol As List(Of DBQueryParameter) = BuildSearchListNew()
+        For Each fld As DBQueryParameter In SearchValCol
             If Not IsNothing(fld.Value) Then
                 If fld.Value.ToString <> "" Then
                     strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE @" + fld.FieldName + " AND"

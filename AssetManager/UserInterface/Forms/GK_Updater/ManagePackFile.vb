@@ -120,7 +120,6 @@ Public Class ManagePackFile
                     Progress.BytesMoved = bytesIn
                 End If
             Loop
-            fStream.Close()
         End Using
     End Sub
 

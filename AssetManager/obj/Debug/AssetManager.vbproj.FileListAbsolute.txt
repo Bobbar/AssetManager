@@ -24,6 +24,8 @@
 \\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
 \\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\bin\Debug\MySql.Data.Entity.dll
 \\core.co.fairfield.oh.us\dfs1\usr\ddad\rl12184\my documents\visual studio 2015\Projects\AssetManager\AssetManager\obj\Debug\AssetManager.AddNew.resources
+C:\GitHub\AssetManager\AssetManager\bin\Debug\x64\SQLite.Interop.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\x86\SQLite.Interop.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.config
 C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.manifest
 C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.application
@@ -34,6 +36,7 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\PingVisLib.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\System.Data.SQLite.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.xml
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.pdb
@@ -41,10 +44,13 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.xml
 C:\GitHub\AssetManager\AssetManager\bin\Debug\PingVisLib.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Debug\PingVisLib.xml
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.xml
+C:\GitHub\AssetManager\AssetManager\bin\Debug\System.Data.SQLite.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssemblyReference.cache
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AdvancedSearchForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AttachmentsForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GetCredentialsForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GKUpdaterForm.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.PackFileForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GridForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.NewDeviceForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.CrypterForm.resources
@@ -69,11 +75,3 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AdvancedSearchForm.resources
-C:\GitHub\AssetManager\AssetManager\bin\Debug\x64\SQLite.Interop.dll
-C:\GitHub\AssetManager\AssetManager\bin\Debug\x86\SQLite.Interop.dll
-C:\GitHub\AssetManager\AssetManager\bin\Debug\System.Data.SQLite.dll
-C:\GitHub\AssetManager\AssetManager\bin\Debug\System.Data.SQLite.xml
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.PackFileForm.resources
-C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.CodeAnalysisLog.xml
-C:\GitHub\AssetManager\AssetManager\bin\Debug\AssetManager.exe.lastcodeanalysissucceeded

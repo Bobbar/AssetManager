@@ -31,8 +31,8 @@ Public Class MainForm
                 strStartQry = "SELECT * FROM " & devices.TableName & " WHERE "
             End If
             Dim strDynaQry As String = ""
-            Dim SearchValCol As List(Of SearchVal) = BuildSearchList()
-            For Each fld As SearchVal In SearchValCol
+            Dim SearchValCol As List(Of DBQueryParameter) = BuildSearchList()
+            For Each fld As DBQueryParameter In SearchValCol
                 If Not IsNothing(fld.Value) Then
                     If fld.Value.ToString <> "" Then
                         If TypeOf fld.Value Is Boolean Then  'trackable boolean. if false, dont add it.
@@ -138,14 +138,14 @@ Public Class MainForm
         DoneWaiting()
     End Sub
 
-    Private Function BuildSearchList() As List(Of SearchVal)
-        Dim tmpList As New List(Of SearchVal)
+    Private Function BuildSearchList() As List(Of DBQueryParameter)
+        Dim tmpList As New List(Of DBQueryParameter)
         Dim CtlList As New List(Of Control)
         Dim DataParser As New DBControlParser(Me)
         DataParser.GetDBControls(Me, CtlList)
         For Each ctl In CtlList
             Dim DBInfo = DirectCast(ctl.Tag, DBControlInfo)
-            tmpList.Add(New SearchVal(DBInfo.DataColumn, DataParser.GetDBControlValue(ctl)))
+            tmpList.Add(New DBQueryParameter(DBInfo.DataColumn, DataParser.GetDBControlValue(ctl), False))
         Next
         Return tmpList
     End Function

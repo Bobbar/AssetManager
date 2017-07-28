@@ -45,11 +45,27 @@ Public Enum FindDevType
     Serial
 End Enum
 
-Public Class SearchVal
+Public Class DBQueryParameter
     Public Property FieldName As String
     Public Property Value As Object
     Public Property IsExact As Boolean
     Public Property OperatorString As String
+
+    Public Sub New(ByVal FieldName As String, ByVal Value As Object, OperatorString As String)
+        Me.FieldName = FieldName
+        Me.Value = Value
+        Me.IsExact = False
+        Me.OperatorString = OperatorString
+    End Sub
+
+
+    Public Sub New(ByVal FieldName As String, ByVal Value As Object, IsExact As Boolean)
+        Me.FieldName = FieldName
+        Me.Value = Value
+        Me.IsExact = IsExact
+        Me.OperatorString = "AND"
+    End Sub
+
 
     Public Sub New(ByVal FieldName As String, ByVal Value As Object, Optional OperatorString As String = "AND", Optional IsExact As Boolean = False)
         Me.FieldName = FieldName

@@ -1,4 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.Data.Common
 
 Public Class AssetManager_Functions
 
@@ -291,14 +292,51 @@ VALUES
     Public Function Get_MunisCode_From_AssetCode(AssetCode As String) As String
         Return Get_SQLValue("munis_codes", "asset_man_code", AssetCode, "munis_code")
     End Function
+
     Public Function Get_SQLValue(table As String, fieldIN As String, valueIN As String, fieldOUT As String) As String
-        Dim sqlQRY As String = "SELECT " & fieldOUT & " FROM " & table & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
-        Dim Result = DBFunc.ExecuteScalarFromQueryString(sqlQRY)
+        Dim sqlQRY As String = "SELECT " & fieldOUT & " FROM " & table ' & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
+        Dim Params As New List(Of DBQueryParameter)
+        Params.Add(New DBQueryParameter(fieldIN, valueIN, True))
+        Dim Result = DBFunc.ExecuteScalarFromCommand(SQLParamCommand(sqlQRY, Params))
         If Result IsNot Nothing Then
             Return Result.ToString
         Else
             Return ""
         End If
+    End Function
+
+    ''' <summary>
+    ''' Takes a partial query string without the WHERE operator, and a list of <see cref="DBQueryParameter"/> and returns a parameterized <see cref="DBCommand"/>.
+    ''' </summary>
+    ''' <param name="PartialQuery"></param>
+    ''' <param name="SearchVals"></param>
+    ''' <returns></returns>
+    Private Function SQLParamCommand(PartialQuery As String, SearchVals As List(Of DBQueryParameter)) As DbCommand
+        Dim cmd = DBFunc.GetCommand(PartialQuery)
+        cmd.CommandText += " WHERE"
+        Dim ParamString As String = ""
+        Dim ValSeq As Integer = 1
+        For Each fld In SearchVals
+            Dim ValueName As String = "@Value" & ValSeq
+            If fld.IsExact Then
+                ParamString += " " + fld.FieldName + "=" & ValueName & " " & fld.OperatorString
+                cmd.AddParameterWithValue(ValueName, fld.Value)
+            Else
+                ParamString += " " + fld.FieldName + " LIKE " & ValueName & " " & fld.OperatorString
+                Dim Value As String = "%" & fld.Value.ToString & "%"
+                cmd.AddParameterWithValue(ValueName, Value)
+            End If
+            ValSeq += 1
+        Next
+        If Strings.Right(ParamString, 3) = "AND" Then 'remove trailing AND from query string
+            ParamString = Strings.Left(ParamString, Strings.Len(ParamString) - 3)
+        End If
+
+        If Strings.Right(ParamString, 2) = "OR" Then 'remove trailing AND from query string
+            ParamString = Strings.Left(ParamString, Strings.Len(ParamString) - 2)
+        End If
+        cmd.CommandText += ParamString
+        Return cmd
     End Function
 
     Public Function GetAttachmentCount(AttachFolderUID As String, AttachTable As main_attachments) As Integer
