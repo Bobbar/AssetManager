@@ -170,6 +170,9 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GK_Updater_Module\NetworkConnection.vb">
+      <Link>DataComms\NetDriveMapper\NetworkConnection.vb</Link>
+    </Compile>
     <Compile Include="..\GK_Updater_Module\ProgressCounter.vb">
       <Link>Classes\ProgressCounter.vb</Link>
     </Compile>
@@ -181,7 +184,6 @@
     <Compile Include="DataFunctions\DBControlParser.vb" />
     <Compile Include="Classes\MyExceptions.vb" />
     <Compile Include="Classes\Type_Classes.vb" />
-    <Compile Include="DataComms\NetDriveMapper\NetworkConnection.vb" />
     <Compile Include="DataComms\AssetManager\DBWrapper.vb" />
     <Compile Include="DataFunctions\LocalFunctions\AttribIndexFunctions.vb" />
     <Compile Include="DataFunctions\LocalFunctions\DataConsistency.vb" />
