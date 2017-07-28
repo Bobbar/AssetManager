@@ -14,7 +14,7 @@ Class AttachmentsForm
     ' Public bolAdminMode As Boolean = False
     Private AttachFolderUID As String
     Private Const FileSizeMBLimit As Short = 150
-    Private _attachTable As main_attachments
+    Private _attachTable As AttachmentsBaseCols
     Private AttachDevice As DeviceStruct
     Private AttachRequest As RequestStruct
     Private bolAllowDrag As Boolean = False
@@ -35,7 +35,7 @@ Class AttachmentsForm
 
 #Region "Constructors"
 
-    Sub New(ParentForm As MyForm, AttachTable As main_attachments, Optional AttachInfo As Object = Nothing)
+    Sub New(ParentForm As ThemedForm, AttachTable As AttachmentsBaseCols, Optional AttachInfo As Object = Nothing)
         InitializeComponent()
         Tag = ParentForm
         Icon = ParentForm.Icon
@@ -106,21 +106,21 @@ Class AttachmentsForm
         Try
             Dim strQry As String
             strQry = GetQry()
-            Using SQLComms As New MySQL_Comms,
-                results As DataTable = SQLComms.Return_SQLTable(strQry),
+            Using SQLComms As New MySqlComms,
+                results As DataTable = SQLComms.ReturnMySqlTable(strQry),
                 table As DataTable = GetTable()
                 Dim strFullFilename As String
                 Dim strFileSizeHuman As String
                 For Each r As DataRow In results.Rows
                     strFileSizeHuman = Math.Round((CInt(r.Item(_attachTable.FileSize)) / 1024), 1) & " KB"
                     strFullFilename = r.Item(_attachTable.FileName).ToString & r.Item(_attachTable.FileType).ToString
-                    If TypeOf _attachTable Is sibi_attachments Then
-                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.TimeStamp), GetHumanValue(SibiIndex.AttachFolder, r.Item(_attachTable.Folder).ToString), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
+                    If TypeOf _attachTable Is SibiAttachmentsCols Then
+                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), GetHumanValue(SibiIndex.AttachFolder, r.Item(_attachTable.Folder).ToString), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                     Else
                         'If bolAdminMode Then
                         '    table.Rows.Add(strFullFilename, strFileSizeHuman, r.Item(_attachTable.TimeStamp), r.Item(devices.AssetTag), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                         'Else
-                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.TimeStamp), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
+                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                         ' End If
                     End If
                 Next
@@ -301,17 +301,17 @@ Class AttachmentsForm
             taskCancelTokenSource = New CancellationTokenSource
             Dim cancelToken As CancellationToken = taskCancelTokenSource.Token
             StatusBar("Connecting...")
-            Dim LocalFTPComm As New FTP_Comms
+            Dim LocalFTPComm As New FtpComms
             dAttachment = GetSQLAttachment(AttachUID)
             Dim FtpRequestString As String = FTPUri & dAttachment.FolderGUID & "/" & AttachUID
             'get file size
             Progress = New ProgressCounter
-            Progress.BytesToTransfer = CInt(LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
+            Progress.BytesToTransfer = CInt(LocalFTPComm.ReturnFtpResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
             'setup download
             StatusBar("Downloading...")
             WorkerFeedback(True)
             dAttachment.DataStream = Await Task.Run(Function()
-                                                        Using respStream = LocalFTPComm.Return_FTPResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile).GetResponseStream
+                                                        Using respStream = LocalFTPComm.ReturnFtpResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile).GetResponseStream
                                                             Dim memStream As New IO.MemoryStream
                                                             Dim buffer(1023) As Byte
                                                             Dim bytesIn As Integer
@@ -379,19 +379,19 @@ Class AttachmentsForm
 
     Private Function GetQry() As String
         Dim strQry As String = ""
-        If TypeOf _attachTable Is sibi_attachments Then
+        If TypeOf _attachTable Is SibiAttachmentsCols Then
             Select Case GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
                 Case "ALL"
-                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
+                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
                 Case Else
-                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex) & "' AND " & _attachTable.FKey & " ='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
+                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex) & "' AND " & _attachTable.FKey & " ='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
             End Select
         Else
             'If bolAdminMode Then 'TODO: include all attachment type tables for admin mode
 
             '    strQry = "Select * FROM " & _attachTable.TableName & "," & _attachTable.TableName & " WHERE " & devices.DeviceUID & " = " & _attachTable.FKey & " ORDER BY " & _attachTable.TimeStamp & " DESC"
             'ElseIf Not bolAdminMode Then
-            strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachDevice.GUID & "' ORDER BY " & _attachTable.TimeStamp & " DESC"
+            strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachDevice.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
             '  End If
         End If
         Return strQry
@@ -399,14 +399,14 @@ Class AttachmentsForm
 
     Private Function GetSQLAttachment(AttachUID As String) As Attachment
         Dim strQry As String = "SELECT * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FileUID & "='" & AttachUID & "' LIMIT 1"
-        Using LocalSQLComm As New MySQL_Comms
-            Return New Attachment(LocalSQLComm.Return_SQLTable(strQry), _attachTable)
+        Using LocalSQLComm As New MySqlComms
+            Return New Attachment(LocalSQLComm.ReturnMySqlTable(strQry), _attachTable)
         End Using
     End Function
 
     Private Function GetTable() As DataTable
         Dim table As New DataTable
-        If TypeOf _attachTable Is sibi_attachments Then
+        If TypeOf _attachTable Is SibiAttachmentsCols Then
             table.Columns.Add(" ", GetType(Image))
             table.Columns.Add("Filename", GetType(String))
             table.Columns.Add("Size", GetType(String))
@@ -436,7 +436,7 @@ Class AttachmentsForm
 
     Private Sub InsertSQLAttachment(Attachment As Attachment)
         Dim SQL As String
-        If TypeOf Attachment Is Sibi_Attachment Then
+        If TypeOf Attachment Is SibiAttachment Then
             SQL = "INSERT INTO " & Attachment.AttachTable.TableName & " (" & Attachment.AttachTable.FKey & ",
 " & Attachment.AttachTable.FileName & ",
 " & Attachment.AttachTable.FileType & ",
@@ -465,15 +465,15 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
 @" & Attachment.AttachTable.FileUID & ",
 @" & Attachment.AttachTable.FileHash & ")"
         End If
-        Using LocalSQLComm As New MySQL_Comms, cmd As MySqlCommand = LocalSQLComm.Return_SQLCommand(SQL)
+        Using LocalSQLComm As New MySqlComms, cmd As MySqlCommand = LocalSQLComm.ReturnMySqlCommand(SQL)
             cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FKey, Attachment.FolderGUID)
-            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileName, Attachment.Filename)
-            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileType, Attachment.Extention)
+            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileName, Attachment.FileName)
+            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileType, Attachment.Extension)
             cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileSize, Attachment.Filesize)
             cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileUID, Attachment.FileUID)
             cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileHash, Attachment.MD5)
-            If TypeOf Attachment Is Sibi_Attachment Then
-                Dim SibiAttach = DirectCast(Attachment, Sibi_Attachment)
+            If TypeOf Attachment Is SibiAttachment Then
+                Dim SibiAttach = DirectCast(Attachment, SibiAttachment)
                 cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.Folder, SibiAttach.SelectedFolder)
             End If
             cmd.ExecuteNonQuery()
@@ -482,12 +482,12 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     End Sub
 
     Private Sub MakeDirectory(FolderGUID As String)
-        Dim LocalFTPComm As New FTP_Comms
-        Using resp = LocalFTPComm.Return_FTPResponse(FTPUri, Net.WebRequestMethods.Ftp.ListDirectoryDetails), 'check if device folder exists. create directory if not.
+        Dim LocalFTPComm As New FtpComms
+        Using resp = LocalFTPComm.ReturnFtpResponse(FTPUri, Net.WebRequestMethods.Ftp.ListDirectoryDetails), 'check if device folder exists. create directory if not.
                sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
             Dim s As String = sr.ReadToEnd()
             If Not s.Contains(FolderGUID) Then
-                Using MkDirResp = LocalFTPComm.Return_FTPResponse(FTPUri & FolderGUID, Net.WebRequestMethods.Ftp.MakeDirectory)
+                Using MkDirResp = LocalFTPComm.ReturnFtpResponse(FTPUri & FolderGUID, Net.WebRequestMethods.Ftp.MakeDirectory)
                 End Using
             End If
         End Using
@@ -510,7 +510,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
 
     Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
         Try
-            AssetFunc.Update_SQLValue(_attachTable.TableName, _attachTable.Folder, Folder, _attachTable.FileUID, AttachUID)
+            AssetFunc.UpdateSqlValue(_attachTable.TableName, _attachTable.Folder, Folder, _attachTable.FileUID, AttachUID)
             ListAttachments()
             cmbMoveFolder.SelectedIndex = -1
             cmbMoveFolder.Text = "Select a folder"
@@ -546,7 +546,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
 
     Private Function TempPathFilename(attachment As Attachment) As String
         Dim strTimeStamp As String = Now.ToString("_hhmmss")
-        Return DownloadPath & attachment.Filename & strTimeStamp & attachment.Extention
+        Return DownloadPath & attachment.FileName & strTimeStamp & attachment.Extension
     End Function
 
     Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
@@ -598,7 +598,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
 
     Private Sub RenameAttachement(AttachUID As String, NewFileName As String)
         Try
-            AssetFunc.Update_SQLValue(_attachTable.TableName, _attachTable.FileName, NewFileName, _attachTable.FileUID, AttachUID)
+            AssetFunc.UpdateSqlValue(_attachTable.TableName, _attachTable.FileName, NewFileName, _attachTable.FileUID, AttachUID)
             ListAttachments()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -608,7 +608,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
         Try
             If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-            Dim strCurrentFileName As String = AssetFunc.Get_SQLValue(_attachTable.TableName, _attachTable.FileUID, SelectedAttachment, _attachTable.FileName)
+            Dim strCurrentFileName As String = AssetFunc.GetSqlValue(_attachTable.TableName, _attachTable.FileUID, SelectedAttachment, _attachTable.FileName)
             Dim strAttachUID As String = SelectedAttachment()
             Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
             If blah = "" Then
@@ -628,7 +628,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
             Dim blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete", Me)
             If blah = vbYes Then
                 Waiting()
-                If AssetFunc.DeleteSQLAttachment(GetSQLAttachment(AttachUID)) > 0 Then
+                If AssetFunc.DeleteSqlAttachment(GetSQLAttachment(AttachUID)) > 0 Then
                     ListAttachments()
                     ' blah = Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
                 Else
@@ -656,14 +656,14 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         TransferTaskRunning = True
         Dim CurrentAttachment As New Attachment
         Try
-            Dim LocalFTPComm As New FTP_Comms
+            Dim LocalFTPComm As New FtpComms
             Dim FileNumber As Integer = 1
             taskCancelTokenSource = New CancellationTokenSource
             Dim cancelToken As CancellationToken = taskCancelTokenSource.Token
             WorkerFeedback(True)
             For Each file As String In files
-                If TypeOf _attachTable Is sibi_attachments Then
-                    CurrentAttachment = New Sibi_Attachment(file, AttachFolderUID, strSelectedFolder, _attachTable)
+                If TypeOf _attachTable Is SibiAttachmentsCols Then
+                    CurrentAttachment = New SibiAttachment(file, AttachFolderUID, strSelectedFolder, _attachTable)
                 Else
                     CurrentAttachment = New Attachment(file, AttachFolderUID, _attachTable)
                 End If
@@ -678,7 +678,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                 Progress = New ProgressCounter
                 Await Task.Run(Sub()
                                    Using FileStream As FileStream = DirectCast(CurrentAttachment.DataStream(), FileStream),
-           FTPStream As System.IO.Stream = LocalFTPComm.Return_FTPRequestStream(FTPUri & CurrentAttachment.FolderGUID & "/" & CurrentAttachment.FileUID, Net.WebRequestMethods.Ftp.UploadFile)
+           FTPStream As System.IO.Stream = LocalFTPComm.ReturnFtpRequestStream(FTPUri & CurrentAttachment.FolderGUID & "/" & CurrentAttachment.FileUID, Net.WebRequestMethods.Ftp.UploadFile)
                                        Dim buffer(1023) As Byte
                                        Dim bytesIn As Integer = 1
                                        Progress.BytesToTransfer = CInt(FileStream.Length)
@@ -692,7 +692,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                                    End Using
                                End Sub)
                 If cancelToken.IsCancellationRequested Then
-                    FTPFunc.DeleteFTPAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID)
+                    FTPFunc.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID)
                 Else
                     InsertSQLAttachment(CurrentAttachment)
                     FileNumber += 1
@@ -731,7 +731,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
             Else
                 Using saveDialog As New SaveFileDialog()
                     saveDialog.Filter = "All files (*.*)|*.*"
-                    saveDialog.FileName = saveAttachment.FullFilename
+                    saveDialog.FileName = saveAttachment.FullFileName
                     If saveDialog.ShowDialog() = DialogResult.OK Then
                         SaveAttachmentToDisk(saveAttachment, saveDialog.FileName)
                     End If

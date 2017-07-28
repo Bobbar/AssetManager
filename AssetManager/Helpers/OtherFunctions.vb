@@ -106,7 +106,7 @@ Module OtherFunctions
             Return False
         End If
         If CheckForActiveTransfers() Then Return False
-        If GKUpdaterForm.Visible AndAlso Not GKUpdaterForm.OKToClose() Then Return False
+        If GKUpdaterForm.Visible AndAlso Not GKUpdaterForm.OkToClose() Then Return False
         Return True
     End Function
 

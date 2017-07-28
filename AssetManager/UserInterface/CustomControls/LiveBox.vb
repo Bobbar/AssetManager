@@ -13,20 +13,20 @@
 
 #Region "Constructors"
 
-    Sub New(ParentForm As Form)
-        InitializeControl(ParentForm)
+    Sub New(parentForm As Form)
+        InitializeControl(parentForm)
     End Sub
 
 #End Region
 
 #Region "Methods"
 
-    Public Sub AttachToControl(Control As TextBox, Type As LiveBoxType, DisplayMember As String, Optional ValueMember As String = Nothing)
+    Public Sub AttachToControl(control As TextBox, type As LiveBoxType, displayMember As String, Optional valueMember As String = Nothing)
         Dim ControlArgs As New LiveBoxArgs
-        ControlArgs.Control = Control
-        ControlArgs.Type = Type
-        ControlArgs.DisplayMember = DisplayMember
-        If Not IsNothing(ValueMember) Then ControlArgs.ValueMember = ValueMember
+        ControlArgs.Control = control
+        ControlArgs.Type = type
+        ControlArgs.DisplayMember = displayMember
+        If Not IsNothing(valueMember) Then ControlArgs.ValueMember = valueMember
         LiveBoxControls.Add(ControlArgs)
         AddHandler ControlArgs.Control.KeyUp, AddressOf Control_KeyUp
         AddHandler ControlArgs.Control.KeyDown, AddressOf Control_KeyDown
@@ -118,9 +118,9 @@
         Return Nothing
     End Function
 
-    Private Sub InitializeControl(ParentForm As Form)
+    Private Sub InitializeControl(parentForm As Form)
         LiveBox = New ListBox
-        LiveBox.Parent = ParentForm
+        LiveBox.Parent = parentForm
         LiveBox.BringToFront()
         'AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
         AddHandler LiveBox.MouseDown, AddressOf LiveBox_MouseDown
@@ -216,16 +216,16 @@
     ''' Runs the DB query Asychronously.
     ''' </summary>
     ''' <param name="SearchString"></param>
-    Private Async Sub ProcessSearch(SearchString As String)
+    Private Async Sub ProcessSearch(searchString As String)
         Try
-            strPrevSearchString = SearchString
+            strPrevSearchString = searchString
             If QueryRunning Then Exit Sub
             Dim Results = Await Task.Run(Function()
                                              QueryRunning = True
                                              Dim strQry As String
-                                             strQry = "SELECT " & devices.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.ValueMember), CurrentLiveBoxArgs.DisplayMember, CurrentLiveBoxArgs.DisplayMember & "," & CurrentLiveBoxArgs.ValueMember).ToString & " FROM " & devices.TableName & " WHERE " & CurrentLiveBoxArgs.DisplayMember & " LIKE  @Search_Value  GROUP BY " & CurrentLiveBoxArgs.DisplayMember & " ORDER BY " & CurrentLiveBoxArgs.DisplayMember & " LIMIT " & RowLimit
+                                             strQry = "SELECT " & DevicesCols.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.ValueMember), CurrentLiveBoxArgs.DisplayMember, CurrentLiveBoxArgs.DisplayMember & "," & CurrentLiveBoxArgs.ValueMember).ToString & " FROM " & DevicesCols.TableName & " WHERE " & CurrentLiveBoxArgs.DisplayMember & " LIKE  @Search_Value  GROUP BY " & CurrentLiveBoxArgs.DisplayMember & " ORDER BY " & CurrentLiveBoxArgs.DisplayMember & " LIMIT " & RowLimit
                                              Using cmd = DBFunc.GetCommand(strQry)
-                                                 cmd.AddParameterWithValue("@Search_Value", "%" & SearchString & "%")
+                                                 cmd.AddParameterWithValue("@Search_Value", "%" & searchString & "%")
                                                  Return DBFunc.DataTableFromCommand(cmd)
                                              End Using
                                          End Function)
@@ -248,8 +248,8 @@
         End With
     End Sub
 
-    Private Sub StartLiveSearch(Args As LiveBoxArgs)
-        CurrentLiveBoxArgs = Args
+    Private Sub StartLiveSearch(args As LiveBoxArgs)
+        CurrentLiveBoxArgs = args
         Dim strSearchString As String = Trim(CurrentLiveBoxArgs.Control.Text)
         If strSearchString <> "" Then
             ProcessSearch(strSearchString)

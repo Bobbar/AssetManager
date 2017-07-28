@@ -4,8 +4,8 @@ Module DBCacheFunctions
     Public Sub RefreshLocalDBCache()
         Try
             BuildingCache = True
-            Using conn As New SQLite_Comms(False)
-                conn.RefreshSQLCache()
+            Using conn As New SqliteComms(False)
+                conn.RefreshSqlCache()
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -24,13 +24,13 @@ Module DBCacheFunctions
             If RemoteTableHashes Is Nothing Then Return False
             Return Await Task.Run(Function()
                                       Dim LocalHashes As New List(Of String)
-                                      Using SQLiteComms As New SQLite_Comms
+                                      Using SQLiteComms As New SqliteComms
                                           LocalHashes = SQLiteComms.LocalTableHashList
                                           Return SQLiteComms.CompareTableHashes(LocalHashes, RemoteTableHashes)
                                       End Using
                                   End Function)
         Else
-            Using SQLiteComms As New SQLite_Comms
+            Using SQLiteComms As New SqliteComms
                 If SQLiteComms.GetSchemaVersion > 0 Then Return True
             End Using
         End If
@@ -44,7 +44,7 @@ Module DBCacheFunctions
     ''' <returns></returns>
     Public Function VerifyCacheHashes(Optional OfflineMode As Boolean = False) As Boolean
         Try
-            Using SQLiteComms As New SQLite_Comms
+            Using SQLiteComms As New SqliteComms
                 If SQLiteComms.GetSchemaVersion > 0 Then
                     If Not OfflineMode Then
                         SQLiteTableHashes = SQLiteComms.LocalTableHashList

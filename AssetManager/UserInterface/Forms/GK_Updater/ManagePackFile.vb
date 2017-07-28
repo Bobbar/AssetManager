@@ -78,20 +78,20 @@ Public Class ManagePackFile
     End Function
 
     ''' <summary>
-    ''' Copies a single file to the <paramref name="Dest"/> path.
+    ''' Copies a single file to the <paramref name="dest"/> path.
     ''' </summary>
-    ''' <param name="Source"></param>
+    ''' <param name="source"></param>
     ''' Path of source file.
-    ''' <param name="Dest"></param>
+    ''' <param name="dest"></param>
     ''' Path of destination.
     ''' <returns></returns>
-    Public Async Function CopyPackFile(Source As String, Dest As String) As Task(Of Boolean)
-        If File.Exists(Dest) Then
-            File.Delete(Dest)
+    Public Async Function CopyPackFile(source As String, dest As String) As Task(Of Boolean)
+        If File.Exists(dest) Then
+            File.Delete(dest)
         End If
         Return Await Task.Run(Function()
                                   Try
-                                      CopyFile(Source, Dest)
+                                      CopyFile(source, dest)
                                       Return True
                                   Catch ex As Exception
                                       Return False

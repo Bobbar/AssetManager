@@ -5,16 +5,16 @@ Imports System.Text
 Imports iTextSharp.text.pdf
 Imports MyDialogLib
 
-Public Class PDFFormFilling
+Public Class PdfFormFilling
     Private ParentForm As Form
     Private CurrentDevice As New DeviceStruct
     Private CurrentDialog As MyDialog
     Private UnitPriceTxtName As String = "txtUnitPrice"
 
-    Sub New(Parent As Form, DeviceInfo As DeviceStruct, Type As PDFFormType)
-        ParentForm = Parent
-        CurrentDevice = DeviceInfo
-        FillForm(Type)
+    Sub New(parentForm As Form, deviceInfo As DeviceStruct, pdfType As PdfFormType)
+        Me.ParentForm = parentForm
+        CurrentDevice = deviceInfo
+        FillForm(pdfType)
     End Sub
 
     Public Sub ListFieldNames()
@@ -46,7 +46,7 @@ Public Class PDFFormFilling
     Private Async Sub PriceFromMunis()
         Try
             Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
-            Dim SelectedPrice = Await MunisFunc.NewMunisView_ReqSearch(MunisFunc.Get_ReqNumber_From_PO(CurrentDevice.PO), MunisFunc.Get_FY_From_PO(CurrentDevice.PO), ParentForm, True)
+            Dim SelectedPrice = Await MunisFunc.NewMunisViewReqSearch(MunisFunc.GetReqNumberFromPO(CurrentDevice.PO), MunisFunc.GetFYFromPO(CurrentDevice.PO), ParentForm, True)
             Dim decPrice As Decimal = Convert.ToDecimal(SelectedPrice)
             Dim SelectedUnitPrice = decPrice.ToString("C")
             CurrentDialog.SetControlValue(UnitPriceTxtName, SelectedUnitPrice)
@@ -55,27 +55,27 @@ Public Class PDFFormFilling
         End Try
     End Sub
 
-    Private Sub FillForm(Type As PDFFormType)
+    Private Sub FillForm(Type As PdfFormType)
         Try
             Directory.CreateDirectory(DownloadPath)
             Dim strTimeStamp As String = Now.ToString("_hhmmss")
             Dim newFile As String = DownloadPath & CurrentDevice.Description & strTimeStamp & ".pdf"
 
             Select Case Type
-                Case PDFFormType.InputForm
+                Case PdfFormType.InputForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_01_Asset_Input_Formnew)
                     Using pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
                         Dim pdfFormFields As AcroFields = InputFormFields(CurrentDevice, pdfStamper)
                         pdfStamper.FormFlattening = FlattenPrompt()
                     End Using
 
-                Case PDFFormType.TransferForm
+                Case PdfFormType.TransferForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_03_Asset_Transfer_Form)
                     Using pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
                         Dim pdfFormFields As AcroFields = TransferFormFields(CurrentDevice, pdfStamper)
                         pdfStamper.FormFlattening = FlattenPrompt()
                     End Using
-                Case PDFFormType.DisposeForm
+                Case PdfFormType.DisposeForm
                     Dim pdfReader As New PdfReader(My.Resources.Exh_K_02_Asset_Disposal_Form)
                     Using pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
                         Dim pdfFormFields As AcroFields = DisposalFormFields(CurrentDevice, pdfStamper)
@@ -208,14 +208,14 @@ Public Class PDFFormFilling
             .SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD")
             ' .SetField("topmostSubform[0].Page1[0].Asterisked_items_____must_be_completed_by_the_department[0]", CurrentDevice.strAssetTag)
             .SetField("topmostSubform[0].Page1[0].undefined[0]", Device.Serial)
-            .SetField("topmostSubform[0].Page1[0].undefined_2[0]", MunisFunc.Get_VendorName_From_PO(Device.PO))
+            .SetField("topmostSubform[0].Page1[0].undefined_2[0]", MunisFunc.GetVendorNameFromPO(Device.PO))
             .SetField("topmostSubform[0].Page1[0].undefined_3[0]", Device.Description)
             '.SetField("topmostSubform[0].Page1[0]._1[0]", "6")
             ' .SetField("topmostSubform[0].Page1[0]._2[0]", "7")
             .SetField("topmostSubform[0].Page1[0].undefined_4[0]", Device.PO)
-            .SetField("topmostSubform[0].Page1[0].undefined_5[0]", AssetFunc.Get_MunisCode_From_AssetCode(Device.Location))
+            .SetField("topmostSubform[0].Page1[0].undefined_5[0]", AssetFunc.GetMunisCodeFromAssetCode(Device.Location))
             .SetField("topmostSubform[0].Page1[0].undefined_6[0]", "5200")
-            .SetField("topmostSubform[0].Page1[0].undefined_7[0]", AssetFunc.Get_MunisCode_From_AssetCode(Device.EquipmentType))
+            .SetField("topmostSubform[0].Page1[0].undefined_7[0]", AssetFunc.GetMunisCodeFromAssetCode(Device.EquipmentType))
             .SetField("topmostSubform[0].Page1[0].undefined_8[0]", "GP")
             '.SetField("topmostSubform[0].Page1[0].undefined_9[0]", "13")
             .SetField("topmostSubform[0].Page1[0].undefined_10[0]", "1")

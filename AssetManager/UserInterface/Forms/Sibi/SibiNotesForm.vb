@@ -7,32 +7,32 @@
         End Get
     End Property
 
-    Sub New(ParentForm As Form, Request As RequestStruct)
+    Sub New(parentForm As Form, request As RequestStruct)
         InitializeComponent()
-        Tag = ParentForm
-        Icon = ParentForm.Icon
-        MyRequest = Request
-        ShowDialog(ParentForm)
+        Tag = parentForm
+        Icon = parentForm.Icon
+        MyRequest = request
+        ShowDialog(parentForm)
     End Sub
 
-    Sub New(ParentForm As Form, NoteUID As String)
+    Sub New(parentForm As Form, noteUID As String)
         InitializeComponent()
-        Tag = ParentForm
-        Icon = ParentForm.Icon
-        FormUID = NoteUID
-        ViewNote(NoteUID)
+        Tag = parentForm
+        Icon = parentForm.Icon
+        FormUID = noteUID
+        ViewNote(noteUID)
     End Sub
 
     Private Sub ClearAll()
         rtbNotes.Clear()
     End Sub
 
-    Private Sub ViewNote(NoteUID As String)
+    Private Sub ViewNote(noteUID As String)
         Try
             cmdOK.Visible = False
             rtbNotes.Clear()
-            Dim NoteText As String = AssetFunc.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.Note)
-            Dim NoteTimeStamp As String = AssetFunc.Get_SQLValue(sibi_notes.TableName, sibi_notes.Note_UID, NoteUID, sibi_notes.DateStamp)
+            Dim NoteText As String = AssetFunc.GetSqlValue(SibiNotesCols.TableName, SibiNotesCols.NoteUID, noteUID, SibiNotesCols.Note)
+            Dim NoteTimeStamp As String = AssetFunc.GetSqlValue(SibiNotesCols.TableName, SibiNotesCols.NoteUID, noteUID, SibiNotesCols.DateStamp)
             Me.Text += " - " & NoteTimeStamp
             Select Case GetStringFormat(NoteText)
                 Case DataFormats.Rtf

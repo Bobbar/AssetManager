@@ -13,9 +13,9 @@ Namespace AdvancedSearch
 
 #Region "Constructors"
 
-        Sub New(SearchString As String, SearchTables As List(Of TableInfo))
-            _searchString = SearchString
-            _searchTables = SearchTables
+        Sub New(searchString As String, searchTables As List(Of TableInfo))
+            _searchString = searchString
+            _searchTables = searchTables
         End Sub
 
 #End Region
@@ -24,9 +24,9 @@ Namespace AdvancedSearch
 
         Public Function GetColumns(table As String) As List(Of String)
             Dim colList As New List(Of String)
-            Using comms As New MySQL_Comms
+            Using comms As New MySqlComms
                 Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & CurrentDB & "' AND TABLE_NAME = '" & table & "'"
-                Dim results = comms.Return_SQLTable(SQLQry)
+                Dim results = comms.ReturnMySqlTable(SQLQry)
                 For Each row As DataRow In results.Rows
                     colList.Add(row.Item("COLUMN_NAME").ToString)
                 Next
@@ -43,7 +43,7 @@ Namespace AdvancedSearch
                 Dim cmd As New MySqlCommand
                 cmd.CommandText = qry
                 cmd.Parameters.AddWithValue("@" & "SEARCHVAL", _searchString)
-                Using LocalSQLComm As New MySQL_Comms,
+                Using LocalSQLComm As New MySqlComms,
                     ds As New DataSet,
                     da As New MySqlDataAdapter,
                     QryComm As MySqlCommand = cmd, results As New DataTable(table.TableName)
@@ -92,9 +92,9 @@ Namespace AdvancedSearch
 
 #Region "Constructors"
 
-        Sub New(Name As String, Cols As List(Of String))
-            TableName = Name
-            Columns = Cols
+        Sub New(name As String, cols As List(Of String))
+            TableName = name
+            Columns = cols
         End Sub
 
 #End Region

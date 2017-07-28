@@ -1,6 +1,6 @@
 ﻿Imports MySql.Data.MySqlClient
 
-Public Class MySQL_Comms : Implements IDisposable
+Public Class MySqlComms : Implements IDisposable
 
 #Region "IDisposable Support"
 
@@ -62,8 +62,8 @@ Public Class MySQL_Comms : Implements IDisposable
         End If
     End Sub
 
-    Sub New(OpenConnectionOnCall As Boolean)
-        If OpenConnectionOnCall Then
+    Sub New(openConnectionOnCall As Boolean)
+        If openConnectionOnCall Then
             If Not OpenConnection() Then
                 Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
                 Dispose()
@@ -110,25 +110,25 @@ Public Class MySQL_Comms : Implements IDisposable
         End Try
     End Function
 
-    Public Function Return_Adapter(strSQLQry As String) As MySqlDataAdapter
+    Public Function ReturnMySqlAdapter(sqlQry As String) As MySqlDataAdapter
         '  Debug.Print("Adapter Hit " & Date.Now.Ticks)
-        Dim adapter As New MySqlDataAdapter(strSQLQry, GetConnectString)
+        Dim adapter As New MySqlDataAdapter(sqlQry, GetConnectString)
         Dim CmdBuilder As New MySqlCommandBuilder(adapter)
         Return adapter
     End Function
 
-    Public Function Return_SQLCommand(Optional strSQLQry As String = "") As MySqlCommand
+    Public Function ReturnMySqlCommand(Optional sqlQry As String = "") As MySqlCommand
         ' Debug.Print("Command Hit " & Date.Now.Ticks)
         Using cmd As New MySqlCommand
             cmd.Connection = Connection
-            cmd.CommandText = strSQLQry
+            cmd.CommandText = sqlQry
             Return cmd
         End Using
     End Function
 
-    Public Function Return_SQLTable(strSQLQry As String) As DataTable
+    Public Function ReturnMySqlTable(sqlQry As String) As DataTable
         ' Debug.Print("Table Hit " & Date.Now.Ticks)
-        Using da As New MySqlDataAdapter, tmpTable As New DataTable, cmd = New MySqlCommand(strSQLQry)
+        Using da As New MySqlDataAdapter, tmpTable As New DataTable, cmd = New MySqlCommand(sqlQry)
             da.SelectCommand = cmd
             da.SelectCommand.Connection = Connection
             da.Fill(tmpTable)

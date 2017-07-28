@@ -180,11 +180,11 @@
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="DataComms\AssetManager\MySQL\DataColumns.vb" />
-    <Compile Include="DataComms\AssetManager\SQLite\SQLite_Comms.vb" />
+    <Compile Include="DataComms\AssetManager\SQLite\SQLiteComms.vb" />
     <Compile Include="DataFunctions\DatabaseFunctions\AdvancedSearch.vb" />
     <Compile Include="DataFunctions\DBControlParser.vb" />
     <Compile Include="Classes\MyExceptions.vb" />
-    <Compile Include="Classes\Type_Classes.vb" />
+    <Compile Include="Classes\TypeClasses.vb" />
     <Compile Include="DataComms\AssetManager\DBWrapper.vb" />
     <Compile Include="DataFunctions\LocalFunctions\AttribIndexFunctions.vb" />
     <Compile Include="DataFunctions\LocalFunctions\DataConsistency.vb" />
@@ -199,9 +199,9 @@
     </Compile>
     <Compile Include="UserInterface\Colors.vb" />
     <Compile Include="GlobalModules\GlobalConstants.vb" />
-    <Compile Include="GlobalModules\Global_Instances.vb" />
+    <Compile Include="GlobalModules\GlobalInstances.vb" />
     <Compile Include="GlobalModules\Paths.vb" />
-    <Compile Include="DataComms\AssetManager\FTP\FTP_Comms.vb" />
+    <Compile Include="DataComms\AssetManager\FTP\FTPComms.vb" />
     <Compile Include="DataComms\AssetManager\ServerInfo.vb" />
     <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.Designer.vb">
       <DependentUpon>AdvancedSearchForm.vb</DependentUpon>
@@ -235,8 +235,8 @@
     <Compile Include="UserInterface\Forms\GridForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\Form_Control.vb" />
-    <Compile Include="DataFunctions\DatabaseFunctions\AssetManager_Functions.vb" />
+    <Compile Include="UserInterface\ChildFormControl.vb" />
+    <Compile Include="DataFunctions\DatabaseFunctions\AssetManagerFunctions.vb" />
     <Compile Include="UserInterface\Forms\AttachmentsForm.Designer.vb">
       <DependentUpon>AttachmentsForm.vb</DependentUpon>
     </Compile>
@@ -267,8 +267,8 @@
     <Compile Include="UserInterface\Forms\AssetManager\MunisUserForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\MyControls\MunisToolBar.vb" />
-    <Compile Include="UserInterface\MyControls\MyForm.vb">
+    <Compile Include="UserInterface\CustomControls\MunisToolBar.vb" />
+    <Compile Include="UserInterface\CustomControls\ThemedForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Sibi\SibiNotesForm.Designer.vb">
@@ -315,13 +315,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Classes\Crypto.vb" />
-    <Compile Include="DataFunctions\DatabaseFunctions\Munis_Functions.vb" />
-    <Compile Include="DataComms\Munis\Munis_Comms.vb" />
+    <Compile Include="DataFunctions\DatabaseFunctions\MunisFunctions.vb" />
+    <Compile Include="DataComms\Munis\MunisComms.vb" />
     <Compile Include="Helpers\ErrorHandling.vb" />
     <Compile Include="Helpers\ExtendedMethods.vb" />
-    <Compile Include="DataFunctions\DatabaseFunctions\FTP_Functions.vb" />
-    <Compile Include="UserInterface\MyControls\LiveBox.vb" />
-    <Compile Include="DataComms\AssetManager\MySQL\MySQL_Comms.vb" />
+    <Compile Include="DataFunctions\DatabaseFunctions\FTPFunctions.vb" />
+    <Compile Include="UserInterface\CustomControls\LiveBox.vb" />
+    <Compile Include="DataComms\AssetManager\MySQL\MySQLComms.vb" />
     <Compile Include="GlobalModules\GlobalStructures.vb" />
     <Compile Include="GlobalModules\SecurityFunctions.vb" />
     <Compile Include="UserInterface\Forms\SplashScreenForm.Designer.vb">
@@ -354,10 +354,10 @@
     <Compile Include="UserInterface\Forms\AssetManager\ViewHistoryForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\MyControls\MyToolStrip.Designer.vb">
-      <DependentUpon>MyToolStrip.vb</DependentUpon>
+    <Compile Include="UserInterface\CustomControls\OneClickToolStrip.Designer.vb">
+      <DependentUpon>OneClickToolStrip.vb</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\MyControls\MyToolStrip.vb">
+    <Compile Include="UserInterface\CustomControls\OneClickToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\GK_Updater\GKProgressControl.Designer.vb">
@@ -366,10 +366,10 @@
     <Compile Include="UserInterface\Forms\GK_Updater\GKProgressControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserInterface\MyControls\MyTreeView.vb">
+    <Compile Include="UserInterface\CustomControls\CorrectedTreeView.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UserInterface\MyControls\WindowList.vb" />
+    <Compile Include="UserInterface\CustomControls\WindowList.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.resx">

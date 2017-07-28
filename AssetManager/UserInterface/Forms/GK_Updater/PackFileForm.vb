@@ -5,10 +5,10 @@ Public Class PackFileForm
     Private Working As Boolean = False
     Private PackFunc As New ManagePackFile
 
-    Sub New(ShowFunctions As Boolean)
+    Sub New(showFunctions As Boolean)
         InitializeComponent()
-        FunctionPanel.Visible = ShowFunctions
-        If Not ShowFunctions Then
+        FunctionPanel.Visible = showFunctions
+        If Not showFunctions Then
             CheckPackFile()
         End If
     End Sub

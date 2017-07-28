@@ -1,11 +1,11 @@
 ﻿Public Class AdvancedSearchForm
     Private _parentForm As Form
 
-    Sub New(ParentForm As Form)
+    Sub New(parentForm As Form)
         InitializeComponent()
-        Tag = ParentForm
-        Icon = ParentForm.Icon
-        _parentForm = ParentForm
+        Tag = parentForm
+        Icon = parentForm.Icon
+        _parentForm = parentForm
         PopulateTableTree()
         Me.Show()
     End Sub
@@ -31,7 +31,7 @@
     Private Function GetTables() As List(Of String)
         Dim Tables As New List(Of String)
         Dim Qry = "SHOW TABLES IN " & CurrentDB
-        Using comms As New MySQL_Comms, Results As DataTable = comms.Return_SQLTable(Qry)
+        Using comms As New MySqlComms, Results As DataTable = comms.ReturnMySqlTable(Qry)
             For Each row As DataRow In Results.Rows
                 Tables.Add(row.Item(Results.Columns(0).ColumnName).ToString)
             Next
@@ -41,9 +41,9 @@
 
     Private Function GetColumns(table As String) As List(Of String)
         Dim colList As New List(Of String)
-        Using comms As New MySQL_Comms
+        Using comms As New MySqlComms
             Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & CurrentDB & "' AND TABLE_NAME = '" & table & "'"
-            Dim results = comms.Return_SQLTable(SQLQry)
+            Dim results = comms.ReturnMySqlTable(SQLQry)
             For Each row As DataRow In results.Rows
                 colList.Add(row.Item("COLUMN_NAME").ToString)
             Next

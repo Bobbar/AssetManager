@@ -22,11 +22,11 @@ Public Class GKUpdaterForm
 
     End Sub
 
-    Public Async Sub AddUpdate(ByVal Device As DeviceStruct)
+    Public Async Sub AddUpdate(device As DeviceStruct)
 
-        If bolCheckForDups AndAlso Not Exists(Device) Then
+        If bolCheckForDups AndAlso Not Exists(device) Then
             Await CheckPackFile()
-            Dim NewProgCtl As New GKProgressControl(Me, Device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
+            Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
             Updater_Table.Controls.Add(NewProgCtl)
             MyUpdates.Add(NewProgCtl)
             AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
@@ -34,10 +34,10 @@ Public Class GKUpdaterForm
             Me.WindowState = FormWindowState.Normal
             Me.Activate()
         Else
-            Dim blah = Message("An update for device " & Device.Serial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
+            Dim blah = Message("An update for device " & device.Serial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
             If blah = vbOK Then
                 Await CheckPackFile()
-                StartUpdateByDevice(Device)
+                StartUpdateByDevice(device)
                 Me.WindowState = FormWindowState.Normal
                 Me.Activate()
             End If
@@ -45,21 +45,21 @@ Public Class GKUpdaterForm
 
     End Sub
 
-    Private Sub StartUpdateByDevice(Device As DeviceStruct)
-        MyUpdates.Find(Function(upd) upd.Device.GUID = Device.GUID).StartUpdate()
+    Private Sub StartUpdateByDevice(device As DeviceStruct)
+        MyUpdates.Find(Function(upd) upd.Device.GUID = device.GUID).StartUpdate()
     End Sub
 
-    Private Function Exists(Device As DeviceStruct) As Boolean
-        Return MyUpdates.Exists(Function(upd) upd.Device.GUID = Device.GUID)
+    Private Function Exists(device As DeviceStruct) As Boolean
+        Return MyUpdates.Exists(Function(upd) upd.Device.GUID = device.GUID)
     End Function
 
     Public Function ActiveUpdates() As Boolean
-        Return MyUpdates.Exists(Function(upd) upd.ProgStatus = GKProgressControl.Progress_Status.Running)
+        Return MyUpdates.Exists(Function(upd) upd.ProgStatus = GKProgressControl.ProgressStatus.Running)
     End Function
 
     Private Sub CancelAll()
         For Each upd As GKProgressControl In MyUpdates
-            If upd.ProgStatus = GKProgressControl.Progress_Status.Running Then
+            If upd.ProgStatus = GKProgressControl.ProgressStatus.Running Then
                 upd.CancelUpdate()
             End If
         Next
@@ -82,7 +82,7 @@ Public Class GKUpdaterForm
             Dim RunningUpdates As Integer = 0
             For Each upd As GKProgressControl In MyUpdates
                 Select Case upd.ProgStatus
-                    Case GKProgressControl.Progress_Status.Running, GKProgressControl.Progress_Status.Starting, GKProgressControl.Progress_Status.Paused
+                    Case GKProgressControl.ProgressStatus.Running, GKProgressControl.ProgressStatus.Starting, GKProgressControl.ProgressStatus.Paused
                         If Not upd.IsDisposed Then RunningUpdates += 1
                 End Select
             Next
@@ -118,14 +118,14 @@ Public Class GKUpdaterForm
     End Sub
 
     Private Sub GKUpdater_Form_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If Not OKToClose() Then
+        If Not OkToClose() Then
             e.Cancel = True
         Else
             DisposeUpdates()
             Me.Dispose()
         End If
     End Sub
-    Public Function OKToClose() As Boolean
+    Public Function OkToClose() As Boolean
         If ActiveUpdates() Then
             Message("There are still updates running!  Cancel the updates or wait for them to finish.", vbOKOnly + vbExclamation, "Close Aborted", Me)
             Me.Activate()
@@ -163,12 +163,12 @@ Public Class GKUpdaterForm
         Dim TransferRateSum As Double
         For Each upd As GKProgressControl In MyUpdates
             Select Case upd.ProgStatus
-                Case GKProgressControl.Progress_Status.Queued
+                Case GKProgressControl.ProgressStatus.Queued
                     intQueued += 1
-                Case GKProgressControl.Progress_Status.Running
+                Case GKProgressControl.ProgressStatus.Running
                     TransferRateSum += upd.MyUpdater.UpdateStatus.CurTransferRate
                     intRunning += 1
-                Case GKProgressControl.Progress_Status.Complete
+                Case GKProgressControl.ProgressStatus.Complete
                     intComplete += 1
             End Select
         Next
@@ -184,7 +184,7 @@ Public Class GKUpdaterForm
     ''' </summary>
     Private Sub SortUpdates()
         Dim sortUpdates As New List(Of GKProgressControl)
-        For Each status As GKProgressControl.Progress_Status In [Enum].GetValues(GetType(GKProgressControl.Progress_Status))
+        For Each status As GKProgressControl.ProgressStatus In [Enum].GetValues(GetType(GKProgressControl.ProgressStatus))
             sortUpdates.AddRange(MyUpdates.FindAll(Function(upd) upd.ProgStatus = status))
         Next
         Updater_Table.Controls.Clear()
@@ -195,7 +195,7 @@ Public Class GKUpdaterForm
     ''' Starts the next update that has a queued status.
     ''' </summary>
     Private Sub StartNextUpdate()
-        Dim NextUpd = MyUpdates.Find(Function(upd) upd.ProgStatus = GKProgressControl.Progress_Status.Queued)
+        Dim NextUpd = MyUpdates.Find(Function(upd) upd.ProgStatus = GKProgressControl.ProgressStatus.Queued)
         If NextUpd IsNot Nothing Then NextUpd.StartUpdate()
     End Sub
 

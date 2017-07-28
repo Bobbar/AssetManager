@@ -1,6 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SibiManageRequestForm
-    Inherits MyForm
+    Inherits ThemedForm
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()> _
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -76,7 +76,7 @@ Partial Class SibiManageRequestForm
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.RequestItemsGrid = New System.Windows.Forms.DataGridView()
         Me.chkAllowDrag = New System.Windows.Forms.CheckBox()
-        Me.ToolStrip = New AssetManager.MyToolStrip()
+        Me.ToolStrip = New AssetManager.OneClickToolStrip()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
         Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
@@ -785,7 +785,7 @@ Partial Class SibiManageRequestForm
     Friend WithEvents fieldErrorIcon As ErrorProvider
     Friend WithEvents cmdNewNote As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
-    Friend WithEvents ToolStrip As MyToolStrip
+    Friend WithEvents ToolStrip As OneClickToolStrip
     Friend WithEvents cmdCreate As ToolStripButton
     Friend WithEvents cmdUpdate As ToolStripButton
     Friend WithEvents cmdDelete As ToolStripButton

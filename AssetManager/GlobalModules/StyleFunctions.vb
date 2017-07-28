@@ -29,7 +29,7 @@
         Grid.DefaultCellStyle.Font = GridFont
     End Sub
 
-    Public Sub HighlightRow(ByRef Grid As DataGridView, Theme As Grid_Theme, Row As Integer)
+    Public Sub HighlightRow(ByRef Grid As DataGridView, Theme As GridTheme, Row As Integer)
         Try
             Dim BackColor As Color = Theme.BackColor 'DefGridBC
             Dim SelectColor As Color = Theme.CellSelectColor 'DefGridSelCol
@@ -55,7 +55,7 @@
         End Try
     End Sub
 
-    Public Sub LeaveRow(ByRef Grid As DataGridView, Theme As Grid_Theme, Row As Integer)
+    Public Sub LeaveRow(ByRef Grid As DataGridView, Theme As GridTheme, Row As Integer)
         Dim BackColor As Color = Theme.BackColor
         Dim SelectColor As Color = Theme.CellSelectColor
         If Row > -1 Then

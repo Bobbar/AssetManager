@@ -5,8 +5,8 @@ Imports System.Text
 Public Class GZipCompress
     Private Progress As ProgressCounter
 
-    Sub New(ProgressDel As ProgressCounter)
-        Progress = ProgressDel
+    Sub New(progress As ProgressCounter)
+        Me.Progress = progress
     End Sub
 
     Private Sub CompressFile(sDir As String, sRelativePath As String, zipStream As GZipStream)

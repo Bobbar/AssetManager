@@ -94,14 +94,14 @@ Module SecurityFunctions
 
     Public Sub GetUserAccess()
         Try
-            Dim strQRY = "SELECT * FROM " & users.TableName & " WHERE " & users.UserName & "='" & strLocalUser & "' LIMIT 1"
+            Dim strQRY = "SELECT * FROM " & UsersCols.TableName & " WHERE " & UsersCols.UserName & "='" & strLocalUser & "' LIMIT 1"
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
                 If results.Rows.Count > 0 Then
                     Dim r As DataRow = results.Rows(0)
-                    UserAccess.Username = r.Item(users.UserName).ToString
-                    UserAccess.Fullname = r.Item(users.FullName).ToString
-                    UserAccess.AccessLevel = CInt(r.Item(users.AccessLevel))
-                    UserAccess.GUID = r.Item(users.UID).ToString
+                    UserAccess.UserName = r.Item(UsersCols.UserName).ToString
+                    UserAccess.Fullname = r.Item(UsersCols.FullName).ToString
+                    UserAccess.AccessLevel = CInt(r.Item(UsersCols.AccessLevel))
+                    UserAccess.GUID = r.Item(UsersCols.UID).ToString
                 Else
                     UserAccess.AccessLevel = 0
                 End If
@@ -113,7 +113,7 @@ Module SecurityFunctions
 
     Public Sub GetAccessLevels()
         Try
-            Dim strQRY = "SELECT * FROM " & security_columns.TableName & " ORDER BY " & security_columns.AccessLevel & "" ' WHERE usr_username='" & strLocalUser & "'"
+            Dim strQRY = "SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & "" ' WHERE usr_username='" & strLocalUser & "'"
             Dim rows As Integer
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
                 ReDim AccessLevels(0)
@@ -121,10 +121,10 @@ Module SecurityFunctions
                 For Each r As DataRow In results.Rows
                     rows += 1
                     ReDim Preserve AccessLevels(rows)
-                    AccessLevels(rows).Level = CInt(r.Item(security_columns.AccessLevel))
-                    AccessLevels(rows).AccessModule = r.Item(security_columns.SecModule).ToString
-                    AccessLevels(rows).Description = r.Item(security_columns.Description).ToString
-                    AccessLevels(rows).AvailableOffline = CBool(r.Item(security_columns.AvailOffline))
+                    AccessLevels(rows).Level = CInt(r.Item(SecurityCols.AccessLevel))
+                    AccessLevels(rows).AccessModule = r.Item(SecurityCols.SecModule).ToString
+                    AccessLevels(rows).Description = r.Item(SecurityCols.Description).ToString
+                    AccessLevels(rows).AvailableOffline = CBool(r.Item(SecurityCols.AvailOffline))
                 Next
             End Using
         Catch ex As Exception

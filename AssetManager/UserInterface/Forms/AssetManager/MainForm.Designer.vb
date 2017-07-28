@@ -1,6 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class MainForm
-    Inherits MyForm
+    Inherits ThemedForm
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -74,7 +74,7 @@ Partial Class MainForm
         Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.ToolStrip1 = New AssetManager.MyToolStrip()
+        Me.ToolStrip1 = New AssetManager.OneClickToolStrip()
         Me.AddDeviceTool = New System.Windows.Forms.ToolStripButton()
         Me.AdminDropDown = New System.Windows.Forms.ToolStripDropDownButton()
         Me.cmbDBs = New System.Windows.Forms.ToolStripComboBox()
@@ -818,7 +818,7 @@ Partial Class MainForm
     Friend WithEvents txtSerialSearch As TextBox
     Friend WithEvents BigQueryWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents StripSpinner As ToolStripStatusLabel
-    Friend WithEvents ToolStrip1 As MyToolStrip
+    Friend WithEvents ToolStrip1 As OneClickToolStrip
     Friend WithEvents AddDeviceTool As ToolStripButton
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents CopyTool As ToolStripMenuItem

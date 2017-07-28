@@ -14,7 +14,7 @@ Namespace My
             SplashScreenForm.Show()
             Logger("Starting AssetManager...")
             Status("Checking Server Connection...")
-            Using SQLComms As New MySQL_Comms(False)
+            Using SQLComms As New MySqlComms(False)
                 OfflineMode = Not SQLComms.OpenConnection
                 'check connection
             End Using

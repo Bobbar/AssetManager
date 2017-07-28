@@ -1,6 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class AdvancedSearchForm
-    Inherits MyForm
+    Inherits ThemedForm
 
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()>
@@ -27,7 +27,7 @@ Partial Class AdvancedSearchForm
         Me.Label2 = New System.Windows.Forms.Label()
         Me.SearchStringTextBox = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.TableTree = New AssetManager.MyTreeView()
+        Me.TableTree = New AssetManager.CorrectedTreeView()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -111,5 +111,5 @@ Partial Class AdvancedSearchForm
     Friend WithEvents Label2 As Label
     Friend WithEvents SearchStringTextBox As TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents TableTree As MyTreeView
+    Friend WithEvents TableTree As CorrectedTreeView
 End Class

@@ -8,10 +8,10 @@
 
     Private SelectedUID As String
 
-    Sub New(ParentForm As Form)
+    Sub New(parentForm As Form)
         InitializeComponent()
-        Icon = ParentForm.Icon
-        ShowDialog(ParentForm)
+        Icon = parentForm.Icon
+        ShowDialog(parentForm)
     End Sub
 
     Private Sub frmSibiSelector_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -19,7 +19,7 @@
         ShowAll()
     End Sub
 
-    Private Sub SendToGrid(Results As DataTable) ' Data() As Device_Info)
+    Private Sub SendToGrid(results As DataTable) ' Data() As Device_Info)
         Try
             Using table As New DataTable
                 table.Columns.Add("Request #", GetType(String))
@@ -31,7 +31,7 @@
                 table.Columns.Add("PO Number", GetType(String))
                 table.Columns.Add("Req. Number", GetType(String))
                 table.Columns.Add("UID", GetType(String))
-                For Each r As DataRow In Results.Rows
+                For Each r As DataRow In results.Rows
                     table.Rows.Add(NoNull(r.Item("sibi_request_number")),
                                    GetHumanValue(SibiIndex.StatusType, r.Item("sibi_status").ToString),
                                    NoNull(r.Item("sibi_description")),
@@ -51,8 +51,8 @@
     End Sub
 
     Private Sub ShowAll()
-        Using SQLComms As New MySQL_Comms
-            SendToGrid(SQLComms.Return_SQLTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
+        Using SQLComms As New MySqlComms
+            SendToGrid(SQLComms.ReturnMySqlTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
         End Using
     End Sub
 

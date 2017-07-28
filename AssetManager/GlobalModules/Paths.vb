@@ -26,6 +26,6 @@ Module Paths
     Public ReadOnly GKPackFileFullPath As String = GKPackFileFDir & GKPackFileName
     Public ReadOnly GKExtractDir As String = strAppDir & "GKUpdateFiles\Gatekeeper\"
     Public Const GKRemotePackFileDir As String = "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Other\GatekeeperPackFile\"
-    Public ReadOnly GKRemotePackFilePath As String = GKRemotePackFileDir & GKPackFileName
+    Public Const GKRemotePackFilePath As String = GKRemotePackFileDir & GKPackFileName
 
 End Module

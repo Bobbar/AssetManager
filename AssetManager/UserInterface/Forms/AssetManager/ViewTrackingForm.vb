@@ -6,11 +6,11 @@ Public Class ViewTrackingForm
     Private Const strCheckOut As String = "OUT"
     Private Const strCheckIn As String = "IN"
 
-    Sub New(ParentForm As Form, EntryGUID As String, Device As DeviceStruct)
+    Sub New(parentForm As Form, entryGUID As String, device As DeviceStruct)
         InitializeComponent()
-        Tag = ParentForm
-        Icon = ParentForm.Icon
-        ViewTrackingEntry(EntryGUID, Device)
+        Tag = parentForm
+        Icon = parentForm.Icon
+        ViewTrackingEntry(entryGUID, device)
         Show()
     End Sub
 
@@ -22,32 +22,32 @@ Public Class ViewTrackingForm
         SetWaitCursor(False)
     End Sub
 
-    Private Sub ViewTrackingEntry(ByVal EntryUID As String, ByRef Device As DeviceStruct)
+    Private Sub ViewTrackingEntry(entryUID As String, device As DeviceStruct)
         Try
             Waiting()
-            Dim strQry = "Select * FROM " & trackable.TableName & " WHERE  " & trackable.UID & " = '" & EntryUID & "'"
+            Dim strQry = "Select * FROM " & TrackablesCols.TableName & " WHERE  " & TrackablesCols.UID & " = '" & entryUID & "'"
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQry)
                 For Each r As DataRow In results.Rows
-                    txtTimeStamp.Text = NoNull(r.Item(trackable.DateStamp))
-                    txtCheckType.Text = NoNull(r.Item(trackable.CheckType))
+                    txtTimeStamp.Text = NoNull(r.Item(TrackablesCols.DateStamp))
+                    txtCheckType.Text = NoNull(r.Item(TrackablesCols.CheckType))
                     If txtCheckType.Text = "IN" Then
                         txtCheckType.BackColor = colCheckIn
                     ElseIf txtCheckType.Text = "OUT" Then
                         txtCheckType.BackColor = colCheckOut
                     End If
-                    txtDescription.Text = Device.Description
-                    txtGUID.Text = NoNull(r.Item(trackable.DeviceUID))
-                    txtCheckOutUser.Text = NoNull(r.Item(trackable.CheckOut_User))
-                    txtCheckInUser.Text = NoNull(r.Item(trackable.CheckIn_User))
-                    txtLocation.Text = NoNull(r.Item(trackable.UseLocation))
-                    txtAssetTag.Text = Device.AssetTag
-                    txtCheckOutTime.Text = NoNull(r.Item(trackable.CheckOut_Time))
-                    txtDueBack.Text = NoNull(r.Item(trackable.DueBackDate))
-                    txtSerial.Text = Device.Serial
-                    txtCheckInTime.Text = NoNull(r.Item(trackable.CheckIn_Time))
-                    txtNotes.Text = NoNull(r.Item(trackable.Notes))
-                    txtEntryGUID.Text = NoNull(r.Item(trackable.UID))
-                    Me.Text = Me.Text + " - " & NoNull(r.Item(trackable.DateStamp))
+                    txtDescription.Text = device.Description
+                    txtGUID.Text = NoNull(r.Item(TrackablesCols.DeviceUID))
+                    txtCheckOutUser.Text = NoNull(r.Item(TrackablesCols.CheckoutUser))
+                    txtCheckInUser.Text = NoNull(r.Item(TrackablesCols.CheckinUser))
+                    txtLocation.Text = NoNull(r.Item(TrackablesCols.UseLocation))
+                    txtAssetTag.Text = device.AssetTag
+                    txtCheckOutTime.Text = NoNull(r.Item(TrackablesCols.CheckoutTime))
+                    txtDueBack.Text = NoNull(r.Item(TrackablesCols.DueBackDate))
+                    txtSerial.Text = device.Serial
+                    txtCheckInTime.Text = NoNull(r.Item(TrackablesCols.CheckinTime))
+                    txtNotes.Text = NoNull(r.Item(TrackablesCols.Notes))
+                    txtEntryGUID.Text = NoNull(r.Item(TrackablesCols.UID))
+                    Me.Text = Me.Text + " - " & NoNull(r.Item(TrackablesCols.DateStamp))
                 Next
             End Using
             DoneWaiting()

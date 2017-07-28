@@ -49,17 +49,17 @@ Public Class SibiMainForm
 
     Private Function BuildSearchListNew() As List(Of DBQueryParameter)
         Dim tmpList As New List(Of DBQueryParameter)
-        tmpList.Add(New DBQueryParameter(sibi_requests.RT_Number, Trim(txtRTNum.Text), False))
-        tmpList.Add(New DBQueryParameter(sibi_requests.Description, Trim(txtDescription.Text), False))
-        tmpList.Add(New DBQueryParameter(sibi_requests.PO, txtPO.Text, False))
-        tmpList.Add(New DBQueryParameter(sibi_requests.RequisitionNumber, txtReq.Text, False))
+        tmpList.Add(New DBQueryParameter(SibiRequestCols.RTNumber, Trim(txtRTNum.Text), False))
+        tmpList.Add(New DBQueryParameter(SibiRequestCols.Description, Trim(txtDescription.Text), False))
+        tmpList.Add(New DBQueryParameter(SibiRequestCols.PO, txtPO.Text, False))
+        tmpList.Add(New DBQueryParameter(SibiRequestCols.RequisitionNumber, txtReq.Text, False))
         Return tmpList
     End Function
 
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         Dim cmd = DBFunc.GetCommand()
         Dim strStartQry As String
-        strStartQry = "SELECT * FROM " & sibi_requests.TableName & " WHERE"
+        strStartQry = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE"
         Dim strDynaQry As String = ""
         Dim SearchValCol As List(Of DBQueryParameter) = BuildSearchListNew()
         For Each fld As DBQueryParameter In SearchValCol
@@ -78,7 +78,7 @@ Public Class SibiMainForm
         If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
             strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
         End If
-        strQry += " ORDER BY " & sibi_requests.RequestNumber & " DESC"
+        strQry += " ORDER BY " & SibiRequestCols.RequestNumber & " DESC"
         cmd.CommandText = strQry
         ExecuteCmd(cmd)
     End Sub
@@ -98,28 +98,28 @@ Public Class SibiMainForm
         End Try
     End Sub
 
-    Public Sub SendToGrid(Results As DataTable)
+    Public Sub SendToGrid(results As DataTable)
         Try
             Using table As New DataTable
                 For Each col As DataGridColumnStruct In SibiTableColumns()
                     Dim column = table.Columns.Add(col.ColumnName, col.ColumnType)
                     column.Caption = col.ColumnCaption
                 Next
-                For Each r As DataRow In Results.Rows
-                    table.Rows.Add(NoNull(r.Item(sibi_requests.RequestNumber)),
-               GetHumanValue(SibiIndex.StatusType, r.Item(sibi_requests.Status).ToString),
-               NoNull(r.Item(sibi_requests.Description)),
-               NoNull(r.Item(sibi_requests.RequestUser)),
-               GetHumanValue(SibiIndex.RequestType, r.Item(sibi_requests.Type).ToString),
-               NoNull(r.Item(sibi_requests.NeedBy)),
-               NoNull(r.Item(sibi_requests.PO)),
-               NoNull(r.Item(sibi_requests.RequisitionNumber)),
-               NoNull(r.Item(sibi_requests.RT_Number)),
-               NoNull(r.Item(sibi_requests.DateStamp)),
-               NoNull(r.Item(sibi_requests.UID)))
+                For Each r As DataRow In results.Rows
+                    table.Rows.Add(NoNull(r.Item(SibiRequestCols.RequestNumber)),
+               GetHumanValue(SibiIndex.StatusType, r.Item(SibiRequestCols.Status).ToString),
+               NoNull(r.Item(SibiRequestCols.Description)),
+               NoNull(r.Item(SibiRequestCols.RequestUser)),
+               GetHumanValue(SibiIndex.RequestType, r.Item(SibiRequestCols.Type).ToString),
+               NoNull(r.Item(SibiRequestCols.NeedBy)),
+               NoNull(r.Item(SibiRequestCols.PO)),
+               NoNull(r.Item(SibiRequestCols.RequisitionNumber)),
+               NoNull(r.Item(SibiRequestCols.RTNumber)),
+               NoNull(r.Item(SibiRequestCols.DateStamp)),
+               NoNull(r.Item(SibiRequestCols.UID)))
                 Next
                 bolGridFilling = True
-                StatusColors = GetStatusColors(Results)
+                StatusColors = GetStatusColors(results)
                 ResultGrid.DataSource = Nothing
                 ResultGrid.DataSource = table
                 SetGridHeaders()
@@ -134,24 +134,24 @@ Public Class SibiMainForm
     Private Function GetStatusColors(Results As DataTable) As List(Of StatusColumnColorStruct)
         Dim StatusList As New List(Of StatusColumnColorStruct)
         For Each row As DataRow In Results.Rows
-            StatusList.Add(New StatusColumnColorStruct(row.Item(sibi_requests.RequestNumber).ToString, GetRowColor(row.Item(sibi_requests.Status).ToString)))
+            StatusList.Add(New StatusColumnColorStruct(row.Item(SibiRequestCols.RequestNumber).ToString, GetRowColor(row.Item(SibiRequestCols.Status).ToString)))
         Next
         Return StatusList
     End Function
 
     Private Function SibiTableColumns() As List(Of DataGridColumnStruct)
         Dim ColList As New List(Of DataGridColumnStruct)
-        ColList.Add(New DataGridColumnStruct(sibi_requests.RequestNumber, "Request #", GetType(Integer)))
-        ColList.Add(New DataGridColumnStruct(sibi_requests.Status, "Status", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(sibi_requests.Description, "Description", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(sibi_requests.RequestUser, "Request User", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(sibi_requests.Type, "Request Type", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(sibi_requests.NeedBy, "Need By", GetType(Date)))
-        ColList.Add(New DataGridColumnStruct(sibi_requests.PO, "PO Number", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(sibi_requests.RequisitionNumber, "Req. Number", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(sibi_requests.RT_Number, "RT Number", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(sibi_requests.DateStamp, "Create Date", GetType(Date)))
-        ColList.Add(New DataGridColumnStruct(sibi_requests.UID, "UID", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.RequestNumber, "Request #", GetType(Integer)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.Status, "Status", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.Description, "Description", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.RequestUser, "Request User", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.Type, "Request Type", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.NeedBy, "Need By", GetType(Date)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.PO, "PO Number", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.RequisitionNumber, "Req. Number", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.RTNumber, "RT Number", GetType(String)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.DateStamp, "Create Date", GetType(Date)))
+        ColList.Add(New DataGridColumnStruct(SibiRequestCols.UID, "UID", GetType(String)))
         Return ColList
     End Function
 
@@ -164,12 +164,12 @@ Public Class SibiMainForm
     Private Function SetDisplayYears() As Boolean
         Try
             bolRebuildingCombo = True
-            Dim strQRY As String = "SELECT DISTINCT " & sibi_requests.DateStamp & " FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.DateStamp & " DESC"
+            Dim strQRY As String = "SELECT DISTINCT " & SibiRequestCols.DateStamp & " FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.DateStamp & " DESC"
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
                 Dim Years As New List(Of String)
                 Years.Add("All")
                 For Each r As DataRow In results.Rows
-                    Dim yr = YearFromDate(DateTime.Parse(r.Item(sibi_requests.DateStamp).ToString))
+                    Dim yr = YearFromDate(DateTime.Parse(r.Item(SibiRequestCols.DateStamp).ToString))
                     If Not Years.Contains(yr) Then
                         Years.Add(yr)
                     End If
@@ -188,9 +188,9 @@ Public Class SibiMainForm
     Private Sub ShowAll(Optional Year As String = "")
         If Year = "" Then Year = cmbDisplayYear.Text
         If Year = "All" Then
-            ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & sibi_requests.TableName & " ORDER BY " & sibi_requests.RequestNumber & " DESC"))
+            ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.RequestNumber & " DESC"))
         Else
-            ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & sibi_requests.TableName & " WHERE " & sibi_requests.DateStamp & " LIKE '%" & Year & "%' ORDER BY " & sibi_requests.RequestNumber & " DESC"))
+            ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.DateStamp & " LIKE '%" & Year & "%' ORDER BY " & SibiRequestCols.RequestNumber & " DESC"))
         End If
     End Sub
 
@@ -199,7 +199,7 @@ Public Class SibiMainForm
     End Sub
 
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
-        If ResultGrid.CurrentRow.Index > -1 Then OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, sibi_requests.UID), ResultGrid.CurrentRow.Index).Value.ToString)
+        If ResultGrid.CurrentRow.Index > -1 Then OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, SibiRequestCols.UID), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
 
     Private Sub OpenRequest(strUID As String)
@@ -210,10 +210,10 @@ Public Class SibiMainForm
 
     Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
         If e.RowIndex > -1 Then
-            Dim dvgCell As DataGridViewCell = ResultGrid.Rows(e.RowIndex).Cells(sibi_requests.Status)
+            Dim dvgCell As DataGridViewCell = ResultGrid.Rows(e.RowIndex).Cells(SibiRequestCols.Status)
             Dim dvgRow As DataGridViewRow = ResultGrid.Rows(e.RowIndex)
             Dim BackCol, ForeCol As Color
-            BackCol = GetRowColorFromID(dvgRow.Cells(sibi_requests.RequestNumber).Value.ToString)
+            BackCol = GetRowColorFromID(dvgRow.Cells(SibiRequestCols.RequestNumber).Value.ToString)
             ForeCol = GetFontColor(BackCol)
             dvgCell.Style.BackColor = BackCol
             dvgCell.Style.ForeColor = ForeCol

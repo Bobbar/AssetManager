@@ -65,8 +65,8 @@ Public Class NewDeviceForm
     Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
         ClearAll()
         InitDBControls()
-        MyLiveBox.AttachToControl(txtCurUser_REQ, LiveBoxType.UserSelect, devices.CurrentUser, devices.Munis_Emp_Num)
-        MyLiveBox.AttachToControl(txtDescription_REQ, LiveBoxType.SelectValue, devices.Description)
+        MyLiveBox.AttachToControl(txtCurUser_REQ, LiveBoxType.UserSelect, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum)
+        MyLiveBox.AttachToControl(txtDescription_REQ, LiveBoxType.SelectValue, DevicesCols.Description)
         Icon = MainForm.Icon
         Tag = MainForm
     End Sub
@@ -75,11 +75,11 @@ Public Class NewDeviceForm
         Try
             NewUID = Guid.NewGuid.ToString
             Dim rows As Integer = 0
-            Dim DeviceInsertQry As String = "SELECT * FROM " & devices.TableName & " LIMIT 0"
-            Dim HistoryInsertQry As String = "SELECT * FROM " & historical_dev.TableName & " LIMIT 0"
-            Using SQLComms As New MySQL_Comms,
-                DeviceInsertAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(DeviceInsertQry),
-                 HistoryInsertAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(HistoryInsertQry)
+            Dim DeviceInsertQry As String = "SELECT * FROM " & DevicesCols.TableName & " LIMIT 0"
+            Dim HistoryInsertQry As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " LIMIT 0"
+            Using SQLComms As New MySqlComms,
+                DeviceInsertAdapter As MySqlDataAdapter = SQLComms.ReturnMySqlAdapter(DeviceInsertQry),
+                 HistoryInsertAdapter As MySqlDataAdapter = SQLComms.ReturnMySqlAdapter(HistoryInsertQry)
                 rows += DeviceInsertAdapter.Update(DeviceInsertTable(DeviceInsertAdapter))
                 rows += HistoryInsertAdapter.Update(HistoryInsertTable(HistoryInsertAdapter))
             End Using
@@ -223,13 +223,13 @@ Public Class NewDeviceForm
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         If MunisUser.Number IsNot Nothing Then
-            DBRow(devices.CurrentUser) = MunisUser.Name
-            DBRow(devices.Munis_Emp_Num) = MunisUser.Number
+            DBRow(DevicesCols.CurrentUser) = MunisUser.Name
+            DBRow(DevicesCols.MunisEmpNum) = MunisUser.Number
         End If
-        DBRow(devices.LastMod_User) = strLocalUser
-        DBRow(devices.LastMod_Date) = Now
-        DBRow(devices.DeviceUID) = NewUID
-        DBRow(devices.CheckedOut) = False
+        DBRow(DevicesCols.LastModUser) = strLocalUser
+        DBRow(DevicesCols.LastModDate) = Now
+        DBRow(DevicesCols.DeviceUID) = NewUID
+        DBRow(DevicesCols.CheckedOut) = False
         Return tmpTable
     End Function
 
@@ -242,28 +242,28 @@ Public Class NewDeviceForm
         Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
-        DBRow(historical_dev.ChangeType) = "NEWD"
-        DBRow(historical_dev.Notes) = Trim(txtNotes.Text)
-        DBRow(historical_dev.ActionUser) = strLocalUser
-        DBRow(historical_dev.DeviceUID) = NewUID
+        DBRow(HistoricalDevicesCols.ChangeType) = "NEWD"
+        DBRow(HistoricalDevicesCols.Notes) = Trim(txtNotes.Text)
+        DBRow(HistoricalDevicesCols.ActionUser) = strLocalUser
+        DBRow(HistoricalDevicesCols.DeviceUID) = NewUID
         Return tmpTable
     End Function
     Private Sub InitDBControls()
-        txtDescription_REQ.Tag = New DBControlInfo(devices_main.Description, True)
-        txtAssetTag_REQ.Tag = New DBControlInfo(devices_main.AssetTag, True)
-        txtSerial_REQ.Tag = New DBControlInfo(devices_main.Serial, True)
-        dtPurchaseDate_REQ.Tag = New DBControlInfo(devices_main.PurchaseDate, True)
-        txtReplaceYear.Tag = New DBControlInfo(devices_main.ReplacementYear, False)
-        cmbLocation_REQ.Tag = New DBControlInfo(devices_main.Location, DeviceIndex.Locations, True)
-        txtCurUser_REQ.Tag = New DBControlInfo(devices_main.CurrentUser, True)
+        txtDescription_REQ.Tag = New DBControlInfo(DevicesBaseCols.Description, True)
+        txtAssetTag_REQ.Tag = New DBControlInfo(DevicesBaseCols.AssetTag, True)
+        txtSerial_REQ.Tag = New DBControlInfo(DevicesBaseCols.Serial, True)
+        dtPurchaseDate_REQ.Tag = New DBControlInfo(DevicesBaseCols.PurchaseDate, True)
+        txtReplaceYear.Tag = New DBControlInfo(DevicesBaseCols.ReplacementYear, False)
+        cmbLocation_REQ.Tag = New DBControlInfo(DevicesBaseCols.Location, DeviceIndex.Locations, True)
+        txtCurUser_REQ.Tag = New DBControlInfo(DevicesBaseCols.CurrentUser, True)
         ' txtNotes.Tag = New DBControlInfo(historical_dev.Notes, False)
-        cmbOSType_REQ.Tag = New DBControlInfo(devices_main.OSVersion, DeviceIndex.OSType, True)
-        txtPhoneNumber.Tag = New DBControlInfo(devices_main.PhoneNumber, False)
-        cmbEquipType_REQ.Tag = New DBControlInfo(devices_main.EQType, DeviceIndex.EquipType, True)
-        cmbStatus_REQ.Tag = New DBControlInfo(devices_main.Status, DeviceIndex.StatusType, True)
-        chkTrackable.Tag = New DBControlInfo(devices_main.Trackable, False)
-        txtPO.Tag = New DBControlInfo(devices_main.PO, False)
-        txtHostname.Tag = New DBControlInfo(devices_main.Hostname, False)
+        cmbOSType_REQ.Tag = New DBControlInfo(DevicesBaseCols.OSVersion, DeviceIndex.OSType, True)
+        txtPhoneNumber.Tag = New DBControlInfo(DevicesBaseCols.PhoneNumber, False)
+        cmbEquipType_REQ.Tag = New DBControlInfo(DevicesBaseCols.EQType, DeviceIndex.EquipType, True)
+        cmbStatus_REQ.Tag = New DBControlInfo(DevicesBaseCols.Status, DeviceIndex.StatusType, True)
+        chkTrackable.Tag = New DBControlInfo(DevicesBaseCols.Trackable, False)
+        txtPO.Tag = New DBControlInfo(DevicesBaseCols.PO, False)
+        txtHostname.Tag = New DBControlInfo(DevicesBaseCols.HostName, False)
     End Sub
     Private Sub RefreshCombos()
         FillComboBox(DeviceIndex.Locations, cmbLocation_REQ)

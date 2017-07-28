@@ -28,8 +28,8 @@ Public Class SplashScreenForm
         Me.Dispose()
     End Sub
 
-    Public Sub SetStatus(Text As String)
-        lblStatus.Text = Text
+    Public Sub SetStatus(text As String)
+        lblStatus.Text = text
         Me.Refresh()
     End Sub
 

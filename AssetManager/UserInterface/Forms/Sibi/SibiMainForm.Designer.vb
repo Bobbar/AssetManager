@@ -1,6 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SibiMainForm
-    Inherits MyForm
+    Inherits ThemedForm
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()> _
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -37,7 +37,7 @@ Partial Class SibiMainForm
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.ResultGrid = New System.Windows.Forms.DataGridView()
-        Me.ToolStrip1 = New AssetManager.MyToolStrip()
+        Me.ToolStrip1 = New AssetManager.OneClickToolStrip()
         Me.cmdManage = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.Panel1.SuspendLayout()
@@ -289,7 +289,7 @@ Partial Class SibiMainForm
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ResultGrid As DataGridView
     Friend WithEvents cmdShowAll As Button
-    Friend WithEvents ToolStrip1 As MyToolStrip
+    Friend WithEvents ToolStrip1 As OneClickToolStrip
     Friend WithEvents cmdManage As ToolStripButton
     Friend WithEvents Label2 As Label
     Friend WithEvents cmbDisplayYear As ComboBox

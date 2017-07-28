@@ -1,7 +1,7 @@
 ﻿Imports System.Data.SQLite
 Imports System.IO
 
-Public Class SQLite_Comms : Implements IDisposable
+Public Class SqliteComms : Implements IDisposable
 
 #Region "Fields"
     Private Const EncSQLitePass As String = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU"
@@ -13,8 +13,8 @@ Public Class SQLite_Comms : Implements IDisposable
 
 #Region "Constructors"
 
-    Sub New(Optional OpenConnectionOnCall As Boolean = True)
-        If OpenConnectionOnCall Then
+    Sub New(Optional openConnectionOnCall As Boolean = True)
+        If openConnectionOnCall Then
             If Not OpenConnection() Then
                 Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
                 Dispose()
@@ -39,13 +39,13 @@ Public Class SQLite_Comms : Implements IDisposable
         End If
     End Sub
 
-    Public Function CompareTableHashes(TableHashesA As List(Of String), TableHashesB As List(Of String)) As Boolean
+    Public Function CompareTableHashes(tableHashesA As List(Of String), tableHashesB As List(Of String)) As Boolean
         Try
-            If TableHashesA Is Nothing Or TableHashesB Is Nothing Then
+            If tableHashesA Is Nothing Or tableHashesB Is Nothing Then
                 Return False
             End If
-            For i As Integer = 0 To TableHashesA.Count - 1
-                If TableHashesA(i) <> TableHashesB(i) Then Return False
+            For i As Integer = 0 To tableHashesA.Count - 1
+                If tableHashesA(i) <> tableHashesB(i) Then Return False
             Next
             Return True
         Catch ex As Exception
@@ -101,7 +101,7 @@ Public Class SQLite_Comms : Implements IDisposable
         End Try
     End Function
 
-    Public Sub RefreshSQLCache()
+    Public Sub RefreshSqlCache()
         Try
             If SQLiteTableHashes IsNot Nothing AndAlso CheckLocalCacheHash() Then Exit Sub
 
@@ -135,9 +135,9 @@ Public Class SQLite_Comms : Implements IDisposable
 
     Public Function RemoteTableHashList() As List(Of String)
         Dim hashList As New List(Of String)
-        Using MySQLConn As New MySQL_Comms
+        Using MySQLConn As New MySqlComms
             For Each table In TableList()
-                Using results = ToStringTable(MySQLConn.Return_SQLTable("SELECT * FROM " & table))
+                Using results = ToStringTable(MySQLConn.ReturnMySqlTable("SELECT * FROM " & table))
                     results.TableName = table
                     hashList.Add(GetHashOfTable(results))
                 End Using
@@ -146,17 +146,17 @@ Public Class SQLite_Comms : Implements IDisposable
         End Using
     End Function
 
-    Private Sub AddTable(TableName As String, Transaction As SQLiteTransaction)
-        CreateCacheTable(TableName, Transaction)
-        ImportDatabase(TableName, Transaction)
+    Private Sub AddTable(tableName As String, transaction As SQLiteTransaction)
+        CreateCacheTable(tableName, transaction)
+        ImportDatabase(tableName, transaction)
     End Sub
 
     ''' <summary>
     ''' Converts MySQL Create statement into a SQL compatible one.
     ''' </summary>
-    ''' <param name="Input"></param>
+    ''' <param name="createStatement"></param>
     ''' <returns></returns>
-    Private Function ConvertStatement(Input As String) As String
+    Private Function ConvertStatement(createStatement As String) As String
         Dim ColumnDefs As New List(Of String)
         Dim RemoveItems As New List(Of String)
         Dim key As String = ""
@@ -165,10 +165,10 @@ Public Class SQLite_Comms : Implements IDisposable
         Dim KeyStringIndex As Integer
 
         'Remove incompatible defs
-        Input = Replace(Input, "AUTO_INCREMENT", "")
+        createStatement = Replace(createStatement, "AUTO_INCREMENT", "")
 
         'Split the statement by commas
-        ColumnDefs = Split(Input, ",").ToList
+        ColumnDefs = Split(createStatement, ",").ToList
 
         'Find the primary key column name
         For Each item In ColumnDefs
@@ -219,44 +219,44 @@ Public Class SQLite_Comms : Implements IDisposable
         Return NewStatement
     End Function
 
-    Private Sub CreateCacheTable(TableName As String, Transaction As SQLiteTransaction)
-        Dim Statement = GetTableCreateStatement(TableName)
+    Private Sub CreateCacheTable(tableName As String, transaction As SQLiteTransaction)
+        Dim Statement = GetTableCreateStatement(tableName)
         Dim qry As String = ConvertStatement(Statement)
         Using cmd As New SQLiteCommand(qry, Connection)
-            cmd.Transaction = Transaction
+            cmd.Transaction = transaction
             cmd.ExecuteNonQuery()
         End Using
     End Sub
 
-    Private Function GetRemoteDBTable(TableName As String) As DataTable
-        Dim qry As String = "SELECT * FROM " & TableName
-        Using conn As New MySQL_Comms, results As New DataTable, adapter = conn.Return_Adapter(qry)
+    Private Function GetRemoteDBTable(tableName As String) As DataTable
+        Dim qry As String = "SELECT * FROM " & tableName
+        Using conn As New MySqlComms, results As New DataTable, adapter = conn.ReturnMySqlAdapter(qry)
             adapter.AcceptChangesDuringFill = False
             adapter.Fill(results)
-            results.TableName = TableName
+            results.TableName = tableName
             Return results
         End Using
     End Function
 
-    Private Function GetTableCreateStatement(TableName As String) As String
-        Dim qry As String = "SHOW CREATE TABLE " & TableName
-        Using conn As New MySQL_Comms, results = conn.Return_SQLTable(qry)
+    Private Function GetTableCreateStatement(tableName As String) As String
+        Dim qry As String = "SHOW CREATE TABLE " & tableName
+        Using conn As New MySqlComms, results = conn.ReturnMySqlTable(qry)
             Return results.Rows(0).Item(1).ToString
         End Using
     End Function
 
-    Private Sub ImportDatabase(TableName As String, Transaction As SQLiteTransaction)
+    Private Sub ImportDatabase(tableName As String, transaction As SQLiteTransaction)
         OpenConnection()
         Using cmd = Connection.CreateCommand, adapter = New SQLiteDataAdapter(cmd), builder As New SQLiteCommandBuilder(adapter)
-            cmd.Transaction = Transaction
-            cmd.CommandText = "SELECT * FROM " & TableName
-            adapter.Update(GetRemoteDBTable(TableName))
+            cmd.Transaction = transaction
+            cmd.CommandText = "SELECT * FROM " & tableName
+            adapter.Update(GetRemoteDBTable(tableName))
         End Using
     End Sub
 
-    Private Function Return_SQLTable(strSQLQry As String) As DataTable
+    Private Function Return_SQLTable(SqlQry As String) As DataTable
         Using da As New SQLiteDataAdapter, tmpTable As New DataTable
-            da.SelectCommand = New SQLiteCommand(strSQLQry)
+            da.SelectCommand = New SQLiteCommand(SqlQry)
             da.SelectCommand.Connection = Connection
             da.Fill(tmpTable)
             Return tmpTable
@@ -264,28 +264,28 @@ Public Class SQLite_Comms : Implements IDisposable
     End Function
     Private Function TableList() As List(Of String)
         Dim list As New List(Of String)
-        list.Add(devices.TableName)
-        list.Add(historical_dev.TableName)
-        list.Add(trackable.TableName)
-        list.Add(sibi_requests.TableName)
-        list.Add(sibi_request_items.TableName)
-        list.Add(sibi_notes.TableName)
-        list.Add(dev_codes.TableName)
-        list.Add(sibi_codes.TableName)
+        list.Add(DevicesCols.TableName)
+        list.Add(HistoricalDevicesCols.TableName)
+        list.Add(TrackablesCols.TableName)
+        list.Add(SibiRequestCols.TableName)
+        list.Add(SibiRequestItemsCols.TableName)
+        list.Add(SibiNotesCols.TableName)
+        list.Add(DeviceComboCodesCols.TableName)
+        list.Add(SibiComboCodesCols.TableName)
         list.Add("munis_codes")
-        list.Add(security_columns.TableName)
-        list.Add(users.TableName)
+        list.Add(SecurityCols.TableName)
+        list.Add(UsersCols.TableName)
         Return list
     End Function
-    Private Function ToStringTable(ByRef Table As DataTable) As DataTable
-        Dim tmpTable As DataTable = Table.Clone
+    Private Function ToStringTable(ByRef table As DataTable) As DataTable
+        Dim tmpTable As DataTable = table.Clone
         For i = 0 To tmpTable.Columns.Count - 1
             tmpTable.Columns(i).DataType = GetType(String)
         Next
-        For Each row As DataRow In Table.Rows
+        For Each row As DataRow In table.Rows
             tmpTable.ImportRow(row)
         Next
-        Table.Dispose()
+        table.Dispose()
         Return tmpTable
     End Function
 

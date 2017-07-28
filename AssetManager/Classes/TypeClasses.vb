@@ -1,33 +1,32 @@
 ﻿Imports System.IO
 
-Public NotInheritable Class Attrib_Type
+Public NotInheritable Class DeviceAttribType
     Public Const Location As String = "LOCATION"
     Public Const ChangeType As String = "CHANGETYPE"
     Public Const EquipType As String = "EQ_TYPE"
     Public Const OSType As String = "OS_TYPE"
     Public Const StatusType As String = "STATUS_TYPE"
+
+End Class
+Public NotInheritable Class SibiAttribType
+
     Public Const SibiStatusType As String = "STATUS"
     Public Const SibiItemStatusType As String = "ITEM_STATUS"
     Public Const SibiRequestType As String = "REQ_TYPE"
     Public Const SibiAttachFolder As String = "ATTACH_FOLDER"
 End Class
 
-Public NotInheritable Class Attrib_Table
-    Public Const Sibi As String = "sibi_codes"
-    Public Const Device As String = "dev_codes"
+Public NotInheritable Class CheckType
+    Public Const Checkin As String = "IN"
+    Public Const Checkout As String = "OUT"
 End Class
 
-Public NotInheritable Class Check_Type
-    Public Const CheckIn As String = "IN"
-    Public Const CheckOut As String = "OUT"
-End Class
-
-Public Enum Entry_Type
+Public Enum EntryType
     Sibi
     Device
 End Enum
 
-Public Enum PDFFormType
+Public Enum PdfFormType
     InputForm
     TransferForm
     DisposeForm
@@ -51,64 +50,61 @@ Public Class DBQueryParameter
     Public Property IsExact As Boolean
     Public Property OperatorString As String
 
-    Public Sub New(ByVal FieldName As String, ByVal Value As Object, OperatorString As String)
-        Me.FieldName = FieldName
-        Me.Value = Value
-        Me.IsExact = False
-        Me.OperatorString = OperatorString
+    Public Sub New(ByVal fieldName As String, ByVal fieldValue As Object, operatorString As String)
+        Me.FieldName = fieldName
+        Me.Value = fieldValue
+        Me.IsExact = IsExact
+        Me.OperatorString = operatorString
     End Sub
 
-
-    Public Sub New(ByVal FieldName As String, ByVal Value As Object, IsExact As Boolean)
-        Me.FieldName = FieldName
-        Me.Value = Value
-        Me.IsExact = IsExact
+    Public Sub New(ByVal fieldName As String, ByVal fieldValue As Object, isExact As Boolean)
+        Me.FieldName = fieldName
+        Me.Value = fieldValue
+        Me.IsExact = isExact
         Me.OperatorString = "AND"
     End Sub
 
-
-    Public Sub New(ByVal FieldName As String, ByVal Value As Object, Optional OperatorString As String = "AND", Optional IsExact As Boolean = False)
-        Me.FieldName = FieldName
-        Me.Value = Value
-        Me.IsExact = IsExact
-        Me.OperatorString = OperatorString
+    Public Sub New(ByVal fieldName As String, ByVal fieldValue As Object, Optional operatorString As String = "AND", Optional isExact As Boolean = False)
+        Me.FieldName = fieldName
+        Me.Value = fieldValue
+        Me.IsExact = isExact
+        Me.OperatorString = operatorString
     End Sub
-
 End Class
 
-Public Class Sibi_Attachment
+Public Class SibiAttachment
     Inherits Attachment
     Public Property SelectedFolder As String
 
-    Sub New(NewFile As String, AttachTable As main_attachments)
-        MyBase.New(NewFile, AttachTable)
+    Sub New(newFile As String, attachTable As AttachmentsBaseCols)
+        MyBase.New(newFile, attachTable)
     End Sub
 
-    Sub New(NewFile As String, FolderGUID As String, AttachTable As main_attachments)
-        MyBase.New(NewFile, FolderGUID, AttachTable)
+    Sub New(newFile As String, folderGUID As String, attachTable As AttachmentsBaseCols)
+        MyBase.New(newFile, folderGUID, attachTable)
     End Sub
 
-    Sub New(NewFile As String, FolderGUID As String, SelectedFolder As String, AttachTable As main_attachments)
-        MyBase.New(NewFile, FolderGUID, AttachTable)
-        Me.SelectedFolder = SelectedFolder
+    Sub New(newFile As String, folderGUID As String, selectedFolder As String, attachTable As AttachmentsBaseCols)
+        MyBase.New(newFile, folderGUID, attachTable)
+        Me.SelectedFolder = selectedFolder
     End Sub
 
-    Sub New(AttachInfoTable As DataTable, SelectedFolder As String, AttachTable As main_attachments)
-        MyBase.New(AttachInfoTable, AttachTable)
-        Me.SelectedFolder = SelectedFolder
+    Sub New(attachInfoTable As DataTable, selectedFolder As String, attachTable As AttachmentsBaseCols)
+        MyBase.New(attachInfoTable, attachTable)
+        Me.SelectedFolder = selectedFolder
     End Sub
 
 End Class
 
-Public Class Device_Attachment
+Public Class DeviceAttachment
     Inherits Attachment
 
-    Sub New(NewFile As String, AttachTable As main_attachments)
-        MyBase.New(NewFile, AttachTable)
+    Sub New(newFile As String, attachTable As AttachmentsBaseCols)
+        MyBase.New(newFile, attachTable)
     End Sub
 
-    Sub New(NewFile As String, FolderGUID As String, AttachTable As main_attachments)
-        MyBase.New(NewFile, FolderGUID, AttachTable)
+    Sub New(newFile As String, folderGUID As String, attachTable As AttachmentsBaseCols)
+        MyBase.New(newFile, folderGUID, attachTable)
     End Sub
 
 End Class
@@ -121,7 +117,7 @@ Public Class Attachment : Implements IDisposable
     Private _folderGUID As String
     Private _MD5 As String
     Private _fileUID As String
-    Private _attachTable As main_attachments
+    Private _attachTable As AttachmentsBaseCols
     Private _dataStream As Stream
 
     Sub New()
@@ -140,42 +136,42 @@ Public Class Attachment : Implements IDisposable
     ''' Create new Attachment from a file path.
     ''' </summary>
     ''' <param name="NewFile">Full path to file.</param>
-    Sub New(NewFile As String, AttachTable As main_attachments)
-        _fileInfo = New FileInfo(NewFile)
+    Sub New(newFile As String, attachTable As AttachmentsBaseCols)
+        _fileInfo = New FileInfo(newFile)
         _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name)
         _fileUID = Guid.NewGuid.ToString
         _MD5 = Nothing
         _fileSize = CInt(_fileInfo.Length)
         _extention = _fileInfo.Extension
         _folderGUID = String.Empty
-        _attachTable = AttachTable
+        _attachTable = attachTable
         _dataStream = _fileInfo.OpenRead
     End Sub
 
-    Sub New(NewFile As String, FolderGUID As String, AttachTable As main_attachments)
-        _fileInfo = New FileInfo(NewFile)
+    Sub New(newFile As String, folderGUID As String, attachTable As AttachmentsBaseCols)
+        _fileInfo = New FileInfo(newFile)
         _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name)
         _fileUID = Guid.NewGuid.ToString
         _MD5 = Nothing
         _fileSize = CInt(_fileInfo.Length)
         _extention = _fileInfo.Extension
-        _folderGUID = FolderGUID
-        _attachTable = AttachTable
+        _folderGUID = folderGUID
+        _attachTable = attachTable
         _dataStream = _fileInfo.OpenRead
     End Sub
 
-    Sub New(AttachInfoTable As DataTable, AttachTable As main_attachments)
-        Dim TableRow As DataRow = AttachInfoTable.Rows(0)
+    Sub New(attachInfoTable As DataTable, attachTable As AttachmentsBaseCols)
+        Dim TableRow As DataRow = attachInfoTable.Rows(0)
         _fileInfo = Nothing
         _dataStream = Nothing
-        _attachTable = AttachTable
+        _attachTable = attachTable
         With TableRow
-            _fileName = .Item(AttachTable.FileName).ToString
-            _fileUID = .Item(AttachTable.FileUID).ToString
-            _MD5 = .Item(AttachTable.FileHash).ToString
-            _fileSize = CInt(.Item(AttachTable.FileSize))
-            _extention = .Item(AttachTable.FileType).ToString
-            _folderGUID = .Item(AttachTable.FKey).ToString
+            _fileName = .Item(attachTable.FileName).ToString
+            _fileUID = .Item(attachTable.FileUID).ToString
+            _MD5 = .Item(attachTable.FileHash).ToString
+            _fileSize = CInt(.Item(attachTable.FileSize))
+            _extention = .Item(attachTable.FileType).ToString
+            _folderGUID = .Item(attachTable.FKey).ToString
         End With
     End Sub
 
@@ -185,7 +181,7 @@ Public Class Attachment : Implements IDisposable
         End Get
     End Property
 
-    Public ReadOnly Property Filename As String
+    Public ReadOnly Property FileName As String
         Get
             If _fileInfo IsNot Nothing Then
                 Return Path.GetFileNameWithoutExtension(_fileInfo.Name)
@@ -195,18 +191,18 @@ Public Class Attachment : Implements IDisposable
         End Get
     End Property
 
-    Public ReadOnly Property FullFilename As String
+    Public ReadOnly Property FullFileName As String
         Get
             If _fileInfo IsNot Nothing Then
                 Return _fileInfo.Name
             Else
-                Return _fileName & Extention
+                Return _fileName & Extension
             End If
         End Get
     End Property
 
 
-    Public ReadOnly Property Extention As String
+    Public ReadOnly Property Extension As String
         Get
             If _fileInfo IsNot Nothing Then
                 Return _fileInfo.Extension
@@ -259,11 +255,11 @@ Public Class Attachment : Implements IDisposable
         End Set
     End Property
 
-    Public Property AttachTable As main_attachments
+    Public Property AttachTable As AttachmentsBaseCols
         Get
             Return _attachTable
         End Get
-        Set(value As main_attachments)
+        Set(value As AttachmentsBaseCols)
             _attachTable = value
         End Set
     End Property
@@ -312,12 +308,12 @@ Public Class Attachment : Implements IDisposable
 
 End Class
 
-Public Class Grid_Theme
+Public Class GridTheme
 
-    Sub New(HighlightCol As Color, CellSelCol As Color, BackCol As Color)
-        RowHighlightColor = HighlightCol
-        CellSelectColor = CellSelCol
-        BackColor = BackCol
+    Sub New(highlightCol As Color, cellSelCol As Color, backCol As Color)
+        RowHighlightColor = highlightCol
+        CellSelectColor = cellSelCol
+        BackColor = backCol
     End Sub
 
     Sub New()

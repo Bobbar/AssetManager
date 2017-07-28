@@ -10,18 +10,18 @@ Public Class UpdateDev
 
     Private NewUpdateInfo As DeviceUpdateInfoStruct
 
-    Sub New(ParentForm As Form, Optional bolNewNote As Boolean = False)
+    Sub New(parentForm As Form, Optional isNoteOnly As Boolean = False)
         InitializeComponent()
-        Icon = ParentForm.Icon
-        Me.Tag = ParentForm
+        Icon = parentForm.Icon
+        Me.Tag = parentForm
         FillComboBox(DeviceIndex.ChangeType, cmbUpdate_ChangeType)
-        If bolNewNote Then
+        If isNoteOnly Then
             cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(DeviceIndex.ChangeType, "NOTE")
             cmbUpdate_ChangeType.Enabled = False
         Else
             cmbUpdate_ChangeType.SelectedIndex = -1
         End If
-        ShowDialog(ParentForm)
+        ShowDialog(parentForm)
     End Sub
 
     Private Sub cmdSubmit_Click(sender As Object, e As EventArgs) Handles cmdSubmit.Click

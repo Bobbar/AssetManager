@@ -11,16 +11,16 @@
 
 #Region "Constructors"
 
-    Sub New(ParentForm As Form)
-        MyParentForm = ParentForm
+    Sub New(parentForm As Form)
+        MyParentForm = parentForm
     End Sub
 
 #End Region
 
 #Region "Methods"
 
-    Public Sub InsertWindowList(TargetToolStrip As MyToolStrip)
-        InitializeDropDownButton(TargetToolStrip)
+    Public Sub InsertWindowList(targetToolStrip As OneClickToolStrip)
+        InitializeDropDownButton(targetToolStrip)
         InitializeTimer()
     End Sub
     Private Sub AddParentMenu()
@@ -38,28 +38,28 @@
     ''' </summary>
     ''' <param name="ParentForm">Form to add to ToolStrip.</param>
     ''' <param name="TargetMenuItem">Item to add the Form item to.</param>
-    Private Sub BuildWindowList(ParentForm As Form, ByRef TargetMenuItem As ToolStripItemCollection)
-        For Each frm As Form In ListOfChilden(ParentForm)
+    Private Sub BuildWindowList(parentForm As Form, ByRef targetMenuItem As ToolStripItemCollection)
+        For Each frm As Form In ListOfChilden(parentForm)
             If HasChildren(frm) Then
                 Dim NewDropDown As ToolStripMenuItem = NewMenuItem(frm)
                 If TypeOf frm Is SibiMainForm Then
-                    TargetMenuItem.Insert(0, NewDropDown)
+                    targetMenuItem.Insert(0, NewDropDown)
                 Else
-                    TargetMenuItem.Add(NewDropDown)
+                    targetMenuItem.Add(NewDropDown)
                 End If
                 BuildWindowList(frm, NewDropDown.DropDownItems)
             Else
                 If TypeOf frm Is SibiMainForm Then
-                    TargetMenuItem.Insert(0, NewMenuItem(frm))
+                    targetMenuItem.Insert(0, NewMenuItem(frm))
                 Else
-                    TargetMenuItem.Add(NewMenuItem(frm))
+                    targetMenuItem.Add(NewMenuItem(frm))
                 End If
             End If
         Next
     End Sub
-    Private Function GetFormFromTag(Tag As Object) As Form
-        If TypeOf Tag Is Form Then
-            Return DirectCast(Tag, Form)
+    Private Function GetFormFromTag(tag As Object) As Form
+        If TypeOf tag Is Form Then
+            Return DirectCast(tag, Form)
         End If
         Return Nothing
     End Function
@@ -72,11 +72,11 @@
         End If
     End Function
 
-    Private Function FormCount(ParentForm As Form) As Integer
+    Private Function FormCount(parentForm As Form) As Integer
         Dim i As Integer = 0
         For Each frm As Form In My.Application.OpenForms
-            If Not frm.IsDisposed And Not frm.Modal And frm IsNot ParentForm Then
-                If frm.Tag Is ParentForm Then
+            If Not frm.IsDisposed And Not frm.Modal And frm IsNot parentForm Then
+                If frm.Tag Is parentForm Then
                     i += FormCount(frm) + 1
                 End If
             End If
@@ -84,22 +84,22 @@
         Return i
     End Function
 
-    Private Function HasChildren(ParentForm As Form) As Boolean
+    Private Function HasChildren(parentForm As Form) As Boolean
         For Each frm As Form In My.Application.OpenForms
-            If frm.Tag Is ParentForm And Not frm.IsDisposed Then
+            If frm.Tag Is parentForm And Not frm.IsDisposed Then
                 Return True
             End If
         Next
         Return False
     End Function
 
-    Private Sub InitializeDropDownButton(TargetToolStrip As MyToolStrip)
+    Private Sub InitializeDropDownButton(targetToolStrip As OneClickToolStrip)
         DropDownControl.Visible = False
-        DropDownControl.Font = TargetToolStrip.Font
+        DropDownControl.Font = targetToolStrip.Font
         DropDownControl.Text = "Select Window"
         DropDownControl.Image = AssetManager.My.Resources.Resources.CascadeIcon
         AddParentMenu()
-        TargetToolStrip.Items.Insert(TargetToolStrip.Items.Count, DropDownControl)
+        targetToolStrip.Items.Insert(targetToolStrip.Items.Count, DropDownControl)
     End Sub
 
     Private Sub InitializeTimer()
@@ -109,10 +109,10 @@
         AddHandler RefreshTimer.Tick, AddressOf RefreshTimer_Tick
     End Sub
 
-    Private Function ListOfChilden(ParentForm As Form) As List(Of Form)
+    Private Function ListOfChilden(parentForm As Form) As List(Of Form)
         Dim tmpList As New List(Of Form)
         For Each frm As Form In My.Application.OpenForms
-            If frm.Tag Is ParentForm And Not frm.IsDisposed Then
+            If frm.Tag Is parentForm And Not frm.IsDisposed Then
                 tmpList.Add(frm)
             End If
         Next
@@ -129,9 +129,9 @@
         AddHandler newitem.MouseDown, AddressOf WindowClick
         Return newitem
     End Function
-    Private Function IsParentForm(Form As Form) As Boolean
+    Private Function IsParentForm(form As Form) As Boolean
         If MyParentForm.Tag IsNot Nothing Then
-            If Form Is GetFormFromTag(MyParentForm.Tag) Then
+            If form Is GetFormFromTag(MyParentForm.Tag) Then
                 Return True
             Else
                 Return False

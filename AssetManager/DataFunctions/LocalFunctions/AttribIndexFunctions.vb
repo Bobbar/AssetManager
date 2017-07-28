@@ -5,7 +5,7 @@
         cmb.Text = ""
         Dim i As Integer = 0
         For Each ComboItem As ComboboxDataStruct In IndexType
-            cmb.Items.Insert(i, ComboItem.strLong)
+            cmb.Items.Insert(i, ComboItem.HumanReadable)
             i += 1
         Next
     End Sub
@@ -15,7 +15,7 @@
         cmb.Text = ""
         Dim i As Integer = 0
         For Each ComboItem As ComboboxDataStruct In IndexType
-            cmb.Items.Insert(i, ComboItem.strLong)
+            cmb.Items.Insert(i, ComboItem.HumanReadable)
             i += 1
         Next
     End Sub
@@ -23,7 +23,7 @@
     Public Function GetDBValue(ByVal CodeIndex() As ComboboxDataStruct, ByVal index As Integer) As String
         Try
             If index > -1 Then
-                Return CodeIndex(index).strShort
+                Return CodeIndex(index).Code
             End If
             Return Nothing
         Catch
@@ -33,18 +33,18 @@
 
     Public Function GetHumanValue(ByVal CodeIndex() As ComboboxDataStruct, ByVal ShortVal As String) As String
         For Each Code As ComboboxDataStruct In CodeIndex
-            If Code.strShort = ShortVal Then Return Code.strLong
+            If Code.Code = ShortVal Then Return Code.HumanReadable
         Next
         Return Nothing
     End Function
 
     Public Function GetHumanValueFromIndex(ByVal CodeIndex() As ComboboxDataStruct, index As Integer) As String
-        Return CodeIndex(index).strLong
+        Return CodeIndex(index).HumanReadable
     End Function
 
     Public Function GetComboIndexFromShort(ByVal CodeIndex() As ComboboxDataStruct, ByVal ShortVal As String) As Integer
         For i As Integer = 0 To UBound(CodeIndex)
-            If CodeIndex(i).strShort = ShortVal Then Return i
+            If CodeIndex(i).Code = ShortVal Then Return i
         Next
         Return Nothing
     End Function
@@ -52,15 +52,15 @@
     Public Sub BuildIndexes()
         Dim BuildIdxs = Task.Run(Sub()
                                      With AssetFunc
-                                         DeviceIndex.Locations = .BuildIndex(Attrib_Table.Device, Attrib_Type.Location)
-                                         DeviceIndex.ChangeType = .BuildIndex(Attrib_Table.Device, Attrib_Type.ChangeType)
-                                         DeviceIndex.EquipType = .BuildIndex(Attrib_Table.Device, Attrib_Type.EquipType)
-                                         DeviceIndex.OSType = .BuildIndex(Attrib_Table.Device, Attrib_Type.OSType)
-                                         DeviceIndex.StatusType = .BuildIndex(Attrib_Table.Device, Attrib_Type.StatusType)
-                                         SibiIndex.StatusType = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiStatusType)
-                                         SibiIndex.ItemStatusType = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiItemStatusType)
-                                         SibiIndex.RequestType = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiRequestType)
-                                         SibiIndex.AttachFolder = .BuildIndex(Attrib_Table.Sibi, Attrib_Type.SibiAttachFolder)
+                                         DeviceIndex.Locations = .BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.Location)
+                                         DeviceIndex.ChangeType = .BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.ChangeType)
+                                         DeviceIndex.EquipType = .BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.EquipType)
+                                         DeviceIndex.OSType = .BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.OSType)
+                                         DeviceIndex.StatusType = .BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.StatusType)
+                                         SibiIndex.StatusType = .BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiStatusType)
+                                         SibiIndex.ItemStatusType = .BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiItemStatusType)
+                                         SibiIndex.RequestType = .BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiRequestType)
+                                         SibiIndex.AttachFolder = .BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiAttachFolder)
                                      End With
                                  End Sub)
         BuildIdxs.Wait()

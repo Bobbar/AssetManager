@@ -1,7 +1,7 @@
 ﻿Public Structure ComboboxDataStruct
-    Public Property strLong As String
-    Public Property strShort As String
-    Public Property strID As String
+    Public Property HumanReadable As String
+    Public Property Code As String
+    Public Property ID As String
 End Structure
 
 Public Structure DeviceStruct
@@ -23,8 +23,8 @@ Public Structure DeviceStruct
     Public Note As String
     Public IsTrackable As Boolean
     Public SibiLink As String
-    Public CheckSum As String
-    Public Hostname As String
+    Public Checksum As String
+    Public HostName As String
     Public Tracking As DeviceTrackingStruct
     Public Historical As DeviceHistoricalStruct
 End Structure
@@ -90,7 +90,7 @@ Public Structure DeviceUpdateInfoStruct
 End Structure
 
 Public Structure LocalUserInfoStruct
-    Public Username As String
+    Public UserName As String
     Public Fullname As String
 
     'Public bolIsAdmin As Boolean
@@ -115,30 +115,30 @@ Public Structure DataGridColumnStruct
     Public ColumnVisible As Boolean
     Public ComboIndex As ComboboxDataStruct()
 
-    Sub New(Name As String, Caption As String, Type As Type)
-        ColumnName = Name
-        ColumnCaption = Caption
-        ColumnType = Type
+    Sub New(name As String, caption As String, type As Type)
+        ColumnName = name
+        ColumnCaption = caption
+        ColumnType = type
         ColumnReadOnly = False
         ColumnVisible = True
         ComboIndex = Nothing
     End Sub
 
-    Sub New(Name As String, Caption As String, Type As Type, ComboIdx() As ComboboxDataStruct)
-        ColumnName = Name
-        ColumnCaption = Caption
-        ColumnType = Type
+    Sub New(name As String, caption As String, type As Type, comboIndex() As ComboboxDataStruct)
+        ColumnName = name
+        ColumnCaption = caption
+        ColumnType = type
         ColumnReadOnly = False
         ColumnVisible = True
-        ComboIndex = ComboIdx
+        Me.ComboIndex = comboIndex
     End Sub
 
-    Sub New(Name As String, Caption As String, Type As Type, IsReadOnly As Boolean, Visible As Boolean)
-        ColumnName = Name
-        ColumnCaption = Caption
-        ColumnType = Type
-        ColumnReadOnly = IsReadOnly
-        ColumnVisible = Visible
+    Sub New(name As String, caption As String, type As Type, isReadOnly As Boolean, visible As Boolean)
+        ColumnName = name
+        ColumnCaption = caption
+        ColumnType = type
+        ColumnReadOnly = isReadOnly
+        ColumnVisible = visible
         ComboIndex = Nothing
     End Sub
 
@@ -148,9 +148,9 @@ Public Structure StatusColumnColorStruct
     Public StatusID As String
     Public StatusColor As Color
 
-    Sub New(ID As String, Color As Color)
-        StatusID = ID
-        StatusColor = Color
+    Sub New(id As String, color As Color)
+        StatusID = id
+        StatusColor = color
     End Sub
 
 End Structure

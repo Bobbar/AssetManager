@@ -1,9 +1,9 @@
 ﻿Public Class CrypterForm
 
-    Sub New(ParentForm As Form)
+    Sub New(parentForm As Form)
         InitializeComponent()
-        Tag = ParentForm
-        Icon = ParentForm.Icon
+        Tag = parentForm
+        Icon = parentForm.Icon
         Show()
     End Sub
 

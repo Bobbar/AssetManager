@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
 
-Public Class Munis_Comms
+Public Class MunisComms
 
 #Region "Fields"
 
@@ -10,29 +10,29 @@ Public Class Munis_Comms
 
 #Region "Methods"
 
-    Public Function Return_MSSQLCommand(strSQLQry As String) As SqlCommand
+    Public Function ReturnSqlCommand(sqlQry As String) As SqlCommand
         Dim conn As SqlConnection = New SqlConnection(MSSQLConnectString)
         Dim cmd As New SqlCommand
         cmd.Connection = conn
-        cmd.CommandText = strSQLQry
+        cmd.CommandText = sqlQry
         Return cmd
     End Function
 
-    Public Function Return_MSSQLTable(strSQLQry As String) As DataTable
+    Public Function ReturnSqlTable(sqlQry As String) As DataTable
         Using conn As SqlConnection = New SqlConnection(MSSQLConnectString),
                     NewTable As New DataTable,
                     da As New SqlDataAdapter
-            da.SelectCommand = New SqlCommand(strSQLQry)
+            da.SelectCommand = New SqlCommand(sqlQry)
             da.SelectCommand.Connection = conn
             da.Fill(NewTable)
             Return NewTable
         End Using
     End Function
 
-    Public Async Function Return_MSSQLTableAsync(strSQLQry As String) As Task(Of DataTable)
+    Public Async Function ReturnSqlTableAsync(sqlQry As String) As Task(Of DataTable)
         Using conn As SqlConnection = New SqlConnection(MSSQLConnectString),
                     NewTable As New DataTable,
-                cmd As New SqlCommand(strSQLQry, conn)
+                cmd As New SqlCommand(sqlQry, conn)
             Await conn.OpenAsync
             Dim dr As SqlDataReader = Await cmd.ExecuteReaderAsync
             NewTable.Load(dr)
@@ -40,7 +40,7 @@ Public Class Munis_Comms
         End Using
     End Function
 
-    Public Function Return_MSSQLTableFromCmd(cmd As SqlCommand) As DataTable
+    Public Function ReturnSqlTableFromCmd(cmd As SqlCommand) As DataTable
         Using NewTable As New DataTable,
                     da As New SqlDataAdapter(cmd)
             da.Fill(NewTable)
@@ -49,7 +49,7 @@ Public Class Munis_Comms
         End Using
     End Function
 
-    Public Async Function Return_MSSQLTableFromCmdAsync(cmd As SqlCommand) As Task(Of DataTable)
+    Public Async Function ReturnSqlTableFromCmdAsync(cmd As SqlCommand) As Task(Of DataTable)
         Using conn = cmd.Connection,
                 NewTable As New DataTable
             Await conn.OpenAsync

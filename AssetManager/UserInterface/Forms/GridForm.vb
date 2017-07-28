@@ -7,21 +7,21 @@ Public Class GridForm
     Private bolGridFilling As Boolean = True
     Private GridList As New List(Of DataGridView)
     Private LastDoubleClickRow As DataGridViewRow
-    Private MyParent As MyForm
+    Private MyParent As ThemedForm
 
 #End Region
 
 #Region "Constructors"
 
-    Sub New(ParentForm As Form, Optional Title As String = "")
-        MyParent = DirectCast(ParentForm, MyForm)
-        Me.Tag = ParentForm
+    Sub New(parentForm As Form, Optional title As String = "")
+        MyParent = DirectCast(parentForm, ThemedForm)
+        Me.Tag = parentForm
         Me.Icon = MyParent.Icon
         Me.GridTheme = MyParent.GridTheme
 
         ' This call is required by the designer.
         InitializeComponent()
-        If Title <> "" Then Me.Text = Title
+        If title <> "" Then Me.Text = title
         ' Add any initialization after the InitializeComponent() call.
 
         DoubleBufferedTableLayout(GridPanel, True)
@@ -49,9 +49,9 @@ Public Class GridForm
 
 #Region "Methods"
 
-    Public Sub AddGrid(Name As String, Label As String, Data As DataTable)
-        Dim NewGrid = GetNewGrid(Name, Label & " (" & Data.Rows.Count.ToString & " rows)")
-        FillGrid(NewGrid, Data)
+    Public Sub AddGrid(name As String, label As String, datatable As DataTable)
+        Dim NewGrid = GetNewGrid(name, label & " (" & datatable.Rows.Count.ToString & " rows)")
+        FillGrid(NewGrid, datatable)
         GridList.Add(NewGrid)
     End Sub
 
@@ -74,8 +74,8 @@ Public Class GridForm
         Me.ResumeLayout()
     End Sub
 
-    Private Sub FillGrid(Grid As DataGridView, Data As DataTable)
-        If Data IsNot Nothing Then Grid.DataSource = Data
+    Private Sub FillGrid(grid As DataGridView, datatable As DataTable)
+        If datatable IsNot Nothing Then grid.DataSource = datatable
     End Sub
 
     Private Function GetActiveGrid() As DataGridView
@@ -85,10 +85,10 @@ Public Class GridForm
         Return Nothing
     End Function
 
-    Private Function GetNewGrid(Name As String, Label As String) As DataGridView
+    Private Function GetNewGrid(name As String, label As String) As DataGridView
         Dim NewGrid As New DataGridView
-        NewGrid.Name = Name
-        NewGrid.Tag = Label
+        NewGrid.Name = name
+        NewGrid.Tag = label
         NewGrid.Dock = DockStyle.Fill
         NewGrid.DefaultCellStyle = GridStyles
         NewGrid.DefaultCellStyle.SelectionBackColor = Me.GridTheme.CellSelectColor

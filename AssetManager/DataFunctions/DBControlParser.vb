@@ -38,32 +38,32 @@ Public Class DBControlInfo
         db_attrib_index = Nothing
     End Sub
 
-    Sub New(DataColumn As String, ParseType As ParseType, Optional Required As Boolean = False)
-        db_column = DataColumn
-        db_required = Required
-        db_parse_type = ParseType
+    Sub New(dataColumn As String, parseType As ParseType, Optional required As Boolean = False)
+        db_column = dataColumn
+        db_required = required
+        db_parse_type = parseType
         db_attrib_index = Nothing
     End Sub
 
-    Sub New(DataColumn As String, Optional Required As Boolean = False)
-        db_column = DataColumn
-        db_required = Required
+    Sub New(dataColumn As String, Optional required As Boolean = False)
+        db_column = dataColumn
+        db_required = required
         db_parse_type = ParseType.UpdateAndDisplay
         db_attrib_index = Nothing
     End Sub
 
-    Sub New(DataColumn As String, AttribIndex As ComboboxDataStruct(), Optional Required As Boolean = False)
-        db_column = DataColumn
-        db_required = Required
+    Sub New(dataColumn As String, attribIndex As ComboboxDataStruct(), Optional required As Boolean = False)
+        db_column = dataColumn
+        db_required = required
         db_parse_type = ParseType.UpdateAndDisplay
-        db_attrib_index = AttribIndex
+        db_attrib_index = attribIndex
     End Sub
 
-    Sub New(DataColumn As String, AttribIndex As ComboboxDataStruct(), ParseType As ParseType, Optional Required As Boolean = False)
-        db_column = DataColumn
-        db_required = Required
-        db_parse_type = ParseType
-        db_attrib_index = AttribIndex
+    Sub New(dataColumn As String, attribIndex As ComboboxDataStruct(), parseType As ParseType, Optional required As Boolean = False)
+        db_column = dataColumn
+        db_required = required
+        db_parse_type = parseType
+        db_attrib_index = attribIndex
     End Sub
 
 #End Region
@@ -138,9 +138,9 @@ Public Class DBControlParser
     ''' <summary>
     ''' Instantiate new instance of <see cref="DBControlParser"/>
     ''' </summary>
-    ''' <param name="Parent">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
-    Sub New(Parent As Form)
-        ParentForm = Parent
+    ''' <param name="parentForm">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
+    Sub New(parentForm As Form)
+        Me.ParentForm = parentForm
     End Sub
 
 #End Region
@@ -150,11 +150,11 @@ Public Class DBControlParser
     ''' <summary>
     ''' Populates all Controls in the ParentForm that have been initiated via <see cref="DBControlInfo"/> with their corresponding column names.
     ''' </summary>
-    ''' <param name="Data">DataTable that contains the rows and columns associated with the controls.</param>
-    Public Sub FillDBFields(Data As DataTable)
+    ''' <param name="data">DataTable that contains the rows and columns associated with the controls.</param>
+    Public Sub FillDBFields(data As DataTable)
         Dim DBCtlList As New List(Of Control)
         GetDBControls(ParentForm, DBCtlList)
-        Dim Row As DataRow = Data.Rows(0)
+        Dim Row As DataRow = data.Rows(0)
         For Each ctl As Control In DBCtlList
             Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
             Select Case True
@@ -194,39 +194,39 @@ Public Class DBControlParser
     ''' <summary>
     ''' Recursively collects list of controls initiated with <see cref="DBControlInfo"/> tags within Parent control.
     ''' </summary>
-    ''' <param name="Parent">Parent control. Usually a Form to being.</param>
-    ''' <param name="ControlList">Blank List of Control to be filled.</param>
-    Public Sub GetDBControls(Parent As Control, ControlList As List(Of Control))
-        For Each ctl As Control In Parent.Controls
+    ''' <param name="parentForm">Parent control. Usually a Form to being.</param>
+    ''' <param name="controlList">Blank List of Control to be filled.</param>
+    Public Sub GetDBControls(parentForm As Control, controlList As List(Of Control))
+        For Each ctl As Control In parentForm.Controls
             Select Case True
                 Case TypeOf ctl.Tag Is DBControlInfo
-                    ControlList.Add(ctl)
+                    controlList.Add(ctl)
             End Select
-            If ctl.HasChildren Then GetDBControls(ctl, ControlList)
+            If ctl.HasChildren Then GetDBControls(ctl, controlList)
         Next
     End Sub
 
-    Public Function GetDBControlValue(DBControl As Control) As Object
-        Dim DBInfo = DirectCast(DBControl.Tag, DBControlInfo)
+    Public Function GetDBControlValue(dbControl As Control) As Object
+        Dim DBInfo = DirectCast(dbControl.Tag, DBControlInfo)
         Select Case True
-            Case TypeOf DBControl Is TextBox
-                Dim dbTxt As TextBox = DirectCast(DBControl, TextBox)
+            Case TypeOf dbControl Is TextBox
+                Dim dbTxt As TextBox = DirectCast(dbControl, TextBox)
                 Return CleanDBValue(dbTxt.Text)
 
-            Case TypeOf DBControl Is MaskedTextBox
-                Dim dbMaskTxt As MaskedTextBox = DirectCast(DBControl, MaskedTextBox)
+            Case TypeOf dbControl Is MaskedTextBox
+                Dim dbMaskTxt As MaskedTextBox = DirectCast(dbControl, MaskedTextBox)
                 Return CleanDBValue(dbMaskTxt.Text)
 
-            Case TypeOf DBControl Is DateTimePicker
-                Dim dbDtPick As DateTimePicker = DirectCast(DBControl, DateTimePicker)
+            Case TypeOf dbControl Is DateTimePicker
+                Dim dbDtPick As DateTimePicker = DirectCast(dbControl, DateTimePicker)
                 Return dbDtPick.Value
 
-            Case TypeOf DBControl Is ComboBox
-                Dim dbCmb As ComboBox = DirectCast(DBControl, ComboBox)
+            Case TypeOf dbControl Is ComboBox
+                Dim dbCmb As ComboBox = DirectCast(dbControl, ComboBox)
                 Return GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex)
 
-            Case TypeOf DBControl Is CheckBox
-                Dim dbChk As CheckBox = DirectCast(DBControl, CheckBox)
+            Case TypeOf dbControl Is CheckBox
+                Dim dbChk As CheckBox = DirectCast(dbControl, CheckBox)
                 Return dbChk.Checked
         End Select
         Return Nothing
@@ -238,14 +238,14 @@ Public Class DBControlParser
     ''' <remarks>
     ''' The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="UpdateDBControlRow(ByRef DataRow)"/>
     ''' </remarks>
-    ''' <param name="SelectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
+    ''' <param name="selectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
     ''' <returns>
     ''' Returns a DataTable with a new row added via <see cref="UpdateDBControlRow(ByRef DataRow)"/>
     ''' </returns>
-    Public Function ReturnInsertTable(SelectQry As String) As DataTable
+    Public Function ReturnInsertTable(selectQry As String) As DataTable
         Dim tmpTable As DataTable
-        Using SQLComm As New MySQL_Comms
-            tmpTable = SQLComm.Return_SQLTable(SelectQry)
+        Using SQLComm As New MySqlComms
+            tmpTable = SQLComm.ReturnMySqlTable(selectQry)
         End Using
         tmpTable.Rows.Add()
         UpdateDBControlRow(tmpTable.Rows(0))
@@ -258,14 +258,14 @@ Public Class DBControlParser
     ''' <remarks>
     ''' The SQL SELECT statement should return a single row only. This is will be the table row that you wish to update.
     ''' </remarks>
-    ''' <param name="SelectQry">A SQL Select query string that will return the table row that is to be updated.</param>
+    ''' <param name="selectQry">A SQL Select query string that will return the table row that is to be updated.</param>
     ''' <returns>
     ''' Returns a DataTable modified by the controls identified by <see cref="GetDBControls(Control, List(Of Control))"/>
     ''' </returns>
-    Public Function ReturnUpdateTable(SelectQry As String) As DataTable
+    Public Function ReturnUpdateTable(selectQry As String) As DataTable
         Dim tmpTable As New DataTable
-        Using SQLComm As New MySQL_Comms
-            tmpTable = SQLComm.Return_SQLTable(SelectQry)
+        Using SQLComm As New MySqlComms
+            tmpTable = SQLComm.ReturnMySqlTable(selectQry)
         End Using
         tmpTable.TableName = "UpdateTable"
         UpdateDBControlRow(tmpTable.Rows(0))

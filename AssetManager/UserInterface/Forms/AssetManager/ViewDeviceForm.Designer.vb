@@ -1,6 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class ViewDeviceForm
-    Inherits MyForm
+    Inherits ThemedForm
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -83,7 +83,7 @@ Partial Class ViewDeviceForm
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.tsSaveModify = New AssetManager.MyToolStrip()
+        Me.tsSaveModify = New AssetManager.OneClickToolStrip()
         Me.cmdAccept_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
@@ -95,7 +95,7 @@ Partial Class ViewDeviceForm
         Me.CheckOutTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckInTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStrip1 = New AssetManager.MyToolStrip()
+        Me.ToolStrip1 = New AssetManager.OneClickToolStrip()
         Me.tsbModify = New System.Windows.Forms.ToolStripButton()
         Me.tsbNewNote = New System.Windows.Forms.ToolStripButton()
         Me.tsbDeleteDevice = New System.Windows.Forms.ToolStripButton()
@@ -1143,7 +1143,7 @@ Partial Class ViewDeviceForm
     Friend WithEvents txtDueBack As TextBox
     Friend WithEvents lblDueBack As Label
     Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents tsSaveModify As MyToolStrip
+    Friend WithEvents tsSaveModify As OneClickToolStrip
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
@@ -1167,7 +1167,7 @@ Partial Class ViewDeviceForm
     Friend WithEvents txtPhoneNumber As MaskedTextBox
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ToolStripContainer1 As ToolStripContainer
-    Friend WithEvents ToolStrip1 As MyToolStrip
+    Friend WithEvents ToolStrip1 As OneClickToolStrip
     Friend WithEvents tsbModify As ToolStripButton
     Friend WithEvents tsbNewNote As ToolStripButton
     Friend WithEvents tsbDeleteDevice As ToolStripButton

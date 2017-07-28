@@ -5,15 +5,15 @@ Public Class UserManagerForm
     Private ModuleIndex As New List(Of AccessGroupStruct)
     Private CurrentUser As LocalUserInfoStruct
     Private DataBinder As New BindingSource
-    Private Qry As String = "SELECT * FROM " & users.TableName
-    Private SQLComms As New MySQL_Comms
-    Private myAdapter As MySqlDataAdapter = SQLComms.Return_Adapter(Qry)
+    Private Qry As String = "SELECT * FROM " & UsersCols.TableName
+    Private SQLComms As New MySqlComms
+    Private myAdapter As MySqlDataAdapter = SQLComms.ReturnMySqlAdapter(Qry)
     Private SelectedRow As Integer
 
-    Sub New(ParentForm As Form)
+    Sub New(parentForm As Form)
         InitializeComponent()
-        Tag = ParentForm
-        Icon = ParentForm.Icon
+        Tag = parentForm
+        Icon = parentForm.Icon
         Show()
     End Sub
 
@@ -39,7 +39,7 @@ Public Class UserManagerForm
         table.Locale = System.Globalization.CultureInfo.InvariantCulture
         myAdapter.Fill(table)
         DataBinder.DataSource = table
-        UserGrid.Columns(users.UID).ReadOnly = True
+        UserGrid.Columns(UsersCols.UID).ReadOnly = True
     End Sub
 
     Private Sub DisplayAccess(intAccessLevel As Integer)
@@ -84,8 +84,8 @@ Public Class UserManagerForm
     End Function
 
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick
-        If TypeOf UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value Is Integer Then
-            DisplayAccess(CInt(UserGrid.Item(GetColIndex(UserGrid, users.AccessLevel), UserGrid.CurrentRow.Index).Value))
+        If TypeOf UserGrid.Item(GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index).Value Is Integer Then
+            DisplayAccess(CInt(UserGrid.Item(GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index).Value))
             GetUserInfo()
         Else
             DisplayAccess(0)
@@ -95,10 +95,10 @@ Public Class UserManagerForm
 
     Private Sub GetUserInfo()
         With CurrentUser
-            .AccessLevel = CInt(GetCurrentCellValue(UserGrid, users.AccessLevel))
-            .Username = GetCurrentCellValue(UserGrid, users.UserName)
-            .GUID = GetCurrentCellValue(UserGrid, users.UID)
-            .Fullname = GetCurrentCellValue(UserGrid, users.FullName)
+            .AccessLevel = CInt(GetCurrentCellValue(UserGrid, UsersCols.AccessLevel))
+            .UserName = GetCurrentCellValue(UserGrid, UsersCols.UserName)
+            .GUID = GetCurrentCellValue(UserGrid, UsersCols.UID)
+            .Fullname = GetCurrentCellValue(UserGrid, UsersCols.FullName)
         End With
     End Sub
 
@@ -121,17 +121,17 @@ Public Class UserManagerForm
 
     Private Sub AddGUIDs()
         For Each rows As DataGridViewRow In UserGrid.Rows
-            If rows.Cells(GetColIndex(UserGrid, users.UID)).EditedFormattedValue.ToString = "" Then
+            If rows.Cells(GetColIndex(UserGrid, UsersCols.UID)).EditedFormattedValue.ToString = "" Then
                 Dim UserUID As String = Guid.NewGuid.ToString
-                rows.Cells(GetColIndex(UserGrid, users.UID)).Value = UserUID
+                rows.Cells(GetColIndex(UserGrid, UsersCols.UID)).Value = UserUID
             End If
         Next
     End Sub
 
     Private Sub AddAccessLevelToGrid()
-        UserGrid.Rows(SelectedRow).Cells(GetColIndex(UserGrid, users.AccessLevel)).Selected = True
+        UserGrid.Rows(SelectedRow).Cells(GetColIndex(UserGrid, UsersCols.AccessLevel)).Selected = True
         UserGrid.BeginEdit(False)
-        UserGrid.Rows(SelectedRow).Cells(GetColIndex(UserGrid, users.AccessLevel)).Value = CalcAccessLevel()
+        UserGrid.Rows(SelectedRow).Cells(GetColIndex(UserGrid, UsersCols.AccessLevel)).Value = CalcAccessLevel()
         UserGrid.EndEdit()
     End Sub
 

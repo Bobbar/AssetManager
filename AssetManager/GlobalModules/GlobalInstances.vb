@@ -1,13 +1,13 @@
-﻿Module Global_Instances
+﻿Module GlobalInstances
 
-    Public Class Sibi_Indexes
+    Public Class SibiIndexes
         Public StatusType() As ComboboxDataStruct
         Public ItemStatusType() As ComboboxDataStruct
         Public RequestType() As ComboboxDataStruct
         Public AttachFolder() As ComboboxDataStruct
     End Class
 
-    Public Class Device_Indexes
+    Public Class DeviceIndexes
         Public Locations() As ComboboxDataStruct
         Public ChangeType() As ComboboxDataStruct
         Public EquipType() As ComboboxDataStruct
@@ -15,10 +15,10 @@
         Public StatusType() As ComboboxDataStruct
     End Class
 
-    Public DeviceIndex As New Device_Indexes
-    Public SibiIndex As New Sibi_Indexes
-    Public MunisFunc As New Munis_Functions
-    Public AssetFunc As New AssetManager_Functions
-    Public FTPFunc As New FTP_Functions
+    Public DeviceIndex As New DeviceIndexes
+    Public SibiIndex As New SibiIndexes
+    Public MunisFunc As New MunisFunctions
+    Public AssetFunc As New AssetManagerFunctions
+    Public FTPFunc As New FtpFunctions
     Public DBFunc As New DBWrapper
 End Module

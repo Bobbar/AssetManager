@@ -9,7 +9,7 @@ Public Class MainForm
 
 #Region "Fields"
 
-    Private Const strShowAllQry As String = "SELECT * FROM " & devices.TableName & " ORDER BY " & devices.Input_DateTime & " DESC"
+    Private Const strShowAllQry As String = "SELECT * FROM " & DevicesCols.TableName & " ORDER BY " & DevicesCols.InputDateTime & " DESC"
     Private bolGridFilling As Boolean = False
     Private LastCommand As DbCommand
     Private MyLiveBox As New LiveBox(Me)
@@ -26,9 +26,9 @@ Public Class MainForm
             Dim cmd = DBFunc.GetCommand()
             Dim strStartQry As String
             If chkHistorical.Checked Then
-                strStartQry = "SELECT * FROM " & historical_dev.TableName & " WHERE "
+                strStartQry = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE "
             Else
-                strStartQry = "SELECT * FROM " & devices.TableName & " WHERE "
+                strStartQry = "SELECT * FROM " & DevicesCols.TableName & " WHERE "
             End If
             Dim strDynaQry As String = ""
             Dim SearchValCol As List(Of DBQueryParameter) = BuildSearchList()
@@ -43,16 +43,16 @@ Public Class MainForm
                             End If
                         Else
                             Select Case fld.FieldName 'use the fixed fields with EQUALS operator instead of LIKE
-                                Case devices.OSVersion
+                                Case DevicesCols.OSVersion
                                     strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                     cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
-                                Case devices.EQType
+                                Case DevicesCols.EQType
                                     strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                     cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
-                                Case devices.Location
+                                Case DevicesCols.Location
                                     strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                     cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
-                                Case devices.Status
+                                Case DevicesCols.Status
                                     strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
                                     cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
                                 Case Else
@@ -79,11 +79,11 @@ Public Class MainForm
         End Try
     End Sub
 
-    Public Sub LoadDevice(ByVal strGUID As String)
-        If Not FormIsOpenByUID(GetType(ViewDeviceForm), strGUID) Then
+    Public Sub LoadDevice(deviceGUID As String)
+        If Not FormIsOpenByUID(GetType(ViewDeviceForm), deviceGUID) Then
             Waiting()
             ResultGrid.Enabled = False
-            Dim NewView As New ViewDeviceForm(Me, strGUID)
+            Dim NewView As New ViewDeviceForm(Me, deviceGUID)
             ResultGrid.Enabled = True
             DoneWaiting()
         End If
@@ -210,7 +210,7 @@ Public Class MainForm
     End Sub
 
     Private Sub cmdSupDevSearch_Click(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
-        Dim results As DataTable = AssetFunc.DevicesBySup(Me)
+        Dim results As DataTable = AssetFunc.DevicesBySupervisor(Me)
         If results IsNot Nothing Then
             SendToGrid(results)
         Else
@@ -235,7 +235,7 @@ Public Class MainForm
                                                    Try
                                                        Dim CanPing As Boolean = My.Computer.Network.Ping(strServerIP)
                                                        If CanPing Then
-                                                           Using LocalSQLComm As New MySQL_Comms(True), cmd = LocalSQLComm.Return_SQLCommand("SELECT NOW()")
+                                                           Using LocalSQLComm As New MySqlComms(True), cmd = LocalSQLComm.ReturnMySqlCommand("SELECT NOW()")
                                                                Dim strTime As String = cmd.ExecuteScalar.ToString
                                                                strServerTime = strTime
                                                            End Using
@@ -369,7 +369,7 @@ Public Class MainForm
         If VerifyAdminCreds() Then
             For Each cell As DataGridViewCell In ResultGrid.SelectedCells
                 Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), cell.RowIndex).Value.ToString
-                Dim SelectedDevice = AssetFunc.Get_DeviceInfo_From_UID(DevUID)
+                Dim SelectedDevice = AssetFunc.GetDeviceInfoFromGUID(DevUID)
                 GKUpdaterForm.AddUpdate(SelectedDevice)
             Next
             If Not GKUpdaterForm.Visible Then GKUpdaterForm.Show()
@@ -411,23 +411,23 @@ Public Class MainForm
     End Sub
 
     Private Sub InitDBControls()
-        txtSerialSearch.Tag = New DBControlInfo(devices.Serial)
-        txtAssetTagSearch.Tag = New DBControlInfo(devices.AssetTag)
-        txtDescription.Tag = New DBControlInfo(devices.Description)
-        cmbEquipType.Tag = New DBControlInfo(devices.EQType, DeviceIndex.EquipType)
-        txtReplaceYear.Tag = New DBControlInfo(devices.ReplacementYear)
-        cmbOSType.Tag = New DBControlInfo(devices.OSVersion, DeviceIndex.OSType)
-        cmbLocation.Tag = New DBControlInfo(devices.Location, DeviceIndex.Locations)
-        txtCurUser.Tag = New DBControlInfo(devices.CurrentUser)
-        cmbStatus.Tag = New DBControlInfo(devices.Status, DeviceIndex.StatusType)
-        chkTrackables.Tag = New DBControlInfo(devices.Trackable)
+        txtSerialSearch.Tag = New DBControlInfo(DevicesCols.Serial)
+        txtAssetTagSearch.Tag = New DBControlInfo(DevicesCols.AssetTag)
+        txtDescription.Tag = New DBControlInfo(DevicesCols.Description)
+        cmbEquipType.Tag = New DBControlInfo(DevicesCols.EQType, DeviceIndex.EquipType)
+        txtReplaceYear.Tag = New DBControlInfo(DevicesCols.ReplacementYear)
+        cmbOSType.Tag = New DBControlInfo(DevicesCols.OSVersion, DeviceIndex.OSType)
+        cmbLocation.Tag = New DBControlInfo(DevicesCols.Location, DeviceIndex.Locations)
+        txtCurUser.Tag = New DBControlInfo(DevicesCols.CurrentUser)
+        cmbStatus.Tag = New DBControlInfo(DevicesCols.Status, DeviceIndex.StatusType)
+        chkTrackables.Tag = New DBControlInfo(DevicesCols.Trackable)
     End Sub
 
     Private Sub InitLiveBox()
-        MyLiveBox.AttachToControl(txtDescription, LiveBoxType.DynamicSearch, devices.Description)
-        MyLiveBox.AttachToControl(txtCurUser, LiveBoxType.DynamicSearch, devices.CurrentUser)
-        MyLiveBox.AttachToControl(txtSerial, LiveBoxType.InstaLoad, devices.Serial, devices.DeviceUID)
-        MyLiveBox.AttachToControl(txtAssetTag, LiveBoxType.InstaLoad, devices.AssetTag, devices.DeviceUID)
+        MyLiveBox.AttachToControl(txtDescription, LiveBoxType.DynamicSearch, DevicesCols.Description)
+        MyLiveBox.AttachToControl(txtCurUser, LiveBoxType.DynamicSearch, DevicesCols.CurrentUser)
+        MyLiveBox.AttachToControl(txtSerial, LiveBoxType.InstaLoad, DevicesCols.Serial, DevicesCols.DeviceUID)
+        MyLiveBox.AttachToControl(txtAssetTag, LiveBoxType.InstaLoad, DevicesCols.AssetTag, DevicesCols.DeviceUID)
     End Sub
 
     Private Sub LoadProgram()
@@ -555,18 +555,18 @@ Public Class MainForm
                 table.Columns.Add("Modified", GetType(Date))
                 table.Columns.Add("GUID", GetType(String))
                 For Each r As DataRow In Results.Rows
-                    table.Rows.Add(r.Item(devices.CurrentUser),
-                              r.Item(devices.AssetTag),
-                              r.Item(devices.Serial),
-                               GetHumanValue(DeviceIndex.EquipType, r.Item(devices.EQType).ToString),
-                               r.Item(devices.Description),
-                               GetHumanValue(DeviceIndex.OSType, r.Item(devices.OSVersion).ToString),
-                               GetHumanValue(DeviceIndex.Locations, r.Item(devices.Location).ToString),
-                               r.Item(devices.PO),
-                               r.Item(devices.PurchaseDate),
-                              r.Item(devices.ReplacementYear),
-                              r.Item(devices.LastMod_Date),
-                              r.Item(devices.DeviceUID))
+                    table.Rows.Add(r.Item(DevicesCols.CurrentUser),
+                              r.Item(DevicesCols.AssetTag),
+                              r.Item(DevicesCols.Serial),
+                               GetHumanValue(DeviceIndex.EquipType, r.Item(DevicesCols.EQType).ToString),
+                               r.Item(DevicesCols.Description),
+                               GetHumanValue(DeviceIndex.OSType, r.Item(DevicesCols.OSVersion).ToString),
+                               GetHumanValue(DeviceIndex.Locations, r.Item(DevicesCols.Location).ToString),
+                               r.Item(DevicesCols.PO),
+                               r.Item(DevicesCols.PurchaseDate),
+                              r.Item(DevicesCols.ReplacementYear),
+                              r.Item(DevicesCols.LastModDate),
+                              r.Item(DevicesCols.DeviceUID))
                 Next
                 bolGridFilling = True
                 ResultGrid.DataSource = table

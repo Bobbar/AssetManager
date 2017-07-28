@@ -1,4 +1,4 @@
-﻿Public Class MyTreeView
+﻿Public Class CorrectedTreeView
     Inherits TreeView
 
     Protected Overrides Sub WndProc(ByRef m As Message)

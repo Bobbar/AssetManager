@@ -8,9 +8,9 @@
 
 #Region "Constructors"
 
-    Sub New(ParentForm As Form)
+    Sub New(parentForm As Form)
         InitDropDown()
-        InitToolItems(ParentForm)
+        InitToolItems(parentForm)
     End Sub
 
 #End Region
@@ -22,37 +22,37 @@
     ''' </summary>
     ''' <param name="TargetStrip"></param>
     ''' <param name="LocationIndex"></param>
-    Public Sub InsertMunisDropDown(TargetStrip As MyToolStrip, Optional LocationIndex As Integer = -1)
-        If LocationIndex >= 0 Then
-            TargetStrip.Items.Insert(LocationIndex, MunisDropDown)
-            AddSeperators(TargetStrip, LocationIndex)
+    Public Sub InsertMunisDropDown(targetStrip As OneClickToolStrip, Optional locationIndex As Integer = -1)
+        If locationIndex >= 0 Then
+            targetStrip.Items.Insert(locationIndex, MunisDropDown)
+            AddSeperators(targetStrip, locationIndex)
         Else
-            TargetStrip.Items.Add(MunisDropDown)
-            AddSeperators(TargetStrip, TargetStrip.Items.Count - 1)
+            targetStrip.Items.Add(MunisDropDown)
+            AddSeperators(targetStrip, targetStrip.Items.Count - 1)
         End If
     End Sub
 
-    Private Sub AddSeperators(ByRef TargetToolStrip As MyToolStrip, LocationIndex As Integer)
-        If TargetToolStrip.Items.Count - 1 >= LocationIndex + 1 Then
-            If TargetToolStrip.Items(LocationIndex + 1).GetType IsNot GetType(ToolStripSeparator) Then
-                TargetToolStrip.Items.Insert(LocationIndex + 1, New ToolStripSeparator)
+    Private Sub AddSeperators(ByRef targetToolStrip As OneClickToolStrip, locationIndex As Integer)
+        If targetToolStrip.Items.Count - 1 >= locationIndex + 1 Then
+            If targetToolStrip.Items(locationIndex + 1).GetType IsNot GetType(ToolStripSeparator) Then
+                targetToolStrip.Items.Insert(locationIndex + 1, New ToolStripSeparator)
             End If
-            If TargetToolStrip.Items(LocationIndex - 1).GetType IsNot GetType(ToolStripSeparator) Then
-                TargetToolStrip.Items.Insert(LocationIndex, New ToolStripSeparator)
+            If targetToolStrip.Items(locationIndex - 1).GetType IsNot GetType(ToolStripSeparator) Then
+                targetToolStrip.Items.Insert(locationIndex, New ToolStripSeparator)
             End If
         Else
-            If TargetToolStrip.Items(LocationIndex).GetType IsNot GetType(ToolStripSeparator) Then
-                TargetToolStrip.Items.Add(New ToolStripSeparator)
+            If targetToolStrip.Items(locationIndex).GetType IsNot GetType(ToolStripSeparator) Then
+                targetToolStrip.Items.Add(New ToolStripSeparator)
             End If
-            If TargetToolStrip.Items(LocationIndex - 1).GetType IsNot GetType(ToolStripSeparator) Then
-                TargetToolStrip.Items.Insert(LocationIndex, New ToolStripSeparator)
+            If targetToolStrip.Items(locationIndex - 1).GetType IsNot GetType(ToolStripSeparator) Then
+                targetToolStrip.Items.Insert(locationIndex, New ToolStripSeparator)
             End If
         End If
     End Sub
 
-    Private Sub AddToolItem(ToolItem As ToolStripMenuItem)
-        MunisDropDown.DropDownItems.Add(ToolItem)
-        AddHandler ToolItem.Click, AddressOf ToolItemClicked
+    Private Sub AddToolItem(toolItem As ToolStripMenuItem)
+        MunisDropDown.DropDownItems.Add(toolItem)
+        AddHandler toolItem.Click, AddressOf ToolItemClicked
     End Sub
 
     Private Sub InitDropDown()
@@ -63,23 +63,23 @@
         MunisDropDown.AutoSize = True
     End Sub
 
-    Private Sub InitToolItems(ParentForm As Form)
+    Private Sub InitToolItems(parentForm As Form)
         Dim ToolItemList As New List(Of ToolStripMenuItem)
-        ToolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", Sub() MunisFunc.NameSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", Sub() MunisFunc.OrgObSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", Sub() MunisFunc.POSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", Sub() MunisFunc.ReqSearch(ParentForm)))
-        ToolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", Sub() MunisFunc.AssetSearch(ParentForm)))
+        ToolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", Sub() MunisFunc.NameSearch(parentForm)))
+        ToolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", Sub() MunisFunc.OrgObSearch(parentForm)))
+        ToolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", Sub() MunisFunc.POSearch(parentForm)))
+        ToolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", Sub() MunisFunc.ReqSearch(parentForm)))
+        ToolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", Sub() MunisFunc.AssetSearch(parentForm)))
         For Each item In ToolItemList
             AddToolItem(item)
         Next
     End Sub
 
-    Private Function NewToolItem(Name As String, Text As String, ClickMethod As Action) As ToolStripMenuItem
+    Private Function NewToolItem(name As String, text As String, clickMethod As Action) As ToolStripMenuItem
         Dim TSM As New ToolStripMenuItem
-        TSM.Name = Name
-        TSM.Text = Text
-        TSM.Tag = ClickMethod
+        TSM.Name = name
+        TSM.Text = text
+        TSM.Tag = clickMethod
         Return TSM
     End Function
     Private Sub ToolItemClicked(sender As Object, e As EventArgs)

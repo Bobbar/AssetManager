@@ -1,7 +1,7 @@
 ﻿''' <summary>
 ''' Modified Toolstrip that responds to clicks as soon as the parent form is activated. As opposed to requiring two clicks (one to activate, another to focus).
 ''' </summary>
-Public Class MyToolStrip
+Public Class OneClickToolStrip
 
     Sub New()
         MyBase.New
