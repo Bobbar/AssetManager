@@ -451,10 +451,10 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                     If Not IsNothing(File) Then
                         UploadAttachments(DirectCast(File, String()))
                     End If
-                Case AttachObject.GetDataPresent("FileDrop")
-                    File = AttachObject.GetData("FileNameW")
-                    If Not IsNothing(File) Then
-                        UploadAttachments(DirectCast(File, String()))
+                Case AttachObject.GetDataPresent(DataFormats.FileDrop)
+                    Dim Files() = CType(AttachObject.GetData(DataFormats.FileDrop), String())
+                    If Not IsNothing(Files) Then
+                        UploadAttachments(Files)
                     End If
             End Select
         Catch ex As Exception
