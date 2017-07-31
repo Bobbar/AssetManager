@@ -4,14 +4,13 @@ Option Compare Binary
 Imports System.ComponentModel
 Imports System.IO
 Imports System.Runtime.InteropServices
-Imports MySql.Data.MySqlClient
 Imports System.Threading
+Imports MySql.Data.MySqlClient
 
 Class AttachmentsForm
 
 #Region "Fields"
 
-    ' Public bolAdminMode As Boolean = False
     Private AttachFolderUID As String
     Private Const FileSizeMBLimit As Short = 150
     Private _attachTable As AttachmentsBaseCols
@@ -22,6 +21,7 @@ Class AttachmentsForm
     Private bolGridFilling As Boolean
     Private taskCancelTokenSource As CancellationTokenSource
     Private TransferTaskRunning As Boolean = False
+
     ''' <summary>
     ''' "ftp://  strServerIP  /attachments/  CurrentDB  /"
     ''' </summary>
@@ -97,6 +97,7 @@ Class AttachmentsForm
     Public Function ActiveTransfer() As Boolean
         Return TransferTaskRunning
     End Function
+
     Public Sub CancelTransfers()
         taskCancelTokenSource.Cancel()
     End Sub
@@ -117,11 +118,7 @@ Class AttachmentsForm
                     If TypeOf _attachTable Is SibiAttachmentsCols Then
                         table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), GetHumanValue(SibiIndex.AttachFolder, r.Item(_attachTable.Folder).ToString), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                     Else
-                        'If bolAdminMode Then
-                        '    table.Rows.Add(strFullFilename, strFileSizeHuman, r.Item(_attachTable.TimeStamp), r.Item(devices.AssetTag), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
-                        'Else
                         table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
-                        ' End If
                     End If
                 Next
                 bolGridFilling = True
@@ -143,62 +140,6 @@ Class AttachmentsForm
         StatusLabel.Invalidate()
     End Sub
 
-    Private Sub AttachGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellDoubleClick
-        DownloadAndOpenAttachment(SelectedAttachment)
-    End Sub
-
-    Private Sub AttachGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellEnter
-        If Not bolGridFilling Then
-            HighlightRow(AttachGrid, GridTheme, e.RowIndex)
-        End If
-    End Sub
-
-    Private Sub AttachGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellLeave
-        LeaveRow(AttachGrid, GridTheme, e.RowIndex)
-    End Sub
-
-    Private Sub AttachGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseDown
-        If e.ColumnIndex >= 0 And e.RowIndex >= 0 Then
-            If e.Button = MouseButtons.Right And Not AttachGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
-                AttachGrid.Rows(e.RowIndex).Selected = True
-                AttachGrid.CurrentCell = AttachGrid(e.ColumnIndex, e.RowIndex)
-            End If
-        End If
-    End Sub
-
-    Private Sub AttachGrid_CellMouseUp(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseUp
-        bolDragging = False
-    End Sub
-
-    Private Sub AttachGrid_DragDrop(sender As Object, e As DragEventArgs) Handles AttachGrid.DragDrop
-        If Not bolAllowDrag Then ProcessDrop(e.Data)
-    End Sub
-
-    Private Sub AttachGrid_DragLeave(sender As Object, e As EventArgs) Handles AttachGrid.DragLeave
-        bolDragging = False
-    End Sub
-
-    Private Sub AttachGrid_DragOver(sender As Object, e As DragEventArgs) Handles AttachGrid.DragOver
-        e.Effect = DragDropEffects.Copy
-    End Sub
-
-    Private Sub AttachGrid_MouseDown(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseDown
-        If bolAllowDrag Then
-            MouseIsDragging(e.Location)
-        End If
-    End Sub
-
-    Private Sub AttachGrid_MouseMove(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseMove
-        If bolAllowDrag And Not bolDragging Then
-            If e.Button = MouseButtons.Left Then
-                If MouseIsDragging(, e.Location) AndAlso AttachGrid.CurrentRow IsNot Nothing Then
-                    bolDragging = True
-                    DownloadAndSaveAttachment(SelectedAttachment)
-                End If
-            End If
-        End If
-    End Sub
-
     Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If ActiveTransfer() Then
             e.Cancel = True
@@ -210,41 +151,14 @@ Class AttachmentsForm
         PurgeTempDir()
     End Sub
 
-    Private Sub chkAllowDrag_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowDrag.CheckedChanged
-        If chkAllowDrag.CheckState = CheckState.Checked Then
-            bolAllowDrag = True
-            AttachGrid.MultiSelect = False
-            AttachGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        Else
-            bolAllowDrag = False
-            AttachGrid.MultiSelect = True
-            AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect
-        End If
-    End Sub
-
-    Private Sub cmbFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFolder.SelectedIndexChanged
-        If Visible Then
-            ListAttachments()
-            strSelectedFolder = GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
-        End If
-    End Sub
-
-    Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
-        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+    Private Sub MoveAttachmentFolder()
+        If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
         If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(SelectedAttachment, GetDBValue(SibiIndex.AttachFolder, cmbMoveFolder.SelectedIndex))
     End Sub
 
-    Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
-        DeleteAttachment(SelectedAttachment)
-    End Sub
-
-    Private Sub cmdOpen_Click(sender As Object, e As EventArgs) Handles cmdOpen.Click
-        DownloadAndOpenAttachment(SelectedAttachment)
-    End Sub
-
-    Private Sub cmdUpload_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
+    Private Sub UploadFileDialog()
         Try
-            If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+            If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
             Using fd As OpenFileDialog = New OpenFileDialog()
                 fd.ShowHelp = True
                 fd.Title = "Select File To Upload - " & FileSizeMBLimit & "MB Limit"
@@ -281,18 +195,11 @@ Class AttachmentsForm
         End Try
     End Function
 
-    Private Sub CopyTextTool_Click(sender As Object, e As EventArgs) Handles CopyTextTool.Click
-        Clipboard.SetDataObject(Me.AttachGrid.GetClipboardContent())
-    End Sub
-
-    Private Sub DeleteAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteAttachmentToolStripMenuItem.Click
-        DeleteAttachment(SelectedAttachment)
-    End Sub
-
     Private Sub DoneWaiting()
         SetWaitCursor(False)
         StatusBar("Idle...")
     End Sub
+
     Private Async Function DownloadAttachment(AttachUID As String) As Task(Of Attachment)
         If TransferTaskRunning Then Return Nothing
         TransferTaskRunning = True
@@ -360,7 +267,7 @@ Class AttachmentsForm
     Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
         Try
             Select Case DataFormat
-                Case "RenPrivateItem" '"FileGroupDescriptor"
+                Case "RenPrivateItem"
                     Using streamFileName As MemoryStream = DirectCast(AttachObject.GetData("FileGroupDescriptor"), MemoryStream)
                         streamFileName.Position = 0
                         Dim sr As New StreamReader(streamFileName)
@@ -387,12 +294,7 @@ Class AttachmentsForm
                     strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex) & "' AND " & _attachTable.FKey & " ='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
             End Select
         Else
-            'If bolAdminMode Then 'TODO: include all attachment type tables for admin mode
-
-            '    strQry = "Select * FROM " & _attachTable.TableName & "," & _attachTable.TableName & " WHERE " & devices.DeviceUID & " = " & _attachTable.FKey & " ORDER BY " & _attachTable.TimeStamp & " DESC"
-            'ElseIf Not bolAdminMode Then
             strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachDevice.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
-            '  End If
         End If
         Return strQry
     End Function
@@ -415,21 +317,12 @@ Class AttachmentsForm
             table.Columns.Add("AttachUID", GetType(String))
             table.Columns.Add("MD5", GetType(String))
         Else
-            'If bolAdminMode Then
-            '    table.Columns.Add("Filename", GetType(String))
-            '    table.Columns.Add("Size", GetType(String))
-            '    table.Columns.Add("Date", GetType(String))
-            '    table.Columns.Add("Device", GetType(String))
-            '    table.Columns.Add("AttachUID", GetType(String))
-            '    table.Columns.Add("MD5", GetType(String))
-            'ElseIf Not bolAdminMode Then
             table.Columns.Add(" ", GetType(Image))
             table.Columns.Add("Filename", GetType(String))
             table.Columns.Add("Size", GetType(String))
             table.Columns.Add("Date", GetType(String))
             table.Columns.Add("AttachUID", GetType(String))
             table.Columns.Add("MD5", GetType(String))
-            '  End If
         End If
         Return table
     End Function
@@ -549,10 +442,6 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         Return DownloadPath & attachment.FileName & strTimeStamp & attachment.Extension
     End Function
 
-    Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
-        DownloadAndOpenAttachment(SelectedAttachment)
-    End Sub
-
     Private Sub ProcessDrop(AttachObject As IDataObject)
         Try
             Dim File As Object
@@ -571,19 +460,6 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
-    End Sub
-
-    Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
-        Progress.Tick()
-        If Progress.BytesMoved > 0 Then
-            statMBPS.Text = Progress.Throughput.ToString("0.00") & " MB/s"
-
-            ProgressBar1.Value = CInt(Progress.Percent)
-            If Progress.Percent > 1 Then ProgressBar1.Value = ProgressBar1.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
-            ProgressBar1.Value = CInt(Progress.Percent)
-        Else
-            statMBPS.Text = String.Empty
-        End If
     End Sub
 
     Private Sub RefreshAttachCount()
@@ -605,9 +481,9 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         End Try
     End Sub
 
-    Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
+    Private Sub RenameAttachmentDialog()
         Try
-            If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+            If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
             Dim strCurrentFileName As String = AssetFunc.GetSqlValue(_attachTable.TableName, _attachTable.FileUID, SelectedAttachment, _attachTable.FileName)
             Dim strAttachUID As String = SelectedAttachment()
             Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
@@ -630,7 +506,6 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                 Waiting()
                 If AssetFunc.DeleteSqlAttachment(GetSQLAttachment(AttachUID)) > 0 Then
                     ListAttachments()
-                    ' blah = Message("'" & strFilename & "' has been deleted.", vbOKOnly + vbInformation, "Deleted")
                 Else
                     blah = Message("Deletion failed!", vbOKOnly + vbExclamation, "Unexpected Results", Me)
                 End If
@@ -640,10 +515,6 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         Finally
             DoneWaiting()
         End Try
-    End Sub
-
-    Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
-        CancelTransfers()
     End Sub
 
     Private Sub UploadFile(Files() As String)
@@ -785,7 +656,6 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     Private Sub WorkerFeedback(WorkerRunning As Boolean)
         If Not ProgramEnding Then
             If WorkerRunning Then
-                ' SetWaitCursor(True)
                 ProgressBar1.Value = 0
                 ProgressBar1.Visible = True
                 cmdCancel.Visible = True
@@ -806,10 +676,6 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         End If
     End Sub
 
-    Private Sub SaveToMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToMenuItem.Click
-        DownloadAndSaveAttachment(SelectedAttachment)
-    End Sub
-
     Private Function SelectedAttachment() As String
         Dim AttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
         If AttachUID <> "" Then
@@ -823,36 +689,176 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         AttachGrid.ClearSelection()
         bolGridFilling = False
     End Sub
+
+#Region "Control Event Methods"
+
+    Private Sub AttachGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellDoubleClick
+        DownloadAndOpenAttachment(SelectedAttachment)
+    End Sub
+
+    Private Sub AttachGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellEnter
+        If Not bolGridFilling Then
+            HighlightRow(AttachGrid, GridTheme, e.RowIndex)
+        End If
+    End Sub
+
+    Private Sub AttachGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellLeave
+        LeaveRow(AttachGrid, GridTheme, e.RowIndex)
+    End Sub
+
+    Private Sub AttachGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseDown
+        If e.ColumnIndex >= 0 And e.RowIndex >= 0 Then
+            If e.Button = MouseButtons.Right And Not AttachGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
+                AttachGrid.Rows(e.RowIndex).Selected = True
+                AttachGrid.CurrentCell = AttachGrid(e.ColumnIndex, e.RowIndex)
+            End If
+        End If
+    End Sub
+
+    Private Sub AttachGrid_CellMouseUp(sender As Object, e As DataGridViewCellMouseEventArgs) Handles AttachGrid.CellMouseUp
+        bolDragging = False
+    End Sub
+
+    Private Sub AttachGrid_DragDrop(sender As Object, e As DragEventArgs) Handles AttachGrid.DragDrop
+        If Not bolAllowDrag Then ProcessDrop(e.Data)
+    End Sub
+
+    Private Sub AttachGrid_DragLeave(sender As Object, e As EventArgs) Handles AttachGrid.DragLeave
+        bolDragging = False
+    End Sub
+
+    Private Sub AttachGrid_DragOver(sender As Object, e As DragEventArgs) Handles AttachGrid.DragOver
+        e.Effect = DragDropEffects.Copy
+    End Sub
+
+    Private Sub AttachGrid_MouseDown(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseDown
+        If bolAllowDrag Then
+            MouseIsDragging(e.Location)
+        End If
+    End Sub
+
+    Private Sub AttachGrid_MouseMove(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseMove
+        If bolAllowDrag And Not bolDragging Then
+            If e.Button = MouseButtons.Left Then
+                If MouseIsDragging(, e.Location) AndAlso AttachGrid.CurrentRow IsNot Nothing Then
+                    bolDragging = True
+                    DownloadAndSaveAttachment(SelectedAttachment)
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub chkAllowDrag_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowDrag.CheckedChanged
+        If chkAllowDrag.CheckState = CheckState.Checked Then
+            bolAllowDrag = True
+            AttachGrid.MultiSelect = False
+            AttachGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        Else
+            bolAllowDrag = False
+            AttachGrid.MultiSelect = True
+            AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect
+        End If
+    End Sub
+
+    Private Sub cmbFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFolder.SelectedIndexChanged
+        If Visible Then
+            ListAttachments()
+            strSelectedFolder = GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
+        End If
+    End Sub
+
+    Private Sub cmbMoveFolder_DropDownClosed(sender As Object, e As EventArgs) Handles cmbMoveFolder.DropDownClosed
+        MoveAttachmentFolder()
+    End Sub
+
+    Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
+        DeleteAttachment(SelectedAttachment)
+    End Sub
+
+    Private Sub cmdOpen_Click(sender As Object, e As EventArgs) Handles cmdOpen.Click
+        DownloadAndOpenAttachment(SelectedAttachment)
+    End Sub
+
+    Private Sub cmdUpload_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
+        UploadFileDialog()
+    End Sub
+
+    Private Sub CopyTextTool_Click(sender As Object, e As EventArgs) Handles CopyTextTool.Click
+        Clipboard.SetDataObject(Me.AttachGrid.GetClipboardContent())
+    End Sub
+
+    Private Sub DeleteAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteAttachmentToolStripMenuItem.Click
+        DeleteAttachment(SelectedAttachment)
+    End Sub
+
+    Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
+        DownloadAndOpenAttachment(SelectedAttachment)
+    End Sub
+
+    Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
+        Progress.Tick()
+        If Progress.BytesMoved > 0 Then
+            statMBPS.Text = Progress.Throughput.ToString("0.00") & " MB/s"
+
+            ProgressBar1.Value = CInt(Progress.Percent)
+            If Progress.Percent > 1 Then ProgressBar1.Value = ProgressBar1.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
+            ProgressBar1.Value = CInt(Progress.Percent)
+        Else
+            statMBPS.Text = String.Empty
+        End If
+    End Sub
+
+    Private Sub RenameStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameStripMenuItem.Click
+        RenameAttachmentDialog()
+    End Sub
+
+    Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
+        CancelTransfers()
+    End Sub
+
+    Private Sub SaveToMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToMenuItem.Click
+        DownloadAndSaveAttachment(SelectedAttachment)
+    End Sub
+
 #End Region
 
+#End Region
 
     Private Class FileIcon
         Private Const MAX_PATH As Int32 = 260
         Private Const SHGFI_ICON As Int32 = &H100
         Private Const SHGFI_USEFILEATTRIBUTES As Int32 = &H10
         Private Const FILE_ATTRIBUTE_NORMAL As Int32 = &H80
+
         Private Structure SHFILEINFO
             Public hIcon As IntPtr
             Public iIcon As Int32
             Public dwAttributes As Int32
+
             <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=MAX_PATH)>
             Public szDisplayName As String
+
             <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=80)>
             Public szTypeName As String
+
         End Structure
+
         Private Enum IconSize
             SHGFI_LARGEICON = 0
             SHGFI_SMALLICON = 1
         End Enum
+
         Private Declare Ansi Function SHGetFileInfo Lib "shell32.dll" (
                     ByVal pszPath As String,
                     ByVal dwFileAttributes As Int32,
                     ByRef psfi As SHFILEINFO,
                     ByVal cbFileInfo As Int32,
                     ByVal uFlags As Int32) As IntPtr
+
         <DllImport("user32.dll", SetLastError:=True)>
         Private Shared Function DestroyIcon(ByVal hIcon As IntPtr) As Boolean
         End Function
+
         Public Shared Function GetFileIcon(ByVal fileExt As String) As Bitmap ', Optional ByVal ICOsize As IconSize = IconSize.SHGFI_SMALLICON
             Try
                 Dim ICOSize As IconSize = IconSize.SHGFI_SMALLICON
@@ -868,7 +874,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
             End Try
             Return Nothing
         End Function
-    End Class
 
+    End Class
 
 End Class

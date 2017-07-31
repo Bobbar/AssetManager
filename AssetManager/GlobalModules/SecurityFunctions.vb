@@ -176,17 +176,17 @@ Module SecurityFunctions
     End Function
 
     Public NotInheritable Class AccessGroup
-        Public Const Add As String = "add"
+        Public Const AddDevice As String = "add"
         Public Const CanRun As String = "can_run"
-        Public Const Delete As String = "delete"
+        Public Const DeleteDevice As String = "delete"
         Public Const ManageAttachment As String = "manage_attach"
-        Public Const Modify As String = "modify"
+        Public Const ModifyDevice As String = "modify"
         Public Const Tracking As String = "track"
         Public Const ViewAttachment As String = "view_attach"
-        Public Const Sibi_View As String = "sibi_view"
-        Public Const Sibi_Add As String = "sibi_add"
-        Public Const Sibi_Modify As String = "sibi_modify"
-        Public Const Sibi_Delete As String = "sibi_delete"
+        Public Const ViewSibi As String = "sibi_view"
+        Public Const AddSibi As String = "sibi_add"
+        Public Const ModifySibi As String = "sibi_modify"
+        Public Const DeleteSibi As String = "sibi_delete"
         Public Const IsAdmin As String = "admin"
         Public Const AdvancedSearch As String = "advanced_search"
     End Class

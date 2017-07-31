@@ -9,7 +9,7 @@ Public Class SibiManageRequestForm
 
     Private CurrentRequest As RequestStruct
     Private CurrentHash As String
-    Private bolUpdating As Boolean = False
+    Private IsModifying As Boolean = False
     Private bolNewRequest As Boolean = False
     Private bolDragging As Boolean = False
     Private bolFieldsValid As Boolean
@@ -57,14 +57,14 @@ Public Class SibiManageRequestForm
         CurrentRequest = Nothing
         DisableControls(Me)
         ToolStrip.BackColor = colSibiToolBarColor
-        bolUpdating = False
+        IsModifying = False
         bolNewRequest = False
         fieldErrorIcon.Clear()
     End Sub
 
     Private Sub NewRequest()
-        If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
-        If bolUpdating Then
+        If Not CheckForAccess(AccessGroup.AddSibi) Then Exit Sub
+        If IsModifying Then
             Dim blah = Message("All current changes will be lost. Are you sure you want to create a new request?", vbOKCancel + vbQuestion, "Create New Request", Me)
             If blah <> vbOK Then
                 Exit Sub
@@ -75,7 +75,7 @@ Public Class SibiManageRequestForm
         SetTitle(True)
         CurrentRequest.GUID = Guid.NewGuid.ToString
         Me.FormUID = CurrentRequest.GUID
-        bolUpdating = True
+        IsModifying = True
         SetupGrid(RequestItemsGrid, RequestItemsColumns)
 
         Using Comms As New MySqlComms 'Set the datasource to a new empty DB table.
@@ -180,6 +180,7 @@ VALUES
     End Function
 
     Private Sub AddNewRequest()
+        If Not CheckForAccess(AccessGroup.AddSibi) Then Exit Sub
         If Not ValidateFields() Then Exit Sub
         Dim RequestData As RequestStruct = CollectData()
         Try
@@ -199,7 +200,7 @@ VALUES
                 Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
                 ParentForm.RefreshResults()
             End If
-            bolUpdating = False
+            IsModifying = False
             bolNewRequest = False
             OpenRequest(CurrentRequest.GUID)
         Catch ex As Exception
@@ -209,7 +210,7 @@ VALUES
 
     Private Sub AddNote()
         Try
-            If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+            If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
             If CurrentRequest.GUID <> "" And Not bolNewRequest Then
                 Dim NewNote As New SibiNotesForm(Me, CurrentRequest)
                 If NewNote.DialogResult = DialogResult.OK Then
@@ -332,11 +333,10 @@ VALUES
         ToolStrip.BackColor = colSibiToolBarColor
         HideEditControls()
         UpdateRequest()
-        bolUpdating = False
+        IsModifying = False
     End Sub
 
     Private Sub cmdAddNew_Click(sender As Object, e As EventArgs) Handles cmdAddNew.Click
-        If Not CheckForAccess(AccessGroup.Sibi_Add) Then Exit Sub
         AddNewRequest()
     End Sub
 
@@ -344,13 +344,17 @@ VALUES
         AddNote()
     End Sub
 
-    Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
+    Private Sub ViewAttachments()
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen(Me) Then
             If CurrentRequest.GUID <> "" And Not bolNewRequest Then
                 Dim NewAttach As New AttachmentsForm(Me, New SibiAttachmentsCols, CurrentRequest)
             End If
         End If
+    End Sub
+
+    Private Sub cmdAttachments_Click(sender As Object, e As EventArgs) Handles cmdAttachments.Click
+        ViewAttachments()
     End Sub
 
     Private Sub cmdClearAll_Click(sender As Object, e As EventArgs)
@@ -362,9 +366,9 @@ VALUES
         NewRequest()
     End Sub
 
-    Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
+    Private Sub DeleteCurrentSibiReqest()
         Try
-            If Not CheckForAccess(AccessGroup.Sibi_Delete) Then Exit Sub
+            If Not CheckForAccess(AccessGroup.DeleteSibi) Then Exit Sub
             If IsNothing(CurrentRequest.RequestItems) Then Exit Sub
             Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING", Me)
             If blah = vbYes Then
@@ -393,8 +397,12 @@ VALUES
         End Try
     End Sub
 
-    Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
-        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+    Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
+        DeleteCurrentSibiReqest()
+    End Sub
+
+    Private Sub DeleteCurrentNote()
+        If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
         If dgvNotes.CurrentRow IsNot Nothing AndAlso dgvNotes.CurrentRow.Index > -1 Then
             Dim blah = Message("Are you sure?", vbYesNo + vbQuestion, "Delete Note", Me)
             If blah = vbYes Then
@@ -405,6 +413,10 @@ VALUES
                 End If
             End If
         End If
+    End Sub
+
+    Private Sub cmdDeleteNote_Click(sender As Object, e As EventArgs) Handles cmdDeleteNote.Click
+        DeleteCurrentNote()
     End Sub
 
     Private Sub cmdDiscard_Click(sender As Object, e As EventArgs) Handles cmdDiscard.Click
@@ -419,9 +431,13 @@ VALUES
         AddNote()
     End Sub
 
-    Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
-        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
-        If CurrentRequest.GUID <> "" And Not bolUpdating Then UpdateMode(bolUpdating)
+    Private Sub ModifyRequest()
+        If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
+        If CurrentRequest.GUID <> "" And Not IsModifying Then SetModifyMode(IsModifying)
+    End Sub
+
+    Private Sub ModifyButton_Click(sender As Object, e As EventArgs) Handles ModifyButton.Click
+        ModifyRequest()
     End Sub
 
     Private Function CollectData() As RequestStruct
@@ -840,7 +856,7 @@ VALUES
         'Drag-drop rows from other data grids, adding new UIDs and the current FKey (RequestUID).
         'This was a tough nut to crack. In the end I just ended up building an item array and adding it to the receiving grids datasource.
         Try
-            If bolUpdating Then
+            If IsModifying Then
                 Dim R = DirectCast(e.Data.GetData(GetType(DataGridViewRow)), DataGridViewRow) 'Cast the DGVRow
                 If R.DataBoundItem IsNot Nothing Then
                     Dim NewDataRow As DataRow = DirectCast(R.DataBoundItem, DataRowView).Row 'Get the databound row
@@ -905,7 +921,7 @@ VALUES
     End Sub
 
     Private Sub RequestItemsGrid_RowLeave(sender As Object, e As DataGridViewCellEventArgs) Handles RequestItemsGrid.RowLeave
-        If bolUpdating Then ValidateRequestItems()
+        If IsModifying Then ValidateRequestItems()
     End Sub
 
     Private Sub RequestItemsGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles RequestItemsGrid.RowPostPaint
@@ -1039,7 +1055,7 @@ VALUES
                 tsmSeparator.Visible = False
                 tsmLookupDevice.Visible = False
             End If
-            If bolUpdating Then
+            If IsModifying Then
                 tsmDeleteItem.Visible = True
             Else
                 tsmDeleteItem.Visible = False
@@ -1062,9 +1078,9 @@ VALUES
         RequestItemsGrid.RowHeadersVisible = True
     End Sub
 
-    Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
+    Private Sub DeleteSelectedRequestItem()
         Try
-            If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+            If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
             Dim blah = Message("Delete selected row?", vbYesNo + vbQuestion, "Delete Item Row", Me)
             If blah = vbYes Then
                 If Not DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index) Then
@@ -1075,6 +1091,10 @@ VALUES
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
+    End Sub
+
+    Private Sub tsmDeleteItem_Click(sender As Object, e As EventArgs) Handles tsmDeleteItem.Click
+        DeleteSelectedRequestItem()
     End Sub
 
     Private Sub tsmGLBudget_Click(sender As Object, e As EventArgs) Handles tsmGLBudget.Click
@@ -1106,8 +1126,8 @@ VALUES
         End Try
     End Sub
 
-    Private Sub tsmPopFA_Click(sender As Object, e As EventArgs) Handles tsmPopFA.Click
-        If Not CheckForAccess(AccessGroup.Sibi_Modify) Then Exit Sub
+    Private Sub PopulateCurrentFAItem()
+        If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
         Try
             If ValidColumn() Then
                 PopulateFromFA(RequestItemsGrid.CurrentCell.OwningColumn.Name)
@@ -1117,9 +1137,13 @@ VALUES
         End Try
     End Sub
 
+    Private Sub tsmPopFA_Click(sender As Object, e As EventArgs) Handles tsmPopFA.Click
+        PopulateCurrentFAItem()
+    End Sub
+
     Private Sub txtPO_Click(sender As Object, e As EventArgs) Handles txtPO.Click
         Dim PO As String = Trim(txtPO.Text)
-        If Not bolUpdating And PO <> "" Then
+        If Not IsModifying And PO <> "" Then
             MunisFunc.NewMunisViewPOSearch(PO, Me)
         End If
     End Sub
@@ -1128,7 +1152,7 @@ VALUES
         Try
             Waiting()
             Dim ReqNum As String = Trim(txtReqNumber.Text)
-            If Not bolUpdating And ReqNum <> "" Then
+            If Not IsModifying And ReqNum <> "" Then
                 MunisFunc.NewMunisViewReqSearch(ReqNum, YearFromDate(CurrentRequest.DateStamp), Me)
             End If
         Catch ex As Exception
@@ -1141,7 +1165,7 @@ VALUES
     Private Sub txtRTNumber_Click(sender As Object, e As EventArgs) Handles txtRTNumber.Click
         Try
             Dim RTNum As String = Trim(txtRTNumber.Text)
-            If Not bolUpdating And RTNum <> "" Then
+            If Not IsModifying And RTNum <> "" Then
                 Process.Start("http://rt.co.fairfield.oh.us/rt/Ticket/Display.html?id=" & RTNum)
             End If
         Catch ex As Exception
@@ -1149,7 +1173,7 @@ VALUES
         End Try
     End Sub
 
-    Private Sub UpdateMode(Enable As Boolean)
+    Private Sub SetModifyMode(Enable As Boolean)
         If Not Enable Then
             If Not ConcurrencyCheck() Then
                 RefreshRequest()
@@ -1158,13 +1182,13 @@ VALUES
             EnableControls(Me)
             ToolStrip.BackColor = colEditColor
             ShowEditControls()
-            bolUpdating = True
+            IsModifying = True
         Else
             DisableControls(Me)
             ToolStrip.BackColor = colSibiToolBarColor
             HideEditControls()
             UpdateRequest()
-            bolUpdating = False
+            IsModifying = False
         End If
     End Sub
 

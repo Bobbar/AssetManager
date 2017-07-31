@@ -176,11 +176,15 @@ Public Class ViewDeviceForm
         Dim PDFForm As New PdfFormFilling(Me, CurrentViewDevice, PdfFormType.DisposeForm)
     End Sub
 
-    Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
+    Private Sub ViewAttachments()
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen(Me) Then
             Dim NewAttachments As New AttachmentsForm(Me, New DeviceAttachmentsCols, CurrentViewDevice)
         End If
+    End Sub
+
+    Private Sub AttachmentTool_Click(sender As Object, e As EventArgs) Handles AttachmentTool.Click
+        ViewAttachments()
     End Sub
 
     Private Sub cmdMunisInfo_Click(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
@@ -235,18 +239,19 @@ Public Class ViewDeviceForm
         Return Not bolMissingField 'if fields are missing return false to trigger a message if needed
     End Function
 
-    Private Sub CheckInTool_Click(sender As Object, e As EventArgs) Handles CheckInTool.Click
+    Private Sub StartTrackDeviceForm()
         If Not CheckForAccess(AccessGroup.Tracking) Then Exit Sub
         Waiting()
         Dim NewTracking As New TrackDeviceForm(CurrentViewDevice, Me)
         DoneWaiting()
     End Sub
 
+    Private Sub CheckInTool_Click(sender As Object, e As EventArgs) Handles CheckInTool.Click
+        StartTrackDeviceForm()
+    End Sub
+
     Private Sub CheckOutTool_Click(sender As Object, e As EventArgs) Handles CheckOutTool.Click
-        If Not CheckForAccess(AccessGroup.Tracking) Then Exit Sub
-        Waiting()
-        Dim NewTracking As New TrackDeviceForm(CurrentViewDevice, Me)
-        DoneWaiting()
+        StartTrackDeviceForm()
     End Sub
 
     Private Sub CheckRDP()
@@ -318,6 +323,7 @@ Public Class ViewDeviceForm
     Private Sub cmdAccept_Tool_Click(sender As Object, e As EventArgs) Handles cmdAccept_Tool.Click
         AcceptChanges()
     End Sub
+
     Private Sub AcceptChanges()
         Try
             If Not CheckFields() Then
@@ -342,6 +348,7 @@ Public Class ViewDeviceForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Private Async Sub BrowseFiles()
         Try
             If VerifyAdminCreds() Then
@@ -363,6 +370,7 @@ Public Class ViewDeviceForm
         End Try
 
     End Sub
+
     Private Sub cmdBrowseFiles_Click(sender As Object, e As EventArgs) Handles cmdBrowseFiles.Click
         BrowseFiles()
     End Sub
@@ -467,7 +475,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub DeleteDevice()
-        If Not CheckForAccess(AccessGroup.Delete) Then Exit Sub
+        If Not CheckForAccess(AccessGroup.DeleteDevice) Then Exit Sub
         Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
             If AssetFunc.DeleteFtpAndSql(CurrentViewDevice.GUID, EntryType.Device) Then
@@ -486,8 +494,8 @@ Public Class ViewDeviceForm
         End If
     End Sub
 
-    Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
-        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
+    Private Sub DeleteSelectedHistoricalEntry()
+        If Not CheckForAccess(AccessGroup.ModifyDevice) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
         Dim Info As DeviceStruct = AssetFunc.GetHistoricalEntryInfo(strGUID)
         Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & Info.Historical.ChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
@@ -497,6 +505,10 @@ Public Class ViewDeviceForm
         Else
             Exit Sub
         End If
+    End Sub
+
+    Private Sub DeleteEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteEntryToolStripMenuItem.Click
+        DeleteSelectedHistoricalEntry()
     End Sub
 
     Private Function DeleteHistoryEntry(ByVal strGUID As String) As Integer
@@ -682,6 +694,7 @@ Public Class ViewDeviceForm
         chkTrackable.Tag = New DBControlInfo(DevicesBaseCols.Trackable, False)
         txtHostname.Tag = New DBControlInfo(DevicesBaseCols.HostName, False)
     End Sub
+
     Private Sub LaunchRDP()
         Dim StartInfo As New ProcessStartInfo
         StartInfo.FileName = "mstsc.exe"
@@ -704,6 +717,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub ModifyDevice()
+        If Not CheckForAccess(AccessGroup.ModifyDevice) Then Exit Sub
         GetCurrentValues()
         EnableControls()
     End Sub
@@ -726,7 +740,7 @@ Public Class ViewDeviceForm
 
     Private Sub OpenSibiLink(LinkDevice As DeviceStruct)
         Try
-            If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
+            If Not CheckForAccess(AccessGroup.ViewSibi) Then Exit Sub
             Dim SibiUID As String
             If LinkDevice.SibiLink = "" Then
                 If LinkDevice.PO = "" Then
@@ -950,16 +964,16 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub tsbModify_Click(sender As Object, e As EventArgs) Handles tsbModify.Click
-        If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
         ModifyDevice()
     End Sub
 
     Private Sub tsbNewNote_Click(sender As Object, e As EventArgs) Handles tsbNewNote.Click
         AddNewNote()
     End Sub
+
     Private Sub AddNewNote()
         Try
-            If Not CheckForAccess(AccessGroup.Modify) Then Exit Sub
+            If Not CheckForAccess(AccessGroup.ModifyDevice) Then Exit Sub
             Using UpdateDia As New UpdateDev(Me, True)
                 If UpdateDia.DialogResult = DialogResult.OK Then
                     If Not ConcurrencyCheck() Then
@@ -1058,6 +1072,7 @@ Public Class ViewDeviceForm
             Return False
         End Try
     End Function
+
     Private Sub Waiting()
         SetWaitCursor(True)
         StatusBar("Processing...")

@@ -3,7 +3,6 @@
 Imports System.ComponentModel
 Imports System.Data.Common
 Imports System.Deployment.Application
-Imports System.Threading
 
 Public Class MainForm
 
@@ -93,21 +92,11 @@ Public Class MainForm
         StartBigQuery(LastCommand)
     End Sub
 
-    Private Sub StatusBar(Text As String)
-        StatusLabel.Text = Text
-        StatusLabel.Invalidate()
-    End Sub
-
-    Private Sub AddDeviceTool_Click(sender As Object, e As EventArgs) Handles AddDeviceTool.Click
-        If Not CheckForAccess(AccessGroup.Add) Then Exit Sub
+    Private Sub AddNewDevice()
+        If Not CheckForAccess(AccessGroup.AddDevice) Then Exit Sub
         NewDeviceForm.Show()
         NewDeviceForm.Activate()
         NewDeviceForm.WindowState = FormWindowState.Normal
-    End Sub
-
-    Private Sub AdvancedSearchMenuItem_Click(sender As Object, e As EventArgs) Handles AdvancedSearchMenuItem.Click
-        If Not CheckForAccess(AccessGroup.AdvancedSearch) Then Exit Sub
-        Dim NewAdvancedSearch As New AdvancedSearchForm(Me)
     End Sub
 
     Private Sub BigQueryDone(ByRef Results As DataTable)
@@ -164,58 +153,6 @@ Public Class MainForm
         chkTrackables.Checked = False
         chkHistorical.Checked = False
         RefreshCombos()
-    End Sub
-
-    Private Sub cmbEquipType_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType.DropDown
-        AdjustComboBoxWidth(sender, e)
-    End Sub
-
-    Private Sub cmbLocation_DropDown(sender As Object, e As EventArgs) Handles cmbLocation.DropDown
-        AdjustComboBoxWidth(sender, e)
-    End Sub
-
-    Private Sub cmbOSType_DropDown(sender As Object, e As EventArgs) Handles cmbOSType.DropDown
-        AdjustComboBoxWidth(sender, e)
-    End Sub
-
-    Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
-        Clear_All()
-    End Sub
-
-    Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
-        If Not BigQueryWorker.IsBusy Then
-            DynamicSearch()
-        End If
-    End Sub
-
-    Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
-        If Not BigQueryWorker.IsBusy Then
-            ShowAll()
-        End If
-    End Sub
-
-    Private Sub cmdSibi_Click(sender As Object, e As EventArgs) Handles cmdSibi.Click
-        If Not CheckForAccess(AccessGroup.Sibi_View) Then Exit Sub
-        Waiting()
-        If Not SibiIsOpen() Then
-            SibiMainForm.Tag = Me
-            SibiMainForm.Show()
-            SibiMainForm.Activate()
-        Else
-            SibiMainForm.Show()
-            SibiMainForm.Activate()
-            SibiMainForm.WindowState = FormWindowState.Normal
-        End If
-        DoneWaiting()
-    End Sub
-
-    Private Sub cmdSupDevSearch_Click(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
-        Dim results As DataTable = AssetFunc.DevicesBySupervisor(Me)
-        If results IsNot Nothing Then
-            SendToGrid(results)
-        Else
-            'do nutzing
-        End If
     End Sub
 
     Private Async Sub ConnectionWatchDog()
@@ -343,18 +280,6 @@ Public Class MainForm
         ConnStatusLabel.ForeColor = FColor
     End Sub
 
-    Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
-        CopySelectedGridData(ResultGrid)
-    End Sub
-
-    Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
-        If ApplicationDeployment.IsNetworkDeployed Then
-            Message(ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString,,, Me)
-        Else
-            Message("Debug",,, Me)
-        End If
-    End Sub
-
     Private Sub DisplayRecords(NumberOf As Integer)
         lblRecords.Text = "Records: " & NumberOf
     End Sub
@@ -464,21 +389,24 @@ Public Class MainForm
         SplashScreenForm.Hide()
     End Sub
 
-    Private Sub ManageAttachmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageAttachmentsToolStripMenuItem.Click
-        'Dim ViewAttachments As New AttachmentsForm(Me, New dev_attachments) 'TODO: Rework Attachments admin mode
-        'ViewAttachments.bolAdminMode = CanAccess(AccessGroup.IsAdmin)
-        'ViewAttachments.ListAttachments()
-        'ViewAttachments.Text = ViewAttachments.Text & " - MANAGE ALL ATTACHMENTS"
-        'ViewAttachments.DeviceGroup.Visible = False
-        'ViewAttachments.cmdUpload.Enabled = False
+    Private Sub NewTextCrypterForm()
+        If Not CheckForAccess(AccessGroup.IsAdmin) Then Exit Sub
+        Dim NewEncryp As New CrypterForm(Me)
     End Sub
 
-    Private Sub PanelNoScrollOnFocus1_MouseWheel(sender As Object, e As MouseEventArgs) Handles SearchPanel.MouseWheel
-        MyLiveBox.HideLiveBox()
-    End Sub
-
-    Private Sub PanelNoScrollOnFocus1_Scroll(sender As Object, e As ScrollEventArgs) Handles SearchPanel.Scroll
-        MyLiveBox.HideLiveBox()
+    Private Sub OpenSibiMainForm()
+        If Not CheckForAccess(AccessGroup.ViewSibi) Then Exit Sub
+        Waiting()
+        If Not SibiIsOpen() Then
+            SibiMainForm.Tag = Me
+            SibiMainForm.Show()
+            SibiMainForm.Activate()
+        Else
+            SibiMainForm.Show()
+            SibiMainForm.Activate()
+            SibiMainForm.WindowState = FormWindowState.Normal
+        End If
+        DoneWaiting()
     End Sub
 
     Private Async Sub RebuildCache()
@@ -499,41 +427,6 @@ Public Class MainForm
         FillComboBox(DeviceIndex.Locations, cmbLocation)
         FillComboBox(DeviceIndex.StatusType, cmbStatus)
         FillComboBox(DeviceIndex.OSType, cmbOSType)
-    End Sub
-
-    Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
-        If Not bolGridFilling Then
-            HighlightRow(ResultGrid, GridTheme, e.RowIndex)
-        End If
-    End Sub
-
-    Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
-        LeaveRow(ResultGrid, GridTheme, e.RowIndex)
-    End Sub
-
-    Private Sub ResultGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ResultGrid.CellMouseDown
-        If e.ColumnIndex >= 0 And e.RowIndex >= 0 Then
-            If e.Button = MouseButtons.Right And Not ResultGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
-                ResultGrid.Rows(e.RowIndex).Selected = True
-                ResultGrid.CurrentCell = ResultGrid(e.ColumnIndex, e.RowIndex)
-            End If
-        End If
-    End Sub
-
-    Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
-        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
-    End Sub
-
-    Private Sub ResultGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles ResultGrid.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
-            e.SuppressKeyPress = True
-        End If
-    End Sub
-
-    Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
-        If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
-        FTPFunc.ScanAttachements()
     End Sub
 
     Private Sub SendToGrid(ByRef Results As DataTable)
@@ -587,12 +480,32 @@ Public Class MainForm
         StartBigQuery(cmd)
     End Sub
 
+    Private Sub StartAdvancedSearch()
+        If Not CheckForAccess(AccessGroup.AdvancedSearch) Then Exit Sub
+        Dim NewAdvancedSearch As New AdvancedSearchForm(Me)
+    End Sub
+
+    Private Sub StartAttachScan()
+        If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
+        FTPFunc.ScanAttachements()
+    End Sub
+
     Private Sub StartBigQuery(QryCommand As DbCommand)
         If Not BigQueryWorker.IsBusy Then
             StatusBar("Request sent to background...")
             StripSpinner.Visible = True
             BigQueryWorker.RunWorkerAsync(QryCommand)
         End If
+    End Sub
+
+    Private Sub StartUserManager()
+        If Not CheckForAccess(AccessGroup.IsAdmin) Then Exit Sub
+        Dim NewUserMan As New UserManagerForm(Me)
+    End Sub
+
+    Private Sub StatusBar(Text As String)
+        StatusLabel.Text = Text
+        StatusLabel.Invalidate()
     End Sub
 
     Private Sub TestDBWarning()
@@ -603,9 +516,118 @@ Public Class MainForm
         End If
     End Sub
 
+    Private Sub Waiting()
+        SetWaitCursor(True)
+        StatusBar("Processing...")
+    End Sub
+
+#Region "Control Event Methods"
+
+    Private Sub AdvancedSearchMenuItem_Click(sender As Object, e As EventArgs) Handles AdvancedSearchMenuItem.Click
+        StartAdvancedSearch()
+    End Sub
+
+    Private Sub AddDeviceTool_Click(sender As Object, e As EventArgs) Handles AddDeviceTool.Click
+        AddNewDevice()
+    End Sub
+
+    Private Sub cmbEquipType_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+
+    Private Sub cmbLocation_DropDown(sender As Object, e As EventArgs) Handles cmbLocation.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+
+    Private Sub cmbOSType_DropDown(sender As Object, e As EventArgs) Handles cmbOSType.DropDown
+        AdjustComboBoxWidth(sender, e)
+    End Sub
+
+    Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
+        Clear_All()
+    End Sub
+
+    Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
+        If Not BigQueryWorker.IsBusy Then
+            DynamicSearch()
+        End If
+    End Sub
+
+    Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
+        If Not BigQueryWorker.IsBusy Then
+            ShowAll()
+        End If
+    End Sub
+
+    Private Sub cmdSibi_Click(sender As Object, e As EventArgs) Handles cmdSibi.Click
+        OpenSibiMainForm()
+    End Sub
+
+    Private Sub cmdSupDevSearch_Click(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
+        Dim results As DataTable = AssetFunc.DevicesBySupervisor(Me)
+        If results IsNot Nothing Then
+            SendToGrid(results)
+        Else
+            'do nutzing
+        End If
+    End Sub
+
+    Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
+        CopySelectedGridData(ResultGrid)
+    End Sub
+
+    Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
+        If ApplicationDeployment.IsNetworkDeployed Then
+            Message(ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString,,, Me)
+        Else
+            Message("Debug",,, Me)
+        End If
+    End Sub
+
+    Private Sub PanelNoScrollOnFocus1_MouseWheel(sender As Object, e As MouseEventArgs) Handles SearchPanel.MouseWheel
+        MyLiveBox.HideLiveBox()
+    End Sub
+
+    Private Sub PanelNoScrollOnFocus1_Scroll(sender As Object, e As ScrollEventArgs) Handles SearchPanel.Scroll
+        MyLiveBox.HideLiveBox()
+    End Sub
+
+    Private Sub ResultGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellEnter
+        If Not bolGridFilling Then
+            HighlightRow(ResultGrid, GridTheme, e.RowIndex)
+        End If
+    End Sub
+
+    Private Sub ResultGrid_CellLeave(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellLeave
+        LeaveRow(ResultGrid, GridTheme, e.RowIndex)
+    End Sub
+
+    Private Sub ResultGrid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ResultGrid.CellMouseDown
+        If e.ColumnIndex >= 0 And e.RowIndex >= 0 Then
+            If e.Button = MouseButtons.Right And Not ResultGrid.Item(e.ColumnIndex, e.RowIndex).Selected Then
+                ResultGrid.Rows(e.RowIndex).Selected = True
+                ResultGrid.CurrentCell = ResultGrid(e.ColumnIndex, e.RowIndex)
+            End If
+        End If
+    End Sub
+
+    Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
+        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
+    End Sub
+
+    Private Sub ResultGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles ResultGrid.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
+            e.SuppressKeyPress = True
+        End If
+    End Sub
+
+    Private Sub ScanAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanAttachmentToolStripMenuItem.Click
+        StartAttachScan()
+    End Sub
+
     Private Sub TextEnCrypterToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TextEnCrypterToolStripMenuItem.Click
-        If Not CheckForAccess(AccessGroup.IsAdmin) Then Exit Sub
-        Dim NewEncryp As New CrypterForm(Me)
+        NewTextCrypterForm()
     End Sub
 
     Private Sub tsmAddGKUpdate_Click(sender As Object, e As EventArgs) Handles tsmAddGKUpdate.Click
@@ -625,8 +647,7 @@ Public Class MainForm
     End Sub
 
     Private Sub tsmUserManager_Click(sender As Object, e As EventArgs) Handles tsmUserManager.Click
-        If Not CheckForAccess(AccessGroup.IsAdmin) Then Exit Sub
-        Dim NewUserMan As New UserManagerForm(Me)
+        StartUserManager()
     End Sub
 
     Private Sub txtGUID_KeyDown(sender As Object, e As KeyEventArgs) Handles txtGUID.KeyDown
@@ -640,10 +661,7 @@ Public Class MainForm
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
 
-    Private Sub Waiting()
-        SetWaitCursor(True)
-        StatusBar("Processing...")
-    End Sub
+#End Region
 
 #End Region
 

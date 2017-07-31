@@ -78,7 +78,7 @@ Partial Class SibiManageRequestForm
         Me.chkAllowDrag = New System.Windows.Forms.CheckBox()
         Me.ToolStrip = New AssetManager.OneClickToolStrip()
         Me.cmdCreate = New System.Windows.Forms.ToolStripButton()
-        Me.cmdUpdate = New System.Windows.Forms.ToolStripButton()
+        Me.ModifyButton = New System.Windows.Forms.ToolStripButton()
         Me.cmdDelete = New System.Windows.Forms.ToolStripButton()
         Me.cmdAddNote = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -108,7 +108,7 @@ Partial Class SibiManageRequestForm
         Me.PopupMenuItems.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmPopFA, Me.tsmLookupDevice, Me.tsmGLBudget, Me.tsmCopyText, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(179, 162)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(179, 140)
         '
         'tsmPopFA
         '
@@ -668,7 +668,7 @@ Partial Class SibiManageRequestForm
         Me.ToolStrip.BackColor = System.Drawing.Color.FromArgb(CType(CType(185, Byte), Integer), CType(CType(205, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ToolStrip.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.cmdUpdate, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.tsbRefresh})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmdCreate, Me.ModifyButton, Me.cmdDelete, Me.cmdAddNote, Me.ToolStripSeparator2, Me.cmdAttachments, Me.ToolStripSeparator3, Me.tsbRefresh})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
@@ -685,15 +685,15 @@ Partial Class SibiManageRequestForm
         Me.cmdCreate.Size = New System.Drawing.Size(39, 34)
         Me.cmdCreate.Text = "New Request"
         '
-        'cmdUpdate
+        'ModifyButton
         '
-        Me.cmdUpdate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.cmdUpdate.Image = Global.AssetManager.My.Resources.Resources.EditIcon
-        Me.cmdUpdate.Name = "cmdUpdate"
-        Me.cmdUpdate.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
-        Me.cmdUpdate.Size = New System.Drawing.Size(39, 34)
-        Me.cmdUpdate.Text = "Update"
-        Me.cmdUpdate.ToolTipText = "Modify"
+        Me.ModifyButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ModifyButton.Image = Global.AssetManager.My.Resources.Resources.EditIcon
+        Me.ModifyButton.Name = "ModifyButton"
+        Me.ModifyButton.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
+        Me.ModifyButton.Size = New System.Drawing.Size(39, 34)
+        Me.ModifyButton.Text = "Modify"
+        Me.ModifyButton.ToolTipText = "Modify"
         '
         'cmdDelete
         '
@@ -787,7 +787,7 @@ Partial Class SibiManageRequestForm
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolStrip As OneClickToolStrip
     Friend WithEvents cmdCreate As ToolStripButton
-    Friend WithEvents cmdUpdate As ToolStripButton
+    Friend WithEvents ModifyButton As ToolStripButton
     Friend WithEvents cmdDelete As ToolStripButton
     Friend WithEvents cmdAddNote As ToolStripButton
     Friend WithEvents cmdAttachments As ToolStripButton
