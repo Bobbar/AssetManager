@@ -46,24 +46,28 @@ Public Class NetworkConnection
         WNetCancelConnection2(_networkName, 0, True)
     End Sub
 
-    <DllImport("mpr.dll")>
+    <DllImport("mpr.dll", CharSet:=CharSet.Unicode)>
     Private Shared Function WNetAddConnection2(netResource As NetResource, password As String, username As String, flags As Integer) As Integer
     End Function
 
-    <DllImport("mpr.dll")>
+    <DllImport("mpr.dll", CharSet:=CharSet.Unicode)>
     Private Shared Function WNetCancelConnection2(name As String, flags As Integer, force As Boolean) As Integer
     End Function
 End Class
 
-<StructLayout(LayoutKind.Sequential)>
+<StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Unicode)>
 Public Class NetResource
     Public Scope As ResourceScope
     Public ResourceType As ResourceType
     Public DisplayType As ResourceDisplaytype
     Public Usage As Integer
+    <MarshalAs(UnmanagedType.LPWStr)>
     Public LocalName As String
+    <MarshalAs(UnmanagedType.LPWStr)>
     Public RemoteName As String
+    <MarshalAs(UnmanagedType.LPWStr)>
     Public Comment As String
+    <MarshalAs(UnmanagedType.LPWStr)>
     Public Provider As String
 End Class
 
