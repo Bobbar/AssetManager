@@ -187,7 +187,7 @@ Partial Class GKUpdaterForm
         'lblTransferRate
         '
         Me.lblTransferRate.AutoSize = True
-        Me.lblTransferRate.Location = New System.Drawing.Point(655, 73)
+        Me.lblTransferRate.Location = New System.Drawing.Point(695, 68)
         Me.lblTransferRate.Name = "lblTransferRate"
         Me.lblTransferRate.Size = New System.Drawing.Size(112, 14)
         Me.lblTransferRate.TabIndex = 3

@@ -206,7 +206,7 @@ Public Class GK_Updater : Implements IDisposable
                 'Check if file extists on target. Then check if file is read-only and try to change attribs
                 If File.Exists(cPath) Then
                     Dim FileAttrib As FileAttributes = File.GetAttributes(cPath)
-                    If (FileAttrib And FileAttributes.ReadOnly) = FileAttrib.ReadOnly Then
+                    If (FileAttrib And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
                         CopyWorker.ReportProgress(99, "******* File is read-only. Changing attributes...")
                         FileAttrib = FileAttrib And (Not FileAttributes.ReadOnly)
                         File.SetAttributes(cPath, FileAttrib)

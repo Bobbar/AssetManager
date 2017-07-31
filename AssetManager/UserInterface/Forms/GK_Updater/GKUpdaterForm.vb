@@ -1,14 +1,13 @@
 ﻿Imports System.ComponentModel
 
 Public Class GKUpdaterForm
-    Private bolRunQueue As Boolean = True
+    Private QueueIsRunning As Boolean = True
     Private MaxSimUpdates As Integer = 4
     Private MyUpdates As New List(Of GKProgressControl)
     Private bolStarting As Boolean = True
     Private bolCheckForDups As Boolean = True
     Private bolCreateMissingDirs As Boolean = False
     Private PackFileReady As Boolean = False
-    Private PackFunc As New ManagePackFile
 
     Sub New()
 
@@ -78,7 +77,7 @@ Public Class GKUpdaterForm
     ''' </summary>
     ''' <returns></returns>
     Private Function CanRunMoreUpdates() As Boolean
-        If bolRunQueue Then
+        If QueueIsRunning Then
             Dim RunningUpdates As Integer = 0
             For Each upd As GKProgressControl In MyUpdates
                 Select Case upd.ProgStatus
@@ -97,7 +96,7 @@ Public Class GKUpdaterForm
     End Sub
 
     Private Sub cmdPauseResume_Click(sender As Object, e As EventArgs) Handles cmdPauseResume.Click
-        If bolRunQueue Then
+        If QueueIsRunning Then
             StopQueue()
         Else
             StartQueue()
@@ -113,7 +112,7 @@ Public Class GKUpdaterForm
         Message("The queue was stopped because of an access error. Please re-enter your credentials.", vbExclamation + vbOKOnly, "Queue Stopped", Me)
         AdminCreds = Nothing
         If VerifyAdminCreds() Then
-            bolRunQueue = True
+            StartQueue()
         End If
     End Sub
 
@@ -176,11 +175,11 @@ Public Class GKUpdaterForm
         lblRunning.Text = "Running: " & intRunning
         lblComplete.Text = "Complete: " & intComplete
         lblTotUpdates.Text = "Tot Updates: " & MyUpdates.Count
-        lblTransferRate.Text = "Transfer Rate: " & TransferRateSum.ToString("0.00") & " MB/s"
+        lblTransferRate.Text = "Total Transfer Rate: " & TransferRateSum.ToString("0.00") & " MB/s"
     End Sub
 
     ''' <summary>
-    ''' Sorts all the GKProgressControls in order of the Progress_Status enum.
+    ''' Sorts all the GKProgressControls in order of the <see cref="GKProgressControl.ProgressStatus"/> enum.
     ''' </summary>
     Private Sub SortUpdates()
         Dim sortUpdates As New List(Of GKProgressControl)
@@ -199,17 +198,26 @@ Public Class GKUpdaterForm
         If NextUpd IsNot Nothing Then NextUpd.StartUpdate()
     End Sub
 
+    Private Sub RunQueue(canRunQueue As Boolean)
+        If canRunQueue Then
+            StartQueue()
+        Else
+            StopQueue()
+        End If
+    End Sub
+
     Private Sub StartQueue()
-        bolRunQueue = True
+        QueueIsRunning = True
         SetQueueButton()
     End Sub
 
     Private Sub StopQueue()
-        bolRunQueue = False
+        QueueIsRunning = False
         SetQueueButton()
     End Sub
+
     Private Sub SetQueueButton()
-        If bolRunQueue Then
+        If QueueIsRunning Then
             cmdPauseResume.Text = "Pause Queue"
         Else
             cmdPauseResume.Text = "Resume Queue"
@@ -228,15 +236,14 @@ Public Class GKUpdaterForm
         Using NewUnPack As New PackFileForm(False)
             NewUnPack.ShowDialog(Me)
             PackFileReady = NewUnPack.PackVerified
-            bolRunQueue = PackFileReady
-            SetQueueButton()
+            RunQueue(PackFileReady)
         End Using
     End Sub
 
     Private Async Function CheckPackFile() As Task(Of Boolean)
-        PackFileReady = Await PackFunc.VerifyPackFile
-        If bolRunQueue And Not PackFileReady Then bolRunQueue = False
-        SetQueueButton()
+        Dim PackFileManager As New ManagePackFile
+        PackFileReady = Await PackFileManager.VerifyPackFile
+        If QueueIsRunning And Not PackFileReady Then RunQueue(False)
         If Not PackFileReady Then
             CancelAll()
             Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", vbOKOnly + vbExclamation, "Pack file out of date", Me)
