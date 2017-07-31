@@ -64,12 +64,6 @@ Public Class DBQueryParameter
         Me.OperatorString = "AND"
     End Sub
 
-    Public Sub New(ByVal fieldName As String, ByVal fieldValue As Object, Optional operatorString As String = "AND", Optional isExact As Boolean = False)
-        Me.FieldName = fieldName
-        Me.Value = fieldValue
-        Me.IsExact = isExact
-        Me.OperatorString = operatorString
-    End Sub
 End Class
 
 Public Class SibiAttachment

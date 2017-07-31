@@ -39,7 +39,7 @@ Namespace My
             Status("Loading Indexes...")
             BuildIndexes()
             Status("Checking Access Level...")
-            GetAccessLevels()
+            PopulateAccessGroups()
             GetUserAccess()
             If Not CanAccess(AccessGroup.CanRun) Then
                 Message("You do not have permission to run this software.", vbOKOnly + vbExclamation, "Access Denied", SplashScreenForm)

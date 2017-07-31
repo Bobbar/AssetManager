@@ -63,18 +63,8 @@ Public Structure DeviceTrackingStruct
     Public UseLocation As String
     Public UseReason As String
     Public IsCheckedOut As Boolean
-End Structure
-'TODO: Combine these two redundant structs into one.
-Public Structure CheckStruct
-    Public CheckoutTime As String
-    Public DueBackDate As String
-    Public UseLocation As String
-    Public UseReason As String
     Public CheckinNotes As String
     Public DeviceGUID As String
-    Public CheckoutUser As String
-    Public CheckinUser As String
-    Public CheckinTime As String
 End Structure
 
 Public Structure AccessGroupStruct
@@ -92,10 +82,7 @@ End Structure
 Public Structure LocalUserInfoStruct
     Public UserName As String
     Public Fullname As String
-
-    'Public bolIsAdmin As Boolean
     Public AccessLevel As Integer
-
     Public GUID As String
 End Structure
 
@@ -104,8 +91,6 @@ Public Structure MunisEmployeeStruct
     Public Name As String
     Public GUID As String
 End Structure
-
-
 
 Public Structure DataGridColumnStruct
     Public ColumnName As String

@@ -31,15 +31,11 @@ VALUES
 
     Public Function BuildIndex(codeType As String, typeName As String) As ComboboxDataStruct()
         Try
-            Dim tmpArray() As ComboboxDataStruct
             Dim strQRY = "SELECT * FROM " & codeType & " LEFT OUTER JOIN munis_codes on " & codeType & ".db_value = munis_codes.asset_man_code WHERE type_name ='" & typeName & "' ORDER BY " & ComboCodesBaseCols.HumanValue & ""
-            Dim row As Integer
+            Dim row As Integer = 0
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
-                ReDim tmpArray(0)
-                row = -1
+                Dim tmpArray(results.Rows.Count - 1) As ComboboxDataStruct
                 For Each r As DataRow In results.Rows
-                    row += 1
-                    ReDim Preserve tmpArray(row)
                     tmpArray(row).ID = r.Item(ComboCodesBaseCols.ID).ToString
                     If r.Table.Columns.Contains("munis_code") Then
                         If Not IsDBNull(r.Item("munis_code")) Then
@@ -51,6 +47,7 @@ VALUES
                         tmpArray(row).HumanReadable = r.Item(ComboCodesBaseCols.HumanValue).ToString
                     End If
                     tmpArray(row).Code = r.Item(ComboCodesBaseCols.DBValue).ToString
+                    row += 1
                 Next
                 Return tmpArray
             End Using
@@ -144,7 +141,7 @@ VALUES
         Return False
     End Function
 
-    Public Function DeleteSqlAttachment(attachment As Attachment) As Integer 'AttachUID As String, AttachTable As main_attachments) As Integer 'TODO: Change this to use Attachment class as propery
+    Public Function DeleteSqlAttachment(attachment As Attachment) As Integer
         Try
             Dim rows As Integer
             Dim strDeviceID As String = ""

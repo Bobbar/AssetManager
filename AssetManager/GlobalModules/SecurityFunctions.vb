@@ -7,8 +7,8 @@ Imports System.Security.Cryptography
 Imports System.Text
 
 Module SecurityFunctions
-    Private AccessLevels() As AccessGroupStruct
-    Private UserAccess As LocalUserInfoStruct
+    Private AccessGroups() As AccessGroupStruct
+    Private LocalUserAccess As LocalUserInfoStruct
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
     Public AdminCreds As NetworkCredential = Nothing
 
@@ -27,25 +27,25 @@ Module SecurityFunctions
         Return False
     End Function
 
-    Public Function DecodePassword(strCypher As String) As String
+    Public Function DecodePassword(cypherString As String) As String
         Using wrapper As New Simple3Des(CryptKey)
-            Return wrapper.DecryptData(strCypher)
+            Return wrapper.DecryptData(cypherString)
         End Using
     End Function
 
-    Public Function GetHashOfTable(Table As DataTable) As String
+    Public Function GetHashOfTable(table As DataTable) As String
         Dim serializer = New DataContractSerializer(GetType(DataTable))
         Using memoryStream = New MemoryStream(), SHA = New SHA1CryptoServiceProvider()
-            serializer.WriteObject(memoryStream, Table)
+            serializer.WriteObject(memoryStream, table)
             Dim serializedData As Byte() = memoryStream.ToArray()
             Dim hash As Byte() = SHA.ComputeHash(serializedData)
             Return Convert.ToBase64String(hash)
         End Using
     End Function
 
-    Public Function GetHashOfFile(Path As String) As String
+    Public Function GetHashOfFile(filePath As String) As String
         Dim hashValue() As Byte
-        Using fStream As New FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read, 16 * 1024 * 1024), hash = MD5.Create
+        Using fStream As New FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 16 * 1024 * 1024), hash = MD5.Create
             fStream.Position = 0
             hashValue = hash.ComputeHash(fStream)
             Dim sBuilder As New StringBuilder
@@ -57,37 +57,37 @@ Module SecurityFunctions
         End Using
     End Function
 
-    Public Function GetHashOfFileStream(ByRef MemStream As IO.FileStream) As String
+    Public Function GetHashOfFileStream(fileStream As IO.FileStream) As String
         Using md5Hash As MD5 = MD5.Create
-            MemStream.Position = 0
-            Dim hash As Byte() = md5Hash.ComputeHash(MemStream)
+            fileStream.Position = 0
+            Dim hash As Byte() = md5Hash.ComputeHash(fileStream)
             Dim sBuilder As New StringBuilder
             Dim i As Integer
             For i = 0 To hash.Length - 1
                 sBuilder.Append(hash(i).ToString("x2"))
             Next
-            MemStream.Position = 0
+            fileStream.Position = 0
             Return sBuilder.ToString
         End Using
     End Function
 
-    Public Function GetHashOfIOStream(ByVal MemStream As IO.MemoryStream) As String
+    Public Function GetHashOfIOStream(memStream As IO.MemoryStream) As String
         Using md5Hash As MD5 = MD5.Create
-            MemStream.Position = 0
-            Dim hash As Byte() = md5Hash.ComputeHash(MemStream)
+            memStream.Position = 0
+            Dim hash As Byte() = md5Hash.ComputeHash(memStream)
             Dim sBuilder As New StringBuilder
             Dim i As Integer
             For i = 0 To hash.Length - 1
                 sBuilder.Append(hash(i).ToString("x2"))
             Next
-            MemStream.Position = 0
+            memStream.Position = 0
             Return sBuilder.ToString
         End Using
     End Function
 
-    Public Function GetSecGroupValue(SecModule As String) As Integer
-        For Each Group As AccessGroupStruct In AccessLevels
-            If Group.AccessModule = SecModule Then Return Group.Level
+    Public Function GetSecGroupValue(accessGroupName As String) As Integer
+        For Each Group As AccessGroupStruct In AccessGroups
+            If Group.AccessModule = accessGroupName Then Return Group.Level
         Next
         Return -1
     End Function
@@ -98,12 +98,12 @@ Module SecurityFunctions
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
                 If results.Rows.Count > 0 Then
                     Dim r As DataRow = results.Rows(0)
-                    UserAccess.UserName = r.Item(UsersCols.UserName).ToString
-                    UserAccess.Fullname = r.Item(UsersCols.FullName).ToString
-                    UserAccess.AccessLevel = CInt(r.Item(UsersCols.AccessLevel))
-                    UserAccess.GUID = r.Item(UsersCols.UID).ToString
+                    LocalUserAccess.UserName = r.Item(UsersCols.UserName).ToString
+                    LocalUserAccess.Fullname = r.Item(UsersCols.FullName).ToString
+                    LocalUserAccess.AccessLevel = CInt(r.Item(UsersCols.AccessLevel))
+                    LocalUserAccess.GUID = r.Item(UsersCols.UID).ToString
                 Else
-                    UserAccess.AccessLevel = 0
+                    LocalUserAccess.AccessLevel = 0
                 End If
             End Using
         Catch ex As Exception
@@ -111,20 +111,18 @@ Module SecurityFunctions
         End Try
     End Sub
 
-    Public Sub GetAccessLevels()
+    Public Sub PopulateAccessGroups()
         Try
-            Dim strQRY = "SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & "" ' WHERE usr_username='" & strLocalUser & "'"
-            Dim rows As Integer
+            Dim strQRY = "SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & ""
+            Dim rows As Integer = 0
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
-                ReDim AccessLevels(0)
-                rows = -1
+                ReDim AccessGroups(results.Rows.Count - 1)
                 For Each r As DataRow In results.Rows
+                    AccessGroups(rows).Level = CInt(r.Item(SecurityCols.AccessLevel))
+                    AccessGroups(rows).AccessModule = r.Item(SecurityCols.SecModule).ToString
+                    AccessGroups(rows).Description = r.Item(SecurityCols.Description).ToString
+                    AccessGroups(rows).AvailableOffline = CBool(r.Item(SecurityCols.AvailOffline))
                     rows += 1
-                    ReDim Preserve AccessLevels(rows)
-                    AccessLevels(rows).Level = CInt(r.Item(SecurityCols.AccessLevel))
-                    AccessLevels(rows).AccessModule = r.Item(SecurityCols.SecModule).ToString
-                    AccessLevels(rows).Description = r.Item(SecurityCols.Description).ToString
-                    AccessLevels(rows).AvailableOffline = CBool(r.Item(SecurityCols.AvailOffline))
                 Next
             End Using
         Catch ex As Exception
@@ -137,17 +135,17 @@ Module SecurityFunctions
         Dim calc_level As Integer
         Dim UsrLevel As Integer
         If AccessLevel = -1 Then
-            UsrLevel = UserAccess.AccessLevel
+            UsrLevel = LocalUserAccess.AccessLevel
         Else
             UsrLevel = AccessLevel
         End If
         Dim levels As Integer
-        For levels = 0 To UBound(AccessLevels)
+        For levels = 0 To UBound(AccessGroups)
             calc_level = UsrLevel And mask
             If calc_level <> 0 Then
-                If AccessLevels(levels).AccessModule = recModule Then
+                If AccessGroups(levels).AccessModule = recModule Then
                     If OfflineMode Then
-                        If AccessLevels(levels).AvailableOffline Then
+                        If AccessGroups(levels).AvailableOffline Then
                             Return True
                         Else
                             Return False

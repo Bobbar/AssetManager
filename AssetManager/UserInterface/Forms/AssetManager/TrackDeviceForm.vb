@@ -5,7 +5,7 @@ Imports MySql.Data.MySqlClient
 Public Class TrackDeviceForm
     Private CurrentTrackingDevice As New DeviceStruct
     Private MyParent As ViewDeviceForm
-    Private CheckData As CheckStruct
+    Private CheckData As DeviceTrackingStruct
 
     Sub New(device As DeviceStruct, parentForm As Form)
         InitializeComponent()
@@ -46,14 +46,14 @@ Public Class TrackDeviceForm
             Next
         End If
         With CheckData
-            .CheckoutTime = dtCheckOut.Value.ToString(strDBDateTimeFormat)
-            .DueBackDate = dtDueBack.Value.ToString(strDBDateTimeFormat)
+            .CheckoutTime = dtCheckOut.Value '.ToString(strDBDateTimeFormat)
+            .DueBackTime = dtDueBack.Value '.ToString(strDBDateTimeFormat)
             .UseLocation = UCase(Trim(txtUseLocation.Text))
             .UseReason = UCase(Trim(txtUseReason.Text))
             .CheckinNotes = UCase(Trim(txtCheckInNotes.Text))
             .DeviceGUID = CurrentTrackingDevice.GUID
             .CheckoutUser = strLocalUser
-            .CheckinTime = dtCheckIn.Value.ToString(strDBDateTimeFormat)
+            .CheckinTime = dtCheckIn.Value '.ToString(strDBDateTimeFormat)
             .CheckinUser = strLocalUser
         End With
         Return True
@@ -146,7 +146,7 @@ VALUES(@" & TrackablesCols.CheckType & ",
                 cmd.CommandText = strSqlQry2
                 cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckType, CheckType.Checkout)
                 cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckoutTime, CheckData.CheckoutTime)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.DueBackDate, CheckData.DueBackDate)
+                cmd.Parameters.AddWithValue("@" & TrackablesCols.DueBackDate, CheckData.DueBackTime)
                 cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckoutUser, CheckData.CheckoutUser)
                 cmd.Parameters.AddWithValue("@" & TrackablesCols.UseLocation, CheckData.UseLocation)
                 cmd.Parameters.AddWithValue("@" & TrackablesCols.Notes, CheckData.UseReason)
@@ -197,7 +197,7 @@ VALUES (@" & TrackablesCols.CheckType & ",
                 cmd.CommandText = strSqlQry2
                 cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckType, CheckType.Checkin)
                 cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckoutTime, CheckData.CheckoutTime)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.DueBackDate, CheckData.DueBackDate)
+                cmd.Parameters.AddWithValue("@" & TrackablesCols.DueBackDate, CheckData.DueBackTime)
                 cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckinTime, CheckData.CheckinTime)
                 cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckoutUser, CheckData.CheckoutUser)
                 cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckinUser, CheckData.CheckinUser)
