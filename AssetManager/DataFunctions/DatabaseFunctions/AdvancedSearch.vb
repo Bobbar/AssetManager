@@ -37,16 +37,14 @@ Namespace AdvancedSearch
         Public Function GetResults() As List(Of DataTable)
             Dim resultsList As New List(Of DataTable)
             For Each table In _searchTables
-                'Dim qry As String = "SELECT * FROM " & table.TableName & " WHERE "
                 Dim qry As String = "SELECT " & BuildSelectString(table) & " FROM " & table.TableName & " WHERE "
                 qry += BuildFieldString(table)
-                Dim cmd As New MySqlCommand
-                cmd.CommandText = qry
-                cmd.Parameters.AddWithValue("@" & "SEARCHVAL", _searchString)
                 Using LocalSQLComm As New MySqlComms,
                     ds As New DataSet,
                     da As New MySqlDataAdapter,
-                    QryComm As MySqlCommand = cmd, results As New DataTable(table.TableName)
+                    QryComm As MySqlCommand = New MySqlCommand, results As New DataTable(table.TableName)
+                    QryComm.CommandText = qry
+                    QryComm.Parameters.AddWithValue("@" & "SEARCHVAL", _searchString)
                     QryComm.Connection = LocalSQLComm.Connection
                     da.SelectCommand = QryComm
                     da.Fill(results)
@@ -84,7 +82,7 @@ Namespace AdvancedSearch
 
 #Region "Fields"
 
-        Public Property Columns As List(Of String)
+        Public ReadOnly Property Columns As List(Of String)
         Public Property TableKey As String
         Public Property TableName As String
 
