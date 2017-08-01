@@ -1,7 +1,9 @@
 ﻿Imports System.Net
+Imports System.Security
 
 Public Class GetCredentialsForm
     Private MyCreds As NetworkCredential
+    Private SecurePwd As New SecureString
 
     Public ReadOnly Property Credentials As NetworkCredential
         Get
@@ -10,11 +12,12 @@ Public Class GetCredentialsForm
     End Property
 
     Private Sub Accept()
-        Dim Username, Password As String
+        Dim Username As String
         Username = Trim(txtUsername.Text)
-        Password = Trim(txtPassword.Text)
-        If Username <> "" And Password <> "" Then
-            MyCreds = New NetworkCredential(Username, Password, Environment.UserDomainName)
+        SecurePwd.MakeReadOnly()
+        If Username <> "" And SecurePwd.Length > 0 Then
+            MyCreds = New NetworkCredential(Username, SecurePwd, Environment.UserDomainName)
+            SecurePwd.Dispose()
             DialogResult = DialogResult.OK
         Else
             Message("Username or Password incomplete.", vbExclamation + vbOKOnly, "Missing Info", Me)
@@ -28,6 +31,17 @@ Public Class GetCredentialsForm
     Private Sub txtPassword_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPassword.KeyDown
         If e.KeyCode = Keys.Enter Then
             Accept()
+        End If
+        If e.KeyCode = Keys.Back Then
+            If SecurePwd.Length > 0 Then
+                SecurePwd.RemoveAt(SecurePwd.Length - 1)
+            End If
+        End If
+    End Sub
+
+    Private Sub txtPassword_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtPassword.KeyPress
+        If e.KeyChar <> Convert.ToChar(Keys.Back) And e.KeyChar <> Convert.ToChar(Keys.Enter) Then
+            SecurePwd.AppendChar(e.KeyChar)
         End If
     End Sub
 

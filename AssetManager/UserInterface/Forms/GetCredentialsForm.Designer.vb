@@ -94,7 +94,7 @@ Partial Class GetCredentialsForm
         Me.txtUsername.Size = New System.Drawing.Size(200, 23)
         Me.txtUsername.TabIndex = 0
         '
-        'Get_Credentials
+        'GetCredentialsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -104,7 +104,7 @@ Partial Class GetCredentialsForm
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "Get_Credentials"
+        Me.Name = "GetCredentialsForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "LA Credentials"
         Me.GroupBox1.ResumeLayout(False)
