@@ -23,6 +23,8 @@ Partial Class ViewDeviceForm
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ViewDeviceForm))
         Me.DeviceInfoBox = New System.Windows.Forms.GroupBox()
+        Me.txtHostname = New System.Windows.Forms.TextBox()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.txtPhoneNumber = New System.Windows.Forms.MaskedTextBox()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.lblGUID = New System.Windows.Forms.Label()
@@ -107,8 +109,6 @@ Partial Class ViewDeviceForm
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.AssetDisposalForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.txtHostname = New System.Windows.Forms.TextBox()
-        Me.Label15 = New System.Windows.Forms.Label()
         Me.DeviceInfoBox.SuspendLayout()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
@@ -172,6 +172,24 @@ Partial Class ViewDeviceForm
         Me.DeviceInfoBox.TabIndex = 39
         Me.DeviceInfoBox.TabStop = False
         Me.DeviceInfoBox.Text = "Current Info"
+        '
+        'txtHostname
+        '
+        Me.txtHostname.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtHostname.Location = New System.Drawing.Point(186, 183)
+        Me.txtHostname.Name = "txtHostname"
+        Me.txtHostname.Size = New System.Drawing.Size(177, 23)
+        Me.txtHostname.TabIndex = 58
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(183, 164)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(73, 16)
+        Me.Label15.TabIndex = 59
+        Me.Label15.Text = "Hostname:"
         '
         'txtPhoneNumber
         '
@@ -686,11 +704,11 @@ Partial Class ViewDeviceForm
         'txtCheckLocation
         '
         Me.txtCheckLocation.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.txtCheckLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCheckLocation.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCheckLocation.Location = New System.Drawing.Point(169, 42)
         Me.txtCheckLocation.Name = "txtCheckLocation"
         Me.txtCheckLocation.ReadOnly = True
-        Me.txtCheckLocation.Size = New System.Drawing.Size(134, 22)
+        Me.txtCheckLocation.Size = New System.Drawing.Size(134, 23)
         Me.txtCheckLocation.TabIndex = 57
         Me.txtCheckLocation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -707,11 +725,11 @@ Partial Class ViewDeviceForm
         'txtDueBack
         '
         Me.txtDueBack.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.txtDueBack.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDueBack.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtDueBack.Location = New System.Drawing.Point(86, 141)
         Me.txtDueBack.Name = "txtDueBack"
         Me.txtDueBack.ReadOnly = True
-        Me.txtDueBack.Size = New System.Drawing.Size(134, 22)
+        Me.txtDueBack.Size = New System.Drawing.Size(134, 23)
         Me.txtDueBack.TabIndex = 55
         Me.txtDueBack.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -728,11 +746,11 @@ Partial Class ViewDeviceForm
         'txtCheckUser
         '
         Me.txtCheckUser.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.txtCheckUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCheckUser.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCheckUser.Location = New System.Drawing.Point(169, 93)
         Me.txtCheckUser.Name = "txtCheckUser"
         Me.txtCheckUser.ReadOnly = True
-        Me.txtCheckUser.Size = New System.Drawing.Size(134, 22)
+        Me.txtCheckUser.Size = New System.Drawing.Size(134, 23)
         Me.txtCheckUser.TabIndex = 53
         Me.txtCheckUser.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -749,11 +767,11 @@ Partial Class ViewDeviceForm
         'txtCheckTime
         '
         Me.txtCheckTime.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.txtCheckTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCheckTime.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCheckTime.Location = New System.Drawing.Point(19, 93)
         Me.txtCheckTime.Name = "txtCheckTime"
         Me.txtCheckTime.ReadOnly = True
-        Me.txtCheckTime.Size = New System.Drawing.Size(134, 22)
+        Me.txtCheckTime.Size = New System.Drawing.Size(134, 23)
         Me.txtCheckTime.TabIndex = 51
         Me.txtCheckTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -770,7 +788,7 @@ Partial Class ViewDeviceForm
         'txtCheckOut
         '
         Me.txtCheckOut.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.txtCheckOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCheckOut.Font = New System.Drawing.Font("Consolas", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCheckOut.Location = New System.Drawing.Point(19, 42)
         Me.txtCheckOut.Name = "txtCheckOut"
         Me.txtCheckOut.ReadOnly = True
@@ -1037,24 +1055,6 @@ Partial Class ViewDeviceForm
         '
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 37)
-        '
-        'txtHostname
-        '
-        Me.txtHostname.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtHostname.Location = New System.Drawing.Point(186, 183)
-        Me.txtHostname.Name = "txtHostname"
-        Me.txtHostname.Size = New System.Drawing.Size(177, 23)
-        Me.txtHostname.TabIndex = 58
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label15.Location = New System.Drawing.Point(183, 164)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(73, 16)
-        Me.Label15.TabIndex = 59
-        Me.Label15.Text = "Hostname:"
         '
         'ViewDeviceForm
         '
