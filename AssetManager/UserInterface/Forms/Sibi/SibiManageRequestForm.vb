@@ -703,6 +703,7 @@ VALUES
         Me.FormUID = UID
         MyWindowList.InsertWindowList(ToolStrip)
         dgvNotes.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
+        RequestItemsGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         ToolStrip.BackColor = colSibiToolBarColor
     End Sub
 
