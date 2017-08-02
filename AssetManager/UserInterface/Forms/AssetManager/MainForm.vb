@@ -374,7 +374,7 @@ Public Class MainForm
             InitLiveBox()
             InitDBControls()
             Clear_All()
-            TestDBWarning()
+            ShowTestDBWarning()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             EndProgram()
@@ -508,7 +508,7 @@ Public Class MainForm
         StatusLabel.Invalidate()
     End Sub
 
-    Private Sub TestDBWarning()
+    Private Sub ShowTestDBWarning()
         If bolUseTestDatabase Then
             Message("TEST DATABASE IN USE", vbOKOnly + vbExclamation, "WARNING", Me)
             Me.BackColor = Color.DarkRed

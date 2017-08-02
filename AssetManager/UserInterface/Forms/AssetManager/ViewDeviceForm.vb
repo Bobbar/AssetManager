@@ -22,7 +22,6 @@ Public Class ViewDeviceForm
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyPingVis As PingVis
     Private MyWindowList As New WindowList(Me)
-    Private OldData As New DeviceStruct
 
 #End Region
 
@@ -635,10 +634,6 @@ Public Class ViewDeviceForm
         Return " - " + Device.CurrentUser + " - " + Device.AssetTag + " - " + Device.Description
     End Function
 
-    Private Sub GetCurrentValues()
-        OldData = AssetFunc.CollectDeviceInfo(DBFunc.DataTableFromQueryString("SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & " = '" & CurrentViewDevice.GUID & "'"))
-    End Sub
-
     Private Function GetInsertTable(Adapter As MySqlDataAdapter, UpdateInfo As DeviceUpdateInfoStruct) As DataTable
         Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
@@ -654,16 +649,16 @@ Public Class ViewDeviceForm
         Dim tmpTable = DataParser.ReturnUpdateTable(Adapter.SelectCommand.CommandText)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
-        If Not IsNothing(MunisUser.Number) Then
+        If MunisUser.Number IsNot Nothing Then
             DBRow(DevicesCols.CurrentUser) = MunisUser.Name
             DBRow(DevicesCols.MunisEmpNum) = MunisUser.Number
         Else
-            If OldData.CurrentUser <> Trim(txtCurUser_View_REQ.Text) Then
+            If CurrentViewDevice.CurrentUser <> Trim(txtCurUser_View_REQ.Text) Then
                 DBRow(DevicesCols.CurrentUser) = Trim(txtCurUser_View_REQ.Text)
                 DBRow(DevicesCols.MunisEmpNum) = DBNull.Value
             Else
-                DBRow(DevicesCols.CurrentUser) = OldData.CurrentUser
-                DBRow(DevicesCols.MunisEmpNum) = CleanDBValue(OldData.CurrentUserEmpNum)
+                DBRow(DevicesCols.CurrentUser) = CurrentViewDevice.CurrentUser
+                DBRow(DevicesCols.MunisEmpNum) = CurrentViewDevice.CurrentUserEmpNum
             End If
         End If
         DBRow(DevicesCols.SibiLinkUID) = CleanDBValue(CurrentViewDevice.SibiLink)
@@ -718,7 +713,6 @@ Public Class ViewDeviceForm
 
     Private Sub ModifyDevice()
         If Not CheckForAccess(AccessGroup.ModifyDevice) Then Exit Sub
-        GetCurrentValues()
         EnableControls()
     End Sub
 
@@ -980,7 +974,6 @@ Public Class ViewDeviceForm
                         CancelModify()
                         Exit Sub
                     End If
-                    GetCurrentValues()
                     UpdateDevice(UpdateDia.UpdateInfo)
                 Else
                     CancelModify()
