@@ -638,6 +638,7 @@ Public Class MainForm
         If Not GKUpdaterForm.Visible Then
             GKUpdaterForm.Show()
         Else
+            GKUpdaterForm.WindowState = FormWindowState.Normal
             GKUpdaterForm.Activate()
         End If
     End Sub
