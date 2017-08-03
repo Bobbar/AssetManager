@@ -56,7 +56,7 @@ Public Class PingVis : Implements IDisposable
             Return CurrentAverageRoundTripTime
         End Get
     End Property
-    Sub New(ByRef DestControl As Control, HostName As String)
+    Sub New(DestControl As Control, HostName As String)
         InitMyControl(DestControl)
         MyPingHostname = HostName
         InitPing()
@@ -238,10 +238,11 @@ Public Class PingVis : Implements IDisposable
             Else
                 OverInfoText = "T/O"
             End If
-            Dim OverFont As Font = New Font("Tahoma", OverInfoFontSize, FontStyle.Regular)
-            gfx.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
-            gfx.TextContrast = 0
-            gfx.DrawString(OverInfoText, OverFont, Brushes.White, New PointF(MouseOverInfo.MouseLoc.X + 20, MouseOverInfo.MouseLoc.Y - 10)) '(intImgWidth / 2) - TextSize.Width / 2
+            Using OverFont As Font = New Font("Tahoma", OverInfoFontSize, FontStyle.Regular)
+                gfx.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
+                gfx.TextContrast = 0
+                gfx.DrawString(OverInfoText, OverFont, Brushes.White, New PointF(MouseOverInfo.MouseLoc.X + 20, MouseOverInfo.MouseLoc.Y - 10)) '(intImgWidth / 2) - TextSize.Width / 2
+            End Using
         End If
         If Not bolScrolling Then
             Dim InfoText As String
@@ -250,19 +251,20 @@ Public Class PingVis : Implements IDisposable
             Else
                 InfoText = "T/O" '"Fail"
             End If
-            Dim InfoFont As Font = New Font("Tahoma", InfoFontSize, FontStyle.Bold)
-            Dim TextSize As SizeF = gfx.MeasureString(InfoText, InfoFont)
-            gfx.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
-            gfx.TextContrast = 0
-            gfx.DrawString(InfoText, InfoFont, Brushes.White, New PointF((intImgWidth - 5) - (TextSize.Width), (intImgHeight) - (TextSize.Height))) '(intImgWidth / 2) - TextSize.Width / 2
+            Using InfoFont As Font = New Font("Tahoma", InfoFontSize, FontStyle.Bold)
+                Dim TextSize As SizeF = gfx.MeasureString(InfoText, InfoFont)
+                gfx.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
+                gfx.TextContrast = 0
+                gfx.DrawString(InfoText, InfoFont, Brushes.White, New PointF((intImgWidth - 5) - (TextSize.Width), (intImgHeight) - (TextSize.Height))) '(intImgWidth / 2) - TextSize.Width / 2
+            End Using
         End If
     End Sub
     Private Sub DrawPingBars(ByRef gfx As Graphics, ByRef Bars As List(Of PingBar))
         For Each bar As PingBar In Bars
             gfx.FillRectangle(bar.Brush, bar.Rectangle)
-            Dim CapPen As Pen = New Pen(Color.ForestGreen, 2)
-            gfx.DrawLine(CapPen, New PointF(bar.Length, bar.PositionY), New PointF(bar.Length, bar.PositionY + bar.Rectangle.Height))
-            CapPen.Dispose()
+            Using CapPen As Pen = New Pen(Color.ForestGreen, 2)
+                gfx.DrawLine(CapPen, New PointF(bar.Length, bar.PositionY), New PointF(bar.Length, bar.PositionY + bar.Rectangle.Height))
+            End Using
         Next
     End Sub
     Private Function GetPingBars() As List(Of PingBar)
@@ -274,8 +276,7 @@ Public Class PingVis : Implements IDisposable
             Dim BarLen As Single
             Dim MyBrush As Brush
             If result.Status <> Net.NetworkInformation.IPStatus.Success Then
-                Dim brushBadPing = New SolidBrush(Color.Red)
-                MyBrush = brushBadPing
+                MyBrush = New SolidBrush(Color.Red)
                 BarLen = intImgWidth - 2
             Else
                 MyBrush = GetBarBrush(result.RoundtripTime)
