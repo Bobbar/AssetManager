@@ -19,9 +19,6 @@ Public Class GK_Updater : Implements IDisposable
     Private ClientHostName As String
     Private CurrentCreds As NetworkCredential
     Private CurrentFileIndex As Integer = 0
-    Private lngBytesMoved As Integer
-    Private progIts As Integer = 0
-    '  Private ServerPath As String = "C:"
     Private ElapTime As New Stopwatch
     Private Progress As New ProgressCounter
     Private bolCreateMissingDirectory As Boolean = True
@@ -41,7 +38,7 @@ Public Class GK_Updater : Implements IDisposable
 #Region "Event Handlers"
     Public Event LogEvent As EventHandler
     Public Event StatusUpdate As EventHandler
-    Public Event UpdateCancelled As EventHandler
+    Public Event UpdateCanceled As EventHandler
     Public Event UpdateComplete As EventHandler
     Protected Overridable Sub OnLogEvent(e As LogEvents)
         RaiseEvent LogEvent(Me, e)
@@ -49,9 +46,9 @@ Public Class GK_Updater : Implements IDisposable
     Protected Overridable Sub OnStatusUpdate(e As GKUpdateEvents)
         RaiseEvent StatusUpdate(Me, e)
     End Sub
-    Protected Overridable Sub OnUpdateCancelled(e As EventArgs)
+    Protected Overridable Sub OnUpdateCanceled(e As EventArgs)
         GKLog("Cancelled by user!")
-        RaiseEvent UpdateCancelled(Me, e)
+        RaiseEvent UpdateCanceled(Me, e)
     End Sub
     Protected Overridable Sub OnUpdateComplete(e As GKUpdateCompleteEvents)
         RaiseEvent UpdateComplete(Me, e)
@@ -92,7 +89,7 @@ Public Class GK_Updater : Implements IDisposable
         If CopyWorker.IsBusy Then
             CopyWorker.CancelAsync()
         Else
-            OnUpdateCancelled(New EventArgs)
+            OnUpdateCanceled(New EventArgs)
         End If
         CurrentFileIndex = 0
     End Sub
@@ -133,35 +130,32 @@ Public Class GK_Updater : Implements IDisposable
     ''' <returns></returns>
     Private Function CanPing() As Boolean
         Try
-            Dim MyPing As New Ping
-            Dim options As New Net.NetworkInformation.PingOptions
-            Dim Hostname As String = ClientHostName
-            Dim Timeout As Integer = 1000
-            Dim buff As Byte() = Encoding.ASCII.GetBytes("pingpingpingpingping")
-            options.DontFragment = True
-            Dim reply As PingReply = MyPing.Send(Hostname, Timeout, buff, options)
-            If reply.Status = IPStatus.Success Then
-                Return True
-            End If
-            Return False
+            Using MyPing As New Ping
+                Dim options As New Net.NetworkInformation.PingOptions
+                Dim Hostname As String = ClientHostName
+                Dim Timeout As Integer = 1000
+                Dim buff As Byte() = Encoding.ASCII.GetBytes("pingpingpingpingping")
+                options.DontFragment = True
+                Dim reply As PingReply = MyPing.Send(Hostname, Timeout, buff, options)
+                If reply.Status = IPStatus.Success Then
+                    Return True
+                End If
+                Return False
+            End Using
         Catch ex As Exception
             Return False
         End Try
     End Function
     Private Sub CopyFile(Source As String, Dest As String)
         Dim BufferSize As Integer = 256000
-        Dim perc As Integer = 0
         Dim buffer(BufferSize - 1) As Byte
         Dim bytesIn As Integer = 1
-        Dim totalBytesIn As Integer
         Dim CurrentFile As New FileInfo(Source)
         Progress.ResetProgress()
         Using fStream As System.IO.FileStream = CurrentFile.OpenRead(),
                 destFile As System.IO.FileStream = New FileStream(Dest, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, BufferSize, FileOptions.None)
             CurrentStatus.CurFileProgress = 1
-            totalBytesIn = 0
             Progress.BytesToTransfer = CInt(fStream.Length)
-            Dim flLength As Long = fStream.Length
             Do Until bytesIn < 1 Or CopyWorker.CancellationPending
                 bytesIn = fStream.Read(buffer, 0, BufferSize)
                 If bytesIn > 0 Then
@@ -185,7 +179,6 @@ Public Class GK_Updater : Implements IDisposable
             'Get array of full paths of all files in source dir and sub-dirs
             Dim files() = Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories)
             'Loop through file array
-            lngBytesMoved = 0
             For i As Integer = StartIdx To UBound(files)
                 Dim file__1 = files(i)
                 If CopyWorker.CancellationPending Then
@@ -258,7 +251,7 @@ Public Class GK_Updater : Implements IDisposable
                 OnUpdateComplete(New GKUpdateCompleteEvents(False))
             Else
                 If Not bolPaused Then
-                    OnUpdateCancelled(New EventArgs)
+                    OnUpdateCanceled(New EventArgs)
                 End If
             End If
         Else
@@ -315,14 +308,9 @@ Public Class GK_Updater : Implements IDisposable
 
 #Region "Structures And Classes"
 
-    Public Structure GK_Complete_Stats
-        Public Errors As Boolean
-    End Structure
-
     Public Structure GK_Log_Info
-        Public ErrList As List(Of String)
-        Public Message As String
-        Public ToErrList As Boolean
+        Public Property Message As String
+        Public Property ToErrList As Boolean
         Sub New(Msg As String, ToErrLst As Boolean)
             Message = Msg
             ToErrList = ToErrLst
@@ -330,12 +318,12 @@ Public Class GK_Updater : Implements IDisposable
     End Structure
 
     Public Structure Status_Stats
-        Public CurFileIdx As Integer
-        Public CurFileName As String
-        Public CurFileProgress As Integer
-        Public CurTransferRate As Double
-        Public SourceFileName As String
-        Public TotFiles As Integer
+        Public Property CurFileIdx As Integer
+        Public Property CurFileName As String
+        Public Property CurFileProgress As Integer
+        Public Property CurTransferRate As Double
+        Public Property SourceFileName As String
+        Public Property TotFiles As Integer
         Sub New(tFiles As Integer, CurFIdx As Integer, CurFName As String, sFileName As String, CurFileProg As Integer, CurTransRate As Double)
             TotFiles = tFiles
             CurFileIdx = CurFIdx

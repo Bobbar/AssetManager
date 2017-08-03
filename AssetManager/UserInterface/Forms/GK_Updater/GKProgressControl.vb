@@ -40,7 +40,7 @@ Public Class GKProgressControl
         AddHandler MyUpdater.LogEvent, AddressOf GKLogEvent
         AddHandler MyUpdater.StatusUpdate, AddressOf GKStatusUpdateEvent
         AddHandler MyUpdater.UpdateComplete, AddressOf GKUpdate_Complete
-        AddHandler MyUpdater.UpdateCancelled, AddressOf GKUpdate_Cancelled
+        AddHandler MyUpdater.UpdateCanceled, AddressOf GKUpdate_Cancelled
         DoubleBufferedPanel(Panel1, True)
     End Sub
 
@@ -101,7 +101,7 @@ Public Class GKProgressControl
         RemoveHandler MyUpdater.LogEvent, AddressOf GKLogEvent
         RemoveHandler MyUpdater.StatusUpdate, AddressOf GKStatusUpdateEvent
         RemoveHandler MyUpdater.UpdateComplete, AddressOf GKUpdate_Complete
-        RemoveHandler MyUpdater.UpdateCancelled, AddressOf GKUpdate_Cancelled
+        RemoveHandler MyUpdater.UpdateCanceled, AddressOf GKUpdate_Cancelled
         MyUpdater.Dispose()
 
     End Sub
