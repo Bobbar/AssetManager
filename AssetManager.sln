@@ -11,6 +11,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PingVisLib", "PingVis_Libra
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "AdvancedDialogLib", "MyDialog\AdvancedDialogLib.vbproj", "{5A65F4BF-4B06-44E4-AE55-5935E03955F6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{D7EFCEAD-2468-46A3-9381-64D12F18406B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{583F28B2-C2F5-4422-BAC8-E3D15CB61DF0} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
+		{BC3270C0-62BA-42E4-8DB3-8ADCFE61DBC4} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
+		{5A65F4BF-4B06-44E4-AE55-5935E03955F6} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
 	EndGlobalSection
 EndGlobal
