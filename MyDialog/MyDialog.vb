@@ -1,8 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports System.Drawing
-Public Class MyDialog
-    Private FormControlSize As Size = New Size(600, 345)
-
+Public Class AdvancedDialog
     Private IsMessageBox As Boolean = False
 
     Private MyControls As New List(Of Control)
@@ -69,7 +67,7 @@ Public Class MyDialog
     ''' <param name="Name">Name of the control. To be referenced later via <see cref="GetControlValue(String)"/></param>
     ''' <param name="Label">Text of label that will be positioned next to the control.</param>
     ''' <param name="control">Reference of pre-prepared control.</param>
-    Public Sub AddCustomControl(Name As String, Label As String, ByRef control As Control)
+    Public Sub AddCustomControl(Name As String, Label As String, control As Control)
         control.Name = Name
         control.Tag = Label
         AddControl(control)
@@ -307,7 +305,13 @@ Public Class MyDialog
         Next
         pnlControls.ResumeLayout()
     End Sub
-
+    ''' <summary>
+    ''' Dispose of all controls.
+    ''' </summary>
+    Private Sub DisposeControls()
+        MyControls.ForEach(Sub(c) c.Dispose())
+        MyControls.Clear()
+    End Sub
     Private Sub MaximizeForm()
         pnlControls_Main.AutoSize = False
         pnlMaster.AutoSize = False
@@ -385,6 +389,11 @@ Public Class MyDialog
     Private Sub MyDialog_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         FlashMe()
     End Sub
+
+    Private Sub MyDialog_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        DisposeControls()
+    End Sub
+
     Private Class TaskBarNotify
         Private Declare Function FlashWindowEx Lib "User32" (ByRef fwInfo As FLASHWINFO) As Boolean
 

@@ -96,7 +96,7 @@ Module OtherFunctions
     End Function
 
     Public Function Message(ByVal Prompt As String, Optional ByVal Buttons As Integer = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As MsgBoxResult
-        Dim NewMessage As New MyDialog(ParentFrm)
+        Dim NewMessage As New AdvancedDialog(ParentFrm)
         Return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
     End Function
 

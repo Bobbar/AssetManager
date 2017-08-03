@@ -8,7 +8,7 @@ Imports MyDialogLib
 Public Class PdfFormFilling
     Private ParentForm As Form
     Private CurrentDevice As New DeviceStruct
-    Private CurrentDialog As MyDialog
+    Private CurrentDialog As AdvancedDialog
     Private UnitPriceTxtName As String = "txtUnitPrice"
 
     Sub New(parentForm As Form, deviceInfo As DeviceStruct, pdfType As PdfFormType)
@@ -28,7 +28,7 @@ Public Class PdfFormFilling
     End Sub
 
     Private Function GetUnitPrice() As String
-        Using NewDialog As New MyDialog(ParentForm)
+        Using NewDialog As New AdvancedDialog(ParentForm)
             CurrentDialog = NewDialog
             With NewDialog
                 .Text = "Input Unit Price"
@@ -100,7 +100,7 @@ Public Class PdfFormFilling
 
     Private Function DisposalFormFields(Device As DeviceStruct, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
-        Using newDialog As New MyDialog(ParentForm, True)
+        Using newDialog As New AdvancedDialog(ParentForm, True)
             With newDialog
                 .Text = "Additional Input Required"
 
@@ -228,7 +228,7 @@ Public Class PdfFormFilling
 
     Private Function TransferFormFields(Device As DeviceStruct, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
-        Using newDialog As New MyDialog(ParentForm)
+        Using newDialog As New AdvancedDialog(ParentForm)
             With newDialog
                 .Text = "Additional Input Required"
                 Dim cmbFrom As New ComboBox

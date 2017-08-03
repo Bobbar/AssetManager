@@ -261,7 +261,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         Try
             Dim Device As New DeviceStruct
             Device.PurchaseDate = Nothing
-            Using NewDialog As New MyDialog(parentForm)
+            Using NewDialog As New AdvancedDialog(parentForm)
                 With NewDialog
                     .Text = "Asset Search"
                     .AddTextBox("txtAsset", "Asset:")
@@ -281,7 +281,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
 
     Public Sub NameSearch(parentForm As Form)
         Try
-            Using NewDialog As New MyDialog(parentForm)
+            Using NewDialog As New AdvancedDialog(parentForm)
                 With NewDialog
                     .Text = "Org/Object Code Search"
                     .AddTextBox("txtName", "First or Last Name:")
@@ -302,7 +302,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
     Public Sub POSearch(parentForm As Form)
         Try
             Dim PO As String
-            Using NewDialog As New MyDialog(parentForm)
+            Using NewDialog As New AdvancedDialog(parentForm)
                 With NewDialog
                     .Text = "PO Search"
                     .AddTextBox("txtPO", "PO #:")
@@ -321,7 +321,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
     Public Async Sub ReqSearch(parentForm As Form)
         Try
             Dim ReqNumber, FY As String
-            Using NewDialog As New MyDialog(parentForm)
+            Using NewDialog As New AdvancedDialog(parentForm)
                 With NewDialog
                     .Text = "Req Search"
                     .AddTextBox("txtReqNum", "Requisition #:")
@@ -348,7 +348,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
 
     Public Sub OrgObSearch(parentForm As Form)
         Try
-            Using NewDialog As New MyDialog(parentForm)
+            Using NewDialog As New AdvancedDialog(parentForm)
                 Dim strOrg, strObj, strFY As String
                 With NewDialog
                     .Text = "Org/Object Code Search"

@@ -9,7 +9,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "GKUpdaterLib", "GK_Updater_
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PingVisLib", "PingVis_Library\PingVisLib.vbproj", "{BC3270C0-62BA-42E4-8DB3-8ADCFE61DBC4}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MyDialogLib", "MyDialog\MyDialogLib.vbproj", "{5A65F4BF-4B06-44E4-AE55-5935E03955F6}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "AdvancedDialogLib", "MyDialog\AdvancedDialogLib.vbproj", "{5A65F4BF-4B06-44E4-AE55-5935E03955F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
