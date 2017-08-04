@@ -46,7 +46,7 @@ Public Class PdfFormFilling
     Private Async Sub PriceFromMunis()
         Try
             Message("Please Double-Click a MUNIS line item on the following window.", vbOKOnly + vbInformation, "Input Needed")
-            Dim SelectedPrice = Await MunisFunc.NewMunisViewReqSearch(MunisFunc.GetReqNumberFromPO(CurrentDevice.PO), MunisFunc.GetFYFromPO(CurrentDevice.PO), ParentForm, True)
+            Dim SelectedPrice = Await MunisFunc.NewMunisReqSearch(MunisFunc.GetReqNumberFromPO(CurrentDevice.PO), MunisFunc.GetFYFromPO(CurrentDevice.PO), ParentForm, True)
             Dim decPrice As Decimal = Convert.ToDecimal(SelectedPrice)
             Dim SelectedUnitPrice = decPrice.ToString("C")
             CurrentDialog.SetControlValue(UnitPriceTxtName, SelectedUnitPrice)

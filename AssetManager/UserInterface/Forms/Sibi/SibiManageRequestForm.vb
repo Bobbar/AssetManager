@@ -1145,7 +1145,7 @@ VALUES
     Private Sub txtPO_Click(sender As Object, e As EventArgs) Handles txtPO.Click
         Dim PO As String = Trim(txtPO.Text)
         If Not IsModifying And PO <> "" Then
-            MunisFunc.NewMunisViewPOSearch(PO, Me)
+            MunisFunc.NewMunisPOSearch(PO, Me)
         End If
     End Sub
 
@@ -1154,7 +1154,7 @@ VALUES
             Waiting()
             Dim ReqNum As String = Trim(txtReqNumber.Text)
             If Not IsModifying And ReqNum <> "" Then
-                MunisFunc.NewMunisViewReqSearch(ReqNum, YearFromDate(CurrentRequest.DateStamp), Me)
+                MunisFunc.NewMunisReqSearch(ReqNum, YearFromDate(CurrentRequest.DateStamp), Me)
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

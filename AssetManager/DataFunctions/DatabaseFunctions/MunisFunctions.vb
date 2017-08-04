@@ -289,7 +289,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
                     If .DialogResult = DialogResult.OK Then
                         Dim strName = NewDialog.GetControlValue("txtName").ToString
                         If Trim(strName) IsNot "" Then
-                            NewMunisViewNameSearch(strName, parentForm)
+                            NewMunisEmployeeSearch(strName, parentForm)
                         End If
                     End If
                 End With
@@ -309,7 +309,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
                     .ShowDialog()
                     If .DialogResult = DialogResult.OK Then
                         PO = NewDialog.GetControlValue("txtPO").ToString
-                        NewMunisViewPOSearch(PO, parentForm)
+                        NewMunisPOSearch(PO, parentForm)
                     End If
                 End With
             End Using
@@ -332,7 +332,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
                         FY = NewDialog.GetControlValue("txtFY").ToString
                         If IsValidYear(FY) Then
                             Waiting()
-                            Dim blah = Await NewMunisViewReqSearch(ReqNumber, FY, parentForm)
+                            Dim blah = Await NewMunisReqSearch(ReqNumber, FY, parentForm)
                         Else
                             Message("Invalid year.", vbOKOnly + vbInformation, "Invalid", parentForm)
                         End If
@@ -419,7 +419,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         End Try
     End Sub
 
-    Private Async Sub NewMunisViewNameSearch(name As String, parentForm As Form)
+    Private Async Sub NewMunisEmployeeSearch(name As String, parentForm As Form)
         Try
             Waiting()
             Dim strColumns As String = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last"
@@ -446,7 +446,7 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number"
         End Try
     End Sub
 
-    Public Async Sub NewMunisViewPOSearch(PO As String, parentForm As Form)
+    Public Async Sub NewMunisPOSearch(PO As String, parentForm As Form)
         Try
             Waiting()
             If PO = "" Then Exit Sub
@@ -471,18 +471,22 @@ FROM poheader"
         End Try
     End Sub
 
-    Public Async Function NewMunisViewReqSearch(reqNumber As String, FY As String, parentForm As Form, Optional selectMode As Boolean = False) As Task(Of String)
+    Public Async Function NewMunisReqSearch(reqNumber As String, FY As String, parentForm As Form, Optional selectMode As Boolean = False) As Task(Of String)
         If reqNumber = "" Or FY = "" Then
             Return Nothing
         End If
         Dim NewGridForm As New GridForm(parentForm, "MUNIS Requisition Info")
-        Using results = Await LoadMunisRequisitionGridByReqNo(reqNumber, FY)
-            If HasResults(results, parentForm) Then
-                NewGridForm.AddGrid("ReqGrid", "Requisition Info:", results)
+        Using ReqLineItemsTable = Await GetReqLineItemsFromReqNum(reqNumber, FY)
+            If HasResults(ReqLineItemsTable, parentForm) Then
                 If Not selectMode Then
+                    Using ReqHeaderTable = Await GetReqHeaderFromReqNum(reqNumber, FY)
+                        NewGridForm.AddGrid("ReqHeaderGrid", "Requisition Header:", ReqHeaderTable)
+                    End Using
+                    NewGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", ReqLineItemsTable)
                     NewGridForm.Show()
                     Return Nothing
                 Else
+                    NewGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", ReqLineItemsTable)
                     NewGridForm.ShowDialog(parentForm)
                     If NewGridForm.DialogResult = DialogResult.OK Then
                         Return SelectedCellValue(NewGridForm.SelectedValue, "rqdt_uni_pr")
@@ -501,7 +505,16 @@ FROM poheader"
         End If
     End Function
 
-    Private Async Function LoadMunisRequisitionGridByReqNo(reqNumber As String, fiscalYr As String) As Task(Of DataTable)
+    Private Async Function GetReqHeaderFromReqNum(reqNumber As String, fiscalYr As String) As Task(Of DataTable)
+        If reqNumber = "" Or fiscalYr = "" Then Return Nothing
+        Dim Query As String = "SELECT TOP " & intMaxResults & " * FROM rqheader"
+        Dim Params As New List(Of DBQueryParameter)
+        Params.Add(New DBQueryParameter("rqhd_req_no", reqNumber, True))
+        Params.Add(New DBQueryParameter("rqhd_fsc_yr", fiscalYr, True))
+        Return Await MunisComms.ReturnSqlTableFromCmdAsync(GetSqlCommandFromParams(Query, Params))
+    End Function
+
+    Private Async Function GetReqLineItemsFromReqNum(reqNumber As String, fiscalYr As String) As Task(Of DataTable)
         If reqNumber = "" Or fiscalYr = "" Then Return Nothing
         Dim VendorNum = MunisFunc.GetVendorNumberFromReqNumber(reqNumber, fiscalYr)
         If VendorNum = "" Then Return Nothing
@@ -530,11 +543,12 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
     Public Async Sub LoadMunisInfoByDevice(device As DeviceStruct, parentForm As Form)
         Try
             Waiting()
-            Dim ReqTable, InvTable As New DataTable
+            Dim ReqLinesTable, ReqHeaderTable, InvTable As New DataTable
             If device.PO <> "" Then
                 device.FiscalYear = YearFromDate(device.PurchaseDate)
                 InvTable = Await LoadMunisInventoryGrid(device)
-                ReqTable = Await LoadMunisRequisitionGridByReqNo(Await GetReqNumberFromPOAsync(device.PO), MunisFunc.GetFYFromPO(device.PO))
+                ReqLinesTable = Await GetReqLineItemsFromReqNum(Await GetReqNumberFromPOAsync(device.PO), MunisFunc.GetFYFromPO(device.PO))
+                ReqHeaderTable = Await GetReqHeaderFromReqNum(Await GetReqNumberFromPOAsync(device.PO), MunisFunc.GetFYFromPO(device.PO))
             Else
                 If device.PO = "" Then
                     Dim PO As String = GetPOFromAsset(device.AssetTag)
@@ -547,26 +561,29 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
                 End If
                 If device.PO <> "" Then
                     InvTable = Await LoadMunisInventoryGrid(device)
-                    ReqTable = Await LoadMunisRequisitionGridByReqNo(Await GetReqNumberFromPOAsync(device.PO), MunisFunc.GetFYFromPO(device.PO))
+                    ReqLinesTable = Await GetReqLineItemsFromReqNum(Await GetReqNumberFromPOAsync(device.PO), MunisFunc.GetFYFromPO(device.PO))
+                    ReqHeaderTable = Await GetReqHeaderFromReqNum(Await GetReqNumberFromPOAsync(device.PO), MunisFunc.GetFYFromPO(device.PO))
                 Else
                     InvTable = Await LoadMunisInventoryGrid(device)
-                    ReqTable = Nothing
+                    ReqLinesTable = Nothing
+                    ReqHeaderTable = Nothing
                 End If
             End If
-            If InvTable IsNot Nothing Or ReqTable IsNot Nothing Then
+            If InvTable IsNot Nothing Or ReqLinesTable IsNot Nothing Then
                 Dim NewGridForm As New GridForm(parentForm, "MUNIS Info")
                 If InvTable Is Nothing Then
                     Message("Could not pull Munis Fixed Asset info.", vbOKOnly + vbInformation, "No FA Record")
                 Else
                     NewGridForm.AddGrid("InvGrid", "FA Info:", InvTable)
                 End If
-                If ReqTable Is Nothing Then
+                If ReqLinesTable Is Nothing Then
                     Message("Could not resolve PO from Asset Tag or Serial. Please add a valid PO if possible.", vbOKOnly + vbInformation, "No Req. Record")
                 Else
-                    NewGridForm.AddGrid("ReqGrid", "Requisition Info:", ReqTable)
+                    NewGridForm.AddGrid("ReqHeadGrid", "Requisition Header:", ReqHeaderTable)
+                    NewGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", ReqLinesTable)
                 End If
                 NewGridForm.Show()
-            ElseIf InvTable Is Nothing And ReqTable Is Nothing Then
+            ElseIf InvTable Is Nothing And ReqLinesTable Is Nothing Then
                 Message("Could not resolve any Req. or FA info.", vbOKOnly + vbInformation, "Nothing Found")
             End If
         Catch ex As Exception
