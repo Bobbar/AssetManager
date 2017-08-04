@@ -18,12 +18,10 @@ Public Class GridForm
         Me.Tag = parentForm
         Me.Icon = MyParent.Icon
         Me.GridTheme = MyParent.GridTheme
-
         ' This call is required by the designer.
         InitializeComponent()
         If title <> "" Then Me.Text = title
         ' Add any initialization after the InitializeComponent() call.
-
         DoubleBufferedTableLayout(GridPanel, True)
         DoubleBufferedPanel(Panel1, True)
         GridPanel.RowStyles.Clear()
@@ -59,7 +57,7 @@ Public Class GridForm
         CopySelectedGridData(GetActiveGrid)
     End Sub
 
-    Private Sub DisplayGrids()
+    Private Sub AddGridsToForm()
         Me.SuspendLayout()
         For Each grid As DataGridView In GridList
             Dim GridBox As New GroupBox
@@ -69,8 +67,6 @@ Public Class GridForm
             GridPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, GridHeight))
             GridPanel.Controls.Add(GridBox)
         Next
-        ResizeGrids()
-        bolGridFilling = False
         Me.ResumeLayout()
     End Sub
 
@@ -128,7 +124,8 @@ Public Class GridForm
     End Sub
 
     Private Sub GridForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        DisplayGrids()
+        ResizeGrids()
+        bolGridFilling = False
     End Sub
 
     Private Function GridHeight() As Integer
@@ -163,6 +160,10 @@ Public Class GridForm
 
     Private Sub SendToNewGridForm_Click(sender As Object, e As EventArgs) Handles SendToNewGridForm.Click
         CopyToGridForm(GetActiveGrid, MyParent)
+    End Sub
+
+    Private Sub GridForm_HandleCreated(sender As Object, e As EventArgs) Handles Me.HandleCreated
+        AddGridsToForm()
     End Sub
 
 #End Region
