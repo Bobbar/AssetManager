@@ -52,10 +52,9 @@ Public Class SibiManageRequestForm
         dgvNotes.DataSource = Nothing
         SetupGrid(RequestItemsGrid, RequestItemsColumns)
         FillCombos()
-        EnableControls(Me)
         pnlCreate.Visible = False
         CurrentRequest = Nothing
-        DisableControls(Me)
+        DisableControls()
         ToolStrip.BackColor = colSibiToolBarColor
         IsModifying = False
         bolNewRequest = False
@@ -82,7 +81,7 @@ Public Class SibiManageRequestForm
             RequestItemsGrid.DataSource = Comms.ReturnMySqlTable("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0")
         End Using
 
-        EnableControls(Me)
+        EnableControls()
         pnlCreate.Visible = True
     End Sub
 
@@ -101,7 +100,7 @@ Public Class SibiManageRequestForm
             DataParser.FillDBFields(RequestResults)
             SendToGrid(RequestItemsResults)
             LoadNotes(CurrentRequest.GUID)
-            DisableControls(Me)
+            DisableControls()
             SetTitle(False)
             SetAttachCount()
             Me.Show()
@@ -329,7 +328,7 @@ VALUES
     Private Sub cmdAccept_Click(sender As Object, e As EventArgs) Handles cmdAccept.Click
         RequestItemsGrid.EndEdit()
         If Not ValidateFields() Then Exit Sub
-        DisableControls(Me)
+        DisableControls()
         ToolStrip.BackColor = colSibiToolBarColor
         HideEditControls()
         UpdateRequest()
@@ -539,7 +538,7 @@ VALUES
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
-    Private Sub DisableControls(ByVal control As Control)
+    Private Sub DisableControlsRecursive(control As Control)
         For Each c As Control In control.Controls
             Select Case True
                 Case TypeOf c Is TextBox
@@ -559,9 +558,13 @@ VALUES
                     'do nut-zing
             End Select
             If c.HasChildren Then
-                DisableControls(c)
+                DisableControlsRecursive(c)
             End If
         Next
+    End Sub
+
+    Private Sub DisableControls()
+        DisableControlsRecursive(Me)
         DisableGrid()
     End Sub
 
@@ -575,7 +578,7 @@ VALUES
         SetWaitCursor(False)
     End Sub
 
-    Private Sub EnableControls(ByVal control As Control)
+    Private Sub EnableControlsRecursive(control As Control)
         For Each c As Control In control.Controls
             Select Case True
                 Case TypeOf c Is TextBox
@@ -595,9 +598,13 @@ VALUES
                     'do nut-zing
             End Select
             If c.HasChildren Then
-                EnableControls(c)
+                EnableControlsRecursive(c)
             End If
         Next
+    End Sub
+
+    Private Sub EnableControls()
+        EnableControlsRecursive(Me)
         EnableGrid()
     End Sub
 
@@ -1180,12 +1187,12 @@ VALUES
                 RefreshRequest()
                 Message("This request has been modified since it's been open and has been refreshed with the current data.", vbOKOnly + vbInformation, "Concurrency Check", Me)
             End If
-            EnableControls(Me)
+            EnableControls()
             ToolStrip.BackColor = colEditColor
             ShowEditControls()
             IsModifying = True
         Else
-            DisableControls(Me)
+            DisableControls()
             ToolStrip.BackColor = colSibiToolBarColor
             HideEditControls()
             UpdateRequest()

@@ -129,10 +129,8 @@ Public Class MainForm
 
     Private Function BuildSearchList() As List(Of DBQueryParameter)
         Dim tmpList As New List(Of DBQueryParameter)
-        Dim CtlList As New List(Of Control)
         Dim DataParser As New DBControlParser(Me)
-        DataParser.GetDBControls(Me, CtlList)
-        For Each ctl In CtlList
+        For Each ctl In DataParser.GetDBControls(Me)
             Dim DBInfo = DirectCast(ctl.Tag, DBControlInfo)
             tmpList.Add(New DBQueryParameter(DBInfo.DataColumn, DataParser.GetDBControlValue(ctl), False))
         Next

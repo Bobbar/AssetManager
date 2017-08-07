@@ -40,9 +40,6 @@ Public Class ViewDeviceForm
         MyWindowList.InsertWindowList(ToolStrip1)
         RefreshCombos()
         grpNetTools.Visible = False
-        '    ToolStrip1.BackColor = colAssetToolBarColor
-        lblGUID.BackColor = SetBarColor(deviceGUID)
-        lblGUID.ForeColor = GetFontColor(lblGUID.BackColor)
         ExtendedMethods.DoubleBufferedDataGrid(DataGridHistory, True)
         ExtendedMethods.DoubleBufferedDataGrid(TrackingGrid, True)
         ViewDevice(deviceGUID)
@@ -198,8 +195,7 @@ Public Class ViewDeviceForm
         Dim bolMissingField As Boolean
         bolMissingField = False
         fieldErrorIcon.Clear()
-        Dim c As Control
-        For Each c In DeviceInfoBox.Controls
+        For Each c As Control In DataParser.GetDBControls(Me)
             Dim DBInfo As DBControlInfo = DirectCast(c.Tag, DBControlInfo)
             Select Case True
                 Case TypeOf c Is TextBox
@@ -270,21 +266,6 @@ Public Class ViewDeviceForm
 
     Private Sub ClearErrorIcon(ctl As Control)
         fieldErrorIcon.SetError(ctl, String.Empty)
-    End Sub
-
-    Private Sub ClearFields()
-        Dim c As Control
-        For Each c In DeviceInfoBox.Controls
-            If TypeOf c Is TextBox Then
-                Dim txt As TextBox = DirectCast(c, TextBox)
-                txt.Text = ""
-            End If
-            If TypeOf c Is ComboBox Then
-                Dim cmb As ComboBox = DirectCast(c, ComboBox)
-                cmb.SelectedIndex = -1
-            End If
-        Next
-        fieldErrorIcon.Clear()
     End Sub
 
     Private Sub cmbEquipType_View_REQ_DropDown(sender As Object, e As EventArgs) Handles cmbEquipType_View_REQ.DropDown
@@ -523,10 +504,8 @@ Public Class ViewDeviceForm
             Return 0
         End Try
     End Function
-
-    Private Sub DisableControls()
-        Dim c As Control
-        For Each c In DeviceInfoBox.Controls
+    Private Sub DisableControlsRecursive(control As Control)
+        For Each c As Control In control.Controls
             Select Case True
                 Case TypeOf c Is TextBox
                     Dim txt As TextBox = DirectCast(c, TextBox)
@@ -545,11 +524,17 @@ Public Class ViewDeviceForm
                 Case TypeOf c Is Label
                     'do nut-zing
             End Select
+            If c.HasChildren Then
+                DisableControlsRecursive(c)
+            End If
         Next
-        For Each c In pnlOtherFunctions.Controls
-            If c.Name IsNot "cmdRDP" Then c.Visible = True
-        Next
-        ' cmdSetSibi.Visible = False
+    End Sub
+
+    Private Sub DisableControls()
+
+        DisableControlsRecursive(Me)
+
+        pnlOtherFunctions.Visible = True
         cmdMunisSearch.Visible = False
         Me.Text = "View"
         tsSaveModify.Visible = False
@@ -572,15 +557,12 @@ Public Class ViewDeviceForm
         If bolCheckFields Then CheckFields()
     End Sub
 
-    Private Sub EnableControls()
-        Dim c As Control
-        For Each c In DeviceInfoBox.Controls
+    Private Sub EnableControlsRecursive(control As Control)
+        For Each c As Control In control.Controls
             Select Case True
                 Case TypeOf c Is TextBox
                     Dim txt As TextBox = DirectCast(c, TextBox)
-                    If txt.Name <> "txtGUID" Then
-                        txt.ReadOnly = False
-                    End If
+                    txt.ReadOnly = False
                 Case TypeOf c Is MaskedTextBox
                     Dim txt As MaskedTextBox = DirectCast(c, MaskedTextBox)
                     txt.ReadOnly = False
@@ -595,15 +577,22 @@ Public Class ViewDeviceForm
                 Case TypeOf c Is Label
                     'do nut-zing
             End Select
+            If c.HasChildren Then
+                EnableControlsRecursive(c)
+            End If
         Next
-        For Each c In pnlOtherFunctions.Controls
-            c.Visible = False
-        Next
-        'cmdSetSibi.Visible = True
+
+    End Sub
+
+
+    Private Sub EnableControls()
+
+        EnableControlsRecursive(Me)
+
+        pnlOtherFunctions.Visible = False
         cmdMunisSearch.Visible = True
         Me.Text = "*View - MODIFYING*"
         tsSaveModify.Visible = True
-
     End Sub
 
     Private Sub FillTrackingBox()
@@ -688,6 +677,7 @@ Public Class ViewDeviceForm
         lblGUID.Tag = New DBControlInfo(DevicesBaseCols.DeviceUID, False)
         chkTrackable.Tag = New DBControlInfo(DevicesBaseCols.Trackable, False)
         txtHostname.Tag = New DBControlInfo(DevicesBaseCols.HostName, False)
+        iCloudTextBox.Tag = New DBControlInfo(DevicesBaseCols.iCloudAccount, False)
     End Sub
 
     Private Sub LaunchRDP()
@@ -716,9 +706,9 @@ Public Class ViewDeviceForm
         EnableControls()
     End Sub
 
-    Private Sub NewEntryView(GUID As String)
+    Private Sub NewEntryView(entryGUID As String)
         Waiting()
-        Dim NewEntry As New ViewHistoryForm(Me, GUID)
+        Dim NewEntry As New ViewHistoryForm(Me, entryGUID, CurrentViewDevice.GUID)
         DoneWaiting()
     End Sub
 
@@ -766,8 +756,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub ResetBackColors()
-        Dim c As Control
-        For Each c In DeviceInfoBox.Controls
+        For Each c As Control In DataParser.GetDBControls(Me)
             Select Case True
                 Case TypeOf c Is TextBox
                     c.BackColor = Color.Empty

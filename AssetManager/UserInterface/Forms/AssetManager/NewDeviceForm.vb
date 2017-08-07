@@ -36,7 +36,7 @@ Public Class NewDeviceForm
                 If Success Then
                     Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete", Me)
                     If Not chkNoClear.Checked Then ClearAll()
-                    If blah = vbNo Then Me.Hide()
+                    If blah = vbNo Then Me.Dispose()
                     MainForm.RefreshCurrent()
                 Else
                     Message("Something went wrong while adding a new device.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
@@ -58,7 +58,7 @@ Public Class NewDeviceForm
         End If
     End Sub
 
-    Private Sub AddNew_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+    Private Sub NewDeviceForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         MyLiveBox.Dispose()
     End Sub
 
@@ -69,6 +69,7 @@ Public Class NewDeviceForm
         MyLiveBox.AttachToControl(txtDescription_REQ, LiveBoxType.SelectValue, DevicesCols.Description)
         Icon = MainForm.Icon
         Tag = MainForm
+        Me.Owner = MainForm
     End Sub
 
     Private Function AddNewDevice() As Boolean
@@ -264,6 +265,7 @@ Public Class NewDeviceForm
         chkTrackable.Tag = New DBControlInfo(DevicesBaseCols.Trackable, False)
         txtPO.Tag = New DBControlInfo(DevicesBaseCols.PO, False)
         txtHostname.Tag = New DBControlInfo(DevicesBaseCols.HostName, False)
+        iCloudTextBox.Tag = New DBControlInfo(DevicesBaseCols.iCloudAccount, False)
     End Sub
     Private Sub RefreshCombos()
         FillComboBox(DeviceIndex.Locations, cmbLocation_REQ)
@@ -318,6 +320,8 @@ Public Class NewDeviceForm
             txtHostname.Text = String.Empty
         End If
     End Sub
+
+
 #End Region
 
 End Class

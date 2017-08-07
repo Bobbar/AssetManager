@@ -152,10 +152,8 @@ Public Class DBControlParser
     ''' </summary>
     ''' <param name="data">DataTable that contains the rows and columns associated with the controls.</param>
     Public Sub FillDBFields(data As DataTable)
-        Dim DBCtlList As New List(Of Control)
-        GetDBControls(ParentForm, DBCtlList)
         Dim Row As DataRow = data.Rows(0)
-        For Each ctl As Control In DBCtlList
+        For Each ctl As Control In GetDBControls(ParentForm)
             Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
             Select Case True
                 Case TypeOf ctl Is TextBox
@@ -196,15 +194,19 @@ Public Class DBControlParser
     ''' </summary>
     ''' <param name="parentForm">Parent control. Usually a Form to being.</param>
     ''' <param name="controlList">Blank List of Control to be filled.</param>
-    Public Sub GetDBControls(parentForm As Control, controlList As List(Of Control))
+    Public Function GetDBControls(parentForm As Control, Optional controlList As List(Of Control) = Nothing) As List(Of Control)
+        If controlList Is Nothing Then controlList = New List(Of Control)
         For Each ctl As Control In parentForm.Controls
             Select Case True
                 Case TypeOf ctl.Tag Is DBControlInfo
                     controlList.Add(ctl)
             End Select
-            If ctl.HasChildren Then GetDBControls(ctl, controlList)
+            If ctl.HasChildren Then
+                controlList.AddRange(GetDBControls(ctl))
+            End If
         Next
-    End Sub
+        Return controlList
+    End Function
 
     Public Function GetDBControlValue(dbControl As Control) As Object
         Dim DBInfo = DirectCast(dbControl.Tag, DBControlInfo)
@@ -276,9 +278,7 @@ Public Class DBControlParser
     ''' </summary>
     ''' <param name="DBRow">DataRow to be modified.</param>
     Private Sub UpdateDBControlRow(ByRef DBRow As DataRow)
-        Dim DBCtlList As New List(Of Control)
-        GetDBControls(ParentForm, DBCtlList)
-        For Each ctl As Control In DBCtlList
+        For Each ctl As Control In GetDBControls(ParentForm)
             Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
             If DBInfo.ParseType <> ParseType.DisplayOnly Then
                 Select Case True
