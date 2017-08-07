@@ -2,14 +2,17 @@
 
 Public Class ViewHistoryForm
     Private DataParser As New DBControlParser(Me)
+    Private _DeviceGUID As String
 
-    Sub New(parentForm As Form, entryUID As String)
+    Sub New(parentForm As Form, entryUID As String, deviceGUID As String)
         InitializeComponent()
         InitDBControls()
         Tag = parentForm
         Icon = parentForm.Icon
         FormUID = entryUID
+        _DeviceGUID = deviceGUID
         ViewEntry(entryUID)
+
     End Sub
 
     Private Sub Waiting()
@@ -53,6 +56,7 @@ Public Class ViewHistoryForm
         Try
             Dim strQry = "Select * FROM " & HistoricalDevicesCols.TableName & " WHERE  " & HistoricalDevicesCols.HistoryEntryUID & " = '" & EntryUID & "'"
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQry)
+                HighlightChangedFields(results)
                 FillControls(results)
                 Show()
                 Activate()
@@ -61,6 +65,48 @@ Public Class ViewHistoryForm
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
+    End Sub
+
+    ''' <summary>
+    ''' Returns a list of controls whose value differs from the previous historical state.
+    ''' </summary>
+    ''' <param name="currentData"></param>
+    ''' <returns></returns>
+    Private Function GetChangedFields(currentData As DataTable) As List(Of Control)
+        Dim ChangedControls As New List(Of Control)
+        Dim CurrentTimeStamp As Date = DirectCast(currentData.Rows(0).Item(HistoricalDevicesCols.ActionDateTime), Date)
+        'Query for all rows with a timestamp older than the current historical entry.
+        Dim Query As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.DeviceUID & " = '" & _DeviceGUID & "' AND " & HistoricalDevicesCols.ActionDateTime & " < '" & CurrentTimeStamp.ToString(strDBDateTimeFormat) & "' ORDER BY " & HistoricalDevicesCols.ActionDateTime & " DESC"
+        Using olderData = DBFunc.DataTableFromQueryString(Query)
+            If olderData.Rows.Count > 0 Then
+                'Declare the current and previous DataRows.
+                Dim PreviousRow As DataRow = olderData.Rows(0)
+                Dim CurrentRow As DataRow = currentData.Rows(0)
+                Dim ChangedColumns As New List(Of String)
+                'Iterate through the CurrentRow item array and compare them to the PreviousRow items.
+                For i As Integer = 0 To CurrentRow.ItemArray.Length - 1
+                    If PreviousRow.Item(i).ToString <> CurrentRow.Item(i).ToString Then
+                        'Add column names to a list if the item values don't match.
+                        ChangedColumns.Add(PreviousRow.Table.Columns(i).ColumnName)
+                    End If
+                Next
+                'Get a list of all the controls with DBControlInfo tags.
+                Dim ControlList As New List(Of Control)
+                DataParser.GetDBControls(Me, ControlList)
+                'Get a list of all the controls whose data columns match the ChangedColumns.
+                For Each col In ChangedColumns
+                    ChangedControls.Add(ControlList.Find(Function(c) DirectCast(c.Tag, DBControlInfo).DataColumn = col))
+                Next
+            End If
+        End Using
+        Return ChangedControls
+    End Function
+
+    Private Sub HighlightChangedFields(currentData As DataTable)
+        'Iterate through the list of changed fields and set the background color to highlight them.
+        For Each ctl In GetChangedFields(currentData)
+            ctl.BackColor = colCheckIn
+        Next
     End Sub
 
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click

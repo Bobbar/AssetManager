@@ -716,9 +716,9 @@ Public Class ViewDeviceForm
         EnableControls()
     End Sub
 
-    Private Sub NewEntryView(GUID As String)
+    Private Sub NewEntryView(entryGUID As String)
         Waiting()
-        Dim NewEntry As New ViewHistoryForm(Me, GUID)
+        Dim NewEntry As New ViewHistoryForm(Me, entryGUID, CurrentViewDevice.GUID)
         DoneWaiting()
     End Sub
 
