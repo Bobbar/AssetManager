@@ -69,6 +69,7 @@ Public Class NewDeviceForm
         MyLiveBox.AttachToControl(txtDescription_REQ, LiveBoxType.SelectValue, DevicesCols.Description)
         Icon = MainForm.Icon
         Tag = MainForm
+        Me.Owner = MainForm
     End Sub
 
     Private Function AddNewDevice() As Boolean
@@ -264,6 +265,7 @@ Public Class NewDeviceForm
         chkTrackable.Tag = New DBControlInfo(DevicesBaseCols.Trackable, False)
         txtPO.Tag = New DBControlInfo(DevicesBaseCols.PO, False)
         txtHostname.Tag = New DBControlInfo(DevicesBaseCols.HostName, False)
+        iCloudTextBox.Tag = New DBControlInfo(DevicesBaseCols.iCloudAccount, False)
     End Sub
     Private Sub RefreshCombos()
         FillComboBox(DeviceIndex.Locations, cmbLocation_REQ)

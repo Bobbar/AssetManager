@@ -55,12 +55,14 @@ Partial Class NewDeviceForm
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.txtHostname = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.txtPhoneNumber = New System.Windows.Forms.MaskedTextBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.GroupBox6 = New System.Windows.Forms.GroupBox()
         Me.GroupBox7 = New System.Windows.Forms.GroupBox()
-        Me.txtHostname = New System.Windows.Forms.TextBox()
-        Me.Label7 = New System.Windows.Forms.Label()
+        Me.iCloudTextBox = New System.Windows.Forms.TextBox()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.GroupBox2.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox3.SuspendLayout()
@@ -187,7 +189,7 @@ Partial Class NewDeviceForm
         '
         Me.chkTrackable.AutoSize = True
         Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(32, 159)
+        Me.chkTrackable.Location = New System.Drawing.Point(31, 196)
         Me.chkTrackable.Name = "chkTrackable"
         Me.chkTrackable.Size = New System.Drawing.Size(135, 20)
         Me.chkTrackable.TabIndex = 12
@@ -437,6 +439,8 @@ Partial Class NewDeviceForm
         '
         'GroupBox5
         '
+        Me.GroupBox5.Controls.Add(Me.iCloudTextBox)
+        Me.GroupBox5.Controls.Add(Me.Label14)
         Me.GroupBox5.Controls.Add(Me.txtHostname)
         Me.GroupBox5.Controls.Add(Me.Label7)
         Me.GroupBox5.Controls.Add(Me.txtPhoneNumber)
@@ -449,10 +453,31 @@ Partial Class NewDeviceForm
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "Misc"
         '
+        'txtHostname
+        '
+        Me.txtHostname.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtHostname.Location = New System.Drawing.Point(14, 100)
+        Me.txtHostname.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
+        Me.txtHostname.Name = "txtHostname"
+        Me.txtHostname.Size = New System.Drawing.Size(178, 25)
+        Me.txtHostname.TabIndex = 59
+        Me.txtHostname.Text = "txtHostname"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(11, 80)
+        Me.Label7.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(70, 16)
+        Me.Label7.TabIndex = 60
+        Me.Label7.Text = "Hostname"
+        '
         'txtPhoneNumber
         '
         Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPhoneNumber.Location = New System.Drawing.Point(14, 50)
+        Me.txtPhoneNumber.Location = New System.Drawing.Point(14, 46)
         Me.txtPhoneNumber.Mask = "(999) 000-0000"
         Me.txtPhoneNumber.Name = "txtPhoneNumber"
         Me.txtPhoneNumber.Size = New System.Drawing.Size(178, 25)
@@ -463,7 +488,7 @@ Partial Class NewDeviceForm
         '
         Me.Label13.AutoSize = True
         Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.Location = New System.Drawing.Point(11, 29)
+        Me.Label13.Location = New System.Drawing.Point(11, 25)
         Me.Label13.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(98, 16)
@@ -490,26 +515,25 @@ Partial Class NewDeviceForm
         Me.GroupBox7.TabIndex = 57
         Me.GroupBox7.TabStop = False
         '
-        'txtHostname
+        'iCloudTextBox
         '
-        Me.txtHostname.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtHostname.Location = New System.Drawing.Point(14, 100)
-        Me.txtHostname.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
-        Me.txtHostname.Name = "txtHostname"
-        Me.txtHostname.Size = New System.Drawing.Size(178, 25)
-        Me.txtHostname.TabIndex = 59
-        Me.txtHostname.Text = "txtHostname"
+        Me.iCloudTextBox.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.iCloudTextBox.Location = New System.Drawing.Point(14, 154)
+        Me.iCloudTextBox.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
+        Me.iCloudTextBox.Name = "iCloudTextBox"
+        Me.iCloudTextBox.Size = New System.Drawing.Size(178, 25)
+        Me.iCloudTextBox.TabIndex = 61
         '
-        'Label7
+        'Label14
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(11, 80)
-        Me.Label7.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(70, 16)
-        Me.Label7.TabIndex = 60
-        Me.Label7.Text = "Hostname"
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Location = New System.Drawing.Point(11, 134)
+        Me.Label14.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(97, 16)
+        Me.Label14.TabIndex = 62
+        Me.Label14.Text = "iCloud Account"
         '
         'NewDeviceForm
         '
@@ -587,4 +611,6 @@ Partial Class NewDeviceForm
     Friend WithEvents txtPhoneNumber As MaskedTextBox
     Friend WithEvents txtHostname As TextBox
     Friend WithEvents Label7 As Label
+    Friend WithEvents iCloudTextBox As TextBox
+    Friend WithEvents Label14 As Label
 End Class

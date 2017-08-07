@@ -44,6 +44,7 @@ Public Class ViewHistoryForm
         chkTrackable.Tag = New DBControlInfo(HistoricalDevicesCols.Trackable, ParseType.DisplayOnly, False)
         txtPhoneNumber.Tag = New DBControlInfo(HistoricalDevicesCols.PhoneNumber, ParseType.DisplayOnly, False)
         txtHostname.Tag = New DBControlInfo(HistoricalDevicesCols.HostName, ParseType.DisplayOnly, False)
+        iCloudTextBox.Tag = New DBControlInfo(HistoricalDevicesCols.iCloudAccount, ParseType.DisplayOnly, False)
     End Sub
 
     Private Sub FillControls(Data As DataTable)
@@ -91,8 +92,7 @@ Public Class ViewHistoryForm
                     End If
                 Next
                 'Get a list of all the controls with DBControlInfo tags.
-                Dim ControlList As New List(Of Control)
-                DataParser.GetDBControls(Me, ControlList)
+                Dim ControlList = DataParser.GetDBControls(Me)
                 'Get a list of all the controls whose data columns match the ChangedColumns.
                 For Each col In ChangedColumns
                     ChangedControls.Add(ControlList.Find(Function(c) DirectCast(c.Tag, DBControlInfo).DataColumn = col))

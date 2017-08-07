@@ -16,6 +16,7 @@
     Public Const Trackable As String = "dev_trackable"
     Public Const Checksum As String = "dev_checksum"
     Public Const HostName As String = "dev_hostname"
+    Public Const iCloudAccount As String = "dev_icloud_account"
 End Class
 
 Public Class DevicesCols

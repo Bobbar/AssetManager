@@ -20,6 +20,8 @@ Partial Class ViewHistoryForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.txtHostname = New System.Windows.Forms.TextBox()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.txtPhoneNumber = New System.Windows.Forms.TextBox()
         Me.chkTrackable = New System.Windows.Forms.CheckBox()
@@ -58,14 +60,16 @@ Partial Class ViewHistoryForm
         Me.txtCurrentUser = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtChangeType = New System.Windows.Forms.TextBox()
-        Me.Label19 = New System.Windows.Forms.Label()
-        Me.txtHostname = New System.Windows.Forms.TextBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.iCloudTextBox = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
         Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.GroupBox1.Controls.Add(Me.Label20)
+        Me.GroupBox1.Controls.Add(Me.iCloudTextBox)
         Me.GroupBox1.Controls.Add(Me.Label19)
         Me.GroupBox1.Controls.Add(Me.txtHostname)
         Me.GroupBox1.Controls.Add(Me.Label18)
@@ -112,6 +116,26 @@ Partial Class ViewHistoryForm
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Device Info Snapshot"
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label19.Location = New System.Drawing.Point(14, 162)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(73, 16)
+        Me.Label19.TabIndex = 39
+        Me.Label19.Text = "Hostname:"
+        '
+        'txtHostname
+        '
+        Me.txtHostname.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHostname.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtHostname.Location = New System.Drawing.Point(17, 181)
+        Me.txtHostname.Name = "txtHostname"
+        Me.txtHostname.ReadOnly = True
+        Me.txtHostname.Size = New System.Drawing.Size(155, 23)
+        Me.txtHostname.TabIndex = 38
         '
         'Label18
         '
@@ -169,7 +193,7 @@ Partial Class ViewHistoryForm
         '
         Me.Label16.AutoSize = True
         Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label16.Location = New System.Drawing.Point(611, 119)
+        Me.Label16.Location = New System.Drawing.Point(560, 119)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(45, 16)
         Me.Label16.TabIndex = 32
@@ -179,7 +203,7 @@ Partial Class ViewHistoryForm
         '
         Me.txtStatus.BackColor = System.Drawing.SystemColors.Window
         Me.txtStatus.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtStatus.Location = New System.Drawing.Point(614, 138)
+        Me.txtStatus.Location = New System.Drawing.Point(563, 138)
         Me.txtStatus.Name = "txtStatus"
         Me.txtStatus.ReadOnly = True
         Me.txtStatus.Size = New System.Drawing.Size(108, 23)
@@ -495,25 +519,25 @@ Partial Class ViewHistoryForm
         Me.txtChangeType.Size = New System.Drawing.Size(110, 23)
         Me.txtChangeType.TabIndex = 0
         '
-        'Label19
+        'Label20
         '
-        Me.Label19.AutoSize = True
-        Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label19.Location = New System.Drawing.Point(14, 162)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(73, 16)
-        Me.Label19.TabIndex = 39
-        Me.Label19.Text = "Hostname:"
+        Me.Label20.AutoSize = True
+        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label20.Location = New System.Drawing.Point(560, 162)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(75, 16)
+        Me.Label20.TabIndex = 41
+        Me.Label20.Text = "iCloud Acct"
         '
-        'txtHostname
+        'iCloudTextBox
         '
-        Me.txtHostname.BackColor = System.Drawing.SystemColors.Window
-        Me.txtHostname.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtHostname.Location = New System.Drawing.Point(17, 181)
-        Me.txtHostname.Name = "txtHostname"
-        Me.txtHostname.ReadOnly = True
-        Me.txtHostname.Size = New System.Drawing.Size(155, 23)
-        Me.txtHostname.TabIndex = 38
+        Me.iCloudTextBox.BackColor = System.Drawing.SystemColors.Window
+        Me.iCloudTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.iCloudTextBox.Location = New System.Drawing.Point(563, 181)
+        Me.iCloudTextBox.Name = "iCloudTextBox"
+        Me.iCloudTextBox.ReadOnly = True
+        Me.iCloudTextBox.Size = New System.Drawing.Size(228, 23)
+        Me.iCloudTextBox.TabIndex = 40
         '
         'ViewHistoryForm
         '
@@ -573,4 +597,6 @@ Partial Class ViewHistoryForm
     Friend WithEvents txtPhoneNumber As TextBox
     Friend WithEvents Label19 As Label
     Friend WithEvents txtHostname As TextBox
+    Friend WithEvents Label20 As Label
+    Friend WithEvents iCloudTextBox As TextBox
 End Class
