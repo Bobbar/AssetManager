@@ -11,7 +11,7 @@ Public Class MySqlComms : Implements IDisposable
         ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
         Dispose(True)
         ' TODO: uncomment the following line if Finalize() is overridden above.
-        GC.SuppressFinalize(Me)
+        '    GC.SuppressFinalize(Me)
     End Sub
 
     ' IDisposable
@@ -19,10 +19,9 @@ Public Class MySqlComms : Implements IDisposable
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
-
+                CloseConnection()
+                MySQLConnectString = vbNullString
             End If
-            CloseConnection()
-            MySQLConnectString = vbNullString
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
             ' TODO: set large fields to null.
         End If
@@ -30,11 +29,11 @@ Public Class MySqlComms : Implements IDisposable
     End Sub
 
     ' TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
-    Protected Overrides Sub Finalize()
-        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-        Dispose(False)
-        MyBase.Finalize()
-    End Sub
+    'Protected Overrides Sub Finalize()
+    '    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+    '    Dispose(False)
+    '    MyBase.Finalize()
+    'End Sub
 #End Region
 
 #Region "Fields"
