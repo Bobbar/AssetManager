@@ -1,9 +1,11 @@
 ﻿Public Module ChildFormControl
 
     Public Sub ActivateFormByHandle(form As Form)
-        form.Show()
-        form.Activate()
-        form.WindowState = FormWindowState.Normal
+        If Not form.IsDisposed Then
+            form.Show()
+            form.Activate()
+            form.WindowState = FormWindowState.Normal
+        End If
     End Sub
 
     Public Function AttachmentsIsOpen(parentForm As Form) As Boolean
