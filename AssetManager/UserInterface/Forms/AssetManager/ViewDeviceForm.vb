@@ -185,7 +185,7 @@ Public Class ViewDeviceForm
 
     Private Sub cmdMunisInfo_Click(sender As Object, e As EventArgs) Handles cmdMunisInfo.Click
         Try
-            NewMunisView(CurrentViewDevice)
+            MunisFunc.LoadMunisInfoByDevice(CurrentViewDevice, Me)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -710,10 +710,6 @@ Public Class ViewDeviceForm
         Waiting()
         Dim NewEntry As New ViewHistoryForm(Me, entryGUID, CurrentViewDevice.GUID)
         DoneWaiting()
-    End Sub
-
-    Private Sub NewMunisView(Device As DeviceStruct)
-        MunisFunc.LoadMunisInfoByDevice(Device, Me)
     End Sub
 
     Private Sub NewTrackingView(GUID As String)
