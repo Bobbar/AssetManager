@@ -384,10 +384,11 @@ Public Class ViewDeviceForm
         If blah = vbYes Then
             Dim IP As String = MyPingVis.CurrentResult.Address.ToString
             Dim DeviceName As String = CurrentViewDevice.HostName
-            If Await SendRestart(IP, DeviceName) Then
+            Dim RestartOutput = Await SendRestart(IP, DeviceName)
+            If RestartOutput = "" Then
                 Message("Success", vbOKOnly + vbInformation, "Restart Device", Me)
             Else
-                Message("Failed", vbOKOnly + vbInformation, "Restart Device", Me)
+                Message("Failed" & vbCrLf & vbCrLf & "Output: " & RestartOutput, vbOKOnly + vbInformation, "Restart Device", Me)
             End If
         End If
     End Sub
@@ -762,40 +763,42 @@ Public Class ViewDeviceForm
         Next
     End Sub
 
-    Private Async Function SendRestart(IP As String, DeviceName As String) As Task(Of Boolean)
+    Private Async Function SendRestart(IP As String, DeviceName As String) As Task(Of String)
         Dim OrigButtonImage = cmdRestart.Image
         Try
             If VerifyAdminCreds() Then
                 cmdRestart.Image = My.Resources.LoadingAni
                 Dim FullPath As String = "\\" & IP
-                Dim Success = Await Task.Run(Function()
-                                                 Using NetCon As New NetworkConnection(FullPath, AdminCreds)
-                                                     Dim p As Process = New Process
-                                                     p.StartInfo.UseShellExecute = False
-                                                     p.StartInfo.RedirectStandardOutput = True
-                                                     p.StartInfo.RedirectStandardError = True
-                                                     p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                                                     p.StartInfo.FileName = "shutdown.exe"
-                                                     p.StartInfo.Arguments = "/m " & FullPath & " /f /r /t 0"
-                                                     p.Start()
-                                                     Dim output As String
-                                                     output = p.StandardError.ReadToEnd
-                                                     p.WaitForExit()
-                                                     If Trim(output) = "" Then
-                                                         Return True
-                                                     Else
-                                                         Return False
-                                                     End If
-                                                 End Using
-                                             End Function)
+                ' Dim output As String
+                Dim output As String = Await Task.Run(Function()
+                                                          Using NetCon As New NetworkConnection(FullPath, AdminCreds)
+                                                              Dim p As Process = New Process
+                                                              p.StartInfo.UseShellExecute = False
+                                                              p.StartInfo.RedirectStandardOutput = True
+                                                              p.StartInfo.RedirectStandardError = True
+                                                              p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                                                              p.StartInfo.FileName = "shutdown.exe"
+                                                              p.StartInfo.Arguments = "/m " & FullPath & " /f /r /t 0"
+                                                              p.Start()
+                                                              output = p.StandardError.ReadToEnd
+                                                              p.WaitForExit()
+                                                              output = Trim(output)
+                                                              Return output
+                                                              'If Trim(output) = "" Then
+                                                              '    Return True
+                                                              'Else
+                                                              '    Return False
+                                                              'End If
+                                                          End Using
+                                                      End Function)
                 cmdRestart.Image = OrigButtonImage
-                Return Success
+                Return output
             End If
         Catch ex As Exception
             cmdRestart.Image = OrigButtonImage
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
-        Return False
+        Return Nothing
     End Function
 
     Private Sub SendToHistGrid(Grid As DataGridView, tblResults As DataTable)
