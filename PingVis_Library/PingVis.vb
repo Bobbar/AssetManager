@@ -22,14 +22,13 @@ Public Class PingVis : Implements IDisposable
     Private LastDraw As Integer = 0
     Private ScrollingBars As List(Of PingBar)
     Private intPrevMax As Long = 1000
-    Private CurrentAverageRoundTripTime As Integer = 0
 
 #Region "Ping Parameters"
     Private Const bolStopWhenNotFocused As Boolean = False 'Set to True to pause the pinging until focus is returned to the parent form.
     Private Const Timeout As Integer = 1000
-    Private Const PingInterval As Integer = 1000
+    Private Const GoodPingInterval As Integer = 1000
     Private Const NoPingInterval As Integer = 5000
-    Private CurrentPingInterval As Integer = PingInterval
+    Private CurrentPingInterval As Integer = GoodPingInterval
 #End Region
 
 #Region "Bar Parameters"
@@ -51,11 +50,6 @@ Public Class PingVis : Implements IDisposable
             Return LastReply
         End Get
     End Property
-    Public ReadOnly Property AvgPingTime As Single
-        Get
-            Return CurrentAverageRoundTripTime
-        End Get
-    End Property
     Sub New(DestControl As Control, HostName As String)
         InitMyControl(DestControl)
         MyPingHostname = HostName
@@ -73,18 +67,22 @@ Public Class PingVis : Implements IDisposable
     Private Sub InitPing()
         AddHandler MyPing.PingCompleted, AddressOf PingComplete
         ServicePointManager.DnsRefreshTimeout = 0
-        PingTimer.Interval = PingInterval
-        PingTimer.Enabled = True
-        AddHandler PingTimer.Tick, AddressOf PingTimer_Tick
+        InitTimer()
         StartPing()
     End Sub
+    Private Sub InitTimer()
+        If PingTimer IsNot Nothing Then
+            RemoveHandler PingTimer.Tick, AddressOf PingTimer_Tick
+            PingTimer.Dispose()
+            PingTimer = New Timer
+        End If
+        PingTimer.Interval = CurrentPingInterval
+        PingTimer.Enabled = True
+        AddHandler PingTimer.Tick, AddressOf PingTimer_Tick
+    End Sub
     Private Sub PingTimer_Tick(sender As Object, e As EventArgs)
-        Try
-            StartPing()
-            PingTimer.Interval = CurrentPingInterval
-        Catch ex As Exception
-            Debug.Print(ex.Message)
-        End Try
+        StartPing()
+        PingTimer.Interval = CurrentPingInterval
     End Sub
     Private Async Sub StartPing()
         Try
@@ -112,15 +110,20 @@ Public Class PingVis : Implements IDisposable
         If Not e.Cancelled Then
             If e.Error Is Nothing Then
                 If e.Reply.Status = IPStatus.Success Then
-                    CurrentPingInterval = PingInterval
+                    If CurrentPingInterval <> GoodPingInterval Then
+                        CurrentPingInterval = GoodPingInterval
+                        InitTimer()
+                    End If
                 Else
-                    CurrentPingInterval = NoPingInterval
+                    If CurrentPingInterval <> NoPingInterval Then
+                        CurrentPingInterval = NoPingInterval
+                        InitTimer()
+                    End If
                 End If
                 pngResults.Add(e.Reply)
                 LastReply = e.Reply
             Else
                 CurrentPingInterval = NoPingInterval
-                'Debug.Print(e.Error.Message)
             End If
             If Not bolScrolling Then DrawBars(MyControl, GetPingBars, mOverInfo)
         End If
@@ -193,7 +196,6 @@ Public Class PingVis : Implements IDisposable
                 gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
                 DrawPingText(gfx, MouseOverInfo) 'Draw last ping round trip time
                 DrawScrollBar(gfx)
-                SetAvgPing() 'Set public property containing current average round trip time
                 TrimPingList()
                 'The bitmap is scaled back to control size using high quality transformations.
                 'This improves the effect of anti-aliasing and therefore readability.
@@ -389,17 +391,6 @@ Public Class PingVis : Implements IDisposable
                 pic.Image = Image
                 pic.Refresh()
         End Select
-    End Sub
-    Private Sub SetAvgPing()
-        Dim TotalPingTime As Long = 0
-        For Each reply As PingReply In pngResults
-            If reply.Status = IPStatus.Success Then
-                TotalPingTime += reply.RoundtripTime
-            Else
-                TotalPingTime += Timeout
-            End If
-        Next
-        CurrentAverageRoundTripTime = CInt(Math.Round((TotalPingTime / pngResults.Count), 0))
     End Sub
     Public Shared Function ResizeImage(image As Image, width As Integer, height As Integer) As Bitmap
         Dim destRect = New Rectangle(0, 0, width, height)
