@@ -907,7 +907,10 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub TrackingGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellDoubleClick
-        NewTrackingView(TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value.ToString)
+        Dim EntryUID = TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value.ToString
+        If Not FormIsOpenByUID(GetType(ViewTrackingForm), EntryUID) Then
+            NewTrackingView(EntryUID)
+        End If
     End Sub
 
     Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint

@@ -1,15 +1,11 @@
 ﻿Option Explicit On
 
 Public Class ViewTrackingForm
-    Private colTextBoxBG As Color = ColorTranslator.FromHtml("#D6D6D6")
-    Private CurrentViewTrackDevice As New DeviceStruct
-    Private Const strCheckOut As String = "OUT"
-    Private Const strCheckIn As String = "IN"
-
     Sub New(parentForm As Form, entryGUID As String, device As DeviceStruct)
         InitializeComponent()
         Tag = parentForm
         Icon = parentForm.Icon
+        FormUID = entryGUID
         ViewTrackingEntry(entryGUID, device)
         Show()
     End Sub
@@ -52,25 +48,12 @@ Public Class ViewTrackingForm
             End Using
             DoneWaiting()
         Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-            Else
-                Exit Sub
-            End If
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
 
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click
         Me.Dispose()
-        Me.Hide()
-    End Sub
-
-    Private Sub View_Tracking_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim c As Control
-        For Each c In GroupBox1.Controls
-            If TypeOf c Is TextBox Then
-                If c.Name <> "txtCheckType" Then c.BackColor = colTextBoxBG
-            End If
-        Next
     End Sub
 
 End Class
