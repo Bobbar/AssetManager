@@ -28,11 +28,12 @@
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & " FROM pr_employee_master WHERE a_name_last LIKE '%" & UCase(Name) & "%' OR a_name_first LIKE '" & UCase(Name) & "'"
             Dim MunisComms As New MunisComms
             SetWorking(True)
-            Dim results As DataTable = Await MunisComms.ReturnSqlTableAsync(strQRY)
-            SetWorking(False)
-            If results.Rows.Count < 1 Then Exit Sub
-            MunisResults.DataSource = results
-            MunisResults.ClearSelection()
+            Using results As DataTable = Await MunisComms.ReturnSqlTableAsync(strQRY)
+                SetWorking(False)
+                If results.Rows.Count < 1 Then Exit Sub
+                MunisResults.DataSource = results
+                MunisResults.ClearSelection()
+            End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try

@@ -206,9 +206,7 @@ VALUES
             If NewMunisSearch.DialogResult = DialogResult.Yes Then
                 SetWaitCursor(True)
                 SupInfo = NewMunisSearch.EmployeeInfo
-                Dim EmpList As DataTable = MunisFunc.ListOfEmpsBySup(SupInfo.Number)
-                Dim DeviceList As New DataTable
-                Using SQLComms As New MySqlComms
+                Using SQLComms As New MySqlComms, DeviceList As New DataTable, EmpList As DataTable = MunisFunc.ListOfEmpsBySup(SupInfo.Number)
                     For Each r As DataRow In EmpList.Rows
                         Dim strQRY As String = "SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.MunisEmpNum & "='" & r.Item("a_employee_number").ToString & "'"
                         Using tmpTable As DataTable = SQLComms.ReturnMySqlTable(strQRY)
