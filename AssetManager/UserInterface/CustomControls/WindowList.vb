@@ -22,6 +22,7 @@
     Public Sub InsertWindowList(targetToolStrip As OneClickToolStrip)
         InitializeDropDownButton(targetToolStrip)
         InitializeTimer()
+        RefreshWindowList()
     End Sub
     Private Sub AddParentMenu()
         If MyParentForm.Tag IsNot Nothing Then
@@ -140,7 +141,12 @@
             Return False
         End If
     End Function
+
     Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs) Handles RefreshTimer.Tick
+        RefreshWindowList()
+    End Sub
+
+    Private Sub RefreshWindowList()
         Dim NumOfForms = FormCount(MyParentForm)
         If MyParentForm.Tag Is Nothing And NumOfForms < 1 Then
             DropDownControl.Visible = False
@@ -157,6 +163,7 @@
             End If
         End If
     End Sub
+
     Private Sub WindowClick(sender As Object, e As MouseEventArgs)
         Dim item As ToolStripItem = CType(sender, ToolStripItem)
         Dim frm As Form = CType(item.Tag, Form)
