@@ -414,7 +414,6 @@ Public Class PingVis : Implements IDisposable
 
     ' IDisposable
     Protected Overridable Sub Dispose(disposing As Boolean)
-        Debug.Print(MyPingHostname & " Dispose")
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
