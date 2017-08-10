@@ -159,7 +159,7 @@ VALUES(@" & TrackablesCols.CheckType & ",
                 End If
             End Using
             Me.Dispose()
-            MyParent.ViewDevice(CurrentTrackingDevice.GUID)
+            MyParent.LoadDevice(CurrentTrackingDevice.GUID)
             DoneWaiting()
         Catch ex As Exception
             DoneWaiting()
@@ -212,7 +212,7 @@ VALUES (@" & TrackablesCols.CheckType & ",
                 End If
             End Using
             Me.Dispose()
-            MyParent.ViewDevice(CurrentTrackingDevice.GUID)
+            MyParent.LoadDevice(CurrentTrackingDevice.GUID)
             DoneWaiting()
         Catch ex As Exception
             DoneWaiting()

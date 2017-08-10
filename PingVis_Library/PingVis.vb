@@ -83,7 +83,7 @@ Public Class PingVis : Implements IDisposable
     Private Sub PingTimer_Tick(sender As Object, e As EventArgs)
         StartPing()
         PingTimer.Interval = CurrentPingInterval
-    End Sub
+          End Sub
     Private Async Sub StartPing()
         Try
             Dim options As New Net.NetworkInformation.PingOptions
@@ -100,9 +100,8 @@ Public Class PingVis : Implements IDisposable
                     End If
                 End If
             End If
-        Catch ex As SocketException
+        Catch ex As Exception
             CurrentPingInterval = NoPingInterval
-            Exit Sub
         End Try
     End Sub
     Private Sub PingComplete(ByVal sender As Object, ByVal e As System.Net.NetworkInformation.PingCompletedEventArgs)
@@ -415,6 +414,7 @@ Public Class PingVis : Implements IDisposable
 
     ' IDisposable
     Protected Overridable Sub Dispose(disposing As Boolean)
+        Debug.Print(MyPingHostname & " Dispose")
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).

@@ -42,7 +42,7 @@ Public Class ViewDeviceForm
         grpNetTools.Visible = False
         ExtendedMethods.DoubleBufferedDataGrid(DataGridHistory, True)
         ExtendedMethods.DoubleBufferedDataGrid(TrackingGrid, True)
-        ViewDevice(deviceGUID)
+        LoadDevice(deviceGUID)
     End Sub
 
 #End Region
@@ -55,7 +55,7 @@ Public Class ViewDeviceForm
         DisableControls()
         ResetBackColors()
         Me.Refresh()
-        ViewDevice(CurrentViewDevice.GUID)
+        LoadDevice(CurrentViewDevice.GUID)
     End Sub
 
     Public Sub SetAttachCount()
@@ -103,26 +103,27 @@ Public Class ViewDeviceForm
                 rows += InsertAdapter.Update(GetInsertTable(InsertAdapter, UpdateInfo))
             End Using
             If rows = 2 Then
-                ViewDevice(CurrentViewDevice.GUID)
+                LoadDevice(CurrentViewDevice.GUID)
                 Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
             Else
-                ViewDevice(CurrentViewDevice.GUID)
+                LoadDevice(CurrentViewDevice.GUID)
                 Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
             End If
             Exit Sub
         Catch ex As Exception
             If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                ViewDevice(CurrentViewDevice.GUID)
+                LoadDevice(CurrentViewDevice.GUID)
             End If
         End Try
     End Sub
 
-    Public Sub ViewDevice(deviceGUID As String)
+    Public Sub LoadDevice(deviceGUID As String)
         Try
             Waiting()
             bolGridFilling = True
-            If ViewHistory(deviceGUID) Then
-                ViewTracking(CurrentViewDevice.GUID)
+            If LoadHistoryAndFields(deviceGUID) Then
+                If CurrentViewDevice.IsTrackable Then LoadTracking(CurrentViewDevice.GUID)
+                SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut)
                 Me.Text = Me.Text + FormTitle(CurrentViewDevice)
                 Me.Show()
                 DataGridHistory.ClearSelection()
@@ -140,7 +141,7 @@ Public Class ViewDeviceForm
         End Try
     End Sub
 
-    Private Sub ViewTracking(strGUID As String)
+    Private Sub LoadTracking(strGUID As String)
         Dim strQry = "Select * FROM " & TrackablesCols.TableName & ", " & DevicesCols.TableName & " WHERE " & TrackablesCols.DeviceUID & " = " & DevicesCols.DeviceUID & " And " & TrackablesCols.DeviceUID & " = '" & strGUID & "' ORDER BY " & TrackablesCols.DateStamp & " DESC"
         Try
             Using Results As DataTable = DBFunc.DataTableFromQueryString(strQry)
@@ -152,7 +153,6 @@ Public Class ViewDeviceForm
                     TrackingGrid.DataSource = Nothing
                 End If
                 FillTrackingBox()
-                SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut)
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -482,7 +482,7 @@ Public Class ViewDeviceForm
         Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & Info.Historical.ChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
             Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results", Me)
-            ViewDevice(CurrentViewDevice.GUID)
+            LoadDevice(CurrentViewDevice.GUID)
         Else
             Exit Sub
         End If
@@ -1032,7 +1032,7 @@ Public Class ViewDeviceForm
         End If
     End Sub
 
-    Private Function ViewHistory(ByVal DeviceUID As String) As Boolean
+    Private Function LoadHistoryAndFields(ByVal DeviceUID As String) As Boolean
         Try
             Using DeviceResults = DBFunc.DataTableFromQueryString("Select * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & " = '" & DeviceUID & "'"),
                     HistoricalResults = DBFunc.DataTableFromQueryString("Select * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & HistoricalDevicesCols.ActionDateTime & " DESC")
