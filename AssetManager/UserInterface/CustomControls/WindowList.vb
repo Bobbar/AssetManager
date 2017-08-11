@@ -107,7 +107,6 @@
         RefreshTimer = New Timer
         RefreshTimer.Interval = 500
         RefreshTimer.Enabled = True
-        AddHandler RefreshTimer.Tick, AddressOf RefreshTimer_Tick
     End Sub
 
     Private Function ListOfChilden(parentForm As Form) As List(Of Form)
@@ -130,6 +129,7 @@
         AddHandler newitem.MouseDown, AddressOf WindowClick
         Return newitem
     End Function
+
     Private Function IsParentForm(form As Form) As Boolean
         If MyParentForm.Tag IsNot Nothing Then
             If form Is GetFormFromTag(MyParentForm.Tag) Then
@@ -153,7 +153,7 @@
         Else
             DropDownControl.Visible = True
         End If
-        If NumOfForms <> intFormCount And NumOfForms > 0 Then
+        If NumOfForms <> intFormCount Then
             If Not DropDownControl.DropDown.Focused Then
                 DropDownControl.DropDownItems.Clear()
                 AddParentMenu()
