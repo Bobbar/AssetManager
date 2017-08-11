@@ -1,7 +1,7 @@
 ﻿Imports System.ComponentModel
 
 Public Class GKUpdaterForm
-    Private QueueIsRunning As Boolean = True
+    Private QueueIsRunning As Boolean = False
     Private MaxSimUpdates As Integer = 4
     Private MyUpdates As New List(Of GKProgressControl)
     Private bolStarting As Boolean = True
@@ -21,10 +21,9 @@ Public Class GKUpdaterForm
 
     End Sub
 
-    Public Async Sub AddUpdate(device As DeviceStruct)
+    Public Sub AddUpdate(device As DeviceStruct)
 
         If bolCheckForDups AndAlso Not Exists(device) Then
-            Await CheckPackFile()
             Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
             Updater_Table.Controls.Add(NewProgCtl)
             MyUpdates.Add(NewProgCtl)
@@ -35,7 +34,6 @@ Public Class GKUpdaterForm
         Else
             Dim blah = Message("An update for device " & device.Serial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
             If blah = vbOK Then
-                Await CheckPackFile()
                 StartUpdateByDevice(device)
                 Me.WindowState = FormWindowState.Normal
                 Me.Activate()
@@ -228,8 +226,9 @@ Public Class GKUpdaterForm
         bolCreateMissingDirs = tsmCreateDirs.Checked
     End Sub
 
-    Private Sub GKUpdaterForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+    Private Async Sub GKUpdaterForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         SetQueueButton()
+        Await CheckPackFile()
     End Sub
 
     Private Sub ProcessPackFile()

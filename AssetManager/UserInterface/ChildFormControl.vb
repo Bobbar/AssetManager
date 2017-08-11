@@ -1,6 +1,6 @@
 ﻿Public Module ChildFormControl
 
-    Public Sub ActivateFormByHandle(form As Form)
+    Public Sub ActivateForm(form As Form)
         If Not form.IsDisposed Then
             form.Show()
             form.Activate()
@@ -11,7 +11,7 @@
     Public Function AttachmentsIsOpen(parentForm As Form) As Boolean
         For Each frm As Form In GetChildren(parentForm)
             If TypeOf frm Is AttachmentsForm And frm.Tag Is parentForm Then
-                ActivateFormByHandle(frm)
+                ActivateForm(frm)
                 Return True
             End If
         Next
@@ -78,7 +78,7 @@
     Public Function FormIsOpenByUID(formType As Type, UID As String) As Boolean
         For Each frm As ThemedForm In My.Application.OpenForms
             If frm.GetType = formType AndAlso frm.FormUID = UID Then
-                ActivateFormByHandle(frm)
+                ActivateForm(frm)
                 Return True
             End If
         Next

@@ -174,7 +174,7 @@
             End If
         ElseIf e.Button = MouseButtons.Left Then
             If Not frm.IsDisposed Then
-                ActivateFormByHandle(frm)
+                ActivateForm(frm)
             Else
                 DisposeDropDownItem(item)
             End If

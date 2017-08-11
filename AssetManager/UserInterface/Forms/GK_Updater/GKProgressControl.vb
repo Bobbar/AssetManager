@@ -215,10 +215,12 @@ Public Class GKProgressControl
     End Sub
 
     Private Sub SetStatus(Status As ProgressStatus)
-        ProgStatus = Status
-        SetStatusLight(Status)
-        SetButtons(Status)
-        SetStatusLabel(Status)
+        If ProgStatus <> Status Then
+            ProgStatus = Status
+            SetStatusLight(Status)
+            SetButtons(Status)
+            SetStatusLabel(Status)
+        End If
     End Sub
 
     Private Sub SetStatusLight(Status As ProgressStatus)
