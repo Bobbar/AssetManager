@@ -64,7 +64,6 @@ Partial Class SibiNotesForm
         Me.Controls.Add(Me.cmdOK)
         Me.Controls.Add(Me.cmdClose)
         Me.Controls.Add(Me.rtbNotes)
-        Me.MaximumSize = New System.Drawing.Size(981, 669)
         Me.MinimumSize = New System.Drawing.Size(253, 160)
         Me.Name = "SibiNotesForm"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
