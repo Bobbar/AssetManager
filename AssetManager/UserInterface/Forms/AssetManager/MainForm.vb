@@ -462,6 +462,7 @@ Public Class MainForm
                 bolGridFilling = True
                 ResultGrid.DataSource = table
                 ResultGrid.ClearSelection()
+                SetColumnWidths()
                 bolGridFilling = False
                 DisplayRecords(table.Rows.Count)
                 Results.Dispose()
@@ -472,6 +473,39 @@ Public Class MainForm
             DoneWaiting()
         End Try
     End Sub
+
+    Private Async Sub SetColumnWidths()
+        Dim ColumnWidths = Await GetColumnWidths(ResultGrid)
+        For i As Integer = 0 To ColumnWidths.Count - 1
+            ResultGrid.Columns(i).Width = ColumnWidths(i)
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Get preferred column widths without stopping the UI.
+    ''' </summary>
+    ''' <param name="grid"></param>
+    ''' <returns></returns>
+    Private Async Function GetColumnWidths(grid As DataGridView) As Task(Of Integer())
+        Dim ColSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader
+        Dim ColWidths = Await Task.Run(Function()
+                                           Dim tmpWidth(grid.ColumnCount - 1) As Integer
+                                           For Each row As DataGridViewRow In grid.Rows
+                                               For Each cell As DataGridViewCell In row.Cells
+                                                   If tmpWidth(cell.ColumnIndex) < cell.PreferredSize.Width Then
+                                                       Dim PrefColHeaderWidth = cell.OwningColumn.GetPreferredWidth(ColSizeMode, True)
+                                                       If cell.PreferredSize.Width < PrefColHeaderWidth Then
+                                                           tmpWidth(cell.ColumnIndex) = PrefColHeaderWidth
+                                                       Else
+                                                           tmpWidth(cell.ColumnIndex) = cell.PreferredSize.Width
+                                                       End If
+                                                   End If
+                                               Next
+                                           Next
+                                           Return tmpWidth
+                                       End Function)
+        Return ColWidths
+    End Function
 
     Private Sub ShowAll()
         Dim cmd = DBFunc.GetCommand(strShowAllQry)
@@ -658,6 +692,12 @@ Public Class MainForm
 
     Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
+    End Sub
+
+    Private Sub ResultGrid_ColumnWidthChanged(sender As Object, e As DataGridViewColumnEventArgs) Handles ResultGrid.ColumnWidthChanged
+        'For Each col As DataGridViewColumn In ResultGrid.Columns
+        '    Debug.Print(".Columns(" & col.Index & ").Width = " & col.HeaderCell.Size.Width)
+        'Next
     End Sub
 
 #End Region
