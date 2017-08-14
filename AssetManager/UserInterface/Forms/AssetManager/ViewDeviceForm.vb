@@ -881,7 +881,7 @@ Public Class ViewDeviceForm
         End If
     End Sub
 
-    Private Sub SetupNetTools(PingResults As PingReply)
+    Private Sub SetupNetTools(PingResults As PingVis.PingInfo)
         If PingResults.Status <> IPStatus.Success Then
             intFailedPings += 1
         Else
