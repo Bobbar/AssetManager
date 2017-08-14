@@ -121,7 +121,6 @@ Partial Class MainForm
         Me.ResultGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ResultGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
@@ -749,7 +748,7 @@ Partial Class MainForm
         Me.cmdSibi.Image = Global.AssetManager.My.Resources.Resources.SibiIcon
         Me.cmdSibi.Name = "cmdSibi"
         Me.cmdSibi.Padding = New System.Windows.Forms.Padding(20, 0, 20, 0)
-        Me.cmdSibi.Size = New System.Drawing.Size(226, 34)
+        Me.cmdSibi.Size = New System.Drawing.Size(232, 34)
         Me.cmdSibi.Text = "Sibi Acquisition Manager"
         Me.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '

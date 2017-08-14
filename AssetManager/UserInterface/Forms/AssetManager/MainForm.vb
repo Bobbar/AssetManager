@@ -462,6 +462,7 @@ Public Class MainForm
                 bolGridFilling = True
                 ResultGrid.DataSource = table
                 ResultGrid.ClearSelection()
+                ResultGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
                 bolGridFilling = False
                 DisplayRecords(table.Rows.Count)
                 Results.Dispose()
