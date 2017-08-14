@@ -242,7 +242,7 @@ Public Class GKUpdaterForm
     Private Async Function CheckPackFile() As Task(Of Boolean)
         Dim PackFileManager As New ManagePackFile
         PackFileReady = Await PackFileManager.VerifyPackFile
-        If QueueIsRunning And Not PackFileReady Then RunQueue(False)
+        RunQueue(PackFileReady)
         If Not PackFileReady Then
             CancelAll()
             Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", vbOKOnly + vbExclamation, "Pack file out of date", Me)
