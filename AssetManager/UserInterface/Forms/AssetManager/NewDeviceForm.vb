@@ -311,10 +311,11 @@ Public Class NewDeviceForm
 
     Private Sub txtSerial_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtSerial_REQ.TextChanged
         If bolCheckFields Then CheckFields(Me, False)
+        SetHostname()
     End Sub
 
     Private Sub SetHostname()
-        If GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex).Contains("WIN") Then
+        If txtSerial_REQ.Text <> "" AndAlso GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex).Contains("WIN") Then
             txtHostname.Text = DeviceHostnameFormat(txtSerial_REQ.Text)
         Else
             txtHostname.Text = String.Empty

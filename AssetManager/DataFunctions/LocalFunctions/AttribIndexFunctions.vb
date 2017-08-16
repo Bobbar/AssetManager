@@ -25,9 +25,9 @@
             If index > -1 Then
                 Return CodeIndex(index).Code
             End If
-            Return Nothing
+            Return String.Empty
         Catch
-            Return Nothing
+            Return String.Empty
         End Try
     End Function
 
