@@ -1,5 +1,5 @@
 ﻿Option Explicit On
-
+Imports MyDialogLib
 Imports System.ComponentModel
 Imports System.Data.Common
 Imports System.Deployment.Application
@@ -284,6 +284,7 @@ Public Class MainForm
 
     Private Sub DoneWaiting()
         SetWaitCursor(False)
+        ResultGrid.Cursor = Cursors.Default
         StripSpinner.Visible = False
         StatusBar("Idle...")
     End Sub
@@ -660,6 +661,55 @@ Public Class MainForm
     Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
         LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
     End Sub
+
+    Private Sub InstallChromeMenuItem_Click(sender As Object, e As EventArgs) Handles InstallChromeMenuItem.Click
+        StartChromeUpdate()
+    End Sub
+
+    Private Async Sub StartChromeUpdate()
+        Try
+            Dim Hostname As String
+            Using GetHostnameDialog As New AdvancedDialog(Me)
+                With GetHostnameDialog
+                    .Text = "Remote Computer Hostname"
+                    .AddTextBox("HostnameText", "Hostname:")
+                    .ShowDialog()
+                    If .DialogResult = DialogResult.OK Then
+                        Hostname = Trim(GetHostnameDialog.GetControlValue("HostnameText").ToString)
+                    Else
+                        Exit Sub
+                    End If
+                End With
+            End Using
+
+            If Hostname <> "" Then
+                If VerifyAdminCreds() Then
+                    Waiting()
+                    If Await SendChromeUpdate(Hostname) Then
+                        Message("Command successful.", vbOKOnly + vbInformation, "Done", Me)
+                    End If
+                End If
+            End If
+
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            DoneWaiting()
+        End Try
+    End Sub
+
+    Private Async Function SendChromeUpdate(hostname As String) As Task(Of Boolean)
+        Dim UpdateResult = Await Task.Run(Function()
+                                              Dim PSWrapper As New PowerShellWrapper
+                                              Return PSWrapper.ExecuteRemotePSScript(hostname, My.Resources.UpdateChrome, AdminCreds)
+                                          End Function)
+        If UpdateResult <> "" Then
+            Message(UpdateResult, vbOKOnly + vbExclamation, "Error Running Script")
+            Return False
+        Else
+            Return True
+        End If
+    End Function
 
 #End Region
 

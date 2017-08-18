@@ -154,6 +154,10 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.PowerShell.5.ReferenceAssemblies.1.1.0\lib\net4\System.Management.Automation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -192,6 +196,7 @@
     <Compile Include="GlobalModules\GlobalVariables.vb" />
     <Compile Include="GlobalModules\StyleFunctions.vb" />
     <Compile Include="Helpers\GridFunctions.vb" />
+    <Compile Include="Helpers\PowerShellWrapper.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -473,7 +478,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\239360-transfer_arrows-512.png" />
     <None Include="inventory_icon_orange_large.ico" />
     <None Include="Resources\Add.png" />
@@ -501,6 +508,7 @@
     <None Include="Resources\err_information.png" />
     <None Include="Resources\err_question.png" />
     <None Include="Resources\icon-box.ico" />
+    <None Include="Resources\InstallMVPS.ps1" />
     <None Include="Resources\presentation-512.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Resources\note-icon-27942.png" />
@@ -508,6 +516,7 @@
     <None Include="Resources\inv_box_large.png" />
     <None Include="Resources\inventory_icon_orange_large.png" />
     <None Include="Resources\inventory_icon_orange.ico" />
+    <None Include="Resources\UpdateChrome.ps1" />
     <None Include="Resources\View_Details.png" />
   </ItemGroup>
   <ItemGroup>

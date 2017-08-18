@@ -85,6 +85,8 @@ Partial Class MainForm
         Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmGKUpdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdvancedSearchMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PSScriptMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.InstallChromeMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
         Me.GroupBox1.SuspendLayout()
@@ -671,7 +673,7 @@ Partial Class MainForm
         '
         'AdminDropDown
         '
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater, Me.AdvancedSearchMenuItem})
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater, Me.AdvancedSearchMenuItem, Me.PSScriptMenuItem})
         Me.AdminDropDown.Image = Global.AssetManager.My.Resources.Resources.AdminIcon
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.Name = "AdminDropDown"
@@ -691,7 +693,7 @@ Partial Class MainForm
         'ManageAttachmentsToolStripMenuItem
         '
         Me.ManageAttachmentsToolStripMenuItem.Name = "ManageAttachmentsToolStripMenuItem"
-        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(227, 26)
+        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
         Me.ManageAttachmentsToolStripMenuItem.Text = "Manage Attachments"
         Me.ManageAttachmentsToolStripMenuItem.ToolTipText = "Manage ALL Attachments"
         Me.ManageAttachmentsToolStripMenuItem.Visible = False
@@ -709,32 +711,45 @@ Partial Class MainForm
         '
         Me.tsmUserManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
         Me.tsmUserManager.Name = "tsmUserManager"
-        Me.tsmUserManager.Size = New System.Drawing.Size(227, 26)
+        Me.tsmUserManager.Size = New System.Drawing.Size(256, 26)
         Me.tsmUserManager.Text = "User Manager"
         '
         'TextEnCrypterToolStripMenuItem
         '
         Me.TextEnCrypterToolStripMenuItem.Name = "TextEnCrypterToolStripMenuItem"
-        Me.TextEnCrypterToolStripMenuItem.Size = New System.Drawing.Size(227, 26)
+        Me.TextEnCrypterToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
         Me.TextEnCrypterToolStripMenuItem.Text = "Text Encrypter"
         '
         'ScanAttachmentToolStripMenuItem
         '
         Me.ScanAttachmentToolStripMenuItem.Name = "ScanAttachmentToolStripMenuItem"
-        Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(227, 26)
+        Me.ScanAttachmentToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
         Me.ScanAttachmentToolStripMenuItem.Text = "Scan Attachments"
         '
         'tsmGKUpdater
         '
         Me.tsmGKUpdater.Name = "tsmGKUpdater"
-        Me.tsmGKUpdater.Size = New System.Drawing.Size(227, 26)
+        Me.tsmGKUpdater.Size = New System.Drawing.Size(256, 26)
         Me.tsmGKUpdater.Text = "GK Updater"
         '
         'AdvancedSearchMenuItem
         '
         Me.AdvancedSearchMenuItem.Name = "AdvancedSearchMenuItem"
-        Me.AdvancedSearchMenuItem.Size = New System.Drawing.Size(227, 26)
+        Me.AdvancedSearchMenuItem.Size = New System.Drawing.Size(256, 26)
         Me.AdvancedSearchMenuItem.Text = "Advanced Search"
+        '
+        'PSScriptMenuItem
+        '
+        Me.PSScriptMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InstallChromeMenuItem})
+        Me.PSScriptMenuItem.Name = "PSScriptMenuItem"
+        Me.PSScriptMenuItem.Size = New System.Drawing.Size(256, 26)
+        Me.PSScriptMenuItem.Text = "Execute Remote PS Script"
+        '
+        'InstallChromeMenuItem
+        '
+        Me.InstallChromeMenuItem.Name = "InstallChromeMenuItem"
+        Me.InstallChromeMenuItem.Size = New System.Drawing.Size(237, 26)
+        Me.InstallChromeMenuItem.Text = "Install/Update Chrome"
         '
         'ToolStripSeparator5
         '
@@ -849,4 +864,6 @@ Partial Class MainForm
     Friend WithEvents tsmGKUpdater As ToolStripMenuItem
     Friend WithEvents AdvancedSearchMenuItem As ToolStripMenuItem
     Friend WithEvents tsmSendToGridForm As ToolStripMenuItem
+    Friend WithEvents PSScriptMenuItem As ToolStripMenuItem
+    Friend WithEvents InstallChromeMenuItem As ToolStripMenuItem
 End Class
