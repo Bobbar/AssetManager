@@ -94,6 +94,7 @@ Partial Class ViewDeviceForm
         Me.FieldTabs = New System.Windows.Forms.TabControl()
         Me.AssetInfo = New System.Windows.Forms.TabPage()
         Me.MiscInfo = New System.Windows.Forms.TabPage()
+        Me.OUTextBox = New System.Windows.Forms.TextBox()
         Me.iCloudTextBox = New System.Windows.Forms.TextBox()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.ToolStripContainer1 = New System.Windows.Forms.ToolStripContainer()
@@ -114,6 +115,8 @@ Partial Class ViewDeviceForm
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.AssetDisposalForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.ADPanel = New System.Windows.Forms.Panel()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         CType(Me.cmdRestart, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -137,6 +140,7 @@ Partial Class ViewDeviceForm
         Me.ToolStripContainer1.SuspendLayout()
         Me.tsTracking.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
+        Me.ADPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtHostname
@@ -160,7 +164,7 @@ Partial Class ViewDeviceForm
         'txtPhoneNumber
         '
         Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPhoneNumber.Location = New System.Drawing.Point(166, 100)
+        Me.txtPhoneNumber.Location = New System.Drawing.Point(166, 99)
         Me.txtPhoneNumber.Mask = "(999) 000-0000"
         Me.txtPhoneNumber.Name = "txtPhoneNumber"
         Me.txtPhoneNumber.Size = New System.Drawing.Size(177, 23)
@@ -171,7 +175,7 @@ Partial Class ViewDeviceForm
         '
         Me.Label14.AutoSize = True
         Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.Location = New System.Drawing.Point(163, 81)
+        Me.Label14.Location = New System.Drawing.Point(163, 80)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(60, 16)
         Me.Label14.TabIndex = 56
@@ -182,7 +186,7 @@ Partial Class ViewDeviceForm
         Me.lblGUID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblGUID.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblGUID.Location = New System.Drawing.Point(166, 155)
+        Me.lblGUID.Location = New System.Drawing.Point(166, 154)
         Me.lblGUID.Name = "lblGUID"
         Me.lblGUID.Size = New System.Drawing.Size(272, 23)
         Me.lblGUID.TabIndex = 54
@@ -923,6 +927,7 @@ Partial Class ViewDeviceForm
         '
         Me.MiscInfo.BackColor = System.Drawing.SystemColors.Control
         Me.MiscInfo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.MiscInfo.Controls.Add(Me.ADPanel)
         Me.MiscInfo.Controls.Add(Me.iCloudTextBox)
         Me.MiscInfo.Controls.Add(Me.Label17)
         Me.MiscInfo.Controls.Add(Me.lblGUID)
@@ -940,10 +945,18 @@ Partial Class ViewDeviceForm
         Me.MiscInfo.TabIndex = 1
         Me.MiscInfo.Text = "Misc."
         '
+        'OUTextBox
+        '
+        Me.OUTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.OUTextBox.Location = New System.Drawing.Point(18, 20)
+        Me.OUTextBox.Name = "OUTextBox"
+        Me.OUTextBox.Size = New System.Drawing.Size(219, 23)
+        Me.OUTextBox.TabIndex = 63
+        '
         'iCloudTextBox
         '
         Me.iCloudTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.iCloudTextBox.Location = New System.Drawing.Point(385, 47)
+        Me.iCloudTextBox.Location = New System.Drawing.Point(386, 99)
         Me.iCloudTextBox.Name = "iCloudTextBox"
         Me.iCloudTextBox.Size = New System.Drawing.Size(219, 23)
         Me.iCloudTextBox.TabIndex = 60
@@ -952,7 +965,7 @@ Partial Class ViewDeviceForm
         '
         Me.Label17.AutoSize = True
         Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label17.Location = New System.Drawing.Point(382, 28)
+        Me.Label17.Location = New System.Drawing.Point(383, 80)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(100, 16)
         Me.Label17.TabIndex = 61
@@ -1121,6 +1134,25 @@ Partial Class ViewDeviceForm
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 37)
         '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(15, 1)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(128, 16)
+        Me.Label18.TabIndex = 64
+        Me.Label18.Text = "Active Directory OU:"
+        '
+        'ADPanel
+        '
+        Me.ADPanel.Controls.Add(Me.Label18)
+        Me.ADPanel.Controls.Add(Me.OUTextBox)
+        Me.ADPanel.Location = New System.Drawing.Point(368, 27)
+        Me.ADPanel.Name = "ADPanel"
+        Me.ADPanel.Size = New System.Drawing.Size(255, 53)
+        Me.ADPanel.TabIndex = 65
+        '
         'ViewDeviceForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1166,6 +1198,8 @@ Partial Class ViewDeviceForm
         Me.tsTracking.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
+        Me.ADPanel.ResumeLayout(False)
+        Me.ADPanel.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1262,4 +1296,7 @@ Partial Class ViewDeviceForm
     Friend WithEvents Panel2 As Panel
     Friend WithEvents iCloudTextBox As TextBox
     Friend WithEvents Label17 As Label
+    Friend WithEvents OUTextBox As TextBox
+    Friend WithEvents ADPanel As Panel
+    Friend WithEvents Label18 As Label
 End Class

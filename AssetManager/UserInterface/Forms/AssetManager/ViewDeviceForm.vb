@@ -1048,6 +1048,7 @@ Public Class ViewDeviceForm
                 SendToHistGrid(DataGridHistory, HistoricalResults)
                 DisableControls()
                 SetAttachCount()
+                SetOUInfo()
                 Return True
             End Using
         Catch ex As Exception
@@ -1062,6 +1063,26 @@ Public Class ViewDeviceForm
         StatusBar("Processing...")
     End Sub
 
+    Private Async Sub SetOUInfo()
+        Try
+            If CurrentViewDevice.HostName <> "" Then
+                Dim ADWrap As New ActiveDirectoryWrapper
+                Dim OUText = Await ADWrap.GetDeviceOU(CurrentViewDevice.HostName)
+                If OUText <> "" Then
+                    OUTextBox.Text = OUText
+                    ADPanel.Visible = True
+                Else
+                    OUTextBox.Text = ""
+                    ADPanel.Visible = False
+                End If
+            Else
+                OUTextBox.Text = ""
+                ADPanel.Visible = False
+            End If
+        Catch
+            ADPanel.Visible = False
+        End Try
+    End Sub
 #End Region
 
 End Class
