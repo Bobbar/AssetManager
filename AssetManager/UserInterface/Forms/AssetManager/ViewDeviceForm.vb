@@ -590,6 +590,7 @@ Public Class ViewDeviceForm
 
         EnableControlsRecursive(Me)
 
+        ADPanel.Visible = False
         pnlOtherFunctions.Visible = False
         cmdMunisSearch.Visible = True
         Me.Text = "*View - MODIFYING*"
