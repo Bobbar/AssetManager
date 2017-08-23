@@ -1049,7 +1049,7 @@ Public Class ViewDeviceForm
                 SendToHistGrid(DataGridHistory, HistoricalResults)
                 DisableControls()
                 SetAttachCount()
-                SetOUInfo()
+                SetADInfo()
                 Return True
             End Using
         Catch ex As Exception
@@ -1063,21 +1063,21 @@ Public Class ViewDeviceForm
         SetWaitCursor(True)
         StatusBar("Processing...")
     End Sub
-
-    Private Async Sub SetOUInfo()
+    Private Async Sub SetADInfo()
         Try
             If CurrentViewDevice.HostName <> "" Then
-                Dim ADWrap As New ActiveDirectoryWrapper
-                Dim OUText = Await ADWrap.GetDeviceOU(CurrentViewDevice.HostName)
-                If OUText <> "" Then
-                    OUTextBox.Text = OUText
+                Dim ADWrap As New ActiveDirectoryWrapper(CurrentViewDevice.HostName)
+                If Await ADWrap.LoadResultsAsync Then
+                    ADOUTextBox.Text = Await ADWrap.GetDeviceOU()
+                    ADOSTextBox.Text = Await ADWrap.GetAttributeValueAsync("operatingsystem")
+                    ADOSVerTextBox.Text = Await ADWrap.GetAttributeValueAsync("operatingsystemversion")
+                    ADLastLoginTextBox.Text = Await ADWrap.GetAttributeValueAsync("lastlogon") '"lastlogontimestamp")
+                    ADCreatedTextBox.Text = Await ADWrap.GetAttributeValueAsync("whencreated")
                     ADPanel.Visible = True
                 Else
-                    OUTextBox.Text = ""
                     ADPanel.Visible = False
                 End If
             Else
-                OUTextBox.Text = ""
                 ADPanel.Visible = False
             End If
         Catch

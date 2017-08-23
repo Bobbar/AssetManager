@@ -94,7 +94,18 @@ Partial Class ViewDeviceForm
         Me.FieldTabs = New System.Windows.Forms.TabControl()
         Me.AssetInfo = New System.Windows.Forms.TabPage()
         Me.MiscInfo = New System.Windows.Forms.TabPage()
-        Me.OUTextBox = New System.Windows.Forms.TextBox()
+        Me.ADPanel = New System.Windows.Forms.Panel()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.ADCreatedTextBox = New System.Windows.Forms.TextBox()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.ADLastLoginTextBox = New System.Windows.Forms.TextBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.ADOSVerTextBox = New System.Windows.Forms.TextBox()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.ADOSTextBox = New System.Windows.Forms.TextBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.ADOUTextBox = New System.Windows.Forms.TextBox()
         Me.iCloudTextBox = New System.Windows.Forms.TextBox()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.ToolStripContainer1 = New System.Windows.Forms.ToolStripContainer()
@@ -115,8 +126,6 @@ Partial Class ViewDeviceForm
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.AssetDisposalForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.ADPanel = New System.Windows.Forms.Panel()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         CType(Me.cmdRestart, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -135,18 +144,19 @@ Partial Class ViewDeviceForm
         Me.FieldTabs.SuspendLayout()
         Me.AssetInfo.SuspendLayout()
         Me.MiscInfo.SuspendLayout()
+        Me.ADPanel.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.ToolStripContainer1.ContentPanel.SuspendLayout()
         Me.ToolStripContainer1.TopToolStripPanel.SuspendLayout()
         Me.ToolStripContainer1.SuspendLayout()
         Me.tsTracking.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
-        Me.ADPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtHostname
         '
         Me.txtHostname.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtHostname.Location = New System.Drawing.Point(166, 47)
+        Me.txtHostname.Location = New System.Drawing.Point(26, 42)
         Me.txtHostname.Name = "txtHostname"
         Me.txtHostname.Size = New System.Drawing.Size(177, 23)
         Me.txtHostname.TabIndex = 58
@@ -155,7 +165,7 @@ Partial Class ViewDeviceForm
         '
         Me.Label15.AutoSize = True
         Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label15.Location = New System.Drawing.Point(163, 28)
+        Me.Label15.Location = New System.Drawing.Point(23, 23)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(73, 16)
         Me.Label15.TabIndex = 59
@@ -164,7 +174,7 @@ Partial Class ViewDeviceForm
         'txtPhoneNumber
         '
         Me.txtPhoneNumber.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPhoneNumber.Location = New System.Drawing.Point(166, 99)
+        Me.txtPhoneNumber.Location = New System.Drawing.Point(26, 94)
         Me.txtPhoneNumber.Mask = "(999) 000-0000"
         Me.txtPhoneNumber.Name = "txtPhoneNumber"
         Me.txtPhoneNumber.Size = New System.Drawing.Size(177, 23)
@@ -175,7 +185,7 @@ Partial Class ViewDeviceForm
         '
         Me.Label14.AutoSize = True
         Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.Location = New System.Drawing.Point(163, 80)
+        Me.Label14.Location = New System.Drawing.Point(23, 75)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(60, 16)
         Me.Label14.TabIndex = 56
@@ -186,7 +196,7 @@ Partial Class ViewDeviceForm
         Me.lblGUID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblGUID.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblGUID.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblGUID.Location = New System.Drawing.Point(166, 154)
+        Me.lblGUID.Location = New System.Drawing.Point(26, 149)
         Me.lblGUID.Name = "lblGUID"
         Me.lblGUID.Size = New System.Drawing.Size(272, 23)
         Me.lblGUID.TabIndex = 54
@@ -256,7 +266,7 @@ Partial Class ViewDeviceForm
         '
         Me.chkTrackable.AutoSize = True
         Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(166, 195)
+        Me.chkTrackable.Location = New System.Drawing.Point(26, 190)
         Me.chkTrackable.Name = "chkTrackable"
         Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
         Me.chkTrackable.TabIndex = 13
@@ -285,7 +295,7 @@ Partial Class ViewDeviceForm
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(162, 135)
+        Me.Label10.Location = New System.Drawing.Point(22, 130)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(90, 16)
         Me.Label10.TabIndex = 41
@@ -945,18 +955,128 @@ Partial Class ViewDeviceForm
         Me.MiscInfo.TabIndex = 1
         Me.MiscInfo.Text = "Misc."
         '
-        'OUTextBox
+        'ADPanel
         '
-        Me.OUTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.OUTextBox.Location = New System.Drawing.Point(18, 20)
-        Me.OUTextBox.Name = "OUTextBox"
-        Me.OUTextBox.Size = New System.Drawing.Size(219, 23)
-        Me.OUTextBox.TabIndex = 63
+        Me.ADPanel.Controls.Add(Me.GroupBox1)
+        Me.ADPanel.Location = New System.Drawing.Point(473, 7)
+        Me.ADPanel.Name = "ADPanel"
+        Me.ADPanel.Size = New System.Drawing.Size(305, 226)
+        Me.ADPanel.TabIndex = 65
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.Label22)
+        Me.GroupBox1.Controls.Add(Me.ADCreatedTextBox)
+        Me.GroupBox1.Controls.Add(Me.Label21)
+        Me.GroupBox1.Controls.Add(Me.ADLastLoginTextBox)
+        Me.GroupBox1.Controls.Add(Me.Label20)
+        Me.GroupBox1.Controls.Add(Me.ADOSVerTextBox)
+        Me.GroupBox1.Controls.Add(Me.Label19)
+        Me.GroupBox1.Controls.Add(Me.ADOSTextBox)
+        Me.GroupBox1.Controls.Add(Me.Label18)
+        Me.GroupBox1.Controls.Add(Me.ADOUTextBox)
+        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(305, 226)
+        Me.GroupBox1.TabIndex = 0
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Active Directory Info:"
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label22.Location = New System.Drawing.Point(24, 163)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(59, 16)
+        Me.Label22.TabIndex = 72
+        Me.Label22.Text = "Created:"
+        '
+        'ADCreatedTextBox
+        '
+        Me.ADCreatedTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ADCreatedTextBox.Location = New System.Drawing.Point(27, 182)
+        Me.ADCreatedTextBox.Name = "ADCreatedTextBox"
+        Me.ADCreatedTextBox.Size = New System.Drawing.Size(244, 23)
+        Me.ADCreatedTextBox.TabIndex = 71
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label21.Location = New System.Drawing.Point(24, 118)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(72, 16)
+        Me.Label21.TabIndex = 70
+        Me.Label21.Text = "Last Login:"
+        '
+        'ADLastLoginTextBox
+        '
+        Me.ADLastLoginTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ADLastLoginTextBox.Location = New System.Drawing.Point(27, 137)
+        Me.ADLastLoginTextBox.Name = "ADLastLoginTextBox"
+        Me.ADLastLoginTextBox.Size = New System.Drawing.Size(244, 23)
+        Me.ADLastLoginTextBox.TabIndex = 69
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label20.Location = New System.Drawing.Point(149, 73)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(79, 16)
+        Me.Label20.TabIndex = 68
+        Me.Label20.Text = "OS Version:"
+        '
+        'ADOSVerTextBox
+        '
+        Me.ADOSVerTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ADOSVerTextBox.Location = New System.Drawing.Point(152, 92)
+        Me.ADOSVerTextBox.Name = "ADOSVerTextBox"
+        Me.ADOSVerTextBox.Size = New System.Drawing.Size(119, 23)
+        Me.ADOSVerTextBox.TabIndex = 67
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label19.Location = New System.Drawing.Point(24, 73)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(30, 16)
+        Me.Label19.TabIndex = 66
+        Me.Label19.Text = "OS:"
+        '
+        'ADOSTextBox
+        '
+        Me.ADOSTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ADOSTextBox.Location = New System.Drawing.Point(27, 92)
+        Me.ADOSTextBox.Name = "ADOSTextBox"
+        Me.ADOSTextBox.Size = New System.Drawing.Size(119, 23)
+        Me.ADOSTextBox.TabIndex = 65
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(24, 28)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(61, 16)
+        Me.Label18.TabIndex = 64
+        Me.Label18.Text = "OU Path:"
+        '
+        'ADOUTextBox
+        '
+        Me.ADOUTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ADOUTextBox.Location = New System.Drawing.Point(27, 47)
+        Me.ADOUTextBox.Name = "ADOUTextBox"
+        Me.ADOUTextBox.Size = New System.Drawing.Size(244, 23)
+        Me.ADOUTextBox.TabIndex = 63
         '
         'iCloudTextBox
         '
         Me.iCloudTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.iCloudTextBox.Location = New System.Drawing.Point(386, 99)
+        Me.iCloudTextBox.Location = New System.Drawing.Point(232, 42)
         Me.iCloudTextBox.Name = "iCloudTextBox"
         Me.iCloudTextBox.Size = New System.Drawing.Size(219, 23)
         Me.iCloudTextBox.TabIndex = 60
@@ -965,7 +1085,7 @@ Partial Class ViewDeviceForm
         '
         Me.Label17.AutoSize = True
         Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label17.Location = New System.Drawing.Point(383, 80)
+        Me.Label17.Location = New System.Drawing.Point(229, 23)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(100, 16)
         Me.Label17.TabIndex = 61
@@ -1134,25 +1254,6 @@ Partial Class ViewDeviceForm
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 37)
         '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.Location = New System.Drawing.Point(15, 1)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(128, 16)
-        Me.Label18.TabIndex = 64
-        Me.Label18.Text = "Active Directory OU:"
-        '
-        'ADPanel
-        '
-        Me.ADPanel.Controls.Add(Me.Label18)
-        Me.ADPanel.Controls.Add(Me.OUTextBox)
-        Me.ADPanel.Location = New System.Drawing.Point(368, 27)
-        Me.ADPanel.Name = "ADPanel"
-        Me.ADPanel.Size = New System.Drawing.Size(255, 53)
-        Me.ADPanel.TabIndex = 65
-        '
         'ViewDeviceForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1189,6 +1290,9 @@ Partial Class ViewDeviceForm
         Me.AssetInfo.PerformLayout()
         Me.MiscInfo.ResumeLayout(False)
         Me.MiscInfo.PerformLayout()
+        Me.ADPanel.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.ToolStripContainer1.ContentPanel.ResumeLayout(False)
         Me.ToolStripContainer1.TopToolStripPanel.ResumeLayout(False)
         Me.ToolStripContainer1.TopToolStripPanel.PerformLayout()
@@ -1198,8 +1302,6 @@ Partial Class ViewDeviceForm
         Me.tsTracking.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
-        Me.ADPanel.ResumeLayout(False)
-        Me.ADPanel.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1296,7 +1398,16 @@ Partial Class ViewDeviceForm
     Friend WithEvents Panel2 As Panel
     Friend WithEvents iCloudTextBox As TextBox
     Friend WithEvents Label17 As Label
-    Friend WithEvents OUTextBox As TextBox
+    Friend WithEvents ADOUTextBox As TextBox
     Friend WithEvents ADPanel As Panel
     Friend WithEvents Label18 As Label
+    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents Label22 As Label
+    Friend WithEvents ADCreatedTextBox As TextBox
+    Friend WithEvents Label21 As Label
+    Friend WithEvents ADLastLoginTextBox As TextBox
+    Friend WithEvents Label20 As Label
+    Friend WithEvents ADOSVerTextBox As TextBox
+    Friend WithEvents Label19 As Label
+    Friend WithEvents ADOSTextBox As TextBox
 End Class

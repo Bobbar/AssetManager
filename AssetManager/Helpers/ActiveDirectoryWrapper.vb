@@ -1,39 +1,133 @@
 ﻿Imports System.DirectoryServices
 Public Class ActiveDirectoryWrapper
+    Private _hostname As String
+    Private _searchResults As SearchResult
+    ' Public Property FoundInAD As Boolean = False
+    Sub New(hostname As String)
+        _hostname = hostname
+    End Sub
+
+    ''' <summary>
+    ''' Executes the Active Directory search and populates search results. Returns true if results were found.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function LoadResults() As Boolean
+        _searchResults = ReturnSearchResult()
+        If _searchResults IsNot Nothing Then
+            '      FoundInAD = True
+            Return True
+        Else
+            '  FoundInAD = False
+            Return False
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Asynchronously executes the Active Directory search and populates search results. Returns true if results were found.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Async Function LoadResultsAsync() As Task(Of Boolean)
+        Return Await Task.Run(Function()
+                                  _searchResults = ReturnSearchResult()
+                                  If _searchResults IsNot Nothing Then
+                                      '   FoundInAD = True
+                                      Return True
+                                  Else
+                                      '    FoundInAD = False
+                                      Return False
+                                  End If
+                              End Function)
+    End Function
 
     ''' <summary>
     ''' Asynchronously get the OU path of a domain computer. 
     ''' </summary>
-    ''' <param name="hostname"></param>
     ''' <returns></returns>
-    Public Async Function GetDeviceOU(hostname As String) As Task(Of String)
+    Public Async Function GetDeviceOU() As Task(Of String)
         Return Await Task.Run(Function()
-                                  Return ParsePath(GetDistinguishedName(hostname))
+                                  Return ParsePath(GetDistinguishedName())
                               End Function)
     End Function
 
     ''' <summary>
     ''' Queries Active Directory for a hostname and returns the Distinguished Name.
     ''' </summary>
-    ''' <param name="hostname"></param>
     ''' <returns></returns>
-    Public Function GetDistinguishedName(hostname As String) As String
-        Using rootDSE = New DirectoryEntry("LDAP://RootDSE")
-            Dim defaultNamingContext = rootDSE.Properties("defaultNamingContext").Value.ToString()
-            Dim domainRootADsPath = [String].Format("LDAP://{0}", defaultNamingContext)
-            Using searchRoot = New DirectoryEntry(domainRootADsPath)
-                Dim filter = "(&(objectCategory=computer)(name=" + hostname + "))"
-                Using directorySearch = New DirectorySearcher(searchRoot, filter)
-                    Dim directorySearchResult = directorySearch.FindOne()
-                    If directorySearchResult IsNot Nothing Then
-                        If directorySearchResult.Properties("distinguishedName").Count > 0 Then
-                            Return directorySearchResult.Properties("distinguishedName")(0).ToString()
+    Public Function GetDistinguishedName() As String
+        Dim directorySearchResult = _searchResults
+        If directorySearchResult IsNot Nothing Then
+            If directorySearchResult.Properties("distinguishedName").Count > 0 Then
+                Return directorySearchResult.Properties("distinguishedName")(0).ToString()
+            End If
+        End If
+        Return String.Empty
+    End Function
+
+    Private Function ReturnSearchResult() As SearchResult
+        Try
+            Using rootDSE = New DirectoryEntry("LDAP://RootDSE")
+                Dim defaultNamingContext = rootDSE.Properties("defaultNamingContext").Value.ToString()
+                Dim domainRootADsPath = [String].Format("LDAP://{0}", defaultNamingContext)
+                Using searchRoot = New DirectoryEntry(domainRootADsPath)
+                    Dim filter = "(&(objectCategory=computer)(name=" + _hostname + "))"
+                    Using directorySearch = New DirectorySearcher(searchRoot, filter)
+                        Dim directorySearchResult = directorySearch.FindOne()
+                        If directorySearchResult IsNot Nothing Then
+                            Return directorySearch.FindOne()
                         End If
-                    End If
-                    Return String.Empty
+                        Return Nothing
+                    End Using
                 End Using
             End Using
-        End Using
+        Catch
+            Return Nothing
+        End Try
+    End Function
+
+    Public Function GetListOfAttribsAndValues() As List(Of String)
+        Dim directorySearchResult = _searchResults
+        Dim AttribList As New List(Of String)
+        For i = 0 To directorySearchResult.Properties.Count - 1
+            AttribList.Add(directorySearchResult.Properties.PropertyNames(i).ToString & " = " & directorySearchResult.Properties(directorySearchResult.Properties.PropertyNames(i).ToString)(0).ToString) ' & directorySearchResult.Properties.Values.)
+        Next
+        Return AttribList
+    End Function
+
+    Public Async Function GetAttributeValueAsync(attribName As String) As Task(Of String)
+        Return Await Task.Run(Function()
+                                  Dim directorySearchResult = _searchResults
+                                  If directorySearchResult IsNot Nothing Then
+                                      If directorySearchResult.Properties(attribName).Count > 0 Then
+                                          Return AttribValueToString(directorySearchResult.Properties(attribName)(0))
+                                      End If
+                                  End If
+                                  Return String.Empty
+                              End Function)
+    End Function
+
+
+    Public Function GetAttributeValue(attribName As String) As String
+        Dim directorySearchResult = _searchResults
+        If directorySearchResult IsNot Nothing Then
+            If directorySearchResult.Properties(attribName).Count > 0 Then
+                Return AttribValueToString(directorySearchResult.Properties(attribName)(0))
+            End If
+        End If
+        Return String.Empty
+    End Function
+
+    Private Function AttribValueToString(value As Object) As String
+        Try
+            Select Case value.GetType
+                Case GetType(Int64)
+                    Dim longTime = CType(value, Int64)
+                    Return Date.FromFileTime(longTime).ToString
+                Case Else
+                    Return value.ToString
+            End Select
+        Catch ex As ArgumentOutOfRangeException
+            Return value.ToString
+        End Try
     End Function
 
     ''' <summary>
