@@ -76,6 +76,7 @@ Public Class PingVis : Implements IDisposable
         If PingTimer IsNot Nothing Then
             RemoveHandler PingTimer.Tick, AddressOf PingTimer_Tick
             PingTimer.Dispose()
+            PingTimer = Nothing
             PingTimer = New Timer
         End If
         PingTimer.Interval = CurrentPingInterval
@@ -98,8 +99,12 @@ Public Class PingVis : Implements IDisposable
                 PingReplies.Add(New PingInfo(reply))
             End If
         Catch ex As Exception
-            PingReplies.Add(New PingInfo())
-            SetPingInterval(NoPingInterval)
+            If Not Me.disposedValue Then
+                PingReplies.Add(New PingInfo())
+                SetPingInterval(NoPingInterval)
+            Else
+                Me.Dispose()
+            End If
         Finally
             If Not MouseIsScrolling Then DrawBars(DrawControl, GetPingBars, MouseOverInfo)
         End Try
@@ -115,9 +120,9 @@ Public Class PingVis : Implements IDisposable
             PingRunning = False
         End Try
     End Function
-    Private Sub SetPingInterval(inverval As Integer)
-        If CurrentPingInterval <> inverval Then
-            CurrentPingInterval = inverval
+    Private Sub SetPingInterval(interval As Integer)
+        If CurrentPingInterval <> interval Then
+            CurrentPingInterval = interval
             InitTimer()
         End If
     End Sub
@@ -401,6 +406,7 @@ Public Class PingVis : Implements IDisposable
                 ' TODO: dispose managed state (managed objects).
                 PingTimer.Enabled = False
                 PingTimer.Dispose()
+                PingTimer = Nothing
                 MyPing.SendAsyncCancel()
                 MyPing.Dispose()
                 ' MyControl.Dispose()
