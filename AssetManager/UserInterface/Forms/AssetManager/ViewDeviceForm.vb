@@ -125,39 +125,34 @@ Public Class ViewDeviceForm
                 If CurrentViewDevice.IsTrackable Then LoadTracking(CurrentViewDevice.GUID)
                 SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut)
                 Me.Text = Me.Text + FormTitle(CurrentViewDevice)
-                Me.Show()
-                DataGridHistory.ClearSelection()
-                bolGridFilling = False
                 DeviceHostname = CurrentViewDevice.HostName & "." & Domain
                 CheckRDP()
                 tmr_RDPRefresher.Enabled = True
+                Me.Show()
+                DataGridHistory.ClearSelection()
+                bolGridFilling = False
             Else
                 Me.Dispose()
             End If
-            DoneWaiting()
         Catch ex As Exception
-            DoneWaiting()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            DoneWaiting()
         End Try
     End Sub
 
     Private Sub LoadTracking(strGUID As String)
         Dim strQry = "Select * FROM " & TrackablesCols.TableName & ", " & DevicesCols.TableName & " WHERE " & TrackablesCols.DeviceUID & " = " & DevicesCols.DeviceUID & " And " & TrackablesCols.DeviceUID & " = '" & strGUID & "' ORDER BY " & TrackablesCols.DateStamp & " DESC"
-        Try
-            Using Results As DataTable = DBFunc.DataTableFromQueryString(strQry)
-                If Results.Rows.Count > 0 Then
-                    CollectCurrentTracking(Results)
-                    SendToTrackGrid(TrackingGrid, Results)
-                    DisableSorting(TrackingGrid)
-                Else
-                    TrackingGrid.DataSource = Nothing
-                End If
-                FillTrackingBox()
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            DoneWaiting()
-        End Try
+        Using Results As DataTable = DBFunc.DataTableFromQueryString(strQry)
+            If Results.Rows.Count > 0 Then
+                CollectCurrentTracking(Results)
+                SendToTrackGrid(TrackingGrid, Results)
+                DisableSorting(TrackingGrid)
+            Else
+                TrackingGrid.DataSource = Nothing
+            End If
+            FillTrackingBox()
+        End Using
     End Sub
 
     Private Sub AddErrorIcon(ctl As Control)
@@ -348,7 +343,6 @@ Public Class ViewDeviceForm
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
-
     End Sub
 
     Private Sub cmdBrowseFiles_Click(sender As Object, e As EventArgs) Handles cmdBrowseFiles.Click
@@ -462,14 +456,13 @@ Public Class ViewDeviceForm
             If AssetFunc.DeleteFtpAndSql(CurrentViewDevice.GUID, EntryType.Device) Then
                 Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                 CurrentViewDevice = Nothing
-                Me.Dispose()
                 MainForm.RefreshCurrent()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentViewDevice.GUID)
                 Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
                 CurrentViewDevice = Nothing
-                Me.Dispose()
             End If
+            Me.Dispose()
         Else
             Exit Sub
         End If
@@ -593,7 +586,7 @@ Public Class ViewDeviceForm
         ADPanel.Visible = False
         pnlOtherFunctions.Visible = False
         cmdMunisSearch.Visible = True
-        Me.Text = "*View - MODIFYING*"
+        Me.Text = "View" & FormTitle(CurrentViewDevice) & "  *MODIFYING**"
         tsSaveModify.Visible = True
     End Sub
 
@@ -770,10 +763,8 @@ Public Class ViewDeviceForm
             If VerifyAdminCreds() Then
                 cmdRestart.Image = My.Resources.LoadingAni
                 Dim FullPath As String = "\\" & IP
-                ' Dim output As String
                 Dim output As String = Await Task.Run(Function()
-                                                          Using NetCon As New NetworkConnection(FullPath, AdminCreds)
-                                                              Dim p As Process = New Process
+                                                          Using NetCon As New NetworkConnection(FullPath, AdminCreds), p As Process = New Process
                                                               p.StartInfo.UseShellExecute = False
                                                               p.StartInfo.RedirectStandardOutput = True
                                                               p.StartInfo.RedirectStandardError = True
@@ -785,19 +776,14 @@ Public Class ViewDeviceForm
                                                               p.WaitForExit()
                                                               output = Trim(output)
                                                               Return output
-                                                              'If Trim(output) = "" Then
-                                                              '    Return True
-                                                              'Else
-                                                              '    Return False
-                                                              'End If
                                                           End Using
                                                       End Function)
-                cmdRestart.Image = OrigButtonImage
                 Return output
             End If
         Catch ex As Exception
-            cmdRestart.Image = OrigButtonImage
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            cmdRestart.Image = OrigButtonImage
         End Try
         Return Nothing
     End Function
@@ -1053,7 +1039,6 @@ Public Class ViewDeviceForm
                 Return True
             End Using
         Catch ex As Exception
-            DoneWaiting()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
         End Try
@@ -1063,6 +1048,7 @@ Public Class ViewDeviceForm
         SetWaitCursor(True)
         StatusBar("Processing...")
     End Sub
+
     Private Async Sub SetADInfo()
         Try
             If CurrentViewDevice.HostName <> "" Then
@@ -1071,7 +1057,7 @@ Public Class ViewDeviceForm
                     ADOUTextBox.Text = Await ADWrap.GetDeviceOU()
                     ADOSTextBox.Text = Await ADWrap.GetAttributeValueAsync("operatingsystem")
                     ADOSVerTextBox.Text = Await ADWrap.GetAttributeValueAsync("operatingsystemversion")
-                    ADLastLoginTextBox.Text = Await ADWrap.GetAttributeValueAsync("lastlogon") '"lastlogontimestamp")
+                    ADLastLoginTextBox.Text = Await ADWrap.GetAttributeValueAsync("lastlogon")
                     ADCreatedTextBox.Text = Await ADWrap.GetAttributeValueAsync("whencreated")
                     ADPanel.Visible = True
                 Else
