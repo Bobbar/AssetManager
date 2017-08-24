@@ -73,15 +73,17 @@ Public Class PingVis : Implements IDisposable
         StartPing()
     End Sub
     Private Sub InitTimer()
-        If PingTimer IsNot Nothing Then
-            RemoveHandler PingTimer.Tick, AddressOf PingTimer_Tick
-            PingTimer.Dispose()
-            PingTimer = Nothing
-            PingTimer = New Timer
+        If Not Me.disposedValue Then
+            If PingTimer IsNot Nothing Then
+                RemoveHandler PingTimer.Tick, AddressOf PingTimer_Tick
+                PingTimer.Dispose()
+                PingTimer = Nothing
+                PingTimer = New Timer
+            End If
+            PingTimer.Interval = CurrentPingInterval
+            PingTimer.Enabled = True
+            AddHandler PingTimer.Tick, AddressOf PingTimer_Tick
         End If
-        PingTimer.Interval = CurrentPingInterval
-        PingTimer.Enabled = True
-        AddHandler PingTimer.Tick, AddressOf PingTimer_Tick
     End Sub
     Private Sub PingTimer_Tick(sender As Object, e As EventArgs)
         StartPing()
@@ -405,6 +407,7 @@ Public Class PingVis : Implements IDisposable
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
                 PingTimer.Enabled = False
+                RemoveHandler PingTimer.Tick, AddressOf PingTimer_Tick
                 PingTimer.Dispose()
                 PingTimer = Nothing
                 MyPing.SendAsyncCancel()
