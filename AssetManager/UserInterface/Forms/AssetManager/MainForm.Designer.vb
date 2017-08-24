@@ -72,7 +72,6 @@ Partial Class MainForm
         Me.ConnStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.BigQueryWorker = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.ToolStrip1 = New AssetManager.OneClickToolStrip()
         Me.AddDeviceTool = New System.Windows.Forms.ToolStripButton()
@@ -632,10 +631,6 @@ Partial Class MainForm
         Me.DateTimeLabel.Text = "ServerTime"
         Me.DateTimeLabel.ToolTipText = "Server Time"
         '
-        'BigQueryWorker
-        '
-        Me.BigQueryWorker.WorkerReportsProgress = True
-        '
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.SearchGroup)
@@ -830,7 +825,6 @@ Partial Class MainForm
     Friend WithEvents Label4 As Label
     Friend WithEvents txtAssetTagSearch As TextBox
     Friend WithEvents txtSerialSearch As TextBox
-    Friend WithEvents BigQueryWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents StripSpinner As ToolStripStatusLabel
     Friend WithEvents ToolStrip1 As OneClickToolStrip
     Friend WithEvents AddDeviceTool As ToolStripButton

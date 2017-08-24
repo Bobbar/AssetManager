@@ -15,6 +15,7 @@ Public Class MainForm
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyWindowList As New WindowList(Me)
     Private strServerTime As String = Now.ToString
+    Private QueryRunning As Boolean = False
 
 #End Region
 
@@ -97,34 +98,6 @@ Public Class MainForm
         NewDeviceForm.Show()
         NewDeviceForm.Activate()
         NewDeviceForm.WindowState = FormWindowState.Normal
-    End Sub
-
-    Private Sub BigQueryDone(ByRef Results As DataTable)
-        SendToGrid(Results)
-        DoneWaiting()
-    End Sub
-
-    Private Sub BigQueryWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles BigQueryWorker.DoWork
-        Using QryComm = DirectCast(e.Argument, DbCommand)
-            BigQueryWorker.ReportProgress(1)
-            LastCommand = QryComm
-            e.Result = DBFunc.DataTableFromCommand(QryComm)
-        End Using
-    End Sub
-
-    Private Sub BigQueryWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BigQueryWorker.ProgressChanged
-        StatusBar("Background query running...")
-    End Sub
-
-    Private Sub BigQueryWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BigQueryWorker.RunWorkerCompleted
-        If e.Error Is Nothing Then
-            If e.Result IsNot Nothing Then
-                BigQueryDone(DirectCast(e.Result, DataTable))
-            End If
-        Else
-            ErrHandle(e.Error, System.Reflection.MethodInfo.GetCurrentMethod())
-        End If
-        DoneWaiting()
     End Sub
 
     Private Function BuildSearchList() As List(Of DBQueryParameter)
@@ -429,9 +402,8 @@ Public Class MainForm
     End Sub
 
     Private Sub SendToGrid(ByRef Results As DataTable)
-        Try
-            If Results Is Nothing Then Exit Sub
-            StatusBar("Building Grid...")
+        If Results Is Nothing Then Exit Sub
+        StatusBar("Building Grid...")
             Application.DoEvents()
             Using table As New DataTable
                 table.Columns.Add("User", GetType(String))
@@ -468,12 +440,7 @@ Public Class MainForm
                 DisplayRecords(table.Rows.Count)
                 Results.Dispose()
             End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        Finally
-            DoneWaiting()
-        End Try
-    End Sub
+            End Sub
 
     Private Sub ShowAll()
         Dim cmd = DBFunc.GetCommand(strShowAllQry)
@@ -490,12 +457,25 @@ Public Class MainForm
         FTPFunc.ScanAttachements()
     End Sub
 
-    Private Sub StartBigQuery(QryCommand As DbCommand)
-        If Not BigQueryWorker.IsBusy Then
-            StatusBar("Request sent to background...")
-            StripSpinner.Visible = True
-            BigQueryWorker.RunWorkerAsync(QryCommand)
-        End If
+    Private Async Sub StartBigQuery(QryCommand As DbCommand)
+        Try
+            If Not QueryRunning Then
+                StripSpinner.Visible = True
+                StatusBar("Background query running...")
+                QueryRunning = True
+                Dim Results = Await Task.Run(Function()
+                                                 LastCommand = QryCommand
+                                                 Return DBFunc.DataTableFromCommand(QryCommand)
+                                             End Function)
+                QryCommand.Dispose()
+                SendToGrid(Results)
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            QueryRunning = False
+            DoneWaiting()
+        End Try
     End Sub
 
     Private Sub StartUserManager()
@@ -548,15 +528,11 @@ Public Class MainForm
     End Sub
 
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
-        If Not BigQueryWorker.IsBusy Then
-            DynamicSearch()
-        End If
+        DynamicSearch()
     End Sub
 
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
-        If Not BigQueryWorker.IsBusy Then
-            ShowAll()
-        End If
+        ShowAll()
     End Sub
 
     Private Sub cmdSibi_Click(sender As Object, e As EventArgs) Handles cmdSibi.Click
@@ -564,12 +540,18 @@ Public Class MainForm
     End Sub
 
     Private Sub cmdSupDevSearch_Click(sender As Object, e As EventArgs) Handles cmdSupDevSearch.Click
-        Dim results As DataTable = AssetFunc.DevicesBySupervisor(Me)
-        If results IsNot Nothing Then
-            SendToGrid(results)
-        Else
-            'do nutzing
-        End If
+        Try
+            Dim results As DataTable = AssetFunc.DevicesBySupervisor(Me)
+            If results IsNot Nothing Then
+                SendToGrid(results)
+            Else
+                'do nutzing
+            End If
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            DoneWaiting()
+        End Try
     End Sub
 
     Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
