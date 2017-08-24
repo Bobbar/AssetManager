@@ -14,10 +14,8 @@ Public Class ActiveDirectoryWrapper
     Public Function LoadResults() As Boolean
         _searchResults = ReturnSearchResult()
         If _searchResults IsNot Nothing Then
-            '      FoundInAD = True
             Return True
         Else
-            '  FoundInAD = False
             Return False
         End If
     End Function
@@ -30,23 +28,19 @@ Public Class ActiveDirectoryWrapper
         Return Await Task.Run(Function()
                                   _searchResults = ReturnSearchResult()
                                   If _searchResults IsNot Nothing Then
-                                      '   FoundInAD = True
                                       Return True
                                   Else
-                                      '    FoundInAD = False
                                       Return False
                                   End If
                               End Function)
     End Function
 
     ''' <summary>
-    ''' Asynchronously get the OU path of a domain computer. 
+    ''' Get the OU path of a domain computer. 
     ''' </summary>
     ''' <returns></returns>
-    Public Async Function GetDeviceOU() As Task(Of String)
-        Return Await Task.Run(Function()
-                                  Return ParsePath(GetDistinguishedName())
-                              End Function)
+    Public Function GetDeviceOU() As String
+        Return ParsePath(GetDistinguishedName())
     End Function
 
     ''' <summary>
@@ -92,19 +86,6 @@ Public Class ActiveDirectoryWrapper
         Next
         Return AttribList
     End Function
-
-    Public Async Function GetAttributeValueAsync(attribName As String) As Task(Of String)
-        Return Await Task.Run(Function()
-                                  Dim directorySearchResult = _searchResults
-                                  If directorySearchResult IsNot Nothing Then
-                                      If directorySearchResult.Properties(attribName).Count > 0 Then
-                                          Return AttribValueToString(directorySearchResult.Properties(attribName)(0))
-                                      End If
-                                  End If
-                                  Return String.Empty
-                              End Function)
-    End Function
-
 
     Public Function GetAttributeValue(attribName As String) As String
         Dim directorySearchResult = _searchResults

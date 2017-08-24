@@ -1054,11 +1054,11 @@ Public Class ViewDeviceForm
             If CurrentViewDevice.HostName <> "" Then
                 Dim ADWrap As New ActiveDirectoryWrapper(CurrentViewDevice.HostName)
                 If Await ADWrap.LoadResultsAsync Then
-                    ADOUTextBox.Text = Await ADWrap.GetDeviceOU()
-                    ADOSTextBox.Text = Await ADWrap.GetAttributeValueAsync("operatingsystem")
-                    ADOSVerTextBox.Text = Await ADWrap.GetAttributeValueAsync("operatingsystemversion")
-                    ADLastLoginTextBox.Text = Await ADWrap.GetAttributeValueAsync("lastlogon")
-                    ADCreatedTextBox.Text = Await ADWrap.GetAttributeValueAsync("whencreated")
+                    ADOUTextBox.Text = ADWrap.GetDeviceOU()
+                    ADOSTextBox.Text = ADWrap.GetAttributeValue("operatingsystem")
+                    ADOSVerTextBox.Text = ADWrap.GetAttributeValue("operatingsystemversion")
+                    ADLastLoginTextBox.Text = ADWrap.GetAttributeValue("lastlogon")
+                    ADCreatedTextBox.Text = ADWrap.GetAttributeValue("whencreated")
                     ADPanel.Visible = True
                 Else
                     ADPanel.Visible = False
