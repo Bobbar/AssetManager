@@ -211,12 +211,13 @@ Public Class NewDeviceForm
     End Sub
 
     Private Sub cmdUserSearch_Click(sender As Object, e As EventArgs) Handles cmdUserSearch.Click
-        Dim NewMunisSearch As New MunisUserForm(Me)
-        MunisUser = NewMunisSearch.EmployeeInfo
-        If MunisUser.Number <> "" Then
-            txtCurUser_REQ.Text = MunisUser.Name
-            txtCurUser_REQ.ReadOnly = True
-        End If
+        Using NewMunisSearch As New MunisUserForm(Me)
+            MunisUser = NewMunisSearch.EmployeeInfo
+            If MunisUser.Number <> "" Then
+                txtCurUser_REQ.Text = MunisUser.Name
+                txtCurUser_REQ.ReadOnly = True
+            End If
+        End Using
     End Sub
 
     Private Function DeviceInsertTable(Adapter As MySqlDataAdapter) As DataTable

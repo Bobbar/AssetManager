@@ -361,12 +361,13 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub cmdMunisSearch_Click(sender As Object, e As EventArgs) Handles cmdMunisSearch.Click
-        Dim NewMunisSearch As New MunisUserForm(Me)
-        MunisUser = NewMunisSearch.EmployeeInfo
-        If MunisUser.Name <> "" Then
-            txtCurUser_View_REQ.Text = MunisUser.Name
-            txtCurUser_View_REQ.ReadOnly = True
-        End If
+        Using NewMunisSearch As New MunisUserForm(Me)
+            MunisUser = NewMunisSearch.EmployeeInfo
+            If MunisUser.Name <> "" Then
+                txtCurUser_View_REQ.Text = MunisUser.Name
+                txtCurUser_View_REQ.ReadOnly = True
+            End If
+        End Using
     End Sub
 
     Private Sub cmdRDP_Click(sender As Object, e As EventArgs) Handles cmdRDP.Click

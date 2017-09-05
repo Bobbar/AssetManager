@@ -29,13 +29,14 @@
             Dim MunisComms As New MunisComms
             SetWorking(True)
             Using results As DataTable = Await MunisComms.ReturnSqlTableAsync(strQRY)
-                SetWorking(False)
                 If results.Rows.Count < 1 Then Exit Sub
                 MunisResults.DataSource = results
                 MunisResults.ClearSelection()
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            SetWorking(False)
         End Try
     End Sub
 
@@ -88,4 +89,7 @@
         SelectEmp()
     End Sub
 
+    Private Sub MunisUserForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        txtSearchName.Focus()
+    End Sub
 End Class

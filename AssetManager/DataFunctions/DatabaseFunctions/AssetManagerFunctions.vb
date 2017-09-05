@@ -201,26 +201,28 @@ VALUES
     End Function
 
     Public Function DevicesBySupervisor(parentForm As Form) As DataTable
-        Dim SupInfo As MunisEmployeeStruct
-        Using NewMunisSearch As New MunisUserForm(parentForm)
-            If NewMunisSearch.DialogResult = DialogResult.Yes Then
-                SetWaitCursor(True)
-                SupInfo = NewMunisSearch.EmployeeInfo
-                Using SQLComms As New MySqlComms, DeviceList As New DataTable, EmpList As DataTable = MunisFunc.ListOfEmpsBySup(SupInfo.Number)
-                    For Each r As DataRow In EmpList.Rows
-                        Dim strQRY As String = "SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.MunisEmpNum & "='" & r.Item("a_employee_number").ToString & "'"
-                        Using tmpTable As DataTable = SQLComms.ReturnMySqlTable(strQRY)
-                            DeviceList.Merge(tmpTable)
-                        End Using
-                    Next
-                    Return DeviceList
-                End Using
-                SetWaitCursor(False)
-            Else
-                SetWaitCursor(False)
-                Return Nothing
-            End If
-        End Using
+        Try
+            Dim SupInfo As MunisEmployeeStruct
+            Using NewMunisSearch As New MunisUserForm(parentForm)
+                If NewMunisSearch.DialogResult = DialogResult.Yes Then
+                    SetWaitCursor(True)
+                    SupInfo = NewMunisSearch.EmployeeInfo
+                    Using SQLComms As New MySqlComms, DeviceList As New DataTable, EmpList As DataTable = MunisFunc.ListOfEmpsBySup(SupInfo.Number)
+                        For Each r As DataRow In EmpList.Rows
+                            Dim strQRY As String = "SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.MunisEmpNum & "='" & r.Item("a_employee_number").ToString & "'"
+                            Using tmpTable As DataTable = SQLComms.ReturnMySqlTable(strQRY)
+                                DeviceList.Merge(tmpTable)
+                            End Using
+                        Next
+                        Return DeviceList
+                    End Using
+                Else
+                    Return Nothing
+                End If
+            End Using
+        Finally
+            SetWaitCursor(False)
+        End Try
     End Function
 
     Public Function IsEmployeeInDB(empNum As String) As Boolean
