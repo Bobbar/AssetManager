@@ -86,11 +86,6 @@ Public Class ViewDeviceForm
         End If
     End Sub
 
-    Private Sub StatusBar(Text As String)
-        StatusLabel.Text = Text
-        StatusLabel.Invalidate()
-    End Sub
-
     Private Sub UpdateDevice(UpdateInfo As DeviceUpdateInfoStruct)
         Try
             Dim rows As Integer = 0
@@ -545,7 +540,6 @@ Public Class ViewDeviceForm
 
     Private Sub DoneWaiting()
         SetWaitCursor(False, Me)
-        StatusBar("Idle...")
     End Sub
 
     Private Sub dtPurchaseDate_View_REQ_ValueChanged(sender As Object, e As EventArgs) Handles dtPurchaseDate_View_REQ.ValueChanged
@@ -1047,7 +1041,6 @@ Public Class ViewDeviceForm
 
     Private Sub Waiting()
         SetWaitCursor(True, Me)
-        StatusBar("Processing...")
     End Sub
 
     Private Async Sub SetADInfo()

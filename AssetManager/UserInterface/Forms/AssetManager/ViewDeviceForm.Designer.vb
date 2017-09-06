@@ -81,7 +81,6 @@ Partial Class ViewDeviceForm
         Me.Label11 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.tsSaveModify = New AssetManager.OneClickToolStrip()
@@ -136,7 +135,6 @@ Partial Class ViewDeviceForm
         Me.TrackingTab.SuspendLayout()
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TrackingBox.SuspendLayout()
-        Me.StatusStrip1.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tsSaveModify.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -574,7 +572,7 @@ Partial Class ViewDeviceForm
         Me.TabControl1.Location = New System.Drawing.Point(11, 296)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1139, 321)
+        Me.TabControl1.Size = New System.Drawing.Size(1124, 270)
         Me.TabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
         Me.TabControl1.TabIndex = 40
         '
@@ -584,7 +582,7 @@ Partial Class ViewDeviceForm
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1131, 292)
+        Me.HistoryTab.Size = New System.Drawing.Size(1116, 241)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -619,7 +617,7 @@ Partial Class ViewDeviceForm
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1119, 280)
+        Me.DataGridHistory.Size = New System.Drawing.Size(1104, 229)
         Me.DataGridHistory.TabIndex = 40
         Me.DataGridHistory.TabStop = False
         Me.DataGridHistory.VirtualMode = True
@@ -630,7 +628,7 @@ Partial Class ViewDeviceForm
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1131, 292)
+        Me.TrackingTab.Size = New System.Drawing.Size(1116, 232)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -656,7 +654,7 @@ Partial Class ViewDeviceForm
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1119, 280)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1104, 220)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
@@ -796,19 +794,11 @@ Partial Class ViewDeviceForm
         'StatusStrip1
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 740)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 680)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1161, 22)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1145, 22)
         Me.StatusStrip1.TabIndex = 45
         Me.StatusStrip1.Text = "StatusStrip1"
-        '
-        'StatusLabel
-        '
-        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StatusLabel.Name = "StatusLabel"
-        Me.StatusLabel.Size = New System.Drawing.Size(76, 17)
-        Me.StatusLabel.Text = "%STATUS%"
         '
         'tmr_RDPRefresher
         '
@@ -1099,13 +1089,13 @@ Partial Class ViewDeviceForm
         '
         Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.TabControl1)
         Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.Panel1)
-        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1161, 629)
+        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1145, 569)
         Me.ToolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ToolStripContainer1.LeftToolStripPanelVisible = False
         Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripContainer1.Name = "ToolStripContainer1"
         Me.ToolStripContainer1.RightToolStripPanelVisible = False
-        Me.ToolStripContainer1.Size = New System.Drawing.Size(1161, 740)
+        Me.ToolStripContainer1.Size = New System.Drawing.Size(1145, 680)
         Me.ToolStripContainer1.TabIndex = 54
         Me.ToolStripContainer1.Text = "ToolStripContainer1"
         '
@@ -1259,11 +1249,11 @@ Partial Class ViewDeviceForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1161, 762)
+        Me.ClientSize = New System.Drawing.Size(1145, 702)
         Me.Controls.Add(Me.ToolStripContainer1)
         Me.Controls.Add(Me.StatusStrip1)
         Me.DoubleBuffered = True
-        Me.MinimumSize = New System.Drawing.Size(1177, 528)
+        Me.MinimumSize = New System.Drawing.Size(1161, 559)
         Me.Name = "ViewDeviceForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View"
@@ -1278,8 +1268,6 @@ Partial Class ViewDeviceForm
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TrackingBox.ResumeLayout(False)
         Me.TrackingBox.PerformLayout()
-        Me.StatusStrip1.ResumeLayout(False)
-        Me.StatusStrip1.PerformLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tsSaveModify.ResumeLayout(False)
         Me.tsSaveModify.PerformLayout()
@@ -1350,7 +1338,6 @@ Partial Class ViewDeviceForm
     Friend WithEvents tsSaveModify As OneClickToolStrip
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents StatusStrip1 As StatusStrip
-    Friend WithEvents StatusLabel As ToolStripStatusLabel
     Friend WithEvents cmdCancel_Tool As ToolStripButton
     Friend WithEvents cmdAccept_Tool As ToolStripButton
     Friend WithEvents cmdMunisInfo As Button
