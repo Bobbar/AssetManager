@@ -15,14 +15,6 @@ Public Class ViewHistoryForm
 
     End Sub
 
-    Private Sub Waiting()
-        SetWaitCursor(True)
-    End Sub
-
-    Private Sub DoneWaiting()
-        SetWaitCursor(False)
-    End Sub
-
     Private Sub InitDBControls()
         txtEntryTime.Tag = New DBControlInfo(HistoricalDevicesCols.ActionDateTime, ParseType.DisplayOnly, False)
         txtActionUser.Tag = New DBControlInfo(HistoricalDevicesCols.ActionUser, ParseType.DisplayOnly, False)
@@ -53,7 +45,7 @@ Public Class ViewHistoryForm
     End Sub
 
     Private Sub ViewEntry(ByVal EntryUID As String)
-        Waiting()
+        SetWaitCursor(True, Me)
         Try
             Dim strQry = "Select * FROM " & HistoricalDevicesCols.TableName & " WHERE  " & HistoricalDevicesCols.HistoryEntryUID & " = '" & EntryUID & "'"
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQry)
@@ -61,10 +53,11 @@ Public Class ViewHistoryForm
                 FillControls(results)
                 Show()
                 Activate()
-                DoneWaiting()
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            SetWaitCursor(False, Me)
         End Try
     End Sub
 

@@ -96,7 +96,7 @@ Module OtherFunctions
     End Function
 
     Public Function Message(ByVal Prompt As String, Optional ByVal Buttons As Integer = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As MsgBoxResult
-        SetWaitCursor(False)
+        SetWaitCursor(False, ParentFrm)
         Dim NewMessage As New AdvancedDialog(ParentFrm)
         Return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm)
     End Function
@@ -140,9 +140,19 @@ Module OtherFunctions
         End If
     End Function
 
-    Public Sub SetWaitCursor(Waiting As Boolean)
-        Application.UseWaitCursor = Waiting
-        Application.DoEvents()
+    Public Sub SetWaitCursor(Waiting As Boolean, Optional parentForm As Form = Nothing)
+        If parentForm Is Nothing Then
+            Application.UseWaitCursor = Waiting
+            Application.DoEvents()
+        Else
+            If Waiting Then
+                parentForm.Cursor = Cursors.AppStarting
+            Else
+                parentForm.Cursor = Cursors.Default
+            End If
+            parentForm.Update()
+        End If
+
     End Sub
 
 End Module

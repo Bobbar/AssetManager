@@ -544,7 +544,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub DoneWaiting()
-        SetWaitCursor(False)
+        SetWaitCursor(False, Me)
         StatusBar("Idle...")
     End Sub
 
@@ -1046,7 +1046,7 @@ Public Class ViewDeviceForm
     End Function
 
     Private Sub Waiting()
-        SetWaitCursor(True)
+        SetWaitCursor(True, Me)
         StatusBar("Processing...")
     End Sub
 

@@ -26,11 +26,9 @@ Public Class SibiManageRequestForm
 #Region "Constructors"
 
     Sub New(parentForm As ThemedForm, requestUID As String)
-        Waiting()
         InitializeComponent()
         InitForm(parentForm, requestUID)
         OpenRequest(requestUID)
-        DoneWaiting()
     End Sub
 
     Sub New(parentForm As ThemedForm)
@@ -86,7 +84,7 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub OpenRequest(RequestUID As String)
-        Waiting()
+        SetWaitCursor(True, Me)
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & "='" & RequestUID & "' ORDER BY " & SibiRequestItemsCols.Timestamp
@@ -110,9 +108,9 @@ Public Class SibiManageRequestForm
         Catch ex As Exception
             Message("An error occured while opening the request. It may have been deleted.", vbOKOnly + vbExclamation, "Error", Me)
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Dispose()
+            Me.Dispose()
         Finally
-            DoneWaiting()
+            SetWaitCursor(False, Me)
         End Try
     End Sub
     Private Function GetHash(RequestTable As DataTable, ItemsTable As DataTable) As String
@@ -371,9 +369,8 @@ VALUES
             If IsNothing(CurrentRequest.RequestItems) Then Exit Sub
             Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING", Me)
             If blah = vbYes Then
-                Waiting()
+                SetWaitCursor(True, Me)
                 If AssetFunc.DeleteFtpAndSql(CurrentRequest.GUID, EntryType.Sibi) Then
-                    DoneWaiting()
                     Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                     CurrentRequest = Nothing
                     If TypeOf Me.Tag Is SibiMainForm Then
@@ -382,7 +379,6 @@ VALUES
                     End If
                     Me.Dispose()
                 Else
-                    DoneWaiting()
                     Logger("*****DELETION ERROR******: " & CurrentRequest.GUID)
                     Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
                     CurrentRequest = Nothing
@@ -393,6 +389,8 @@ VALUES
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            SetWaitCursor(False, Me)
         End Try
     End Sub
 
@@ -572,10 +570,6 @@ VALUES
         RequestItemsGrid.EditMode = DataGridViewEditMode.EditProgrammatically
         RequestItemsGrid.AllowUserToAddRows = False
         RequestItemsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
-    End Sub
-
-    Private Sub DoneWaiting()
-        SetWaitCursor(False)
     End Sub
 
     Private Sub EnableControlsRecursive(control As Control)
@@ -761,7 +755,7 @@ VALUES
 
     Private Async Sub PopulateFromFA(ColumnName As String)
         Try
-            Waiting()
+            SetWaitCursor(True, Me)
             Select Case ColumnName
                 Case SibiRequestItemsCols.NewSerial
                     Dim ItemUID = GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID)
@@ -803,7 +797,7 @@ VALUES
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            DoneWaiting()
+            SetWaitCursor(False, Me)
         End Try
     End Sub
 
@@ -1158,7 +1152,7 @@ VALUES
 
     Private Sub txtReqNumber_Click(sender As Object, e As EventArgs) Handles txtReqNumber.Click
         Try
-            Waiting()
+            SetWaitCursor(True, Me)
             Dim ReqNum As String = Trim(txtReqNumber.Text)
             If Not IsModifying And ReqNum <> "" Then
                 MunisFunc.NewMunisReqSearch(ReqNum, YearFromDate(CurrentRequest.DateStamp), Me)
@@ -1166,7 +1160,7 @@ VALUES
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            DoneWaiting()
+            SetWaitCursor(False, Me)
         End Try
     End Sub
 
@@ -1290,10 +1284,6 @@ VALUES
             Return False
         End Try
     End Function
-
-    Private Sub Waiting()
-        SetWaitCursor(True)
-    End Sub
 
 #End Region
 

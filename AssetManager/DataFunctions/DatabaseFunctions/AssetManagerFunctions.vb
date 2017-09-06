@@ -205,7 +205,7 @@ VALUES
             Dim SupInfo As MunisEmployeeStruct
             Using NewMunisSearch As New MunisUserForm(parentForm)
                 If NewMunisSearch.DialogResult = DialogResult.Yes Then
-                    SetWaitCursor(True)
+                    SetWaitCursor(True, parentForm)
                     SupInfo = NewMunisSearch.EmployeeInfo
                     Using SQLComms As New MySqlComms, DeviceList As New DataTable, EmpList As DataTable = MunisFunc.ListOfEmpsBySup(SupInfo.Number)
                         For Each r As DataRow In EmpList.Rows
@@ -221,7 +221,7 @@ VALUES
                 End If
             End Using
         Finally
-            SetWaitCursor(False)
+            SetWaitCursor(False, parentForm)
         End Try
     End Function
 

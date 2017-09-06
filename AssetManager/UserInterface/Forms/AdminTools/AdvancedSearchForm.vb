@@ -52,13 +52,21 @@
     End Function
 
     Private Sub StartSearch()
-        Dim AdvSearch As New AdvancedSearch.Search(Trim(SearchStringTextBox.Text), GetSelectedTables) ' GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
-        Dim DisplayGrid As New GridForm(_parentForm, "Advanced Search Results")
-        Dim Tables As List(Of DataTable) = AdvSearch.GetResults
-        For Each table In Tables
-            DisplayGrid.AddGrid(table.TableName, table.TableName, table)
-        Next
-        DisplayGrid.Show()
+        Try
+            SetWaitCursor(True, _parentForm)
+            Dim AdvSearch As New AdvancedSearch.Search(Trim(SearchStringTextBox.Text), GetSelectedTables) ' GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
+            Dim DisplayGrid As New GridForm(_parentForm, "Advanced Search Results")
+            Dim Tables As List(Of DataTable) = AdvSearch.GetResults
+            For Each table In Tables
+                DisplayGrid.AddGrid(table.TableName, table.TableName, table)
+            Next
+            DisplayGrid.Show()
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            SetWaitCursor(False, _parentForm)
+        End Try
+
     End Sub
 
     Private Function GetSelectedTables() As List(Of AdvancedSearch.TableInfo)

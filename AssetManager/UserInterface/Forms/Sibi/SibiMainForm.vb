@@ -203,9 +203,14 @@ Public Class SibiMainForm
     End Sub
 
     Private Sub OpenRequest(strUID As String)
-        If Not FormIsOpenByUID(GetType(SibiManageRequestForm), strUID) Then
-            Dim NewRequest As New SibiManageRequestForm(Me, strUID)
-        End If
+        Try
+            SetWaitCursor(True, Me)
+            If Not FormIsOpenByUID(GetType(SibiManageRequestForm), strUID) Then
+                Dim NewRequest As New SibiManageRequestForm(Me, strUID)
+            End If
+        Finally
+            SetWaitCursor(False, Me)
+        End Try
     End Sub
 
     Private Sub ResultGrid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) Handles ResultGrid.RowPostPaint
@@ -326,14 +331,6 @@ Public Class SibiMainForm
 
     Private Sub txtRTNum_TextChanged(sender As Object, e As EventArgs) Handles txtRTNum.TextChanged
         DynamicSearch()
-    End Sub
-
-    Private Sub Waiting()
-        SetWaitCursor(True)
-    End Sub
-
-    Private Sub DoneWaiting()
-        SetWaitCursor(False)
     End Sub
 
     Private Sub SibiMainForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed

@@ -82,9 +82,7 @@ Public Class MainForm
     Public Sub LoadDevice(deviceGUID As String)
         If Not FormIsOpenByUID(GetType(ViewDeviceForm), deviceGUID) Then
             Waiting()
-            ResultGrid.Enabled = False
             Dim NewView As New ViewDeviceForm(Me, deviceGUID)
-            ResultGrid.Enabled = True
             DoneWaiting()
         End If
     End Sub
@@ -256,8 +254,7 @@ Public Class MainForm
     End Sub
 
     Private Sub DoneWaiting()
-        SetWaitCursor(False)
-        ResultGrid.Cursor = Cursors.Default
+        SetWaitCursor(False, Me)
         StripSpinner.Visible = False
         StatusBar("Idle...")
     End Sub
@@ -460,6 +457,7 @@ Public Class MainForm
     Private Async Sub StartBigQuery(QryCommand As DbCommand)
         Try
             If Not QueryRunning Then
+                SetWaitCursor(True, Me)
                 StripSpinner.Visible = True
                 StatusBar("Background query running...")
                 QueryRunning = True
@@ -485,7 +483,7 @@ Public Class MainForm
 
     Private Sub StatusBar(Text As String)
         StatusLabel.Text = Text
-        StatusLabel.Invalidate()
+        StatusStrip1.Update()
     End Sub
 
     Private Sub ShowTestDBWarning()
@@ -497,7 +495,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Waiting()
-        SetWaitCursor(True)
+        SetWaitCursor(True, Me)
         StatusBar("Processing...")
     End Sub
 

@@ -137,7 +137,7 @@ Class AttachmentsForm
 
     Private Sub StatusBar(Text As String)
         StatusLabel.Text = Text
-        StatusLabel.Invalidate()
+        StatusStrip1.Update()
     End Sub
 
     Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -196,7 +196,7 @@ Class AttachmentsForm
     End Function
 
     Private Sub DoneWaiting()
-        SetWaitCursor(False)
+        SetWaitCursor(False, Me)
         StatusBar("Idle...")
     End Sub
 
@@ -649,7 +649,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     End Function
 
     Private Sub Waiting()
-        SetWaitCursor(True)
+        SetWaitCursor(True, Me)
         StatusBar("Processing...")
     End Sub
 
@@ -663,7 +663,6 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                 ProgTimer.Enabled = True
             Else
                 Progress = New ProgressCounter
-                SetWaitCursor(False)
                 ProgressBar1.Value = 0
                 ProgressBar1.Visible = False
                 cmdCancel.Visible = False

@@ -104,11 +104,11 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         Return Nothing
     End Function
 
-    Private Function GetPOFromAsset(assetTag As String) As String
+    Private Async Function GetPOFromAsset(assetTag As String) As Task(Of String)
         Try
             If Not IsNothing(assetTag) Then
                 If assetTag <> "" Then
-                    Dim PO = ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_purch_memo")
+                    Dim PO = Await ReturnSqlValueAsync("famaster", "fama_tag", assetTag, "fama_purch_memo")
                     If PO IsNot Nothing Then
                         Return Trim(PO.ToString)
                     End If
@@ -176,8 +176,8 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         Return ReturnSqlValue("ap_vendor", "a_vendor_number", VendorNumber, "a_vendor_name").ToString
     End Function
 
-    Public Function GetVendorNumberFromReqNumber(reqNum As String, FY As String) As String
-        Dim VendorNum = ReturnSqlValue("rqdetail", "rqdt_req_no", reqNum, "rqdt_sug_vn", "rqdt_fsc_yr", FY)
+    Public Async Function GetVendorNumberFromReqNumber(reqNum As String, FY As String) As Task(Of String)
+        Dim VendorNum = Await ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_sug_vn", "rqdt_fsc_yr", FY)
         If VendorNum IsNot Nothing Then
             Return VendorNum.ToString
         End If
@@ -331,7 +331,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
                         ReqNumber = NewDialog.GetControlValue("txtReqNum").ToString
                         FY = NewDialog.GetControlValue("txtFY").ToString
                         If IsValidYear(FY) Then
-                            Waiting()
+                            SetWaitCursor(True, parentForm)
                             Dim blah = Await NewMunisReqSearch(ReqNumber, FY, parentForm)
                         Else
                             Message("Invalid year.", vbOKOnly + vbInformation, "Invalid", parentForm)
@@ -342,7 +342,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            DoneWaiting()
+            SetWaitCursor(False, parentForm)
         End Try
     End Sub
 
@@ -379,7 +379,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
 
     Public Async Sub NewOrgObView(org As String, obj As String, FY As String, parentForm As Form)
         Try
-            Waiting()
+            SetWaitCursor(True, parentForm)
             Dim NewGridForm As New GridForm(parentForm, "Org/Obj Info")
             Dim GLColumns As String = " glma_org, glma_obj, glma_desc, glma_seg5, glma_bud_yr, glma_orig_bud_cy, glma_rev_bud_cy, glma_encumb_cy, glma_memo_bal_cy, glma_rev_bud_cy-glma_encumb_cy-glma_memo_bal_cy AS 'Funds Available' "
             Dim GLMasterQry As String = "Select TOP " & intMaxResults & " " & GLColumns & "FROM glmaster"
@@ -415,13 +415,13 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            DoneWaiting()
+            SetWaitCursor(False, parentForm)
         End Try
     End Sub
 
     Private Async Sub NewMunisEmployeeSearch(name As String, parentForm As Form)
         Try
-            Waiting()
+            SetWaitCursor(True, parentForm)
             Dim strColumns As String = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last"
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " " & strColumns & "
 FROM pr_employee_master e
@@ -442,13 +442,13 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number"
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            DoneWaiting()
+            SetWaitCursor(False, parentForm)
         End Try
     End Sub
 
     Public Async Sub NewMunisPOSearch(PO As String, parentForm As Form)
         Try
-            Waiting()
+            SetWaitCursor(True, parentForm)
             If PO = "" Then Exit Sub
             Dim strQRY As String = "SELECT TOP " & intMaxResults & " pohd_pur_no, pohd_fsc_yr, pohd_req_no, pohd_gen_cm, pohd_buy_id, pohd_pre_dt, pohd_exp_dt, pohd_sta_cd, pohd_vnd_cd, pohd_dep_cd, pohd_shp_cd, pohd_tot_amt, pohd_serial
 FROM poheader"
@@ -467,7 +467,7 @@ FROM poheader"
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            DoneWaiting()
+            SetWaitCursor(False, parentForm)
         End Try
     End Sub
 
@@ -516,7 +516,7 @@ FROM poheader"
 
     Private Async Function GetReqLineItemsFromReqNum(reqNumber As String, fiscalYr As String) As Task(Of DataTable)
         If reqNumber = "" Or fiscalYr = "" Then Return Nothing
-        Dim VendorNum = MunisFunc.GetVendorNumberFromReqNumber(reqNumber, fiscalYr)
+        Dim VendorNum = Await MunisFunc.GetVendorNumberFromReqNumber(reqNumber, fiscalYr)
         If VendorNum = "" Then Return Nothing
 
         Dim strQRY As String = "SELECT TOP " & intMaxResults & " dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc,
@@ -542,7 +542,7 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
 
     Public Async Sub LoadMunisInfoByDevice(device As DeviceStruct, parentForm As Form)
         Try
-            Waiting()
+            SetWaitCursor(True, parentForm)
             Dim ReqLinesTable, ReqHeaderTable, InvTable As New DataTable
             If device.PO <> "" Then
                 device.FiscalYear = YearFromDate(device.PurchaseDate)
@@ -551,7 +551,7 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
                 ReqHeaderTable = Await GetReqHeaderFromReqNum(Await GetReqNumberFromPOAsync(device.PO), MunisFunc.GetFYFromPO(device.PO))
             Else
                 If device.PO = "" Then
-                    Dim PO As String = GetPOFromAsset(device.AssetTag)
+                    Dim PO As String = Await GetPOFromAsset(device.AssetTag)
                     If PO <> "" Then
                         device.PO = PO 'if some's missing -> try to find it by other means
                     Else
@@ -589,7 +589,7 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            DoneWaiting()
+            SetWaitCursor(False, parentForm)
         End Try
     End Sub
 
@@ -616,15 +616,5 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
         End If
         Return Nothing
     End Function
-
-    Private Sub Waiting()
-        ' Application.UseWaitCursor = True
-        SetWaitCursor(True)
-    End Sub
-
-    Private Sub DoneWaiting()
-        ' Application.UseWaitCursor = False
-        SetWaitCursor(False)
-    End Sub
 
 End Class

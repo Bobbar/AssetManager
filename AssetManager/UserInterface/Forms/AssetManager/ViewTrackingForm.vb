@@ -10,17 +10,9 @@ Public Class ViewTrackingForm
         Show()
     End Sub
 
-    Private Sub Waiting()
-        SetWaitCursor(True)
-    End Sub
-
-    Private Sub DoneWaiting()
-        SetWaitCursor(False)
-    End Sub
-
     Private Sub ViewTrackingEntry(entryUID As String, device As DeviceStruct)
         Try
-            Waiting()
+            SetWaitCursor(True, Me)
             Dim strQry = "Select * FROM " & TrackablesCols.TableName & " WHERE  " & TrackablesCols.UID & " = '" & entryUID & "'"
             Using results As DataTable = DBFunc.DataTableFromQueryString(strQry)
                 For Each r As DataRow In results.Rows
@@ -46,9 +38,10 @@ Public Class ViewTrackingForm
                     Me.Text = Me.Text + " - " & NoNull(r.Item(TrackablesCols.DateStamp))
                 Next
             End Using
-            DoneWaiting()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            SetWaitCursor(False, Me)
         End Try
     End Sub
 

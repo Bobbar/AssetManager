@@ -122,7 +122,7 @@ Public Class TrackDeviceForm
     Private Sub CheckOut()
         Try
             If Not GetCheckData() Then Exit Sub
-            Waiting()
+            SetWaitCursor(True, Me)
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE " & DevicesCols.TableName & " SET " & DevicesCols.CheckedOut & "='1' WHERE " & DevicesCols.DeviceUID & "='" & CurrentTrackingDevice.GUID & "'"
             Using SQLComms As New MySqlComms, cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(strSQLQry1)
@@ -158,19 +158,18 @@ VALUES(@" & TrackablesCols.CheckType & ",
                     Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
                 End If
             End Using
-            Me.Dispose()
             MyParent.LoadDevice(CurrentTrackingDevice.GUID)
-            DoneWaiting()
         Catch ex As Exception
-            DoneWaiting()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            Me.Dispose()
         End Try
     End Sub
 
     Private Sub CheckIn()
         Try
             If Not GetCheckData() Then Exit Sub
-            Waiting()
+            SetWaitCursor(True, Me)
             Dim rows As Integer
             Dim strSQLQry1 = "UPDATE " & DevicesCols.TableName & " SET " & DevicesCols.CheckedOut & "='0' WHERE " & DevicesCols.DeviceUID & "='" & CurrentTrackingDevice.GUID & "'"
             Using SQLComms As New MySqlComms, cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(strSQLQry1)
@@ -211,21 +210,12 @@ VALUES (@" & TrackablesCols.CheckType & ",
                     Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
                 End If
             End Using
-            Me.Dispose()
             MyParent.LoadDevice(CurrentTrackingDevice.GUID)
-            DoneWaiting()
         Catch ex As Exception
-            DoneWaiting()
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            Me.Dispose()
         End Try
-    End Sub
-
-    Private Sub Waiting()
-        SetWaitCursor(True)
-    End Sub
-
-    Private Sub DoneWaiting()
-        SetWaitCursor(False)
     End Sub
 
     Private Sub cmdCheckOut_Click(sender As Object, e As EventArgs) Handles cmdCheckOut.Click
