@@ -42,7 +42,7 @@ Class AttachmentsForm
         GridTheme = ParentForm.GridTheme
         AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         ExtendedMethods.DoubleBufferedDataGrid(AttachGrid, True)
-        StatusBar("Idle...")
+        SetStatusBar("Idle...")
         _attachTable = AttachTable
         If Not IsNothing(AttachInfo) Then
             If TypeOf AttachInfo Is RequestStruct Then
@@ -135,7 +135,7 @@ Class AttachmentsForm
         End Try
     End Sub
 
-    Private Sub StatusBar(Text As String)
+    Private Sub SetStatusBar(Text As String)
         StatusLabel.Text = Text
         StatusStrip1.Update()
     End Sub
@@ -197,7 +197,7 @@ Class AttachmentsForm
 
     Private Sub DoneWaiting()
         SetWaitCursor(False, Me)
-        StatusBar("Idle...")
+        SetStatusBar("Idle...")
     End Sub
 
     Private Async Function DownloadAttachment(AttachUID As String) As Task(Of Attachment)
@@ -207,7 +207,7 @@ Class AttachmentsForm
         Try
             taskCancelTokenSource = New CancellationTokenSource
             Dim cancelToken As CancellationToken = taskCancelTokenSource.Token
-            StatusBar("Connecting...")
+            SetStatusBar("Connecting...")
             Dim LocalFTPComm As New FtpComms
             dAttachment = GetSQLAttachment(AttachUID)
             Dim FtpRequestString As String = FTPUri & dAttachment.FolderGUID & "/" & AttachUID
@@ -215,7 +215,7 @@ Class AttachmentsForm
             Progress = New ProgressCounter
             Progress.BytesToTransfer = CInt(LocalFTPComm.ReturnFtpResponse(FtpRequestString, Net.WebRequestMethods.Ftp.GetFileSize).ContentLength)
             'setup download
-            StatusBar("Downloading...")
+            SetStatusBar("Downloading...")
             WorkerFeedback(True)
             dAttachment.DataStream = Await Task.Run(Function()
                                                         Using respStream = LocalFTPComm.ReturnFtpResponse(FtpRequestString, Net.WebRequestMethods.Ftp.DownloadFile).GetResponseStream
@@ -429,10 +429,10 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
             Dim strFullPath As String = TempPathFilename(saveAttachment)
             SaveAttachmentToDisk(saveAttachment, strFullPath)
             Process.Start(strFullPath)
-            StatusBar("Idle...")
+            SetStatusBar("Idle...")
             saveAttachment.Dispose()
         Catch ex As Exception
-            StatusBar("Idle...")
+            SetStatusBar("Idle...")
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
@@ -518,7 +518,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     End Sub
 
     Private Sub UploadFile(Files() As String)
-        StatusBar("Starting Upload...")
+        SetStatusBar("Starting Upload...")
         UploadAttachments(Files)
     End Sub
 
@@ -543,9 +543,9 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                     Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded", Me)
                     Continue For
                 End If
-                StatusBar("Connecting...")
+                SetStatusBar("Connecting...")
                 MakeDirectory(CurrentAttachment.FolderGUID)
-                StatusBar("Uploading... " & FileNumber & " of " & files.Count)
+                SetStatusBar("Uploading... " & FileNumber & " of " & files.Count)
                 Progress = New ProgressCounter
                 Await Task.Run(Sub()
                                    Using FileStream As FileStream = DirectCast(CurrentAttachment.DataStream(), FileStream),
@@ -576,7 +576,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
             If Not ProgramEnding Then
                 TransferTaskRunning = False
                 If CurrentAttachment IsNot Nothing Then CurrentAttachment.Dispose()
-                StatusBar("Idle...")
+                SetStatusBar("Idle...")
                 WorkerFeedback(False)
                 ListAttachments()
             End If
@@ -588,11 +588,11 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
             If AttachUID = "" Then Exit Sub
             Dim saveAttachment = Await DownloadAttachment(AttachUID)
             If saveAttachment Is Nothing Then Exit Sub
-            StatusBar("Idle...")
+            SetStatusBar("Idle...")
             If bolDragging Then
                 Dim strFullPath As String = TempPathFilename(saveAttachment)
                 SaveAttachmentToDisk(saveAttachment, strFullPath)
-                StatusBar("Drag/Drop...")
+                SetStatusBar("Drag/Drop...")
                 Dim fileList As New Collections.Specialized.StringCollection
                 fileList.Add(strFullPath)
                 Dim dataObj As New DataObject()
@@ -608,33 +608,33 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                     End If
                 End Using
             End If
-            StatusBar("Idle...")
+            SetStatusBar("Idle...")
             saveAttachment.Dispose()
         Catch ex As Exception
-            StatusBar("Idle...")
+            SetStatusBar("Idle...")
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
 
     Private Function SaveAttachmentToDisk(attachment As Attachment, savePath As String) As Boolean
         Try
-            StatusBar("Saving to disk...")
+            SetStatusBar("Saving to disk...")
             Directory.CreateDirectory(DownloadPath)
             Using outputStream = IO.File.Create(savePath),
             memStream = DirectCast(attachment.DataStream, MemoryStream)
                 memStream.CopyTo(outputStream) 'once data is verified we go ahead and copy it to disk
             End Using
-            StatusBar("Idle...")
+            SetStatusBar("Idle...")
             Return True
         Catch ex As Exception
-            StatusBar("Idle...")
+            SetStatusBar("Idle...")
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
         End Try
     End Function
 
     Private Function VerifyAttachment(attachment As Attachment) As Boolean
-        StatusBar("Verifying data...")
+        SetStatusBar("Verifying data...")
         Dim FileResultHash = GetHashOfIOStream(DirectCast(attachment.DataStream, MemoryStream))
         If FileResultHash = attachment.MD5 Then
             Return True
@@ -650,7 +650,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
 
     Private Sub Waiting()
         SetWaitCursor(True, Me)
-        StatusBar("Processing...")
+        SetStatusBar("Processing...")
     End Sub
 
     Private Sub WorkerFeedback(WorkerRunning As Boolean)
@@ -669,7 +669,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
                 Spinner.Visible = False
                 ProgTimer.Enabled = False
                 statMBPS.Text = Nothing
-                StatusBar("Idle...")
+                SetStatusBar("Idle...")
                 DoneWaiting()
             End If
         End If

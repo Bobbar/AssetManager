@@ -256,7 +256,7 @@ Public Class MainForm
     Private Sub DoneWaiting()
         SetWaitCursor(False, Me)
         StripSpinner.Visible = False
-        StatusBar("Idle...")
+        SetStatusBar("Idle...")
     End Sub
 
     Private Sub EnqueueGKUpdate()
@@ -380,14 +380,14 @@ Public Class MainForm
 
     Private Async Sub RebuildCache()
         Try
-            StatusBar("Rebuilding DB Cache...")
+            SetStatusBar("Rebuilding DB Cache...")
             Await Task.Run(Sub()
                                If Not VerifyCacheHashes() Then RefreshLocalDBCache()
                            End Sub)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            StatusBar("Idle...")
+            SetStatusBar("Idle...")
         End Try
     End Sub
 
@@ -400,23 +400,23 @@ Public Class MainForm
 
     Private Sub SendToGrid(ByRef Results As DataTable)
         If Results Is Nothing Then Exit Sub
-        StatusBar("Building Grid...")
-            Application.DoEvents()
-            Using table As New DataTable
-                table.Columns.Add("User", GetType(String))
-                table.Columns.Add("Asset ID", GetType(String))
-                table.Columns.Add("Serial", GetType(String))
-                table.Columns.Add("Device Type", GetType(String))
-                table.Columns.Add("Description", GetType(String))
-                table.Columns.Add("OS Version", GetType(String))
-                table.Columns.Add("Location", GetType(String))
-                table.Columns.Add("PO Number", GetType(String))
-                table.Columns.Add("Purchase Date", GetType(Date))
-                table.Columns.Add("Replace Year", GetType(String))
-                table.Columns.Add("Modified", GetType(Date))
-                table.Columns.Add("GUID", GetType(String))
-                For Each r As DataRow In Results.Rows
-                    table.Rows.Add(r.Item(DevicesCols.CurrentUser),
+        SetStatusBar("Building Grid...")
+        Application.DoEvents()
+        Using table As New DataTable
+            table.Columns.Add("User", GetType(String))
+            table.Columns.Add("Asset ID", GetType(String))
+            table.Columns.Add("Serial", GetType(String))
+            table.Columns.Add("Device Type", GetType(String))
+            table.Columns.Add("Description", GetType(String))
+            table.Columns.Add("OS Version", GetType(String))
+            table.Columns.Add("Location", GetType(String))
+            table.Columns.Add("PO Number", GetType(String))
+            table.Columns.Add("Purchase Date", GetType(Date))
+            table.Columns.Add("Replace Year", GetType(String))
+            table.Columns.Add("Modified", GetType(Date))
+            table.Columns.Add("GUID", GetType(String))
+            For Each r As DataRow In Results.Rows
+                table.Rows.Add(r.Item(DevicesCols.CurrentUser),
                               r.Item(DevicesCols.AssetTag),
                               r.Item(DevicesCols.Serial),
                                GetHumanValue(DeviceIndex.EquipType, r.Item(DevicesCols.EQType).ToString),
@@ -428,16 +428,16 @@ Public Class MainForm
                               r.Item(DevicesCols.ReplacementYear),
                               r.Item(DevicesCols.LastModDate),
                               r.Item(DevicesCols.DeviceUID))
-                Next
-                bolGridFilling = True
-                ResultGrid.DataSource = table
-                ResultGrid.ClearSelection()
-                ResultGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
-                bolGridFilling = False
-                DisplayRecords(table.Rows.Count)
-                Results.Dispose()
-            End Using
-            End Sub
+            Next
+            bolGridFilling = True
+            ResultGrid.DataSource = table
+            ResultGrid.ClearSelection()
+            ResultGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
+            bolGridFilling = False
+            DisplayRecords(table.Rows.Count)
+            Results.Dispose()
+        End Using
+    End Sub
 
     Private Sub ShowAll()
         Dim cmd = DBFunc.GetCommand(strShowAllQry)
@@ -459,7 +459,7 @@ Public Class MainForm
             If Not QueryRunning Then
                 SetWaitCursor(True, Me)
                 StripSpinner.Visible = True
-                StatusBar("Background query running...")
+                SetStatusBar("Background query running...")
                 QueryRunning = True
                 Dim Results = Await Task.Run(Function()
                                                  LastCommand = QryCommand
@@ -481,7 +481,7 @@ Public Class MainForm
         Dim NewUserMan As New UserManagerForm(Me)
     End Sub
 
-    Private Sub StatusBar(Text As String)
+    Private Sub SetStatusBar(Text As String)
         StatusLabel.Text = Text
         StatusStrip1.Update()
     End Sub
@@ -496,7 +496,7 @@ Public Class MainForm
 
     Private Sub Waiting()
         SetWaitCursor(True, Me)
-        StatusBar("Processing...")
+        SetStatusBar("Processing...")
     End Sub
 
 #Region "Control Event Methods"
