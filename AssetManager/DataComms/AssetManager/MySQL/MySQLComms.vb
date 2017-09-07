@@ -43,14 +43,14 @@ Public Class MySqlComms : Implements IDisposable
     Private Const strDatabase As String = "asset_manager"
     Private Const strTestDatabase As String = "test_db"
     Private ConnectionException As Exception
-    Private MySQLConnectString As String = "server=" & strServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database="
+    Private MySQLConnectString As String = "server=" & ServerInfo.MySQLServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database="
 
 #End Region
 
 #Region "Constructors"
 
     Sub New()
-        If ServerPinging Then
+        If ServerInfo.ServerPinging Then
             If Not OpenConnection() Then
                 Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
                 Dispose()
@@ -63,7 +63,7 @@ Public Class MySqlComms : Implements IDisposable
 
     Sub New(openConnectionOnCall As Boolean)
         If openConnectionOnCall Then
-            If Not OpenConnection() Then
+            If Not OpenConnection(openConnectionOnCall) Then
                 Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
                 Dispose()
             End If
@@ -83,19 +83,23 @@ Public Class MySqlComms : Implements IDisposable
 
     End Sub
 
-    Public Function NewConnection() As MySqlConnection
-        Return New MySqlConnection(GetConnectString)
+    Public Function NewConnection(Optional overrideNoPing As Boolean = False) As MySqlConnection
+        If ServerInfo.ServerPinging Or overrideNoPing Then
+            Return New MySqlConnection(GetConnectString)
+        Else
+            Throw New NoPingException
+        End If
     End Function
 
-    Public Function OpenConnection() As Boolean
+    Public Function OpenConnection(Optional overrideNoPing As Boolean = False) As Boolean
         Try
             If Connection Is Nothing Then
-                Connection = NewConnection()
+                Connection = NewConnection(overrideNoPing)
                 Connection.Open()
             End If
             If Connection.State <> ConnectionState.Open Then
                 CloseConnection()
-                Connection = NewConnection()
+                Connection = NewConnection(overrideNoPing)
                 Connection.Open()
             End If
             If Connection.State = ConnectionState.Open Then
@@ -136,11 +140,11 @@ Public Class MySqlComms : Implements IDisposable
     End Function
 
     Private Function GetConnectString() As String
-        If Not bolUseTestDatabase Then
-            CurrentDB = strDatabase
+        If Not ServerInfo.UseTestDatabase Then
+            ServerInfo.CurrentDataBase = strDatabase
             Return MySQLConnectString & strDatabase
         Else
-            CurrentDB = strTestDatabase
+            ServerInfo.CurrentDataBase = strTestDatabase
             Return MySQLConnectString & strTestDatabase
         End If
     End Function

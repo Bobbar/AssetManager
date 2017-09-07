@@ -1,10 +1,8 @@
-﻿Module GlobalVariables
-    Public ProgramEnding As Boolean = False
-    Public ServerPinging As Boolean = True
-    Public CurrentDB As String
-    Public OfflineMode As Boolean = False
-    Public BuildingCache As Boolean = False
-    Public CacheAvailable As Boolean = False
-    Public SQLiteTableHashes As List(Of String)
-    Public RemoteTableHashes As List(Of String)
-End Module
+﻿Namespace GlobalSwitches
+    Module GlobalSwitchDeclarations
+        Public BuildingCache As Boolean = False
+        Public ProgramEnding As Boolean = False
+        Public CachedMode As Boolean = False
+
+    End Module
+End Namespace

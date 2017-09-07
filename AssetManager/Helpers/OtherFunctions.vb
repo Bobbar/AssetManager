@@ -58,7 +58,7 @@ Module OtherFunctions
     End Function
 
     Public Sub EndProgram()
-        ProgramEnding = True
+        GlobalSwitches.ProgramEnding = True
         Logger("Ending Program...")
         PurgeTempDir()
         Application.Exit()
@@ -102,7 +102,7 @@ Module OtherFunctions
     End Function
 
     Public Function OKToEnd() As Boolean
-        If BuildingCache Then
+        If GlobalSwitches.BuildingCache Then
             Message("Still building DB Cache. Please wait and try again.", vbOKOnly + vbInformation, "Critical Function Running")
             Return False
         End If

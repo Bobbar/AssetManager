@@ -144,7 +144,7 @@ Module SecurityFunctions
             calc_level = UsrLevel And mask
             If calc_level <> 0 Then
                 If AccessGroups(levels).AccessModule = recModule Then
-                    If OfflineMode Then
+                    If GlobalSwitches.CachedMode Then
                         If AccessGroups(levels).AvailableOffline Then
                             Return True
                         Else
@@ -162,7 +162,7 @@ Module SecurityFunctions
 
     Public Function CheckForAccess(recModule As String) As Boolean
         If Not CanAccess(recModule) Then
-            If OfflineMode Then
+            If GlobalSwitches.CachedMode Then
                 Message("You cannot access this function. Some features are disabled while running in cached mode.", vbOKOnly + vbExclamation, "Access Denied/Disabled")
             Else
                 Message("You do not have the required rights for this function. Must have access to '" & recModule & "'.", vbOKOnly + vbExclamation, "Access Denied")

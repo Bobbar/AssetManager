@@ -25,7 +25,7 @@ Namespace AdvancedSearch
         Public Function GetColumns(table As String) As List(Of String)
             Dim colList As New List(Of String)
             Using comms As New MySqlComms
-                Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & CurrentDB & "' AND TABLE_NAME = '" & table & "'"
+                Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & ServerInfo.CurrentDataBase & "' AND TABLE_NAME = '" & table & "'"
                 Dim results = comms.ReturnMySqlTable(SQLQry)
                 For Each row As DataRow In results.Rows
                     colList.Add(row.Item("COLUMN_NAME").ToString)

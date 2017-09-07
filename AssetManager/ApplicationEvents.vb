@@ -11,28 +11,30 @@ Namespace My
     Partial Friend Class MyApplication
 
         Private Sub LoadSplash(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
+            Dim ConnectionSuccessful As Boolean = False
+            Dim CacheAvailable As Boolean = False
             SplashScreenForm.Show()
             Logger("Starting AssetManager...")
             Status("Checking Server Connection...")
             Using SQLComms As New MySqlComms(False)
-                OfflineMode = Not SQLComms.OpenConnection
+                ConnectionSuccessful = SQLComms.OpenConnection
                 'check connection
             End Using
             Status("Checking Local Cache...")
-            If Not OfflineMode Then
-                If Not VerifyCacheHashes(OfflineMode) Then
+            If ConnectionSuccessful Then
+                If Not VerifyCacheHashes() Then
                     Status("Building Cache DB...")
                     RefreshLocalDBCache()
                 End If
             Else
-                CacheAvailable = VerifyCacheHashes(OfflineMode)
+                CacheAvailable = VerifyCacheHashes(ConnectionSuccessful)
             End If
-
-            If OfflineMode And Not CacheAvailable Then
+            If Not ConnectionSuccessful And Not CacheAvailable Then
                 Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", vbOKOnly + vbExclamation, "No Connection")
                 e.Cancel = True
                 Exit Sub
-            ElseIf OfflineMode And CacheAvailable Then
+            ElseIf Not ConnectionSuccessful And CacheAvailable Then
+                GlobalSwitches.CachedMode = True
                 Message("Could not connect to server. Running from local DB cache.", vbOKOnly + vbExclamation, "Cached Mode")
             End If
 

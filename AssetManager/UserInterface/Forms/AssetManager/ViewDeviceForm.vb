@@ -59,7 +59,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Public Sub SetAttachCount()
-        If Not OfflineMode Then
+        If Not GlobalSwitches.CachedMode Then
             AttachmentTool.Text = "(" + AssetFunc.GetAttachmentCount(CurrentViewDevice.GUID, New DeviceAttachmentsCols).ToString + ")"
             AttachmentTool.ToolTipText = "Attachments " + AttachmentTool.Text
         End If

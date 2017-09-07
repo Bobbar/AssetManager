@@ -25,7 +25,7 @@ Class AttachmentsForm
     ''' <summary>
     ''' "ftp://  strServerIP  /attachments/  CurrentDB  /"
     ''' </summary>
-    Private FTPUri As String = "ftp://" & strServerIP & "/attachments/" & CurrentDB & "/"
+    Private FTPUri As String = "ftp://" & ServerInfo.MySQLServerIP & "/attachments/" & ServerInfo.CurrentDataBase & "/"
 
     Private MouseStartPos As Point
     Private Progress As New ProgressCounter
@@ -246,7 +246,7 @@ Class AttachmentsForm
             If dAttachment IsNot Nothing Then dAttachment.Dispose()
             Throw ex
         Finally
-            If Not ProgramEnding Then
+            If Not GlobalSwitches.ProgramEnding Then
                 TransferTaskRunning = False
                 WorkerFeedback(False)
             End If
@@ -573,7 +573,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            If Not ProgramEnding Then
+            If Not GlobalSwitches.ProgramEnding Then
                 TransferTaskRunning = False
                 If CurrentAttachment IsNot Nothing Then CurrentAttachment.Dispose()
                 SetStatusBar("Idle...")
@@ -654,7 +654,7 @@ VALUES(@" & Attachment.AttachTable.FKey & ",
     End Sub
 
     Private Sub WorkerFeedback(WorkerRunning As Boolean)
-        If Not ProgramEnding Then
+        If Not GlobalSwitches.ProgramEnding Then
             If WorkerRunning Then
                 ProgressBar1.Value = 0
                 ProgressBar1.Visible = True

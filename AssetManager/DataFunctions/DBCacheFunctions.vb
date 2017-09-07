@@ -1,26 +1,30 @@
 ﻿Imports System.Threading
 Module DBCacheFunctions
 
+    Public SQLiteTableHashes As List(Of String)
+    Public RemoteTableHashes As List(Of String)
+
+
     Public Sub RefreshLocalDBCache()
         Try
-            BuildingCache = True
+            ' GlobalSwitches.BuildingCache = True
             Using conn As New SqliteComms(False)
                 conn.RefreshSqlCache()
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            BuildingCache = False
+            GlobalSwitches.BuildingCache = False
         End Try
     End Sub
 
     ''' <summary>
     ''' Builds local hash list and compares to previously built remote hash list. Returns False for mismatch.
     ''' </summary>
-    ''' <param name="OfflineMode">When true, only checks for Schema Version since a remote table hash will likely be unavailabe.</param>
+    ''' <param name="cachedMode">When true, only checks for Schema Version since a remote table hash will likely be unavailabe.</param>
     ''' <returns></returns>
-    Public Async Function VerifyLocalCacheHashOnly(OfflineMode As Boolean) As Task(Of Boolean)
-        If Not OfflineMode Then
+    Public Async Function VerifyLocalCacheHashOnly(cachedMode As Boolean) As Task(Of Boolean)
+        If Not cachedMode Then
             If RemoteTableHashes Is Nothing Then Return False
             Return Await Task.Run(Function()
                                       Dim LocalHashes As New List(Of String)
@@ -40,13 +44,13 @@ Module DBCacheFunctions
     ''' <summary>
     ''' Builds hash lists for both local and remote tables and compares them.  Returns False for mismatch.
     ''' </summary>
-    ''' <param name="OfflineMode"></param>
+    ''' <param name="connectedToDB"></param>
     ''' <returns></returns>
-    Public Function VerifyCacheHashes(Optional OfflineMode As Boolean = False) As Boolean
+    Public Function VerifyCacheHashes(Optional connectedToDB As Boolean = True) As Boolean
         Try
             Using SQLiteComms As New SqliteComms
                 If SQLiteComms.GetSchemaVersion > 0 Then
-                    If Not OfflineMode Then
+                    If connectedToDB Then
                         SQLiteTableHashes = SQLiteComms.LocalTableHashList
                         RemoteTableHashes = SQLiteComms.RemoteTableHashList
                         Return SQLiteComms.CompareTableHashes(SQLiteTableHashes, RemoteTableHashes)
@@ -54,6 +58,7 @@ Module DBCacheFunctions
                         Return True
                     End If
                 Else
+                    SQLiteTableHashes = Nothing
                     Return False
                 End If
             End Using

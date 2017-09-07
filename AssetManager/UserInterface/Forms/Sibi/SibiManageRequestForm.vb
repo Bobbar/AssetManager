@@ -136,7 +136,7 @@ Public Class SibiManageRequestForm
         End Try
     End Function
     Public Sub SetAttachCount()
-        If Not OfflineMode Then
+        If Not GlobalSwitches.CachedMode Then
             cmdAttachments.Text = "(" + AssetFunc.GetAttachmentCount(CurrentRequest.GUID, New SibiAttachmentsCols).ToString + ")"
             cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text
         End If
@@ -997,7 +997,7 @@ VALUES
     End Sub
 
     Private Sub SetMunisStatus()
-        If Not OfflineMode Then
+        If Not GlobalSwitches.CachedMode Then
             SetReqStatus(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year)
             CheckForPO()
             SetPOStatus(CurrentRequest.PO)

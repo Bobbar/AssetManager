@@ -16,6 +16,7 @@ Public Class MainForm
     Private MyWindowList As New WindowList(Me)
     Private strServerTime As String = Now.ToString
     Private QueryRunning As Boolean = False
+    Private WatchDog As ConnectionMonitoring.ConnectionWatchdog
 
 #End Region
 
@@ -124,123 +125,35 @@ Public Class MainForm
         RefreshCombos()
     End Sub
 
-    Private Async Sub ConnectionWatchDog()
-        If OfflineMode Then
-            StatusStrip1.BackColor = colFormBackColor
-            ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
-        End If
-        Try
-            Dim FailedPings As Integer = 0
-            Const MaxFailedPings As Integer = 2
-            Const ItsTillHashCheck As Integer = 60
-            Dim Its As Integer = 0
-            Dim NoCacheMessageSent As Boolean = False
-            Do Until ProgramEnding
-                ServerPinging = Await Task.Run(Async Function()
-                                                   Await Task.Delay(5000)
-                                                   Try
-                                                       Dim CanPing As Boolean = My.Computer.Network.Ping(strServerIP)
-                                                       If CanPing Then
-                                                           Using LocalSQLComm As New MySqlComms(True), cmd = LocalSQLComm.ReturnMySqlCommand("SELECT NOW()")
-                                                               Dim strTime As String = cmd.ExecuteScalar.ToString
-                                                               strServerTime = strTime
-                                                           End Using
-                                                       End If
-                                                       Return CanPing
-                                                   Catch
-                                                       Return False
-                                                   End Try
-                                               End Function)
-                CacheAvailable = Await VerifyLocalCacheHashOnly(OfflineMode)
-                If DateTimeLabel.Text <> strServerTime Then DateTimeLabel.Text = strServerTime
+    Private Sub WatchDogTick(sender As Object, e As EventArgs)
+        Dim TickEvent = DirectCast(e, ConnectionMonitoring.WatchDogTickEventArgs)
+        If DateTimeLabel.Text <> TickEvent.ServerTime Then DateTimeLabel.Text = TickEvent.ServerTime
+    End Sub
 
-                'Cache and connection handling.
-                Select Case True
-                    Case ServerPinging And Not OfflineMode
-                        'Everything is normal
+    Private Sub WatchDogStatusChanged(sender As Object, e As EventArgs)
+        Dim ConnectionEventArgs = DirectCast(e, ConnectionMonitoring.WatchDogStatusEventArgs)
 
-#Region "Server Online. Not In Cache Mode."
+        Select Case ConnectionEventArgs.ConnectionStatus
 
-                        FailedPings = 0
-                        ConnectStatus("Connected", Color.Green, "Connection OK")
-                        StatusStrip1.BackColor = colFormBackColor
-                        If CacheAvailable Then
-                            Its += 1
-                            If Its >= ItsTillHashCheck Then
-                                Its = 0
-                                RebuildCache()
-                            End If
-                        Else
-                            SQLiteTableHashes = Nothing
-                            RemoteTableHashes = Nothing
-                            NoCacheMessageSent = False
-                            RebuildCache()
-                        End If
+            Case ConnectionMonitoring.WatchDogConnectionStatus.Online
+                ConnectStatus("Connected", Color.Green, "Connection OK")
+                StatusStrip1.BackColor = colFormBackColor
+                GlobalSwitches.CachedMode = False
+                ServerInfo.ServerPinging = True
 
-#End Region
+            Case ConnectionMonitoring.WatchDogConnectionStatus.Offline
+                StatusStrip1.BackColor = colStatusBarProblem
+                ConnectStatus("Offline", Color.Red, "No connection. Cache unavailable.")
+                GlobalSwitches.CachedMode = False
+                ServerInfo.ServerPinging = False
 
-                    Case Not ServerPinging And Not OfflineMode
-                        'Server offline. Verify cache and enable if possible.
+            Case ConnectionMonitoring.WatchDogConnectionStatus.CachedMode
+                StatusStrip1.BackColor = colStatusBarProblem
+                ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
+                GlobalSwitches.CachedMode = True
+                ServerInfo.ServerPinging = False
 
-#Region "Server Offline. Not In Cache Mode."
-
-                        FailedPings += 1
-                        If FailedPings >= MaxFailedPings Then
-                            FailedPings = 0
-                            StatusStrip1.BackColor = colStatusBarProblem
-                            ConnectStatus("Offline", Color.Red, "No connection. Cache unavailable.")
-
-                            If CacheAvailable Then
-                                OfflineMode = True
-                                StatusStrip1.BackColor = colStatusBarProblem
-                                ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
-                                '   Message("Connection Lost, cached mode enabled. Some functionality will be disabled.", vbOKOnly + vbInformation, "Cache Mode Enabled", Me)
-                            Else
-                                OfflineMode = False
-                                If Not NoCacheMessageSent Then
-                                    Message("Connection to the server was lost, and the local DB cache could not be verified. All functionality disabled.", vbOKOnly + vbExclamation, "Cache Mode Failed", Me)
-                                    NoCacheMessageSent = True
-                                End If
-                            End If
-                        End If
-
-#End Region
-
-                    Case Not ServerPinging And OfflineMode
-                        'Notify user of cached mode.
-
-                        If CacheAvailable Then
-                            OfflineMode = True
-                            StatusStrip1.BackColor = colStatusBarProblem
-                            ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
-                            '   Message("Connection Lost, cached mode enabled. Some functionality will be disabled.", vbOKOnly + vbInformation, "Cache Mode Enabled", Me)
-                        Else
-                            OfflineMode = False
-                            If Not NoCacheMessageSent Then
-                                Message("Connection to the server was lost, and the local DB cache could not be verified. All functionality disabled.", vbOKOnly + vbExclamation, "Cache Mode Failed", Me)
-                                NoCacheMessageSent = True
-                            End If
-                        End If
-
-                    Case ServerPinging And OfflineMode
-                        FailedPings = 0
-                        'Connection Restored. Re-enable comms and rebuild cache.
-
-#Region "Server Online. Running In Cache Mode."
-
-                        OfflineMode = False
-                        NoCacheMessageSent = False
-                        ConnectStatus("Connection Restored!", Color.Green, "Connection OK")
-                        StatusStrip1.BackColor = colFormBackColor
-                        RebuildCache()
-
-#End Region
-
-                End Select
-            Loop
-        Catch
-            ConnectionWatchDog()
-        End Try
+        End Select
     End Sub
 
     Private Sub ConnectStatus(Message As String, FColor As Color, Optional ToolTipText As String = "")
@@ -337,7 +250,13 @@ Public Class MainForm
             End If
             GetGridStyles()
             SetGridStyle(ResultGrid)
-            ConnectionWatchDog()
+
+            WatchDog = New ConnectionMonitoring.ConnectionWatchdog(GlobalSwitches.CachedMode)
+            WatchDog.StartWatcher()
+            AddHandler WatchDog.StatusChanged, AddressOf WatchDogStatusChanged
+            AddHandler WatchDog.RebuildCache, AddressOf RebuildCache
+            AddHandler WatchDog.WatcherTick, AddressOf WatchDogTick
+
             MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2)
             MyWindowList.InsertWindowList(ToolStrip1)
             InitLiveBox()
@@ -378,11 +297,17 @@ Public Class MainForm
         DoneWaiting()
     End Sub
 
-    Private Async Sub RebuildCache()
+    Private Async Sub RebuildCache(sender As Object, e As EventArgs)
+        If GlobalSwitches.BuildingCache Then Exit Sub
+        GlobalSwitches.BuildingCache = True
         Try
             SetStatusBar("Rebuilding DB Cache...")
             Await Task.Run(Sub()
-                               If Not VerifyCacheHashes() Then RefreshLocalDBCache()
+                               If Not VerifyCacheHashes() Then
+                                   RefreshLocalDBCache()
+                               Else
+                                   GlobalSwitches.BuildingCache = False
+                               End If
                            End Sub)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -487,7 +412,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ShowTestDBWarning()
-        If bolUseTestDatabase Then
+        If ServerInfo.UseTestDatabase Then
             Message("TEST DATABASE IN USE", vbOKOnly + vbExclamation, "WARNING", Me)
             Me.BackColor = Color.DarkRed
             Me.Text += " - ****TEST DATABASE****"
@@ -690,6 +615,14 @@ Public Class MainForm
             Return True
         End If
     End Function
+
+    Private Sub MainForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        LastCommand.Dispose()
+        MyLiveBox.Dispose()
+        MyMunisToolBar.Dispose()
+        MyWindowList.Dispose()
+        WatchDog.Dispose()
+    End Sub
 
 #End Region
 

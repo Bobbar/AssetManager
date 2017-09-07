@@ -48,7 +48,7 @@ Public Class DBWrapper
     End Function
 
     Public Function GetCommand(Optional qryString As String = "") As DbCommand
-        If OfflineMode Then
+        If GlobalSwitches.CachedMode Then
             Return New SQLiteCommand(qryString)
         Else
             Return New MySqlCommand(qryString)
@@ -56,7 +56,7 @@ Public Class DBWrapper
     End Function
 
     Public Function GetAdapter() As DbDataAdapter
-        If OfflineMode Then
+        If GlobalSwitches.CachedMode Then
             Return New SQLiteDataAdapter
         Else
             Return New MySqlDataAdapter
@@ -64,7 +64,7 @@ Public Class DBWrapper
     End Function
 
     Public Function GetConnection() As DbConnection
-        If OfflineMode Then
+        If GlobalSwitches.CachedMode Then
             Dim SQLiteComms As New SqliteComms(False)
             Return SQLiteComms.NewConnection
         Else
