@@ -52,14 +52,14 @@ Partial Class GKProgressControl
         Me.pbarFileProgress.Size = New System.Drawing.Size(254, 12)
         Me.pbarFileProgress.TabIndex = 0
         '
-        'lblCurrentFile
+        'lblStatus
         '
         Me.lblStatus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblStatus.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblStatus.ImageAlign = System.Drawing.ContentAlignment.TopCenter
         Me.lblStatus.Location = New System.Drawing.Point(2, 61)
-        Me.lblStatus.Name = "lblCurrentFile"
+        Me.lblStatus.Name = "lblStatus"
         Me.lblStatus.Size = New System.Drawing.Size(395, 14)
         Me.lblStatus.TabIndex = 1
         Me.lblStatus.Text = "[Status/File]"
@@ -203,7 +203,7 @@ Partial Class GKProgressControl
         Me.pbStatus.TabIndex = 8
         Me.pbStatus.TabStop = False
         '
-        'GK_Progress_Fragment
+        'GKProgressControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
@@ -213,7 +213,7 @@ Partial Class GKProgressControl
         Me.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MaximumSize = New System.Drawing.Size(400, 300)
         Me.MinimumSize = New System.Drawing.Size(400, 87)
-        Me.Name = "GK_Progress_Fragment"
+        Me.Name = "GKProgressControl"
         Me.Size = New System.Drawing.Size(400, 300)
         CType(Me.pbRestart, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbCancelClose, System.ComponentModel.ISupportInitialize).EndInit()

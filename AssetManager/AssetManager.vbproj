@@ -393,6 +393,9 @@
     <EmbeddedResource Include="UserInterface\Forms\GetCredentialsForm.resx">
       <DependentUpon>GetCredentialsForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKProgressControl.resx">
+      <DependentUpon>GKProgressControl.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKUpdaterForm.resx">
       <DependentUpon>GKUpdaterForm.vb</DependentUpon>
     </EmbeddedResource>

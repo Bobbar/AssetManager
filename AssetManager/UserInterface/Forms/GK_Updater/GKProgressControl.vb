@@ -125,7 +125,6 @@ Public Class GKProgressControl
         pbarProgress.Maximum = CurrentStatus.TotFiles
         pbarProgress.Value = CurrentStatus.CurFileIdx
         lblStatus.Text = CurrentStatus.CurFileName
-        lblStatus.Refresh()
     End Sub
 
     Private Sub GKUpdate_Cancelled(sender As Object, e As EventArgs)
@@ -278,9 +277,8 @@ Public Class GKProgressControl
             pbarFileProgress.Value = MyUpdater.UpdateStatus.CurFileProgress
             If pbarFileProgress.Value > 1 Then pbarFileProgress.Value = pbarFileProgress.Value - 1 'doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
             pbarFileProgress.Value = MyUpdater.UpdateStatus.CurFileProgress
-            pbarFileProgress.Refresh()
             lblTransRate.Text = MyUpdater.UpdateStatus.CurTransferRate.ToString("0.00") & "MB/s"
-            lblTransRate.Refresh()
+            Me.Update()
         End If
     End Sub
 
