@@ -32,15 +32,15 @@
                 table.Columns.Add("Req. Number", GetType(String))
                 table.Columns.Add("UID", GetType(String))
                 For Each r As DataRow In results.Rows
-                    table.Rows.Add(NoNull(r.Item("sibi_request_number")),
-                                   GetHumanValue(SibiIndex.StatusType, r.Item("sibi_status").ToString),
-                                   NoNull(r.Item("sibi_description")),
-                                   NoNull(r.Item("sibi_request_user")),
-                                   GetHumanValue(SibiIndex.RequestType, r.Item("sibi_type").ToString),
-                                   NoNull(r.Item("sibi_need_by")),
-                                   NoNull(r.Item("sibi_PO")),
-                                   NoNull(r.Item("sibi_requisition_number")),
-                                   NoNull(r.Item("sibi_uid")))
+                    table.Rows.Add(NoNull(r.Item(SibiRequestCols.RequestNumber)),
+                                   GetHumanValue(SibiIndex.StatusType, r.Item(SibiRequestCols.Status).ToString),
+                                   NoNull(r.Item(SibiRequestCols.Description)),
+                                   NoNull(r.Item(SibiRequestCols.RequestUser)),
+                                   GetHumanValue(SibiIndex.RequestType, r.Item(SibiRequestCols.Type).ToString),
+                                   NoNull(r.Item(SibiRequestCols.NeedBy)),
+                                   NoNull(r.Item(SibiRequestCols.PO)),
+                                   NoNull(r.Item(SibiRequestCols.RequisitionNumber)),
+                                   NoNull(r.Item(SibiRequestCols.UID)))
                 Next
                 ResultGrid.DataSource = table
                 ResultGrid.ClearSelection()
@@ -51,9 +51,7 @@
     End Sub
 
     Private Sub ShowAll()
-        Using SQLComms As New MySqlComms
-            SendToGrid(SQLComms.ReturnMySqlTable("SELECT * FROM sibi_requests ORDER BY sibi_need_by"))
-        End Using
+        SendToGrid(DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.NeedBy))
     End Sub
 
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick

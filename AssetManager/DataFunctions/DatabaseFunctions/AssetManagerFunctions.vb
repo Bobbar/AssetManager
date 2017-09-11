@@ -50,8 +50,7 @@ Public Class AssetManagerFunctions
 
     Public Function BuildModuleIndex() As List(Of AccessGroupStruct)
         Dim tmpList As New List(Of AccessGroupStruct)
-        Using SQLComms As New MySqlComms,
-            ModuleTable As DataTable = SQLComms.ReturnMySqlTable("SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & "")
+        Using ModuleTable As DataTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & "")
             For Each row As DataRow In ModuleTable.Rows
                 Dim tmpInfo As AccessGroupStruct
                 With tmpInfo
@@ -98,20 +97,16 @@ Public Class AssetManagerFunctions
 
     Public Function DeleteMasterSqlEntry(sqlGUID As String, type As EntryType) As Boolean
         Try
-            Dim rows As Integer
-            Dim strSQLQry As String = ""
+            Dim DeleteQuery As String = ""
             Select Case type
                 Case EntryType.Device
-                    strSQLQry = "DELETE FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & sqlGUID & "'"
+                    DeleteQuery = "DELETE FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & sqlGUID & "'"
                 Case EntryType.Sibi
-                    strSQLQry = "DELETE FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & sqlGUID & "'"
+                    DeleteQuery = "DELETE FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & sqlGUID & "'"
             End Select
-            Using SQLComms As New MySqlComms
-                rows = SQLComms.ReturnMySqlCommand(strSQLQry).ExecuteNonQuery
-                If rows > 0 Then
-                    Return True
-                End If
-            End Using
+            If DBFunc.GetDatabase.ExecuteQuery(DeleteQuery) > 0 Then
+                Return True
+            End If
             Return False
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -134,29 +129,13 @@ Public Class AssetManagerFunctions
 
     Public Function DeleteSqlAttachment(attachment As Attachment) As Integer
         Try
-            Dim rows As Integer
-            Dim strDeviceID As String = ""
-            Dim strSQLIDQry As String = ""
-            strSQLIDQry = "SELECT " & attachment.AttachTable.FKey & " FROM " & attachment.AttachTable.TableName & " WHERE " & attachment.AttachTable.FileUID & "='" & attachment.FileUID & "'"
-            Using SQLComms As New MySqlComms, results As DataTable = SQLComms.ReturnMySqlTable(strSQLIDQry)
-                For Each r As DataRow In results.Rows
-                    strDeviceID = r.Item(attachment.AttachTable.FKey).ToString
-                Next
-                'Delete FTP Attachment
-                If FTPFunc.DeleteFtpAttachment(attachment.FileUID, strDeviceID) Then
-                    'delete SQL entry
-                    Dim strSQLDelQry As String = ""
-                    strSQLDelQry = "DELETE FROM " & attachment.AttachTable.TableName & " WHERE " & attachment.AttachTable.FileUID & "='" & attachment.FileUID & "'"
-                    rows = SQLComms.ReturnMySqlCommand(strSQLDelQry).ExecuteNonQuery
-                    Return rows
-                    'Else  'if file not found then we might as well remove the DB record.
-                    '    Dim strSQLDelQry As String = "DELETE FROM dev_attachments WHERE attach_file_UID='" & AttachUID & "'"
-                    '    cmd.Connection = GlobalConn
-                    '    cmd.CommandText = strSQLDelQry
-                    '    rows = cmd.ExecuteNonQuery()
-                    '    Return rows
-                End If
-            End Using
+            Dim AttachmentFolderID = GetSqlValue(attachment.AttachTable.TableName, attachment.AttachTable.FileUID, attachment.FileUID, attachment.AttachTable.FKey)
+            'Delete FTP Attachment
+            If FTPFunc.DeleteFtpAttachment(attachment.FileUID, AttachmentFolderID) Then
+                'delete SQL entry
+                Dim SQLDeleteQry = "DELETE FROM " & attachment.AttachTable.TableName & " WHERE " & attachment.AttachTable.FileUID & "='" & attachment.FileUID & "'"
+                Return DBFunc.GetDatabase.ExecuteQuery(SQLDeleteQry)
+            End If
             Return -1
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -198,10 +177,10 @@ Public Class AssetManagerFunctions
                 If NewMunisSearch.DialogResult = DialogResult.Yes Then
                     SetWaitCursor(True, parentForm)
                     SupInfo = NewMunisSearch.EmployeeInfo
-                    Using SQLComms As New MySqlComms, DeviceList As New DataTable, EmpList As DataTable = MunisFunc.ListOfEmpsBySup(SupInfo.Number)
+                    Using DeviceList As New DataTable, EmpList As DataTable = MunisFunc.ListOfEmpsBySup(SupInfo.Number)
                         For Each r As DataRow In EmpList.Rows
                             Dim strQRY As String = "SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.MunisEmpNum & "='" & r.Item("a_employee_number").ToString & "'"
-                            Using tmpTable As DataTable = SQLComms.ReturnMySqlTable(strQRY)
+                            Using tmpTable As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
                                 DeviceList.Merge(tmpTable)
                             End Using
                         Next
@@ -244,16 +223,14 @@ Public Class AssetManagerFunctions
     End Function
 
     Public Function GetDeviceInfoFromGUID(deviceGUID As String) As DeviceStruct
-        Using SQLComms As New MySqlComms
-            Return AssetFunc.CollectDeviceInfo(SQLComms.ReturnMySqlTable("SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & deviceGUID & "'"))
-        End Using
+        Return AssetFunc.CollectDeviceInfo(DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & deviceGUID & "'"))
     End Function
 
     Public Function GetHistoricalEntryInfo(ByVal deviceHistEntryGUID As String) As DeviceStruct
         Try
             Dim tmpInfo As New DeviceStruct
             Dim strQry = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & deviceHistEntryGUID & "'"
-            Using SQLComms As New MySqlComms, results As DataTable = SQLComms.ReturnMySqlTable(strQry)
+            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry)
                 For Each r As DataRow In results.Rows
                     tmpInfo.Historical.ChangeType = GetHumanValue(DeviceIndex.ChangeType, r.Item(HistoricalDevicesCols.ChangeType).ToString)
                     tmpInfo.AssetTag = r.Item(HistoricalDevicesCols.AssetTag).ToString
@@ -323,11 +300,7 @@ Public Class AssetManagerFunctions
 
     Public Function GetAttachmentCount(attachFolderUID As String, attachTable As AttachmentsBaseCols) As Integer
         Try
-            Dim strQRY As String = ""
-            strQRY = "SELECT COUNT(*) FROM " & attachTable.TableName & " WHERE " & attachTable.FKey & "='" & attachFolderUID & "'"
-            Using SQLComms As New MySqlComms, cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(strQRY)
-                Return CInt(cmd.ExecuteScalar)
-            End Using
+            Return CInt(GetSqlValue(attachTable.TableName, attachTable.FKey, attachFolderUID, "COUNT(*)"))
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return 0
@@ -335,11 +308,7 @@ Public Class AssetManagerFunctions
     End Function
 
     Public Function UpdateSqlValue(table As String, fieldIn As String, valueIn As String, idField As String, idValue As String) As Integer
-        Dim sqlUpdateQry As String = "UPDATE " & table & " SET " & fieldIn & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"
-        Using SQLComms As New MySqlComms, cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(sqlUpdateQry)
-            cmd.Parameters.AddWithValue("@ValueIN", valueIn)
-            Return cmd.ExecuteNonQuery()
-        End Using
+        Return DBFunc.GetDatabase.UpdateValue(table, fieldIn, valueIn, idField, idValue)
     End Function
 
 #End Region

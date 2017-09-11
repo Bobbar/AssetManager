@@ -75,9 +75,8 @@ Public Class SibiManageRequestForm
         IsModifying = True
         SetupGrid(RequestItemsGrid, RequestItemsColumns)
 
-        Using Comms As New MySqlComms 'Set the datasource to a new empty DB table.
-            RequestItemsGrid.DataSource = Comms.ReturnMySqlTable("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0")
-        End Using
+        'Set the datasource to a new empty DB table.
+        RequestItemsGrid.DataSource = DBFunc.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0")
 
         EnableControls()
         pnlCreate.Visible = True
@@ -120,16 +119,14 @@ Public Class SibiManageRequestForm
     End Function
     Private Function ConcurrencyCheck() As Boolean
         Try
-            Using comms As New MySqlComms
-                Dim RequestTable = comms.ReturnMySqlTable("SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & CurrentRequest.GUID & "'")
-                RequestTable.TableName = SibiRequestCols.TableName
-                Dim ItemTable = comms.ReturnMySqlTable("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & "='" & CurrentRequest.GUID & "' ORDER BY " & SibiRequestItemsCols.Timestamp)
-                ItemTable.TableName = SibiRequestItemsCols.TableName
+            Dim RequestTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & CurrentRequest.GUID & "'")
+            RequestTable.TableName = SibiRequestCols.TableName
+            Dim ItemTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & "='" & CurrentRequest.GUID & "' ORDER BY " & SibiRequestItemsCols.Timestamp)
+            ItemTable.TableName = SibiRequestItemsCols.TableName
                 Dim DBHash As String = GetHash(RequestTable, ItemTable)
                 If DBHash <> CurrentHash Then
                     Return False
                 End If
-            End Using
             Return True
         Catch ex As Exception
             Throw
@@ -503,12 +500,9 @@ Public Class SibiManageRequestForm
     Private Function DeleteItem_FromSQL(ItemUID As String, ItemColumnName As String, Table As String) As Integer
         Try
             Dim rows As Integer
-            Dim strSQLQry As String = "DELETE FROM " & Table & " WHERE " & ItemColumnName & "='" & ItemUID & "'"
-            Using SQLComms As New MySqlComms
-                rows = SQLComms.ReturnMySqlCommand(strSQLQry).ExecuteNonQuery
-                Return rows
-            End Using
-            UpdateRequest()
+            Dim DeleteItemQuery As String = "DELETE FROM " & Table & " WHERE " & ItemColumnName & "='" & ItemUID & "'"
+            rows = DBFunc.GetDatabase.ExecuteQuery(DeleteItemQuery)
+            Return rows
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return -1

@@ -9,6 +9,7 @@ Public Interface IDataBase
     Function DataTableFromCommand(command As DbCommand) As DataTable
     Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable
     Function ExecuteScalarFromCommand(command As DbCommand) As Object
+    Function ExecuteQuery(query As String) As Integer
     Function InsertFromParameters(tableName As String, params As List(Of DBParameter)) As Integer
     Function UpdateTable(selectQuery As String, table As DataTable) As Integer
     Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer
@@ -176,6 +177,13 @@ Public Class MySQLDatabase
         End Using
     End Function
 
+    Public Function ExecuteQuery(query As String) As Integer Implements IDataBase.ExecuteQuery
+        Using conn = NewConnection(), cmd As New MySqlCommand(query, conn)
+            conn.Open()
+            Return cmd.ExecuteNonQuery
+        End Using
+    End Function
+
     Public Function ExecuteScalarFromCommand(command As DbCommand) As Object Implements IDataBase.ExecuteScalarFromCommand
         Try
             Using conn = NewConnection()
@@ -295,6 +303,7 @@ Public Class SQLiteDatabase
         End If
     End Sub
 
+
 #End Region
 
 
@@ -351,6 +360,10 @@ Public Class SQLiteDatabase
     End Function
 
     Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer Implements IDataBase.UpdateValue
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function ExecuteQuery(query As String) As Integer Implements IDataBase.ExecuteQuery
         Throw New NotImplementedException()
     End Function
 

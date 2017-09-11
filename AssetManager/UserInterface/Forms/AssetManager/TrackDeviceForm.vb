@@ -60,11 +60,9 @@ Public Class TrackDeviceForm
     End Function
 
     Private Sub GetCurrentTracking(strGUID As String)
-        Dim dt As DataTable
-        Using SQLComms As New MySqlComms
-            dt = SQLComms.ReturnMySqlTable("SELECT * FROM " & TrackablesCols.TableName & " WHERE " & TrackablesCols.DeviceUID & "='" & strGUID & "' ORDER BY " & TrackablesCols.DateStamp & " DESC LIMIT 1") 'ds.Tables(0)
-            If dt.Rows.Count > 0 Then
-                For Each dr As DataRow In dt.Rows
+        Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & TrackablesCols.TableName & " WHERE " & TrackablesCols.DeviceUID & "='" & strGUID & "' ORDER BY " & TrackablesCols.DateStamp & " DESC LIMIT 1") 'ds.Tables(0)
+            If results.Rows.Count > 0 Then
+                For Each dr As DataRow In results.Rows
                     With dr
                         DateTime.TryParse(.Item(TrackablesCols.CheckoutTime).ToString, CurrentTrackingDevice.Tracking.CheckoutTime)
                         DateTime.TryParse(.Item(TrackablesCols.CheckinTime).ToString, CurrentTrackingDevice.Tracking.CheckinTime)

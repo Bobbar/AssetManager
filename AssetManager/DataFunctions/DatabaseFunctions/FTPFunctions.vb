@@ -124,21 +124,18 @@ Missing Files: " & MissingSQLFiles.Count
 
                 Dim deletions As Integer = 0
                 For Each sqlItem In missingSQLFiles
-                    Using cmd = SQLComms.ReturnMySqlCommand("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FileUID & "='" & sqlItem.FileUID & "'")
-                        Dim rows = cmd.ExecuteNonQuery()
-                        If rows > 0 Then
-                            deletions += rows
-                            Logger("Deleted Device SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
-                        End If
-                    End Using
 
-                    Using cmd = SQLComms.ReturnMySqlCommand("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FileUID & "='" & sqlItem.FileUID & "'")
-                        Dim rows = cmd.ExecuteNonQuery()
-                        If rows > 0 Then
-                            deletions += rows
-                            Logger("Deleted Sibi SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
-                        End If
-                    End Using
+                    Dim DeviceRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FileUID & "='" & sqlItem.FileUID & "'")
+                    If DeviceRows > 0 Then
+                        deletions += DeviceRows
+                        Logger("Deleted Device SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
+                    End If
+
+                    Dim SibiRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FileUID & "='" & sqlItem.FileUID & "'")
+                    If SibiRows > 0 Then
+                        deletions += SibiRows
+                        Logger("Deleted Sibi SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
+                    End If
                 Next
                 Return deletions
             End Using
@@ -154,21 +151,19 @@ Missing Files: " & MissingSQLFiles.Count
                 Dim deletions As Integer = 0
                 For Each sqlItem In missingSQLDirs
                     If Not CheckForPrimaryItem(sqlItem.FKey) Then
-                        Using cmd = SQLComms.ReturnMySqlCommand("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & "='" & sqlItem.FKey & "'")
-                            Dim rows = cmd.ExecuteNonQuery()
-                            If rows > 0 Then
-                                deletions += rows
-                                Logger("Deleted " & rows & " Device SQL Entries For: " & sqlItem.FKey)
-                            End If
-                        End Using
 
-                        Using cmd = SQLComms.ReturnMySqlCommand("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & "='" & sqlItem.FKey & "'")
-                            Dim rows = cmd.ExecuteNonQuery()
-                            If rows > 0 Then
-                                deletions += rows
-                                Logger("Deleted " & rows & " Sibi SQL Entries For: " & sqlItem.FKey)
-                            End If
-                        End Using
+                        Dim DeviceRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & "='" & sqlItem.FKey & "'")
+                        If DeviceRows > 0 Then
+                            deletions += DeviceRows
+                            Logger("Deleted " & DeviceRows & " Device SQL Entries For: " & sqlItem.FKey)
+                        End If
+
+                        Dim SibiRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & "='" & sqlItem.FKey & "'")
+                        If SibiRows > 0 Then
+                            deletions += SibiRows
+                            Logger("Deleted " & SibiRows & " Sibi SQL Entries For: " & sqlItem.FKey)
+                        End If
+
                     End If
                 Next
                 Return deletions
@@ -267,18 +262,17 @@ Missing Files: " & MissingSQLFiles.Count
         Dim DeviceTable As New DeviceAttachmentsCols
         Dim SibiTable As New SibiAttachmentsCols
         Dim SQLFileList As New List(Of AttachScanInfo)
-        Using SQLComms As New MySqlComms
-            Dim devFiles = SQLComms.ReturnMySqlTable("SELECT * FROM " & DeviceTable.TableName)
-            For Each file As DataRow In devFiles.Rows
-                SQLFileList.Add(New AttachScanInfo(file.Item(DeviceTable.FKey).ToString, file.Item(DeviceTable.FileUID).ToString))
-            Next
 
-            Dim sibiFiles = SQLComms.ReturnMySqlTable("SELECT * FROM " & SibiTable.TableName)
-            For Each file As DataRow In sibiFiles.Rows
-                SQLFileList.Add(New AttachScanInfo(file.Item(SibiTable.FKey).ToString, file.Item(SibiTable.FileUID).ToString))
-            Next
+        Dim devFiles = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DeviceTable.TableName)
+        For Each file As DataRow In devFiles.Rows
+            SQLFileList.Add(New AttachScanInfo(file.Item(DeviceTable.FKey).ToString, file.Item(DeviceTable.FileUID).ToString))
+        Next
 
-        End Using
+        Dim sibiFiles = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiTable.TableName)
+        For Each file As DataRow In sibiFiles.Rows
+            SQLFileList.Add(New AttachScanInfo(file.Item(SibiTable.FKey).ToString, file.Item(SibiTable.FileUID).ToString))
+        Next
+
         Return SQLFileList
     End Function
 

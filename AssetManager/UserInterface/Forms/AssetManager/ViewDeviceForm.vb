@@ -486,11 +486,9 @@ Public Class ViewDeviceForm
     Private Function DeleteHistoryEntry(ByVal strGUID As String) As Integer
         Try
             Dim rows As Integer
-            Dim strSQLQry As String = "DELETE FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & strGUID & "'"
-            Using SQLComms As New MySqlComms
-                rows = SQLComms.ReturnMySqlCommand(strSQLQry).ExecuteNonQuery
-                Return rows
-            End Using
+            Dim DeleteEntryQuery As String = "DELETE FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & strGUID & "'"
+            rows = DBFunc.GetDatabase.ExecuteQuery(DeleteEntryQuery)
+            Return rows
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return 0

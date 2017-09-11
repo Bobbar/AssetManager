@@ -107,8 +107,7 @@ Class AttachmentsForm
         Try
             Dim strQry As String
             strQry = GetQry()
-            Using SQLComms As New MySqlComms,
-                results As DataTable = SQLComms.ReturnMySqlTable(strQry),
+            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry),
                 table As DataTable = GetTable()
                 Dim strFullFilename As String
                 Dim strFileSizeHuman As String
@@ -301,9 +300,7 @@ Class AttachmentsForm
 
     Private Function GetSQLAttachment(AttachUID As String) As Attachment
         Dim strQry As String = "SELECT * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FileUID & "='" & AttachUID & "' LIMIT 1"
-        Using LocalSQLComm As New MySqlComms
-            Return New Attachment(LocalSQLComm.ReturnMySqlTable(strQry), _attachTable)
-        End Using
+        Return New Attachment(DBFunc.GetDatabase.DataTableFromQueryString(strQry), _attachTable)
     End Function
 
     Private Function GetTable() As DataTable

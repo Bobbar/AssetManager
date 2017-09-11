@@ -246,9 +246,7 @@ Public Class DBControlParser
     ''' </returns>
     Public Function ReturnInsertTable(selectQry As String) As DataTable
         Dim tmpTable As DataTable
-        Using SQLComm As New MySqlComms
-            tmpTable = SQLComm.ReturnMySqlTable(selectQry)
-        End Using
+        tmpTable = DBFunc.GetDatabase.DataTableFromQueryString(selectQry)
         tmpTable.Rows.Add()
         UpdateDBControlRow(tmpTable.Rows(0))
         Return tmpTable
@@ -266,9 +264,7 @@ Public Class DBControlParser
     ''' </returns>
     Public Function ReturnUpdateTable(selectQry As String) As DataTable
         Dim tmpTable As New DataTable
-        Using SQLComm As New MySqlComms
-            tmpTable = SQLComm.ReturnMySqlTable(selectQry)
-        End Using
+        tmpTable = DBFunc.GetDatabase.DataTableFromQueryString(selectQry)
         tmpTable.TableName = "UpdateTable"
         UpdateDBControlRow(tmpTable.Rows(0))
         Return tmpTable
