@@ -24,7 +24,7 @@ Public Class MainForm
 
     Public Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         Try
-            Dim cmd = DBFunc.GetCommand()
+            Dim cmd = DBFunc.GetDatabase.GetCommand()
             Dim strStartQry As String
             If chkHistorical.Checked Then
                 strStartQry = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE "
@@ -33,48 +33,51 @@ Public Class MainForm
             End If
             Dim strDynaQry As String = ""
             Dim SearchValCol As List(Of DBQueryParameter) = BuildSearchList()
-            For Each fld As DBQueryParameter In SearchValCol
-                If Not IsNothing(fld.Value) Then
-                    If fld.Value.ToString <> "" Then
-                        If TypeOf fld.Value Is Boolean Then  'trackable boolean. if false, dont add it.
-                            Dim bolTrackable As Boolean = CType(fld.Value, Boolean)
-                            If bolTrackable Then
-                                strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE @" + fld.FieldName + " AND"
-                                cmd.AddParameterWithValue("@" & fld.FieldName, Convert.ToInt32(fld.Value))
-                            End If
-                        Else
-                            Select Case fld.FieldName 'use the fixed fields with EQUALS operator instead of LIKE
-                                Case DevicesCols.OSVersion
-                                    strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                    cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
-                                Case DevicesCols.EQType
-                                    strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                    cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
-                                Case DevicesCols.Location
-                                    strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                    cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
-                                Case DevicesCols.Status
-                                    strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
-                                    cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
-                                Case Else
-                                    strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE @" + fld.FieldName + " AND"
-                                    Dim Value As String = "%" & fld.Value.ToString & "%"
-                                    cmd.AddParameterWithValue("@" & fld.FieldName, Value)
-                            End Select
-                        End If
-                    End If
-                End If
-            Next
-            If strDynaQry = "" Then
-                Message("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing", Me)
-                Exit Sub
-            End If
-            Dim strQry = strStartQry & strDynaQry
-            If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
-                strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
-            End If
-            cmd.CommandText = strQry
-            StartBigQuery(cmd)
+            'For Each fld As DBQueryParameter In SearchValCol
+            '    If Not IsNothing(fld.Value) Then
+            '        If fld.Value.ToString <> "" Then
+            '            If TypeOf fld.Value Is Boolean Then  'trackable boolean. if false, dont add it.
+            '                Dim bolTrackable As Boolean = CType(fld.Value, Boolean)
+            '                If bolTrackable Then
+            '                    strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+            '                    cmd.AddParameterWithValue("@" & fld.FieldName, Convert.ToInt32(fld.Value))
+            '                End If
+            '            Else
+            '                Select Case fld.FieldName 'use the fixed fields with EQUALS operator instead of LIKE
+            '                    Case DevicesCols.OSVersion
+            '                        strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+            '                        cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
+            '                    Case DevicesCols.EQType
+            '                        strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+            '                        cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
+            '                    Case DevicesCols.Location
+            '                        strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+            '                        cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
+            '                    Case DevicesCols.Status
+            '                        strDynaQry = strDynaQry + " " + fld.FieldName + "=@" + fld.FieldName + " AND"
+            '                        cmd.AddParameterWithValue("@" & fld.FieldName, fld.Value)
+            '                    Case Else
+            '                        strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE @" + fld.FieldName + " AND"
+            '                        Dim Value As String = "%" & fld.Value.ToString & "%"
+            '                        cmd.AddParameterWithValue("@" & fld.FieldName, Value)
+            '                End Select
+            '            End If
+            '        End If
+            '    End If
+            'Next
+
+            SendToGrid(DBFunc.GetDatabase.DataTableFromParameters(strStartQry, SearchValCol))
+
+            'If strDynaQry = "" Then
+            '    Message("Please add some filter data.", vbOKOnly + vbInformation, "Fields Missing", Me)
+            '    Exit Sub
+            'End If
+            'Dim strQry = strStartQry & strDynaQry
+            'If Strings.Right(strQry, 3) = "AND" Then 'remove trailing AND from dynamic query
+            '    strQry = Strings.Left(strQry, Strings.Len(strQry) - 3)
+            'End If
+            ' cmd.CommandText = strQry
+            ' StartBigQuery(cmd)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -103,8 +106,24 @@ Public Class MainForm
         Dim tmpList As New List(Of DBQueryParameter)
         Dim DataParser As New DBControlParser(Me)
         For Each ctl In DataParser.GetDBControls(Me)
-            Dim DBInfo = DirectCast(ctl.Tag, DBControlInfo)
-            tmpList.Add(New DBQueryParameter(DBInfo.DataColumn, DataParser.GetDBControlValue(ctl), False))
+            Dim CtlValue = DataParser.GetDBControlValue(ctl)
+            If TypeOf CtlValue IsNot DBNull AndAlso CtlValue.ToString <> "" Then
+                Dim DBInfo = DirectCast(ctl.Tag, DBControlInfo)
+                Dim IsExact As Boolean = False
+                Select Case DBInfo.DataColumn
+                    Case DevicesCols.OSVersion
+                        IsExact = True
+                    Case DevicesCols.EQType
+                        IsExact = True
+                    Case DevicesCols.Location
+                        IsExact = True
+                    Case DevicesCols.Status
+                        IsExact = True
+                    Case Else
+                        IsExact = False
+                End Select
+                tmpList.Add(New DBQueryParameter(DBInfo.DataColumn, CtlValue, IsExact))
+            End If
         Next
         Return tmpList
     End Function
@@ -365,7 +384,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ShowAll()
-        Dim cmd = DBFunc.GetCommand(strShowAllQry)
+        Dim cmd = DBFunc.GetDatabase.GetCommand(strShowAllQry)
         StartBigQuery(cmd)
     End Sub
 
@@ -388,7 +407,7 @@ Public Class MainForm
                 QueryRunning = True
                 Dim Results = Await Task.Run(Function()
                                                  LastCommand = QryCommand
-                                                 Return DBFunc.DataTableFromCommand(QryCommand)
+                                                 Return DBFunc.GetDatabase.DataTableFromCommand(QryCommand)
                                              End Function)
                 QryCommand.Dispose()
                 SendToGrid(Results)

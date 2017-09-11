@@ -57,7 +57,7 @@ Public Class SibiMainForm
     End Function
 
     Private Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
-        Dim cmd = DBFunc.GetCommand()
+        Dim cmd = DBFunc.GetDatabase.GetCommand()
         Dim strStartQry As String
         strStartQry = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE"
         Dim strDynaQry As String = ""
@@ -86,7 +86,7 @@ Public Class SibiMainForm
     Private Sub ExecuteCmd(ByRef cmd As DbCommand)
         Try
             LastCmd = cmd
-            SendToGrid(DBFunc.DataTableFromCommand(cmd))
+            SendToGrid(DBFunc.GetDatabase.DataTableFromCommand(cmd))
         Catch ex As Exception
             'InvalidCastException is expected when the last LastCmd was populated while in cached DB mode and now cached mode is currently false. 
             'ShowAll will start a new connection and populate LastCmd with a correctly matching DBCommand. See DBWrapper.GetCommand()
@@ -165,7 +165,7 @@ Public Class SibiMainForm
         Try
             bolRebuildingCombo = True
             Dim strQRY As String = "SELECT DISTINCT " & SibiRequestCols.DateStamp & " FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.DateStamp & " DESC"
-            Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
+            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
                 Dim Years As New List(Of String)
                 Years.Add("All")
                 For Each r As DataRow In results.Rows
@@ -188,9 +188,9 @@ Public Class SibiMainForm
     Private Sub ShowAll(Optional Year As String = "")
         If Year = "" Then Year = cmbDisplayYear.Text
         If Year = "All" Then
-            ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.RequestNumber & " DESC"))
+            ExecuteCmd(DBFunc.GetDatabase.GetCommand("SELECT * FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.RequestNumber & " DESC"))
         Else
-            ExecuteCmd(DBFunc.GetCommand("SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.DateStamp & " LIKE '%" & Year & "%' ORDER BY " & SibiRequestCols.RequestNumber & " DESC"))
+            ExecuteCmd(DBFunc.GetDatabase.GetCommand("SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.DateStamp & " LIKE '%" & Year & "%' ORDER BY " & SibiRequestCols.RequestNumber & " DESC"))
         End If
     End Sub
 

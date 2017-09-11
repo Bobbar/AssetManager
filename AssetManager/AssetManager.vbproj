@@ -191,6 +191,7 @@
     <Compile Include="Classes\ConnectionWatchdog.vb" />
     <Compile Include="DataComms\AssetManager\MySQL\DataColumns.vb" />
     <Compile Include="DataComms\AssetManager\SQLite\SQLiteComms.vb" />
+    <Compile Include="DataComms\DataInterface.vb" />
     <Compile Include="DataFunctions\DatabaseFunctions\AdvancedSearch.vb" />
     <Compile Include="DataFunctions\DBControlParser.vb" />
     <Compile Include="Classes\MyExceptions.vb" />

@@ -78,12 +78,15 @@ Public Class NewDeviceForm
             Dim rows As Integer = 0
             Dim DeviceInsertQry As String = "SELECT * FROM " & DevicesCols.TableName & " LIMIT 0"
             Dim HistoryInsertQry As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " LIMIT 0"
-            Using SQLComms As New MySqlComms,
-                DeviceInsertAdapter As MySqlDataAdapter = SQLComms.ReturnMySqlAdapter(DeviceInsertQry),
-                 HistoryInsertAdapter As MySqlDataAdapter = SQLComms.ReturnMySqlAdapter(HistoryInsertQry)
-                rows += DeviceInsertAdapter.Update(DeviceInsertTable(DeviceInsertAdapter))
-                rows += HistoryInsertAdapter.Update(HistoryInsertTable(HistoryInsertAdapter))
-            End Using
+
+            rows += DBFunc.GetDatabase.UpdateTable(DeviceInsertQry, DeviceInsertTable(DeviceInsertQry))
+            rows += DBFunc.GetDatabase.UpdateTable(HistoryInsertQry, HistoryInsertTable(HistoryInsertQry))
+            'Using SQLComms As New MySqlComms,
+            '    DeviceInsertAdapter As MySqlDataAdapter = SQLComms.ReturnMySqlAdapter(DeviceInsertQry),
+            '     HistoryInsertAdapter As MySqlDataAdapter = SQLComms.ReturnMySqlAdapter(HistoryInsertQry)
+            '    rows += DeviceInsertAdapter.Update(DeviceInsertTable(DeviceInsertAdapter))
+            '    rows += HistoryInsertAdapter.Update(HistoryInsertTable(HistoryInsertAdapter))
+            'End Using
             If rows = 2 Then
                 Return True
             Else
@@ -220,8 +223,8 @@ Public Class NewDeviceForm
         End Using
     End Sub
 
-    Private Function DeviceInsertTable(Adapter As MySqlDataAdapter) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
+    Private Function DeviceInsertTable(selectQuery As String) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(selectQuery)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         If MunisUser.Number IsNot Nothing Then
@@ -240,8 +243,8 @@ Public Class NewDeviceForm
         SetReplacementYear(dtPurchaseDate_REQ.Value)
     End Sub
 
-    Private Function HistoryInsertTable(Adapter As MySqlDataAdapter) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
+    Private Function HistoryInsertTable(selectQuery As String) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(selectQuery)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         DBRow(HistoricalDevicesCols.ChangeType) = "NEWD"

@@ -9,20 +9,11 @@ Public Class AssetManagerFunctions
         Try
             If Not IsEmployeeInDB(empInfo.Number) Then
                 Dim UID As String = Guid.NewGuid.ToString
-                Dim strQRY As String = "INSERT INTO " & EmployeesCols.TableName & "
-(" & EmployeesCols.Name & ",
-" & EmployeesCols.Number & ",
-" & EmployeesCols.UID & ")
-VALUES
-(@" & EmployeesCols.Name & ",
-@" & EmployeesCols.Number & ",
-@" & EmployeesCols.UID & ")"
-                Using SQLComms As New MySqlComms, cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(strQRY)
-                    cmd.Parameters.AddWithValue("@" & EmployeesCols.Name, empInfo.Name)
-                    cmd.Parameters.AddWithValue("@" & EmployeesCols.Number, empInfo.Number)
-                    cmd.Parameters.AddWithValue("@" & EmployeesCols.UID, UID)
-                    cmd.ExecuteNonQuery()
-                End Using
+                Dim InsertEmployeeParams As New List(Of DBParameter)
+                InsertEmployeeParams.Add(New DBParameter(EmployeesCols.Name, empInfo.Name))
+                InsertEmployeeParams.Add(New DBParameter(EmployeesCols.Number, empInfo.Number))
+                InsertEmployeeParams.Add(New DBParameter(EmployeesCols.UID, UID))
+                DBFunc.GetDatabase.InsertFromParameters(EmployeesCols.TableName, InsertEmployeeParams)
             End If
         Catch ex As MySqlException
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -33,7 +24,7 @@ VALUES
         Try
             Dim strQRY = "SELECT * FROM " & codeType & " LEFT OUTER JOIN munis_codes on " & codeType & ".db_value = munis_codes.asset_man_code WHERE type_name ='" & typeName & "' ORDER BY " & ComboCodesBaseCols.HumanValue & ""
             Dim row As Integer = 0
-            Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
+            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY) 'DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
                 Dim tmpArray(results.Rows.Count - 1) As ComboboxDataStruct
                 For Each r As DataRow In results.Rows
                     tmpArray(row).ID = r.Item(ComboCodesBaseCols.ID).ToString
@@ -239,11 +230,11 @@ VALUES
             If type = FindDevType.AssetTag Then
                 Dim Params As New List(Of DBQueryParameter)
                 Params.Add(New DBQueryParameter(DevicesCols.AssetTag, searchVal, True))
-                Return CollectDeviceInfo(DBFunc.DataTableFromCommand(GetSQLCommandFromParams("SELECT * FROM " & DevicesCols.TableName, Params)))
+                Return CollectDeviceInfo(DBFunc.GetDatabase.DataTableFromCommand(GetSQLCommandFromParams("SELECT * FROM " & DevicesCols.TableName, Params)))
             ElseIf type = FindDevType.Serial Then
                 Dim Params As New List(Of DBQueryParameter)
                 Params.Add(New DBQueryParameter(DevicesCols.Serial, searchVal, True))
-                Return CollectDeviceInfo(DBFunc.DataTableFromCommand(GetSQLCommandFromParams("SELECT * FROM " & DevicesCols.TableName, Params)))
+                Return CollectDeviceInfo(DBFunc.GetDatabase.DataTableFromCommand(GetSQLCommandFromParams("SELECT * FROM " & DevicesCols.TableName, Params)))
             End If
             Return Nothing
         Catch ex As MySqlException
@@ -288,7 +279,7 @@ VALUES
         Dim sqlQRY As String = "SELECT " & fieldOut & " FROM " & table ' & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
         Dim Params As New List(Of DBQueryParameter)
         Params.Add(New DBQueryParameter(fieldIn, valueIn, True))
-        Dim Result = DBFunc.ExecuteScalarFromCommand(GetSQLCommandFromParams(sqlQRY, Params))
+        Dim Result = DBFunc.GetDatabase.ExecuteScalarFromCommand(GetSQLCommandFromParams(sqlQRY, Params))
         If Result IsNot Nothing Then
             Return Result.ToString
         Else
@@ -303,7 +294,7 @@ VALUES
     ''' <param name="parameters"></param>
     ''' <returns></returns>
     Private Function GetSQLCommandFromParams(partialQuery As String, parameters As List(Of DBQueryParameter)) As DbCommand
-        Dim cmd = DBFunc.GetCommand(partialQuery)
+        Dim cmd = DBFunc.GetDatabase.GetCommand(partialQuery)
         cmd.CommandText += " WHERE"
         Dim ParamString As String = ""
         Dim ValSeq As Integer = 1

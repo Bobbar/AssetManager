@@ -48,7 +48,7 @@ Public Class ViewHistoryForm
         SetWaitCursor(True, Me)
         Try
             Dim strQry = "Select * FROM " & HistoricalDevicesCols.TableName & " WHERE  " & HistoricalDevicesCols.HistoryEntryUID & " = '" & EntryUID & "'"
-            Using results As DataTable = DBFunc.DataTableFromQueryString(strQry)
+            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry)
                 HighlightChangedFields(results)
                 FillControls(results)
                 Show()
@@ -71,7 +71,7 @@ Public Class ViewHistoryForm
         Dim CurrentTimeStamp As Date = DirectCast(currentData.Rows(0).Item(HistoricalDevicesCols.ActionDateTime), Date)
         'Query for all rows with a timestamp older than the current historical entry.
         Dim Query As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.DeviceUID & " = '" & _DeviceGUID & "' AND " & HistoricalDevicesCols.ActionDateTime & " < '" & CurrentTimeStamp.ToString(strDBDateTimeFormat) & "' ORDER BY " & HistoricalDevicesCols.ActionDateTime & " DESC"
-        Using olderData = DBFunc.DataTableFromQueryString(Query)
+        Using olderData = DBFunc.GetDatabase.DataTableFromQueryString(Query)
             If olderData.Rows.Count > 0 Then
                 'Declare the current and previous DataRows.
                 Dim PreviousRow As DataRow = olderData.Rows(0)

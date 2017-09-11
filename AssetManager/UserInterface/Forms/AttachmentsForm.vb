@@ -328,50 +328,18 @@ Class AttachmentsForm
     End Function
 
     Private Sub InsertSQLAttachment(Attachment As Attachment)
-        Dim SQL As String
+        Dim InsertAttachmentParams As New List(Of DBParameter)
+        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FKey, Attachment.FolderGUID))
+        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileName, Attachment.FileName))
+        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileType, Attachment.Extension))
+        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileSize, Attachment.Filesize))
+        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileUID, Attachment.FileUID))
+        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileHash, Attachment.MD5))
         If TypeOf Attachment Is SibiAttachment Then
-            SQL = "INSERT INTO " & Attachment.AttachTable.TableName & " (" & Attachment.AttachTable.FKey & ",
-" & Attachment.AttachTable.FileName & ",
-" & Attachment.AttachTable.FileType & ",
-" & Attachment.AttachTable.FileSize & ",
-" & Attachment.AttachTable.FileUID & ",
-" & Attachment.AttachTable.FileHash & ",
-" & Attachment.AttachTable.Folder & ")
-VALUES(@" & Attachment.AttachTable.FKey & ",
-@" & Attachment.AttachTable.FileName & ",
-@" & Attachment.AttachTable.FileType & ",
-@" & Attachment.AttachTable.FileSize & ",
-@" & Attachment.AttachTable.FileUID & ",
-@" & Attachment.AttachTable.FileHash & ",
-@" & Attachment.AttachTable.Folder & ")"
-        Else
-            SQL = "INSERT INTO " & Attachment.AttachTable.TableName & " (" & Attachment.AttachTable.FKey & ",
-" & Attachment.AttachTable.FileName & ",
-" & Attachment.AttachTable.FileType & ",
-" & Attachment.AttachTable.FileSize & ",
-" & Attachment.AttachTable.FileUID & ",
-" & Attachment.AttachTable.FileHash & ")
-VALUES(@" & Attachment.AttachTable.FKey & ",
-@" & Attachment.AttachTable.FileName & ",
-@" & Attachment.AttachTable.FileType & ",
-@" & Attachment.AttachTable.FileSize & ",
-@" & Attachment.AttachTable.FileUID & ",
-@" & Attachment.AttachTable.FileHash & ")"
+            Dim SibiAttach = DirectCast(Attachment, SibiAttachment)
+            InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.Folder, SibiAttach.SelectedFolder))
         End If
-        Using LocalSQLComm As New MySqlComms, cmd As MySqlCommand = LocalSQLComm.ReturnMySqlCommand(SQL)
-            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FKey, Attachment.FolderGUID)
-            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileName, Attachment.FileName)
-            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileType, Attachment.Extension)
-            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileSize, Attachment.Filesize)
-            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileUID, Attachment.FileUID)
-            cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.FileHash, Attachment.MD5)
-            If TypeOf Attachment Is SibiAttachment Then
-                Dim SibiAttach = DirectCast(Attachment, SibiAttachment)
-                cmd.Parameters.AddWithValue("@" & Attachment.AttachTable.Folder, SibiAttach.SelectedFolder)
-            End If
-            cmd.ExecuteNonQuery()
-            cmd.Parameters.Clear()
-        End Using
+        DBFunc.GetDatabase.InsertFromParameters(Attachment.AttachTable.TableName, InsertAttachmentParams)
     End Sub
 
     Private Sub MakeDirectory(FolderGUID As String)

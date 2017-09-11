@@ -95,7 +95,7 @@ Module SecurityFunctions
     Public Sub GetUserAccess()
         Try
             Dim strQRY = "SELECT * FROM " & UsersCols.TableName & " WHERE " & UsersCols.UserName & "='" & strLocalUser & "' LIMIT 1"
-            Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
+            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
                 If results.Rows.Count > 0 Then
                     Dim r As DataRow = results.Rows(0)
                     LocalUserAccess.UserName = r.Item(UsersCols.UserName).ToString
@@ -115,7 +115,7 @@ Module SecurityFunctions
         Try
             Dim strQRY = "SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & ""
             Dim rows As Integer = 0
-            Using results As DataTable = DBFunc.DataTableFromQueryString(strQRY)
+            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
                 ReDim AccessGroups(results.Rows.Count - 1)
                 For Each r As DataRow In results.Rows
                     AccessGroups(rows).Level = CInt(r.Item(SecurityCols.AccessLevel))

@@ -24,13 +24,13 @@ Namespace AdvancedSearch
 
         Public Function GetColumns(table As String) As List(Of String)
             Dim colList As New List(Of String)
-            Using comms As New MySqlComms
-                Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & ServerInfo.CurrentDataBase & "' AND TABLE_NAME = '" & table & "'"
-                Dim results = comms.ReturnMySqlTable(SQLQry)
+            ' Using comms As New MySqlComms
+            Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & ServerInfo.CurrentDataBase & "' AND TABLE_NAME = '" & table & "'"
+                Dim results = DBFunc.GetDatabase.DataTableFromQueryString(SQLQry) 'comms.ReturnMySqlTable(SQLQry)
                 For Each row As DataRow In results.Rows
                     colList.Add(row.Item("COLUMN_NAME").ToString)
                 Next
-            End Using
+            '  End Using
             Return colList
         End Function
 

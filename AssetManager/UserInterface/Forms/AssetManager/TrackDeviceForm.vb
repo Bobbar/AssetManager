@@ -124,40 +124,24 @@ Public Class TrackDeviceForm
             If Not GetCheckData() Then Exit Sub
             SetWaitCursor(True, Me)
             Dim rows As Integer
-            Dim strSQLQry1 = "UPDATE " & DevicesCols.TableName & " SET " & DevicesCols.CheckedOut & "='1' WHERE " & DevicesCols.DeviceUID & "='" & CurrentTrackingDevice.GUID & "'"
-            Using SQLComms As New MySqlComms, cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(strSQLQry1)
-                'Dim cmd As MySqlCommand = SQLComms.Return_SQLCommand(strSQLQry1)
-                rows = rows + cmd.ExecuteNonQuery()
-                Dim strSqlQry2 = "INSERT INTO " & TrackablesCols.TableName & "
-(" & TrackablesCols.CheckType & ",
-" & TrackablesCols.CheckoutTime & ",
-" & TrackablesCols.DueBackDate & ",
-" & TrackablesCols.CheckoutUser & ",
-" & TrackablesCols.UseLocation & ",
-" & TrackablesCols.Notes & ",
-" & TrackablesCols.DeviceUID & ")
-VALUES(@" & TrackablesCols.CheckType & ",
-@" & TrackablesCols.CheckoutTime & ",
-@" & TrackablesCols.DueBackDate & ",
-@" & TrackablesCols.CheckoutUser & ",
-@" & TrackablesCols.UseLocation & ",
-@" & TrackablesCols.Notes & ",
-@" & TrackablesCols.DeviceUID & ")"
-                cmd.CommandText = strSqlQry2
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckType, CheckType.Checkout)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckoutTime, CheckData.CheckoutTime)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.DueBackDate, CheckData.DueBackTime)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckoutUser, CheckData.CheckoutUser)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.UseLocation, CheckData.UseLocation)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.Notes, CheckData.UseReason)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.DeviceUID, CheckData.DeviceGUID)
-                rows = rows + cmd.ExecuteNonQuery()
-                If rows = 2 Then
-                    Message("Device Checked Out!", vbOKOnly + vbInformation, "Success", Me)
-                Else
-                    Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
-                End If
-            End Using
+            rows += DBFunc.GetDatabase.UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID)
+
+            Dim CheckOutParams As New List(Of DBParameter)
+            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckType, CheckType.Checkout))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutTime, CheckData.CheckoutTime))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.DueBackDate, CheckData.DueBackTime))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutUser, CheckData.CheckoutUser))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.Notes, CheckData.UseReason))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID))
+            rows += DBFunc.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams)
+
+            If rows = 2 Then
+                Message("Device Checked Out!", vbOKOnly + vbInformation, "Success", Me)
+            Else
+                Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
+            End If
+
             MyParent.LoadDevice(CurrentTrackingDevice.GUID)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -171,45 +155,26 @@ VALUES(@" & TrackablesCols.CheckType & ",
             If Not GetCheckData() Then Exit Sub
             SetWaitCursor(True, Me)
             Dim rows As Integer
-            Dim strSQLQry1 = "UPDATE " & DevicesCols.TableName & " SET " & DevicesCols.CheckedOut & "='0' WHERE " & DevicesCols.DeviceUID & "='" & CurrentTrackingDevice.GUID & "'"
-            Using SQLComms As New MySqlComms, cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(strSQLQry1)
-                rows = rows + cmd.ExecuteNonQuery()
-                Dim strSqlQry2 = "INSERT INTO " & TrackablesCols.TableName & "
-(" & TrackablesCols.CheckType & ",
-" & TrackablesCols.CheckoutTime & ",
-" & TrackablesCols.DueBackDate & ",
-" & TrackablesCols.CheckinTime & ",
-" & TrackablesCols.CheckoutUser & ",
-" & TrackablesCols.CheckinUser & ",
-" & TrackablesCols.UseLocation & ",
-" & TrackablesCols.Notes & ",
-" & TrackablesCols.DeviceUID & ")
-VALUES (@" & TrackablesCols.CheckType & ",
-@" & TrackablesCols.CheckoutTime & ",
-@" & TrackablesCols.DueBackDate & ",
-@" & TrackablesCols.CheckinTime & ",
-@" & TrackablesCols.CheckoutUser & ",
-@" & TrackablesCols.CheckinUser & ",
-@" & TrackablesCols.UseLocation & ",
-@" & TrackablesCols.Notes & ",
-@" & TrackablesCols.DeviceUID & ")"
-                cmd.CommandText = strSqlQry2
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckType, CheckType.Checkin)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckoutTime, CheckData.CheckoutTime)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.DueBackDate, CheckData.DueBackTime)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckinTime, CheckData.CheckinTime)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckoutUser, CheckData.CheckoutUser)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.CheckinUser, CheckData.CheckinUser)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.UseLocation, CheckData.UseLocation)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.Notes, CheckData.CheckinNotes)
-                cmd.Parameters.AddWithValue("@" & TrackablesCols.DeviceUID, CheckData.DeviceGUID)
-                rows = rows + cmd.ExecuteNonQuery()
-                If rows = 2 Then
-                    Message("Device Checked In!", vbOKOnly + vbInformation, "Success", Me)
-                Else
-                    Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
-                End If
-            End Using
+            rows += DBFunc.GetDatabase.UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID)
+
+            Dim CheckOutParams As New List(Of DBParameter)
+            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckType, CheckType.Checkin))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutTime, CheckData.CheckoutTime))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.DueBackDate, CheckData.DueBackTime))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckinTime, CheckData.CheckinTime))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutUser, CheckData.CheckoutUser))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckinUser, CheckData.CheckinUser))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.Notes, CheckData.UseReason))
+            CheckOutParams.Add(New DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID))
+            rows += DBFunc.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams)
+
+            If rows = 2 Then
+                Message("Device Checked In!", vbOKOnly + vbInformation, "Success", Me)
+            Else
+                Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
+            End If
+
             MyParent.LoadDevice(CurrentTrackingDevice.GUID)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

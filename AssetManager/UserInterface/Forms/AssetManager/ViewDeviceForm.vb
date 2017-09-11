@@ -91,12 +91,14 @@ Public Class ViewDeviceForm
             Dim rows As Integer = 0
             Dim SelectQry As String = "SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & CurrentViewDevice.GUID & "'"
             Dim InsertQry As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " LIMIT 0"
-            Using SQLComms As New MySqlComms,
-                    UpdateAdapter = SQLComms.ReturnMySqlAdapter(SelectQry),
-                    InsertAdapter = SQLComms.ReturnMySqlAdapter(InsertQry)
-                rows += UpdateAdapter.Update(GetUpdateTable(UpdateAdapter))
-                rows += InsertAdapter.Update(GetInsertTable(InsertAdapter, UpdateInfo))
-            End Using
+            rows += DBFunc.GetDatabase.UpdateTable(SelectQry, GetUpdateTable(SelectQry))
+            rows += DBFunc.GetDatabase.UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo))
+            'Using SQLComms As New MySqlComms,
+            '        UpdateAdapter = SQLComms.ReturnMySqlAdapter(SelectQry),
+            '        InsertAdapter = SQLComms.ReturnMySqlAdapter(InsertQry)
+            'rows += UpdateAdapter.Update(GetUpdateTable(UpdateAdapter))
+            '    rows += InsertAdapter.Update(GetInsertTable(InsertAdapter, UpdateInfo))
+            'End Using
             If rows = 2 Then
                 LoadDevice(CurrentViewDevice.GUID)
                 Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
@@ -138,7 +140,7 @@ Public Class ViewDeviceForm
 
     Private Sub LoadTracking(strGUID As String)
         Dim strQry = "Select * FROM " & TrackablesCols.TableName & ", " & DevicesCols.TableName & " WHERE " & TrackablesCols.DeviceUID & " = " & DevicesCols.DeviceUID & " And " & TrackablesCols.DeviceUID & " = '" & strGUID & "' ORDER BY " & TrackablesCols.DateStamp & " DESC"
-        Using Results As DataTable = DBFunc.DataTableFromQueryString(strQry)
+        Using Results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry)
             If Results.Rows.Count > 0 Then
                 CollectCurrentTracking(Results)
                 SendToTrackGrid(TrackingGrid, Results)
@@ -613,8 +615,8 @@ Public Class ViewDeviceForm
         Return " - " + Device.CurrentUser + " - " + Device.AssetTag + " - " + Device.Description
     End Function
 
-    Private Function GetInsertTable(Adapter As MySqlDataAdapter, UpdateInfo As DeviceUpdateInfoStruct) As DataTable
-        Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
+    Private Function GetInsertTable(selectQuery As String, UpdateInfo As DeviceUpdateInfoStruct) As DataTable
+        Dim tmpTable = DataParser.ReturnInsertTable(selectQuery)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         DBRow(HistoricalDevicesCols.ChangeType) = UpdateInfo.ChangeType
@@ -624,8 +626,8 @@ Public Class ViewDeviceForm
         Return tmpTable
     End Function
 
-    Private Function GetUpdateTable(Adapter As MySqlDataAdapter) As DataTable
-        Dim tmpTable = DataParser.ReturnUpdateTable(Adapter.SelectCommand.CommandText)
+    Private Function GetUpdateTable(selectQuery As String) As DataTable
+        Dim tmpTable = DataParser.ReturnUpdateTable(selectQuery)
         Dim DBRow = tmpTable.Rows(0)
         'Add Add'l info
         If MunisUser.Number IsNot Nothing Then
@@ -1016,8 +1018,8 @@ Public Class ViewDeviceForm
 
     Private Function LoadHistoryAndFields(ByVal DeviceUID As String) As Boolean
         Try
-            Using DeviceResults = DBFunc.DataTableFromQueryString("Select * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & " = '" & DeviceUID & "'"),
-                    HistoricalResults = DBFunc.DataTableFromQueryString("Select * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & HistoricalDevicesCols.ActionDateTime & " DESC")
+            Using DeviceResults = DBFunc.GetDatabase.DataTableFromQueryString("Select * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & " = '" & DeviceUID & "'"),
+                    HistoricalResults = DBFunc.GetDatabase.DataTableFromQueryString("Select * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & HistoricalDevicesCols.ActionDateTime & " DESC")
                 If DeviceResults.Rows.Count < 1 Then
                     CloseChildren(Me)
                     CurrentViewDevice = Nothing

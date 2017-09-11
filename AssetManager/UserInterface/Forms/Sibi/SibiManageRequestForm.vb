@@ -88,8 +88,8 @@ Public Class SibiManageRequestForm
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & "='" & RequestUID & "' ORDER BY " & SibiRequestItemsCols.Timestamp
-            Dim RequestResults As DataTable = DBFunc.DataTableFromQueryString(strRequestQRY)
-            Dim RequestItemsResults As DataTable = DBFunc.DataTableFromQueryString(strRequestItemsQRY)
+            Dim RequestResults As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strRequestQRY)
+            Dim RequestItemsResults As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strRequestItemsQRY)
             RequestResults.TableName = SibiRequestCols.TableName
             RequestItemsResults.TableName = SibiRequestItemsCols.TableName
             CurrentHash = GetHash(RequestResults, RequestItemsResults)
@@ -153,23 +153,14 @@ Public Class SibiManageRequestForm
     Private Function AddNewNote(RequestUID As String, Note As String) As Boolean
         Dim strNoteUID As String = Guid.NewGuid.ToString
         Try
-            Dim strAddNoteQry As String = "INSERT INTO " & SibiNotesCols.TableName & "
-(" & SibiNotesCols.RequestUID & ",
-" & SibiNotesCols.NoteUID & ",
-" & SibiNotesCols.Note & ")
-VALUES
-(@" & SibiNotesCols.RequestUID & ",
-@" & SibiNotesCols.NoteUID & ",
-@" & SibiNotesCols.Note & ")"
-            Using SQLComms As New MySqlComms, cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(strAddNoteQry)
-                cmd.Parameters.AddWithValue("@" & SibiNotesCols.RequestUID, RequestUID)
-                cmd.Parameters.AddWithValue("@" & SibiNotesCols.NoteUID, strNoteUID)
-                cmd.Parameters.AddWithValue("@" & SibiNotesCols.Note, Note)
-                If cmd.ExecuteNonQuery() > 0 Then
-                    Return True
-                End If
-                Return False
-            End Using
+            Dim NewNoteParams As New List(Of DBParameter)
+            NewNoteParams.Add(New DBParameter(SibiNotesCols.RequestUID, RequestUID))
+            NewNoteParams.Add(New DBParameter(SibiNotesCols.NoteUID, strNoteUID))
+            NewNoteParams.Add(New DBParameter(SibiNotesCols.Note, Note))
+            If DBFunc.GetDatabase.InsertFromParameters(SibiNotesCols.TableName, NewNoteParams) > 0 Then
+                Return True
+            End If
+            Return False
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
@@ -183,14 +174,15 @@ VALUES
         Try
             Dim InsertRequestQry As String = "SELECT * FROM " & SibiRequestCols.TableName & " LIMIT 0"
             Dim InsertRequestItemsQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0"
-            Using SQLComms As New MySqlComms,
-                cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(),
-                InsertAdapter = SQLComms.ReturnMySqlAdapter(InsertRequestQry),
-                InsertItemsAdapter = SQLComms.ReturnMySqlAdapter(InsertRequestItemsQry)
-
-                InsertAdapter.Update(GetInsertTable(InsertAdapter, CurrentRequest.GUID))
-                InsertItemsAdapter.Update(RequestData.RequestItems)
-            End Using
+            DBFunc.GetDatabase.UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID))
+            DBFunc.GetDatabase.UpdateTable(InsertRequestItemsQry, RequestData.RequestItems)
+            'Using SQLComms As New MySqlComms,
+            '    cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(),
+            '    InsertAdapter = SQLComms.ReturnMySqlAdapter(InsertRequestQry),
+            '    InsertItemsAdapter = SQLComms.ReturnMySqlAdapter(InsertRequestItemsQry)
+            '    InsertAdapter.Update(GetInsertTable(InsertAdapter, CurrentRequest.GUID))
+            'InsertItemsAdapter.Update(RequestData.RequestItems)
+            'End Using
             pnlCreate.Visible = False
             Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
             If TypeOf Me.Tag Is SibiMainForm Then
@@ -643,9 +635,9 @@ VALUES
         PrevWindowState = f.WindowState
     End Sub
 
-    Private Function GetInsertTable(Adapter As MySqlDataAdapter, UID As String) As DataTable
+    Private Function GetInsertTable(selectQuery As String, UID As String) As DataTable
         Try
-            Dim tmpTable = DataParser.ReturnInsertTable(Adapter.SelectCommand.CommandText)
+            Dim tmpTable = DataParser.ReturnInsertTable(selectQuery)
             Dim DBRow = tmpTable.Rows(0)
             'Add Add'l info
             DBRow(SibiRequestCols.UID) = UID
@@ -656,9 +648,9 @@ VALUES
         End Try
     End Function
 
-    Private Function GetUpdateTable(Adapter As MySqlDataAdapter) As DataTable
+    Private Function GetUpdateTable(selectQuery As String) As DataTable
         Try
-            Dim tmpTable = DataParser.ReturnUpdateTable(Adapter.SelectCommand.CommandText)
+            Dim tmpTable = DataParser.ReturnUpdateTable(selectQuery)
             'Add Add'l info
             Return tmpTable
         Catch ex As Exception
@@ -719,7 +711,7 @@ VALUES
     Private Sub LoadNotes(RequestUID As String)
         Try
             Dim strPullNotesQry As String = "SELECT * FROM " & SibiNotesCols.TableName & " WHERE " & SibiNotesCols.RequestUID & "='" & RequestUID & "' ORDER BY " & SibiNotesCols.DateStamp & " DESC"
-            Using table As New DataTable, Results As DataTable = DBFunc.DataTableFromQueryString(strPullNotesQry)
+            Using table As New DataTable, Results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strPullNotesQry)
                 Dim intPreviewChars As Integer = 50
                 table.Columns.Add("Date Stamp")
                 table.Columns.Add("Preview")
@@ -1205,12 +1197,16 @@ VALUES
             If RequestData.RequestItems Is Nothing Then Exit Sub
             Dim RequestUpdateQry As String = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & " = '" & CurrentRequest.GUID & "'"
             Dim RequestItemsUpdateQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & " = '" & CurrentRequest.GUID & "'"
-            Using SQLComms As New MySqlComms,
-               RequestUpdateAdapter = SQLComms.ReturnMySqlAdapter(RequestUpdateQry),
-               RequestItemsUpdateAdapter = SQLComms.ReturnMySqlAdapter(RequestItemsUpdateQry)
-                RequestUpdateAdapter.Update(GetUpdateTable(RequestUpdateAdapter))
-                RequestItemsUpdateAdapter.Update(RequestData.RequestItems)
-            End Using
+
+            DBFunc.GetDatabase.UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry))
+            DBFunc.GetDatabase.UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems)
+
+            'Using SQLComms As New MySqlComms,
+            '   RequestUpdateAdapter = SQLComms.ReturnMySqlAdapter(RequestUpdateQry),
+            '   RequestItemsUpdateAdapter = SQLComms.ReturnMySqlAdapter(RequestItemsUpdateQry)
+            'RequestUpdateAdapter.Update(GetUpdateTable(RequestUpdateAdapter))
+            '    RequestItemsUpdateAdapter.Update(RequestData.RequestItems)
+            'End Using
             If TypeOf Me.Tag Is SibiMainForm Then
                 Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
                 ParentForm.RefreshResults()

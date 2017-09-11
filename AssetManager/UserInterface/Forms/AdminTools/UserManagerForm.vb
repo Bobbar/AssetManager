@@ -4,10 +4,7 @@ Imports MySql.Data.MySqlClient
 Public Class UserManagerForm
     Private ModuleIndex As New List(Of AccessGroupStruct)
     Private CurrentUser As LocalUserInfoStruct
-    Private DataBinder As New BindingSource
-    Private Qry As String = "SELECT * FROM " & UsersCols.TableName
-    Private SQLComms As New MySqlComms
-    Private myAdapter As MySqlDataAdapter = SQLComms.ReturnMySqlAdapter(Qry)
+    Private UserDataQuery As String = "SELECT * FROM " & UsersCols.TableName
     Private SelectedRow As Integer
 
     Sub New(parentForm As Form)
@@ -22,7 +19,6 @@ Public Class UserManagerForm
     End Sub
 
     Private Sub LoadUserData()
-        UserGrid.DataSource = DataBinder
         ListUsers()
         ModuleIndex = AssetFunc.BuildModuleIndex()
         LoadModuleBoxes()
@@ -34,11 +30,7 @@ Public Class UserManagerForm
     End Sub
 
     Private Sub SendToGrid()
-        Dim cmdBuilder As New MySqlCommandBuilder(myAdapter)
-        Dim table As New DataTable
-        table.Locale = System.Globalization.CultureInfo.InvariantCulture
-        myAdapter.Fill(table)
-        DataBinder.DataSource = table
+        UserGrid.DataSource = DBFunc.GetDatabase.DataTableFromQueryString(UserDataQuery)
         UserGrid.Columns(UsersCols.UID).ReadOnly = True
     End Sub
 
@@ -108,7 +100,7 @@ Public Class UserManagerForm
             If blah = DialogResult.Yes Then
                 UserGrid.EndEdit()
                 AddGUIDs()
-                myAdapter.Update(CType(DataBinder.DataSource, DataTable))
+                DBFunc.GetDatabase.UpdateTable(UserDataQuery, DirectCast(UserGrid.DataSource, DataTable))
                 ListUsers()
                 GetUserAccess()
             Else
@@ -162,8 +154,4 @@ Public Class UserManagerForm
         LoadUserData()
     End Sub
 
-    Private Sub UserManagerForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
-        myAdapter.Dispose()
-        SQLComms.Dispose()
-    End Sub
 End Class
