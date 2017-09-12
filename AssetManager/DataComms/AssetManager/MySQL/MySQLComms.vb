@@ -195,27 +195,26 @@ Public Class MySQLDatabase
     End Function
 
     Public Function GetCommandFromParams(query As String, params As List(Of DBQueryParameter)) As DbCommand Implements IDataBase.GetCommandFromParams
-        Using cmd = New MySqlCommand
-            Dim ParamQuery As String = ""
-            For Each param In params
-                If TypeOf param.Value Is Boolean Then
+        Dim cmd = New MySqlCommand
+        Dim ParamQuery As String = ""
+        For Each param In params
+            If TypeOf param.Value Is Boolean Then
+                ParamQuery += " " & param.FieldName & "=@" & param.FieldName
+                cmd.Parameters.AddWithValue("@" & param.FieldName, Convert.ToInt32(param.Value))
+            Else
+                If param.IsExact Then
                     ParamQuery += " " & param.FieldName & "=@" & param.FieldName
-                    cmd.Parameters.AddWithValue("@" & param.FieldName, Convert.ToInt32(param.Value))
+                    cmd.Parameters.AddWithValue("@" & param.FieldName, param.Value)
                 Else
-                    If param.IsExact Then
-                        ParamQuery += " " & param.FieldName & "=@" & param.FieldName
-                        cmd.Parameters.AddWithValue("@" & param.FieldName, param.Value)
-                    Else
-                        ParamQuery += " " & param.FieldName & " LIKE @" & param.FieldName
-                        cmd.Parameters.AddWithValue("@" & param.FieldName, "%" & param.Value.ToString & "%")
-                    End If
+                    ParamQuery += " " & param.FieldName & " LIKE @" & param.FieldName
+                    cmd.Parameters.AddWithValue("@" & param.FieldName, "%" & param.Value.ToString & "%")
                 End If
-                'Add operator if we are not on the last entry
-                If params.IndexOf(param) < params.Count - 1 Then ParamQuery += " " & param.OperatorString
-            Next
-            cmd.CommandText = query & ParamQuery
-            Return cmd
-        End Using
+            End If
+            'Add operator if we are not on the last entry
+            If params.IndexOf(param) < params.Count - 1 Then ParamQuery += " " & param.OperatorString
+        Next
+        cmd.CommandText = query & ParamQuery
+        Return cmd
     End Function
 
 
