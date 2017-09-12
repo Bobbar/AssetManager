@@ -1,11 +1,14 @@
-﻿Imports System.Data.SQLite
+﻿Imports System.Data.Common
+Imports System.Data.SQLite
 Imports System.IO
 
-Public Class SqliteComms : Implements IDisposable
+Public Class SQLiteDatabase
+    Implements IDisposable
+    Implements IDataBase
 
 #Region "Fields"
     Private Const EncSQLitePass As String = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU"
-    Public Property Connection As SQLiteConnection
+    Private Property Connection As SQLiteConnection
     Private ConnectionException As Exception
     Private SQLiteConnectString As String = "Data Source=" & strSQLitePath & ";Password=" & DecodePassword(EncSQLitePass)
 
@@ -16,8 +19,6 @@ Public Class SqliteComms : Implements IDisposable
     Sub New(Optional openConnectionOnCall As Boolean = True)
         If openConnectionOnCall Then
             If Not OpenConnection() Then
-                Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
-                Dispose()
             End If
         End If
     End Sub
@@ -26,18 +27,42 @@ Public Class SqliteComms : Implements IDisposable
 
 #Region "Methods"
 
-    Public Function CheckLocalCacheHash() As Boolean
-        Dim RemoteHashes As New List(Of String)
-        RemoteHashes = RemoteTableHashList()
-        Return CompareTableHashes(RemoteHashes, SQLiteTableHashes)
-    End Function
-
+#Region "Connection Methods"
     Public Sub CloseConnection()
         If Connection IsNot Nothing Then
             Connection.Close()
             Connection.Dispose()
         End If
     End Sub
+
+    Public Function NewConnection() As SQLiteConnection
+        Return New SQLiteConnection(SQLiteConnectString)
+    End Function
+
+    Public Function OpenConnection() As Boolean
+        If Connection Is Nothing Then
+            Connection = NewConnection()
+        End If
+        If Connection.State <> ConnectionState.Open Then
+            CloseConnection()
+            Connection = NewConnection()
+            Connection.Open()
+        End If
+        If Connection.State = ConnectionState.Open Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+#End Region
+
+#Region "CacheManagement"
+
+    Public Function CheckLocalCacheHash() As Boolean
+        Dim RemoteHashes As New List(Of String)
+        RemoteHashes = RemoteTableHashList()
+        Return CompareTableHashes(RemoteHashes, SQLiteTableHashes)
+    End Function
 
     Public Function CompareTableHashes(tableHashesA As List(Of String), tableHashesB As List(Of String)) As Boolean
         Try
@@ -58,47 +83,6 @@ Public Class SqliteComms : Implements IDisposable
             cmd.Connection = Connection
             Return CInt(cmd.ExecuteScalar)
         End Using
-    End Function
-
-    Public Function LocalTableHashList() As List(Of String)
-        Try
-            Dim hashList As New List(Of String)
-            For Each table In TableList()
-                Using results = ToStringTable(Return_SQLTable("SELECT * FROM " & table))
-                    results.TableName = table
-                    hashList.Add(GetHashOfTable(results))
-                End Using
-            Next
-            Return hashList
-        Catch ex As Exception
-            Return Nothing
-        End Try
-    End Function
-
-    Public Function NewConnection() As SQLiteConnection
-        Return New SQLiteConnection(SQLiteConnectString)
-    End Function
-
-    Public Function OpenConnection() As Boolean
-        Try
-            If Connection Is Nothing Then
-                Connection = NewConnection()
-            End If
-            If Connection.State <> ConnectionState.Open Then
-                CloseConnection()
-                Connection = NewConnection()
-                Connection.Open()
-            End If
-            If Connection.State = ConnectionState.Open Then
-                Return True
-            Else
-                Return False
-            End If
-        Catch ex As Exception
-            ConnectionException = ex
-            Debug.Print(ex.Message)
-            Return False
-        End Try
     End Function
 
     Public Sub RefreshSqlCache()
@@ -133,11 +117,26 @@ Public Class SqliteComms : Implements IDisposable
         End Try
     End Sub
 
+    Public Function LocalTableHashList() As List(Of String)
+        Try
+            Dim hashList As New List(Of String)
+            For Each table In TableList()
+                Using results = ToStringTable(DataTableFromQueryString("SELECT * FROM " & table))
+                    results.TableName = table
+                    hashList.Add(GetHashOfTable(results))
+                End Using
+            Next
+            Return hashList
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
     Public Function RemoteTableHashList() As List(Of String)
         Dim hashList As New List(Of String)
-        Using MySQLConn As New MySqlComms
+        Using MySQLDB As New MySQLDatabase
             For Each table In TableList()
-                Using results = ToStringTable(MySQLConn.ReturnMySqlTable("SELECT * FROM " & table))
+                Using results = ToStringTable(MySQLDB.DataTableFromQueryString("SELECT * FROM " & table))
                     results.TableName = table
                     hashList.Add(GetHashOfTable(results))
                 End Using
@@ -230,7 +229,7 @@ Public Class SqliteComms : Implements IDisposable
 
     Private Function GetRemoteDBTable(tableName As String) As DataTable
         Dim qry As String = "SELECT * FROM " & tableName
-        Using conn As New MySqlComms, results As New DataTable, adapter = conn.ReturnMySqlAdapter(qry)
+        Using MySQLDB As New MySQLDatabase, results As New DataTable, conn = MySQLDB.NewConnection, adapter = MySQLDB.ReturnMySqlAdapter(qry, conn)
             adapter.AcceptChangesDuringFill = False
             adapter.Fill(results)
             results.TableName = tableName
@@ -240,7 +239,7 @@ Public Class SqliteComms : Implements IDisposable
 
     Private Function GetTableCreateStatement(tableName As String) As String
         Dim qry As String = "SHOW CREATE TABLE " & tableName
-        Using conn As New MySqlComms, results = conn.ReturnMySqlTable(qry)
+        Using MySQLDB As New MySQLDatabase, results = MySQLDB.DataTableFromQueryString(qry)
             Return results.Rows(0).Item(1).ToString
         End Using
     End Function
@@ -254,14 +253,6 @@ Public Class SqliteComms : Implements IDisposable
         End Using
     End Sub
 
-    Private Function Return_SQLTable(SqlQry As String) As DataTable
-        Using da As New SQLiteDataAdapter, tmpTable As New DataTable
-            da.SelectCommand = New SQLiteCommand(SqlQry)
-            da.SelectCommand.Connection = Connection
-            da.Fill(tmpTable)
-            Return tmpTable
-        End Using
-    End Function
     Private Function TableList() As List(Of String)
         Dim list As New List(Of String)
         list.Add(DevicesCols.TableName)
@@ -277,6 +268,7 @@ Public Class SqliteComms : Implements IDisposable
         list.Add(UsersCols.TableName)
         Return list
     End Function
+
     Private Function ToStringTable(ByRef table As DataTable) As DataTable
         Dim tmpTable As DataTable = table.Clone
         For i = 0 To tmpTable.Columns.Count - 1
@@ -288,6 +280,97 @@ Public Class SqliteComms : Implements IDisposable
         table.Dispose()
         Return tmpTable
     End Function
+#End Region
+
+
+
+#Region "IDataBase"
+    Public Function DataTableFromCommand(command As DbCommand) As DataTable Implements IDataBase.DataTableFromCommand
+        Using da As DbDataAdapter = New SQLiteDataAdapter, results As New DataTable, conn = NewConnection()
+            command.Connection = conn
+            da.SelectCommand = command
+            da.Fill(results)
+            command.Dispose()
+            Return results
+        End Using
+    End Function
+
+    Public Function DataTableFromQueryString(query As String) As DataTable Implements IDataBase.DataTableFromQueryString
+        Using results As New DataTable, da As DbDataAdapter = New SQLiteDataAdapter, cmd = New SQLiteCommand(query), conn = NewConnection()
+            cmd.Connection = conn
+            da.SelectCommand = cmd
+            da.Fill(results)
+            Return results
+            da.SelectCommand.Connection.Dispose()
+        End Using
+    End Function
+
+    Public Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable Implements IDataBase.DataTableFromParameters
+        Using conn = NewConnection(), cmd As New SQLiteCommand, da = New SQLiteDataAdapter(cmd), results As New DataTable
+            cmd.Connection = conn
+            'Build query from params
+            Dim ParamQuery As String = ""
+            For Each param In params
+                If TypeOf param.Value Is Boolean Then
+                    ParamQuery += " " & param.FieldName & "=@" & param.FieldName
+                    cmd.Parameters.AddWithValue("@" & param.FieldName, Convert.ToInt32(param.Value))
+                Else
+                    If param.IsExact Then
+                        ParamQuery += " " & param.FieldName & "=@" & param.FieldName
+                        cmd.Parameters.AddWithValue("@" & param.FieldName, param.Value)
+                    Else
+                        ParamQuery += " " & param.FieldName & " LIKE @" & param.FieldName
+                        cmd.Parameters.AddWithValue("@" & param.FieldName, "%" & param.Value.ToString & "%")
+                    End If
+                End If
+                'Add operator if we are not on the last entry
+                If params.IndexOf(param) < params.Count - 1 Then ParamQuery += " " & param.OperatorString
+            Next
+            cmd.CommandText = query & ParamQuery
+            da.Fill(results)
+            Return results
+        End Using
+    End Function
+
+    Public Function InsertFromParameters(query As String, params As List(Of DBParameter)) As Integer Implements IDataBase.InsertFromParameters
+        Throw New NotImplementedException()
+    End Function
+
+    Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer Implements IDataBase.UpdateValue
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function ExecuteQuery(query As String) As Integer Implements IDataBase.ExecuteQuery
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function ExecuteScalarFromCommand(command As DbCommand) As Object Implements IDataBase.ExecuteScalarFromCommand
+        Try
+            Using conn = NewConnection()
+                command.Connection = conn
+                command.Connection.Open()
+                Return command.ExecuteScalar
+            End Using
+        Finally
+            command.Dispose()
+        End Try
+    End Function
+
+    Public Function ExecuteScalarFromQueryString(query As String) As Object Implements IDataBase.ExecuteScalarFromQueryString
+        Using conn = NewConnection(), cmd As New SQLiteCommand(query, conn)
+            cmd.Connection.Open()
+            Return cmd.ExecuteScalar
+        End Using
+    End Function
+
+    Public Function GetCommand(Optional qryString As String = "") As DbCommand Implements IDataBase.GetCommand
+        Return New SQLiteCommand(qryString)
+    End Function
+
+    Function UpdateTable(selectQuery As String, table As DataTable) As Integer Implements IDataBase.UpdateTable
+        Throw New NotImplementedException()
+    End Function
+#End Region
 
 #End Region
 

@@ -16,10 +16,12 @@ Namespace My
             SplashScreenForm.Show()
             Logger("Starting AssetManager...")
             Status("Checking Server Connection...")
-            Using SQLComms As New MySqlComms(False)
-                ConnectionSuccessful = SQLComms.OpenConnection
-                'check connection
-            End Using
+
+            'check connection
+            ConnectionSuccessful = CheckConnection()
+
+            ServerInfo.ServerPinging = ConnectionSuccessful
+
             Status("Checking Local Cache...")
             If ConnectionSuccessful Then
                 If Not VerifyCacheHashes() Then
@@ -49,6 +51,16 @@ Namespace My
             End If
             Status("Ready!")
         End Sub
+        Private Function CheckConnection() As Boolean
+            Try
+                Using SQLComms As New MySQLDatabase(), conn = SQLComms.NewConnection
+                    Return SQLComms.OpenConnection(conn, True)
+                End Using
+            Catch
+                Return False
+            End Try
+        End Function
+
 
         Private Sub MyApplication_UnhandledException(sender As Object, e As UnhandledExceptionEventArgs) Handles Me.UnhandledException
             ErrHandle(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod())

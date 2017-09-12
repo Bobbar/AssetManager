@@ -1,6 +1,10 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.Data.Common
 
-Public Class MySqlComms : Implements IDisposable
+Public Class MySQLDatabase
+    Implements IDisposable
+    Implements IDataBase
+
 
 #Region "IDisposable Support"
 
@@ -19,7 +23,6 @@ Public Class MySqlComms : Implements IDisposable
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
-                CloseConnection()
                 MySQLConnectString = vbNullString
             End If
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
@@ -38,11 +41,9 @@ Public Class MySqlComms : Implements IDisposable
 
 #Region "Fields"
 
-    Public Property Connection As MySqlConnection
     Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
     Private Const strDatabase As String = "asset_manager"
     Private Const strTestDatabase As String = "test_db"
-    Private ConnectionException As Exception
     Private MySQLConnectString As String = "server=" & ServerInfo.MySQLServerIP & ";uid=asset_mgr_usr;pwd=" & DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database="
 
 #End Region
@@ -50,93 +51,39 @@ Public Class MySqlComms : Implements IDisposable
 #Region "Constructors"
 
     Sub New()
-        If ServerInfo.ServerPinging Then
-            If Not OpenConnection() Then
-                Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
-                Dispose()
-            End If
-        Else
-            Throw New NoPingException
-            '  Dispose()
-        End If
-    End Sub
 
-    Sub New(openConnectionOnCall As Boolean)
-        If openConnectionOnCall Then
-            If Not OpenConnection(openConnectionOnCall) Then
-                Throw ConnectionException 'If cannot connect, collect the exact exception and pass it to the referencing object
-                Dispose()
-            End If
-        Else
-        End If
     End Sub
 
 #End Region
 
 #Region "Methods"
 
-    Public Sub CloseConnection()
-        If Connection IsNot Nothing Then
-            Connection.Close()
-            Connection.Dispose()
-        End If
-
-    End Sub
-
     Public Function NewConnection(Optional overrideNoPing As Boolean = False) As MySqlConnection
-        If ServerInfo.ServerPinging Or overrideNoPing Then
-            Return New MySqlConnection(GetConnectString)
-        Else
-            Throw New NoPingException
-        End If
+        Return New MySqlConnection(GetConnectString)
     End Function
 
-    Public Function OpenConnection(Optional overrideNoPing As Boolean = False) As Boolean
-        Try
-            If Connection Is Nothing Then
-                Connection = NewConnection(overrideNoPing)
-                Connection.Open()
-            End If
-            If Connection.State <> ConnectionState.Open Then
-                CloseConnection()
-                Connection = NewConnection(overrideNoPing)
-                Connection.Open()
-            End If
-            If Connection.State = ConnectionState.Open Then
-                Return True
-            Else
+    Public Function OpenConnection(connection As MySqlConnection, Optional overrideNoPing As Boolean = False) As Boolean
+        If overrideNoPing Then
+            'open connection no matter what
+        Else
+            If Not ServerInfo.ServerPinging Then
+                'check NoPing switch, throw NoPingException if true
+                Throw New NoPingException
                 Return False
             End If
-        Catch ex As MySqlException
-            ConnectionException = ex
+        End If
+
+        If connection Is Nothing Then
+            connection = NewConnection()
+        End If
+        If connection.State <> ConnectionState.Open Then
+            connection.Open()
+        End If
+        If connection.State = ConnectionState.Open Then
+            Return True
+        Else
             Return False
-        End Try
-    End Function
-
-    Public Function ReturnMySqlAdapter(sqlQry As String) As MySqlDataAdapter
-        '  Debug.Print("Adapter Hit " & Date.Now.Ticks)
-        Dim adapter As New MySqlDataAdapter(sqlQry, GetConnectString)
-        Dim CmdBuilder As New MySqlCommandBuilder(adapter)
-        Return adapter
-    End Function
-
-    Public Function ReturnMySqlCommand(Optional sqlQry As String = "") As MySqlCommand
-        ' Debug.Print("Command Hit " & Date.Now.Ticks)
-        Using cmd As New MySqlCommand
-            cmd.Connection = Connection
-            cmd.CommandText = sqlQry
-            Return cmd
-        End Using
-    End Function
-
-    Public Function ReturnMySqlTable(sqlQry As String) As DataTable
-        ' Debug.Print("Table Hit " & Date.Now.Ticks)
-        Using da As New MySqlDataAdapter, tmpTable As New DataTable, cmd = New MySqlCommand(sqlQry)
-            da.SelectCommand = cmd
-            da.SelectCommand.Connection = Connection
-            da.Fill(tmpTable)
-            Return tmpTable
-        End Using
+        End If
     End Function
 
     Private Function GetConnectString() As String
@@ -149,6 +96,124 @@ Public Class MySqlComms : Implements IDisposable
         End If
     End Function
 
+    Public Function ReturnMySqlAdapter(sqlQry As String, connection As MySqlConnection) As MySqlDataAdapter
+        Return New MySqlDataAdapter(sqlQry, connection)
+    End Function
+
 #End Region
+
+#Region "IDataBase"
+    Public Function DataTableFromCommand(command As DbCommand) As DataTable Implements IDataBase.DataTableFromCommand
+        Using da As DbDataAdapter = New MySqlDataAdapter, results As New DataTable, conn = NewConnection()
+            OpenConnection(conn)
+            command.Connection = conn
+            da.SelectCommand = command
+            da.Fill(results)
+            command.Dispose()
+            Return results
+        End Using
+    End Function
+
+    Public Function DataTableFromQueryString(query As String) As DataTable Implements IDataBase.DataTableFromQueryString
+        Using results As New DataTable, da As DbDataAdapter = New MySqlDataAdapter, cmd = New MySqlCommand(query), conn = NewConnection()
+            OpenConnection(conn)
+            cmd.Connection = conn
+            da.SelectCommand = cmd
+            da.Fill(results)
+            Return results
+        End Using
+    End Function
+
+    Public Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable Implements IDataBase.DataTableFromParameters
+        Using conn = NewConnection(), cmd As New MySqlCommand(), da = New MySqlDataAdapter(cmd), results As New DataTable
+            OpenConnection(conn)
+            cmd.Connection = conn
+            'Build query from params
+            Dim ParamQuery As String = ""
+            For Each param In params
+                If TypeOf param.Value Is Boolean Then
+                    ParamQuery += " " & param.FieldName & "=@" & param.FieldName
+                    cmd.Parameters.AddWithValue("@" & param.FieldName, Convert.ToInt32(param.Value))
+                Else
+                    If param.IsExact Then
+                        ParamQuery += " " & param.FieldName & "=@" & param.FieldName
+                        cmd.Parameters.AddWithValue("@" & param.FieldName, param.Value)
+                    Else
+                        ParamQuery += " " & param.FieldName & " LIKE @" & param.FieldName
+                        cmd.Parameters.AddWithValue("@" & param.FieldName, "%" & param.Value.ToString & "%")
+                    End If
+                End If
+                'Add operator if we are not on the last entry
+                If params.IndexOf(param) < params.Count - 1 Then ParamQuery += " " & param.OperatorString
+            Next
+            cmd.CommandText = query & ParamQuery
+            da.Fill(results)
+            Return results
+        End Using
+    End Function
+
+    Public Function InsertFromParameters(tableName As String, params As List(Of DBParameter)) As Integer Implements IDataBase.InsertFromParameters
+        Dim SelectQuery As String = "SELECT * FROM " & tableName & " LIMIT 0"
+        Using conn = NewConnection(), Adapter = New MySqlDataAdapter(SelectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
+            OpenConnection(conn)
+            Dim table = DataTableFromQueryString(SelectQuery)
+            table.Rows.Add()
+            For Each param In params
+                table.Rows(0)(param.FieldName) = param.Value
+            Next
+            Return Adapter.Update(table)
+        End Using
+    End Function
+
+    Public Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer Implements IDataBase.UpdateValue
+        Dim sqlUpdateQry As String = "UPDATE " & tableName & " SET " & fieldIn & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"
+        Using conn = NewConnection(), cmd As MySqlCommand = New MySqlCommand(sqlUpdateQry, conn)
+            OpenConnection(conn)
+            cmd.Parameters.AddWithValue("@ValueIN", valueIn)
+            Return cmd.ExecuteNonQuery()
+        End Using
+    End Function
+
+    Public Function ExecuteQuery(query As String) As Integer Implements IDataBase.ExecuteQuery
+        Using conn = NewConnection(), cmd As New MySqlCommand(query, conn)
+            OpenConnection(conn)
+            Return cmd.ExecuteNonQuery
+        End Using
+    End Function
+
+    Public Function ExecuteScalarFromCommand(command As DbCommand) As Object Implements IDataBase.ExecuteScalarFromCommand
+        Try
+            Using conn = NewConnection()
+                OpenConnection(conn)
+                command.Connection = conn
+                Return command.ExecuteScalar
+            End Using
+        Finally
+            command.Dispose()
+        End Try
+    End Function
+
+    Public Function ExecuteScalarFromQueryString(query As String) As Object Implements IDataBase.ExecuteScalarFromQueryString
+        Using conn = NewConnection(), cmd As New MySqlCommand(query, conn)
+            OpenConnection(conn)
+            Return cmd.ExecuteScalar
+        End Using
+    End Function
+
+    Public Function GetCommand(Optional qryString As String = "") As DbCommand Implements IDataBase.GetCommand
+        Return New MySqlCommand(qryString)
+    End Function
+
+    Public Function UpdateTable(selectQuery As String, table As DataTable) As Integer Implements IDataBase.UpdateTable
+        Using conn = NewConnection(), Adapter = New MySqlDataAdapter(selectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
+            OpenConnection(conn)
+            Return Adapter.Update(table)
+        End Using
+    End Function
+
+
+#End Region
+
+
 
 End Class

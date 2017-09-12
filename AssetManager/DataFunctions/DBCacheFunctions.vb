@@ -1,4 +1,5 @@
 ﻿Imports System.Threading
+Imports MySql.Data.MySqlClient
 Module DBCacheFunctions
 
     Public SQLiteTableHashes As List(Of String)
@@ -8,7 +9,7 @@ Module DBCacheFunctions
     Public Sub RefreshLocalDBCache()
         Try
             ' GlobalSwitches.BuildingCache = True
-            Using conn As New SqliteComms(False)
+            Using conn As New SQLiteDatabase(False)
                 conn.RefreshSqlCache()
             End Using
         Catch ex As Exception
@@ -28,13 +29,13 @@ Module DBCacheFunctions
             If RemoteTableHashes Is Nothing Then Return False
             Return Await Task.Run(Function()
                                       Dim LocalHashes As New List(Of String)
-                                      Using SQLiteComms As New SqliteComms
+                                      Using SQLiteComms As New SQLiteDatabase
                                           LocalHashes = SQLiteComms.LocalTableHashList
                                           Return SQLiteComms.CompareTableHashes(LocalHashes, RemoteTableHashes)
                                       End Using
                                   End Function)
         Else
-            Using SQLiteComms As New SqliteComms
+            Using SQLiteComms As New SQLiteDatabase
                 If SQLiteComms.GetSchemaVersion > 0 Then Return True
             End Using
         End If
@@ -48,7 +49,7 @@ Module DBCacheFunctions
     ''' <returns></returns>
     Public Function VerifyCacheHashes(Optional connectedToDB As Boolean = True) As Boolean
         Try
-            Using SQLiteComms As New SqliteComms
+            Using SQLiteComms As New SQLiteDatabase
                 If SQLiteComms.GetSchemaVersion > 0 Then
                     If connectedToDB Then
                         SQLiteTableHashes = SQLiteComms.LocalTableHashList
@@ -66,5 +67,9 @@ Module DBCacheFunctions
             Return False
         End Try
     End Function
+
+
+
+
 
 End Module

@@ -11,21 +11,25 @@
     End Sub
 
     Private Sub PopulateTableTree()
-        For Each table In GetTables()
-            Dim parentNode As New TreeNode(table)
-            parentNode.Tag = False
-            Dim childAllNode As New TreeNode("*All")
-            childAllNode.Tag = True
-            childAllNode.Checked = True
-            parentNode.Nodes.Add(childAllNode)
-            For Each col In GetColumns(table)
-                Dim childNode As New TreeNode(col)
-                childNode.Tag = False
-                childNode.Checked = True
-                parentNode.Nodes.Add(childNode)
+        Try
+            For Each table In GetTables()
+                Dim parentNode As New TreeNode(table)
+                parentNode.Tag = False
+                Dim childAllNode As New TreeNode("*All")
+                childAllNode.Tag = True
+                childAllNode.Checked = True
+                parentNode.Nodes.Add(childAllNode)
+                For Each col In GetColumns(table)
+                    Dim childNode As New TreeNode(col)
+                    childNode.Tag = False
+                    childNode.Checked = True
+                    parentNode.Nodes.Add(childNode)
+                Next
+                TableTree.Nodes.Add(parentNode)
             Next
-            TableTree.Nodes.Add(parentNode)
-        Next
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
     End Sub
 
     Private Function GetTables() As List(Of String)

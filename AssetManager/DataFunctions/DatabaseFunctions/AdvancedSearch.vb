@@ -24,31 +24,26 @@ Namespace AdvancedSearch
 
         Public Function GetColumns(table As String) As List(Of String)
             Dim colList As New List(Of String)
-            ' Using comms As New MySqlComms
             Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & ServerInfo.CurrentDataBase & "' AND TABLE_NAME = '" & table & "'"
-                Dim results = DBFunc.GetDatabase.DataTableFromQueryString(SQLQry) 'comms.ReturnMySqlTable(SQLQry)
+            Dim results = DBFunc.GetDatabase.DataTableFromQueryString(SQLQry) 'comms.ReturnMySqlTable(SQLQry)
                 For Each row As DataRow In results.Rows
                     colList.Add(row.Item("COLUMN_NAME").ToString)
                 Next
-            '  End Using
             Return colList
         End Function
-
         Public Function GetResults() As List(Of DataTable)
             Dim resultsList As New List(Of DataTable)
             For Each table In _searchTables
                 Dim qry As String = "SELECT " & BuildSelectString(table) & " FROM " & table.TableName & " WHERE "
                 qry += BuildFieldString(table)
-                Using LocalSQLComm As New MySqlComms,
-                    ds As New DataSet,
-                    da As New MySqlDataAdapter,
-                    QryComm As MySqlCommand = New MySqlCommand, results As New DataTable(table.TableName)
-                    QryComm.CommandText = qry
-                    QryComm.Parameters.AddWithValue("@" & "SEARCHVAL", _searchString)
-                    QryComm.Connection = LocalSQLComm.Connection
-                    da.SelectCommand = QryComm
-                    da.Fill(results)
+                Using MySQLDB As New MySQLDatabase,
+                    cmd = New MySqlCommand
+                    cmd.CommandText = qry
+                    cmd.Parameters.AddWithValue("@" & "SEARCHVAL", _searchString)
+                    Dim results = MySQLDB.DataTableFromCommand(cmd)
+                    results.TableName = table.TableName
                     resultsList.Add(results)
+                    results.Dispose()
                 End Using
             Next
             Return resultsList

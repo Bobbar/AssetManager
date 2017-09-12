@@ -51,6 +51,16 @@
                     OnStatusChanged(New WatchDogStatusEventArgs(CurrentWatchdogStatus))
                 End If
 
+
+                If ServerIsOnline Then
+                    Using MySQLDB As New MySQLDatabase
+                        Dim ServerDateTime = MySQLDB.ExecuteScalarFromQueryString("SELECT NOW()").ToString
+                        'Fire tick event to update server datatime.
+                        OnWatcherTick(New WatchDogTickEventArgs(ServerDateTime))
+                    End Using
+
+                End If
+
                 CheckForCacheRebuild()
 
                 Await Task.Delay(WatcherInterval)
@@ -96,15 +106,11 @@
         Private Function CanTalkToServer() As Boolean
             Try
                 Dim CanPing As Boolean = My.Computer.Network.Ping(ServerInfo.MySQLServerIP)
-                'If server pinging, try a simple SQL query.
+                'If server pinging, try to open a connection.
                 If CanPing Then
-                    Using LocalSQLComm As New MySqlComms(True), cmd = LocalSQLComm.ReturnMySqlCommand("SELECT NOW()")
-                        Dim ServerDateTime = cmd.ExecuteScalar.ToString
-                        'Fire tick event to update server datatime.
-                        OnWatcherTick(New WatchDogTickEventArgs(ServerDateTime))
+                    Using MySQLDB As New MySQLDatabase(), conn = MySQLDB.NewConnection
+                        Return MySQLDB.OpenConnection(conn, True)
                     End Using
-                    'Query successful. Return true.
-                    Return True
                 Else
                     'Not pinging. Return false.
                     Return False

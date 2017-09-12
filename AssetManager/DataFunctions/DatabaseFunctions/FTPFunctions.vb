@@ -120,25 +120,21 @@ Missing Files: " & MissingSQLFiles.Count
         If missingSQLFiles.Count > 0 Then
             Dim DeviceTable As New DeviceAttachmentsCols
             Dim SibiTable As New SibiAttachmentsCols
-            Using SQLComms As New MySqlComms
+            Dim deletions As Integer = 0
+            For Each sqlItem In missingSQLFiles
+                Dim DeviceRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FileUID & "='" & sqlItem.FileUID & "'")
+                If DeviceRows > 0 Then
+                    deletions += DeviceRows
+                    Logger("Deleted Device SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
+                End If
 
-                Dim deletions As Integer = 0
-                For Each sqlItem In missingSQLFiles
-
-                    Dim DeviceRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FileUID & "='" & sqlItem.FileUID & "'")
-                    If DeviceRows > 0 Then
-                        deletions += DeviceRows
-                        Logger("Deleted Device SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
-                    End If
-
-                    Dim SibiRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FileUID & "='" & sqlItem.FileUID & "'")
-                    If SibiRows > 0 Then
-                        deletions += SibiRows
-                        Logger("Deleted Sibi SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
-                    End If
-                Next
-                Return deletions
-            End Using
+                Dim SibiRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FileUID & "='" & sqlItem.FileUID & "'")
+                If SibiRows > 0 Then
+                    deletions += SibiRows
+                    Logger("Deleted Sibi SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
+                End If
+            Next
+            Return deletions
         End If
         Return 0
     End Function
@@ -147,27 +143,25 @@ Missing Files: " & MissingSQLFiles.Count
         If missingSQLDirs.Count > 0 Then
             Dim DeviceTable As New DeviceAttachmentsCols
             Dim SibiTable As New SibiAttachmentsCols
-            Using SQLComms As New MySqlComms
-                Dim deletions As Integer = 0
-                For Each sqlItem In missingSQLDirs
-                    If Not CheckForPrimaryItem(sqlItem.FKey) Then
+            Dim deletions As Integer = 0
+            For Each sqlItem In missingSQLDirs
+                If Not CheckForPrimaryItem(sqlItem.FKey) Then
 
-                        Dim DeviceRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & "='" & sqlItem.FKey & "'")
-                        If DeviceRows > 0 Then
-                            deletions += DeviceRows
-                            Logger("Deleted " & DeviceRows & " Device SQL Entries For: " & sqlItem.FKey)
-                        End If
-
-                        Dim SibiRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & "='" & sqlItem.FKey & "'")
-                        If SibiRows > 0 Then
-                            deletions += SibiRows
-                            Logger("Deleted " & SibiRows & " Sibi SQL Entries For: " & sqlItem.FKey)
-                        End If
-
+                    Dim DeviceRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & "='" & sqlItem.FKey & "'")
+                    If DeviceRows > 0 Then
+                        deletions += DeviceRows
+                        Logger("Deleted " & DeviceRows & " Device SQL Entries For: " & sqlItem.FKey)
                     End If
-                Next
-                Return deletions
-            End Using
+
+                    Dim SibiRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & "='" & sqlItem.FKey & "'")
+                    If SibiRows > 0 Then
+                        deletions += SibiRows
+                        Logger("Deleted " & SibiRows & " Sibi SQL Entries For: " & sqlItem.FKey)
+                    End If
+
+                End If
+            Next
+            Return deletions
         End If
         Return 0
     End Function
