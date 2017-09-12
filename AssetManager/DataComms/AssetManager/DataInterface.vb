@@ -1,7 +1,4 @@
 ﻿Imports System.Data.Common
-Imports MySql.Data.MySqlClient
-Imports System.Data.SQLite
-Imports System.IO
 
 Public Interface IDataBase
 
