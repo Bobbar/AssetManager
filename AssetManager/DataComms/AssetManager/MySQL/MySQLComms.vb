@@ -100,19 +100,13 @@ Public Class MySQLDatabase
         Return New MySqlDataAdapter(sqlQry, connection)
     End Function
 
+
+
+
+
 #End Region
 
 #Region "IDataBase"
-    Public Function DataTableFromCommand(command As DbCommand) As DataTable Implements IDataBase.DataTableFromCommand
-        Using da As DbDataAdapter = New MySqlDataAdapter, results As New DataTable, conn = NewConnection()
-            OpenConnection(conn)
-            command.Connection = conn
-            da.SelectCommand = command
-            da.Fill(results)
-            command.Dispose()
-            Return results
-        End Using
-    End Function
 
     Public Function DataTableFromQueryString(query As String) As DataTable Implements IDataBase.DataTableFromQueryString
         Using results As New DataTable, da As DbDataAdapter = New MySqlDataAdapter, cmd = New MySqlCommand(query), conn = NewConnection()
@@ -124,60 +118,20 @@ Public Class MySQLDatabase
         End Using
     End Function
 
-    Public Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable Implements IDataBase.DataTableFromParameters
-        Using conn = NewConnection(), cmd As New MySqlCommand(), da = New MySqlDataAdapter(cmd), results As New DataTable
+    Public Function DataTableFromCommand(command As DbCommand) As DataTable Implements IDataBase.DataTableFromCommand
+        Using da As DbDataAdapter = New MySqlDataAdapter, results As New DataTable, conn = NewConnection()
             OpenConnection(conn)
-            cmd.Connection = conn
-            'Build query from params
-            Dim ParamQuery As String = ""
-            For Each param In params
-                If TypeOf param.Value Is Boolean Then
-                    ParamQuery += " " & param.FieldName & "=@" & param.FieldName
-                    cmd.Parameters.AddWithValue("@" & param.FieldName, Convert.ToInt32(param.Value))
-                Else
-                    If param.IsExact Then
-                        ParamQuery += " " & param.FieldName & "=@" & param.FieldName
-                        cmd.Parameters.AddWithValue("@" & param.FieldName, param.Value)
-                    Else
-                        ParamQuery += " " & param.FieldName & " LIKE @" & param.FieldName
-                        cmd.Parameters.AddWithValue("@" & param.FieldName, "%" & param.Value.ToString & "%")
-                    End If
-                End If
-                'Add operator if we are not on the last entry
-                If params.IndexOf(param) < params.Count - 1 Then ParamQuery += " " & param.OperatorString
-            Next
-            cmd.CommandText = query & ParamQuery
+            command.Connection = conn
+            da.SelectCommand = command
             da.Fill(results)
+            command.Dispose()
             Return results
         End Using
     End Function
 
-    Public Function InsertFromParameters(tableName As String, params As List(Of DBParameter)) As Integer Implements IDataBase.InsertFromParameters
-        Dim SelectQuery As String = "SELECT * FROM " & tableName & " LIMIT 0"
-        Using conn = NewConnection(), Adapter = New MySqlDataAdapter(SelectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
-            OpenConnection(conn)
-            Dim table = DataTableFromQueryString(SelectQuery)
-            table.Rows.Add()
-            For Each param In params
-                table.Rows(0)(param.FieldName) = param.Value
-            Next
-            Return Adapter.Update(table)
-        End Using
-    End Function
-
-    Public Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer Implements IDataBase.UpdateValue
-        Dim sqlUpdateQry As String = "UPDATE " & tableName & " SET " & fieldIn & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"
-        Using conn = NewConnection(), cmd As MySqlCommand = New MySqlCommand(sqlUpdateQry, conn)
-            OpenConnection(conn)
-            cmd.Parameters.AddWithValue("@ValueIN", valueIn)
-            Return cmd.ExecuteNonQuery()
-        End Using
-    End Function
-
-    Public Function ExecuteQuery(query As String) As Integer Implements IDataBase.ExecuteQuery
-        Using conn = NewConnection(), cmd As New MySqlCommand(query, conn)
-            OpenConnection(conn)
-            Return cmd.ExecuteNonQuery
+    Public Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable Implements IDataBase.DataTableFromParameters
+        Using cmd = GetCommandFromParams(query, params), results = DataTableFromCommand(cmd)
+            Return results
         End Using
     End Function
 
@@ -200,8 +154,24 @@ Public Class MySQLDatabase
         End Using
     End Function
 
-    Public Function GetCommand(Optional qryString As String = "") As DbCommand Implements IDataBase.GetCommand
-        Return New MySqlCommand(qryString)
+    Public Function ExecuteQuery(query As String) As Integer Implements IDataBase.ExecuteQuery
+        Using conn = NewConnection(), cmd As New MySqlCommand(query, conn)
+            OpenConnection(conn)
+            Return cmd.ExecuteNonQuery
+        End Using
+    End Function
+
+    Public Function InsertFromParameters(tableName As String, params As List(Of DBParameter)) As Integer Implements IDataBase.InsertFromParameters
+        Dim SelectQuery As String = "SELECT * FROM " & tableName & " LIMIT 0"
+        Using conn = NewConnection(), Adapter = New MySqlDataAdapter(SelectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
+            OpenConnection(conn)
+            Dim table = DataTableFromQueryString(SelectQuery)
+            table.Rows.Add()
+            For Each param In params
+                table.Rows(0)(param.FieldName) = param.Value
+            Next
+            Return Adapter.Update(table)
+        End Using
     End Function
 
     Public Function UpdateTable(selectQuery As String, table As DataTable) As Integer Implements IDataBase.UpdateTable
@@ -210,6 +180,44 @@ Public Class MySQLDatabase
             Return Adapter.Update(table)
         End Using
     End Function
+
+    Public Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer Implements IDataBase.UpdateValue
+        Dim sqlUpdateQry As String = "UPDATE " & tableName & " SET " & fieldIn & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"
+        Using conn = NewConnection(), cmd As MySqlCommand = New MySqlCommand(sqlUpdateQry, conn)
+            OpenConnection(conn)
+            cmd.Parameters.AddWithValue("@ValueIN", valueIn)
+            Return cmd.ExecuteNonQuery()
+        End Using
+    End Function
+
+    Public Function GetCommand(Optional qryString As String = "") As DbCommand Implements IDataBase.GetCommand
+        Return New MySqlCommand(qryString)
+    End Function
+
+    Public Function GetCommandFromParams(query As String, params As List(Of DBQueryParameter)) As DbCommand Implements IDataBase.GetCommandFromParams
+        Using cmd = New MySqlCommand
+            Dim ParamQuery As String = ""
+            For Each param In params
+                If TypeOf param.Value Is Boolean Then
+                    ParamQuery += " " & param.FieldName & "=@" & param.FieldName
+                    cmd.Parameters.AddWithValue("@" & param.FieldName, Convert.ToInt32(param.Value))
+                Else
+                    If param.IsExact Then
+                        ParamQuery += " " & param.FieldName & "=@" & param.FieldName
+                        cmd.Parameters.AddWithValue("@" & param.FieldName, param.Value)
+                    Else
+                        ParamQuery += " " & param.FieldName & " LIKE @" & param.FieldName
+                        cmd.Parameters.AddWithValue("@" & param.FieldName, "%" & param.Value.ToString & "%")
+                    End If
+                End If
+                'Add operator if we are not on the last entry
+                If params.IndexOf(param) < params.Count - 1 Then ParamQuery += " " & param.OperatorString
+            Next
+            cmd.CommandText = query & ParamQuery
+            Return cmd
+        End Using
+    End Function
+
 
 
 #End Region

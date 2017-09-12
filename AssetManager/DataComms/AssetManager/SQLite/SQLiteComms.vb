@@ -283,18 +283,7 @@ Public Class SQLiteDatabase
 #End Region
 
 
-
 #Region "IDataBase"
-    Public Function DataTableFromCommand(command As DbCommand) As DataTable Implements IDataBase.DataTableFromCommand
-        Using da As DbDataAdapter = New SQLiteDataAdapter, results As New DataTable, conn = NewConnection()
-            command.Connection = conn
-            da.SelectCommand = command
-            da.Fill(results)
-            command.Dispose()
-            Return results
-        End Using
-    End Function
-
     Public Function DataTableFromQueryString(query As String) As DataTable Implements IDataBase.DataTableFromQueryString
         Using results As New DataTable, da As DbDataAdapter = New SQLiteDataAdapter, cmd = New SQLiteCommand(query), conn = NewConnection()
             cmd.Connection = conn
@@ -305,43 +294,20 @@ Public Class SQLiteDatabase
         End Using
     End Function
 
-    Public Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable Implements IDataBase.DataTableFromParameters
-        Using conn = NewConnection(), cmd As New SQLiteCommand, da = New SQLiteDataAdapter(cmd), results As New DataTable
-            cmd.Connection = conn
-            'Build query from params
-            Dim ParamQuery As String = ""
-            For Each param In params
-                If TypeOf param.Value Is Boolean Then
-                    ParamQuery += " " & param.FieldName & "=@" & param.FieldName
-                    cmd.Parameters.AddWithValue("@" & param.FieldName, Convert.ToInt32(param.Value))
-                Else
-                    If param.IsExact Then
-                        ParamQuery += " " & param.FieldName & "=@" & param.FieldName
-                        cmd.Parameters.AddWithValue("@" & param.FieldName, param.Value)
-                    Else
-                        ParamQuery += " " & param.FieldName & " LIKE @" & param.FieldName
-                        cmd.Parameters.AddWithValue("@" & param.FieldName, "%" & param.Value.ToString & "%")
-                    End If
-                End If
-                'Add operator if we are not on the last entry
-                If params.IndexOf(param) < params.Count - 1 Then ParamQuery += " " & param.OperatorString
-            Next
-            cmd.CommandText = query & ParamQuery
+    Public Function DataTableFromCommand(command As DbCommand) As DataTable Implements IDataBase.DataTableFromCommand
+        Using da As DbDataAdapter = New SQLiteDataAdapter, results As New DataTable, conn = NewConnection()
+            command.Connection = conn
+            da.SelectCommand = command
             da.Fill(results)
+            command.Dispose()
             Return results
         End Using
     End Function
 
-    Public Function InsertFromParameters(query As String, params As List(Of DBParameter)) As Integer Implements IDataBase.InsertFromParameters
-        Throw New NotImplementedException()
-    End Function
-
-    Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer Implements IDataBase.UpdateValue
-        Throw New NotImplementedException()
-    End Function
-
-    Public Function ExecuteQuery(query As String) As Integer Implements IDataBase.ExecuteQuery
-        Throw New NotImplementedException()
+    Public Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable Implements IDataBase.DataTableFromParameters
+        Using cmd = GetCommandFromParams(query, params), results = DataTableFromCommand(cmd)
+            Return results
+        End Using
     End Function
 
     Public Function ExecuteScalarFromCommand(command As DbCommand) As Object Implements IDataBase.ExecuteScalarFromCommand
@@ -363,13 +329,51 @@ Public Class SQLiteDatabase
         End Using
     End Function
 
-    Public Function GetCommand(Optional qryString As String = "") As DbCommand Implements IDataBase.GetCommand
-        Return New SQLiteCommand(qryString)
+    Public Function ExecuteQuery(query As String) As Integer Implements IDataBase.ExecuteQuery
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function InsertFromParameters(query As String, params As List(Of DBParameter)) As Integer Implements IDataBase.InsertFromParameters
+        Throw New NotImplementedException()
     End Function
 
     Function UpdateTable(selectQuery As String, table As DataTable) As Integer Implements IDataBase.UpdateTable
         Throw New NotImplementedException()
     End Function
+
+    Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer Implements IDataBase.UpdateValue
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function GetCommand(Optional qryString As String = "") As DbCommand Implements IDataBase.GetCommand
+        Return New SQLiteCommand(qryString)
+    End Function
+
+    Public Function GetCommandFromParams(query As String, params As List(Of DBQueryParameter)) As DbCommand Implements IDataBase.GetCommandFromParams
+        Using cmd = New SQLiteCommand
+            Dim ParamQuery As String = ""
+            For Each param In params
+                If TypeOf param.Value Is Boolean Then
+                    ParamQuery += " " & param.FieldName & "=@" & param.FieldName
+                    cmd.Parameters.AddWithValue("@" & param.FieldName, Convert.ToInt32(param.Value))
+                Else
+                    If param.IsExact Then
+                        ParamQuery += " " & param.FieldName & "=@" & param.FieldName
+                        cmd.Parameters.AddWithValue("@" & param.FieldName, param.Value)
+                    Else
+                        ParamQuery += " " & param.FieldName & " LIKE @" & param.FieldName
+                        cmd.Parameters.AddWithValue("@" & param.FieldName, "%" & param.Value.ToString & "%")
+                    End If
+                End If
+                'Add operator if we are not on the last entry
+                If params.IndexOf(param) < params.Count - 1 Then ParamQuery += " " & param.OperatorString
+            Next
+            cmd.CommandText = query & ParamQuery
+            Return cmd
+        End Using
+    End Function
+
+
 #End Region
 
 #End Region
