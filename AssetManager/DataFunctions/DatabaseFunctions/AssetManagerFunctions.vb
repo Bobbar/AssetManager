@@ -1,7 +1,4 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.Data.Common
-
-Public Class AssetManagerFunctions
+﻿Public Class AssetManagerFunctions
 
 #Region "Methods"
 
@@ -15,7 +12,7 @@ Public Class AssetManagerFunctions
                 InsertEmployeeParams.Add(New DBParameter(EmployeesCols.UID, UID))
                 DBFunc.GetDatabase.InsertFromParameters(EmployeesCols.TableName, InsertEmployeeParams)
             End If
-        Catch ex As MySqlException
+        Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
@@ -209,14 +206,14 @@ Public Class AssetManagerFunctions
             If type = FindDevType.AssetTag Then
                 Dim Params As New List(Of DBQueryParameter)
                 Params.Add(New DBQueryParameter(DevicesCols.AssetTag, searchVal, True))
-                Return CollectDeviceInfo(DBFunc.GetDatabase.DataTableFromCommand(GetSQLCommandFromParams("SELECT * FROM " & DevicesCols.TableName, Params)))
+                Return CollectDeviceInfo(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
             ElseIf type = FindDevType.Serial Then
                 Dim Params As New List(Of DBQueryParameter)
                 Params.Add(New DBQueryParameter(DevicesCols.Serial, searchVal, True))
-                Return CollectDeviceInfo(DBFunc.GetDatabase.DataTableFromCommand(GetSQLCommandFromParams("SELECT * FROM " & DevicesCols.TableName, Params)))
+                Return CollectDeviceInfo(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
             End If
             Return Nothing
-        Catch ex As MySqlException
+        Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return Nothing
         End Try
@@ -253,49 +250,15 @@ Public Class AssetManagerFunctions
     End Function
 
     Public Function GetSqlValue(table As String, fieldIn As String, valueIn As String, fieldOut As String) As String
-        Dim sqlQRY As String = "SELECT " & fieldOut & " FROM " & table ' & " WHERE " & fieldIN & " = '" & valueIN & "' LIMIT 1"
+        Dim sqlQRY As String = "SELECT " & fieldOut & " FROM " & table & " WHERE "
         Dim Params As New List(Of DBQueryParameter)
         Params.Add(New DBQueryParameter(fieldIn, valueIn, True))
-        Dim Result = DBFunc.GetDatabase.ExecuteScalarFromCommand(GetSQLCommandFromParams(sqlQRY, Params))
+        Dim Result = DBFunc.GetDatabase.ExecuteScalarFromCommand(DBFunc.GetDatabase.GetCommandFromParams(sqlQRY, Params))
         If Result IsNot Nothing Then
             Return Result.ToString
         Else
             Return ""
         End If
-    End Function
-
-    ''' <summary>
-    ''' Takes a partial query string without the WHERE operator, and a list of <see cref="DBQueryParameter"/> and returns a parameterized <see cref="DBCommand"/>.
-    ''' </summary>
-    ''' <param name="partialQuery"></param>
-    ''' <param name="parameters"></param>
-    ''' <returns></returns>
-    Private Function GetSQLCommandFromParams(partialQuery As String, parameters As List(Of DBQueryParameter)) As DbCommand
-        Dim cmd = DBFunc.GetDatabase.GetCommand(partialQuery)
-        cmd.CommandText += " WHERE"
-        Dim ParamString As String = ""
-        Dim ValSeq As Integer = 1
-        For Each fld In parameters
-            Dim ValueName As String = "@Value" & ValSeq
-            If fld.IsExact Then
-                ParamString += " " + fld.FieldName + "=" & ValueName & " " & fld.OperatorString
-                cmd.AddParameterWithValue(ValueName, fld.Value)
-            Else
-                ParamString += " " + fld.FieldName + " LIKE " & ValueName & " " & fld.OperatorString
-                Dim Value As String = "%" & fld.Value.ToString & "%"
-                cmd.AddParameterWithValue(ValueName, Value)
-            End If
-            ValSeq += 1
-        Next
-        If Strings.Right(ParamString, 3) = "AND" Then 'remove trailing AND from query string
-            ParamString = Strings.Left(ParamString, Strings.Len(ParamString) - 3)
-        End If
-
-        If Strings.Right(ParamString, 2) = "OR" Then 'remove trailing AND from query string
-            ParamString = Strings.Left(ParamString, Strings.Len(ParamString) - 2)
-        End If
-        cmd.CommandText += ParamString
-        Return cmd
     End Function
 
     Public Function GetAttachmentCount(attachFolderUID As String, attachTable As AttachmentsBaseCols) As Integer

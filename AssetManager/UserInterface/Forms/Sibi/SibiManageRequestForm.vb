@@ -1,7 +1,4 @@
-﻿Option Explicit On
-
-Imports System.ComponentModel
-Imports MySql.Data.MySqlClient
+﻿Imports System.ComponentModel
 
 Public Class SibiManageRequestForm
 

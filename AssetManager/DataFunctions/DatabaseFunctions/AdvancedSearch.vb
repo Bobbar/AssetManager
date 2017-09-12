@@ -1,5 +1,4 @@
-﻿Imports MySql.Data.MySqlClient
-Namespace AdvancedSearch
+﻿Namespace AdvancedSearch
 
 
     Public Class Search
@@ -26,9 +25,9 @@ Namespace AdvancedSearch
             Dim colList As New List(Of String)
             Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & ServerInfo.CurrentDataBase & "' AND TABLE_NAME = '" & table & "'"
             Dim results = DBFunc.GetDatabase.DataTableFromQueryString(SQLQry) 'comms.ReturnMySqlTable(SQLQry)
-                For Each row As DataRow In results.Rows
-                    colList.Add(row.Item("COLUMN_NAME").ToString)
-                Next
+            For Each row As DataRow In results.Rows
+                colList.Add(row.Item("COLUMN_NAME").ToString)
+            Next
             Return colList
         End Function
         Public Function GetResults() As List(Of DataTable)
@@ -37,9 +36,8 @@ Namespace AdvancedSearch
                 Dim qry As String = "SELECT " & BuildSelectString(table) & " FROM " & table.TableName & " WHERE "
                 qry += BuildFieldString(table)
                 Using MySQLDB As New MySQLDatabase,
-                    cmd = New MySqlCommand
-                    cmd.CommandText = qry
-                    cmd.Parameters.AddWithValue("@" & "SEARCHVAL", _searchString)
+                    cmd = MySQLDB.GetCommand(qry)
+                    cmd.AddParameterWithValue("@" & "SEARCHVAL", _searchString)
                     Dim results = MySQLDB.DataTableFromCommand(cmd)
                     results.TableName = table.TableName
                     resultsList.Add(results)

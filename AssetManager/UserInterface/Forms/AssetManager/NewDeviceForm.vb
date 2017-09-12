@@ -1,9 +1,4 @@
-﻿Option Explicit On
-
-Imports System.ComponentModel
-Imports MySql.Data.MySqlClient
-
-Public Class NewDeviceForm
+﻿Public Class NewDeviceForm
 
 #Region "Fields"
 

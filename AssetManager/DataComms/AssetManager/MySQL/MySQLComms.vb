@@ -109,7 +109,7 @@ Public Class MySQLDatabase
 #Region "IDataBase"
 
     Public Function DataTableFromQueryString(query As String) As DataTable Implements IDataBase.DataTableFromQueryString
-        Using results As New DataTable, da As DbDataAdapter = New MySqlDataAdapter, cmd = New MySqlCommand(query), conn = NewConnection()
+        Using results As New DataTable, da = New MySqlDataAdapter, cmd = New MySqlCommand(query), conn = NewConnection()
             OpenConnection(conn)
             cmd.Connection = conn
             da.SelectCommand = cmd

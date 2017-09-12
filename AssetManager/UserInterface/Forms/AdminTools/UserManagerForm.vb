@@ -1,6 +1,4 @@
-﻿Imports System.ComponentModel
-Imports MySql.Data.MySqlClient
-
+﻿
 Public Class UserManagerForm
     Private ModuleIndex As New List(Of AccessGroupStruct)
     Private CurrentUser As LocalUserInfoStruct

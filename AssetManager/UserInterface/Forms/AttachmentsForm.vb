@@ -1,11 +1,10 @@
-﻿Option Explicit On
-Option Compare Binary
+﻿Option Compare Binary
 
 Imports System.ComponentModel
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Threading
-Imports MySql.Data.MySqlClient
+
 
 Class AttachmentsForm
 

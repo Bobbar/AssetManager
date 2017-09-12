@@ -1,9 +1,6 @@
-﻿Option Explicit On
-
-Imports System.ComponentModel
+﻿Imports System.ComponentModel
 Imports System.Net
 Imports System.Net.NetworkInformation
-Imports MySql.Data.MySqlClient
 Imports PingVisLib
 
 Public Class ViewDeviceForm

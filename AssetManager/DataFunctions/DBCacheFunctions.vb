@@ -1,6 +1,4 @@
-﻿Imports System.Threading
-Imports MySql.Data.MySqlClient
-Module DBCacheFunctions
+﻿Module DBCacheFunctions
 
     Public SQLiteTableHashes As List(Of String)
     Public RemoteTableHashes As List(Of String)

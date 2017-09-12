@@ -1,7 +1,4 @@
-﻿Option Explicit On
-
-Imports MySql.Data.MySqlClient
-
+﻿
 Public Class TrackDeviceForm
     Private CurrentTrackingDevice As New DeviceStruct
     Private MyParent As ViewDeviceForm
