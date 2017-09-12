@@ -19,6 +19,7 @@ Public Class ViewDeviceForm
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyPingVis As PingVis
     Private MyWindowList As New WindowList(Me)
+    Private EditMode As Boolean = False
 
 #End Region
 
@@ -47,12 +48,17 @@ Public Class ViewDeviceForm
 #Region "Methods"
 
     Private Sub CancelModify()
-        bolCheckFields = False
-        fieldErrorIcon.Clear()
-        DisableControls()
-        ResetBackColors()
-        Me.Refresh()
-        LoadDevice(CurrentViewDevice.GUID)
+        If EditMode Then
+            Dim blah = Message("All changes will be lost.  Are you sure you want to cancel?", vbYesNo + vbQuestion, "Cancel Edit", Me)
+            If blah = vbYes Then
+                bolCheckFields = False
+                fieldErrorIcon.Clear()
+                DisableControls()
+                ResetBackColors()
+                Me.Refresh()
+                RefreshDevice()
+            End If
+        End If
     End Sub
 
     Public Sub SetAttachCount()
@@ -90,12 +96,6 @@ Public Class ViewDeviceForm
             Dim InsertQry As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " LIMIT 0"
             rows += DBFunc.GetDatabase.UpdateTable(SelectQry, GetUpdateTable(SelectQry))
             rows += DBFunc.GetDatabase.UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo))
-            'Using SQLComms As New MySqlComms,
-            '        UpdateAdapter = SQLComms.ReturnMySqlAdapter(SelectQry),
-            '        InsertAdapter = SQLComms.ReturnMySqlAdapter(InsertQry)
-            'rows += UpdateAdapter.Update(GetUpdateTable(UpdateAdapter))
-            '    rows += InsertAdapter.Update(GetInsertTable(InsertAdapter, UpdateInfo))
-            'End Using
             If rows = 2 Then
                 LoadDevice(CurrentViewDevice.GUID)
                 Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
@@ -133,6 +133,19 @@ Public Class ViewDeviceForm
         Finally
             DoneWaiting()
         End Try
+    End Sub
+    Private Sub RefreshDevice()
+        If EditMode Then
+            CancelModify()
+        Else
+            ADPanel.Visible = False
+            grpNetTools.Visible = False
+            If MyPingVis IsNot Nothing Then
+                MyPingVis.Dispose()
+                MyPingVis = Nothing
+            End If
+            LoadDevice(CurrentViewDevice.GUID)
+        End If
     End Sub
 
     Private Sub LoadTracking(strGUID As String)
@@ -518,9 +531,8 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub DisableControls()
-
+        EditMode = False
         DisableControlsRecursive(Me)
-
         pnlOtherFunctions.Visible = True
         cmdMunisSearch.Visible = False
         Me.Text = "View"
@@ -570,11 +582,9 @@ Public Class ViewDeviceForm
 
     End Sub
 
-
     Private Sub EnableControls()
-
+        EditMode = True
         EnableControlsRecursive(Me)
-
         ADPanel.Visible = False
         pnlOtherFunctions.Visible = False
         cmdMunisSearch.Visible = True
@@ -1060,6 +1070,10 @@ Public Class ViewDeviceForm
         Catch
             ADPanel.Visible = False
         End Try
+    End Sub
+
+    Private Sub RefreshToolStripButton_Click(sender As Object, e As EventArgs) Handles RefreshToolStripButton.Click
+        RefreshDevice()
     End Sub
 #End Region
 

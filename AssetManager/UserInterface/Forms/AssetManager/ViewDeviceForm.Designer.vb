@@ -125,6 +125,7 @@ Partial Class ViewDeviceForm
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.AssetDisposalForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.RefreshToolStripButton = New System.Windows.Forms.ToolStripButton()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         CType(Me.cmdRestart, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -628,7 +629,7 @@ Partial Class ViewDeviceForm
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1116, 232)
+        Me.TrackingTab.Size = New System.Drawing.Size(1116, 241)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -654,7 +655,7 @@ Partial Class ViewDeviceForm
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1104, 220)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1104, 229)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
@@ -1157,11 +1158,11 @@ Partial Class ViewDeviceForm
         Me.ToolStrip1.Dock = System.Windows.Forms.DockStyle.None
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbModify, Me.tsbNewNote, Me.tsbDeleteDevice, Me.ToolStripSeparator1, Me.AttachmentTool, Me.ToolStripSeparator7, Me.ToolStripDropDownButton2, Me.ToolStripSeparator9})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbModify, Me.tsbNewNote, Me.tsbDeleteDevice, Me.RefreshToolStripButton, Me.ToolStripSeparator1, Me.AttachmentTool, Me.ToolStripSeparator7, Me.ToolStripDropDownButton2, Me.ToolStripSeparator9})
         Me.ToolStrip1.Location = New System.Drawing.Point(3, 74)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ToolStrip1.Size = New System.Drawing.Size(375, 37)
+        Me.ToolStrip1.Size = New System.Drawing.Size(435, 37)
         Me.ToolStrip1.TabIndex = 45
         Me.ToolStrip1.Text = "MyToolStrip1"
         '
@@ -1243,6 +1244,16 @@ Partial Class ViewDeviceForm
         '
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 37)
+        '
+        'RefreshToolStripButton
+        '
+        Me.RefreshToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.RefreshToolStripButton.Image = Global.AssetManager.My.Resources.Resources.RefreshIcon
+        Me.RefreshToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.RefreshToolStripButton.Name = "RefreshToolStripButton"
+        Me.RefreshToolStripButton.Size = New System.Drawing.Size(29, 34)
+        Me.RefreshToolStripButton.Text = "ToolStripButton1"
+        Me.RefreshToolStripButton.ToolTipText = "Refresh"
         '
         'ViewDeviceForm
         '
@@ -1397,4 +1408,5 @@ Partial Class ViewDeviceForm
     Friend WithEvents ADOSVerTextBox As TextBox
     Friend WithEvents Label19 As Label
     Friend WithEvents ADOSTextBox As TextBox
+    Friend WithEvents RefreshToolStripButton As ToolStripButton
 End Class
