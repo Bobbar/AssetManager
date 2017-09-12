@@ -9,7 +9,6 @@ Public Class SQLiteDatabase
 #Region "Fields"
     Private Const EncSQLitePass As String = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU"
     Private Property Connection As SQLiteConnection
-    Private ConnectionException As Exception
     Private SQLiteConnectString As String = "Data Source=" & strSQLitePath & ";Password=" & DecodePassword(EncSQLitePass)
 
 #End Region
