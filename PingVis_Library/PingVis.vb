@@ -410,9 +410,10 @@ Public Class PingVis : Implements IDisposable
                 RemoveHandler PingTimer.Tick, AddressOf PingTimer_Tick
                 PingTimer.Dispose()
                 PingTimer = Nothing
-                MyPing.SendAsyncCancel()
+                RemoveHandler DrawControl.MouseWheel, AddressOf ControlMouseWheel
+                RemoveHandler DrawControl.MouseLeave, AddressOf ControlMouseLeave
+                RemoveHandler DrawControl.MouseMove, AddressOf ControlMouseMove
                 MyPing.Dispose()
-                ' MyControl.Dispose()
                 PingReplies.Clear()
             End If
 
