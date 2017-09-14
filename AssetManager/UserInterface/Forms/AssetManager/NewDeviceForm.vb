@@ -68,29 +68,29 @@
     End Sub
 
     Private Function AddNewDevice() As Boolean
-        Try
-            NewUID = Guid.NewGuid.ToString
-            Dim rows As Integer = 0
-            Dim DeviceInsertQry As String = "SELECT * FROM " & DevicesCols.TableName & " LIMIT 0"
-            Dim HistoryInsertQry As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " LIMIT 0"
+        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+            Try
+                NewUID = Guid.NewGuid.ToString
+                Dim rows As Integer = 0
+                Dim DeviceInsertQry As String = "SELECT * FROM " & DevicesCols.TableName & " LIMIT 0"
+                Dim HistoryInsertQry As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " LIMIT 0"
 
-            rows += DBFunc.GetDatabase.UpdateTable(DeviceInsertQry, DeviceInsertTable(DeviceInsertQry))
-            rows += DBFunc.GetDatabase.UpdateTable(HistoryInsertQry, HistoryInsertTable(HistoryInsertQry))
-            'Using SQLComms As New MySqlComms,
-            '    DeviceInsertAdapter As MySqlDataAdapter = SQLComms.ReturnMySqlAdapter(DeviceInsertQry),
-            '     HistoryInsertAdapter As MySqlDataAdapter = SQLComms.ReturnMySqlAdapter(HistoryInsertQry)
-            '    rows += DeviceInsertAdapter.Update(DeviceInsertTable(DeviceInsertAdapter))
-            '    rows += HistoryInsertAdapter.Update(HistoryInsertTable(HistoryInsertAdapter))
-            'End Using
-            If rows = 2 Then
-                Return True
-            Else
+                rows += DBFunc.GetDatabase.UpdateTable(DeviceInsertQry, DeviceInsertTable(DeviceInsertQry), trans)
+                rows += DBFunc.GetDatabase.UpdateTable(HistoryInsertQry, HistoryInsertTable(HistoryInsertQry), trans)
+
+                If rows = 2 Then
+                    trans.Commit()
+                    Return True
+                Else
+                    trans.Rollback()
+                    Return False
+                End If
+            Catch ex As Exception
+                trans.Rollback()
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
                 Return False
-            End If
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return False
-        End Try
+            End Try
+        End Using
     End Function
 
     Private Function CheckFields(Parent As Control, bolValidFields As Boolean) As Boolean

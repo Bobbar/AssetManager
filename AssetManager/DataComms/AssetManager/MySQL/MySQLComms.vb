@@ -108,6 +108,13 @@ Public Class MySQLDatabase
 
 #Region "IDataBase"
 
+    Public Function StartTransaction() As DbTransaction Implements IDataBase.StartTransaction
+        Dim conn = NewConnection()
+        OpenConnection(conn)
+        Dim trans = conn.BeginTransaction
+        Return trans
+    End Function
+
     Public Function DataTableFromQueryString(query As String) As DataTable Implements IDataBase.DataTableFromQueryString
         Using results As New DataTable, da = New MySqlDataAdapter, cmd = New MySqlCommand(query), conn = NewConnection()
             OpenConnection(conn)
@@ -174,11 +181,18 @@ Public Class MySQLDatabase
         End Using
     End Function
 
-    Public Function UpdateTable(selectQuery As String, table As DataTable) As Integer Implements IDataBase.UpdateTable
-        Using conn = NewConnection(), Adapter = New MySqlDataAdapter(selectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
-            OpenConnection(conn)
-            Return Adapter.Update(table)
-        End Using
+    Public Function UpdateTable(selectQuery As String, table As DataTable, Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.UpdateTable
+        If transaction IsNot Nothing Then
+            Dim conn = DirectCast(transaction.Connection, MySqlConnection)
+            Using cmd = New MySqlCommand(selectQuery, conn, DirectCast(transaction, MySqlTransaction)), Adapter = New MySqlDataAdapter(cmd), Builder = New MySqlCommandBuilder(Adapter)
+                Return Adapter.Update(table)
+            End Using
+        Else
+            Using conn = NewConnection(), Adapter = New MySqlDataAdapter(selectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
+                OpenConnection(conn)
+                Return Adapter.Update(table)
+            End Using
+        End If
     End Function
 
     Public Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer Implements IDataBase.UpdateValue

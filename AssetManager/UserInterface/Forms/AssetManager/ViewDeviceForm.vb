@@ -90,25 +90,31 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub UpdateDevice(UpdateInfo As DeviceUpdateInfoStruct)
-        Try
-            Dim rows As Integer = 0
-            Dim SelectQry As String = "SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & CurrentViewDevice.GUID & "'"
-            Dim InsertQry As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " LIMIT 0"
-            rows += DBFunc.GetDatabase.UpdateTable(SelectQry, GetUpdateTable(SelectQry))
-            rows += DBFunc.GetDatabase.UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo))
-            If rows = 2 Then
-                LoadDevice(CurrentViewDevice.GUID)
-                Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
-            Else
-                LoadDevice(CurrentViewDevice.GUID)
-                Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
-            End If
-            Exit Sub
-        Catch ex As Exception
-            If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
-                LoadDevice(CurrentViewDevice.GUID)
-            End If
-        End Try
+        Dim rows As Integer = 0
+        Dim SelectQry As String = "SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & CurrentViewDevice.GUID & "'"
+        Dim InsertQry As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " LIMIT 0"
+        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+            Try
+                rows += DBFunc.GetDatabase.UpdateTable(SelectQry, GetUpdateTable(SelectQry), trans)
+                rows += DBFunc.GetDatabase.UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo), trans)
+
+                If rows = 2 Then
+                    trans.Commit()
+                    LoadDevice(CurrentViewDevice.GUID)
+                    Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
+                Else
+                    trans.Rollback()
+                    LoadDevice(CurrentViewDevice.GUID)
+                    Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
+                End If
+
+            Catch ex As Exception
+                trans.Rollback()
+                If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
+                    LoadDevice(CurrentViewDevice.GUID)
+                End If
+            End Try
+        End Using
     End Sub
 
     Public Sub LoadDevice(deviceGUID As String)

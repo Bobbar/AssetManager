@@ -165,30 +165,27 @@ Public Class SibiManageRequestForm
         If Not CheckForAccess(AccessGroup.AddSibi) Then Exit Sub
         If Not ValidateFields() Then Exit Sub
         Dim RequestData As RequestStruct = CollectData()
-        Try
-            Dim InsertRequestQry As String = "SELECT * FROM " & SibiRequestCols.TableName & " LIMIT 0"
-            Dim InsertRequestItemsQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0"
-            DBFunc.GetDatabase.UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID))
-            DBFunc.GetDatabase.UpdateTable(InsertRequestItemsQry, RequestData.RequestItems)
-            'Using SQLComms As New MySqlComms,
-            '    cmd As MySqlCommand = SQLComms.ReturnMySqlCommand(),
-            '    InsertAdapter = SQLComms.ReturnMySqlAdapter(InsertRequestQry),
-            '    InsertItemsAdapter = SQLComms.ReturnMySqlAdapter(InsertRequestItemsQry)
-            '    InsertAdapter.Update(GetInsertTable(InsertAdapter, CurrentRequest.GUID))
-            'InsertItemsAdapter.Update(RequestData.RequestItems)
-            'End Using
-            pnlCreate.Visible = False
-            Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
-            If TypeOf Me.Tag Is SibiMainForm Then
-                Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
-                ParentForm.RefreshResults()
-            End If
-            IsModifying = False
-            bolNewRequest = False
-            OpenRequest(CurrentRequest.GUID)
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
+        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+            Try
+                Dim InsertRequestQry As String = "SELECT * FROM " & SibiRequestCols.TableName & " LIMIT 0"
+                Dim InsertRequestItemsQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0"
+                DBFunc.GetDatabase.UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), trans)
+                DBFunc.GetDatabase.UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans)
+                pnlCreate.Visible = False
+                trans.Commit()
+                If TypeOf Me.Tag Is SibiMainForm Then
+                    Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
+                    ParentForm.RefreshResults()
+                End If
+                IsModifying = False
+                bolNewRequest = False
+                OpenRequest(CurrentRequest.GUID)
+                Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
+            Catch ex As Exception
+                trans.Rollback()
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            End Try
+        End Using
     End Sub
 
     Private Sub AddNote()
@@ -1178,34 +1175,32 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub UpdateRequest()
-        Try
-            If Not ConcurrencyCheck() Then
-                Message("It appears that someone else has modified this request. Please refresh and try again.", vbOKOnly + vbExclamation, "Concurrency Failure", Me)
-                Exit Sub
-            End If
-            Dim RequestData As RequestStruct = CollectData()
-            RequestData.GUID = CurrentRequest.GUID
-            If RequestData.RequestItems Is Nothing Then Exit Sub
-            Dim RequestUpdateQry As String = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & " = '" & CurrentRequest.GUID & "'"
-            Dim RequestItemsUpdateQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & " = '" & CurrentRequest.GUID & "'"
+        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+            Try
+                If Not ConcurrencyCheck() Then
+                    Message("It appears that someone else has modified this request. Please refresh and try again.", vbOKOnly + vbExclamation, "Concurrency Failure", Me)
+                    Exit Sub
+                End If
+                Dim RequestData As RequestStruct = CollectData()
+                RequestData.GUID = CurrentRequest.GUID
+                If RequestData.RequestItems Is Nothing Then Exit Sub
+                Dim RequestUpdateQry As String = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & " = '" & CurrentRequest.GUID & "'"
+                Dim RequestItemsUpdateQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & " = '" & CurrentRequest.GUID & "'"
 
-            DBFunc.GetDatabase.UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry))
-            DBFunc.GetDatabase.UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems)
+                DBFunc.GetDatabase.UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans)
+                DBFunc.GetDatabase.UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans)
 
-            'Using SQLComms As New MySqlComms,
-            '   RequestUpdateAdapter = SQLComms.ReturnMySqlAdapter(RequestUpdateQry),
-            '   RequestItemsUpdateAdapter = SQLComms.ReturnMySqlAdapter(RequestItemsUpdateQry)
-            'RequestUpdateAdapter.Update(GetUpdateTable(RequestUpdateAdapter))
-            '    RequestItemsUpdateAdapter.Update(RequestData.RequestItems)
-            'End Using
-            If TypeOf Me.Tag Is SibiMainForm Then
-                Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
-                ParentForm.RefreshResults()
-            End If
-            OpenRequest(CurrentRequest.GUID)
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
+                trans.Commit()
+                If TypeOf Me.Tag Is SibiMainForm Then
+                    Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
+                    ParentForm.RefreshResults()
+                End If
+                OpenRequest(CurrentRequest.GUID)
+            Catch ex As Exception
+                trans.Rollback()
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            End Try
+        End Using
     End Sub
 
     Private Function ValidateFields() As Boolean

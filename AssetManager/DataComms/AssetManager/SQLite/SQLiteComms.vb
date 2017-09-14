@@ -283,6 +283,10 @@ Public Class SQLiteDatabase
 
 
 #Region "IDataBase"
+    Public Function StartTransaction() As DbTransaction Implements IDataBase.StartTransaction
+        Throw New NotImplementedException()
+    End Function
+
     Public Function DataTableFromQueryString(query As String) As DataTable Implements IDataBase.DataTableFromQueryString
         Using results As New DataTable, da As DbDataAdapter = New SQLiteDataAdapter, cmd = New SQLiteCommand(query), conn = NewConnection()
             cmd.Connection = conn
@@ -336,7 +340,7 @@ Public Class SQLiteDatabase
         Throw New NotImplementedException()
     End Function
 
-    Function UpdateTable(selectQuery As String, table As DataTable) As Integer Implements IDataBase.UpdateTable
+    Public Function UpdateTable(selectQuery As String, table As DataTable, Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.UpdateTable
         Throw New NotImplementedException()
     End Function
 
