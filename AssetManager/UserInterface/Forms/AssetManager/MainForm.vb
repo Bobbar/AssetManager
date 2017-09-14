@@ -598,6 +598,16 @@ Public Class MainForm
         WatchDog.Dispose()
     End Sub
 
+    Private Sub ReEnterLACredentialsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReEnterLACredentialsToolStripMenuItem.Click
+        VerifyAdminCreds()
+    End Sub
+
+    Private Sub ViewLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewLogToolStripMenuItem.Click
+        Dim StartInfo As New ProcessStartInfo
+        StartInfo.FileName = strLogPath
+        Process.Start(StartInfo)
+    End Sub
+
 #End Region
 
 #End Region
