@@ -54,7 +54,9 @@
 
                 If ServerIsOnline Then
                     Using MySQLDB As New MySQLDatabase
-                        Dim ServerDateTime = MySQLDB.ExecuteScalarFromQueryString("SELECT NOW()").ToString
+                        Dim ServerDateTime = Await Task.Run(Function()
+                                                                Return MySQLDB.ExecuteScalarFromQueryString("SELECT NOW()").ToString
+                                                            End Function)
                         'Fire tick event to update server datatime.
                         OnWatcherTick(New WatchDogTickEventArgs(ServerDateTime))
                     End Using
