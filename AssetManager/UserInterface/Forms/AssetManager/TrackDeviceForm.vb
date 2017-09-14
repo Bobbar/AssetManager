@@ -115,67 +115,76 @@ Public Class TrackDeviceForm
     End Sub
 
     Private Sub CheckOut()
-        Try
-            If Not GetCheckData() Then Exit Sub
-            SetWaitCursor(True, Me)
-            Dim rows As Integer
-            rows += DBFunc.GetDatabase.UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID)
+        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+            Try
+                If Not GetCheckData() Then Exit Sub
+                SetWaitCursor(True, Me)
+                Dim rows As Integer
+                rows += DBFunc.GetDatabase.UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans)
 
-            Dim CheckOutParams As New List(Of DBParameter)
-            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckType, CheckType.Checkout))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutTime, CheckData.CheckoutTime))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.DueBackDate, CheckData.DueBackTime))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutUser, CheckData.CheckoutUser))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.Notes, CheckData.UseReason))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID))
-            rows += DBFunc.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams)
+                Dim CheckOutParams As New List(Of DBParameter)
+                CheckOutParams.Add(New DBParameter(TrackablesCols.CheckType, CheckType.Checkout))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutTime, CheckData.CheckoutTime))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.DueBackDate, CheckData.DueBackTime))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutUser, CheckData.CheckoutUser))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.Notes, CheckData.UseReason))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID))
+                rows += DBFunc.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans)
 
-            If rows = 2 Then
-                Message("Device Checked Out!", vbOKOnly + vbInformation, "Success", Me)
-            Else
-                Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
-            End If
-
-            MyParent.LoadDevice(CurrentTrackingDevice.GUID)
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        Finally
-            Me.Dispose()
-        End Try
+                If rows = 2 Then
+                    trans.Commit()
+                    Message("Device Checked Out!", vbOKOnly + vbInformation, "Success", Me)
+                Else
+                    trans.Rollback()
+                    Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
+                End If
+                MyParent.LoadDevice(CurrentTrackingDevice.GUID)
+            Catch ex As Exception
+                trans.Rollback()
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Finally
+                Me.Dispose()
+            End Try
+        End Using
     End Sub
 
     Private Sub CheckIn()
-        Try
-            If Not GetCheckData() Then Exit Sub
-            SetWaitCursor(True, Me)
-            Dim rows As Integer
-            rows += DBFunc.GetDatabase.UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID)
+        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+            Try
+                If Not GetCheckData() Then Exit Sub
+                SetWaitCursor(True, Me)
+                Dim rows As Integer
+                rows += DBFunc.GetDatabase.UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans)
 
-            Dim CheckOutParams As New List(Of DBParameter)
-            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckType, CheckType.Checkin))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutTime, CheckData.CheckoutTime))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.DueBackDate, CheckData.DueBackTime))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckinTime, CheckData.CheckinTime))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutUser, CheckData.CheckoutUser))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.CheckinUser, CheckData.CheckinUser))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.Notes, CheckData.UseReason))
-            CheckOutParams.Add(New DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID))
-            rows += DBFunc.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams)
+                Dim CheckOutParams As New List(Of DBParameter)
+                CheckOutParams.Add(New DBParameter(TrackablesCols.CheckType, CheckType.Checkin))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutTime, CheckData.CheckoutTime))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.DueBackDate, CheckData.DueBackTime))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.CheckinTime, CheckData.CheckinTime))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutUser, CheckData.CheckoutUser))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.CheckinUser, CheckData.CheckinUser))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.Notes, CheckData.UseReason))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID))
+                rows += DBFunc.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans)
 
-            If rows = 2 Then
-                Message("Device Checked In!", vbOKOnly + vbInformation, "Success", Me)
-            Else
-                Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbAbort, "Unexpected Result", Me)
-            End If
+                If rows = 2 Then
+                    trans.Commit()
+                    Message("Device Checked In!", vbOKOnly + vbInformation, "Success", Me)
+                Else
+                    trans.Rollback()
+                    Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
+                End If
 
-            MyParent.LoadDevice(CurrentTrackingDevice.GUID)
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        Finally
-            Me.Dispose()
-        End Try
+                MyParent.LoadDevice(CurrentTrackingDevice.GUID)
+            Catch ex As Exception
+                trans.Rollback()
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Finally
+                Me.Dispose()
+            End Try
+        End Using
     End Sub
 
     Private Sub cmdCheckOut_Click(sender As Object, e As EventArgs) Handles cmdCheckOut.Click

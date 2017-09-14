@@ -336,7 +336,7 @@ Public Class SQLiteDatabase
         Throw New NotImplementedException()
     End Function
 
-    Public Function InsertFromParameters(query As String, params As List(Of DBParameter)) As Integer Implements IDataBase.InsertFromParameters
+    Public Function InsertFromParameters(query As String, params As List(Of DBParameter), Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.InsertFromParameters
         Throw New NotImplementedException()
     End Function
 
@@ -344,7 +344,7 @@ Public Class SQLiteDatabase
         Throw New NotImplementedException()
     End Function
 
-    Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer Implements IDataBase.UpdateValue
+    Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String, Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.UpdateValue
         Throw New NotImplementedException()
     End Function
 

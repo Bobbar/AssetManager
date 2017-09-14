@@ -168,17 +168,29 @@ Public Class MySQLDatabase
         End Using
     End Function
 
-    Public Function InsertFromParameters(tableName As String, params As List(Of DBParameter)) As Integer Implements IDataBase.InsertFromParameters
+    Public Function InsertFromParameters(tableName As String, params As List(Of DBParameter), Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.InsertFromParameters
         Dim SelectQuery As String = "SELECT * FROM " & tableName & " LIMIT 0"
-        Using conn = NewConnection(), Adapter = New MySqlDataAdapter(SelectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
-            OpenConnection(conn)
-            Dim table = DataTableFromQueryString(SelectQuery)
-            table.Rows.Add()
-            For Each param In params
-                table.Rows(0)(param.FieldName) = param.Value
-            Next
-            Return Adapter.Update(table)
-        End Using
+        If transaction IsNot Nothing Then
+            Dim conn = DirectCast(transaction.Connection, MySqlConnection)
+            Using cmd = New MySqlCommand(SelectQuery, conn, DirectCast(transaction, MySqlTransaction)), Adapter = New MySqlDataAdapter(cmd), Builder = New MySqlCommandBuilder(Adapter)
+                Dim table = DataTableFromQueryString(SelectQuery)
+                table.Rows.Add()
+                For Each param In params
+                    table.Rows(0)(param.FieldName) = param.Value
+                Next
+                Return Adapter.Update(table)
+            End Using
+        Else
+            Using conn = NewConnection(), Adapter = New MySqlDataAdapter(SelectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
+                OpenConnection(conn)
+                Dim table = DataTableFromQueryString(SelectQuery)
+                table.Rows.Add()
+                For Each param In params
+                    table.Rows(0)(param.FieldName) = param.Value
+                Next
+                Return Adapter.Update(table)
+            End Using
+        End If
     End Function
 
     Public Function UpdateTable(selectQuery As String, table As DataTable, Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.UpdateTable
@@ -195,13 +207,22 @@ Public Class MySQLDatabase
         End If
     End Function
 
-    Public Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String) As Integer Implements IDataBase.UpdateValue
+    Public Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String, Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.UpdateValue
         Dim sqlUpdateQry As String = "UPDATE " & tableName & " SET " & fieldIn & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"
-        Using conn = NewConnection(), cmd As MySqlCommand = New MySqlCommand(sqlUpdateQry, conn)
-            OpenConnection(conn)
-            cmd.Parameters.AddWithValue("@ValueIN", valueIn)
-            Return cmd.ExecuteNonQuery()
-        End Using
+        If transaction IsNot Nothing Then
+            Dim conn = DirectCast(transaction.Connection, MySqlConnection)
+            Using cmd = New MySqlCommand(sqlUpdateQry, conn, DirectCast(transaction, MySqlTransaction))
+                cmd.Parameters.AddWithValue("@ValueIN", valueIn)
+                Return cmd.ExecuteNonQuery()
+            End Using
+        Else
+            Using conn = NewConnection(), cmd As MySqlCommand = New MySqlCommand(sqlUpdateQry, conn)
+                OpenConnection(conn)
+                cmd.Parameters.AddWithValue("@ValueIN", valueIn)
+                Return cmd.ExecuteNonQuery()
+            End Using
+        End If
+
     End Function
 
     Public Function GetCommand(Optional qryString As String = "") As DbCommand Implements IDataBase.GetCommand
