@@ -54,12 +54,16 @@
         Return colList
     End Function
 
-    Private Sub StartSearch()
+    Private Async Sub StartSearch()
         Try
             SetWaitCursor(True, _parentForm)
             Dim AdvSearch As New AdvancedSearch.Search(Trim(SearchStringTextBox.Text), GetSelectedTables) ' GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
             Dim DisplayGrid As New GridForm(_parentForm, "Advanced Search Results")
-            Dim Tables As List(Of DataTable) = AdvSearch.GetResults
+
+            Dim Tables As List(Of DataTable) = Await Task.Run(Function()
+                                                                  Return AdvSearch.GetResults
+                                                              End Function)
+
             For Each table In Tables
                 DisplayGrid.AddGrid(table.TableName, table.TableName, table)
             Next
