@@ -76,16 +76,16 @@ Partial Class MainForm
         Me.ToolStrip1 = New AssetManager.OneClickToolStrip()
         Me.AddDeviceTool = New System.Windows.Forms.ToolStripButton()
         Me.AdminDropDown = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.cmbDBs = New System.Windows.Forms.ToolStripComboBox()
-        Me.ManageAttachmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.txtGUID = New System.Windows.Forms.ToolStripTextBox()
         Me.tsmUserManager = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ReEnterLACredentialsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TextEnCrypterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmGKUpdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdvancedSearchMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PSScriptMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InstallChromeMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ViewLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
         Me.GroupBox1.SuspendLayout()
@@ -668,30 +668,13 @@ Partial Class MainForm
         '
         'AdminDropDown
         '
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbDBs, Me.ManageAttachmentsToolStripMenuItem, Me.txtGUID, Me.tsmUserManager, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater, Me.AdvancedSearchMenuItem, Me.PSScriptMenuItem})
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.txtGUID, Me.tsmUserManager, Me.ReEnterLACredentialsToolStripMenuItem, Me.ViewLogToolStripMenuItem, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater, Me.AdvancedSearchMenuItem, Me.PSScriptMenuItem})
         Me.AdminDropDown.Image = Global.AssetManager.My.Resources.Resources.AdminIcon
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.Name = "AdminDropDown"
         Me.AdminDropDown.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
         Me.AdminDropDown.Size = New System.Drawing.Size(143, 34)
         Me.AdminDropDown.Text = "Admin Tools"
-        '
-        'cmbDBs
-        '
-        Me.cmbDBs.Items.AddRange(New Object() {"asset_manager", "test_db"})
-        Me.cmbDBs.Name = "cmbDBs"
-        Me.cmbDBs.Size = New System.Drawing.Size(121, 23)
-        Me.cmbDBs.Text = "asset_manager"
-        Me.cmbDBs.ToolTipText = "Change DB"
-        Me.cmbDBs.Visible = False
-        '
-        'ManageAttachmentsToolStripMenuItem
-        '
-        Me.ManageAttachmentsToolStripMenuItem.Name = "ManageAttachmentsToolStripMenuItem"
-        Me.ManageAttachmentsToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
-        Me.ManageAttachmentsToolStripMenuItem.Text = "Manage Attachments"
-        Me.ManageAttachmentsToolStripMenuItem.ToolTipText = "Manage ALL Attachments"
-        Me.ManageAttachmentsToolStripMenuItem.Visible = False
         '
         'txtGUID
         '
@@ -708,6 +691,12 @@ Partial Class MainForm
         Me.tsmUserManager.Name = "tsmUserManager"
         Me.tsmUserManager.Size = New System.Drawing.Size(256, 26)
         Me.tsmUserManager.Text = "User Manager"
+        '
+        'ReEnterLACredentialsToolStripMenuItem
+        '
+        Me.ReEnterLACredentialsToolStripMenuItem.Name = "ReEnterLACredentialsToolStripMenuItem"
+        Me.ReEnterLACredentialsToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
+        Me.ReEnterLACredentialsToolStripMenuItem.Text = "Re-Enter Credentials"
         '
         'TextEnCrypterToolStripMenuItem
         '
@@ -745,6 +734,12 @@ Partial Class MainForm
         Me.InstallChromeMenuItem.Name = "InstallChromeMenuItem"
         Me.InstallChromeMenuItem.Size = New System.Drawing.Size(237, 26)
         Me.InstallChromeMenuItem.Text = "Install/Update Chrome"
+        '
+        'ViewLogToolStripMenuItem
+        '
+        Me.ViewLogToolStripMenuItem.Name = "ViewLogToolStripMenuItem"
+        Me.ViewLogToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
+        Me.ViewLogToolStripMenuItem.Text = "View Log"
         '
         'ToolStripSeparator5
         '
@@ -834,8 +829,6 @@ Partial Class MainForm
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents DateTimeLabel As ToolStripStatusLabel
     Friend WithEvents AdminDropDown As ToolStripDropDownButton
-    Friend WithEvents cmbDBs As ToolStripComboBox
-    Friend WithEvents ManageAttachmentsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents chkTrackables As CheckBox
     Friend WithEvents txtGUID As ToolStripTextBox
@@ -860,4 +853,6 @@ Partial Class MainForm
     Friend WithEvents tsmSendToGridForm As ToolStripMenuItem
     Friend WithEvents PSScriptMenuItem As ToolStripMenuItem
     Friend WithEvents InstallChromeMenuItem As ToolStripMenuItem
+    Friend WithEvents ReEnterLACredentialsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ViewLogToolStripMenuItem As ToolStripMenuItem
 End Class
