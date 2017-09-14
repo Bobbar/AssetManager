@@ -4,7 +4,6 @@ Imports System.Security
 Public Class GetCredentialsForm
     Private MyCreds As NetworkCredential
     Private SecurePwd As New SecureString
-
     Public ReadOnly Property Credentials As NetworkCredential
         Get
             Return MyCreds
@@ -44,5 +43,21 @@ Public Class GetCredentialsForm
             SecurePwd.AppendChar(e.KeyChar)
         End If
     End Sub
+
+    Private Sub txtPassword_KeyUp(sender As Object, e As KeyEventArgs) Handles txtPassword.KeyUp
+        SetText()
+    End Sub
+
+    Private Sub SetText()
+        txtPassword.Text = BlankText(SecurePwd.Length)
+        txtPassword.SelectionStart = txtPassword.Text.Length + 1
+    End Sub
+
+    Private Function BlankText(length As Integer) As String
+        If length > 0 Then
+            Return New String(Char.Parse("*"), length)
+        End If
+        Return String.Empty
+    End Function
 
 End Class
