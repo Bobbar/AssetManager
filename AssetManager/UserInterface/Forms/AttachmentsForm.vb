@@ -4,6 +4,7 @@ Imports System.ComponentModel
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Threading
+Imports System.Net
 
 
 Class AttachmentsForm
@@ -338,17 +339,25 @@ Class AttachmentsForm
         DBFunc.GetDatabase.InsertFromParameters(Attachment.AttachTable.TableName, InsertAttachmentParams)
     End Sub
 
-    Private Sub MakeDirectory(FolderGUID As String)
-        Dim LocalFTPComm As New FtpComms
-        Using resp = LocalFTPComm.ReturnFtpResponse(FTPUri, Net.WebRequestMethods.Ftp.ListDirectoryDetails), 'check if device folder exists. create directory if not.
+    Private Async Function MakeDirectory(FolderGUID As String) As Task(Of Boolean)
+        Return Await Task.Run(Function()
+                                  Dim LocalFTPComm As New FtpComms
+                                  Using resp = LocalFTPComm.ReturnFtpResponse(FTPUri, Net.WebRequestMethods.Ftp.ListDirectoryDetails), 'check if device folder exists. create directory if not.
                sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
-            Dim s As String = sr.ReadToEnd()
-            If Not s.Contains(FolderGUID) Then
-                Using MkDirResp = LocalFTPComm.ReturnFtpResponse(FTPUri & FolderGUID, Net.WebRequestMethods.Ftp.MakeDirectory)
-                End Using
-            End If
-        End Using
-    End Sub
+                                      Dim s As String = sr.ReadToEnd()
+                                      If Not s.Contains(FolderGUID) Then
+                                          Using MkDirResp = DirectCast(LocalFTPComm.ReturnFtpResponse(FTPUri & FolderGUID, Net.WebRequestMethods.Ftp.MakeDirectory), FtpWebResponse)
+                                              If MkDirResp.StatusCode = FtpStatusCode.PathnameCreated Then
+                                                  Return True
+                                              End If
+                                              Return False
+                                          End Using
+                                      Else
+                                          Return True
+                                      End If
+                                  End Using
+                              End Function)
+    End Function
 
     Private Function MouseIsDragging(Optional NewStartPos As Point = Nothing, Optional CurrentPos As Point = Nothing) As Boolean
         Dim intMouseMoveThreshold As Integer = 50
@@ -508,7 +517,11 @@ Class AttachmentsForm
                     Continue For
                 End If
                 SetStatusBar("Connecting...")
-                MakeDirectory(CurrentAttachment.FolderGUID)
+                If Not Await MakeDirectory(CurrentAttachment.FolderGUID) Then
+                    CurrentAttachment.Dispose()
+                    Message("Error creating FTP directory.", vbOKOnly + vbExclamation, "FTP Upload Error", Me)
+                    Exit Sub
+                End If
                 SetStatusBar("Uploading... " & FileNumber & " of " & files.Count)
                 Progress = New ProgressCounter
                 Await Task.Run(Sub()
