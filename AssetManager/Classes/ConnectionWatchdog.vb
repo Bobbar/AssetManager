@@ -53,14 +53,8 @@
 
 
                 If ServerIsOnline Then
-                    Using MySQLDB As New MySQLDatabase
-                        Dim ServerDateTime = Await Task.Run(Function()
-                                                                Return MySQLDB.ExecuteScalarFromQueryString("SELECT NOW()").ToString
-                                                            End Function)
-                        'Fire tick event to update server datatime.
-                        OnWatcherTick(New WatchDogTickEventArgs(ServerDateTime))
-                    End Using
-
+                    'Fire tick event to update server datatime.
+                    OnWatcherTick(New WatchDogTickEventArgs(Await GetServerTime()))
                 End If
 
                 CheckForCacheRebuild()
@@ -86,6 +80,17 @@
             End If
             PreviousWatchdogStatus = CurrentWatchdogStatus
         End Sub
+        Private Async Function GetServerTime() As Task(Of String)
+            Try
+                Return Await Task.Run(Function()
+                                          Using MySQLDB As New MySQLDatabase
+                                              Return MySQLDB.ExecuteScalarFromQueryString("SELECT NOW()").ToString
+                                          End Using
+                                      End Function)
+            Catch
+                Return String.Empty
+            End Try
+        End Function
 
         Private Async Function GetServerStatus() As Task(Of Boolean)
             Return Await Task.Run(Function()
