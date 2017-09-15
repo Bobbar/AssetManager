@@ -341,21 +341,24 @@ Class AttachmentsForm
 
     Private Async Function MakeDirectory(FolderGUID As String) As Task(Of Boolean)
         Return Await Task.Run(Function()
-                                  Dim LocalFTPComm As New FtpComms
-                                  Using resp = LocalFTPComm.ReturnFtpResponse(FTPUri, Net.WebRequestMethods.Ftp.ListDirectoryDetails), 'check if device folder exists. create directory if not.
-               sr As StreamReader = New StreamReader(resp.GetResponseStream(), System.Text.Encoding.ASCII)
-                                      Dim s As String = sr.ReadToEnd()
-                                      If Not s.Contains(FolderGUID) Then
-                                          Using MkDirResp = DirectCast(LocalFTPComm.ReturnFtpResponse(FTPUri & FolderGUID, Net.WebRequestMethods.Ftp.MakeDirectory), FtpWebResponse)
-                                              If MkDirResp.StatusCode = FtpStatusCode.PathnameCreated Then
-                                                  Return True
-                                              End If
-                                              Return False
-                                          End Using
-                                      Else
-                                          Return True
+                                  Try
+                                      Dim LocalFTPComm As New FtpComms
+                                      Using MkDirResp = DirectCast(LocalFTPComm.ReturnFtpResponse(FTPUri & FolderGUID, Net.WebRequestMethods.Ftp.MakeDirectory), FtpWebResponse)
+                                          If MkDirResp.StatusCode = FtpStatusCode.PathnameCreated Then
+                                              Return True
+                                          End If
+                                          Return False
+                                      End Using
+                                  Catch ex As WebException
+                                      If ex.Response IsNot Nothing Then
+                                          Dim resp = DirectCast(ex.Response, FtpWebResponse)
+                                          If resp.StatusCode = FtpStatusCode.ActionNotTakenFileUnavailable Then
+                                              'directory already exists
+                                              Return True
+                                          End If
                                       End If
-                                  End Using
+                                      Return False
+                                  End Try
                               End Function)
     End Function
 
@@ -516,7 +519,7 @@ Class AttachmentsForm
                     Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded", Me)
                     Continue For
                 End If
-                SetStatusBar("Connecting...")
+                SetStatusBar("Creating Directory...")
                 If Not Await MakeDirectory(CurrentAttachment.FolderGUID) Then
                     CurrentAttachment.Dispose()
                     Message("Error creating FTP directory.", vbOKOnly + vbExclamation, "FTP Upload Error", Me)
