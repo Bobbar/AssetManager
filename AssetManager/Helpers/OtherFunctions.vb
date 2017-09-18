@@ -111,16 +111,8 @@ Module OtherFunctions
         Return True
     End Function
 
-    Public Function CheckForActiveTransfers() As Boolean
-        Dim ActiveTransfers As New List(Of AttachmentsForm)
-        For Each frm As Form In My.Application.OpenForms
-            If TypeOf frm Is AttachmentsForm Then
-                Dim Attachments As AttachmentsForm = DirectCast(frm, AttachmentsForm)
-                If Attachments.ActiveTransfer Then
-                    ActiveTransfers.Add(Attachments)
-                End If
-            End If
-        Next
+    Public Function CheckForActiveTransfers(Optional parentForm As Form = Nothing) As Boolean
+        Dim ActiveTransfers = GetActiveAttachmentForms(parentForm)
         If ActiveTransfers.Count > 0 Then
             Dim blah = Message("There are " & ActiveTransfers.Count.ToString & " active uploads/downloads. Do you wish to cancel the current operations?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
             If blah = vbYes Then

@@ -7,7 +7,7 @@ Imports System.Threading
 Imports System.Net
 
 
-Class AttachmentsForm
+Public Class AttachmentsForm
 
 #Region "Fields"
 
@@ -553,7 +553,7 @@ Class AttachmentsForm
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            If Not GlobalSwitches.ProgramEnding Then
+            If Not GlobalSwitches.ProgramEnding And Not Me.IsDisposed Then
                 TransferTaskRunning = False
                 If CurrentAttachment IsNot Nothing Then CurrentAttachment.Dispose()
                 SetStatusBar("Idle...")

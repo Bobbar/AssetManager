@@ -85,4 +85,26 @@
         Return False
     End Function
 
+    Public Function GetActiveAttachmentForms(Optional parentForm As Form = Nothing) As List(Of AttachmentsForm)
+        Dim ActiveTransfers As New List(Of AttachmentsForm)
+        For Each frm As Form In My.Application.OpenForms
+            If TypeOf frm Is AttachmentsForm Then
+                Dim AttachForm As AttachmentsForm = DirectCast(frm, AttachmentsForm)
+                If parentForm IsNot Nothing Then
+                    If AttachForm.ActiveTransfer AndAlso DirectCast(AttachForm.Tag, Form) Is parentForm Then
+                        ActiveTransfers.Add(AttachForm)
+                    End If
+                Else
+                    If AttachForm.ActiveTransfer Then
+                        ActiveTransfers.Add(AttachForm)
+                    End If
+                End If
+            End If
+        Next
+        Return ActiveTransfers
+    End Function
+
+
+
+
 End Module

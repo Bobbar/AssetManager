@@ -47,7 +47,7 @@ Public Class ViewDeviceForm
 
 #Region "Methods"
 
-    Private Sub CancelModify()
+    Private Function CancelModify() As Boolean
         If EditMode Then
             Dim blah = Message("All changes will be lost.  Are you sure you want to cancel?", vbYesNo + vbQuestion, "Cancel Edit", Me)
             If blah = vbYes Then
@@ -57,9 +57,11 @@ Public Class ViewDeviceForm
                 ResetBackColors()
                 Me.Refresh()
                 RefreshDevice()
+                Return True
             End If
         End If
-    End Sub
+        Return False
+    End Function
 
     Public Sub SetAttachCount()
         If Not GlobalSwitches.CachedMode Then
@@ -1010,7 +1012,11 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        Me.Dispose()
+        Dim OKToClose As Boolean = True
+        Dim ActiveTransfers As Boolean = CheckForActiveTransfers(Me)
+        If ActiveTransfers Then OKToClose = False
+        If EditMode AndAlso Not CancelModify() Then OKToClose = False
+        e.Cancel = Not OKToClose
     End Sub
 
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed

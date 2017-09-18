@@ -40,6 +40,18 @@ Public Class SibiManageRequestForm
 
 #Region "Methods"
 
+    Private Function CancelModify() As Boolean
+        If IsModifying Then
+            Dim blah = Message("Are you sure you want to discard all changes?", vbOKCancel + vbQuestion, "Discard Changes", Me)
+            If blah = vbOK Then
+                HideEditControls()
+                OpenRequest(CurrentRequest.GUID)
+                Return True
+            End If
+        End If
+        Return False
+    End Function
+
     Private Sub ClearAll()
         ClearControls(Me)
         ResetBackColors(Me)
@@ -400,11 +412,7 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub cmdDiscard_Click(sender As Object, e As EventArgs) Handles cmdDiscard.Click
-        Dim blah = Message("Are you sure you want to discard all changes?", vbOKCancel + vbQuestion, "Discard Changes", Me)
-        If blah = vbOK Then
-            HideEditControls()
-            OpenRequest(CurrentRequest.GUID)
-        End If
+        CancelModify()
     End Sub
 
     Private Sub cmdNewNote_Click(sender As Object, e As EventArgs) Handles cmdNewNote.Click
@@ -594,17 +602,16 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        Dim CancelClose As Boolean = CheckForActiveTransfers()
-        If CancelClose Then
-            e.Cancel = True
-        Else
-            MyMunisToolBar.Dispose()
-            MyWindowList.Dispose()
-            CloseChildren(Me)
-        End If
+        Dim OKToClose As Boolean = True
+        Dim ActiveTransfers As Boolean = CheckForActiveTransfers(Me)
+        If ActiveTransfers Then OKToClose = False
+        If IsModifying AndAlso Not CancelModify() Then OKToClose = False
+        e.Cancel = Not OKToClose
     End Sub
 
     Private Sub frmManageRequest_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        MyMunisToolBar.Dispose()
+        MyWindowList.Dispose()
         CloseChildren(Me)
     End Sub
 
