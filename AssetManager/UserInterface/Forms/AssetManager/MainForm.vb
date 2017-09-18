@@ -14,7 +14,6 @@ Public Class MainForm
     Private MyLiveBox As New LiveBox(Me)
     Private MyMunisToolBar As New MunisToolBar(Me)
     Private MyWindowList As New WindowList(Me)
-    Private strServerTime As String = Now.ToString
     Private QueryRunning As Boolean = False
     Private WatchDog As ConnectionMonitoring.ConnectionWatchdog
 

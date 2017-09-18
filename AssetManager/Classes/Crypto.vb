@@ -30,9 +30,8 @@ Public Class Simple3Des : Implements IDisposable
         Dim plaintextBytes() As Byte =
             System.Text.Encoding.Unicode.GetBytes(plaintext)
         ' Create the stream.
-        Dim ms As New System.IO.MemoryStream
         ' Create the encoder to write to the stream.
-        Using encStream As New CryptoStream(ms,
+        Using ms As New System.IO.MemoryStream, encStream As New CryptoStream(ms,
             TripleDes.CreateEncryptor(),
             System.Security.Cryptography.CryptoStreamMode.Write)
             ' Use the crypto stream to write the byte array to the stream.
@@ -47,10 +46,9 @@ Public Class Simple3Des : Implements IDisposable
         Try
             ' Convert the encrypted text string to a byte array.
             Dim encryptedBytes() As Byte = Convert.FromBase64String(encryptedtext)
-            ' Create the stream.
-            Dim ms As New System.IO.MemoryStream
+            ' ' Create the stream.
             ' Create the decoder to write to the stream.
-            Using decStream As New CryptoStream(ms,
+            Using ms As New System.IO.MemoryStream, decStream As New CryptoStream(ms,
             TripleDes.CreateDecryptor(),
             System.Security.Cryptography.CryptoStreamMode.Write)
                 ' Use the crypto stream to write the byte array to the stream.

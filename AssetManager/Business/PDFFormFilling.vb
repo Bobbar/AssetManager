@@ -27,6 +27,7 @@ Public Class PdfFormFilling
         Debug.Print(sb.ToString())
     End Sub
 
+    <CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId:="Req")>
     Private Function GetUnitPrice() As String
         Using NewDialog As New AdvancedDialog(ParentForm)
             CurrentDialog = NewDialog
@@ -63,21 +64,18 @@ Public Class PdfFormFilling
 
             Select Case Type
                 Case PdfFormType.InputForm
-                    Dim pdfReader As New PdfReader(My.Resources.Exh_K_01_Asset_Input_Formnew)
-                    Using pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
+                    Using pdfReader As New PdfReader(My.Resources.Exh_K_01_Asset_Input_Formnew), pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
                         Dim pdfFormFields As AcroFields = InputFormFields(CurrentDevice, pdfStamper)
                         pdfStamper.FormFlattening = FlattenPrompt()
                     End Using
 
                 Case PdfFormType.TransferForm
-                    Dim pdfReader As New PdfReader(My.Resources.Exh_K_03_Asset_Transfer_Form)
-                    Using pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
+                    Using pdfReader As New PdfReader(My.Resources.Exh_K_03_Asset_Transfer_Form), pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
                         Dim pdfFormFields As AcroFields = TransferFormFields(CurrentDevice, pdfStamper)
                         pdfStamper.FormFlattening = FlattenPrompt()
                     End Using
                 Case PdfFormType.DisposeForm
-                    Dim pdfReader As New PdfReader(My.Resources.Exh_K_02_Asset_Disposal_Form)
-                    Using pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
+                    Using pdfReader As New PdfReader(My.Resources.Exh_K_02_Asset_Disposal_Form), pdfStamper = New PdfStamper(pdfReader, New FileStream(newFile, FileMode.Create))
                         Dim pdfFormFields As AcroFields = DisposalFormFields(CurrentDevice, pdfStamper)
                         pdfStamper.FormFlattening = FlattenPrompt()
                     End Using

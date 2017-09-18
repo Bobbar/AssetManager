@@ -58,7 +58,7 @@ Public Class MySQLDatabase
 
 #Region "Methods"
 
-    Public Function NewConnection(Optional overrideNoPing As Boolean = False) As MySqlConnection
+    Public Function NewConnection() As MySqlConnection
         Return New MySqlConnection(GetConnectString)
     End Function
 
