@@ -321,7 +321,6 @@ Public Class ViewDeviceForm
                 bolCheckFields = True
                 Exit Sub
             End If
-            DisableControls()
             Using UpdateDia As New UpdateDev(Me)
                 If UpdateDia.DialogResult = DialogResult.OK Then
                     If Not ConcurrencyCheck() Then
