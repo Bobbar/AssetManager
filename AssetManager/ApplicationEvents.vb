@@ -11,6 +11,7 @@ Namespace My
     Partial Friend Class MyApplication
 
         Private Sub LoadSplash(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
+            ProcessCommandArgs()
             Dim ConnectionSuccessful As Boolean = False
             Dim CacheAvailable As Boolean = False
             SplashScreenForm.Show()
@@ -68,6 +69,25 @@ Namespace My
 
         Private Sub Status(Text As String)
             SplashScreenForm.SetStatus(Text)
+        End Sub
+
+        Private Sub ProcessCommandArgs()
+            Try
+                Dim Args = Environment.GetCommandLineArgs
+                For i = 1 To Args.Length - 1
+                    Try
+                        Dim ArgToEnum = DirectCast(CommandArgs.Parse(GetType(CommandArgs), UCase(Args(i))), CommandArgs)
+                        Select Case ArgToEnum
+                            Case CommandArgs.TESTDB
+                                ServerInfo.UseTestDatabase = True
+                        End Select
+                    Catch ex As ArgumentException
+                        Logger("Invalid argument: " & Args(i))
+                    End Try
+                Next
+            Catch ex As Exception
+                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            End Try
         End Sub
 
     End Class

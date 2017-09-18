@@ -44,6 +44,10 @@ Public Enum FindDevType
     Serial
 End Enum
 
+Public Enum CommandArgs
+    TESTDB
+End Enum
+
 Public Class DBParameter
     Public Property FieldName As String
     Public Property Value As Object
