@@ -7,7 +7,7 @@ Public Class SibiManageRequestForm
     Private CurrentRequest As RequestStruct
     Private CurrentHash As String
     Private IsModifying As Boolean = False
-    Private bolNewRequest As Boolean = False
+    Private IsNewRequest As Boolean = False
     Private bolDragging As Boolean = False
     Private bolFieldsValid As Boolean
     Private bolGridFilling As Boolean = False
@@ -44,9 +44,13 @@ Public Class SibiManageRequestForm
         If IsModifying Then
             Dim blah = Message("Are you sure you want to discard all changes?", vbOKCancel + vbQuestion, "Discard Changes", Me)
             If blah = vbOK Then
-                HideEditControls()
-                OpenRequest(CurrentRequest.GUID)
-                Return True
+                If IsNewRequest Then
+                    Return True
+                Else
+                    HideEditControls()
+                    OpenRequest(CurrentRequest.GUID)
+                    Return True
+                End If
             End If
         End If
         Return False
@@ -64,7 +68,7 @@ Public Class SibiManageRequestForm
         DisableControls()
         ToolStrip.BackColor = colSibiToolBarColor
         IsModifying = False
-        bolNewRequest = False
+        IsNewRequest = False
         fieldErrorIcon.Clear()
     End Sub
 
@@ -77,7 +81,7 @@ Public Class SibiManageRequestForm
             End If
         End If
         ClearAll()
-        bolNewRequest = True
+        IsNewRequest = True
         SetTitle(True)
         CurrentRequest.GUID = Guid.NewGuid.ToString
         Me.FormUID = CurrentRequest.GUID
@@ -192,7 +196,7 @@ Public Class SibiManageRequestForm
                     ParentForm.RefreshResults()
                 End If
                 IsModifying = False
-                bolNewRequest = False
+                IsNewRequest = False
                 OpenRequest(CurrentRequest.GUID)
                 Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
             Catch ex As Exception
@@ -205,7 +209,7 @@ Public Class SibiManageRequestForm
     Private Sub AddNote()
         Try
             If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
-            If CurrentRequest.GUID <> "" And Not bolNewRequest Then
+            If CurrentRequest.GUID <> "" And Not IsNewRequest Then
                 Dim NewNote As New SibiNotesForm(Me, CurrentRequest)
                 If NewNote.DialogResult = DialogResult.OK Then
                     AddNewNote(NewNote.Request.GUID, Trim(NewNote.rtbNotes.Rtf))
@@ -341,7 +345,7 @@ Public Class SibiManageRequestForm
     Private Sub ViewAttachments()
         If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen(Me) Then
-            If CurrentRequest.GUID <> "" And Not bolNewRequest Then
+            If CurrentRequest.GUID <> "" And Not IsNewRequest Then
                 Dim NewAttach As New AttachmentsForm(Me, New SibiAttachmentsCols, CurrentRequest)
             End If
         End If
@@ -1060,7 +1064,7 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub tsbRefresh_Click(sender As Object, e As EventArgs) Handles tsbRefresh.Click
-        If Not bolNewRequest Then OpenRequest(CurrentRequest.GUID)
+        If Not IsNewRequest Then OpenRequest(CurrentRequest.GUID)
     End Sub
 
     Private Sub tsmCopyText_Click(sender As Object, e As EventArgs) Handles tsmCopyText.Click
