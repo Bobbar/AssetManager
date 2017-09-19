@@ -598,6 +598,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ReEnterLACredentialsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReEnterLACredentialsToolStripMenuItem.Click
+        AdminCreds = Nothing
         VerifyAdminCreds()
     End Sub
 
