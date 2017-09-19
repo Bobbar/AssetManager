@@ -104,6 +104,15 @@
         Return ActiveTransfers
     End Function
 
+    Public Function OKToCloseChildren(parentForm As Form) As Boolean
+        Dim CanClose As Boolean = True
+        Dim frms = My.Application.OpenForms.OfType(Of ThemedForm).ToList.FindAll(Function(f) f.Tag Is parentForm).ToArray
+        For i = 0 To frms.Length - 1
+            If Not frms(i).OKToClose Then CanClose = False
+        Next
+        Return CanClose
+    End Function
+
 
 
 

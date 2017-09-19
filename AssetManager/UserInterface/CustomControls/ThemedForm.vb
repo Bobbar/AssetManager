@@ -31,4 +31,8 @@ Public Class ThemedForm
         End Get
     End Property
 
+    Public Overridable Function OKToClose() As Boolean
+        Return True
+    End Function
+
 End Class

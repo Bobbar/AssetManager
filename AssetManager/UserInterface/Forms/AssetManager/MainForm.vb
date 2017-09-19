@@ -157,7 +157,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If Not OKToEnd() Then
+        If Not OKToEnd() Or Not OKToCloseChildren(Me) Then
             e.Cancel = True
         Else
             LastCommand.Dispose()

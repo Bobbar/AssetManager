@@ -42,6 +42,8 @@ Public Class SibiManageRequestForm
 
     Private Function CancelModify() As Boolean
         If IsModifying Then
+            Me.WindowState = FormWindowState.Normal
+            Me.Activate()
             Dim blah = Message("Are you sure you want to discard all changes?", vbOKCancel + vbQuestion, "Discard Changes", Me)
             If blah = vbOK Then
                 If IsNewRequest Then
@@ -607,12 +609,17 @@ Public Class SibiManageRequestForm
         FillComboBox(SibiIndex.RequestType, cmbType)
     End Sub
 
+    Public Overrides Function OKToClose() As Boolean
+        Dim CanClose As Boolean = True
+        If Not OKToCloseChildren(Me) Then CanClose = False
+        If IsModifying AndAlso Not CancelModify() Then CanClose = False
+        Return CanClose
+    End Function
+
     Private Sub frmManageRequest_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        Dim OKToClose As Boolean = True
-        Dim ActiveTransfers As Boolean = CheckForActiveTransfers(Me)
-        If ActiveTransfers Then OKToClose = False
-        If IsModifying AndAlso Not CancelModify() Then OKToClose = False
-        e.Cancel = Not OKToClose
+        If Not OKToClose() Then
+            e.Cancel = True
+        End If
     End Sub
 
     Private Sub frmManageRequest_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed

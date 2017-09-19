@@ -106,30 +106,8 @@ Module OtherFunctions
             Message("Still building DB Cache. Please wait and try again.", vbOKOnly + vbInformation, "Critical Function Running")
             Return False
         End If
-        If CheckForActiveTransfers() Then Return False
         If GKUpdaterForm.Visible AndAlso Not GKUpdaterForm.OkToClose() Then Return False
         Return True
-    End Function
-
-    Public Function CheckForActiveTransfers(Optional parentForm As Form = Nothing) As Boolean
-        Dim ActiveTransfers = GetActiveAttachmentForms(parentForm)
-        If ActiveTransfers.Count > 0 Then
-            Dim blah = Message("There are " & ActiveTransfers.Count.ToString & " active uploads/downloads. Do you wish to cancel the current operations?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy")
-            If blah = vbYes Then
-                For Each AttachForm As AttachmentsForm In ActiveTransfers
-                    AttachForm.CancelTransfers()
-                Next
-                Return False
-            Else
-                For Each AttachForm As AttachmentsForm In ActiveTransfers
-                    AttachForm.WindowState = FormWindowState.Normal
-                    AttachForm.Activate()
-                Next
-                Return True
-            End If
-        Else
-            Return False
-        End If
     End Function
 
     Public Sub SetWaitCursor(Waiting As Boolean, Optional parentForm As Form = Nothing)

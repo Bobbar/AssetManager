@@ -50,6 +50,8 @@ Public Class ViewDeviceForm
 
     Private Function CancelModify() As Boolean
         If EditMode Then
+            Me.WindowState = FormWindowState.Normal
+            Me.Activate()
             Dim blah = Message("All changes will be lost.  Are you sure you want to cancel?", vbYesNo + vbQuestion, "Cancel Edit", Me)
             If blah = vbYes Then
                 bolCheckFields = False
@@ -1014,12 +1016,18 @@ Public Class ViewDeviceForm
         If bolCheckFields Then CheckFields()
     End Sub
 
+    Public Overrides Function OKToClose() As Boolean
+        Dim CanClose As Boolean = True
+        If Not OKToCloseChildren(Me) Then CanClose = False
+        If EditMode AndAlso Not CancelModify() Then CanClose = False
+        Return CanClose
+    End Function
+
+
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        Dim OKToClose As Boolean = True
-        Dim ActiveTransfers As Boolean = CheckForActiveTransfers(Me)
-        If ActiveTransfers Then OKToClose = False
-        If EditMode AndAlso Not CancelModify() Then OKToClose = False
-        e.Cancel = Not OKToClose
+        If Not OKToClose() Then
+            e.Cancel = True
+        End If
     End Sub
 
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed

@@ -138,16 +138,25 @@ Public Class AttachmentsForm
         StatusLabel.Text = Text
         StatusStrip1.Update()
     End Sub
-
-    Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+    Public Overrides Function OKToClose() As Boolean
         If ActiveTransfer() Then
-            e.Cancel = True
+            Me.WindowState = FormWindowState.Normal
+            Me.Activate()
             Dim blah = Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxIcon.Warning + vbYesNo, "Worker Busy", Me)
             If blah = vbYes Then
                 CancelTransfers()
+                Return True
+            Else
+                Return False
             End If
         End If
-        PurgeTempDir()
+        Return True
+    End Function
+
+    Private Sub Attachments_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        If Not OKToClose() Then
+            e.Cancel = True
+        End If
     End Sub
 
     Private Sub MoveAttachmentFolder()
@@ -245,8 +254,8 @@ Public Class AttachmentsForm
             If dAttachment IsNot Nothing Then dAttachment.Dispose()
             Throw ex
         Finally
+            TransferTaskRunning = False
             If Not GlobalSwitches.ProgramEnding Then
-                TransferTaskRunning = False
                 WorkerFeedback(False)
             End If
         End Try
@@ -553,8 +562,8 @@ Public Class AttachmentsForm
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
+            TransferTaskRunning = False
             If Not GlobalSwitches.ProgramEnding And Not Me.IsDisposed Then
-                TransferTaskRunning = False
                 If CurrentAttachment IsNot Nothing Then CurrentAttachment.Dispose()
                 SetStatusBar("Idle...")
                 WorkerFeedback(False)
@@ -799,6 +808,9 @@ Public Class AttachmentsForm
         DownloadAndSaveAttachment(SelectedAttachment)
     End Sub
 
+    Private Sub AttachmentsForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        PurgeTempDir()
+    End Sub
 #End Region
 
 #End Region

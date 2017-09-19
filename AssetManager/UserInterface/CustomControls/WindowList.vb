@@ -169,8 +169,10 @@
         Dim frm As Form = CType(item.Tag, Form)
         If e.Button = MouseButtons.Right Then
             If Not IsParentForm(frm) Then
-                frm.Dispose()
-                DisposeDropDownItem(item)
+                frm.Close()
+                If frm.Disposing Or frm.IsDisposed Then
+                    DisposeDropDownItem(item)
+                End If
             End If
         ElseIf e.Button = MouseButtons.Left Then
             If Not frm.IsDisposed Then

@@ -305,15 +305,14 @@ Public Class SibiMainForm
             ShowAll(cmbDisplayYear.Text)
         End If
     End Sub
-
+    Public Overrides Function OKToClose() As Boolean
+        Dim CanClose As Boolean = True
+        If Not OKToCloseChildren(Me) Then CanClose = False
+        Return CanClose
+    End Function
     Private Sub frmSibiMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        Dim CancelClose As Boolean = CheckForActiveTransfers()
-        If CancelClose Then
+        If Not OKToClose() Then
             e.Cancel = True
-        Else
-            LastCmd.Dispose()
-            MyWindowList.Dispose()
-            CloseChildren(Me)
         End If
     End Sub
 
@@ -334,6 +333,8 @@ Public Class SibiMainForm
     End Sub
 
     Private Sub SibiMainForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        LastCmd.Dispose()
+        MyWindowList.Dispose()
         CloseChildren(Me)
     End Sub
 End Class
