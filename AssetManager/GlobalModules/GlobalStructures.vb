@@ -23,7 +23,6 @@ Public Structure DeviceStruct
     Public Note As String
     Public IsTrackable As Boolean
     Public SibiLink As String
-    Public Checksum As String
     Public HostName As String
     Public Tracking As DeviceTrackingStruct
     Public Historical As DeviceHistoricalStruct

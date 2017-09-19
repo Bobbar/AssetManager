@@ -14,7 +14,6 @@
     Public Const EQType As String = "dev_eq_type"
     Public Const Status As String = "dev_status"
     Public Const Trackable As String = "dev_trackable"
-    Public Const Checksum As String = "dev_checksum"
     Public Const HostName As String = "dev_hostname"
     Public Const iCloudAccount As String = "dev_icloud_account"
 End Class

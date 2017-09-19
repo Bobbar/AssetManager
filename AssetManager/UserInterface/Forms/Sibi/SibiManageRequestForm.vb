@@ -96,23 +96,24 @@ Public Class SibiManageRequestForm
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & "='" & RequestUID & "' ORDER BY " & SibiRequestItemsCols.Timestamp
-            Dim RequestResults As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strRequestQRY)
-            Dim RequestItemsResults As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strRequestItemsQRY)
-            RequestResults.TableName = SibiRequestCols.TableName
-            RequestItemsResults.TableName = SibiRequestItemsCols.TableName
-            CurrentHash = GetHash(RequestResults, RequestItemsResults)
-            ClearAll()
-            CollectRequestInfo(RequestResults, RequestItemsResults)
-            DataParser.FillDBFields(RequestResults)
-            SendToGrid(RequestItemsResults)
-            LoadNotes(CurrentRequest.GUID)
-            DisableControls()
-            SetTitle(False)
-            SetAttachCount()
-            Me.Show()
-            Me.Activate()
-            SetMunisStatus()
-            bolGridFilling = False
+            Using RequestResults As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strRequestQRY),
+                RequestItemsResults As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strRequestItemsQRY)
+                RequestResults.TableName = SibiRequestCols.TableName
+                RequestItemsResults.TableName = SibiRequestItemsCols.TableName
+                CurrentHash = GetHash(RequestResults, RequestItemsResults)
+                ClearAll()
+                CollectRequestInfo(RequestResults, RequestItemsResults)
+                DataParser.FillDBFields(RequestResults)
+                SendToGrid(RequestItemsResults)
+                LoadNotes(CurrentRequest.GUID)
+                DisableControls()
+                SetTitle(False)
+                SetAttachCount()
+                Me.Show()
+                Me.Activate()
+                SetMunisStatus()
+                bolGridFilling = False
+            End Using
         Catch ex As Exception
             Message("An error occured while opening the request. It may have been deleted.", vbOKOnly + vbExclamation, "Error", Me)
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -128,15 +129,16 @@ Public Class SibiManageRequestForm
     End Function
     Private Function ConcurrencyCheck() As Boolean
         Try
-            Dim RequestTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & CurrentRequest.GUID & "'")
-            RequestTable.TableName = SibiRequestCols.TableName
-            Dim ItemTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & "='" & CurrentRequest.GUID & "' ORDER BY " & SibiRequestItemsCols.Timestamp)
-            ItemTable.TableName = SibiRequestItemsCols.TableName
+            Using RequestTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & CurrentRequest.GUID & "'"),
+            ItemTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & "='" & CurrentRequest.GUID & "' ORDER BY " & SibiRequestItemsCols.Timestamp)
+                RequestTable.TableName = SibiRequestCols.TableName
+                ItemTable.TableName = SibiRequestItemsCols.TableName
                 Dim DBHash As String = GetHash(RequestTable, ItemTable)
                 If DBHash <> CurrentHash Then
                     Return False
                 End If
-            Return True
+                Return True
+            End Using
         Catch ex As Exception
             Throw
         End Try

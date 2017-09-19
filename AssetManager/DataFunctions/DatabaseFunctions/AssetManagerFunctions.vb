@@ -82,7 +82,6 @@
                 .IsTrackable = CBool(deviceTable.Rows(0).Item(DevicesCols.Trackable))
                 .SibiLink = NoNull(deviceTable.Rows(0).Item(DevicesCols.SibiLinkUID))
                 .Tracking.IsCheckedOut = CBool(deviceTable.Rows(0).Item(DevicesCols.CheckedOut))
-                .Checksum = NoNull(deviceTable.Rows(0).Item(DevicesCols.Checksum))
                 .HostName = NoNull(deviceTable.Rows(0).Item(DevicesCols.HostName))
             End With
             Return newDeviceInfo

@@ -9,6 +9,7 @@ Public Class ViewDeviceForm
 
     Public MunisUser As MunisEmployeeStruct = Nothing
     Private CurrentViewDevice As New DeviceStruct
+    Private CurrentHash As String
     Private bolCheckFields As Boolean
     Private bolGridFilling As Boolean = False
     Private DataParser As New DBControlParser(Me)
@@ -432,13 +433,17 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Function ConcurrencyCheck() As Boolean
-        Dim InDBCheckSum As String = AssetFunc.GetSqlValue(DevicesCols.TableName, DevicesCols.DeviceUID, CurrentViewDevice.GUID, DevicesCols.Checksum)
-        If InDBCheckSum = CurrentViewDevice.Checksum Then
+        Using DeviceResults = GetDevicesTable(CurrentViewDevice.GUID),
+                HistoricalResults = GetHistoricalTable(CurrentViewDevice.GUID)
+            DeviceResults.TableName = DevicesCols.TableName
+            HistoricalResults.TableName = HistoricalDevicesCols.TableName
+            Dim DBHash = GetHash(DeviceResults, HistoricalResults)
+            If DBHash <> CurrentHash Then
+                Message("This record appears to have been modified by someone else since the start of this modification.", vbOKOnly + vbExclamation, "Concurrency Error", Me)
+                Return False
+            End If
             Return True
-        Else
-            Message("This record appears to have been modified by someone else since the start of this modification.", vbOKOnly + vbExclamation, "Concurrency Error", Me)
-            Return False
-        End If
+        End Using
     End Function
 
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
@@ -657,7 +662,6 @@ Public Class ViewDeviceForm
         DBRow(DevicesCols.SibiLinkUID) = CleanDBValue(CurrentViewDevice.SibiLink)
         DBRow(DevicesCols.LastModUser) = strLocalUser
         DBRow(DevicesCols.LastModDate) = Now
-        DBRow(DevicesCols.Checksum) = GetHashOfTable(tmpTable)
         MunisUser = Nothing
         Return tmpTable
     End Function
@@ -958,12 +962,12 @@ Public Class ViewDeviceForm
             Using UpdateDia As New UpdateDev(Me, True)
                 If UpdateDia.DialogResult = DialogResult.OK Then
                     If Not ConcurrencyCheck() Then
-                        CancelModify()
-                        Exit Sub
+                        RefreshDevice()
+                    Else
+                        UpdateDevice(UpdateDia.UpdateInfo)
                     End If
-                    UpdateDevice(UpdateDia.UpdateInfo)
                 Else
-                    CancelModify()
+                    RefreshDevice()
                 End If
             End Using
         Catch ex As Exception
@@ -1032,16 +1036,31 @@ Public Class ViewDeviceForm
         End If
     End Sub
 
-    Private Function LoadHistoryAndFields(ByVal DeviceUID As String) As Boolean
+    Private Function GetHash(deviceTable As DataTable, historicalTable As DataTable) As String
+        Return GetHashOfTable(deviceTable) & GetHashOfTable(historicalTable)
+    End Function
+
+    Private Function GetDevicesTable(deviceUID As String) As DataTable
+        Return DBFunc.GetDatabase.DataTableFromQueryString("Select * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & " = '" & deviceUID & "'")
+    End Function
+
+    Private Function GetHistoricalTable(deviceUID As String) As DataTable
+        Return DBFunc.GetDatabase.DataTableFromQueryString("Select * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.DeviceUID & " = '" & deviceUID & "' ORDER BY " & HistoricalDevicesCols.ActionDateTime & " DESC")
+    End Function
+
+    Private Function LoadHistoryAndFields(deviceUID As String) As Boolean
         Try
-            Using DeviceResults = DBFunc.GetDatabase.DataTableFromQueryString("Select * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & " = '" & DeviceUID & "'"),
-                    HistoricalResults = DBFunc.GetDatabase.DataTableFromQueryString("Select * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.DeviceUID & " = '" & DeviceUID & "' ORDER BY " & HistoricalDevicesCols.ActionDateTime & " DESC")
+            Using DeviceResults = GetDevicesTable(deviceUID),
+                HistoricalResults = GetHistoricalTable(deviceUID)
+                DeviceResults.TableName = DevicesCols.TableName
+                HistoricalResults.TableName = HistoricalDevicesCols.TableName
                 If DeviceResults.Rows.Count < 1 Then
                     CloseChildren(Me)
                     CurrentViewDevice = Nothing
                     Message("That device was not found!  It may have been deleted.  Re-execute your search.", vbOKOnly + vbExclamation, "Not Found", Me)
                     Return False
                 End If
+                CurrentHash = GetHash(DeviceResults, HistoricalResults)
                 CurrentViewDevice = AssetFunc.CollectDeviceInfo(DeviceResults)
                 DataParser.FillDBFields(DeviceResults)
                 SetMunisEmpStatus()
