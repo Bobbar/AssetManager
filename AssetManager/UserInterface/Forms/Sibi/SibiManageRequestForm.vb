@@ -22,13 +22,13 @@ Public Class SibiManageRequestForm
 
 #Region "Constructors"
 
-    Sub New(parentForm As ThemedForm, requestUID As String)
+    Sub New(parentForm As ExtendedForm, requestUID As String)
         InitializeComponent()
         InitForm(parentForm, requestUID)
         OpenRequest(requestUID)
     End Sub
 
-    Sub New(parentForm As ThemedForm)
+    Sub New(parentForm As ExtendedForm)
         InitializeComponent()
         InitForm(parentForm)
         Text += " - *New Request*"
@@ -694,13 +694,11 @@ Public Class SibiManageRequestForm
 
     End Sub
 
-    Private Sub InitForm(ParentForm As ThemedForm, Optional UID As String = "")
+    Private Sub InitForm(ParentForm As ExtendedForm, Optional UID As String = "")
         InitDBControls()
         ExtendedMethods.DoubleBufferedDataGrid(RequestItemsGrid, True)
         MyMunisToolBar.InsertMunisDropDown(ToolStrip)
-        Tag = ParentForm
-        Icon = ParentForm.Icon
-        GridTheme = ParentForm.GridTheme
+        Me.ParentForm = ParentForm
         Me.FormUID = UID
         MyWindowList.InsertWindowList(ToolStrip)
         dgvNotes.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor

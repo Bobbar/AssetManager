@@ -4,11 +4,10 @@ Public Class ViewHistoryForm
     Private DataParser As New DBControlParser(Me)
     Private _DeviceGUID As String
 
-    Sub New(parentForm As Form, entryUID As String, deviceGUID As String)
+    Sub New(parentForm As ExtendedForm, entryUID As String, deviceGUID As String)
         InitializeComponent()
         InitDBControls()
-        Tag = parentForm
-        Icon = parentForm.Icon
+        Me.ParentForm = parentForm
         FormUID = entryUID
         _DeviceGUID = deviceGUID
         ViewEntry(entryUID)

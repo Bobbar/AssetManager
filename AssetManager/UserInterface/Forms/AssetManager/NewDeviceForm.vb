@@ -13,6 +13,16 @@
 #End Region
 
 #Region "Methods"
+    Sub New(parentForm As ExtendedForm)
+        InitializeComponent()
+        Me.ParentForm = parentForm
+        Me.Owner = parentForm
+        ClearAll()
+        InitDBControls()
+        MyLiveBox.AttachToControl(txtCurUser_REQ, LiveBoxType.UserSelect, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum)
+        MyLiveBox.AttachToControl(txtDescription_REQ, LiveBoxType.SelectValue, DevicesCols.Description)
+
+    End Sub
 
     Private Sub AddDevice()
         Try
@@ -32,7 +42,7 @@
                     Dim blah = Message("New Device Added.   Add another?", vbYesNo + vbInformation, "Complete", Me)
                     If Not chkNoClear.Checked Then ClearAll()
                     If blah = vbNo Then Me.Dispose()
-                    MainForm.RefreshCurrent()
+                    ParentForm.RefreshData()
                 Else
                     Message("Something went wrong while adding a new device.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
                 End If
@@ -56,17 +66,6 @@
     Private Sub NewDeviceForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         MyLiveBox.Dispose()
     End Sub
-
-    Private Sub AddNew_Load(sender As Object, e As EventArgs) Handles Me.Load
-        ClearAll()
-        InitDBControls()
-        MyLiveBox.AttachToControl(txtCurUser_REQ, LiveBoxType.UserSelect, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum)
-        MyLiveBox.AttachToControl(txtDescription_REQ, LiveBoxType.SelectValue, DevicesCols.Description)
-        Icon = MainForm.Icon
-        Tag = MainForm
-        Me.Owner = MainForm
-    End Sub
-
     Private Function AddNewDevice() As Boolean
         Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
             Try

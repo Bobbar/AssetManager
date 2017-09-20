@@ -45,15 +45,17 @@ Public Class MainForm
         End If
     End Sub
 
-    Public Sub RefreshCurrent()
+    Public Overrides Sub RefreshData()
         StartBigQuery(LastCommand)
     End Sub
 
     Private Sub AddNewDevice()
         If Not CheckForAccess(AccessGroup.AddDevice) Then Exit Sub
-        NewDeviceForm.Show()
-        NewDeviceForm.Activate()
-        NewDeviceForm.WindowState = FormWindowState.Normal
+        Dim NewDev As New NewDeviceForm(Me)
+
+        'NewDeviceForm.Show()
+        'NewDeviceForm.Activate()
+        'NewDeviceForm.WindowState = FormWindowState.Normal
     End Sub
 
     Private Function BuildSearchList() As List(Of DBQueryParameter)

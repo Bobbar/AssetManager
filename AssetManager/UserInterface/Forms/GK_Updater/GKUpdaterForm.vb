@@ -122,7 +122,7 @@ Public Class GKUpdaterForm
             Me.Dispose()
         End If
     End Sub
-    Public Function OkToClose() As Boolean
+    Public Overrides Function OkToClose() As Boolean
         If ActiveUpdates() Then
             Message("There are still updates running!  Cancel the updates or wait for them to finish.", vbOKOnly + vbExclamation, "Close Aborted", Me)
             Me.Activate()

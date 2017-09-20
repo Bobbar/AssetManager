@@ -1,11 +1,7 @@
 ﻿Public Class AdvancedSearchForm
-    Private _parentForm As Form
-
-    Sub New(parentForm As Form)
+    Sub New(parentForm As ExtendedForm)
         InitializeComponent()
-        Tag = parentForm
-        Icon = parentForm.Icon
-        _parentForm = parentForm
+        Me.ParentForm = parentForm
         PopulateTableTree()
         Me.Show()
     End Sub
@@ -56,9 +52,9 @@
 
     Private Async Sub StartSearch()
         Try
-            SetWaitCursor(True, _parentForm)
+            SetWaitCursor(True, ParentForm)
             Dim AdvSearch As New AdvancedSearch.Search(Trim(SearchStringTextBox.Text), GetSelectedTables) ' GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
-            Dim DisplayGrid As New GridForm(_parentForm, "Advanced Search Results")
+            Dim DisplayGrid As New GridForm(ParentForm, "Advanced Search Results")
 
             Dim Tables As List(Of DataTable) = Await Task.Run(Function()
                                                                   Return AdvSearch.GetResults
@@ -71,7 +67,7 @@
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
-            SetWaitCursor(False, _parentForm)
+            SetWaitCursor(False, ParentForm)
         End Try
 
     End Sub

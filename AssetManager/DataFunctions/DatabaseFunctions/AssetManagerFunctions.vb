@@ -166,7 +166,7 @@
         End If
     End Function
 
-    Public Function DevicesBySupervisor(parentForm As Form) As DataTable
+    Public Function DevicesBySupervisor(parentForm As ExtendedForm) As DataTable
         Try
             Dim SupInfo As MunisEmployeeStruct
             Using NewMunisSearch As New MunisUserForm(parentForm)

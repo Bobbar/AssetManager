@@ -78,7 +78,7 @@
         Return NoNull(Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value.ToString)
     End Function
 
-    Public Sub CopyToGridForm(Grid As DataGridView, Parent As Form)
+    Public Sub CopyToGridForm(Grid As DataGridView, Parent As ExtendedForm)
         If Grid IsNot Nothing Then
             Dim NewGridForm As New GridForm(Parent, Grid.Name & " Copy")
             NewGridForm.AddGrid(Grid.Name, Grid.Name, DirectCast(Grid.DataSource, DataTable))

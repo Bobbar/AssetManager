@@ -6,12 +6,12 @@ Imports iTextSharp.text.pdf
 Imports MyDialogLib
 
 Public Class PdfFormFilling
-    Private ParentForm As Form
+    Private ParentForm As ExtendedForm
     Private CurrentDevice As New DeviceStruct
     Private CurrentDialog As AdvancedDialog
     Private UnitPriceTxtName As String = "txtUnitPrice"
 
-    Sub New(parentForm As Form, deviceInfo As DeviceStruct, pdfType As PdfFormType)
+    Sub New(parentForm As ExtendedForm, deviceInfo As DeviceStruct, pdfType As PdfFormType)
         Me.ParentForm = parentForm
         CurrentDevice = deviceInfo
         FillForm(pdfType)

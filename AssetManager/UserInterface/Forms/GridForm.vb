@@ -7,17 +7,13 @@ Public Class GridForm
     Private bolGridFilling As Boolean = True
     Private GridList As New List(Of DataGridView)
     Private LastDoubleClickRow As DataGridViewRow
-    Private MyParent As ThemedForm
 
 #End Region
 
 #Region "Constructors"
 
-    Sub New(parentForm As Form, Optional title As String = "")
-        MyParent = DirectCast(parentForm, ThemedForm)
-        Me.Tag = parentForm
-        Me.Icon = MyParent.Icon
-        Me.GridTheme = MyParent.GridTheme
+    Sub New(parentForm As ExtendedForm, Optional title As String = "")
+        Me.ParentForm = parentForm
         ' This call is required by the designer.
         InitializeComponent()
         If title <> "" Then Me.Text = title
@@ -159,7 +155,7 @@ Public Class GridForm
     End Sub
 
     Private Sub SendToNewGridForm_Click(sender As Object, e As EventArgs) Handles SendToNewGridForm.Click
-        CopyToGridForm(GetActiveGrid, MyParent)
+        CopyToGridForm(GetActiveGrid, ParentForm)
     End Sub
 
     Private Sub GridForm_HandleCreated(sender As Object, e As EventArgs) Handles Me.HandleCreated

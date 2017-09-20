@@ -1,10 +1,9 @@
 ﻿Option Explicit On
 
 Public Class ViewTrackingForm
-    Sub New(parentForm As Form, entryGUID As String, device As DeviceStruct)
+    Sub New(parentForm As ExtendedForm, entryGUID As String, device As DeviceStruct)
         InitializeComponent()
-        Tag = parentForm
-        Icon = parentForm.Icon
+        Me.ParentForm = parentForm
         FormUID = entryGUID
         ViewTrackingEntry(entryGUID, device)
         Show()

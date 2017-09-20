@@ -1,15 +1,12 @@
 ﻿
 Public Class TrackDeviceForm
     Private CurrentTrackingDevice As New DeviceStruct
-    Private MyParent As ViewDeviceForm
     Private CheckData As DeviceTrackingStruct
 
-    Sub New(device As DeviceStruct, parentForm As Form)
+    Sub New(device As DeviceStruct, parentForm As ExtendedForm)
         InitializeComponent()
         CurrentTrackingDevice = device
-        Tag = parentForm
-        MyParent = DirectCast(parentForm, ViewDeviceForm)
-        Icon = parentForm.Icon
+        Me.ParentForm = parentForm
         ClearAll()
         SetDates()
         SetGroups()
@@ -139,7 +136,7 @@ Public Class TrackDeviceForm
                     trans.Rollback()
                     Message("Unsuccessful! The number of affected rows was not expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
                 End If
-                MyParent.LoadDevice(CurrentTrackingDevice.GUID)
+                ParentForm.RefreshData()
             Catch ex As Exception
                 trans.Rollback()
                 ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -176,8 +173,7 @@ Public Class TrackDeviceForm
                     trans.Rollback()
                     Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
                 End If
-
-                MyParent.LoadDevice(CurrentTrackingDevice.GUID)
+                ParentForm.RefreshData()
             Catch ex As Exception
                 trans.Rollback()
                 ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

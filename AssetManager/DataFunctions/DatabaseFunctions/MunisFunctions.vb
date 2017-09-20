@@ -257,7 +257,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         Return Nothing
     End Function
 
-    Public Sub AssetSearch(parentForm As Form)
+    Public Sub AssetSearch(parentForm As ExtendedForm)
         Try
             Dim Device As New DeviceStruct
             Device.PurchaseDate = Nothing
@@ -279,7 +279,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         End Try
     End Sub
 
-    Public Sub NameSearch(parentForm As Form)
+    Public Sub NameSearch(parentForm As ExtendedForm)
         Try
             Using NewDialog As New AdvancedDialog(parentForm)
                 With NewDialog
@@ -299,7 +299,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         End Try
     End Sub
 
-    Public Sub POSearch(parentForm As Form)
+    Public Sub POSearch(parentForm As ExtendedForm)
         Try
             Dim PO As String
             Using NewDialog As New AdvancedDialog(parentForm)
@@ -318,7 +318,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         End Try
     End Sub
 
-    Public Async Sub ReqSearch(parentForm As Form)
+    Public Async Sub ReqSearch(parentForm As ExtendedForm)
         Try
             Dim ReqNumber, FY As String
             Using NewDialog As New AdvancedDialog(parentForm)
@@ -346,7 +346,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         End Try
     End Sub
 
-    Public Sub OrgObSearch(parentForm As Form)
+    Public Sub OrgObSearch(parentForm As ExtendedForm)
         Try
             Using NewDialog As New AdvancedDialog(parentForm)
                 Dim strOrg, strObj, strFY As String
@@ -377,7 +377,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         Return MunisComms.ReturnSqlTable(strQRY)
     End Function
 
-    Public Async Sub NewOrgObView(org As String, obj As String, FY As String, parentForm As Form)
+    Public Async Sub NewOrgObView(org As String, obj As String, FY As String, parentForm As ExtendedForm)
         Try
             SetWaitCursor(True, parentForm)
             Dim NewGridForm As New GridForm(parentForm, "Org/Obj Info")
@@ -419,7 +419,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         End Try
     End Sub
 
-    Private Async Sub NewMunisEmployeeSearch(name As String, parentForm As Form)
+    Private Async Sub NewMunisEmployeeSearch(name As String, parentForm As ExtendedForm)
         Try
             SetWaitCursor(True, parentForm)
             Dim strColumns As String = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last"
@@ -446,7 +446,7 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number"
         End Try
     End Sub
 
-    Public Async Sub NewMunisPOSearch(PO As String, parentForm As Form)
+    Public Async Sub NewMunisPOSearch(PO As String, parentForm As ExtendedForm)
         Try
             SetWaitCursor(True, parentForm)
             If PO = "" Then Exit Sub
@@ -471,7 +471,7 @@ FROM poheader"
         End Try
     End Sub
 
-    Public Async Function NewMunisReqSearch(reqNumber As String, FY As String, parentForm As Form, Optional selectMode As Boolean = False) As Task(Of String)
+    Public Async Function NewMunisReqSearch(reqNumber As String, FY As String, parentForm As ExtendedForm, Optional selectMode As Boolean = False) As Task(Of String)
         If reqNumber = "" Or FY = "" Then
             Return Nothing
         End If
@@ -540,7 +540,7 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
         End If
     End Function
 
-    Public Async Sub LoadMunisInfoByDevice(device As DeviceStruct, parentForm As Form)
+    Public Async Sub LoadMunisInfoByDevice(device As DeviceStruct, parentForm As ExtendedForm)
         Try
             SetWaitCursor(True, parentForm)
             Dim ReqLinesTable, ReqHeaderTable, InvTable As New DataTable

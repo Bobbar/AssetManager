@@ -283,7 +283,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\CustomControls\MunisToolBar.vb" />
-    <Compile Include="UserInterface\CustomControls\ThemedForm.vb">
+    <Compile Include="UserInterface\CustomControls\ExtendedForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Sibi\SibiNotesForm.Designer.vb">

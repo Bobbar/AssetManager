@@ -8,7 +8,7 @@
 
 #Region "Constructors"
 
-    Sub New(parentForm As Form)
+    Sub New(parentForm As ExtendedForm)
         InitDropDown()
         InitToolItems(parentForm)
     End Sub
@@ -63,7 +63,7 @@
         MunisDropDown.AutoSize = True
     End Sub
 
-    Private Sub InitToolItems(parentForm As Form)
+    Private Sub InitToolItems(parentForm As ExtendedForm)
         Dim ToolItemList As New List(Of ToolStripMenuItem)
         ToolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", Sub() MunisFunc.NameSearch(parentForm)))
         ToolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", Sub() MunisFunc.OrgObSearch(parentForm)))

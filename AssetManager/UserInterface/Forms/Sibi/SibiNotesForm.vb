@@ -7,18 +7,16 @@
         End Get
     End Property
 
-    Sub New(parentForm As Form, request As RequestStruct)
+    Sub New(parentForm As ExtendedForm, request As RequestStruct)
         InitializeComponent()
-        Tag = parentForm
-        Icon = parentForm.Icon
+        Me.ParentForm = parentForm
         MyRequest = request
         ShowDialog(parentForm)
     End Sub
 
-    Sub New(parentForm As Form, noteUID As String)
+    Sub New(parentForm As ExtendedForm, noteUID As String)
         InitializeComponent()
-        Tag = parentForm
-        Icon = parentForm.Icon
+        Me.ParentForm = parentForm
         FormUID = noteUID
         ViewNote(noteUID)
     End Sub

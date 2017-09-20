@@ -35,11 +35,9 @@ Public Class AttachmentsForm
 
 #Region "Constructors"
 
-    Sub New(ParentForm As ThemedForm, AttachTable As AttachmentsBaseCols, Optional AttachInfo As Object = Nothing)
+    Sub New(ParentForm As ExtendedForm, AttachTable As AttachmentsBaseCols, Optional AttachInfo As Object = Nothing)
         InitializeComponent()
-        Tag = ParentForm
-        Icon = ParentForm.Icon
-        GridTheme = ParentForm.GridTheme
+        Me.ParentForm = ParentForm
         AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         ExtendedMethods.DoubleBufferedDataGrid(AttachGrid, True)
         SetStatusBar("Idle...")

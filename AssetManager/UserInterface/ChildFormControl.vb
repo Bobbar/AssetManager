@@ -39,7 +39,7 @@
         Return Children
     End Function
 
-    Public Sub LookupDevice(parentForm As ThemedForm, device As DeviceStruct)
+    Public Sub LookupDevice(parentForm As ExtendedForm, device As DeviceStruct)
         If device.GUID IsNot Nothing Then
             If Not FormIsOpenByUID(GetType(ViewDeviceForm), device.GUID) Then
                 Dim NewView As New ViewDeviceForm(parentForm, device.GUID)
@@ -76,7 +76,7 @@
     End Function
 
     Public Function FormIsOpenByUID(formType As Type, UID As String) As Boolean
-        For Each frm As ThemedForm In My.Application.OpenForms
+        For Each frm As ExtendedForm In My.Application.OpenForms
             If frm.GetType = formType AndAlso frm.FormUID = UID Then
                 ActivateForm(frm)
                 Return True
@@ -106,7 +106,7 @@
 
     Public Function OKToCloseChildren(parentForm As Form) As Boolean
         Dim CanClose As Boolean = True
-        Dim frms = My.Application.OpenForms.OfType(Of ThemedForm).ToList.FindAll(Function(f) f.Tag Is parentForm).ToArray
+        Dim frms = My.Application.OpenForms.OfType(Of ExtendedForm).ToList.FindAll(Function(f) f.Tag Is parentForm).ToArray
         For i = 0 To frms.Length - 1
             If Not frms(i).OKToClose Then CanClose = False
         Next

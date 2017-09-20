@@ -26,15 +26,13 @@ Public Class ViewDeviceForm
 
 #Region "Constructors"
 
-    Sub New(parentForm As ThemedForm, deviceGUID As String)
+    Sub New(parentForm As ExtendedForm, deviceGUID As String)
         InitializeComponent()
         InitDBControls()
         MyLiveBox.AttachToControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum)
         MyLiveBox.AttachToControl(txtDescription_View_REQ, LiveBoxType.SelectValue, DevicesCols.Description)
         MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6)
-        Tag = parentForm
-        Icon = parentForm.Icon
-        GridTheme = parentForm.GridTheme
+        Me.ParentForm = parentForm
         FormUID = deviceGUID
         MyWindowList.InsertWindowList(ToolStrip1)
         RefreshCombos()
@@ -59,7 +57,7 @@ Public Class ViewDeviceForm
                 DisableControls()
                 ResetBackColors()
                 Me.Refresh()
-                RefreshDevice()
+                RefreshData()
                 Return True
             End If
         End If
@@ -145,7 +143,7 @@ Public Class ViewDeviceForm
             DoneWaiting()
         End Try
     End Sub
-    Private Sub RefreshDevice()
+    Public Overrides Sub RefreshData()
         If EditMode Then
             CancelModify()
         Else
@@ -478,7 +476,7 @@ Public Class ViewDeviceForm
             If AssetFunc.DeleteFtpAndSql(CurrentViewDevice.GUID, EntryType.Device) Then
                 Message("Device deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                 CurrentViewDevice = Nothing
-                MainForm.RefreshCurrent()
+                MainForm.RefreshData()
             Else
                 Logger("*****DELETION ERROR******: " & CurrentViewDevice.GUID)
                 Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
@@ -964,12 +962,12 @@ Public Class ViewDeviceForm
             Using UpdateDia As New UpdateDev(Me, True)
                 If UpdateDia.DialogResult = DialogResult.OK Then
                     If Not ConcurrencyCheck() Then
-                        RefreshDevice()
+                        RefreshData()
                     Else
                         UpdateDevice(UpdateDia.UpdateInfo)
                     End If
                 Else
-                    RefreshDevice()
+                    RefreshData()
                 End If
             End Using
         Catch ex As Exception
@@ -1111,7 +1109,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub RefreshToolStripButton_Click(sender As Object, e As EventArgs) Handles RefreshToolStripButton.Click
-        RefreshDevice()
+        RefreshData()
     End Sub
 #End Region
 

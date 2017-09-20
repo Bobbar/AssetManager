@@ -14,10 +14,9 @@
     Private SelectedEmpInfo As MunisEmployeeStruct
     Private Const intMaxResults As Integer = 50
 
-    Sub New(parentForm As Form)
+    Sub New(parentForm As ExtendedForm)
         InitializeComponent()
-        Tag = parentForm
-        Icon = parentForm.Icon
+        Me.ParentForm = parentForm
         ShowDialog(parentForm)
     End Sub
 
