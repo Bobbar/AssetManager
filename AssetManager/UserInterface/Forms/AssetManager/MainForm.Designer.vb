@@ -79,15 +79,16 @@ Partial Class MainForm
         Me.txtGUID = New System.Windows.Forms.ToolStripTextBox()
         Me.tsmUserManager = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReEnterLACredentialsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ViewLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TextEnCrypterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmGKUpdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdvancedSearchMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PSScriptMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InstallChromeMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ViewLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -633,6 +634,7 @@ Partial Class MainForm
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.Button1)
         Me.GroupBox2.Controls.Add(Me.SearchGroup)
         Me.GroupBox2.Controls.Add(Me.InstantGroup)
         Me.GroupBox2.Controls.Add(Me.cmdShowAll)
@@ -698,6 +700,12 @@ Partial Class MainForm
         Me.ReEnterLACredentialsToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
         Me.ReEnterLACredentialsToolStripMenuItem.Text = "Re-Enter Credentials"
         '
+        'ViewLogToolStripMenuItem
+        '
+        Me.ViewLogToolStripMenuItem.Name = "ViewLogToolStripMenuItem"
+        Me.ViewLogToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
+        Me.ViewLogToolStripMenuItem.Text = "View Log"
+        '
         'TextEnCrypterToolStripMenuItem
         '
         Me.TextEnCrypterToolStripMenuItem.Name = "TextEnCrypterToolStripMenuItem"
@@ -735,12 +743,6 @@ Partial Class MainForm
         Me.InstallChromeMenuItem.Size = New System.Drawing.Size(237, 26)
         Me.InstallChromeMenuItem.Text = "Install/Update Chrome"
         '
-        'ViewLogToolStripMenuItem
-        '
-        Me.ViewLogToolStripMenuItem.Name = "ViewLogToolStripMenuItem"
-        Me.ViewLogToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
-        Me.ViewLogToolStripMenuItem.Text = "View Log"
-        '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
@@ -756,6 +758,15 @@ Partial Class MainForm
         Me.cmdSibi.Size = New System.Drawing.Size(232, 34)
         Me.cmdSibi.Text = "Sibi Acquisition Manager"
         Me.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(1109, 47)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(51, 24)
+        Me.Button1.TabIndex = 35
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'MainForm
         '
@@ -855,4 +866,5 @@ Partial Class MainForm
     Friend WithEvents InstallChromeMenuItem As ToolStripMenuItem
     Friend WithEvents ReEnterLACredentialsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ViewLogToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents Button1 As Button
 End Class

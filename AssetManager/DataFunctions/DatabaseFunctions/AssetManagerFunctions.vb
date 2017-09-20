@@ -60,30 +60,73 @@
             Return tmpList
         End Using
     End Function
+    Public Sub PopStructInfo(obj As Object, data As DataTable)
+        Dim Props As List(Of Reflection.PropertyInfo) = (obj.GetType.GetProperties().Where(Function(x) x.GetCustomAttributes(GetType(DataNamesAttribute), True).Any()).ToList())
+        Dim row = data.Rows(0)
+
+        For Each prop In Props
+            Dim propColumn = DirectCast(prop.GetCustomAttributes(False)(0), DataNamesAttribute).ValueName
+
+            Select Case prop.PropertyType
+                Case GetType(String)
+                    prop.SetValue(obj, row(propColumn).ToString, Nothing)
+
+                Case GetType(DateTime)
+                    prop.SetValue(obj, DateTime.Parse(NoNull(row(propColumn).ToString)))
+
+                Case GetType(Boolean)
+                    prop.SetValue(obj, CBool(row(propColumn)))
+
+                Case Else
+                    Debug.Print(prop.PropertyType.ToString)
+            End Select
+
+
+
+        Next
+
+
+
+    End Sub
+
+
 
     Public Function CollectDeviceInfo(deviceTable As DataTable) As DeviceStruct
         Try
+
+            'Dim testDev As New DeviceStruct
+            'PopStructInfo(testDev, deviceTable)
+
+
+
+
+
             Dim newDeviceInfo As New DeviceStruct
-            With newDeviceInfo
-                .GUID = NoNull(deviceTable.Rows(0).Item(DevicesCols.DeviceUID))
-                .Description = NoNull(deviceTable.Rows(0).Item(DevicesCols.Description))
-                .Location = NoNull(deviceTable.Rows(0).Item(DevicesCols.Location))
-                .CurrentUser = NoNull(deviceTable.Rows(0).Item(DevicesCols.CurrentUser))
-                .CurrentUserEmpNum = NoNull(deviceTable.Rows(0).Item(DevicesCols.MunisEmpNum))
-                .Serial = NoNull(deviceTable.Rows(0).Item(DevicesCols.Serial))
-                .AssetTag = NoNull(deviceTable.Rows(0).Item(DevicesCols.AssetTag))
-                .PurchaseDate = DateTime.Parse(NoNull(deviceTable.Rows(0).Item(DevicesCols.PurchaseDate)))
-                .ReplaceYear = NoNull(deviceTable.Rows(0).Item(DevicesCols.ReplacementYear))
-                .PO = NoNull(deviceTable.Rows(0).Item(DevicesCols.PO))
-                .OSVersion = NoNull(deviceTable.Rows(0).Item(DevicesCols.OSVersion))
-                .PhoneNumber = NoNull(deviceTable.Rows(0).Item(DevicesCols.PhoneNumber))
-                .EquipmentType = NoNull(deviceTable.Rows(0).Item(DevicesCols.EQType))
-                .Status = NoNull(deviceTable.Rows(0).Item(DevicesCols.Status))
-                .IsTrackable = CBool(deviceTable.Rows(0).Item(DevicesCols.Trackable))
-                .SibiLink = NoNull(deviceTable.Rows(0).Item(DevicesCols.SibiLinkUID))
-                .Tracking.IsCheckedOut = CBool(deviceTable.Rows(0).Item(DevicesCols.CheckedOut))
-                .HostName = NoNull(deviceTable.Rows(0).Item(DevicesCols.HostName))
-            End With
+
+            PopStructInfo(newDeviceInfo, deviceTable)
+
+            'With newDeviceInfo
+
+
+            '    .GUID = NoNull(deviceTable.Rows(0).Item(DevicesCols.DeviceUID))
+            '    .Description = NoNull(deviceTable.Rows(0).Item(DevicesCols.Description))
+            '    .Location = NoNull(deviceTable.Rows(0).Item(DevicesCols.Location))
+            '    .CurrentUser = NoNull(deviceTable.Rows(0).Item(DevicesCols.CurrentUser))
+            '    .CurrentUserEmpNum = NoNull(deviceTable.Rows(0).Item(DevicesCols.MunisEmpNum))
+            '    .Serial = NoNull(deviceTable.Rows(0).Item(DevicesCols.Serial))
+            '    .AssetTag = NoNull(deviceTable.Rows(0).Item(DevicesCols.AssetTag))
+            '    .PurchaseDate = DateTime.Parse(NoNull(deviceTable.Rows(0).Item(DevicesCols.PurchaseDate)))
+            '    .ReplaceYear = NoNull(deviceTable.Rows(0).Item(DevicesCols.ReplacementYear))
+            '    .PO = NoNull(deviceTable.Rows(0).Item(DevicesCols.PO))
+            '    .OSVersion = NoNull(deviceTable.Rows(0).Item(DevicesCols.OSVersion))
+            '    .PhoneNumber = NoNull(deviceTable.Rows(0).Item(DevicesCols.PhoneNumber))
+            '    .EquipmentType = NoNull(deviceTable.Rows(0).Item(DevicesCols.EQType))
+            '    .Status = NoNull(deviceTable.Rows(0).Item(DevicesCols.Status))
+            '    .IsTrackable = CBool(deviceTable.Rows(0).Item(DevicesCols.Trackable))
+            '    .SibiLink = NoNull(deviceTable.Rows(0).Item(DevicesCols.SibiLinkUID))
+            '    .Tracking.IsCheckedOut = CBool(deviceTable.Rows(0).Item(DevicesCols.CheckedOut))
+            '    .HostName = NoNull(deviceTable.Rows(0).Item(DevicesCols.HostName))
+            'End With
             Return newDeviceInfo
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
