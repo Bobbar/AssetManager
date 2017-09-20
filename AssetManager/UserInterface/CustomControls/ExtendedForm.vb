@@ -1,5 +1,5 @@
 ﻿''' <summary>
-''' Custom form with added GridTheme property.
+''' Custom form with project specific properties and methods.
 ''' </summary>
 Public Class ExtendedForm
     Inherits Form
@@ -18,7 +18,7 @@ Public Class ExtendedForm
     Public Property FormUID As String
 
     ''' <summary>
-    ''' Overloads the stock ParentForm proptery with a read/writable one. And also sets the icon to the parent forms icon.
+    ''' Overloads the stock ParentForm proptery with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
     ''' </summary>
     ''' <returns></returns>
     Public Overloads Property ParentForm(Optional doNotTakeTheme As Boolean = False) As ExtendedForm
