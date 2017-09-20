@@ -21,7 +21,8 @@
         InitDBControls()
         MyLiveBox.AttachToControl(txtCurUser_REQ, LiveBoxType.UserSelect, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum)
         MyLiveBox.AttachToControl(txtDescription_REQ, LiveBoxType.SelectValue, DevicesCols.Description)
-
+        Me.Show()
+        Me.Activate()
     End Sub
 
     Private Sub AddDevice()

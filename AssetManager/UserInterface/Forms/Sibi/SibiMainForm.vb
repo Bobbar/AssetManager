@@ -7,8 +7,23 @@ Public Class SibiMainForm
     Private LastCmd As DbCommand
     Private bolRebuildingCombo As Boolean = False
     Private StatusColors As List(Of StatusColumnColorStruct)
+    Sub New(parentForm As ExtendedForm)
+        Me.ParentForm(True) = parentForm
+        ' This call is required by the designer.
+        InitializeComponent()
 
-    Public Sub RefreshResults()
+        ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
+        Me.GridTheme = New GridTheme(colHighlightBlue, colSibiSelectColor, ResultGrid.DefaultCellStyle.BackColor)
+        ToolStrip1.BackColor = colSibiToolBarColor
+        MyWindowList.InsertWindowList(ToolStrip1)
+        SetDisplayYears()
+        Me.Show()
+        Me.Activate()
+        ShowAll("All")
+
+    End Sub
+
+    Public Overrides Sub RefreshData()
         ExecuteCmd(LastCmd)
     End Sub
 
@@ -28,23 +43,8 @@ Public Class SibiMainForm
 
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
         ClearAll(Me.Controls)
-        If SetDisplayYears() Then
-            ShowAll()
-        End If
-    End Sub
-
-    Private Sub frmSibiMain_Load(sender As Object, e As EventArgs) Handles Me.Load
-        ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
-        If SetDisplayYears() Then
-            ShowAll("All")
-            GridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
-            GridTheme.CellSelectColor = colSibiSelectColor
-            GridTheme.RowHighlightColor = colHighlightBlue
-            ToolStrip1.BackColor = colSibiToolBarColor
-            MyWindowList.InsertWindowList(ToolStrip1)
-        Else
-            Me.Dispose()
-        End If
+        SetDisplayYears()
+        ShowAll()
     End Sub
 
     Private Function BuildSearchListNew() As List(Of DBQueryParameter)
@@ -161,7 +161,7 @@ Public Class SibiMainForm
         Next
     End Sub
 
-    Private Function SetDisplayYears() As Boolean
+    Private Sub SetDisplayYears()
         Try
             bolRebuildingCombo = True
             Dim strQRY As String = "SELECT DISTINCT " & SibiRequestCols.DateStamp & " FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.DateStamp & " DESC"
@@ -177,13 +177,11 @@ Public Class SibiMainForm
                 cmbDisplayYear.DataSource = Years
                 cmbDisplayYear.SelectedIndex = 0
                 bolRebuildingCombo = False
-                Return True
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return False
         End Try
-    End Function
+    End Sub
 
     Private Sub ShowAll(Optional Year As String = "")
         If Year = "" Then Year = cmbDisplayYear.Text

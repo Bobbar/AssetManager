@@ -51,11 +51,12 @@ Public Class MainForm
 
     Private Sub AddNewDevice()
         If Not CheckForAccess(AccessGroup.AddDevice) Then Exit Sub
-        Dim NewDev As New NewDeviceForm(Me)
-
-        'NewDeviceForm.Show()
-        'NewDeviceForm.Activate()
-        'NewDeviceForm.WindowState = FormWindowState.Normal
+        Dim NewDevForm = GetChildOfType(Me, GetType(NewDeviceForm))
+        If NewDevForm Is Nothing Then
+            Dim NewDev As New NewDeviceForm(Me)
+        Else
+            ActivateForm(NewDevForm)
+        End If
     End Sub
 
     Private Function BuildSearchList() As List(Of DBQueryParameter)
@@ -177,9 +178,8 @@ Public Class MainForm
         DefGridSelCol = ResultGrid.DefaultCellStyle.SelectionBackColor
 
         ResultGrid.DefaultCellStyle.SelectionBackColor = colSelectColor
-        GridTheme.BackColor = ResultGrid.DefaultCellStyle.BackColor
-        GridTheme.CellSelectColor = ResultGrid.DefaultCellStyle.SelectionBackColor
-        GridTheme.RowHighlightColor = colHighlightColor
+
+        Me.GridTheme = New GridTheme(colHighlightColor, ResultGrid.DefaultCellStyle.SelectionBackColor, ResultGrid.DefaultCellStyle.BackColor)
 
         Dim tmpStyle As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         tmpStyle.Alignment = ResultGrid.DefaultCellStyle.Alignment
@@ -260,14 +260,11 @@ Public Class MainForm
     Private Sub OpenSibiMainForm()
         If Not CheckForAccess(AccessGroup.ViewSibi) Then Exit Sub
         Waiting()
-        If Not SibiIsOpen() Then
-            SibiMainForm.Tag = Me
-            SibiMainForm.Show()
-            SibiMainForm.Activate()
+        Dim SibiForm = GetChildOfType(Me, GetType(SibiMainForm))
+        If SibiForm Is Nothing Then
+            Dim NewSibi As New SibiMainForm(Me)
         Else
-            SibiMainForm.Show()
-            SibiMainForm.Activate()
-            SibiMainForm.WindowState = FormWindowState.Normal
+            ActivateForm(SibiForm)
         End If
         DoneWaiting()
     End Sub

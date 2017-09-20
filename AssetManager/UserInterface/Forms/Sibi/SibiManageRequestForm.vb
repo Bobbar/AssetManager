@@ -193,13 +193,10 @@ Public Class SibiManageRequestForm
                 DBFunc.GetDatabase.UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans)
                 pnlCreate.Visible = False
                 trans.Commit()
-                If TypeOf Me.Tag Is SibiMainForm Then
-                    Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
-                    ParentForm.RefreshResults()
-                End If
                 IsModifying = False
                 IsNewRequest = False
                 OpenRequest(CurrentRequest.GUID)
+                ParentForm.RefreshData()
                 Message("New Request Added.", vbOKOnly + vbInformation, "Complete", Me)
             Catch ex As Exception
                 trans.Rollback()
@@ -376,10 +373,7 @@ Public Class SibiManageRequestForm
                 If AssetFunc.DeleteFtpAndSql(CurrentRequest.GUID, EntryType.Sibi) Then
                     Message("Sibi Request deleted successfully.", vbOKOnly + vbInformation, "Device Deleted", Me)
                     CurrentRequest = Nothing
-                    If TypeOf Me.Tag Is SibiMainForm Then
-                        Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
-                        ParentForm.RefreshResults()
-                    End If
+                    ParentForm.RefreshData()
                     Me.Dispose()
                 Else
                     Logger("*****DELETION ERROR******: " & CurrentRequest.GUID)
@@ -1209,10 +1203,8 @@ Public Class SibiManageRequestForm
                 DBFunc.GetDatabase.UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans)
 
                 trans.Commit()
-                If TypeOf Me.Tag Is SibiMainForm Then
-                    Dim ParentForm As SibiMainForm = DirectCast(Me.Tag, SibiMainForm)
-                    ParentForm.RefreshResults()
-                End If
+
+                ParentForm.RefreshData()
                 OpenRequest(CurrentRequest.GUID)
             Catch ex As Exception
                 trans.Rollback()

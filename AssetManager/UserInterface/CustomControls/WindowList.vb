@@ -5,13 +5,13 @@
     Private WithEvents RefreshTimer As Timer
     Private DropDownControl As New ToolStripDropDownButton
     Private intFormCount As Integer
-    Private MyParentForm As Form
+    Private MyParentForm As ExtendedForm
 
 #End Region
 
 #Region "Constructors"
 
-    Sub New(parentForm As Form)
+    Sub New(parentForm As ExtendedForm)
         MyParentForm = parentForm
     End Sub
 
@@ -25,8 +25,8 @@
         RefreshWindowList()
     End Sub
     Private Sub AddParentMenu()
-        If MyParentForm.Tag IsNot Nothing Then
-            Dim ParentDropDown As ToolStripMenuItem = NewMenuItem(GetFormFromTag(MyParentForm.Tag))
+        If MyParentForm.ParentForm IsNot Nothing Then
+            Dim ParentDropDown As ToolStripMenuItem = NewMenuItem(MyParentForm.ParentForm)
             ParentDropDown.Text = "[Parent] " & ParentDropDown.Text
             ParentDropDown.ToolTipText = "Parent Form"
             DropDownControl.DropDownItems.Insert(0, ParentDropDown)
@@ -39,8 +39,8 @@
     ''' </summary>
     ''' <param name="ParentForm">Form to add to ToolStrip.</param>
     ''' <param name="TargetMenuItem">Item to add the Form item to.</param>
-    Private Sub BuildWindowList(parentForm As Form, ByRef targetMenuItem As ToolStripItemCollection)
-        For Each frm As Form In ListOfChilden(parentForm)
+    Private Sub BuildWindowList(parentForm As ExtendedForm, ByRef targetMenuItem As ToolStripItemCollection)
+        For Each frm In GetChildren(parentForm)
             If HasChildren(frm) Then
                 Dim NewDropDown As ToolStripMenuItem = NewMenuItem(frm)
                 If TypeOf frm Is SibiMainForm Then
@@ -58,12 +58,14 @@
             End If
         Next
     End Sub
+
     Private Function GetFormFromTag(tag As Object) As Form
         If TypeOf tag Is Form Then
             Return DirectCast(tag, Form)
         End If
         Return Nothing
     End Function
+
     Private Function CountText(count As Integer) As String
         Dim MainText As String = "Select Window"
         If count > 0 Then
@@ -73,24 +75,27 @@
         End If
     End Function
 
-    Private Function FormCount(parentForm As Form) As Integer
+    Private Function FormCount(parentForm As ExtendedForm) As Integer
         Dim i As Integer = 0
-        For Each frm As Form In My.Application.OpenForms
-            If Not frm.IsDisposed And Not frm.Modal And frm IsNot parentForm Then
-                If frm.Tag Is parentForm Then
-                    i += FormCount(frm) + 1
-                End If
+        For Each frm In GetChildren(parentForm)
+            If Not frm.Modal And frm IsNot parentForm Then
+                i += FormCount(frm) + 1
             End If
         Next
         Return i
     End Function
 
-    Private Function HasChildren(parentForm As Form) As Boolean
-        For Each frm As Form In My.Application.OpenForms
-            If frm.Tag Is parentForm And Not frm.IsDisposed Then
-                Return True
-            End If
-        Next
+    Private Function HasChildren(parentForm As ExtendedForm) As Boolean
+        Dim Children = GetChildren(parentForm)
+        If Children.Count = 0 Then
+            Return False
+        Else
+            For Each frm In Children
+                If Not frm.IsDisposed Then
+                    Return True
+                End If
+            Next
+        End If
         Return False
     End Function
 
@@ -109,16 +114,6 @@
         RefreshTimer.Enabled = True
     End Sub
 
-    Private Function ListOfChilden(parentForm As Form) As List(Of Form)
-        Dim tmpList As New List(Of Form)
-        For Each frm As Form In My.Application.OpenForms
-            If frm.Tag Is parentForm And Not frm.IsDisposed Then
-                tmpList.Add(frm)
-            End If
-        Next
-        Return tmpList
-    End Function
-
     Private Function NewMenuItem(frm As Form) As ToolStripMenuItem
         Dim newitem As New ToolStripMenuItem
         newitem.Font = DropDownControl.Font
@@ -130,25 +125,13 @@
         Return newitem
     End Function
 
-    Private Function IsParentForm(form As Form) As Boolean
-        If MyParentForm.Tag IsNot Nothing Then
-            If form Is GetFormFromTag(MyParentForm.Tag) Then
-                Return True
-            Else
-                Return False
-            End If
-        Else
-            Return False
-        End If
-    End Function
-
     Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs) Handles RefreshTimer.Tick
         RefreshWindowList()
     End Sub
 
     Private Sub RefreshWindowList()
         Dim NumOfForms = FormCount(MyParentForm)
-        If MyParentForm.Tag Is Nothing And NumOfForms < 1 Then
+        If MyParentForm.ParentForm Is Nothing And NumOfForms < 1 Then
             DropDownControl.Visible = False
         Else
             DropDownControl.Visible = True
@@ -166,9 +149,9 @@
 
     Private Sub WindowClick(sender As Object, e As MouseEventArgs)
         Dim item As ToolStripItem = CType(sender, ToolStripItem)
-        Dim frm As Form = CType(item.Tag, Form)
+        Dim frm = CType(item.Tag, ExtendedForm)
         If e.Button = MouseButtons.Right Then
-            If Not IsParentForm(frm) Then
+            If Not frm Is MyParentForm.ParentForm Then
                 frm.Close()
                 If frm.Disposing Or frm.IsDisposed Then
                     DisposeDropDownItem(item)
