@@ -337,7 +337,7 @@
     <Compile Include="DataFunctions\DatabaseFunctions\FTPFunctions.vb" />
     <Compile Include="UserInterface\CustomControls\LiveBox.vb" />
     <Compile Include="DataComms\AssetManager\MySQL\MySQLComms.vb" />
-    <Compile Include="GlobalModules\GlobalStructures.vb" />
+    <Compile Include="GlobalModules\DataStructures.vb" />
     <Compile Include="GlobalModules\SecurityFunctions.vb" />
     <Compile Include="UserInterface\Forms\SplashScreenForm.Designer.vb">
       <DependentUpon>SplashScreenForm.vb</DependentUpon>

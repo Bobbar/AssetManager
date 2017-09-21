@@ -85,7 +85,7 @@ Public Class SibiManageRequestForm
         ClearAll()
         IsNewRequest = True
         SetTitle(True)
-        CurrentRequest.GUID = Guid.NewGuid.ToString
+        CurrentRequest = New RequestStruct
         Me.FormUID = CurrentRequest.GUID
         IsModifying = True
         SetupGrid(RequestItemsGrid, RequestItemsColumns)

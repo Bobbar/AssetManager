@@ -1,7 +1,4 @@
 ﻿'TODO: Break up this class into separate files.
-Imports System.Linq
-Imports System.Collections.Generic
-Imports System
 Public Structure ComboboxDataStruct
     Public Property HumanReadable As String
     Public Property Code As String
@@ -167,7 +164,7 @@ Public Class RequestStruct
     Inherits DataStructure
 
     Sub New()
-
+        Me.GUID = System.Guid.NewGuid.ToString
     End Sub
 
     Sub New(data As DataTable)
