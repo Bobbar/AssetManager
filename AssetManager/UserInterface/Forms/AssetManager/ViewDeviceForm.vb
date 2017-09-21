@@ -420,16 +420,8 @@ Public Class ViewDeviceForm
         OpenSibiLink(CurrentViewDevice)
     End Sub
 
-    Private Sub CollectCurrentTracking(Results As DataTable)
-        With CurrentViewDevice
-            DateTime.TryParse(NoNull(Results.Rows(0).Item(TrackablesCols.CheckoutTime)), .Tracking.CheckoutTime)
-            DateTime.TryParse(NoNull(Results.Rows(0).Item(TrackablesCols.CheckinTime)), .Tracking.CheckinTime)
-            DateTime.TryParse(NoNull(Results.Rows(0).Item(TrackablesCols.DueBackDate)), .Tracking.DueBackTime)
-            .Tracking.UseLocation = NoNull(Results.Rows(0).Item(TrackablesCols.UseLocation))
-            .Tracking.CheckoutUser = NoNull(Results.Rows(0).Item(TrackablesCols.CheckoutUser))
-            .Tracking.CheckinUser = NoNull(Results.Rows(0).Item(TrackablesCols.CheckinUser))
-            .Tracking.UseReason = NoNull(Results.Rows(0).Item(TrackablesCols.Notes))
-        End With
+    Private Sub CollectCurrentTracking(results As DataTable)
+        CurrentViewDevice.PopulateClassProps(CurrentViewDevice.Tracking, results)
     End Sub
 
     Private Function ConcurrencyCheck() As Boolean
@@ -491,8 +483,12 @@ Public Class ViewDeviceForm
     Private Sub DeleteSelectedHistoricalEntry()
         If Not CheckForAccess(AccessGroup.ModifyDevice) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
-        Dim Info As DeviceStruct = AssetFunc.GetHistoricalEntryInfo(strGUID)
-        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & Info.Historical.ChangeType & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
+        Dim Info As DeviceStruct
+        Dim strQry = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & strGUID & "'"
+        Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry)
+            Info = New DeviceStruct(results)
+        End Using
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & GetHumanValue(DeviceIndex.ChangeType, Info.Historical.ChangeType) & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
             Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results", Me)
             LoadDevice(CurrentViewDevice.GUID)
@@ -1067,7 +1063,7 @@ Public Class ViewDeviceForm
                     Return False
                 End If
                 CurrentHash = GetHash(DeviceResults, HistoricalResults)
-                CurrentViewDevice = AssetFunc.CollectDeviceInfo(DeviceResults)
+                CurrentViewDevice = New DeviceStruct(DeviceResults)
                 DataParser.FillDBFields(DeviceResults)
                 SetMunisEmpStatus()
                 SendToHistGrid(DataGridHistory, HistoricalResults)

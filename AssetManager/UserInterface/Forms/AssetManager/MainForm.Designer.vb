@@ -88,7 +88,6 @@ Partial Class MainForm
         Me.InstallChromeMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -634,7 +633,6 @@ Partial Class MainForm
         '
         'GroupBox2
         '
-        Me.GroupBox2.Controls.Add(Me.Button1)
         Me.GroupBox2.Controls.Add(Me.SearchGroup)
         Me.GroupBox2.Controls.Add(Me.InstantGroup)
         Me.GroupBox2.Controls.Add(Me.cmdShowAll)
@@ -759,15 +757,6 @@ Partial Class MainForm
         Me.cmdSibi.Text = "Sibi Acquisition Manager"
         Me.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(1109, 47)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(51, 24)
-        Me.Button1.TabIndex = 35
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -866,5 +855,4 @@ Partial Class MainForm
     Friend WithEvents InstallChromeMenuItem As ToolStripMenuItem
     Friend WithEvents ReEnterLACredentialsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ViewLogToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents Button1 As Button
 End Class

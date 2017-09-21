@@ -607,26 +607,6 @@ Public Class MainForm
         Process.Start(StartInfo)
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim test As New TestingToo()
-        ' test.props.ForEach(Sub(p) Debug.Print(p.))
-
-        Dim DevObj As New DeviceStruct
-
-        Dim blah = DevObj.GetType.GetProperty(NameOf(DevObj.AssetTag))
-        Dim halb = DirectCast(blah.GetCustomAttributes(False)(0), DataNamesAttribute)
-
-
-
-        Debug.Print(halb.ValueName)
-        'For Each p In test.props
-
-        '    Dim dbcol = GetType(DeviceStruct).GetProperty(p.Name).GetCustomAttributes(False).Where(Function(x) x.GetType Is GetType(DataNamesAttribute)).FirstOrDefault()
-        '    Dim vals = DirectCast(dbcol, DataNamesAttribute).ValueNames
-        '    vals.ForEach(Sub(v) Debug.Print(v))
-        'Next
-    End Sub
-
 #End Region
 
 #End Region

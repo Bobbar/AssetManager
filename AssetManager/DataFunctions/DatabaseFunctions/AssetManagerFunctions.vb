@@ -60,79 +60,6 @@
             Return tmpList
         End Using
     End Function
-    Public Sub PopStructInfo(obj As Object, data As DataTable)
-        Dim Props As List(Of Reflection.PropertyInfo) = (obj.GetType.GetProperties().Where(Function(x) x.GetCustomAttributes(GetType(DataNamesAttribute), True).Any()).ToList())
-        Dim row = data.Rows(0)
-
-        For Each prop In Props
-            Dim propColumn = DirectCast(prop.GetCustomAttributes(False)(0), DataNamesAttribute).ValueName
-
-            Select Case prop.PropertyType
-                Case GetType(String)
-                    prop.SetValue(obj, row(propColumn).ToString, Nothing)
-
-                Case GetType(DateTime)
-                    prop.SetValue(obj, DateTime.Parse(NoNull(row(propColumn).ToString)))
-
-                Case GetType(Boolean)
-                    prop.SetValue(obj, CBool(row(propColumn)))
-
-                Case Else
-                    Debug.Print(prop.PropertyType.ToString)
-            End Select
-
-
-
-        Next
-
-
-
-    End Sub
-
-
-
-    Public Function CollectDeviceInfo(deviceTable As DataTable) As DeviceStruct
-        Try
-
-            'Dim testDev As New DeviceStruct
-            'PopStructInfo(testDev, deviceTable)
-
-
-
-
-
-            Dim newDeviceInfo As New DeviceStruct
-
-            PopStructInfo(newDeviceInfo, deviceTable)
-
-            'With newDeviceInfo
-
-
-            '    .GUID = NoNull(deviceTable.Rows(0).Item(DevicesCols.DeviceUID))
-            '    .Description = NoNull(deviceTable.Rows(0).Item(DevicesCols.Description))
-            '    .Location = NoNull(deviceTable.Rows(0).Item(DevicesCols.Location))
-            '    .CurrentUser = NoNull(deviceTable.Rows(0).Item(DevicesCols.CurrentUser))
-            '    .CurrentUserEmpNum = NoNull(deviceTable.Rows(0).Item(DevicesCols.MunisEmpNum))
-            '    .Serial = NoNull(deviceTable.Rows(0).Item(DevicesCols.Serial))
-            '    .AssetTag = NoNull(deviceTable.Rows(0).Item(DevicesCols.AssetTag))
-            '    .PurchaseDate = DateTime.Parse(NoNull(deviceTable.Rows(0).Item(DevicesCols.PurchaseDate)))
-            '    .ReplaceYear = NoNull(deviceTable.Rows(0).Item(DevicesCols.ReplacementYear))
-            '    .PO = NoNull(deviceTable.Rows(0).Item(DevicesCols.PO))
-            '    .OSVersion = NoNull(deviceTable.Rows(0).Item(DevicesCols.OSVersion))
-            '    .PhoneNumber = NoNull(deviceTable.Rows(0).Item(DevicesCols.PhoneNumber))
-            '    .EquipmentType = NoNull(deviceTable.Rows(0).Item(DevicesCols.EQType))
-            '    .Status = NoNull(deviceTable.Rows(0).Item(DevicesCols.Status))
-            '    .IsTrackable = CBool(deviceTable.Rows(0).Item(DevicesCols.Trackable))
-            '    .SibiLink = NoNull(deviceTable.Rows(0).Item(DevicesCols.SibiLinkUID))
-            '    .Tracking.IsCheckedOut = CBool(deviceTable.Rows(0).Item(DevicesCols.CheckedOut))
-            '    .HostName = NoNull(deviceTable.Rows(0).Item(DevicesCols.HostName))
-            'End With
-            Return newDeviceInfo
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
-    End Function
 
     Public Function DeleteMasterSqlEntry(sqlGUID As String, type As EntryType) As Boolean
         Try
@@ -248,11 +175,11 @@
             If type = FindDevType.AssetTag Then
                 Dim Params As New List(Of DBQueryParameter)
                 Params.Add(New DBQueryParameter(DevicesCols.AssetTag, searchVal, True))
-                Return CollectDeviceInfo(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
+                Return New DeviceStruct(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
             ElseIf type = FindDevType.Serial Then
                 Dim Params As New List(Of DBQueryParameter)
                 Params.Add(New DBQueryParameter(DevicesCols.Serial, searchVal, True))
-                Return CollectDeviceInfo(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
+                Return New DeviceStruct(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
             End If
             Return Nothing
         Catch ex As Exception
@@ -262,29 +189,7 @@
     End Function
 
     Public Function GetDeviceInfoFromGUID(deviceGUID As String) As DeviceStruct
-        Return AssetFunc.CollectDeviceInfo(DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & deviceGUID & "'"))
-    End Function
-
-    Public Function GetHistoricalEntryInfo(ByVal deviceHistEntryGUID As String) As DeviceStruct
-        Try
-            Dim tmpInfo As New DeviceStruct
-            Dim strQry = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & deviceHistEntryGUID & "'"
-            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry)
-                For Each r As DataRow In results.Rows
-                    tmpInfo.Historical.ChangeType = GetHumanValue(DeviceIndex.ChangeType, r.Item(HistoricalDevicesCols.ChangeType).ToString)
-                    tmpInfo.AssetTag = r.Item(HistoricalDevicesCols.AssetTag).ToString
-                    tmpInfo.CurrentUser = r.Item(HistoricalDevicesCols.CurrentUser).ToString
-                    tmpInfo.Serial = r.Item(HistoricalDevicesCols.Serial).ToString
-                    tmpInfo.Description = r.Item(HistoricalDevicesCols.Description).ToString
-                    tmpInfo.Historical.ActionDateTime = DateTime.Parse(r.Item(HistoricalDevicesCols.ActionDateTime).ToString)
-                    tmpInfo.Historical.ActionUser = r.Item(HistoricalDevicesCols.ActionUser).ToString
-                Next
-                Return tmpInfo
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+        Return New DeviceStruct(DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & deviceGUID & "'"))
     End Function
 
     Public Function GetMunisCodeFromAssetCode(assetCode As String) As String

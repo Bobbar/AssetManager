@@ -1,4 +1,5 @@
-﻿Imports System.Linq
+﻿'TODO: Break up this class into separate files.
+Imports System.Linq
 Imports System.Collections.Generic
 Imports System
 Public Structure ComboboxDataStruct
@@ -7,156 +8,259 @@ Public Structure ComboboxDataStruct
     Public Property ID As String
 End Structure
 <AttributeUsage(AttributeTargets.[Property])>
-Public Class DataNamesAttribute
+Public Class DataColumnNamesAttribute
     Inherits Attribute
-    'Protected Property _valueNames() As List(Of String)
-    '    Get
-    '        Return m__valueNames
-    '    End Get
-    '    Set
-    '        m__valueNames = Value
-    '    End Set
-    'End Property
-    ' Private m__valueNames As List(Of String)
-    Private _valueName As String
-    Public Property ValueName As String
+
+    Private _columnName As String
+    Public Property ColumnName As String
         Get
-            Return _valueName
+            Return _columnName
         End Get
         Set
-            _valueName = Value
+            _columnName = Value
         End Set
     End Property
 
     Public Sub New()
-        _valueName = String.Empty
+        _columnName = String.Empty
     End Sub
 
-    Public Sub New(valueName As String)
-        _valueName = valueName
+    Public Sub New(columnName As String)
+        _columnName = columnName
     End Sub
 End Class
 
-Public Class Test
-    <DataNames("dev_asset_tag")>
-    Public Property AssetTag As String
+''' <summary>
+''' Base type for classes that will hold information from database.
+''' </summary>
+Public Class DataStructure
 
-    <DataNames("dev_description")>
-    Public Property Description As String
+    ''' <summary>
+    ''' Uses reflection to recursively populate/map class properties that are marked with a <see cref="DataColumnNamesAttribute"/>.
+    ''' </summary>
+    ''' <param name="obj">Object to be populated.</param>
+    ''' <param name="data">Datatable with columns matching the <see cref="DataColumnNamesAttribute"/> in the objects properties.</param>
+    Public Sub PopulateClassProps(obj As Object, data As DataTable)
+        'Collect list of all properties in the object class.
+        Dim Props As List(Of Reflection.PropertyInfo) = (obj.GetType.GetProperties().ToList)
+        'Get the first, and hopefully only relevent row of the DataTable.
+        Dim row = data.Rows(0)
+        'Iterate through the properties.
+        For Each prop In Props
 
+            'Check if the property contains a target attribute.
+            If prop.GetCustomAttributes(GetType(DataColumnNamesAttribute), True).Length > 0 Then
+
+                'Get the column name attached to the property.
+                Dim propColumn = DirectCast(prop.GetCustomAttributes(False)(0), DataColumnNamesAttribute).ColumnName
+
+                'Make sure the DataTable contains a matching column name.
+                If row.Table.Columns.Contains(propColumn) Then
+
+                    'Check the type of the propery and set its value accordingly.
+                    Select Case prop.PropertyType
+                        Case GetType(String)
+                            prop.SetValue(obj, row(propColumn).ToString, Nothing)
+
+                        Case GetType(DateTime)
+                            Dim pDate As DateTime
+                            If DateTime.TryParse(NoNull(row(propColumn).ToString), pDate) Then
+                                prop.SetValue(obj, pDate)
+                            Else
+                                prop.SetValue(obj, Nothing)
+                            End If
+
+                        Case GetType(Boolean)
+                            prop.SetValue(obj, CBool(row(propColumn)))
+
+                        Case Else
+                            'Throw an error if type is unexpected.
+                            Debug.Print(prop.PropertyType.ToString)
+                            Throw New Exception("Unexpected property type.")
+                    End Select
+                End If
+
+            Else 'If the property does not contain a target attribute, check to see if it is a nested class inheriting the DataStructure base class.
+
+                If GetType(DataStructure).IsAssignableFrom(prop.PropertyType) Then
+                    'Recurse with nested DataStructure properties.
+                    PopulateClassProps(prop.GetValue(obj, Nothing), data)
+                End If
+            End If
+        Next
+    End Sub
 End Class
 
-Public Class TestingToo
-
-    Public props As List(Of Reflection.PropertyInfo) = (GetType(DeviceStruct).GetProperties().Where(Function(x) x.GetCustomAttributes(GetType(DataNamesAttribute), True).Any()).ToList())
-
-
-
-
-End Class
 
 Public Class DeviceStruct
-    <DataNames("dev_asset_tag")>
+    Inherits DataStructure
+
+    Sub New()
+
+    End Sub
+
+    Sub New(data As DataTable)
+        Me.PopulateClassProps(Me, data)
+    End Sub
+
+    <DataColumnNames(DevicesCols.AssetTag)>
     Public Property AssetTag As String
 
-    <DataNames("dev_description")>
+    <DataColumnNames(DevicesCols.Description)>
     Public Property Description As String
 
-    <DataNames("dev_eq_type")>
+    <DataColumnNames(DevicesCols.EQType)>
     Public Property EquipmentType As String
 
-    <DataNames("dev_serial")>
+    <DataColumnNames(DevicesCols.Serial)>
     Public Property Serial As String
 
-    <DataNames("dev_location")>
+    <DataColumnNames(DevicesCols.Location)>
     Public Property Location As String
 
-    <DataNames("dev_cur_user")>
+    <DataColumnNames(DevicesCols.CurrentUser)>
     Public Property CurrentUser As String
 
-    <DataNames("dev_cur_user_emp_num")>
+    <DataColumnNames(DevicesCols.MunisEmpNum)>
     Public Property CurrentUserEmpNum As String
 
-    Public Property FiscalYear As String
-
-    <DataNames("dev_purchase_date")>
+    <DataColumnNames(DevicesCols.PurchaseDate)>
     Public Property PurchaseDate As Date
 
-    <DataNames("dev_replacement_year")>
+    <DataColumnNames(DevicesCols.ReplacementYear)>
     Public Property ReplaceYear As String
 
-    <DataNames("dev_osversion")>
+    <DataColumnNames(DevicesCols.OSVersion)>
     Public Property OSVersion As String
 
-    <DataNames("dev_phone_number")>
+    <DataColumnNames(DevicesCols.PhoneNumber)>
     Public Property PhoneNumber As String
 
-    <DataNames("dev_UID")>
+    <DataColumnNames(DevicesCols.DeviceUID)>
     Public Property GUID As String
 
-    <DataNames("dev_po")>
+    <DataColumnNames(DevicesCols.PO)>
     Public Property PO As String
 
-    <DataNames("dev_status")>
+    <DataColumnNames(DevicesCols.Status)>
     Public Property Status As String
 
-    Public Property Note As String
-
-    <DataNames("dev_trackable")>
+    <DataColumnNames(DevicesCols.Trackable)>
     Public Property IsTrackable As Boolean
 
-    <DataNames("dev_sibi_link")>
+    <DataColumnNames(DevicesCols.SibiLinkUID)>
     Public Property SibiLink As String
 
-    <DataNames("dev_hostname")>
+    <DataColumnNames(DevicesCols.HostName)>
     Public Property HostName As String
 
-    Public Tracking As DeviceTrackingStruct
-    Public Historical As DeviceHistoricalStruct
+
+    Public Property FiscalYear As String
+    Public Property Note As String
+
+    Public Property Tracking As New DeviceTrackingStruct
+    Public Property Historical As New DeviceHistoricalStruct
+
 End Class
 
-Public Structure RequestStruct
-    Public GUID As String
-    Public RequestUser As String
-    Public Description As String
-    Public DateStamp As Date
-    Public NeedByDate As Date
-    Public Status As String
-    Public Type As String
-    Public PO As String
-    Public RequisitionNumber As String
-    Public ReplaceAsset As String
-    Public ReplaceSerial As String
-    Public RequestNumber As String
-    Public RTNumber As String
+Public Class RequestStruct
+    Inherits DataStructure
+
+    Sub New()
+
+    End Sub
+
+    Sub New(data As DataTable)
+        Me.PopulateClassProps(Me, data)
+    End Sub
+
+
+    <DataColumnNames(SibiRequestCols.UID)>
+    Public Property GUID As String
+    <DataColumnNames(SibiRequestCols.RequestUser)>
+    Public Property RequestUser As String
+    <DataColumnNames(SibiRequestCols.Description)>
+    Public Property Description As String
+    <DataColumnNames(SibiRequestCols.DateStamp)>
+    Public Property DateStamp As Date
+    <DataColumnNames(SibiRequestCols.NeedBy)>
+    Public Property NeedByDate As Date
+    <DataColumnNames(SibiRequestCols.Status)>
+    Public Property Status As String
+    <DataColumnNames(SibiRequestCols.Type)>
+    Public Property RequestType As String
+    <DataColumnNames(SibiRequestCols.PO)>
+    Public Property PO As String
+    <DataColumnNames(SibiRequestCols.RequisitionNumber)>
+    Public Property RequisitionNumber As String
+    <DataColumnNames(SibiRequestCols.ReplaceAsset)>
+    Public Property ReplaceAsset As String
+    <DataColumnNames(SibiRequestCols.ReplaceSerial)>
+    Public Property ReplaceSerial As String
+    <DataColumnNames(SibiRequestCols.RequestNumber)>
+    Public Property RequestNumber As String
+    <DataColumnNames(SibiRequestCols.RTNumber)>
+    Public Property RTNumber As String
+
+
     Public RequestItems As DataTable
-End Structure
+End Class
 
 Public Class DeviceHistoricalStruct
-    <DataNames("hist_change_type")>
+    Inherits DataStructure
+
+    Sub New()
+
+    End Sub
+
+    Sub New(data As DataTable)
+        Me.PopulateClassProps(Me, data)
+    End Sub
+
+    <DataColumnNames(HistoricalDevicesCols.ChangeType)>
     Public Property ChangeType As String
-    <DataNames("hist_uid")>
+    <DataColumnNames(HistoricalDevicesCols.HistoryEntryUID)>
     Public Property GUID As String
-    <DataNames("hist_notes")>
+    <DataColumnNames(HistoricalDevicesCols.Notes)>
     Public Property Note As String
-    <DataNames("hist_action_user")>
+    <DataColumnNames(HistoricalDevicesCols.ActionUser)>
     Public Property ActionUser As String
-    <DataNames("dev_lastmod_date")>
+    <DataColumnNames(HistoricalDevicesCols.ActionDateTime)>
     Public Property ActionDateTime As Date
 End Class
 
-Public Structure DeviceTrackingStruct
-    Public CheckoutTime As Date
-    Public DueBackTime As Date
-    Public CheckinTime As Date
-    Public CheckoutUser As String
-    Public CheckinUser As String
-    Public UseLocation As String
-    Public UseReason As String
-    Public IsCheckedOut As Boolean
-    Public CheckinNotes As String
-    Public DeviceGUID As String
-End Structure
+Public Class DeviceTrackingStruct
+    Inherits DataStructure
+
+    Sub New()
+
+    End Sub
+
+    Sub New(data As DataTable)
+        Me.PopulateClassProps(Me, data)
+    End Sub
+
+    <DataColumnNames(TrackablesCols.CheckoutTime)>
+    Public Property CheckoutTime As Date
+    <DataColumnNames(TrackablesCols.DueBackDate)>
+    Public Property DueBackTime As Date
+    <DataColumnNames(TrackablesCols.CheckinTime)>
+    Public Property CheckinTime As Date
+    <DataColumnNames(TrackablesCols.CheckoutUser)>
+    Public Property CheckoutUser As String
+    <DataColumnNames(TrackablesCols.CheckinUser)>
+    Public Property CheckinUser As String
+    <DataColumnNames(TrackablesCols.UseLocation)>
+    Public Property UseLocation As String
+    <DataColumnNames(TrackablesCols.Notes)>
+    Public Property UseReason As String
+    <DataColumnNames(DevicesCols.CheckedOut)>
+    Public Property IsCheckedOut As Boolean
+    <DataColumnNames(TrackablesCols.Notes)>
+    Public Property CheckinNotes As String
+    <DataColumnNames(TrackablesCols.DeviceUID)>
+    Public Property DeviceGUID As String
+End Class
 
 Public Structure AccessGroupStruct
     Public AccessModule As String

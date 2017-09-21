@@ -4,7 +4,7 @@ Public Class SibiManageRequestForm
 
 #Region "Fields"
 
-    Private CurrentRequest As RequestStruct
+    Private CurrentRequest As New RequestStruct
     Private CurrentHash As String
     Private IsModifying As Boolean = False
     Private IsNewRequest As Boolean = False
@@ -436,7 +436,7 @@ Public Class SibiManageRequestForm
             With info
                 .Description = Trim(txtDescription.Text)
                 .RequestUser = Trim(txtUser.Text)
-                .Type = GetDBValue(SibiIndex.RequestType, cmbType.SelectedIndex)
+                .RequestType = GetDBValue(SibiIndex.RequestType, cmbType.SelectedIndex)
                 .NeedByDate = dtNeedBy.Value
                 .Status = GetDBValue(SibiIndex.StatusType, cmbStatus.SelectedIndex)
                 .PO = Trim(txtPO.Text)
@@ -468,21 +468,8 @@ Public Class SibiManageRequestForm
 
     Private Sub CollectRequestInfo(RequestResults As DataTable, RequestItemsResults As DataTable)
         Try
-            With CurrentRequest
-                .GUID = NoNull(RequestResults.Rows(0).Item(SibiRequestCols.UID))
-                .RequestUser = NoNull(RequestResults.Rows(0).Item(SibiRequestCols.RequestUser))
-                .Description = NoNull(RequestResults.Rows(0).Item(SibiRequestCols.Description))
-                .DateStamp = DateTime.Parse(NoNull(RequestResults.Rows(0).Item(SibiRequestCols.DateStamp)))
-                .NeedByDate = DateTime.Parse(NoNull(RequestResults.Rows(0).Item(SibiRequestCols.NeedBy)))
-                .Status = NoNull(RequestResults.Rows(0).Item(SibiRequestCols.Status))
-                .Type = NoNull(RequestResults.Rows(0).Item(SibiRequestCols.Type))
-                .PO = NoNull(RequestResults.Rows(0).Item(SibiRequestCols.PO))
-                .RequisitionNumber = NoNull(RequestResults.Rows(0).Item(SibiRequestCols.RequisitionNumber))
-                .ReplaceAsset = NoNull(RequestResults.Rows(0).Item(SibiRequestCols.ReplaceAsset))
-                .ReplaceSerial = NoNull(RequestResults.Rows(0).Item(SibiRequestCols.ReplaceSerial))
-                .RequestNumber = NoNull(RequestResults.Rows(0).Item(SibiRequestCols.RequestNumber))
-                .RequestItems = RequestItemsResults
-            End With
+            CurrentRequest = New RequestStruct(RequestResults)
+            CurrentRequest.RequestItems = RequestItemsResults
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try

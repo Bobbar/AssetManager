@@ -1,7 +1,7 @@
 ﻿
 Public Class TrackDeviceForm
     Private CurrentTrackingDevice As New DeviceStruct
-    Private CheckData As DeviceTrackingStruct
+    Private CheckData As New DeviceTrackingStruct
 
     Sub New(device As DeviceStruct, parentForm As ExtendedForm)
         InitializeComponent()
@@ -56,17 +56,7 @@ Public Class TrackDeviceForm
     Private Sub GetCurrentTracking(strGUID As String)
         Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & TrackablesCols.TableName & " WHERE " & TrackablesCols.DeviceUID & "='" & strGUID & "' ORDER BY " & TrackablesCols.DateStamp & " DESC LIMIT 1") 'ds.Tables(0)
             If results.Rows.Count > 0 Then
-                For Each dr As DataRow In results.Rows
-                    With dr
-                        DateTime.TryParse(.Item(TrackablesCols.CheckoutTime).ToString, CurrentTrackingDevice.Tracking.CheckoutTime)
-                        DateTime.TryParse(.Item(TrackablesCols.CheckinTime).ToString, CurrentTrackingDevice.Tracking.CheckinTime)
-                        CurrentTrackingDevice.Tracking.UseLocation = .Item(TrackablesCols.UseLocation).ToString
-                        CurrentTrackingDevice.Tracking.CheckoutUser = .Item(TrackablesCols.CheckoutUser).ToString
-                        CurrentTrackingDevice.Tracking.CheckinUser = .Item(TrackablesCols.CheckinUser).ToString
-                        DateTime.TryParse(.Item(TrackablesCols.DueBackDate).ToString, CurrentTrackingDevice.Tracking.DueBackTime)
-                        CurrentTrackingDevice.Tracking.UseReason = .Item(TrackablesCols.Notes).ToString
-                    End With
-                Next
+                CurrentTrackingDevice.PopulateClassProps(CurrentTrackingDevice, results)
             End If
         End Using
     End Sub
@@ -162,7 +152,7 @@ Public Class TrackDeviceForm
                 CheckOutParams.Add(New DBParameter(TrackablesCols.CheckoutUser, CheckData.CheckoutUser))
                 CheckOutParams.Add(New DBParameter(TrackablesCols.CheckinUser, CheckData.CheckinUser))
                 CheckOutParams.Add(New DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation))
-                CheckOutParams.Add(New DBParameter(TrackablesCols.Notes, CheckData.UseReason))
+                CheckOutParams.Add(New DBParameter(TrackablesCols.Notes, CheckData.CheckinNotes))
                 CheckOutParams.Add(New DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID))
                 rows += DBFunc.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans)
 

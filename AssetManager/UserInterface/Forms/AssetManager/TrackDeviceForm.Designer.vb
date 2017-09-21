@@ -167,7 +167,6 @@ Partial Class TrackDeviceForm
         Me.txtUseReason.Name = "txtUseReason"
         Me.txtUseReason.Size = New System.Drawing.Size(256, 68)
         Me.txtUseReason.TabIndex = 9
-        Me.txtUseReason.Text = "test"
         '
         'Label8
         '
@@ -344,7 +343,7 @@ Partial Class TrackDeviceForm
         Me.txtAssetTag.Size = New System.Drawing.Size(114, 23)
         Me.txtAssetTag.TabIndex = 0
         '
-        'Tracking
+        'TrackDeviceForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -355,7 +354,7 @@ Partial Class TrackDeviceForm
         Me.Controls.Add(Me.CheckInBox)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
-        Me.Name = "Tracking"
+        Me.Name = "TrackDeviceForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Tracking"
         Me.CheckInBox.ResumeLayout(False)
