@@ -6,7 +6,7 @@
     Private ReadOnly intReplacementSched As Integer = 4
     Private bolCheckFields As Boolean
     Private DataParser As New DBControlParser(Me)
-    Private Device As New DeviceStruct
+    Private Device As New DeviceObject
     Private MyLiveBox As New LiveBox(Me)
     Private NewUID As String
 
@@ -226,7 +226,7 @@
             DBRow(DevicesCols.CurrentUser) = MunisUser.Name
             DBRow(DevicesCols.MunisEmpNum) = MunisUser.Number
         End If
-        DBRow(DevicesCols.LastModUser) = strLocalUser
+        DBRow(DevicesCols.LastModUser) = LocalDomainUser
         DBRow(DevicesCols.LastModDate) = Now
         DBRow(DevicesCols.DeviceUID) = NewUID
         DBRow(DevicesCols.CheckedOut) = False
@@ -244,7 +244,7 @@
         'Add Add'l info
         DBRow(HistoricalDevicesCols.ChangeType) = "NEWD"
         DBRow(HistoricalDevicesCols.Notes) = Trim(txtNotes.Text)
-        DBRow(HistoricalDevicesCols.ActionUser) = strLocalUser
+        DBRow(HistoricalDevicesCols.ActionUser) = LocalDomainUser
         DBRow(HistoricalDevicesCols.DeviceUID) = NewUID
         Return tmpTable
     End Function

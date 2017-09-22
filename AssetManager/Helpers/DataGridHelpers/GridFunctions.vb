@@ -1,13 +1,13 @@
 ﻿Module GridFunctions
 
-    Public Sub SetupGrid(Grid As DataGridView, Columns As List(Of DataGridColumnStruct))
+    Public Sub SetupGrid(Grid As DataGridView, Columns As List(Of DataGridColumn))
         Try
             Grid.DataSource = Nothing
             Grid.Rows.Clear()
             Grid.Columns.Clear()
             Grid.AutoGenerateColumns = False
 
-            For Each col As DataGridColumnStruct In Columns
+            For Each col As DataGridColumn In Columns
                 Grid.Columns.Add(GetColumn(col))
             Next
         Catch ex As Exception
@@ -15,7 +15,7 @@
         End Try
     End Sub
 
-    Private Function GetColumn(Column As DataGridColumnStruct) As DataGridViewColumn
+    Private Function GetColumn(Column As DataGridColumn) As DataGridViewColumn
         Select Case Column.ColumnType
             Case GetType(String), GetType(Integer)
                 Return GenericColumn(Column)
@@ -25,7 +25,7 @@
         Return Nothing
     End Function
 
-    Private Function GenericColumn(Column As DataGridColumnStruct) As DataGridViewColumn
+    Private Function GenericColumn(Column As DataGridColumn) As DataGridViewColumn
         Dim NewCol As New DataGridViewColumn
         NewCol.Name = Column.ColumnName
         NewCol.DataPropertyName = Column.ColumnName
@@ -57,7 +57,7 @@
     ''' </summary>
     ''' <param name="Columns"></param>
     ''' <returns></returns>
-    Public Function ColumnsString(Columns As List(Of DataGridColumnStruct)) As String
+    Public Function ColumnsString(Columns As List(Of DataGridColumn)) As String
         Dim ColString As String = ""
         For Each col In Columns
             ColString += col.ColumnName

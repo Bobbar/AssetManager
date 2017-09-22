@@ -13,9 +13,6 @@ Module ErrorHandling
             Logger("ERR STACK TRACE: " & ex.ToString)
             Dim ErrorResult As Boolean
             Select Case True
-                Case TypeOf ex Is BackgroundWorkerCanceledException
-                    ErrorResult = True
-
                 Case TypeOf ex Is Net.WebException
                     Dim WebEx = DirectCast(ex, Net.WebException)
                     ErrorResult = handleWebException(WebEx, Method)

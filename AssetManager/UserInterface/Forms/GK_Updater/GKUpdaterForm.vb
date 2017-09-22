@@ -21,7 +21,7 @@ Public Class GKUpdaterForm
 
     End Sub
 
-    Public Sub AddUpdate(device As DeviceStruct)
+    Public Sub AddUpdate(device As DeviceObject)
 
         If bolCheckForDups AndAlso Not Exists(device) Then
             Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
@@ -42,11 +42,11 @@ Public Class GKUpdaterForm
 
     End Sub
 
-    Private Sub StartUpdateByDevice(device As DeviceStruct)
+    Private Sub StartUpdateByDevice(device As DeviceObject)
         MyUpdates.Find(Function(upd) upd.Device.GUID = device.GUID).StartUpdate()
     End Sub
 
-    Private Function Exists(device As DeviceStruct) As Boolean
+    Private Function Exists(device As DeviceObject) As Boolean
         Return MyUpdates.Exists(Function(upd) upd.Device.GUID = device.GUID)
     End Function
 

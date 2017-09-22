@@ -8,7 +8,7 @@ Public Class ViewDeviceForm
 #Region "Fields"
 
     Public MunisUser As MunisEmployeeStruct = Nothing
-    Private CurrentViewDevice As New DeviceStruct
+    Private CurrentViewDevice As New DeviceObject
     Private CurrentHash As String
     Private bolCheckFields As Boolean
     Private bolGridFilling As Boolean = False
@@ -483,10 +483,10 @@ Public Class ViewDeviceForm
     Private Sub DeleteSelectedHistoricalEntry()
         If Not CheckForAccess(AccessGroup.ModifyDevice) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
-        Dim Info As DeviceStruct
+        Dim Info As DeviceObject
         Dim strQry = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & strGUID & "'"
         Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry)
-            Info = New DeviceStruct(results)
+            Info = New DeviceObject(results)
         End Using
         Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & GetHumanValue(DeviceIndex.ChangeType, Info.Historical.ChangeType) & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
@@ -624,7 +624,7 @@ Public Class ViewDeviceForm
         txtCheckOut.Text = IIf(CurrentViewDevice.Tracking.IsCheckedOut, "Checked Out", "Checked In").ToString
     End Sub
 
-    Private Function FormTitle(Device As DeviceStruct) As String
+    Private Function FormTitle(Device As DeviceObject) As String
         Return " - " + Device.CurrentUser + " - " + Device.AssetTag + " - " + Device.Description
     End Function
 
@@ -634,7 +634,7 @@ Public Class ViewDeviceForm
         'Add Add'l info
         DBRow(HistoricalDevicesCols.ChangeType) = UpdateInfo.ChangeType
         DBRow(HistoricalDevicesCols.Notes) = UpdateInfo.Note
-        DBRow(HistoricalDevicesCols.ActionUser) = strLocalUser
+        DBRow(HistoricalDevicesCols.ActionUser) = LocalDomainUser
         DBRow(HistoricalDevicesCols.DeviceUID) = CurrentViewDevice.GUID
         Return tmpTable
     End Function
@@ -656,7 +656,7 @@ Public Class ViewDeviceForm
             End If
         End If
         DBRow(DevicesCols.SibiLinkUID) = CleanDBValue(CurrentViewDevice.SibiLink)
-        DBRow(DevicesCols.LastModUser) = strLocalUser
+        DBRow(DevicesCols.LastModUser) = LocalDomainUser
         DBRow(DevicesCols.LastModDate) = Now
         MunisUser = Nothing
         Return tmpTable
@@ -722,7 +722,7 @@ Public Class ViewDeviceForm
         DoneWaiting()
     End Sub
 
-    Private Sub OpenSibiLink(LinkDevice As DeviceStruct)
+    Private Sub OpenSibiLink(LinkDevice As DeviceObject)
         Try
             If Not CheckForAccess(AccessGroup.ViewSibi) Then Exit Sub
             Dim SibiUID As String
@@ -1063,7 +1063,7 @@ Public Class ViewDeviceForm
                     Return False
                 End If
                 CurrentHash = GetHash(DeviceResults, HistoricalResults)
-                CurrentViewDevice = New DeviceStruct(DeviceResults)
+                CurrentViewDevice = New DeviceObject(DeviceResults)
                 DataParser.FillDBFields(DeviceResults)
                 SetMunisEmpStatus()
                 SendToHistGrid(DataGridHistory, HistoricalResults)

@@ -4,7 +4,7 @@ Public Class SibiManageRequestForm
 
 #Region "Fields"
 
-    Private CurrentRequest As New RequestStruct
+    Private CurrentRequest As New RequestObject
     Private CurrentHash As String
     Private IsModifying As Boolean = False
     Private IsNewRequest As Boolean = False
@@ -85,7 +85,7 @@ Public Class SibiManageRequestForm
         ClearAll()
         IsNewRequest = True
         SetTitle(True)
-        CurrentRequest = New RequestStruct
+        CurrentRequest = New RequestObject
         Me.FormUID = CurrentRequest.GUID
         IsModifying = True
         SetupGrid(RequestItemsGrid, RequestItemsColumns)
@@ -184,7 +184,7 @@ Public Class SibiManageRequestForm
     Private Sub AddNewRequest()
         If Not CheckForAccess(AccessGroup.AddSibi) Then Exit Sub
         If Not ValidateFields() Then Exit Sub
-        Dim RequestData As RequestStruct = CollectData()
+        Dim RequestData As RequestObject = CollectData()
         Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
             Try
                 Dim InsertRequestQry As String = "SELECT * FROM " & SibiRequestCols.TableName & " LIMIT 0"
@@ -430,9 +430,9 @@ Public Class SibiManageRequestForm
         ModifyRequest()
     End Sub
 
-    Private Function CollectData() As RequestStruct
+    Private Function CollectData() As RequestObject
         Try
-            Dim info As New RequestStruct
+            Dim info As New RequestObject
             With info
                 .Description = Trim(txtDescription.Text)
                 .RequestUser = Trim(txtUser.Text)
@@ -468,7 +468,7 @@ Public Class SibiManageRequestForm
 
     Private Sub CollectRequestInfo(RequestResults As DataTable, RequestItemsResults As DataTable)
         Try
-            CurrentRequest = New RequestStruct(RequestResults)
+            CurrentRequest = New RequestObject(RequestResults)
             CurrentRequest.RequestItems = RequestItemsResults
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -784,21 +784,21 @@ Public Class SibiManageRequestForm
         OpenRequest(CurrentRequest.GUID)
     End Sub
 
-    Private Function RequestItemsColumns() As List(Of DataGridColumnStruct)
-        Dim ColList As New List(Of DataGridColumnStruct)
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.User, "User", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.Description, "Description", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.Qty, "Qty", GetType(Integer)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.Location, "Location", GetType(ComboboxDataStruct), DeviceIndex.Locations))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.Status, "Status", GetType(ComboboxDataStruct), SibiIndex.ItemStatusType))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.ReplaceAsset, "Replace Asset", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.ReplaceSerial, "Replace Serial", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.NewAsset, "New Asset", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.NewSerial, "New Serial", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.OrgCode, "Org Code", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.ObjectCode, "Object Code", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.ItemUID, "Item UID", GetType(String), True, True))
-        ColList.Add(New DataGridColumnStruct(SibiRequestItemsCols.RequestUID, "Request UID", GetType(String), True, False))
+    Private Function RequestItemsColumns() As List(Of DataGridColumn)
+        Dim ColList As New List(Of DataGridColumn)
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.User, "User", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.Description, "Description", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.Qty, "Qty", GetType(Integer)))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.Location, "Location", GetType(ComboboxDataStruct), DeviceIndex.Locations))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.Status, "Status", GetType(ComboboxDataStruct), SibiIndex.ItemStatusType))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.ReplaceAsset, "Replace Asset", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.ReplaceSerial, "Replace Serial", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.NewAsset, "New Asset", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.NewSerial, "New Serial", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.OrgCode, "Org Code", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.ObjectCode, "Object Code", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.ItemUID, "Item UID", GetType(String), True, True))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.RequestUID, "Request UID", GetType(String), True, False))
         Return ColList
     End Function
 
@@ -1180,7 +1180,7 @@ Public Class SibiManageRequestForm
                     Message("It appears that someone else has modified this request. Please refresh and try again.", vbOKOnly + vbExclamation, "Concurrency Failure", Me)
                     Exit Sub
                 End If
-                Dim RequestData As RequestStruct = CollectData()
+                Dim RequestData As RequestObject = CollectData()
                 RequestData.GUID = CurrentRequest.GUID
                 If RequestData.RequestItems Is Nothing Then Exit Sub
                 Dim RequestUpdateQry As String = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & " = '" & CurrentRequest.GUID & "'"

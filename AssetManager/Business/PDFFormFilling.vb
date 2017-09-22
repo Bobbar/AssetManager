@@ -7,11 +7,11 @@ Imports MyDialogLib
 
 Public Class PdfFormFilling
     Private ParentForm As ExtendedForm
-    Private CurrentDevice As New DeviceStruct
+    Private CurrentDevice As New DeviceObject
     Private CurrentDialog As AdvancedDialog
     Private UnitPriceTxtName As String = "txtUnitPrice"
 
-    Sub New(parentForm As ExtendedForm, deviceInfo As DeviceStruct, pdfType As PdfFormType)
+    Sub New(parentForm As ExtendedForm, deviceInfo As DeviceObject, pdfType As PdfFormType)
         Me.ParentForm = parentForm
         CurrentDevice = deviceInfo
         FillForm(pdfType)
@@ -96,7 +96,7 @@ Public Class PdfFormFilling
         End If
     End Function
 
-    Private Function DisposalFormFields(Device As DeviceStruct, ByRef pdfStamper As PdfStamper) As AcroFields
+    Private Function DisposalFormFields(Device As DeviceObject, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
         Using newDialog As New AdvancedDialog(ParentForm, True)
             With newDialog
@@ -196,7 +196,7 @@ Public Class PdfFormFilling
         Return tmpFields
     End Function
 
-    Private Function InputFormFields(Device As DeviceStruct, ByRef pdfStamper As PdfStamper) As AcroFields
+    Private Function InputFormFields(Device As DeviceObject, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
         Dim strUnitPrice As String = GetUnitPrice()
         If strUnitPrice = "" Or IsNothing(strUnitPrice) Then
@@ -224,7 +224,7 @@ Public Class PdfFormFilling
         Return tmpFields
     End Function
 
-    Private Function TransferFormFields(Device As DeviceStruct, ByRef pdfStamper As PdfStamper) As AcroFields
+    Private Function TransferFormFields(Device As DeviceObject, ByRef pdfStamper As PdfStamper) As AcroFields
         Dim tmpFields As AcroFields = pdfStamper.AcroFields
         Using newDialog As New AdvancedDialog(ParentForm)
             With newDialog

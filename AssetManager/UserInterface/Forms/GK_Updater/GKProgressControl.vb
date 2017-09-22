@@ -8,18 +8,18 @@ Public Class GKProgressControl
     Public ProgStatus As ProgressStatus
     Private bolShow As Boolean = False
     Private CurrentStatus As GK_Updater.Status_Stats
-    Private CurDevice As New DeviceStruct
+    Private CurDevice As New DeviceObject
     Private LogBuff As String = ""
     Private MyParentForm As Form
     Private PrevColor As Color
 
-    Public ReadOnly Property Device As DeviceStruct
+    Public ReadOnly Property Device As DeviceObject
         Get
             Return CurDevice
         End Get
     End Property
 
-    Sub New(parentForm As Form, device As DeviceStruct, createMissingDirs As Boolean, gkPath As String, Optional seq As Integer = 0)
+    Sub New(parentForm As Form, device As DeviceObject, createMissingDirs As Boolean, gkPath As String, Optional seq As Integer = 0)
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.

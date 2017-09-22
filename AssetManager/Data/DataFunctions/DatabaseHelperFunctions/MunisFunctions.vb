@@ -259,7 +259,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
 
     Public Sub AssetSearch(parentForm As ExtendedForm)
         Try
-            Dim Device As New DeviceStruct
+            Dim Device As New DeviceObject
             Device.PurchaseDate = Nothing
             Using NewDialog As New AdvancedDialog(parentForm)
                 With NewDialog
@@ -540,7 +540,7 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
         End If
     End Function
 
-    Public Async Sub LoadMunisInfoByDevice(device As DeviceStruct, parentForm As ExtendedForm)
+    Public Async Sub LoadMunisInfoByDevice(device As DeviceObject, parentForm As ExtendedForm)
         Try
             SetWaitCursor(True, parentForm)
             Dim ReqLinesTable, ReqHeaderTable, InvTable As New DataTable
@@ -593,7 +593,7 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
         End Try
     End Sub
 
-    Private Async Function LoadMunisInventoryGrid(device As DeviceStruct) As Task(Of DataTable)
+    Private Async Function LoadMunisInventoryGrid(device As DeviceObject) As Task(Of DataTable)
         Dim GridData As New DataTable
         Dim strFields As String = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo"
         Dim AssetTagQuery As String = "SELECT TOP 1 " & strFields & " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" & device.AssetTag & "'"

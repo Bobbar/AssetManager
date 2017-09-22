@@ -32,7 +32,7 @@
         Return My.Application.OpenForms.OfType(Of ExtendedForm).ToList.FindAll(Function(f) f.ParentForm Is parentForm And Not f.IsDisposed)
     End Function
 
-    Public Sub LookupDevice(parentForm As ExtendedForm, device As DeviceStruct)
+    Public Sub LookupDevice(parentForm As ExtendedForm, device As DeviceObject)
         If device.GUID IsNot Nothing Then
             If Not FormIsOpenByUID(GetType(ViewDeviceForm), device.GUID) Then
                 Dim NewView As New ViewDeviceForm(parentForm, device.GUID)

@@ -14,8 +14,8 @@ Public Class AttachmentsForm
     Private AttachFolderUID As String
     Private Const FileSizeMBLimit As Short = 150
     Private _attachTable As AttachmentsBaseCols
-    Private AttachDevice As DeviceStruct
-    Private AttachRequest As RequestStruct
+    Private AttachDevice As DeviceObject
+    Private AttachRequest As RequestObject
     Private bolAllowDrag As Boolean = False
     Private bolDragging As Boolean = False
     Private bolGridFilling As Boolean
@@ -43,8 +43,8 @@ Public Class AttachmentsForm
         SetStatusBar("Idle...")
         _attachTable = AttachTable
         If Not IsNothing(AttachInfo) Then
-            If TypeOf AttachInfo Is RequestStruct Then
-                AttachRequest = DirectCast(AttachInfo, RequestStruct)
+            If TypeOf AttachInfo Is RequestObject Then
+                AttachRequest = DirectCast(AttachInfo, RequestObject)
                 AttachFolderUID = AttachRequest.GUID
                 FormUID = AttachFolderUID
                 strSelectedFolder = GetHumanValueFromIndex(SibiIndex.AttachFolder, 0)
@@ -53,8 +53,8 @@ Public Class AttachmentsForm
                 SibiGroup.Dock = DockStyle.Top
                 FillFolderCombos()
                 FillSibiInfo()
-            ElseIf TypeOf AttachInfo Is DeviceStruct Then
-                AttachDevice = DirectCast(AttachInfo, DeviceStruct)
+            ElseIf TypeOf AttachInfo Is DeviceObject Then
+                AttachDevice = DirectCast(AttachInfo, DeviceObject)
                 AttachFolderUID = AttachDevice.GUID
                 FormUID = AttachFolderUID
                 Me.Text = "Device Attachements"

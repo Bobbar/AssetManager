@@ -101,7 +101,7 @@ Public Class SibiMainForm
     Public Sub SendToGrid(results As DataTable)
         Try
             Using table As New DataTable
-                For Each col As DataGridColumnStruct In SibiTableColumns()
+                For Each col As DataGridColumn In SibiTableColumns()
                     Dim column = table.Columns.Add(col.ColumnName, col.ColumnType)
                     column.Caption = col.ColumnCaption
                 Next
@@ -139,19 +139,19 @@ Public Class SibiMainForm
         Return StatusList
     End Function
 
-    Private Function SibiTableColumns() As List(Of DataGridColumnStruct)
-        Dim ColList As New List(Of DataGridColumnStruct)
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.RequestNumber, "Request #", GetType(Integer)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.Status, "Status", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.Description, "Description", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.RequestUser, "Request User", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.Type, "Request Type", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.NeedBy, "Need By", GetType(Date)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.PO, "PO Number", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.RequisitionNumber, "Req. Number", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.RTNumber, "RT Number", GetType(String)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.DateStamp, "Create Date", GetType(Date)))
-        ColList.Add(New DataGridColumnStruct(SibiRequestCols.UID, "UID", GetType(String)))
+    Private Function SibiTableColumns() As List(Of DataGridColumn)
+        Dim ColList As New List(Of DataGridColumn)
+        ColList.Add(New DataGridColumn(SibiRequestCols.RequestNumber, "Request #", GetType(Integer)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.Status, "Status", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.Description, "Description", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.RequestUser, "Request User", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.Type, "Request Type", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.NeedBy, "Need By", GetType(Date)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.PO, "PO Number", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.RequisitionNumber, "Req. Number", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.RTNumber, "RT Number", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.DateStamp, "Create Date", GetType(Date)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.UID, "UID", GetType(String)))
         Return ColList
     End Function
 

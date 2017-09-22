@@ -1,7 +1,7 @@
 ﻿Option Explicit On
 
 Public Class ViewTrackingForm
-    Sub New(parentForm As ExtendedForm, entryGUID As String, device As DeviceStruct)
+    Sub New(parentForm As ExtendedForm, entryGUID As String, device As DeviceObject)
         InitializeComponent()
         Me.ParentForm = parentForm
         FormUID = entryGUID
@@ -9,7 +9,7 @@ Public Class ViewTrackingForm
         Show()
     End Sub
 
-    Private Sub ViewTrackingEntry(entryUID As String, device As DeviceStruct)
+    Private Sub ViewTrackingEntry(entryUID As String, device As DeviceObject)
         Try
             SetWaitCursor(True, Me)
             Dim strQry = "Select * FROM " & TrackablesCols.TableName & " WHERE  " & TrackablesCols.UID & " = '" & entryUID & "'"

@@ -35,7 +35,7 @@ Public Class HistoricalDevicesCols
     Public Const HistoryEntryUID As String = "hist_uid"
     Public Const ChangeType As String = "hist_change_type"
     Public Const Notes As String = "hist_notes"
-    Public Const ActionDateTime As String = "dev_lastmod_date" '"hist_action_datetime"
+    Public Const ActionDateTime As String = "dev_lastmod_date"
     Public Const ActionUser As String = "hist_action_user"
 End Class
 
@@ -163,4 +163,24 @@ Public Class EmployeesCols
     Public Const Name As String = "emp_name"
     Public Const Number As String = "emp_number"
     Public Const UID As String = "emp_UID"
+End Class
+Public NotInheritable Class DeviceAttribType
+    Public Const Location As String = "LOCATION"
+    Public Const ChangeType As String = "CHANGETYPE"
+    Public Const EquipType As String = "EQ_TYPE"
+    Public Const OSType As String = "OS_TYPE"
+    Public Const StatusType As String = "STATUS_TYPE"
+
+End Class
+Public NotInheritable Class SibiAttribType
+
+    Public Const SibiStatusType As String = "STATUS"
+    Public Const SibiItemStatusType As String = "ITEM_STATUS"
+    Public Const SibiRequestType As String = "REQ_TYPE"
+    Public Const SibiAttachFolder As String = "ATTACH_FOLDER"
+End Class
+
+Public NotInheritable Class CheckType
+    Public Const Checkin As String = "IN"
+    Public Const Checkout As String = "OUT"
 End Class

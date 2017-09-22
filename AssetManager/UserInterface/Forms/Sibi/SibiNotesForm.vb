@@ -1,13 +1,13 @@
 ﻿Public Class SibiNotesForm
-    Private MyRequest As RequestStruct
+    Private MyRequest As RequestObject
 
-    Public ReadOnly Property Request As RequestStruct
+    Public ReadOnly Property Request As RequestObject
         Get
             Return MyRequest
         End Get
     End Property
 
-    Sub New(parentForm As ExtendedForm, request As RequestStruct)
+    Sub New(parentForm As ExtendedForm, request As RequestObject)
         InitializeComponent()
         Me.ParentForm = parentForm
         MyRequest = request

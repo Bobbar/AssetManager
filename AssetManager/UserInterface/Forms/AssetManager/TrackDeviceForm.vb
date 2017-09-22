@@ -1,9 +1,9 @@
 ﻿
 Public Class TrackDeviceForm
-    Private CurrentTrackingDevice As New DeviceStruct
-    Private CheckData As New DeviceTrackingStruct
+    Private CurrentTrackingDevice As New DeviceObject
+    Private CheckData As New DeviceTrackingObject
 
-    Sub New(device As DeviceStruct, parentForm As ExtendedForm)
+    Sub New(device As DeviceObject, parentForm As ExtendedForm)
         InitializeComponent()
         CurrentTrackingDevice = device
         Me.ParentForm = parentForm
@@ -46,9 +46,9 @@ Public Class TrackDeviceForm
             .UseReason = UCase(Trim(txtUseReason.Text))
             .CheckinNotes = UCase(Trim(txtCheckInNotes.Text))
             .DeviceGUID = CurrentTrackingDevice.GUID
-            .CheckoutUser = strLocalUser
+            .CheckoutUser = LocalDomainUser
             .CheckinTime = dtCheckIn.Value '.ToString(strDBDateTimeFormat)
-            .CheckinUser = strLocalUser
+            .CheckinUser = LocalDomainUser
         End With
         Return True
     End Function

@@ -170,16 +170,16 @@
         End If
     End Function
 
-    Public Function FindDeviceFromAssetOrSerial(searchVal As String, type As FindDevType) As DeviceStruct
+    Public Function FindDeviceFromAssetOrSerial(searchVal As String, type As FindDevType) As DeviceObject
         Try
             If type = FindDevType.AssetTag Then
                 Dim Params As New List(Of DBQueryParameter)
                 Params.Add(New DBQueryParameter(DevicesCols.AssetTag, searchVal, True))
-                Return New DeviceStruct(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
+                Return New DeviceObject(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
             ElseIf type = FindDevType.Serial Then
                 Dim Params As New List(Of DBQueryParameter)
                 Params.Add(New DBQueryParameter(DevicesCols.Serial, searchVal, True))
-                Return New DeviceStruct(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
+                Return New DeviceObject(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
             End If
             Return Nothing
         Catch ex As Exception
@@ -188,8 +188,8 @@
         End Try
     End Function
 
-    Public Function GetDeviceInfoFromGUID(deviceGUID As String) As DeviceStruct
-        Return New DeviceStruct(DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & deviceGUID & "'"))
+    Public Function GetDeviceInfoFromGUID(deviceGUID As String) As DeviceObject
+        Return New DeviceObject(DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & deviceGUID & "'"))
     End Function
 
     Public Function GetMunisCodeFromAssetCode(assetCode As String) As String

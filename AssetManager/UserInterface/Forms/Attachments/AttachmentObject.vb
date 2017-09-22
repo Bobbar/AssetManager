@@ -1,91 +1,4 @@
 ﻿Imports System.IO
-
-Public NotInheritable Class DeviceAttribType
-    Public Const Location As String = "LOCATION"
-    Public Const ChangeType As String = "CHANGETYPE"
-    Public Const EquipType As String = "EQ_TYPE"
-    Public Const OSType As String = "OS_TYPE"
-    Public Const StatusType As String = "STATUS_TYPE"
-
-End Class
-Public NotInheritable Class SibiAttribType
-
-    Public Const SibiStatusType As String = "STATUS"
-    Public Const SibiItemStatusType As String = "ITEM_STATUS"
-    Public Const SibiRequestType As String = "REQ_TYPE"
-    Public Const SibiAttachFolder As String = "ATTACH_FOLDER"
-End Class
-
-Public NotInheritable Class CheckType
-    Public Const Checkin As String = "IN"
-    Public Const Checkout As String = "OUT"
-End Class
-
-Public Enum EntryType
-    Sibi
-    Device
-End Enum
-
-Public Enum PdfFormType
-    InputForm
-    TransferForm
-    DisposeForm
-End Enum
-
-Public Enum LiveBoxType
-    DynamicSearch
-    InstaLoad
-    SelectValue
-    UserSelect
-End Enum
-
-Public Enum FindDevType
-    AssetTag
-    Serial
-End Enum
-
-Public Enum CommandArgs
-    TESTDB
-End Enum
-
-Public Class DBParameter
-    Public Property FieldName As String
-    Public Property Value As Object
-
-    Sub New(ByVal fieldName As String, ByVal fieldValue As Object)
-        Me.FieldName = fieldName
-        Me.Value = fieldValue
-    End Sub
-
-End Class
-
-
-Public Class DBQueryParameter
-    Inherits DBParameter
-    Public Property IsExact As Boolean
-    Public Property OperatorString As String
-
-    Sub New(ByVal fieldName As String, ByVal fieldValue As Object, operatorString As String)
-        MyBase.New(fieldName, fieldValue)
-        Me.IsExact = IsExact
-        Me.OperatorString = operatorString
-    End Sub
-
-    Public Sub New(ByVal fieldName As String, ByVal fieldValue As Object, isExact As Boolean)
-        MyBase.New(fieldName, fieldValue)
-        Me.IsExact = isExact
-        Me.OperatorString = "AND"
-    End Sub
-
-    Public Sub New(ByVal fieldName As String, ByVal fieldValue As Object, isExact As Boolean, operatorString As String)
-        MyBase.New(fieldName, fieldValue)
-        Me.IsExact = isExact
-        Me.OperatorString = operatorString
-    End Sub
-
-
-End Class
-
 Public Class SibiAttachment
     Inherits Attachment
     Public Property SelectedFolder As String
@@ -295,11 +208,11 @@ Public Class Attachment : Implements IDisposable
                 ' TODO: dispose managed state (managed objects).
                 If _dataStream IsNot Nothing Then _dataStream.Dispose()
                 _fileInfo = Nothing
-                End If
-
-                ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
-                ' TODO: set large fields to null.
             End If
+
+            ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
+            ' TODO: set large fields to null.
+        End If
         disposedValue = True
     End Sub
 
@@ -320,21 +233,4 @@ Public Class Attachment : Implements IDisposable
 
 #End Region
 
-End Class
-
-Public Class GridTheme
-
-    Sub New(highlightCol As Color, cellSelCol As Color, backCol As Color)
-        RowHighlightColor = highlightCol
-        CellSelectColor = cellSelCol
-        BackColor = backCol
-    End Sub
-
-    Sub New()
-
-    End Sub
-
-    Public Property RowHighlightColor As Color
-    Public Property CellSelectColor As Color
-    Public Property BackColor As Color
 End Class

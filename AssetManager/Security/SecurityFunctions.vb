@@ -1,16 +1,14 @@
-﻿Option Explicit On
-
-Imports System.IO
+﻿Imports System.IO
 Imports System.Net
 Imports System.Runtime.Serialization
 Imports System.Security.Cryptography
 Imports System.Text
 
 Module SecurityFunctions
+    Public AdminCreds As NetworkCredential = Nothing
     Private AccessGroups() As AccessGroupStruct
     Private LocalUserAccess As LocalUserInfoStruct
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
-    Public AdminCreds As NetworkCredential = Nothing
 
     Public Function VerifyAdminCreds() As Boolean
         If AdminCreds Is Nothing Then
@@ -94,7 +92,7 @@ Module SecurityFunctions
 
     Public Sub GetUserAccess()
         Try
-            Dim strQRY = "SELECT * FROM " & UsersCols.TableName & " WHERE " & UsersCols.UserName & "='" & strLocalUser & "' LIMIT 1"
+            Dim strQRY = "SELECT * FROM " & UsersCols.TableName & " WHERE " & UsersCols.UserName & "='" & LocalDomainUser & "' LIMIT 1"
             Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
                 If results.Rows.Count > 0 Then
                     Dim r As DataRow = results.Rows(0)
