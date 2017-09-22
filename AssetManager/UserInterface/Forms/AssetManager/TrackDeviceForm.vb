@@ -56,7 +56,7 @@ Public Class TrackDeviceForm
     Private Sub GetCurrentTracking(strGUID As String)
         Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & TrackablesCols.TableName & " WHERE " & TrackablesCols.DeviceUID & "='" & strGUID & "' ORDER BY " & TrackablesCols.DateStamp & " DESC LIMIT 1") 'ds.Tables(0)
             If results.Rows.Count > 0 Then
-                CurrentTrackingDevice.PopulateClassProps(CurrentTrackingDevice, results)
+                CurrentTrackingDevice.MapClassProperties(CurrentTrackingDevice, results)
             End If
         End Using
     End Sub

@@ -421,7 +421,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub CollectCurrentTracking(results As DataTable)
-        CurrentViewDevice.PopulateClassProps(CurrentViewDevice.Tracking, results)
+        CurrentViewDevice.MapClassProperties(CurrentViewDevice.Tracking, results)
     End Sub
 
     Private Function ConcurrencyCheck() As Boolean

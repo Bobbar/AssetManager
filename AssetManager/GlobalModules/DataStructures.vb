@@ -32,16 +32,34 @@ End Class
 ''' </summary>
 Public Class DataStructure
 
+    Public Sub MapClassProperties(obj As Object, data As Object)
+        If TypeOf data Is DataTable Then
+            Dim row = DirectCast(data, DataTable).Rows(0)
+            MapProperty(obj, row)
+        ElseIf TypeOf data Is DataRow Then
+            MapProperty(obj, DirectCast(data, DataRow))
+        Else
+            Throw New Exception("Invalid data object type.")
+        End If
+    End Sub
+
+    Public Sub MapClassProperties(obj As Object, row As DataRow)
+        MapProperty(obj, row)
+    End Sub
+
+    Public Sub MapClassProperties(obj As Object, data As DataTable)
+        Dim row = data.Rows(0)
+        MapProperty(obj, row)
+    End Sub
     ''' <summary>
     ''' Uses reflection to recursively populate/map class properties that are marked with a <see cref="DataColumnNamesAttribute"/>.
     ''' </summary>
     ''' <param name="obj">Object to be populated.</param>
-    ''' <param name="data">Datatable with columns matching the <see cref="DataColumnNamesAttribute"/> in the objects properties.</param>
-    Public Sub PopulateClassProps(obj As Object, data As DataTable)
+    ''' <param name="row">DataRow with columns matching the <see cref="DataColumnNamesAttribute"/> in the objects properties.</param>
+    Private Sub MapProperty(obj As Object, row As DataRow)
         'Collect list of all properties in the object class.
         Dim Props As List(Of Reflection.PropertyInfo) = (obj.GetType.GetProperties().ToList)
-        'Get the first, and hopefully only relevent row of the DataTable.
-        Dim row = data.Rows(0)
+
         'Iterate through the properties.
         For Each prop In Props
 
@@ -81,11 +99,12 @@ Public Class DataStructure
 
                 If GetType(DataStructure).IsAssignableFrom(prop.PropertyType) Then
                     'Recurse with nested DataStructure properties.
-                    PopulateClassProps(prop.GetValue(obj, Nothing), data)
+                    MapProperty(prop.GetValue(obj, Nothing), row)
                 End If
             End If
         Next
     End Sub
+
 End Class
 
 
@@ -96,8 +115,8 @@ Public Class DeviceStruct
 
     End Sub
 
-    Sub New(data As DataTable)
-        Me.PopulateClassProps(Me, data)
+    Sub New(data As Object)
+        Me.MapClassProperties(Me, data)
     End Sub
 
     <DataColumnNames(DevicesCols.AssetTag)>
@@ -167,8 +186,8 @@ Public Class RequestStruct
         Me.GUID = System.Guid.NewGuid.ToString
     End Sub
 
-    Sub New(data As DataTable)
-        Me.PopulateClassProps(Me, data)
+    Sub New(data As Object)
+        Me.MapClassProperties(Me, data)
     End Sub
 
 
@@ -210,8 +229,8 @@ Public Class DeviceHistoricalStruct
 
     End Sub
 
-    Sub New(data As DataTable)
-        Me.PopulateClassProps(Me, data)
+    Sub New(data As Object)
+        Me.MapClassProperties(Me, data)
     End Sub
 
     <DataColumnNames(HistoricalDevicesCols.ChangeType)>
@@ -234,7 +253,7 @@ Public Class DeviceTrackingStruct
     End Sub
 
     Sub New(data As DataTable)
-        Me.PopulateClassProps(Me, data)
+        Me.MapClassProperties(Me, data)
     End Sub
 
     <DataColumnNames(TrackablesCols.CheckoutTime)>

@@ -16,7 +16,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
             sqlQRY = "SELECT TOP 1 " & fieldOut & " FROM " & table ' & fieldIN.ToString & " = '" & valueIN.ToString & "'"
             Params.Add(New DBQueryParameter(fieldIn.ToString, valueIn.ToString, True))
         End If
-        Using cmd = GetSqlCommandFromParams(sqlQRY, Params)
+        Using cmd = GetSqlCommandFromParams(sqlQRY, Params), conn = cmd.Connection
             cmd.Connection.Open()
             Return cmd.ExecuteScalar
         End Using
@@ -34,7 +34,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
                 sqlQRY = "SELECT TOP 1 " & fieldOut & " FROM " & table ' & fieldIN.ToString & " = '" & valueIN.ToString & "'"
                 Params.Add(New DBQueryParameter(fieldIn.ToString, valueIn.ToString, True))
             End If
-            Using cmd = GetSqlCommandFromParams(sqlQRY, Params)
+            Using cmd = GetSqlCommandFromParams(sqlQRY, Params), conn = cmd.Connection
                 Await cmd.Connection.OpenAsync()
                 Dim Value = Await cmd.ExecuteScalarAsync
                 If Value IsNot Nothing Then Return Value.ToString
@@ -42,7 +42,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
-        Return Nothing
+        Return String.Empty
     End Function
 
     ''' <summary>
