@@ -23,7 +23,7 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Asset Manager\</PublishUrl>
+    <PublishUrl>\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Asset Manager_TEST\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -37,7 +37,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>34</ApplicationRevision>
+    <ApplicationRevision>36</ApplicationRevision>
     <ApplicationVersion>4.5.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -605,7 +605,18 @@
   <ItemGroup>
     <None Include="Resources\PlayIcon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PublishFile Include="Microsoft.Management.Infrastructure.Native">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MoneyCircleIcon.png" />
     <None Include="Resources\CoinIcon.png" />
