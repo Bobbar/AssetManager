@@ -183,7 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GK_Updater_Module\NetworkConnection.vb">
-      <Link>DataComms\NetDriveMapper\NetworkConnection.vb</Link>
+      <Link>Data\DataComms\NetDriveMapper\NetworkConnection.vb</Link>
     </Compile>
     <Compile Include="..\GK_Updater_Module\ProgressCounter.vb">
       <Link>Helpers\ProgressCounter.vb</Link>

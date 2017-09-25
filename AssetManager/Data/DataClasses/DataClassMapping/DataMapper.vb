@@ -66,10 +66,10 @@ Public Class DataMapping
                     End Select
                 End If
 
-            Else 'If the property does not contain a target attribute, check to see if it is a nested class inheriting the DataStructure base class.
+            Else 'If the property does not contain a target attribute, check to see if it is a nested class inheriting the DataMapping class.
 
                 If GetType(DataMapping).IsAssignableFrom(prop.PropertyType) Then
-                    'Recurse with nested DataStructure properties.
+                    'Recurse with nested DataMapping properties.
                     MapProperty(prop.GetValue(obj, Nothing), row)
                 End If
             End If
