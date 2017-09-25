@@ -79,7 +79,7 @@ Namespace My
                         Dim ArgToEnum = DirectCast(CommandArgs.Parse(GetType(CommandArgs), UCase(Args(i))), CommandArgs)
                         Select Case ArgToEnum
                             Case CommandArgs.TESTDB
-                                ServerInfo.UseTestDatabase = True
+                                ServerInfo.CurrentDataBase = Databases.test_db
                         End Select
                     Catch ex As ArgumentException
                         Logger("Invalid argument: " & Args(i))

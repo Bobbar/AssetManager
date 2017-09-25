@@ -25,7 +25,7 @@ Public Class AttachmentsForm
     ''' <summary>
     ''' "ftp://  strServerIP  /attachments/  CurrentDB  /"
     ''' </summary>
-    Private FTPUri As String = "ftp://" & ServerInfo.MySQLServerIP & "/attachments/" & ServerInfo.CurrentDataBase & "/"
+    Private FTPUri As String = "ftp://" & ServerInfo.MySQLServerIP & "/attachments/" & ServerInfo.CurrentDataBase.ToString & "/"
 
     Private MouseStartPos As Point
     Private Progress As New ProgressCounter

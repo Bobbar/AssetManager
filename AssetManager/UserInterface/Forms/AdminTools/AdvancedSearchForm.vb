@@ -30,7 +30,7 @@
 
     Private Function GetTables() As List(Of String)
         Dim Tables As New List(Of String)
-        Dim Qry = "SHOW TABLES IN " & ServerInfo.CurrentDataBase
+        Dim Qry = "SHOW TABLES IN " & ServerInfo.CurrentDataBase.ToString
         Using Results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(Qry)
             For Each row As DataRow In Results.Rows
                 Tables.Add(row.Item(Results.Columns(0).ColumnName).ToString)
@@ -41,7 +41,7 @@
 
     Private Function GetColumns(table As String) As List(Of String)
         Dim colList As New List(Of String)
-        Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & ServerInfo.CurrentDataBase & "' AND TABLE_NAME = '" & table & "'"
+        Dim SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" & ServerInfo.CurrentDataBase.ToString & "' AND TABLE_NAME = '" & table & "'"
         Using results = DBFunc.GetDatabase.DataTableFromQueryString(SQLQry)
             For Each row As DataRow In results.Rows
                 colList.Add(row.Item("COLUMN_NAME").ToString)

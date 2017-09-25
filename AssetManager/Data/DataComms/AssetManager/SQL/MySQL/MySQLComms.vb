@@ -87,13 +87,7 @@ Public Class MySQLDatabase
     End Function
 
     Private Function GetConnectString() As String
-        If Not ServerInfo.UseTestDatabase Then
-            ServerInfo.CurrentDataBase = strDatabase
-            Return MySQLConnectString & strDatabase
-        Else
-            ServerInfo.CurrentDataBase = strTestDatabase
-            Return MySQLConnectString & strTestDatabase
-        End If
+        Return MySQLConnectString & ServerInfo.CurrentDataBase.ToString
     End Function
 
     Public Function ReturnMySqlAdapter(sqlQry As String, connection As MySqlConnection) As MySqlDataAdapter

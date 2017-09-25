@@ -212,6 +212,13 @@ Public Class MainForm
         MyLiveBox.AttachToControl(txtAssetTag, LiveBoxType.InstaLoad, DevicesCols.AssetTag, DevicesCols.DeviceUID)
     End Sub
 
+    Private Sub InitDBCombo()
+        For Each item In [Enum].GetValues(GetType(Databases))
+            DatabaseToolCombo.Items.Add(item.ToString)
+        Next
+        DatabaseToolCombo.SelectedIndex = ServerInfo.CurrentDataBase
+    End Sub
+
     Private Sub LoadProgram()
         Try
             ShowAll()
@@ -238,6 +245,7 @@ Public Class MainForm
             InitDBControls()
             Clear_All()
             ShowTestDBWarning()
+            InitDBCombo()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             EndProgram()
@@ -383,11 +391,28 @@ Public Class MainForm
         StatusStrip1.Update()
     End Sub
 
+    Private Sub ChangeDatabase(database As Databases)
+        If database <> ServerInfo.CurrentDataBase Then
+            Dim blah = Message("Are you sure? This will close all open forms.", vbYesNo + vbQuestion, "Change Database", Me)
+            If blah = MsgBoxResult.Yes Then
+                If OKToCloseChildren(Me) Then
+                    CloseChildren(Me)
+                    ServerInfo.CurrentDataBase = database
+                    ShowTestDBWarning()
+                    Me.RefreshData()
+                End If
+            End If
+        End If
+    End Sub
+
     Private Sub ShowTestDBWarning()
-        If ServerInfo.UseTestDatabase Then
+        If ServerInfo.CurrentDataBase = Databases.test_db Then
             Message("TEST DATABASE IN USE", vbOKOnly + vbExclamation, "WARNING", Me)
             Me.BackColor = Color.DarkRed
             Me.Text += " - ****TEST DATABASE****"
+        Else
+            Me.BackColor = Color.FromArgb(232, 232, 232)
+            Me.Text = "Asset Manager - Main"
         End If
     End Sub
 
@@ -607,6 +632,9 @@ Public Class MainForm
         Process.Start(StartInfo)
     End Sub
 
+    Private Sub DatabaseToolCombo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DatabaseToolCombo.SelectedIndexChanged
+        ChangeDatabase(CType(DatabaseToolCombo.SelectedIndex, Databases))
+    End Sub
 #End Region
 
 #End Region

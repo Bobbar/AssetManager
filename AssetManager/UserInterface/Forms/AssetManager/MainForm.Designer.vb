@@ -86,6 +86,7 @@ Partial Class MainForm
         Me.AdvancedSearchMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PSScriptMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InstallChromeMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DatabaseToolCombo = New System.Windows.Forms.ToolStripComboBox()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
         Me.GroupBox1.SuspendLayout()
@@ -668,7 +669,7 @@ Partial Class MainForm
         '
         'AdminDropDown
         '
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.txtGUID, Me.tsmUserManager, Me.ReEnterLACredentialsToolStripMenuItem, Me.ViewLogToolStripMenuItem, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater, Me.AdvancedSearchMenuItem, Me.PSScriptMenuItem})
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.txtGUID, Me.DatabaseToolCombo, Me.tsmUserManager, Me.ReEnterLACredentialsToolStripMenuItem, Me.ViewLogToolStripMenuItem, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater, Me.AdvancedSearchMenuItem, Me.PSScriptMenuItem})
         Me.AdminDropDown.Image = Global.AssetManager.My.Resources.Resources.AdminIcon
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.Name = "AdminDropDown"
@@ -684,6 +685,7 @@ Partial Class MainForm
         Me.txtGUID.Name = "txtGUID"
         Me.txtGUID.Size = New System.Drawing.Size(150, 23)
         Me.txtGUID.ToolTipText = "GUID Lookup. (Press Enter)"
+        Me.txtGUID.Visible = False
         '
         'tsmUserManager
         '
@@ -740,6 +742,13 @@ Partial Class MainForm
         Me.InstallChromeMenuItem.Name = "InstallChromeMenuItem"
         Me.InstallChromeMenuItem.Size = New System.Drawing.Size(237, 26)
         Me.InstallChromeMenuItem.Text = "Install/Update Chrome"
+        '
+        'DatabaseToolCombo
+        '
+        Me.DatabaseToolCombo.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DatabaseToolCombo.Name = "DatabaseToolCombo"
+        Me.DatabaseToolCombo.Size = New System.Drawing.Size(121, 25)
+        Me.DatabaseToolCombo.ToolTipText = "Change Database"
         '
         'ToolStripSeparator5
         '
@@ -855,4 +864,5 @@ Partial Class MainForm
     Friend WithEvents InstallChromeMenuItem As ToolStripMenuItem
     Friend WithEvents ReEnterLACredentialsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ViewLogToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DatabaseToolCombo As ToolStripComboBox
 End Class

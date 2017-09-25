@@ -25,3 +25,8 @@ End Enum
 Public Enum CommandArgs
     TESTDB
 End Enum
+
+Public Enum Databases
+    test_db
+    asset_manager
+End Enum
