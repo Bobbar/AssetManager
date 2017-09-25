@@ -1,4 +1,5 @@
-﻿Namespace ConnectionMonitoring
+﻿Imports System.Net.NetworkInformation
+Namespace ConnectionMonitoring
     Public Class ConnectionWatchdog : Implements IDisposable
 
         Sub New(cachedMode As Boolean)
@@ -112,16 +113,27 @@
 
         Private Function CanTalkToServer() As Boolean
             Try
-                Dim CanPing As Boolean = My.Computer.Network.Ping(ServerInfo.MySQLServerIP)
-                'If server pinging, try to open a connection.
-                If CanPing Then
-                    Using MySQLDB As New MySQLDatabase(), conn = MySQLDB.NewConnection
-                        Return MySQLDB.OpenConnection(conn, True)
-                    End Using
-                Else
-                    'Not pinging. Return false.
-                    Return False
-                End If
+                Using ServerPing As New Ping
+                    Dim CanPing As Boolean = False
+                    Dim Reply = ServerPing.Send(ServerInfo.MySQLServerIP)
+                    If Reply.Status = IPStatus.Success Then
+                        CanPing = True
+                    Else
+                        CanPing = False
+                    End If
+
+                    Reply = Nothing
+
+                    'If server pinging, try to open a connection.
+                    If CanPing Then
+                        Using MySQLDB As New MySQLDatabase(), conn = MySQLDB.NewConnection
+                            Return MySQLDB.OpenConnection(conn, True)
+                        End Using
+                    Else
+                        'Not pinging. Return false.
+                        Return False
+                    End If
+                End Using
             Catch
                 'Catch ping or SQL exceptions, and return false.
                 Return False
