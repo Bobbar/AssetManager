@@ -25,12 +25,12 @@ Namespace My
 
             Status("Checking Local Cache...")
             If ConnectionSuccessful Then
-                If Not VerifyCacheHashes() Then
+                If Not DBCache.VerifyCacheHashes() Then
                     Status("Building Cache DB...")
-                    RefreshLocalDBCache()
+                    DBCache.RefreshLocalDBCache()
                 End If
             Else
-                CacheAvailable = VerifyCacheHashes(ConnectionSuccessful)
+                CacheAvailable = DBCache.VerifyCacheHashes(ConnectionSuccessful)
             End If
             If Not ConnectionSuccessful And Not CacheAvailable Then
                 Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", vbOKOnly + vbExclamation, "No Connection")

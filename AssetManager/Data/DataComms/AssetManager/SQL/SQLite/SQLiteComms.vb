@@ -60,7 +60,7 @@ Public Class SQLiteDatabase
     Public Function CheckLocalCacheHash() As Boolean
         Dim RemoteHashes As New List(Of String)
         RemoteHashes = RemoteTableHashList()
-        Return CompareTableHashes(RemoteHashes, SQLiteTableHashes)
+        Return CompareTableHashes(RemoteHashes, DBCache.SQLiteTableHashes)
     End Function
 
     Public Function CompareTableHashes(tableHashesA As List(Of String), tableHashesB As List(Of String)) As Boolean
@@ -86,7 +86,7 @@ Public Class SQLiteDatabase
 
     Public Sub RefreshSqlCache()
         Try
-            If SQLiteTableHashes IsNot Nothing AndAlso CheckLocalCacheHash() Then Exit Sub
+            If DBCache.SQLiteTableHashes IsNot Nothing AndAlso CheckLocalCacheHash() Then Exit Sub
 
             Logger("Rebuilding local DB cache...")
             CloseConnection()
@@ -107,8 +107,8 @@ Public Class SQLiteDatabase
                 Next
                 trans.Commit()
             End Using
-            SQLiteTableHashes = LocalTableHashList()
-            RemoteTableHashes = RemoteTableHashList()
+            DBCache.SQLiteTableHashes = LocalTableHashList()
+            DBCache.RemoteTableHashes = RemoteTableHashList()
             Logger("Local DB cache complete...")
         Catch ex As Exception
             Logger("Errors during cache rebuild!")

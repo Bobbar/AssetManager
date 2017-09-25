@@ -283,8 +283,8 @@ Public Class MainForm
         Try
             SetStatusBar("Rebuilding DB Cache...")
             Await Task.Run(Sub()
-                               If Not VerifyCacheHashes() Then
-                                   RefreshLocalDBCache()
+                               If Not DBCache.VerifyCacheHashes() Then
+                                   DBCache.RefreshLocalDBCache()
                                Else
                                    GlobalSwitches.BuildingCache = False
                                End If
@@ -392,17 +392,26 @@ Public Class MainForm
     End Sub
 
     Private Sub ChangeDatabase(database As Databases)
-        If database <> ServerInfo.CurrentDataBase Then
-            Dim blah = Message("Are you sure? This will close all open forms.", vbYesNo + vbQuestion, "Change Database", Me)
-            If blah = MsgBoxResult.Yes Then
-                If OKToCloseChildren(Me) Then
-                    CloseChildren(Me)
-                    ServerInfo.CurrentDataBase = database
-                    ShowTestDBWarning()
-                    Me.RefreshData()
+        Try
+            If Not GlobalSwitches.CachedMode And ServerInfo.ServerPinging Then
+                If database <> ServerInfo.CurrentDataBase Then
+                    Dim blah = Message("Are you sure? This will close all open forms.", vbYesNo + vbQuestion, "Change Database", Me)
+                    If blah = MsgBoxResult.Yes Then
+                        If OKToCloseChildren(Me) Then
+                            CloseChildren(Me)
+                            ServerInfo.CurrentDataBase = database
+                            DBCache.RefreshLocalDBCache()
+                            ShowTestDBWarning()
+                            ShowAll()
+                        End If
+                    End If
                 End If
+            Else
+                Message("Cannot switch database while Offline or in Cached Mode.", vbOK + vbInformation, "Unavailable", Me)
             End If
-        End If
+        Finally
+            DatabaseToolCombo.SelectedIndex = ServerInfo.CurrentDataBase
+        End Try
     End Sub
 
     Private Sub ShowTestDBWarning()
@@ -632,7 +641,7 @@ Public Class MainForm
         Process.Start(StartInfo)
     End Sub
 
-    Private Sub DatabaseToolCombo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DatabaseToolCombo.SelectedIndexChanged
+    Private Sub DatabaseToolCombo_DropDownClosed(sender As Object, e As EventArgs) Handles DatabaseToolCombo.DropDownClosed
         ChangeDatabase(CType(DatabaseToolCombo.SelectedIndex, Databases))
     End Sub
 #End Region

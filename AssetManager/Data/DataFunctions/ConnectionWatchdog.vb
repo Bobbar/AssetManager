@@ -44,7 +44,7 @@ Namespace ConnectionMonitoring
             Do Until disposedValue
 
                 ServerIsOnline = Await GetServerStatus()
-                CacheIsAvailable = Await VerifyLocalCacheHashOnly(InCachedMode)
+                CacheIsAvailable = Await DBCache.VerifyLocalCacheHashOnly(InCachedMode)
 
                 Dim Status = GetWatchdogStatus()
                 If Status <> CurrentWatchdogStatus Then
