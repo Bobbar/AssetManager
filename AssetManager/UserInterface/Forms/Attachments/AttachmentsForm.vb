@@ -407,16 +407,17 @@ Public Class AttachmentsForm
     Private Async Sub DownloadAndOpenAttachment(AttachUID As String)
         Try
             If AttachUID = "" Then Exit Sub
-            Dim saveAttachment = Await DownloadAttachment(AttachUID)
-            If saveAttachment Is Nothing Then Exit Sub
-            Dim strFullPath As String = TempPathFilename(saveAttachment)
-            SaveAttachmentToDisk(saveAttachment, strFullPath)
-            Process.Start(strFullPath)
-            SetStatusBar("Idle...")
-            saveAttachment.Dispose()
+            Using saveAttachment = Await DownloadAttachment(AttachUID)
+                If saveAttachment Is Nothing Then Exit Sub
+                Dim strFullPath As String = TempPathFilename(saveAttachment)
+                SaveAttachmentToDisk(saveAttachment, strFullPath)
+                Process.Start(strFullPath)
+            End Using
         Catch ex As Exception
-            SetStatusBar("Idle...")
+            Logger("ERROR DOWNLOADING ATTACHMENT: " & Me.FormUID & "/" & AttachUID)
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            SetStatusBar("Idle...")
         End Try
     End Sub
 
@@ -511,7 +512,6 @@ Public Class AttachmentsForm
         Dim CurrentAttachment As New Attachment
         Try
             Dim LocalFTPComm As New FtpComms
-            Dim FileNumber As Integer = 1
             taskCancelTokenSource = New CancellationTokenSource
             Dim cancelToken As CancellationToken = taskCancelTokenSource.Token
             WorkerFeedback(True)
@@ -532,7 +532,7 @@ Public Class AttachmentsForm
                     Message("Error creating FTP directory.", vbOKOnly + vbExclamation, "FTP Upload Error", Me)
                     Exit Sub
                 End If
-                SetStatusBar("Uploading... " & FileNumber & " of " & files.Count)
+                SetStatusBar("Uploading... " & files.ToList.IndexOf(file) + 1 & " of " & files.Count)
                 Progress = New ProgressCounter
                 Await Task.Run(Sub()
                                    Using FileStream As FileStream = DirectCast(CurrentAttachment.DataStream(), FileStream),
@@ -553,7 +553,6 @@ Public Class AttachmentsForm
                     FTPFunc.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID)
                 Else
                     InsertSQLAttachment(CurrentAttachment)
-                    FileNumber += 1
                 End If
                 CurrentAttachment.Dispose()
             Next
