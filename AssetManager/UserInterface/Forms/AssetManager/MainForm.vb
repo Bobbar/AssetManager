@@ -137,7 +137,7 @@ Public Class MainForm
     Private Sub ConnectStatus(text As String, foreColor As Color, backColor As Color, toolTipText As String)
         If StatusStrip1.InvokeRequired Then
             Dim d As New ConnectStatusVoidDelegate(AddressOf ConnectStatus)
-            Me.Invoke(d, New Object() {text, foreColor, backColor, toolTipText})
+            StatusStrip1.Invoke(d, New Object() {text, foreColor, backColor, toolTipText})
         Else
             ConnStatusLabel.Text = text
             ConnStatusLabel.ToolTipText = toolTipText
@@ -400,7 +400,7 @@ Public Class MainForm
     Private Sub SetStatusBar(text As String)
         If StatusStrip1.InvokeRequired Then
             Dim d As New StatusVoidDelegate(AddressOf SetStatusBar)
-            Me.Invoke(d, New Object() {text})
+            StatusStrip1.Invoke(d, New Object() {text})
         Else
             StatusLabel.Text = text
             StatusStrip1.Update()
