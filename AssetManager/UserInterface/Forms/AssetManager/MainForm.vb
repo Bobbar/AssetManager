@@ -243,10 +243,10 @@ Public Class MainForm
             SetGridStyle(ResultGrid)
 
             WatchDog = New ConnectionMonitoring.ConnectionWatchdog(GlobalSwitches.CachedMode)
-            WatchDog.StartWatcher()
             AddHandler WatchDog.StatusChanged, AddressOf WatchDogStatusChanged
             AddHandler WatchDog.RebuildCache, AddressOf RebuildCache
             AddHandler WatchDog.WatcherTick, AddressOf WatchDogTick
+            WatchDog.StartWatcher()
 
             MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2)
             MyWindowList.InsertWindowList(ToolStrip1)
@@ -297,13 +297,12 @@ Public Class MainForm
             Await Task.Run(Sub()
                                If Not DBCache.VerifyCacheHashes() Then
                                    DBCache.RefreshLocalDBCache()
-                               Else
-                                   GlobalSwitches.BuildingCache = False
                                End If
                            End Sub)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
+            GlobalSwitches.BuildingCache = False
             SetStatusBar("Idle...")
         End Try
     End Sub

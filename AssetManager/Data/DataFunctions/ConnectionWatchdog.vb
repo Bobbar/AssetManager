@@ -35,9 +35,13 @@ Namespace ConnectionMonitoring
         Const MaxFailedPings As Integer = 2
         Const CyclesTillHashCheck As Integer = 60
         Const WatcherInterval As Integer = 5000
+        Private WatcherTask As New Task(Sub() Watcher())
 
         Public Sub StartWatcher()
-            Task.Run(Sub() Watcher())
+            WatcherTask.Start()
+            If InCachedMode Then
+                OnStatusChanged(New WatchDogStatusEventArgs(WatchDogConnectionStatus.CachedMode))
+            End If
         End Sub
 
         Private Async Sub Watcher()
@@ -171,6 +175,7 @@ Namespace ConnectionMonitoring
             If Not disposedValue Then
                 If disposing Then
                     ' TODO: dispose managed state (managed objects).
+                    WatcherTask.Dispose()
                 End If
 
                 ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
