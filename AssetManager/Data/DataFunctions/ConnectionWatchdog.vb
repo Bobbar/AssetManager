@@ -37,12 +37,11 @@ Namespace ConnectionMonitoring
         Const WatcherInterval As Integer = 5000
 
         Public Sub StartWatcher()
-            Watcher()
+            Task.Run(Sub() Watcher())
         End Sub
 
         Private Async Sub Watcher()
             Do Until disposedValue
-
                 ServerIsOnline = Await GetServerStatus()
                 CacheIsAvailable = Await DBCache.VerifyLocalCacheHashOnly(InCachedMode)
 

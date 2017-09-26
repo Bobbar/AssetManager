@@ -19,6 +19,11 @@ Public Class MainForm
 
 #End Region
 
+#Region "Delegates"
+    Delegate Sub ConnectStatusVoidDelegate(text As String, foreColor As Color, backColor As Color, toolTipText As String)
+    Delegate Sub StatusVoidDelegate(text As String)
+#End Region
+
 #Region "Methods"
 
     Public Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
@@ -112,30 +117,34 @@ Public Class MainForm
         Select Case ConnectionEventArgs.ConnectionStatus
 
             Case ConnectionMonitoring.WatchDogConnectionStatus.Online
-                ConnectStatus("Connected", Color.Green, "Connection OK")
-                StatusStrip1.BackColor = colFormBackColor
+                ConnectStatus("Connected", Color.Green, colFormBackColor, "Connection OK")
                 GlobalSwitches.CachedMode = False
                 ServerInfo.ServerPinging = True
 
             Case ConnectionMonitoring.WatchDogConnectionStatus.Offline
-                StatusStrip1.BackColor = colStatusBarProblem
-                ConnectStatus("Offline", Color.Red, "No connection. Cache unavailable.")
+                ConnectStatus("Offline", Color.Red, colStatusBarProblem, "No connection. Cache unavailable.")
                 GlobalSwitches.CachedMode = False
                 ServerInfo.ServerPinging = False
 
             Case ConnectionMonitoring.WatchDogConnectionStatus.CachedMode
-                StatusStrip1.BackColor = colStatusBarProblem
-                ConnectStatus("Cached Mode", Color.Black, "Server Offline. Using Local DB Cache.")
+                ConnectStatus("Cached Mode", Color.Black, colStatusBarProblem, "Server Offline. Using Local DB Cache.")
                 GlobalSwitches.CachedMode = True
                 ServerInfo.ServerPinging = False
 
         End Select
     End Sub
 
-    Private Sub ConnectStatus(Message As String, FColor As Color, Optional ToolTipText As String = "")
-        ConnStatusLabel.Text = Message
-        ConnStatusLabel.ToolTipText = ToolTipText
-        ConnStatusLabel.ForeColor = FColor
+    Private Sub ConnectStatus(text As String, foreColor As Color, backColor As Color, toolTipText As String)
+        If StatusStrip1.InvokeRequired Then
+            Dim d As New ConnectStatusVoidDelegate(AddressOf ConnectStatus)
+            Me.Invoke(d, New Object() {text, foreColor, backColor, toolTipText})
+        Else
+            ConnStatusLabel.Text = text
+            ConnStatusLabel.ToolTipText = toolTipText
+            ConnStatusLabel.ForeColor = foreColor
+            StatusStrip1.BackColor = backColor
+            StatusStrip1.Update()
+        End If
     End Sub
 
     Private Sub DisplayRecords(NumberOf As Integer)
@@ -389,9 +398,14 @@ Public Class MainForm
         Dim NewUserMan As New UserManagerForm(Me)
     End Sub
 
-    Private Sub SetStatusBar(Text As String)
-        StatusLabel.Text = Text
-        StatusStrip1.Update()
+    Private Sub SetStatusBar(text As String)
+        If StatusStrip1.InvokeRequired Then
+            Dim d As New StatusVoidDelegate(AddressOf SetStatusBar)
+            Me.Invoke(d, New Object() {text})
+        Else
+            StatusLabel.Text = text
+            StatusStrip1.Update()
+        End If
     End Sub
 
     Private Sub ChangeDatabase(database As Databases)
