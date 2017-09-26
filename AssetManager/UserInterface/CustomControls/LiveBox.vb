@@ -217,9 +217,9 @@
     ''' </summary>
     ''' <param name="SearchString"></param>
     Private Async Sub ProcessSearch(searchString As String)
+        strPrevSearchString = searchString
+        If QueryRunning Then Exit Sub
         Try
-            strPrevSearchString = searchString
-            If QueryRunning Then Exit Sub
             Dim Results = Await Task.Run(Function()
                                              QueryRunning = True
                                              Dim strQry As String
