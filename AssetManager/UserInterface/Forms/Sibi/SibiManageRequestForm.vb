@@ -33,7 +33,6 @@ Public Class SibiManageRequestForm
         InitForm(parentForm)
         Text += " - *New Request*"
         NewRequest()
-        Show()
     End Sub
 
 #End Region
@@ -72,29 +71,44 @@ Public Class SibiManageRequestForm
         IsModifying = False
         IsNewRequest = False
         fieldErrorIcon.Clear()
+        SetAttachCount()
+        SetMunisStatus()
+
     End Sub
 
     Private Sub NewRequest()
-        If Not CheckForAccess(AccessGroup.AddSibi) Then Exit Sub
-        If IsModifying Then
-            Dim blah = Message("All current changes will be lost. Are you sure you want to create a new request?", vbOKCancel + vbQuestion, "Create New Request", Me)
-            If blah <> vbOK Then
+        Try
+            SetWaitCursor(True, Me)
+            If Not CheckForAccess(AccessGroup.AddSibi) Then
+                If Not Me.Visible Then
+                    Me.Dispose()
+                End If
                 Exit Sub
             End If
-        End If
-        ClearAll()
-        IsNewRequest = True
-        SetTitle(True)
-        CurrentRequest = New RequestObject
-        Me.FormUID = CurrentRequest.GUID
-        IsModifying = True
-        SetupGrid(RequestItemsGrid, RequestItemsColumns)
-
-        'Set the datasource to a new empty DB table.
-        RequestItemsGrid.DataSource = DBFunc.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0")
-
-        EnableControls()
-        pnlCreate.Visible = True
+            If IsModifying Then
+                Dim blah = Message("All current changes will be lost. Are you sure you want to create a new request?", vbOKCancel + vbQuestion, "Create New Request", Me)
+                If blah <> vbOK Then
+                    Exit Sub
+                End If
+            End If
+            ClearAll()
+            IsNewRequest = True
+            SetTitle(True)
+            CurrentRequest = New RequestObject
+            Me.FormUID = CurrentRequest.GUID
+            IsModifying = True
+            SetupGrid(RequestItemsGrid, RequestItemsColumns)
+            'Set the datasource to a new empty DB table.
+            RequestItemsGrid.DataSource = DBFunc.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0")
+            EnableControls()
+            pnlCreate.Visible = True
+            Me.Show()
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Me.Dispose()
+        Finally
+            SetWaitCursor(False, Me)
+        End Try
     End Sub
 
     Private Sub OpenRequest(RequestUID As String)
@@ -151,8 +165,15 @@ Public Class SibiManageRequestForm
     End Function
     Public Sub SetAttachCount()
         If Not GlobalSwitches.CachedMode Then
-            cmdAttachments.Text = "(" + AssetFunc.GetAttachmentCount(CurrentRequest.GUID, New SibiAttachmentsCols).ToString + ")"
-            cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text
+
+            If CurrentRequest IsNot Nothing Then
+                cmdAttachments.Text = "(" + AssetFunc.GetAttachmentCount(CurrentRequest.GUID, New SibiAttachmentsCols).ToString + ")"
+                cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text
+            Else
+                cmdAttachments.Text = "(0)"
+                cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text
+            End If
+
         End If
     End Sub
 
@@ -977,38 +998,37 @@ Public Class SibiManageRequestForm
 
     Private Sub SetMunisStatus()
         If Not GlobalSwitches.CachedMode Then
-            SetReqStatus(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year)
-            CheckForPO()
-            SetPOStatus(CurrentRequest.PO)
+            If CurrentRequest IsNot Nothing Then
+                SetReqStatus(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year)
+                CheckForPO()
+                SetPOStatus(CurrentRequest.PO)
+            Else
+                SetReqStatus(String.Empty, -1)
+                SetPOStatus(String.Empty)
+            End If
         End If
     End Sub
 
     Private Async Sub SetPOStatus(PO As String)
         Dim intPO As Integer = 0
+        lblPOStatus.Text = "Status: NA"
         If PO <> "" And Int32.TryParse(PO, intPO) Then
             Dim GetStatusString As String = Await MunisFunc.GetPOStatusFromPO(intPO)
             If GetStatusString <> "" Then
                 lblPOStatus.Text = "Status: " & GetStatusString
-            Else
-                lblPOStatus.Text = "Status: NA"
             End If
-        Else
-            lblPOStatus.Text = "Status: NA"
         End If
     End Sub
 
     Private Async Sub SetReqStatus(ReqNum As String, FY As Integer)
         Dim intReq As Integer = 0
+        lblReqStatus.Text = "Status: NA"
         If FY > 0 Then
             If ReqNum <> "" And Int32.TryParse(ReqNum, intReq) Then
                 Dim GetStatusString As String = Await MunisFunc.GetReqStatusFromReqNum(ReqNum, FY)
                 If GetStatusString <> "" Then
                     lblReqStatus.Text = "Status: " & GetStatusString
-                Else
-                    lblReqStatus.Text = "Status: NA"
                 End If
-            Else
-                lblReqStatus.Text = "Status: NA"
             End If
         End If
     End Sub

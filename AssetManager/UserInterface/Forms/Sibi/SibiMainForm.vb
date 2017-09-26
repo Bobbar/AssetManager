@@ -12,16 +12,24 @@ Public Class SibiMainForm
         ' This call is required by the designer.
         InitializeComponent()
 
-        ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
-        Me.GridTheme = New GridTheme(colHighlightBlue, colSibiSelectColor, ResultGrid.DefaultCellStyle.BackColor)
-        ToolStrip1.BackColor = colSibiToolBarColor
-        MyWindowList.InsertWindowList(ToolStrip1)
-        SetDisplayYears()
-        Me.Show()
-        Me.Activate()
-        ShowAll("All")
-
+        InitForm()
     End Sub
+    Private Sub InitForm()
+        Try
+            ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
+            Me.GridTheme = New GridTheme(colHighlightBlue, colSibiSelectColor, ResultGrid.DefaultCellStyle.BackColor)
+            ToolStrip1.BackColor = colSibiToolBarColor
+            MyWindowList.InsertWindowList(ToolStrip1)
+            SetDisplayYears()
+            Me.Show()
+            Me.Activate()
+            ShowAll("All")
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+            Me.Dispose()
+        End Try
+    End Sub
+
 
     Public Overrides Sub RefreshData()
         ExecuteCmd(LastCmd)
@@ -42,9 +50,16 @@ Public Class SibiMainForm
     End Sub
 
     Private Sub cmdShowAll_Click(sender As Object, e As EventArgs) Handles cmdShowAll.Click
-        ClearAll(Me.Controls)
-        SetDisplayYears()
-        ShowAll()
+        Try
+            SetWaitCursor(True, Me)
+            ClearAll(Me.Controls)
+            SetDisplayYears()
+            ShowAll()
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            SetWaitCursor(False, Me)
+        End Try
     End Sub
 
     Private Function BuildSearchListNew() As List(Of DBQueryParameter)
@@ -162,25 +177,21 @@ Public Class SibiMainForm
     End Sub
 
     Private Sub SetDisplayYears()
-        Try
-            bolRebuildingCombo = True
-            Dim strQRY As String = "SELECT DISTINCT " & SibiRequestCols.DateStamp & " FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.DateStamp & " DESC"
-            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
-                Dim Years As New List(Of String)
-                Years.Add("All")
-                For Each r As DataRow In results.Rows
-                    Dim yr = YearFromDate(DateTime.Parse(r.Item(SibiRequestCols.DateStamp).ToString))
-                    If Not Years.Contains(yr) Then
-                        Years.Add(yr)
-                    End If
-                Next
-                cmbDisplayYear.DataSource = Years
-                cmbDisplayYear.SelectedIndex = 0
-                bolRebuildingCombo = False
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
+        bolRebuildingCombo = True
+        Dim strQRY As String = "SELECT DISTINCT " & SibiRequestCols.DateStamp & " FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.DateStamp & " DESC"
+        Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
+            Dim Years As New List(Of String)
+            Years.Add("All")
+            For Each r As DataRow In results.Rows
+                Dim yr = YearFromDate(DateTime.Parse(r.Item(SibiRequestCols.DateStamp).ToString))
+                If Not Years.Contains(yr) Then
+                    Years.Add(yr)
+                End If
+            Next
+            cmbDisplayYear.DataSource = Years
+            cmbDisplayYear.SelectedIndex = 0
+            bolRebuildingCombo = False
+        End Using
     End Sub
 
     Private Sub ShowAll(Optional Year As String = "")
@@ -193,7 +204,12 @@ Public Class SibiMainForm
     End Sub
 
     Private Sub cmdManage_Click(sender As Object, e As EventArgs) Handles cmdManage.Click
-        Dim NewRequest As New SibiManageRequestForm(Me)
+        Try
+            SetWaitCursor(True, Me)
+            Dim NewRequest As New SibiManageRequestForm(Me)
+        Finally
+            SetWaitCursor(False, Me)
+        End Try
     End Sub
 
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
@@ -331,7 +347,7 @@ Public Class SibiMainForm
     End Sub
 
     Private Sub SibiMainForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
-        LastCmd.Dispose()
+        If LastCmd IsNot Nothing Then LastCmd.Dispose()
         MyWindowList.Dispose()
         CloseChildren(Me)
     End Sub

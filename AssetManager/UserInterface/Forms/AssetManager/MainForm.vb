@@ -266,15 +266,18 @@ Public Class MainForm
     End Sub
 
     Private Sub OpenSibiMainForm()
-        If Not CheckForAccess(AccessGroup.ViewSibi) Then Exit Sub
-        Waiting()
-        Dim SibiForm = GetChildOfType(Me, GetType(SibiMainForm))
-        If SibiForm Is Nothing Then
-            Dim NewSibi As New SibiMainForm(Me)
-        Else
-            ActivateForm(SibiForm)
-        End If
-        DoneWaiting()
+        Try
+            If Not CheckForAccess(AccessGroup.ViewSibi) Then Exit Sub
+            Waiting()
+            Dim SibiForm = GetChildOfType(Me, GetType(SibiMainForm))
+            If SibiForm Is Nothing Then
+                Dim NewSibi As New SibiMainForm(Me)
+            Else
+                ActivateForm(SibiForm)
+            End If
+        Finally
+            DoneWaiting()
+        End Try
     End Sub
 
     Private Async Sub RebuildCache(sender As Object, e As EventArgs)
