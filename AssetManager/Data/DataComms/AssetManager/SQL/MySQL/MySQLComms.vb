@@ -63,23 +63,26 @@ Public Class MySQLDatabase
     End Function
 
     Public Function OpenConnection(connection As MySqlConnection, Optional overrideNoPing As Boolean = False) As Boolean
-        If overrideNoPing Then
-            'open connection no matter what
-        Else
-            If Not ServerInfo.ServerPinging Then
-                'check NoPing switch, throw NoPingException if true
+        If Not ServerInfo.ServerPinging Then 'Server not pinging.
+            If overrideNoPing Then 'Ignore server not pinging, try to open anyway.
+                Return TryOpenConnection(connection)
+            Else 'Throw exception.
                 Throw New NoPingException
                 Return False
             End If
+        Else 'Server is pinging, try to open connection.
+            Return TryOpenConnection(connection)
         End If
 
-        If connection Is Nothing Then
+    End Function
+    Private Function TryOpenConnection(connection As MySqlConnection) As Boolean
+        If connection Is Nothing Then 'Instantiate new connection.
             connection = NewConnection()
         End If
-        If connection.State <> ConnectionState.Open Then
+        If connection.State <> ConnectionState.Open Then 'Try to open connection.
             connection.Open()
         End If
-        If connection.State = ConnectionState.Open Then
+        If connection.State = ConnectionState.Open Then 'Check if connection is open.
             Return True
         Else
             Return False
