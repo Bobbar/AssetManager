@@ -20,9 +20,30 @@ Public Class GKUpdaterForm
         DoubleBufferedFlowLayout(Updater_Table, True)
 
     End Sub
+    Public Sub AddMultipleUpdates(devices As List(Of DeviceObject))
 
+        For Each device In devices
+            If bolCheckForDups AndAlso Not Exists(device) Then
+                Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
+                MyUpdates.Add(NewProgCtl)
+                AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
+            End If
+        Next
+
+        Updater_Table.SuspendLayout()
+        Me.SuspendLayout()
+
+        Updater_Table.Controls.AddRange(MyUpdates.ToArray)
+
+        Updater_Table.ResumeLayout()
+        Me.ResumeLayout()
+
+        ProcessUpdates()
+
+        Me.WindowState = FormWindowState.Normal
+        Me.Activate()
+    End Sub
     Public Sub AddUpdate(device As DeviceObject)
-
         If bolCheckForDups AndAlso Not Exists(device) Then
             Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
             Updater_Table.Controls.Add(NewProgCtl)

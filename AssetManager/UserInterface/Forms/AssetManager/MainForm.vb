@@ -159,12 +159,19 @@ Public Class MainForm
 
     Private Sub EnqueueGKUpdate()
         If VerifyAdminCreds() Then
+            Dim SelectedDevices As New List(Of DeviceObject)
+            Dim Rows As New HashSet(Of Integer)
+            'Iterate selected cells and collect unique row indexes via a HashSet.(HashSet only allows unique values to be added to collection).
             For Each cell As DataGridViewCell In ResultGrid.SelectedCells
-                Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), cell.RowIndex).Value.ToString
-                Dim SelectedDevice = AssetFunc.GetDeviceInfoFromGUID(DevUID)
-                GKUpdaterForm.AddUpdate(SelectedDevice)
+                Rows.Add(cell.RowIndex)
             Next
-            If Not GKUpdaterForm.Visible Then GKUpdaterForm.Show()
+
+            For Each row In Rows
+                Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), row).Value.ToString
+                SelectedDevices.Add(AssetFunc.GetDeviceInfoFromGUID(DevUID))
+            Next
+
+            GKUpdaterForm.AddMultipleUpdates(SelectedDevices)
         End If
     End Sub
 
