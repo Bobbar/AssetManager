@@ -21,31 +21,46 @@ Public Class GKUpdaterForm
 
     End Sub
     Public Sub AddMultipleUpdates(devices As List(Of DeviceObject))
+        Try
+            'cache images for much lower memory usage.
+            Dim RestartImage = Global.AssetManager.My.Resources.Resources.RestartIcon
+            Dim CloseCancelImage = Global.AssetManager.My.Resources.Resources.CloseCancelDeleteIcon
 
-        For Each device In devices
-            If bolCheckForDups AndAlso Not Exists(device) Then
-                Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
-                MyUpdates.Add(NewProgCtl)
-                AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
-            End If
-        Next
+            SetWaitCursor(True, Me)
+            For Each device In devices
+                If bolCheckForDups AndAlso Not Exists(device) Then
+                    Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
+                    NewProgCtl.pbRestart.Image = RestartImage
+                    NewProgCtl.pbCancelClose.Image = CloseCancelImage
+                    MyUpdates.Add(NewProgCtl)
+                    AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
+                End If
+            Next
 
-        Updater_Table.SuspendLayout()
-        Me.SuspendLayout()
+            Updater_Table.SuspendLayout()
+            Me.SuspendLayout()
 
-        Updater_Table.Controls.AddRange(MyUpdates.ToArray)
+            Updater_Table.Controls.AddRange(MyUpdates.ToArray)
 
-        Updater_Table.ResumeLayout()
-        Me.ResumeLayout()
+            Updater_Table.ResumeLayout()
+            Me.ResumeLayout()
 
-        ProcessUpdates()
+            ProcessUpdates()
 
-        Me.WindowState = FormWindowState.Normal
-        Me.Activate()
+            Me.WindowState = FormWindowState.Normal
+            Me.Activate()
+        Finally
+            SetWaitCursor(False, Me)
+        End Try
     End Sub
     Public Sub AddUpdate(device As DeviceObject)
         If bolCheckForDups AndAlso Not Exists(device) Then
+            'cache images for much lower memory usage.
+            Dim RestartImage = Global.AssetManager.My.Resources.Resources.RestartIcon
+            Dim CloseCancelImage = Global.AssetManager.My.Resources.Resources.CloseCancelDeleteIcon
             Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
+            NewProgCtl.pbRestart.Image = RestartImage
+            NewProgCtl.pbCancelClose.Image = CloseCancelImage
             Updater_Table.Controls.Add(NewProgCtl)
             MyUpdates.Add(NewProgCtl)
             AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
