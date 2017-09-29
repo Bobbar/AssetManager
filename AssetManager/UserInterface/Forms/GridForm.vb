@@ -162,6 +162,14 @@ Public Class GridForm
         AddGridsToForm()
     End Sub
 
+    Private Sub GridForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        For Each grid In GridList
+            DirectCast(grid.DataSource, DataTable).Dispose()
+            grid.Dispose()
+        Next
+        If LastDoubleClickRow IsNot Nothing Then LastDoubleClickRow.Dispose()
+    End Sub
+
 #End Region
 
 End Class
