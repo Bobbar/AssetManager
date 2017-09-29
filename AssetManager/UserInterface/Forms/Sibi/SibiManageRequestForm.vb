@@ -706,6 +706,7 @@ Public Class SibiManageRequestForm
         dgvNotes.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         RequestItemsGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         ToolStrip.BackColor = colSibiToolBarColor
+        ImageCaching.CacheControlImages(Me)
     End Sub
 
     Private Sub InsertPONumber(PO As String)

@@ -27,14 +27,15 @@ Public Class ViewDeviceForm
 #Region "Constructors"
 
     Sub New(parentForm As ExtendedForm, deviceGUID As String)
+        Me.ParentForm = parentForm
+        FormUID = deviceGUID
         InitializeComponent()
+        MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6)
+        MyWindowList.InsertWindowList(ToolStrip1)
+        ImageCaching.CacheControlImages(Me)
         InitDBControls()
         MyLiveBox.AttachToControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum)
         MyLiveBox.AttachToControl(txtDescription_View_REQ, LiveBoxType.SelectValue, DevicesCols.Description)
-        MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6)
-        Me.ParentForm = parentForm
-        FormUID = deviceGUID
-        MyWindowList.InsertWindowList(ToolStrip1)
         RefreshCombos()
         grpNetTools.Visible = False
         ExtendedMethods.DoubleBufferedDataGrid(DataGridHistory, True)
@@ -45,6 +46,8 @@ Public Class ViewDeviceForm
 #End Region
 
 #Region "Methods"
+
+
 
     Private Function CancelModify() As Boolean
         If EditMode Then
@@ -1021,7 +1024,10 @@ Public Class ViewDeviceForm
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If Not OKToClose() Then
             e.Cancel = True
+        Else
+            '    DisposeImages(Me)
         End If
+
     End Sub
 
     Private Sub View_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
@@ -1030,6 +1036,7 @@ Public Class ViewDeviceForm
         MyMunisToolBar.Dispose()
         CloseChildren(Me)
         If MyPingVis IsNot Nothing Then MyPingVis.Dispose()
+
     End Sub
 
     Private Sub View_Resize(sender As Object, e As EventArgs) Handles Me.Resize

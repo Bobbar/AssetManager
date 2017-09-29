@@ -257,6 +257,7 @@ Public Class MainForm
 
             MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2)
             MyWindowList.InsertWindowList(ToolStrip1)
+            ImageCaching.CacheControlImages(Me)
             InitLiveBox()
             InitDBControls()
             Clear_All()

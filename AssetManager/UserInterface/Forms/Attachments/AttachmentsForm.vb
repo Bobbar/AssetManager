@@ -37,6 +37,7 @@ Public Class AttachmentsForm
 
     Sub New(ParentForm As ExtendedForm, AttachTable As AttachmentsBaseCols, Optional AttachInfo As Object = Nothing)
         InitializeComponent()
+        ImageCaching.CacheControlImages(Me)
         Me.ParentForm = ParentForm
         AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         ExtendedMethods.DoubleBufferedDataGrid(AttachGrid, True)

@@ -20,9 +20,8 @@ Public Class GKProgressControl
     End Property
 
     Sub New(parentForm As Form, device As DeviceObject, createMissingDirs As Boolean, gkPath As String, Optional seq As Integer = 0)
-        ' This call is required by the designer.
         InitializeComponent()
-        ' Add any initialization after the InitializeComponent() call.
+        ImageCaching.CacheControlImages(Me)
         Me.Size = Me.MinimumSize
         MyParentForm = parentForm
         CurDevice = device
@@ -236,13 +235,13 @@ Public Class GKProgressControl
     Private Sub SetButtons(Status As ProgressStatus)
         Select Case Status
             Case ProgressStatus.Running
-                pbRestart.Image = My.Resources.PauseIcon
+                pbRestart.Image = ImageCaching.ImageCache("PauseIcon", My.Resources.PauseIcon)
                 MyToolTip.SetToolTip(pbRestart, "Pause")
             Case ProgressStatus.Paused, ProgressStatus.Queued
-                pbRestart.Image = My.Resources.PlayIcon
+                pbRestart.Image = ImageCaching.ImageCache("PlayIcon", My.Resources.PlayIcon)
                 MyToolTip.SetToolTip(pbRestart, "Resume")
             Case Else
-                pbRestart.Image = My.Resources.RestartIcon
+                pbRestart.Image = ImageCaching.ImageCache("RestartIcon", My.Resources.RestartIcon)
                 MyToolTip.SetToolTip(pbRestart, "Restart")
         End Select
     End Sub

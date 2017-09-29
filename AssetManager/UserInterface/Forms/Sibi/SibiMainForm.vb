@@ -20,6 +20,7 @@ Public Class SibiMainForm
             Me.GridTheme = New GridTheme(colHighlightBlue, colSibiSelectColor, ResultGrid.DefaultCellStyle.BackColor)
             ToolStrip1.BackColor = colSibiToolBarColor
             MyWindowList.InsertWindowList(ToolStrip1)
+            ImageCaching.CacheControlImages(Me)
             SetDisplayYears()
             Me.Show()
             Me.Activate()
