@@ -22,6 +22,7 @@ Public Class MainForm
 #Region "Delegates"
     Delegate Sub ConnectStatusVoidDelegate(text As String, foreColor As Color, backColor As Color, toolTipText As String)
     Delegate Sub StatusVoidDelegate(text As String)
+    Delegate Sub ServerTimeVoidDelegate(serverTime As String)
 #End Region
 
 #Region "Methods"
@@ -108,7 +109,9 @@ Public Class MainForm
 
     Private Sub WatchDogTick(sender As Object, e As EventArgs)
         Dim TickEvent = DirectCast(e, ConnectionMonitoring.WatchDogTickEventArgs)
-        If DateTimeLabel.Text <> TickEvent.ServerTime Then DateTimeLabel.Text = TickEvent.ServerTime
+        If DateTimeLabel.Text <> TickEvent.ServerTime Then
+            SetServerTime(TickEvent.ServerTime)
+        End If
     End Sub
 
     Private Sub WatchDogStatusChanged(sender As Object, e As EventArgs)
@@ -414,6 +417,16 @@ Public Class MainForm
             StatusStrip1.Update()
         End If
     End Sub
+    Private Sub SetServerTime(serverTime As String)
+        If StatusStrip1.InvokeRequired Then
+            Dim d As New ServerTimeVoidDelegate(AddressOf SetServerTime)
+            StatusStrip1.Invoke(d, New Object() {serverTime})
+        Else
+            DateTimeLabel.Text = serverTime
+            StatusStrip1.Update()
+        End If
+    End Sub
+
 
     Private Sub ChangeDatabase(database As Databases)
         Try
