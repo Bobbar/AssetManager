@@ -35,7 +35,7 @@
         ''' <param name="key">The identifying key for cached image. Can be anything, but a control.name of a frequently duplicated control is a good value.</param>
         ''' <param name="image">The image to be cached.</param>
         ''' <returns></returns>
-        Public Function ImageCache(key As Object, ByRef image As Image) As Image
+        Public Function ImageCache(key As Object, image As Image) As Image
             'Try to pull an image from the cache with a matching key.
             Dim img As Image = DirectCast(ImageCacheHashTable(key), Image)
             'If no matching image was found, add it to the cache.

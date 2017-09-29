@@ -46,7 +46,7 @@ Public Class GKUpdaterForm
             Me.ResumeLayout()
 
             ProcessUpdates()
-
+            Me.Show()
             Me.WindowState = FormWindowState.Normal
             Me.Activate()
         Finally
@@ -54,28 +54,30 @@ Public Class GKUpdaterForm
         End Try
     End Sub
     Public Sub AddUpdate(device As DeviceObject)
-        If bolCheckForDups AndAlso Not Exists(device) Then
-            'cache images for much lower memory usage.
-            Dim RestartImage = Global.AssetManager.My.Resources.Resources.RestartIcon
-            Dim CloseCancelImage = Global.AssetManager.My.Resources.Resources.CloseCancelDeleteIcon
-            Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
-            NewProgCtl.pbRestart.Image = RestartImage
-            NewProgCtl.pbCancelClose.Image = CloseCancelImage
-            Updater_Table.Controls.Add(NewProgCtl)
-            MyUpdates.Add(NewProgCtl)
-            AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
-            ProcessUpdates()
+        Try
+            If bolCheckForDups AndAlso Not Exists(device) Then
+                'cache images for much lower memory usage.
+                Dim RestartImage = Global.AssetManager.My.Resources.Resources.RestartIcon
+                Dim CloseCancelImage = Global.AssetManager.My.Resources.Resources.CloseCancelDeleteIcon
+                Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
+                NewProgCtl.pbRestart.Image = RestartImage
+                NewProgCtl.pbCancelClose.Image = CloseCancelImage
+                Updater_Table.Controls.Add(NewProgCtl)
+                MyUpdates.Add(NewProgCtl)
+                AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
+                ProcessUpdates()
+            Else
+                Dim blah = Message("An update for device " & device.Serial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
+                If blah = vbOK Then
+                    StartUpdateByDevice(device)
+
+                End If
+            End If
+        Finally
+            Me.Show()
             Me.WindowState = FormWindowState.Normal
             Me.Activate()
-        Else
-            Dim blah = Message("An update for device " & device.Serial & " already exists.  Do you want to restart the update for this device?", vbOKCancel + vbExclamation, "Duplicate Update", Me)
-            If blah = vbOK Then
-                StartUpdateByDevice(device)
-                Me.WindowState = FormWindowState.Normal
-                Me.Activate()
-            End If
-        End If
-
+        End Try
     End Sub
 
     Private Sub StartUpdateByDevice(device As DeviceObject)
