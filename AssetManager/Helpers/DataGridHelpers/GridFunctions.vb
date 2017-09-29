@@ -81,7 +81,7 @@
     Public Sub CopyToGridForm(Grid As DataGridView, Parent As ExtendedForm)
         If Grid IsNot Nothing Then
             Dim NewGridForm As New GridForm(Parent, Grid.Name & " Copy")
-            NewGridForm.AddGrid(Grid.Name, Grid.Name, DirectCast(Grid.DataSource, DataTable))
+            NewGridForm.AddGrid(Grid.Name, Grid.Name, DirectCast(Grid.DataSource, DataTable).Copy())
             NewGridForm.Show()
         End If
     End Sub
