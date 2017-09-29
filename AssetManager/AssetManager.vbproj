@@ -190,6 +190,7 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Business\PDFFormFilling.vb" />
+    <Compile Include="GlobalObjects\CachedImages.vb" />
     <Compile Include="Helpers\DataGridHelpers\ColumnClasses.vb" />
     <Compile Include="Helpers\Logging.vb" />
     <Compile Include="UserInterface\Forms\Attachments\AttachmentObject.vb" />
