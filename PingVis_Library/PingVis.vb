@@ -176,7 +176,7 @@ Public Class PingVis : Implements IDisposable
     End Function
 
     Private Sub DrawBars(ByRef DestControl As Control, ByRef Bars As List(Of PingBar), Optional MouseOverInfo As MouseOverInfoStruct = Nothing)
-        If PingReplies.Count < 1 Or Not CanDraw(Environment.TickCount) Then Exit Sub
+        If PingReplies.Count < 1 Or Not CanDraw(Environment.TickCount) Or DrawControl.FindForm.WindowState = FormWindowState.Minimized Then Exit Sub
         Try
             Using bm = New Drawing.Bitmap(ImageWidth, ImageHeight), gfx = Graphics.FromImage(bm)
                 gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
