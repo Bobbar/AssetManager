@@ -702,11 +702,12 @@ Public Class SibiManageRequestForm
         MyMunisToolBar.InsertMunisDropDown(ToolStrip)
         Me.ParentForm = ParentForm
         Me.FormUID = UID
+        ImageCaching.CacheControlImages(Me)
         MyWindowList.InsertWindowList(ToolStrip)
         dgvNotes.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         RequestItemsGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         ToolStrip.BackColor = colSibiToolBarColor
-        ImageCaching.CacheControlImages(Me)
+
     End Sub
 
     Private Sub InsertPONumber(PO As String)

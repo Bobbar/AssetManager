@@ -31,8 +31,8 @@ Public Class ViewDeviceForm
         FormUID = deviceGUID
         InitializeComponent()
         MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6)
-        MyWindowList.InsertWindowList(ToolStrip1)
         ImageCaching.CacheControlImages(Me)
+        MyWindowList.InsertWindowList(ToolStrip1)
         InitDBControls()
         MyLiveBox.AttachToControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum)
         MyLiveBox.AttachToControl(txtDescription_View_REQ, LiveBoxType.SelectValue, DevicesCols.Description)
@@ -889,7 +889,6 @@ Public Class ViewDeviceForm
         If Not grpNetTools.Visible And PingResults.Status = IPStatus.Success Then
             intFailedPings = 0
             cmdShowIP.Tag = PingResults.Address
-            ToolTip1.SetToolTip(cmdShowIP, PingResults.Address.ToString & " - " & Subnets.IPtoSubnet(PingResults.Address.ToString))
             grpNetTools.Visible = True
         End If
         If intFailedPings > 10 And grpNetTools.Visible Then
