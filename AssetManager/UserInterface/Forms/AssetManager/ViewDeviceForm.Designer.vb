@@ -1249,6 +1249,7 @@ Partial Class ViewDeviceForm
         '
         Me.RefreshToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.RefreshToolStripButton.Image = Global.AssetManager.My.Resources.Resources.RefreshIcon
+        Me.RefreshToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.RefreshToolStripButton.Name = "RefreshToolStripButton"
         Me.RefreshToolStripButton.Size = New System.Drawing.Size(29, 34)
         Me.RefreshToolStripButton.Text = "ToolStripButton1"

@@ -50,4 +50,5 @@ C:\GitHub\AssetManager\AssetManager\bin\Release\System.Data.SQLite.dll
 C:\GitHub\AssetManager\AssetManager\bin\Release\System.Data.SQLite.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.PackFileForm.resources
 C:\GitHub\AssetManager\AssetManager\bin\Release\System.Management.Automation.dll
+C:\GitHub\AssetManager\AssetManager\bin\Release\Microsoft.Management.Infrastructure.dll
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.GKProgressControl.resources
