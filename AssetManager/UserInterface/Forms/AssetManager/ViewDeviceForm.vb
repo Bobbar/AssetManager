@@ -412,7 +412,7 @@ Public Class ViewDeviceForm
 
     Private Sub cmdShowIP_Click(sender As Object, e As EventArgs) Handles cmdShowIP.Click
         If Not IsNothing(cmdShowIP.Tag) Then
-            Dim blah = Message(cmdShowIP.Tag.ToString & vbCrLf & vbCrLf & "Press 'Yes' to copy to clipboard.", vbInformation + vbYesNo, "IP Address", Me)
+            Dim blah = Message(cmdShowIP.Tag.ToString & " - " & Subnets.IPtoSubnet(cmdShowIP.Tag.ToString) & vbCrLf & vbCrLf & "Press 'Yes' to copy to clipboard.", vbInformation + vbYesNo, "IP Address", Me)
             If blah = vbYes Then
                 Clipboard.SetText(cmdShowIP.Tag.ToString)
             End If
@@ -889,6 +889,7 @@ Public Class ViewDeviceForm
         If Not grpNetTools.Visible And PingResults.Status = IPStatus.Success Then
             intFailedPings = 0
             cmdShowIP.Tag = PingResults.Address
+            ToolTip1.SetToolTip(cmdShowIP, PingResults.Address.ToString & " - " & Subnets.IPtoSubnet(PingResults.Address.ToString))
             grpNetTools.Visible = True
         End If
         If intFailedPings > 10 And grpNetTools.Visible Then
