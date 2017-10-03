@@ -59,6 +59,9 @@ Public Class DataMapping
                         Case GetType(Boolean)
                             prop.SetValue(obj, CBool(row(propColumn)))
 
+                        Case GetType(Integer)
+                            prop.SetValue(obj, CInt(row(propColumn)))
+
                         Case Else
                             'Throw an error if type is unexpected.
                             Debug.Print(prop.PropertyType.ToString)

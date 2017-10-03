@@ -45,21 +45,7 @@
         End Try
     End Function
 
-    Public Function BuildModuleIndex() As List(Of AccessGroupStruct)
-        Dim tmpList As New List(Of AccessGroupStruct)
-        Using ModuleTable As DataTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & "")
-            For Each row As DataRow In ModuleTable.Rows
-                Dim tmpInfo As AccessGroupStruct
-                With tmpInfo
-                    .Level = CInt(row.Item(SecurityCols.AccessLevel))
-                    .AccessModule = row.Item(SecurityCols.SecModule).ToString
-                    .Description = row.Item(SecurityCols.Description).ToString
-                End With
-                tmpList.Add(tmpInfo)
-            Next
-            Return tmpList
-        End Using
-    End Function
+
 
     Public Function DeleteMasterSqlEntry(sqlGUID As String, type As EntryType) As Boolean
         Try

@@ -1,6 +1,6 @@
 ﻿
 Public Class UserManagerForm
-    Private ModuleIndex As New List(Of AccessGroupStruct)
+    Private ModuleIndex As New List(Of AccessGroupObject)
     Private CurrentUser As LocalUserInfoStruct
     Private UserDataQuery As String = "SELECT * FROM " & UsersCols.TableName
     Private SelectedRow As Integer
@@ -17,7 +17,7 @@ Public Class UserManagerForm
 
     Private Sub LoadUserData()
         ListUsers()
-        ModuleIndex = AssetFunc.BuildModuleIndex()
+        ModuleIndex = BuildModuleIndex()
         LoadModuleBoxes()
         UpdateAccessLabel()
     End Sub
@@ -47,10 +47,20 @@ Public Class UserManagerForm
         AutoSizeCLBColumns(clbModules)
     End Sub
 
+    Public Function BuildModuleIndex() As List(Of AccessGroupObject)
+        Dim tmpList As New List(Of AccessGroupObject)
+        Using ModuleTable As DataTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & "")
+            For Each row As DataRow In ModuleTable.Rows
+                tmpList.Add(New AccessGroupObject(row))
+            Next
+            Return tmpList
+        End Using
+    End Function
+
     Private Sub LoadModuleBoxes()
         Dim chkModuleBox As CheckBox
         clbModules.Items.Clear()
-        For Each ModuleBox As AccessGroupStruct In ModuleIndex
+        For Each ModuleBox As AccessGroupObject In ModuleIndex
             chkModuleBox = New CheckBox
             With chkModuleBox
                 .Text = ModuleBox.Description

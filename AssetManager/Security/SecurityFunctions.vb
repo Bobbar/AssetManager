@@ -6,7 +6,7 @@ Imports System.Text
 
 Module SecurityFunctions
     Public AdminCreds As NetworkCredential = Nothing
-    Private AccessGroups() As AccessGroupStruct
+    Private AccessGroups As New Dictionary(Of String, AccessGroupObject)
     Private LocalUserAccess As LocalUserInfoStruct
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
 
@@ -84,10 +84,7 @@ Module SecurityFunctions
     End Function
 
     Public Function GetSecGroupValue(accessGroupName As String) As Integer
-        For Each Group As AccessGroupStruct In AccessGroups
-            If Group.AccessModule = accessGroupName Then Return Group.Level
-        Next
-        Return -1
+        Return AccessGroups(accessGroupName).Level
     End Function
 
     Public Sub GetUserAccess()
@@ -112,15 +109,9 @@ Module SecurityFunctions
     Public Sub PopulateAccessGroups()
         Try
             Dim strQRY = "SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & ""
-            Dim rows As Integer = 0
             Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
-                ReDim AccessGroups(results.Rows.Count - 1)
-                For Each r As DataRow In results.Rows
-                    AccessGroups(rows).Level = CInt(r.Item(SecurityCols.AccessLevel))
-                    AccessGroups(rows).AccessModule = r.Item(SecurityCols.SecModule).ToString
-                    AccessGroups(rows).Description = r.Item(SecurityCols.Description).ToString
-                    AccessGroups(rows).AvailableOffline = CBool(r.Item(SecurityCols.AvailOffline))
-                    rows += 1
+                For Each row As DataRow In results.Rows
+                    AccessGroups.Add(row.Item(SecurityCols.SecModule).ToString, New AccessGroupObject(row))
                 Next
             End Using
         Catch ex As Exception
@@ -137,13 +128,12 @@ Module SecurityFunctions
         Else
             UsrLevel = AccessLevel
         End If
-        Dim levels As Integer
-        For levels = 0 To UBound(AccessGroups)
+        For Each group In AccessGroups.Values
             calc_level = UsrLevel And mask
             If calc_level <> 0 Then
-                If AccessGroups(levels).AccessModule = recModule Then
+                If group.AccessModule = recModule Then
                     If GlobalSwitches.CachedMode Then
-                        If AccessGroups(levels).AvailableOffline Then
+                        If group.AvailableOffline Then
                             Return True
                         Else
                             Return False

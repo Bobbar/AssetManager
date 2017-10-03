@@ -167,3 +167,27 @@ Public Class DeviceTrackingObject
     <DataColumnName(TrackablesCols.DeviceUID)>
     Public Property DeviceGUID As String
 End Class
+
+Public Class AccessGroupObject
+    Inherits DataMapping
+    Sub New()
+
+    End Sub
+
+    Sub New(data As Object)
+        Me.MapClassProperties(Me, data)
+    End Sub
+
+    <DataColumnName(SecurityCols.SecModule)>
+    Public Property AccessModule As String
+
+    <DataColumnName(SecurityCols.AccessLevel)>
+    Public Property Level As Integer
+
+    <DataColumnName(SecurityCols.Description)>
+    Public Property Description As String
+
+    <DataColumnName(SecurityCols.AvailOffline)>
+    Public Property AvailableOffline As Boolean
+
+End Class

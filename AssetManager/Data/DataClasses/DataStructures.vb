@@ -4,13 +4,6 @@
     Public Property ID As String
 End Structure
 
-Public Structure AccessGroupStruct
-    Public AccessModule As String
-    Public Level As Integer
-    Public Description As String
-    Public AvailableOffline As Boolean
-End Structure
-
 Public Structure DeviceUpdateInfoStruct
     Public Note As String
     Public ChangeType As String
