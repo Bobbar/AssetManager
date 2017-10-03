@@ -622,7 +622,7 @@ Public Class AttachmentsForm
 
     Private Function VerifyAttachment(attachment As Attachment) As Boolean
         SetStatusBar("Verifying data...")
-        Dim FileResultHash = GetHashOfIOStream(DirectCast(attachment.DataStream, MemoryStream))
+        Dim FileResultHash = GetMD5OfStream(DirectCast(attachment.DataStream, MemoryStream)) 'GetHashOfIOStream(DirectCast(attachment.DataStream, MemoryStream))
         If FileResultHash = attachment.MD5 Then
             Return True
         Else

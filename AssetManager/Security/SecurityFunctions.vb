@@ -31,7 +31,7 @@ Module SecurityFunctions
         End Using
     End Function
 
-    Public Function GetHashOfTable(table As DataTable) As String
+    Public Function GetSHAOfTable(table As DataTable) As String
         Dim serializer = New DataContractSerializer(GetType(DataTable))
         Using memoryStream = New MemoryStream(), SHA = New SHA1CryptoServiceProvider()
             serializer.WriteObject(memoryStream, table)
@@ -41,44 +41,22 @@ Module SecurityFunctions
         End Using
     End Function
 
-    Public Function GetHashOfFile(filePath As String) As String
-        Dim hashValue() As Byte
+    Public Function GetMD5OfFile(filePath As String) As String
         Using fStream As New FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 16 * 1024 * 1024), hash = MD5.Create
-            fStream.Position = 0
-            hashValue = hash.ComputeHash(fStream)
-            Dim sBuilder As New StringBuilder
-            Dim i As Integer
-            For i = 0 To hashValue.Length - 1
-                sBuilder.Append(hashValue(i).ToString("x2"))
-            Next
-            Return sBuilder.ToString
+            Return GetMD5OfStream(fStream)
         End Using
     End Function
 
-    Public Function GetHashOfFileStream(fileStream As IO.FileStream) As String
+    Public Function GetMD5OfStream(stream As Stream) As String
         Using md5Hash As MD5 = MD5.Create
-            fileStream.Position = 0
-            Dim hash As Byte() = md5Hash.ComputeHash(fileStream)
+            stream.Position = 0
+            Dim hash As Byte() = md5Hash.ComputeHash(stream)
             Dim sBuilder As New StringBuilder
             Dim i As Integer
             For i = 0 To hash.Length - 1
                 sBuilder.Append(hash(i).ToString("x2"))
             Next
-            fileStream.Position = 0
-            Return sBuilder.ToString
-        End Using
-    End Function
-
-    Public Function GetHashOfIOStream(memStream As IO.MemoryStream) As String
-        Using md5Hash As MD5 = MD5.Create
-            memStream.Position = 0
-            Dim hash As Byte() = md5Hash.ComputeHash(memStream)
-            Dim sBuilder As New StringBuilder
-            Dim i As Integer
-            For i = 0 To hash.Length - 1
-                sBuilder.Append(hash(i).ToString("x2"))
-            Next
-            memStream.Position = 0
+            stream.Position = 0
             Return sBuilder.ToString
         End Using
     End Function

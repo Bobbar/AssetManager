@@ -1046,7 +1046,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Function GetHash(deviceTable As DataTable, historicalTable As DataTable) As String
-        Return GetHashOfTable(deviceTable) & GetHashOfTable(historicalTable)
+        Return GetSHAOfTable(deviceTable) & GetSHAOfTable(historicalTable)
     End Function
 
     Private Function GetDevicesTable(deviceUID As String) As DataTable

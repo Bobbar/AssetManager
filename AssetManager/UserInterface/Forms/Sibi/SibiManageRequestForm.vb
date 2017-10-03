@@ -143,8 +143,8 @@ Public Class SibiManageRequestForm
         End Try
     End Sub
     Private Function GetHash(RequestTable As DataTable, ItemsTable As DataTable) As String
-        Dim RequestHash As String = GetHashOfTable(RequestTable)
-        Dim ItemHash As String = GetHashOfTable(ItemsTable)
+        Dim RequestHash As String = GetSHAOfTable(RequestTable)
+        Dim ItemHash As String = GetSHAOfTable(ItemsTable)
         Return RequestHash & ItemHash
     End Function
     Private Function ConcurrencyCheck() As Boolean

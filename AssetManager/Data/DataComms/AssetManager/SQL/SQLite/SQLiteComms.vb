@@ -122,7 +122,7 @@ Public Class SQLiteDatabase
             For Each table In TableList()
                 Using results = ToStringTable(DataTableFromQueryString("SELECT * FROM " & table))
                     results.TableName = table
-                    hashList.Add(GetHashOfTable(results))
+                    hashList.Add(GetSHAOfTable(results))
                 End Using
             Next
             Return hashList
@@ -137,7 +137,7 @@ Public Class SQLiteDatabase
             For Each table In TableList()
                 Using results = ToStringTable(MySQLDB.DataTableFromQueryString("SELECT * FROM " & table))
                     results.TableName = table
-                    hashList.Add(GetHashOfTable(results))
+                    hashList.Add(GetSHAOfTable(results))
                 End Using
             Next
             Return hashList

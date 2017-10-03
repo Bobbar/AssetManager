@@ -17,33 +17,7 @@
         End Try
     End Sub
 
-    Public Function BuildIndex(codeType As String, typeName As String) As ComboboxDataStruct()
-        Try
-            Dim strQRY = "SELECT * FROM " & codeType & " LEFT OUTER JOIN munis_codes on " & codeType & ".db_value = munis_codes.asset_man_code WHERE type_name ='" & typeName & "' ORDER BY " & ComboCodesBaseCols.HumanValue & ""
-            Dim row As Integer = 0
-            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY) 'DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
-                Dim tmpArray(results.Rows.Count - 1) As ComboboxDataStruct
-                For Each r As DataRow In results.Rows
-                    tmpArray(row).ID = r.Item(ComboCodesBaseCols.ID).ToString
-                    If r.Table.Columns.Contains("munis_code") Then
-                        If Not IsDBNull(r.Item("munis_code")) Then
-                            tmpArray(row).HumanReadable = r.Item(ComboCodesBaseCols.HumanValue).ToString & " - " & r.Item("munis_code").ToString
-                        Else
-                            tmpArray(row).HumanReadable = r.Item(ComboCodesBaseCols.HumanValue).ToString
-                        End If
-                    Else
-                        tmpArray(row).HumanReadable = r.Item(ComboCodesBaseCols.HumanValue).ToString
-                    End If
-                    tmpArray(row).Code = r.Item(ComboCodesBaseCols.DBValue).ToString
-                    row += 1
-                Next
-                Return tmpArray
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
-    End Function
+
 
 
 
