@@ -412,7 +412,7 @@ Public Class ViewDeviceForm
 
     Private Sub cmdShowIP_Click(sender As Object, e As EventArgs) Handles cmdShowIP.Click
         If Not IsNothing(cmdShowIP.Tag) Then
-            Dim blah = Message(cmdShowIP.Tag.ToString & " - " & Subnets.IPtoSubnet(cmdShowIP.Tag.ToString) & vbCrLf & vbCrLf & "Press 'Yes' to copy to clipboard.", vbInformation + vbYesNo, "IP Address", Me)
+            Dim blah = Message(cmdShowIP.Tag.ToString & " - " & NetworkInfo.LocationOfIP(cmdShowIP.Tag.ToString) & vbCrLf & vbCrLf & "Press 'Yes' to copy to clipboard.", vbInformation + vbYesNo, "IP Address", Me)
             If blah = vbYes Then
                 Clipboard.SetText(cmdShowIP.Tag.ToString)
             End If
