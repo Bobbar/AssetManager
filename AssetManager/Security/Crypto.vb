@@ -55,6 +55,7 @@ Public Class Simple3Des : Implements IDisposable
                 decStream.Write(encryptedBytes, 0, encryptedBytes.Length)
                 decStream.FlushFinalBlock()
                 ' Convert the plaintext stream to a string.
+                encryptedBytes = Nothing
                 Return System.Text.Encoding.Unicode.GetString(ms.ToArray)
             End Using
         Catch ex As Exception
