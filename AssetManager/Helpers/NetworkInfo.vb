@@ -36,6 +36,11 @@
 
         Public Function SetCurrentDomain(database As Databases) As String
             _currentDomain = DomainNames(database)
+            If database = Databases.vintondd Then
+                VerifyAdminCreds("Credentials for Vinton AD")
+            Else
+                AdminCreds = Nothing
+            End If
             Return DomainNames(database)
         End Function
 

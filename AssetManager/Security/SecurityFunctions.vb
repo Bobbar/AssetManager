@@ -10,9 +10,9 @@ Module SecurityFunctions
     Private LocalUserAccess As LocalUserInfoStruct
     Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
 
-    Public Function VerifyAdminCreds() As Boolean
+    Public Function VerifyAdminCreds(Optional credentialDescription As String = "") As Boolean
         If AdminCreds Is Nothing Then
-            Using NewGetCreds As New GetCredentialsForm
+            Using NewGetCreds As New GetCredentialsForm(credentialDescription)
                 NewGetCreds.ShowDialog()
                 If NewGetCreds.DialogResult = DialogResult.OK Then
                     AdminCreds = NewGetCreds.Credentials

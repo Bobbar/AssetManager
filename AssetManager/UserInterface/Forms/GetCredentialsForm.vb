@@ -9,6 +9,14 @@ Public Class GetCredentialsForm
             Return MyCreds
         End Get
     End Property
+    Sub New()
+        InitializeComponent()
+    End Sub
+
+    Sub New(credentialDescription As String)
+        InitializeComponent()
+        CredDescriptionLabel.Text = credentialDescription
+    End Sub
 
     Private Sub Accept()
         Dim Username As String

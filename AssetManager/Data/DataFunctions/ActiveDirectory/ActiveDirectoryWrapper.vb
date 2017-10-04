@@ -59,10 +59,20 @@ Public Class ActiveDirectoryWrapper
 
     Private Function ReturnSearchResult() As SearchResult
         Try
-            Using rootDSE = New DirectoryEntry("LDAP://RootDSE")
+            Using rootDSE = New DirectoryEntry("LDAP://" & NetworkInfo.CurrentDomain & "/RootDSE")
+                If ServerInfo.CurrentDataBase = Databases.vintondd Then
+                    rootDSE.Username = AdminCreds.UserName
+                    rootDSE.Password = AdminCreds.Password
+                End If
+
                 Dim defaultNamingContext = rootDSE.Properties("defaultNamingContext").Value.ToString()
-                Dim domainRootADsPath = [String].Format("LDAP://{0}", defaultNamingContext)
+                Dim domainRootADsPath = [String].Format("LDAP://" & NetworkInfo.CurrentDomain & "/{0}", defaultNamingContext)
+
                 Using searchRoot = New DirectoryEntry(domainRootADsPath)
+                    If ServerInfo.CurrentDataBase = Databases.vintondd Then
+                        searchRoot.Username = AdminCreds.UserName
+                        searchRoot.Password = AdminCreds.Password
+                    End If
                     Dim filter = "(&(objectCategory=computer)(name=" + _hostname + "))"
                     Using directorySearch = New DirectorySearcher(searchRoot, filter)
                         Dim directorySearchResult = directorySearch.FindOne()

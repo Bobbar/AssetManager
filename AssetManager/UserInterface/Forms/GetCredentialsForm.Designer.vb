@@ -24,6 +24,7 @@ Partial Class GetCredentialsForm
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(GetCredentialsForm))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CredDescriptionLabel = New System.Windows.Forms.Label()
         Me.cmdAccept = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -37,6 +38,7 @@ Partial Class GetCredentialsForm
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.CredDescriptionLabel)
         Me.GroupBox1.Controls.Add(Me.cmdAccept)
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.Label1)
@@ -49,6 +51,16 @@ Partial Class GetCredentialsForm
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Enter Credentials"
+        '
+        'CredDescriptionLabel
+        '
+        Me.CredDescriptionLabel.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CredDescriptionLabel.ForeColor = System.Drawing.Color.Gray
+        Me.CredDescriptionLabel.Location = New System.Drawing.Point(1, 139)
+        Me.CredDescriptionLabel.Name = "CredDescriptionLabel"
+        Me.CredDescriptionLabel.Size = New System.Drawing.Size(278, 19)
+        Me.CredDescriptionLabel.TabIndex = 5
+        Me.CredDescriptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'cmdAccept
         '
@@ -119,4 +131,5 @@ Partial Class GetCredentialsForm
     Friend WithEvents Label1 As Label
     Friend WithEvents txtPassword As TextBox
     Friend WithEvents txtUsername As TextBox
+    Friend WithEvents CredDescriptionLabel As Label
 End Class
