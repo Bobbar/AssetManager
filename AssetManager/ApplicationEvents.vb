@@ -80,6 +80,8 @@ Namespace My
                         Select Case ArgToEnum
                             Case CommandArgs.TESTDB
                                 ServerInfo.CurrentDataBase = Databases.test_db
+                            Case CommandArgs.VINTONDD
+                                ServerInfo.CurrentDataBase = Databases.vintondd
                         End Select
                     Catch ex As ArgumentException
                         Logger("Invalid argument: " & Args(i))

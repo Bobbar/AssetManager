@@ -14,7 +14,6 @@ Public Class ViewDeviceForm
     Private bolGridFilling As Boolean = False
     Private DataParser As New DBControlParser(Me)
     Private DeviceHostname As String = Nothing
-    Private Domain As String = Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties.DomainName
     Private intFailedPings As Integer = 0
     Private MyLiveBox As New LiveBox(Me)
     Private MyMunisToolBar As New MunisToolBar(Me)
@@ -131,7 +130,7 @@ Public Class ViewDeviceForm
                 If CurrentViewDevice.IsTrackable Then LoadTracking(CurrentViewDevice.GUID)
                 SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut)
                 Me.Text = Me.Text + FormTitle(CurrentViewDevice)
-                DeviceHostname = CurrentViewDevice.HostName & "." & Domain
+                DeviceHostname = CurrentViewDevice.HostName & "." & NetworkInfo.CurrentDomain
                 CheckRDP()
                 tmr_RDPRefresher.Enabled = True
                 Me.Show()

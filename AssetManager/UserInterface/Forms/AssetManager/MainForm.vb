@@ -427,7 +427,6 @@ Public Class MainForm
         End If
     End Sub
 
-
     Private Sub ChangeDatabase(database As Databases)
         Try
             If Not GlobalSwitches.CachedMode And ServerInfo.ServerPinging Then
@@ -437,6 +436,9 @@ Public Class MainForm
                         If OKToCloseChildren(Me) Then
                             CloseChildren(Me)
                             ServerInfo.CurrentDataBase = database
+                            BuildIndexes()
+                            RefreshCombos()
+                            InitDBControls()
                             DBCache.RefreshLocalDBCache()
                             ShowTestDBWarning()
                             ShowAll()

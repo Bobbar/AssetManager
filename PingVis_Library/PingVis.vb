@@ -177,6 +177,8 @@ Public Class PingVis : Implements IDisposable
 
     Private Sub DrawBars(ByRef DestControl As Control, ByRef Bars As List(Of PingBar), Optional MouseOverInfo As MouseOverInfoStruct = Nothing)
         If PingReplies.Count < 1 Or Not CanDraw(Environment.TickCount) Then
+            Exit Sub
+        Else
             If DrawControl IsNot Nothing AndAlso DrawControl.FindForm IsNot Nothing Then
                 If DrawControl.FindForm.WindowState = FormWindowState.Minimized Then Exit Sub
             End If
