@@ -107,6 +107,24 @@ Public Class MainForm
         RefreshCombos()
     End Sub
 
+    Private Async Sub WatchDogRebuildCache(sender As Object, e As EventArgs)
+        If GlobalSwitches.BuildingCache Then Exit Sub
+        GlobalSwitches.BuildingCache = True
+        Try
+            SetStatusBar("Rebuilding DB Cache...")
+            Await Task.Run(Sub()
+                               If Not DBCache.VerifyCacheHashes() Then
+                                   DBCache.RefreshLocalDBCache()
+                               End If
+                           End Sub)
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            GlobalSwitches.BuildingCache = False
+            SetStatusBar("Idle...")
+        End Try
+    End Sub
+
     Private Sub WatchDogTick(sender As Object, e As EventArgs)
         Dim TickEvent = DirectCast(e, ConnectionMonitoring.WatchDogTickEventArgs)
         If DateTimeLabel.Text <> TickEvent.ServerTime Then
@@ -254,7 +272,7 @@ Public Class MainForm
 
             WatchDog = New ConnectionMonitoring.ConnectionWatchdog(GlobalSwitches.CachedMode)
             AddHandler WatchDog.StatusChanged, AddressOf WatchDogStatusChanged
-            AddHandler WatchDog.RebuildCache, AddressOf RebuildCache
+            AddHandler WatchDog.RebuildCache, AddressOf WatchDogRebuildCache
             AddHandler WatchDog.WatcherTick, AddressOf WatchDogTick
             WatchDog.StartWatcher()
 
@@ -277,7 +295,7 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        SplashScreenForm.Hide()
+        SplashScreenForm.Dispose()
     End Sub
 
     Private Sub NewTextCrypterForm()
@@ -300,23 +318,7 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private Async Sub RebuildCache(sender As Object, e As EventArgs)
-        If GlobalSwitches.BuildingCache Then Exit Sub
-        GlobalSwitches.BuildingCache = True
-        Try
-            SetStatusBar("Rebuilding DB Cache...")
-            Await Task.Run(Sub()
-                               If Not DBCache.VerifyCacheHashes() Then
-                                   DBCache.RefreshLocalDBCache()
-                               End If
-                           End Sub)
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        Finally
-            GlobalSwitches.BuildingCache = False
-            SetStatusBar("Idle...")
-        End Try
-    End Sub
+
 
     Private Sub RefreshCombos()
         FillComboBox(DeviceIndex.EquipType, cmbEquipType)
@@ -439,7 +441,8 @@ Public Class MainForm
                             BuildIndexes()
                             RefreshCombos()
                             InitDBControls()
-                            DBCache.RefreshLocalDBCache()
+                            GlobalSwitches.BuildingCache = True
+                            Task.Run(Sub() DBCache.RefreshLocalDBCache())
                             ShowTestDBWarning()
                             ShowAll()
                         End If
