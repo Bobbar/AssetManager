@@ -79,7 +79,7 @@ Public Class SibiManageRequestForm
     Private Sub NewRequest()
         Try
             SetWaitCursor(True, Me)
-            If Not CheckForAccess(AccessGroup.AddSibi) Then
+            If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddSibi) Then
                 If Not Me.Visible Then
                     Me.Dispose()
                 End If
@@ -143,8 +143,8 @@ Public Class SibiManageRequestForm
         End Try
     End Sub
     Private Function GetHash(RequestTable As DataTable, ItemsTable As DataTable) As String
-        Dim RequestHash As String = GetSHAOfTable(RequestTable)
-        Dim ItemHash As String = GetSHAOfTable(ItemsTable)
+        Dim RequestHash As String = SecurityTools.GetSHAOfTable(RequestTable)
+        Dim ItemHash As String = SecurityTools.GetSHAOfTable(ItemsTable)
         Return RequestHash & ItemHash
     End Function
     Private Function ConcurrencyCheck() As Boolean
@@ -203,7 +203,7 @@ Public Class SibiManageRequestForm
     End Function
 
     Private Sub AddNewRequest()
-        If Not CheckForAccess(AccessGroup.AddSibi) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddSibi) Then Exit Sub
         If Not ValidateFields() Then Exit Sub
         Dim RequestData As RequestObject = CollectData()
         Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
@@ -228,7 +228,7 @@ Public Class SibiManageRequestForm
 
     Private Sub AddNote()
         Try
-            If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
+            If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi) Then Exit Sub
             If CurrentRequest.GUID <> "" And Not IsNewRequest Then
                 Dim NewNote As New SibiNotesForm(Me, CurrentRequest)
                 If NewNote.DialogResult = DialogResult.OK Then
@@ -363,7 +363,7 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub ViewAttachments()
-        If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen(Me) Then
             If CurrentRequest.GUID <> "" And Not IsNewRequest Then
                 Dim NewAttach As New AttachmentsForm(Me, New SibiAttachmentsCols, CurrentRequest)
@@ -386,7 +386,7 @@ Public Class SibiManageRequestForm
 
     Private Sub DeleteCurrentSibiReqest()
         Try
-            If Not CheckForAccess(AccessGroup.DeleteSibi) Then Exit Sub
+            If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.DeleteSibi) Then Exit Sub
             If IsNothing(CurrentRequest.RequestItems) Then Exit Sub
             Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", vbYesNo + vbExclamation, "WARNING", Me)
             If blah = vbYes Then
@@ -417,7 +417,7 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub DeleteCurrentNote()
-        If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi) Then Exit Sub
         If dgvNotes.CurrentRow IsNot Nothing AndAlso dgvNotes.CurrentRow.Index > -1 Then
             Dim blah = Message("Are you sure?", vbYesNo + vbQuestion, "Delete Note", Me)
             If blah = vbYes Then
@@ -443,7 +443,7 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub ModifyRequest()
-        If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi) Then Exit Sub
         If CurrentRequest.GUID <> "" And Not IsModifying Then SetModifyMode(IsModifying)
     End Sub
 
@@ -1083,7 +1083,7 @@ Public Class SibiManageRequestForm
 
     Private Sub DeleteSelectedRequestItem()
         Try
-            If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
+            If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi) Then Exit Sub
             Dim blah = Message("Delete selected row?", vbYesNo + vbQuestion, "Delete Item Row", Me)
             If blah = vbYes Then
                 If Not DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index) Then
@@ -1130,7 +1130,7 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub PopulateCurrentFAItem()
-        If Not CheckForAccess(AccessGroup.ModifySibi) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi) Then Exit Sub
         Try
             If ValidColumn() Then
                 PopulateFromFA(RequestItemsGrid.CurrentCell.OwningColumn.Name)

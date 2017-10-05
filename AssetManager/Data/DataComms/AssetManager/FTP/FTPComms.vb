@@ -5,7 +5,7 @@ Public Class FtpComms
 
     Private Const EncFTPUserPass As String = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ="
     Private Const strFTPUser As String = "asset_manager"
-    Private FTPcreds As NetworkCredential = New NetworkCredential(strFTPUser, DecodePassword(EncFTPUserPass))
+    Private FTPcreds As NetworkCredential = New NetworkCredential(strFTPUser, SecurityTools.DecodePassword(EncFTPUserPass))
     Private intSocketTimeout As Integer = 5000
 
 #End Region

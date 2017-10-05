@@ -65,7 +65,7 @@ Public Class GKProgressControl
             If ProgStatus <> ProgressStatus.Running Then
                 LogBuff = ""
                 SetStatus(ProgressStatus.Starting)
-                MyUpdater.StartUpdate(AdminCreds)
+                MyUpdater.StartUpdate(SecurityTools.AdminCreds)
             End If
         Catch ex As Exception
             SetStatus(ProgressStatus.Errors)

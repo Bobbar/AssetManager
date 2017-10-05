@@ -186,7 +186,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub ViewAttachments()
-        If Not CheckForAccess(AccessGroup.ViewAttachment) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewAttachment) Then Exit Sub
         If Not AttachmentsIsOpen(Me) Then
             Dim NewAttachments As New AttachmentsForm(Me, New DeviceAttachmentsCols, CurrentViewDevice)
         End If
@@ -248,7 +248,7 @@ Public Class ViewDeviceForm
     End Function
 
     Private Sub StartTrackDeviceForm()
-        If Not CheckForAccess(AccessGroup.Tracking) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.Tracking) Then Exit Sub
         Waiting()
         Dim NewTracking As New TrackDeviceForm(CurrentViewDevice, Me)
         DoneWaiting()
@@ -343,10 +343,10 @@ Public Class ViewDeviceForm
 
     Private Async Sub BrowseFiles()
         Try
-            If VerifyAdminCreds() Then
+            If SecurityTools.VerifyAdminCreds() Then
                 Dim FullPath As String = "\\" & CurrentViewDevice.HostName & "\c$"
                 Await Task.Run(Sub()
-                                   Using NetCon As New NetworkConnection(FullPath, AdminCreds), p As Process = New Process
+                                   Using NetCon As New NetworkConnection(FullPath, SecurityTools.AdminCreds), p As Process = New Process
                                        p.StartInfo.UseShellExecute = False
                                        p.StartInfo.RedirectStandardOutput = True
                                        p.StartInfo.RedirectStandardError = True
@@ -371,7 +371,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub cmdGKUpdate_Click(sender As Object, e As EventArgs) Handles cmdGKUpdate.Click
-        If VerifyAdminCreds() Then
+        If SecurityTools.VerifyAdminCreds() Then
             GKUpdaterForm.AddUpdate(CurrentViewDevice)
             If Not GKUpdaterForm.Visible Then GKUpdaterForm.Show()
         End If
@@ -464,7 +464,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub DeleteDevice()
-        If Not CheckForAccess(AccessGroup.DeleteDevice) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.DeleteDevice) Then Exit Sub
         Dim blah = Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
             If AssetFunc.DeleteFtpAndSql(CurrentViewDevice.GUID, EntryType.Device) Then
@@ -483,7 +483,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub DeleteSelectedHistoricalEntry()
-        If Not CheckForAccess(AccessGroup.ModifyDevice) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice) Then Exit Sub
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
         Dim Info As DeviceObject
         Dim strQry = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & strGUID & "'"
@@ -708,7 +708,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub ModifyDevice()
-        If Not CheckForAccess(AccessGroup.ModifyDevice) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice) Then Exit Sub
         EnableControls()
     End Sub
 
@@ -726,7 +726,7 @@ Public Class ViewDeviceForm
 
     Private Sub OpenSibiLink(LinkDevice As DeviceObject)
         Try
-            If Not CheckForAccess(AccessGroup.ViewSibi) Then Exit Sub
+            If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi) Then Exit Sub
             Dim SibiUID As String
             If LinkDevice.SibiLink = "" Then
                 If LinkDevice.PO = "" Then
@@ -771,11 +771,11 @@ Public Class ViewDeviceForm
     Private Async Function SendRestart(IP As String, DeviceName As String) As Task(Of String)
         Dim OrigButtonImage = cmdRestart.Image
         Try
-            If VerifyAdminCreds() Then
+            If SecurityTools.VerifyAdminCreds() Then
                 cmdRestart.Image = My.Resources.LoadingAni
                 Dim FullPath As String = "\\" & IP
                 Dim output As String = Await Task.Run(Function()
-                                                          Using NetCon As New NetworkConnection(FullPath, AdminCreds), p As Process = New Process
+                                                          Using NetCon As New NetworkConnection(FullPath, SecurityTools.AdminCreds), p As Process = New Process
                                                               p.StartInfo.UseShellExecute = False
                                                               p.StartInfo.RedirectStandardOutput = True
                                                               p.StartInfo.RedirectStandardError = True
@@ -956,7 +956,7 @@ Public Class ViewDeviceForm
 
     Private Sub AddNewNote()
         Try
-            If Not CheckForAccess(AccessGroup.ModifyDevice) Then Exit Sub
+            If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice) Then Exit Sub
             Using UpdateDia As New UpdateDev(Me, True)
                 If UpdateDia.DialogResult = DialogResult.OK Then
                     If Not ConcurrencyCheck() Then
@@ -1045,7 +1045,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Function GetHash(deviceTable As DataTable, historicalTable As DataTable) As String
-        Return GetSHAOfTable(deviceTable) & GetSHAOfTable(historicalTable)
+        Return SecurityTools.GetSHAOfTable(deviceTable) & SecurityTools.GetSHAOfTable(historicalTable)
     End Function
 
     Private Function GetDevicesTable(deviceUID As String) As DataTable

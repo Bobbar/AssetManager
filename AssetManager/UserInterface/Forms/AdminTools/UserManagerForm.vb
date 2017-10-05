@@ -34,7 +34,7 @@ Public Class UserManagerForm
     Private Sub DisplayAccess(intAccessLevel As Integer)
         Dim clbItemStates(clbModules.Items.Count - 1) As CheckState
         For Each chkBox As CheckBox In clbModules.Items
-            If CanAccess(chkBox.Name, intAccessLevel) Then
+            If SecurityTools.CanAccess(chkBox.Name, intAccessLevel) Then
                 clbItemStates(clbModules.Items.IndexOf(chkBox)) = CheckState.Checked
             Else
                 clbItemStates(clbModules.Items.IndexOf(chkBox)) = CheckState.Unchecked
@@ -76,7 +76,7 @@ Public Class UserManagerForm
         Dim intAccessLevel As Integer = 0
         For Each chkBox As CheckBox In clbModules.Items
             If clbModules.GetItemCheckState(clbModules.Items.IndexOf(chkBox)) = CheckState.Checked Then
-                intAccessLevel += GetSecGroupValue(chkBox.Name)
+                intAccessLevel += SecurityTools.GetSecGroupValue(chkBox.Name)
             End If
         Next
         Return intAccessLevel
@@ -109,7 +109,7 @@ Public Class UserManagerForm
                 AddGUIDs()
                 DBFunc.GetDatabase.UpdateTable(UserDataQuery, DirectCast(UserGrid.DataSource, DataTable))
                 ListUsers()
-                GetUserAccess()
+                SecurityTools.GetUserAccess()
             Else
 
             End If

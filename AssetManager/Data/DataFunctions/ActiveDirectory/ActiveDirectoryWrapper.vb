@@ -61,8 +61,9 @@ Public Class ActiveDirectoryWrapper
         Try
             Using rootDSE = New DirectoryEntry("LDAP://" & NetworkInfo.CurrentDomain & "/RootDSE")
                 If ServerInfo.CurrentDataBase = Databases.vintondd Then
-                    rootDSE.Username = AdminCreds.UserName
-                    rootDSE.Password = AdminCreds.Password
+                    SecurityTools.VerifyAdminCreds("Credentials for Vinton AD")
+                    rootDSE.Username = SecurityTools.AdminCreds.UserName
+                    rootDSE.Password = SecurityTools.AdminCreds.Password
                 End If
 
                 Dim defaultNamingContext = rootDSE.Properties("defaultNamingContext").Value.ToString()
@@ -70,8 +71,8 @@ Public Class ActiveDirectoryWrapper
 
                 Using searchRoot = New DirectoryEntry(domainRootADsPath)
                     If ServerInfo.CurrentDataBase = Databases.vintondd Then
-                        searchRoot.Username = AdminCreds.UserName
-                        searchRoot.Password = AdminCreds.Password
+                        searchRoot.Username = SecurityTools.AdminCreds.UserName
+                        searchRoot.Password = SecurityTools.AdminCreds.Password
                     End If
                     Dim filter = "(&(objectCategory=computer)(name=" + _hostname + "))"
                     Using directorySearch = New DirectorySearcher(searchRoot, filter)

@@ -71,7 +71,7 @@ Public Class AttachmentsForm
             FolderPanel.Visible = False
         End If
 
-        If CanAccess(AccessGroup.ManageAttachment) Then
+        If SecurityTools.CanAccess(SecurityTools.AccessGroup.ManageAttachment) Then
             cmdUpload.Enabled = True
             cmdDelete.Enabled = True
         Else
@@ -159,13 +159,13 @@ Public Class AttachmentsForm
     End Sub
 
     Private Sub MoveAttachmentFolder()
-        If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
         If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(SelectedAttachment, GetDBValue(SibiIndex.AttachFolder, cmbMoveFolder.SelectedIndex))
     End Sub
 
     Private Sub UploadFileDialog()
         Try
-            If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
+            If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
             Using fd As OpenFileDialog = New OpenFileDialog()
                 fd.ShowHelp = True
                 fd.Title = "Select File To Upload - " & FileSizeMBLimit & "MB Limit"
@@ -468,7 +468,7 @@ Public Class AttachmentsForm
 
     Private Sub RenameAttachmentDialog()
         Try
-            If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
+            If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
             Dim strCurrentFileName As String = AssetFunc.GetSqlValue(_attachTable.TableName, _attachTable.FileUID, SelectedAttachment, _attachTable.FileName)
             Dim strAttachUID As String = SelectedAttachment()
             Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
@@ -484,7 +484,7 @@ Public Class AttachmentsForm
 
     Private Sub DeleteAttachment(AttachUID As String)
         Try
-            If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
+            If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
             Dim strFilename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value.ToString
             Dim blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete", Me)
             If blah = vbYes Then
@@ -622,7 +622,7 @@ Public Class AttachmentsForm
 
     Private Function VerifyAttachment(attachment As Attachment) As Boolean
         SetStatusBar("Verifying data...")
-        Dim FileResultHash = GetMD5OfStream(DirectCast(attachment.DataStream, MemoryStream)) 'GetHashOfIOStream(DirectCast(attachment.DataStream, MemoryStream))
+        Dim FileResultHash = SecurityTools.GetMD5OfStream(DirectCast(attachment.DataStream, MemoryStream)) 'GetHashOfIOStream(DirectCast(attachment.DataStream, MemoryStream))
         If FileResultHash = attachment.MD5 Then
             Return True
         Else

@@ -135,8 +135,9 @@ Public Class GKUpdaterForm
     Private Sub CriticalStop(sender As Object, e As EventArgs)
         StopQueue()
         Message("The queue was stopped because of an access error. Please re-enter your credentials.", vbExclamation + vbOKOnly, "Queue Stopped", Me)
-        AdminCreds = Nothing
-        If VerifyAdminCreds() Then
+        SecurityTools.ClearAdminCreds()
+
+        If SecurityTools.VerifyAdminCreds() Then
             StartQueue()
         End If
     End Sub

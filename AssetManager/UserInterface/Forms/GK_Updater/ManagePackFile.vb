@@ -48,7 +48,7 @@ Public Class ManagePackFile
             Else
 
                 Dim LocalHash = Await Task.Run(Function()
-                                                   Return GetMD5OfFile(GKPackFileFullPath)
+                                                   Return SecurityTools.GetMD5OfFile(GKPackFileFullPath)
                                                End Function)
 
                 Dim RemoteHash = Await Task.Run(Function()
@@ -249,7 +249,7 @@ Public Class ManagePackFile
             File.Delete(GKPackFileFDir & GKPackHashName)
         End If
         Dim Hash = Await Task.Run(Function()
-                                      Return GetMD5OfFile(GKPackFileFullPath)
+                                      Return SecurityTools.GetMD5OfFile(GKPackFileFullPath)
                                   End Function)
         Using sw As StreamWriter = File.CreateText(GKPackFileFDir & GKPackHashName)
             sw.Write(Hash)

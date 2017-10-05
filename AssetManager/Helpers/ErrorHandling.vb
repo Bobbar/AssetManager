@@ -89,15 +89,15 @@ Module ErrorHandling
         Select Case ex.NativeErrorCode
             Case 1326 'Bad credentials error. Clear AdminCreds
                 PromptUser("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
-                AdminCreds = Nothing
+                SecurityTools.ClearAdminCreds()
                 Return True
             Case 86 'Bad credentials error. Clear AdminCreds
                 PromptUser("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
-                AdminCreds = Nothing
+                SecurityTools.ClearAdminCreds()
                 Return True
             Case 5 'Access denied error. Clear AdminCreds
                 PromptUser("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
-                AdminCreds = Nothing
+                SecurityTools.ClearAdminCreds()
                 Return True
             Case Else
                 PromptUser("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")

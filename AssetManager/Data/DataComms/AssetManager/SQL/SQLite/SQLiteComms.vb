@@ -9,7 +9,7 @@ Public Class SQLiteDatabase
 #Region "Fields"
     Private Const EncSQLitePass As String = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU"
     Private Property Connection As SQLiteConnection
-    Private SQLiteConnectString As String = "Data Source=" & strSQLitePath & ";Password=" & DecodePassword(EncSQLitePass)
+    Private SQLiteConnectString As String = "Data Source=" & strSQLitePath & ";Password=" & SecurityTools.DecodePassword(EncSQLitePass)
 
 #End Region
 
@@ -99,7 +99,7 @@ Public Class SQLiteDatabase
             End If
             SQLiteConnection.CreateFile(strSQLitePath)
             Connection = NewConnection()
-            Connection.SetPassword(DecodePassword(EncSQLitePass))
+            Connection.SetPassword(SecurityTools.DecodePassword(EncSQLitePass))
             OpenConnection()
             Using trans = Connection.BeginTransaction
                 For Each table In TableList()
@@ -122,7 +122,7 @@ Public Class SQLiteDatabase
             For Each table In TableList()
                 Using results = ToStringTable(DataTableFromQueryString("SELECT * FROM " & table))
                     results.TableName = table
-                    hashList.Add(GetSHAOfTable(results))
+                    hashList.Add(SecurityTools.GetSHAOfTable(results))
                 End Using
             Next
             Return hashList
@@ -137,7 +137,7 @@ Public Class SQLiteDatabase
             For Each table In TableList()
                 Using results = ToStringTable(MySQLDB.DataTableFromQueryString("SELECT * FROM " & table))
                     results.TableName = table
-                    hashList.Add(GetSHAOfTable(results))
+                    hashList.Add(SecurityTools.GetSHAOfTable(results))
                 End Using
             Next
             Return hashList

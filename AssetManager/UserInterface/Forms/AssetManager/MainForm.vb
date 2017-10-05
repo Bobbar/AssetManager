@@ -56,7 +56,7 @@ Public Class MainForm
     End Sub
 
     Private Sub AddNewDevice()
-        If Not CheckForAccess(AccessGroup.AddDevice) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice) Then Exit Sub
         Dim NewDevForm = GetChildOfType(Me, GetType(NewDeviceForm))
         If NewDevForm Is Nothing Then
             Dim NewDev As New NewDeviceForm(Me)
@@ -161,7 +161,7 @@ Public Class MainForm
     End Sub
 
     Private Sub EnqueueGKUpdate()
-        If VerifyAdminCreds() Then
+        If SecurityTools.VerifyAdminCreds() Then
             Dim SelectedDevices As New List(Of DeviceObject)
             Dim Rows As New HashSet(Of Integer)
             'Iterate selected cells and collect unique row indexes via a HashSet.(HashSet only allows unique values to be added to collection).
@@ -244,7 +244,7 @@ Public Class MainForm
             DateTimeLabel.Text = Now.ToString
             ToolStrip1.BackColor = colAssetToolBarColor
             ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
-            If CanAccess(AccessGroup.IsAdmin) Then
+            If SecurityTools.CanAccess(SecurityTools.AccessGroup.IsAdmin) Then
                 AdminDropDown.Visible = True
             Else
                 AdminDropDown.Visible = False
@@ -281,13 +281,13 @@ Public Class MainForm
     End Sub
 
     Private Sub NewTextCrypterForm()
-        If Not CheckForAccess(AccessGroup.IsAdmin) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin) Then Exit Sub
         Dim NewEncryp As New CrypterForm(Me)
     End Sub
 
     Private Sub OpenSibiMainForm()
         Try
-            If Not CheckForAccess(AccessGroup.ViewSibi) Then Exit Sub
+            If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi) Then Exit Sub
             Waiting()
             Dim SibiForm = GetChildOfType(Me, GetType(SibiMainForm))
             If SibiForm Is Nothing Then
@@ -372,12 +372,12 @@ Public Class MainForm
     End Sub
 
     Private Sub StartAdvancedSearch()
-        If Not CheckForAccess(AccessGroup.AdvancedSearch) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AdvancedSearch) Then Exit Sub
         Dim NewAdvancedSearch As New AdvancedSearchForm(Me)
     End Sub
 
     Private Sub StartAttachScan()
-        If Not CheckForAccess(AccessGroup.ManageAttachment) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
         FTPFunc.ScanAttachements()
     End Sub
 
@@ -404,7 +404,7 @@ Public Class MainForm
     End Sub
 
     Private Sub StartUserManager()
-        If Not CheckForAccess(AccessGroup.IsAdmin) Then Exit Sub
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin) Then Exit Sub
         Dim NewUserMan As New UserManagerForm(Me)
     End Sub
 
@@ -436,6 +436,7 @@ Public Class MainForm
                         If OKToCloseChildren(Me) Then
                             CloseChildren(Me)
                             ServerInfo.CurrentDataBase = database
+                            SecurityTools.ClearAdminCreds()
                             BuildIndexes()
                             RefreshCombos()
                             InitDBControls()
@@ -486,7 +487,7 @@ Public Class MainForm
             End Using
 
             If Hostname <> "" Then
-                If VerifyAdminCreds() Then
+                If SecurityTools.VerifyAdminCreds() Then
                     Waiting()
                     If Await ExecutePowerShellScript(Hostname, scriptByte) Then
                         Message("Command successful.", vbOKOnly + vbInformation, "Done", Me)
@@ -504,7 +505,7 @@ Public Class MainForm
     Private Async Function ExecutePowerShellScript(hostname As String, scriptByte() As Byte) As Task(Of Boolean)
         Dim UpdateResult = Await Task.Run(Function()
                                               Dim PSWrapper As New PowerShellWrapper
-                                              Return PSWrapper.ExecuteRemotePSScript(hostname, scriptByte, AdminCreds)
+                                              Return PSWrapper.ExecuteRemotePSScript(hostname, scriptByte, SecurityTools.AdminCreds)
                                           End Function)
         If UpdateResult <> "" Then
             Message(UpdateResult, vbOKOnly + vbExclamation, "Error Running Script")
@@ -671,8 +672,8 @@ Public Class MainForm
     End Sub
 
     Private Sub ReEnterLACredentialsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReEnterLACredentialsToolStripMenuItem.Click
-        AdminCreds = Nothing
-        VerifyAdminCreds()
+        SecurityTools.ClearAdminCreds()
+        SecurityTools.VerifyAdminCreds()
     End Sub
 
     Private Sub ViewLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewLogToolStripMenuItem.Click

@@ -193,7 +193,7 @@ Public Class Attachment : Implements IDisposable
 
     Private Function GetHash(Fileinfo As FileInfo) As String
         Using HashStream As FileStream = Fileinfo.OpenRead
-            Return GetMD5OfStream(HashStream)
+            Return SecurityTools.GetMD5OfStream(HashStream)
         End Using
     End Function
 
