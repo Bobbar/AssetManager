@@ -36,10 +36,9 @@
 
         Public Function SetCurrentDomain(database As Databases) As String
             _currentDomain = DomainNames(database)
+            SecurityTools.ClearAdminCreds()
             If database = Databases.vintondd Then
                 SecurityTools.VerifyAdminCreds("Credentials for Vinton AD")
-            Else
-                SecurityTools.ClearAdminCreds()
             End If
             Return DomainNames(database)
         End Function

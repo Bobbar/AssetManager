@@ -436,7 +436,6 @@ Public Class MainForm
                         If OKToCloseChildren(Me) Then
                             CloseChildren(Me)
                             ServerInfo.CurrentDataBase = database
-                            SecurityTools.ClearAdminCreds()
                             BuildIndexes()
                             RefreshCombos()
                             InitDBControls()
