@@ -55,14 +55,14 @@ Partial Class NewDeviceForm
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.iCloudTextBox = New System.Windows.Forms.TextBox()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.txtHostname = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtPhoneNumber = New System.Windows.Forms.MaskedTextBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.GroupBox6 = New System.Windows.Forms.GroupBox()
         Me.GroupBox7 = New System.Windows.Forms.GroupBox()
-        Me.iCloudTextBox = New System.Windows.Forms.TextBox()
-        Me.Label14 = New System.Windows.Forms.Label()
         Me.GroupBox2.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox3.SuspendLayout()
@@ -181,7 +181,7 @@ Partial Class NewDeviceForm
         Me.chkNoClear.Location = New System.Drawing.Point(732, 392)
         Me.chkNoClear.Name = "chkNoClear"
         Me.chkNoClear.Size = New System.Drawing.Size(91, 20)
-        Me.chkNoClear.TabIndex = 15
+        Me.chkNoClear.TabIndex = 16
         Me.chkNoClear.Text = "Don't clear"
         Me.chkNoClear.UseVisualStyleBackColor = True
         '
@@ -202,7 +202,7 @@ Partial Class NewDeviceForm
         Me.cmdClear.Location = New System.Drawing.Point(693, 427)
         Me.cmdClear.Name = "cmdClear"
         Me.cmdClear.Size = New System.Drawing.Size(170, 23)
-        Me.cmdClear.TabIndex = 16
+        Me.cmdClear.TabIndex = 17
         Me.cmdClear.Text = "Clear"
         Me.cmdClear.UseVisualStyleBackColor = True
         '
@@ -297,7 +297,7 @@ Partial Class NewDeviceForm
         Me.txtNotes.Multiline = True
         Me.txtNotes.Name = "txtNotes"
         Me.txtNotes.Size = New System.Drawing.Size(366, 86)
-        Me.txtNotes.TabIndex = 13
+        Me.txtNotes.TabIndex = 14
         '
         'cmdAdd
         '
@@ -305,7 +305,7 @@ Partial Class NewDeviceForm
         Me.cmdAdd.Location = New System.Drawing.Point(693, 342)
         Me.cmdAdd.Name = "cmdAdd"
         Me.cmdAdd.Size = New System.Drawing.Size(170, 44)
-        Me.cmdAdd.TabIndex = 14
+        Me.cmdAdd.TabIndex = 15
         Me.cmdAdd.Text = "Add Device"
         Me.cmdAdd.UseVisualStyleBackColor = True
         '
@@ -453,6 +453,26 @@ Partial Class NewDeviceForm
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "Misc"
         '
+        'iCloudTextBox
+        '
+        Me.iCloudTextBox.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.iCloudTextBox.Location = New System.Drawing.Point(14, 154)
+        Me.iCloudTextBox.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
+        Me.iCloudTextBox.Name = "iCloudTextBox"
+        Me.iCloudTextBox.Size = New System.Drawing.Size(178, 25)
+        Me.iCloudTextBox.TabIndex = 13
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Location = New System.Drawing.Point(11, 134)
+        Me.Label14.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(97, 16)
+        Me.Label14.TabIndex = 62
+        Me.Label14.Text = "iCloud Account"
+        '
         'txtHostname
         '
         Me.txtHostname.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -460,7 +480,7 @@ Partial Class NewDeviceForm
         Me.txtHostname.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
         Me.txtHostname.Name = "txtHostname"
         Me.txtHostname.Size = New System.Drawing.Size(178, 25)
-        Me.txtHostname.TabIndex = 59
+        Me.txtHostname.TabIndex = 12
         Me.txtHostname.Text = "txtHostname"
         '
         'Label7
@@ -481,7 +501,7 @@ Partial Class NewDeviceForm
         Me.txtPhoneNumber.Mask = "(999) 000-0000"
         Me.txtPhoneNumber.Name = "txtPhoneNumber"
         Me.txtPhoneNumber.Size = New System.Drawing.Size(178, 25)
-        Me.txtPhoneNumber.TabIndex = 58
+        Me.txtPhoneNumber.TabIndex = 11
         Me.txtPhoneNumber.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
         'Label13
@@ -514,26 +534,6 @@ Partial Class NewDeviceForm
         Me.GroupBox7.Size = New System.Drawing.Size(547, 151)
         Me.GroupBox7.TabIndex = 57
         Me.GroupBox7.TabStop = False
-        '
-        'iCloudTextBox
-        '
-        Me.iCloudTextBox.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.iCloudTextBox.Location = New System.Drawing.Point(14, 154)
-        Me.iCloudTextBox.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
-        Me.iCloudTextBox.Name = "iCloudTextBox"
-        Me.iCloudTextBox.Size = New System.Drawing.Size(178, 25)
-        Me.iCloudTextBox.TabIndex = 61
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.Location = New System.Drawing.Point(11, 134)
-        Me.Label14.Margin = New System.Windows.Forms.Padding(2, 2, 40, 2)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(97, 16)
-        Me.Label14.TabIndex = 62
-        Me.Label14.Text = "iCloud Account"
         '
         'NewDeviceForm
         '

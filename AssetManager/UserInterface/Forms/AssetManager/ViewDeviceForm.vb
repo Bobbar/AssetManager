@@ -680,7 +680,7 @@ Public Class ViewDeviceForm
         txtPONumber.Tag = New DBControlInfo(DevicesBaseCols.PO, False)
         txtReplacementYear_View.Tag = New DBControlInfo(DevicesBaseCols.ReplacementYear, False)
         txtPhoneNumber.Tag = New DBControlInfo(DevicesBaseCols.PhoneNumber, False)
-        lblGUID.Tag = New DBControlInfo(DevicesBaseCols.DeviceUID, False)
+        lblGUID.Tag = New DBControlInfo(DevicesBaseCols.DeviceUID, ParseType.DisplayOnly, False)
         chkTrackable.Tag = New DBControlInfo(DevicesBaseCols.Trackable, False)
         txtHostname.Tag = New DBControlInfo(DevicesBaseCols.HostName, False)
         iCloudTextBox.Tag = New DBControlInfo(DevicesBaseCols.iCloudAccount, False)

@@ -138,6 +138,7 @@ Partial Class ViewHistoryForm
         Me.NotesTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NotesTextBox.Location = New System.Drawing.Point(3, 19)
         Me.NotesTextBox.Name = "NotesTextBox"
+        Me.NotesTextBox.ReadOnly = True
         Me.NotesTextBox.Size = New System.Drawing.Size(789, 149)
         Me.NotesTextBox.TabIndex = 42
         Me.NotesTextBox.Text = ""

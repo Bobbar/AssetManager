@@ -47,18 +47,18 @@ Partial Class UpdateDev
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(473, 268)
+        Me.GroupBox1.Size = New System.Drawing.Size(456, 297)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "More Info."
         '
         'CancelButton
         '
-        Me.CancelButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CancelButton.Location = New System.Drawing.Point(9, 225)
+        Me.CancelButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CancelButton.Location = New System.Drawing.Point(381, 254)
         Me.CancelButton.Name = "CancelButton"
-        Me.CancelButton.Size = New System.Drawing.Size(115, 32)
-        Me.CancelButton.TabIndex = 6
+        Me.CancelButton.Size = New System.Drawing.Size(66, 32)
+        Me.CancelButton.TabIndex = 3
         Me.CancelButton.Text = "Cancel"
         Me.CancelButton.UseVisualStyleBackColor = True
         '
@@ -67,20 +67,21 @@ Partial Class UpdateDev
         Me.NotesTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.NotesTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NotesTextBox.Location = New System.Drawing.Point(9, 85)
         Me.NotesTextBox.Name = "NotesTextBox"
-        Me.NotesTextBox.Size = New System.Drawing.Size(455, 134)
-        Me.NotesTextBox.TabIndex = 5
+        Me.NotesTextBox.Size = New System.Drawing.Size(438, 163)
+        Me.NotesTextBox.TabIndex = 1
         Me.NotesTextBox.Text = ""
         '
         'SubmitButton
         '
-        Me.SubmitButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SubmitButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.SubmitButton.Enabled = False
-        Me.SubmitButton.Location = New System.Drawing.Point(349, 225)
+        Me.SubmitButton.Location = New System.Drawing.Point(9, 254)
         Me.SubmitButton.Name = "SubmitButton"
-        Me.SubmitButton.Size = New System.Drawing.Size(115, 32)
-        Me.SubmitButton.TabIndex = 4
+        Me.SubmitButton.Size = New System.Drawing.Size(156, 32)
+        Me.SubmitButton.TabIndex = 2
         Me.SubmitButton.Text = "Submit"
         Me.SubmitButton.UseVisualStyleBackColor = True
         '
@@ -97,7 +98,7 @@ Partial Class UpdateDev
         '
         Me.Label1.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(77, 37)
+        Me.Label1.Location = New System.Drawing.Point(69, 37)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(93, 16)
         Me.Label1.TabIndex = 1
@@ -108,7 +109,7 @@ Partial Class UpdateDev
         Me.UpdateTypeCombo.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.UpdateTypeCombo.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.UpdateTypeCombo.FormattingEnabled = True
-        Me.UpdateTypeCombo.Location = New System.Drawing.Point(173, 34)
+        Me.UpdateTypeCombo.Location = New System.Drawing.Point(165, 34)
         Me.UpdateTypeCombo.Name = "UpdateTypeCombo"
         Me.UpdateTypeCombo.Size = New System.Drawing.Size(178, 23)
         Me.UpdateTypeCombo.TabIndex = 0
@@ -122,7 +123,7 @@ Partial Class UpdateDev
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(497, 293)
+        Me.ClientSize = New System.Drawing.Size(480, 322)
         Me.Controls.Add(Me.GroupBox1)
         Me.DoubleBuffered = True
         Me.MaximizeBox = False
