@@ -46,7 +46,7 @@
         NewCombo.Name = Name
         NewCombo.Width = 200
         NewCombo.SortMode = DataGridViewColumnSortMode.Automatic
-        NewCombo.DisplayMember = NameOf(ComboboxDataStruct.HumanReadable)
+        NewCombo.DisplayMember = NameOf(ComboboxDataStruct.DisplayValue)
         NewCombo.ValueMember = NameOf(ComboboxDataStruct.Code)
         NewCombo.DataSource = IndexType
         Return NewCombo

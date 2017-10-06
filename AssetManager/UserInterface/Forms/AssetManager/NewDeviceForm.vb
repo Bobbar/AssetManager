@@ -140,7 +140,7 @@
         RefreshCombos()
         ClearFields(Me)
         dtPurchaseDate_REQ.Value = Now
-        cmbStatus_REQ.SelectedIndex = GetComboIndexFromShort(DeviceIndex.StatusType, "INSRV")
+        cmbStatus_REQ.SelectedIndex = GetComboIndexFromCode(DeviceIndex.StatusType, "INSRV")
         ResetBackColors(Me)
         chkTrackable.Checked = False
         chkNoClear.Checked = False

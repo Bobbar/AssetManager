@@ -32,12 +32,7 @@
             Dim NoteText As String = AssetFunc.GetSqlValue(SibiNotesCols.TableName, SibiNotesCols.NoteUID, noteUID, SibiNotesCols.Note)
             Dim NoteTimeStamp As String = AssetFunc.GetSqlValue(SibiNotesCols.TableName, SibiNotesCols.NoteUID, noteUID, SibiNotesCols.DateStamp)
             Me.Text += " - " & NoteTimeStamp
-            Select Case GetStringFormat(NoteText)
-                Case DataFormats.Rtf
-                    rtbNotes.Rtf = NoteText
-                Case DataFormats.Text
-                    rtbNotes.Text = NoteText
-            End Select
+            SetRichTextBox(rtbNotes, NoteText)
             rtbNotes.ReadOnly = True
             rtbNotes.BackColor = Color.White
             Show()
@@ -61,12 +56,5 @@
         Process.Start(e.LinkText)
     End Sub
 
-    Private Function GetStringFormat(text As String) As String
-        If text.StartsWith("{\rtf") Then
-            Return DataFormats.Rtf
-        Else
-            Return DataFormats.Text
-        End If
-    End Function
 
 End Class

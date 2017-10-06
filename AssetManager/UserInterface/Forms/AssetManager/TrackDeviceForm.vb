@@ -65,7 +65,7 @@ Public Class TrackDeviceForm
         txtAssetTag.Text = CurrentTrackingDevice.AssetTag
         txtDescription.Text = CurrentTrackingDevice.Description
         txtSerial.Text = CurrentTrackingDevice.Serial
-        txtDeviceType.Text = GetHumanValue(DeviceIndex.EquipType, CurrentTrackingDevice.EquipmentType)
+        txtDeviceType.Text = GetDisplayValueFromCode(DeviceIndex.EquipType, CurrentTrackingDevice.EquipmentType)
         If CurrentTrackingDevice.Tracking.IsCheckedOut Then
             dtCheckOut.Value = CurrentTrackingDevice.Tracking.CheckoutTime
             dtDueBack.Value = CurrentTrackingDevice.Tracking.DueBackTime

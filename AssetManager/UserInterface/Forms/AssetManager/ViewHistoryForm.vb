@@ -1,4 +1,4 @@
-﻿Option Explicit On
+﻿Imports System.ComponentModel
 
 Public Class ViewHistoryForm
     Private DataParser As New DBControlParser(Me)
@@ -29,7 +29,7 @@ Public Class ViewHistoryForm
         txtSerial.Tag = New DBControlInfo(HistoricalDevicesCols.Serial, ParseType.DisplayOnly, False)
         txtReplaceYear.Tag = New DBControlInfo(HistoricalDevicesCols.ReplacementYear, ParseType.DisplayOnly, False)
         txtEQType.Tag = New DBControlInfo(HistoricalDevicesCols.EQType, DeviceIndex.EquipType, ParseType.DisplayOnly, False)
-        txtNotes.Tag = New DBControlInfo(HistoricalDevicesCols.Notes, ParseType.DisplayOnly, False)
+        NotesTextBox.Tag = New DBControlInfo(HistoricalDevicesCols.Notes, ParseType.DisplayOnly, False)
         txtStatus.Tag = New DBControlInfo(HistoricalDevicesCols.Status, DeviceIndex.StatusType, ParseType.DisplayOnly, False)
         txtEntryGUID.Tag = New DBControlInfo(HistoricalDevicesCols.HistoryEntryUID, ParseType.DisplayOnly, False)
         chkTrackable.Tag = New DBControlInfo(HistoricalDevicesCols.Trackable, ParseType.DisplayOnly, False)
@@ -99,10 +99,10 @@ Public Class ViewHistoryForm
         For Each ctl In GetChangedFields(currentData)
             ctl.BackColor = colCheckIn
         Next
+        NotesTextBox.BackColor = Color.White
     End Sub
 
-    Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click
+    Private Sub ViewHistoryForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Me.Dispose()
     End Sub
-
 End Class

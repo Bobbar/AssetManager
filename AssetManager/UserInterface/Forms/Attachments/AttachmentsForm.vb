@@ -48,7 +48,7 @@ Public Class AttachmentsForm
                 AttachRequest = DirectCast(AttachInfo, RequestObject)
                 AttachFolderUID = AttachRequest.GUID
                 FormUID = AttachFolderUID
-                strSelectedFolder = GetHumanValueFromIndex(SibiIndex.AttachFolder, 0)
+                strSelectedFolder = GetDisplayValueFromIndex(SibiIndex.AttachFolder, 0)
                 Me.Text = "Sibi Attachements"
                 DeviceGroup.Visible = False
                 SibiGroup.Dock = DockStyle.Top
@@ -114,7 +114,7 @@ Public Class AttachmentsForm
                     strFileSizeHuman = Math.Round((CInt(r.Item(_attachTable.FileSize)) / 1024), 1) & " KB"
                     strFullFilename = r.Item(_attachTable.FileName).ToString & r.Item(_attachTable.FileType).ToString
                     If TypeOf _attachTable Is SibiAttachmentsCols Then
-                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), GetHumanValue(SibiIndex.AttachFolder, r.Item(_attachTable.Folder).ToString), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
+                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), GetDisplayValueFromCode(SibiIndex.AttachFolder, r.Item(_attachTable.Folder).ToString), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                     Else
                         table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                     End If

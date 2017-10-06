@@ -126,8 +126,8 @@ End Class
 
 Public Class ComboCodesBaseCols
     Public Const TypeName As String = "type_name"
-    Public Const HumanValue As String = "human_value"
-    Public Const DBValue As String = "db_value"
+    Public Const DisplayValue As String = "human_value"
+    Public Const CodeValue As String = "db_value"
     Public Const ID As String = "id"
 End Class
 

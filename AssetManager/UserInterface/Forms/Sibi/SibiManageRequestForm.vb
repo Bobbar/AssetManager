@@ -186,11 +186,11 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Function AddNewNote(RequestUID As String, Note As String) As Boolean
-        Dim strNoteUID As String = Guid.NewGuid.ToString
+        Dim NoteUID As String = Guid.NewGuid.ToString
         Try
             Dim NewNoteParams As New List(Of DBParameter)
             NewNoteParams.Add(New DBParameter(SibiNotesCols.RequestUID, RequestUID))
-            NewNoteParams.Add(New DBParameter(SibiNotesCols.NoteUID, strNoteUID))
+            NewNoteParams.Add(New DBParameter(SibiNotesCols.NoteUID, NoteUID))
             NewNoteParams.Add(New DBParameter(SibiNotesCols.Note, Note))
             If DBFunc.GetDatabase.InsertFromParameters(SibiNotesCols.TableName, NewNoteParams) > 0 Then
                 Return True
@@ -951,17 +951,17 @@ Public Class SibiManageRequestForm
         Next
     End Sub
 
-    Private Function RTFToPlainText(strRTF As String) As String
-        Try
-            Using rtBox As New RichTextBox
-                rtBox.Rtf = strRTF
-                Return rtBox.Text
-            End Using
-        Catch ex As ArgumentException
-            'If we get an argument error, that means the text is not RTF so we return the plain text.
-            Return strRTF
-        End Try
-    End Function
+    'Private Function RTFToPlainText(strRTF As String) As String
+    '    Try
+    '        Using rtBox As New RichTextBox
+    '            rtBox.Rtf = strRTF
+    '            Return rtBox.Text
+    '        End Using
+    '    Catch ex As ArgumentException
+    '        'If we get an argument error, that means the text is not RTF so we return the plain text.
+    '        Return strRTF
+    '    End Try
+    'End Function
 
     Private Sub SendToGrid(Results As DataTable)
         Try

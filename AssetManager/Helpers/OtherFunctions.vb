@@ -87,4 +87,28 @@ Module OtherFunctions
 
     End Sub
 
+    Public Function RTFToPlainText(rtfText As String) As String
+        Try
+            If rtfText.StartsWith("{\rtf") Then
+                Using rtBox As New RichTextBox
+                    rtBox.Rtf = rtfText
+                    Return rtBox.Text
+                End Using
+            Else
+                Return rtfText
+            End If
+        Catch ex As ArgumentException
+            'If we get an argument error, that means the text is not RTF so we return the plain text.
+            Return rtfText
+        End Try
+    End Function
+
+    Public Sub SetRichTextBox(ByRef richTextBox As RichTextBox, text As String)
+        If text.StartsWith("{\rtf") Then
+            richTextBox.Rtf = text
+        Else
+            richTextBox.Text = text
+        End If
+    End Sub
+
 End Module

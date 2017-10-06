@@ -1,4 +1,5 @@
 ﻿Option Explicit On
+Imports System.ComponentModel
 
 Public Class UpdateDev
 
@@ -13,34 +14,47 @@ Public Class UpdateDev
     Sub New(parentForm As ExtendedForm, Optional isNoteOnly As Boolean = False)
         InitializeComponent()
         Me.ParentForm = parentForm
-        FillComboBox(DeviceIndex.ChangeType, cmbUpdate_ChangeType)
+        FillComboBox(DeviceIndex.ChangeType, UpdateTypeCombo)
         If isNoteOnly Then
-            cmbUpdate_ChangeType.SelectedIndex = GetComboIndexFromShort(DeviceIndex.ChangeType, "NOTE")
-            cmbUpdate_ChangeType.Enabled = False
+            UpdateTypeCombo.SelectedIndex = GetComboIndexFromCode(DeviceIndex.ChangeType, "NOTE")
+            UpdateTypeCombo.Enabled = False
+            ValidateUpdateType()
         Else
-            cmbUpdate_ChangeType.SelectedIndex = -1
+            UpdateTypeCombo.SelectedIndex = -1
         End If
         ShowDialog(parentForm)
     End Sub
 
-    Private Sub cmdSubmit_Click(sender As Object, e As EventArgs) Handles cmdSubmit.Click
-        If Not CheckFields() Then
-            Message("Please select a change type.", vbOKOnly + vbExclamation, "Missing Field", Me)
-            Exit Sub
-        End If
-        NewUpdateInfo.Note = Trim(txtUpdate_Note.Text)
-        NewUpdateInfo.ChangeType = GetDBValue(DeviceIndex.ChangeType, cmbUpdate_ChangeType.SelectedIndex)
-        txtUpdate_Note.Text = ""
-        cmbUpdate_ChangeType.Enabled = True
+    Private Sub SubmitButton_Click(sender As Object, e As EventArgs) Handles SubmitButton.Click
+        NewUpdateInfo.Note = Trim(NotesTextBox.Rtf)
+        NewUpdateInfo.ChangeType = GetDBValue(DeviceIndex.ChangeType, UpdateTypeCombo.SelectedIndex)
+        NotesTextBox.Text = ""
+        UpdateTypeCombo.Enabled = True
         Me.DialogResult = DialogResult.OK
     End Sub
 
-    Private Function CheckFields() As Boolean
-        If cmbUpdate_ChangeType.SelectedIndex = -1 Then
-            Return False
-        Else
+    Private Sub CancelButton_Click(sender As Object, e As EventArgs) Handles CancelButton.Click
+        Me.DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Function ValidateUpdateType() As Boolean
+        If UpdateTypeCombo.SelectedIndex > 0 Then
+            ErrorProvider1.SetError(UpdateTypeCombo, "")
+            SubmitButton.Enabled = True
             Return True
+        Else
+            SubmitButton.Enabled = False
+            UpdateTypeCombo.Focus()
+            ErrorProvider1.SetError(UpdateTypeCombo, "Please select a change type.")
         End If
+        Return False
     End Function
 
+    Private Sub UpdateTypeCombo_ChangeType_Validating(sender As Object, e As CancelEventArgs) Handles UpdateTypeCombo.Validating
+        e.Cancel = Not ValidateUpdateType()
+    End Sub
+
+    Private Sub UpdateTypeCombo_SelectionChangeCommitted(sender As Object, e As EventArgs) Handles UpdateTypeCombo.SelectionChangeCommitted
+        ValidateUpdateType()
+    End Sub
 End Class

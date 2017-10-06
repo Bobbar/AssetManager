@@ -159,7 +159,7 @@ Public Class DBControlParser
                 Case TypeOf ctl Is TextBox
                     Dim dbTxt As TextBox = DirectCast(ctl, TextBox)
                     If DBInfo.AttribIndex IsNot Nothing Then
-                        dbTxt.Text = GetHumanValue(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn).ToString)
+                        dbTxt.Text = GetDisplayValueFromCode(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn).ToString)
                     Else
                         dbTxt.Text = Row.Item(DBInfo.DataColumn).ToString
                     End If
@@ -174,7 +174,7 @@ Public Class DBControlParser
 
                 Case TypeOf ctl Is ComboBox
                     Dim dbCmb As ComboBox = DirectCast(ctl, ComboBox)
-                    dbCmb.SelectedIndex = GetComboIndexFromShort(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn).ToString)
+                    dbCmb.SelectedIndex = GetComboIndexFromCode(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn).ToString)
 
                 Case TypeOf ctl Is Label
                     Dim dbLbl As Label = DirectCast(ctl, Label)
@@ -183,6 +183,13 @@ Public Class DBControlParser
                 Case TypeOf ctl Is CheckBox
                     Dim dbChk As CheckBox = DirectCast(ctl, CheckBox)
                     dbChk.Checked = CBool(Row.Item(DBInfo.DataColumn))
+
+                Case TypeOf ctl Is RichTextBox
+                    Dim dbRtb As RichTextBox = DirectCast(ctl, RichTextBox)
+                    SetRichTextBox(dbRtb, Row.Item(DBInfo.DataColumn).ToString)
+
+                Case Else
+                    Throw New Exception("Unexpected type.")
             End Select
 
         Next
@@ -230,6 +237,8 @@ Public Class DBControlParser
             Case TypeOf dbControl Is CheckBox
                 Dim dbChk As CheckBox = DirectCast(dbControl, CheckBox)
                 Return dbChk.Checked
+            Case Else
+                Throw New Exception("Unexpected type.")
         End Select
         Return Nothing
     End Function
@@ -297,6 +306,8 @@ Public Class DBControlParser
                     Case TypeOf ctl Is CheckBox
                         Dim dbChk As CheckBox = DirectCast(ctl, CheckBox)
                         DBRow(DBInfo.DataColumn) = dbChk.Checked
+                    Case Else
+                        Throw New Exception("Unexpected type.")
                 End Select
             End If
         Next

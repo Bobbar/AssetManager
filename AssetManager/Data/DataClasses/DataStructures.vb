@@ -1,7 +1,13 @@
 ﻿Public Structure ComboboxDataStruct
-    Public Property HumanReadable As String
+    Public Property DisplayValue As String
     Public Property Code As String
-    Public Property ID As String
+    Public Property ID As Integer
+
+    Sub New(displayValue As String, code As String, id As Integer)
+        Me.DisplayValue = displayValue
+        Me.Code = code
+        Me.ID = id
+    End Sub
 End Structure
 
 Public Structure DeviceUpdateInfoStruct

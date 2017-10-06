@@ -20,6 +20,10 @@ Partial Class ViewHistoryForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.NotesTextBox = New System.Windows.Forms.RichTextBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.iCloudTextBox = New System.Windows.Forms.TextBox()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.txtHostname = New System.Windows.Forms.TextBox()
         Me.Label18 = New System.Windows.Forms.Label()
@@ -29,9 +33,6 @@ Partial Class ViewHistoryForm
         Me.txtEntryGUID = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.txtStatus = New System.Windows.Forms.TextBox()
-        Me.cmdClose = New System.Windows.Forms.Button()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.txtNotes = New System.Windows.Forms.TextBox()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.txtActionUser = New System.Windows.Forms.TextBox()
         Me.Label13 = New System.Windows.Forms.Label()
@@ -60,14 +61,17 @@ Partial Class ViewHistoryForm
         Me.txtCurrentUser = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtChangeType = New System.Windows.Forms.TextBox()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.iCloudTextBox = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
+        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.GroupBox1.Controls.Add(Me.GroupBox2)
         Me.GroupBox1.Controls.Add(Me.Label20)
         Me.GroupBox1.Controls.Add(Me.iCloudTextBox)
         Me.GroupBox1.Controls.Add(Me.Label19)
@@ -79,9 +83,6 @@ Partial Class ViewHistoryForm
         Me.GroupBox1.Controls.Add(Me.txtEntryGUID)
         Me.GroupBox1.Controls.Add(Me.Label16)
         Me.GroupBox1.Controls.Add(Me.txtStatus)
-        Me.GroupBox1.Controls.Add(Me.cmdClose)
-        Me.GroupBox1.Controls.Add(Me.Label15)
-        Me.GroupBox1.Controls.Add(Me.txtNotes)
         Me.GroupBox1.Controls.Add(Me.Label14)
         Me.GroupBox1.Controls.Add(Me.txtActionUser)
         Me.GroupBox1.Controls.Add(Me.Label13)
@@ -112,18 +113,62 @@ Partial Class ViewHistoryForm
         Me.GroupBox1.Controls.Add(Me.txtChangeType)
         Me.GroupBox1.Location = New System.Drawing.Point(13, 14)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(821, 335)
+        Me.GroupBox1.Size = New System.Drawing.Size(807, 407)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Device Info Snapshot"
         '
+        'GroupBox2
+        '
+        Me.GroupBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Controls.Add(Me.NotesTextBox)
+        Me.GroupBox2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox2.Location = New System.Drawing.Point(6, 230)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(795, 171)
+        Me.GroupBox2.TabIndex = 43
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Notes"
+        '
+        'NotesTextBox
+        '
+        Me.NotesTextBox.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NotesTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NotesTextBox.Location = New System.Drawing.Point(3, 19)
+        Me.NotesTextBox.Name = "NotesTextBox"
+        Me.NotesTextBox.Size = New System.Drawing.Size(789, 149)
+        Me.NotesTextBox.TabIndex = 42
+        Me.NotesTextBox.Text = ""
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label20.Location = New System.Drawing.Point(560, 162)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(84, 15)
+        Me.Label20.TabIndex = 41
+        Me.Label20.Text = "iCloud Acct"
+        '
+        'iCloudTextBox
+        '
+        Me.iCloudTextBox.BackColor = System.Drawing.SystemColors.Window
+        Me.iCloudTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.iCloudTextBox.Location = New System.Drawing.Point(563, 181)
+        Me.iCloudTextBox.Name = "iCloudTextBox"
+        Me.iCloudTextBox.ReadOnly = True
+        Me.iCloudTextBox.Size = New System.Drawing.Size(228, 23)
+        Me.iCloudTextBox.TabIndex = 40
+        '
         'Label19
         '
         Me.Label19.AutoSize = True
-        Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label19.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label19.Location = New System.Drawing.Point(14, 162)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(73, 16)
+        Me.Label19.Size = New System.Drawing.Size(70, 15)
         Me.Label19.TabIndex = 39
         Me.Label19.Text = "Hostname:"
         '
@@ -140,10 +185,10 @@ Partial Class ViewHistoryForm
         'Label18
         '
         Me.Label18.AutoSize = True
-        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label18.Location = New System.Drawing.Point(14, 119)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(50, 16)
+        Me.Label18.Size = New System.Drawing.Size(49, 15)
         Me.Label18.TabIndex = 37
         Me.Label18.Text = "Phone:"
         '
@@ -161,10 +206,10 @@ Partial Class ViewHistoryForm
         '
         Me.chkTrackable.AutoSize = True
         Me.chkTrackable.Enabled = False
-        Me.chkTrackable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrackable.Location = New System.Drawing.Point(643, 225)
+        Me.chkTrackable.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkTrackable.Location = New System.Drawing.Point(563, 210)
         Me.chkTrackable.Name = "chkTrackable"
-        Me.chkTrackable.Size = New System.Drawing.Size(89, 20)
+        Me.chkTrackable.Size = New System.Drawing.Size(89, 19)
         Me.chkTrackable.TabIndex = 35
         Me.chkTrackable.Text = "Trackable"
         Me.chkTrackable.UseVisualStyleBackColor = True
@@ -172,10 +217,10 @@ Partial Class ViewHistoryForm
         'Label17
         '
         Me.Label17.AutoSize = True
-        Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label17.Location = New System.Drawing.Point(560, 75)
         Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(64, 16)
+        Me.Label17.Size = New System.Drawing.Size(70, 15)
         Me.Label17.TabIndex = 34
         Me.Label17.Text = "Entry UID"
         '
@@ -192,10 +237,10 @@ Partial Class ViewHistoryForm
         'Label16
         '
         Me.Label16.AutoSize = True
-        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label16.Location = New System.Drawing.Point(560, 119)
         Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(45, 16)
+        Me.Label16.Size = New System.Drawing.Size(49, 15)
         Me.Label16.TabIndex = 32
         Me.Label16.Text = "Status"
         '
@@ -209,43 +254,13 @@ Partial Class ViewHistoryForm
         Me.txtStatus.Size = New System.Drawing.Size(108, 23)
         Me.txtStatus.TabIndex = 31
         '
-        'cmdClose
-        '
-        Me.cmdClose.Location = New System.Drawing.Point(339, 291)
-        Me.cmdClose.Name = "cmdClose"
-        Me.cmdClose.Size = New System.Drawing.Size(128, 28)
-        Me.cmdClose.TabIndex = 30
-        Me.cmdClose.Text = "Close"
-        Me.cmdClose.UseVisualStyleBackColor = True
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label15.Location = New System.Drawing.Point(144, 242)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(44, 16)
-        Me.Label15.TabIndex = 29
-        Me.Label15.Text = "Notes"
-        '
-        'txtNotes
-        '
-        Me.txtNotes.BackColor = System.Drawing.SystemColors.Window
-        Me.txtNotes.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtNotes.Location = New System.Drawing.Point(194, 224)
-        Me.txtNotes.Multiline = True
-        Me.txtNotes.Name = "txtNotes"
-        Me.txtNotes.ReadOnly = True
-        Me.txtNotes.Size = New System.Drawing.Size(391, 56)
-        Me.txtNotes.TabIndex = 28
-        '
         'Label14
         '
         Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label14.Location = New System.Drawing.Point(14, 75)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(77, 16)
+        Me.Label14.Size = New System.Drawing.Size(84, 15)
         Me.Label14.TabIndex = 27
         Me.Label14.Text = "Action User"
         '
@@ -262,10 +277,10 @@ Partial Class ViewHistoryForm
         'Label13
         '
         Me.Label13.AutoSize = True
-        Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label13.Location = New System.Drawing.Point(14, 28)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(81, 16)
+        Me.Label13.Size = New System.Drawing.Size(77, 15)
         Me.Label13.TabIndex = 25
         Me.Label13.Text = "Time Stamp"
         '
@@ -282,10 +297,10 @@ Partial Class ViewHistoryForm
         'Label12
         '
         Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label12.Location = New System.Drawing.Point(560, 28)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(77, 16)
+        Me.Label12.Size = New System.Drawing.Size(77, 15)
         Me.Label12.TabIndex = 23
         Me.Label12.Text = "Device UID"
         '
@@ -302,10 +317,10 @@ Partial Class ViewHistoryForm
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label11.Location = New System.Drawing.Point(438, 162)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(62, 16)
+        Me.Label11.Size = New System.Drawing.Size(56, 15)
         Me.Label11.TabIndex = 21
         Me.Label11.Text = "EQ Type"
         '
@@ -322,10 +337,10 @@ Partial Class ViewHistoryForm
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label10.Location = New System.Drawing.Point(438, 119)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(76, 16)
+        Me.Label10.Size = New System.Drawing.Size(77, 15)
         Me.Label10.TabIndex = 19
         Me.Label10.Text = "OS Version"
         '
@@ -342,10 +357,10 @@ Partial Class ViewHistoryForm
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.Location = New System.Drawing.Point(438, 75)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(78, 16)
+        Me.Label9.Size = New System.Drawing.Size(70, 15)
         Me.Label9.TabIndex = 17
         Me.Label9.Text = "PO Number"
         '
@@ -362,10 +377,10 @@ Partial Class ViewHistoryForm
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.Location = New System.Drawing.Point(317, 162)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(121, 16)
+        Me.Label8.Size = New System.Drawing.Size(119, 15)
         Me.Label8.TabIndex = 15
         Me.Label8.Text = "Replacement Year"
         '
@@ -382,10 +397,10 @@ Partial Class ViewHistoryForm
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(317, 119)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(97, 16)
+        Me.Label7.Size = New System.Drawing.Size(98, 15)
         Me.Label7.TabIndex = 13
         Me.Label7.Text = "Purchase Date"
         '
@@ -402,10 +417,10 @@ Partial Class ViewHistoryForm
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.Location = New System.Drawing.Point(317, 75)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(59, 16)
+        Me.Label6.Size = New System.Drawing.Size(63, 15)
         Me.Label6.TabIndex = 11
         Me.Label6.Text = "Location"
         '
@@ -422,10 +437,10 @@ Partial Class ViewHistoryForm
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.Location = New System.Drawing.Point(317, 28)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(76, 16)
+        Me.Label5.Size = New System.Drawing.Size(84, 15)
         Me.Label5.TabIndex = 9
         Me.Label5.Text = "Description"
         '
@@ -442,10 +457,10 @@ Partial Class ViewHistoryForm
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.Location = New System.Drawing.Point(191, 162)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(43, 16)
+        Me.Label4.Size = New System.Drawing.Size(49, 15)
         Me.Label4.TabIndex = 7
         Me.Label4.Text = "Serial"
         '
@@ -462,10 +477,10 @@ Partial Class ViewHistoryForm
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(191, 119)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(70, 16)
+        Me.Label3.Size = New System.Drawing.Size(70, 15)
         Me.Label3.TabIndex = 5
         Me.Label3.Text = "Asset Tag"
         '
@@ -482,10 +497,10 @@ Partial Class ViewHistoryForm
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(189, 75)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(37, 16)
+        Me.Label2.Size = New System.Drawing.Size(35, 15)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "User"
         '
@@ -502,10 +517,10 @@ Partial Class ViewHistoryForm
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(189, 28)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(90, 16)
+        Me.Label1.Size = New System.Drawing.Size(84, 15)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Change Type"
         '
@@ -519,40 +534,21 @@ Partial Class ViewHistoryForm
         Me.txtChangeType.Size = New System.Drawing.Size(110, 23)
         Me.txtChangeType.TabIndex = 0
         '
-        'Label20
-        '
-        Me.Label20.AutoSize = True
-        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label20.Location = New System.Drawing.Point(560, 162)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(75, 16)
-        Me.Label20.TabIndex = 41
-        Me.Label20.Text = "iCloud Acct"
-        '
-        'iCloudTextBox
-        '
-        Me.iCloudTextBox.BackColor = System.Drawing.SystemColors.Window
-        Me.iCloudTextBox.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.iCloudTextBox.Location = New System.Drawing.Point(563, 181)
-        Me.iCloudTextBox.Name = "iCloudTextBox"
-        Me.iCloudTextBox.ReadOnly = True
-        Me.iCloudTextBox.Size = New System.Drawing.Size(228, 23)
-        Me.iCloudTextBox.TabIndex = 40
-        '
         'ViewHistoryForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(846, 359)
+        Me.ClientSize = New System.Drawing.Size(832, 431)
         Me.Controls.Add(Me.GroupBox1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
-        Me.MaximizeBox = False
+        Me.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MinimumSize = New System.Drawing.Size(848, 385)
         Me.Name = "ViewHistoryForm"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View Entry"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -585,9 +581,6 @@ Partial Class ViewHistoryForm
     Friend WithEvents txtEntryTime As TextBox
     Friend WithEvents Label14 As Label
     Friend WithEvents txtActionUser As TextBox
-    Friend WithEvents Label15 As Label
-    Friend WithEvents txtNotes As TextBox
-    Friend WithEvents cmdClose As Button
     Friend WithEvents Label16 As Label
     Friend WithEvents txtStatus As TextBox
     Friend WithEvents Label17 As Label
@@ -599,4 +592,6 @@ Partial Class ViewHistoryForm
     Friend WithEvents txtHostname As TextBox
     Friend WithEvents Label20 As Label
     Friend WithEvents iCloudTextBox As TextBox
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents NotesTextBox As RichTextBox
 End Class

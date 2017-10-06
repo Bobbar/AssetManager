@@ -42,8 +42,6 @@ Public Class MySQLDatabase
 #Region "Fields"
 
     Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
-    Private Const strDatabase As String = "asset_manager"
-    Private Const strTestDatabase As String = "test_db"
     Private MySQLConnectString As String = "server=" & ServerInfo.MySQLServerIP & ";uid=asset_mgr_usr;pwd=" & SecurityTools.DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database="
 
 #End Region

@@ -490,7 +490,7 @@ Public Class ViewDeviceForm
         Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry)
             Info = New DeviceObject(results)
         End Using
-        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & GetHumanValue(DeviceIndex.ChangeType, Info.Historical.ChangeType) & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & GetDisplayValueFromCode(DeviceIndex.ChangeType, Info.Historical.ChangeType) & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
             Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results", Me)
             LoadDevice(CurrentViewDevice.GUID)
@@ -615,7 +615,7 @@ Public Class ViewDeviceForm
             txtDueBack.Text = CurrentViewDevice.Tracking.DueBackTime.ToString
         Else
             txtCheckOut.BackColor = colCheckIn
-            txtCheckLocation.Text = GetHumanValue(DeviceIndex.Locations, CurrentViewDevice.Location)
+            txtCheckLocation.Text = GetDisplayValueFromCode(DeviceIndex.Locations, CurrentViewDevice.Location)
             lblCheckTime.Text = "CheckIn Time:"
             txtCheckTime.Text = CurrentViewDevice.Tracking.CheckinTime.ToString
             lblCheckUser.Text = "CheckIn User:"
@@ -816,14 +816,14 @@ Public Class ViewDeviceForm
                     table.Columns.Add("GUID", GetType(String))
                     For Each r As DataRow In tblResults.Rows
                         table.Rows.Add(NoNull(r.Item(HistoricalDevicesCols.ActionDateTime)),
-                           GetHumanValue(DeviceIndex.ChangeType, NoNull(r.Item(HistoricalDevicesCols.ChangeType))),
+                           GetDisplayValueFromCode(DeviceIndex.ChangeType, NoNull(r.Item(HistoricalDevicesCols.ChangeType))),
                            NoNull(r.Item(HistoricalDevicesCols.ActionUser)),
-                           NotePreview(NoNull(r.Item(HistoricalDevicesCols.Notes)), 25),
+                           NotePreview(RTFToPlainText(NoNull(r.Item(HistoricalDevicesCols.Notes))), 25),
                            NoNull(r.Item(HistoricalDevicesCols.CurrentUser)),
                            NoNull(r.Item(HistoricalDevicesCols.AssetTag)),
                            NoNull(r.Item(HistoricalDevicesCols.Serial)),
                            NoNull(r.Item(HistoricalDevicesCols.Description)),
-                           GetHumanValue(DeviceIndex.Locations, NoNull(r.Item(HistoricalDevicesCols.Location))),
+                           GetDisplayValueFromCode(DeviceIndex.Locations, NoNull(r.Item(HistoricalDevicesCols.Location))),
                            NoNull(r.Item(HistoricalDevicesCols.PurchaseDate)),
                            NoNull(r.Item(HistoricalDevicesCols.HistoryEntryUID)))
                     Next

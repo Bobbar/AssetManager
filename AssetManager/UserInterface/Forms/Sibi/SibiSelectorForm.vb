@@ -33,10 +33,10 @@
                 table.Columns.Add("UID", GetType(String))
                 For Each r As DataRow In results.Rows
                     table.Rows.Add(NoNull(r.Item(SibiRequestCols.RequestNumber)),
-                                   GetHumanValue(SibiIndex.StatusType, r.Item(SibiRequestCols.Status).ToString),
+                                   GetDisplayValueFromCode(SibiIndex.StatusType, r.Item(SibiRequestCols.Status).ToString),
                                    NoNull(r.Item(SibiRequestCols.Description)),
                                    NoNull(r.Item(SibiRequestCols.RequestUser)),
-                                   GetHumanValue(SibiIndex.RequestType, r.Item(SibiRequestCols.Type).ToString),
+                                   GetDisplayValueFromCode(SibiIndex.RequestType, r.Item(SibiRequestCols.Type).ToString),
                                    NoNull(r.Item(SibiRequestCols.NeedBy)),
                                    NoNull(r.Item(SibiRequestCols.PO)),
                                    NoNull(r.Item(SibiRequestCols.RequisitionNumber)),

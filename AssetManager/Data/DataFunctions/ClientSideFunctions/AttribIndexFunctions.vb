@@ -3,10 +3,8 @@
     Public Sub FillComboBox(IndexType() As ComboboxDataStruct, ByRef cmb As ComboBox)
         cmb.Items.Clear()
         cmb.Text = ""
-        Dim i As Integer = 0
         For Each ComboItem As ComboboxDataStruct In IndexType
-            cmb.Items.Insert(i, ComboItem.HumanReadable)
-            i += 1
+            cmb.Items.Add(ComboItem.DisplayValue)
         Next
     End Sub
 
@@ -15,15 +13,15 @@
         cmb.Text = ""
         Dim i As Integer = 0
         For Each ComboItem As ComboboxDataStruct In IndexType
-            cmb.Items.Insert(i, ComboItem.HumanReadable)
+            cmb.Items.Insert(i, ComboItem.DisplayValue)
             i += 1
         Next
     End Sub
 
-    Public Function GetDBValue(ByVal CodeIndex() As ComboboxDataStruct, ByVal index As Integer) As String
+    Public Function GetDBValue(codeIndex() As ComboboxDataStruct, index As Integer) As String
         Try
             If index > -1 Then
-                Return CodeIndex(index).Code
+                Return codeIndex(index).Code
             End If
             Return String.Empty
         Catch
@@ -31,22 +29,22 @@
         End Try
     End Function
 
-    Public Function GetHumanValue(ByVal CodeIndex() As ComboboxDataStruct, ByVal ShortVal As String) As String
-        For Each Code As ComboboxDataStruct In CodeIndex
-            If Code.Code = ShortVal Then Return Code.HumanReadable
+    Public Function GetDisplayValueFromCode(codeIndex() As ComboboxDataStruct, code As String) As String
+        For Each item In codeIndex
+            If item.Code = code Then Return item.DisplayValue
         Next
-        Return Nothing
+        Return String.Empty
     End Function
 
-    Public Function GetHumanValueFromIndex(ByVal CodeIndex() As ComboboxDataStruct, index As Integer) As String
-        Return CodeIndex(index).HumanReadable
+    Public Function GetDisplayValueFromIndex(codeIndex() As ComboboxDataStruct, index As Integer) As String
+        Return codeIndex(index).DisplayValue
     End Function
 
-    Public Function GetComboIndexFromShort(ByVal CodeIndex() As ComboboxDataStruct, ByVal ShortVal As String) As Integer
-        For i As Integer = 0 To UBound(CodeIndex)
-            If CodeIndex(i).Code = ShortVal Then Return i
+    Public Function GetComboIndexFromCode(codeIndex() As ComboboxDataStruct, code As String) As Integer
+        For i = 0 To codeIndex.Length - 1
+            If codeIndex(i).Code = code Then Return i
         Next
-        Return Nothing
+        Return -1
     End Function
 
     Public Sub BuildIndexes()
@@ -66,25 +64,23 @@
 
     Public Function BuildIndex(codeType As String, typeName As String) As ComboboxDataStruct()
         Try
-            Dim strQRY = "SELECT * FROM " & codeType & " LEFT OUTER JOIN munis_codes on " & codeType & ".db_value = munis_codes.asset_man_code WHERE type_name ='" & typeName & "' ORDER BY " & ComboCodesBaseCols.HumanValue & ""
-            Dim row As Integer = 0
+            Dim strQRY = "SELECT * FROM " & codeType & " LEFT OUTER JOIN munis_codes on " & codeType & ".db_value = munis_codes.asset_man_code WHERE type_name ='" & typeName & "' ORDER BY " & ComboCodesBaseCols.DisplayValue & ""
             Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
-                Dim tmpArray(results.Rows.Count - 1) As ComboboxDataStruct
+                Dim tmpArray As New List(Of ComboboxDataStruct)
                 For Each r As DataRow In results.Rows
-                    tmpArray(row).ID = r.Item(ComboCodesBaseCols.ID).ToString
+                    Dim DisplayValue As String = ""
                     If r.Table.Columns.Contains("munis_code") Then
                         If Not IsDBNull(r.Item("munis_code")) Then
-                            tmpArray(row).HumanReadable = r.Item(ComboCodesBaseCols.HumanValue).ToString & " - " & r.Item("munis_code").ToString
+                            DisplayValue = r.Item(ComboCodesBaseCols.DisplayValue).ToString & " - " & r.Item("munis_code").ToString
                         Else
-                            tmpArray(row).HumanReadable = r.Item(ComboCodesBaseCols.HumanValue).ToString
+                            DisplayValue = r.Item(ComboCodesBaseCols.DisplayValue).ToString
                         End If
                     Else
-                        tmpArray(row).HumanReadable = r.Item(ComboCodesBaseCols.HumanValue).ToString
+                        DisplayValue = r.Item(ComboCodesBaseCols.DisplayValue).ToString
                     End If
-                    tmpArray(row).Code = r.Item(ComboCodesBaseCols.DBValue).ToString
-                    row += 1
+                    tmpArray.Add(New ComboboxDataStruct(DisplayValue, r.Item(ComboCodesBaseCols.CodeValue).ToString, CInt(r.Item(ComboCodesBaseCols.ID))))
                 Next
-                Return tmpArray
+                Return tmpArray.ToArray
             End Using
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

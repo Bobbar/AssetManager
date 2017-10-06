@@ -19,98 +19,130 @@ Partial Class UpdateDev
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.cmdSubmit = New System.Windows.Forms.Button()
+        Me.CancelButton = New System.Windows.Forms.Button()
+        Me.NotesTextBox = New System.Windows.Forms.RichTextBox()
+        Me.SubmitButton = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.txtUpdate_Note = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.cmbUpdate_ChangeType = New System.Windows.Forms.ComboBox()
+        Me.UpdateTypeCombo = New System.Windows.Forms.ComboBox()
+        Me.ErrorProvider1 = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.GroupBox1.SuspendLayout()
+        CType(Me.ErrorProvider1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
+        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.GroupBox1.Controls.Add(Me.cmdSubmit)
+        Me.GroupBox1.Controls.Add(Me.CancelButton)
+        Me.GroupBox1.Controls.Add(Me.NotesTextBox)
+        Me.GroupBox1.Controls.Add(Me.SubmitButton)
         Me.GroupBox1.Controls.Add(Me.Label2)
-        Me.GroupBox1.Controls.Add(Me.txtUpdate_Note)
         Me.GroupBox1.Controls.Add(Me.Label1)
-        Me.GroupBox1.Controls.Add(Me.cmbUpdate_ChangeType)
+        Me.GroupBox1.Controls.Add(Me.UpdateTypeCombo)
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(495, 232)
+        Me.GroupBox1.Size = New System.Drawing.Size(473, 268)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "More Info."
         '
-        'cmdSubmit
+        'CancelButton
         '
-        Me.cmdSubmit.Location = New System.Drawing.Point(188, 187)
-        Me.cmdSubmit.Name = "cmdSubmit"
-        Me.cmdSubmit.Size = New System.Drawing.Size(115, 32)
-        Me.cmdSubmit.TabIndex = 4
-        Me.cmdSubmit.Text = "Submit"
-        Me.cmdSubmit.UseVisualStyleBackColor = True
+        Me.CancelButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CancelButton.Location = New System.Drawing.Point(9, 225)
+        Me.CancelButton.Name = "CancelButton"
+        Me.CancelButton.Size = New System.Drawing.Size(115, 32)
+        Me.CancelButton.TabIndex = 6
+        Me.CancelButton.Text = "Cancel"
+        Me.CancelButton.UseVisualStyleBackColor = True
+        '
+        'NotesTextBox
+        '
+        Me.NotesTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.NotesTextBox.Location = New System.Drawing.Point(9, 85)
+        Me.NotesTextBox.Name = "NotesTextBox"
+        Me.NotesTextBox.Size = New System.Drawing.Size(455, 134)
+        Me.NotesTextBox.TabIndex = 5
+        Me.NotesTextBox.Text = ""
+        '
+        'SubmitButton
+        '
+        Me.SubmitButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SubmitButton.Enabled = False
+        Me.SubmitButton.Location = New System.Drawing.Point(349, 225)
+        Me.SubmitButton.Name = "SubmitButton"
+        Me.SubmitButton.Size = New System.Drawing.Size(115, 32)
+        Me.SubmitButton.TabIndex = 4
+        Me.SubmitButton.Text = "Submit"
+        Me.SubmitButton.UseVisualStyleBackColor = True
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(37, 66)
+        Me.Label2.Location = New System.Drawing.Point(6, 66)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(47, 16)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Notes:"
         '
-        'txtUpdate_Note
-        '
-        Me.txtUpdate_Note.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtUpdate_Note.Location = New System.Drawing.Point(40, 85)
-        Me.txtUpdate_Note.MaxLength = 200
-        Me.txtUpdate_Note.Multiline = True
-        Me.txtUpdate_Note.Name = "txtUpdate_Note"
-        Me.txtUpdate_Note.Size = New System.Drawing.Size(409, 84)
-        Me.txtUpdate_Note.TabIndex = 2
-        '
         'Label1
         '
+        Me.Label1.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(92, 37)
+        Me.Label1.Location = New System.Drawing.Point(77, 37)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(90, 16)
+        Me.Label1.Size = New System.Drawing.Size(93, 16)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Change Type"
+        Me.Label1.Text = "Change Type:"
         '
-        'cmbUpdate_ChangeType
+        'UpdateTypeCombo
         '
-        Me.cmbUpdate_ChangeType.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbUpdate_ChangeType.FormattingEnabled = True
-        Me.cmbUpdate_ChangeType.Location = New System.Drawing.Point(188, 34)
-        Me.cmbUpdate_ChangeType.Name = "cmbUpdate_ChangeType"
-        Me.cmbUpdate_ChangeType.Size = New System.Drawing.Size(178, 23)
-        Me.cmbUpdate_ChangeType.TabIndex = 0
+        Me.UpdateTypeCombo.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.UpdateTypeCombo.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.UpdateTypeCombo.FormattingEnabled = True
+        Me.UpdateTypeCombo.Location = New System.Drawing.Point(173, 34)
+        Me.UpdateTypeCombo.Name = "UpdateTypeCombo"
+        Me.UpdateTypeCombo.Size = New System.Drawing.Size(178, 23)
+        Me.UpdateTypeCombo.TabIndex = 0
+        '
+        'ErrorProvider1
+        '
+        Me.ErrorProvider1.ContainerControl = Me
         '
         'UpdateDev
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(519, 257)
+        Me.ClientSize = New System.Drawing.Size(497, 293)
         Me.Controls.Add(Me.GroupBox1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.DoubleBuffered = True
         Me.MaximizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(426, 287)
         Me.Name = "UpdateDev"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Update Device"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        CType(Me.ErrorProvider1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents cmbUpdate_ChangeType As ComboBox
-    Friend WithEvents txtUpdate_Note As TextBox
-    Friend WithEvents cmdSubmit As Button
+    Friend WithEvents UpdateTypeCombo As ComboBox
+    Friend WithEvents SubmitButton As Button
     Friend WithEvents Label2 As Label
+    Friend WithEvents CancelButton As Button
+    Friend WithEvents NotesTextBox As RichTextBox
+    Friend WithEvents ErrorProvider1 As ErrorProvider
 End Class
