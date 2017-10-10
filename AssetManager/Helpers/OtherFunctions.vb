@@ -19,6 +19,12 @@ Module OtherFunctions
         Return Results
     End Function
 
+    Public Function ElaptTime() As String
+        Dim results As String = intTimerHits & "  Elapsed: MS:" & stpw.ElapsedMilliseconds & " Ticks: " & stpw.ElapsedTicks
+        Debug.Print(results)
+        Return results
+    End Function
+
     Public Sub EndProgram()
         GlobalSwitches.ProgramEnding = True
         Logger("Ending Program...")

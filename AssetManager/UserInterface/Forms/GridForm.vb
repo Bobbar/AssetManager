@@ -55,6 +55,8 @@ Public Class GridForm
 
     Private Sub AddGridsToForm()
         Me.SuspendLayout()
+        Panel1.SuspendLayout()
+        GridPanel.SuspendLayout()
         For Each grid As DataGridView In GridList
             Dim GridBox As New GroupBox
             GridBox.Text = DirectCast(grid.Tag, String)
@@ -64,6 +66,8 @@ Public Class GridForm
             GridPanel.Controls.Add(GridBox)
         Next
         Me.ResumeLayout()
+        Panel1.ResumeLayout()
+        GridPanel.ResumeLayout()
     End Sub
 
     Private Sub FillGrid(grid As DataGridView, datatable As DataTable)
@@ -119,11 +123,6 @@ Public Class GridForm
         If Not bolGridFilling Then ResizeGridPanel()
     End Sub
 
-    Private Sub GridForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        ResizeGrids()
-        bolGridFilling = False
-    End Sub
-
     Private Function GridHeight() As Integer
         Dim MinHeight As Integer = 200
         Dim CalcHeight As Integer = CInt((Me.ClientSize.Height - 30) / GridList.Count)
@@ -158,10 +157,6 @@ Public Class GridForm
         CopyToGridForm(GetActiveGrid, ParentForm)
     End Sub
 
-    Private Sub GridForm_HandleCreated(sender As Object, e As EventArgs) Handles Me.HandleCreated
-        AddGridsToForm()
-    End Sub
-
     Private Sub GridForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         For Each grid In GridList
             DirectCast(grid.DataSource, DataTable).Dispose()
@@ -170,6 +165,11 @@ Public Class GridForm
         If LastDoubleClickRow IsNot Nothing Then LastDoubleClickRow.Dispose()
     End Sub
 
+    Private Sub GridForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        AddGridsToForm()
+        ResizeGrids()
+        bolGridFilling = False
+    End Sub
 #End Region
 
 End Class
