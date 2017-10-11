@@ -51,7 +51,7 @@
     End Sub
 
     Private Sub ShowAll()
-        SendToGrid(DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.NeedBy))
+        SendToGrid(DBFactory.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiRequestCols.TableName & " ORDER BY " & SibiRequestCols.NeedBy))
     End Sub
 
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick

@@ -201,7 +201,7 @@
     <Compile Include="Data\DataFunctions\DBControlParser.vb" />
     <Compile Include="Data\DataComms\AssetManager\SQL\MySQL\NoPingException.vb" />
     <Compile Include="GlobalObjects\Enums.vb" />
-    <Compile Include="Data\DataComms\AssetManager\DBWrapper.vb" />
+    <Compile Include="Data\DataComms\AssetManager\DBFactory.vb" />
     <Compile Include="Data\DataFunctions\ClientSideFunctions\AttribIndexFunctions.vb" />
     <Compile Include="Data\DataFunctions\ClientSideFunctions\DataConsistency.vb" />
     <Compile Include="Data\DataFunctions\DBCacheFunctions.vb" />

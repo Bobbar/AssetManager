@@ -37,7 +37,7 @@ Public Class MainForm
             End If
             Dim strDynaQry As String = ""
             Dim SearchValCol As List(Of DBQueryParameter) = BuildSearchList()
-            StartBigQuery(DBFunc.GetDatabase.GetCommandFromParams(strStartQry, SearchValCol))
+            StartBigQuery(DBFactory.GetDatabase.GetCommandFromParams(strStartQry, SearchValCol))
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -369,7 +369,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ShowAll()
-        Dim cmd = DBFunc.GetDatabase.GetCommand(strShowAllQry)
+        Dim cmd = DBFactory.GetDatabase.GetCommand(strShowAllQry)
         StartBigQuery(cmd)
     End Sub
 
@@ -392,7 +392,7 @@ Public Class MainForm
                 QueryRunning = True
                 Dim Results = Await Task.Run(Function()
                                                  LastCommand = QryCommand
-                                                 Return DBFunc.GetDatabase.DataTableFromCommand(QryCommand)
+                                                 Return DBFactory.GetDatabase.DataTableFromCommand(QryCommand)
                                              End Function)
                 QryCommand.Dispose()
                 SendToGrid(Results)

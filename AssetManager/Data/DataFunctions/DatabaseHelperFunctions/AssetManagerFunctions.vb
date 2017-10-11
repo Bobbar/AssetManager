@@ -10,7 +10,7 @@
                 InsertEmployeeParams.Add(New DBParameter(EmployeesCols.Name, empInfo.Name))
                 InsertEmployeeParams.Add(New DBParameter(EmployeesCols.Number, empInfo.Number))
                 InsertEmployeeParams.Add(New DBParameter(EmployeesCols.UID, UID))
-                DBFunc.GetDatabase.InsertFromParameters(EmployeesCols.TableName, InsertEmployeeParams)
+                DBFactory.GetDatabase.InsertFromParameters(EmployeesCols.TableName, InsertEmployeeParams)
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -30,7 +30,7 @@
                 Case EntryType.Sibi
                     DeleteQuery = "DELETE FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & sqlGUID & "'"
             End Select
-            If DBFunc.GetDatabase.ExecuteQuery(DeleteQuery) > 0 Then
+            If DBFactory.GetDatabase.ExecuteQuery(DeleteQuery) > 0 Then
                 Return True
             End If
             Return False
@@ -60,7 +60,7 @@
             If FTPFunc.DeleteFtpAttachment(attachment.FileUID, AttachmentFolderID) Then
                 'delete SQL entry
                 Dim SQLDeleteQry = "DELETE FROM " & attachment.AttachTable.TableName & " WHERE " & attachment.AttachTable.FileUID & "='" & attachment.FileUID & "'"
-                Return DBFunc.GetDatabase.ExecuteQuery(SQLDeleteQry)
+                Return DBFactory.GetDatabase.ExecuteQuery(SQLDeleteQry)
             End If
             Return -1
         Catch ex As Exception
@@ -106,7 +106,7 @@
                     Using DeviceList As New DataTable, EmpList As DataTable = MunisFunc.ListOfEmpsBySup(SupInfo.Number)
                         For Each r As DataRow In EmpList.Rows
                             Dim strQRY As String = "SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.MunisEmpNum & "='" & r.Item("a_employee_number").ToString & "'"
-                            Using tmpTable As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
+                            Using tmpTable As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQRY)
                                 DeviceList.Merge(tmpTable)
                             End Using
                         Next
@@ -135,11 +135,11 @@
             If type = FindDevType.AssetTag Then
                 Dim Params As New List(Of DBQueryParameter)
                 Params.Add(New DBQueryParameter(DevicesCols.AssetTag, searchVal, True))
-                Return New DeviceObject(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
+                Return New DeviceObject(DBFactory.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
             ElseIf type = FindDevType.Serial Then
                 Dim Params As New List(Of DBQueryParameter)
                 Params.Add(New DBQueryParameter(DevicesCols.Serial, searchVal, True))
-                Return New DeviceObject(DBFunc.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
+                Return New DeviceObject(DBFactory.GetDatabase.DataTableFromParameters("SELECT * FROM " & DevicesCols.TableName & " WHERE ", Params))
             End If
             Return Nothing
         Catch ex As Exception
@@ -149,7 +149,7 @@
     End Function
 
     Public Function GetDeviceInfoFromGUID(deviceGUID As String) As DeviceObject
-        Return New DeviceObject(DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & deviceGUID & "'"))
+        Return New DeviceObject(DBFactory.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & deviceGUID & "'"))
     End Function
 
     Public Function GetMunisCodeFromAssetCode(assetCode As String) As String
@@ -160,7 +160,7 @@
         Dim sqlQRY As String = "SELECT " & fieldOut & " FROM " & table & " WHERE "
         Dim Params As New List(Of DBQueryParameter)
         Params.Add(New DBQueryParameter(fieldIn, valueIn, True))
-        Dim Result = DBFunc.GetDatabase.ExecuteScalarFromCommand(DBFunc.GetDatabase.GetCommandFromParams(sqlQRY, Params))
+        Dim Result = DBFactory.GetDatabase.ExecuteScalarFromCommand(DBFactory.GetDatabase.GetCommandFromParams(sqlQRY, Params))
         If Result IsNot Nothing Then
             Return Result.ToString
         Else
@@ -178,7 +178,7 @@
     End Function
 
     Public Function UpdateSqlValue(table As String, fieldIn As String, valueIn As String, idField As String, idValue As String) As Integer
-        Return DBFunc.GetDatabase.UpdateValue(table, fieldIn, valueIn, idField, idValue)
+        Return DBFactory.GetDatabase.UpdateValue(table, fieldIn, valueIn, idField, idValue)
     End Function
 
 #End Region

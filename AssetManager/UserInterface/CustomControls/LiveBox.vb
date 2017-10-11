@@ -224,9 +224,9 @@
                                              QueryRunning = True
                                              Dim strQry As String
                                              strQry = "SELECT " & DevicesCols.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.ValueMember), CurrentLiveBoxArgs.DisplayMember, CurrentLiveBoxArgs.DisplayMember & "," & CurrentLiveBoxArgs.ValueMember).ToString & " FROM " & DevicesCols.TableName & " WHERE " & CurrentLiveBoxArgs.DisplayMember & " LIKE  @Search_Value  GROUP BY " & CurrentLiveBoxArgs.DisplayMember & " ORDER BY " & CurrentLiveBoxArgs.DisplayMember & " LIMIT " & RowLimit
-                                             Using cmd = DBFunc.GetDatabase.GetCommand(strQry)
+                                             Using cmd = DBFactory.GetDatabase.GetCommand(strQry)
                                                  cmd.AddParameterWithValue("@Search_Value", "%" & searchString & "%")
-                                                 Return DBFunc.GetDatabase.DataTableFromCommand(cmd)
+                                                 Return DBFactory.GetDatabase.DataTableFromCommand(cmd)
                                              End Using
                                          End Function)
             DrawLiveBox(Results)

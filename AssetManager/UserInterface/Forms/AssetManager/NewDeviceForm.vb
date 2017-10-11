@@ -68,15 +68,15 @@
         MyLiveBox.Dispose()
     End Sub
     Private Function AddNewDevice() As Boolean
-        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+        Using trans = DBFactory.GetDatabase.StartTransaction, conn = trans.Connection
             Try
                 NewUID = Guid.NewGuid.ToString
                 Dim rows As Integer = 0
                 Dim DeviceInsertQry As String = "SELECT * FROM " & DevicesCols.TableName & " LIMIT 0"
                 Dim HistoryInsertQry As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " LIMIT 0"
 
-                rows += DBFunc.GetDatabase.UpdateTable(DeviceInsertQry, DeviceInsertTable(DeviceInsertQry), trans)
-                rows += DBFunc.GetDatabase.UpdateTable(HistoryInsertQry, HistoryInsertTable(HistoryInsertQry), trans)
+                rows += DBFactory.GetDatabase.UpdateTable(DeviceInsertQry, DeviceInsertTable(DeviceInsertQry), trans)
+                rows += DBFactory.GetDatabase.UpdateTable(HistoryInsertQry, HistoryInsertTable(HistoryInsertQry), trans)
 
                 If rows = 2 Then
                     trans.Commit()

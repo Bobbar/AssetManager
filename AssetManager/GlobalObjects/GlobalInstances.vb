@@ -20,5 +20,5 @@
     Public MunisFunc As New MunisFunctions
     Public AssetFunc As New AssetManagerFunctions
     Public FTPFunc As New FtpFunctions
-    Public DBFunc As New DBWrapper
+    'Public DBFactory As New DBFactory
 End Module

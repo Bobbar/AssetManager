@@ -122,13 +122,13 @@ Missing Files: " & MissingSQLFiles.Count
             Dim SibiTable As New SibiAttachmentsCols
             Dim deletions As Integer = 0
             For Each sqlItem In missingSQLFiles
-                Dim DeviceRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FileUID & "='" & sqlItem.FileUID & "'")
+                Dim DeviceRows = DBFactory.GetDatabase.ExecuteQuery("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FileUID & "='" & sqlItem.FileUID & "'")
                 If DeviceRows > 0 Then
                     deletions += DeviceRows
                     Logger("Deleted Device SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
                 End If
 
-                Dim SibiRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FileUID & "='" & sqlItem.FileUID & "'")
+                Dim SibiRows = DBFactory.GetDatabase.ExecuteQuery("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FileUID & "='" & sqlItem.FileUID & "'")
                 If SibiRows > 0 Then
                     deletions += SibiRows
                     Logger("Deleted Sibi SQL File: " & sqlItem.FKey & "/" & sqlItem.FileUID)
@@ -147,13 +147,13 @@ Missing Files: " & MissingSQLFiles.Count
             For Each sqlItem In missingSQLDirs
                 If Not CheckForPrimaryItem(sqlItem.FKey) Then
 
-                    Dim DeviceRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & "='" & sqlItem.FKey & "'")
+                    Dim DeviceRows = DBFactory.GetDatabase.ExecuteQuery("DELETE FROM " & DeviceTable.TableName & " WHERE " & DeviceTable.FKey & "='" & sqlItem.FKey & "'")
                     If DeviceRows > 0 Then
                         deletions += DeviceRows
                         Logger("Deleted " & DeviceRows & " Device SQL Entries For: " & sqlItem.FKey)
                     End If
 
-                    Dim SibiRows = DBFunc.GetDatabase.ExecuteQuery("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & "='" & sqlItem.FKey & "'")
+                    Dim SibiRows = DBFactory.GetDatabase.ExecuteQuery("DELETE FROM " & SibiTable.TableName & " WHERE " & SibiTable.FKey & "='" & sqlItem.FKey & "'")
                     If SibiRows > 0 Then
                         deletions += SibiRows
                         Logger("Deleted " & SibiRows & " Sibi SQL Entries For: " & sqlItem.FKey)
@@ -257,12 +257,12 @@ Missing Files: " & MissingSQLFiles.Count
         Dim SibiTable As New SibiAttachmentsCols
         Dim SQLFileList As New List(Of AttachScanInfo)
 
-        Dim devFiles = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DeviceTable.TableName)
+        Dim devFiles = DBFactory.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DeviceTable.TableName)
         For Each file As DataRow In devFiles.Rows
             SQLFileList.Add(New AttachScanInfo(file.Item(DeviceTable.FKey).ToString, file.Item(DeviceTable.FileUID).ToString))
         Next
 
-        Dim sibiFiles = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiTable.TableName)
+        Dim sibiFiles = DBFactory.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiTable.TableName)
         For Each file As DataRow In sibiFiles.Rows
             SQLFileList.Add(New AttachScanInfo(file.Item(SibiTable.FKey).ToString, file.Item(SibiTable.FileUID).ToString))
         Next

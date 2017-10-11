@@ -98,10 +98,10 @@ Public Class ViewDeviceForm
         Dim rows As Integer = 0
         Dim SelectQry As String = "SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & CurrentViewDevice.GUID & "'"
         Dim InsertQry As String = "SELECT * FROM " & HistoricalDevicesCols.TableName & " LIMIT 0"
-        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+        Using trans = DBFactory.GetDatabase.StartTransaction, conn = trans.Connection
             Try
-                rows += DBFunc.GetDatabase.UpdateTable(SelectQry, GetUpdateTable(SelectQry), trans)
-                rows += DBFunc.GetDatabase.UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo), trans)
+                rows += DBFactory.GetDatabase.UpdateTable(SelectQry, GetUpdateTable(SelectQry), trans)
+                rows += DBFactory.GetDatabase.UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo), trans)
 
                 If rows = 2 Then
                     trans.Commit()
@@ -161,7 +161,7 @@ Public Class ViewDeviceForm
 
     Private Sub LoadTracking(strGUID As String)
         Dim strQry = "Select * FROM " & TrackablesCols.TableName & ", " & DevicesCols.TableName & " WHERE " & TrackablesCols.DeviceUID & " = " & DevicesCols.DeviceUID & " And " & TrackablesCols.DeviceUID & " = '" & strGUID & "' ORDER BY " & TrackablesCols.DateStamp & " DESC"
-        Using Results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry)
+        Using Results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQry)
             If Results.Rows.Count > 0 Then
                 CollectCurrentTracking(Results)
                 SendToTrackGrid(TrackingGrid, Results)
@@ -487,7 +487,7 @@ Public Class ViewDeviceForm
         Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
         Dim Info As DeviceObject
         Dim strQry = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & strGUID & "'"
-        Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry)
+        Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQry)
             Info = New DeviceObject(results)
         End Using
         Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & GetDisplayValueFromCode(DeviceIndex.ChangeType, Info.Historical.ChangeType) & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
@@ -507,7 +507,7 @@ Public Class ViewDeviceForm
         Try
             Dim rows As Integer
             Dim DeleteEntryQuery As String = "DELETE FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & strGUID & "'"
-            rows = DBFunc.GetDatabase.ExecuteQuery(DeleteEntryQuery)
+            rows = DBFactory.GetDatabase.ExecuteQuery(DeleteEntryQuery)
             Return rows
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -1049,11 +1049,11 @@ Public Class ViewDeviceForm
     End Function
 
     Private Function GetDevicesTable(deviceUID As String) As DataTable
-        Return DBFunc.GetDatabase.DataTableFromQueryString("Select * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & " = '" & deviceUID & "'")
+        Return DBFactory.GetDatabase.DataTableFromQueryString("Select * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & " = '" & deviceUID & "'")
     End Function
 
     Private Function GetHistoricalTable(deviceUID As String) As DataTable
-        Return DBFunc.GetDatabase.DataTableFromQueryString("Select * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.DeviceUID & " = '" & deviceUID & "' ORDER BY " & HistoricalDevicesCols.ActionDateTime & " DESC")
+        Return DBFactory.GetDatabase.DataTableFromQueryString("Select * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.DeviceUID & " = '" & deviceUID & "' ORDER BY " & HistoricalDevicesCols.ActionDateTime & " DESC")
     End Function
 
     Private Function LoadHistoryAndFields(deviceUID As String) As Boolean

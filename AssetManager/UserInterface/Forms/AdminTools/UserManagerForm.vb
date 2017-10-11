@@ -27,7 +27,7 @@ Public Class UserManagerForm
     End Sub
 
     Private Sub SendToGrid()
-        UserGrid.DataSource = DBFunc.GetDatabase.DataTableFromQueryString(UserDataQuery)
+        UserGrid.DataSource = DBFactory.GetDatabase.DataTableFromQueryString(UserDataQuery)
         UserGrid.Columns(UsersCols.UID).ReadOnly = True
     End Sub
 
@@ -49,7 +49,7 @@ Public Class UserManagerForm
 
     Public Function BuildModuleIndex() As List(Of AccessGroupObject)
         Dim tmpList As New List(Of AccessGroupObject)
-        Using ModuleTable As DataTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & "")
+        Using ModuleTable As DataTable = DBFactory.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & "")
             For Each row As DataRow In ModuleTable.Rows
                 tmpList.Add(New AccessGroupObject(row))
             Next
@@ -107,7 +107,7 @@ Public Class UserManagerForm
             If blah = DialogResult.Yes Then
                 UserGrid.EndEdit()
                 AddGUIDs()
-                DBFunc.GetDatabase.UpdateTable(UserDataQuery, DirectCast(UserGrid.DataSource, DataTable))
+                DBFactory.GetDatabase.UpdateTable(UserDataQuery, DirectCast(UserGrid.DataSource, DataTable))
                 ListUsers()
                 SecurityTools.GetUserAccess()
             Else

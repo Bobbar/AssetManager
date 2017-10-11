@@ -65,7 +65,7 @@
     Public Function BuildIndex(codeType As String, typeName As String) As ComboboxDataStruct()
         Try
             Dim strQRY = "SELECT * FROM " & codeType & " LEFT OUTER JOIN munis_codes on " & codeType & ".db_value = munis_codes.asset_man_code WHERE type_name ='" & typeName & "' ORDER BY " & ComboCodesBaseCols.DisplayValue & ""
-            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
+            Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQRY)
                 Dim tmpArray As New List(Of ComboboxDataStruct)
                 For Each r As DataRow In results.Rows
                     Dim DisplayValue As String = ""

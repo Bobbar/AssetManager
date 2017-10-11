@@ -72,7 +72,7 @@ Namespace SecurityTools
         Public Sub GetUserAccess()
             Try
                 Dim strQRY = "SELECT * FROM " & UsersCols.TableName & " WHERE " & UsersCols.UserName & "='" & LocalDomainUser & "' LIMIT 1"
-                Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
+                Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQRY)
                     If results.Rows.Count > 0 Then
                         Dim r As DataRow = results.Rows(0)
                         LocalUserAccess.UserName = r.Item(UsersCols.UserName).ToString
@@ -91,7 +91,7 @@ Namespace SecurityTools
         Public Sub PopulateAccessGroups()
             Try
                 Dim strQRY = "SELECT * FROM " & SecurityCols.TableName & " ORDER BY " & SecurityCols.AccessLevel & ""
-                Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQRY)
+                Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQRY)
                     For Each row As DataRow In results.Rows
                         AccessGroups.Add(row.Item(SecurityCols.SecModule).ToString, New AccessGroupObject(row))
                     Next

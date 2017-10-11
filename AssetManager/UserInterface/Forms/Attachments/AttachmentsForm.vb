@@ -106,7 +106,7 @@ Public Class AttachmentsForm
         Try
             Dim strQry As String
             strQry = GetQry()
-            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry),
+            Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQry),
                 table As DataTable = GetTable()
                 Dim strFullFilename As String
                 Dim strFileSizeHuman As String
@@ -308,7 +308,7 @@ Public Class AttachmentsForm
 
     Private Function GetSQLAttachment(AttachUID As String) As Attachment
         Dim strQry As String = "SELECT * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FileUID & "='" & AttachUID & "' LIMIT 1"
-        Return New Attachment(DBFunc.GetDatabase.DataTableFromQueryString(strQry), _attachTable)
+        Return New Attachment(DBFactory.GetDatabase.DataTableFromQueryString(strQry), _attachTable)
     End Function
 
     Private Function GetTable() As DataTable
@@ -344,7 +344,7 @@ Public Class AttachmentsForm
             Dim SibiAttach = DirectCast(Attachment, SibiAttachment)
             InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.Folder, SibiAttach.SelectedFolder))
         End If
-        DBFunc.GetDatabase.InsertFromParameters(Attachment.AttachTable.TableName, InsertAttachmentParams)
+        DBFactory.GetDatabase.InsertFromParameters(Attachment.AttachTable.TableName, InsertAttachmentParams)
     End Sub
 
     Private Async Function MakeDirectory(FolderGUID As String) As Task(Of Boolean)

@@ -99,7 +99,7 @@ Public Class SibiManageRequestForm
             IsModifying = True
             SetupGrid(RequestItemsGrid, RequestItemsColumns)
             'Set the datasource to a new empty DB table.
-            RequestItemsGrid.DataSource = DBFunc.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0")
+            RequestItemsGrid.DataSource = DBFactory.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0")
             EnableControls()
             pnlCreate.Visible = True
             Me.Show()
@@ -116,8 +116,8 @@ Public Class SibiManageRequestForm
         Try
             Dim strRequestQRY As String = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & RequestUID & "'"
             Dim strRequestItemsQRY As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & "='" & RequestUID & "' ORDER BY " & SibiRequestItemsCols.Timestamp
-            Using RequestResults As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strRequestQRY),
-                RequestItemsResults As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strRequestItemsQRY)
+            Using RequestResults As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strRequestQRY),
+                RequestItemsResults As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strRequestItemsQRY)
                 RequestResults.TableName = SibiRequestCols.TableName
                 RequestItemsResults.TableName = SibiRequestItemsCols.TableName
                 CurrentHash = GetHash(RequestResults, RequestItemsResults)
@@ -149,8 +149,8 @@ Public Class SibiManageRequestForm
     End Function
     Private Function ConcurrencyCheck() As Boolean
         Try
-            Using RequestTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & CurrentRequest.GUID & "'"),
-            ItemTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & "='" & CurrentRequest.GUID & "' ORDER BY " & SibiRequestItemsCols.Timestamp)
+            Using RequestTable = DBFactory.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & CurrentRequest.GUID & "'"),
+            ItemTable = DBFactory.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & "='" & CurrentRequest.GUID & "' ORDER BY " & SibiRequestItemsCols.Timestamp)
                 RequestTable.TableName = SibiRequestCols.TableName
                 ItemTable.TableName = SibiRequestItemsCols.TableName
                 Dim DBHash As String = GetHash(RequestTable, ItemTable)
@@ -192,7 +192,7 @@ Public Class SibiManageRequestForm
             NewNoteParams.Add(New DBParameter(SibiNotesCols.RequestUID, RequestUID))
             NewNoteParams.Add(New DBParameter(SibiNotesCols.NoteUID, NoteUID))
             NewNoteParams.Add(New DBParameter(SibiNotesCols.Note, Note))
-            If DBFunc.GetDatabase.InsertFromParameters(SibiNotesCols.TableName, NewNoteParams) > 0 Then
+            If DBFactory.GetDatabase.InsertFromParameters(SibiNotesCols.TableName, NewNoteParams) > 0 Then
                 Return True
             End If
             Return False
@@ -206,12 +206,12 @@ Public Class SibiManageRequestForm
         If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddSibi) Then Exit Sub
         If Not ValidateFields() Then Exit Sub
         Dim RequestData As RequestObject = CollectData()
-        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+        Using trans = DBFactory.GetDatabase.StartTransaction, conn = trans.Connection
             Try
                 Dim InsertRequestQry As String = "SELECT * FROM " & SibiRequestCols.TableName & " LIMIT 0"
                 Dim InsertRequestItemsQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0"
-                DBFunc.GetDatabase.UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), trans)
-                DBFunc.GetDatabase.UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans)
+                DBFactory.GetDatabase.UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), trans)
+                DBFactory.GetDatabase.UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans)
                 pnlCreate.Visible = False
                 trans.Commit()
                 IsModifying = False
@@ -513,7 +513,7 @@ Public Class SibiManageRequestForm
         Try
             Dim rows As Integer
             Dim DeleteItemQuery As String = "DELETE FROM " & Table & " WHERE " & ItemColumnName & "='" & ItemUID & "'"
-            rows = DBFunc.GetDatabase.ExecuteQuery(DeleteItemQuery)
+            rows = DBFactory.GetDatabase.ExecuteQuery(DeleteItemQuery)
             Return rows
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -721,7 +721,7 @@ Public Class SibiManageRequestForm
     Private Sub LoadNotes(RequestUID As String)
         Try
             Dim strPullNotesQry As String = "SELECT * FROM " & SibiNotesCols.TableName & " WHERE " & SibiNotesCols.RequestUID & "='" & RequestUID & "' ORDER BY " & SibiNotesCols.DateStamp & " DESC"
-            Using table As New DataTable, Results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strPullNotesQry)
+            Using table As New DataTable, Results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strPullNotesQry)
                 Dim intPreviewChars As Integer = 50
                 table.Columns.Add("Date Stamp")
                 table.Columns.Add("Preview")
@@ -1196,7 +1196,7 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub UpdateRequest()
-        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+        Using trans = DBFactory.GetDatabase.StartTransaction, conn = trans.Connection
             Try
                 If Not ConcurrencyCheck() Then
                     Message("It appears that someone else has modified this request. Please refresh and try again.", vbOKOnly + vbExclamation, "Concurrency Failure", Me)
@@ -1208,8 +1208,8 @@ Public Class SibiManageRequestForm
                 Dim RequestUpdateQry As String = "SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & " = '" & CurrentRequest.GUID & "'"
                 Dim RequestItemsUpdateQry As String = "SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " WHERE " & SibiRequestItemsCols.RequestUID & " = '" & CurrentRequest.GUID & "'"
 
-                DBFunc.GetDatabase.UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans)
-                DBFunc.GetDatabase.UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans)
+                DBFactory.GetDatabase.UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans)
+                DBFactory.GetDatabase.UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans)
 
                 trans.Commit()
 

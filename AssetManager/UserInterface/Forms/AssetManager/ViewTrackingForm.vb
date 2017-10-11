@@ -13,7 +13,7 @@ Public Class ViewTrackingForm
         Try
             SetWaitCursor(True, Me)
             Dim strQry = "Select * FROM " & TrackablesCols.TableName & " WHERE  " & TrackablesCols.UID & " = '" & entryUID & "'"
-            Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString(strQry)
+            Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQry)
                 For Each r As DataRow In results.Rows
                     txtTimeStamp.Text = NoNull(r.Item(TrackablesCols.DateStamp))
                     txtCheckType.Text = NoNull(r.Item(TrackablesCols.CheckType))

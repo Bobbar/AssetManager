@@ -54,7 +54,7 @@ Public Class TrackDeviceForm
     End Function
 
     Private Sub GetCurrentTracking(strGUID As String)
-        Using results As DataTable = DBFunc.GetDatabase.DataTableFromQueryString("SELECT * FROM " & TrackablesCols.TableName & " WHERE " & TrackablesCols.DeviceUID & "='" & strGUID & "' ORDER BY " & TrackablesCols.DateStamp & " DESC LIMIT 1") 'ds.Tables(0)
+        Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString("SELECT * FROM " & TrackablesCols.TableName & " WHERE " & TrackablesCols.DeviceUID & "='" & strGUID & "' ORDER BY " & TrackablesCols.DateStamp & " DESC LIMIT 1") 'ds.Tables(0)
             If results.Rows.Count > 0 Then
                 CurrentTrackingDevice.MapClassProperties(CurrentTrackingDevice, results)
             End If
@@ -102,12 +102,12 @@ Public Class TrackDeviceForm
     End Sub
 
     Private Sub CheckOut()
-        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+        Using trans = DBFactory.GetDatabase.StartTransaction, conn = trans.Connection
             Try
                 If Not GetCheckData() Then Exit Sub
                 SetWaitCursor(True, Me)
                 Dim rows As Integer
-                rows += DBFunc.GetDatabase.UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans)
+                rows += DBFactory.GetDatabase.UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans)
 
                 Dim CheckOutParams As New List(Of DBParameter)
                 CheckOutParams.Add(New DBParameter(TrackablesCols.CheckType, CheckType.Checkout))
@@ -117,7 +117,7 @@ Public Class TrackDeviceForm
                 CheckOutParams.Add(New DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation))
                 CheckOutParams.Add(New DBParameter(TrackablesCols.Notes, CheckData.UseReason))
                 CheckOutParams.Add(New DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID))
-                rows += DBFunc.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans)
+                rows += DBFactory.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans)
 
                 If rows = 2 Then
                     trans.Commit()
@@ -137,12 +137,12 @@ Public Class TrackDeviceForm
     End Sub
 
     Private Sub CheckIn()
-        Using trans = DBFunc.GetDatabase.StartTransaction, conn = trans.Connection
+        Using trans = DBFactory.GetDatabase.StartTransaction, conn = trans.Connection
             Try
                 If Not GetCheckData() Then Exit Sub
                 SetWaitCursor(True, Me)
                 Dim rows As Integer
-                rows += DBFunc.GetDatabase.UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans)
+                rows += DBFactory.GetDatabase.UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans)
 
                 Dim CheckOutParams As New List(Of DBParameter)
                 CheckOutParams.Add(New DBParameter(TrackablesCols.CheckType, CheckType.Checkin))
@@ -154,7 +154,7 @@ Public Class TrackDeviceForm
                 CheckOutParams.Add(New DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation))
                 CheckOutParams.Add(New DBParameter(TrackablesCols.Notes, CheckData.CheckinNotes))
                 CheckOutParams.Add(New DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID))
-                rows += DBFunc.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans)
+                rows += DBFactory.GetDatabase.InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans)
 
                 If rows = 2 Then
                     trans.Commit()
