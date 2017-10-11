@@ -5,82 +5,14 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
     Private Const intMaxResults As Integer = 100
     Private MunisComms As New MunisComms
 
-    Public Function ReturnSqlValue(table As String, fieldIn As Object, valueIn As Object, fieldOut As String, Optional fieldIn2 As Object = Nothing, Optional valueIn2 As Object = Nothing) As Object
-        Dim sqlQRY As String
-        Dim Params As New List(Of DBQueryParameter)
-        If fieldIn2 IsNot Nothing And valueIn2 IsNot Nothing Then
-            sqlQRY = "SELECT TOP 1 " & fieldOut & " FROM " & table  ' & fieldIN.ToString & " = '" & valueIN.ToString & "' AND " & fieldIN2.ToString & " = '" & ValueIN2.ToString & "'"
-            Params.Add(New DBQueryParameter(fieldIn.ToString, valueIn.ToString, True))
-            Params.Add(New DBQueryParameter(fieldIn2.ToString, valueIn2.ToString, True))
-        Else
-            sqlQRY = "SELECT TOP 1 " & fieldOut & " FROM " & table ' & fieldIN.ToString & " = '" & valueIN.ToString & "'"
-            Params.Add(New DBQueryParameter(fieldIn.ToString, valueIn.ToString, True))
-        End If
-        Using cmd = GetSqlCommandFromParams(sqlQRY, Params), conn = cmd.Connection
-            cmd.Connection.Open()
-            Return cmd.ExecuteScalar
-        End Using
-    End Function
 
-    Public Async Function ReturnSqlValueAsync(table As String, fieldIn As Object, valueIn As Object, fieldOut As String, Optional fieldIn2 As Object = Nothing, Optional valueIn2 As Object = Nothing) As Task(Of String)
-        Try
-            Dim sqlQRY As String
-            Dim Params As New List(Of DBQueryParameter)
-            If fieldIn2 IsNot Nothing And valueIn2 IsNot Nothing Then
-                sqlQRY = "SELECT TOP 1 " & fieldOut & " FROM " & table  ' & fieldIN.ToString & " = '" & valueIN.ToString & "' AND " & fieldIN2.ToString & " = '" & ValueIN2.ToString & "'"
-                Params.Add(New DBQueryParameter(fieldIn.ToString, valueIn.ToString, True))
-                Params.Add(New DBQueryParameter(fieldIn2.ToString, valueIn2.ToString, True))
-            Else
-                sqlQRY = "SELECT TOP 1 " & fieldOut & " FROM " & table ' & fieldIN.ToString & " = '" & valueIN.ToString & "'"
-                Params.Add(New DBQueryParameter(fieldIn.ToString, valueIn.ToString, True))
-            End If
-            Using cmd = GetSqlCommandFromParams(sqlQRY, Params), conn = cmd.Connection
-                Await cmd.Connection.OpenAsync()
-                Dim Value = Await cmd.ExecuteScalarAsync
-                If Value IsNot Nothing Then Return Value.ToString
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
-        Return String.Empty
-    End Function
 
-    ''' <summary>
-    ''' Takes a partial query string without the WHERE operator, and a list of <see cref="DBQueryParameter"/> and returns a parameterized <see cref="SqlCommand"/>.
-    ''' </summary>
-    ''' <param name="partialQuery"></param>
-    ''' <param name="parameters"></param>
-    ''' <returns></returns>
-    Private Function GetSqlCommandFromParams(partialQuery As String, parameters As List(Of DBQueryParameter)) As SqlCommand
-        Dim cmd = MunisComms.ReturnSqlCommand(partialQuery)
-        cmd.CommandText += " WHERE"
-        Dim ParamString As String = ""
-        Dim ValSeq As Integer = 1
-        For Each fld In parameters
-            If fld.IsExact Then
-                ParamString += " " + fld.FieldName + "=@Value" & ValSeq & " " & fld.OperatorString
-                cmd.Parameters.AddWithValue("@Value" & ValSeq, fld.Value)
-            Else
-                ParamString += " " + fld.FieldName + " LIKE CONCAT('%', @Value" & ValSeq & ", '%') " & fld.OperatorString
-                cmd.Parameters.AddWithValue("@Value" & ValSeq, fld.Value)
-            End If
-            ValSeq += 1
-        Next
-        If Strings.Right(ParamString, 3) = "AND" Then 'remove trailing AND from query string
-            ParamString = Strings.Left(ParamString, Strings.Len(ParamString) - 3)
-        End If
 
-        If Strings.Right(ParamString, 2) = "OR" Then 'remove trailing AND from query string
-            ParamString = Strings.Left(ParamString, Strings.Len(ParamString) - 2)
-        End If
-        cmd.CommandText += ParamString
-        Return cmd
-    End Function
 
     Public Function GetReqNumberFromPO(PO As String) As String
         If Not IsNothing(PO) Then
             If PO <> "" Then
-                Return ReturnSqlValue("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber").ToString
+                Return MunisComms.ReturnSqlValue("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber").ToString
             End If
         End If
         Return Nothing
@@ -88,14 +20,14 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
 
     Private Async Function GetReqNumberFromPOAsync(PO As String) As Task(Of String)
         If PO <> "" Then
-            Return Await ReturnSqlValueAsync("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber")
+            Return Await MunisComms.ReturnSqlValueAsync("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber")
         End If
         Return String.Empty
     End Function
 
     Public Async Function GetPOFromReqNumberAsync(reqNum As String, FY As String) As Task(Of String)
         If reqNum <> "" Then
-            Return Await ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_pur_no", "rqdt_fsc_yr", FY)
+            Return Await MunisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_pur_no", "rqdt_fsc_yr", FY)
         End If
         Return String.Empty
     End Function
@@ -103,12 +35,12 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
     Private Async Function GetPOFromDevice(device As DeviceObject) As Task(Of String)
         Dim PO As String
         If device.AssetTag IsNot Nothing AndAlso device.AssetTag <> "" Then
-            PO = Await ReturnSqlValueAsync("famaster", "fama_tag", device.AssetTag, "fama_purch_memo")
+            PO = Await MunisComms.ReturnSqlValueAsync("famaster", "fama_tag", device.AssetTag, "fama_purch_memo")
             If PO <> "" Then
                 Return Trim(PO.ToString)
             Else
                 If device.Serial IsNot Nothing AndAlso device.Serial <> "" Then
-                    PO = Await ReturnSqlValueAsync("famaster", "fama_serial", device.Serial, "fama_purch_memo")
+                    PO = Await MunisComms.ReturnSqlValueAsync("famaster", "fama_serial", device.Serial, "fama_purch_memo")
                     Return Trim(PO.ToString)
                 End If
             End If
@@ -128,7 +60,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
     End Function
 
     Public Function GetSerialFromAsset(assetTag As String) As String
-        Dim value = ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_serial")
+        Dim value = MunisComms.ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_serial")
         If value IsNot Nothing Then
             Return Trim(value.ToString)
         End If
@@ -136,7 +68,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
     End Function
 
     Public Function GetAssetFromSerial(serial As String) As String
-        Dim value = ReturnSqlValue("famaster", "fama_serial", serial, "fama_tag")
+        Dim value = MunisComms.ReturnSqlValue("famaster", "fama_serial", serial, "fama_tag")
         If value IsNot Nothing Then
             Return Trim(value.ToString)
         End If
@@ -144,20 +76,20 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
     End Function
 
     Public Function GetFYFromAsset(assetTag As String) As String
-        Return Trim(ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_fisc_yr").ToString)
+        Return Trim(MunisComms.ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_fisc_yr").ToString)
     End Function
 
     Public Function GetPODateFromPO(PO As String) As String
-        Return YearFromDate(DateTime.Parse(Trim(ReturnSqlValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate").ToString)))
+        Return YearFromDate(DateTime.Parse(Trim(MunisComms.ReturnSqlValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate").ToString)))
     End Function
 
     Public Function GetVendorNameFromPO(PO As String) As String
-        Dim VendorNumber = ReturnSqlValue("rqdetail", "rqdt_req_no", GetReqNumberFromPO(PO), "rqdt_sug_vn", "rqdt_fsc_yr", GetFYFromPO(PO))
-        Return ReturnSqlValue("ap_vendor", "a_vendor_number", VendorNumber, "a_vendor_name").ToString
+        Dim VendorNumber = MunisComms.ReturnSqlValue("rqdetail", "rqdt_req_no", GetReqNumberFromPO(PO), "rqdt_sug_vn", "rqdt_fsc_yr", GetFYFromPO(PO))
+        Return MunisComms.ReturnSqlValue("ap_vendor", "a_vendor_number", VendorNumber, "a_vendor_name").ToString
     End Function
 
     Public Async Function GetVendorNumberFromReqNumber(reqNum As String, FY As String) As Task(Of String)
-        Dim VendorNum = Await ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_sug_vn", "rqdt_fsc_yr", FY)
+        Dim VendorNum = Await MunisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_sug_vn", "rqdt_fsc_yr", FY)
         If VendorNum IsNot Nothing Then
             Return VendorNum.ToString
         End If
@@ -171,7 +103,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
 
     Public Async Function GetPOStatusFromPO(PO As Integer) As Task(Of String)
         Dim StatusString As String
-        Dim StatusCode As String = Await ReturnSqlValueAsync("poheader", "pohd_pur_no", PO, "pohd_sta_cd")
+        Dim StatusCode As String = Await MunisComms.ReturnSqlValueAsync("poheader", "pohd_pur_no", PO, "pohd_sta_cd")
         If StatusCode <> "" Then
             Dim ParseCode As Integer = -1
             If Not Int32.TryParse(StatusCode, ParseCode) Then Return Nothing
@@ -183,7 +115,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
 
     Public Async Function GetReqStatusFromReqNum(reqNum As String, FY As Integer) As Task(Of String)
         Dim StatusString As String
-        Dim StatusCode As String = Await ReturnSqlValueAsync("rqheader", "rqhd_req_no", reqNum, "rqhd_sta_cd", "rqhd_fsc_yr", FY)
+        Dim StatusCode As String = Await MunisComms.ReturnSqlValueAsync("rqheader", "rqhd_req_no", reqNum, "rqhd_sta_cd", "rqhd_fsc_yr", FY)
         If StatusCode <> "" Then
             Dim ParseCode As Integer = -1
             If Not Int32.TryParse(StatusCode, ParseCode) Then Return Nothing
@@ -370,7 +302,7 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
             If obj <> "" Then 'Show Rollup info for Object
                 GL_Params.Add(New DBQueryParameter("glma_obj", obj, True))
 
-                Dim RollUpCode As String = Await ReturnSqlValueAsync("gl_budget_rollup", "a_org", org, "a_rollup_code")
+                Dim RollUpCode As String = Await MunisComms.ReturnSqlValueAsync("gl_budget_rollup", "a_org", org, "a_rollup_code")
                 Dim RollUpByCodeQry As String = "SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_rollup_code = '" & RollUpCode & "'"
                 Dim BudgetQry As String = "SELECT TOP " & intMaxResults & " a_projection_no,a_org,a_object,db_line,db_bud_desc_line1,db_bud_reason_desc,db_bud_req_qty5,db_bud_unit_cost,db_bud_req_amt5,a_account_id FROM gl_budget_detail_2" ' WHERE a_projection_no='" & FY & "' AND a_org='" & Org & "' AND a_object='" & Obj & "'"
 
@@ -379,17 +311,17 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
                 Budget_Params.Add(New DBQueryParameter("a_org", org, True))
                 Budget_Params.Add(New DBQueryParameter("a_object", obj, True))
 
-                NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.ReturnSqlTableFromCmdAsync(GetSqlCommandFromParams(GLMasterQry, GL_Params)))
+                NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(GLMasterQry, GL_Params)))
                 NewGridForm.AddGrid("RollupGrid", "Rollup Info:", Await MunisComms.ReturnSqlTableAsync(RollUpByCodeQry))
-                NewGridForm.AddGrid("BudgetGrid", "Budget Info:", Await MunisComms.ReturnSqlTableFromCmdAsync(GetSqlCommandFromParams(BudgetQry, Budget_Params)))
+                NewGridForm.AddGrid("BudgetGrid", "Budget Info:", Await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(BudgetQry, Budget_Params)))
             Else ' Show Rollup info for all Objects in Org
                 Dim RollUpAllQry As String = "SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup"
 
                 Dim Roll_Params As New List(Of DBQueryParameter)
                 Roll_Params.Add(New DBQueryParameter("a_org", org, True))
 
-                NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.ReturnSqlTableFromCmdAsync(GetSqlCommandFromParams(GLMasterQry, GL_Params))) 'MunisComms.Return_MSSQLTableAsync(Qry))
-                NewGridForm.AddGrid("RollupGrid", "Rollup Info:", Await MunisComms.ReturnSqlTableFromCmdAsync(GetSqlCommandFromParams(RollUpAllQry, Roll_Params))) 'MunisComms.Return_MSSQLTableAsync("SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
+                NewGridForm.AddGrid("OrgGrid", "GL Info:", Await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(GLMasterQry, GL_Params))) 'MunisComms.Return_MSSQLTableAsync(Qry))
+                NewGridForm.AddGrid("RollupGrid", "Rollup Info:", Await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(RollUpAllQry, Roll_Params))) 'MunisComms.Return_MSSQLTableAsync("SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
             End If
             NewGridForm.Show()
         Catch ex As Exception
@@ -412,7 +344,7 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number"
             Params.Add(New DBQueryParameter("e.a_name_first", UCase(name), "OR"))
 
             Dim NewGridForm As New GridForm(parentForm, "MUNIS Employee Info")
-            Using cmd = GetSqlCommandFromParams(strQRY, Params),
+            Using cmd = MunisComms.GetSqlCommandFromParams(strQRY, Params),
                 results = Await MunisComms.ReturnSqlTableFromCmdAsync(cmd)
                 If HasResults(results, parentForm) Then
                     NewGridForm.AddGrid("EmpGrid", "MUNIS Info:", results)
@@ -437,7 +369,7 @@ FROM poheader"
             Params.Add(New DBQueryParameter("pohd_pur_no", PO, True))
 
             Dim NewGridForm As New GridForm(parentForm, "MUNIS PO Info")
-            Using cmd = GetSqlCommandFromParams(strQRY, Params),
+            Using cmd = MunisComms.GetSqlCommandFromParams(strQRY, Params),
                 results = Await MunisComms.ReturnSqlTableFromCmdAsync(cmd)
                 If HasResults(results, parentForm) Then
                     NewGridForm.AddGrid("POGrid", "PO Info:", results)
@@ -492,28 +424,22 @@ FROM poheader"
         Dim Params As New List(Of DBQueryParameter)
         Params.Add(New DBQueryParameter("rqhd_req_no", reqNumber, True))
         Params.Add(New DBQueryParameter("rqhd_fsc_yr", fiscalYr, True))
-        Return Await MunisComms.ReturnSqlTableFromCmdAsync(GetSqlCommandFromParams(Query, Params))
+        Return Await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(Query, Params))
     End Function
 
     Private Async Function GetReqLineItemsFromReqNum(reqNumber As String, fiscalYr As String) As Task(Of DataTable)
         If reqNumber = "" Or fiscalYr = "" Then Return Nothing
         Dim VendorNum = Await MunisFunc.GetVendorNumberFromReqNumber(reqNumber, fiscalYr)
         If VendorNum = "" Then Return Nothing
-
+        Dim VendorName As String = Await MunisComms.ReturnSqlValueAsync("ap_vendor", "a_vendor_number", VendorNum, "a_vendor_name")
         Dim strQRY As String = "SELECT TOP " & intMaxResults & " dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc,
-VEN.a_vendor_name, VEN.a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr, dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
+ '" & VendorName & "' AS a_vendor_name, '" & VendorNum & "' AS a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr, dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
 FROM dbo.rq_gl_info INNER JOIN
-dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr LEFT JOIN
-(
-SELECT TOP 1 a_vendor_number,a_vendor_name
-FROM ap_vendor
-WHERE a_vendor_number = " & VendorNum & "
-) VEN
-ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
+dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr"
         Dim Params As New List(Of DBQueryParameter)
         Params.Add(New DBQueryParameter("dbo.rq_gl_info.a_requisition_no", reqNumber, True))
         Params.Add(New DBQueryParameter("dbo.rq_gl_info.rg_fiscal_year", fiscalYr, True))
-        Dim ReqTable = Await MunisComms.ReturnSqlTableFromCmdAsync(GetSqlCommandFromParams(strQRY, Params))
+        Dim ReqTable = Await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(strQRY, Params))
         If ReqTable.Rows.Count > 0 Then
             Return ReqTable
         Else
@@ -537,7 +463,6 @@ ON dbo.rqdetail.rqdt_sug_vn = VEN.a_vendor_number"
                 ReqLinesTable = Nothing
                 ReqHeaderTable = Nothing
             End If
-
             If InventoryTable IsNot Nothing Or ReqLinesTable IsNot Nothing Then
                 Dim NewGridForm As New GridForm(parentForm, "MUNIS Info")
                 If InventoryTable Is Nothing Then

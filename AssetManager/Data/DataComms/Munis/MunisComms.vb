@@ -60,7 +60,78 @@ Public Class MunisComms
         End Using
     End Function
 
+    Public Function ReturnSqlValue(table As String, fieldIn As Object, valueIn As Object, fieldOut As String, Optional fieldIn2 As Object = Nothing, Optional valueIn2 As Object = Nothing) As Object
+        Dim sqlQRY As String
+        Dim Params As New List(Of DBQueryParameter)
+        If fieldIn2 IsNot Nothing And valueIn2 IsNot Nothing Then
+            sqlQRY = "SELECT TOP 1 " & fieldOut & " FROM " & table  ' & fieldIN.ToString & " = '" & valueIN.ToString & "' AND " & fieldIN2.ToString & " = '" & ValueIN2.ToString & "'"
+            Params.Add(New DBQueryParameter(fieldIn.ToString, valueIn.ToString, True))
+            Params.Add(New DBQueryParameter(fieldIn2.ToString, valueIn2.ToString, True))
+        Else
+            sqlQRY = "SELECT TOP 1 " & fieldOut & " FROM " & table ' & fieldIN.ToString & " = '" & valueIN.ToString & "'"
+            Params.Add(New DBQueryParameter(fieldIn.ToString, valueIn.ToString, True))
+        End If
+        Using cmd = GetSqlCommandFromParams(sqlQRY, Params), conn = cmd.Connection
+            cmd.Connection.Open()
+            Return cmd.ExecuteScalar
+        End Using
+    End Function
 
+    Public Async Function ReturnSqlValueAsync(table As String, fieldIn As Object, valueIn As Object, fieldOut As String, Optional fieldIn2 As Object = Nothing, Optional valueIn2 As Object = Nothing) As Task(Of String)
+        Try
+            Dim sqlQRY As String
+            Dim Params As New List(Of DBQueryParameter)
+            If fieldIn2 IsNot Nothing And valueIn2 IsNot Nothing Then
+                sqlQRY = "SELECT TOP 1 " & fieldOut & " FROM " & table  ' & fieldIN.ToString & " = '" & valueIN.ToString & "' AND " & fieldIN2.ToString & " = '" & ValueIN2.ToString & "'"
+                Params.Add(New DBQueryParameter(fieldIn.ToString, valueIn.ToString, True))
+                Params.Add(New DBQueryParameter(fieldIn2.ToString, valueIn2.ToString, True))
+            Else
+                sqlQRY = "SELECT TOP 1 " & fieldOut & " FROM " & table ' & fieldIN.ToString & " = '" & valueIN.ToString & "'"
+                Params.Add(New DBQueryParameter(fieldIn.ToString, valueIn.ToString, True))
+            End If
+            Using cmd = GetSqlCommandFromParams(sqlQRY, Params), conn = cmd.Connection
+                Await cmd.Connection.OpenAsync()
+                Dim Value = Await cmd.ExecuteScalarAsync
+                'StopTimer()
+                If Value IsNot Nothing Then Return Value.ToString
+            End Using
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
+        Return String.Empty
+    End Function
+
+    ''' <summary>
+    ''' Takes a partial query string without the WHERE operator, and a list of <see cref="DBQueryParameter"/> and returns a parameterized <see cref="SqlCommand"/>.
+    ''' </summary>
+    ''' <param name="partialQuery"></param>
+    ''' <param name="parameters"></param>
+    ''' <returns></returns>
+    Public Function GetSqlCommandFromParams(partialQuery As String, parameters As List(Of DBQueryParameter)) As SqlCommand
+        Dim cmd = ReturnSqlCommand(partialQuery)
+        cmd.CommandText += " WHERE"
+        Dim ParamString As String = ""
+        Dim ValSeq As Integer = 1
+        For Each fld In parameters
+            If fld.IsExact Then
+                ParamString += " " + fld.FieldName + "=@Value" & ValSeq & " " & fld.OperatorString
+                cmd.Parameters.AddWithValue("@Value" & ValSeq, fld.Value)
+            Else
+                ParamString += " " + fld.FieldName + " LIKE CONCAT('%', @Value" & ValSeq & ", '%') " & fld.OperatorString
+                cmd.Parameters.AddWithValue("@Value" & ValSeq, fld.Value)
+            End If
+            ValSeq += 1
+        Next
+        If Strings.Right(ParamString, 3) = "AND" Then 'remove trailing AND from query string
+            ParamString = Strings.Left(ParamString, Strings.Len(ParamString) - 3)
+        End If
+
+        If Strings.Right(ParamString, 2) = "OR" Then 'remove trailing AND from query string
+            ParamString = Strings.Left(ParamString, Strings.Len(ParamString) - 2)
+        End If
+        cmd.CommandText += ParamString
+        Return cmd
+    End Function
 #End Region
 
 End Class
