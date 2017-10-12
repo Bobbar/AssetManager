@@ -116,29 +116,10 @@ Public Class SibiMainForm
 
     Public Sub SendToGrid(results As DataTable)
         Try
-            Using table As New DataTable
-                For Each col As DataGridColumn In SibiTableColumns()
-                    Dim column = table.Columns.Add(col.ColumnName, col.ColumnType)
-                    column.Caption = col.ColumnCaption
-                Next
-                For Each r As DataRow In results.Rows
-                    table.Rows.Add(NoNull(r.Item(SibiRequestCols.RequestNumber)),
-               GetDisplayValueFromCode(SibiIndex.StatusType, r.Item(SibiRequestCols.Status).ToString),
-               NoNull(r.Item(SibiRequestCols.Description)),
-               NoNull(r.Item(SibiRequestCols.RequestUser)),
-               GetDisplayValueFromCode(SibiIndex.RequestType, r.Item(SibiRequestCols.Type).ToString),
-               NoNull(r.Item(SibiRequestCols.NeedBy)),
-               NoNull(r.Item(SibiRequestCols.PO)),
-               NoNull(r.Item(SibiRequestCols.RequisitionNumber)),
-               NoNull(r.Item(SibiRequestCols.RTNumber)),
-               NoNull(r.Item(SibiRequestCols.DateStamp)),
-               NoNull(r.Item(SibiRequestCols.UID)))
-                Next
+            Using results
                 bolGridFilling = True
                 StatusColors = GetStatusColors(results)
-                ResultGrid.DataSource = Nothing
-                ResultGrid.DataSource = table
-                SetGridHeaders()
+                PopulateGrid(ResultGrid, results, SibiTableColumns)
                 ResultGrid.ClearSelection()
                 bolGridFilling = False
             End Using
@@ -158,10 +139,10 @@ Public Class SibiMainForm
     Private Function SibiTableColumns() As List(Of DataGridColumn)
         Dim ColList As New List(Of DataGridColumn)
         ColList.Add(New DataGridColumn(SibiRequestCols.RequestNumber, "Request #", GetType(Integer)))
-        ColList.Add(New DataGridColumn(SibiRequestCols.Status, "Status", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.Status, "Status", GetType(ComboboxDataStruct), SibiIndex.StatusType, ComboColumnDisplayMode.DisplayMemberOnly))
         ColList.Add(New DataGridColumn(SibiRequestCols.Description, "Description", GetType(String)))
         ColList.Add(New DataGridColumn(SibiRequestCols.RequestUser, "Request User", GetType(String)))
-        ColList.Add(New DataGridColumn(SibiRequestCols.Type, "Request Type", GetType(String)))
+        ColList.Add(New DataGridColumn(SibiRequestCols.Type, "Request Type", GetType(ComboboxDataStruct), SibiIndex.RequestType, ComboColumnDisplayMode.DisplayMemberOnly))
         ColList.Add(New DataGridColumn(SibiRequestCols.NeedBy, "Need By", GetType(Date)))
         ColList.Add(New DataGridColumn(SibiRequestCols.PO, "PO Number", GetType(String)))
         ColList.Add(New DataGridColumn(SibiRequestCols.RequisitionNumber, "Req. Number", GetType(String)))
@@ -214,7 +195,7 @@ Public Class SibiMainForm
     End Sub
 
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
-        If ResultGrid.CurrentRow.Index > -1 Then OpenRequest(ResultGrid.Item(GetColIndex(ResultGrid, SibiRequestCols.UID), ResultGrid.CurrentRow.Index).Value.ToString)
+        If ResultGrid.CurrentRow.Index > -1 Then OpenRequest(GetCurrentCellValue(ResultGrid, SibiRequestCols.UID))
     End Sub
 
     Private Sub OpenRequest(strUID As String)

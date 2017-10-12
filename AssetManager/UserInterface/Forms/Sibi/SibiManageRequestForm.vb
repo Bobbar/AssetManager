@@ -982,7 +982,7 @@ Public Class SibiManageRequestForm
         RequestItemsGrid.RowHeadersWidth = 57
     End Sub
 
-    Private Sub SetGLBudgetItems()
+    Private Sub SetGLBudgetContextMenu()
         If RequestItemsGrid.CurrentCell IsNot Nothing Then
             Dim ColIndex As Integer = RequestItemsGrid.CurrentCell.ColumnIndex
             Select Case True
@@ -1064,7 +1064,7 @@ Public Class SibiManageRequestForm
                 tsmDeleteItem.Visible = False
             End If
         End If
-        SetGLBudgetItems()
+        SetGLBudgetContextMenu()
     End Sub
 
     Private Sub ShowEditControls()

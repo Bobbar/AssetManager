@@ -188,7 +188,7 @@ Public Class MainForm
             Next
 
             For Each row In Rows
-                Dim DevUID As String = ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), row).Value.ToString
+                Dim DevUID As String = GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID)
                 SelectedDevices.Add(AssetFunc.GetDeviceInfoFromGUID(DevUID))
             Next
 
@@ -290,9 +290,6 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private Sub MainForm_HandleCreated(sender As Object, e As EventArgs) Handles Me.HandleCreated
-        LoadProgram()
-    End Sub
 
     Private Sub MainForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         SplashScreenForm.Dispose()
@@ -318,8 +315,6 @@ Public Class MainForm
         End Try
     End Sub
 
-
-
     Private Sub RefreshCombos()
         FillComboBox(DeviceIndex.EquipType, cmbEquipType)
         FillComboBox(DeviceIndex.Locations, cmbLocation)
@@ -327,44 +322,33 @@ Public Class MainForm
         FillComboBox(DeviceIndex.OSType, cmbOSType)
     End Sub
 
-    Private Sub SendToGrid(ByRef Results As DataTable)
-        If Results Is Nothing Then Exit Sub
-        SetStatusBar("Building Grid...")
-        Application.DoEvents()
-        Using table As New DataTable
-            table.Columns.Add("User", GetType(String))
-            table.Columns.Add("Asset ID", GetType(String))
-            table.Columns.Add("Serial", GetType(String))
-            table.Columns.Add("Device Type", GetType(String))
-            table.Columns.Add("Description", GetType(String))
-            table.Columns.Add("OS Version", GetType(String))
-            table.Columns.Add("Location", GetType(String))
-            table.Columns.Add("PO Number", GetType(String))
-            table.Columns.Add("Purchase Date", GetType(Date))
-            table.Columns.Add("Replace Year", GetType(String))
-            table.Columns.Add("Modified", GetType(Date))
-            table.Columns.Add("GUID", GetType(String))
-            For Each r As DataRow In Results.Rows
-                table.Rows.Add(r.Item(DevicesCols.CurrentUser),
-                              r.Item(DevicesCols.AssetTag),
-                              r.Item(DevicesCols.Serial),
-                               GetDisplayValueFromCode(DeviceIndex.EquipType, r.Item(DevicesCols.EQType).ToString),
-                               r.Item(DevicesCols.Description),
-                               GetDisplayValueFromCode(DeviceIndex.OSType, r.Item(DevicesCols.OSVersion).ToString),
-                               GetDisplayValueFromCode(DeviceIndex.Locations, r.Item(DevicesCols.Location).ToString),
-                               r.Item(DevicesCols.PO),
-                               r.Item(DevicesCols.PurchaseDate),
-                              r.Item(DevicesCols.ReplacementYear),
-                              r.Item(DevicesCols.LastModDate),
-                              r.Item(DevicesCols.DeviceUID))
-            Next
+    Private Function ResultGridColumns() As List(Of DataGridColumn)
+        Dim ColList As New List(Of DataGridColumn)
+        ColList.Add(New DataGridColumn(DevicesCols.CurrentUser, "User", GetType(String)))
+        ColList.Add(New DataGridColumn(DevicesCols.AssetTag, "Asset ID", GetType(String)))
+        ColList.Add(New DataGridColumn(DevicesCols.Serial, "Serial", GetType(String)))
+        ColList.Add(New DataGridColumn(DevicesCols.EQType, "Device Type", GetType(ComboboxDataStruct), DeviceIndex.EquipType, ComboColumnDisplayMode.DisplayMemberOnly))
+        ColList.Add(New DataGridColumn(DevicesCols.Description, "Description", GetType(String)))
+        ColList.Add(New DataGridColumn(DevicesCols.OSVersion, "OS Version", GetType(ComboboxDataStruct), DeviceIndex.OSType, ComboColumnDisplayMode.DisplayMemberOnly))
+        ColList.Add(New DataGridColumn(DevicesCols.Location, "Location", GetType(ComboboxDataStruct), DeviceIndex.Locations, ComboColumnDisplayMode.DisplayMemberOnly))
+        ColList.Add(New DataGridColumn(DevicesCols.PO, "PO Number", GetType(String)))
+        ColList.Add(New DataGridColumn(DevicesCols.PurchaseDate, "Purchase Date", GetType(Date)))
+        ColList.Add(New DataGridColumn(DevicesCols.ReplacementYear, "Replace Year", GetType(String)))
+        ColList.Add(New DataGridColumn(DevicesCols.LastModDate, "Modifed", GetType(Date)))
+        ColList.Add(New DataGridColumn(DevicesCols.DeviceUID, "GUID", GetType(String)))
+        Return ColList
+    End Function
+
+    Private Sub SendToGrid(ByRef results As DataTable)
+        If results Is Nothing Then Exit Sub
+        Using results
+            SetStatusBar("Building Grid...")
             bolGridFilling = True
-            ResultGrid.DataSource = table
+            PopulateGrid(ResultGrid, results, ResultGridColumns)
             ResultGrid.ClearSelection()
             ResultGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
             bolGridFilling = False
-            DisplayRecords(table.Rows.Count)
-            Results.Dispose()
+            DisplayRecords(ResultGrid.Rows.Count)
         End Using
     End Sub
 
@@ -611,12 +595,12 @@ Public Class MainForm
     End Sub
 
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
-        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
+        LoadDevice(GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID))
     End Sub
 
     Private Sub ResultGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles ResultGrid.KeyDown
         If e.KeyCode = Keys.Enter Then
-            LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
+            LoadDevice(GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID))
             e.SuppressKeyPress = True
         End If
     End Sub
@@ -658,7 +642,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
-        LoadDevice(ResultGrid.Item(GetColIndex(ResultGrid, "GUID"), ResultGrid.CurrentRow.Index).Value.ToString)
+        LoadDevice(GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID))
     End Sub
 
     Private Sub InstallChromeMenuItem_Click(sender As Object, e As EventArgs) Handles InstallChromeMenuItem.Click
@@ -686,6 +670,11 @@ Public Class MainForm
 
     Private Sub DatabaseToolCombo_DropDownClosed(sender As Object, e As EventArgs) Handles DatabaseToolCombo.DropDownClosed
         ChangeDatabase(CType(DatabaseToolCombo.SelectedIndex, Databases))
+    End Sub
+
+    Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        LoadProgram()
+        Application.DoEvents()
     End Sub
 
 #End Region

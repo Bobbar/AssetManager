@@ -5,6 +5,7 @@
     Public Property ColumnReadOnly As Boolean
     Public Property ColumnVisible As Boolean
     Public Property ComboIndex As ComboboxDataStruct()
+    Public Property ComboDisplayMode As ComboColumnDisplayMode
 
     Sub New(name As String, caption As String, type As Type)
         ColumnName = name
@@ -13,6 +14,7 @@
         ColumnReadOnly = False
         ColumnVisible = True
         ComboIndex = Nothing
+        ComboDisplayMode = ComboColumnDisplayMode.DefaultMode
     End Sub
 
     Sub New(name As String, caption As String, type As Type, comboIndex() As ComboboxDataStruct)
@@ -22,6 +24,21 @@
         ColumnReadOnly = False
         ColumnVisible = True
         Me.ComboIndex = comboIndex
+        ComboDisplayMode = ComboColumnDisplayMode.DefaultMode
+    End Sub
+
+    Sub New(name As String, caption As String, type As Type, comboIndex() As ComboboxDataStruct, displayMode As ComboColumnDisplayMode)
+        ColumnName = name
+        ColumnCaption = caption
+        If displayMode <> ComboColumnDisplayMode.DefaultMode Then
+            ColumnType = GetType(String)
+        Else
+            ColumnType = type
+        End If
+        ColumnReadOnly = False
+        ColumnVisible = True
+        Me.ComboIndex = comboIndex
+        ComboDisplayMode = displayMode
     End Sub
 
     Sub New(name As String, caption As String, type As Type, isReadOnly As Boolean, visible As Boolean)
@@ -31,9 +48,17 @@
         ColumnReadOnly = isReadOnly
         ColumnVisible = visible
         ComboIndex = Nothing
+        ComboDisplayMode = ComboColumnDisplayMode.DefaultMode
     End Sub
 
 End Class
+
+Public Enum ComboColumnDisplayMode
+    DefaultMode
+    DisplayMemberOnly
+
+
+End Enum
 
 Public Structure StatusColumnColorStruct
     Public StatusID As String

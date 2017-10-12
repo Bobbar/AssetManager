@@ -1,94 +1,135 @@
 ﻿Module GridFunctions
 
-    Public Sub SetupGrid(Grid As DataGridView, Columns As List(Of DataGridColumn))
-        Try
-            Grid.DataSource = Nothing
-            Grid.Rows.Clear()
-            Grid.Columns.Clear()
-            Grid.AutoGenerateColumns = False
+    Public Sub PopulateGrid(grid As DataGridView, data As DataTable, columns As List(Of DataGridColumn))
+        SetupGrid(grid, columns)
+        Using data
+            grid.DataSource = Nothing
+            grid.DataSource = RebuildDataSource(data, columns)
+        End Using
+    End Sub
+    Public Function RebuildDataSource(data As DataTable, columns As List(Of DataGridColumn)) As DataTable
+        Dim NeedsRebuilt As Boolean = columns.Exists(Function(c) c.ComboDisplayMode <> ComboColumnDisplayMode.DefaultMode)
+        If NeedsRebuilt Then
+            Dim NewTable As New DataTable
+            For Each col In columns
+                NewTable.Columns.Add(col.ColumnName, data.Columns(col.ColumnName).DataType)
+            Next
+            For Each row As DataRow In data.Rows
+                Dim NewRow As DataRow
+                NewRow = NewTable.NewRow
+                For Each col In columns
 
-            For Each col As DataGridColumn In Columns
-                Grid.Columns.Add(GetColumn(col))
+                    Select Case col.ComboDisplayMode
+                        Case ComboColumnDisplayMode.DefaultMode
+                            NewRow.Item(col.ColumnName) = row.Item(col.ColumnName)
+                        Case ComboColumnDisplayMode.DisplayMemberOnly
+                            NewRow.Item(col.ColumnName) = GetDisplayValueFromCode(col.ComboIndex, row.Item(col.ColumnName).ToString)
+                    End Select
+                Next
+                NewTable.Rows.Add(NewRow)
+            Next
+            Return NewTable
+        Else
+            Return data
+        End If
+    End Function
+
+    Public Sub SetupGrid(grid As DataGridView, columns As List(Of DataGridColumn))
+        Try
+            grid.DataSource = Nothing
+            grid.Rows.Clear()
+            grid.Columns.Clear()
+            grid.AutoGenerateColumns = False
+
+            For Each col As DataGridColumn In columns
+                grid.Columns.Add(GetColumn(col))
             Next
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
 
-    Private Function GetColumn(Column As DataGridColumn) As DataGridViewColumn
-        Select Case Column.ColumnType
-            Case GetType(String), GetType(Integer)
-                Return GenericColumn(Column)
+    Private Function GetColumn(column As DataGridColumn) As DataGridViewColumn
+        Select Case column.ColumnType
+            Case GetType(String), GetType(Integer), GetType(Date)
+                Return GenericColumn(column)
             Case GetType(ComboboxDataStruct)
-                Return DataGridComboColumn(Column.ComboIndex, Column.ColumnCaption, Column.ColumnName)
+                Select Case column.ComboDisplayMode
+                    Case ComboColumnDisplayMode.DefaultMode
+                        Return DataGridComboColumn(column.ComboIndex, column.ColumnCaption, column.ColumnName)
+                    Case ComboColumnDisplayMode.DisplayMemberOnly
+                        Return GenericColumn(column)
+                End Select
+            Case Else
+                Throw New Exception("Unexpected column data type.")
         End Select
         Return Nothing
     End Function
 
-    Private Function GenericColumn(Column As DataGridColumn) As DataGridViewColumn
+    Private Function GenericColumn(column As DataGridColumn) As DataGridViewColumn
         Dim NewCol As New DataGridViewColumn
-        NewCol.Name = Column.ColumnName
-        NewCol.DataPropertyName = Column.ColumnName
-        NewCol.HeaderText = Column.ColumnCaption
-        NewCol.ValueType = Column.ColumnType
+        NewCol.Name = column.ColumnName
+        NewCol.DataPropertyName = column.ColumnName
+        NewCol.HeaderText = column.ColumnCaption
+        NewCol.ValueType = column.ColumnType
         NewCol.CellTemplate = New DataGridViewTextBoxCell
         NewCol.SortMode = DataGridViewColumnSortMode.Automatic
-        NewCol.ReadOnly = Column.ColumnReadOnly
-        NewCol.Visible = Column.ColumnVisible
+        NewCol.ReadOnly = column.ColumnReadOnly
+        NewCol.Visible = column.ColumnVisible
         Return NewCol
     End Function
 
-    Private Function DataGridComboColumn(IndexType() As ComboboxDataStruct, HeaderText As String, Name As String) As DataGridViewComboBoxColumn
+    Private Function DataGridComboColumn(indexType() As ComboboxDataStruct, headerText As String, name As String) As DataGridViewComboBoxColumn
         Dim NewCombo As New DataGridViewComboBoxColumn
         NewCombo.Items.Clear()
-        NewCombo.HeaderText = HeaderText
-        NewCombo.DataPropertyName = Name
-        NewCombo.Name = Name
+        NewCombo.HeaderText = headerText
+        NewCombo.DataPropertyName = name
+        NewCombo.Name = name
         NewCombo.Width = 200
         NewCombo.SortMode = DataGridViewColumnSortMode.Automatic
         NewCombo.DisplayMember = NameOf(ComboboxDataStruct.DisplayValue)
         NewCombo.ValueMember = NameOf(ComboboxDataStruct.Code)
-        NewCombo.DataSource = IndexType
+        NewCombo.DataSource = indexType
         Return NewCombo
     End Function
 
     ''' <summary>
     ''' Returns a comma separated string containing the DB columns within a List(Of ColumnStruct). For use in queries.
     ''' </summary>
-    ''' <param name="Columns"></param>
+    ''' <param name="columns"></param>
     ''' <returns></returns>
-    Public Function ColumnsString(Columns As List(Of DataGridColumn)) As String
+    Public Function ColumnsString(columns As List(Of DataGridColumn)) As String
         Dim ColString As String = ""
-        For Each col In Columns
+        For Each col In columns
             ColString += col.ColumnName
-            If Columns.IndexOf(col) <> Columns.Count - 1 Then ColString += ","
+            If columns.IndexOf(col) <> columns.Count - 1 Then ColString += ","
         Next
         Return ColString
     End Function
 
-    Public Function GetColIndex(ByVal Grid As DataGridView, ByVal strColName As String) As Integer
+    Public Function GetColIndex(grid As DataGridView, ByVal columnName As String) As Integer
         Try
-            Return Grid.Columns.Item(strColName).Index
+            Return grid.Columns.Item(columnName).Index
         Catch ex As Exception
             Return -1
         End Try
     End Function
 
-    Public Function GetCurrentCellValue(ByVal Grid As DataGridView, ColumnName As String) As String
-        Return NoNull(Grid.Item(GetColIndex(Grid, ColumnName), Grid.CurrentRow.Index).Value.ToString)
+    Public Function GetCurrentCellValue(grid As DataGridView, columnName As String) As String
+        Return NoNull(grid.Item(GetColIndex(grid, columnName), grid.CurrentRow.Index).Value.ToString)
     End Function
 
-    Public Sub CopyToGridForm(Grid As DataGridView, Parent As ExtendedForm)
-        If Grid IsNot Nothing Then
-            Dim NewGridForm As New GridForm(Parent, Grid.Name & " Copy")
-            NewGridForm.AddGrid(Grid.Name, Grid.Name, DirectCast(Grid.DataSource, DataTable).Copy())
+    Public Sub CopyToGridForm(grid As DataGridView, parentForm As ExtendedForm)
+        If grid IsNot Nothing Then
+            Dim NewGridForm As New GridForm(parentForm, grid.Name & " Copy")
+            NewGridForm.AddGrid(grid.Name, grid.Name, DirectCast(grid.DataSource, DataTable).Copy())
             NewGridForm.Show()
         End If
     End Sub
 
-    Public Sub CopySelectedGridData(Grid As DataGridView)
-        Grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
-        Clipboard.SetDataObject(Grid.GetClipboardContent())
-        Grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
+    Public Sub CopySelectedGridData(grid As DataGridView)
+        grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
+        Clipboard.SetDataObject(grid.GetClipboardContent())
+        grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
     End Sub
 End Module
