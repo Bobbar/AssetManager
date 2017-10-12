@@ -233,12 +233,12 @@ Public Class MainForm
         txtSerialSearch.Tag = New DBControlInfo(DevicesCols.Serial)
         txtAssetTagSearch.Tag = New DBControlInfo(DevicesCols.AssetTag)
         txtDescription.Tag = New DBControlInfo(DevicesCols.Description)
-        cmbEquipType.Tag = New DBControlInfo(DevicesCols.EQType, DeviceIndex.EquipType)
+        cmbEquipType.Tag = New DBControlInfo(DevicesCols.EQType, DeviceAttribute.EquipType)
         txtReplaceYear.Tag = New DBControlInfo(DevicesCols.ReplacementYear)
-        cmbOSType.Tag = New DBControlInfo(DevicesCols.OSVersion, DeviceIndex.OSType)
-        cmbLocation.Tag = New DBControlInfo(DevicesCols.Location, DeviceIndex.Locations)
+        cmbOSType.Tag = New DBControlInfo(DevicesCols.OSVersion, DeviceAttribute.OSType)
+        cmbLocation.Tag = New DBControlInfo(DevicesCols.Location, DeviceAttribute.Locations)
         txtCurUser.Tag = New DBControlInfo(DevicesCols.CurrentUser)
-        cmbStatus.Tag = New DBControlInfo(DevicesCols.Status, DeviceIndex.StatusType)
+        cmbStatus.Tag = New DBControlInfo(DevicesCols.Status, DeviceAttribute.StatusType)
         chkTrackables.Tag = New DBControlInfo(DevicesCols.Trackable)
     End Sub
 
@@ -316,10 +316,10 @@ Public Class MainForm
     End Sub
 
     Private Sub RefreshCombos()
-        FillComboBox(DeviceIndex.EquipType, cmbEquipType)
-        FillComboBox(DeviceIndex.Locations, cmbLocation)
-        FillComboBox(DeviceIndex.StatusType, cmbStatus)
-        FillComboBox(DeviceIndex.OSType, cmbOSType)
+        FillComboBox(DeviceAttribute.EquipType, cmbEquipType)
+        FillComboBox(DeviceAttribute.Locations, cmbLocation)
+        FillComboBox(DeviceAttribute.StatusType, cmbStatus)
+        FillComboBox(DeviceAttribute.OSType, cmbOSType)
     End Sub
 
     Private Function ResultGridColumns() As List(Of DataGridColumn)
@@ -327,10 +327,10 @@ Public Class MainForm
         ColList.Add(New DataGridColumn(DevicesCols.CurrentUser, "User", GetType(String)))
         ColList.Add(New DataGridColumn(DevicesCols.AssetTag, "Asset ID", GetType(String)))
         ColList.Add(New DataGridColumn(DevicesCols.Serial, "Serial", GetType(String)))
-        ColList.Add(New DataGridColumn(DevicesCols.EQType, "Device Type", GetType(ComboboxDataStruct), DeviceIndex.EquipType, ComboColumnDisplayMode.DisplayMemberOnly))
+        ColList.Add(New DataGridColumn(DevicesCols.EQType, "Device Type", DeviceAttribute.EquipType, ColumnDisplayTypes.AttributeDisplayMemberOnly))
         ColList.Add(New DataGridColumn(DevicesCols.Description, "Description", GetType(String)))
-        ColList.Add(New DataGridColumn(DevicesCols.OSVersion, "OS Version", GetType(ComboboxDataStruct), DeviceIndex.OSType, ComboColumnDisplayMode.DisplayMemberOnly))
-        ColList.Add(New DataGridColumn(DevicesCols.Location, "Location", GetType(ComboboxDataStruct), DeviceIndex.Locations, ComboColumnDisplayMode.DisplayMemberOnly))
+        ColList.Add(New DataGridColumn(DevicesCols.OSVersion, "OS Version", DeviceAttribute.OSType, ColumnDisplayTypes.AttributeDisplayMemberOnly))
+        ColList.Add(New DataGridColumn(DevicesCols.Location, "Location", DeviceAttribute.Locations, ColumnDisplayTypes.AttributeDisplayMemberOnly))
         ColList.Add(New DataGridColumn(DevicesCols.PO, "PO Number", GetType(String)))
         ColList.Add(New DataGridColumn(DevicesCols.PurchaseDate, "Purchase Date", GetType(Date)))
         ColList.Add(New DataGridColumn(DevicesCols.ReplacementYear, "Replace Year", GetType(String)))
@@ -422,7 +422,7 @@ Public Class MainForm
                         If OKToCloseChildren(Me) Then
                             CloseChildren(Me)
                             ServerInfo.CurrentDataBase = database
-                            BuildIndexes()
+                            PopulateAttributeIndexes()
                             RefreshCombos()
                             InitDBControls()
                             GlobalSwitches.BuildingCache = True

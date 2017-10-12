@@ -1,24 +1,24 @@
 ﻿Module GlobalInstances
 
-    Public Class SibiIndexes
-        Public StatusType() As ComboboxDataStruct
-        Public ItemStatusType() As ComboboxDataStruct
-        Public RequestType() As ComboboxDataStruct
-        Public AttachFolder() As ComboboxDataStruct
+    Public Class SibiAttributes
+        Public StatusType() As AttributeDataStruct
+        Public ItemStatusType() As AttributeDataStruct
+        Public RequestType() As AttributeDataStruct
+        Public AttachFolder() As AttributeDataStruct
     End Class
 
-    Public Class DeviceIndexes
-        Public Locations() As ComboboxDataStruct
-        Public ChangeType() As ComboboxDataStruct
-        Public EquipType() As ComboboxDataStruct
-        Public OSType() As ComboboxDataStruct
-        Public StatusType() As ComboboxDataStruct
+    Public Class DeviceAttributes
+        Public Locations() As AttributeDataStruct
+        Public ChangeType() As AttributeDataStruct
+        Public EquipType() As AttributeDataStruct
+        Public OSType() As AttributeDataStruct
+        Public StatusType() As AttributeDataStruct
     End Class
 
-    Public DeviceIndex As New DeviceIndexes
-    Public SibiIndex As New SibiIndexes
+    Public DeviceAttribute As New DeviceAttributes
+    Public SibiAttribute As New SibiAttributes
     Public MunisFunc As New MunisFunctions
     Public AssetFunc As New AssetManagerFunctions
     Public FTPFunc As New FtpFunctions
-    'Public DBFactory As New DBFactory
+
 End Module

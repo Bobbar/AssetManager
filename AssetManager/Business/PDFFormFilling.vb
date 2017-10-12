@@ -230,10 +230,10 @@ Public Class PdfFormFilling
             With newDialog
                 .Text = "Additional Input Required"
                 Dim cmbFrom As New ComboBox
-                FillComboBox(DeviceIndex.Locations, cmbFrom)
+                FillComboBox(DeviceAttribute.Locations, cmbFrom)
                 .AddCustomControl("cmbFromLoc", "Transfer FROM:", DirectCast(cmbFrom, Control))
                 Dim cmbTo As New ComboBox
-                FillComboBox(DeviceIndex.Locations, cmbTo)
+                FillComboBox(DeviceAttribute.Locations, cmbTo)
                 .AddCustomControl("cmbToLoc", "Transfer TO:", DirectCast(cmbTo, Control))
                 .AddLabel("Reason For Transfer-Check One:", True)
                 .AddCheckBox("chkBetterU", "Better Use of asset:")
@@ -249,9 +249,9 @@ Public Class PdfFormFilling
                 .SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.Serial)
                 .SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.Description)
                 .SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD - 5200")
-                .SetField("topmostSubform[0].Page1[0].Location[0]", GetDisplayValueFromIndex(DeviceIndex.Locations, CInt(newDialog.GetControlValue("cmbFromLoc"))))
+                .SetField("topmostSubform[0].Page1[0].Location[0]", GetDisplayValueFromIndex(DeviceAttribute.Locations, CInt(newDialog.GetControlValue("cmbFromLoc"))))
                 .SetField("topmostSubform[0].Page1[0].Department_2[0]", "FCBDD - 5200")
-                .SetField("topmostSubform[0].Page1[0].Location_2[0]", GetDisplayValueFromIndex(DeviceIndex.Locations, CInt(newDialog.GetControlValue("cmbToLoc"))))
+                .SetField("topmostSubform[0].Page1[0].Location_2[0]", GetDisplayValueFromIndex(DeviceAttribute.Locations, CInt(newDialog.GetControlValue("cmbToLoc"))))
                 .SetField("topmostSubform[0].Page1[0].Better_utilization_of_assets[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkBetterU"))))
                 .SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkTradeIn"))))
                 .SetField("topmostSubform[0].Page1[0].Excess_assets[0]", CheckValueToString(CBool(newDialog.GetControlValue("chkExcess"))))

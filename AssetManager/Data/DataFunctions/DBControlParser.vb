@@ -22,7 +22,7 @@ Public Class DBControlInfo
 
 #Region "Fields"
 
-    Private db_attrib_index As ComboboxDataStruct()
+    Private db_attrib_index As AttributeDataStruct()
     Private db_column As String
     Private db_parse_type As ParseType
     Private db_required As Boolean
@@ -52,14 +52,14 @@ Public Class DBControlInfo
         db_attrib_index = Nothing
     End Sub
 
-    Sub New(dataColumn As String, attribIndex As ComboboxDataStruct(), Optional required As Boolean = False)
+    Sub New(dataColumn As String, attribIndex As AttributeDataStruct(), Optional required As Boolean = False)
         db_column = dataColumn
         db_required = required
         db_parse_type = ParseType.UpdateAndDisplay
         db_attrib_index = attribIndex
     End Sub
 
-    Sub New(dataColumn As String, attribIndex As ComboboxDataStruct(), parseType As ParseType, Optional required As Boolean = False)
+    Sub New(dataColumn As String, attribIndex As AttributeDataStruct(), parseType As ParseType, Optional required As Boolean = False)
         db_column = dataColumn
         db_required = required
         db_parse_type = parseType
@@ -71,14 +71,14 @@ Public Class DBControlInfo
 #Region "Properties"
 
     ''' <summary>
-    ''' Gets or sets the <see cref="ComboboxDataStruct"/> index for <see cref="ComboBox"/> controls.
+    ''' Gets or sets the <see cref="AttributeDataStruct"/> index for <see cref="ComboBox"/> controls.
     ''' </summary>
     ''' <returns></returns>
-    Public Property AttribIndex As ComboboxDataStruct()
+    Public Property AttribIndex As AttributeDataStruct()
         Get
             Return db_attrib_index
         End Get
-        Set(value As ComboboxDataStruct())
+        Set(value As AttributeDataStruct())
             db_attrib_index = value
         End Set
     End Property

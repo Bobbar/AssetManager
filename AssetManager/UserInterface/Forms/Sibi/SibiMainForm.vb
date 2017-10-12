@@ -105,7 +105,7 @@ Public Class SibiMainForm
             SendToGrid(DBFactory.GetDatabase.DataTableFromCommand(cmd))
         Catch ex As Exception
             'InvalidCastException is expected when the last LastCmd was populated while in cached DB mode and now cached mode is currently false. 
-            'ShowAll will start a new connection and populate LastCmd with a correctly matching DBCommand. See DBWrapper.GetCommand()
+            'ShowAll will start a new connection and populate LastCmd with a correctly matching DBCommand. See DBFactory.GetCommand()
             If TypeOf ex Is InvalidCastException Then
                 ShowAll()
             Else
@@ -139,10 +139,10 @@ Public Class SibiMainForm
     Private Function SibiTableColumns() As List(Of DataGridColumn)
         Dim ColList As New List(Of DataGridColumn)
         ColList.Add(New DataGridColumn(SibiRequestCols.RequestNumber, "Request #", GetType(Integer)))
-        ColList.Add(New DataGridColumn(SibiRequestCols.Status, "Status", GetType(ComboboxDataStruct), SibiIndex.StatusType, ComboColumnDisplayMode.DisplayMemberOnly))
+        ColList.Add(New DataGridColumn(SibiRequestCols.Status, "Status", SibiAttribute.StatusType, ColumnDisplayTypes.AttributeDisplayMemberOnly))
         ColList.Add(New DataGridColumn(SibiRequestCols.Description, "Description", GetType(String)))
         ColList.Add(New DataGridColumn(SibiRequestCols.RequestUser, "Request User", GetType(String)))
-        ColList.Add(New DataGridColumn(SibiRequestCols.Type, "Request Type", GetType(ComboboxDataStruct), SibiIndex.RequestType, ComboColumnDisplayMode.DisplayMemberOnly))
+        ColList.Add(New DataGridColumn(SibiRequestCols.Type, "Request Type", SibiAttribute.RequestType, ColumnDisplayTypes.AttributeDisplayMemberOnly))
         ColList.Add(New DataGridColumn(SibiRequestCols.NeedBy, "Need By", GetType(Date)))
         ColList.Add(New DataGridColumn(SibiRequestCols.PO, "PO Number", GetType(String)))
         ColList.Add(New DataGridColumn(SibiRequestCols.RequisitionNumber, "Req. Number", GetType(String)))

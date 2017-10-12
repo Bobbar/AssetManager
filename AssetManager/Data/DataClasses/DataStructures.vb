@@ -1,4 +1,4 @@
-﻿Public Structure ComboboxDataStruct
+﻿Public Structure AttributeDataStruct
     Public Property DisplayValue As String
     Public Property Code As String
     Public Property ID As Integer

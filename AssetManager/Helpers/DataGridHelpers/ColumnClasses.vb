@@ -4,8 +4,8 @@
     Public Property ColumnType As Type
     Public Property ColumnReadOnly As Boolean
     Public Property ColumnVisible As Boolean
-    Public Property ComboIndex As ComboboxDataStruct()
-    Public Property ComboDisplayMode As ComboColumnDisplayMode
+    Public Property AttributeIndex As AttributeDataStruct()
+    Public Property ColumnDisplayType As ColumnDisplayTypes
 
     Sub New(name As String, caption As String, type As Type)
         ColumnName = name
@@ -13,32 +13,38 @@
         ColumnType = type
         ColumnReadOnly = False
         ColumnVisible = True
-        ComboIndex = Nothing
-        ComboDisplayMode = ComboColumnDisplayMode.DefaultMode
+        AttributeIndex = Nothing
+        ColumnDisplayType = ColumnDisplayTypes.DefaultType
     End Sub
 
-    Sub New(name As String, caption As String, type As Type, comboIndex() As ComboboxDataStruct)
+    Sub New(name As String, caption As String, type As Type, displayMode As ColumnDisplayTypes)
         ColumnName = name
         ColumnCaption = caption
         ColumnType = type
         ColumnReadOnly = False
         ColumnVisible = True
-        Me.ComboIndex = comboIndex
-        ComboDisplayMode = ComboColumnDisplayMode.DefaultMode
+        AttributeIndex = Nothing
+        ColumnDisplayType = displayMode
     End Sub
 
-    Sub New(name As String, caption As String, type As Type, comboIndex() As ComboboxDataStruct, displayMode As ComboColumnDisplayMode)
+    Sub New(name As String, caption As String, attribIndex() As AttributeDataStruct)
         ColumnName = name
         ColumnCaption = caption
-        If displayMode <> ComboColumnDisplayMode.DefaultMode Then
-            ColumnType = GetType(String)
-        Else
-            ColumnType = type
-        End If
+        ColumnType = GetType(String)
         ColumnReadOnly = False
         ColumnVisible = True
-        Me.ComboIndex = comboIndex
-        ComboDisplayMode = displayMode
+        Me.AttributeIndex = attribIndex
+        ColumnDisplayType = ColumnDisplayTypes.AttributeCombo
+    End Sub
+
+    Sub New(name As String, caption As String, attribIndex() As AttributeDataStruct, displayMode As ColumnDisplayTypes)
+        ColumnName = name
+        ColumnCaption = caption
+        ColumnType = GetType(String)
+        ColumnReadOnly = False
+        ColumnVisible = True
+        Me.AttributeIndex = attribIndex
+        ColumnDisplayType = displayMode
     End Sub
 
     Sub New(name As String, caption As String, type As Type, isReadOnly As Boolean, visible As Boolean)
@@ -47,16 +53,17 @@
         ColumnType = type
         ColumnReadOnly = isReadOnly
         ColumnVisible = visible
-        ComboIndex = Nothing
-        ComboDisplayMode = ComboColumnDisplayMode.DefaultMode
+        AttributeIndex = Nothing
+        ColumnDisplayType = ColumnDisplayTypes.DefaultType
     End Sub
 
 End Class
 
-Public Enum ComboColumnDisplayMode
-    DefaultMode
-    DisplayMemberOnly
-
+Public Enum ColumnDisplayTypes
+    DefaultType
+    AttributeCombo
+    AttributeDisplayMemberOnly
+    NotePreview
 
 End Enum
 

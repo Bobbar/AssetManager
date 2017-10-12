@@ -62,7 +62,6 @@ Public Class SibiManageRequestForm
         ResetBackColors(Me)
         HideEditControls()
         dgvNotes.DataSource = Nothing
-        SetupGrid(RequestItemsGrid, RequestItemsColumns)
         FillCombos()
         pnlCreate.Visible = False
         CurrentRequest = Nothing
@@ -97,9 +96,9 @@ Public Class SibiManageRequestForm
             CurrentRequest = New RequestObject
             Me.FormUID = CurrentRequest.GUID
             IsModifying = True
-            SetupGrid(RequestItemsGrid, RequestItemsColumns)
             'Set the datasource to a new empty DB table.
-            RequestItemsGrid.DataSource = DBFactory.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0")
+            Dim EmptyTable = DBFactory.GetDatabase.DataTableFromQueryString("SELECT " & ColumnsString(RequestItemsColumns) & " FROM " & SibiRequestItemsCols.TableName & " LIMIT 0")
+            PopulateGrid(RequestItemsGrid, EmptyTable, RequestItemsColumns)
             EnableControls()
             pnlCreate.Visible = True
             Me.Show()
@@ -421,7 +420,7 @@ Public Class SibiManageRequestForm
         If dgvNotes.CurrentRow IsNot Nothing AndAlso dgvNotes.CurrentRow.Index > -1 Then
             Dim blah = Message("Are you sure?", vbYesNo + vbQuestion, "Delete Note", Me)
             If blah = vbYes Then
-                Dim NoteUID As String = dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString
+                Dim NoteUID As String = GetCurrentCellValue(dgvNotes, SibiNotesCols.NoteUID)
                 If NoteUID <> "" Then
                     Message(DeleteItem_FromSQL(NoteUID, SibiNotesCols.NoteUID, SibiNotesCols.TableName) & " Rows affected.", vbOKOnly + vbInformation, "Delete Item", Me)
                     OpenRequest(CurrentRequest.GUID)
@@ -457,9 +456,9 @@ Public Class SibiManageRequestForm
             With info
                 .Description = Trim(txtDescription.Text)
                 .RequestUser = Trim(txtUser.Text)
-                .RequestType = GetDBValue(SibiIndex.RequestType, cmbType.SelectedIndex)
+                .RequestType = GetDBValue(SibiAttribute.RequestType, cmbType.SelectedIndex)
                 .NeedByDate = dtNeedBy.Value
-                .Status = GetDBValue(SibiIndex.StatusType, cmbStatus.SelectedIndex)
+                .Status = GetDBValue(SibiAttribute.StatusType, cmbStatus.SelectedIndex)
                 .PO = Trim(txtPO.Text)
                 .RequisitionNumber = Trim(txtReqNumber.Text)
                 .RTNumber = Trim(txtRTNumber.Text)
@@ -526,7 +525,7 @@ Public Class SibiManageRequestForm
     End Sub
     Private Sub ViewNote()
         Try
-            Dim NoteUID = dgvNotes.Item(GetColIndex(dgvNotes, "UID"), dgvNotes.CurrentRow.Index).Value.ToString
+            Dim NoteUID = GetCurrentCellValue(dgvNotes, SibiNotesCols.NoteUID)
             If Not FormIsOpenByUID(GetType(SibiNotesForm), NoteUID) Then
                 Dim ViewNote As New SibiNotesForm(Me, NoteUID)
             End If
@@ -607,8 +606,8 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub FillCombos()
-        FillComboBox(SibiIndex.StatusType, cmbStatus)
-        FillComboBox(SibiIndex.RequestType, cmbType)
+        FillComboBox(SibiAttribute.StatusType, cmbStatus)
+        FillComboBox(SibiAttribute.RequestType, cmbType)
     End Sub
 
     Public Overrides Function OKToClose() As Boolean
@@ -685,9 +684,9 @@ Public Class SibiManageRequestForm
     Private Sub InitDBControls()
         txtDescription.Tag = New DBControlInfo(SibiRequestCols.Description, True)
         txtUser.Tag = New DBControlInfo(SibiRequestCols.RequestUser, True)
-        cmbType.Tag = New DBControlInfo(SibiRequestCols.Type, SibiIndex.RequestType, True)
+        cmbType.Tag = New DBControlInfo(SibiRequestCols.Type, SibiAttribute.RequestType, True)
         dtNeedBy.Tag = New DBControlInfo(SibiRequestCols.NeedBy, True)
-        cmbStatus.Tag = New DBControlInfo(SibiRequestCols.Status, SibiIndex.StatusType, True)
+        cmbStatus.Tag = New DBControlInfo(SibiRequestCols.Status, SibiAttribute.StatusType, True)
         txtPO.Tag = New DBControlInfo(SibiRequestCols.PO, False)
         txtReqNumber.Tag = New DBControlInfo(SibiRequestCols.RequisitionNumber, False)
         txtRequestNum.Tag = New DBControlInfo(SibiRequestCols.RequestNumber, ParseType.DisplayOnly, False)
@@ -720,21 +719,12 @@ Public Class SibiManageRequestForm
 
     Private Sub LoadNotes(RequestUID As String)
         Try
-            Dim strPullNotesQry As String = "SELECT * FROM " & SibiNotesCols.TableName & " WHERE " & SibiNotesCols.RequestUID & "='" & RequestUID & "' ORDER BY " & SibiNotesCols.DateStamp & " DESC"
-            Using table As New DataTable, Results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strPullNotesQry)
-                Dim intPreviewChars As Integer = 50
-                table.Columns.Add("Date Stamp")
-                table.Columns.Add("Preview")
-                table.Columns.Add("UID")
-                For Each r As DataRow In Results.Rows
-                    Dim NoteText As String = RTFToPlainText(r.Item(SibiNotesCols.Note).ToString)
-                    table.Rows.Add(r.Item(SibiNotesCols.DateStamp),
-                                   IIf(Len(NoteText) > intPreviewChars, NotePreview(NoteText), NoteText),
-                                   r.Item(SibiNotesCols.NoteUID))
-                Next
-                dgvNotes.DataSource = table
-                dgvNotes.ClearSelection()
+            Dim NotesQry As String = "SELECT * FROM " & SibiNotesCols.TableName & " WHERE " & SibiNotesCols.RequestUID & "='" & RequestUID & "' ORDER BY " & SibiNotesCols.DateStamp & " DESC"
+            Using Results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(NotesQry)
+                PopulateGrid(dgvNotes, Results, NotesGridColumns)
             End Using
+
+            dgvNotes.ClearSelection()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -807,13 +797,21 @@ Public Class SibiManageRequestForm
         OpenRequest(CurrentRequest.GUID)
     End Sub
 
+    Private Function NotesGridColumns() As List(Of DataGridColumn)
+        Dim ColList As New List(Of DataGridColumn)
+        ColList.Add(New DataGridColumn(SibiNotesCols.DateStamp, "Date Stamp", GetType(Date)))
+        ColList.Add(New DataGridColumn(SibiNotesCols.Note, "Note", GetType(String), ColumnDisplayTypes.NotePreview))
+        ColList.Add(New DataGridColumn(SibiNotesCols.NoteUID, "UID", GetType(String), True, False))
+        Return ColList
+    End Function
+
     Private Function RequestItemsColumns() As List(Of DataGridColumn)
         Dim ColList As New List(Of DataGridColumn)
         ColList.Add(New DataGridColumn(SibiRequestItemsCols.User, "User", GetType(String)))
         ColList.Add(New DataGridColumn(SibiRequestItemsCols.Description, "Description", GetType(String)))
         ColList.Add(New DataGridColumn(SibiRequestItemsCols.Qty, "Qty", GetType(Integer)))
-        ColList.Add(New DataGridColumn(SibiRequestItemsCols.Location, "Location", GetType(ComboboxDataStruct), DeviceIndex.Locations))
-        ColList.Add(New DataGridColumn(SibiRequestItemsCols.Status, "Status", GetType(ComboboxDataStruct), SibiIndex.ItemStatusType))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.Location, "Location", DeviceAttribute.Locations))
+        ColList.Add(New DataGridColumn(SibiRequestItemsCols.Status, "Status", SibiAttribute.ItemStatusType))
         ColList.Add(New DataGridColumn(SibiRequestItemsCols.ReplaceAsset, "Replace Asset", GetType(String)))
         ColList.Add(New DataGridColumn(SibiRequestItemsCols.ReplaceSerial, "Replace Serial", GetType(String)))
         ColList.Add(New DataGridColumn(SibiRequestItemsCols.NewAsset, "New Asset", GetType(String)))
@@ -951,22 +949,10 @@ Public Class SibiManageRequestForm
         Next
     End Sub
 
-    'Private Function RTFToPlainText(strRTF As String) As String
-    '    Try
-    '        Using rtBox As New RichTextBox
-    '            rtBox.Rtf = strRTF
-    '            Return rtBox.Text
-    '        End Using
-    '    Catch ex As ArgumentException
-    '        'If we get an argument error, that means the text is not RTF so we return the plain text.
-    '        Return strRTF
-    '    End Try
-    'End Function
-
     Private Sub SendToGrid(Results As DataTable)
         Try
             bolGridFilling = True
-            RequestItemsGrid.DataSource = Results
+            PopulateGrid(RequestItemsGrid, Results, RequestItemsColumns)
             RequestItemsGrid.ClearSelection()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

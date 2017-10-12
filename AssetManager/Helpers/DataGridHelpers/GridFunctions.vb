@@ -4,11 +4,12 @@
         SetupGrid(grid, columns)
         Using data
             grid.DataSource = Nothing
-            grid.DataSource = RebuildDataSource(data, columns)
+            grid.DataSource = BuildDataSource(data, columns)
         End Using
     End Sub
-    Public Function RebuildDataSource(data As DataTable, columns As List(Of DataGridColumn)) As DataTable
-        Dim NeedsRebuilt As Boolean = columns.Exists(Function(c) c.ComboDisplayMode <> ComboColumnDisplayMode.DefaultMode)
+
+    Private Function BuildDataSource(data As DataTable, columns As List(Of DataGridColumn)) As DataTable
+        Dim NeedsRebuilt As Boolean = columns.Exists(Function(c) c.ColumnDisplayType = ColumnDisplayTypes.AttributeDisplayMemberOnly Or c.ColumnDisplayType = ColumnDisplayTypes.NotePreview)
         If NeedsRebuilt Then
             Dim NewTable As New DataTable
             For Each col In columns
@@ -19,12 +20,19 @@
                 NewRow = NewTable.NewRow
                 For Each col In columns
 
-                    Select Case col.ComboDisplayMode
-                        Case ComboColumnDisplayMode.DefaultMode
+                    Select Case col.ColumnDisplayType
+                        Case ColumnDisplayTypes.DefaultType, ColumnDisplayTypes.AttributeCombo
                             NewRow.Item(col.ColumnName) = row.Item(col.ColumnName)
-                        Case ComboColumnDisplayMode.DisplayMemberOnly
-                            NewRow.Item(col.ColumnName) = GetDisplayValueFromCode(col.ComboIndex, row.Item(col.ColumnName).ToString)
+
+                        Case ColumnDisplayTypes.AttributeDisplayMemberOnly
+                            NewRow.Item(col.ColumnName) = GetDisplayValueFromCode(col.AttributeIndex, row.Item(col.ColumnName).ToString)
+
+                        Case ColumnDisplayTypes.NotePreview
+                            Dim NoteText = RTFToPlainText(row.Item(col.ColumnName).ToString)
+                            NewRow.Item(col.ColumnName) = NotePreview(NoteText)
+
                     End Select
+
                 Next
                 NewTable.Rows.Add(NewRow)
             Next
@@ -34,34 +42,22 @@
         End If
     End Function
 
-    Public Sub SetupGrid(grid As DataGridView, columns As List(Of DataGridColumn))
-        Try
-            grid.DataSource = Nothing
-            grid.Rows.Clear()
-            grid.Columns.Clear()
-            grid.AutoGenerateColumns = False
-
-            For Each col As DataGridColumn In columns
-                grid.Columns.Add(GetColumn(col))
-            Next
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
+    Private Sub SetupGrid(grid As DataGridView, columns As List(Of DataGridColumn))
+        grid.DataSource = Nothing
+        grid.Rows.Clear()
+        grid.Columns.Clear()
+        grid.AutoGenerateColumns = False
+        For Each col As DataGridColumn In columns
+            grid.Columns.Add(GetColumn(col))
+        Next
     End Sub
 
     Private Function GetColumn(column As DataGridColumn) As DataGridViewColumn
-        Select Case column.ColumnType
-            Case GetType(String), GetType(Integer), GetType(Date)
+        Select Case column.ColumnDisplayType
+            Case ColumnDisplayTypes.DefaultType, ColumnDisplayTypes.AttributeDisplayMemberOnly, ColumnDisplayTypes.NotePreview
                 Return GenericColumn(column)
-            Case GetType(ComboboxDataStruct)
-                Select Case column.ComboDisplayMode
-                    Case ComboColumnDisplayMode.DefaultMode
-                        Return DataGridComboColumn(column.ComboIndex, column.ColumnCaption, column.ColumnName)
-                    Case ComboColumnDisplayMode.DisplayMemberOnly
-                        Return GenericColumn(column)
-                End Select
-            Case Else
-                Throw New Exception("Unexpected column data type.")
+            Case ColumnDisplayTypes.AttributeCombo
+                Return DataGridComboColumn(column.AttributeIndex, column.ColumnCaption, column.ColumnName)
         End Select
         Return Nothing
     End Function
@@ -79,7 +75,7 @@
         Return NewCol
     End Function
 
-    Private Function DataGridComboColumn(indexType() As ComboboxDataStruct, headerText As String, name As String) As DataGridViewComboBoxColumn
+    Private Function DataGridComboColumn(indexType() As AttributeDataStruct, headerText As String, name As String) As DataGridViewComboBoxColumn
         Dim NewCombo As New DataGridViewComboBoxColumn
         NewCombo.Items.Clear()
         NewCombo.HeaderText = headerText
@@ -87,8 +83,8 @@
         NewCombo.Name = name
         NewCombo.Width = 200
         NewCombo.SortMode = DataGridViewColumnSortMode.Automatic
-        NewCombo.DisplayMember = NameOf(ComboboxDataStruct.DisplayValue)
-        NewCombo.ValueMember = NameOf(ComboboxDataStruct.Code)
+        NewCombo.DisplayMember = NameOf(AttributeDataStruct.DisplayValue)
+        NewCombo.ValueMember = NameOf(AttributeDataStruct.Code)
         NewCombo.DataSource = indexType
         Return NewCombo
     End Function

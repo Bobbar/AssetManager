@@ -49,8 +49,8 @@
 
     Private Sub MunisResults_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles MunisResults.CellClick
         With SelectedEmpInfo
-            .Name = MunisResults.Item(GetColIndex(MunisResults, "a_name_first"), MunisResults.CurrentRow.Index).Value.ToString & " " & MunisResults.Item(GetColIndex(MunisResults, "a_name_last"), MunisResults.CurrentRow.Index).Value.ToString.ToString
-            .Number = MunisResults.Item(GetColIndex(MunisResults, "a_employee_number"), MunisResults.CurrentRow.Index).Value.ToString
+            .Name = GetCurrentCellValue(MunisResults, "a_name_first") & " " & GetCurrentCellValue(MunisResults, "a_name_last")
+            .Number = GetCurrentCellValue(MunisResults, "a_employee_number")
         End With
         lblSelectedEmp.Text = "Selected Emp: " & SelectedEmpInfo.Name & " - " & SelectedEmpInfo.Number
     End Sub

@@ -441,7 +441,7 @@ Public Class ViewDeviceForm
     End Function
 
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
-        Dim EntryUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
+        Dim EntryUID As String = GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID)
         If Not FormIsOpenByUID(GetType(ViewHistoryForm), EntryUID) Then
             NewEntryView(EntryUID)
         End If
@@ -484,13 +484,13 @@ Public Class ViewDeviceForm
 
     Private Sub DeleteSelectedHistoricalEntry()
         If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice) Then Exit Sub
-        Dim strGUID As String = DataGridHistory.Item(GetColIndex(DataGridHistory, "GUID"), DataGridHistory.CurrentRow.Index).Value.ToString
+        Dim strGUID As String = GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID)
         Dim Info As DeviceObject
         Dim strQry = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & strGUID & "'"
         Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQry)
             Info = New DeviceObject(results)
         End Using
-        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & GetDisplayValueFromCode(DeviceIndex.ChangeType, Info.Historical.ChangeType) & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
+        Dim blah = Message("Are you absolutely sure?  This cannot be undone!" & vbCrLf & vbCrLf & "Entry info: " & Info.Historical.ActionDateTime & " - " & GetDisplayValueFromCode(DeviceAttribute.ChangeType, Info.Historical.ChangeType) & " - " & strGUID, vbYesNo + vbExclamation, "WARNING", Me)
         If blah = vbYes Then
             Message(DeleteHistoryEntry(strGUID) & " rows affected.", vbOKOnly + vbInformation, "Deletion Results", Me)
             LoadDevice(CurrentViewDevice.GUID)
@@ -615,7 +615,7 @@ Public Class ViewDeviceForm
             txtDueBack.Text = CurrentViewDevice.Tracking.DueBackTime.ToString
         Else
             txtCheckOut.BackColor = colCheckIn
-            txtCheckLocation.Text = GetDisplayValueFromCode(DeviceIndex.Locations, CurrentViewDevice.Location)
+            txtCheckLocation.Text = GetDisplayValueFromCode(DeviceAttribute.Locations, CurrentViewDevice.Location)
             lblCheckTime.Text = "CheckIn Time:"
             txtCheckTime.Text = CurrentViewDevice.Tracking.CheckinTime.ToString
             lblCheckUser.Text = "CheckIn User:"
@@ -671,10 +671,10 @@ Public Class ViewDeviceForm
         txtCurUser_View_REQ.Tag = New DBControlInfo(DevicesBaseCols.CurrentUser, True)
         txtDescription_View_REQ.Tag = New DBControlInfo(DevicesBaseCols.Description, True)
         dtPurchaseDate_View_REQ.Tag = New DBControlInfo(DevicesBaseCols.PurchaseDate, True)
-        cmbEquipType_View_REQ.Tag = New DBControlInfo(DevicesBaseCols.EQType, DeviceIndex.EquipType, True)
-        cmbLocation_View_REQ.Tag = New DBControlInfo(DevicesBaseCols.Location, DeviceIndex.Locations, True)
-        cmbOSVersion_REQ.Tag = New DBControlInfo(DevicesBaseCols.OSVersion, DeviceIndex.OSType, True)
-        cmbStatus_REQ.Tag = New DBControlInfo(DevicesBaseCols.Status, DeviceIndex.StatusType, True)
+        cmbEquipType_View_REQ.Tag = New DBControlInfo(DevicesBaseCols.EQType, DeviceAttribute.EquipType, True)
+        cmbLocation_View_REQ.Tag = New DBControlInfo(DevicesBaseCols.Location, DeviceAttribute.Locations, True)
+        cmbOSVersion_REQ.Tag = New DBControlInfo(DevicesBaseCols.OSVersion, DeviceAttribute.OSType, True)
+        cmbStatus_REQ.Tag = New DBControlInfo(DevicesBaseCols.Status, DeviceAttribute.StatusType, True)
 
         'Non-required and Misc Fields
         txtPONumber.Tag = New DBControlInfo(DevicesBaseCols.PO, False)
@@ -751,10 +751,10 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub RefreshCombos()
-        FillComboBox(DeviceIndex.EquipType, cmbEquipType_View_REQ)
-        FillComboBox(DeviceIndex.Locations, cmbLocation_View_REQ)
-        FillComboBox(DeviceIndex.OSType, cmbOSVersion_REQ)
-        FillComboBox(DeviceIndex.StatusType, cmbStatus_REQ)
+        FillComboBox(DeviceAttribute.EquipType, cmbEquipType_View_REQ)
+        FillComboBox(DeviceAttribute.Locations, cmbLocation_View_REQ)
+        FillComboBox(DeviceAttribute.OSType, cmbOSVersion_REQ)
+        FillComboBox(DeviceAttribute.StatusType, cmbStatus_REQ)
     End Sub
 
     Private Sub ResetBackColors()
@@ -799,35 +799,27 @@ Public Class ViewDeviceForm
         Return Nothing
     End Function
 
-    Private Sub SendToHistGrid(Grid As DataGridView, tblResults As DataTable)
+    Private Function HistoricalGridColumns() As List(Of DataGridColumn)
+        Dim ColList As New List(Of DataGridColumn)
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.ActionDateTime, "Time Stamp", GetType(Date)))
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.ChangeType, "Change Type", DeviceAttribute.ChangeType, ColumnDisplayTypes.AttributeDisplayMemberOnly))
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.ActionUser, "Action User", GetType(String)))
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.Notes, "Note Peek", GetType(String), ColumnDisplayTypes.NotePreview))
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.CurrentUser, "User", GetType(String)))
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.AssetTag, "Asset ID", GetType(String)))
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.Serial, "Serial", GetType(String)))
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.Description, "Description", GetType(String)))
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.Location, "Location", DeviceAttribute.Locations, ColumnDisplayTypes.AttributeDisplayMemberOnly))
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.PurchaseDate, "Purchase Date", GetType(Date)))
+        ColList.Add(New DataGridColumn(HistoricalDevicesCols.HistoryEntryUID, "GUID", GetType(String)))
+        Return ColList
+    End Function
+
+    Private Sub SendToHistGrid(Grid As DataGridView, results As DataTable)
         Try
-            Using table As New DataTable
-                If tblResults.Rows.Count > 0 Then
-                    table.Columns.Add("Time Stamp", GetType(Date))
-                    table.Columns.Add("Change Type", GetType(String))
-                    table.Columns.Add("Action User", GetType(String))
-                    table.Columns.Add("Note Peek", GetType(String))
-                    table.Columns.Add("User", GetType(String))
-                    table.Columns.Add("Asset ID", GetType(String))
-                    table.Columns.Add("Serial", GetType(String))
-                    table.Columns.Add("Description", GetType(String))
-                    table.Columns.Add("Location", GetType(String))
-                    table.Columns.Add("Purchase Date", GetType(Date))
-                    table.Columns.Add("GUID", GetType(String))
-                    For Each r As DataRow In tblResults.Rows
-                        table.Rows.Add(NoNull(r.Item(HistoricalDevicesCols.ActionDateTime)),
-                           GetDisplayValueFromCode(DeviceIndex.ChangeType, NoNull(r.Item(HistoricalDevicesCols.ChangeType))),
-                           NoNull(r.Item(HistoricalDevicesCols.ActionUser)),
-                           NotePreview(RTFToPlainText(NoNull(r.Item(HistoricalDevicesCols.Notes))), 25),
-                           NoNull(r.Item(HistoricalDevicesCols.CurrentUser)),
-                           NoNull(r.Item(HistoricalDevicesCols.AssetTag)),
-                           NoNull(r.Item(HistoricalDevicesCols.Serial)),
-                           NoNull(r.Item(HistoricalDevicesCols.Description)),
-                           GetDisplayValueFromCode(DeviceIndex.Locations, NoNull(r.Item(HistoricalDevicesCols.Location))),
-                           NoNull(r.Item(HistoricalDevicesCols.PurchaseDate)),
-                           NoNull(r.Item(HistoricalDevicesCols.HistoryEntryUID)))
-                    Next
-                    Grid.DataSource = table
+            Using results
+                If results.Rows.Count > 0 Then
+                    PopulateGrid(Grid, results, HistoricalGridColumns)
                 Else
                     Grid.DataSource = Nothing
                 End If
@@ -837,31 +829,25 @@ Public Class ViewDeviceForm
         End Try
     End Sub
 
-    Private Sub SendToTrackGrid(Grid As DataGridView, tblResults As DataTable)
+    Private Function TrackingGridColumns() As List(Of DataGridColumn)
+        Dim ColList As New List(Of DataGridColumn)
+        ColList.Add(New DataGridColumn(TrackablesCols.DateStamp, "Date", GetType(Date)))
+        ColList.Add(New DataGridColumn(TrackablesCols.CheckType, "Check Type", GetType(String)))
+        ColList.Add(New DataGridColumn(TrackablesCols.CheckoutUser, "Check Out User", GetType(String)))
+        ColList.Add(New DataGridColumn(TrackablesCols.CheckinUser, "Check In User", GetType(String)))
+        ColList.Add(New DataGridColumn(TrackablesCols.CheckoutTime, "Check Out", GetType(Date)))
+        ColList.Add(New DataGridColumn(TrackablesCols.CheckinTime, "Check In", GetType(Date)))
+        ColList.Add(New DataGridColumn(TrackablesCols.DueBackDate, "Due Back", GetType(Date)))
+        ColList.Add(New DataGridColumn(TrackablesCols.UseLocation, "Location", GetType(String)))
+        ColList.Add(New DataGridColumn(TrackablesCols.UID, "GUID", GetType(String)))
+        Return ColList
+    End Function
+
+    Private Sub SendToTrackGrid(Grid As DataGridView, results As DataTable)
         Try
-            Using table As New DataTable
-                If tblResults.Rows.Count > 0 Then
-                    table.Columns.Add("Date", GetType(String))
-                    table.Columns.Add("Check Type", GetType(String))
-                    table.Columns.Add("Check Out User", GetType(String))
-                    table.Columns.Add("Check In User", GetType(String))
-                    table.Columns.Add("Check Out", GetType(String))
-                    table.Columns.Add("Check In", GetType(String))
-                    table.Columns.Add("Due Back", GetType(String))
-                    table.Columns.Add("Location", GetType(String))
-                    table.Columns.Add("GUID", GetType(String))
-                    For Each r As DataRow In tblResults.Rows
-                        table.Rows.Add(NoNull(r.Item(TrackablesCols.DateStamp)),
-                           NoNull(r.Item(TrackablesCols.CheckType)),
-                           NoNull(r.Item(TrackablesCols.CheckoutUser)),
-                           NoNull(r.Item(TrackablesCols.CheckinUser)),
-                           NoNull(r.Item(TrackablesCols.CheckoutTime)),
-                           NoNull(r.Item(TrackablesCols.CheckinTime)),
-                           NoNull(r.Item(TrackablesCols.DueBackDate)),
-                           NoNull(r.Item(TrackablesCols.UseLocation)),
-                           NoNull(r.Item(TrackablesCols.UID)))
-                    Next
-                    Grid.DataSource = table
+            Using results
+                If results.Rows.Count > 0 Then
+                    PopulateGrid(Grid, results, TrackingGridColumns)
                 Else
                     Grid.DataSource = Nothing
                 End If
@@ -904,7 +890,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub TrackingGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellDoubleClick
-        Dim EntryUID = TrackingGrid.Item(GetColIndex(TrackingGrid, "GUID"), TrackingGrid.CurrentRow.Index).Value.ToString
+        Dim EntryUID = GetCurrentCellValue(TrackingGrid, TrackablesCols.UID)
         If Not FormIsOpenByUID(GetType(ViewTrackingForm), EntryUID) Then
             NewTrackingView(EntryUID)
         End If
@@ -912,7 +898,7 @@ Public Class ViewDeviceForm
 
     Private Sub TrackingGrid_Paint(sender As Object, e As PaintEventArgs) Handles TrackingGrid.Paint
         Try
-            TrackingGrid.Columns("Check Type").DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
+            TrackingGrid.Columns(TrackablesCols.CheckType).DefaultCellStyle.Font = New Font(TrackingGrid.Font, FontStyle.Bold)
         Catch
         End Try
     End Sub
@@ -920,8 +906,8 @@ Public Class ViewDeviceForm
     Private Sub TrackingGrid_RowPrePaint(sender As Object, e As DataGridViewRowPrePaintEventArgs) Handles TrackingGrid.RowPrePaint
         Dim c1 As Color = ColorTranslator.FromHtml("#8BCEE8") 'highlight color
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
-        TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-        If TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value.ToString = CheckType.Checkin Then
+        TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+        If TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Value.ToString = CheckType.Checkin Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckIn
             Dim c2 As Color = Color.FromArgb(colCheckIn.R, colCheckIn.G, colCheckIn.B)
             Dim BlendColor As Color
@@ -930,7 +916,7 @@ Public Class ViewDeviceForm
                                                 CInt((CInt(c1.G) + CInt(c2.G)) / 2),
                                                 CInt((CInt(c1.B) + CInt(c2.B)) / 2))
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = BlendColor
-        ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, "Check Type")).Value.ToString = CheckType.Checkout Then
+        ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Value.ToString = CheckType.Checkout Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
             Dim c2 As Color = Color.FromArgb(colCheckOut.R, colCheckOut.G, colCheckOut.B)
             Dim BlendColor As Color

@@ -48,7 +48,7 @@ Public Class AttachmentsForm
                 AttachRequest = DirectCast(AttachInfo, RequestObject)
                 AttachFolderUID = AttachRequest.GUID
                 FormUID = AttachFolderUID
-                strSelectedFolder = GetDisplayValueFromIndex(SibiIndex.AttachFolder, 0)
+                strSelectedFolder = GetDisplayValueFromIndex(SibiAttribute.AttachFolder, 0)
                 Me.Text = "Sibi Attachements"
                 DeviceGroup.Visible = False
                 SibiGroup.Dock = DockStyle.Top
@@ -114,7 +114,7 @@ Public Class AttachmentsForm
                     strFileSizeHuman = Math.Round((CInt(r.Item(_attachTable.FileSize)) / 1024), 1) & " KB"
                     strFullFilename = r.Item(_attachTable.FileName).ToString & r.Item(_attachTable.FileType).ToString
                     If TypeOf _attachTable Is SibiAttachmentsCols Then
-                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), GetDisplayValueFromCode(SibiIndex.AttachFolder, r.Item(_attachTable.Folder).ToString), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
+                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), GetDisplayValueFromCode(SibiAttribute.AttachFolder, r.Item(_attachTable.Folder).ToString), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                     Else
                         table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                     End If
@@ -160,7 +160,7 @@ Public Class AttachmentsForm
 
     Private Sub MoveAttachmentFolder()
         If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
-        If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(SelectedAttachment, GetDBValue(SibiIndex.AttachFolder, cmbMoveFolder.SelectedIndex))
+        If cmbMoveFolder.SelectedIndex > -1 Then MoveAttachFolder(SelectedAttachment, GetDBValue(SibiAttribute.AttachFolder, cmbMoveFolder.SelectedIndex))
     End Sub
 
     Private Sub UploadFileDialog()
@@ -267,8 +267,8 @@ Public Class AttachmentsForm
     End Sub
 
     Private Sub FillFolderCombos()
-        FillComboBox(SibiIndex.AttachFolder, cmbFolder)
-        FillToolComboBox(SibiIndex.AttachFolder, cmbMoveFolder)
+        FillComboBox(SibiAttribute.AttachFolder, cmbFolder)
+        FillToolComboBox(SibiAttribute.AttachFolder, cmbMoveFolder)
     End Sub
 
     Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
@@ -294,11 +294,11 @@ Public Class AttachmentsForm
     Private Function GetQry() As String
         Dim strQry As String = ""
         If TypeOf _attachTable Is SibiAttachmentsCols Then
-            Select Case GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
+            Select Case GetDBValue(SibiAttribute.AttachFolder, cmbFolder.SelectedIndex)
                 Case "ALL"
                     strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
                 Case Else
-                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex) & "' AND " & _attachTable.FKey & " ='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
+                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & GetDBValue(SibiAttribute.AttachFolder, cmbFolder.SelectedIndex) & "' AND " & _attachTable.FKey & " ='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
             End Select
         Else
             strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachDevice.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
@@ -749,7 +749,7 @@ Public Class AttachmentsForm
     Private Sub cmbFolder_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFolder.SelectedIndexChanged
         If Visible Then
             ListAttachments()
-            strSelectedFolder = GetDBValue(SibiIndex.AttachFolder, cmbFolder.SelectedIndex)
+            strSelectedFolder = GetDBValue(SibiAttribute.AttachFolder, cmbFolder.SelectedIndex)
         End If
     End Sub
 

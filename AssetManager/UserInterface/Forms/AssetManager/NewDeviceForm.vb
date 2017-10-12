@@ -140,7 +140,7 @@
         RefreshCombos()
         ClearFields(Me)
         dtPurchaseDate_REQ.Value = Now
-        cmbStatus_REQ.SelectedIndex = GetComboIndexFromCode(DeviceIndex.StatusType, "INSRV")
+        cmbStatus_REQ.SelectedIndex = GetComboIndexFromCode(DeviceAttribute.StatusType, "INSRV")
         ResetBackColors(Me)
         chkTrackable.Checked = False
         chkNoClear.Checked = False
@@ -254,23 +254,24 @@
         txtSerial_REQ.Tag = New DBControlInfo(DevicesBaseCols.Serial, True)
         dtPurchaseDate_REQ.Tag = New DBControlInfo(DevicesBaseCols.PurchaseDate, True)
         txtReplaceYear.Tag = New DBControlInfo(DevicesBaseCols.ReplacementYear, False)
-        cmbLocation_REQ.Tag = New DBControlInfo(DevicesBaseCols.Location, DeviceIndex.Locations, True)
+        cmbLocation_REQ.Tag = New DBControlInfo(DevicesBaseCols.Location, DeviceAttribute.Locations, True)
         txtCurUser_REQ.Tag = New DBControlInfo(DevicesBaseCols.CurrentUser, True)
         ' txtNotes.Tag = New DBControlInfo(historical_dev.Notes, False)
-        cmbOSType_REQ.Tag = New DBControlInfo(DevicesBaseCols.OSVersion, DeviceIndex.OSType, True)
+        cmbOSType_REQ.Tag = New DBControlInfo(DevicesBaseCols.OSVersion, DeviceAttribute.OSType, True)
         txtPhoneNumber.Tag = New DBControlInfo(DevicesBaseCols.PhoneNumber, False)
-        cmbEquipType_REQ.Tag = New DBControlInfo(DevicesBaseCols.EQType, DeviceIndex.EquipType, True)
-        cmbStatus_REQ.Tag = New DBControlInfo(DevicesBaseCols.Status, DeviceIndex.StatusType, True)
+        cmbEquipType_REQ.Tag = New DBControlInfo(DevicesBaseCols.EQType, DeviceAttribute.EquipType, True)
+        cmbStatus_REQ.Tag = New DBControlInfo(DevicesBaseCols.Status, DeviceAttribute.StatusType, True)
         chkTrackable.Tag = New DBControlInfo(DevicesBaseCols.Trackable, False)
         txtPO.Tag = New DBControlInfo(DevicesBaseCols.PO, False)
         txtHostname.Tag = New DBControlInfo(DevicesBaseCols.HostName, False)
         iCloudTextBox.Tag = New DBControlInfo(DevicesBaseCols.iCloudAccount, False)
     End Sub
+
     Private Sub RefreshCombos()
-        FillComboBox(DeviceIndex.Locations, cmbLocation_REQ)
-        FillComboBox(DeviceIndex.EquipType, cmbEquipType_REQ)
-        FillComboBox(DeviceIndex.OSType, cmbOSType_REQ)
-        FillComboBox(DeviceIndex.StatusType, cmbStatus_REQ)
+        FillComboBox(DeviceAttribute.Locations, cmbLocation_REQ)
+        FillComboBox(DeviceAttribute.EquipType, cmbEquipType_REQ)
+        FillComboBox(DeviceAttribute.OSType, cmbOSType_REQ)
+        FillComboBox(DeviceAttribute.StatusType, cmbStatus_REQ)
     End Sub
 
     Private Sub ResetBackColors(Parent As Control)
@@ -314,7 +315,7 @@
     End Sub
 
     Private Sub SetHostname()
-        If txtSerial_REQ.Text <> "" AndAlso GetDBValue(DeviceIndex.OSType, cmbOSType_REQ.SelectedIndex).Contains("WIN") Then
+        If txtSerial_REQ.Text <> "" AndAlso GetDBValue(DeviceAttribute.OSType, cmbOSType_REQ.SelectedIndex).Contains("WIN") Then
             txtHostname.Text = DeviceHostnameFormat(txtSerial_REQ.Text)
         Else
             txtHostname.Text = String.Empty

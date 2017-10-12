@@ -42,7 +42,7 @@ Namespace My
             End If
 
             Status("Loading Indexes...")
-            BuildIndexes()
+            PopulateAttributeIndexes()
             Status("Checking Access Level...")
             SecurityTools.PopulateAccessGroups()
             SecurityTools.GetUserAccess()

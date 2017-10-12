@@ -14,9 +14,9 @@ Public Class UpdateDev
     Sub New(parentForm As ExtendedForm, Optional isNoteOnly As Boolean = False)
         InitializeComponent()
         Me.ParentForm = parentForm
-        FillComboBox(DeviceIndex.ChangeType, UpdateTypeCombo)
+        FillComboBox(DeviceAttribute.ChangeType, UpdateTypeCombo)
         If isNoteOnly Then
-            UpdateTypeCombo.SelectedIndex = GetComboIndexFromCode(DeviceIndex.ChangeType, "NOTE")
+            UpdateTypeCombo.SelectedIndex = GetComboIndexFromCode(DeviceAttribute.ChangeType, "NOTE")
             UpdateTypeCombo.Enabled = False
             ValidateUpdateType()
         Else
@@ -27,7 +27,7 @@ Public Class UpdateDev
 
     Private Sub SubmitButton_Click(sender As Object, e As EventArgs) Handles SubmitButton.Click
         NewUpdateInfo.Note = Trim(NotesTextBox.Rtf)
-        NewUpdateInfo.ChangeType = GetDBValue(DeviceIndex.ChangeType, UpdateTypeCombo.SelectedIndex)
+        NewUpdateInfo.ChangeType = GetDBValue(DeviceAttribute.ChangeType, UpdateTypeCombo.SelectedIndex)
         NotesTextBox.Text = ""
         UpdateTypeCombo.Enabled = True
         Me.DialogResult = DialogResult.OK
