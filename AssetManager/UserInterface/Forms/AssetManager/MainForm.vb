@@ -424,6 +424,7 @@ Public Class MainForm
                             ServerInfo.CurrentDataBase = database
                             PopulateAttributeIndexes()
                             RefreshCombos()
+                            SecurityTools.GetUserAccess()
                             InitDBControls()
                             GlobalSwitches.BuildingCache = True
                             Task.Run(Sub() DBCache.RefreshLocalDBCache())
