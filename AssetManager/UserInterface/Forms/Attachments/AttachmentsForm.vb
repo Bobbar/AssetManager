@@ -485,7 +485,7 @@ Public Class AttachmentsForm
     Private Sub DeleteAttachment(AttachUID As String)
         Try
             If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
-            Dim strFilename As String = AttachGrid.Item(GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value.ToString
+            Dim strFilename As String = AttachGrid.Item(GridFunctions.GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value.ToString
             Dim blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete", Me)
             If blah = vbYes Then
                 Waiting()
@@ -663,7 +663,7 @@ Public Class AttachmentsForm
     End Sub
 
     Private Function SelectedAttachment() As String
-        Dim AttachUID As String = AttachGrid.Item(GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
+        Dim AttachUID As String = AttachGrid.Item(GridFunctions.GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
         If AttachUID <> "" Then
             Return AttachUID
         Else

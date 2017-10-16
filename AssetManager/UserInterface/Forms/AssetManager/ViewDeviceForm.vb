@@ -441,7 +441,7 @@ Public Class ViewDeviceForm
     End Function
 
     Private Sub DataGridHistory_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridHistory.CellDoubleClick
-        Dim EntryUID As String = GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID)
+        Dim EntryUID As String = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID)
         If Not FormIsOpenByUID(GetType(ViewHistoryForm), EntryUID) Then
             NewEntryView(EntryUID)
         End If
@@ -484,7 +484,7 @@ Public Class ViewDeviceForm
 
     Private Sub DeleteSelectedHistoricalEntry()
         If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice) Then Exit Sub
-        Dim strGUID As String = GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID)
+        Dim strGUID As String = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID)
         Dim Info As DeviceObject
         Dim strQry = "SELECT * FROM " & HistoricalDevicesCols.TableName & " WHERE " & HistoricalDevicesCols.HistoryEntryUID & "='" & strGUID & "'"
         Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQry)
@@ -819,7 +819,7 @@ Public Class ViewDeviceForm
         Try
             Using results
                 If results.Rows.Count > 0 Then
-                    PopulateGrid(Grid, results, HistoricalGridColumns)
+                    GridFunctions.PopulateGrid(Grid, results, HistoricalGridColumns)
                 Else
                     Grid.DataSource = Nothing
                 End If
@@ -847,7 +847,7 @@ Public Class ViewDeviceForm
         Try
             Using results
                 If results.Rows.Count > 0 Then
-                    PopulateGrid(Grid, results, TrackingGridColumns)
+                    GridFunctions.PopulateGrid(Grid, results, TrackingGridColumns)
                 Else
                     Grid.DataSource = Nothing
                 End If
@@ -890,7 +890,7 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub TrackingGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles TrackingGrid.CellDoubleClick
-        Dim EntryUID = GetCurrentCellValue(TrackingGrid, TrackablesCols.UID)
+        Dim EntryUID = GridFunctions.GetCurrentCellValue(TrackingGrid, TrackablesCols.UID)
         If Not FormIsOpenByUID(GetType(ViewTrackingForm), EntryUID) Then
             NewTrackingView(EntryUID)
         End If
@@ -906,8 +906,8 @@ Public Class ViewDeviceForm
     Private Sub TrackingGrid_RowPrePaint(sender As Object, e As DataGridViewRowPrePaintEventArgs) Handles TrackingGrid.RowPrePaint
         Dim c1 As Color = ColorTranslator.FromHtml("#8BCEE8") 'highlight color
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
-        TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-        If TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Value.ToString = CheckType.Checkin Then
+        TrackingGrid.Rows(e.RowIndex).Cells(GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+        If TrackingGrid.Rows(e.RowIndex).Cells(GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Value.ToString = CheckType.Checkin Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckIn
             Dim c2 As Color = Color.FromArgb(colCheckIn.R, colCheckIn.G, colCheckIn.B)
             Dim BlendColor As Color
@@ -916,7 +916,7 @@ Public Class ViewDeviceForm
                                                 CInt((CInt(c1.G) + CInt(c2.G)) / 2),
                                                 CInt((CInt(c1.B) + CInt(c2.B)) / 2))
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = BlendColor
-        ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Value.ToString = CheckType.Checkout Then
+        ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Value.ToString = CheckType.Checkout Then
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
             Dim c2 As Color = Color.FromArgb(colCheckOut.R, colCheckOut.G, colCheckOut.B)
             Dim BlendColor As Color

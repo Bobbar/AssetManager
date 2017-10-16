@@ -119,7 +119,7 @@ Public Class SibiMainForm
             Using results
                 bolGridFilling = True
                 StatusColors = GetStatusColors(results)
-                PopulateGrid(ResultGrid, results, SibiTableColumns)
+                GridFunctions.PopulateGrid(ResultGrid, results, SibiTableColumns)
                 ResultGrid.ClearSelection()
                 bolGridFilling = False
             End Using
@@ -195,7 +195,7 @@ Public Class SibiMainForm
     End Sub
 
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
-        If ResultGrid.CurrentRow.Index > -1 Then OpenRequest(GetCurrentCellValue(ResultGrid, SibiRequestCols.UID))
+        If ResultGrid.CurrentRow.Index > -1 Then OpenRequest(GridFunctions.GetCurrentCellValue(ResultGrid, SibiRequestCols.UID))
     End Sub
 
     Private Sub OpenRequest(strUID As String)

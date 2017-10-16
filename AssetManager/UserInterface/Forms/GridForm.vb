@@ -50,7 +50,7 @@ Public Class GridForm
     End Sub
 
     Private Sub CopySelectedToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopySelectedToolStripMenuItem.Click
-        CopySelectedGridData(GetActiveGrid)
+        GridFunctions.CopySelectedGridData(GetActiveGrid)
     End Sub
 
     Private Sub AddGridsToForm()
@@ -154,7 +154,7 @@ Public Class GridForm
     End Sub
 
     Private Sub SendToNewGridForm_Click(sender As Object, e As EventArgs) Handles SendToNewGridForm.Click
-        CopyToGridForm(GetActiveGrid, ParentForm)
+        GridFunctions.CopyToGridForm(GetActiveGrid, ParentForm)
     End Sub
 
     Private Sub GridForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed

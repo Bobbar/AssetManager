@@ -188,7 +188,7 @@ Public Class MainForm
             Next
 
             For Each row In Rows
-                Dim DevUID As String = GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID)
+                Dim DevUID As String = GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID)
                 SelectedDevices.Add(AssetFunc.GetDeviceInfoFromGUID(DevUID))
             Next
 
@@ -344,7 +344,7 @@ Public Class MainForm
         Using results
             SetStatusBar("Building Grid...")
             bolGridFilling = True
-            PopulateGrid(ResultGrid, results, ResultGridColumns)
+            GridFunctions.PopulateGrid(ResultGrid, results, ResultGridColumns)
             ResultGrid.ClearSelection()
             ResultGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
             bolGridFilling = False
@@ -557,7 +557,7 @@ Public Class MainForm
     End Sub
 
     Private Sub CopyTool_Click(sender As Object, e As EventArgs) Handles CopyTool.Click
-        CopySelectedGridData(ResultGrid)
+        GridFunctions.CopySelectedGridData(ResultGrid)
     End Sub
 
     Private Sub DateTimeLabel_Click(sender As Object, e As EventArgs) Handles DateTimeLabel.Click
@@ -596,12 +596,12 @@ Public Class MainForm
     End Sub
 
     Private Sub ResultGrid_DoubleClick(sender As Object, e As EventArgs) Handles ResultGrid.CellDoubleClick
-        LoadDevice(GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID))
+        LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID))
     End Sub
 
     Private Sub ResultGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles ResultGrid.KeyDown
         If e.KeyCode = Keys.Enter Then
-            LoadDevice(GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID))
+            LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID))
             e.SuppressKeyPress = True
         End If
     End Sub
@@ -628,7 +628,7 @@ Public Class MainForm
     End Sub
 
     Private Sub tsmSendToGridForm_Click(sender As Object, e As EventArgs) Handles tsmSendToGridForm.Click
-        CopyToGridForm(ResultGrid, Me)
+        GridFunctions.CopyToGridForm(ResultGrid, Me)
     End Sub
 
     Private Sub tsmUserManager_Click(sender As Object, e As EventArgs) Handles tsmUserManager.Click
@@ -643,7 +643,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ViewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewToolStripMenuItem.Click
-        LoadDevice(GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID))
+        LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID))
     End Sub
 
     Private Sub InstallChromeMenuItem_Click(sender As Object, e As EventArgs) Handles InstallChromeMenuItem.Click

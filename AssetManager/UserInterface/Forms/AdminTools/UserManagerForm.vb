@@ -83,8 +83,8 @@ Public Class UserManagerForm
     End Function
 
     Private Sub UserGrid_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles UserGrid.CellClick
-        If TypeOf UserGrid.Item(GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index).Value Is Integer Then
-            DisplayAccess(CInt(UserGrid.Item(GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index).Value))
+        If TypeOf UserGrid.Item(GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index).Value Is Integer Then
+            DisplayAccess(CInt(UserGrid.Item(GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index).Value))
             GetUserInfo()
         Else
             DisplayAccess(0)
@@ -94,10 +94,10 @@ Public Class UserManagerForm
 
     Private Sub GetUserInfo()
         With CurrentUser
-            .AccessLevel = CInt(GetCurrentCellValue(UserGrid, UsersCols.AccessLevel))
-            .UserName = GetCurrentCellValue(UserGrid, UsersCols.UserName)
-            .GUID = GetCurrentCellValue(UserGrid, UsersCols.UID)
-            .Fullname = GetCurrentCellValue(UserGrid, UsersCols.FullName)
+            .AccessLevel = CInt(GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.AccessLevel))
+            .UserName = GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.UserName)
+            .GUID = GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.UID)
+            .Fullname = GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.FullName)
         End With
     End Sub
 
@@ -120,17 +120,17 @@ Public Class UserManagerForm
 
     Private Sub AddGUIDs()
         For Each rows As DataGridViewRow In UserGrid.Rows
-            If rows.Cells(GetColIndex(UserGrid, UsersCols.UID)).EditedFormattedValue.ToString = "" Then
+            If rows.Cells(GridFunctions.GetColIndex(UserGrid, UsersCols.UID)).EditedFormattedValue.ToString = "" Then
                 Dim UserUID As String = Guid.NewGuid.ToString
-                rows.Cells(GetColIndex(UserGrid, UsersCols.UID)).Value = UserUID
+                rows.Cells(GridFunctions.GetColIndex(UserGrid, UsersCols.UID)).Value = UserUID
             End If
         Next
     End Sub
 
     Private Sub AddAccessLevelToGrid()
-        UserGrid.Rows(SelectedRow).Cells(GetColIndex(UserGrid, UsersCols.AccessLevel)).Selected = True
+        UserGrid.Rows(SelectedRow).Cells(GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel)).Selected = True
         UserGrid.BeginEdit(False)
-        UserGrid.Rows(SelectedRow).Cells(GetColIndex(UserGrid, UsersCols.AccessLevel)).Value = CalcAccessLevel()
+        UserGrid.Rows(SelectedRow).Cells(GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel)).Value = CalcAccessLevel()
         UserGrid.EndEdit()
     End Sub
 

@@ -55,7 +55,7 @@
     End Sub
 
     Private Sub ResultGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles ResultGrid.CellDoubleClick
-        SelectedUID = ResultGrid.Item(GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value.ToString
+        SelectedUID = ResultGrid.Item(GridFunctions.GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index).Value.ToString
         Me.DialogResult = DialogResult.OK
     End Sub
 
