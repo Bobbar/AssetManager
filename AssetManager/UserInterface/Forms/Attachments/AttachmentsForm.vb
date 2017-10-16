@@ -87,10 +87,12 @@ Public Class AttachmentsForm
 #Region "Methods"
 
     Private Sub FillSibiInfo()
-        txtUID.Text = AttachRequest.GUID
+        ReqPO.Text = AttachRequest.PO
+        ReqNumberTextBox.Text = AttachRequest.RequisitionNumber
         txtRequestNum.Text = AttachRequest.RequestNumber
         txtDescription.Text = AttachRequest.Description
         cmbFolder.SelectedIndex = 0
+        Me.Text += " - " & AttachRequest.Description
     End Sub
 
     Public Function ActiveTransfer() As Boolean

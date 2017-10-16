@@ -48,7 +48,7 @@ Partial Class AttachmentsForm
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtRequestNum = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.txtUID = New System.Windows.Forms.TextBox()
+        Me.ReqPO = New System.Windows.Forms.TextBox()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
@@ -66,6 +66,8 @@ Partial Class AttachmentsForm
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.ReqNumberTextBox = New System.Windows.Forms.TextBox()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -287,12 +289,14 @@ Partial Class AttachmentsForm
         'SibiGroup
         '
         Me.SibiGroup.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.SibiGroup.Controls.Add(Me.Label4)
+        Me.SibiGroup.Controls.Add(Me.ReqNumberTextBox)
         Me.SibiGroup.Controls.Add(Me.Label3)
         Me.SibiGroup.Controls.Add(Me.txtDescription)
         Me.SibiGroup.Controls.Add(Me.Label2)
         Me.SibiGroup.Controls.Add(Me.txtRequestNum)
         Me.SibiGroup.Controls.Add(Me.Label1)
-        Me.SibiGroup.Controls.Add(Me.txtUID)
+        Me.SibiGroup.Controls.Add(Me.ReqPO)
         Me.SibiGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SibiGroup.Location = New System.Drawing.Point(0, 3)
         Me.SibiGroup.Name = "SibiGroup"
@@ -305,11 +309,11 @@ Partial Class AttachmentsForm
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(24, 29)
+        Me.Label3.Location = New System.Drawing.Point(20, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(76, 16)
+        Me.Label3.Size = New System.Drawing.Size(79, 16)
         Me.Label3.TabIndex = 5
-        Me.Label3.Text = "Description"
+        Me.Label3.Text = "Description:"
         '
         'txtDescription
         '
@@ -324,11 +328,11 @@ Partial Class AttachmentsForm
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(321, 29)
+        Me.Label2.Location = New System.Drawing.Point(317, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(69, 16)
+        Me.Label2.Size = New System.Drawing.Size(72, 16)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Request #"
+        Me.Label2.Text = "Request #:"
         '
         'txtRequestNum
         '
@@ -336,27 +340,27 @@ Partial Class AttachmentsForm
         Me.txtRequestNum.Location = New System.Drawing.Point(320, 49)
         Me.txtRequestNum.Name = "txtRequestNum"
         Me.txtRequestNum.ReadOnly = True
-        Me.txtRequestNum.Size = New System.Drawing.Size(105, 25)
+        Me.txtRequestNum.Size = New System.Drawing.Size(83, 25)
         Me.txtRequestNum.TabIndex = 2
         '
         'Label1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(460, 29)
+        Me.Label1.Location = New System.Drawing.Point(439, 29)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(85, 16)
+        Me.Label1.Size = New System.Drawing.Size(40, 16)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Request UID"
+        Me.Label1.Text = "PO #:"
         '
-        'txtUID
+        'ReqPO
         '
-        Me.txtUID.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtUID.Location = New System.Drawing.Point(459, 49)
-        Me.txtUID.Name = "txtUID"
-        Me.txtUID.ReadOnly = True
-        Me.txtUID.Size = New System.Drawing.Size(307, 25)
-        Me.txtUID.TabIndex = 0
+        Me.ReqPO.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ReqPO.Location = New System.Drawing.Point(442, 49)
+        Me.ReqPO.Name = "ReqPO"
+        Me.ReqPO.ReadOnly = True
+        Me.ReqPO.Size = New System.Drawing.Size(120, 25)
+        Me.ReqPO.TabIndex = 0
         '
         'StatusStrip1
         '
@@ -409,7 +413,7 @@ Partial Class AttachmentsForm
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(434, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(696, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'cmdCancel
@@ -446,11 +450,11 @@ Partial Class AttachmentsForm
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(335, 29)
+        Me.Label5.Location = New System.Drawing.Point(331, 29)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(76, 16)
+        Me.Label5.Size = New System.Drawing.Size(79, 16)
         Me.Label5.TabIndex = 5
-        Me.Label5.Text = "Description"
+        Me.Label5.Text = "Description:"
         '
         'txtDeviceDescription
         '
@@ -465,11 +469,11 @@ Partial Class AttachmentsForm
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(179, 29)
+        Me.Label6.Location = New System.Drawing.Point(175, 29)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(43, 16)
+        Me.Label6.Size = New System.Drawing.Size(46, 16)
         Me.Label6.TabIndex = 3
-        Me.Label6.Text = "Serial"
+        Me.Label6.Text = "Serial:"
         '
         'txtSerial
         '
@@ -484,11 +488,11 @@ Partial Class AttachmentsForm
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(34, 29)
+        Me.Label7.Location = New System.Drawing.Point(30, 29)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(70, 16)
+        Me.Label7.Size = New System.Drawing.Size(73, 16)
         Me.Label7.TabIndex = 1
-        Me.Label7.Text = "Asset Tag"
+        Me.Label7.Text = "Asset Tag:"
         '
         'txtAssetTag
         '
@@ -509,6 +513,25 @@ Partial Class AttachmentsForm
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(793, 116)
         Me.Panel2.TabIndex = 10
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(598, 29)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(47, 16)
+        Me.Label4.TabIndex = 7
+        Me.Label4.Text = "Req #:"
+        '
+        'ReqNumberTextBox
+        '
+        Me.ReqNumberTextBox.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ReqNumberTextBox.Location = New System.Drawing.Point(601, 49)
+        Me.ReqNumberTextBox.Name = "ReqNumberTextBox"
+        Me.ReqNumberTextBox.ReadOnly = True
+        Me.ReqNumberTextBox.Size = New System.Drawing.Size(120, 25)
+        Me.ReqNumberTextBox.TabIndex = 6
         '
         'AttachmentsForm
         '
@@ -555,7 +578,7 @@ Partial Class AttachmentsForm
     Friend WithEvents Label2 As Label
     Friend WithEvents txtRequestNum As TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents txtUID As TextBox
+    Friend WithEvents ReqPO As TextBox
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents StatusLabel As ToolStripStatusLabel
     Friend WithEvents Spinner As ToolStripStatusLabel
@@ -586,4 +609,6 @@ Partial Class AttachmentsForm
     Friend WithEvents FolderPanel As Panel
     Friend WithEvents Panel2 As Panel
     Friend WithEvents SaveToMenuItem As ToolStripMenuItem
+    Friend WithEvents Label4 As Label
+    Friend WithEvents ReqNumberTextBox As TextBox
 End Class

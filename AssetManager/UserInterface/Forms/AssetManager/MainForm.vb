@@ -429,6 +429,7 @@ Public Class MainForm
                             GlobalSwitches.BuildingCache = True
                             Task.Run(Sub() DBCache.RefreshLocalDBCache())
                             ShowTestDBWarning()
+                            SetDatabaseTitleText()
                             ShowAll()
                         End If
                     End If
@@ -441,14 +442,26 @@ Public Class MainForm
         End Try
     End Sub
 
+    Private Sub SetDatabaseTitleText()
+        Select Case ServerInfo.CurrentDataBase
+            Case Databases.asset_manager
+                Me.Text = "Asset Manager - Main"
+            Case Databases.test_db
+                Me.Text = "Asset Manager - Main - ****TEST DATABASE****"
+            Case Databases.vintondd
+                Me.Text = "Asset Manager - Main - Vinton DD"
+        End Select
+
+    End Sub
+
     Private Sub ShowTestDBWarning()
         If ServerInfo.CurrentDataBase = Databases.test_db Then
             Message("TEST DATABASE IN USE", vbOKOnly + vbExclamation, "WARNING", Me)
             Me.BackColor = Color.DarkRed
-            Me.Text += " - ****TEST DATABASE****"
+            'Me.Text += " - ****TEST DATABASE****"
         Else
             Me.BackColor = Color.FromArgb(232, 232, 232)
-            Me.Text = "Asset Manager - Main"
+            '  Me.Text = "Asset Manager - Main"
         End If
     End Sub
 
