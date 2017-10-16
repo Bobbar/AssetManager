@@ -37,6 +37,7 @@ C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MySql.Data.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\PingVisLib.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\System.Data.SQLite.dll
+C:\GitHub\AssetManager\AssetManager\bin\Debug\System.Management.Automation.dll
 C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.pdb
 C:\GitHub\AssetManager\AssetManager\bin\Debug\GKUpdaterLib.xml
 C:\GitHub\AssetManager\AssetManager\bin\Debug\MyDialogLib.pdb
@@ -49,6 +50,7 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.vbprojResolveAssembly
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AdvancedSearchForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.AttachmentsForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GetCredentialsForm.resources
+C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GKProgressControl.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GKUpdaterForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.PackFileForm.resources
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GridForm.resources
@@ -75,5 +77,3 @@ C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.pdb
-C:\GitHub\AssetManager\AssetManager\bin\Debug\System.Management.Automation.dll
-C:\GitHub\AssetManager\AssetManager\obj\Debug\AssetManager.GKProgressControl.resources
