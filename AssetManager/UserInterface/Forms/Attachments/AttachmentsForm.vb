@@ -189,8 +189,8 @@ Public Class AttachmentsForm
         Try
             Dim FileName As String = GetAttachFileName(AttachObject, DataFormat)
             Dim strFullPath(0) As String
-            strFullPath(0) = DownloadPath & FileName
-            Directory.CreateDirectory(DownloadPath)
+            strFullPath(0) = Paths.DownloadPath & FileName
+            Directory.CreateDirectory(Paths.DownloadPath)
             Using streamFileData = DirectCast(AttachObject.GetData("FileContents"), MemoryStream),
                      outputStream = IO.File.Create(strFullPath(0))
                 streamFileData.CopyTo(outputStream)
@@ -424,7 +424,7 @@ Public Class AttachmentsForm
 
     Private Function TempPathFilename(attachment As Attachment) As String
         Dim strTimeStamp As String = Now.ToString("_hhmmss")
-        Return DownloadPath & attachment.FileName & strTimeStamp & attachment.Extension
+        Return Paths.DownloadPath & attachment.FileName & strTimeStamp & attachment.Extension
     End Function
 
     Private Sub ProcessDrop(AttachObject As IDataObject)
@@ -606,7 +606,7 @@ Public Class AttachmentsForm
     Private Function SaveAttachmentToDisk(attachment As Attachment, savePath As String) As Boolean
         Try
             SetStatusBar("Saving to disk...")
-            Directory.CreateDirectory(DownloadPath)
+            Directory.CreateDirectory(Paths.DownloadPath)
             Using outputStream = IO.File.Create(savePath),
             memStream = DirectCast(attachment.DataStream, MemoryStream)
                 memStream.CopyTo(outputStream) 'once data is verified we go ahead and copy it to disk

@@ -34,7 +34,7 @@ Module OtherFunctions
 
     Public Sub PurgeTempDir()
         Try
-            Directory.Delete(DownloadPath, True)
+            Directory.Delete(Paths.DownloadPath, True)
         Catch
         End Try
     End Sub

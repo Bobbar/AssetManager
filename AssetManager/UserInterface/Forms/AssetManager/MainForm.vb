@@ -665,7 +665,7 @@ Public Class MainForm
 
     Private Sub ViewLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewLogToolStripMenuItem.Click
         Dim StartInfo As New ProcessStartInfo
-        StartInfo.FileName = strLogPath
+        StartInfo.FileName = Paths.LogPath
         Process.Start(StartInfo)
     End Sub
 

@@ -1,31 +1,35 @@
 ﻿Imports System.Environment
 Imports System.Deployment.Application
+Namespace Paths
+    Module Paths
 
-Module Paths
+        'Application paths
+        Public ReadOnly AppDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
+        Public Const LogName As String = "log.log"
+        Public ReadOnly LogPath As String = AppDir & LogName
+        Public ReadOnly DownloadPath As String = AppDir & "temp\"
 
-    'Application paths
-    Public ReadOnly strAppDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
+        'SQLite DB paths
 
-    Public Const strLogName As String = "log.log"
-    Public ReadOnly strLogPath As String = strAppDir & strLogName
-    Public ReadOnly DownloadPath As String = strAppDir & "temp\"
+        Public Function SQLiteDBName() As String
+            Return "cache_" & ServerInfo.CurrentDataBase.ToString & IIf(Not ApplicationDeployment.IsNetworkDeployed, "_DEBUG", "").ToString & ".db"
+        End Function
 
-    'SQLite DB paths
+        Public Function SQLitePath() As String
+            Return AppDir & "SQLiteCache\" & SQLiteDBName()
+        End Function
 
-    Public ReadOnly strSQLiteDBName As String = "cache" & IIf(Not ApplicationDeployment.IsNetworkDeployed, "_DEBUG", "").ToString & ".db"
+        Public ReadOnly SQLiteDir As String = AppDir & "SQLiteCache\"
 
-    Public ReadOnly strSQLitePath As String = strAppDir & "SQLiteCache\" & strSQLiteDBName
-    Public ReadOnly strSQLiteDir As String = strAppDir & "SQLiteCache\"
+        'Gatekeeper package paths
+        Public Const GKInstallDir As String = "C:\PSi\Gatekeeper"
+        Public Const GKPackFileName As String = "GatekeeperPack.gz"
+        Public Const GKPackHashName As String = "hash.md5"
+        Public ReadOnly GKPackFileFDir As String = AppDir & "GKUpdateFiles\PackFile\"
+        Public ReadOnly GKPackFileFullPath As String = GKPackFileFDir & GKPackFileName
+        Public ReadOnly GKExtractDir As String = AppDir & "GKUpdateFiles\Gatekeeper\"
+        Public Const GKRemotePackFileDir As String = "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Other\GatekeeperPackFile\"
+        Public Const GKRemotePackFilePath As String = GKRemotePackFileDir & GKPackFileName
 
-    'Gatekeeper package paths
-    Public Const GKInstallDir As String = "C:\PSi\Gatekeeper"
-
-    Public Const GKPackFileName As String = "GatekeeperPack.gz"
-    Public Const GKPackHashName As String = "hash.md5"
-    Public ReadOnly GKPackFileFDir As String = strAppDir & "GKUpdateFiles\PackFile\"
-    Public ReadOnly GKPackFileFullPath As String = GKPackFileFDir & GKPackFileName
-    Public ReadOnly GKExtractDir As String = strAppDir & "GKUpdateFiles\Gatekeeper\"
-    Public Const GKRemotePackFileDir As String = "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Other\GatekeeperPackFile\"
-    Public Const GKRemotePackFilePath As String = GKRemotePackFileDir & GKPackFileName
-
-End Module
+    End Module
+End Namespace

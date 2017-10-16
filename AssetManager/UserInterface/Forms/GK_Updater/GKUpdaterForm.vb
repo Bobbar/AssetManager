@@ -25,7 +25,7 @@ Public Class GKUpdaterForm
             SetWaitCursor(True, Me)
             For Each device In devices
                 If bolCheckForDups AndAlso Not Exists(device) Then
-                    Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
+                    Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, Paths.GKExtractDir, MyUpdates.Count + 1)
                     MyUpdates.Add(NewProgCtl)
                     AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop
                 End If
@@ -50,7 +50,7 @@ Public Class GKUpdaterForm
     Public Sub AddUpdate(device As DeviceObject)
         Try
             If bolCheckForDups AndAlso Not Exists(device) Then
-                Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, GKExtractDir, MyUpdates.Count + 1)
+                Dim NewProgCtl As New GKProgressControl(Me, device, bolCreateMissingDirs, Paths.GKExtractDir, MyUpdates.Count + 1)
                 Updater_Table.Controls.Add(NewProgCtl)
                 MyUpdates.Add(NewProgCtl)
                 AddHandler NewProgCtl.CriticalStopError, AddressOf CriticalStop

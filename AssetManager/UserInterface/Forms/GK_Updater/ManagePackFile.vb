@@ -14,19 +14,19 @@ Public Class ManagePackFile
     ''' </summary>
     ''' <returns></returns>
     Public Async Function DownloadPack() As Task(Of Boolean)
-        If Not Directory.Exists(GKPackFileFDir) Then
-            Directory.CreateDirectory(GKPackFileFDir)
+        If Not Directory.Exists(Paths.GKPackFileFDir) Then
+            Directory.CreateDirectory(Paths.GKPackFileFDir)
         End If
 
-        If Directory.Exists(GKExtractDir) Then
-            Directory.Delete(GKExtractDir, True)
+        If Directory.Exists(Paths.GKExtractDir) Then
+            Directory.Delete(Paths.GKExtractDir, True)
         End If
 
-        If File.Exists(GKPackFileFullPath) Then
-            File.Delete(GKPackFileFullPath)
+        If File.Exists(Paths.GKPackFileFullPath) Then
+            File.Delete(Paths.GKPackFileFullPath)
         End If
         Progress = New ProgressCounter
-        Return Await CopyPackFile(GKRemotePackFilePath, GKPackFileFullPath)
+        Return Await CopyPackFile(Paths.GKRemotePackFilePath, Paths.GKPackFileFullPath)
     End Function
 
     ''' <summary>
@@ -37,18 +37,18 @@ Public Class ManagePackFile
     ''' <returns></returns>
     Public Async Function VerifyPackFile() As Task(Of Boolean)
         Try
-            If Not Directory.Exists(GKPackFileFDir) Then
+            If Not Directory.Exists(Paths.GKPackFileFDir) Then
                 Return False
             End If
-            If Not Directory.Exists(GKExtractDir) Then
+            If Not Directory.Exists(Paths.GKExtractDir) Then
                 Return False
             End If
-            If Not File.Exists(GKPackFileFullPath) Then
+            If Not File.Exists(Paths.GKPackFileFullPath) Then
                 Return False
             Else
 
                 Dim LocalHash = Await Task.Run(Function()
-                                                   Return SecurityTools.GetMD5OfFile(GKPackFileFullPath)
+                                                   Return SecurityTools.GetMD5OfFile(Paths.GKPackFileFullPath)
                                                End Function)
 
                 Dim RemoteHash = Await Task.Run(Function()
@@ -72,7 +72,7 @@ Public Class ManagePackFile
     ''' </summary>
     ''' <returns></returns>
     Private Function GetRemoteHash() As String
-        Using sr As New StreamReader(GKRemotePackFileDir & GKPackHashName)
+        Using sr As New StreamReader(Paths.GKRemotePackFileDir & Paths.GKPackHashName)
             Return sr.ReadToEnd
         End Using
     End Function
@@ -131,15 +131,15 @@ Public Class ManagePackFile
         Try
             Progress = New ProgressCounter
             Dim CompDir As New GZipCompress(Progress)
-            If Not Directory.Exists(GKPackFileFDir) Then
-                Directory.CreateDirectory(GKPackFileFDir)
+            If Not Directory.Exists(Paths.GKPackFileFDir) Then
+                Directory.CreateDirectory(Paths.GKPackFileFDir)
             End If
 
-            If File.Exists(GKPackFileFullPath) Then
-                File.Delete(GKPackFileFullPath)
+            If File.Exists(Paths.GKPackFileFullPath) Then
+                File.Delete(Paths.GKPackFileFullPath)
             End If
             Await Task.Run(Sub()
-                               CompDir.CompressDirectory(GKInstallDir, GKPackFileFullPath)
+                               CompDir.CompressDirectory(Paths.GKInstallDir, Paths.GKPackFileFullPath)
                            End Sub)
             Return True
         Catch ex As Exception
@@ -158,7 +158,7 @@ Public Class ManagePackFile
             Progress = New ProgressCounter
             Dim CompDir As New GZipCompress(Progress)
             Await Task.Run(Sub()
-                               CompDir.DecompressToDirectory(GKPackFileFullPath, GKExtractDir)
+                               CompDir.DecompressToDirectory(Paths.GKPackFileFullPath, Paths.GKExtractDir)
                            End Sub)
             Return True
         Catch ex As Exception
@@ -175,11 +175,11 @@ Public Class ManagePackFile
         Dim Done As Boolean = False
         Status = "Uploading Pack File..."
         Progress = New ProgressCounter
-        Done = Await CopyPackFile(GKPackFileFullPath, GKRemotePackFilePath)
+        Done = Await CopyPackFile(Paths.GKPackFileFullPath, Paths.GKRemotePackFilePath)
 
         Status = "Uploading Hash File..."
         Progress = New ProgressCounter
-        Done = Await CopyPackFile(GKPackFileFDir & GKPackHashName, GKRemotePackFileDir & GKPackHashName)
+        Done = Await CopyPackFile(Paths.GKPackFileFDir & Paths.GKPackHashName, Paths.GKRemotePackFileDir & Paths.GKPackHashName)
         Return Done
     End Function
 
@@ -245,13 +245,13 @@ Public Class ManagePackFile
     ''' </summary>
     ''' <returns></returns>
     Private Async Function CreateHashFile() As Task(Of Boolean)
-        If File.Exists(GKPackFileFDir & GKPackHashName) Then
-            File.Delete(GKPackFileFDir & GKPackHashName)
+        If File.Exists(Paths.GKPackFileFDir & Paths.GKPackHashName) Then
+            File.Delete(Paths.GKPackFileFDir & Paths.GKPackHashName)
         End If
         Dim Hash = Await Task.Run(Function()
-                                      Return SecurityTools.GetMD5OfFile(GKPackFileFullPath)
+                                      Return SecurityTools.GetMD5OfFile(Paths.GKPackFileFullPath)
                                   End Function)
-        Using sw As StreamWriter = File.CreateText(GKPackFileFDir & GKPackHashName)
+        Using sw As StreamWriter = File.CreateText(Paths.GKPackFileFDir & Paths.GKPackHashName)
             sw.Write(Hash)
         End Using
         Return True

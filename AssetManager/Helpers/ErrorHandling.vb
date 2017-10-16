@@ -33,7 +33,7 @@ Module ErrorHandling
                 Case TypeOf ex Is InvalidCastException
                     Dim handEx As InvalidCastException = DirectCast(ex, InvalidCastException)
                     Logger("CAST ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & handEx.HResult & "  Message:" & handEx.Message)
-                    PromptUser("An object was cast to an unmatched type.  See log for details.  Log: " & strLogPath, vbOKOnly + vbExclamation, "Invalid Cast Error")
+                    PromptUser("An object was cast to an unmatched type.  See log for details.  Log: " & Paths.LogPath, vbOKOnly + vbExclamation, "Invalid Cast Error")
                     Select Case handEx.HResult
                         Case -2147467262 'DBNull to String type error. These are pretty ubiquitous and not a big deal. Move along.
                             ErrorResult = True
@@ -128,13 +128,13 @@ Module ErrorHandling
                 PromptUser("Unable to connect to server.  Check connection and try again.", vbOKOnly + vbExclamation, "Connection Lost")
                 Return True
             Case 1064
-                PromptUser("Something went wrong with the SQL command. See log for details.  Log: " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
+                PromptUser("Something went wrong with the SQL command. See log for details.  Log: " & Paths.LogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
                 Return True
             Case 1406
-                PromptUser(ex.Message & vbCrLf & vbCrLf & "Log: " & strLogPath, vbOKOnly + vbCritical, "SQL Error")
+                PromptUser(ex.Message & vbCrLf & vbCrLf & "Log: " & Paths.LogPath, vbOKOnly + vbCritical, "SQL Error")
                 Return True
             Case 1292
-                PromptUser("Something went wrong with the SQL command. See log for details.  Log: " & strLogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
+                PromptUser("Something went wrong with the SQL command. See log for details.  Log: " & Paths.LogPath, vbOKOnly + vbCritical, "SQL Syntax Error")
                 Return True
             Case Else
                 UnHandledError(ex, ex.Number, Method)
@@ -200,7 +200,7 @@ Module ErrorHandling
         Select Case ex.SocketErrorCode                               'FTPSocket timeout
             Case SocketError.TimedOut '10060
                 Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
-                PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Timeout")
+                PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" & Paths.LogPath & "'", vbOKOnly + vbExclamation, "Network Socket Timeout")
                 Return True
             Case SocketError.HostUnreachable '10065 'host unreachable
                 Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
@@ -208,15 +208,15 @@ Module ErrorHandling
                 Return True
             Case SocketError.ConnectionAborted '10053
                 Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
-                PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Connection Aborted")
+                PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" & Paths.LogPath & "'", vbOKOnly + vbExclamation, "Connection Aborted")
                 Return True
             Case SocketError.ConnectionReset '10054 'connection reset
                 Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
-                PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Connection Reset")
+                PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" & Paths.LogPath & "'", vbOKOnly + vbExclamation, "Connection Reset")
                 Return True
             Case SocketError.NetworkUnreachable
                 Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.SocketErrorCode & "  Message:" & ex.Message)
-                PromptUser("Could not connect to server.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Unreachable")
+                PromptUser("Could not connect to server.  See Log.  '" & Paths.LogPath & "'", vbOKOnly + vbExclamation, "Network Unreachable")
                 Return True
             Case SocketError.HostNotFound '11001 'host not found.
                 Return False
@@ -285,7 +285,7 @@ Module ErrorHandling
 
     Private Sub UnHandledError(ex As Exception, ErrorCode As Integer, Method As MethodBase)
         Logger("UNHANDLED ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ErrorCode & "  Message:" & ex.Message)
-        PromptUser("UNHANDLED ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ErrorCode & "  Message:" & ex.Message & vbCrLf & vbCrLf & "file://" & strLogPath, vbOKOnly + vbCritical, "ERROR")
+        PromptUser("UNHANDLED ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ErrorCode & "  Message:" & ex.Message & vbCrLf & vbCrLf & "file://" & Paths.LogPath, vbOKOnly + vbCritical, "ERROR")
         EndProgram()
     End Sub
 

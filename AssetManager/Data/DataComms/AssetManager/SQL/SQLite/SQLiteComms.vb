@@ -9,7 +9,7 @@ Public Class SQLiteDatabase
 #Region "Fields"
     Private Const EncSQLitePass As String = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU"
     Private Property Connection As SQLiteConnection
-    Private SQLiteConnectString As String = "Data Source=" & strSQLitePath & ";Password=" & SecurityTools.DecodePassword(EncSQLitePass)
+    Private SQLiteConnectString As String = "Data Source=" & Paths.SQLitePath & ";Password=" & SecurityTools.DecodePassword(EncSQLitePass)
 
 #End Region
 
@@ -91,13 +91,13 @@ Public Class SQLiteDatabase
             Logger("Rebuilding local DB cache...")
             CloseConnection()
             GC.Collect()
-            If Not File.Exists(strSQLiteDir) Then
-                Directory.CreateDirectory(strSQLiteDir)
+            If Not File.Exists(Paths.SQLiteDir) Then
+                Directory.CreateDirectory(Paths.SQLiteDir)
             End If
-            If File.Exists(strSQLitePath) Then
-                File.Delete(strSQLitePath)
+            If File.Exists(Paths.SQLitePath) Then
+                File.Delete(Paths.SQLitePath)
             End If
-            SQLiteConnection.CreateFile(strSQLitePath)
+            SQLiteConnection.CreateFile(Paths.SQLitePath)
             Connection = NewConnection()
             Connection.SetPassword(SecurityTools.DecodePassword(EncSQLitePass))
             OpenConnection()
