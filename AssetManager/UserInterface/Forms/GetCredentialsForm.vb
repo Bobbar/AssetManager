@@ -23,8 +23,8 @@ Public Class GetCredentialsForm
     Private Sub Accept()
         Dim Username As String
         Username = Trim(txtUsername.Text)
-        SecurePwd.MakeReadOnly()
         If Username <> "" And SecurePwd.Length > 0 Then
+            SecurePwd.MakeReadOnly()
             MyCreds = New NetworkCredential(Username, SecurePwd, NetworkInfo.CurrentDomain)
             SecurePwd.Dispose()
             DialogResult = DialogResult.OK
