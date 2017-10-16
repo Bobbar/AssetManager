@@ -97,7 +97,7 @@ Public Class ViewHistoryForm
     Private Sub HighlightChangedFields(currentData As DataTable)
         'Iterate through the list of changed fields and set the background color to highlight them.
         For Each ctl In GetChangedFields(currentData)
-            ctl.BackColor = colCheckIn
+            ctl.BackColor = Colors.CheckIn
         Next
         NotesTextBox.BackColor = Color.White
     End Sub

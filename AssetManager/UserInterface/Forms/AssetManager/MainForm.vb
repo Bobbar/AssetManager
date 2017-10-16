@@ -138,17 +138,17 @@ Public Class MainForm
         Select Case ConnectionEventArgs.ConnectionStatus
 
             Case ConnectionMonitoring.WatchDogConnectionStatus.Online
-                ConnectStatus("Connected", Color.Green, colFormBackColor, "Connection OK")
+                ConnectStatus("Connected", Color.Green, Colors.DefaultFormBackColor, "Connection OK")
                 GlobalSwitches.CachedMode = False
                 ServerInfo.ServerPinging = True
 
             Case ConnectionMonitoring.WatchDogConnectionStatus.Offline
-                ConnectStatus("Offline", Color.Red, colStatusBarProblem, "No connection. Cache unavailable.")
+                ConnectStatus("Offline", Color.Red, Colors.StatusBarProblem, "No connection. Cache unavailable.")
                 GlobalSwitches.CachedMode = False
                 ServerInfo.ServerPinging = False
 
             Case ConnectionMonitoring.WatchDogConnectionStatus.CachedMode
-                ConnectStatus("Cached Mode", Color.Black, colStatusBarProblem, "Server Offline. Using Local DB Cache.")
+                ConnectStatus("Cached Mode", Color.Black, Colors.StatusBarProblem, "Server Offline. Using Local DB Cache.")
                 GlobalSwitches.CachedMode = True
                 ServerInfo.ServerPinging = False
 
@@ -211,12 +211,12 @@ Public Class MainForm
     Private Sub GetGridStyles()
         'set colors
 
-        DefGridBC = ResultGrid.DefaultCellStyle.BackColor
-        DefGridSelCol = ResultGrid.DefaultCellStyle.SelectionBackColor
+        Colors.DefaultGridBackColor = ResultGrid.DefaultCellStyle.BackColor
+        Colors.DefaultGridSelectColor = ResultGrid.DefaultCellStyle.SelectionBackColor
 
-        ResultGrid.DefaultCellStyle.SelectionBackColor = colSelectColor
+        ResultGrid.DefaultCellStyle.SelectionBackColor = Colors.OrangeSelectColor
 
-        Me.GridTheme = New GridTheme(colHighlightColor, ResultGrid.DefaultCellStyle.SelectionBackColor, ResultGrid.DefaultCellStyle.BackColor)
+        Me.GridTheme = New GridTheme(Colors.OrangeHighlightColor, ResultGrid.DefaultCellStyle.SelectionBackColor, ResultGrid.DefaultCellStyle.BackColor)
 
         Dim tmpStyle As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         tmpStyle.Alignment = ResultGrid.DefaultCellStyle.Alignment
@@ -260,7 +260,7 @@ Public Class MainForm
         Try
             ShowAll()
             DateTimeLabel.Text = Now.ToString
-            ToolStrip1.BackColor = colAssetToolBarColor
+            ToolStrip1.BackColor = Colors.AssetToolBarColor
             ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
             If SecurityTools.CanAccess(SecurityTools.AccessGroup.IsAdmin) Then
                 AdminDropDown.Visible = True

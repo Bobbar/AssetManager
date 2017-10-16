@@ -18,9 +18,9 @@ Public Class ViewTrackingForm
                     txtTimeStamp.Text = NoNull(r.Item(TrackablesCols.DateStamp))
                     txtCheckType.Text = NoNull(r.Item(TrackablesCols.CheckType))
                     If txtCheckType.Text = "IN" Then
-                        txtCheckType.BackColor = colCheckIn
+                        txtCheckType.BackColor = Colors.CheckIn
                     ElseIf txtCheckType.Text = "OUT" Then
-                        txtCheckType.BackColor = colCheckOut
+                        txtCheckType.BackColor = Colors.CheckOut
                     End If
                     txtDescription.Text = device.Description
                     txtGUID.Text = NoNull(r.Item(TrackablesCols.DeviceUID))

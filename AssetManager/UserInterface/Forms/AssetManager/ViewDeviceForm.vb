@@ -215,7 +215,7 @@ Public Class ViewDeviceForm
                     If DBInfo.Required Then
                         If Trim(c.Text) = "" Then
                             bolMissingField = True
-                            c.BackColor = colMissingField
+                            c.BackColor = Colors.MissingField
                             AddErrorIcon(c)
                         Else
                             c.BackColor = Color.Empty
@@ -227,7 +227,7 @@ Public Class ViewDeviceForm
                     If DBInfo.Required Then
                         If cmb.SelectedIndex = -1 Then
                             bolMissingField = True
-                            cmb.BackColor = colMissingField
+                            cmb.BackColor = Colors.MissingField
                             AddErrorIcon(cmb)
                         Else
                             cmb.BackColor = Color.Empty
@@ -238,7 +238,7 @@ Public Class ViewDeviceForm
         Next
         If Not ValidPhoneNumber(txtPhoneNumber.Text) Then
             bolMissingField = True
-            txtPhoneNumber.BackColor = colMissingField
+            txtPhoneNumber.BackColor = Colors.MissingField
             AddErrorIcon(txtPhoneNumber)
         Else
             txtPhoneNumber.BackColor = Color.Empty
@@ -604,7 +604,7 @@ Public Class ViewDeviceForm
 
     Private Sub FillTrackingBox()
         If CBool(CurrentViewDevice.Tracking.IsCheckedOut) Then
-            txtCheckOut.BackColor = colCheckOut
+            txtCheckOut.BackColor = Colors.CheckOut
             txtCheckLocation.Text = CurrentViewDevice.Tracking.UseLocation
             lblCheckTime.Text = "CheckOut Time:"
             txtCheckTime.Text = CurrentViewDevice.Tracking.CheckoutTime.ToString
@@ -614,7 +614,7 @@ Public Class ViewDeviceForm
             txtDueBack.Visible = True
             txtDueBack.Text = CurrentViewDevice.Tracking.DueBackTime.ToString
         Else
-            txtCheckOut.BackColor = colCheckIn
+            txtCheckOut.BackColor = Colors.CheckIn
             txtCheckLocation.Text = GetDisplayValueFromCode(DeviceAttribute.Locations, CurrentViewDevice.Location)
             lblCheckTime.Text = "CheckIn Time:"
             txtCheckTime.Text = CurrentViewDevice.Tracking.CheckinTime.ToString
@@ -860,7 +860,7 @@ Public Class ViewDeviceForm
     Private Sub SetMunisEmpStatus()
         ToolTip1.SetToolTip(txtCurUser_View_REQ, "")
         If CurrentViewDevice.CurrentUserEmpNum <> "" Then
-            txtCurUser_View_REQ.BackColor = colEditColor
+            txtCurUser_View_REQ.BackColor = Colors.EditColor
             ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee")
         End If
     End Sub
@@ -908,8 +908,8 @@ Public Class ViewDeviceForm
         TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.ForeColor = Color.Black
         TrackingGrid.Rows(e.RowIndex).Cells(GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Style.Alignment = DataGridViewContentAlignment.MiddleCenter
         If TrackingGrid.Rows(e.RowIndex).Cells(GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Value.ToString = CheckType.Checkin Then
-            TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckIn
-            Dim c2 As Color = Color.FromArgb(colCheckIn.R, colCheckIn.G, colCheckIn.B)
+            TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = Colors.CheckIn
+            Dim c2 As Color = Color.FromArgb(Colors.CheckIn.R, Colors.CheckIn.G, Colors.CheckIn.B)
             Dim BlendColor As Color
             BlendColor = Color.FromArgb(CInt((CInt(c1.A) + CInt(c2.A)) / 2),
                                                 CInt((CInt(c1.R) + CInt(c2.R)) / 2),
@@ -917,8 +917,8 @@ Public Class ViewDeviceForm
                                                 CInt((CInt(c1.B) + CInt(c2.B)) / 2))
             TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = BlendColor
         ElseIf TrackingGrid.Rows(e.RowIndex).Cells(GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType)).Value.ToString = CheckType.Checkout Then
-            TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = colCheckOut
-            Dim c2 As Color = Color.FromArgb(colCheckOut.R, colCheckOut.G, colCheckOut.B)
+            TrackingGrid.Rows(e.RowIndex).DefaultCellStyle.BackColor = Colors.CheckOut
+            Dim c2 As Color = Color.FromArgb(Colors.CheckOut.R, Colors.CheckOut.G, Colors.CheckOut.B)
             Dim BlendColor As Color
             BlendColor = Color.FromArgb(CInt((CInt(c1.A) + CInt(c2.A)) / 2),
                                                 CInt((CInt(c1.R) + CInt(c2.R)) / 2),

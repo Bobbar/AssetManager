@@ -24,16 +24,16 @@
     End Function
 
     Public Sub SetGridStyle(Grid As DataGridView)
-        Grid.BackgroundColor = DefGridBC
+        Grid.BackgroundColor = Colors.DefaultGridBackColor
         Grid.DefaultCellStyle = GridStyles
         Grid.DefaultCellStyle.Font = GridFont
     End Sub
 
     Public Sub HighlightRow(ByRef Grid As DataGridView, Theme As GridTheme, Row As Integer)
         Try
-            Dim BackColor As Color = Theme.BackColor 'DefGridBC
-            Dim SelectColor As Color = Theme.CellSelectColor 'DefGridSelCol
-            Dim c1 As Color = Theme.RowHighlightColor 'colHighlightColor 'highlight color
+            Dim BackColor As Color = Theme.BackColor 'Colors.DefGridBC
+            Dim SelectColor As Color = Theme.CellSelectColor 'Colors.DefGridSelCol
+            Dim c1 As Color = Theme.RowHighlightColor 'Colors.colHighlightColor 'highlight color
             If Row > -1 Then
                 For Each cell As DataGridViewCell In Grid.Rows(Row).Cells
                     Dim c2 As Color = Color.FromArgb(SelectColor.R, SelectColor.G, SelectColor.B)

@@ -17,8 +17,8 @@ Public Class SibiMainForm
     Private Sub InitForm()
         Try
             ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
-            Me.GridTheme = New GridTheme(colHighlightBlue, colSibiSelectColor, ResultGrid.DefaultCellStyle.BackColor)
-            ToolStrip1.BackColor = colSibiToolBarColor
+            Me.GridTheme = New GridTheme(Colors.HighlightBlue, Colors.SibiSelectColor, ResultGrid.DefaultCellStyle.BackColor)
+            ToolStrip1.BackColor = Colors.SibiToolBarColor
             ImageCaching.CacheControlImages(Me)
             MyWindowList.InsertWindowList(ToolStrip1)
             SetDisplayYears()

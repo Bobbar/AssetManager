@@ -66,7 +66,7 @@ Public Class SibiManageRequestForm
         pnlCreate.Visible = False
         CurrentRequest = Nothing
         DisableControls()
-        ToolStrip.BackColor = colSibiToolBarColor
+        ToolStrip.BackColor = Colors.SibiToolBarColor
         IsModifying = False
         IsNewRequest = False
         fieldErrorIcon.Clear()
@@ -250,7 +250,7 @@ Public Class SibiManageRequestForm
                     Case TypeOf c Is TextBox
                         If Trim(c.Text) = "" Then
                             bolFieldsValid = False
-                            c.BackColor = colMissingField
+                            c.BackColor = Colors.MissingField
                             AddErrorIcon(c)
                         Else
                             c.BackColor = Color.Empty
@@ -260,7 +260,7 @@ Public Class SibiManageRequestForm
                         Dim cmb = DirectCast(c, ComboBox)
                         If cmb.SelectedIndex = -1 Then
                             bolFieldsValid = False
-                            cmb.BackColor = colMissingField
+                            cmb.BackColor = Colors.MissingField
                             AddErrorIcon(cmb)
                         Else
                             cmb.BackColor = Color.Empty
@@ -347,7 +347,7 @@ Public Class SibiManageRequestForm
         RequestItemsGrid.EndEdit()
         If Not ValidateFields() Then Exit Sub
         DisableControls()
-        ToolStrip.BackColor = colSibiToolBarColor
+        ToolStrip.BackColor = Colors.SibiToolBarColor
         HideEditControls()
         UpdateRequest()
         IsModifying = False
@@ -705,7 +705,7 @@ Public Class SibiManageRequestForm
         MyWindowList.InsertWindowList(ToolStrip)
         dgvNotes.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
         RequestItemsGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
-        ToolStrip.BackColor = colSibiToolBarColor
+        ToolStrip.BackColor = Colors.SibiToolBarColor
 
     End Sub
 
@@ -1169,12 +1169,12 @@ Public Class SibiManageRequestForm
                 Message("This request has been modified since it's been open and has been refreshed with the current data.", vbOKOnly + vbInformation, "Concurrency Check", Me)
             End If
             EnableControls()
-            ToolStrip.BackColor = colEditColor
+            ToolStrip.BackColor = Colors.EditColor
             ShowEditControls()
             IsModifying = True
         Else
             DisableControls()
-            ToolStrip.BackColor = colSibiToolBarColor
+            ToolStrip.BackColor = Colors.SibiToolBarColor
             HideEditControls()
             UpdateRequest()
             IsModifying = False

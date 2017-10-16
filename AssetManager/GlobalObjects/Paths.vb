@@ -11,13 +11,17 @@ Namespace Paths
 
         'SQLite DB paths
 
-        Public Function SQLiteDBName() As String
-            Return "cache_" & ServerInfo.CurrentDataBase.ToString & IIf(Not ApplicationDeployment.IsNetworkDeployed, "_DEBUG", "").ToString & ".db"
-        End Function
+        Public ReadOnly Property SQLiteDBName() As String
+            Get
+                Return "cache_" & ServerInfo.CurrentDataBase.ToString & IIf(Not ApplicationDeployment.IsNetworkDeployed, "_DEBUG", "").ToString & ".db"
+            End Get
+        End Property
 
-        Public Function SQLitePath() As String
-            Return AppDir & "SQLiteCache\" & SQLiteDBName()
-        End Function
+        Public ReadOnly Property SQLitePath() As String
+            Get
+                Return AppDir & "SQLiteCache\" & SQLiteDBName()
+            End Get
+        End Property
 
         Public ReadOnly SQLiteDir As String = AppDir & "SQLiteCache\"
 

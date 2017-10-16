@@ -102,7 +102,7 @@
                     If DBInfo.Required Then
                         If Trim(ctl.Text) = "" Then
                             bolValidFields = False
-                            ctl.BackColor = colMissingField
+                            ctl.BackColor = Colors.MissingField
                             AddErrorIcon(ctl)
                         Else
                             ctl.BackColor = Color.Empty
@@ -121,7 +121,7 @@
                     If DBInfo.Required Then
                         If cmb.SelectedIndex = -1 Then
                             bolValidFields = False
-                            cmb.BackColor = colMissingField
+                            cmb.BackColor = Colors.MissingField
                             AddErrorIcon(cmb)
                         Else
                             cmb.BackColor = Color.Empty
