@@ -4,11 +4,13 @@ Imports System.Security
 Public Class GetCredentialsForm
     Private MyCreds As NetworkCredential
     Private SecurePwd As New SecureString
+
     Public ReadOnly Property Credentials As NetworkCredential
         Get
             Return MyCreds
         End Get
     End Property
+
     Sub New()
         InitializeComponent()
     End Sub

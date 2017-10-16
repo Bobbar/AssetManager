@@ -54,6 +54,7 @@
             End If
         End Get
     End Property
+
     Public ReadOnly Property Throughput As Double
         Get
             Return _speedThroughput

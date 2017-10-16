@@ -45,5 +45,4 @@ Public Class ExtendedForm
         Me.Refresh()
     End Sub
 
-
 End Class

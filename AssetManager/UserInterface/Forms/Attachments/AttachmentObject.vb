@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+
 Public Class SibiAttachment
     Inherits Attachment
     Public Property SelectedFolder As String
@@ -127,7 +128,6 @@ Public Class Attachment : Implements IDisposable
             End If
         End Get
     End Property
-
 
     Public ReadOnly Property Extension As String
         Get

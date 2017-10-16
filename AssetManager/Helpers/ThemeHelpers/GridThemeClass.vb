@@ -1,5 +1,4 @@
-﻿
-Public Class GridTheme
+﻿Public Class GridTheme
 
     Sub New(highlightCol As Color, cellSelCol As Color, backCol As Color)
         RowHighlightColor = highlightCol

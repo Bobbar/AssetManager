@@ -131,9 +131,11 @@
         LiveBox.Visible = False
         SetStyle()
     End Sub
+
     Private Sub LiveBox_LostFocus(sender As Object, e As EventArgs)
         HideLiveBox()
     End Sub
+
     Private Sub LiveBox_KeyDown(sender As Object, e As KeyEventArgs)
         Select Case e.KeyCode
             Case Keys.Enter
@@ -308,6 +310,7 @@
         End If
         disposedValue = True
     End Sub
+
 #End Region
 
 End Class

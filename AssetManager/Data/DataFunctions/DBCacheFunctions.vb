@@ -4,7 +4,6 @@
         Public SQLiteTableHashes As List(Of String)
         Public RemoteTableHashes As List(Of String)
 
-
         Public Sub RefreshLocalDBCache()
             Try
                 ' GlobalSwitches.BuildingCache = True
@@ -66,10 +65,6 @@
                 Return False
             End Try
         End Function
-
-
-
-
 
     End Module
 End Namespace

@@ -7,6 +7,7 @@ Public Class SibiMainForm
     Private LastCmd As DbCommand
     Private bolRebuildingCombo As Boolean = False
     Private StatusColors As List(Of StatusColumnColorStruct)
+
     Sub New(parentForm As ExtendedForm)
         Me.ParentForm(True) = parentForm
         ' This call is required by the designer.
@@ -14,6 +15,7 @@ Public Class SibiMainForm
 
         InitForm()
     End Sub
+
     Private Sub InitForm()
         Try
             ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, True)
@@ -30,7 +32,6 @@ Public Class SibiMainForm
             Me.Dispose()
         End Try
     End Sub
-
 
     Public Overrides Sub RefreshData()
         ExecuteCmd(LastCmd)
@@ -104,7 +105,7 @@ Public Class SibiMainForm
             LastCmd = cmd
             SendToGrid(DBFactory.GetDatabase.DataTableFromCommand(cmd))
         Catch ex As Exception
-            'InvalidCastException is expected when the last LastCmd was populated while in cached DB mode and now cached mode is currently false. 
+            'InvalidCastException is expected when the last LastCmd was populated while in cached DB mode and now cached mode is currently false.
             'ShowAll will start a new connection and populate LastCmd with a correctly matching DBCommand. See DBFactory.GetCommand()
             If TypeOf ex Is InvalidCastException Then
                 ShowAll()
@@ -301,11 +302,13 @@ Public Class SibiMainForm
             ShowAll(cmbDisplayYear.Text)
         End If
     End Sub
+
     Public Overrides Function OKToClose() As Boolean
         Dim CanClose As Boolean = True
         If Not OKToCloseChildren(Me) Then CanClose = False
         Return CanClose
     End Function
+
     Private Sub frmSibiMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If Not OKToClose() Then
             e.Cancel = True
@@ -333,4 +336,5 @@ Public Class SibiMainForm
         MyWindowList.Dispose()
         CloseChildren(Me)
     End Sub
+
 End Class

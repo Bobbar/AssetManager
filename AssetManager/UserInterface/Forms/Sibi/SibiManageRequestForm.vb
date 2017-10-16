@@ -141,11 +141,13 @@ Public Class SibiManageRequestForm
             SetWaitCursor(False, Me)
         End Try
     End Sub
+
     Private Function GetHash(RequestTable As DataTable, ItemsTable As DataTable) As String
         Dim RequestHash As String = SecurityTools.GetSHAOfTable(RequestTable)
         Dim ItemHash As String = SecurityTools.GetSHAOfTable(ItemsTable)
         Return RequestHash & ItemHash
     End Function
+
     Private Function ConcurrencyCheck() As Boolean
         Try
             Using RequestTable = DBFactory.GetDatabase.DataTableFromQueryString("SELECT * FROM " & SibiRequestCols.TableName & " WHERE " & SibiRequestCols.UID & "='" & CurrentRequest.GUID & "'"),
@@ -162,6 +164,7 @@ Public Class SibiManageRequestForm
             Throw
         End Try
     End Function
+
     Public Sub SetAttachCount()
         If Not GlobalSwitches.CachedMode Then
 
@@ -523,6 +526,7 @@ Public Class SibiManageRequestForm
     Private Sub dgvNotes_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvNotes.CellDoubleClick
         ViewNote()
     End Sub
+
     Private Sub ViewNote()
         Try
             Dim NoteUID = GridFunctions.GetCurrentCellValue(dgvNotes, SibiNotesCols.NoteUID)
@@ -533,6 +537,7 @@ Public Class SibiManageRequestForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
     End Sub
+
     Private Sub DisableControlsRecursive(control As Control)
         For Each c As Control In control.Controls
             Select Case True

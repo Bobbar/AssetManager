@@ -13,6 +13,7 @@ Public Class ViewHistoryForm
         ViewEntry(entryUID)
 
     End Sub
+
     'TODO: Iterate through properties and dynamically generate controls at runtime.
     Private Sub InitDBControls()
         txtEntryTime.Tag = New DBControlInfo(HistoricalDevicesCols.ActionDateTime, ParseType.DisplayOnly, False)
@@ -105,4 +106,5 @@ Public Class ViewHistoryForm
     Private Sub ViewHistoryForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Me.Dispose()
     End Sub
+
 End Class

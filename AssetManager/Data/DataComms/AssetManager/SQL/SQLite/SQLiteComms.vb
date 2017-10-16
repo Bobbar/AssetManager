@@ -7,6 +7,7 @@ Public Class SQLiteDatabase
     Implements IDataBase
 
 #Region "Fields"
+
     Private Const EncSQLitePass As String = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU"
     Private Property Connection As SQLiteConnection
     Private SQLiteConnectString As String = "Data Source=" & Paths.SQLitePath & ";Password=" & SecurityTools.DecodePassword(EncSQLitePass)
@@ -27,6 +28,7 @@ Public Class SQLiteDatabase
 #Region "Methods"
 
 #Region "Connection Methods"
+
     Public Sub CloseConnection()
         If Connection IsNot Nothing Then
             Connection.Close()
@@ -53,6 +55,7 @@ Public Class SQLiteDatabase
             Return False
         End If
     End Function
+
 #End Region
 
 #Region "CacheManagement"
@@ -279,10 +282,11 @@ Public Class SQLiteDatabase
         table.Dispose()
         Return tmpTable
     End Function
+
 #End Region
 
-
 #Region "IDataBase"
+
     Public Function StartTransaction() As DbTransaction Implements IDataBase.StartTransaction
         Throw New NotImplementedException()
     End Function
@@ -375,7 +379,6 @@ Public Class SQLiteDatabase
         Return cmd
     End Function
 
-
 #End Region
 
 #End Region
@@ -412,6 +415,7 @@ Public Class SQLiteDatabase
     '    Dispose(False)
     '    MyBase.Finalize()
     'End Sub
+
 #End Region
 
 End Class

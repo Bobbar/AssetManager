@@ -6,8 +6,10 @@ Imports System.Reflection
 Imports MySql.Data.MySqlClient
 
 Module ErrorHandling
+
     'Suppress additional messages to user.
     Private SuppressAdditionalMessages As Boolean = False
+
     Public Function ErrHandle(ex As Exception, Method As MethodBase) As Boolean 'Recursive error handler. Returns False for undesired or dangerous errors, True if safe to continue.
         Try
             Logger("ERR STACK TRACE: " & ex.ToString)

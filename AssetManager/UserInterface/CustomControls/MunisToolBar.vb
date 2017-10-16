@@ -82,6 +82,7 @@
         TSM.Tag = clickMethod
         Return TSM
     End Function
+
     Private Sub ToolItemClicked(sender As Object, e As EventArgs)
         Dim ClickedItem As ToolStripMenuItem = DirectCast(sender, ToolStripMenuItem)
         Dim ClickAction As Action = DirectCast(ClickedItem.Tag, Action)
@@ -122,6 +123,7 @@
     '    Dispose(False)
     '    MyBase.Finalize()
     'End Sub
+
 #End Region
 
 End Class

@@ -1,5 +1,4 @@
-﻿
-Public Enum EntryType
+﻿Public Enum EntryType
     Sibi
     Device
 End Enum

@@ -1,8 +1,9 @@
 ﻿Option Explicit On
-Imports MyDialogLib
+
 Imports System.ComponentModel
 Imports System.Data.Common
 Imports System.Deployment.Application
+Imports MyDialogLib
 
 Public Class MainForm
 
@@ -20,9 +21,13 @@ Public Class MainForm
 #End Region
 
 #Region "Delegates"
+
     Delegate Sub ConnectStatusVoidDelegate(text As String, foreColor As Color, backColor As Color, toolTipText As String)
+
     Delegate Sub StatusVoidDelegate(text As String)
+
     Delegate Sub ServerTimeVoidDelegate(serverTime As String)
+
 #End Region
 
 #Region "Methods"
@@ -290,7 +295,6 @@ Public Class MainForm
         End Try
     End Sub
 
-
     Private Sub MainForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         SplashScreenForm.Dispose()
     End Sub
@@ -403,6 +407,7 @@ Public Class MainForm
             StatusStrip1.Update()
         End If
     End Sub
+
     Private Sub SetServerTime(serverTime As String)
         If StatusStrip1.InvokeRequired Then
             Dim d As New ServerTimeVoidDelegate(AddressOf SetServerTime)
@@ -494,7 +499,6 @@ Public Class MainForm
                     End If
                 End If
             End If
-
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
@@ -514,7 +518,6 @@ Public Class MainForm
             Return True
         End If
     End Function
-
 
 #Region "Control Event Methods"
 

@@ -24,6 +24,7 @@
         InitializeTimer()
         RefreshWindowList()
     End Sub
+
     Private Sub AddParentMenu()
         If MyParentForm.ParentForm IsNot Nothing Then
             Dim ParentDropDown As ToolStripMenuItem = NewMenuItem(MyParentForm.ParentForm)
@@ -180,7 +181,6 @@
         End If
     End Sub
 
-
 #End Region
 
 #Region "IDisposable Support"
@@ -216,6 +216,7 @@
     '    Dispose(False)
     '    MyBase.Finalize()
     'End Sub
+
 #End Region
 
 End Class

@@ -1,11 +1,12 @@
 ﻿Option Explicit On
-Imports System.Net.NetworkInformation
-Imports System.Net
+
+Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
-Imports System.Drawing
-Imports System.Windows.Forms
+Imports System.Net
+Imports System.Net.NetworkInformation
 Imports System.Text
+Imports System.Windows.Forms
 
 Public Class PingVis : Implements IDisposable
     Private MyPing As New Ping
@@ -24,26 +25,33 @@ Public Class PingVis : Implements IDisposable
     Private PrevScaleMax As Long = 1000
 
 #Region "Ping Parameters"
+
     Private Const Timeout As Integer = 1000
     Private Const GoodPingInterval As Integer = 1000
     Private Const NoPingInterval As Integer = 5000
     Private CurrentPingInterval As Integer = GoodPingInterval
+
 #End Region
 
 #Region "Bar Parameters"
+
     Private Const BarGap As Single = 0
     Private Const MaxBars As Integer = 10
     Private Const MinBarLength As Integer = 2
     Private Const BarTopPadding As Single = 0
     Private Const BarBottomPadding As Single = 5
+
 #End Region
 
 #Region "Misc PingVis Variables"
+
     Private InitialScale As Single = 4
     Private Const MaxStoredResults As Integer = 1000000
     Private Const MaxDrawRate As Integer = 20
     Private ScaleMulti As Integer = 2
+
 #End Region
+
     Public ReadOnly Property CurrentResult As PingInfo
         Get
             If PingReplies.Count > 0 Then
@@ -53,11 +61,13 @@ Public Class PingVis : Implements IDisposable
             End If
         End Get
     End Property
+
     Sub New(destControl As Control, hostName As String)
         InitMyControl(destControl)
         MyPingHostname = hostName
         InitPing()
     End Sub
+
     Private Sub InitMyControl(destControl As Control)
         DrawControl = destControl
         'Set image to double the size of the control
@@ -67,11 +77,13 @@ Public Class PingVis : Implements IDisposable
         AddHandler DrawControl.MouseLeave, AddressOf ControlMouseLeave
         AddHandler DrawControl.MouseMove, AddressOf ControlMouseMove
     End Sub
+
     Private Sub InitPing()
         ServicePointManager.DnsRefreshTimeout = 0
         InitTimer()
         StartPing()
     End Sub
+
     Private Sub InitTimer()
         If Not Me.disposedValue Then
             If PingTimer IsNot Nothing Then
@@ -85,10 +97,12 @@ Public Class PingVis : Implements IDisposable
             AddHandler PingTimer.Tick, AddressOf PingTimer_Tick
         End If
     End Sub
+
     Private Sub PingTimer_Tick(sender As Object, e As EventArgs)
         StartPing()
         PingTimer.Interval = CurrentPingInterval
     End Sub
+
     Private Async Sub StartPing()
         Try
             If Not PingRunning Then
@@ -111,6 +125,7 @@ Public Class PingVis : Implements IDisposable
             If Not MouseIsScrolling Then DrawBars(DrawControl, GetPingBars, MouseOverInfo)
         End Try
     End Sub
+
     Private Async Function GetPingReply(hostname As String) As Task(Of PingReply)
         Try
             PingRunning = True
@@ -122,18 +137,21 @@ Public Class PingVis : Implements IDisposable
             PingRunning = False
         End Try
     End Function
+
     Private Sub SetPingInterval(interval As Integer)
         If CurrentPingInterval <> interval Then
             CurrentPingInterval = interval
             InitTimer()
         End If
     End Sub
+
     Private Sub ControlMouseLeave(sender As Object, e As EventArgs)
         MouseIsScrolling = False
         MouseOverInfo = Nothing
         If ScrollingBars IsNot Nothing Then ScrollingBars.Clear()
         DrawBars(DrawControl, GetPingBars, MouseOverInfo)
     End Sub
+
     Private Sub ControlMouseWheel(sender As Object, e As MouseEventArgs)
         If PingReplies.Count > MaxBars Then
             MouseIsScrolling = True
@@ -156,6 +174,7 @@ Public Class PingVis : Implements IDisposable
             DrawBars(DrawControl, GetPingBars)
         End If
     End Sub
+
     Private Sub ControlMouseMove(sender As Object, e As MouseEventArgs)
         If MouseIsScrolling Then
             MouseOverInfo = GetMouseOverPing(e.Location)
@@ -226,6 +245,7 @@ Public Class PingVis : Implements IDisposable
             End Using
         End If
     End Sub
+
     Private Function CanDraw(timeStamp As Integer) As Boolean
         Dim ElapTime As Integer = timeStamp - LastDraw
         If ElapTime >= MaxDrawRate Then
@@ -234,6 +254,7 @@ Public Class PingVis : Implements IDisposable
         End If
         Return False
     End Function
+
     Private Sub DrawPingText(ByRef gfx As Graphics, Optional mouseOverInfo As MouseOverInfoStruct = Nothing)
         Dim InfoFontSize As Single = 15
         Dim OverInfoFontSize As Single = 14
@@ -255,6 +276,7 @@ Public Class PingVis : Implements IDisposable
             End Using
         End If
     End Sub
+
     Private Function GetReplyStatusText(reply As PingInfo) As String
         Select Case reply.Status
             Case IPStatus.Success
@@ -265,6 +287,7 @@ Public Class PingVis : Implements IDisposable
                 Return "ERR"
         End Select
     End Function
+
     Private Sub DrawPingBars(ByRef gfx As Graphics, ByRef bars As List(Of PingBar))
         For Each bar As PingBar In bars
             gfx.FillRectangle(bar.Brush, bar.Rectangle)
@@ -273,6 +296,7 @@ Public Class PingVis : Implements IDisposable
             End Using
         Next
     End Sub
+
     Private Function GetPingBars() As List(Of PingBar)
         Dim NewPBars As New List(Of PingBar)
         Dim curPos As Single = BarTopPadding
@@ -308,6 +332,7 @@ Public Class PingVis : Implements IDisposable
             Return TopBarIndex
         End If
     End Function
+
     Private Function GetBarBrush(roundTrip As Long) As Brush
         'Alpha blending two colors. As ping times go up, the returned color becomes more red.
         Dim FadeColor As Integer
@@ -329,6 +354,7 @@ Public Class PingVis : Implements IDisposable
         FadeColor = RGB(CInt(r1 + (r2 - r1) / iSteps * iStep), CInt(g1 + (g2 - g1) / iSteps * iStep), CInt(b1 + (b2 - b1) / iSteps * iStep))
         Return New SolidBrush(ColorTranslator.FromOle(FadeColor))
     End Function
+
     Private Sub DrawScaleLines(ByRef gfx As Graphics)
         Dim ScaleLineLoc As Integer = 0
         Dim NumOfLines As Integer = CInt(Timeout / 10)
@@ -339,11 +365,13 @@ Public Class PingVis : Implements IDisposable
             ScaleLineLoc += StepSize
         Next
     End Sub
+
     Private Sub TrimPingList()
         If PingReplies.Count > MaxStoredResults Then
             PingReplies = PingReplies.GetRange(PingReplies.Count - MaxStoredResults, MaxStoredResults)
         End If
     End Sub
+
     Private Sub SetScale()
         Dim MaxPing As Long = CurrentDisplayResults.OrderByDescending(Function(p) p.RoundTripTime).FirstOrDefault.RoundTripTime
         If MaxPing <> PrevScaleMax Then
@@ -359,6 +387,7 @@ Public Class PingVis : Implements IDisposable
             PrevScaleMax = MaxPing
         End If
     End Sub
+
     Private Function CurrentDisplayResults() As List(Of PingInfo)
         If PingReplies.Count > MaxBars Then
             Return PingReplies.GetRange(FirstDrawIndex(PingReplies.Count), MaxBars)
@@ -366,6 +395,7 @@ Public Class PingVis : Implements IDisposable
             Return PingReplies
         End If
     End Function
+
     Private Sub SetControlImage(ByRef destControl As Control, ByRef image As Bitmap)
         Select Case True
             Case TypeOf destControl Is Form
@@ -404,7 +434,9 @@ Public Class PingVis : Implements IDisposable
         End Using
         Return destImage
     End Function
+
 #Region "IDisposable Support"
+
     Private disposedValue As Boolean ' To detect redundant calls
 
     ' IDisposable
@@ -444,21 +476,26 @@ Public Class PingVis : Implements IDisposable
         ' TODO: uncomment the following line if Finalize() is overridden above.
         ' GC.SuppressFinalize(Me)
     End Sub
+
 #End Region
+
     Public Class PingInfo
         Public Property Status As IPStatus
         Public Property RoundTripTime As Long
         Public Property Address As IPAddress
+
         Sub New()
             Status = IPStatus.Unknown
             RoundTripTime = 0
             Address = Nothing
         End Sub
+
         Sub New(reply As PingReply)
             Status = reply.Status
             RoundTripTime = reply.RoundtripTime
             Address = reply.Address
         End Sub
+
     End Class
 
     Private Class PingBar
@@ -467,11 +504,13 @@ Public Class PingVis : Implements IDisposable
         Private rec As Rectangle
         Private pos As Single
         Private pInfo As PingInfo
+
         Public ReadOnly Property Length As Single
             Get
                 Return len
             End Get
         End Property
+
         Public Property Brush As Brush
             Get
                 Return br
@@ -480,21 +519,25 @@ Public Class PingVis : Implements IDisposable
                 br = value
             End Set
         End Property
+
         Public ReadOnly Property Rectangle As Rectangle
             Get
                 Return rec
             End Get
         End Property
+
         Public ReadOnly Property PositionY As Single
             Get
                 Return pos
             End Get
         End Property
+
         Public ReadOnly Property PingResult As PingInfo
             Get
                 Return pInfo
             End Get
         End Property
+
         Sub New(length As Single, ByRef brush As Brush, rect As Rectangle, posY As Single, ByVal pingInfo As PingInfo)
             len = length
             br = brush
@@ -504,14 +547,16 @@ Public Class PingVis : Implements IDisposable
         End Sub
 
     End Class
+
     Private Class MouseOverInfoStruct
         Public MouseLoc As Point
         Public PingReply As PingInfo
+
         Sub New(mLoc As Point, pReply As PingInfo)
             MouseLoc = mLoc
             PingReply = pReply
         End Sub
+
     End Class
+
 End Class
-
-

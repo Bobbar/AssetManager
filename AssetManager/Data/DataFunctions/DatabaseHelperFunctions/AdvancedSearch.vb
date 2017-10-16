@@ -1,6 +1,5 @@
 ﻿Namespace AdvancedSearch
 
-
     Public Class Search
 
 #Region "Fields"
@@ -30,6 +29,7 @@
             Next
             Return colList
         End Function
+
         Public Function GetResults() As List(Of DataTable)
             Dim resultsList As New List(Of DataTable)
             For Each table In _searchTables
@@ -93,4 +93,5 @@
     End Structure
 
 #End Region
+
 End Namespace

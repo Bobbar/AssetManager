@@ -1,11 +1,11 @@
 ﻿Namespace ImageCaching
     ''' <summary>
-    '''  These methods allow me to add a single line after the 
-    '''  InitializeComponent call in a Forms constructor that will efficiently reassign 
+    '''  These methods allow me to add a single line after the
+    '''  InitializeComponent call in a Forms constructor that will efficiently reassign
     '''  all control images set from the recklessly leaky 'spawn-a-new-instance-of-every-object' - ResourceManager.GetObject method.
-    '''  By using a global HashTable to contain and pass out single instances of the images, I can  
+    '''  By using a global HashTable to contain and pass out single instances of the images, I can
     '''  reduce memory usage by comical orders of magnitude.
-    '''  ResourceManager.GetObject can "Die a prolonged and relentlessly agonizing death." 
+    '''  ResourceManager.GetObject can "Die a prolonged and relentlessly agonizing death."
     ''' </summary>
     Module CachedImages
         Private ImageCacheHashTable As New Hashtable
@@ -88,4 +88,3 @@
 
     End Module
 End Namespace
-

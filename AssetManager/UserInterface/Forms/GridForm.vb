@@ -103,6 +103,7 @@ Public Class GridForm
         DoubleBufferedDataGrid(NewGrid, True)
         Return NewGrid
     End Function
+
     Private Sub GridDoubleClickCell(sender As Object, e As EventArgs)
         Dim SenderGrid As DataGridView = DirectCast(sender, DataGridView)
         LastDoubleClickRow = SenderGrid.CurrentRow
@@ -132,9 +133,11 @@ Public Class GridForm
             Return CalcHeight
         End If
     End Function
+
     Private Sub GridLeaveCell(sender As Object, e As DataGridViewCellEventArgs)
         LeaveRow(DirectCast(sender, DataGridView), Me.GridTheme, e.RowIndex)
     End Sub
+
     Private Sub ResizeGridPanel()
         Dim NewHeight = GridHeight()
         For Each grid In GridList
@@ -170,6 +173,7 @@ Public Class GridForm
         ResizeGrids()
         bolGridFilling = False
     End Sub
+
 #End Region
 
 End Class

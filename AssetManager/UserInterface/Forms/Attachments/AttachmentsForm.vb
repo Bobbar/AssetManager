@@ -2,10 +2,9 @@
 
 Imports System.ComponentModel
 Imports System.IO
+Imports System.Net
 Imports System.Runtime.InteropServices
 Imports System.Threading
-Imports System.Net
-
 
 Public Class AttachmentsForm
 
@@ -139,6 +138,7 @@ Public Class AttachmentsForm
         StatusLabel.Text = Text
         StatusStrip1.Update()
     End Sub
+
     Public Overrides Function OKToClose() As Boolean
         If ActiveTransfer() Then
             Me.WindowState = FormWindowState.Normal
@@ -811,6 +811,7 @@ Public Class AttachmentsForm
     Private Sub AttachmentsForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         PurgeTempDir()
     End Sub
+
 #End Region
 
 #End Region

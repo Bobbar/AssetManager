@@ -20,6 +20,7 @@ Public Class GKUpdaterForm
         DoubleBufferedFlowLayout(Updater_Table, True)
 
     End Sub
+
     Public Sub AddMultipleUpdates(devices As List(Of DeviceObject))
         Try
             SetWaitCursor(True, Me)
@@ -47,6 +48,7 @@ Public Class GKUpdaterForm
             SetWaitCursor(False, Me)
         End Try
     End Sub
+
     Public Sub AddUpdate(device As DeviceObject)
         Try
             If bolCheckForDups AndAlso Not Exists(device) Then
@@ -150,6 +152,7 @@ Public Class GKUpdaterForm
             Me.Dispose()
         End If
     End Sub
+
     Public Overrides Function OkToClose() As Boolean
         If ActiveUpdates() Then
             Message("There are still updates running!  Cancel the updates or wait for them to finish.", vbOKOnly + vbExclamation, "Close Aborted", Me)

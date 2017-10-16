@@ -1,5 +1,7 @@
 ﻿Imports System.Net.NetworkInformation
+
 Namespace ConnectionMonitoring
+
     Public Class ConnectionWatchdog : Implements IDisposable
 
         Sub New(cachedMode As Boolean)
@@ -7,7 +9,9 @@ Namespace ConnectionMonitoring
         End Sub
 
         Public Event StatusChanged As EventHandler
+
         Public Event RebuildCache As EventHandler
+
         Public Event WatcherTick As EventHandler
 
         Protected Overridable Sub OnStatusChanged(e As WatchDogStatusEventArgs)
@@ -55,7 +59,6 @@ Namespace ConnectionMonitoring
                     OnStatusChanged(New WatchDogStatusEventArgs(CurrentWatchdogStatus))
                 End If
 
-
                 If ServerIsOnline Then
                     'Fire tick event to update server datatime.
                     OnWatcherTick(New WatchDogTickEventArgs(Await GetServerTime()))
@@ -84,6 +87,7 @@ Namespace ConnectionMonitoring
             End If
             PreviousWatchdogStatus = CurrentWatchdogStatus
         End Sub
+
         Private Async Function GetServerTime() As Task(Of String)
             Try
                 Return Await Task.Run(Function()
@@ -168,6 +172,7 @@ Namespace ConnectionMonitoring
         End Function
 
 #Region "IDisposable Support"
+
         Private disposedValue As Boolean ' To detect redundant calls
 
         ' IDisposable
@@ -198,7 +203,9 @@ Namespace ConnectionMonitoring
             ' TODO: uncomment the following line if Finalize() is overridden above.
             ' GC.SuppressFinalize(Me)
         End Sub
+
 #End Region
+
     End Class
 
     Public Class WatchDogTickEventArgs : Inherits EventArgs
@@ -207,13 +214,16 @@ Namespace ConnectionMonitoring
         Public Sub New(serverTime As String)
             Me.ServerTime = serverTime
         End Sub
+
     End Class
 
     Public Class WatchDogStatusEventArgs : Inherits EventArgs
         Public Property ConnectionStatus As WatchDogConnectionStatus
+
         Public Sub New(ByVal connectionStatus As WatchDogConnectionStatus)
             Me.ConnectionStatus = connectionStatus
         End Sub
+
     End Class
 
     Public Enum WatchDogConnectionStatus

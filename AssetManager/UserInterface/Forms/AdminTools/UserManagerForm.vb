@@ -1,5 +1,4 @@
-﻿
-Public Class UserManagerForm
+﻿Public Class UserManagerForm
     Private ModuleIndex As New List(Of AccessGroupObject)
     Private CurrentUser As LocalUserInfoStruct
     Private UserDataQuery As String = "SELECT * FROM " & UsersCols.TableName

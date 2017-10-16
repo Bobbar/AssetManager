@@ -132,6 +132,7 @@ Public Class MunisComms
         cmd.CommandText += ParamString
         Return cmd
     End Function
+
 #End Region
 
 End Class

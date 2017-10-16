@@ -65,6 +65,7 @@ Public Class Simple3Des : Implements IDisposable
     End Function
 
 #Region "IDisposable Support"
+
     Private disposedValue As Boolean ' To detect redundant calls
 
     ' IDisposable
@@ -95,6 +96,7 @@ Public Class Simple3Des : Implements IDisposable
         ' TODO: uncomment the following line if Finalize() is overridden above.
         ' GC.SuppressFinalize(Me)
     End Sub
+
 #End Region
 
 End Class

@@ -46,8 +46,6 @@ Public Class ViewDeviceForm
 
 #Region "Methods"
 
-
-
     Private Function CancelModify() As Boolean
         If EditMode Then
             Me.WindowState = FormWindowState.Normal
@@ -112,7 +110,6 @@ Public Class ViewDeviceForm
                     LoadDevice(CurrentViewDevice.GUID)
                     Message("Unsuccessful! The number of affected rows was not what was expected.", vbOKOnly + vbExclamation, "Unexpected Result", Me)
                 End If
-
             Catch ex As Exception
                 trans.Rollback()
                 If ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()) Then
@@ -145,6 +142,7 @@ Public Class ViewDeviceForm
             DoneWaiting()
         End Try
     End Sub
+
     Public Overrides Sub RefreshData()
         If EditMode Then
             CancelModify()
@@ -514,6 +512,7 @@ Public Class ViewDeviceForm
             Return 0
         End Try
     End Function
+
     Private Sub DisableControlsRecursive(control As Control)
         For Each c As Control In control.Controls
             Select Case True
@@ -1005,7 +1004,6 @@ Public Class ViewDeviceForm
         Return CanClose
     End Function
 
-
     Private Sub View_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If Not OKToClose() Then
             e.Cancel = True
@@ -1099,6 +1097,7 @@ Public Class ViewDeviceForm
     Private Sub RefreshToolStripButton_Click(sender As Object, e As EventArgs) Handles RefreshToolStripButton.Click
         RefreshData()
     End Sub
+
 #End Region
 
 End Class

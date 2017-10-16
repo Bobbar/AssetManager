@@ -3,6 +3,7 @@ Imports System.Net
 Imports System.Runtime.Serialization
 Imports System.Security.Cryptography
 Imports System.Text
+
 Namespace SecurityTools
     Module SecurityFunctions
         Public AdminCreds As NetworkCredential = Nothing

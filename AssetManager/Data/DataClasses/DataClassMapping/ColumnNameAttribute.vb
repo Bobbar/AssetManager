@@ -3,6 +3,7 @@ Public Class DataColumnNameAttribute
     Inherits Attribute
 
     Private _columnName As String
+
     Public Property ColumnName As String
         Get
             Return _columnName
@@ -19,4 +20,5 @@ Public Class DataColumnNameAttribute
     Public Sub New(columnName As String)
         _columnName = columnName
     End Sub
+
 End Class

@@ -74,7 +74,7 @@
                 Logger("Orphan Files/Directories found!")
                 StatsText = "Orphan Files/Directories found!  Do you want to delete the corrupt SQL/FTP entries?
 
-FTP: 
+FTP:
 Missing Dirs: " & MissingFTPDirs.Count & "
 Missing Files: " & MissingFTPFiles.Count & "
 
@@ -291,11 +291,14 @@ Missing Files: " & MissingSQLFiles.Count
     Private Structure AttachScanInfo
         Public FKey As String
         Public FileUID As String
+
         Sub New(FKey As String, FileUID As String)
             Me.FKey = FKey
             Me.FileUID = FileUID
         End Sub
+
     End Structure
+
 #End Region
 
 End Class

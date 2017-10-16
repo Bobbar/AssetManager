@@ -1,10 +1,9 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.Data.Common
+﻿Imports System.Data.Common
+Imports MySql.Data.MySqlClient
 
 Public Class MySQLDatabase
     Implements IDisposable
     Implements IDataBase
-
 
 #Region "IDisposable Support"
 
@@ -37,6 +36,7 @@ Public Class MySQLDatabase
     '    Dispose(False)
     '    MyBase.Finalize()
     'End Sub
+
 #End Region
 
 #Region "Fields"
@@ -73,6 +73,7 @@ Public Class MySQLDatabase
         End If
 
     End Function
+
     Private Function TryOpenConnection(connection As MySqlConnection) As Boolean
         If connection Is Nothing Then 'Instantiate new connection.
             connection = NewConnection()
@@ -94,10 +95,6 @@ Public Class MySQLDatabase
     Public Function ReturnMySqlAdapter(sqlQry As String, connection As MySqlConnection) As MySqlDataAdapter
         Return New MySqlDataAdapter(sqlQry, connection)
     End Function
-
-
-
-
 
 #End Region
 
@@ -247,10 +244,6 @@ Public Class MySQLDatabase
         Return cmd
     End Function
 
-
-
 #End Region
-
-
 
 End Class

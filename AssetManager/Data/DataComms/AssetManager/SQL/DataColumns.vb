@@ -164,6 +164,7 @@ Public Class EmployeesCols
     Public Const Number As String = "emp_number"
     Public Const UID As String = "emp_UID"
 End Class
+
 Public NotInheritable Class DeviceAttribType
     Public Const Location As String = "LOCATION"
     Public Const ChangeType As String = "CHANGETYPE"
@@ -172,6 +173,7 @@ Public NotInheritable Class DeviceAttribType
     Public Const StatusType As String = "STATUS_TYPE"
 
 End Class
+
 Public NotInheritable Class SibiAttribType
 
     Public Const SibiStatusType As String = "STATUS"

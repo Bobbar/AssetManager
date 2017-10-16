@@ -1,6 +1,7 @@
 ﻿Option Explicit On
 
 Public Class ViewTrackingForm
+
     Sub New(parentForm As ExtendedForm, entryGUID As String, device As DeviceObject)
         InitializeComponent()
         Me.ParentForm = parentForm

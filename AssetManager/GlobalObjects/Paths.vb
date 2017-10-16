@@ -1,10 +1,12 @@
-﻿Imports System.Environment
-Imports System.Deployment.Application
+﻿Imports System.Deployment.Application
+Imports System.Environment
+
 Namespace Paths
     Module Paths
 
         'Application paths
         Public ReadOnly AppDir As String = GetFolderPath(SpecialFolder.ApplicationData) & "\AssetManager\"
+
         Public Const LogName As String = "log.log"
         Public ReadOnly LogPath As String = AppDir & LogName
         Public ReadOnly DownloadPath As String = AppDir & "temp\"
@@ -27,6 +29,7 @@ Namespace Paths
 
         'Gatekeeper package paths
         Public Const GKInstallDir As String = "C:\PSi\Gatekeeper"
+
         Public Const GKPackFileName As String = "GatekeeperPack.gz"
         Public Const GKPackHashName As String = "hash.md5"
         Public ReadOnly GKPackFileFDir As String = AppDir & "GKUpdateFiles\PackFile\"

@@ -1,7 +1,9 @@
 ﻿Imports System.DirectoryServices
+
 Public Class ActiveDirectoryWrapper
     Private _hostname As String
     Private _searchResults As SearchResult
+
     ' Public Property FoundInAD As Boolean = False
     Sub New(hostname As String)
         _hostname = hostname
@@ -36,7 +38,7 @@ Public Class ActiveDirectoryWrapper
     End Function
 
     ''' <summary>
-    ''' Get the OU path of a domain computer. 
+    ''' Get the OU path of a domain computer.
     ''' </summary>
     ''' <returns></returns>
     Public Function GetDeviceOU() As String
@@ -135,7 +137,7 @@ Public Class ActiveDirectoryWrapper
         'Find the index of the RootOUName using a lambda expression.
         Dim RootIndex = Elements.FindIndex(Function(e) e.Contains(RootOUName))
         Dim Path As String = ""
-        'Iterate through the elements starting at 1 to skip the device name, stop at the RootIndex. 
+        'Iterate through the elements starting at 1 to skip the device name, stop at the RootIndex.
         For i = 1 To RootIndex
             'Concant the user friendly path string.
             Path += Elements(i) & "/"

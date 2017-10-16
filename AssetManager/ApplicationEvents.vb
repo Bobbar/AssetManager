@@ -52,6 +52,7 @@ Namespace My
             End If
             Status("Ready!")
         End Sub
+
         Private Function CheckConnection() As Boolean
             Try
                 Using SQLComms As New MySQLDatabase(), conn = SQLComms.NewConnection
@@ -61,7 +62,6 @@ Namespace My
                 Return False
             End Try
         End Function
-
 
         Private Sub MyApplication_UnhandledException(sender As Object, e As UnhandledExceptionEventArgs) Handles Me.UnhandledException
             ErrHandle(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod())

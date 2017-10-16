@@ -129,5 +129,6 @@
             Clipboard.SetDataObject(grid.GetClipboardContent())
             grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText
         End Sub
+
     End Module
 End Namespace

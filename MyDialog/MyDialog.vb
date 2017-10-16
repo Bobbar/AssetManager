@@ -1,5 +1,6 @@
-﻿Imports System.Windows.Forms
-Imports System.Drawing
+﻿Imports System.Drawing
+Imports System.Windows.Forms
+
 Public Class AdvancedDialog
     Private IsMessageBox As Boolean = False
 
@@ -21,6 +22,7 @@ Public Class AdvancedDialog
             Icon = My.Resources.inventory_icon_orange
         End If
     End Sub
+
     ''' <summary>
     ''' List of controls added to this dialog instance.
     ''' </summary>
@@ -30,6 +32,7 @@ Public Class AdvancedDialog
             Return MyControls
         End Get
     End Property
+
     ''' <summary>
     ''' Adds new <see cref="Button"/> control to the dialog box.
     ''' </summary>
@@ -43,6 +46,7 @@ Public Class AdvancedDialog
         but.Tag = ClickAction
         AddControl(but)
     End Sub
+
     ''' <summary>
     ''' Adds new <see cref="CheckBox"/> control to the dialog box.
     ''' </summary>
@@ -54,6 +58,7 @@ Public Class AdvancedDialog
         chk.Tag = Label
         AddControl(chk)
     End Sub
+
     ''' <summary>
     ''' Adds control to the <see cref="MyControls"/> member.
     ''' </summary>
@@ -61,6 +66,7 @@ Public Class AdvancedDialog
     Private Sub AddControl(c As Control)
         MyControls.Add(c)
     End Sub
+
     ''' <summary>
     ''' Add a previously instantiated control to the dialog box.
     ''' </summary>
@@ -72,6 +78,7 @@ Public Class AdvancedDialog
         control.Tag = Label
         AddControl(control)
     End Sub
+
     ''' <summary>
     ''' Adds a new <see cref="Label"/> control to the dialog box.
     ''' </summary>
@@ -152,6 +159,7 @@ Public Class AdvancedDialog
         Me.Dispose()
         Return CType(Me.DialogResult, MsgBoxResult)
     End Function
+
     ''' <summary>
     ''' Returns the value of the specified control.
     ''' </summary>
@@ -180,6 +188,7 @@ Public Class AdvancedDialog
         Next
         Return Nothing
     End Function
+
     ''' <summary>
     ''' Instantiate new label.
     ''' </summary>
@@ -305,6 +314,7 @@ Public Class AdvancedDialog
         Next
         pnlControls.ResumeLayout()
     End Sub
+
     ''' <summary>
     ''' Dispose of all controls.
     ''' </summary>
@@ -312,6 +322,7 @@ Public Class AdvancedDialog
         MyControls.ForEach(Sub(c) c.Dispose())
         MyControls.Clear()
     End Sub
+
     Private Sub MaximizeForm()
         pnlControls_Main.AutoSize = False
         pnlMaster.AutoSize = False
@@ -376,16 +387,20 @@ Public Class AdvancedDialog
             tblYesNo.Visible = True
         End If
     End Sub
+
     Private Sub Yes_Button_Click(sender As Object, e As EventArgs) Handles Yes_Button.Click
         Me.DialogResult = DialogResult.Yes
         Me.Close()
     End Sub
+
     Private Sub ClickedRTBLink(sender As Object, e As LinkClickedEventArgs)
         Process.Start(New Uri(e.LinkText).AbsolutePath)
     End Sub
+
     Private Sub FlashMe()
         TaskBarNotify.FlashWindow(Me.Handle, True, True, 3)
     End Sub
+
     Private Sub MyDialog_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         FlashMe()
     End Sub
@@ -399,19 +414,26 @@ Public Class AdvancedDialog
 
         ' As defined by: http://msdn.microsoft.com/en-us/library/ms679347(v=vs.85).aspx
         Private Enum FlashWindowFlags As UInt32
+
             ' Stop flashing. The system restores the window to its original state.
             FLASHW_STOP = 0
+
             ' Flash the window caption.
             FLASHW_CAPTION = 1
+
             ' Flash the taskbar button.
             FLASHW_TRAY = 2
+
             ' Flash both the window caption and taskbar button.
             ' This is equivalent to setting the FLASHW_CAPTION | FLASHW_TRAY flags.
             FLASHW_ALL = 3
+
             ' Flash continuously, until the FLASHW_STOP flag is set.
             FLASHW_TIMER = 4
+
             ' Flash continuously until the window comes to the foreground.
             FLASHW_TIMERNOFG = 12
+
         End Enum
 
         Private Structure FLASHWINFO
@@ -442,5 +464,7 @@ Public Class AdvancedDialog
                 Return False
             End Try
         End Function
+
     End Class
+
 End Class

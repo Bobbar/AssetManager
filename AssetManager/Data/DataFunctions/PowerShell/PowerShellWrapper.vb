@@ -1,13 +1,13 @@
-﻿Imports System.Management.Automation
-Imports System.Collections.ObjectModel
-Imports System.Management.Automation.Runspaces
-Imports System.Text
-Imports System.IO
-Imports System.Net
+﻿Imports System.Collections.ObjectModel
 Imports System.ComponentModel
-
+Imports System.IO
+Imports System.Management.Automation
+Imports System.Management.Automation.Runspaces
+Imports System.Net
+Imports System.Text
 
 Public Class PowerShellWrapper
+
     ''' <summary>
     ''' Execute the specified PowerShell script on the specified host.
     ''' </summary>
@@ -56,41 +56,39 @@ Public Class PowerShellWrapper
 
         Try
 
-            ' Create an instance of StreamReader to read from our file. 
-            ' The using statement also closes the StreamReader. 
+            ' Create an instance of StreamReader to read from our file.
+            ' The using statement also closes the StreamReader.
             ' Dim sr As New StreamReader(filename)
             Using sr As New StreamReader(New MemoryStream(scriptBytes), Encoding.ASCII)
-                ' use a string builder to get all our lines from the file 
+                ' use a string builder to get all our lines from the file
                 Dim fileContents As New StringBuilder()
 
-                ' string to hold the current line 
+                ' string to hold the current line
                 Dim curLine As String = ""
 
-                ' loop through our file and read each line into our 
-                ' stringbuilder as we go along 
+                ' loop through our file and read each line into our
+                ' stringbuilder as we go along
                 Do
-                    ' read each line and MAKE SURE YOU ADD BACK THE 
-                    ' LINEFEED THAT IT THE ReadLine() METHOD STRIPS OFF 
+                    ' read each line and MAKE SURE YOU ADD BACK THE
+                    ' LINEFEED THAT IT THE ReadLine() METHOD STRIPS OFF
                     curLine = sr.ReadLine()
                     fileContents.Append(curLine + vbCrLf)
                 Loop Until curLine Is Nothing
 
-                ' close our reader now that we are done 
+                ' close our reader now that we are done
                 sr.Close()
 
-                ' call RunScript and pass in our file contents 
-                ' converted to a string 
+                ' call RunScript and pass in our file contents
+                ' converted to a string
                 Return fileContents.ToString()
             End Using
-
         Catch e As Exception
-            ' Let the user know what went wrong. 
+            ' Let the user know what went wrong.
             Dim errorText As String = "The file could not be read:"
             errorText += e.Message + "\n"
             Return errorText
         End Try
 
     End Function
-
 
 End Class

@@ -1,6 +1,6 @@
-﻿
-Namespace DBFactory
+﻿Namespace DBFactory
     Public Module DBFactory
+
         Public Function GetDatabase() As IDataBase
             If GlobalSwitches.CachedMode Then
                 Return New SQLiteDatabase(False)

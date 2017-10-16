@@ -8,6 +8,7 @@
         Me.Code = code
         Me.ID = id
     End Sub
+
 End Structure
 
 Public Structure DeviceUpdateInfoStruct
@@ -27,4 +28,3 @@ Public Structure MunisEmployeeStruct
     Public Name As String
     Public GUID As String
 End Structure
-

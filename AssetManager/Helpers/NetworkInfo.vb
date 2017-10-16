@@ -2,6 +2,7 @@
 
     Public Module NetInfo
         Private _currentDomain As String = "core.co.fairfield.oh.us"
+
         Public ReadOnly Property CurrentDomain As String
             Get
                 Return _currentDomain

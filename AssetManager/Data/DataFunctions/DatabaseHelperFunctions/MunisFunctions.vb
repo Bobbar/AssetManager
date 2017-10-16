@@ -1,13 +1,8 @@
 ﻿Imports MyDialogLib
-Imports System.Data.SqlClient
 
 Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard...
     Private Const intMaxResults As Integer = 100
     Private MunisComms As New MunisComms
-
-
-
-
 
     Public Function GetReqNumberFromPO(PO As String) As String
         If Not IsNothing(PO) Then

@@ -1,4 +1,5 @@
 ﻿Public Class AdvancedSearchForm
+
     Sub New(parentForm As ExtendedForm)
         InitializeComponent()
         Me.ParentForm = parentForm

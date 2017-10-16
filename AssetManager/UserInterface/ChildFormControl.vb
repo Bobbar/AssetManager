@@ -91,7 +91,4 @@
         Return CanClose
     End Function
 
-
-
-
 End Module

@@ -1,14 +1,14 @@
-﻿Imports System.Net
-Imports System.Net.NetworkInformation
+﻿Imports System.ComponentModel
 Imports System.IO
-Imports System.ComponentModel
+Imports System.Net
+Imports System.Net.NetworkInformation
 Imports System.Text
 Imports System.Windows.Forms
-Imports System.Environment
-
 
 Public Class GK_Updater : Implements IDisposable
+
 #Region "Members"
+
     Private WithEvents CopyWorker As BackgroundWorker
     Private WithEvents SpeedTimer As Timer
     Private CurrentStatus As Status_Stats
@@ -23,9 +23,11 @@ Public Class GK_Updater : Implements IDisposable
     Private Progress As New ProgressCounter
     Private bolCreateMissingDirectory As Boolean = True
     Private bolPaused As Boolean = False
+
 #End Region
 
 #Region "Constructors"
+
     Sub New(ByVal HostName As String, GatekeeperPath As String)
         GKSourcePath = GatekeeperPath
         ClientHostName = HostName
@@ -33,23 +35,32 @@ Public Class GK_Updater : Implements IDisposable
         InitWorker()
         InitializeTimer()
     End Sub
+
 #End Region
 
 #Region "Event Handlers"
+
     Public Event LogEvent As EventHandler
+
     Public Event StatusUpdate As EventHandler
+
     Public Event UpdateCanceled As EventHandler
+
     Public Event UpdateComplete As EventHandler
+
     Protected Overridable Sub OnLogEvent(e As LogEvents)
         RaiseEvent LogEvent(Me, e)
     End Sub
+
     Protected Overridable Sub OnStatusUpdate(e As GKUpdateEvents)
         RaiseEvent StatusUpdate(Me, e)
     End Sub
+
     Protected Overridable Sub OnUpdateCanceled(e As EventArgs)
         GKLog("Cancelled by user!")
         RaiseEvent UpdateCanceled(Me, e)
     End Sub
+
     Protected Overridable Sub OnUpdateComplete(e As GKUpdateCompleteEvents)
         RaiseEvent UpdateComplete(Me, e)
     End Sub
@@ -57,21 +68,25 @@ Public Class GK_Updater : Implements IDisposable
 #End Region
 
 #Region "Properties"
+
     Public ReadOnly Property IsDisposed As Boolean
         Get
             Return disposedValue
         End Get
     End Property
+
     Public ReadOnly Property ErrorList As List(Of String)
         Get
             Return ErrList
         End Get
     End Property
+
     Public ReadOnly Property UpdateStatus As Status_Stats
         Get
             Return CurrentStatus
         End Get
     End Property
+
     Public Property CreateMissingDirectories As Boolean
         Get
             Return bolCreateMissingDirectory
@@ -84,6 +99,7 @@ Public Class GK_Updater : Implements IDisposable
 #End Region
 
 #Region "Methods"
+
     Public Sub CancelUpdate()
         bolPaused = False
         If CopyWorker.IsBusy Then
@@ -93,11 +109,13 @@ Public Class GK_Updater : Implements IDisposable
         End If
         CurrentFileIndex = 0
     End Sub
+
     Public Sub PauseUpdate()
         bolPaused = True
         Progress = New ProgressCounter
         CopyWorker.CancelAsync()
     End Sub
+
     Public Sub ResumeUpdate()
         bolPaused = False
         Dim NewArgs As Worker_Args
@@ -105,6 +123,7 @@ Public Class GK_Updater : Implements IDisposable
         NewArgs.Credentials = CurrentCreds
         If Not CopyWorker.IsBusy Then CopyWorker.RunWorkerAsync(NewArgs)
     End Sub
+
     Public Sub StartUpdate(Creds As NetworkCredential)
         If Creds Is Nothing Then
             Throw New Win32Exception(1326)
@@ -146,6 +165,7 @@ Public Class GK_Updater : Implements IDisposable
             Return False
         End Try
     End Function
+
     Private Sub CopyFile(Source As String, Dest As String)
         Dim BufferSize As Integer = 256000
         Dim buffer(BufferSize - 1) As Byte
@@ -219,6 +239,7 @@ Public Class GK_Updater : Implements IDisposable
             Next
         End Using
     End Sub
+
     Private Sub CopyWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
 
         If e.ProgressPercentage = 1 Then
@@ -266,6 +287,7 @@ Public Class GK_Updater : Implements IDisposable
             End If
         End If
     End Sub
+
     Private Sub GKLog(Message As String, Optional ToErrList As Boolean = False)
         Dim NewLog As New GK_Log_Info(Message, ToErrList)
         OnLogEvent(New LogEvents(NewLog))
@@ -279,6 +301,7 @@ Public Class GK_Updater : Implements IDisposable
             ErrList.Add(ErrMsg)
         End If
     End Sub
+
     Private Sub InitializeTimer()
         SpeedTimer = New Timer
         SpeedTimer.Interval = 100
@@ -296,6 +319,7 @@ Public Class GK_Updater : Implements IDisposable
             .WorkerSupportsCancellation = True
         End With
     End Sub
+
     Private Sub SpeedTimer_Tick(sender As Object, e As EventArgs)
         If Not bolPaused Then Progress.Tick()
         If Progress.BytesMoved > 0 Then
@@ -304,6 +328,7 @@ Public Class GK_Updater : Implements IDisposable
         Else
         End If
     End Sub
+
 #End Region
 
 #Region "Structures And Classes"
@@ -311,10 +336,12 @@ Public Class GK_Updater : Implements IDisposable
     Public Structure GK_Log_Info
         Public Property Message As String
         Public Property ToErrList As Boolean
+
         Sub New(Msg As String, ToErrLst As Boolean)
             Message = Msg
             ToErrList = ToErrLst
         End Sub
+
     End Structure
 
     Public Structure Status_Stats
@@ -324,6 +351,7 @@ Public Class GK_Updater : Implements IDisposable
         Public Property CurTransferRate As Double
         Public Property SourceFileName As String
         Public Property TotFiles As Integer
+
         Sub New(tFiles As Integer, CurFIdx As Integer, CurFName As String, sFileName As String, CurFileProg As Integer, CurTransRate As Double)
             TotFiles = tFiles
             CurFileIdx = CurFIdx
@@ -332,6 +360,7 @@ Public Class GK_Updater : Implements IDisposable
             CurFileProgress = CurFileProg
             CurTransferRate = CurTransRate
         End Sub
+
     End Structure
 
     Private Structure Worker_Args
@@ -339,13 +368,16 @@ Public Class GK_Updater : Implements IDisposable
         Public StartIndex As Integer
         Public Credentials As NetworkCredential
     End Structure
+
     Public Class GKUpdateCompleteEvents : Inherits EventArgs
         Private ErrExeption As Exception
         Private Errs As Boolean
+
         Public Sub New(ByVal Errs As Boolean, Optional ByVal Ex As Exception = Nothing)
             Me.Errs = Errs
             Me.ErrExeption = Ex
         End Sub
+
         Public ReadOnly Property Errors As Exception
             Get
                 Return ErrExeption
@@ -357,40 +389,52 @@ Public Class GK_Updater : Implements IDisposable
                 Return Errs
             End Get
         End Property
+
     End Class
 
     Public Class GKUpdateEvents : Inherits EventArgs
         Private eStatus As Status_Stats
+
         Public Sub New(ByVal Status As Status_Stats)
             eStatus = Status
         End Sub
+
         Public ReadOnly Property CurrentStatus As Status_Stats
             Get
                 Return eStatus
             End Get
         End Property
+
     End Class
 
     Public Class LogEvents : Inherits EventArgs
         Private MyLogInfo As GK_Log_Info
+
         Public Sub New(ByVal LogInfo As GK_Log_Info)
             MyLogInfo = LogInfo
         End Sub
+
         Public ReadOnly Property LogData As GK_Log_Info
             Get
                 Return MyLogInfo
             End Get
         End Property
+
     End Class
+
     Public Class MissingDirectoryException
         Inherits Exception
+
         Public Sub New()
             MyBase.New("Directory not found on target.")
         End Sub
+
     End Class
+
 #End Region
 
 #Region "IDisposable Support"
+
     Private disposedValue As Boolean ' To detect redundant calls
 
     ' This code added by Visual Basic to correctly implement the disposable pattern.
@@ -422,6 +466,7 @@ Public Class GK_Updater : Implements IDisposable
     '    Dispose(False)
     '    MyBase.Finalize()
     'End Sub
+
 #End Region
 
 End Class

@@ -13,6 +13,7 @@
 #End Region
 
 #Region "Methods"
+
     Sub New(parentForm As ExtendedForm)
         InitializeComponent()
         Me.ParentForm = parentForm
@@ -67,6 +68,7 @@
     Private Sub NewDeviceForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         MyLiveBox.Dispose()
     End Sub
+
     Private Function AddNewDevice() As Boolean
         Using trans = DBFactory.GetDatabase.StartTransaction, conn = trans.Connection
             Try
@@ -204,6 +206,7 @@
     Private Sub cmdAdd_Click(sender As Object, e As EventArgs) Handles cmdAdd.Click
         AddDevice()
     End Sub
+
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
         ClearAll()
     End Sub
@@ -248,6 +251,7 @@
         DBRow(HistoricalDevicesCols.DeviceUID) = NewUID
         Return tmpTable
     End Function
+
     Private Sub InitDBControls()
         txtDescription_REQ.Tag = New DBControlInfo(DevicesBaseCols.Description, True)
         txtAssetTag_REQ.Tag = New DBControlInfo(DevicesBaseCols.AssetTag, True)
@@ -285,6 +289,7 @@
             If ctl.HasChildren Then ResetBackColors(ctl)
         Next
     End Sub
+
     Private Sub SetReplacementYear(PurDate As Date)
         Dim ReplaceYear As Integer = PurDate.Year + intReplacementSched
         txtReplaceYear.Text = ReplaceYear.ToString
@@ -321,7 +326,6 @@
             txtHostname.Text = String.Empty
         End If
     End Sub
-
 
 #End Region
 

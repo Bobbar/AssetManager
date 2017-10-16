@@ -47,6 +47,7 @@ Module DataConsistency
     Public Function DeviceHostnameFormat(Serial As String) As String
         Return "D" & Trim(Serial)
     End Function
+
     Public Function IsValidYear(Year As String) As Boolean
         Try
             If Trim(Year) <> "" Then

@@ -22,6 +22,7 @@ Public Class DataMapping
         Dim row = data.Rows(0)
         MapProperty(obj, row)
     End Sub
+
     ''' <summary>
     ''' Uses reflection to recursively populate/map class properties that are marked with a <see cref="DataColumnNameAttribute"/>.
     ''' </summary>
@@ -68,7 +69,6 @@ Public Class DataMapping
                             Throw New Exception("Unexpected property type.")
                     End Select
                 End If
-
             Else 'If the property does not contain a target attribute, check to see if it is a nested class inheriting the DataMapping class.
 
                 If GetType(DataMapping).IsAssignableFrom(prop.PropertyType) Then

@@ -1,4 +1,5 @@
 ﻿Option Explicit On
+
 Imports System.ComponentModel
 
 Public Class UpdateDev
@@ -57,4 +58,5 @@ Public Class UpdateDev
     Private Sub UpdateTypeCombo_SelectionChangeCommitted(sender As Object, e As EventArgs) Handles UpdateTypeCombo.SelectionChangeCommitted
         ValidateUpdateType()
     End Sub
+
 End Class

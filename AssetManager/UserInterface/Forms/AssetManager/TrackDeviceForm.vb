@@ -1,5 +1,4 @@
-﻿
-Public Class TrackDeviceForm
+﻿Public Class TrackDeviceForm
     Private CurrentTrackingDevice As New DeviceObject
     Private CheckData As New DeviceTrackingObject
 

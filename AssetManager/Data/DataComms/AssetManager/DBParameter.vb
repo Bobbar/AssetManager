@@ -31,4 +31,5 @@ Public Class DBQueryParameter
         Me.IsExact = isExact
         Me.OperatorString = operatorString
     End Sub
+
 End Class

@@ -108,6 +108,7 @@ Public Class DBControlInfo
             db_parse_type = value
         End Set
     End Property
+
     ''' <summary>
     ''' Is the Control a required field?
     ''' </summary>
@@ -278,6 +279,7 @@ Public Class DBControlParser
         UpdateDBControlRow(tmpTable.Rows(0))
         Return tmpTable
     End Function
+
     ''' <summary>
     ''' Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControls(Control, List(Of Control))"/>
     ''' </summary>

@@ -1,5 +1,7 @@
 ﻿Imports System.IO
+
 Module Logging
+
     Public Sub Logger(Message As String)
         Dim MaxLogSizeKiloBytes As Short = 500
         Dim DateStamp As String = DateTime.Now.ToString
@@ -35,4 +37,5 @@ Module Logging
             Return False
         End Try
     End Function
+
 End Module

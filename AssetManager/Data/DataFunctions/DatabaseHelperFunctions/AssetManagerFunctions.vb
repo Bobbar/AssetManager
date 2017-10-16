@@ -17,10 +17,6 @@
         End Try
     End Sub
 
-
-
-
-
     Public Function DeleteMasterSqlEntry(sqlGUID As String, type As EntryType) As Boolean
         Try
             Dim DeleteQuery As String = ""

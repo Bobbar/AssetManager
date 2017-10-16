@@ -4,6 +4,7 @@
         Public Const MySQLServerIP As String = "10.10.0.89"
         Public UseTestDatabase As Boolean = False
         Private _currentDataBase As Databases = Databases.asset_manager
+
         Public Property CurrentDataBase As Databases
             Get
                 Return _currentDataBase
