@@ -29,7 +29,7 @@
             For Each file As String In files   'delete each file counting for successes
                 If DeleteFtpAttachment(file, folderUID) Then i += 1
             Next
-            If files.Count = i Then ' if successful deletetions = total # of files, delete the directory
+            If files.Count = i Then ' if successful deletions = total # of files, delete the directory
                 Using deleteResp = DirectCast(FTPComms.ReturnFtpResponse("ftp://" & ServerInfo.MySQLServerIP & "/attachments/" & ServerInfo.CurrentDataBase.ToString & "/" & folderUID, Net.WebRequestMethods.Ftp.RemoveDirectory), Net.FtpWebResponse)
                     If deleteResp.StatusCode = Net.FtpStatusCode.FileActionOK Then
                         Return True

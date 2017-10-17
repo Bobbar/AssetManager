@@ -215,7 +215,7 @@
     End Function
 
     ''' <summary>
-    ''' Runs the DB query Asychronously.
+    ''' Runs the DB query Asynchronously.
     ''' </summary>
     ''' <param name="SearchString"></param>
     Private Async Sub ProcessSearch(searchString As String)

@@ -134,7 +134,7 @@ Public Class SibiManageRequestForm
                 bolGridFilling = False
             End Using
         Catch ex As Exception
-            Message("An error occured while opening the request. It may have been deleted.", vbOKOnly + vbExclamation, "Error", Me)
+            Message("An error occurred while opening the request. It may have been deleted.", vbOKOnly + vbExclamation, "Error", Me)
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Me.Dispose()
         Finally
@@ -400,7 +400,7 @@ Public Class SibiManageRequestForm
                     Me.Dispose()
                 Else
                     Logger("*****DELETION ERROR******: " & CurrentRequest.GUID)
-                    Message("Failed to delete request succesfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
+                    Message("Failed to delete request successfully!  Please let Bobby Lovell know about this.", vbOKOnly + vbCritical, "Delete Failed", Me)
                     CurrentRequest = Nothing
                     Me.Dispose()
                 End If

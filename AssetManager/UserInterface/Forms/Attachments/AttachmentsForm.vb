@@ -48,7 +48,7 @@ Public Class AttachmentsForm
                 AttachFolderUID = AttachRequest.GUID
                 FormUID = AttachFolderUID
                 strSelectedFolder = GetDisplayValueFromIndex(SibiAttribute.AttachFolder, 0)
-                Me.Text = "Sibi Attachements"
+                Me.Text = "Sibi Attachments"
                 DeviceGroup.Visible = False
                 SibiGroup.Dock = DockStyle.Top
                 FillFolderCombos()
@@ -57,7 +57,7 @@ Public Class AttachmentsForm
                 AttachDevice = DirectCast(AttachInfo, DeviceObject)
                 AttachFolderUID = AttachDevice.GUID
                 FormUID = AttachFolderUID
-                Me.Text = "Device Attachements"
+                Me.Text = "Device Attachments"
                 SibiGroup.Visible = False
                 DeviceGroup.Dock = DockStyle.Top
                 MoveStripMenuItem.Visible = False

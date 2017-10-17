@@ -251,7 +251,7 @@ Public Class GKProgressControl
             Case ProgressStatus.Queued
                 lblStatus.Text = "Queued..."
             Case ProgressStatus.Canceled
-                lblStatus.Text = "Cancelled!"
+                lblStatus.Text = "Canceled!"
             Case ProgressStatus.Errors
                 lblStatus.Text = "ERROR!"
             Case ProgressStatus.CompleteWithErrors

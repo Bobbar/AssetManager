@@ -338,7 +338,7 @@ Public Class MainForm
         ColList.Add(New DataGridColumn(DevicesCols.PO, "PO Number", GetType(String)))
         ColList.Add(New DataGridColumn(DevicesCols.PurchaseDate, "Purchase Date", GetType(Date)))
         ColList.Add(New DataGridColumn(DevicesCols.ReplacementYear, "Replace Year", GetType(String)))
-        ColList.Add(New DataGridColumn(DevicesCols.LastModDate, "Modifed", GetType(Date)))
+        ColList.Add(New DataGridColumn(DevicesCols.LastModDate, "Modified", GetType(Date)))
         ColList.Add(New DataGridColumn(DevicesCols.DeviceUID, "GUID", GetType(String)))
         Return ColList
     End Function

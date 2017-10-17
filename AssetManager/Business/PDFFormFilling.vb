@@ -134,8 +134,8 @@ Public Class PdfFormFilling
 
 #Region "Section4"
 
-                .AddTextBox("txtSaleAmount", "List the amount of proceedes from the sale of the diposed asset, if any.")
-                .AddLabel("If the asset item was traded, procide the following information for the asset BEGING ACQUIRED:", True)
+                .AddTextBox("txtSaleAmount", "List the amount of proceeds from the sale of the disposed asset, if any.")
+                .AddLabel("If the asset item was traded, provide the following information for the asset BEGING ACQUIRED:", True)
                 .AddTextBox("txtAssetTag", "Asset/Tag Number:")
                 .AddTextBox("txtSerial", "Serial Number:")
                 .AddTextBox("txtDescription", "Description:")

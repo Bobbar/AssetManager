@@ -20,7 +20,7 @@
         ''' <summary>
         ''' Builds local hash list and compares to previously built remote hash list. Returns False for mismatch.
         ''' </summary>
-        ''' <param name="cachedMode">When true, only checks for Schema Version since a remote table hash will likely be unavailabe.</param>
+        ''' <param name="cachedMode">When true, only checks for Schema Version since a remote table hash will likely be unavailable.</param>
         ''' <returns></returns>
         Public Async Function VerifyLocalCacheHashOnly(cachedMode As Boolean) As Task(Of Boolean)
             If Not cachedMode Then

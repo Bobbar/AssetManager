@@ -6,7 +6,7 @@ Public Class ExtendedForm
     Private myParentForm As ExtendedForm
 
     ''' <summary>
-    ''' Unique identifying string used to locate sepcific instances of this form.
+    ''' Unique identifying string used to locate specific instances of this form.
     ''' </summary>
     ''' <returns></returns>
     Public Property GridTheme As GridTheme
@@ -18,7 +18,7 @@ Public Class ExtendedForm
     Public Property FormUID As String
 
     ''' <summary>
-    ''' Overloads the stock ParentForm proptery with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
+    ''' Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
     ''' </summary>
     ''' <returns></returns>
     Public Overloads Property ParentForm(Optional doNotTakeTheme As Boolean = False) As ExtendedForm

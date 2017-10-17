@@ -57,7 +57,7 @@ Public Class GK_Updater : Implements IDisposable
     End Sub
 
     Protected Overridable Sub OnUpdateCanceled(e As EventArgs)
-        GKLog("Cancelled by user!")
+        GKLog("Canceled by user!")
         RaiseEvent UpdateCanceled(Me, e)
     End Sub
 
