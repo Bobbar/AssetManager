@@ -21,6 +21,7 @@ Partial Class AttachmentsForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AttachmentsForm))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.cmdUpload = New System.Windows.Forms.Button()
@@ -28,8 +29,6 @@ Partial Class AttachmentsForm
         Me.OpenTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveToMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyTextTool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MoveStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmbMoveFolder = New System.Windows.Forms.ToolStripComboBox()
         Me.RenameStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -37,12 +36,15 @@ Partial Class AttachmentsForm
         Me.cmdOpen = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.chkAllowDrag = New System.Windows.Forms.CheckBox()
+        Me.AttachContainer = New System.Windows.Forms.SplitContainer()
+        Me.FolderListView = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.imageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.AttachGrid = New System.Windows.Forms.DataGridView()
-        Me.FolderPanel = New System.Windows.Forms.Panel()
-        Me.cmbFolder = New System.Windows.Forms.ComboBox()
-        Me.lblFolder = New System.Windows.Forms.Label()
+        Me.AllowDragCheckBox = New System.Windows.Forms.CheckBox()
         Me.SibiGroup = New System.Windows.Forms.GroupBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.ReqNumberTextBox = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -66,13 +68,14 @@ Partial Class AttachmentsForm
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.ReqNumberTextBox = New System.Windows.Forms.TextBox()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        CType(Me.AttachContainer, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.AttachContainer.Panel1.SuspendLayout()
+        Me.AttachContainer.Panel2.SuspendLayout()
+        Me.AttachContainer.SuspendLayout()
         CType(Me.AttachGrid, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.FolderPanel.SuspendLayout()
         Me.SibiGroup.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.DeviceGroup.SuspendLayout()
@@ -91,7 +94,7 @@ Partial Class AttachmentsForm
         '
         'RightClickMenu
         '
-        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.SaveToMenuItem, Me.CopyTextTool, Me.MoveStripMenuItem, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
+        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.SaveToMenuItem, Me.CopyTextTool, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
         Me.RightClickMenu.Size = New System.Drawing.Size(174, 142)
         '
@@ -112,19 +115,6 @@ Partial Class AttachmentsForm
         Me.CopyTextTool.Name = "CopyTextTool"
         Me.CopyTextTool.Size = New System.Drawing.Size(173, 22)
         Me.CopyTextTool.Text = "Copy Text"
-        '
-        'MoveStripMenuItem
-        '
-        Me.MoveStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmbMoveFolder})
-        Me.MoveStripMenuItem.Name = "MoveStripMenuItem"
-        Me.MoveStripMenuItem.Size = New System.Drawing.Size(173, 22)
-        Me.MoveStripMenuItem.Text = "Move"
-        '
-        'cmbMoveFolder
-        '
-        Me.cmbMoveFolder.Name = "cmbMoveFolder"
-        Me.cmbMoveFolder.Size = New System.Drawing.Size(121, 23)
-        Me.cmbMoveFolder.Text = "Select a folder"
         '
         'RenameStripMenuItem
         '
@@ -179,7 +169,7 @@ Partial Class AttachmentsForm
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(12, 113)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(793, 416)
+        Me.GroupBox1.Size = New System.Drawing.Size(793, 440)
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Manage Attachments"
@@ -190,25 +180,61 @@ Partial Class AttachmentsForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel1.Controls.Add(Me.chkAllowDrag)
-        Me.Panel1.Controls.Add(Me.AttachGrid)
-        Me.Panel1.Controls.Add(Me.FolderPanel)
+        Me.Panel1.Controls.Add(Me.AttachContainer)
+        Me.Panel1.Controls.Add(Me.AllowDragCheckBox)
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(150, 21)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(637, 389)
+        Me.Panel1.Size = New System.Drawing.Size(637, 413)
         Me.Panel1.TabIndex = 19
         '
-        'chkAllowDrag
+        'AttachContainer
         '
-        Me.chkAllowDrag.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.chkAllowDrag.AutoSize = True
-        Me.chkAllowDrag.Location = New System.Drawing.Point(501, 7)
-        Me.chkAllowDrag.Name = "chkAllowDrag"
-        Me.chkAllowDrag.Size = New System.Drawing.Size(131, 19)
-        Me.chkAllowDrag.TabIndex = 21
-        Me.chkAllowDrag.Text = "Allow Drag-Drop"
-        Me.chkAllowDrag.UseVisualStyleBackColor = True
+        Me.AttachContainer.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AttachContainer.Location = New System.Drawing.Point(3, 22)
+        Me.AttachContainer.Name = "AttachContainer"
+        '
+        'AttachContainer.Panel1
+        '
+        Me.AttachContainer.Panel1.Controls.Add(Me.FolderListView)
+        '
+        'AttachContainer.Panel2
+        '
+        Me.AttachContainer.Panel2.Controls.Add(Me.AttachGrid)
+        Me.AttachContainer.Size = New System.Drawing.Size(629, 386)
+        Me.AttachContainer.SplitterDistance = 130
+        Me.AttachContainer.TabIndex = 23
+        '
+        'FolderListView
+        '
+        Me.FolderListView.AllowDrop = True
+        Me.FolderListView.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.FolderListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.FolderListView.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1})
+        Me.FolderListView.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FolderListView.ForeColor = System.Drawing.Color.White
+        Me.FolderListView.Location = New System.Drawing.Point(0, 0)
+        Me.FolderListView.MultiSelect = False
+        Me.FolderListView.Name = "FolderListView"
+        Me.FolderListView.Size = New System.Drawing.Size(130, 386)
+        Me.FolderListView.StateImageList = Me.imageList1
+        Me.FolderListView.TabIndex = 0
+        Me.FolderListView.UseCompatibleStateImageBehavior = False
+        Me.FolderListView.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Folder"
+        Me.ColumnHeader1.Width = 115
+        '
+        'imageList1
+        '
+        Me.imageList1.ImageStream = CType(resources.GetObject("imageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.imageList1.Images.SetKeyName(0, "icons8-Folder-48.png")
+        Me.imageList1.Images.SetKeyName(1, "icons8-Open-48.png")
         '
         'AttachGrid
         '
@@ -216,12 +242,8 @@ Partial Class AttachmentsForm
         Me.AttachGrid.AllowUserToAddRows = False
         Me.AttachGrid.AllowUserToDeleteRows = False
         Me.AttachGrid.AllowUserToResizeRows = False
-        Me.AttachGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AttachGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.AttachGrid.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.AttachGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.AttachGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None
         Me.AttachGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.AttachGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
@@ -235,8 +257,10 @@ Partial Class AttachmentsForm
         DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.AttachGrid.DefaultCellStyle = DataGridViewCellStyle1
+        Me.AttachGrid.Dock = System.Windows.Forms.DockStyle.Fill
         Me.AttachGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.AttachGrid.Location = New System.Drawing.Point(3, 32)
+        Me.AttachGrid.Location = New System.Drawing.Point(0, 0)
+        Me.AttachGrid.MultiSelect = False
         Me.AttachGrid.Name = "AttachGrid"
         Me.AttachGrid.ReadOnly = True
         Me.AttachGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
@@ -250,41 +274,26 @@ Partial Class AttachmentsForm
         Me.AttachGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.AttachGrid.RowHeadersVisible = False
         Me.AttachGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.AttachGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.AttachGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.AttachGrid.ShowCellErrors = False
         Me.AttachGrid.ShowCellToolTips = False
         Me.AttachGrid.ShowEditingIcon = False
-        Me.AttachGrid.Size = New System.Drawing.Size(629, 352)
+        Me.AttachGrid.Size = New System.Drawing.Size(495, 386)
         Me.AttachGrid.TabIndex = 18
         Me.AttachGrid.VirtualMode = True
         '
-        'FolderPanel
+        'AllowDragCheckBox
         '
-        Me.FolderPanel.Controls.Add(Me.cmbFolder)
-        Me.FolderPanel.Controls.Add(Me.lblFolder)
-        Me.FolderPanel.Location = New System.Drawing.Point(3, 3)
-        Me.FolderPanel.Name = "FolderPanel"
-        Me.FolderPanel.Size = New System.Drawing.Size(214, 33)
-        Me.FolderPanel.TabIndex = 22
-        '
-        'cmbFolder
-        '
-        Me.cmbFolder.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbFolder.FormattingEnabled = True
-        Me.cmbFolder.Items.AddRange(New Object() {"Quotes", "POs", "Invoices"})
-        Me.cmbFolder.Location = New System.Drawing.Point(3, 4)
-        Me.cmbFolder.Name = "cmbFolder"
-        Me.cmbFolder.Size = New System.Drawing.Size(144, 23)
-        Me.cmbFolder.TabIndex = 19
-        '
-        'lblFolder
-        '
-        Me.lblFolder.AutoSize = True
-        Me.lblFolder.Location = New System.Drawing.Point(152, 9)
-        Me.lblFolder.Name = "lblFolder"
-        Me.lblFolder.Size = New System.Drawing.Size(49, 15)
-        Me.lblFolder.TabIndex = 20
-        Me.lblFolder.Text = "Folder"
+        Me.AllowDragCheckBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AllowDragCheckBox.AutoSize = True
+        Me.AllowDragCheckBox.Checked = True
+        Me.AllowDragCheckBox.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.AllowDragCheckBox.Location = New System.Drawing.Point(543, 3)
+        Me.AllowDragCheckBox.Name = "AllowDragCheckBox"
+        Me.AllowDragCheckBox.Size = New System.Drawing.Size(89, 19)
+        Me.AllowDragCheckBox.TabIndex = 21
+        Me.AllowDragCheckBox.Text = "Drag-Drop"
+        Me.AllowDragCheckBox.UseVisualStyleBackColor = True
         '
         'SibiGroup
         '
@@ -304,6 +313,25 @@ Partial Class AttachmentsForm
         Me.SibiGroup.TabIndex = 7
         Me.SibiGroup.TabStop = False
         Me.SibiGroup.Text = "Request Info"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(598, 29)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(47, 16)
+        Me.Label4.TabIndex = 7
+        Me.Label4.Text = "Req #:"
+        '
+        'ReqNumberTextBox
+        '
+        Me.ReqNumberTextBox.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ReqNumberTextBox.Location = New System.Drawing.Point(601, 49)
+        Me.ReqNumberTextBox.Name = "ReqNumberTextBox"
+        Me.ReqNumberTextBox.ReadOnly = True
+        Me.ReqNumberTextBox.Size = New System.Drawing.Size(120, 25)
+        Me.ReqNumberTextBox.TabIndex = 6
         '
         'Label3
         '
@@ -366,7 +394,7 @@ Partial Class AttachmentsForm
         '
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.ProgressBar1, Me.ToolStripStatusLabel2, Me.Spinner, Me.statMBPS, Me.ToolStripStatusLabel1, Me.cmdCancel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 532)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 556)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(817, 22)
         Me.StatusStrip1.TabIndex = 8
@@ -514,32 +542,13 @@ Partial Class AttachmentsForm
         Me.Panel2.Size = New System.Drawing.Size(793, 116)
         Me.Panel2.TabIndex = 10
         '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(598, 29)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(47, 16)
-        Me.Label4.TabIndex = 7
-        Me.Label4.Text = "Req #:"
-        '
-        'ReqNumberTextBox
-        '
-        Me.ReqNumberTextBox.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ReqNumberTextBox.Location = New System.Drawing.Point(601, 49)
-        Me.ReqNumberTextBox.Name = "ReqNumberTextBox"
-        Me.ReqNumberTextBox.ReadOnly = True
-        Me.ReqNumberTextBox.Size = New System.Drawing.Size(120, 25)
-        Me.ReqNumberTextBox.TabIndex = 6
-        '
         'AttachmentsForm
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(817, 554)
+        Me.ClientSize = New System.Drawing.Size(817, 578)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Panel2)
@@ -552,9 +561,11 @@ Partial Class AttachmentsForm
         Me.GroupBox1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.AttachContainer.Panel1.ResumeLayout(False)
+        Me.AttachContainer.Panel2.ResumeLayout(False)
+        CType(Me.AttachContainer, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.AttachContainer.ResumeLayout(False)
         CType(Me.AttachGrid, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.FolderPanel.ResumeLayout(False)
-        Me.FolderPanel.PerformLayout()
         Me.SibiGroup.ResumeLayout(False)
         Me.SibiGroup.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
@@ -593,12 +604,8 @@ Partial Class AttachmentsForm
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents cmdCancel As ToolStripDropDownButton
-    Friend WithEvents cmbFolder As ComboBox
-    Friend WithEvents MoveStripMenuItem As ToolStripMenuItem
-    Friend WithEvents cmbMoveFolder As ToolStripComboBox
-    Friend WithEvents lblFolder As Label
     Friend WithEvents RenameStripMenuItem As ToolStripMenuItem
-    Friend WithEvents chkAllowDrag As CheckBox
+    Friend WithEvents AllowDragCheckBox As CheckBox
     Friend WithEvents DeviceGroup As GroupBox
     Friend WithEvents Label5 As Label
     Friend WithEvents txtDeviceDescription As TextBox
@@ -606,9 +613,12 @@ Partial Class AttachmentsForm
     Friend WithEvents txtSerial As TextBox
     Friend WithEvents Label7 As Label
     Friend WithEvents txtAssetTag As TextBox
-    Friend WithEvents FolderPanel As Panel
     Friend WithEvents Panel2 As Panel
     Friend WithEvents SaveToMenuItem As ToolStripMenuItem
     Friend WithEvents Label4 As Label
     Friend WithEvents ReqNumberTextBox As TextBox
+    Friend WithEvents AttachContainer As SplitContainer
+    Friend WithEvents FolderListView As ListView
+    Friend WithEvents ColumnHeader1 As ColumnHeader
+    Friend WithEvents imageList1 As ImageList
 End Class
