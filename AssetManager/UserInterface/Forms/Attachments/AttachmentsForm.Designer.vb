@@ -68,6 +68,7 @@ Partial Class AttachmentsForm
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.NewFolderMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -94,44 +95,44 @@ Partial Class AttachmentsForm
         '
         'RightClickMenu
         '
-        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.SaveToMenuItem, Me.CopyTextTool, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
+        Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.SaveToMenuItem, Me.CopyTextTool, Me.NewFolderMenuItem, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(174, 142)
+        Me.RightClickMenu.Size = New System.Drawing.Size(178, 164)
         '
         'OpenTool
         '
         Me.OpenTool.Name = "OpenTool"
-        Me.OpenTool.Size = New System.Drawing.Size(173, 22)
+        Me.OpenTool.Size = New System.Drawing.Size(177, 22)
         Me.OpenTool.Text = "Open"
         '
         'SaveToMenuItem
         '
         Me.SaveToMenuItem.Name = "SaveToMenuItem"
-        Me.SaveToMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.SaveToMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.SaveToMenuItem.Text = "Save To"
         '
         'CopyTextTool
         '
         Me.CopyTextTool.Name = "CopyTextTool"
-        Me.CopyTextTool.Size = New System.Drawing.Size(173, 22)
+        Me.CopyTextTool.Size = New System.Drawing.Size(177, 22)
         Me.CopyTextTool.Text = "Copy Text"
         '
         'RenameStripMenuItem
         '
         Me.RenameStripMenuItem.Name = "RenameStripMenuItem"
-        Me.RenameStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.RenameStripMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.RenameStripMenuItem.Text = "Rename"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(170, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(174, 6)
         '
         'DeleteAttachmentToolStripMenuItem
         '
         Me.DeleteAttachmentToolStripMenuItem.Image = Global.AssetManager.My.Resources.Resources.DeleteRedIcon
         Me.DeleteAttachmentToolStripMenuItem.Name = "DeleteAttachmentToolStripMenuItem"
-        Me.DeleteAttachmentToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.DeleteAttachmentToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.DeleteAttachmentToolStripMenuItem.Text = "Delete Attachment"
         '
         'cmdDelete
@@ -542,6 +543,12 @@ Partial Class AttachmentsForm
         Me.Panel2.Size = New System.Drawing.Size(793, 116)
         Me.Panel2.TabIndex = 10
         '
+        'NewFolderMenuItem
+        '
+        Me.NewFolderMenuItem.Name = "NewFolderMenuItem"
+        Me.NewFolderMenuItem.Size = New System.Drawing.Size(177, 22)
+        Me.NewFolderMenuItem.Text = "Move to new folder"
+        '
         'AttachmentsForm
         '
         Me.AllowDrop = True
@@ -621,4 +628,5 @@ Partial Class AttachmentsForm
     Friend WithEvents FolderListView As ListView
     Friend WithEvents ColumnHeader1 As ColumnHeader
     Friend WithEvents imageList1 As ImageList
+    Friend WithEvents NewFolderMenuItem As ToolStripMenuItem
 End Class

@@ -27,6 +27,7 @@ Public Class AttachmentsForm
 
     Private MouseStartPos As Point
     Private Progress As New ProgressCounter
+    Private PrevSelectedFolder As String
     Private _currentFolder As String = ""
     Private Property CurrentSelectedFolder As String
         Get
@@ -40,10 +41,10 @@ Public Class AttachmentsForm
             Else
                 Return _currentFolder
             End If
-
         End Get
         Set(value As String)
             _currentFolder = value
+            SetActiveFolderByName(value)
         End Set
     End Property
 
@@ -95,6 +96,19 @@ Public Class AttachmentsForm
 #End Region
 
 #Region "Methods"
+    Private Sub SetActiveFolderByName(folderName As String)
+        If folderName = "" Then
+            FolderListView.Items(0).Selected = True
+        Else
+            For Each item As ListViewItem In FolderListView.Items
+
+                If item.Text = folderName Then
+                    item.Selected = True
+                End If
+            Next
+        End If
+        SetFolderListViewStates()
+    End Sub
 
     Private Sub FillSibiInfo()
         ReqPO.Text = AttachRequest.PO
@@ -168,10 +182,6 @@ Public Class AttachmentsForm
         If Not OKToClose() Then
             e.Cancel = True
         End If
-    End Sub
-
-    Private Sub MoveAttachmentFolder()
-        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
     End Sub
 
     Private Sub UploadFileDialog()
@@ -281,20 +291,24 @@ Public Class AttachmentsForm
         PopulateFolderList()
     End Sub
 
-    Private Sub PopulateFolderList()
+    Private Sub PopulateFolderList(Optional currentFolder As String = Nothing)
         FolderListView.Items.Clear()
-        Dim folders = DBFactory.GetDatabase.DataTableFromQueryString("SELECT DISTINCT " & _attachTable.Folder & " FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachFolderUID & "'")
+        Dim folders = DBFactory.GetDatabase.DataTableFromQueryString("SELECT DISTINCT " & _attachTable.Folder & " FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachFolderUID & "' ORDER BY " & _attachTable.Folder)
         Dim allFolderItem = New ListViewItem("*All")
         allFolderItem.StateImageIndex = 1
         allFolderItem.Selected = True
         FolderListView.Items.Add(allFolderItem)
         For Each row As DataRow In folders.Rows
-            Dim newFolderItem = New ListViewItem(row.Item(_attachTable.Folder).ToString)
-            newFolderItem.StateImageIndex = 0
-            newFolderItem.Selected = False
-            FolderListView.Items.Add(newFolderItem)
+            If row.Item(_attachTable.Folder).ToString.Trim <> "" Then
+                Dim newFolderItem = New ListViewItem(row.Item(_attachTable.Folder).ToString)
+                newFolderItem.StateImageIndex = 0
+                newFolderItem.Selected = False
+                FolderListView.Items.Add(newFolderItem)
+            End If
         Next
-        ' CurrentSelectedFolder = FolderListView.Items(0).Text
+        If currentFolder IsNot Nothing Then
+            CurrentSelectedFolder = currentFolder
+        End If
     End Sub
 
     Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
@@ -411,12 +425,17 @@ Public Class AttachmentsForm
         Return False
     End Function
 
-    Private Sub MoveAttachFolder(AttachUID As String, Folder As String)
+    Private Sub MoveAttachToFolder(AttachUID As String, Folder As String, Optional isNew As Boolean = False)
         If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
         Try
-            AssetFunc.UpdateSqlValue(_attachTable.TableName, _attachTable.Folder, Folder, _attachTable.FileUID, AttachUID)
-            ListAttachments()
             RightClickMenu.Close()
+            AssetFunc.UpdateSqlValue(_attachTable.TableName, _attachTable.Folder, Folder, _attachTable.FileUID, AttachUID)
+            If isNew Then
+                PopulateFolderList(Folder)
+            Else
+                PopulateFolderList(CurrentSelectedFolder)
+            End If
+            ListAttachments()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -473,10 +492,13 @@ Public Class AttachmentsForm
             If dropObject.GetDataPresent(GetType(DataGridViewRow)) Then
                 'Cast out the datarow, get the attach UID, and move the attachment to the new folder.
                 Dim DragRow = DirectCast(dropObject.GetData(GetType(DataGridViewRow)), DataGridViewRow)
-                MoveAttachFolder(DragRow.Cells(GridFunctions.GetColIndex(AttachGrid, "AttachUID")).Value.ToString, folder)
+                CurrentSelectedFolder = PrevSelectedFolder
+                MoveAttachToFolder(DragRow.Cells(GridFunctions.GetColIndex(AttachGrid, "AttachUID")).Value.ToString, folder)
+
             Else
                 'Otherwise the drag originated from windows explorer or Outlook. Process accordingly.
                 ProcessFileDrop(dropObject, folder)
+                CurrentSelectedFolder = folder
             End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -529,8 +551,8 @@ Public Class AttachmentsForm
     Private Sub RenameAttachmentDialog()
         Try
             If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
-            Dim strCurrentFileName As String = AssetFunc.GetSqlValue(_attachTable.TableName, _attachTable.FileUID, SelectedAttachment, _attachTable.FileName)
-            Dim strAttachUID As String = SelectedAttachment()
+            Dim strCurrentFileName As String = AssetFunc.GetSqlValue(_attachTable.TableName, _attachTable.FileUID, SelectedAttachmentUID, _attachTable.FileName)
+            Dim strAttachUID As String = SelectedAttachmentUID()
             Dim blah As String = InputBox("Enter new filename.", "Rename", strCurrentFileName)
             If blah = "" Then
                 blah = strCurrentFileName
@@ -723,7 +745,7 @@ Public Class AttachmentsForm
         End If
     End Sub
 
-    Private Function SelectedAttachment() As String
+    Private Function SelectedAttachmentUID() As String
         Dim AttachUID As String = AttachGrid.Item(GridFunctions.GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
         If AttachUID <> "" Then
             Return AttachUID
@@ -732,15 +754,38 @@ Public Class AttachmentsForm
         End If
     End Function
 
+    Private Sub ToggleDragMode()
+        bolAllowDrag = Not bolAllowDrag
+        AttachGrid.MultiSelect = Not bolAllowDrag
+        If AttachGrid.MultiSelect Then
+            AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect
+        Else
+            AttachGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        End If
+        AllowDragCheckBox.Checked = bolAllowDrag
+    End Sub
+
+
+    Private Function FolderNameExists(folderName As String) As Boolean
+        For Each item As ListViewItem In FolderListView.Items
+            If item.Text.ToUpper = folderName.ToUpper Then Return True
+        Next
+        Return False
+    End Function
+
+#Region "Control Event Methods"
+
     Private Sub AttachmentsForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         AttachGrid.ClearSelection()
         bolGridFilling = False
     End Sub
 
-#Region "Control Event Methods"
+    Private Sub AttachmentsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ListAttachments()
+    End Sub
 
     Private Sub AttachGrid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellDoubleClick
-        DownloadAndOpenAttachment(SelectedAttachment)
+        DownloadAndOpenAttachment(SelectedAttachmentUID)
     End Sub
 
     Private Sub AttachGrid_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles AttachGrid.CellEnter
@@ -789,19 +834,19 @@ Public Class AttachmentsForm
             If e.Button = MouseButtons.Left Then
                 If MouseIsDragging(, e.Location) AndAlso AttachGrid.CurrentRow IsNot Nothing Then
                     bolDragging = True
-                    PrevFolderIdx = FolderListView.SelectedIndices(0)
-                    DownloadAndSaveAttachment(SelectedAttachment)
+                    PrevSelectedFolder = CurrentSelectedFolder
+                    DownloadAndSaveAttachment(SelectedAttachmentUID)
                 End If
             End If
         End If
     End Sub
 
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
-        DeleteAttachment(SelectedAttachment)
+        DeleteAttachment(SelectedAttachmentUID)
     End Sub
 
     Private Sub cmdOpen_Click(sender As Object, e As EventArgs) Handles cmdOpen.Click
-        DownloadAndOpenAttachment(SelectedAttachment)
+        DownloadAndOpenAttachment(SelectedAttachmentUID)
     End Sub
 
     Private Sub cmdUpload_Click(sender As Object, e As EventArgs) Handles cmdUpload.Click
@@ -813,11 +858,11 @@ Public Class AttachmentsForm
     End Sub
 
     Private Sub DeleteAttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteAttachmentToolStripMenuItem.Click
-        DeleteAttachment(SelectedAttachment)
+        DeleteAttachment(SelectedAttachmentUID)
     End Sub
 
     Private Sub OpenTool_Click(sender As Object, e As EventArgs) Handles OpenTool.Click
-        DownloadAndOpenAttachment(SelectedAttachment)
+        DownloadAndOpenAttachment(SelectedAttachmentUID)
     End Sub
 
     Private Sub ProgTimer_Tick(sender As Object, e As EventArgs) Handles ProgTimer.Tick
@@ -842,7 +887,7 @@ Public Class AttachmentsForm
     End Sub
 
     Private Sub SaveToMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToMenuItem.Click
-        DownloadAndSaveAttachment(SelectedAttachment)
+        DownloadAndSaveAttachment(SelectedAttachmentUID)
     End Sub
 
     Private Sub AttachmentsForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
@@ -853,44 +898,36 @@ Public Class AttachmentsForm
         For Each item As ListViewItem In FolderListView.Items
             item.StateImageIndex = Convert.ToInt32(item.Selected)
         Next
-        If FolderListView.SelectedIndices.Count > 0 Then PrevFolderIdx = FolderListView.SelectedIndices(0)
+        If FolderListView.SelectedIndices.Count > 0 Then PrevSelectedFolder = CurrentSelectedFolder
         ListAttachments()
 
     End Sub
 
     Private Sub FolderListView_ItemSelectionChanged(sender As Object, e As ListViewItemSelectionChangedEventArgs) Handles FolderListView.ItemSelectionChanged
         If bolDragging Then
-            If FolderListView.Items.Count > 0 Then
-                For Each item As ListViewItem In FolderListView.Items
-                    If item IsNot Nothing Then item.StateImageIndex = Convert.ToInt32(item.Selected)
-                Next
-            End If
+            SetFolderListViewStates()
         End If
     End Sub
 
-    Private Sub AttachmentsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
-        ListAttachments()
+    Private Sub SetFolderListViewStates()
+        If FolderListView.Items.Count > 0 Then
+            For Each item As ListViewItem In FolderListView.Items
+                If item IsNot Nothing Then item.StateImageIndex = Convert.ToInt32(item.Selected)
+            Next
+        End If
     End Sub
-    Private PrevFolderIdx As Integer = 0
-    Private Sub FolderListView_DragOver(sender As Object, e As DragEventArgs) Handles FolderListView.DragOver
 
+    Private Sub FolderListView_DragOver(sender As Object, e As DragEventArgs) Handles FolderListView.DragOver
         e.Effect = DragDropEffects.Copy
         bolDragging = True
         Dim p As Point = FolderListView.PointToClient(New Point(e.X, e.Y))
         Dim dragToItem As ListViewItem = FolderListView.GetItemAt(p.X, p.Y)
         If dragToItem IsNot Nothing Then
             dragToItem.Selected = True
-            '  Debug.Print(dragToItem.Text & " - " & bolDragging & " - " & PrevFolderIdx & " - " & strSelectedFolder)
         End If
-
     End Sub
 
     Private Sub FolderListView_DragDrop(sender As Object, e As DragEventArgs) Handles FolderListView.DragDrop
-        'ProcessDrop(e.Data)
-
-        ' e.Data.GetFormats.ToList.ForEach(Sub(d) Debug.Print(d.ToString))
-
-
         'Return if the items are not selected in the ListView control.
         If FolderListView.SelectedItems.Count = 0 Then Return
         'Returns the location of the mouse pointer in the ListView control.
@@ -898,7 +935,6 @@ Public Class AttachmentsForm
         'Obtain the item that is located at the specified location of the mouse pointer.
         Dim dragToItem As ListViewItem = FolderListView.GetItemAt(p.X, p.Y)
         If dragToItem Is Nothing Then Return
-        FolderListView.Items(PrevFolderIdx).Selected = True
 
         If dragToItem.Index = 0 Then
             ProcessFolderListDrop(e.Data, "")
@@ -906,52 +942,31 @@ Public Class AttachmentsForm
             ProcessFolderListDrop(e.Data, dragToItem.Text)
         End If
 
-
-        'MoveAttachFolder(SelectedAttachment, dragToItem.Text)
-
-        'Obtain the index of the item at the mouse pointer.
-        ' Dim dragIndex As Integer = dragToItem.Index
-
-
-        'bolDragging = False
-        'Dim i As Integer
-        'Dim sel(FolderListView.SelectedItems.Count) As ListViewItem
-        'For i = 0 To FolderListView.SelectedItems.Count - 1
-        '    sel(i) = FolderListView.SelectedItems.Item(i)
-        'Next
-        'For i = 0 To FolderListView.SelectedItems.Count - 1
-        '    'Obtain the ListViewItem to be dragged to the target location.
-        '    Dim dragItem As ListViewItem = sel(i)
-        '    Dim itemIndex As Integer = dragIndex
-        '    If itemIndex = dragItem.Index Then Return
-        '    If dragItem.Index < itemIndex Then
-        '        itemIndex = itemIndex + 1
-        '    Else
-        '        itemIndex = dragIndex + i
-        '    End If
-        '    'Insert the item in the specified location.
-        '    Dim insertitem As ListViewItem = DirectCast(dragItem.Clone, ListViewItem)
-        '    FolderListView.Items.Insert(itemIndex, insertitem)
-        '    'Removes the item from the initial location while 
-        '    'the item is moved to the new location.
-        '    FolderListView.Items.Remove(dragItem)
-        'Next
     End Sub
 
-    Private Sub FolderListView_DragEnter(sender As Object, e As DragEventArgs) Handles FolderListView.DragEnter
-
-        'Dim i As Integer
-        'For i = 0 To e.Data.GetFormats().Length - 1
-        '    Debug.Print(e.Data.GetFormats()(i))
-        '    If e.Data.GetFormats()(i).Equals("System.Windows.Forms.ListView+SelectedListViewItemCollection") Then
-        '        'The data from the drag source is moved to the target.
-        '        e.Effect = DragDropEffects.Move
-        '    End If
-        'Next
+    Private Sub AttachGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles AttachGrid.KeyDown
+        If e.KeyCode = Keys.Menu Then
+            ToggleDragMode()
+        End If
     End Sub
 
+    Private Sub AllowDragCheckBox_Click(sender As Object, e As EventArgs) Handles AllowDragCheckBox.Click
+        ToggleDragMode()
+    End Sub
 
+    Private Sub NewFolderMenuItem_Click(sender As Object, e As EventArgs) Handles NewFolderMenuItem.Click
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
+        Dim NewFolderName As String = InputBox("Enter new folder name.", "New Folder").Trim
+        If Not FolderNameExists(NewFolderName) Then
+            MoveAttachToFolder(SelectedAttachmentUID, NewFolderName, True)
+        Else
+            Message("A folder with that name already exists.", vbOKOnly + vbInformation, "Duplicate Name", Me)
+        End If
+    End Sub
 
+    Private Sub FolderListView_DragLeave(sender As Object, e As EventArgs) Handles FolderListView.DragLeave
+        CurrentSelectedFolder = PrevSelectedFolder
+    End Sub
 
 #End Region
 
@@ -1010,26 +1025,6 @@ Public Class AttachmentsForm
 
     End Class
 
-    Private Sub ToggleDragMode()
-        bolAllowDrag = Not bolAllowDrag
-        AttachGrid.MultiSelect = Not bolAllowDrag
-        If AttachGrid.MultiSelect Then
-            AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect
-        Else
-            AttachGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        End If
-        AllowDragCheckBox.Checked = bolAllowDrag
-    End Sub
 
-    Private Sub AttachGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles AttachGrid.KeyDown
-
-        If e.KeyCode = Keys.Menu Then
-            ToggleDragMode()
-        End If
-    End Sub
-
-    Private Sub AllowDragCheckBox_Click(sender As Object, e As EventArgs) Handles AllowDragCheckBox.Click
-        ToggleDragMode()
-    End Sub
 
 End Class
