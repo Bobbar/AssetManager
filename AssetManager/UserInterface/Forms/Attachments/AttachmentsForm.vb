@@ -68,7 +68,6 @@ Public Class AttachmentsForm
                 Me.Text = "Sibi Attachments"
                 DeviceGroup.Visible = False
                 SibiGroup.Dock = DockStyle.Top
-                FillFolderCombos()
                 FillSibiInfo()
             ElseIf TypeOf AttachInfo Is DeviceObject Then
                 AttachDevice = DirectCast(AttachInfo, DeviceObject)
@@ -79,6 +78,7 @@ Public Class AttachmentsForm
                 DeviceGroup.Dock = DockStyle.Top
                 FillDeviceInfo()
             End If
+            PopulateFolderList()
         Else
             SibiGroup.Visible = False
         End If
@@ -101,7 +101,6 @@ Public Class AttachmentsForm
             FolderListView.Items(0).Selected = True
         Else
             For Each item As ListViewItem In FolderListView.Items
-
                 If item.Text = folderName Then
                     item.Selected = True
                 End If
@@ -116,6 +115,12 @@ Public Class AttachmentsForm
         txtRequestNum.Text = AttachRequest.RequestNumber
         txtDescription.Text = AttachRequest.Description
         Me.Text += " - " & AttachRequest.Description
+    End Sub
+
+    Private Sub FillDeviceInfo()
+        txtAssetTag.Text = AttachDevice.AssetTag
+        txtSerial.Text = AttachDevice.Serial
+        txtDeviceDescription.Text = AttachDevice.Description
     End Sub
 
     Public Function ActiveTransfer() As Boolean
@@ -138,11 +143,7 @@ Public Class AttachmentsForm
                 For Each r As DataRow In results.Rows
                     strFileSizeHuman = Math.Round((CInt(r.Item(_attachTable.FileSize)) / 1024), 1) & " KB"
                     strFullFilename = r.Item(_attachTable.FileName).ToString & r.Item(_attachTable.FileType).ToString
-                    If TypeOf _attachTable Is SibiAttachmentsCols Then
-                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), r.Item(_attachTable.Folder).ToString, r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
-                    Else
-                        table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
-                    End If
+                    table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), r.Item(_attachTable.Folder).ToString, r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
                 Next
                 bolGridFilling = True
                 AttachGrid.DataSource = table
@@ -207,20 +208,15 @@ Public Class AttachmentsForm
     End Sub
 
     Private Function CopyAttachement(AttachObject As IDataObject, DataFormat As String) As String()
-        Try
-            Dim FileName As String = GetAttachFileName(AttachObject, DataFormat)
-            Dim strFullPath(0) As String
-            strFullPath(0) = Paths.DownloadPath & FileName
-            Directory.CreateDirectory(Paths.DownloadPath)
-            Using streamFileData = DirectCast(AttachObject.GetData("FileContents"), MemoryStream),
+        Dim FileName As String = GetAttachFileName(AttachObject, DataFormat)
+        Dim strFullPath(0) As String
+        strFullPath(0) = Paths.DownloadPath & FileName
+        Directory.CreateDirectory(Paths.DownloadPath)
+        Using streamFileData = DirectCast(AttachObject.GetData("FileContents"), MemoryStream),
                      outputStream = IO.File.Create(strFullPath(0))
-                streamFileData.CopyTo(outputStream)
-                Return strFullPath
-            End Using
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+            streamFileData.CopyTo(outputStream)
+            Return strFullPath
+        End Using
     End Function
 
     Private Sub DoneWaiting()
@@ -281,16 +277,6 @@ Public Class AttachmentsForm
         End Try
     End Function
 
-    Private Sub FillDeviceInfo()
-        txtAssetTag.Text = AttachDevice.AssetTag
-        txtSerial.Text = AttachDevice.Serial
-        txtDeviceDescription.Text = AttachDevice.Description
-    End Sub
-
-    Private Sub FillFolderCombos()
-        PopulateFolderList()
-    End Sub
-
     Private Sub PopulateFolderList(Optional currentFolder As String = Nothing)
         FolderListView.Items.Clear()
         Dim folders = DBFactory.GetDatabase.DataTableFromQueryString("SELECT DISTINCT " & _attachTable.Folder & " FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachFolderUID & "' ORDER BY " & _attachTable.Folder)
@@ -312,37 +298,28 @@ Public Class AttachmentsForm
     End Sub
 
     Private Function GetAttachFileName(AttachObject As IDataObject, DataFormat As String) As String
-        Try
-            Select Case DataFormat
-                Case "RenPrivateItem"
-                    Using streamFileName As MemoryStream = DirectCast(AttachObject.GetData("FileGroupDescriptor"), MemoryStream)
-                        streamFileName.Position = 0
-                        Dim sr As New StreamReader(streamFileName)
-                        Dim fullString As String = sr.ReadToEnd
-                        fullString = Replace(fullString, vbNullChar, "")
-                        fullString = Replace(fullString, ChrW(1), "")
-                        Return fullString
-                    End Using
-            End Select
-            Return Nothing
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return Nothing
-        End Try
+        Select Case DataFormat
+            Case "RenPrivateItem"
+                Using streamFileName As MemoryStream = DirectCast(AttachObject.GetData("FileGroupDescriptor"), MemoryStream)
+                    streamFileName.Position = 0
+                    Dim sr As New StreamReader(streamFileName)
+                    Dim fullString As String = sr.ReadToEnd
+                    fullString = Replace(fullString, vbNullChar, "")
+                    fullString = Replace(fullString, ChrW(1), "")
+                    Return fullString
+                End Using
+        End Select
+        Return Nothing
     End Function
 
     Private Function GetQry() As String
         Dim strQry As String = ""
-        If TypeOf _attachTable Is SibiAttachmentsCols Then
-            Select Case FolderListView.SelectedIndices(0)
-                Case 0
-                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
-                Case Else
-                    strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & CurrentSelectedFolder & "' AND " & _attachTable.FKey & " ='" & AttachRequest.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
-            End Select
-        Else
-            strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachDevice.GUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
-        End If
+        Select Case FolderListView.SelectedIndices(0)
+            Case 0
+                strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachFolderUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
+            Case Else
+                strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & CurrentSelectedFolder & "' AND " & _attachTable.FKey & " ='" & AttachFolderUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
+        End Select
         Return strQry
     End Function
 
@@ -353,22 +330,13 @@ Public Class AttachmentsForm
 
     Private Function GetTable() As DataTable
         Dim table As New DataTable
-        If TypeOf _attachTable Is SibiAttachmentsCols Then
-            table.Columns.Add(" ", GetType(Image))
-            table.Columns.Add("Filename", GetType(String))
-            table.Columns.Add("Size", GetType(String))
-            table.Columns.Add("Date", GetType(String))
-            table.Columns.Add("Folder", GetType(String))
-            table.Columns.Add("AttachUID", GetType(String))
-            table.Columns.Add("MD5", GetType(String))
-        Else
-            table.Columns.Add(" ", GetType(Image))
-            table.Columns.Add("Filename", GetType(String))
-            table.Columns.Add("Size", GetType(String))
-            table.Columns.Add("Date", GetType(String))
-            table.Columns.Add("AttachUID", GetType(String))
-            table.Columns.Add("MD5", GetType(String))
-        End If
+        table.Columns.Add(" ", GetType(Image))
+        table.Columns.Add("Filename", GetType(String))
+        table.Columns.Add("Size", GetType(String))
+        table.Columns.Add("Date", GetType(String))
+        table.Columns.Add("Folder", GetType(String))
+        table.Columns.Add("AttachUID", GetType(String))
+        table.Columns.Add("MD5", GetType(String))
         Return table
     End Function
 
@@ -380,10 +348,7 @@ Public Class AttachmentsForm
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileSize, Attachment.Filesize))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileUID, Attachment.FileUID))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileHash, Attachment.MD5))
-        If TypeOf Attachment Is SibiAttachment Then
-            Dim SibiAttach = DirectCast(Attachment, SibiAttachment)
-            InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.Folder, SibiAttach.SelectedFolder))
-        End If
+        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.Folder, Attachment.FolderName))
         DBFactory.GetDatabase.InsertFromParameters(Attachment.AttachTable.TableName, InsertAttachmentParams)
     End Sub
 
@@ -508,25 +473,21 @@ Public Class AttachmentsForm
     End Sub
 
     Private Sub ProcessFileDrop(dropObject As IDataObject, folder As String)
-        Try
-            Dim File As Object
-            Select Case True
+        Dim File As Object
+        Select Case True
                     'Outlook data object.
-                Case dropObject.GetDataPresent("RenPrivateItem")
-                    File = CopyAttachement(dropObject, "RenPrivateItem")
-                    If Not IsNothing(File) Then
-                        UploadAttachments(DirectCast(File, String()), folder)
-                    End If
+            Case dropObject.GetDataPresent("RenPrivateItem")
+                File = CopyAttachement(dropObject, "RenPrivateItem")
+                If Not IsNothing(File) Then
+                    UploadAttachments(DirectCast(File, String()), folder)
+                End If
                     'Explorer data object.
-                Case dropObject.GetDataPresent(DataFormats.FileDrop)
-                    Dim Files() = CType(dropObject.GetData(DataFormats.FileDrop), String())
-                    If Not IsNothing(Files) Then
-                        UploadAttachments(Files, folder)
-                    End If
-            End Select
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        End Try
+            Case dropObject.GetDataPresent(DataFormats.FileDrop)
+                Dim Files() = CType(dropObject.GetData(DataFormats.FileDrop), String())
+                If Not IsNothing(Files) Then
+                    UploadAttachments(Files, folder)
+                End If
+        End Select
     End Sub
 
     Private Sub RefreshAttachCount()
@@ -599,11 +560,7 @@ Public Class AttachmentsForm
             Dim cancelToken As CancellationToken = taskCancelTokenSource.Token
             WorkerFeedback(True)
             For Each file As String In files
-                If TypeOf _attachTable Is SibiAttachmentsCols Then
-                    CurrentAttachment = New SibiAttachment(file, AttachFolderUID, folder, _attachTable)
-                Else
-                    CurrentAttachment = New Attachment(file, AttachFolderUID, _attachTable)
-                End If
+                CurrentAttachment = New Attachment(file, AttachFolderUID, folder, _attachTable)
                 If Not OKFileSize(CurrentAttachment) Then
                     CurrentAttachment.Dispose()
                     Message("The file is too large.   Please select a file less than " & FileSizeMBLimit & "MB.", vbOKOnly + vbExclamation, "Size Limit Exceeded", Me)

@@ -56,9 +56,9 @@ Public Class TrackablesCols
     Public Const DateStamp As String = "track_datestamp"
 End Class
 
-Public Class AttachmentsBaseCols
+Public MustInherit Class AttachmentsBaseCols
 
-    Public Overridable ReadOnly Property TableName As String = "attachments"
+    Public MustOverride ReadOnly Property TableName As String
     Public ReadOnly Property Timestamp As String = "attach_timestamp"
     Public ReadOnly Property FKey As String = "attach_fkey_UID"
     Public ReadOnly Property FileName As String = "attach_file_name"
@@ -66,7 +66,7 @@ Public Class AttachmentsBaseCols
     Public ReadOnly Property FileSize As String = "attach_file_size"
     Public ReadOnly Property FileUID As String = "attach_file_UID"
     Public ReadOnly Property FileHash As String = "attach_file_hash"
-    Public Overridable ReadOnly Property Folder As String = "attach_folder"
+    Public ReadOnly Property Folder As String = "attach_folder"
 End Class
 
 Public Class DeviceAttachmentsCols
@@ -77,7 +77,6 @@ End Class
 Public Class SibiAttachmentsCols
     Inherits AttachmentsBaseCols
     Public Overrides ReadOnly Property TableName As String = "sibi_attachments"
-    Public Overrides ReadOnly Property Folder As String = "attach_folder"
 End Class
 
 Public Class SibiRequestCols

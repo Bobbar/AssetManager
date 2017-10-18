@@ -1,47 +1,11 @@
 ﻿Imports System.IO
 
-Public Class SibiAttachment
-    Inherits Attachment
-    Public Property SelectedFolder As String
-
-    Sub New(newFile As String, attachTable As AttachmentsBaseCols)
-        MyBase.New(newFile, attachTable)
-    End Sub
-
-    Sub New(newFile As String, folderGUID As String, attachTable As AttachmentsBaseCols)
-        MyBase.New(newFile, folderGUID, attachTable)
-    End Sub
-
-    Sub New(newFile As String, folderGUID As String, selectedFolder As String, attachTable As AttachmentsBaseCols)
-        MyBase.New(newFile, folderGUID, attachTable)
-        Me.SelectedFolder = selectedFolder
-    End Sub
-
-    Sub New(attachInfoTable As DataTable, selectedFolder As String, attachTable As AttachmentsBaseCols)
-        MyBase.New(attachInfoTable, attachTable)
-        Me.SelectedFolder = selectedFolder
-    End Sub
-
-End Class
-
-Public Class DeviceAttachment
-    Inherits Attachment
-
-    Sub New(newFile As String, attachTable As AttachmentsBaseCols)
-        MyBase.New(newFile, attachTable)
-    End Sub
-
-    Sub New(newFile As String, folderGUID As String, attachTable As AttachmentsBaseCols)
-        MyBase.New(newFile, folderGUID, attachTable)
-    End Sub
-
-End Class
-
 Public Class Attachment : Implements IDisposable
     Private _fileInfo As FileInfo
     Private _fileName As String
     Private _fileSize As Integer
     Private _extention As String
+    Private _folderName As String
     Private _folderGUID As String
     Private _MD5 As String
     Private _fileUID As String
@@ -53,6 +17,7 @@ Public Class Attachment : Implements IDisposable
         _fileName = Nothing
         _fileSize = Nothing
         _extention = Nothing
+        _folderName = Nothing
         _folderGUID = Nothing
         _MD5 = Nothing
         _fileUID = Nothing
@@ -71,6 +36,7 @@ Public Class Attachment : Implements IDisposable
         _MD5 = Nothing
         _fileSize = CInt(_fileInfo.Length)
         _extention = _fileInfo.Extension
+        _folderName = String.Empty
         _folderGUID = String.Empty
         _attachTable = attachTable
         _dataStream = _fileInfo.OpenRead
@@ -83,6 +49,7 @@ Public Class Attachment : Implements IDisposable
         _MD5 = Nothing
         _fileSize = CInt(_fileInfo.Length)
         _extention = _fileInfo.Extension
+        _folderName = String.Empty
         _folderGUID = folderGUID
         _attachTable = attachTable
         _dataStream = _fileInfo.OpenRead
@@ -99,6 +66,36 @@ Public Class Attachment : Implements IDisposable
             _MD5 = .Item(attachTable.FileHash).ToString
             _fileSize = CInt(.Item(attachTable.FileSize))
             _extention = .Item(attachTable.FileType).ToString
+            _folderName = .Item(attachTable.Folder).ToString
+            _folderGUID = .Item(attachTable.FKey).ToString
+        End With
+    End Sub
+
+    Sub New(newFile As String, folderGUID As String, selectedFolder As String, attachTable As AttachmentsBaseCols)
+        _fileInfo = New FileInfo(newFile)
+        _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name)
+        _fileUID = Guid.NewGuid.ToString
+        _MD5 = Nothing
+        _fileSize = CInt(_fileInfo.Length)
+        _extention = _fileInfo.Extension
+        _folderName = selectedFolder
+        _folderGUID = folderGUID
+        _attachTable = attachTable
+        _dataStream = _fileInfo.OpenRead
+    End Sub
+
+    Sub New(attachInfoTable As DataTable, selectedFolder As String, attachTable As AttachmentsBaseCols)
+        Dim TableRow As DataRow = attachInfoTable.Rows(0)
+        _fileInfo = Nothing
+        _dataStream = Nothing
+        _attachTable = attachTable
+        With TableRow
+            _fileName = .Item(attachTable.FileName).ToString
+            _fileUID = .Item(attachTable.FileUID).ToString
+            _MD5 = .Item(attachTable.FileHash).ToString
+            _fileSize = CInt(.Item(attachTable.FileSize))
+            _extention = .Item(attachTable.FileType).ToString
+            _folderName = .Item(attachTable.Folder).ToString
             _folderGUID = .Item(attachTable.FKey).ToString
         End With
     End Sub
@@ -164,6 +161,12 @@ Public Class Attachment : Implements IDisposable
                 _MD5 = GetHash(_fileInfo)
                 Return _MD5
             End If
+        End Get
+    End Property
+
+    Public ReadOnly Property FolderName As String
+        Get
+            Return _folderName
         End Get
     End Property
 
