@@ -29,6 +29,7 @@ Partial Class AttachmentsForm
         Me.OpenTool = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveToMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyTextTool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NewFolderMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RenameStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -68,7 +69,6 @@ Partial Class AttachmentsForm
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtAssetTag = New System.Windows.Forms.TextBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.NewFolderMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RightClickMenu.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -86,7 +86,7 @@ Partial Class AttachmentsForm
         'cmdUpload
         '
         Me.cmdUpload.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdUpload.Location = New System.Drawing.Point(23, 29)
+        Me.cmdUpload.Location = New System.Drawing.Point(29, 46)
         Me.cmdUpload.Name = "cmdUpload"
         Me.cmdUpload.Size = New System.Drawing.Size(92, 46)
         Me.cmdUpload.TabIndex = 0
@@ -97,7 +97,7 @@ Partial Class AttachmentsForm
         '
         Me.RightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.SaveToMenuItem, Me.CopyTextTool, Me.NewFolderMenuItem, Me.RenameStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAttachmentToolStripMenuItem})
         Me.RightClickMenu.Name = "RightClickMenu"
-        Me.RightClickMenu.Size = New System.Drawing.Size(178, 164)
+        Me.RightClickMenu.Size = New System.Drawing.Size(178, 142)
         '
         'OpenTool
         '
@@ -116,6 +116,12 @@ Partial Class AttachmentsForm
         Me.CopyTextTool.Name = "CopyTextTool"
         Me.CopyTextTool.Size = New System.Drawing.Size(177, 22)
         Me.CopyTextTool.Text = "Copy Text"
+        '
+        'NewFolderMenuItem
+        '
+        Me.NewFolderMenuItem.Name = "NewFolderMenuItem"
+        Me.NewFolderMenuItem.Size = New System.Drawing.Size(177, 22)
+        Me.NewFolderMenuItem.Text = "Move to new folder"
         '
         'RenameStripMenuItem
         '
@@ -139,7 +145,7 @@ Partial Class AttachmentsForm
         '
         Me.cmdDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdDelete.Location = New System.Drawing.Point(23, 143)
+        Me.cmdDelete.Location = New System.Drawing.Point(29, 160)
         Me.cmdDelete.Name = "cmdDelete"
         Me.cmdDelete.Size = New System.Drawing.Size(92, 25)
         Me.cmdDelete.TabIndex = 4
@@ -149,7 +155,7 @@ Partial Class AttachmentsForm
         'cmdOpen
         '
         Me.cmdOpen.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdOpen.Location = New System.Drawing.Point(23, 81)
+        Me.cmdOpen.Location = New System.Drawing.Point(29, 98)
         Me.cmdOpen.Name = "cmdOpen"
         Me.cmdOpen.Size = New System.Drawing.Size(92, 23)
         Me.cmdOpen.TabIndex = 5
@@ -173,7 +179,7 @@ Partial Class AttachmentsForm
         Me.GroupBox1.Size = New System.Drawing.Size(793, 440)
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Manage Attachments"
+        Me.GroupBox1.Text = "Attachments"
         '
         'Panel1
         '
@@ -194,6 +200,7 @@ Partial Class AttachmentsForm
         Me.AttachContainer.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AttachContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
         Me.AttachContainer.Location = New System.Drawing.Point(3, 22)
         Me.AttachContainer.Name = "AttachContainer"
         '
@@ -205,7 +212,7 @@ Partial Class AttachmentsForm
         '
         Me.AttachContainer.Panel2.Controls.Add(Me.AttachGrid)
         Me.AttachContainer.Size = New System.Drawing.Size(629, 386)
-        Me.AttachContainer.SplitterDistance = 130
+        Me.AttachContainer.SplitterDistance = 122
         Me.AttachContainer.TabIndex = 23
         '
         'FolderListView
@@ -216,10 +223,11 @@ Partial Class AttachmentsForm
         Me.FolderListView.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1})
         Me.FolderListView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FolderListView.ForeColor = System.Drawing.Color.White
+        Me.FolderListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.FolderListView.Location = New System.Drawing.Point(0, 0)
         Me.FolderListView.MultiSelect = False
         Me.FolderListView.Name = "FolderListView"
-        Me.FolderListView.Size = New System.Drawing.Size(130, 386)
+        Me.FolderListView.Size = New System.Drawing.Size(122, 386)
         Me.FolderListView.StateImageList = Me.imageList1
         Me.FolderListView.TabIndex = 0
         Me.FolderListView.UseCompatibleStateImageBehavior = False
@@ -279,7 +287,7 @@ Partial Class AttachmentsForm
         Me.AttachGrid.ShowCellErrors = False
         Me.AttachGrid.ShowCellToolTips = False
         Me.AttachGrid.ShowEditingIcon = False
-        Me.AttachGrid.Size = New System.Drawing.Size(495, 386)
+        Me.AttachGrid.Size = New System.Drawing.Size(503, 386)
         Me.AttachGrid.TabIndex = 18
         Me.AttachGrid.VirtualMode = True
         '
@@ -542,12 +550,6 @@ Partial Class AttachmentsForm
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(793, 116)
         Me.Panel2.TabIndex = 10
-        '
-        'NewFolderMenuItem
-        '
-        Me.NewFolderMenuItem.Name = "NewFolderMenuItem"
-        Me.NewFolderMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.NewFolderMenuItem.Text = "Move to new folder"
         '
         'AttachmentsForm
         '

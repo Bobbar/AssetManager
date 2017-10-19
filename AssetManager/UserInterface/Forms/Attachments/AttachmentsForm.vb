@@ -315,12 +315,13 @@ Public Class AttachmentsForm
 
     Private Function GetQry() As String
         Dim strQry As String = ""
-        Select Case FolderListView.SelectedIndices(0)
-            Case 0
-                strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachFolderUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
-            Case Else
-                strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & CurrentSelectedFolder & "' AND " & _attachTable.FKey & " ='" & AttachFolderUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
-        End Select
+
+        If FolderListView.SelectedIndices.Count > 0 AndAlso FolderListView.SelectedIndices(0) = 0 Then
+            strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.FKey & "='" & AttachFolderUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
+        Else
+            strQry = "Select * FROM " & _attachTable.TableName & " WHERE " & _attachTable.Folder & "='" & CurrentSelectedFolder & "' AND " & _attachTable.FKey & " ='" & AttachFolderUID & "' ORDER BY " & _attachTable.Timestamp & " DESC"
+        End If
+
         Return strQry
     End Function
 
@@ -394,6 +395,7 @@ Public Class AttachmentsForm
     Private Sub MoveAttachToFolder(AttachUID As String, Folder As String, Optional isNew As Boolean = False)
         If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
         Try
+            Waiting()
             RightClickMenu.Close()
             AssetFunc.UpdateSqlValue(_attachTable.TableName, _attachTable.Folder, Folder, _attachTable.FileUID, AttachUID)
             If isNew Then
@@ -404,6 +406,8 @@ Public Class AttachmentsForm
             ListAttachments()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        Finally
+            DoneWaiting()
         End Try
     End Sub
 
@@ -648,23 +652,21 @@ Public Class AttachmentsForm
     End Sub
 
     Private Async Sub AddAttachmentFileToDragDropObject(attachUID As String)
-        Try
-            If Not dragDropDataObj.GetDataPresent(DataFormats.FileDrop) And Not TransferTaskRunning Then
-                Using saveAttachment = Await DownloadAttachment(attachUID)
-                    If saveAttachment Is Nothing Then Exit Sub
-                    Dim strFullPath As String = TempPathFilename(saveAttachment)
-                    Dim fileList As New Collections.Specialized.StringCollection
-                    fileList.Add(strFullPath)
-                    dragDropDataObj.SetFileDropList(fileList)
-                    SaveAttachmentToDisk(saveAttachment, strFullPath)
-                    SetStatusBar("Drag/Drop...")
-                    AttachGrid.DoDragDrop(dragDropDataObj, DragDropEffects.All)
-                End Using
-            End If
-        Finally
+        If Not dragDropDataObj.GetDataPresent(DataFormats.FileDrop) And Not TransferTaskRunning Then
+            Waiting()
+            Using saveAttachment = Await DownloadAttachment(attachUID)
+                If saveAttachment Is Nothing Then Exit Sub
+                Dim strFullPath As String = TempPathFilename(saveAttachment)
+                Dim fileList As New Collections.Specialized.StringCollection
+                fileList.Add(strFullPath)
+                dragDropDataObj.SetFileDropList(fileList)
+                SaveAttachmentToDisk(saveAttachment, strFullPath)
+                SetStatusBar("Drag/Drop...")
+                AttachGrid.DoDragDrop(dragDropDataObj, DragDropEffects.All)
+            End Using
             bolDragging = False
             DoneWaiting()
-        End Try
+        End If
     End Sub
 
     Private Function SaveAttachmentToDisk(attachment As Attachment, savePath As String) As Boolean
@@ -675,12 +677,12 @@ Public Class AttachmentsForm
             memStream = DirectCast(attachment.DataStream, MemoryStream)
                 memStream.CopyTo(outputStream) 'once data is verified we go ahead and copy it to disk
             End Using
-            SetStatusBar("Idle...")
             Return True
         Catch ex As Exception
-            SetStatusBar("Idle...")
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
+        Finally
+            SetStatusBar("Idle...")
         End Try
     End Function
 
