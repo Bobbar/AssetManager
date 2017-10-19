@@ -19,6 +19,7 @@ Public Class AttachmentsForm
     Private bolGridFilling As Boolean
     Private taskCancelTokenSource As CancellationTokenSource
     Private TransferTaskRunning As Boolean = False
+    Private dragDropDataObj As New DataObject
 
     ''' <summary>
     ''' "ftp://  strServerIP  /attachments/  CurrentDB  /"
@@ -438,10 +439,7 @@ Public Class AttachmentsForm
 
     Private Sub ProcessAttachGridDrop(dropObject As IDataObject)
         Try
-            'If a datagridviewrow is present, don't process the drop, as the drag came from within. 
-            If dropObject.GetDataPresent(GetType(DataGridViewRow)) Then
-                Exit Sub
-            Else
+            If DropIsFromOutside(dropObject) Then
                 ProcessFileDrop(dropObject, CurrentSelectedFolder)
             End If
         Catch ex As Exception
@@ -453,15 +451,20 @@ Public Class AttachmentsForm
 
     Private Sub ProcessFolderListDrop(dropObject As IDataObject, folder As String)
         Try
-            'If a datagridviewrow is present, we know that a drop was performed from the attachgrid.
+            'If a datagridviewrow is present, and the drop not from outside our form.
             If dropObject.GetDataPresent(GetType(DataGridViewRow)) Then
-                'Cast out the datarow, get the attach UID, and move the attachment to the new folder.
-                Dim DragRow = DirectCast(dropObject.GetData(GetType(DataGridViewRow)), DataGridViewRow)
-                CurrentSelectedFolder = PrevSelectedFolder
-                MoveAttachToFolder(DragRow.Cells(GridFunctions.GetColIndex(AttachGrid, "AttachUID")).Value.ToString, folder)
-
+                If Not DropIsFromOutside(dropObject) Then
+                    'Cast out the datarow, get the attach UID, and move the attachment to the new folder.
+                    Dim DragRow = DirectCast(dropObject.GetData(GetType(DataGridViewRow)), DataGridViewRow)
+                    CurrentSelectedFolder = PrevSelectedFolder
+                    MoveAttachToFolder(DragRow.Cells(GridFunctions.GetColIndex(AttachGrid, "AttachUID")).Value.ToString, folder)
+                Else
+                    'Drop from another form. Process as a normal file drop.
+                    ProcessFileDrop(dropObject, folder)
+                    CurrentSelectedFolder = folder
+                End If
             Else
-                'Otherwise the drag originated from windows explorer or Outlook. Process accordingly.
+                'Otherwise the drag originated from windows explorer or Outlook. Process as a normal file drop.
                 ProcessFileDrop(dropObject, folder)
                 CurrentSelectedFolder = folder
             End If
@@ -489,6 +492,16 @@ Public Class AttachmentsForm
                 End If
         End Select
     End Sub
+
+    Private Function DropIsFromOutside(dropObject As IDataObject) As Boolean
+        If dropObject.GetDataPresent("FormID") Then
+            Dim FormID As String = DirectCast(dropObject.GetData("FormID"), String)
+            If FormID <> Me.FormUID Then
+                Return True
+            End If
+        End If
+        Return False
+    End Function
 
     Private Sub RefreshAttachCount()
         If TypeOf Tag Is ViewDeviceForm Then
@@ -609,24 +622,18 @@ Public Class AttachmentsForm
         End Try
     End Sub
 
-    Private Async Sub DownloadAndSaveAttachment(AttachUID As String)
+    Private Sub StartDragDropAttachment()
+        dragDropDataObj = New DataObject()
+        dragDropDataObj.SetData(GetType(DataGridViewRow), AttachGrid.CurrentRow)
+        dragDropDataObj.SetData("FormID", Me.FormUID)
+        AttachGrid.DoDragDrop(dragDropDataObj, DragDropEffects.All)
+    End Sub
+
+    Private Async Sub DownloadAndSaveAttachment(attachUID As String)
         Try
-            If AttachUID = "" Then Exit Sub
-            Dim saveAttachment = Await DownloadAttachment(AttachUID)
-            If saveAttachment Is Nothing Then Exit Sub
-            SetStatusBar("Idle...")
-            If bolDragging Then
-                Dim strFullPath As String = TempPathFilename(saveAttachment)
-                SaveAttachmentToDisk(saveAttachment, strFullPath)
-                SetStatusBar("Drag/Drop...")
-                Dim fileList As New Collections.Specialized.StringCollection
-                fileList.Add(strFullPath)
-                Dim dataObj As New DataObject()
-                dataObj.SetFileDropList(fileList)
-                dataObj.SetData(GetType(DataGridViewRow), AttachGrid.CurrentRow)
-                AttachGrid.DoDragDrop(dataObj, DragDropEffects.All)
-                bolDragging = False
-            Else
+            If attachUID = "" Then Exit Sub
+            Using saveAttachment = Await DownloadAttachment(attachUID)
+                If saveAttachment Is Nothing Then Exit Sub
                 Using saveDialog As New SaveFileDialog()
                     saveDialog.Filter = "All files (*.*)|*.*"
                     saveDialog.FileName = saveAttachment.FullFileName
@@ -634,12 +641,29 @@ Public Class AttachmentsForm
                         SaveAttachmentToDisk(saveAttachment, saveDialog.FileName)
                     End If
                 End Using
-            End If
-            SetStatusBar("Idle...")
-            saveAttachment.Dispose()
+            End Using
         Catch ex As Exception
-            SetStatusBar("Idle...")
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
+        End Try
+    End Sub
+
+    Private Async Sub AddAttachmentFileToDragDropObject(attachUID As String)
+        Try
+            If Not dragDropDataObj.GetDataPresent(DataFormats.FileDrop) And Not TransferTaskRunning Then
+                Using saveAttachment = Await DownloadAttachment(attachUID)
+                    If saveAttachment Is Nothing Then Exit Sub
+                    Dim strFullPath As String = TempPathFilename(saveAttachment)
+                    Dim fileList As New Collections.Specialized.StringCollection
+                    fileList.Add(strFullPath)
+                    dragDropDataObj.SetFileDropList(fileList)
+                    SaveAttachmentToDisk(saveAttachment, strFullPath)
+                    SetStatusBar("Drag/Drop...")
+                    AttachGrid.DoDragDrop(dragDropDataObj, DragDropEffects.All)
+                End Using
+            End If
+        Finally
+            bolDragging = False
+            DoneWaiting()
         End Try
     End Sub
 
@@ -792,7 +816,7 @@ Public Class AttachmentsForm
                 If MouseIsDragging(, e.Location) AndAlso AttachGrid.CurrentRow IsNot Nothing Then
                     bolDragging = True
                     PrevSelectedFolder = CurrentSelectedFolder
-                    DownloadAndSaveAttachment(SelectedAttachmentUID)
+                    StartDragDropAttachment()
                 End If
             End If
         End If
@@ -898,7 +922,7 @@ Public Class AttachmentsForm
         Else
             ProcessFolderListDrop(e.Data, dragToItem.Text)
         End If
-
+        bolDragging = False
     End Sub
 
     Private Sub AttachGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles AttachGrid.KeyDown
@@ -923,6 +947,27 @@ Public Class AttachmentsForm
 
     Private Sub FolderListView_DragLeave(sender As Object, e As EventArgs) Handles FolderListView.DragLeave
         CurrentSelectedFolder = PrevSelectedFolder
+    End Sub
+
+    Private Sub AttachGrid_QueryContinueDrag(ByVal sender As Object, ByVal e As QueryContinueDragEventArgs) Handles AttachGrid.QueryContinueDrag
+        Dim grid As DataGridView = CType(sender, DataGridView)
+        If grid IsNot Nothing Then
+            Dim f As Form = grid.FindForm
+            If (((Control.MousePosition.X) < f.DesktopBounds.Left) Or
+             ((Control.MousePosition.X) > f.DesktopBounds.Right) Or
+             ((Control.MousePosition.Y) < f.DesktopBounds.Top) Or
+             ((Control.MousePosition.Y) > f.DesktopBounds.Bottom)) Then
+
+                AddAttachmentFileToDragDropObject(SelectedAttachmentUID)
+
+            Else
+                If bolDragging And TransferTaskRunning Then
+                    taskCancelTokenSource.Cancel()
+                End If
+
+            End If
+
+        End If
     End Sub
 
 #End Region
