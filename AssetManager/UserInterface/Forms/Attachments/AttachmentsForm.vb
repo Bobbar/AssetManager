@@ -5,6 +5,7 @@ Imports System.IO
 Imports System.Net
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
 Public Class AttachmentsForm
 
 #Region "Fields"
@@ -30,6 +31,7 @@ Public Class AttachmentsForm
     Private Progress As New ProgressCounter
     Private PrevSelectedFolder As String
     Private _currentFolder As String = ""
+
     Private Property CurrentSelectedFolder As String
         Get
             If FolderListView.SelectedItems.Count > 0 Then
@@ -97,6 +99,7 @@ Public Class AttachmentsForm
 #End Region
 
 #Region "Methods"
+
     Private Sub SetActiveFolderByName(folderName As String)
         If folderName = "" Then
             FolderListView.Items(0).Selected = True
@@ -748,7 +751,6 @@ Public Class AttachmentsForm
         AllowDragCheckBox.Checked = bolAllowDrag
     End Sub
 
-
     Private Function FolderNameExists(folderName As String) As Boolean
         For Each item As ListViewItem In FolderListView.Items
             If item.Text.ToUpper = folderName.ToUpper Then Return True
@@ -961,7 +963,6 @@ Public Class AttachmentsForm
              ((Control.MousePosition.Y) > f.DesktopBounds.Bottom)) Then
 
                 AddAttachmentFileToDragDropObject(SelectedAttachmentUID)
-
             Else
                 If bolDragging And TransferTaskRunning Then
                     taskCancelTokenSource.Cancel()
@@ -1028,7 +1029,5 @@ Public Class AttachmentsForm
         End Function
 
     End Class
-
-
 
 End Class
