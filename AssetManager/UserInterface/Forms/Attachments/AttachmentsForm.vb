@@ -140,19 +140,11 @@ Public Class AttachmentsForm
         Try
             Dim strQry As String
             strQry = GetQry()
-            Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQry),
-                table As DataTable = GetTable()
-                Dim strFullFilename As String
-                Dim strFileSizeHuman As String
-                For Each r As DataRow In results.Rows
-                    strFileSizeHuman = Math.Round((CInt(r.Item(_attachTable.FileSize)) / 1024), 1) & " KB"
-                    strFullFilename = r.Item(_attachTable.FileName).ToString & r.Item(_attachTable.FileType).ToString
-                    table.Rows.Add(FileIcon.GetFileIcon(r.Item(_attachTable.FileType).ToString), strFullFilename, strFileSizeHuman, r.Item(_attachTable.Timestamp), r.Item(_attachTable.Folder).ToString, r.Item(_attachTable.FileUID), r.Item(_attachTable.FileHash))
-                Next
+            Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQry)
                 bolGridFilling = True
-                AttachGrid.DataSource = table
+                GridFunctions.PopulateGrid(AttachGrid, results, AttachGridColumns(_attachTable))
             End Using
-            AttachGrid.Columns("Filename").DefaultCellStyle.Font = New Font("Consolas", 9.75, FontStyle.Bold)
+            AttachGrid.Columns(_attachTable.FileName).DefaultCellStyle.Font = New Font("Consolas", 9.75, FontStyle.Bold)
             RefreshAttachCount()
             AttachGrid.ClearSelection()
             If Me.Visible Then bolGridFilling = False
@@ -333,22 +325,22 @@ Public Class AttachmentsForm
         Return New Attachment(DBFactory.GetDatabase.DataTableFromQueryString(strQry), _attachTable)
     End Function
 
-    Private Function GetTable() As DataTable
-        Dim table As New DataTable
-        table.Columns.Add(" ", GetType(Image))
-        table.Columns.Add("Filename", GetType(String))
-        table.Columns.Add("Size", GetType(String))
-        table.Columns.Add("Date", GetType(String))
-        table.Columns.Add("Folder", GetType(String))
-        table.Columns.Add("AttachUID", GetType(String))
-        table.Columns.Add("MD5", GetType(String))
-        Return table
+    Private Function AttachGridColumns(attachtable As AttachmentsBaseCols) As List(Of DataGridColumn)
+        Dim ColList As New List(Of DataGridColumn)
+        ColList.Add(New DataGridColumn(attachtable.FileType, "", GetType(Image), ColumnFormatTypes.Image))
+        ColList.Add(New DataGridColumn(attachtable.FileName, "Filename", GetType(String)))
+        ColList.Add(New DataGridColumn(attachtable.FileSize, "Size", GetType(String), ColumnFormatTypes.FileSize))
+        ColList.Add(New DataGridColumn(attachtable.Timestamp, "Date", GetType(Date)))
+        ColList.Add(New DataGridColumn(attachtable.Folder, "Folder", GetType(String)))
+        ColList.Add(New DataGridColumn(attachtable.FileUID, "AttachUID", GetType(String)))
+        ColList.Add(New DataGridColumn(attachtable.FileHash, "MD5", GetType(String)))
+        Return ColList
     End Function
 
     Private Sub InsertSQLAttachment(Attachment As Attachment)
         Dim InsertAttachmentParams As New List(Of DBParameter)
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FKey, Attachment.FolderGUID))
-        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileName, Attachment.FileName))
+        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileName, Attachment.FullFileName))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileType, Attachment.Extension))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileSize, Attachment.Filesize))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileUID, Attachment.FileUID))
@@ -464,7 +456,7 @@ Public Class AttachmentsForm
                     'Cast out the datarow, get the attach UID, and move the attachment to the new folder.
                     Dim DragRow = DirectCast(dropObject.GetData(GetType(DataGridViewRow)), DataGridViewRow)
                     CurrentSelectedFolder = PrevSelectedFolder
-                    MoveAttachToFolder(DragRow.Cells(GridFunctions.GetColIndex(AttachGrid, "AttachUID")).Value.ToString, folder)
+                    MoveAttachToFolder(DragRow.Cells(GridFunctions.GetColIndex(AttachGrid, _attachTable.FileUID)).Value.ToString, folder)
                 Else
                     'Drop from another form. Process as a normal file drop.
                     ProcessFileDrop(dropObject, folder)
@@ -506,6 +498,8 @@ Public Class AttachmentsForm
             If FormID <> Me.FormUID Then
                 Return True
             End If
+        Else
+            Return True
         End If
         Return False
     End Function
@@ -548,7 +542,7 @@ Public Class AttachmentsForm
     Private Sub DeleteAttachment(AttachUID As String)
         Try
             If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment) Then Exit Sub
-            Dim strFilename As String = AttachGrid.Item(GridFunctions.GetColIndex(AttachGrid, "Filename"), AttachGrid.CurrentRow.Index).Value.ToString
+            Dim strFilename As String = AttachGrid.Item(GridFunctions.GetColIndex(AttachGrid, _attachTable.FileName), AttachGrid.CurrentRow.Index).Value.ToString
             Dim blah = Message("Are you sure you want to delete '" & strFilename & "'?", vbYesNo + vbQuestion, "Confirm Delete", Me)
             If blah = vbYes Then
                 Waiting()
@@ -732,7 +726,7 @@ Public Class AttachmentsForm
     End Sub
 
     Private Function SelectedAttachmentUID() As String
-        Dim AttachUID As String = AttachGrid.Item(GridFunctions.GetColIndex(AttachGrid, "AttachUID"), AttachGrid.CurrentRow.Index).Value.ToString
+        Dim AttachUID As String = AttachGrid.Item(GridFunctions.GetColIndex(AttachGrid, _attachTable.FileUID), AttachGrid.CurrentRow.Index).Value.ToString
         If AttachUID <> "" Then
             Return AttachUID
         Else
@@ -977,57 +971,5 @@ Public Class AttachmentsForm
 
 #End Region
 
-    Private Class FileIcon
-        Private Const MAX_PATH As Int32 = 260
-        Private Const SHGFI_ICON As Int32 = &H100
-        Private Const SHGFI_USEFILEATTRIBUTES As Int32 = &H10
-        Private Const FILE_ATTRIBUTE_NORMAL As Int32 = &H80
-
-        Private Structure SHFILEINFO
-            Public hIcon As IntPtr
-            Public iIcon As Int32
-            Public dwAttributes As Int32
-
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=MAX_PATH)>
-            Public szDisplayName As String
-
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=80)>
-            Public szTypeName As String
-
-        End Structure
-
-        Private Enum IconSize
-            SHGFI_LARGEICON = 0
-            SHGFI_SMALLICON = 1
-        End Enum
-
-        Private Declare Ansi Function SHGetFileInfo Lib "shell32.dll" (
-                    ByVal pszPath As String,
-                    ByVal dwFileAttributes As Int32,
-                    ByRef psfi As SHFILEINFO,
-                    ByVal cbFileInfo As Int32,
-                    ByVal uFlags As Int32) As IntPtr
-
-        <DllImport("user32.dll", SetLastError:=True)>
-        Private Shared Function DestroyIcon(ByVal hIcon As IntPtr) As Boolean
-        End Function
-
-        Public Shared Function GetFileIcon(ByVal fileExt As String) As Bitmap ', Optional ByVal ICOsize As IconSize = IconSize.SHGFI_SMALLICON
-            Try
-                Dim ICOSize As IconSize = IconSize.SHGFI_SMALLICON
-                Dim shinfo As New SHFILEINFO
-                shinfo.szDisplayName = New String(Chr(0), MAX_PATH)
-                shinfo.szTypeName = New String(Chr(0), 80)
-                SHGetFileInfo(fileExt, FILE_ATTRIBUTE_NORMAL, shinfo, Marshal.SizeOf(shinfo), SHGFI_ICON Or ICOSize Or SHGFI_USEFILEATTRIBUTES)
-                Dim bmp As Bitmap = System.Drawing.Icon.FromHandle(shinfo.hIcon).ToBitmap
-                DestroyIcon(shinfo.hIcon) ' must destroy icon to avoid GDI leak!
-                Return bmp ' return icon as a bitmap
-            Catch ex As Exception
-                ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            End Try
-            Return Nothing
-        End Function
-
-    End Class
 
 End Class

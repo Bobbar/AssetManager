@@ -10,27 +10,34 @@
         End Sub
 
         Private Function BuildDataSource(data As DataTable, columns As List(Of DataGridColumn)) As DataTable
-            Dim NeedsRebuilt As Boolean = columns.Exists(Function(c) c.ColumnDisplayType = ColumnDisplayTypes.AttributeDisplayMemberOnly Or c.ColumnDisplayType = ColumnDisplayTypes.NotePreview)
+            Dim NeedsRebuilt = ColumnsRequireRebuild(columns)
             If NeedsRebuilt Then
                 Dim NewTable As New DataTable
                 For Each col In columns
-                    NewTable.Columns.Add(col.ColumnName, data.Columns(col.ColumnName).DataType)
+                    NewTable.Columns.Add(col.ColumnName, col.ColumnType)
                 Next
                 For Each row As DataRow In data.Rows
                     Dim NewRow As DataRow
                     NewRow = NewTable.NewRow
                     For Each col In columns
 
-                        Select Case col.ColumnDisplayType
-                            Case ColumnDisplayTypes.DefaultType, ColumnDisplayTypes.AttributeCombo
+                        Select Case col.ColumnFormatType
+                            Case ColumnFormatTypes.DefaultFormat, ColumnFormatTypes.AttributeCombo
                                 NewRow.Item(col.ColumnName) = row.Item(col.ColumnName)
 
-                            Case ColumnDisplayTypes.AttributeDisplayMemberOnly
+                            Case ColumnFormatTypes.AttributeDisplayMemberOnly
                                 NewRow.Item(col.ColumnName) = GetDisplayValueFromCode(col.AttributeIndex, row.Item(col.ColumnName).ToString)
 
-                            Case ColumnDisplayTypes.NotePreview
+                            Case ColumnFormatTypes.NotePreview
                                 Dim NoteText = RTFToPlainText(row.Item(col.ColumnName).ToString)
                                 NewRow.Item(col.ColumnName) = NotePreview(NoteText)
+
+                            Case ColumnFormatTypes.FileSize
+                                Dim HumanFileSize As String = Math.Round((CInt(row.Item(col.ColumnName)) / 1024), 1) & " KB"
+                                NewRow.Item(col.ColumnName) = HumanFileSize
+
+                            Case ColumnFormatTypes.Image
+                                NewRow.Item(col.ColumnName) = FileIcon.GetFileIcon(row.Item(col.ColumnName).ToString)
 
                         End Select
 
@@ -41,6 +48,17 @@
             Else
                 Return data
             End If
+        End Function
+
+        Private Function ColumnsRequireRebuild(columns As List(Of DataGridColumn)) As Boolean
+            Dim RebuildRequired As Boolean = False
+            For Each col In columns
+                Select Case col.ColumnFormatType
+                    Case ColumnFormatTypes.AttributeDisplayMemberOnly, ColumnFormatTypes.NotePreview, ColumnFormatTypes.FileSize, ColumnFormatTypes.Image
+                        RebuildRequired = True
+                End Select
+            Next
+            Return RebuildRequired
         End Function
 
         Private Sub SetupGrid(grid As DataGridView, columns As List(Of DataGridColumn))
@@ -54,13 +72,29 @@
         End Sub
 
         Private Function GetColumn(column As DataGridColumn) As DataGridViewColumn
-            Select Case column.ColumnDisplayType
-                Case ColumnDisplayTypes.DefaultType, ColumnDisplayTypes.AttributeDisplayMemberOnly, ColumnDisplayTypes.NotePreview
+            Select Case column.ColumnFormatType
+                Case ColumnFormatTypes.DefaultFormat, ColumnFormatTypes.AttributeDisplayMemberOnly, ColumnFormatTypes.NotePreview, ColumnFormatTypes.FileSize
                     Return GenericColumn(column)
-                Case ColumnDisplayTypes.AttributeCombo
+                Case ColumnFormatTypes.AttributeCombo
                     Return DataGridComboColumn(column.AttributeIndex, column.ColumnCaption, column.ColumnName)
+                Case ColumnFormatTypes.Image
+                    Return DataGridImageColumn(column)
             End Select
             Return Nothing
+        End Function
+
+        Private Function DataGridImageColumn(column As DataGridColumn) As DataGridViewColumn
+            Dim NewCol As New DataGridViewImageColumn
+            NewCol.Name = column.ColumnName
+            NewCol.DataPropertyName = column.ColumnName
+            NewCol.HeaderText = column.ColumnCaption
+            NewCol.ValueType = column.ColumnType
+            NewCol.CellTemplate = New DataGridViewImageCell
+            NewCol.SortMode = DataGridViewColumnSortMode.Automatic
+            NewCol.ReadOnly = column.ColumnReadOnly
+            NewCol.Visible = column.ColumnVisible
+            NewCol.Width = 40
+            Return NewCol
         End Function
 
         Private Function GenericColumn(column As DataGridColumn) As DataGridViewColumn

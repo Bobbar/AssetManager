@@ -805,7 +805,7 @@ Public Class SibiManageRequestForm
     Private Function NotesGridColumns() As List(Of DataGridColumn)
         Dim ColList As New List(Of DataGridColumn)
         ColList.Add(New DataGridColumn(SibiNotesCols.DateStamp, "Date Stamp", GetType(Date)))
-        ColList.Add(New DataGridColumn(SibiNotesCols.Note, "Note", GetType(String), ColumnDisplayTypes.NotePreview))
+        ColList.Add(New DataGridColumn(SibiNotesCols.Note, "Note", GetType(String), ColumnFormatTypes.NotePreview))
         ColList.Add(New DataGridColumn(SibiNotesCols.NoteUID, "UID", GetType(String), True, False))
         Return ColList
     End Function

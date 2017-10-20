@@ -5,65 +5,67 @@
     Public Property ColumnReadOnly As Boolean
     Public Property ColumnVisible As Boolean
     Public Property AttributeIndex As AttributeDataStruct()
-    Public Property ColumnDisplayType As ColumnDisplayTypes
+    Public Property ColumnFormatType As ColumnFormatTypes
 
-    Sub New(name As String, caption As String, type As Type)
-        ColumnName = name
+    Sub New(colName As String, caption As String, type As Type)
+        ColumnName = colName
         ColumnCaption = caption
         ColumnType = type
         ColumnReadOnly = False
         ColumnVisible = True
         AttributeIndex = Nothing
-        ColumnDisplayType = ColumnDisplayTypes.DefaultType
+        ColumnFormatType = ColumnFormatTypes.DefaultFormat
     End Sub
 
-    Sub New(name As String, caption As String, type As Type, displayMode As ColumnDisplayTypes)
-        ColumnName = name
+    Sub New(colName As String, caption As String, type As Type, displayMode As ColumnFormatTypes)
+        ColumnName = colName
         ColumnCaption = caption
         ColumnType = type
         ColumnReadOnly = False
         ColumnVisible = True
         AttributeIndex = Nothing
-        ColumnDisplayType = displayMode
+        ColumnFormatType = displayMode
     End Sub
 
-    Sub New(name As String, caption As String, attribIndex() As AttributeDataStruct)
-        ColumnName = name
+    Sub New(colName As String, caption As String, attribIndex() As AttributeDataStruct)
+        ColumnName = colName
         ColumnCaption = caption
         ColumnType = GetType(String)
         ColumnReadOnly = False
         ColumnVisible = True
         Me.AttributeIndex = attribIndex
-        ColumnDisplayType = ColumnDisplayTypes.AttributeCombo
+        ColumnFormatType = ColumnFormatTypes.AttributeCombo
     End Sub
 
-    Sub New(name As String, caption As String, attribIndex() As AttributeDataStruct, displayMode As ColumnDisplayTypes)
-        ColumnName = name
+    Sub New(colName As String, caption As String, attribIndex() As AttributeDataStruct, displayMode As ColumnFormatTypes)
+        ColumnName = colName
         ColumnCaption = caption
         ColumnType = GetType(String)
         ColumnReadOnly = False
         ColumnVisible = True
         Me.AttributeIndex = attribIndex
-        ColumnDisplayType = displayMode
+        ColumnFormatType = displayMode
     End Sub
 
-    Sub New(name As String, caption As String, type As Type, isReadOnly As Boolean, visible As Boolean)
-        ColumnName = name
+    Sub New(colName As String, caption As String, type As Type, isReadOnly As Boolean, visible As Boolean)
+        ColumnName = colName
         ColumnCaption = caption
         ColumnType = type
         ColumnReadOnly = isReadOnly
         ColumnVisible = visible
         AttributeIndex = Nothing
-        ColumnDisplayType = ColumnDisplayTypes.DefaultType
+        ColumnFormatType = ColumnFormatTypes.DefaultFormat
     End Sub
 
 End Class
 
-Public Enum ColumnDisplayTypes
-    DefaultType
+Public Enum ColumnFormatTypes
+    DefaultFormat
     AttributeCombo
     AttributeDisplayMemberOnly
     NotePreview
+    Image
+    FileSize
 
 End Enum
 
