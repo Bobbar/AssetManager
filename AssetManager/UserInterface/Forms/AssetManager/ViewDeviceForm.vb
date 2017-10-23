@@ -33,8 +33,8 @@ Public Class ViewDeviceForm
         ImageCaching.CacheControlImages(Me)
         MyWindowList.InsertWindowList(ToolStrip1)
         InitDBControls()
-        MyLiveBox.AttachToControl(txtCurUser_View_REQ, LiveBoxType.UserSelect, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum)
-        MyLiveBox.AttachToControl(txtDescription_View_REQ, LiveBoxType.SelectValue, DevicesCols.Description)
+        MyLiveBox.AttachToControl(txtCurUser_View_REQ, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum)
+        MyLiveBox.AttachToControl(txtDescription_View_REQ, DevicesCols.Description, LiveBoxType.SelectValue)
         RefreshCombos()
         grpNetTools.Visible = False
         ExtendedMethods.DoubleBufferedDataGrid(DataGridHistory, True)

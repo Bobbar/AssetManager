@@ -248,10 +248,10 @@ Public Class MainForm
     End Sub
 
     Private Sub InitLiveBox()
-        MyLiveBox.AttachToControl(txtDescription, LiveBoxType.DynamicSearch, DevicesCols.Description)
-        MyLiveBox.AttachToControl(txtCurUser, LiveBoxType.DynamicSearch, DevicesCols.CurrentUser)
-        MyLiveBox.AttachToControl(txtSerial, LiveBoxType.InstaLoad, DevicesCols.Serial, DevicesCols.DeviceUID)
-        MyLiveBox.AttachToControl(txtAssetTag, LiveBoxType.InstaLoad, DevicesCols.AssetTag, DevicesCols.DeviceUID)
+        MyLiveBox.AttachToControl(txtDescription, DevicesCols.Description, LiveBoxType.DynamicSearch)
+        MyLiveBox.AttachToControl(txtCurUser, DevicesCols.CurrentUser, LiveBoxType.DynamicSearch)
+        MyLiveBox.AttachToControl(txtSerial, DevicesCols.Serial, LiveBoxType.InstaLoad, DevicesCols.DeviceUID)
+        MyLiveBox.AttachToControl(txtAssetTag, DevicesCols.AssetTag, LiveBoxType.InstaLoad, DevicesCols.DeviceUID)
     End Sub
 
     Private Sub InitDBCombo()

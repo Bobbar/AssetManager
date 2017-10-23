@@ -8,6 +8,7 @@
     Private QueryRunning As Boolean = False
     Private RowLimit As Integer = 30
     Private strPrevSearchString As String
+    Private LastQryHash As String
 
 #End Region
 
@@ -21,12 +22,8 @@
 
 #Region "Methods"
 
-    Public Sub AttachToControl(control As TextBox, type As LiveBoxType, displayMember As String, Optional valueMember As String = Nothing)
-        Dim ControlArgs As New LiveBoxArgs
-        ControlArgs.Control = control
-        ControlArgs.Type = type
-        ControlArgs.DisplayMember = displayMember
-        If Not IsNothing(valueMember) Then ControlArgs.ValueMember = valueMember
+    Public Sub AttachToControl(control As TextBox, displayMember As String, type As LiveBoxType, Optional valueMember As String = Nothing)
+        Dim ControlArgs As New LiveBoxArgs(control, displayMember, type, valueMember)
         LiveBoxControls.Add(ControlArgs)
         AddHandler ControlArgs.Control.KeyUp, AddressOf Control_KeyUp
         AddHandler ControlArgs.Control.KeyDown, AddressOf Control_KeyDown
@@ -92,12 +89,16 @@
     Private Sub DrawLiveBox(dtResults As DataTable)
         Try
             If dtResults.Rows.Count > 0 Then
+                LiveBox.SuspendLayout()
+                LiveBox.BeginUpdate()
                 LiveBox.DataSource = dtResults
                 LiveBox.DisplayMember = CurrentLiveBoxArgs.DisplayMember
                 LiveBox.ValueMember = CurrentLiveBoxArgs.ValueMember
                 LiveBox.ClearSelected()
                 PosistionLiveBox()
                 LiveBox.Visible = True
+                LiveBox.EndUpdate()
+                LiveBox.ResumeLayout()
                 If strPrevSearchString <> Trim(CurrentLiveBoxArgs.Control.Text) Then
                     StartLiveSearch(CurrentLiveBoxArgs) 'if search string has changed since last completion, run again.
                 End If
@@ -198,10 +199,9 @@
 
     Private Function PreferredWidth() As Integer
         Using gfx As Graphics = LiveBox.CreateGraphics
-            Dim BoxFont As Font = LiveBox.Font
             Dim MaxLen As Integer = 0
             For Each row As DataRowView In LiveBox.Items
-                Dim ItemLen As Integer = CInt(gfx.MeasureString(row.Item(CurrentLiveBoxArgs.DisplayMember).ToString, BoxFont).Width)
+                Dim ItemLen As Integer = CInt(gfx.MeasureString(row.Item(CurrentLiveBoxArgs.DisplayMember).ToString, LiveBox.Font).Width)
                 If ItemLen > MaxLen Then
                     MaxLen = ItemLen
                 End If
@@ -220,10 +220,8 @@
     ''' <param name="SearchString"></param>
     Private Async Sub ProcessSearch(searchString As String)
         strPrevSearchString = searchString
-        If QueryRunning Then Exit Sub
         Try
             Dim Results = Await Task.Run(Function()
-                                             QueryRunning = True
                                              Dim strQry As String
                                              strQry = "SELECT " & DevicesCols.DeviceUID & "," & IIf(IsNothing(CurrentLiveBoxArgs.ValueMember), CurrentLiveBoxArgs.DisplayMember, CurrentLiveBoxArgs.DisplayMember & "," & CurrentLiveBoxArgs.ValueMember).ToString & " FROM " & DevicesCols.TableName & " WHERE " & CurrentLiveBoxArgs.DisplayMember & " LIKE  @Search_Value  GROUP BY " & CurrentLiveBoxArgs.DisplayMember & " ORDER BY " & CurrentLiveBoxArgs.DisplayMember & " LIMIT " & RowLimit
                                              Using cmd = DBFactory.GetDatabase.GetCommand(strQry)
@@ -231,11 +229,14 @@
                                                  Return DBFactory.GetDatabase.DataTableFromCommand(cmd)
                                              End Using
                                          End Function)
-            DrawLiveBox(Results)
+            Results.TableName = "LiveBoxResults"
+            Dim CurrentQueryHash = SecurityTools.GetSHAOfTable(Results)
+            If CurrentQueryHash <> LastQryHash Then
+                LastQryHash = CurrentQueryHash
+                DrawLiveBox(Results)
+            End If
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-        Finally
-            QueryRunning = False
         End Try
     End Sub
 
@@ -266,14 +267,18 @@
 
     Private Structure LiveBoxArgs
 
-#Region "Fields"
+        Public Property Control As TextBox
+        Public Property DisplayMember As String
+        Public Property Type As LiveBoxType
+        Public Property ValueMember As String
 
-        Public Control As TextBox
-        Public DisplayMember As String
-        Public Type As LiveBoxType
-        Public ValueMember As String
+        Sub New(control As TextBox, displayMember As String, type As LiveBoxType, valueMember As String)
+            Me.Control = control
+            Me.DisplayMember = displayMember
+            Me.Type = type
+            Me.ValueMember = valueMember
+        End Sub
 
-#End Region
 
     End Structure
 
