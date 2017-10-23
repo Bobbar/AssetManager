@@ -8,7 +8,6 @@
     Private QueryRunning As Boolean = False
     Private RowLimit As Integer = 30
     Private strPrevSearchString As String
-    Private LastQryHash As String
 
 #End Region
 
@@ -39,11 +38,8 @@
     End Sub
 
     Public Sub HideLiveBox()
-        Try
-            LiveBox.Visible = False
-            LiveBox.DataSource = Nothing
-        Catch
-        End Try
+        LiveBox.Visible = False
+        LiveBox.DataSource = Nothing
     End Sub
 
     Private Sub Control_KeyDown(sender As Object, e As KeyEventArgs)
@@ -160,28 +156,30 @@
     End Sub
 
     Private Sub LiveBoxSelect()
+        Dim SelectedText As String = LiveBox.Text
+        Dim SelectedValue As String = LiveBox.SelectedValue.ToString
+        HideLiveBox()
         Select Case CurrentLiveBoxArgs.Type
             Case LiveBoxType.DynamicSearch
-                CurrentLiveBoxArgs.Control.Text = LiveBox.Text
+                CurrentLiveBoxArgs.Control.Text = SelectedText
                 MainForm.DynamicSearch()
             Case LiveBoxType.InstaLoad
-                MainForm.LoadDevice(LiveBox.SelectedValue.ToString)
                 CurrentLiveBoxArgs.Control.Text = ""
+                MainForm.LoadDevice(SelectedValue)
             Case LiveBoxType.SelectValue
-                CurrentLiveBoxArgs.Control.Text = LiveBox.Text
+                CurrentLiveBoxArgs.Control.Text = SelectedText
             Case LiveBoxType.UserSelect
-                CurrentLiveBoxArgs.Control.Text = LiveBox.Text
+                CurrentLiveBoxArgs.Control.Text = SelectedText
                 If TypeOf CurrentLiveBoxArgs.Control.FindForm Is ViewDeviceForm Then
                     Dim FrmSetData As ViewDeviceForm = DirectCast(CurrentLiveBoxArgs.Control.FindForm, ViewDeviceForm)
-                    FrmSetData.MunisUser.Name = LiveBox.Text
-                    FrmSetData.MunisUser.Number = LiveBox.SelectedValue.ToString
+                    FrmSetData.MunisUser.Name = SelectedText
+                    FrmSetData.MunisUser.Number = SelectedValue
                 ElseIf TypeOf CurrentLiveBoxArgs.Control.FindForm Is NewDeviceForm Then
                     Dim FrmSetData As NewDeviceForm = DirectCast(CurrentLiveBoxArgs.Control.FindForm, NewDeviceForm)
-                    FrmSetData.MunisUser.Name = LiveBox.Text
-                    FrmSetData.MunisUser.Number = LiveBox.SelectedValue.ToString
+                    FrmSetData.MunisUser.Name = SelectedText
+                    FrmSetData.MunisUser.Number = SelectedValue
                 End If
         End Select
-        HideLiveBox()
     End Sub
 
     Private Sub PosistionLiveBox()
@@ -229,12 +227,7 @@
                                                  Return DBFactory.GetDatabase.DataTableFromCommand(cmd)
                                              End Using
                                          End Function)
-            Results.TableName = "LiveBoxResults"
-            Dim CurrentQueryHash = SecurityTools.GetSHAOfTable(Results)
-            If CurrentQueryHash <> LastQryHash Then
-                LastQryHash = CurrentQueryHash
-                DrawLiveBox(Results)
-            End If
+            DrawLiveBox(Results)
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         End Try
@@ -259,6 +252,15 @@
         Else
             HideLiveBox()
         End If
+    End Sub
+
+    Private Sub RemovedHandlers()
+        For Each control In LiveBoxControls
+            RemoveHandler control.Control.KeyUp, AddressOf Control_KeyUp
+            RemoveHandler control.Control.KeyDown, AddressOf Control_KeyDown
+            RemoveHandler control.Control.LostFocus, AddressOf Control_LostFocus
+            RemoveHandler control.Control.ReadOnlyChanged, AddressOf Control_LostFocus
+        Next
     End Sub
 
 #End Region
@@ -307,6 +309,7 @@
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
+                RemovedHandlers()
                 LiveBox.Dispose()
                 LiveBoxControls.Clear()
             End If
