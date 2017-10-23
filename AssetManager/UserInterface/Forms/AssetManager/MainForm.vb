@@ -139,7 +139,7 @@ Public Class MainForm
 
     Private Sub WatchDogStatusChanged(sender As Object, e As EventArgs)
         Dim ConnectionEventArgs = DirectCast(e, ConnectionMonitoring.WatchDogStatusEventArgs)
-
+        Logger("Connection Status changed to: " & ConnectionEventArgs.ConnectionStatus.ToString)
         Select Case ConnectionEventArgs.ConnectionStatus
 
             Case ConnectionMonitoring.WatchDogConnectionStatus.Online
