@@ -337,7 +337,7 @@ Public Class AttachmentsForm
         Return ColList
     End Function
 
-    Private Sub InsertSQLAttachment(Attachment As Attachment)
+    Private Sub InsertSQLAttachment(Attachment As Attachment, transaction As Common.DbTransaction)
         Dim InsertAttachmentParams As New List(Of DBParameter)
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FKey, Attachment.FolderGUID))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileName, Attachment.FullFileName))
@@ -346,7 +346,7 @@ Public Class AttachmentsForm
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileUID, Attachment.FileUID))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileHash, Attachment.MD5))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.Folder, Attachment.FolderName))
-        DBFactory.GetDatabase.InsertFromParameters(Attachment.AttachTable.TableName, InsertAttachmentParams)
+        DBFactory.GetDatabase.InsertFromParameters(Attachment.AttachTable.TableName, InsertAttachmentParams, transaction)
     End Sub
 
     Private Async Function MakeDirectory(FolderGUID As String) As Task(Of Boolean)
@@ -588,27 +588,35 @@ Public Class AttachmentsForm
                 End If
                 SetStatusBar("Uploading... " & files.ToList.IndexOf(file) + 1 & " of " & files.Count)
                 Progress = New ProgressCounter
-                Await Task.Run(Sub()
-                                   Using FileStream As FileStream = DirectCast(CurrentAttachment.DataStream(), FileStream),
-           FTPStream As System.IO.Stream = LocalFTPComm.ReturnFtpRequestStream(FTPUri & CurrentAttachment.FolderGUID & "/" & CurrentAttachment.FileUID, Net.WebRequestMethods.Ftp.UploadFile)
-                                       Dim buffer(1023) As Byte
-                                       Dim bytesIn As Integer = 1
-                                       Progress.BytesToTransfer = CInt(FileStream.Length)
-                                       Do Until bytesIn < 1 Or cancelToken.IsCancellationRequested
-                                           bytesIn = FileStream.Read(buffer, 0, 1024)
-                                           If bytesIn > 0 Then
-                                               FTPStream.Write(buffer, 0, bytesIn)
-                                               Progress.BytesMoved = bytesIn
-                                           End If
-                                       Loop
-                                   End Using
-                               End Sub)
-                If cancelToken.IsCancellationRequested Then
-                    FTPFunc.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID)
-                Else
-                    InsertSQLAttachment(CurrentAttachment)
-                End If
-                CurrentAttachment.Dispose()
+                Using trans = DBFactory.GetDatabase.StartTransaction, conn = trans.Connection
+                    Try
+                        Await Task.Run(Sub()
+                                           Using FileStream As FileStream = DirectCast(CurrentAttachment.DataStream(), FileStream),
+                                               FTPStream As System.IO.Stream = LocalFTPComm.ReturnFtpRequestStream(FTPUri & CurrentAttachment.FolderGUID & "/" & CurrentAttachment.FileUID, Net.WebRequestMethods.Ftp.UploadFile)
+                                               Dim buffer(1023) As Byte
+                                               Dim bytesIn As Integer = 1
+                                               Progress.BytesToTransfer = CInt(FileStream.Length)
+                                               Do Until bytesIn < 1 Or cancelToken.IsCancellationRequested
+                                                   bytesIn = FileStream.Read(buffer, 0, 1024)
+                                                   If bytesIn > 0 Then
+
+                                                       FTPStream.Write(buffer, 0, bytesIn)
+                                                       Progress.BytesMoved = bytesIn
+                                                   End If
+                                               Loop
+                                           End Using
+                                       End Sub)
+                        If cancelToken.IsCancellationRequested Then
+                            FTPFunc.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID)
+                        Else
+                            InsertSQLAttachment(CurrentAttachment, trans)
+                        End If
+                        CurrentAttachment.Dispose()
+                        trans.Commit()
+                    Catch ex As Exception
+                        trans.Rollback()
+                    End Try
+                End Using
             Next
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -809,7 +817,7 @@ Public Class AttachmentsForm
     End Sub
 
     Private Sub AttachGrid_MouseMove(sender As Object, e As MouseEventArgs) Handles AttachGrid.MouseMove
-        If bolAllowDrag And Not bolDragging Then
+        If bolAllowDrag And Not bolDragging And Not TransferTaskRunning Then
             If e.Button = MouseButtons.Left Then
                 If MouseIsDragging(, e.Location) AndAlso AttachGrid.CurrentRow IsNot Nothing Then
                     bolDragging = True
@@ -959,7 +967,7 @@ Public Class AttachmentsForm
                 AddAttachmentFileToDragDropObject(SelectedAttachmentUID)
             Else
                 If bolDragging And TransferTaskRunning Then
-                    taskCancelTokenSource.Cancel()
+                    CancelTransfers()
                 End If
 
             End If

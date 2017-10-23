@@ -20,6 +20,7 @@ Public Class FtpComms
             .Credentials = FTPcreds
             .Method = method
             .ReadWriteTimeout = intSocketTimeout
+            .Timeout = intSocketTimeout
             Return .GetRequestStream
         End With
     End Function
@@ -31,6 +32,7 @@ Public Class FtpComms
             .Credentials = FTPcreds
             .Method = method
             .ReadWriteTimeout = intSocketTimeout
+            .Timeout = intSocketTimeout
             Return .GetResponse
         End With
     End Function

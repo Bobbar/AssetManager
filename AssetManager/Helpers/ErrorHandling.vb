@@ -4,6 +4,7 @@ Imports System.IO
 Imports System.Net.Sockets
 Imports System.Reflection
 Imports MySql.Data.MySqlClient
+Imports System.Data.SQLite
 
 Module ErrorHandling
 
@@ -31,6 +32,10 @@ Module ErrorHandling
                 Case TypeOf ex Is SqlException
                     Dim SQLEx = DirectCast(ex, SqlException)
                     ErrorResult = handleSQLException(SQLEx, Method)
+
+                Case TypeOf ex Is SQLiteException
+                    Dim SQLiteEx = DirectCast(ex, SQLiteException)
+                    ErrorResult = handleSQLiteException(SQLiteEx, Method)
 
                 Case TypeOf ex Is InvalidCastException
                     Dim handEx As InvalidCastException = DirectCast(ex, InvalidCastException)
@@ -260,6 +265,20 @@ Module ErrorHandling
                 Return False
         End Select
     End Function
+
+    Private Function handleSQLiteException(ex As SqliteException, Method As MethodBase) As Boolean
+
+        Select Case ex.ErrorCode
+            Case 1
+                Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.ErrorCode & "  Message:" & ex.Message)
+                Return True
+            Case Else
+                UnHandledError(ex, ex.ErrorCode, Method)
+                Return False
+        End Select
+
+    End Function
+
 
     Private Function handleNoPingException(ex As NoPingException, Method As MethodBase) As Boolean
         Select Case ex.HResult
