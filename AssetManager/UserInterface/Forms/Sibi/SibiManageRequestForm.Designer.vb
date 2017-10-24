@@ -143,9 +143,10 @@ Partial Class SibiManageRequestForm
         '
         'NewDeviceMenuItem
         '
+        Me.NewDeviceMenuItem.Image = Global.AssetManager.My.Resources.Resources.AddIcon
         Me.NewDeviceMenuItem.Name = "NewDeviceMenuItem"
         Me.NewDeviceMenuItem.Size = New System.Drawing.Size(178, 26)
-        Me.NewDeviceMenuItem.Text = "Add New Device"
+        Me.NewDeviceMenuItem.Text = "Import New Asset"
         '
         'tsmSeparator
         '

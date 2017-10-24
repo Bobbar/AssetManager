@@ -51,3 +51,5 @@ C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.application
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.exe
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.xml
 C:\GitHub\AssetManager\AssetManager\obj\Release\AssetManager.pdb
+C:\GitHub\AssetManager\AssetManager\bin\Release\Fastenshtein.dll
+C:\GitHub\AssetManager\AssetManager\bin\Release\Fastenshtein.xml

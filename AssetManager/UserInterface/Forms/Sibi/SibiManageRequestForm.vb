@@ -1278,10 +1278,9 @@ Public Class SibiManageRequestForm
     End Function
 
     Private Sub NewDeviceMenuItem_Click(sender As Object, e As EventArgs) Handles NewDeviceMenuItem.Click
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice) Then Exit Sub
         Dim NewDev As New NewDeviceForm(Me)
         NewDev.ImportFromSibi(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID))
-
-        '   GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID)
 
     End Sub
 
