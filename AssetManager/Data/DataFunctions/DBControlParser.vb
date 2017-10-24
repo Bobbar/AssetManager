@@ -126,6 +126,15 @@ Public Class DBControlInfo
 
 End Class
 
+Public Structure DBRemappingInfo
+    Public Property FromColumnName As String
+    Public Property ToColumnName As String
+    Sub New(fromColumn As String, toColumn As String)
+        FromColumnName = fromColumn
+        ToColumnName = toColumn
+    End Sub
+End Structure
+
 Public Class DBControlParser
 
 #Region "Fields"
@@ -152,50 +161,74 @@ Public Class DBControlParser
     ''' Populates all Controls in the ParentForm that have been initiated via <see cref="DBControlInfo"/> with their corresponding column names.
     ''' </summary>
     ''' <param name="data">DataTable that contains the rows and columns associated with the controls.</param>
-    Public Sub FillDBFields(data As DataTable)
+    Public Sub FillDBFields(data As DataTable, Optional remappingList As List(Of DBRemappingInfo) = Nothing)
         Dim Row As DataRow = data.Rows(0)
         For Each ctl As Control In GetDBControls(ParentForm)
             Dim DBInfo As DBControlInfo = DirectCast(ctl.Tag, DBControlInfo)
-            Select Case True
-                Case TypeOf ctl Is TextBox
-                    Dim dbTxt As TextBox = DirectCast(ctl, TextBox)
-                    If DBInfo.AttribIndex IsNot Nothing Then
-                        dbTxt.Text = GetDisplayValueFromCode(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn).ToString)
-                    Else
-                        dbTxt.Text = Row.Item(DBInfo.DataColumn).ToString
-                    End If
+            Dim DBColumn As String
 
-                Case TypeOf ctl Is MaskedTextBox
-                    Dim dbMaskTxt As MaskedTextBox = DirectCast(ctl, MaskedTextBox)
-                    dbMaskTxt.Text = Row.Item(DBInfo.DataColumn).ToString
+            If remappingList IsNot Nothing Then
+                DBColumn = GetRemappedColumnName(DBInfo.DataColumn, remappingList)
+            Else
+                DBColumn = DBInfo.DataColumn
+            End If
 
-                Case TypeOf ctl Is DateTimePicker
-                    Dim dbDtPick As DateTimePicker = DirectCast(ctl, DateTimePicker)
-                    dbDtPick.Value = DateTime.Parse(Row.Item(DBInfo.DataColumn).ToString)
+            If Row.Table.Columns.Contains(DBColumn) Then
+                Select Case True
+                    Case TypeOf ctl Is TextBox
+                        Dim dbTxt As TextBox = DirectCast(ctl, TextBox)
+                        If DBInfo.AttribIndex IsNot Nothing Then
+                            dbTxt.Text = GetDisplayValueFromCode(DBInfo.AttribIndex, Row.Item(DBColumn).ToString)
+                        Else
+                            dbTxt.Text = Row.Item(DBColumn).ToString
+                        End If
 
-                Case TypeOf ctl Is ComboBox
-                    Dim dbCmb As ComboBox = DirectCast(ctl, ComboBox)
-                    dbCmb.SelectedIndex = GetComboIndexFromCode(DBInfo.AttribIndex, Row.Item(DBInfo.DataColumn).ToString)
+                    Case TypeOf ctl Is MaskedTextBox
+                        Dim dbMaskTxt As MaskedTextBox = DirectCast(ctl, MaskedTextBox)
+                        dbMaskTxt.Text = Row.Item(DBColumn).ToString
 
-                Case TypeOf ctl Is Label
-                    Dim dbLbl As Label = DirectCast(ctl, Label)
-                    dbLbl.Text = Row.Item(DBInfo.DataColumn).ToString
+                    Case TypeOf ctl Is DateTimePicker
+                        Dim dbDtPick As DateTimePicker = DirectCast(ctl, DateTimePicker)
+                        dbDtPick.Value = DateTime.Parse(Row.Item(DBColumn).ToString)
 
-                Case TypeOf ctl Is CheckBox
-                    Dim dbChk As CheckBox = DirectCast(ctl, CheckBox)
-                    dbChk.Checked = CBool(Row.Item(DBInfo.DataColumn))
+                    Case TypeOf ctl Is ComboBox
+                        Dim dbCmb As ComboBox = DirectCast(ctl, ComboBox)
+                        dbCmb.SelectedIndex = GetComboIndexFromCode(DBInfo.AttribIndex, Row.Item(DBColumn).ToString)
 
-                Case TypeOf ctl Is RichTextBox
-                    Dim dbRtb As RichTextBox = DirectCast(ctl, RichTextBox)
-                    SetRichTextBox(dbRtb, Row.Item(DBInfo.DataColumn).ToString)
+                    Case TypeOf ctl Is Label
+                        Dim dbLbl As Label = DirectCast(ctl, Label)
+                        dbLbl.Text = Row.Item(DBColumn).ToString
 
-                Case Else
-                    Throw New Exception("Unexpected type.")
-            End Select
+                    Case TypeOf ctl Is CheckBox
+                        Dim dbChk As CheckBox = DirectCast(ctl, CheckBox)
+                        dbChk.Checked = CBool(Row.Item(DBColumn))
+
+                    Case TypeOf ctl Is RichTextBox
+                        Dim dbRtb As RichTextBox = DirectCast(ctl, RichTextBox)
+                        SetRichTextBox(dbRtb, Row.Item(DBColumn).ToString)
+
+                    Case Else
+                        Throw New Exception("Unexpected type.")
+                End Select
+            End If
 
         Next
 
     End Sub
+
+    ''' <summary>
+    ''' Get remapped column name for the specified column and remapping info. Returns new column name if a match is found in the map; otherwise, returns the original column name.
+    ''' </summary>
+    ''' <param name="columnName"></param>
+    ''' <param name="mappingInfo"></param>
+    ''' <returns></returns>
+    Public Function GetRemappedColumnName(columnName As String, mappingInfo As List(Of DBRemappingInfo)) As String
+        If mappingInfo.Exists(Function(m) m.ToColumnName = columnName) Then
+            Return mappingInfo.Find(Function(m) m.ToColumnName = columnName).FromColumnName
+        Else
+            Return columnName
+        End If
+    End Function
 
     ''' <summary>
     ''' Recursively collects list of controls initiated with <see cref="DBControlInfo"/> tags within Parent control.

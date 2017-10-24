@@ -63,6 +63,7 @@ Partial Class NewDeviceForm
         Me.Label13 = New System.Windows.Forms.Label()
         Me.GroupBox6 = New System.Windows.Forms.GroupBox()
         Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox2.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox3.SuspendLayout()
@@ -613,4 +614,5 @@ Partial Class NewDeviceForm
     Friend WithEvents Label7 As Label
     Friend WithEvents iCloudTextBox As TextBox
     Friend WithEvents Label14 As Label
+    Friend WithEvents ToolTip1 As ToolTip
 End Class

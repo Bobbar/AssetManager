@@ -1,8 +1,17 @@
 ﻿Public Class NewDeviceForm
 
 #Region "Fields"
+    Private _munisUser As MunisEmployeeStruct = Nothing
+    Public Property MunisUser As MunisEmployeeStruct
+        Get
+            Return _munisUser
+        End Get
+        Set(value As MunisEmployeeStruct)
+            _munisUser = value
+            LockUnlockUserField()
+        End Set
+    End Property
 
-    Public MunisUser As MunisEmployeeStruct = Nothing
     Private ReadOnly intReplacementSched As Integer = 4
     Private bolCheckFields As Boolean
     Private DataParser As New DBControlParser(Me)
@@ -25,6 +34,32 @@
         Me.Show()
         Me.Activate()
     End Sub
+
+    Public Sub ImportFromSibi(itemUID As String)
+        Dim itemQuery As String = "SELECT * FROM " & SibiRequestItemsCols.TableName & " INNER JOIN " & SibiRequestCols.TableName & " ON " & SibiRequestItemsCols.RequestUID & " = " & SibiRequestCols.UID & " WHERE " & SibiRequestItemsCols.ItemUID & "='" & itemUID & "'"
+        Dim POPurchaseDate As Date
+        Using results = DBFactory.GetDatabase.DataTableFromQueryString(itemQuery)
+            DataParser.FillDBFields(results, ImportColumnRemaps)
+            MunisUser = AssetFunc.SmartEmployeeSearch(results.Rows(0).Item(SibiRequestItemsCols.User).ToString.ToUpper)
+            POPurchaseDate = MunisFunc.GetPODate(results.Rows(0).Item(SibiRequestCols.PO).ToString)
+        End Using
+
+        txtCurUser_REQ.Text = MunisUser.Name
+        CheckFields(Me, False)
+        dtPurchaseDate_REQ.Value = POPurchaseDate
+        bolCheckFields = True
+    End Sub
+
+    Private Function ImportColumnRemaps() As List(Of DBRemappingInfo)
+        Dim newMap As New List(Of DBRemappingInfo)
+        newMap.Add(New DBRemappingInfo(SibiRequestItemsCols.User, DevicesCols.CurrentUser))
+        newMap.Add(New DBRemappingInfo(SibiRequestItemsCols.NewAsset, DevicesCols.AssetTag))
+        newMap.Add(New DBRemappingInfo(SibiRequestItemsCols.NewSerial, DevicesCols.Serial))
+        newMap.Add(New DBRemappingInfo(SibiRequestItemsCols.Description, DevicesCols.Description))
+        newMap.Add(New DBRemappingInfo(SibiRequestItemsCols.Location, DevicesCols.Location))
+        newMap.Add(New DBRemappingInfo(SibiRequestCols.PO, DevicesCols.PO))
+        Return newMap
+    End Function
 
     Private Sub AddDevice()
         Try
@@ -58,10 +93,11 @@
     End Sub
 
     Private Sub AddErrorIcon(ctl As Control)
+        ctl.BackColor = Colors.MissingField
         If fieldErrorIcon.GetError(ctl) Is String.Empty Then
             fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight)
             fieldErrorIcon.SetIconPadding(ctl, 4)
-            fieldErrorIcon.SetError(ctl, "Required Field")
+            fieldErrorIcon.SetError(ctl, "Required or invalid field")
         End If
     End Sub
 
@@ -104,11 +140,16 @@
                     If DBInfo.Required Then
                         If Trim(ctl.Text) = "" Then
                             bolValidFields = False
-                            ctl.BackColor = Colors.MissingField
+                            '  ctl.BackColor = Colors.MissingField
                             AddErrorIcon(ctl)
                         Else
-                            ctl.BackColor = Color.Empty
+                            ' ctl.BackColor = Color.Empty
                             ClearErrorIcon(ctl)
+
+                            If ctl Is txtCurUser_REQ Then
+                                LockUnlockUserField()
+                            End If
+
                         End If
                     End If
                     If ctl Is txtPhoneNumber Then
@@ -123,10 +164,10 @@
                     If DBInfo.Required Then
                         If cmb.SelectedIndex = -1 Then
                             bolValidFields = False
-                            cmb.BackColor = Colors.MissingField
+                            ' cmb.BackColor = Colors.MissingField
                             AddErrorIcon(cmb)
                         Else
-                            cmb.BackColor = Color.Empty
+                            '  cmb.BackColor = Color.Empty
                             ClearErrorIcon(cmb)
                         End If
                     End If
@@ -137,6 +178,18 @@
         Next
         Return bolValidFields 'if fields are missing return false to trigger a message if needed
     End Function
+
+    Private Sub LockUnlockUserField()
+        If MunisUser.Number <> "" Then
+            txtCurUser_REQ.BackColor = Colors.EditColor
+            txtCurUser_REQ.ReadOnly = True
+            ToolTip1.SetToolTip(txtCurUser_REQ, "Munis Linked Employee - Double-Click to change.")
+        Else
+            txtCurUser_REQ.BackColor = Color.Empty
+            txtCurUser_REQ.ReadOnly = False
+            ToolTip1.SetToolTip(txtCurUser_REQ, "")
+        End If
+    End Sub
 
     Private Sub ClearAll()
         RefreshCombos()
@@ -151,6 +204,7 @@
     End Sub
 
     Private Sub ClearErrorIcon(ctl As Control)
+        ctl.BackColor = Color.Empty
         fieldErrorIcon.SetError(ctl, String.Empty)
     End Sub
 
@@ -303,6 +357,12 @@
         If bolCheckFields Then CheckFields(Me, False)
     End Sub
 
+    Private Sub txtCurUser_REQ_DoubleClick(sender As Object, e As EventArgs) Handles txtCurUser_REQ.DoubleClick
+        txtCurUser_REQ.ReadOnly = False
+        MunisUser = Nothing
+        txtCurUser_REQ.SelectAll()
+    End Sub
+
     Private Sub txtDescription_REQ_TextChanged(sender As Object, e As EventArgs) Handles txtDescription_REQ.TextChanged
         If bolCheckFields Then CheckFields(Me, False)
     End Sub
@@ -326,6 +386,7 @@
             txtHostname.Text = String.Empty
         End If
     End Sub
+
 
 #End Region
 

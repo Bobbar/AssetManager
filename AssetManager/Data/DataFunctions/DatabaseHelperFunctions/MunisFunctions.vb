@@ -82,8 +82,12 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         Return Trim(MunisComms.ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_fisc_yr").ToString)
     End Function
 
-    Public Function GetPODateFromPO(PO As String) As String
-        Return YearFromDate(DateTime.Parse(Trim(MunisComms.ReturnSqlValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate").ToString)))
+    Public Function GetPODate(PO As String) As Date
+        Try
+            Return DateTime.Parse(Trim(MunisComms.ReturnSqlValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate").ToString))
+        Catch ex As Exception
+            Return Now
+        End Try
     End Function
 
     Public Function GetVendorNameFromPO(PO As String) As String

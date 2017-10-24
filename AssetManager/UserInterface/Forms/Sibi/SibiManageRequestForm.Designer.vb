@@ -30,6 +30,7 @@ Partial Class SibiManageRequestForm
         Me.tsmLookupDevice = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmGLBudget = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmCopyText = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NewDeviceMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmDeleteItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
@@ -106,9 +107,9 @@ Partial Class SibiManageRequestForm
         'PopupMenuItems
         '
         Me.PopupMenuItems.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmPopFA, Me.tsmLookupDevice, Me.tsmGLBudget, Me.tsmCopyText, Me.tsmSeparator, Me.tsmDeleteItem})
+        Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmPopFA, Me.tsmLookupDevice, Me.tsmGLBudget, Me.tsmCopyText, Me.NewDeviceMenuItem, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(179, 140)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(179, 188)
         '
         'tsmPopFA
         '
@@ -139,6 +140,12 @@ Partial Class SibiManageRequestForm
         Me.tsmCopyText.Name = "tsmCopyText"
         Me.tsmCopyText.Size = New System.Drawing.Size(178, 26)
         Me.tsmCopyText.Text = "Copy Selected"
+        '
+        'NewDeviceMenuItem
+        '
+        Me.NewDeviceMenuItem.Name = "NewDeviceMenuItem"
+        Me.NewDeviceMenuItem.Size = New System.Drawing.Size(178, 26)
+        Me.NewDeviceMenuItem.Text = "Add New Device"
         '
         'tsmSeparator
         '
@@ -836,4 +843,5 @@ Partial Class SibiManageRequestForm
     Friend WithEvents tsbRefresh As ToolStripButton
     Friend WithEvents tsmPopFA As ToolStripMenuItem
     Friend WithEvents tsmGLBudget As ToolStripMenuItem
+    Friend WithEvents NewDeviceMenuItem As ToolStripMenuItem
 End Class

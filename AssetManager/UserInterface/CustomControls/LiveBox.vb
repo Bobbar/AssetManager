@@ -176,8 +176,7 @@
                     FrmSetData.MunisUser.Number = SelectedValue
                 ElseIf TypeOf CurrentLiveBoxArgs.Control.FindForm Is NewDeviceForm Then
                     Dim FrmSetData As NewDeviceForm = DirectCast(CurrentLiveBoxArgs.Control.FindForm, NewDeviceForm)
-                    FrmSetData.MunisUser.Name = SelectedText
-                    FrmSetData.MunisUser.Number = SelectedValue
+                    FrmSetData.MunisUser = New MunisEmployeeStruct(SelectedText, SelectedValue)
                 End If
         End Select
     End Sub
