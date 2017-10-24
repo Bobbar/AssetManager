@@ -74,7 +74,7 @@
                 'Iterate through the separate strings
                 For Each item In resultSplit
                     'Make sure the result string contains the search string
-                    If result.SearchString.Contains(item) Then
+                    If item.Contains(result.SearchString) AndAlso item.StartsWith(result.SearchString) Then
                         'Get a new Levenshtein distance.
                         Dim NewDistance = Fastenshtein.Levenshtein.Distance(item, result.SearchString)
                         'If the strings are closer together, add the new data.
