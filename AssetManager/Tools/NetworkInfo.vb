@@ -27,12 +27,16 @@
         }
 
         Public Function LocationOfIP(ip As String) As String
-            Dim Subnet = ip.Substring(0, 8) & ".0"
-            If SubnetLocations.ContainsKey(Subnet) Then
-                Return SubnetLocations(Subnet)
-            Else
+            Try
+                Dim Subnet = ip.Substring(0, 8) & ".0"
+                If SubnetLocations.ContainsKey(Subnet) Then
+                    Return SubnetLocations(Subnet)
+                Else
+                    Return String.Empty
+                End If
+            Catch
                 Return String.Empty
-            End If
+            End Try
         End Function
 
         Public Function SetCurrentDomain(database As Databases) As String
