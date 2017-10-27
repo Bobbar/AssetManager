@@ -17,6 +17,7 @@ Public Class MainForm
     Private MyWindowList As New WindowList(Me)
     Private QueryRunning As Boolean = False
     Private WatchDog As ConnectionMonitoring.ConnectionWatchdog
+    Private CurrentTransaction As DbTransaction = Nothing
 
 #End Region
 
@@ -31,6 +32,61 @@ Public Class MainForm
 #End Region
 
 #Region "Methods"
+    Private Sub StartTransaction()
+        If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.CanStartTransaction) Then Exit Sub
+        If Message("This will allow unchecked changes to the database. Incorrect inputs WILL BREAK THINGS! " & vbCrLf & vbCrLf & "Changes must be 'applied' and 'committed' before they will be permanently stored in the database.", vbOKCancel + vbExclamation, "WARNING", Me) = MsgBoxResult.Ok Then
+            CurrentTransaction = DBFactory.GetDatabase.StartTransaction
+            RefreshData()
+            GridEditMode(True)
+            DoneWaiting()
+        End If
+    End Sub
+
+    Private Sub CommitTransaction()
+        If CurrentTransaction IsNot Nothing Then
+            If Message("Are you sure? This will permanently apply the changes to the database.", vbYesNo + vbExclamation, "Commit Transaction", Me) = MsgBoxResult.Yes Then
+                CurrentTransaction.Commit()
+                CurrentTransaction.Dispose()
+                CurrentTransaction = Nothing
+                RefreshData()
+                GridEditMode(False)
+                DoneWaiting()
+            End If
+        End If
+    End Sub
+
+    Private Sub RollbackTransaction()
+        If CurrentTransaction IsNot Nothing Then
+            If Message("Restore database to original state?", vbYesNo + vbQuestion, "Rollback Transaction", Me) = MsgBoxResult.Yes Then
+                CurrentTransaction.Rollback()
+                CurrentTransaction.Dispose()
+                CurrentTransaction = Nothing
+                RefreshData()
+                GridEditMode(False)
+                DoneWaiting()
+            End If
+        End If
+    End Sub
+
+    Private Sub UpdateRecords()
+        If CurrentTransaction IsNot Nothing Then
+            DBFactory.GetDatabase.UpdateTable(strShowAllQry, DirectCast(ResultGrid.DataSource, DataTable), CurrentTransaction)
+            RefreshData()
+            DoneWaiting()
+        End If
+    End Sub
+
+    Private Sub GridEditMode(canEdit As Boolean)
+        If canEdit Then
+            ResultGrid.ReadOnly = False
+            ResultGrid.EditMode = DataGridViewEditMode.EditOnEnter
+            TransactionBox.Visible = True
+        Else
+            ResultGrid.ReadOnly = True
+            TransactionBox.Visible = False
+            ResultGrid.EditMode = DataGridViewEditMode.EditProgrammatically
+        End If
+    End Sub
 
     Public Sub DynamicSearch() 'dynamically creates sql query using any combination of search filters the users wants
         Try
@@ -202,7 +258,11 @@ Public Class MainForm
     End Sub
 
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If Not OKToEnd() Or Not OKToCloseChildren(Me) Then
+        If CurrentTransaction IsNot Nothing Then
+            Message("There is currently an active transaction. Please commit or rollback before closing.", vbOKOnly + vbExclamation, "Cannot Close")
+        End If
+
+        If Not OKToEnd() Or Not OKToCloseChildren(Me) Or CurrentTransaction IsNot Nothing Then
             e.Cancel = True
         Else
             LastCommand.Dispose()
@@ -327,14 +387,20 @@ Public Class MainForm
     End Sub
 
     Private Function ResultGridColumns() As List(Of DataGridColumn)
+        Dim AttribColumnType As ColumnFormatTypes
+        If CurrentTransaction IsNot Nothing Then
+            AttribColumnType = ColumnFormatTypes.AttributeCombo
+        Else
+            AttribColumnType = ColumnFormatTypes.AttributeDisplayMemberOnly
+        End If
         Dim ColList As New List(Of DataGridColumn)
         ColList.Add(New DataGridColumn(DevicesCols.CurrentUser, "User", GetType(String)))
         ColList.Add(New DataGridColumn(DevicesCols.AssetTag, "Asset ID", GetType(String)))
         ColList.Add(New DataGridColumn(DevicesCols.Serial, "Serial", GetType(String)))
-        ColList.Add(New DataGridColumn(DevicesCols.EQType, "Device Type", DeviceAttribute.EquipType, ColumnFormatTypes.AttributeDisplayMemberOnly))
+        ColList.Add(New DataGridColumn(DevicesCols.EQType, "Device Type", DeviceAttribute.EquipType, AttribColumnType))
         ColList.Add(New DataGridColumn(DevicesCols.Description, "Description", GetType(String)))
-        ColList.Add(New DataGridColumn(DevicesCols.OSVersion, "OS Version", DeviceAttribute.OSType, ColumnFormatTypes.AttributeDisplayMemberOnly))
-        ColList.Add(New DataGridColumn(DevicesCols.Location, "Location", DeviceAttribute.Locations, ColumnFormatTypes.AttributeDisplayMemberOnly))
+        ColList.Add(New DataGridColumn(DevicesCols.OSVersion, "OS Version", DeviceAttribute.OSType, AttribColumnType))
+        ColList.Add(New DataGridColumn(DevicesCols.Location, "Location", DeviceAttribute.Locations, AttribColumnType))
         ColList.Add(New DataGridColumn(DevicesCols.PO, "PO Number", GetType(String)))
         ColList.Add(New DataGridColumn(DevicesCols.PurchaseDate, "Purchase Date", GetType(Date)))
         ColList.Add(New DataGridColumn(DevicesCols.ReplacementYear, "Replace Year", GetType(String)))
@@ -348,7 +414,11 @@ Public Class MainForm
         Using results
             SetStatusBar("Building Grid...")
             bolGridFilling = True
-            GridFunctions.PopulateGrid(ResultGrid, results, ResultGridColumns)
+            If CurrentTransaction IsNot Nothing Then
+                GridFunctions.PopulateGrid(ResultGrid, results, ResultGridColumns, True)
+            Else
+                GridFunctions.PopulateGrid(ResultGrid, results, ResultGridColumns)
+            End If
             ResultGrid.ClearSelection()
             ResultGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
             bolGridFilling = False
@@ -380,7 +450,11 @@ Public Class MainForm
                 QueryRunning = True
                 Dim Results = Await Task.Run(Function()
                                                  LastCommand = QryCommand
-                                                 Return DBFactory.GetDatabase.DataTableFromCommand(QryCommand)
+                                                 ' If CurrentTransaction IsNot Nothing Then
+                                                 Return DBFactory.GetDatabase.DataTableFromCommand(QryCommand, CurrentTransaction)
+                                                 'Else
+                                                 '    Return DBFactory.GetDatabase.DataTableFromCommand(QryCommand)
+                                                 'End If
                                              End Function)
                 QryCommand.Dispose()
                 SendToGrid(Results)
@@ -420,28 +494,33 @@ Public Class MainForm
 
     Private Sub ChangeDatabase(database As Databases)
         Try
-            If Not GlobalSwitches.CachedMode And ServerInfo.ServerPinging Then
-                If database <> ServerInfo.CurrentDataBase Then
-                    Dim blah = Message("Are you sure? This will close all open forms.", vbYesNo + vbQuestion, "Change Database", Me)
-                    If blah = MsgBoxResult.Yes Then
-                        If OKToCloseChildren(Me) Then
-                            CloseChildren(Me)
-                            ServerInfo.CurrentDataBase = database
-                            PopulateAttributeIndexes()
-                            RefreshCombos()
-                            SecurityTools.GetUserAccess()
-                            InitDBControls()
-                            GlobalSwitches.BuildingCache = True
-                            Task.Run(Sub() DBCache.RefreshLocalDBCache())
-                            ShowTestDBWarning()
-                            SetDatabaseTitleText()
-                            ShowAll()
+            If CurrentTransaction Is Nothing Then
+                If Not GlobalSwitches.CachedMode And ServerInfo.ServerPinging Then
+                    If database <> ServerInfo.CurrentDataBase Then
+                        Dim blah = Message("Are you sure? This will close all open forms.", vbYesNo + vbQuestion, "Change Database", Me)
+                        If blah = MsgBoxResult.Yes Then
+                            If OKToCloseChildren(Me) Then
+                                CloseChildren(Me)
+                                ServerInfo.CurrentDataBase = database
+                                PopulateAttributeIndexes()
+                                RefreshCombos()
+                                SecurityTools.GetUserAccess()
+                                InitDBControls()
+                                GlobalSwitches.BuildingCache = True
+                                Task.Run(Sub() DBCache.RefreshLocalDBCache())
+                                ShowTestDBWarning()
+                                SetDatabaseTitleText()
+                                ShowAll()
+                            End If
                         End If
                     End If
+                Else
+                    Message("Cannot switch database while Offline or in Cached Mode.", vbOK + vbInformation, "Unavailable", Me)
                 End If
             Else
-                Message("Cannot switch database while Offline or in Cached Mode.", vbOK + vbInformation, "Unavailable", Me)
+                Message("There is currently an active transaction. Please commit or rollback before switching databases.", vbOKOnly + vbExclamation, "Stop")
             End If
+
         Finally
             DatabaseToolCombo.SelectedIndex = ServerInfo.CurrentDataBase
         End Try
@@ -692,6 +771,21 @@ Public Class MainForm
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         LoadProgram()
         Application.DoEvents()
+    End Sub
+    Private Sub CommitButton_Click(sender As Object, e As EventArgs) Handles CommitButton.Click
+        CommitTransaction()
+    End Sub
+
+    Private Sub RollbackButton_Click(sender As Object, e As EventArgs) Handles RollbackButton.Click
+        RollbackTransaction()
+    End Sub
+
+    Private Sub StartTransactionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles StartTransactionToolStripMenuItem.Click
+        StartTransaction()
+    End Sub
+
+    Private Sub UpdateButton_Click(sender As Object, e As EventArgs) Handles UpdateButton.Click
+        UpdateRecords()
     End Sub
 
 #End Region

@@ -27,12 +27,14 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
         Return String.Empty
     End Function
 
-    Private Async Function GetPOFromDevice(device As DeviceObject) As Task(Of String)
+    Public Async Function GetPOFromDevice(device As DeviceObject) As Task(Of String)
         Dim POFromAsset As String = ""
         Dim POFromSerial As String = ""
+        Dim POFromAssetFromPurchaseHist As String = ""
 
         If device.AssetTag IsNot Nothing AndAlso device.AssetTag <> "" Then
             POFromAsset = Await MunisComms.ReturnSqlValueAsync("famaster", "fama_tag", device.AssetTag, "fama_purch_memo")
+            POFromAssetFromPurchaseHist = Await MunisComms.ReturnSqlValueAsync("fapurchh", "faph_asset", device.AssetTag, "faph_po_num")
         End If
 
         If device.Serial IsNot Nothing AndAlso device.Serial <> "" Then
@@ -46,6 +48,8 @@ Public Class MunisFunctions 'Be warned. This whole class is a horrible bastard..
             Return POFromAsset
         ElseIf POFromSerial <> "" Then
             Return POFromSerial
+        ElseIf POFromAssetFromPurchaseHist <> "" Then
+            Return POFromAssetFromPurchaseHist
         End If
 
         Return String.Empty

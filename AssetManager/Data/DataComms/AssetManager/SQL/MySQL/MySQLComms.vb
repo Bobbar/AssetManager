@@ -117,15 +117,26 @@ Public Class MySQLDatabase
         End Using
     End Function
 
-    Public Function DataTableFromCommand(command As DbCommand) As DataTable Implements IDataBase.DataTableFromCommand
-        Using da As DbDataAdapter = New MySqlDataAdapter, results As New DataTable, conn = NewConnection()
-            OpenConnection(conn)
-            command.Connection = conn
-            da.SelectCommand = command
-            da.Fill(results)
-            command.Dispose()
-            Return results
-        End Using
+    Public Function DataTableFromCommand(command As DbCommand, Optional transaction As DbTransaction = Nothing) As DataTable Implements IDataBase.DataTableFromCommand
+        If transaction Is Nothing Then
+            Using da As DbDataAdapter = New MySqlDataAdapter, results As New DataTable, conn = NewConnection()
+                OpenConnection(conn)
+                command.Connection = conn
+                da.SelectCommand = command
+                da.Fill(results)
+                command.Dispose()
+                Return results
+            End Using
+        Else
+            Dim conn = DirectCast(transaction.Connection, MySqlConnection)
+            Using da As DbDataAdapter = New MySqlDataAdapter, results As New DataTable
+                command.Connection = conn
+                da.SelectCommand = command
+                da.Fill(results)
+                command.Dispose()
+                Return results
+            End Using
+        End If
     End Function
 
     Public Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable Implements IDataBase.DataTableFromParameters

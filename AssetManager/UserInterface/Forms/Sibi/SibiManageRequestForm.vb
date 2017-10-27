@@ -957,7 +957,7 @@ Public Class SibiManageRequestForm
     Private Sub SendToGrid(Results As DataTable)
         Try
             bolGridFilling = True
-            GridFunctions.PopulateGrid(RequestItemsGrid, Results, RequestItemsColumns)
+            GridFunctions.PopulateGrid(RequestItemsGrid, Results, RequestItemsColumns, True)
             RequestItemsGrid.ClearSelection()
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())

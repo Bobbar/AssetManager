@@ -301,7 +301,8 @@ Public Class SQLiteDatabase
         End Using
     End Function
 
-    Public Function DataTableFromCommand(command As DbCommand) As DataTable Implements IDataBase.DataTableFromCommand
+    Public Function DataTableFromCommand(command As DbCommand, Optional transaction As DbTransaction = Nothing) As DataTable Implements IDataBase.DataTableFromCommand
+        If transaction IsNot Nothing Then Throw New NotImplementedException()
         Using da As DbDataAdapter = New SQLiteDataAdapter, results As New DataTable, conn = NewConnection()
             command.Connection = conn
             da.SelectCommand = command

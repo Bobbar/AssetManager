@@ -78,6 +78,10 @@ Module ErrorHandling
                     Dim NullRefEx = DirectCast(ex, NullReferenceException)
                     ErrorResult = handleNullReferenceException(NullRefEx, Method)
 
+                Case TypeOf ex Is NotImplementedException
+                    Dim NotImplementedEx = DirectCast(ex, NotImplementedException)
+                    ErrorResult = handleNotImplementedException(NotImplementedEx, Method)
+
                 Case Else
                     UnHandledError(ex, ex.HResult, Method)
                     ErrorResult = False
@@ -91,8 +95,14 @@ Module ErrorHandling
         End Try
     End Function
 
+    Private Function handleNotImplementedException(ex As NotImplementedException, Method As MethodBase) As Boolean
+        Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message)
+        PromptUser("ERROR:  Method not implemented.  See log for details: file://" & Paths.LogPath, vbOKOnly + vbExclamation, "Method Not Implemented")
+        Return True
+    End Function
+
     Private Function handleWin32Exception(ex As Win32Exception, Method As MethodBase) As Boolean
-        Logger("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message)
+        Logger("ERROR: MethodName =" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message)
         Select Case ex.NativeErrorCode
             Case 1326 'Bad credentials error. Clear AdminCreds
                 PromptUser("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")

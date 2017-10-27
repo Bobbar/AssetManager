@@ -1,17 +1,17 @@
 ﻿Namespace GridFunctions
     Module GridFunctions
 
-        Public Sub PopulateGrid(grid As DataGridView, data As DataTable, columns As List(Of DataGridColumn))
+        Public Sub PopulateGrid(grid As DataGridView, data As DataTable, columns As List(Of DataGridColumn), Optional forceRawData As Boolean = False)
             SetupGrid(grid, columns)
             Using data
                 grid.DataSource = Nothing
-                grid.DataSource = BuildDataSource(data, columns)
+                grid.DataSource = BuildDataSource(data, columns, forceRawData)
             End Using
         End Sub
 
-        Private Function BuildDataSource(data As DataTable, columns As List(Of DataGridColumn)) As DataTable
+        Private Function BuildDataSource(data As DataTable, columns As List(Of DataGridColumn), forceRawData As Boolean) As DataTable
             Dim NeedsRebuilt = ColumnsRequireRebuild(columns)
-            If NeedsRebuilt Then
+            If NeedsRebuilt And Not forceRawData Then
                 Dim NewTable As New DataTable
                 For Each col In columns
                     NewTable.Columns.Add(col.ColumnName, col.ColumnType)

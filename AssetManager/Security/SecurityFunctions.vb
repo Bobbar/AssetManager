@@ -158,6 +158,7 @@ Namespace SecurityTools
             Public Const DeleteSibi As String = "sibi_delete"
             Public Const IsAdmin As String = "admin"
             Public Const AdvancedSearch As String = "advanced_search"
+            Public Const CanStartTransaction As String = "start_transaction"
         End Class
 
     End Module

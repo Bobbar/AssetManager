@@ -73,10 +73,15 @@ Partial Class MainForm
         Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.DateTimeLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.TransactionBox = New System.Windows.Forms.GroupBox()
+        Me.UpdateButton = New System.Windows.Forms.Button()
+        Me.CommitButton = New System.Windows.Forms.Button()
+        Me.RollbackButton = New System.Windows.Forms.Button()
         Me.ToolStrip1 = New AssetManager.OneClickToolStrip()
         Me.AddDeviceTool = New System.Windows.Forms.ToolStripButton()
         Me.AdminDropDown = New System.Windows.Forms.ToolStripDropDownButton()
         Me.txtGUID = New System.Windows.Forms.ToolStripTextBox()
+        Me.DatabaseToolCombo = New System.Windows.Forms.ToolStripComboBox()
         Me.tsmUserManager = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReEnterLACredentialsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ViewLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -86,7 +91,7 @@ Partial Class MainForm
         Me.AdvancedSearchMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PSScriptMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InstallChromeMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DatabaseToolCombo = New System.Windows.Forms.ToolStripComboBox()
+        Me.StartTransactionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
         Me.GroupBox1.SuspendLayout()
@@ -98,6 +103,7 @@ Partial Class MainForm
         Me.SearchPanel.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.TransactionBox.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -572,7 +578,7 @@ Partial Class MainForm
         'cmdShowAll
         '
         Me.cmdShowAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdShowAll.Location = New System.Drawing.Point(1069, 105)
+        Me.cmdShowAll.Location = New System.Drawing.Point(1066, 63)
         Me.cmdShowAll.Name = "cmdShowAll"
         Me.cmdShowAll.Size = New System.Drawing.Size(134, 35)
         Me.cmdShowAll.TabIndex = 27
@@ -634,14 +640,59 @@ Partial Class MainForm
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.TransactionBox)
         Me.GroupBox2.Controls.Add(Me.SearchGroup)
-        Me.GroupBox2.Controls.Add(Me.InstantGroup)
         Me.GroupBox2.Controls.Add(Me.cmdShowAll)
+        Me.GroupBox2.Controls.Add(Me.InstantGroup)
         Me.GroupBox2.Location = New System.Drawing.Point(12, 40)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(1215, 226)
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
+        '
+        'TransactionBox
+        '
+        Me.TransactionBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.TransactionBox.Controls.Add(Me.UpdateButton)
+        Me.TransactionBox.Controls.Add(Me.CommitButton)
+        Me.TransactionBox.Controls.Add(Me.RollbackButton)
+        Me.TransactionBox.Location = New System.Drawing.Point(1066, 118)
+        Me.TransactionBox.Name = "TransactionBox"
+        Me.TransactionBox.Size = New System.Drawing.Size(134, 92)
+        Me.TransactionBox.TabIndex = 38
+        Me.TransactionBox.TabStop = False
+        Me.TransactionBox.Text = "Transaction"
+        Me.TransactionBox.Visible = False
+        '
+        'UpdateButton
+        '
+        Me.UpdateButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.UpdateButton.Location = New System.Drawing.Point(6, 18)
+        Me.UpdateButton.Name = "UpdateButton"
+        Me.UpdateButton.Size = New System.Drawing.Size(122, 22)
+        Me.UpdateButton.TabIndex = 38
+        Me.UpdateButton.Text = "Apply Changes"
+        Me.UpdateButton.UseVisualStyleBackColor = False
+        '
+        'CommitButton
+        '
+        Me.CommitButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.CommitButton.Location = New System.Drawing.Point(30, 41)
+        Me.CommitButton.Name = "CommitButton"
+        Me.CommitButton.Size = New System.Drawing.Size(76, 22)
+        Me.CommitButton.TabIndex = 36
+        Me.CommitButton.Text = "Commit"
+        Me.CommitButton.UseVisualStyleBackColor = False
+        '
+        'RollbackButton
+        '
+        Me.RollbackButton.BackColor = System.Drawing.Color.Red
+        Me.RollbackButton.Location = New System.Drawing.Point(31, 64)
+        Me.RollbackButton.Name = "RollbackButton"
+        Me.RollbackButton.Size = New System.Drawing.Size(76, 22)
+        Me.RollbackButton.TabIndex = 37
+        Me.RollbackButton.Text = "Rollback"
+        Me.RollbackButton.UseVisualStyleBackColor = False
         '
         'ToolStrip1
         '
@@ -669,7 +720,7 @@ Partial Class MainForm
         '
         'AdminDropDown
         '
-        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.txtGUID, Me.DatabaseToolCombo, Me.tsmUserManager, Me.ReEnterLACredentialsToolStripMenuItem, Me.ViewLogToolStripMenuItem, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater, Me.AdvancedSearchMenuItem, Me.PSScriptMenuItem})
+        Me.AdminDropDown.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.txtGUID, Me.DatabaseToolCombo, Me.tsmUserManager, Me.ReEnterLACredentialsToolStripMenuItem, Me.ViewLogToolStripMenuItem, Me.TextEnCrypterToolStripMenuItem, Me.ScanAttachmentToolStripMenuItem, Me.tsmGKUpdater, Me.AdvancedSearchMenuItem, Me.StartTransactionToolStripMenuItem, Me.PSScriptMenuItem})
         Me.AdminDropDown.Image = Global.AssetManager.My.Resources.Resources.AdminIcon
         Me.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.AdminDropDown.Name = "AdminDropDown"
@@ -686,6 +737,13 @@ Partial Class MainForm
         Me.txtGUID.Size = New System.Drawing.Size(150, 23)
         Me.txtGUID.ToolTipText = "GUID Lookup. (Press Enter)"
         Me.txtGUID.Visible = False
+        '
+        'DatabaseToolCombo
+        '
+        Me.DatabaseToolCombo.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DatabaseToolCombo.Name = "DatabaseToolCombo"
+        Me.DatabaseToolCombo.Size = New System.Drawing.Size(121, 25)
+        Me.DatabaseToolCombo.ToolTipText = "Change Database"
         '
         'tsmUserManager
         '
@@ -743,12 +801,11 @@ Partial Class MainForm
         Me.InstallChromeMenuItem.Size = New System.Drawing.Size(237, 26)
         Me.InstallChromeMenuItem.Text = "Install/Update Chrome"
         '
-        'DatabaseToolCombo
+        'StartTransactionToolStripMenuItem
         '
-        Me.DatabaseToolCombo.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DatabaseToolCombo.Name = "DatabaseToolCombo"
-        Me.DatabaseToolCombo.Size = New System.Drawing.Size(121, 25)
-        Me.DatabaseToolCombo.ToolTipText = "Change Database"
+        Me.StartTransactionToolStripMenuItem.Name = "StartTransactionToolStripMenuItem"
+        Me.StartTransactionToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
+        Me.StartTransactionToolStripMenuItem.Text = "Start Manual Edit Mode"
         '
         'ToolStripSeparator5
         '
@@ -794,6 +851,7 @@ Partial Class MainForm
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
+        Me.TransactionBox.ResumeLayout(False)
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
@@ -865,4 +923,9 @@ Partial Class MainForm
     Friend WithEvents ReEnterLACredentialsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ViewLogToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents DatabaseToolCombo As ToolStripComboBox
+    Friend WithEvents RollbackButton As Button
+    Friend WithEvents CommitButton As Button
+    Friend WithEvents StartTransactionToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TransactionBox As GroupBox
+    Friend WithEvents UpdateButton As Button
 End Class

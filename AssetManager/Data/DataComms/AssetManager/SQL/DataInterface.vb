@@ -20,7 +20,7 @@ Public Interface IDataBase
     ''' </summary>
     ''' <param name="command"></param>
     ''' <returns></returns>
-    Function DataTableFromCommand(command As DbCommand) As DataTable
+    Function DataTableFromCommand(command As DbCommand, Optional transaction As DbTransaction = Nothing) As DataTable
 
     ''' <summary>
     ''' Returns a DataTable from a partial SQL query string and a <see cref="List(Of DBQueryParameter)"/>.
