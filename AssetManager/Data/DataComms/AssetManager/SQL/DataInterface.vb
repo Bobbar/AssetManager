@@ -84,9 +84,9 @@ Public Interface IDataBase
     ''' <summary>
     ''' Returns a new <see cref="DbCommand"/>.
     ''' </summary>
-    ''' <param name="qryString"></param>
+    ''' <param name="query"></param>
     ''' <returns></returns>
-    Function GetCommand(Optional qryString As String = "") As DbCommand
+    Function GetCommand(Optional query As String = "") As DbCommand
 
     ''' <summary>
     ''' Returns a new <see cref="DbCommand"/> with the specified parameters added.
