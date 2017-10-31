@@ -81,6 +81,7 @@ Partial Class ViewDeviceForm
         Me.Label11 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmr_RDPRefresher = New System.Windows.Forms.Timer(Me.components)
         Me.fieldErrorIcon = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.tsSaveModify = New AssetManager.OneClickToolStrip()
@@ -92,6 +93,7 @@ Partial Class ViewDeviceForm
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.FieldTabs = New System.Windows.Forms.TabControl()
         Me.AssetInfo = New System.Windows.Forms.TabPage()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.MiscInfo = New System.Windows.Forms.TabPage()
         Me.ADPanel = New System.Windows.Forms.Panel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
@@ -117,6 +119,7 @@ Partial Class ViewDeviceForm
         Me.tsbModify = New System.Windows.Forms.ToolStripButton()
         Me.tsbNewNote = New System.Windows.Forms.ToolStripButton()
         Me.tsbDeleteDevice = New System.Windows.Forms.ToolStripButton()
+        Me.RefreshToolStripButton = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.AttachmentTool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
@@ -125,7 +128,6 @@ Partial Class ViewDeviceForm
         Me.tsmAssetTransferForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.AssetDisposalForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.RefreshToolStripButton = New System.Windows.Forms.ToolStripButton()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
         CType(Me.cmdRestart, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -136,6 +138,7 @@ Partial Class ViewDeviceForm
         Me.TrackingTab.SuspendLayout()
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TrackingBox.SuspendLayout()
+        Me.StatusStrip1.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tsSaveModify.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -794,12 +797,22 @@ Partial Class ViewDeviceForm
         '
         'StatusStrip1
         '
+        Me.StatusStrip1.AutoSize = False
         Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 680)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1145, 22)
+        Me.StatusStrip1.Stretch = False
         Me.StatusStrip1.TabIndex = 45
         Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'StatusLabel
+        '
+        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StatusLabel.Name = "StatusLabel"
+        Me.StatusLabel.Size = New System.Drawing.Size(0, 17)
         '
         'tmr_RDPRefresher
         '
@@ -893,6 +906,7 @@ Partial Class ViewDeviceForm
         '
         Me.AssetInfo.BackColor = System.Drawing.SystemColors.Control
         Me.AssetInfo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.AssetInfo.Controls.Add(Me.Button1)
         Me.AssetInfo.Controls.Add(Me.pnlOtherFunctions)
         Me.AssetInfo.Controls.Add(Me.Label2)
         Me.AssetInfo.Controls.Add(Me.Label3)
@@ -923,6 +937,15 @@ Partial Class ViewDeviceForm
         Me.AssetInfo.Size = New System.Drawing.Size(788, 249)
         Me.AssetInfo.TabIndex = 0
         Me.AssetInfo.Text = "Asset Info."
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(312, 189)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 55
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'MiscInfo
         '
@@ -1162,7 +1185,7 @@ Partial Class ViewDeviceForm
         Me.ToolStrip1.Location = New System.Drawing.Point(3, 74)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ToolStrip1.Size = New System.Drawing.Size(435, 37)
+        Me.ToolStrip1.Size = New System.Drawing.Size(404, 37)
         Me.ToolStrip1.TabIndex = 45
         Me.ToolStrip1.Text = "MyToolStrip1"
         '
@@ -1192,6 +1215,16 @@ Partial Class ViewDeviceForm
         Me.tsbDeleteDevice.Padding = New System.Windows.Forms.Padding(5, 5, 5, 0)
         Me.tsbDeleteDevice.Size = New System.Drawing.Size(39, 34)
         Me.tsbDeleteDevice.Text = "Delete Device"
+        '
+        'RefreshToolStripButton
+        '
+        Me.RefreshToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.RefreshToolStripButton.Image = Global.AssetManager.My.Resources.Resources.RefreshIcon
+        Me.RefreshToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.RefreshToolStripButton.Name = "RefreshToolStripButton"
+        Me.RefreshToolStripButton.Size = New System.Drawing.Size(29, 34)
+        Me.RefreshToolStripButton.Text = "ToolStripButton1"
+        Me.RefreshToolStripButton.ToolTipText = "Refresh"
         '
         'ToolStripSeparator1
         '
@@ -1245,16 +1278,6 @@ Partial Class ViewDeviceForm
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 37)
         '
-        'RefreshToolStripButton
-        '
-        Me.RefreshToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.RefreshToolStripButton.Image = Global.AssetManager.My.Resources.Resources.RefreshIcon
-        Me.RefreshToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.RefreshToolStripButton.Name = "RefreshToolStripButton"
-        Me.RefreshToolStripButton.Size = New System.Drawing.Size(29, 34)
-        Me.RefreshToolStripButton.Text = "ToolStripButton1"
-        Me.RefreshToolStripButton.ToolTipText = "Refresh"
-        '
         'ViewDeviceForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1279,6 +1302,8 @@ Partial Class ViewDeviceForm
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TrackingBox.ResumeLayout(False)
         Me.TrackingBox.PerformLayout()
+        Me.StatusStrip1.ResumeLayout(False)
+        Me.StatusStrip1.PerformLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tsSaveModify.ResumeLayout(False)
         Me.tsSaveModify.PerformLayout()
@@ -1302,7 +1327,6 @@ Partial Class ViewDeviceForm
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents Label9 As Label
@@ -1409,4 +1433,6 @@ Partial Class ViewDeviceForm
     Friend WithEvents Label19 As Label
     Friend WithEvents ADOSTextBox As TextBox
     Friend WithEvents RefreshToolStripButton As ToolStripButton
+    Friend WithEvents StatusLabel As ToolStripStatusLabel
+    Friend WithEvents Button1 As Button
 End Class

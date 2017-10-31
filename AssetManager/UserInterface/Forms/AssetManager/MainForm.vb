@@ -182,7 +182,7 @@ Public Class MainForm
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
         Finally
             GlobalSwitches.BuildingCache = False
-            SetStatusBar("Idle...")
+            DoneWaiting()
         End Try
     End Sub
 
@@ -472,13 +472,21 @@ Public Class MainForm
         Dim NewUserMan As New UserManagerForm(Me)
     End Sub
 
-    Private Sub SetStatusBar(text As String)
-        If StatusStrip1.InvokeRequired Then
-            Dim d As New StatusVoidDelegate(AddressOf SetStatusBar)
-            StatusStrip1.Invoke(d, New Object() {text})
+    Private Async Sub SetStatusBar(text As String, Optional timeOut As Integer = 0)
+        If timeOut > 0 Then
+            SetStatusBar(text)
+            Await Task.Run(Sub()
+                               Task.Delay(timeOut * 1000).Wait()
+                               SetStatusBar("Idle...")
+                           End Sub)
         Else
-            StatusLabel.Text = text
-            StatusStrip1.Update()
+            If StatusStrip1.InvokeRequired Then
+                Dim d As New StatusVoidDelegate(AddressOf SetStatusBar)
+                StatusStrip1.Invoke(d, New Object() {text})
+            Else
+                StatusLabel.Text = text
+                StatusStrip1.Update()
+            End If
         End If
     End Sub
 
@@ -786,6 +794,10 @@ Public Class MainForm
 
     Private Sub UpdateButton_Click(sender As Object, e As EventArgs) Handles UpdateButton.Click
         UpdateRecords()
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        '  SliderLabel1.SlideText = txtDescription.Text
     End Sub
 
 #End Region

@@ -195,6 +195,12 @@
     <Compile Include="Tools\NetworkInfo.vb" />
     <Compile Include="Helpers\DataGridHelpers\ColumnClasses.vb" />
     <Compile Include="Helpers\Logging.vb" />
+    <Compile Include="UserInterface\CustomControls\SliderLabel.Designer.vb">
+      <DependentUpon>SliderLabel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\CustomControls\SliderLabel.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserInterface\Forms\Attachments\AttachmentObject.vb" />
     <Compile Include="Data\DataFunctions\ConnectionWatchdog.vb" />
     <Compile Include="Data\DataClasses\DataClassMapping\DataMapper.vb" />
@@ -398,6 +404,9 @@
     <Compile Include="Helpers\ThemeHelpers\GridThemeClass.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="UserInterface\CustomControls\SliderLabel.resx">
+      <DependentUpon>SliderLabel.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.resx">
       <DependentUpon>AdvancedSearchForm.vb</DependentUpon>
     </EmbeddedResource>

@@ -89,11 +89,12 @@ Partial Class MainForm
         Me.ScanAttachmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmGKUpdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdvancedSearchMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.StartTransactionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PSScriptMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InstallChromeMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.StartTransactionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdSibi = New System.Windows.Forms.ToolStripButton()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         CType(Me.ResultGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -788,6 +789,12 @@ Partial Class MainForm
         Me.AdvancedSearchMenuItem.Size = New System.Drawing.Size(256, 26)
         Me.AdvancedSearchMenuItem.Text = "Advanced Search"
         '
+        'StartTransactionToolStripMenuItem
+        '
+        Me.StartTransactionToolStripMenuItem.Name = "StartTransactionToolStripMenuItem"
+        Me.StartTransactionToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
+        Me.StartTransactionToolStripMenuItem.Text = "Start Manual Edit Mode"
+        '
         'PSScriptMenuItem
         '
         Me.PSScriptMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InstallChromeMenuItem})
@@ -800,12 +807,6 @@ Partial Class MainForm
         Me.InstallChromeMenuItem.Name = "InstallChromeMenuItem"
         Me.InstallChromeMenuItem.Size = New System.Drawing.Size(237, 26)
         Me.InstallChromeMenuItem.Text = "Install/Update Chrome"
-        '
-        'StartTransactionToolStripMenuItem
-        '
-        Me.StartTransactionToolStripMenuItem.Name = "StartTransactionToolStripMenuItem"
-        Me.StartTransactionToolStripMenuItem.Size = New System.Drawing.Size(256, 26)
-        Me.StartTransactionToolStripMenuItem.Text = "Start Manual Edit Mode"
         '
         'ToolStripSeparator5
         '
@@ -823,12 +824,22 @@ Partial Class MainForm
         Me.cmdSibi.Text = "Sibi Acquisition Manager"
         Me.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(1265, 101)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(76, 38)
+        Me.Button1.TabIndex = 8
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1381, 809)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.StatusStrip1)
@@ -928,4 +939,6 @@ Partial Class MainForm
     Friend WithEvents StartTransactionToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents TransactionBox As GroupBox
     Friend WithEvents UpdateButton As Button
+    Friend WithEvents Button1 As Button
+    ' Friend WithEvents SliderTextBox1 As SliderLabel
 End Class
