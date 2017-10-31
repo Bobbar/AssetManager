@@ -1142,7 +1142,7 @@ Public Class ViewDeviceForm
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         ' SetStatusBar("Testing...", 4)
-        Slider.SlideText = "Testing...."
+        Slider.SlideText = "Testing.... Blah blah blah"
         'StatusStrip1.Invalidate()
         'StatusStrip1.Update()
     End Sub

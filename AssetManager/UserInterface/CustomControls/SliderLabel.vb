@@ -8,12 +8,15 @@ Public Class SliderLabel
     Private _slideInDirection As SlideDirection
     Private _slideOutDirection As SlideDirection
     Private _xStart, _xEnd, _yStart, _yEnd As Integer
-    Private _currentY As Integer = 0
-    Private _currentX As Integer = 0
-    Private _currentDirection As SlideDirection ' = SlideDirection
+    Private _currentY As Single = 0
+    Private _currentX As Single = 0
+    Private _currentSpeed As Single = 0
+    Private _currentDirection As SlideDirection
     Private _currentSlideState As SlideState
-
-
+    '  Private _stepSize As Single = 0.25
+    Private _acceleration As Single = 0.25
+    Private _movementInterval As Integer = 10
+    Private _textSize As SizeF
 
     Private _slideTimer As Timer
 
@@ -23,7 +26,7 @@ Public Class SliderLabel
         End Get
         Set(value As String)
             _text = value
-
+            _textSize = GetTextSize(_text)
             SetInMovements()
             _slideTimer.Enabled = True
             Me.Invalidate()
@@ -59,13 +62,13 @@ Public Class SliderLabel
         '_yEnd = 0
         '_currentY = Me.Height
         _slideTimer = New Timer()
-        _slideTimer.Interval = 25
+        _slideTimer.Interval = _movementInterval
         _slideTimer.Enabled = True
         AddHandler _slideTimer.Tick, AddressOf Tick
 
         ' _text = ""
         _slideInDirection = SlideDirection.Up
-        _slideOutDirection = SlideDirection.Right
+        _slideOutDirection = SlideDirection.Left
     End Sub
 
     Sub New(text As String)
@@ -121,6 +124,8 @@ Public Class SliderLabel
     End Sub
 
 
+
+
     Private Async Sub UpdateTextPosition()
         Dim PositionChanged As Boolean = False
         Dim SlideComplete As Boolean = False
@@ -128,7 +133,8 @@ Public Class SliderLabel
         Select Case _currentDirection
             Case SlideDirection.DefaultSlide, SlideDirection.Up
                 If _currentY > _yEnd Then
-                    _currentY -= 1
+                    _currentSpeed -= _acceleration
+                    _currentY += _currentSpeed
                     PositionChanged = True
                 Else
                     _currentY = _yEnd
@@ -136,7 +142,8 @@ Public Class SliderLabel
                 End If
             Case SlideDirection.Down
                 If _currentY < _yEnd Then
-                    _currentY += 1
+                    _currentSpeed += _acceleration
+                    _currentY += _currentSpeed
                     PositionChanged = True
                 Else
                     _currentY = _yEnd
@@ -144,7 +151,8 @@ Public Class SliderLabel
                 End If
             Case SlideDirection.Left
                 If _currentX > _xEnd Then
-                    _currentX -= 1
+                    _currentSpeed -= _acceleration
+                    _currentX += _currentSpeed
                     PositionChanged = True
                 Else
                     _currentX = _xEnd
@@ -152,7 +160,8 @@ Public Class SliderLabel
                 End If
             Case SlideDirection.Right
                 If _currentX < _xEnd Then
-                    _currentX += 1
+                    _currentSpeed += _acceleration
+                    _currentX += _currentSpeed
                     PositionChanged = True
                 Else
                     _currentX = _xEnd
@@ -160,12 +169,13 @@ Public Class SliderLabel
                 End If
         End Select
 
-        If PositionChanged Then
-            Me.Invalidate()
+        '  If PositionChanged Then
+        Me.Invalidate()
             Me.Update()
-        End If
+        ' End If
 
         If SlideComplete Then
+            _currentSpeed = 0
             If _currentSlideState = SlideState.SlideIn Then
                 _slideTimer.Enabled = False
 
@@ -189,6 +199,7 @@ Public Class SliderLabel
         _currentSlideState = SlideState.SlideIn
         _currentX = 0
         _currentY = 0
+        _currentSpeed = 0
         Select Case _slideInDirection
             Case SlideDirection.DefaultSlide, SlideDirection.Up
                 _yStart = Me.Height
@@ -199,11 +210,11 @@ Public Class SliderLabel
                 _currentY = _yStart
                 _yEnd = 0
             Case SlideDirection.Left
-                _xStart = -Me.Width
+                _xStart = Me.Width
                 _currentX = _xStart
                 _xEnd = 0
             Case SlideDirection.Right
-                _xStart = Me.Width
+                _xStart = -Me.Width
                 _currentX = _xStart
                 _xEnd = 0
         End Select
@@ -212,6 +223,7 @@ Public Class SliderLabel
     Private Sub SetOutMovements()
         _currentDirection = _slideOutDirection
         _currentSlideState = SlideState.SlideOut
+        _currentSpeed = 0
 
         Select Case _slideOutDirection
             Case SlideDirection.DefaultSlide, SlideDirection.Up
@@ -233,6 +245,11 @@ Public Class SliderLabel
         End Select
 
     End Sub
+    Private Function GetTextSize(text As String) As SizeF
+        Using gfx = Me.CreateGraphics
+            Return gfx.MeasureString(text, Me.Font)
+        End Using
+    End Function
 
     Public Sub Slide(text As String)
 
