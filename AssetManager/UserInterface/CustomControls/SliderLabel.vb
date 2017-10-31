@@ -7,7 +7,7 @@ Public Class SliderLabel
     Private _displayTime As Integer = 4
     Private _slideInDirection As SlideDirection
     Private _slideOutDirection As SlideDirection
-    Private _xStart, _xEnd, _yStart, _yEnd As Integer
+    Private _xStart, _xEnd, _yStart, _yEnd As Single
     Private _currentY As Single = 0
     Private _currentX As Single = 0
     Private _currentSpeed As Single = 0
@@ -20,17 +20,24 @@ Public Class SliderLabel
 
     Private _slideTimer As Timer
 
+    Private _messageQueue As New List(Of MessageParameters)
+
+
     <Category("Appearance"), Browsable(True)> Public Property SlideText As String
         Get
             Return _text
         End Get
         Set(value As String)
             _text = value
-            _textSize = GetTextSize(_text)
-            SetInMovements()
-            _slideTimer.Enabled = True
-            Me.Invalidate()
-            Me.Update()
+            If _text <> "" Then
+                _textSize = GetTextSize(_text)
+                SetSize()
+                SetInMovements()
+                _slideTimer.Enabled = True
+                Me.Invalidate()
+                Me.Update()
+            End If
+
         End Set
     End Property
 
@@ -123,7 +130,7 @@ Public Class SliderLabel
 
     End Sub
 
-
+    Private Sub AddMessageToQueue(text As String, Optional displayTime As Integer =  )
 
 
     Private Async Sub UpdateTextPosition()
@@ -171,7 +178,7 @@ Public Class SliderLabel
 
         '  If PositionChanged Then
         Me.Invalidate()
-            Me.Update()
+        Me.Update()
         ' End If
 
         If SlideComplete Then
@@ -202,19 +209,23 @@ Public Class SliderLabel
         _currentSpeed = 0
         Select Case _slideInDirection
             Case SlideDirection.DefaultSlide, SlideDirection.Up
-                _yStart = Me.Height
+                '_yStart = Me.Height
+                _yStart = _textSize.Height
                 _currentY = _yStart
                 _yEnd = 0
             Case SlideDirection.Down
-                _yStart = -Me.Height
+                ' _yStart = -Me.Height
+                _yStart = -_textSize.Height
                 _currentY = _yStart
                 _yEnd = 0
             Case SlideDirection.Left
-                _xStart = Me.Width
+                '  _xStart = Me.Width
+                _xStart = _textSize.Width
                 _currentX = _xStart
                 _xEnd = 0
             Case SlideDirection.Right
-                _xStart = -Me.Width
+                '  _xStart = -Me.Width
+                _xStart = -_textSize.Width
                 _currentX = _xStart
                 _xEnd = 0
         End Select
@@ -227,21 +238,21 @@ Public Class SliderLabel
 
         Select Case _slideOutDirection
             Case SlideDirection.DefaultSlide, SlideDirection.Up
-                '_yStart = Me.Height
-                '_currentY = _yStart
-                _yEnd = -Me.Height
+
+                ' _yEnd = -Me.Height
+                _yEnd = -_textSize.Height
             Case SlideDirection.Down
-                '_yStart = -Me.Height
-                '_currentY = _yStart
-                _yEnd = Me.Height
+
+                ' _yEnd = Me.Height
+                _yEnd = _textSize.Height
             Case SlideDirection.Left
-                '_xStart = -Me.Width
-                '_currentX = _xStart
-                _xEnd = -Me.Width
+
+                '_xEnd = -Me.Width
+                _xEnd = -_textSize.Width
             Case SlideDirection.Right
-                '_xStart = Me.Width
-                '_currentX = _xStart
-                _xEnd = Me.Width
+
+                ' _xEnd = Me.Width
+                _xEnd = _textSize.Width
         End Select
 
     End Sub
@@ -289,9 +300,42 @@ Public Class SliderLabel
 
     Private Sub SliderTextBox_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
         DrawText(e.Graphics)
-
-        'MyBase.OnPaint(e)
     End Sub
+
+    Private Sub SliderLabel_Load(sender As Object, e As EventArgs) Handles Me.Load
+        SetSize()
+    End Sub
+
+    Private Sub SetSize()
+        If Me.AutoSize Then
+            Me.Size = _textSize.ToSize
+        End If
+    End Sub
+
+    Public Function ToToolStripControl(Optional parentControl As Control = Nothing) As ToolStripControlHost
+        Me.AutoSize = True
+        If parentControl IsNot Nothing Then
+            Me.Font = parentControl.Font
+            Me.BackColor = parentControl.BackColor
+        End If
+        Dim stripSlider = New ToolStripControlHost(Me)
+        stripSlider.AutoSize = False
+        Return stripSlider
+    End Function
+
+
+    Private Structure MessageParameters
+        Public Message As String
+        Public DisplayTime As Integer
+
+        Sub New(message As String, displayTime As Integer)
+            Me.Message = message
+            Me.DisplayTime = displayTime
+
+        End Sub
+    End Structure
+
+
 End Class
 
 Public Enum SlideDirection
@@ -308,5 +352,7 @@ Public Enum SlideState
     SlideOut
     Paused
 End Enum
+
+
 
 

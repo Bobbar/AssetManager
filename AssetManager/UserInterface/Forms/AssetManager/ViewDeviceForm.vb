@@ -37,19 +37,21 @@ Public Class ViewDeviceForm
         InitializeComponent()
 
         Slider = New SliderLabel
-        Slider.AutoSize = False
-        Slider.Font = StatusStrip1.Font
-        Slider.BackColor = StatusStrip1.BackColor
-        Slider.Height = 17
-        Slider.Width = 100
-        Slider.SlideText = "Blah blah blah"
-        Slider.DistplayTime = 4
-        Slider.Visible = True
-        Dim stripSlider = New ToolStripControlHost(Slider)
-        stripSlider.AutoSize = False
-        stripSlider.Width = 100
-        stripSlider.Height = 17
-        StatusStrip1.Items.Add(stripSlider)
+        'Slider.AutoSize = True
+        'Slider.Font = StatusStrip1.Font
+        'Slider.BackColor = StatusStrip1.BackColor
+        'Slider.Height = 17
+        'Slider.Width = 100
+        '  Slider.SlideText = "Blah blah blah"
+        '  Slider.DistplayTime = 4
+        '   Slider.Visible = True
+        'Dim stripSlider = New ToolStripControlHost(Slider)
+        'stripSlider.AutoSize = False
+        ''stripSlider.Width = 100
+        ''stripSlider.Height = 17
+        'StatusStrip1.Items.Add(stripSlider)
+        StatusStrip1.Items.Add(Slider.ToToolStripControl(StatusStrip1))
+
 
         MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6)
         ImageCaching.CacheControlImages(Me)
@@ -86,22 +88,14 @@ Public Class ViewDeviceForm
         Return False
     End Function
 
-    Private Async Sub SetStatusBar(text As String, Optional timeOut As Integer = 0)
-        If timeOut > 0 Then
-            SetStatusBar(text)
-            Await Task.Run(Sub()
-                               Task.Delay(timeOut * 1000).Wait()
-                               SetStatusBar("")
-                           End Sub)
+    Private Sub SetStatusBar(text As String)
+        If StatusStrip1.InvokeRequired Then
+            Dim d As New StatusVoidDelegate(AddressOf SetStatusBar)
+            StatusStrip1.Invoke(d, New Object() {text})
         Else
-            If StatusStrip1.InvokeRequired Then
-                Dim d As New StatusVoidDelegate(AddressOf SetStatusBar)
-                StatusStrip1.Invoke(d, New Object() {text})
-            Else
-                ' StatusLabel.Text = text
-                Slider.SlideText = text
-                StatusStrip1.Update()
-            End If
+            ' StatusLabel.Text = text
+            Slider.SlideText = text
+            StatusStrip1.Update()
         End If
     End Sub
 
@@ -146,7 +140,7 @@ Public Class ViewDeviceForm
                     trans.Commit()
                     LoadDevice(CurrentViewDevice.GUID)
                     'Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
-                    SetStatusBar("Update added!", 4)
+                    SetStatusBar("Update added!")
                 Else
                     trans.Rollback()
                     LoadDevice(CurrentViewDevice.GUID)
@@ -1141,8 +1135,8 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        ' SetStatusBar("Testing...", 4)
-        Slider.SlideText = "Testing.... Blah blah blah"
+        SetStatusBar("Testing.... Blah blah blah BLah blah blahba sdj ahsdlkjhasd ")
+        '  Slider.SlideText = "Testing.... Blah blah blah BLah blah blahba sdj ahsdlkjhasd "
         'StatusStrip1.Invalidate()
         'StatusStrip1.Update()
     End Sub
