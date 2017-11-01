@@ -20,7 +20,7 @@ Public Class ViewDeviceForm
     Private MyPingVis As PingVis
     Private MyWindowList As New WindowList(Me)
     Private EditMode As Boolean = False
-    Private Slider As SliderLabel
+    Private StatusSlider As SliderLabel
 #End Region
 
 #Region "Delegates"
@@ -36,21 +36,8 @@ Public Class ViewDeviceForm
         FormUID = deviceGUID
         InitializeComponent()
 
-        Slider = New SliderLabel
-        'Slider.AutoSize = True
-        'Slider.Font = StatusStrip1.Font
-        'Slider.BackColor = StatusStrip1.BackColor
-        'Slider.Height = 17
-        'Slider.Width = 100
-        '  Slider.SlideText = "Blah blah blah"
-        '  Slider.DistplayTime = 4
-        '   Slider.Visible = True
-        'Dim stripSlider = New ToolStripControlHost(Slider)
-        'stripSlider.AutoSize = False
-        ''stripSlider.Width = 100
-        ''stripSlider.Height = 17
-        'StatusStrip1.Items.Add(stripSlider)
-        StatusStrip1.Items.Add(Slider.ToToolStripControl(StatusStrip1))
+        StatusSlider = New SliderLabel
+        StatusStrip1.Items.Add(StatusSlider.ToToolStripControl(StatusStrip1))
 
 
         MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6)
@@ -94,7 +81,7 @@ Public Class ViewDeviceForm
             StatusStrip1.Invoke(d, New Object() {text})
         Else
             ' StatusLabel.Text = text
-            Slider.SlideText = text
+            StatusSlider.SlideText = text
             StatusStrip1.Update()
         End If
     End Sub
@@ -140,7 +127,7 @@ Public Class ViewDeviceForm
                     trans.Commit()
                     LoadDevice(CurrentViewDevice.GUID)
                     'Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
-                    SetStatusBar("Update added!")
+                    SetStatusBar("Update successful!")
                 Else
                     trans.Rollback()
                     LoadDevice(CurrentViewDevice.GUID)
@@ -1135,10 +1122,12 @@ Public Class ViewDeviceForm
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        SetStatusBar("Testing.... Blah blah blah BLah blah blahba sdj ahsdlkjhasd ")
-        '  Slider.SlideText = "Testing.... Blah blah blah BLah blah blahba sdj ahsdlkjhasd "
+        '  SetStatusBar("Testing.... Blah blah blah BLah blah blahba sdj ahsdlkjhasd ")
+        'StatusSlider.SlideText = "Testing...."
         'StatusStrip1.Invalidate()
         'StatusStrip1.Update()
+
+        StatusSlider.NewSlideMessage("Testing.... ", SlideDirection.Up, SlideDirection.Left, 2)
     End Sub
 
 #End Region
