@@ -22,26 +22,26 @@ Public Class SliderLabel
 
 #Region "Fields"
 
-    Private Const _defaultDisplayTime As Integer = 4
-    Private Const _defaultSlideInDirection As SlideDirection = SlideDirection.Up
-    Private Const _defaultSlideOutDirection As SlideDirection = SlideDirection.Left
-    '  Private _stepSize As Single = 0.25
-    Private _acceleration As Single = 0.25
+    Private Const defaultDisplayTime As Integer = 4
+    Private Const defaultSlideInDirection As SlideDirection = SlideDirection.Up
+    Private Const defaultSlideOutDirection As SlideDirection = SlideDirection.Left
+    '  Private stepSize As Single = 0.25
+    Private Acceleration As Single = 0.25
 
-    Private _currentDirection As SlideDirection
-    Private _currentSlideState As SlideState
-    Private _currentSpeed As Single = 0
-    Private _currentX As Single = 0
-    Private _currentY As Single = 0
-    Private _displayTime As Integer = 4
-    Private _messageQueue As New List(Of MessageParameters)
-    Private _movementInterval As Integer = 10
-    Private _slideInDirection As SlideDirection
-    Private _slideOutDirection As SlideDirection
-    Private _slideTimer As Timer
-    Private _text As String
-    Private _textSize As SizeF
-    Private _xStart, _xEnd, _yStart, _yEnd As Single
+    Private CurrentDirection As SlideDirection
+    Private CurrentSlideState As SlideState = SlideState.Done
+    Private CurrentSpeed As Single = 0
+    Private DisplayTime As Integer = 4
+    Private MessageQueue As New List(Of MessageParameters)
+    Private AnimationTimerInterval As Integer = 10
+    Private SlideInDirection As SlideDirection
+    Private SlideOutDirection As SlideDirection
+    Private SlideTimer As Timer
+    Private TextSize As SizeF
+    Private StartPosition As New PointF
+    Private EndPosition As New PointF
+    Private CurrentPosition As New PointF
+
 
 #End Region
 
@@ -55,16 +55,13 @@ Public Class SliderLabel
         Me.SetStyle(ControlStyles.UserPaint, True)
         Me.SetStyle(ControlStyles.ResizeRedraw, True)
 
-        SetInMovements()
-        _currentSlideState = SlideState.Done
+        SlideTimer = New Timer()
+        SlideTimer.Interval = AnimationTimerInterval
+        SlideTimer.Enabled = False
+        AddHandler SlideTimer.Tick, AddressOf Tick
 
-        _slideTimer = New Timer()
-        _slideTimer.Interval = _movementInterval
-        _slideTimer.Enabled = False
-        AddHandler _slideTimer.Tick, AddressOf Tick
-
-        _slideInDirection = _defaultSlideInDirection
-        _slideOutDirection = _defaultSlideOutDirection
+        SlideInDirection = defaultSlideInDirection
+        SlideOutDirection = defaultSlideOutDirection
     End Sub
 
 #End Region
@@ -73,19 +70,19 @@ Public Class SliderLabel
 
     Public Property DistplayTime As Integer
         Get
-            Return _displayTime
+            Return DisplayTime
         End Get
         Set(value As Integer)
-            _displayTime = value
+            DisplayTime = value
         End Set
     End Property
 
     <Category("Appearance"), Browsable(True)> Public Property SlideText As String
         Get
-            Return _text
+            Return Text
         End Get
         Set(value As String)
-            AddMessageToQueue(value, _defaultSlideInDirection, _defaultSlideOutDirection, _defaultDisplayTime)
+            AddMessageToQueue(value, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime)
         End Set
     End Property
 
@@ -94,35 +91,35 @@ Public Class SliderLabel
     'Sub New(text As String)
     '    InitializeComponent()
 
-    '    ' _text = text
-    '    _slideInDirection = SlideDirection.DefaultSlide
-    '    _slideOutDirection = SlideDirection.DefaultSlide
+    '    ' text = text
+    '    slideInDirection = SlideDirection.DefaultSlide
+    '    slideOutDirection = SlideDirection.DefaultSlide
     'End Sub
 
     'Sub New(text As String, displayTime As Integer)
     '    InitializeComponent()
 
-    '    ' _text = text
-    '    _displayTime = displayTime
-    '    _slideInDirection = SlideDirection.DefaultSlide
-    '    _slideOutDirection = SlideDirection.DefaultSlide
+    '    ' text = text
+    '    displayTime = displayTime
+    '    slideInDirection = SlideDirection.DefaultSlide
+    '    slideOutDirection = SlideDirection.DefaultSlide
     'End Sub
 
     'Sub New(text As String, displayTime As Integer, slideInDirection As SlideDirection)
     '    InitializeComponent()
 
-    '    ' _text = text
-    '    _displayTime = displayTime
-    '    _slideInDirection = slideInDirection
-    '    _slideOutDirection = SlideDirection.DefaultSlide
+    '    ' text = text
+    '    displayTime = displayTime
+    '    slideInDirection = slideInDirection
+    '    slideOutDirection = SlideDirection.DefaultSlide
     'End Sub
 
     'Sub New(text As String, displayTime As Integer, slideInDirection As SlideDirection, slideOutDirection As SlideDirection)
     '    InitializeComponent()
 
-    '    ' _text = text
-    '    _displayTime = displayTime
-    '    _slideInDirection = slideInDirection
+    '    ' text = text
+    '    displayTime = displayTime
+    '    slideInDirection = slideInDirection
     '    slideOutDirection = slideOutDirection
     'End Sub
 
@@ -133,10 +130,10 @@ Public Class SliderLabel
     ''' </summary>
     ''' <param name="canvas"></param>
     Public Sub DrawText(canvas As Graphics)
-        Dim textSize = canvas.MeasureString(Me.SlideText, Me.Font)
+        'Dim textSize = canvas.MeasureString(Me.SlideText, Me.Font)
         canvas.Clear(Me.BackColor)
         Using textBrush = New SolidBrush(Me.ForeColor)
-            canvas.DrawString(Me.SlideText, Me.Font, textBrush, _currentX, _currentY)
+            canvas.DrawString(Me.SlideText, Me.Font, textBrush, CurrentPosition)
         End Using
     End Sub
 
@@ -175,7 +172,7 @@ Public Class SliderLabel
     ''' <param name="slideOutDirection"></param>
     ''' <param name="displayTime"></param>
     Private Sub AddMessageToQueue(text As String, slideInDirection As SlideDirection, slideOutDirection As SlideDirection, displayTime As Integer)
-        _messageQueue.Add(New MessageParameters(text, slideInDirection, slideOutDirection, displayTime))
+        MessageQueue.Add(New MessageParameters(text, slideInDirection, slideOutDirection, displayTime))
         ProcessQueue()
     End Sub
 
@@ -185,14 +182,14 @@ Public Class SliderLabel
     ''' <param name="message"></param>
     Private Sub DisplayText(message As MessageParameters)
         If message.Message <> "" Then
-            _text = message.Message
-            _displayTime = message.DisplayTime
-            _textSize = GetTextSize(message.Message)
-            _slideInDirection = message.SlideInDirection
-            _slideOutDirection = message.SlideOutDirection
+            Text = message.Message
+            DisplayTime = message.DisplayTime
+            TextSize = GetTextSize(message.Message)
+            SlideInDirection = message.SlideInDirection
+            SlideOutDirection = message.SlideOutDirection
             SetControlSize()
-            SetInMovements()
-            _slideTimer.Enabled = True
+            SetSlideInAnimation()
+            SlideTimer.Enabled = True
             Me.Invalidate()
             Me.Update()
         End If
@@ -205,9 +202,13 @@ Public Class SliderLabel
     ''' <param name="text"></param>
     ''' <returns></returns>
     Private Function GetTextSize(text As String) As SizeF
-        Using gfx = Me.CreateGraphics
-            Return gfx.MeasureString(text, Me.Font)
-        End Using
+        Try
+            Using gfx = Me.CreateGraphics
+                Return gfx.MeasureString(text, Me.Font)
+            End Using
+        Catch ex As ObjectDisposedException
+            'We've been disposed. Do nothing.
+        End Try
     End Function
 
     ''' <summary>
@@ -225,13 +226,15 @@ Public Class SliderLabel
     ''' Handles the message queue. Messages are queued until they their animation is complete. Messages with a display time of 0 are moved to the slide out animation status, then replaced with the next message when complete.
     ''' </summary>
     Private Sub ProcessQueue()
-        If _messageQueue.Count > 0 Then
-            If _currentSlideState = SlideState.Done Then
-                DisplayText(_messageQueue.Last)
-                _messageQueue.RemoveAt(_messageQueue.Count - 1)
-            ElseIf _currentSlideState = SlideState.Hold Then
-                SetOutMovements()
-                _slideTimer.Enabled = True
+        If MessageQueue.Count > 0 Then
+            'If state is done, then we can display the next message
+            If CurrentSlideState = SlideState.Done Then
+                DisplayText(MessageQueue.Last)
+                MessageQueue.RemoveAt(MessageQueue.Count - 1)
+                'If the state is hold, then a permanent message is currently displayed. Trigger a slide out animation, which will change the state to done once complete.
+            ElseIf CurrentSlideState = SlideState.Hold Then
+                SetSlideOutAnimation()
+                SlideTimer.Enabled = True
             End If
         End If
 
@@ -243,72 +246,73 @@ Public Class SliderLabel
     Private Sub SetControlSize()
         Me.BackColor = Me.Parent.BackColor
         If Me.AutoSize Then
-            Me.Size = GetTextSize(_text).ToSize
+            Me.Size = GetTextSize(Text).ToSize
         End If
     End Sub
 
     ''' <summary>
     ''' Sets states, current positions and ending positions for a slide-in animation.
     ''' </summary>
-    Private Sub SetInMovements()
-        _currentDirection = _slideInDirection
-        _currentSlideState = SlideState.SlideIn
-        _currentX = 0
-        _currentY = 0
-        _currentSpeed = 0
-        Select Case _slideInDirection
+    Private Sub SetSlideInAnimation()
+        CurrentDirection = SlideInDirection
+        CurrentSlideState = SlideState.SlideIn
+        CurrentPosition = New PointF(0, 0)
+        CurrentSpeed = 0
+        Select Case SlideInDirection
 
             Case SlideDirection.DefaultSlide, SlideDirection.Up
-                _yStart = _textSize.Height
-                _currentY = _yStart
-                _yEnd = 0
+                StartPosition.Y = TextSize.Height
+                CurrentPosition.Y = StartPosition.Y
+                EndPosition.Y = 0
 
             Case SlideDirection.Down
-                _yStart = -_textSize.Height
-                _currentY = _yStart
-                _yEnd = 0
+                StartPosition.Y = -TextSize.Height
+                CurrentPosition.Y = StartPosition.Y
+                EndPosition.Y = 0
 
             Case SlideDirection.Left
-                _xStart = _textSize.Width
-                _currentX = _xStart
-                _xEnd = 0
+                StartPosition.X = TextSize.Width
+                CurrentPosition.X = StartPosition.X
+                EndPosition.X = 0
 
             Case SlideDirection.Right
-                _xStart = -_textSize.Width
-                _currentX = _xStart
-                _xEnd = 0
+                StartPosition.X = -TextSize.Width
+                CurrentPosition.X = StartPosition.X
+                EndPosition.X = 0
+
         End Select
     End Sub
 
     ''' <summary>
     ''' Sets states, current positions and ending positions for a slide-out animation.
     ''' </summary>
-    Private Sub SetOutMovements()
-        _currentDirection = _slideOutDirection
-        _currentSlideState = SlideState.SlideOut
-        _currentSpeed = 0
+    Private Sub SetSlideOutAnimation()
+        CurrentDirection = SlideOutDirection
+        CurrentSlideState = SlideState.SlideOut
+        CurrentSpeed = 0
 
-        Select Case _slideOutDirection
+        Select Case SlideOutDirection
 
             Case SlideDirection.DefaultSlide, SlideDirection.Up
-                _yEnd = -_textSize.Height
+                EndPosition.Y = -TextSize.Height
 
             Case SlideDirection.Down
-                _yEnd = _textSize.Height
+                EndPosition.Y = TextSize.Height
 
             Case SlideDirection.Left
-                _xEnd = -_textSize.Width
+                EndPosition.X = -TextSize.Width
 
             Case SlideDirection.Right
-                _xEnd = _textSize.Width
+                EndPosition.X = TextSize.Width
+
         End Select
     End Sub
 
-    Private Sub SliderLabel_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Sub SliderLabelLoad(sender As Object, e As EventArgs) Handles Me.Load
         SetControlSize()
     End Sub
 
-    Private Sub SliderTextBox_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
+    Private Sub SliderTextBoxPaint(sender As Object, e As PaintEventArgs) Handles Me.Paint
         DrawText(e.Graphics)
     End Sub
 
@@ -325,47 +329,41 @@ Public Class SliderLabel
     ''' Primary animation routine. Messages are animated per their current state and specified directions.
     ''' </summary>
     Private Async Sub UpdateTextPosition()
-        'Text position has moved, trigger redraw.
-        Dim PositionChanged As Boolean = False
         'Current slide animation is complete, move to next state.
         Dim SlideComplete As Boolean = False
 
         'Check current direction and change X,Y positions/speeds as needed using an accumulating acceleration.
-        Select Case _currentDirection
+        Select Case CurrentDirection
             Case SlideDirection.DefaultSlide, SlideDirection.Up
-                If _currentY > _yEnd Then
-                    _currentSpeed -= _acceleration
-                    _currentY += _currentSpeed
-                    PositionChanged = True
+                If CurrentPosition.Y > EndPosition.Y Then
+                    CurrentSpeed -= Acceleration
+                    CurrentPosition.Y += CurrentSpeed
                 Else
-                    _currentY = _yEnd
+                    CurrentPosition.Y = EndPosition.Y
                     SlideComplete = True
                 End If
             Case SlideDirection.Down
-                If _currentY < _yEnd Then
-                    _currentSpeed += _acceleration
-                    _currentY += _currentSpeed
-                    PositionChanged = True
+                If CurrentPosition.Y < EndPosition.Y Then
+                    CurrentSpeed += Acceleration
+                    CurrentPosition.Y += CurrentSpeed
                 Else
-                    _currentY = _yEnd
+                    CurrentPosition.Y = EndPosition.Y
                     SlideComplete = True
                 End If
             Case SlideDirection.Left
-                If _currentX > _xEnd Then
-                    _currentSpeed -= _acceleration
-                    _currentX += _currentSpeed
-                    PositionChanged = True
+                If CurrentPosition.X > EndPosition.X Then
+                    CurrentSpeed -= Acceleration
+                    CurrentPosition.X += CurrentSpeed
                 Else
-                    _currentX = _xEnd
+                    CurrentPosition.X = EndPosition.X
                     SlideComplete = True
                 End If
             Case SlideDirection.Right
-                If _currentX < _xEnd Then
-                    _currentSpeed += _acceleration
-                    _currentX += _currentSpeed
-                    PositionChanged = True
+                If CurrentPosition.X < EndPosition.X Then
+                    CurrentSpeed += Acceleration
+                    CurrentPosition.X += CurrentSpeed
                 Else
-                    _currentX = _xEnd
+                    CurrentPosition.X = EndPosition.X
                     SlideComplete = True
                 End If
         End Select
@@ -378,39 +376,39 @@ Public Class SliderLabel
         If SlideComplete Then
 
             'Reset speed.
-            _currentSpeed = 0
+            CurrentSpeed = 0
 
             'If current state is slide-in and display time is not forever.
-            If _currentSlideState = SlideState.SlideIn And _displayTime > 0 Then
+            If CurrentSlideState = SlideState.SlideIn And DisplayTime > 0 Then
 
                 'Stop the animation timer, change state to paused, and pause for the specified display time.
-                _slideTimer.Enabled = False
-                _currentSlideState = SlideState.Paused
+                SlideTimer.Enabled = False
+                CurrentSlideState = SlideState.Paused
 
                 'Asynchronous wait task. (Keeps UI alive)
-                Await Pause(_displayTime)
+                Await Pause(DisplayTime)
 
                 'Once the wait is complete, set the next state (slide-out) and re-start the animation timer.
-                SetOutMovements()
-                _slideTimer.Enabled = True
+                SetSlideOutAnimation()
+                SlideTimer.Enabled = True
             Else
                 'If the display time is forever
-                If _displayTime = 0 Then
+                If DisplayTime = 0 Then
 
-                    'If the forever displayed message state is slide-out, change the state to done.
-                    If _currentSlideState = SlideState.SlideOut Then
-                        _currentSlideState = SlideState.Done
+                    'If the forever displayed message state is slide-out, then the forever message is being replaced with a new message, so change the state to done.
+                    If CurrentSlideState = SlideState.SlideOut Then
+                        CurrentSlideState = SlideState.Done
                     Else
                         'Otherwise, change the forever displayed message state to hold to keep it visible.
-                        _currentSlideState = SlideState.Hold
+                        CurrentSlideState = SlideState.Hold
                     End If
                 Else
-                    'If the message actually has a display time, set state to done.
-                    _currentSlideState = SlideState.Done
+                    'If the message has a display time, set state to done.
+                    CurrentSlideState = SlideState.Done
                 End If
 
                 'Stop the animation timer.
-                _slideTimer.Enabled = False
+                SlideTimer.Enabled = False
 
                 'Add pause between messages if desired.
                 'Await Pause(1)
@@ -420,6 +418,12 @@ Public Class SliderLabel
 
         'Check the queue for new messages.
         ProcessQueue()
+    End Sub
+
+    Private Sub SliderLabel_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
+        MessageQueue.Clear()
+        SlideTimer.Enabled = False
+        SlideTimer.Dispose()
     End Sub
 
 #End Region
@@ -454,5 +458,6 @@ Public Class SliderLabel
     End Structure
 
 #End Region
+
 
 End Class
