@@ -93,7 +93,6 @@ Partial Class ViewDeviceForm
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.FieldTabs = New System.Windows.Forms.TabControl()
         Me.AssetInfo = New System.Windows.Forms.TabPage()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.MiscInfo = New System.Windows.Forms.TabPage()
         Me.ADPanel = New System.Windows.Forms.Panel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
@@ -906,7 +905,6 @@ Partial Class ViewDeviceForm
         '
         Me.AssetInfo.BackColor = System.Drawing.SystemColors.Control
         Me.AssetInfo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.AssetInfo.Controls.Add(Me.Button1)
         Me.AssetInfo.Controls.Add(Me.pnlOtherFunctions)
         Me.AssetInfo.Controls.Add(Me.Label2)
         Me.AssetInfo.Controls.Add(Me.Label3)
@@ -937,15 +935,6 @@ Partial Class ViewDeviceForm
         Me.AssetInfo.Size = New System.Drawing.Size(788, 249)
         Me.AssetInfo.TabIndex = 0
         Me.AssetInfo.Text = "Asset Info."
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(312, 189)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 55
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
         '
         'MiscInfo
         '
@@ -1434,5 +1423,4 @@ Partial Class ViewDeviceForm
     Friend WithEvents ADOSTextBox As TextBox
     Friend WithEvents RefreshToolStripButton As ToolStripButton
     Friend WithEvents StatusLabel As ToolStripStatusLabel
-    Friend WithEvents Button1 As Button
 End Class

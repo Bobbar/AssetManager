@@ -182,13 +182,14 @@ Partial Class SibiManageRequestForm
         'txtCreateDate
         '
         Me.txtCreateDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtCreateDate.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtCreateDate.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.txtCreateDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtCreateDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCreateDate.ForeColor = System.Drawing.Color.Silver
-        Me.txtCreateDate.Location = New System.Drawing.Point(452, 61)
+        Me.txtCreateDate.ForeColor = System.Drawing.Color.Black
+        Me.txtCreateDate.Location = New System.Drawing.Point(263, 71)
         Me.txtCreateDate.Name = "txtCreateDate"
         Me.txtCreateDate.ReadOnly = True
-        Me.txtCreateDate.Size = New System.Drawing.Size(137, 14)
+        Me.txtCreateDate.Size = New System.Drawing.Size(137, 21)
         Me.txtCreateDate.TabIndex = 23
         Me.txtCreateDate.Text = "[CREATE DATE]"
         Me.txtCreateDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -334,7 +335,7 @@ Partial Class SibiManageRequestForm
         '
         Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(474, 17)
+        Me.Label8.Location = New System.Drawing.Point(484, 29)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(66, 15)
         Me.Label8.TabIndex = 16
@@ -343,7 +344,7 @@ Partial Class SibiManageRequestForm
         'txtRequestNum
         '
         Me.txtRequestNum.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtRequestNum.Location = New System.Drawing.Point(477, 33)
+        Me.txtRequestNum.Location = New System.Drawing.Point(487, 45)
         Me.txtRequestNum.Name = "txtRequestNum"
         Me.txtRequestNum.ReadOnly = True
         Me.txtRequestNum.Size = New System.Drawing.Size(86, 21)
@@ -751,6 +752,7 @@ Partial Class SibiManageRequestForm
         'StatusStrip1
         '
         Me.StatusStrip1.AutoSize = False
+        Me.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 701)
         Me.StatusStrip1.Name = "StatusStrip1"
@@ -762,11 +764,12 @@ Partial Class SibiManageRequestForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1079, 723)
-        Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel4)
+        Me.Controls.Add(Me.StatusStrip1)
         Me.MinimumSize = New System.Drawing.Size(771, 443)
         Me.Name = "SibiManageRequestForm"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide

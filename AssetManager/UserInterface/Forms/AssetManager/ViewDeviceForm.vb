@@ -1121,23 +1121,6 @@ Public Class ViewDeviceForm
         RefreshData()
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        '  SetStatusBar("Testing.... Blah blah blah BLah blah blahba sdj ahsdlkjhasd ")
-        'StatusSlider.SlideText = "Testing...."
-        'StatusStrip1.Invalidate()
-        'StatusStrip1.Update()
-
-        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Up, SlideDirection.Down, 1)
-        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Down, SlideDirection.Up, 1)
-        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Left, SlideDirection.Right, 1)
-        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Right, SlideDirection.Left, 1)
-        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Up, SlideDirection.Up, 1)
-        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Left, SlideDirection.Left, 1)
-        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Right, SlideDirection.Right, 1)
-        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Down, SlideDirection.Down, 1)
-        StatusSlider.NewSlideMessage("Testing.... Blah blah blah ",,, 2)
-    End Sub
-
 #End Region
 
 End Class

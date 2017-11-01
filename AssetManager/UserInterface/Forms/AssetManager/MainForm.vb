@@ -788,10 +788,6 @@ Public Class MainForm
         UpdateRecords()
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        '  SliderLabel1.SlideText = txtDescription.Text
-        WatchDogRebuildCache(Me, New EventArgs)
-    End Sub
 
 #End Region
 

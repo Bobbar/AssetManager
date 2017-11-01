@@ -25,6 +25,7 @@ Public Class SliderLabel
     Private Const defaultDisplayTime As Integer = 4
     Private Const defaultSlideInDirection As SlideDirection = SlideDirection.Up
     Private Const defaultSlideOutDirection As SlideDirection = SlideDirection.Left
+
     '  Private stepSize As Single = 0.25
     Private Acceleration As Single = 0.5
 
@@ -43,7 +44,6 @@ Public Class SliderLabel
     Private CurrentPosition As New PointF
     Private SlideComplete As Boolean = False
     Private lastPositionRect As RectangleF
-
 
 #End Region
 
@@ -340,8 +340,6 @@ Public Class SliderLabel
         End Try
     End Sub
 
-
-
     ''' <summary>
     ''' Primary animation routine. Messages are animated per their current state and specified directions.
     ''' </summary>
@@ -437,7 +435,6 @@ Public Class SliderLabel
         ProcessQueue()
     End Sub
 
-
     Private Sub SliderLabel_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         MessageQueue.Clear()
         SlideTimer.Stop()
@@ -475,6 +472,5 @@ Public Class SliderLabel
     End Structure
 
 #End Region
-
 
 End Class
