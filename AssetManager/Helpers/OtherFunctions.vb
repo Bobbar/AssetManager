@@ -78,19 +78,24 @@ Module OtherFunctions
         Return True
     End Function
 
+    Delegate Sub SetWaitCursorVoidDelegate(waiting As Boolean)
     Public Sub SetWaitCursor(Waiting As Boolean, Optional parentForm As Form = Nothing)
         If parentForm Is Nothing Then
             Application.UseWaitCursor = Waiting
             Application.DoEvents()
         Else
-            If Waiting Then
-                parentForm.Cursor = Cursors.AppStarting
+            If parentForm.InvokeRequired Then
+                Dim d As New SetWaitCursorVoidDelegate(AddressOf SetWaitCursor)
+                parentForm.Invoke(d, New Object() {Waiting})
             Else
-                parentForm.Cursor = Cursors.Default
+                If Waiting Then
+                    parentForm.Cursor = Cursors.AppStarting
+                Else
+                    parentForm.Cursor = Cursors.Default
+                End If
+                parentForm.Update()
             End If
-            parentForm.Update()
         End If
-
     End Sub
 
     Public Function RTFToPlainText(rtfText As String) As String
