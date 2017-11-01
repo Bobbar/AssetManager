@@ -86,6 +86,7 @@ Partial Class SibiManageRequestForm
         Me.cmdAttachments = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsbRefresh = New System.Windows.Forms.ToolStripButton()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.PopupMenuItems.SuspendLayout()
         Me.PopupMenuNotes.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -109,7 +110,7 @@ Partial Class SibiManageRequestForm
         Me.PopupMenuItems.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.PopupMenuItems.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmPopFA, Me.tsmLookupDevice, Me.tsmGLBudget, Me.tsmCopyText, Me.NewDeviceMenuItem, Me.tsmSeparator, Me.tsmDeleteItem})
         Me.PopupMenuItems.Name = "PopupMenu"
-        Me.PopupMenuItems.Size = New System.Drawing.Size(179, 188)
+        Me.PopupMenuItems.Size = New System.Drawing.Size(179, 166)
         '
         'tsmPopFA
         '
@@ -605,7 +606,7 @@ Partial Class SibiManageRequestForm
         Me.Panel1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(8, 314)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1061, 371)
+        Me.Panel1.Size = New System.Drawing.Size(1061, 384)
         Me.Panel1.TabIndex = 1
         '
         'GroupBox4
@@ -617,7 +618,7 @@ Partial Class SibiManageRequestForm
         Me.GroupBox4.Controls.Add(Me.chkAllowDrag)
         Me.GroupBox4.Location = New System.Drawing.Point(0, 3)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(1058, 365)
+        Me.GroupBox4.Size = New System.Drawing.Size(1058, 378)
         Me.GroupBox4.TabIndex = 21
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Items"
@@ -656,7 +657,7 @@ Partial Class SibiManageRequestForm
         Me.RequestItemsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.RequestItemsGrid.ShowCellToolTips = False
-        Me.RequestItemsGrid.Size = New System.Drawing.Size(1046, 327)
+        Me.RequestItemsGrid.Size = New System.Drawing.Size(1046, 340)
         Me.RequestItemsGrid.TabIndex = 18
         '
         'chkAllowDrag
@@ -747,17 +748,28 @@ Partial Class SibiManageRequestForm
         Me.tsbRefresh.Size = New System.Drawing.Size(29, 34)
         Me.tsbRefresh.ToolTipText = "Refresh"
         '
+        'StatusStrip1
+        '
+        Me.StatusStrip1.AutoSize = False
+        Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 701)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Size = New System.Drawing.Size(1079, 22)
+        Me.StatusStrip1.TabIndex = 7
+        Me.StatusStrip1.Text = "StatusStrip1"
+        '
         'SibiManageRequestForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1079, 697)
+        Me.ClientSize = New System.Drawing.Size(1079, 723)
+        Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel4)
         Me.MinimumSize = New System.Drawing.Size(771, 443)
         Me.Name = "SibiManageRequestForm"
-        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Manage Request"
         Me.PopupMenuItems.ResumeLayout(False)
@@ -845,4 +857,5 @@ Partial Class SibiManageRequestForm
     Friend WithEvents tsmPopFA As ToolStripMenuItem
     Friend WithEvents tsmGLBudget As ToolStripMenuItem
     Friend WithEvents NewDeviceMenuItem As ToolStripMenuItem
+    Friend WithEvents StatusStrip1 As StatusStrip
 End Class

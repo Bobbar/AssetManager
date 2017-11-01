@@ -1127,7 +1127,15 @@ Public Class ViewDeviceForm
         'StatusStrip1.Invalidate()
         'StatusStrip1.Update()
 
-        StatusSlider.NewSlideMessage("Testing.... ", SlideDirection.Up, SlideDirection.Left, 2)
+        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Up, SlideDirection.Down, 1)
+        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Down, SlideDirection.Up, 1)
+        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Left, SlideDirection.Right, 1)
+        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Right, SlideDirection.Left, 1)
+        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Up, SlideDirection.Up, 1)
+        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Left, SlideDirection.Left, 1)
+        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Right, SlideDirection.Right, 1)
+        'StatusSlider.NewSlideMessage("Testing.... Blah blah blah ", SlideDirection.Down, SlideDirection.Down, 1)
+        StatusSlider.NewSlideMessage("Testing.... Blah blah blah ",,, 2)
     End Sub
 
 #End Region

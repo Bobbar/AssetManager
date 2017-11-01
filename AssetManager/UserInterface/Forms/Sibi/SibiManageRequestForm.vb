@@ -17,6 +17,7 @@ Public Class SibiManageRequestForm
     Private TitleText As String = "Manage Request"
     Private MyWindowList As New WindowList(Me)
     Private PrevWindowState As Integer
+    Private StatusSlider As SliderLabel
 
 #End Region
 
@@ -701,6 +702,9 @@ Public Class SibiManageRequestForm
     End Sub
 
     Private Sub InitForm(ParentForm As ExtendedForm, Optional UID As String = "")
+        StatusSlider = New SliderLabel
+        StatusStrip1.Items.Insert(0, StatusSlider.ToToolStripControl(StatusStrip1))
+
         InitDBControls()
         ExtendedMethods.DoubleBufferedDataGrid(RequestItemsGrid, True)
         MyMunisToolBar.InsertMunisDropDown(ToolStrip)
@@ -1206,6 +1210,7 @@ Public Class SibiManageRequestForm
 
                 ParentForm.RefreshData()
                 OpenRequest(CurrentRequest.GUID)
+                StatusSlider.NewSlideMessage("Update successful!")
             Catch ex As Exception
                 trans.Rollback()
                 ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
