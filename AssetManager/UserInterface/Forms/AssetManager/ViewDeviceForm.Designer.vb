@@ -56,14 +56,11 @@ Partial Class ViewDeviceForm
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
         Me.grpNetTools = New System.Windows.Forms.GroupBox()
-        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.cmdGKUpdate = New System.Windows.Forms.Button()
-        Me.cmdBrowseFiles = New System.Windows.Forms.Button()
         Me.cmdRestart = New System.Windows.Forms.PictureBox()
-        Me.cmdRDP = New System.Windows.Forms.Button()
-        Me.DeployTVButton = New System.Windows.Forms.Button()
-        Me.UpdateChromeButton = New System.Windows.Forms.Button()
+        Me.cmdGKUpdate = New System.Windows.Forms.Button()
         Me.cmdShowIP = New System.Windows.Forms.Button()
+        Me.cmdBrowseFiles = New System.Windows.Forms.Button()
+        Me.cmdRDP = New System.Windows.Forms.Button()
         Me.RightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.DeleteEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -132,7 +129,6 @@ Partial Class ViewDeviceForm
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
         Me.pnlOtherFunctions.SuspendLayout()
         Me.grpNetTools.SuspendLayout()
-        Me.FlowLayoutPanel1.SuspendLayout()
         CType(Me.cmdRestart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RightClickMenu.SuspendLayout()
         Me.TabControl1.SuspendLayout()
@@ -476,107 +472,44 @@ Partial Class ViewDeviceForm
         '
         'grpNetTools
         '
-        Me.grpNetTools.Controls.Add(Me.FlowLayoutPanel1)
+        Me.grpNetTools.Controls.Add(Me.cmdRestart)
+        Me.grpNetTools.Controls.Add(Me.cmdGKUpdate)
         Me.grpNetTools.Controls.Add(Me.cmdShowIP)
+        Me.grpNetTools.Controls.Add(Me.cmdBrowseFiles)
+        Me.grpNetTools.Controls.Add(Me.cmdRDP)
         Me.grpNetTools.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.grpNetTools.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.grpNetTools.Location = New System.Drawing.Point(3, 3)
         Me.grpNetTools.Name = "grpNetTools"
-        Me.grpNetTools.Size = New System.Drawing.Size(320, 97)
+        Me.grpNetTools.Size = New System.Drawing.Size(320, 96)
         Me.grpNetTools.TabIndex = 52
         Me.grpNetTools.TabStop = False
-        Me.grpNetTools.Text = "Remote Tools"
+        Me.grpNetTools.Text = "Remote Mgmt"
         Me.grpNetTools.Visible = False
-        '
-        'FlowLayoutPanel1
-        '
-        Me.FlowLayoutPanel1.AutoScroll = True
-        Me.FlowLayoutPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.FlowLayoutPanel1.Controls.Add(Me.cmdGKUpdate)
-        Me.FlowLayoutPanel1.Controls.Add(Me.cmdBrowseFiles)
-        Me.FlowLayoutPanel1.Controls.Add(Me.cmdRestart)
-        Me.FlowLayoutPanel1.Controls.Add(Me.cmdRDP)
-        Me.FlowLayoutPanel1.Controls.Add(Me.DeployTVButton)
-        Me.FlowLayoutPanel1.Controls.Add(Me.UpdateChromeButton)
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(6, 20)
-        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(227, 71)
-        Me.FlowLayoutPanel1.TabIndex = 57
-        '
-        'cmdGKUpdate
-        '
-        Me.cmdGKUpdate.BackgroundImage = Global.AssetManager.My.Resources.Resources.GK__UpdateIcon
-        Me.cmdGKUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.cmdGKUpdate.Location = New System.Drawing.Point(1, 1)
-        Me.cmdGKUpdate.Margin = New System.Windows.Forms.Padding(1)
-        Me.cmdGKUpdate.Name = "cmdGKUpdate"
-        Me.cmdGKUpdate.Size = New System.Drawing.Size(45, 45)
-        Me.cmdGKUpdate.TabIndex = 55
-        Me.ToolTip1.SetToolTip(Me.cmdGKUpdate, "Enqueue GK Update")
-        Me.cmdGKUpdate.UseVisualStyleBackColor = True
-        '
-        'cmdBrowseFiles
-        '
-        Me.cmdBrowseFiles.BackgroundImage = Global.AssetManager.My.Resources.Resources.FolderIcon
-        Me.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.cmdBrowseFiles.Location = New System.Drawing.Point(48, 1)
-        Me.cmdBrowseFiles.Margin = New System.Windows.Forms.Padding(1)
-        Me.cmdBrowseFiles.Name = "cmdBrowseFiles"
-        Me.cmdBrowseFiles.Size = New System.Drawing.Size(45, 45)
-        Me.cmdBrowseFiles.TabIndex = 52
-        Me.ToolTip1.SetToolTip(Me.cmdBrowseFiles, "Browse Files")
-        Me.cmdBrowseFiles.UseVisualStyleBackColor = True
         '
         'cmdRestart
         '
         Me.cmdRestart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.cmdRestart.Image = Global.AssetManager.My.Resources.Resources.RestartIcon
-        Me.cmdRestart.Location = New System.Drawing.Point(97, 3)
+        Me.cmdRestart.Location = New System.Drawing.Point(118, 29)
         Me.cmdRestart.Name = "cmdRestart"
-        Me.cmdRestart.Size = New System.Drawing.Size(42, 42)
+        Me.cmdRestart.Size = New System.Drawing.Size(50, 50)
         Me.cmdRestart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.cmdRestart.TabIndex = 56
         Me.cmdRestart.TabStop = False
         Me.ToolTip1.SetToolTip(Me.cmdRestart, "Reboot Device")
         '
-        'cmdRDP
+        'cmdGKUpdate
         '
-        Me.cmdRDP.BackgroundImage = Global.AssetManager.My.Resources.Resources.RDPIcon
-        Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRDP.Location = New System.Drawing.Point(143, 1)
-        Me.cmdRDP.Margin = New System.Windows.Forms.Padding(1)
-        Me.cmdRDP.Name = "cmdRDP"
-        Me.cmdRDP.Size = New System.Drawing.Size(45, 45)
-        Me.cmdRDP.TabIndex = 46
-        Me.ToolTip1.SetToolTip(Me.cmdRDP, "Launch Remote Desktop")
-        Me.cmdRDP.UseVisualStyleBackColor = True
-        '
-        'DeployTVButton
-        '
-        Me.DeployTVButton.BackgroundImage = Global.AssetManager.My.Resources.Resources.TeamViewerIcon
-        Me.DeployTVButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.DeployTVButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.DeployTVButton.Location = New System.Drawing.Point(1, 49)
-        Me.DeployTVButton.Margin = New System.Windows.Forms.Padding(1)
-        Me.DeployTVButton.Name = "DeployTVButton"
-        Me.DeployTVButton.Size = New System.Drawing.Size(45, 45)
-        Me.DeployTVButton.TabIndex = 57
-        Me.ToolTip1.SetToolTip(Me.DeployTVButton, "Deploy TeamViewer")
-        Me.DeployTVButton.UseVisualStyleBackColor = True
-        '
-        'UpdateChromeButton
-        '
-        Me.UpdateChromeButton.BackgroundImage = Global.AssetManager.My.Resources.Resources.ChromeIcon
-        Me.UpdateChromeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.UpdateChromeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.UpdateChromeButton.Location = New System.Drawing.Point(48, 49)
-        Me.UpdateChromeButton.Margin = New System.Windows.Forms.Padding(1)
-        Me.UpdateChromeButton.Name = "UpdateChromeButton"
-        Me.UpdateChromeButton.Size = New System.Drawing.Size(45, 45)
-        Me.UpdateChromeButton.TabIndex = 58
-        Me.ToolTip1.SetToolTip(Me.UpdateChromeButton, "Update/Install Chrome")
-        Me.UpdateChromeButton.UseVisualStyleBackColor = True
+        Me.cmdGKUpdate.BackgroundImage = Global.AssetManager.My.Resources.Resources.GK__UpdateIcon
+        Me.cmdGKUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdGKUpdate.Location = New System.Drawing.Point(14, 29)
+        Me.cmdGKUpdate.Margin = New System.Windows.Forms.Padding(1)
+        Me.cmdGKUpdate.Name = "cmdGKUpdate"
+        Me.cmdGKUpdate.Size = New System.Drawing.Size(50, 50)
+        Me.cmdGKUpdate.TabIndex = 55
+        Me.ToolTip1.SetToolTip(Me.cmdGKUpdate, "Enqueue GK Update")
+        Me.cmdGKUpdate.UseVisualStyleBackColor = True
         '
         'cmdShowIP
         '
@@ -591,6 +524,31 @@ Partial Class ViewDeviceForm
         Me.cmdShowIP.TabIndex = 53
         Me.cmdShowIP.TextAlign = System.Drawing.ContentAlignment.TopRight
         Me.cmdShowIP.UseVisualStyleBackColor = False
+        '
+        'cmdBrowseFiles
+        '
+        Me.cmdBrowseFiles.BackgroundImage = Global.AssetManager.My.Resources.Resources.FolderIcon
+        Me.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdBrowseFiles.Location = New System.Drawing.Point(66, 29)
+        Me.cmdBrowseFiles.Margin = New System.Windows.Forms.Padding(1)
+        Me.cmdBrowseFiles.Name = "cmdBrowseFiles"
+        Me.cmdBrowseFiles.Size = New System.Drawing.Size(50, 50)
+        Me.cmdBrowseFiles.TabIndex = 52
+        Me.ToolTip1.SetToolTip(Me.cmdBrowseFiles, "Browse Files")
+        Me.cmdBrowseFiles.UseVisualStyleBackColor = True
+        '
+        'cmdRDP
+        '
+        Me.cmdRDP.BackgroundImage = Global.AssetManager.My.Resources.Resources.RDPIcon
+        Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.cmdRDP.Location = New System.Drawing.Point(170, 29)
+        Me.cmdRDP.Margin = New System.Windows.Forms.Padding(1)
+        Me.cmdRDP.Name = "cmdRDP"
+        Me.cmdRDP.Size = New System.Drawing.Size(50, 50)
+        Me.cmdRDP.TabIndex = 46
+        Me.ToolTip1.SetToolTip(Me.cmdRDP, "Launch Remote Desktop")
+        Me.cmdRDP.UseVisualStyleBackColor = True
         '
         'RightClickMenu
         '
@@ -716,7 +674,7 @@ Partial Class ViewDeviceForm
         Me.TrackingBox.Controls.Add(Me.txtCheckOut)
         Me.TrackingBox.Controls.Add(Me.Label11)
         Me.TrackingBox.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TrackingBox.Location = New System.Drawing.Point(4, 105)
+        Me.TrackingBox.Location = New System.Drawing.Point(3, 105)
         Me.TrackingBox.Name = "TrackingBox"
         Me.TrackingBox.Size = New System.Drawing.Size(320, 167)
         Me.TrackingBox.TabIndex = 41
@@ -1324,7 +1282,6 @@ Partial Class ViewDeviceForm
         Me.Text = "View"
         Me.pnlOtherFunctions.ResumeLayout(False)
         Me.grpNetTools.ResumeLayout(False)
-        Me.FlowLayoutPanel1.ResumeLayout(False)
         CType(Me.cmdRestart, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RightClickMenu.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
@@ -1466,7 +1423,4 @@ Partial Class ViewDeviceForm
     Friend WithEvents ADOSTextBox As TextBox
     Friend WithEvents RefreshToolStripButton As ToolStripButton
     Friend WithEvents StatusLabel As ToolStripStatusLabel
-    Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
-    Friend WithEvents DeployTVButton As Button
-    Friend WithEvents UpdateChromeButton As Button
 End Class

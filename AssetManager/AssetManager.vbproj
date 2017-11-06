@@ -631,8 +631,6 @@
     <None Include="Resources\MoneyCircleIcon.png" />
     <None Include="Resources\CoinIcon.png" />
     <None Include="Resources\MoneyCircle2Icon.png" />
-    <None Include="Resources\TeamViewerIcon.png" />
-    <None Include="Resources\ChromeIcon.png" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

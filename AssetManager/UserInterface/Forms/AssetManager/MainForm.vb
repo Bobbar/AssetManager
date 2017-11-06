@@ -3,10 +3,7 @@
 Imports System.ComponentModel
 Imports System.Data.Common
 Imports System.Deployment.Application
-Imports System.Management.Automation
-Imports System.Management.Automation.Runspaces
 Imports MyDialogLib
-Imports System.IO
 
 Public Class MainForm
 
@@ -557,80 +554,49 @@ Public Class MainForm
         SetStatusBar("Processing...")
     End Sub
 
-    Private Async Function StartPowerShellScript(scriptByte() As Byte, Optional hostName As String = "") As Task(Of Boolean)
+    Private Async Sub StartPowerShellScript(scriptByte() As Byte)
         Try
-            'Dim Hostname As String
-            If hostName = "" Then
-                Using GetHostnameDialog As New AdvancedDialog(Me)
-                    With GetHostnameDialog
-                        .Text = "Remote Computer Hostname"
-                        .AddTextBox("HostnameText", "Hostname:")
-                        .ShowDialog()
-                        If .DialogResult = DialogResult.OK Then
-                            hostName = Trim(GetHostnameDialog.GetControlValue("HostnameText").ToString)
-                        Else
-                            Return False
-                        End If
-                    End With
-                End Using
-            End If
+            Dim Hostname As String
+            Using GetHostnameDialog As New AdvancedDialog(Me)
+                With GetHostnameDialog
+                    .Text = "Remote Computer Hostname"
+                    .AddTextBox("HostnameText", "Hostname:")
+                    .ShowDialog()
+                    If .DialogResult = DialogResult.OK Then
+                        Hostname = Trim(GetHostnameDialog.GetControlValue("HostnameText").ToString)
+                    Else
+                        Exit Sub
+                    End If
+                End With
+            End Using
 
-            If hostName <> "" Then
+            If Hostname <> "" Then
                 If SecurityTools.VerifyAdminCreds() Then
                     Waiting()
-                    Dim PSWrapper As New PowerShellWrapper
-                    If Await PSWrapper.ExecutePowerShellScript(hostName, scriptByte) Then
+                    If Await ExecutePowerShellScript(Hostname, scriptByte) Then
                         Message("Command successful.", vbOKOnly + vbInformation, "Done", Me)
-                        Return True
                     End If
                 End If
             End If
-            Return False
         Catch ex As Exception
             ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return False
         Finally
             DoneWaiting()
         End Try
-    End Function
+    End Sub
 
-    Private Async Function StartPowerShellCommand(PScommand As Command, Optional hostName As String = "") As Task(Of Boolean)
-        Try
-            'Dim Hostname As String
-            If hostName = "" Then
-                Using GetHostnameDialog As New AdvancedDialog(Me)
-                    With GetHostnameDialog
-                        .Text = "Remote Computer Hostname"
-                        .AddTextBox("HostnameText", "Hostname:")
-                        .ShowDialog()
-                        If .DialogResult = DialogResult.OK Then
-                            hostName = Trim(GetHostnameDialog.GetControlValue("HostnameText").ToString)
-                        Else
-                            Return False
-                        End If
-                    End With
-                End Using
-            End If
-
-            If hostName <> "" Then
-                If SecurityTools.VerifyAdminCreds() Then
-                    Waiting()
-                    Dim PSWrapper As New PowerShellWrapper
-                    If Await PSWrapper.InvokePowerShellCommand(hostName, PScommand) Then
-                        '  Message("Command successful.", vbOKOnly + vbInformation, "Done", Me)
-                        Return True
-                    End If
-                End If
-            End If
+    Private Async Function ExecutePowerShellScript(hostname As String, scriptByte() As Byte) As Task(Of Boolean)
+        Dim UpdateResult = Await Task.Run(Function()
+                                              Dim PSWrapper As New PowerShellWrapper
+                                              Return PSWrapper.ExecuteRemotePSScript(hostname, scriptByte, SecurityTools.AdminCreds)
+                                          End Function)
+        If UpdateResult <> "" Then
+            Message(UpdateResult, vbOKOnly + vbExclamation, "Error Running Script")
             Return False
-        Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
-            Return False
-        Finally
-            DoneWaiting()
-        End Try
+        Else
+            Return True
+        End If
     End Function
-
 
 #Region "Control Event Methods"
 
@@ -821,6 +787,7 @@ Public Class MainForm
     Private Sub UpdateButton_Click(sender As Object, e As EventArgs) Handles UpdateButton.Click
         UpdateRecords()
     End Sub
+
 
 #End Region
 

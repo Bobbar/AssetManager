@@ -153,16 +153,6 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Public ReadOnly Property ChromeIcon() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("ChromeIcon", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
         Public ReadOnly Property CloseCancelDeleteIcon() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("CloseCancelDeleteIcon", resourceCulture)
@@ -416,16 +406,6 @@ Namespace My.Resources
         Public ReadOnly Property SibiIcon() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("SibiIcon", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Public ReadOnly Property TeamViewerIcon() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("TeamViewerIcon", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
