@@ -18,6 +18,15 @@ Public Class GKProgressControl
             Return CurDevice
         End Get
     End Property
+    Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+    End Sub
+
 
     Sub New(parentForm As Form, device As DeviceObject, createMissingDirs As Boolean, gkPath As String, Optional seq As Integer = 0)
         InitializeComponent()
@@ -42,6 +51,32 @@ Public Class GKProgressControl
         AddHandler MyUpdater.UpdateCanceled, AddressOf GKUpdate_Cancelled
         DoubleBufferedPanel(Panel1, True)
     End Sub
+
+    Sub New(parentForm As Form, device As DeviceObject, createMissingDirs As Boolean, sourcePath As String, destPath As String, Optional seq As Integer = 0)
+        InitializeComponent()
+        ImageCaching.CacheControlImages(Me)
+        Me.Size = Me.MinimumSize
+        MyParentForm = parentForm
+        CurDevice = device
+        MyUpdater = New GK_Updater(CurDevice.HostName, sourcePath, destPath)
+        MyUpdater.CreateMissingDirectories = createMissingDirs
+        Me.DoubleBuffered = True
+        lblInfo.Text = CurDevice.Serial & " - " & CurDevice.CurrentUser
+        lblTransRate.Text = "0.00MB/s"
+        SetStatus(ProgressStatus.Queued)
+        If seq > 0 Then
+            lblSeq.Text = "#" & seq
+        Else
+            lblSeq.Text = ""
+        End If
+        AddHandler MyUpdater.LogEvent, AddressOf GKLogEvent
+        AddHandler MyUpdater.StatusUpdate, AddressOf GKStatusUpdateEvent
+        AddHandler MyUpdater.UpdateComplete, AddressOf GKUpdate_Complete
+        AddHandler MyUpdater.UpdateCanceled, AddressOf GKUpdate_Cancelled
+        DoubleBufferedPanel(Panel1, True)
+    End Sub
+
+
 
     Public Event CriticalStopError As EventHandler
 

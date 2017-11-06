@@ -52,6 +52,83 @@ Public Class PowerShellWrapper
         End Try
     End Function
 
+    Public Function InvokeRemotePSCommand(hostname As String, credentials As NetworkCredential, PScommand As Command) As String
+        Try
+            Dim psCreds = New PSCredential(credentials.UserName, credentials.SecurePassword)
+
+            Dim shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell"
+            Dim connInfo As WSManConnectionInfo = New WSManConnectionInfo(False, hostname, 5985, "/wsman", shellUri, psCreds)
+
+            Using remoteRunSpace As Runspace = RunspaceFactory.CreateRunspace(connInfo) '(connInfo)
+                remoteRunSpace.Open()
+                remoteRunSpace.SessionStateProxy.SetVariable("cred", psCreds)
+
+                Using powerSh = PowerShell.Create
+                    powerSh.Runspace = remoteRunSpace
+                    AddHandler powerSh.Streams.Error.DataAdded, AddressOf PSEventHandler
+                    powerSh.Commands.AddCommand(PScommand)
+
+
+                    Dim results As Collection(Of PSObject) = powerSh.Invoke
+                    'Task.Delay(10000).Wait()
+                    Dim stringBuilder As New StringBuilder
+
+                    For Each obj In results
+                        stringBuilder.AppendLine(obj.ToString())
+                    Next
+
+                    Return CleanDBValue((stringBuilder.ToString)).ToString
+
+
+                End Using
+
+            End Using
+        Catch ex As Exception
+            'Check for incorrect username/password error and rethrow a Win32Exception to be caught in the error handler.
+            'Makes sure that the global admin credentials variable is cleared so that a new prompt will be shown on the next attempt. See: VerifyAdminCreds method.
+            If TypeOf ex Is Remoting.PSRemotingTransportException Then
+                Dim transportEx = DirectCast(ex, Remoting.PSRemotingTransportException)
+                If transportEx.ErrorCode = 1326 Then
+                    Throw New Win32Exception(1326)
+                End If
+            End If
+            Return ex.Message
+        End Try
+    End Function
+
+    Public Async Function ExecutePowerShellScript(hostname As String, scriptByte() As Byte) As Task(Of Boolean)
+        Dim UpdateResult = Await Task.Run(Function()
+                                              '  Dim PSWrapper As New PowerShellWrapper
+                                              Return ExecuteRemotePSScript(hostname, scriptByte, SecurityTools.AdminCreds)
+                                          End Function)
+        If UpdateResult <> "" Then
+            Message(UpdateResult, vbOKOnly + vbExclamation, "Error Running Script")
+            Return False
+        Else
+            Return True
+        End If
+    End Function
+
+    Public Async Function InvokePowerShellCommand(hostname As String, PScommand As Command) As Task(Of Boolean)
+        Dim UpdateResult = Await Task.Run(Function()
+                                              ' Dim PSWrapper As New PowerShellWrapper
+                                              Return InvokeRemotePSCommand(hostname, SecurityTools.AdminCreds, PScommand)
+                                          End Function)
+        If UpdateResult <> "" Then
+            Message(UpdateResult, vbOKOnly + vbExclamation, "Error Running Script")
+            Return False
+        Else
+            Return True
+        End If
+    End Function
+
+    Private Sub PSEventHandler(sender As Object, e As DataAddedEventArgs)
+
+        Dim newRecord As ErrorRecord = DirectCast(sender, PSDataCollection(Of ErrorRecord))(e.Index)
+
+        Debug.Print(newRecord.Exception.Message)
+    End Sub
+
     Private Function LoadScript(scriptBytes As Byte()) As String
 
         Try

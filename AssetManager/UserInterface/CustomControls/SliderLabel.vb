@@ -131,7 +131,7 @@ Public Class SliderLabel
     ''' Primary text renderer.
     ''' </summary>
     ''' <param name="canvas"></param>
-    Public Sub DrawText(canvas As Graphics)
+    Private Sub DrawText(canvas As Graphics)
         canvas.Clear(Me.BackColor)
         Using textBrush = New SolidBrush(Me.ForeColor)
             canvas.DrawString(Me.SlideText, Me.Font, textBrush, CurrentPosition)
@@ -146,9 +146,18 @@ Public Class SliderLabel
     ''' <param name="slideInDirection">Slide in direction.</param>
     ''' <param name="slideOutDirection">Slide out direction.</param>
     ''' <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
-    Public Sub NewSlideMessage(text As String, Optional slideInDirection As SlideDirection = SlideDirection.Up, Optional slideOutDirection As SlideDirection = SlideDirection.Left, Optional displayTime As Integer = 4)
+    Public Sub NewSlideMessage(text As String, Optional slideInDirection As SlideDirection = defaultSlideInDirection, Optional slideOutDirection As SlideDirection = defaultSlideOutDirection, Optional displayTime As Integer = defaultDisplayTime)
         AddMessageToQueue(text, slideInDirection, slideOutDirection, displayTime)
     End Sub
+
+    Public Sub NewSlideMessage(text As String, displayTime As Integer)
+        AddMessageToQueue(text, defaultSlideInDirection, defaultSlideOutDirection, displayTime)
+    End Sub
+
+    Public Sub NewSlideMessage(text As String)
+        AddMessageToQueue(text, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime)
+    End Sub
+
 
     ''' <summary>
     ''' Returns a <see cref="ToolStripControlHost"/> of this control for insertion into tool strips/status strips.

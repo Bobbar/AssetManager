@@ -195,11 +195,18 @@
     <Compile Include="Tools\NetworkInfo.vb" />
     <Compile Include="Helpers\DataGridHelpers\ColumnClasses.vb" />
     <Compile Include="Helpers\Logging.vb" />
+    <Compile Include="Tools\TeamViewer\TeamViewerDeploy.vb" />
     <Compile Include="UserInterface\CustomControls\SliderLabel.Designer.vb">
       <DependentUpon>SliderLabel.vb</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\CustomControls\SliderLabel.vb">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserInterface\Forms\AdminTools\CopyFilesForm.Designer.vb">
+      <DependentUpon>CopyFilesForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\AdminTools\CopyFilesForm.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Attachments\AttachmentObject.vb" />
     <Compile Include="Data\DataFunctions\ConnectionWatchdog.vb" />
@@ -409,6 +416,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.resx">
       <DependentUpon>AdvancedSearchForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\AdminTools\CopyFilesForm.resx">
+      <DependentUpon>CopyFilesForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Attachments\AttachmentsForm.resx">
       <DependentUpon>AttachmentsForm.vb</DependentUpon>
@@ -631,6 +641,8 @@
     <None Include="Resources\MoneyCircleIcon.png" />
     <None Include="Resources\CoinIcon.png" />
     <None Include="Resources\MoneyCircle2Icon.png" />
+    <None Include="Resources\TeamViewerIcon.png" />
+    <None Include="Resources\ChromeIcon.png" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
