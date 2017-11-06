@@ -33,6 +33,14 @@ Public Class ExtendedForm
             End If
         End Set
     End Property
+    Sub New()
+
+    End Sub
+
+    Sub New(parentForm As ExtendedForm)
+        Me.ParentForm = parentForm
+    End Sub
+
 
     Public Overridable Function OKToClose() As Boolean
         Return True

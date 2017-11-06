@@ -278,6 +278,14 @@
         End Try
     End Function
 
+    Public Function GetTVApiToken() As String
+        Using results = DBFactory.GetDatabase.DataTableFromQueryString("SELECT apitoken FROM teamviewer_info")
+            Dim token = results.Rows(0).Item("apitoken").ToString
+            Return token
+        End Using
+    End Function
+
+
     Public Function GetDeviceInfoFromGUID(deviceGUID As String) As DeviceObject
         Return New DeviceObject(DBFactory.GetDatabase.DataTableFromQueryString("SELECT * FROM " & DevicesCols.TableName & " WHERE " & DevicesCols.DeviceUID & "='" & deviceGUID & "'"))
     End Function

@@ -15,6 +15,7 @@ Public Class GK_Updater : Implements IDisposable
     Private ErrList As New List(Of String)
     Private ReadOnly GKPath As String = "\PSi\Gatekeeper\"
     Private GKSourcePath As String
+    Private DestinationPath As String
     Private ClientPath As String
     Private ClientHostName As String
     Private CurrentCreds As NetworkCredential
@@ -28,13 +29,24 @@ Public Class GK_Updater : Implements IDisposable
 
 #Region "Constructors"
 
-    Sub New(ByVal HostName As String, GatekeeperPath As String)
-        GKSourcePath = GatekeeperPath
+    Sub New(ByVal HostName As String, SourcePath As String)
+        GKSourcePath = SourcePath
+        DestinationPath = GKPath
         ClientHostName = HostName
         ClientPath = "\\" & HostName & "\c$"
         InitWorker()
         InitializeTimer()
     End Sub
+
+    Sub New(ByVal HostName As String, SourcePath As String, DestPath As String)
+        GKSourcePath = SourcePath
+        DestinationPath = DestPath
+        ClientHostName = HostName
+        ClientPath = "\\" & HostName & "\c$"
+        InitWorker()
+        InitializeTimer()
+    End Sub
+
 
 #End Region
 
@@ -193,7 +205,7 @@ Public Class GK_Updater : Implements IDisposable
         Dim Args As Worker_Args = DirectCast(e.Argument, Worker_Args)
         Using NetCon As New NetworkConnection(ClientPath, Args.Credentials)
             Dim sourceDir As String = GKSourcePath
-            Dim targetDir As String = ClientPath & GKPath
+            Dim targetDir As String = ClientPath & DestinationPath 'GKPath
             Dim StartIdx As Integer = Args.StartIndex
             Dim CurFileIdx As Integer = Args.StartIndex
             'Get array of full paths of all files in source dir and sub-dirs
