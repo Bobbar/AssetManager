@@ -7,6 +7,7 @@ Imports System.Net
 Imports System.Text
 
 Public Class PowerShellWrapper
+    Private CurrentPowerShellObject As PowerShell
 
     ''' <summary>
     ''' Execute the specified PowerShell script on the specified host.
@@ -67,7 +68,7 @@ Public Class PowerShellWrapper
                     powerSh.Runspace = remoteRunSpace
                     AddHandler powerSh.Streams.Error.DataAdded, AddressOf PSEventHandler
                     powerSh.Commands.AddCommand(PScommand)
-
+                    CurrentPowerShellObject = powerSh
 
                     Dim results As Collection(Of PSObject) = powerSh.Invoke
                     'Task.Delay(10000).Wait()
@@ -121,6 +122,12 @@ Public Class PowerShellWrapper
             Return True
         End If
     End Function
+
+    Public Sub StopPowerShellCommand()
+        If CurrentPowerShellObject IsNot Nothing Then
+            CurrentPowerShellObject.Stop()
+        End If
+    End Sub
 
     Private Sub PSEventHandler(sender As Object, e As DataAddedEventArgs)
 

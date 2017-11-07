@@ -104,6 +104,10 @@ Module ErrorHandling
     Private Function handleWin32Exception(ex As Win32Exception, Method As MethodBase) As Boolean
         Logger("ERROR: MethodName =" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message)
         Select Case ex.NativeErrorCode
+            Case 1909 'Locked account
+                PromptUser("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
+                SecurityTools.ClearAdminCreds()
+                Return True
             Case 1326 'Bad credentials error. Clear AdminCreds
                 PromptUser("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.NativeErrorCode & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "Network Error")
                 SecurityTools.ClearAdminCreds()

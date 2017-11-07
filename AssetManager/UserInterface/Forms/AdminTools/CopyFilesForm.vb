@@ -13,7 +13,7 @@
         Me.TargetDirectory = targetDirectory
         PushFilesControl = New GKProgressControl(Me, targetDevice, True, sourceDirectory, targetDirectory)
         Me.Controls.Add(PushFilesControl)
-
+        AddHandler PushFilesControl.CriticalStopError, AddressOf CopyCritcalError
         Me.Show()
 
     End Sub
@@ -35,11 +35,16 @@
                                       End Function)
             Return Done
         Catch ex As Exception
-            Debug.Print(ex.Message)
+            Throw ex
             Return False
         End Try
 
     End Function
+
+    Private Sub CopyCritcalError(sender As Object, e As EventArgs)
+        Cancel = True
+        SecurityTools.ClearAdminCreds()
+    End Sub
 
     Private Sub CopyFilesForm_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed
         If PushFilesControl IsNot Nothing Then PushFilesControl.Dispose()

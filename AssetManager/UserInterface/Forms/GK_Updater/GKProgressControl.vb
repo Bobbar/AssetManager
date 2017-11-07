@@ -169,10 +169,14 @@ Public Class GKProgressControl
         Dim CompleteEvent = DirectCast(e, GK_Updater.GKUpdateCompleteEvents)
         If CompleteEvent.HasErrors Then
             SetStatus(ProgressStatus.Errors)
+            ErrHandle(CompleteEvent.Errors, System.Reflection.MethodInfo.GetCurrentMethod())
             If TypeOf CompleteEvent.Errors Is Win32Exception Then
+
                 Dim err = DirectCast(CompleteEvent.Errors, Win32Exception)
                 'Check for invalid credentials error and fire critical stop event.
                 'We want to stop all updates if the credentials are wrong as to avoid locking the account.
+
+                'TODO: Try to let these errors bubble up to ErrHandler.
                 If err.NativeErrorCode = 1326 Or err.NativeErrorCode = 86 Then
                     OnCriticalStopError(New EventArgs())
                 End If

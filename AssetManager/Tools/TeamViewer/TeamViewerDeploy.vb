@@ -39,6 +39,7 @@ Public Class TeamViewerDeploy
                 DepLog("Starting new TeamViewer deployment to " & targetDevice.HostName)
                 DepLog("-------------------")
                 Using PushForm As New CopyFilesForm(parentForm, targetDevice, DeploymentFilesDirectory, DeployTempDirectory)
+
                     DepLog("Pushing files to target computer...")
                     If Not OKToContinue() Then Return False
                     If Await PushForm.StartCopy Then
@@ -50,6 +51,7 @@ Public Class TeamViewerDeploy
                         Message("Error occurred while pushing deployment files to device!")
                         Return False
                     End If
+
                     If Not OKToContinue() Then Return False
                     DepLog("Starting TeamViewer deployment...")
                     If Await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetTVDeployCommand) Then
@@ -60,6 +62,7 @@ Public Class TeamViewerDeploy
                         Message("Error occurred while executing deployment command!")
                         Return False
                     End If
+
                     DepLog("Waiting 10 seconds.")
                     For i = 10 To 1 Step -1
                         If Not OKToContinue() Then Return False
@@ -67,6 +70,7 @@ Public Class TeamViewerDeploy
                         DepLog(i & "...")
                     Next
                     If Not OKToContinue() Then Return False
+
                     DepLog("Starting TeamViewer assignment...")
                     If Await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetTVAssignCommand) Then
                         DepLog("Assignment complete!")
@@ -76,6 +80,7 @@ Public Class TeamViewerDeploy
                         Message("Error occurred while executing assignment command!")
                         Return False
                     End If
+
                     If Not OKToContinue() Then Return False
                     DepLog("Deleting temp files...")
                     Dim ClientPath As String = "\\" & targetDevice.HostName & "\c$"
@@ -84,6 +89,7 @@ Public Class TeamViewerDeploy
                     End Using
                     Finished = True
                     DepLog("Done.")
+
                 End Using
                 DepLog("-------------------")
                 DepLog("TeamView deployment is complete!")
@@ -92,6 +98,9 @@ Public Class TeamViewerDeploy
             End If
             Finished = True
             Message("The target device is null or does not have a hostname.", vbOKOnly + vbInformation, "Missing Info", parentForm)
+            Return False
+        Catch ex As Exception
+            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
         Finally
             Finished = True
@@ -111,7 +120,7 @@ Public Class TeamViewerDeploy
         Dim ApiToken As String = AssetFunc.GetTVApiToken
         Dim cmd = New Command("Start-Process", False, True)
         cmd.Parameters.Add("FilePath", "C:\Temp\TVDeploy\Assignment\TeamViewer_Assignment.exe")
-        cmd.Parameters.Add("ArgumentList", "-apitoken " & ApiToken & " -datafile C:\PROGRA~2\TeamViewer\AssignmentData.json")
+        cmd.Parameters.Add("ArgumentList", "-apitoken " & ApiToken & " -datafile ${ProgramFiles}\TeamViewer\AssignmentData.json")
         cmd.Parameters.Add("Wait")
         cmd.Parameters.Add("NoNewWindow")
         Return cmd
@@ -120,7 +129,7 @@ Public Class TeamViewerDeploy
     Private Function GetTVDeployCommand() As Command
         Dim cmd = New Command("Start-Process", False, True)
         cmd.Parameters.Add("FilePath", "msiexec.exe")
-        cmd.Parameters.Add("ArgumentList", "/i C:\Temp\TVDeploy\TeamViewer_Host-idcjnfzfgb.msi /qn")
+        cmd.Parameters.Add("ArgumentList", "/i C:\Temp\TVDeploy\TeamViewer_Host-idcjnfzfgb.msi REINSTALL=ALL REINSTALLMODE=omus /qn")
         cmd.Parameters.Add("Wait")
         cmd.Parameters.Add("NoNewWindow")
         Return cmd
@@ -141,16 +150,26 @@ Public Class TeamViewerDeploy
 
     Private Sub LogClosed(sender As Object, e As CancelEventArgs)
         If Not Finished Then
-            If Not CancelOperation AndAlso Message("Cancel the current operation?", vbYesNo + vbQuestion, "Cancel?", ParentForm) = MsgBoxResult.Yes Then
-                CancelOperation = True
+            If Not CancelOperation Then
+                If Message("Cancel the current operation?", vbYesNo + vbQuestion, "Cancel?", ParentForm) = MsgBoxResult.Yes Then
+                    CancelOperation = True
+                    PSWrapper.StopPowerShellCommand()
+                End If
                 e.Cancel = True
             Else
-                If CancelOperation And Finished Then e.Cancel = False
+                If Finished Then
+                    e.Cancel = False
+                Else
+                    If SecondsSinceLastActivity() > TimeoutSeconds Then
+                        PSWrapper.StopPowerShellCommand()
+                    End If
+
+                    e.Cancel = True
+                End If
             End If
         Else
             e.Cancel = False
         End If
-        If Not Finished AndAlso SecondsSinceLastActivity() > TimeoutSeconds Then e.Cancel = False
     End Sub
 
     Private Function OKToContinue() As Boolean
