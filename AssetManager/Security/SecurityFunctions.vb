@@ -3,6 +3,7 @@ Imports System.Net
 Imports System.Runtime.Serialization
 Imports System.Security.Cryptography
 Imports System.Text
+Imports System.DirectoryServices.AccountManagement
 
 Namespace SecurityTools
     Module SecurityFunctions
@@ -12,18 +13,37 @@ Namespace SecurityTools
         Private Const CryptKey As String = "r7L$aNjE6eiVj&zhap_@|Gz_"
 
         Public Function VerifyAdminCreds(Optional credentialDescription As String = "") As Boolean
+            Dim ValidCreds As Boolean = False
             If AdminCreds Is Nothing Then
                 Using NewGetCreds As New GetCredentialsForm(credentialDescription)
                     NewGetCreds.ShowDialog()
                     If NewGetCreds.DialogResult = DialogResult.OK Then
                         AdminCreds = NewGetCreds.Credentials
-                        Return True
+                    Else
+                        ClearAdminCreds()
+                        Return False
                     End If
                 End Using
-            Else
-                Return True
             End If
-            Return False
+            ValidCreds = CredentialIsValid(AdminCreds)
+            If Not ValidCreds Then
+                ClearAdminCreds()
+                If Message("Could not authenticate with provided credentials.  Do you with to re-enter?", vbOKCancel + vbExclamation, "Auth Error") = MsgBoxResult.Ok Then
+                    Return VerifyAdminCreds(credentialDescription)
+                Else
+                    Return False
+                End If
+            Else
+                Return ValidCreds
+            End If
+        End Function
+
+        Private Function CredentialIsValid(creds As NetworkCredential) As Boolean
+            Dim valid = False
+            Using context As PrincipalContext = New PrincipalContext(ContextType.Domain, NetworkInfo.CurrentDomain)
+                valid = context.ValidateCredentials(creds.UserName, creds.Password)
+            End Using
+            Return valid
         End Function
 
         Public Sub ClearAdminCreds()

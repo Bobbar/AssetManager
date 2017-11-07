@@ -63,7 +63,7 @@ Public Class ActiveDirectoryWrapper
         Try
             Using rootDSE = New DirectoryEntry("LDAP://" & NetworkInfo.CurrentDomain & "/RootDSE")
                 If ServerInfo.CurrentDataBase = Databases.vintondd Then
-                    SecurityTools.VerifyAdminCreds("Credentials for Vinton AD")
+                    If Not SecurityTools.VerifyAdminCreds("Credentials for Vinton AD") Then Return Nothing
                     rootDSE.Username = SecurityTools.AdminCreds.UserName
                     rootDSE.Password = SecurityTools.AdminCreds.Password
                 End If
