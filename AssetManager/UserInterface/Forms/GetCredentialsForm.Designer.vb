@@ -56,9 +56,9 @@ Partial Class GetCredentialsForm
         '
         Me.CredDescriptionLabel.Font = New System.Drawing.Font("Consolas", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CredDescriptionLabel.ForeColor = System.Drawing.Color.Gray
-        Me.CredDescriptionLabel.Location = New System.Drawing.Point(1, 139)
+        Me.CredDescriptionLabel.Location = New System.Drawing.Point(2, 19)
         Me.CredDescriptionLabel.Name = "CredDescriptionLabel"
-        Me.CredDescriptionLabel.Size = New System.Drawing.Size(278, 19)
+        Me.CredDescriptionLabel.Size = New System.Drawing.Size(274, 19)
         Me.CredDescriptionLabel.TabIndex = 5
         Me.CredDescriptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
@@ -74,7 +74,7 @@ Partial Class GetCredentialsForm
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(34, 93)
+        Me.Label2.Location = New System.Drawing.Point(33, 99)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(63, 15)
         Me.Label2.TabIndex = 3
@@ -84,7 +84,7 @@ Partial Class GetCredentialsForm
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(34, 36)
+        Me.Label1.Location = New System.Drawing.Point(33, 42)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(63, 15)
         Me.Label1.TabIndex = 2
@@ -93,7 +93,7 @@ Partial Class GetCredentialsForm
         '
         'txtPassword
         '
-        Me.txtPassword.Location = New System.Drawing.Point(36, 111)
+        Me.txtPassword.Location = New System.Drawing.Point(35, 117)
         Me.txtPassword.Name = "txtPassword"
         Me.txtPassword.Size = New System.Drawing.Size(200, 23)
         Me.txtPassword.TabIndex = 1
@@ -101,7 +101,7 @@ Partial Class GetCredentialsForm
         '
         'txtUsername
         '
-        Me.txtUsername.Location = New System.Drawing.Point(36, 56)
+        Me.txtUsername.Location = New System.Drawing.Point(35, 62)
         Me.txtUsername.Name = "txtUsername"
         Me.txtUsername.Size = New System.Drawing.Size(200, 23)
         Me.txtUsername.TabIndex = 0

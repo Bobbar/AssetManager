@@ -332,7 +332,7 @@ Public Class ViewDeviceForm
         If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin) Then Exit Sub
         If Message("Deploy TeamViewer to this device?", vbYesNo + vbQuestion, "Are you sure?", Me) <> MsgBoxResult.Yes Then Exit Sub
         Try
-            If SecurityTools.VerifyAdminCreds() Then
+            If SecurityTools.VerifyAdminCreds("For remote runspace access.") Then
                 Dim NewTVDeploy As New TeamViewerDeploy
                 StatusSlider.NewSlideMessage("Deploying TeamViewer...", 0)
                 If Await NewTVDeploy.DeployToDevice(Me, device) Then
@@ -353,7 +353,7 @@ Public Class ViewDeviceForm
         If Not SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin) Then Exit Sub
         If Message("Update/Install Chrome on this device?", vbYesNo + vbQuestion, "Are you sure?", Me) <> MsgBoxResult.Yes Then Exit Sub
         Try
-            If SecurityTools.VerifyAdminCreds() Then
+            If SecurityTools.VerifyAdminCreds("For remote runspace access.") Then
                 Waiting()
                 StatusSlider.NewSlideMessage("Installing Chrome...", 0)
                 Dim PSWrapper As New PowerShellWrapper
