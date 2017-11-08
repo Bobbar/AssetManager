@@ -47,7 +47,7 @@ Public Class ViewDeviceForm
         MyLiveBox.AttachToControl(txtCurUser_View_REQ, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum)
         MyLiveBox.AttachToControl(txtDescription_View_REQ, DevicesCols.Description, LiveBoxType.SelectValue)
         RefreshCombos()
-        grpNetTools.Visible = False
+        RemoteToolsBox.Visible = False
         ExtendedMethods.DoubleBufferedDataGrid(DataGridHistory, True)
         ExtendedMethods.DoubleBufferedDataGrid(TrackingGrid, True)
         LoadDevice(deviceGUID)
@@ -93,7 +93,7 @@ Public Class ViewDeviceForm
             CancelModify()
         Else
             ADPanel.Visible = False
-            grpNetTools.Visible = False
+            RemoteToolsBox.Visible = False
             If MyPingVis IsNot Nothing Then
                 MyPingVis.Dispose()
                 MyPingVis = Nothing
@@ -455,6 +455,33 @@ Public Class ViewDeviceForm
         Next
 
     End Sub
+    Private Sub ExpandSplitter()
+
+        Debug.Print(RemoteToolsBox.Visible.ToString & " - " & TrackingBox.Visible.ToString)
+
+
+        If RemoteToolsBox.Visible Or TrackingBox.Visible Then
+            InfoDataSplitter.Panel2Collapsed = False
+        ElseIf Not RemoteToolsBox.Visible And Not TrackingBox.Visible Then
+            InfoDataSplitter.Panel2Collapsed = True
+        End If
+
+    End Sub
+
+
+    Private Sub ExpandSplitter(shouldExpand As Boolean)
+
+        Debug.Print(RemoteToolsBox.Visible.ToString & " - " & TrackingBox.Visible.ToString)
+
+        InfoDataSplitter.Panel2Collapsed = Not shouldExpand
+
+        'If RemoteToolsBox.Visible Or TrackingBox.Visible Then
+        '    InfoDataSplitter.Panel2Collapsed = False
+        'ElseIf Not RemoteToolsBox.Visible And Not TrackingBox.Visible Then
+        '    InfoDataSplitter.Panel2Collapsed = True
+        'End If
+
+    End Sub
 
     Private Sub FillTrackingBox()
         If CBool(CurrentViewDevice.Tracking.IsCheckedOut) Then
@@ -792,6 +819,7 @@ Public Class ViewDeviceForm
             SetGridStyle(DataGridHistory)
             SetGridStyle(TrackingGrid)
             DataGridHistory.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
+            ExpandSplitter(True)
             TrackingBox.Visible = True
             tsTracking.Visible = bolEnabled
             CheckOutTool.Visible = Not bolCheckedOut
@@ -803,6 +831,7 @@ Public Class ViewDeviceForm
             SetGridStyle(TrackingGrid)
             DataGridHistory.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor
             TrackingBox.Visible = False
+            ExpandSplitter()
         End If
     End Sub
 
@@ -812,13 +841,15 @@ Public Class ViewDeviceForm
         Else
             intFailedPings = 0
         End If
-        If Not grpNetTools.Visible And PingResults.Status = IPStatus.Success Then
+        If Not RemoteToolsBox.Visible And PingResults.Status = IPStatus.Success Then
             intFailedPings = 0
             cmdShowIP.Tag = PingResults.Address
-            grpNetTools.Visible = True
+            ExpandSplitter(True)
+            RemoteToolsBox.Visible = True
         End If
-        If intFailedPings > 10 And grpNetTools.Visible Then
-            grpNetTools.Visible = False
+        If intFailedPings > 10 And RemoteToolsBox.Visible Then
+            RemoteToolsBox.Visible = False
+            ExpandSplitter()
         End If
     End Sub
 
@@ -1165,6 +1196,16 @@ Public Class ViewDeviceForm
     Private Sub UpdateChromeButton_Click(sender As Object, e As EventArgs) Handles UpdateChromeButton.Click
         UpdateChrome(CurrentViewDevice)
     End Sub
+
+    Private Sub RemoteToolsBox_VisibleChanged(sender As Object, e As EventArgs) Handles RemoteToolsBox.VisibleChanged
+        ' Debug.Print(RemoteToolsBox.Visible.ToString)
+        '  ExpandSplitter()
+    End Sub
+
+    Private Sub TrackingBox_VisibleChanged(sender As Object, e As EventArgs) Handles TrackingBox.VisibleChanged
+        '  ExpandSplitter()
+    End Sub
+
 #End Region
 
 #End Region

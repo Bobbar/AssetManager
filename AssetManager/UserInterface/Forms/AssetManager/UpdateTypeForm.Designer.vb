@@ -55,7 +55,7 @@ Partial Class UpdateDev
         'CancelButton
         '
         Me.CancelButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CancelButton.Location = New System.Drawing.Point(381, 254)
+        Me.CancelButton.Location = New System.Drawing.Point(9, 254)
         Me.CancelButton.Name = "CancelButton"
         Me.CancelButton.Size = New System.Drawing.Size(66, 32)
         Me.CancelButton.TabIndex = 3
@@ -78,7 +78,7 @@ Partial Class UpdateDev
         '
         Me.SubmitButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.SubmitButton.Enabled = False
-        Me.SubmitButton.Location = New System.Drawing.Point(9, 254)
+        Me.SubmitButton.Location = New System.Drawing.Point(291, 254)
         Me.SubmitButton.Name = "SubmitButton"
         Me.SubmitButton.Size = New System.Drawing.Size(156, 32)
         Me.SubmitButton.TabIndex = 2

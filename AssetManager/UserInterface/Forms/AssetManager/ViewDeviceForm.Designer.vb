@@ -55,7 +55,7 @@ Partial Class ViewDeviceForm
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtReplacementYear_View = New System.Windows.Forms.TextBox()
-        Me.grpNetTools = New System.Windows.Forms.GroupBox()
+        Me.RemoteToolsBox = New System.Windows.Forms.GroupBox()
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.cmdGKUpdate = New System.Windows.Forms.Button()
         Me.cmdBrowseFiles = New System.Windows.Forms.Button()
@@ -72,6 +72,7 @@ Partial Class ViewDeviceForm
         Me.TrackingTab = New System.Windows.Forms.TabPage()
         Me.TrackingGrid = New System.Windows.Forms.DataGridView()
         Me.TrackingBox = New System.Windows.Forms.GroupBox()
+        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.txtCheckLocation = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.txtDueBack = New System.Windows.Forms.TextBox()
@@ -92,8 +93,8 @@ Partial Class ViewDeviceForm
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmdCancel_Tool = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.FieldsPanel = New System.Windows.Forms.Panel()
+        Me.InfoDataSplitter = New System.Windows.Forms.SplitContainer()
         Me.FieldTabs = New System.Windows.Forms.TabControl()
         Me.AssetInfo = New System.Windows.Forms.TabPage()
         Me.MiscInfo = New System.Windows.Forms.TabPage()
@@ -111,6 +112,7 @@ Partial Class ViewDeviceForm
         Me.ADOUTextBox = New System.Windows.Forms.TextBox()
         Me.iCloudTextBox = New System.Windows.Forms.TextBox()
         Me.Label17 = New System.Windows.Forms.Label()
+        Me.RemoteTrackingPanel = New System.Windows.Forms.Panel()
         Me.ToolStripContainer1 = New System.Windows.Forms.ToolStripContainer()
         Me.tsTracking = New System.Windows.Forms.ToolStrip()
         Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
@@ -131,7 +133,7 @@ Partial Class ViewDeviceForm
         Me.AssetDisposalForm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
         Me.pnlOtherFunctions.SuspendLayout()
-        Me.grpNetTools.SuspendLayout()
+        Me.RemoteToolsBox.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
         CType(Me.cmdRestart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RightClickMenu.SuspendLayout()
@@ -141,16 +143,21 @@ Partial Class ViewDeviceForm
         Me.TrackingTab.SuspendLayout()
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TrackingBox.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tsSaveModify.SuspendLayout()
-        Me.Panel1.SuspendLayout()
-        Me.Panel2.SuspendLayout()
+        Me.FieldsPanel.SuspendLayout()
+        CType(Me.InfoDataSplitter, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.InfoDataSplitter.Panel1.SuspendLayout()
+        Me.InfoDataSplitter.Panel2.SuspendLayout()
+        Me.InfoDataSplitter.SuspendLayout()
         Me.FieldTabs.SuspendLayout()
         Me.AssetInfo.SuspendLayout()
         Me.MiscInfo.SuspendLayout()
         Me.ADPanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        Me.RemoteTrackingPanel.SuspendLayout()
         Me.ToolStripContainer1.ContentPanel.SuspendLayout()
         Me.ToolStripContainer1.TopToolStripPanel.SuspendLayout()
         Me.ToolStripContainer1.SuspendLayout()
@@ -474,33 +481,36 @@ Partial Class ViewDeviceForm
         Me.txtReplacementYear_View.Size = New System.Drawing.Size(169, 23)
         Me.txtReplacementYear_View.TabIndex = 10
         '
-        'grpNetTools
+        'RemoteToolsBox
         '
-        Me.grpNetTools.Controls.Add(Me.FlowLayoutPanel1)
-        Me.grpNetTools.Controls.Add(Me.cmdShowIP)
-        Me.grpNetTools.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.grpNetTools.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.grpNetTools.Location = New System.Drawing.Point(3, 3)
-        Me.grpNetTools.Name = "grpNetTools"
-        Me.grpNetTools.Size = New System.Drawing.Size(320, 97)
-        Me.grpNetTools.TabIndex = 52
-        Me.grpNetTools.TabStop = False
-        Me.grpNetTools.Text = "Remote Tools"
-        Me.grpNetTools.Visible = False
+        Me.RemoteToolsBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RemoteToolsBox.BackColor = System.Drawing.SystemColors.Control
+        Me.RemoteToolsBox.Controls.Add(Me.FlowLayoutPanel1)
+        Me.RemoteToolsBox.Controls.Add(Me.cmdShowIP)
+        Me.RemoteToolsBox.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.RemoteToolsBox.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RemoteToolsBox.Location = New System.Drawing.Point(3, 2)
+        Me.RemoteToolsBox.Name = "RemoteToolsBox"
+        Me.RemoteToolsBox.Size = New System.Drawing.Size(422, 108)
+        Me.RemoteToolsBox.TabIndex = 52
+        Me.RemoteToolsBox.TabStop = False
+        Me.RemoteToolsBox.Text = "Remote Tools"
+        Me.RemoteToolsBox.Visible = False
         '
         'FlowLayoutPanel1
         '
+        Me.FlowLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FlowLayoutPanel1.AutoScroll = True
-        Me.FlowLayoutPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.FlowLayoutPanel1.Controls.Add(Me.cmdGKUpdate)
         Me.FlowLayoutPanel1.Controls.Add(Me.cmdBrowseFiles)
         Me.FlowLayoutPanel1.Controls.Add(Me.cmdRestart)
         Me.FlowLayoutPanel1.Controls.Add(Me.cmdRDP)
         Me.FlowLayoutPanel1.Controls.Add(Me.DeployTVButton)
         Me.FlowLayoutPanel1.Controls.Add(Me.UpdateChromeButton)
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(6, 20)
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(6, 16)
+        Me.FlowLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(227, 71)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(319, 86)
         Me.FlowLayoutPanel1.TabIndex = 57
         '
         'cmdGKUpdate
@@ -529,11 +539,13 @@ Partial Class ViewDeviceForm
         '
         'cmdRestart
         '
+        Me.cmdRestart.BackColor = System.Drawing.SystemColors.ControlLight
         Me.cmdRestart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.cmdRestart.Image = Global.AssetManager.My.Resources.Resources.RestartIcon
-        Me.cmdRestart.Location = New System.Drawing.Point(97, 3)
+        Me.cmdRestart.Location = New System.Drawing.Point(95, 1)
+        Me.cmdRestart.Margin = New System.Windows.Forms.Padding(1)
         Me.cmdRestart.Name = "cmdRestart"
-        Me.cmdRestart.Size = New System.Drawing.Size(42, 42)
+        Me.cmdRestart.Size = New System.Drawing.Size(45, 45)
         Me.cmdRestart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.cmdRestart.TabIndex = 56
         Me.cmdRestart.TabStop = False
@@ -544,7 +556,7 @@ Partial Class ViewDeviceForm
         Me.cmdRDP.BackgroundImage = Global.AssetManager.My.Resources.Resources.RDPIcon
         Me.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRDP.Location = New System.Drawing.Point(143, 1)
+        Me.cmdRDP.Location = New System.Drawing.Point(142, 1)
         Me.cmdRDP.Margin = New System.Windows.Forms.Padding(1)
         Me.cmdRDP.Name = "cmdRDP"
         Me.cmdRDP.Size = New System.Drawing.Size(45, 45)
@@ -557,7 +569,7 @@ Partial Class ViewDeviceForm
         Me.DeployTVButton.BackgroundImage = Global.AssetManager.My.Resources.Resources.TeamViewerIcon
         Me.DeployTVButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.DeployTVButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.DeployTVButton.Location = New System.Drawing.Point(1, 49)
+        Me.DeployTVButton.Location = New System.Drawing.Point(189, 1)
         Me.DeployTVButton.Margin = New System.Windows.Forms.Padding(1)
         Me.DeployTVButton.Name = "DeployTVButton"
         Me.DeployTVButton.Size = New System.Drawing.Size(45, 45)
@@ -570,7 +582,7 @@ Partial Class ViewDeviceForm
         Me.UpdateChromeButton.BackgroundImage = Global.AssetManager.My.Resources.Resources.ChromeIcon
         Me.UpdateChromeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.UpdateChromeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.UpdateChromeButton.Location = New System.Drawing.Point(48, 49)
+        Me.UpdateChromeButton.Location = New System.Drawing.Point(236, 1)
         Me.UpdateChromeButton.Margin = New System.Windows.Forms.Padding(1)
         Me.UpdateChromeButton.Name = "UpdateChromeButton"
         Me.UpdateChromeButton.Size = New System.Drawing.Size(45, 45)
@@ -580,14 +592,15 @@ Partial Class ViewDeviceForm
         '
         'cmdShowIP
         '
+        Me.cmdShowIP.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdShowIP.BackColor = System.Drawing.Color.Black
         Me.cmdShowIP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.cmdShowIP.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdShowIP.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdShowIP.ForeColor = System.Drawing.Color.White
-        Me.cmdShowIP.Location = New System.Drawing.Point(236, 11)
+        Me.cmdShowIP.Location = New System.Drawing.Point(329, 11)
         Me.cmdShowIP.Name = "cmdShowIP"
-        Me.cmdShowIP.Size = New System.Drawing.Size(80, 80)
+        Me.cmdShowIP.Size = New System.Drawing.Size(90, 90)
         Me.cmdShowIP.TabIndex = 53
         Me.cmdShowIP.TextAlign = System.Drawing.ContentAlignment.TopRight
         Me.cmdShowIP.UseVisualStyleBackColor = False
@@ -614,10 +627,10 @@ Partial Class ViewDeviceForm
         Me.TabControl1.Controls.Add(Me.TrackingTab)
         Me.TabControl1.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TabControl1.ItemSize = New System.Drawing.Size(69, 21)
-        Me.TabControl1.Location = New System.Drawing.Point(11, 296)
+        Me.TabControl1.Location = New System.Drawing.Point(11, 301)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1124, 270)
+        Me.TabControl1.Size = New System.Drawing.Size(1268, 265)
         Me.TabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
         Me.TabControl1.TabIndex = 40
         '
@@ -627,7 +640,7 @@ Partial Class ViewDeviceForm
         Me.HistoryTab.Location = New System.Drawing.Point(4, 25)
         Me.HistoryTab.Name = "HistoryTab"
         Me.HistoryTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.HistoryTab.Size = New System.Drawing.Size(1116, 241)
+        Me.HistoryTab.Size = New System.Drawing.Size(1260, 236)
         Me.HistoryTab.TabIndex = 0
         Me.HistoryTab.Text = "History"
         Me.HistoryTab.UseVisualStyleBackColor = True
@@ -662,7 +675,7 @@ Partial Class ViewDeviceForm
         Me.DataGridHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridHistory.ShowCellToolTips = False
         Me.DataGridHistory.ShowEditingIcon = False
-        Me.DataGridHistory.Size = New System.Drawing.Size(1104, 229)
+        Me.DataGridHistory.Size = New System.Drawing.Size(1243, 224)
         Me.DataGridHistory.TabIndex = 40
         Me.DataGridHistory.TabStop = False
         Me.DataGridHistory.VirtualMode = True
@@ -673,7 +686,7 @@ Partial Class ViewDeviceForm
         Me.TrackingTab.Location = New System.Drawing.Point(4, 25)
         Me.TrackingTab.Name = "TrackingTab"
         Me.TrackingTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrackingTab.Size = New System.Drawing.Size(1116, 241)
+        Me.TrackingTab.Size = New System.Drawing.Size(1260, 236)
         Me.TrackingTab.TabIndex = 1
         Me.TrackingTab.Text = "Tracking"
         Me.TrackingTab.UseVisualStyleBackColor = True
@@ -699,36 +712,49 @@ Partial Class ViewDeviceForm
         Me.TrackingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.TrackingGrid.ShowCellToolTips = False
         Me.TrackingGrid.ShowEditingIcon = False
-        Me.TrackingGrid.Size = New System.Drawing.Size(1104, 229)
+        Me.TrackingGrid.Size = New System.Drawing.Size(1248, 224)
         Me.TrackingGrid.TabIndex = 41
         '
         'TrackingBox
         '
-        Me.TrackingBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.TrackingBox.Controls.Add(Me.txtCheckLocation)
-        Me.TrackingBox.Controls.Add(Me.Label16)
-        Me.TrackingBox.Controls.Add(Me.txtDueBack)
-        Me.TrackingBox.Controls.Add(Me.lblDueBack)
-        Me.TrackingBox.Controls.Add(Me.txtCheckUser)
-        Me.TrackingBox.Controls.Add(Me.lblCheckUser)
-        Me.TrackingBox.Controls.Add(Me.txtCheckTime)
-        Me.TrackingBox.Controls.Add(Me.lblCheckTime)
-        Me.TrackingBox.Controls.Add(Me.txtCheckOut)
-        Me.TrackingBox.Controls.Add(Me.Label11)
+        Me.TrackingBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TrackingBox.BackColor = System.Drawing.SystemColors.Control
+        Me.TrackingBox.Controls.Add(Me.Panel3)
         Me.TrackingBox.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TrackingBox.Location = New System.Drawing.Point(4, 105)
+        Me.TrackingBox.Location = New System.Drawing.Point(3, 116)
         Me.TrackingBox.Name = "TrackingBox"
-        Me.TrackingBox.Size = New System.Drawing.Size(320, 167)
+        Me.TrackingBox.Size = New System.Drawing.Size(421, 165)
         Me.TrackingBox.TabIndex = 41
         Me.TrackingBox.TabStop = False
         Me.TrackingBox.Text = "Tracking Info"
         Me.TrackingBox.Visible = False
         '
+        'Panel3
+        '
+        Me.Panel3.AutoScroll = True
+        Me.Panel3.Controls.Add(Me.txtCheckLocation)
+        Me.Panel3.Controls.Add(Me.Label16)
+        Me.Panel3.Controls.Add(Me.txtDueBack)
+        Me.Panel3.Controls.Add(Me.lblDueBack)
+        Me.Panel3.Controls.Add(Me.txtCheckUser)
+        Me.Panel3.Controls.Add(Me.lblCheckUser)
+        Me.Panel3.Controls.Add(Me.txtCheckTime)
+        Me.Panel3.Controls.Add(Me.lblCheckTime)
+        Me.Panel3.Controls.Add(Me.txtCheckOut)
+        Me.Panel3.Controls.Add(Me.Label11)
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel3.Location = New System.Drawing.Point(3, 18)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Padding = New System.Windows.Forms.Padding(0, 0, 5, 0)
+        Me.Panel3.Size = New System.Drawing.Size(415, 144)
+        Me.Panel3.TabIndex = 58
+        '
         'txtCheckLocation
         '
+        Me.txtCheckLocation.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.txtCheckLocation.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.txtCheckLocation.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCheckLocation.Location = New System.Drawing.Point(169, 42)
+        Me.txtCheckLocation.Location = New System.Drawing.Point(224, 19)
         Me.txtCheckLocation.Name = "txtCheckLocation"
         Me.txtCheckLocation.ReadOnly = True
         Me.txtCheckLocation.Size = New System.Drawing.Size(134, 22)
@@ -737,9 +763,10 @@ Partial Class ViewDeviceForm
         '
         'Label16
         '
+        Me.Label16.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Label16.AutoSize = True
         Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label16.Location = New System.Drawing.Point(166, 23)
+        Me.Label16.Location = New System.Drawing.Point(221, 0)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(62, 16)
         Me.Label16.TabIndex = 56
@@ -747,9 +774,10 @@ Partial Class ViewDeviceForm
         '
         'txtDueBack
         '
+        Me.txtDueBack.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.txtDueBack.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.txtDueBack.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDueBack.Location = New System.Drawing.Point(87, 131)
+        Me.txtDueBack.Location = New System.Drawing.Point(142, 108)
         Me.txtDueBack.Name = "txtDueBack"
         Me.txtDueBack.ReadOnly = True
         Me.txtDueBack.Size = New System.Drawing.Size(134, 22)
@@ -758,9 +786,10 @@ Partial Class ViewDeviceForm
         '
         'lblDueBack
         '
+        Me.lblDueBack.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.lblDueBack.AutoSize = True
         Me.lblDueBack.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblDueBack.Location = New System.Drawing.Point(84, 112)
+        Me.lblDueBack.Location = New System.Drawing.Point(139, 89)
         Me.lblDueBack.Name = "lblDueBack"
         Me.lblDueBack.Size = New System.Drawing.Size(70, 16)
         Me.lblDueBack.TabIndex = 54
@@ -768,9 +797,10 @@ Partial Class ViewDeviceForm
         '
         'txtCheckUser
         '
+        Me.txtCheckUser.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.txtCheckUser.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.txtCheckUser.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCheckUser.Location = New System.Drawing.Point(169, 88)
+        Me.txtCheckUser.Location = New System.Drawing.Point(224, 65)
         Me.txtCheckUser.Name = "txtCheckUser"
         Me.txtCheckUser.ReadOnly = True
         Me.txtCheckUser.Size = New System.Drawing.Size(134, 22)
@@ -779,9 +809,10 @@ Partial Class ViewDeviceForm
         '
         'lblCheckUser
         '
+        Me.lblCheckUser.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.lblCheckUser.AutoSize = True
         Me.lblCheckUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCheckUser.Location = New System.Drawing.Point(166, 69)
+        Me.lblCheckUser.Location = New System.Drawing.Point(221, 46)
         Me.lblCheckUser.Name = "lblCheckUser"
         Me.lblCheckUser.Size = New System.Drawing.Size(101, 16)
         Me.lblCheckUser.TabIndex = 52
@@ -789,9 +820,10 @@ Partial Class ViewDeviceForm
         '
         'txtCheckTime
         '
+        Me.txtCheckTime.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.txtCheckTime.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.txtCheckTime.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCheckTime.Location = New System.Drawing.Point(19, 88)
+        Me.txtCheckTime.Location = New System.Drawing.Point(74, 65)
         Me.txtCheckTime.Name = "txtCheckTime"
         Me.txtCheckTime.ReadOnly = True
         Me.txtCheckTime.Size = New System.Drawing.Size(134, 22)
@@ -800,9 +832,10 @@ Partial Class ViewDeviceForm
         '
         'lblCheckTime
         '
+        Me.lblCheckTime.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.lblCheckTime.AutoSize = True
         Me.lblCheckTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCheckTime.Location = New System.Drawing.Point(16, 69)
+        Me.lblCheckTime.Location = New System.Drawing.Point(71, 46)
         Me.lblCheckTime.Name = "lblCheckTime"
         Me.lblCheckTime.Size = New System.Drawing.Size(103, 16)
         Me.lblCheckTime.TabIndex = 50
@@ -810,9 +843,10 @@ Partial Class ViewDeviceForm
         '
         'txtCheckOut
         '
+        Me.txtCheckOut.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.txtCheckOut.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.txtCheckOut.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCheckOut.Location = New System.Drawing.Point(19, 42)
+        Me.txtCheckOut.Location = New System.Drawing.Point(74, 19)
         Me.txtCheckOut.Name = "txtCheckOut"
         Me.txtCheckOut.ReadOnly = True
         Me.txtCheckOut.Size = New System.Drawing.Size(134, 22)
@@ -822,9 +856,10 @@ Partial Class ViewDeviceForm
         '
         'Label11
         '
+        Me.Label11.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Label11.AutoSize = True
         Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(16, 23)
+        Me.Label11.Location = New System.Drawing.Point(71, 0)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(48, 16)
         Me.Label11.TabIndex = 48
@@ -844,7 +879,7 @@ Partial Class ViewDeviceForm
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 680)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1145, 22)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1291, 22)
         Me.StatusStrip1.Stretch = False
         Me.StatusStrip1.TabIndex = 45
         Me.StatusStrip1.Text = "StatusStrip1"
@@ -910,43 +945,57 @@ Partial Class ViewDeviceForm
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 37)
         '
-        'Panel1
+        'FieldsPanel
         '
-        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.Panel1.Controls.Add(Me.Panel2)
-        Me.Panel1.Controls.Add(Me.FieldTabs)
-        Me.Panel1.Location = New System.Drawing.Point(11, 8)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1136, 282)
-        Me.Panel1.TabIndex = 53
+        Me.FieldsPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.FieldsPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.FieldsPanel.Controls.Add(Me.InfoDataSplitter)
+        Me.FieldsPanel.Location = New System.Drawing.Point(11, 8)
+        Me.FieldsPanel.Name = "FieldsPanel"
+        Me.FieldsPanel.Size = New System.Drawing.Size(1268, 288)
+        Me.FieldsPanel.TabIndex = 53
         '
-        'Panel2
+        'InfoDataSplitter
         '
-        Me.Panel2.Controls.Add(Me.grpNetTools)
-        Me.Panel2.Controls.Add(Me.TrackingBox)
-        Me.Panel2.Location = New System.Drawing.Point(801, 3)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(330, 276)
-        Me.Panel2.TabIndex = 54
+        Me.InfoDataSplitter.BackColor = System.Drawing.SystemColors.Control
+        Me.InfoDataSplitter.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.InfoDataSplitter.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.InfoDataSplitter.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
+        Me.InfoDataSplitter.Location = New System.Drawing.Point(0, 0)
+        Me.InfoDataSplitter.Name = "InfoDataSplitter"
+        '
+        'InfoDataSplitter.Panel1
+        '
+        Me.InfoDataSplitter.Panel1.Controls.Add(Me.FieldTabs)
+        '
+        'InfoDataSplitter.Panel2
+        '
+        Me.InfoDataSplitter.Panel2.Controls.Add(Me.RemoteTrackingPanel)
+        Me.InfoDataSplitter.Panel2MinSize = 327
+        Me.InfoDataSplitter.Size = New System.Drawing.Size(1268, 288)
+        Me.InfoDataSplitter.SplitterDistance = 833
+        Me.InfoDataSplitter.TabIndex = 55
         '
         'FieldTabs
         '
         Me.FieldTabs.Controls.Add(Me.AssetInfo)
         Me.FieldTabs.Controls.Add(Me.MiscInfo)
+        Me.FieldTabs.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FieldTabs.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FieldTabs.HotTrack = True
-        Me.FieldTabs.Location = New System.Drawing.Point(3, 3)
+        Me.FieldTabs.Location = New System.Drawing.Point(0, 0)
         Me.FieldTabs.Multiline = True
         Me.FieldTabs.Name = "FieldTabs"
         Me.FieldTabs.SelectedIndex = 0
-        Me.FieldTabs.Size = New System.Drawing.Size(796, 276)
+        Me.FieldTabs.Size = New System.Drawing.Size(829, 284)
         Me.FieldTabs.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
         Me.FieldTabs.TabIndex = 53
         '
         'AssetInfo
         '
+        Me.AssetInfo.AutoScroll = True
         Me.AssetInfo.BackColor = System.Drawing.SystemColors.Control
-        Me.AssetInfo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.AssetInfo.Controls.Add(Me.pnlOtherFunctions)
         Me.AssetInfo.Controls.Add(Me.Label2)
         Me.AssetInfo.Controls.Add(Me.Label3)
@@ -974,14 +1023,14 @@ Partial Class ViewDeviceForm
         Me.AssetInfo.Location = New System.Drawing.Point(4, 23)
         Me.AssetInfo.Name = "AssetInfo"
         Me.AssetInfo.Padding = New System.Windows.Forms.Padding(3)
-        Me.AssetInfo.Size = New System.Drawing.Size(788, 249)
+        Me.AssetInfo.Size = New System.Drawing.Size(821, 257)
         Me.AssetInfo.TabIndex = 0
         Me.AssetInfo.Text = "Asset Info."
         '
         'MiscInfo
         '
+        Me.MiscInfo.AutoScroll = True
         Me.MiscInfo.BackColor = System.Drawing.SystemColors.Control
-        Me.MiscInfo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.MiscInfo.Controls.Add(Me.ADPanel)
         Me.MiscInfo.Controls.Add(Me.iCloudTextBox)
         Me.MiscInfo.Controls.Add(Me.Label17)
@@ -996,7 +1045,7 @@ Partial Class ViewDeviceForm
         Me.MiscInfo.Location = New System.Drawing.Point(4, 23)
         Me.MiscInfo.Name = "MiscInfo"
         Me.MiscInfo.Padding = New System.Windows.Forms.Padding(3)
-        Me.MiscInfo.Size = New System.Drawing.Size(788, 249)
+        Me.MiscInfo.Size = New System.Drawing.Size(821, 257)
         Me.MiscInfo.TabIndex = 1
         Me.MiscInfo.Text = "Misc."
         '
@@ -1136,6 +1185,16 @@ Partial Class ViewDeviceForm
         Me.Label17.TabIndex = 61
         Me.Label17.Text = "iCloud Account:"
         '
+        'RemoteTrackingPanel
+        '
+        Me.RemoteTrackingPanel.Controls.Add(Me.RemoteToolsBox)
+        Me.RemoteTrackingPanel.Controls.Add(Me.TrackingBox)
+        Me.RemoteTrackingPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RemoteTrackingPanel.Location = New System.Drawing.Point(0, 0)
+        Me.RemoteTrackingPanel.Name = "RemoteTrackingPanel"
+        Me.RemoteTrackingPanel.Size = New System.Drawing.Size(427, 284)
+        Me.RemoteTrackingPanel.TabIndex = 54
+        '
         'ToolStripContainer1
         '
         Me.ToolStripContainer1.BottomToolStripPanelVisible = False
@@ -1143,27 +1202,27 @@ Partial Class ViewDeviceForm
         'ToolStripContainer1.ContentPanel
         '
         Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.TabControl1)
-        Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.Panel1)
-        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1145, 569)
+        Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.FieldsPanel)
+        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1291, 569)
         Me.ToolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ToolStripContainer1.LeftToolStripPanelVisible = False
         Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripContainer1.Name = "ToolStripContainer1"
         Me.ToolStripContainer1.RightToolStripPanelVisible = False
-        Me.ToolStripContainer1.Size = New System.Drawing.Size(1145, 680)
+        Me.ToolStripContainer1.Size = New System.Drawing.Size(1291, 680)
         Me.ToolStripContainer1.TabIndex = 54
         Me.ToolStripContainer1.Text = "ToolStripContainer1"
         '
         'ToolStripContainer1.TopToolStripPanel
         '
-        Me.ToolStripContainer1.TopToolStripPanel.BackColor = System.Drawing.Color.Silver
+        Me.ToolStripContainer1.TopToolStripPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.tsSaveModify)
         Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.tsTracking)
         Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.ToolStrip1)
         '
         'tsTracking
         '
-        Me.tsTracking.BackColor = System.Drawing.SystemColors.Control
+        Me.tsTracking.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.tsTracking.Dock = System.Windows.Forms.DockStyle.None
         Me.tsTracking.ImageScalingSize = New System.Drawing.Size(25, 25)
         Me.tsTracking.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripDropDownButton1, Me.ToolStripSeparator4})
@@ -1208,7 +1267,7 @@ Partial Class ViewDeviceForm
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.BackColor = System.Drawing.SystemColors.Control
+        Me.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
         Me.ToolStrip1.Dock = System.Windows.Forms.DockStyle.None
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(25, 25)
@@ -1314,7 +1373,7 @@ Partial Class ViewDeviceForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1145, 702)
+        Me.ClientSize = New System.Drawing.Size(1291, 702)
         Me.Controls.Add(Me.ToolStripContainer1)
         Me.Controls.Add(Me.StatusStrip1)
         Me.DoubleBuffered = True
@@ -1323,7 +1382,7 @@ Partial Class ViewDeviceForm
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "View"
         Me.pnlOtherFunctions.ResumeLayout(False)
-        Me.grpNetTools.ResumeLayout(False)
+        Me.RemoteToolsBox.ResumeLayout(False)
         Me.FlowLayoutPanel1.ResumeLayout(False)
         CType(Me.cmdRestart, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RightClickMenu.ResumeLayout(False)
@@ -1333,14 +1392,18 @@ Partial Class ViewDeviceForm
         Me.TrackingTab.ResumeLayout(False)
         CType(Me.TrackingGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TrackingBox.ResumeLayout(False)
-        Me.TrackingBox.PerformLayout()
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         CType(Me.fieldErrorIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tsSaveModify.ResumeLayout(False)
         Me.tsSaveModify.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel2.ResumeLayout(False)
+        Me.FieldsPanel.ResumeLayout(False)
+        Me.InfoDataSplitter.Panel1.ResumeLayout(False)
+        Me.InfoDataSplitter.Panel2.ResumeLayout(False)
+        CType(Me.InfoDataSplitter, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.InfoDataSplitter.ResumeLayout(False)
         Me.FieldTabs.ResumeLayout(False)
         Me.AssetInfo.ResumeLayout(False)
         Me.AssetInfo.PerformLayout()
@@ -1349,6 +1412,7 @@ Partial Class ViewDeviceForm
         Me.ADPanel.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.RemoteTrackingPanel.ResumeLayout(False)
         Me.ToolStripContainer1.ContentPanel.ResumeLayout(False)
         Me.ToolStripContainer1.TopToolStripPanel.ResumeLayout(False)
         Me.ToolStripContainer1.TopToolStripPanel.PerformLayout()
@@ -1416,14 +1480,14 @@ Partial Class ViewDeviceForm
     Friend WithEvents pnlOtherFunctions As Panel
     Friend WithEvents fieldErrorIcon As ErrorProvider
     Friend WithEvents cmdBrowseFiles As Button
-    Friend WithEvents grpNetTools As GroupBox
+    Friend WithEvents RemoteToolsBox As GroupBox
     Friend WithEvents cmdMunisSearch As Button
     Friend WithEvents lblGUID As Label
     Friend WithEvents cmdShowIP As Button
     Friend WithEvents Label14 As Label
     Friend WithEvents cmdGKUpdate As Button
     Friend WithEvents txtPhoneNumber As MaskedTextBox
-    Friend WithEvents Panel1 As Panel
+    Friend WithEvents FieldsPanel As Panel
     Friend WithEvents ToolStripContainer1 As ToolStripContainer
     Friend WithEvents ToolStrip1 As OneClickToolStrip
     Friend WithEvents tsbModify As ToolStripButton
@@ -1449,7 +1513,7 @@ Partial Class ViewDeviceForm
     Friend WithEvents FieldTabs As TabControl
     Friend WithEvents AssetInfo As TabPage
     Friend WithEvents MiscInfo As TabPage
-    Friend WithEvents Panel2 As Panel
+    Friend WithEvents RemoteTrackingPanel As Panel
     Friend WithEvents iCloudTextBox As TextBox
     Friend WithEvents Label17 As Label
     Friend WithEvents ADOUTextBox As TextBox
@@ -1469,4 +1533,6 @@ Partial Class ViewDeviceForm
     Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
     Friend WithEvents DeployTVButton As Button
     Friend WithEvents UpdateChromeButton As Button
+    Friend WithEvents InfoDataSplitter As SplitContainer
+    Friend WithEvents Panel3 As Panel
 End Class
