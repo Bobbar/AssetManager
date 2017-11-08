@@ -25,7 +25,10 @@
 
             Dim Done = Await Task.Run(Function()
                                           Do Until PushFilesControl.ProgStatus <> GKProgressControl.ProgressStatus.Running And PushFilesControl.ProgStatus <> GKProgressControl.ProgressStatus.Starting
-                                              If Cancel Then Return False
+                                              If Cancel Then
+                                                  PushFilesControl.CancelUpdate()
+                                                  Return False
+                                              End If
                                               Task.Delay(1000).Wait()
                                           Loop
                                           If PushFilesControl.ProgStatus <> GKProgressControl.ProgressStatus.CompleteWithErrors And PushFilesControl.ProgStatus <> GKProgressControl.ProgressStatus.Complete Then

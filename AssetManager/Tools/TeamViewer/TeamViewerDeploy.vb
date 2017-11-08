@@ -181,7 +181,7 @@ Public Class TeamViewerDeploy
         Me.ParentForm = parentForm
         LogView = New ExtendedForm(parentForm)
         AddHandler LogView.FormClosing, AddressOf LogClosed
-        LogView.Text = "Log"
+        LogView.Text = "Deployment Log (Close to cancel)"
         LogView.Width = 500
         LogView.Owner = parentForm
         RTBLog = New RichTextBox
