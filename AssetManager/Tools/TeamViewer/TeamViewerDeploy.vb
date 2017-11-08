@@ -39,6 +39,7 @@ Public Class TeamViewerDeploy
                 DepLog("Starting new TeamViewer deployment to " & targetDevice.HostName)
                 DepLog("-------------------")
                 Using PushForm As New CopyFilesForm(parentForm, targetDevice, DeploymentFilesDirectory, DeployTempDirectory)
+                    Dim TVExists As Boolean = False
 
                     DepLog("Pushing files to target computer...")
                     If Not OKToContinue() Then Return False
@@ -53,14 +54,37 @@ Public Class TeamViewerDeploy
                     End If
 
                     If Not OKToContinue() Then Return False
-                    DepLog("Starting TeamViewer deployment...")
-                    If Await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetTVDeployCommand) Then
-                        DepLog("Deployment complete!")
+                    DepLog("Checking for previous installation...")
+                    TVExists = Await TeamViewerInstalled(targetDevice)
+                    If TVExists Then
+                        DepLog("TeamViewer already installed.")
                     Else
-                        Finished = True
-                        DepLog("Deployment failed!")
-                        Message("Error occurred while executing deployment command!")
-                        Return False
+                        DepLog("TeamViewer not installed.")
+                    End If
+
+                    If Not OKToContinue() Then Return False
+                    If TVExists Then
+                        DepLog("Reinstalling TeamViewer...")
+
+                        If Await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetTVReinstallCommand) Then
+                            DepLog("Deployment complete!")
+                        Else
+                            Finished = True
+                            DepLog("Deployment failed!")
+                            Message("Error occurred while executing deployment command!")
+                            Return False
+                        End If
+
+                    Else
+                        DepLog("Starting TeamViewer deployment...")
+                        If Await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetTVInstallCommand) Then
+                            DepLog("Deployment complete!")
+                        Else
+                            Finished = True
+                            DepLog("Deployment failed!")
+                            Message("Error occurred while executing deployment command!")
+                            Return False
+                        End If
                     End If
 
                     DepLog("Waiting 10 seconds.")
@@ -69,8 +93,8 @@ Public Class TeamViewerDeploy
                         Await Task.Delay(1000)
                         DepLog(i & "...")
                     Next
-                    If Not OKToContinue() Then Return False
 
+                    If Not OKToContinue() Then Return False
                     DepLog("Starting TeamViewer assignment...")
                     If Await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetTVAssignCommand) Then
                         DepLog("Assignment complete!")
@@ -93,7 +117,7 @@ Public Class TeamViewerDeploy
                 End Using
                 DepLog("-------------------")
                 DepLog("TeamView deployment is complete!")
-                DepLog("NOTE: The target computer may need rebooted before TeamViewer will connect successfully.")
+                DepLog("NOTE: The target computer may need rebooted or the user may need to open the application before TeamViewer will connect.")
                 Return True
             End If
             Finished = True
@@ -126,7 +150,7 @@ Public Class TeamViewerDeploy
         Return cmd
     End Function
 
-    Private Function GetTVDeployCommand() As Command
+    Private Function GetTVReinstallCommand() As Command
         Dim cmd = New Command("Start-Process", False, True)
         cmd.Parameters.Add("FilePath", "msiexec.exe")
         cmd.Parameters.Add("ArgumentList", "/i C:\Temp\TVDeploy\TeamViewer_Host-idcjnfzfgb.msi REINSTALL=ALL REINSTALLMODE=omus /qn")
@@ -135,12 +159,34 @@ Public Class TeamViewerDeploy
         Return cmd
     End Function
 
+    Private Function GetTVInstallCommand() As Command
+        Dim cmd = New Command("Start-Process", False, True)
+        cmd.Parameters.Add("FilePath", "msiexec.exe")
+        cmd.Parameters.Add("ArgumentList", "/i C:\Temp\TVDeploy\TeamViewer_Host-idcjnfzfgb.msi /qn")
+        cmd.Parameters.Add("Wait")
+        cmd.Parameters.Add("NoNewWindow")
+        Return cmd
+    End Function
+
+    Private Async Function TeamViewerInstalled(targetDevice As DeviceObject) As Task(Of Boolean)
+        Try
+            Dim resultString = Await Task.Run(Function()
+                                                  Return PSWrapper.ExecuteRemotePSScript(targetDevice.HostName, My.Resources.CheckForTVRegistryValue, SecurityTools.AdminCreds)
+                                              End Function)
+            Dim result = Convert.ToBoolean(resultString)
+            Return result
+        Catch ex As FormatException
+            Return False
+        End Try
+    End Function
+
     Private Sub InitLogWindow(parentForm As ExtendedForm)
         Me.ParentForm = parentForm
         LogView = New ExtendedForm(parentForm)
         AddHandler LogView.FormClosing, AddressOf LogClosed
         LogView.Text = "Log"
         LogView.Width = 500
+        LogView.Parent = parentForm
         RTBLog = New RichTextBox
         RTBLog.Dock = DockStyle.Fill
         RTBLog.Font = GridFont
@@ -154,6 +200,7 @@ Public Class TeamViewerDeploy
                 If Message("Cancel the current operation?", vbYesNo + vbQuestion, "Cancel?", ParentForm) = MsgBoxResult.Yes Then
                     CancelOperation = True
                     PSWrapper.StopPowerShellCommand()
+                    PSWrapper.StopPiplineCommand()
                 End If
                 e.Cancel = True
             Else
@@ -162,6 +209,7 @@ Public Class TeamViewerDeploy
                 Else
                     If SecondsSinceLastActivity() > TimeoutSeconds Then
                         PSWrapper.StopPowerShellCommand()
+                        PSWrapper.StopPiplineCommand()
                     End If
 
                     e.Cancel = True

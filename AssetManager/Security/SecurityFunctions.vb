@@ -28,7 +28,7 @@ Namespace SecurityTools
             ValidCreds = CredentialIsValid(AdminCreds)
             If Not ValidCreds Then
                 ClearAdminCreds()
-                If Message("Could not authenticate with provided credentials.  Do you with to re-enter?", vbOKCancel + vbExclamation, "Auth Error") = MsgBoxResult.Ok Then
+                If Message("Could not authenticate with provided credentials.  Do you wish to re-enter?", vbOKCancel + vbExclamation, "Auth Error") = MsgBoxResult.Ok Then
                     Return VerifyAdminCreds(credentialDescription)
                 Else
                     Return False

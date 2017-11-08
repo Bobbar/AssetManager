@@ -8,6 +8,7 @@ Imports System.Text
 
 Public Class PowerShellWrapper
     Private CurrentPowerShellObject As PowerShell
+    Private CurrentPipelineObject As Pipeline
 
     ''' <summary>
     ''' Execute the specified PowerShell script on the specified host.
@@ -27,6 +28,8 @@ Public Class PowerShellWrapper
                 Using MyPipline As Pipeline = remoteRunSpace.CreatePipeline
                     MyPipline.Commands.AddScript(scriptText)
                     MyPipline.Commands.Add("Out-String")
+
+                    CurrentPipelineObject = MyPipline
 
                     Dim results As Collection(Of PSObject) = MyPipline.Invoke
                     Dim stringBuilder As New StringBuilder
@@ -126,6 +129,12 @@ Public Class PowerShellWrapper
     Public Sub StopPowerShellCommand()
         If CurrentPowerShellObject IsNot Nothing Then
             CurrentPowerShellObject.Stop()
+        End If
+    End Sub
+
+    Public Sub StopPiplineCommand()
+        If CurrentPipelineObject IsNot Nothing Then
+            CurrentPipelineObject.Stop()
         End If
     End Sub
 
