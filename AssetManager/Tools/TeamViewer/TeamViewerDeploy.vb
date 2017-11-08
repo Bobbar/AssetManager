@@ -12,13 +12,11 @@ Public Class TeamViewerDeploy
     Private Finished As Boolean = False
     Private LastActivity As Long
     Private LogView As ExtendedForm
-    Private OperationStalled As Boolean = False
     Private ParentForm As ExtendedForm
     Private PSWrapper As New PowerShellWrapper
     Private RTBLog As RichTextBox
     Private TimeoutSeconds As Integer = 120
     Private WatchDogTask As New Task(Sub() WatchDog())
-
 #End Region
 
 #Region "Delegates"
@@ -32,7 +30,7 @@ Public Class TeamViewerDeploy
     Public Async Function DeployToDevice(parentForm As ExtendedForm, targetDevice As DeviceObject) As Task(Of Boolean)
         Try
             If targetDevice IsNot Nothing AndAlso targetDevice.HostName <> "" Then
-                OKToContinue()
+                ActivityTick()
                 WatchDogTask.Start()
                 InitLogWindow(parentForm)
 
@@ -42,7 +40,7 @@ Public Class TeamViewerDeploy
                     Dim TVExists As Boolean = False
 
                     DepLog("Pushing files to target computer...")
-                    If Not OKToContinue() Then Return False
+                    ActivityTick()
                     If Await PushForm.StartCopy Then
                         DepLog("Push successful!")
                         PushForm.Dispose()
@@ -53,7 +51,7 @@ Public Class TeamViewerDeploy
                         Return False
                     End If
 
-                    If Not OKToContinue() Then Return False
+                    ActivityTick()
                     DepLog("Checking for previous installation...")
                     TVExists = Await TeamViewerInstalled(targetDevice)
                     If TVExists Then
@@ -62,7 +60,7 @@ Public Class TeamViewerDeploy
                         DepLog("TeamViewer not installed.")
                     End If
 
-                    If Not OKToContinue() Then Return False
+                    ActivityTick()
                     If TVExists Then
                         DepLog("Reinstalling TeamViewer...")
 
@@ -89,12 +87,12 @@ Public Class TeamViewerDeploy
 
                     DepLog("Waiting 10 seconds.")
                     For i = 10 To 1 Step -1
-                        If Not OKToContinue() Then Return False
+                        ActivityTick()
                         Await Task.Delay(1000)
                         DepLog(i & "...")
                     Next
 
-                    If Not OKToContinue() Then Return False
+                    ActivityTick()
                     DepLog("Starting TeamViewer assignment...")
                     If Await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetTVAssignCommand) Then
                         DepLog("Assignment complete!")
@@ -105,7 +103,7 @@ Public Class TeamViewerDeploy
                         Return False
                     End If
 
-                    If Not OKToContinue() Then Return False
+                    ActivityTick()
                     DepLog("Deleting temp files...")
                     Dim ClientPath As String = "\\" & targetDevice.HostName & "\c$"
                     Using NetCon As New NetworkConnection(ClientPath, SecurityTools.AdminCreds)
@@ -124,7 +122,6 @@ Public Class TeamViewerDeploy
             Message("The target device is null or does not have a hostname.", vbOKOnly + vbInformation, "Missing Info", parentForm)
             Return False
         Catch ex As Exception
-            ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod())
             Return False
         Finally
             Finished = True
@@ -186,7 +183,7 @@ Public Class TeamViewerDeploy
         AddHandler LogView.FormClosing, AddressOf LogClosed
         LogView.Text = "Log"
         LogView.Width = 500
-        LogView.Parent = parentForm
+        LogView.Owner = parentForm
         RTBLog = New RichTextBox
         RTBLog.Dock = DockStyle.Fill
         RTBLog.Font = GridFont
@@ -220,16 +217,13 @@ Public Class TeamViewerDeploy
         End If
     End Sub
 
-    Private Function OKToContinue() As Boolean
+    Private Sub ActivityTick()
         LastActivity = Now.Ticks
         If CancelOperation Then
             DepLog("The deployment has been canceled!")
-            Finished = True
-            Return False
-        Else
-            Return True
+            Throw New DeploymentCanceledException
         End If
-    End Function
+    End Sub
 
     Private Function SecondsSinceLastActivity() As Integer
         Return CInt(((Now.Ticks - LastActivity) / 10000) / 1000)
@@ -256,5 +250,21 @@ Public Class TeamViewerDeploy
     End Sub
 
 #End Region
+    Private Class DeploymentCanceledException
+        Inherits Exception
+
+        Public Sub New()
+        End Sub
+
+        Public Sub New(message As String)
+            MyBase.New(message)
+        End Sub
+
+        Public Sub New(message As String, inner As Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+    End Class
+
 
 End Class

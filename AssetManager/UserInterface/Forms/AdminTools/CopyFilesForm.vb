@@ -8,7 +8,7 @@
         InitializeComponent()
         ImageCaching.CacheControlImages(Me)
         Me.ParentForm = parentForm
-        Me.Parent = parentForm
+        Me.Owner = parentForm
         Me.TargetDevice = targetDevice
         Me.SourceDirectory = sourceDirectory
         Me.TargetDirectory = targetDirectory

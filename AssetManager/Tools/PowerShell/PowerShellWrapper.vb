@@ -127,15 +127,23 @@ Public Class PowerShellWrapper
     End Function
 
     Public Sub StopPowerShellCommand()
-        If CurrentPowerShellObject IsNot Nothing Then
-            CurrentPowerShellObject.Stop()
-        End If
+        Try
+            If CurrentPowerShellObject IsNot Nothing Then
+                CurrentPowerShellObject.Stop()
+            End If
+        Catch ex As Exception
+            'don't care about errors here
+        End Try
     End Sub
 
     Public Sub StopPiplineCommand()
-        If CurrentPipelineObject IsNot Nothing Then
-            CurrentPipelineObject.Stop()
-        End If
+        Try
+            If CurrentPipelineObject IsNot Nothing Then
+                CurrentPipelineObject.Stop()
+            End If
+        Catch ex As Exception
+            'don't care about errors here
+        End Try
     End Sub
 
     Private Sub PSEventHandler(sender As Object, e As DataAddedEventArgs)
@@ -146,9 +154,7 @@ Public Class PowerShellWrapper
     End Sub
 
     Private Function LoadScript(scriptBytes As Byte()) As String
-
         Try
-
             ' Create an instance of StreamReader to read from our file.
             ' The using statement also closes the StreamReader.
             ' Dim sr As New StreamReader(filename)
