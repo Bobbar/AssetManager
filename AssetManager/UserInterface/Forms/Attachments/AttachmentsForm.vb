@@ -340,7 +340,7 @@ Public Class AttachmentsForm
     Private Sub InsertSQLAttachment(Attachment As Attachment, transaction As Common.DbTransaction)
         Dim InsertAttachmentParams As New List(Of DBParameter)
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FKey, Attachment.FolderGUID))
-        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileName, Attachment.FullFileName))
+        InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileName, Attachment.FileName))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileType, Attachment.Extension))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileSize, Attachment.Filesize))
         InsertAttachmentParams.Add(New DBParameter(Attachment.AttachTable.FileUID, Attachment.FileUID))
