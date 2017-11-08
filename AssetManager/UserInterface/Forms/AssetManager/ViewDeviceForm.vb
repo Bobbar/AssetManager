@@ -455,32 +455,17 @@ Public Class ViewDeviceForm
         Next
 
     End Sub
+
     Private Sub ExpandSplitter()
-
-        Debug.Print(RemoteToolsBox.Visible.ToString & " - " & TrackingBox.Visible.ToString)
-
-
         If RemoteToolsBox.Visible Or TrackingBox.Visible Then
             InfoDataSplitter.Panel2Collapsed = False
         ElseIf Not RemoteToolsBox.Visible And Not TrackingBox.Visible Then
             InfoDataSplitter.Panel2Collapsed = True
         End If
-
     End Sub
 
-
     Private Sub ExpandSplitter(shouldExpand As Boolean)
-
-        Debug.Print(RemoteToolsBox.Visible.ToString & " - " & TrackingBox.Visible.ToString)
-
         InfoDataSplitter.Panel2Collapsed = Not shouldExpand
-
-        'If RemoteToolsBox.Visible Or TrackingBox.Visible Then
-        '    InfoDataSplitter.Panel2Collapsed = False
-        'ElseIf Not RemoteToolsBox.Visible And Not TrackingBox.Visible Then
-        '    InfoDataSplitter.Panel2Collapsed = True
-        'End If
-
     End Sub
 
     Private Sub FillTrackingBox()
@@ -1195,15 +1180,6 @@ Public Class ViewDeviceForm
 
     Private Sub UpdateChromeButton_Click(sender As Object, e As EventArgs) Handles UpdateChromeButton.Click
         UpdateChrome(CurrentViewDevice)
-    End Sub
-
-    Private Sub RemoteToolsBox_VisibleChanged(sender As Object, e As EventArgs) Handles RemoteToolsBox.VisibleChanged
-        ' Debug.Print(RemoteToolsBox.Visible.ToString)
-        '  ExpandSplitter()
-    End Sub
-
-    Private Sub TrackingBox_VisibleChanged(sender As Object, e As EventArgs) Handles TrackingBox.VisibleChanged
-        '  ExpandSplitter()
     End Sub
 
 #End Region
