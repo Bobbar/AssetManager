@@ -491,7 +491,7 @@ Partial Class ViewDeviceForm
         Me.RemoteToolsBox.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RemoteToolsBox.Location = New System.Drawing.Point(3, 2)
         Me.RemoteToolsBox.Name = "RemoteToolsBox"
-        Me.RemoteToolsBox.Size = New System.Drawing.Size(422, 108)
+        Me.RemoteToolsBox.Size = New System.Drawing.Size(421, 108)
         Me.RemoteToolsBox.TabIndex = 52
         Me.RemoteToolsBox.TabStop = False
         Me.RemoteToolsBox.Text = "Remote Tools"
@@ -510,7 +510,7 @@ Partial Class ViewDeviceForm
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(6, 16)
         Me.FlowLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(319, 86)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(318, 86)
         Me.FlowLayoutPanel1.TabIndex = 57
         '
         'cmdGKUpdate
@@ -598,7 +598,7 @@ Partial Class ViewDeviceForm
         Me.cmdShowIP.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdShowIP.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdShowIP.ForeColor = System.Drawing.Color.White
-        Me.cmdShowIP.Location = New System.Drawing.Point(329, 11)
+        Me.cmdShowIP.Location = New System.Drawing.Point(327, 12)
         Me.cmdShowIP.Name = "cmdShowIP"
         Me.cmdShowIP.Size = New System.Drawing.Size(90, 90)
         Me.cmdShowIP.TabIndex = 53

@@ -187,7 +187,7 @@ Public Class PingVis : Implements IDisposable
         ScrollingBars = GetPingBars()
         For Each r As PingBar In ScrollingBars
             If r.Rectangle.Contains(mScalePoint) Then
-                r.Brush = New SolidBrush(Color.Navy) 'Highlight MoveOver bar
+                r.Brush = New SolidBrush(Color.FromArgb(128, Color.Navy)) 'Highlight MoveOver bar
                 Return New MouseOverInfoStruct(mScalePoint, r.PingResult)
             End If
         Next
@@ -204,7 +204,7 @@ Public Class PingVis : Implements IDisposable
         End If
         Try
             Using bm = New Drawing.Bitmap(ImageWidth, ImageHeight), gfx = Graphics.FromImage(bm)
-                gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+                gfx.SmoothingMode = Drawing2D.SmoothingMode.None
                 If Not MouseIsScrolling Then
                     gfx.Clear(DestControl.BackColor)
                 Else
@@ -212,9 +212,9 @@ Public Class PingVis : Implements IDisposable
                 End If
                 SetScale()
                 DrawScaleLines(gfx) 'Draw scale lines
-                gfx.SmoothingMode = Drawing2D.SmoothingMode.None
+                ' gfx.SmoothingMode = Drawing2D.SmoothingMode.None
                 DrawPingBars(gfx, Bars) 'Draw ping bars
-                gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+                'gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
                 DrawPingText(gfx, MouseOverInfo) 'Draw last ping round trip time
                 DrawScrollBar(gfx)
                 TrimPingList()
@@ -291,7 +291,7 @@ Public Class PingVis : Implements IDisposable
     Private Sub DrawPingBars(ByRef gfx As Graphics, ByRef bars As List(Of PingBar))
         For Each bar As PingBar In bars
             gfx.FillRectangle(bar.Brush, bar.Rectangle)
-            Using CapPen As Pen = New Pen(Color.ForestGreen, 2)
+            Using CapPen As Pen = New Pen(Color.FromArgb(200, Color.ForestGreen), 2)
                 gfx.DrawLine(CapPen, New PointF(bar.Length, bar.PositionY), New PointF(bar.Length, bar.PositionY + bar.Rectangle.Height))
             End Using
         Next
@@ -310,10 +310,10 @@ Public Class PingVis : Implements IDisposable
                 BarRatio = (Timeout / InitialScale) / result.RoundTripTime
                 BarLen = (ImageWidth / BarRatio) + MinBarLength '* 2
             Else
-                MyBrush = New SolidBrush(Color.Red)
+                MyBrush = New SolidBrush(Color.FromArgb(200, Color.Red))
                 BarLen = ImageWidth - 2
             End If
-            NewPBars.Add(New PingBar(BarLen, MyBrush, New Rectangle(1, CInt(curPos), CInt(BarLen), CInt(BarHeight)), curPos, result))
+            NewPBars.Add(New PingBar(BarLen, MyBrush, New RectangleF(1, curPos, BarLen, BarHeight), curPos, result))
             curPos += BarHeight + BarGap
         Next
         Return NewPBars
@@ -352,16 +352,18 @@ Public Class PingVis : Implements IDisposable
         Dim iStep As Integer = CInt(255 / ((Timeout / 3) / roundTrip)) 'Convert ping time to ratio of 255. 255 being the maximum levels of blending.
         If iStep > iSteps Then iStep = iSteps
         FadeColor = RGB(CInt(r1 + (r2 - r1) / iSteps * iStep), CInt(g1 + (g2 - g1) / iSteps * iStep), CInt(b1 + (b2 - b1) / iSteps * iStep))
-        Return New SolidBrush(ColorTranslator.FromOle(FadeColor))
+        Dim NewColor = ColorTranslator.FromOle(FadeColor)
+        Dim AlphaColor = Color.FromArgb(200, NewColor)
+        Return New SolidBrush(AlphaColor)
     End Function
 
     Private Sub DrawScaleLines(ByRef gfx As Graphics)
-        Dim ScaleLineLoc As Integer = 0
+        Dim ScaleLineLoc As Single = 0
         Dim NumOfLines As Integer = CInt(Timeout / 10)
-        Dim StepSize As Integer = 0
+        Dim StepSize As Single = 0
         For a As Integer = 0 To NumOfLines
-            StepSize = CInt((((Timeout / 4)) / NumOfLines) * InitialScale)
-            gfx.DrawLine(Pens.LightSlateGray, New Point(ScaleLineLoc, 0), New Point(ScaleLineLoc, ImageHeight))
+            StepSize = Convert.ToSingle(((Timeout / 4) / NumOfLines) * InitialScale)
+            gfx.DrawLine(Pens.LightSlateGray, New PointF(ScaleLineLoc, 0), New PointF(ScaleLineLoc, ImageHeight))
             ScaleLineLoc += StepSize
         Next
     End Sub
@@ -424,8 +426,14 @@ Public Class PingVis : Implements IDisposable
             graphics__1.CompositingMode = CompositingMode.SourceCopy
             graphics__1.CompositingQuality = CompositingQuality.HighQuality
             graphics__1.InterpolationMode = InterpolationMode.HighQualityBicubic
-            '   graphics__1.SmoothingMode = SmoothingMode.HighQuality
+            ' graphics__1.SmoothingMode = SmoothingMode.HighQuality
             graphics__1.PixelOffsetMode = PixelOffsetMode.HighQuality
+
+            'graphics__1.CompositingMode = CompositingMode.SourceCopy
+            'graphics__1.CompositingQuality = CompositingQuality.HighSpeed
+            'graphics__1.InterpolationMode = InterpolationMode.HighQualityBilinear
+            'graphics__1.SmoothingMode = SmoothingMode.HighSpeed
+            'graphics__1.PixelOffsetMode = PixelOffsetMode.HighSpeed
             Using wrapMode__2 = New ImageAttributes()
                 wrapMode__2.SetWrapMode(WrapMode.TileFlipXY)
                 graphics__1.DrawImage(image, destRect, 0, 0, image.Width, image.Height,
@@ -501,7 +509,7 @@ Public Class PingVis : Implements IDisposable
     Private Class PingBar
         Private len As Single
         Private br As Brush
-        Private rec As Rectangle
+        Private rec As RectangleF
         Private pos As Single
         Private pInfo As PingInfo
 
@@ -520,7 +528,7 @@ Public Class PingVis : Implements IDisposable
             End Set
         End Property
 
-        Public ReadOnly Property Rectangle As Rectangle
+        Public ReadOnly Property Rectangle As RectangleF
             Get
                 Return rec
             End Get
@@ -538,7 +546,7 @@ Public Class PingVis : Implements IDisposable
             End Get
         End Property
 
-        Sub New(length As Single, ByRef brush As Brush, rect As Rectangle, posY As Single, ByVal pingInfo As PingInfo)
+        Sub New(length As Single, ByRef brush As Brush, rect As RectangleF, posY As Single, ByVal pingInfo As PingInfo)
             len = length
             br = brush
             rec = rect
