@@ -34,7 +34,7 @@ Public Class PingVis : Implements IDisposable
 #End Region
 
 #Region "Bar Parameters"
-    Private Const MaxScale As Integer = 10
+    Private Const MaxDrawScale As Integer = 10
     Private Const BarGap As Single = 0
     Private Const MaxBars As Integer = 10
     Private Const MinBarLength As Integer = 1
@@ -47,8 +47,8 @@ Public Class PingVis : Implements IDisposable
 
 
     Private Const MaxStoredResults As Integer = 1000000
-    Private Const MaxDrawRate As Integer = 20
-    Private ImageScaleMulti As Integer = 2
+    Private Const MaxDrawRatePerMilliseconds As Integer = 10
+    Private ImageScaleMulti As Integer = 5
 
 #End Region
 
@@ -154,35 +154,36 @@ Public Class PingVis : Implements IDisposable
 
     Private Sub ControlMouseWheel(sender As Object, e As MouseEventArgs)
         If PingReplies.Count > MaxBars Then
+            Dim NewIdx As Integer
             MouseIsScrolling = True
             If e.Delta < 0 Then 'scroll up
-                Dim NewIdx As Integer = TopBarIndex + 1
+                NewIdx = TopBarIndex + 1
                 If NewIdx > PingReplies.Count - MaxBars Then 'if the scroll index returns to the end (bottom) of the results, disable scrolling and return to normal display
-                    TopBarIndex = PingReplies.Count - MaxBars
+                    NewIdx = PingReplies.Count - MaxBars
                     MouseIsScrolling = False
-                Else
-                    TopBarIndex = NewIdx
+                    DrawBars(DrawControl, GetPingBars)
                 End If
             ElseIf e.Delta > 0 Then 'scroll down
-                Dim NewIdx As Integer = TopBarIndex - 1
+                NewIdx = TopBarIndex - 1
                 If NewIdx < 0 Then 'clamp the scroll index to always be greater than 0
-                    TopBarIndex = 0
-                Else
-                    TopBarIndex = NewIdx
+                    NewIdx = 0
                 End If
             End If
-            DrawBars(DrawControl, GetPingBars)
+            If TopBarIndex <> NewIdx Then
+                TopBarIndex = NewIdx
+                DrawBars(DrawControl, GetPingBars)
+            End If
         End If
     End Sub
 
     Private Sub ControlMouseMove(sender As Object, e As MouseEventArgs)
         If MouseIsScrolling Then
-            MouseOverInfo = GetMouseOverPing(e.Location)
+            MouseOverInfo = GetMouseOverPingBar(e.Location)
             DrawBars(DrawControl, ScrollingBars, MouseOverInfo)
         End If
     End Sub
 
-    Private Function GetMouseOverPing(mPos As Point) As MouseOverInfoStruct
+    Private Function GetMouseOverPingBar(mPos As Point) As MouseOverInfoStruct
         Dim mScalePoint As New Point(mPos.X * ImageScaleMulti, mPos.Y * ImageScaleMulti)
         ScrollingBars = GetPingBars()
         For Each r As PingBar In ScrollingBars
@@ -203,7 +204,7 @@ Public Class PingVis : Implements IDisposable
             End If
         End If
         Try
-            Using bm = New Drawing.Bitmap(ImageWidth, ImageHeight), gfx = Graphics.FromImage(bm)
+            Using bm = New Drawing.Bitmap(ImageWidth, ImageHeight, PixelFormat.Format32bppPArgb), gfx = Graphics.FromImage(bm)
                 gfx.SmoothingMode = Drawing2D.SmoothingMode.None
                 If Not MouseIsScrolling Then
                     gfx.Clear(DestControl.BackColor)
@@ -217,7 +218,7 @@ Public Class PingVis : Implements IDisposable
                 TrimPingList()
                 'The bitmap is scaled back to control size using high quality transformations.
                 'This improves the effect of anti-aliasing and therefore readability.
-                '  bm.Save("C:\Temp\test.bmp")
+                ' bm.Save("C:\Temp\testBig.bmp")
                 Dim bmRz = ResizeImage(bm, DestControl.ClientSize.Width, DestControl.ClientSize.Height)
                 SetControlImage(DestControl, bmRz)
                 DisposeBarList(Bars)
@@ -238,14 +239,14 @@ Public Class PingVis : Implements IDisposable
         If MouseIsScrolling Then
             Using ScrollBrush As New SolidBrush(Color.White)
                 Dim ScrollLocation As Integer = CInt(ImageHeight / (PingReplies.Count / TopBarIndex))
-                gfx.FillRectangle(ScrollBrush, New RectangleF(ImageWidth - 15, ScrollLocation, 10, 5))
+                gfx.FillRectangle(ScrollBrush, New RectangleF(ImageWidth - (20 + ImageScaleMulti), ScrollLocation, 10 + ImageScaleMulti, 5 + ImageScaleMulti))
             End Using
         End If
     End Sub
 
     Private Function CanDraw(timeStamp As Integer) As Boolean
         Dim ElapTime As Integer = timeStamp - LastDraw
-        If ElapTime >= MaxDrawRate Then
+        If ElapTime >= MaxDrawRatePerMilliseconds Then
             LastDraw = timeStamp
             Return True
         End If
@@ -253,14 +254,16 @@ Public Class PingVis : Implements IDisposable
     End Function
 
     Private Sub DrawPingText(ByRef gfx As Graphics, Optional mouseOverInfo As MouseOverInfoStruct = Nothing)
-        Dim InfoFontSize As Single = 15
-        Dim OverInfoFontSize As Single = 14
+        Dim InfoFontSize As Single = Convert.ToSingle(8 * ImageScaleMulti)
+        Dim OverInfoFontSize As Single = Convert.ToSingle(7 * ImageScaleMulti)
         If mouseOverInfo IsNot Nothing Then
             Dim OverInfoText As String = GetReplyStatusText(mouseOverInfo.PingReply)
+
             Using OverFont As Font = New Font("Tahoma", OverInfoFontSize, FontStyle.Regular)
+                Dim TextSize As SizeF = gfx.MeasureString(OverInfoText, OverFont)
                 gfx.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
                 gfx.TextContrast = 0
-                gfx.DrawString(OverInfoText, OverFont, Brushes.White, New PointF(mouseOverInfo.MouseLoc.X + 20, mouseOverInfo.MouseLoc.Y - 10)) '(intImgWidth / 2) - TextSize.Width / 2
+                gfx.DrawString(OverInfoText, OverFont, New SolidBrush(Color.FromArgb(240, Color.White)), New PointF(mouseOverInfo.MouseLoc.X + (TextSize.Width / 2), mouseOverInfo.MouseLoc.Y - (TextSize.Height / 2)))
             End Using
         End If
         If Not MouseIsScrolling Then
@@ -269,7 +272,7 @@ Public Class PingVis : Implements IDisposable
                 Dim TextSize As SizeF = gfx.MeasureString(InfoText, InfoFont)
                 gfx.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
                 gfx.TextContrast = 0
-                gfx.DrawString(InfoText, InfoFont, Brushes.White, New PointF((ImageWidth - 5) - (TextSize.Width), (ImageHeight) - (TextSize.Height))) '(intImgWidth / 2) - TextSize.Width / 2
+                gfx.DrawString(InfoText, InfoFont, Brushes.White, New PointF((ImageWidth - 5) - (TextSize.Width), (ImageHeight) - (TextSize.Height + 5)))
             End Using
         End If
     End Sub
@@ -288,9 +291,6 @@ Public Class PingVis : Implements IDisposable
     Private Sub DrawPingBars(ByRef gfx As Graphics, ByRef bars As List(Of PingBar))
         For Each bar As PingBar In bars
             gfx.FillRectangle(bar.Brush, bar.Rectangle)
-            Using CapPen As Pen = New Pen(Color.FromArgb(150, Color.ForestGreen), 2)
-                gfx.DrawLine(CapPen, New PointF(bar.Length, bar.PositionY), New PointF(bar.Length, bar.PositionY + bar.Rectangle.Height))
-            End Using
         Next
     End Sub
 
@@ -359,7 +359,7 @@ Public Class PingVis : Implements IDisposable
         Dim StepSize As Single = CInt(CurrentScale * 15)
         Dim NumOfLines As Integer = CInt(ImageWidth / StepSize)
         For a As Integer = 0 To NumOfLines
-            gfx.DrawLine(Pens.LightSlateGray, New PointF(ScaleLineLoc, 0), New PointF(ScaleLineLoc, ImageHeight))
+            gfx.DrawLine(Pens.White, New PointF(ScaleLineLoc, 0), New PointF(ScaleLineLoc, ImageHeight))
             ScaleLineLoc += StepSize
         Next
     End Sub
@@ -371,11 +371,13 @@ Public Class PingVis : Implements IDisposable
     End Sub
 
     Private Sub SetScale()
-        Dim MaxPing As Long = CurrentDisplayResults.OrderByDescending(Function(p) p.RoundTripTime).FirstOrDefault.RoundTripTime
-        If MaxPing <= 0 Then MaxPing = 1
-        Dim NewScale = Convert.ToSingle((ImageWidth / 2) / MaxPing)
-        If NewScale > 10 Then NewScale = 10
-        CurrentScale = NewScale
+        If CurrentDisplayResults.Count > 0 Then
+            Dim MaxPing As Long = CurrentDisplayResults.OrderByDescending(Function(p) p.RoundTripTime).FirstOrDefault.RoundTripTime
+            If MaxPing <= 0 Then MaxPing = 1
+            Dim NewScale = Convert.ToSingle((ImageWidth / 2) / MaxPing)
+            If NewScale > MaxDrawScale Then NewScale = MaxDrawScale
+            CurrentScale = NewScale
+        End If
     End Sub
 
     Private Function CurrentDisplayResults() As List(Of PingInfo)
@@ -412,10 +414,11 @@ Public Class PingVis : Implements IDisposable
         destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution)
         Using graphics__1 = Graphics.FromImage(destImage)
             graphics__1.CompositingMode = CompositingMode.SourceCopy
-            graphics__1.CompositingQuality = CompositingQuality.HighQuality
-            graphics__1.InterpolationMode = InterpolationMode.HighQualityBicubic
-            ' graphics__1.SmoothingMode = SmoothingMode.HighQuality
-            graphics__1.PixelOffsetMode = PixelOffsetMode.HighQuality
+            graphics__1.CompositingQuality = CompositingQuality.HighSpeed
+            graphics__1.InterpolationMode = InterpolationMode.HighQualityBilinear
+
+            graphics__1.SmoothingMode = SmoothingMode.None
+            graphics__1.PixelOffsetMode = PixelOffsetMode.HighSpeed
             Using wrapMode__2 = New ImageAttributes()
                 wrapMode__2.SetWrapMode(WrapMode.TileFlipXY)
                 graphics__1.DrawImage(image, destRect, 0, 0, image.Width, image.Height,
