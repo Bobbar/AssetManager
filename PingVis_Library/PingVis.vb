@@ -22,33 +22,33 @@ Public Class PingVis : Implements IDisposable
     Private MouseOverInfo As MouseOverInfoStruct
     Private LastDraw As Integer = 0
     Private ScrollingBars As List(Of PingBar)
-    Private PrevScaleMax As Long = 1000
+    Private CurrentScale As Single
 
 #Region "Ping Parameters"
 
     Private Const Timeout As Integer = 1000
     Private Const GoodPingInterval As Integer = 1000
-    Private Const NoPingInterval As Integer = 5000
+    Private Const NoPingInterval As Integer = 3000
     Private CurrentPingInterval As Integer = GoodPingInterval
 
 #End Region
 
 #Region "Bar Parameters"
-
+    Private Const MaxScale As Integer = 10
     Private Const BarGap As Single = 0
     Private Const MaxBars As Integer = 10
-    Private Const MinBarLength As Integer = 2
+    Private Const MinBarLength As Integer = 1
     Private Const BarTopPadding As Single = 0
-    Private Const BarBottomPadding As Single = 5
+    Private Const BarBottomPadding As Single = 4
 
 #End Region
 
 #Region "Misc PingVis Variables"
 
-    Private InitialScale As Single = 4
+
     Private Const MaxStoredResults As Integer = 1000000
     Private Const MaxDrawRate As Integer = 20
-    Private ScaleMulti As Integer = 2
+    Private ImageScaleMulti As Integer = 2
 
 #End Region
 
@@ -71,8 +71,8 @@ Public Class PingVis : Implements IDisposable
     Private Sub InitMyControl(destControl As Control)
         DrawControl = destControl
         'Set image to double the size of the control
-        ImageWidth = DrawControl.ClientSize.Width * ScaleMulti
-        ImageHeight = DrawControl.ClientSize.Height * ScaleMulti
+        ImageWidth = DrawControl.ClientSize.Width * ImageScaleMulti
+        ImageHeight = DrawControl.ClientSize.Height * ImageScaleMulti
         AddHandler DrawControl.MouseWheel, AddressOf ControlMouseWheel
         AddHandler DrawControl.MouseLeave, AddressOf ControlMouseLeave
         AddHandler DrawControl.MouseMove, AddressOf ControlMouseMove
@@ -183,7 +183,7 @@ Public Class PingVis : Implements IDisposable
     End Sub
 
     Private Function GetMouseOverPing(mPos As Point) As MouseOverInfoStruct
-        Dim mScalePoint As New Point(mPos.X * ScaleMulti, mPos.Y * ScaleMulti)
+        Dim mScalePoint As New Point(mPos.X * ImageScaleMulti, mPos.Y * ImageScaleMulti)
         ScrollingBars = GetPingBars()
         For Each r As PingBar In ScrollingBars
             If r.Rectangle.Contains(mScalePoint) Then
@@ -210,11 +210,8 @@ Public Class PingVis : Implements IDisposable
                 Else
                     gfx.Clear(Color.FromArgb(48, 53, 61))
                 End If
-                SetScale()
                 DrawScaleLines(gfx) 'Draw scale lines
-                ' gfx.SmoothingMode = Drawing2D.SmoothingMode.None
                 DrawPingBars(gfx, Bars) 'Draw ping bars
-                'gfx.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
                 DrawPingText(gfx, MouseOverInfo) 'Draw last ping round trip time
                 DrawScrollBar(gfx)
                 TrimPingList()
@@ -291,7 +288,7 @@ Public Class PingVis : Implements IDisposable
     Private Sub DrawPingBars(ByRef gfx As Graphics, ByRef bars As List(Of PingBar))
         For Each bar As PingBar In bars
             gfx.FillRectangle(bar.Brush, bar.Rectangle)
-            Using CapPen As Pen = New Pen(Color.FromArgb(200, Color.ForestGreen), 2)
+            Using CapPen As Pen = New Pen(Color.FromArgb(150, Color.ForestGreen), 2)
                 gfx.DrawLine(CapPen, New PointF(bar.Length, bar.PositionY), New PointF(bar.Length, bar.PositionY + bar.Rectangle.Height))
             End Using
         Next
@@ -301,14 +298,14 @@ Public Class PingVis : Implements IDisposable
         Dim NewPBars As New List(Of PingBar)
         Dim curPos As Single = BarTopPadding
         Dim BarHeight As Single = (ImageHeight - BarBottomPadding - BarTopPadding - (BarGap * MaxBars)) / MaxBars
+        SetScale()
         For Each result As PingInfo In CurrentDisplayResults()
-            Dim BarRatio As Single
             Dim BarLen As Single
             Dim MyBrush As Brush
             If result.Status = Net.NetworkInformation.IPStatus.Success Then
                 MyBrush = GetBarBrush(result.RoundTripTime)
-                BarRatio = (Timeout / InitialScale) / result.RoundTripTime
-                BarLen = (ImageWidth / BarRatio) + MinBarLength '* 2
+                BarLen = result.RoundTripTime * CurrentScale
+                If BarLen < MinBarLength Then BarLen = MinBarLength * CurrentScale
             Else
                 MyBrush = New SolidBrush(Color.FromArgb(200, Color.Red))
                 BarLen = ImageWidth - 2
@@ -353,16 +350,15 @@ Public Class PingVis : Implements IDisposable
         If iStep > iSteps Then iStep = iSteps
         FadeColor = RGB(CInt(r1 + (r2 - r1) / iSteps * iStep), CInt(g1 + (g2 - g1) / iSteps * iStep), CInt(b1 + (b2 - b1) / iSteps * iStep))
         Dim NewColor = ColorTranslator.FromOle(FadeColor)
-        Dim AlphaColor = Color.FromArgb(200, NewColor)
+        Dim AlphaColor = Color.FromArgb(220, NewColor)
         Return New SolidBrush(AlphaColor)
     End Function
 
     Private Sub DrawScaleLines(ByRef gfx As Graphics)
         Dim ScaleLineLoc As Single = 0
-        Dim NumOfLines As Integer = CInt(Timeout / 10)
-        Dim StepSize As Single = 0
+        Dim StepSize As Single = CInt(CurrentScale * 15)
+        Dim NumOfLines As Integer = CInt(ImageWidth / StepSize)
         For a As Integer = 0 To NumOfLines
-            StepSize = Convert.ToSingle(((Timeout / 4) / NumOfLines) * InitialScale)
             gfx.DrawLine(Pens.LightSlateGray, New PointF(ScaleLineLoc, 0), New PointF(ScaleLineLoc, ImageHeight))
             ScaleLineLoc += StepSize
         Next
@@ -376,18 +372,10 @@ Public Class PingVis : Implements IDisposable
 
     Private Sub SetScale()
         Dim MaxPing As Long = CurrentDisplayResults.OrderByDescending(Function(p) p.RoundTripTime).FirstOrDefault.RoundTripTime
-        If MaxPing <> PrevScaleMax Then
-            If MaxPing * 2 >= (Timeout / InitialScale) Then
-                Do Until InitialScale <= 0 Or MaxPing * 2 < (Timeout / InitialScale)
-                    InitialScale -= 0.1F
-                Loop
-            ElseIf MaxPing < ((Timeout / InitialScale) / 2) AndAlso InitialScale >= 0 Then
-                Do Until InitialScale >= 15 Or MaxPing > ((Timeout / InitialScale) / 2)
-                    InitialScale += 0.1F
-                Loop
-            End If
-            PrevScaleMax = MaxPing
-        End If
+        If MaxPing <= 0 Then MaxPing = 1
+        Dim NewScale = Convert.ToSingle((ImageWidth / 2) / MaxPing)
+        If NewScale > 10 Then NewScale = 10
+        CurrentScale = NewScale
     End Sub
 
     Private Function CurrentDisplayResults() As List(Of PingInfo)
@@ -428,12 +416,6 @@ Public Class PingVis : Implements IDisposable
             graphics__1.InterpolationMode = InterpolationMode.HighQualityBicubic
             ' graphics__1.SmoothingMode = SmoothingMode.HighQuality
             graphics__1.PixelOffsetMode = PixelOffsetMode.HighQuality
-
-            'graphics__1.CompositingMode = CompositingMode.SourceCopy
-            'graphics__1.CompositingQuality = CompositingQuality.HighSpeed
-            'graphics__1.InterpolationMode = InterpolationMode.HighQualityBilinear
-            'graphics__1.SmoothingMode = SmoothingMode.HighSpeed
-            'graphics__1.PixelOffsetMode = PixelOffsetMode.HighSpeed
             Using wrapMode__2 = New ImageAttributes()
                 wrapMode__2.SetWrapMode(WrapMode.TileFlipXY)
                 graphics__1.DrawImage(image, destRect, 0, 0, image.Width, image.Height,
