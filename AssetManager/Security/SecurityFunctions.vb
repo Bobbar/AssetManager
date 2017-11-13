@@ -58,17 +58,21 @@ Namespace SecurityTools
 
         Public Function GetSHAOfTable(table As DataTable) As String
             Dim serializer = New DataContractSerializer(GetType(DataTable))
-            Using memoryStream = New MemoryStream(), SHA = New SHA1CryptoServiceProvider()
-                serializer.WriteObject(memoryStream, table)
-                Dim serializedData As Byte() = memoryStream.ToArray()
-                Dim hash As Byte() = SHA.ComputeHash(serializedData)
-                Return Convert.ToBase64String(hash)
+            Using memoryStream = New MemoryStream()
+                Using SHA = New SHA1CryptoServiceProvider()
+                    serializer.WriteObject(memoryStream, table)
+                    Dim serializedData As Byte() = memoryStream.ToArray()
+                    Dim hash As Byte() = SHA.ComputeHash(serializedData)
+                    Return Convert.ToBase64String(hash)
+                End Using
             End Using
         End Function
 
         Public Function GetMD5OfFile(filePath As String) As String
-            Using fStream As New FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 16 * 1024 * 1024), hash = MD5.Create
-                Return GetMD5OfStream(fStream)
+            Using fStream As New FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 16 * 1024 * 1024)
+                Using hash = MD5.Create
+                    Return GetMD5OfStream(fStream)
+                End Using
             End Using
         End Function
 
@@ -92,7 +96,7 @@ Namespace SecurityTools
 
         Public Sub GetUserAccess()
             Try
-                Dim strQRY = "SELECT * FROM " & UsersCols.TableName & " WHERE " & UsersCols.UserName & "='" & LocalDomainUser & "' LIMIT 1"
+                Dim strQRY = "SELECT * FROM " & UsersCols.TableName & " WHERE " & UsersCols.UserName & "='" & GlobalConstants.LocalDomainUser & "' LIMIT 1"
                 Using results As DataTable = DBFactory.GetDatabase.DataTableFromQueryString(strQRY)
                     If results.Rows.Count > 0 Then
                         Dim r As DataRow = results.Rows(0)

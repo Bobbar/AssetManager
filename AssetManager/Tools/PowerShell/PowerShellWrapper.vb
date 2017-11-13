@@ -38,7 +38,7 @@ Public Class PowerShellWrapper
                         stringBuilder.AppendLine(obj.ToString())
                     Next
 
-                    Return CleanDBValue((stringBuilder.ToString)).ToString
+                    Return DataConsistency.CleanDBValue((stringBuilder.ToString)).ToString
 
                 End Using
 

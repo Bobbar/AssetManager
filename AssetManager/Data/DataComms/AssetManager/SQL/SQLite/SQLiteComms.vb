@@ -231,27 +231,39 @@ Public Class SQLiteDatabase
 
     Private Function GetRemoteDBTable(tableName As String) As DataTable
         Dim qry As String = "SELECT * FROM " & tableName
-        Using MySQLDB As New MySQLDatabase, results As New DataTable, conn = MySQLDB.NewConnection, adapter = MySQLDB.ReturnMySqlAdapter(qry, conn)
-            adapter.AcceptChangesDuringFill = False
-            adapter.Fill(results)
-            results.TableName = tableName
-            Return results
+        Using MySQLDB As New MySQLDatabase
+            Using results As New DataTable
+                Using conn = MySQLDB.NewConnection
+                    Using adapter = MySQLDB.ReturnMySqlAdapter(qry, conn)
+                        adapter.AcceptChangesDuringFill = False
+                        adapter.Fill(results)
+                        results.TableName = tableName
+                        Return results
+                    End Using
+                End Using
+            End Using
         End Using
     End Function
 
     Private Function GetTableCreateStatement(tableName As String) As String
         Dim qry As String = "SHOW CREATE TABLE " & tableName
-        Using MySQLDB As New MySQLDatabase, results = MySQLDB.DataTableFromQueryString(qry)
-            Return results.Rows(0).Item(1).ToString
+        Using MySQLDB As New MySQLDatabase
+            Using results = MySQLDB.DataTableFromQueryString(qry)
+                Return results.Rows(0).Item(1).ToString
+            End Using
         End Using
     End Function
 
     Private Sub ImportDatabase(tableName As String, transaction As SQLiteTransaction)
         OpenConnection()
-        Using cmd = Connection.CreateCommand, adapter = New SQLiteDataAdapter(cmd), builder As New SQLiteCommandBuilder(adapter)
-            cmd.Transaction = transaction
-            cmd.CommandText = "SELECT * FROM " & tableName
-            adapter.Update(GetRemoteDBTable(tableName))
+        Using cmd = Connection.CreateCommand
+            Using adapter = New SQLiteDataAdapter(cmd)
+                Using builder As New SQLiteCommandBuilder(adapter)
+                    cmd.Transaction = transaction
+                    cmd.CommandText = "SELECT * FROM " & tableName
+                    adapter.Update(GetRemoteDBTable(tableName))
+                End Using
+            End Using
         End Using
     End Sub
 
@@ -292,29 +304,41 @@ Public Class SQLiteDatabase
     End Function
 
     Public Function DataTableFromQueryString(query As String) As DataTable Implements IDataBase.DataTableFromQueryString
-        Using results As New DataTable, da As DbDataAdapter = New SQLiteDataAdapter, cmd = New SQLiteCommand(query), conn = NewConnection()
-            cmd.Connection = conn
-            da.SelectCommand = cmd
-            da.Fill(results)
-            Return results
-            da.SelectCommand.Connection.Dispose()
+        Using results As New DataTable
+            Using da As DbDataAdapter = New SQLiteDataAdapter
+                Using cmd = New SQLiteCommand(query)
+                    Using conn = NewConnection()
+                        cmd.Connection = conn
+                        da.SelectCommand = cmd
+                        da.Fill(results)
+                        Return results
+                        da.SelectCommand.Connection.Dispose()
+                    End Using
+                End Using
+            End Using
         End Using
     End Function
 
     Public Function DataTableFromCommand(command As DbCommand, Optional transaction As DbTransaction = Nothing) As DataTable Implements IDataBase.DataTableFromCommand
         If transaction IsNot Nothing Then Throw New NotImplementedException()
-        Using da As DbDataAdapter = New SQLiteDataAdapter, results As New DataTable, conn = NewConnection()
-            command.Connection = conn
-            da.SelectCommand = command
-            da.Fill(results)
-            command.Dispose()
-            Return results
+        Using da As DbDataAdapter = New SQLiteDataAdapter
+            Using results As New DataTable
+                Using conn = NewConnection()
+                    command.Connection = conn
+                    da.SelectCommand = command
+                    da.Fill(results)
+                    command.Dispose()
+                    Return results
+                End Using
+            End Using
         End Using
     End Function
 
     Public Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable Implements IDataBase.DataTableFromParameters
-        Using cmd = GetCommandFromParams(query, params), results = DataTableFromCommand(cmd)
-            Return results
+        Using cmd = GetCommandFromParams(query, params)
+            Using results = DataTableFromCommand(cmd)
+                Return results
+            End Using
         End Using
     End Function
 
@@ -331,9 +355,11 @@ Public Class SQLiteDatabase
     End Function
 
     Public Function ExecuteScalarFromQueryString(query As String) As Object Implements IDataBase.ExecuteScalarFromQueryString
-        Using conn = NewConnection(), cmd As New SQLiteCommand(query, conn)
-            cmd.Connection.Open()
-            Return cmd.ExecuteScalar
+        Using conn = NewConnection()
+            Using cmd As New SQLiteCommand(query, conn)
+                cmd.Connection.Open()
+                Return cmd.ExecuteScalar
+            End Using
         End Using
     End Function
 

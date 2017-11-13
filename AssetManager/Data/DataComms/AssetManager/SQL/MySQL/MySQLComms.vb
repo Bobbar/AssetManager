@@ -108,40 +108,54 @@ Public Class MySQLDatabase
     End Function
 
     Public Function DataTableFromQueryString(query As String) As DataTable Implements IDataBase.DataTableFromQueryString
-        Using results As New DataTable, da = New MySqlDataAdapter, cmd = New MySqlCommand(query), conn = NewConnection()
-            OpenConnection(conn)
-            cmd.Connection = conn
-            da.SelectCommand = cmd
-            da.Fill(results)
-            Return results
+        Using results As New DataTable
+            Using da = New MySqlDataAdapter
+                Using cmd = New MySqlCommand(query)
+                    Using conn = NewConnection()
+                        OpenConnection(conn)
+                        cmd.Connection = conn
+                        da.SelectCommand = cmd
+                        da.Fill(results)
+                        Return results
+                    End Using
+                End Using
+            End Using
         End Using
     End Function
 
     Public Function DataTableFromCommand(command As DbCommand, Optional transaction As DbTransaction = Nothing) As DataTable Implements IDataBase.DataTableFromCommand
         If transaction Is Nothing Then
-            Using da As DbDataAdapter = New MySqlDataAdapter, results As New DataTable, conn = NewConnection()
-                OpenConnection(conn)
-                command.Connection = conn
-                da.SelectCommand = command
-                da.Fill(results)
-                command.Dispose()
-                Return results
+            Using da As DbDataAdapter = New MySqlDataAdapter
+                Using results As New DataTable
+                    Using conn = NewConnection()
+                        OpenConnection(conn)
+                        command.Connection = conn
+                        da.SelectCommand = command
+                        da.Fill(results)
+                        command.Dispose()
+                        Return results
+                    End Using
+                End Using
             End Using
         Else
             Dim conn = DirectCast(transaction.Connection, MySqlConnection)
-            Using da As DbDataAdapter = New MySqlDataAdapter, results As New DataTable
-                command.Connection = conn
-                da.SelectCommand = command
-                da.Fill(results)
-                command.Dispose()
-                Return results
+            Using da As DbDataAdapter = New MySqlDataAdapter
+                Using results As New DataTable
+                    command.Connection = conn
+                    da.SelectCommand = command
+                    da.Fill(results)
+                    command.Dispose()
+                    Return results
+                End Using
             End Using
         End If
     End Function
 
     Public Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable Implements IDataBase.DataTableFromParameters
-        Using cmd = GetCommandFromParams(query, params), results = DataTableFromCommand(cmd)
-            Return results
+        Using cmd = GetCommandFromParams(query, params)
+            Using results = DataTableFromCommand(cmd)
+                Return results
+            End Using
         End Using
     End Function
 
@@ -158,16 +172,20 @@ Public Class MySQLDatabase
     End Function
 
     Public Function ExecuteScalarFromQueryString(query As String) As Object Implements IDataBase.ExecuteScalarFromQueryString
-        Using conn = NewConnection(), cmd As New MySqlCommand(query, conn)
-            OpenConnection(conn)
-            Return cmd.ExecuteScalar
+        Using conn = NewConnection()
+            Using cmd As New MySqlCommand(query, conn)
+                OpenConnection(conn)
+                Return cmd.ExecuteScalar
+            End Using
         End Using
     End Function
 
     Public Function ExecuteQuery(query As String) As Integer Implements IDataBase.ExecuteQuery
-        Using conn = NewConnection(), cmd As New MySqlCommand(query, conn)
-            OpenConnection(conn)
-            Return cmd.ExecuteNonQuery
+        Using conn = NewConnection()
+            Using cmd As New MySqlCommand(query, conn)
+                OpenConnection(conn)
+                Return cmd.ExecuteNonQuery
+            End Using
         End Using
     End Function
 
@@ -175,23 +193,31 @@ Public Class MySQLDatabase
         Dim SelectQuery As String = "SELECT * FROM " & tableName & " LIMIT 0"
         If transaction IsNot Nothing Then
             Dim conn = DirectCast(transaction.Connection, MySqlConnection)
-            Using cmd = New MySqlCommand(SelectQuery, conn, DirectCast(transaction, MySqlTransaction)), Adapter = New MySqlDataAdapter(cmd), Builder = New MySqlCommandBuilder(Adapter)
-                Dim table = DataTableFromQueryString(SelectQuery)
-                table.Rows.Add()
-                For Each param In params
-                    table.Rows(0)(param.FieldName) = param.Value
-                Next
-                Return Adapter.Update(table)
+            Using cmd = New MySqlCommand(SelectQuery, conn, DirectCast(transaction, MySqlTransaction))
+                Using Adapter = New MySqlDataAdapter(cmd)
+                    Using Builder = New MySqlCommandBuilder(Adapter)
+                        Dim table = DataTableFromQueryString(SelectQuery)
+                        table.Rows.Add()
+                        For Each param In params
+                            table.Rows(0)(param.FieldName) = param.Value
+                        Next
+                        Return Adapter.Update(table)
+                    End Using
+                End Using
             End Using
         Else
-            Using conn = NewConnection(), Adapter = New MySqlDataAdapter(SelectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
-                OpenConnection(conn)
-                Dim table = DataTableFromQueryString(SelectQuery)
-                table.Rows.Add()
-                For Each param In params
-                    table.Rows(0)(param.FieldName) = param.Value
-                Next
-                Return Adapter.Update(table)
+            Using conn = NewConnection()
+                Using Adapter = New MySqlDataAdapter(SelectQuery, conn)
+                    Using Builder = New MySqlCommandBuilder(Adapter)
+                        OpenConnection(conn)
+                        Dim table = DataTableFromQueryString(SelectQuery)
+                        table.Rows.Add()
+                        For Each param In params
+                            table.Rows(0)(param.FieldName) = param.Value
+                        Next
+                        Return Adapter.Update(table)
+                    End Using
+                End Using
             End Using
         End If
     End Function
@@ -199,13 +225,21 @@ Public Class MySQLDatabase
     Public Function UpdateTable(selectQuery As String, table As DataTable, Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.UpdateTable
         If transaction IsNot Nothing Then
             Dim conn = DirectCast(transaction.Connection, MySqlConnection)
-            Using cmd = New MySqlCommand(selectQuery, conn, DirectCast(transaction, MySqlTransaction)), Adapter = New MySqlDataAdapter(cmd), Builder = New MySqlCommandBuilder(Adapter)
-                Return Adapter.Update(table)
+            Using cmd = New MySqlCommand(selectQuery, conn, DirectCast(transaction, MySqlTransaction))
+                Using Adapter = New MySqlDataAdapter(cmd)
+                    Using Builder = New MySqlCommandBuilder(Adapter)
+                        Return Adapter.Update(table)
+                    End Using
+                End Using
             End Using
         Else
-            Using conn = NewConnection(), Adapter = New MySqlDataAdapter(selectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
-                OpenConnection(conn)
-                Return Adapter.Update(table)
+            Using conn = NewConnection()
+                Using Adapter = New MySqlDataAdapter(selectQuery, conn)
+                    Using Builder = New MySqlCommandBuilder(Adapter)
+                        OpenConnection(conn)
+                        Return Adapter.Update(table)
+                    End Using
+                End Using
             End Using
         End If
     End Function
@@ -219,10 +253,12 @@ Public Class MySQLDatabase
                 Return cmd.ExecuteNonQuery()
             End Using
         Else
-            Using conn = NewConnection(), cmd As MySqlCommand = New MySqlCommand(sqlUpdateQry, conn)
-                OpenConnection(conn)
-                cmd.Parameters.AddWithValue("@ValueIN", valueIn)
-                Return cmd.ExecuteNonQuery()
+            Using conn = NewConnection()
+                Using cmd As MySqlCommand = New MySqlCommand(sqlUpdateQry, conn)
+                    OpenConnection(conn)
+                    cmd.Parameters.AddWithValue("@ValueIN", valueIn)
+                    Return cmd.ExecuteNonQuery()
+                End Using
             End Using
         End If
 

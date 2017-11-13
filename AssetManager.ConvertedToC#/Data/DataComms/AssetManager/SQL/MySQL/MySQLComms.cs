@@ -1,260 +1,426 @@
-﻿Imports System.Data.Common
-Imports MySql.Data.MySqlClient
+﻿using System.Data.Common;
+using MySql.Data.MySqlClient;
+using System;
+using System.Data;
+using System.Collections.Generic;
 
-Public Class MySQLDatabase
-    Implements IDisposable
-    Implements IDataBase
 
-#Region "IDisposable Support"
+namespace AssetManager
+{
+    public class MySQLDatabase : IDisposable, IDataBase
+    {
 
-    Private disposedValue As Boolean ' To detect redundant calls
+        #region IDisposable Support
 
-    ' This code added by Visual Basic to correctly implement the disposable pattern.
-    Public Sub Dispose() Implements IDisposable.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-        Dispose(True)
-        ' TODO: uncomment the following line if Finalize() is overridden above.
-        '    GC.SuppressFinalize(Me)
-    End Sub
+        private bool disposedValue; // To detect redundant calls
 
-    ' IDisposable
-    Protected Overridable Sub Dispose(disposing As Boolean)
-        If Not disposedValue Then
-            If disposing Then
-                ' TODO: dispose managed state (managed objects).
-                MySQLConnectString = vbNullString
-            End If
-            ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
-            ' TODO: set large fields to null.
-        End If
-        disposedValue = True
-    End Sub
+        // This code added by Visual Basic to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+            Dispose(true);
+            // TODO: uncomment the following line if Finalize() is overridden above.
+            //    GC.SuppressFinalize(Me)
+        }
 
-    ' TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
-    'Protected Overrides Sub Finalize()
-    '    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-    '    Dispose(False)
-    '    MyBase.Finalize()
-    'End Sub
+        // IDisposable
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                    MySQLConnectString = null;
+                }
+                // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
+                // TODO: set large fields to null.
+            }
+            disposedValue = true;
+        }
 
-#End Region
+        // TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
+        //Protected Overrides Sub Finalize()
+        //    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+        //    Dispose(False)
+        //    MyBase.Finalize()
+        //End Sub
 
-#Region "Fields"
+        #endregion
 
-    Private Const EncMySqlPass As String = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG"
-    Private MySQLConnectString As String = "server=" & ServerInfo.MySQLServerIP & ";uid=asset_mgr_usr;pwd=" & SecurityTools.DecodePassword(EncMySqlPass) & ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database="
+        #region Fields
 
-#End Region
+        private const string EncMySqlPass = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG";
+        private string MySQLConnectString;
 
-#Region "Constructors"
+        #endregion
 
-    Sub New()
+        #region Constructors
 
-    End Sub
+        public MySQLDatabase()
+        {
+           
+            MySQLConnectString = "server=" + ServerInfo.MySQLServerIP + ";uid=asset_mgr_usr;pwd=" + SecurityTools.DecodePassword(EncMySqlPass) + ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database=";
 
-#End Region
+        }
 
-#Region "Methods"
+        #endregion
 
-    Public Function NewConnection() As MySqlConnection
-        Return New MySqlConnection(GetConnectString)
-    End Function
+        #region Methods
 
-    Public Function OpenConnection(connection As MySqlConnection, Optional overrideNoPing As Boolean = False) As Boolean
-        If Not ServerInfo.ServerPinging Then 'Server not pinging.
-            If overrideNoPing Then 'Ignore server not pinging, try to open anyway.
-                Return TryOpenConnection(connection)
-            Else 'Throw exception.
-                Throw New NoPingException
-                Return False
-            End If
-        Else 'Server is pinging, try to open connection.
-            Return TryOpenConnection(connection)
-        End If
+        public MySqlConnection NewConnection()
+        {
+            return new MySqlConnection(GetConnectString());
+        }
 
-    End Function
+        public bool OpenConnection(MySqlConnection connection, bool overrideNoPing = false)
+        {
+            if (!ServerInfo.ServerPinging) //Server not pinging.
+            {
+                if (overrideNoPing) //Ignore server not pinging, try to open anyway.
+                {
+                    return TryOpenConnection(connection);
+                }
+                else //Throw exception.
+                {
+                    throw (new NoPingException());
+                    return false;
+                }
+            }
+            else //Server is pinging, try to open connection.
+            {
+                return TryOpenConnection(connection);
+            }
 
-    Private Function TryOpenConnection(connection As MySqlConnection) As Boolean
-        If connection Is Nothing Then 'Instantiate new connection.
-            connection = NewConnection()
-        End If
-        If connection.State <> ConnectionState.Open Then 'Try to open connection.
-            connection.Open()
-        End If
-        If connection.State = ConnectionState.Open Then 'Check if connection is open.
-            Return True
-        Else
-            Return False
-        End If
-    End Function
+        }
 
-    Private Function GetConnectString() As String
-        Return MySQLConnectString & ServerInfo.CurrentDataBase.ToString
-    End Function
+        private bool TryOpenConnection(MySqlConnection connection)
+        {
+            if (ReferenceEquals(connection, null)) //Instantiate new connection.
+            {
+                connection = NewConnection();
+            }
+            if (connection.State != ConnectionState.Open) //Try to open connection.
+            {
+                connection.Open();
+            }
+            if (connection.State == ConnectionState.Open) //Check if connection is open.
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-    Public Function ReturnMySqlAdapter(sqlQry As String, connection As MySqlConnection) As MySqlDataAdapter
-        Return New MySqlDataAdapter(sqlQry, connection)
-    End Function
+        private string GetConnectString()
+        {
+            return MySQLConnectString + ServerInfo.CurrentDataBase.ToString();
+        }
 
-#End Region
+        public MySqlDataAdapter ReturnMySqlAdapter(string sqlQry, MySqlConnection connection)
+        {
+            return new MySqlDataAdapter(sqlQry, connection);
+        }
 
-#Region "IDataBase"
+        #endregion
 
-    Public Function StartTransaction() As DbTransaction Implements IDataBase.StartTransaction
-        Dim conn = NewConnection()
-        OpenConnection(conn)
-        Dim trans = conn.BeginTransaction
-        Return trans
-    End Function
+        #region IDataBase
 
-    Public Function DataTableFromQueryString(query As String) As DataTable Implements IDataBase.DataTableFromQueryString
-        Using results As New DataTable, da = New MySqlDataAdapter, cmd = New MySqlCommand(query), conn = NewConnection()
-            OpenConnection(conn)
-            cmd.Connection = conn
-            da.SelectCommand = cmd
-            da.Fill(results)
-            Return results
-        End Using
-    End Function
+        public DbTransaction StartTransaction()
+        {
+            var conn = NewConnection();
+            OpenConnection(conn);
+            var trans = conn.BeginTransaction();
+            return trans;
+        }
 
-    Public Function DataTableFromCommand(command As DbCommand, Optional transaction As DbTransaction = Nothing) As DataTable Implements IDataBase.DataTableFromCommand
-        If transaction Is Nothing Then
-            Using da As DbDataAdapter = New MySqlDataAdapter, results As New DataTable, conn = NewConnection()
-                OpenConnection(conn)
-                command.Connection = conn
-                da.SelectCommand = command
-                da.Fill(results)
-                command.Dispose()
-                Return results
-            End Using
-        Else
-            Dim conn = DirectCast(transaction.Connection, MySqlConnection)
-            Using da As DbDataAdapter = New MySqlDataAdapter, results As New DataTable
-                command.Connection = conn
-                da.SelectCommand = command
-                da.Fill(results)
-                command.Dispose()
-                Return results
-            End Using
-        End If
-    End Function
+        public DataTable DataTableFromQueryString(string query)
+        {
+            using (DataTable results = new DataTable())
+            {
+                using (var da = new MySqlDataAdapter())
+                {
+                    using (var cmd = new MySqlCommand(query))
+                    {
+                        using (var conn = NewConnection())
+                        {
+                            OpenConnection(conn);
+                            cmd.Connection = conn;
+                            da.SelectCommand = cmd;
+                            da.Fill(results);
+                            return results;
+                        }
 
-    Public Function DataTableFromParameters(query As String, params As List(Of DBQueryParameter)) As DataTable Implements IDataBase.DataTableFromParameters
-        Using cmd = GetCommandFromParams(query, params), results = DataTableFromCommand(cmd)
-            Return results
-        End Using
-    End Function
+                    }
 
-    Public Function ExecuteScalarFromCommand(command As DbCommand) As Object Implements IDataBase.ExecuteScalarFromCommand
-        Try
-            Using conn = NewConnection()
-                OpenConnection(conn)
-                command.Connection = conn
-                Return command.ExecuteScalar
-            End Using
-        Finally
-            command.Dispose()
-        End Try
-    End Function
+                }
 
-    Public Function ExecuteScalarFromQueryString(query As String) As Object Implements IDataBase.ExecuteScalarFromQueryString
-        Using conn = NewConnection(), cmd As New MySqlCommand(query, conn)
-            OpenConnection(conn)
-            Return cmd.ExecuteScalar
-        End Using
-    End Function
+            }
 
-    Public Function ExecuteQuery(query As String) As Integer Implements IDataBase.ExecuteQuery
-        Using conn = NewConnection(), cmd As New MySqlCommand(query, conn)
-            OpenConnection(conn)
-            Return cmd.ExecuteNonQuery
-        End Using
-    End Function
+        }
 
-    Public Function InsertFromParameters(tableName As String, params As List(Of DBParameter), Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.InsertFromParameters
-        Dim SelectQuery As String = "SELECT * FROM " & tableName & " LIMIT 0"
-        If transaction IsNot Nothing Then
-            Dim conn = DirectCast(transaction.Connection, MySqlConnection)
-            Using cmd = New MySqlCommand(SelectQuery, conn, DirectCast(transaction, MySqlTransaction)), Adapter = New MySqlDataAdapter(cmd), Builder = New MySqlCommandBuilder(Adapter)
-                Dim table = DataTableFromQueryString(SelectQuery)
-                table.Rows.Add()
-                For Each param In params
-                    table.Rows(0)(param.FieldName) = param.Value
-                Next
-                Return Adapter.Update(table)
-            End Using
-        Else
-            Using conn = NewConnection(), Adapter = New MySqlDataAdapter(SelectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
-                OpenConnection(conn)
-                Dim table = DataTableFromQueryString(SelectQuery)
-                table.Rows.Add()
-                For Each param In params
-                    table.Rows(0)(param.FieldName) = param.Value
-                Next
-                Return Adapter.Update(table)
-            End Using
-        End If
-    End Function
+        public DataTable DataTableFromCommand(DbCommand command, DbTransaction transaction = null)
+        {
+            if (ReferenceEquals(transaction, null))
+            {
+                using (DbDataAdapter da = new MySqlDataAdapter())
+                {
+                    using (DataTable results = new DataTable())
+                    {
+                        using (var conn = NewConnection())
+                        {
+                            OpenConnection(conn);
+                            command.Connection = conn;
+                            da.SelectCommand = command;
+                            da.Fill(results);
+                            command.Dispose();
+                            return results;
+                        }
 
-    Public Function UpdateTable(selectQuery As String, table As DataTable, Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.UpdateTable
-        If transaction IsNot Nothing Then
-            Dim conn = DirectCast(transaction.Connection, MySqlConnection)
-            Using cmd = New MySqlCommand(selectQuery, conn, DirectCast(transaction, MySqlTransaction)), Adapter = New MySqlDataAdapter(cmd), Builder = New MySqlCommandBuilder(Adapter)
-                Return Adapter.Update(table)
-            End Using
-        Else
-            Using conn = NewConnection(), Adapter = New MySqlDataAdapter(selectQuery, conn), Builder = New MySqlCommandBuilder(Adapter)
-                OpenConnection(conn)
-                Return Adapter.Update(table)
-            End Using
-        End If
-    End Function
+                    }
 
-    Public Function UpdateValue(tableName As String, fieldIn As String, valueIn As Object, idField As String, idValue As String, Optional transaction As DbTransaction = Nothing) As Integer Implements IDataBase.UpdateValue
-        Dim sqlUpdateQry As String = "UPDATE " & tableName & " SET " & fieldIn & "=@ValueIN  WHERE " & idField & "='" & idValue & "'"
-        If transaction IsNot Nothing Then
-            Dim conn = DirectCast(transaction.Connection, MySqlConnection)
-            Using cmd = New MySqlCommand(sqlUpdateQry, conn, DirectCast(transaction, MySqlTransaction))
-                cmd.Parameters.AddWithValue("@ValueIN", valueIn)
-                Return cmd.ExecuteNonQuery()
-            End Using
-        Else
-            Using conn = NewConnection(), cmd As MySqlCommand = New MySqlCommand(sqlUpdateQry, conn)
-                OpenConnection(conn)
-                cmd.Parameters.AddWithValue("@ValueIN", valueIn)
-                Return cmd.ExecuteNonQuery()
-            End Using
-        End If
+                }
 
-    End Function
+            }
+            else
+            {
+                var conn = (MySqlConnection)transaction.Connection;
+                using (DbDataAdapter da = new MySqlDataAdapter())
+                {
+                    using (DataTable results = new DataTable())
+                    {
+                        command.Connection = conn;
+                        da.SelectCommand = command;
+                        da.Fill(results);
+                        command.Dispose();
+                        return results;
+                    }
 
-    Public Function GetCommand(Optional qryString As String = "") As DbCommand Implements IDataBase.GetCommand
-        Return New MySqlCommand(qryString)
-    End Function
+                }
 
-    Public Function GetCommandFromParams(query As String, params As List(Of DBQueryParameter)) As DbCommand Implements IDataBase.GetCommandFromParams
-        Dim cmd = New MySqlCommand
-        Dim ParamQuery As String = ""
-        For Each param In params
-            If TypeOf param.Value Is Boolean Then
-                ParamQuery += " " & param.FieldName & "=@" & param.FieldName
-                cmd.Parameters.AddWithValue("@" & param.FieldName, Convert.ToInt32(param.Value))
-            Else
-                If param.IsExact Then
-                    ParamQuery += " " & param.FieldName & "=@" & param.FieldName
-                    cmd.Parameters.AddWithValue("@" & param.FieldName, param.Value)
-                Else
-                    ParamQuery += " " & param.FieldName & " LIKE @" & param.FieldName
-                    cmd.Parameters.AddWithValue("@" & param.FieldName, "%" & param.Value.ToString & "%")
-                End If
-            End If
-            'Add operator if we are not on the last entry
-            If params.IndexOf(param) < params.Count - 1 Then ParamQuery += " " & param.OperatorString
-        Next
-        cmd.CommandText = query & ParamQuery
-        Return cmd
-    End Function
+            }
+        }
 
-#End Region
+        public DataTable DataTableFromParameters(string query, List<DBQueryParameter> @params)
+        {
+            using (var cmd = GetCommandFromParams(query, @params))
+            {
+                using (var results = DataTableFromCommand(cmd))
+                {
+                    return results;
+                }
 
-End Class
+            }
+
+        }
+
+        public dynamic ExecuteScalarFromCommand(DbCommand command)
+        {
+            try
+            {
+                using (var conn = NewConnection())
+                {
+                    OpenConnection(conn);
+                    command.Connection = conn;
+                    return command.ExecuteScalar();
+                }
+
+            }
+            finally
+            {
+                command.Dispose();
+            }
+        }
+
+        public dynamic ExecuteScalarFromQueryString(string query)
+        {
+            using (var conn = NewConnection())
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    OpenConnection(conn);
+                    return cmd.ExecuteScalar();
+                }
+
+            }
+
+        }
+
+        public int ExecuteQuery(string query)
+        {
+            using (var conn = NewConnection())
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    OpenConnection(conn);
+                    return cmd.ExecuteNonQuery();
+                }
+
+            }
+
+        }
+
+        public int InsertFromParameters(string tableName, List<DBParameter> @params, DbTransaction transaction = null)
+        {
+            string SelectQuery = "SELECT * FROM " + tableName + " LIMIT 0";
+            if (transaction != null)
+            {
+                var conn = (MySqlConnection)transaction.Connection;
+                using (var cmd = new MySqlCommand(SelectQuery, conn, (MySqlTransaction)transaction))
+                {
+                    using (var Adapter = new MySqlDataAdapter(cmd))
+                    {
+                        using (var Builder = new MySqlCommandBuilder(Adapter))
+                        {
+                            var table = DataTableFromQueryString(SelectQuery);
+                            table.Rows.Add();
+                            foreach (var param in @params)
+                            {
+                                table.Rows[0][param.FieldName] = param.Value;
+                            }
+                            return Adapter.Update(table);
+                        }
+
+                    }
+
+                }
+
+            }
+            else
+            {
+                using (var conn = NewConnection())
+                {
+                    using (var Adapter = new MySqlDataAdapter(SelectQuery, conn))
+                    {
+                        using (var Builder = new MySqlCommandBuilder(Adapter))
+                        {
+                            OpenConnection(conn);
+                            var table = DataTableFromQueryString(SelectQuery);
+                            table.Rows.Add();
+                            foreach (var param in @params)
+                            {
+                                table.Rows[0][param.FieldName] = param.Value;
+                            }
+                            return Adapter.Update(table);
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+        public int UpdateTable(string selectQuery, DataTable table, DbTransaction transaction = null)
+        {
+            if (transaction != null)
+            {
+                var conn = (MySqlConnection)transaction.Connection;
+                using (var cmd = new MySqlCommand(selectQuery, conn, (MySqlTransaction)transaction))
+                {
+                    using (var Adapter = new MySqlDataAdapter(cmd))
+                    {
+                        using (var Builder = new MySqlCommandBuilder(Adapter))
+                        {
+                            return Adapter.Update(table);
+                        }
+
+                    }
+
+                }
+
+            }
+            else
+            {
+                using (var conn = NewConnection())
+                {
+                    using (var Adapter = new MySqlDataAdapter(selectQuery, conn))
+                    {
+                        using (var Builder = new MySqlCommandBuilder(Adapter))
+                        {
+                            OpenConnection(conn);
+                            return Adapter.Update(table);
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+        public int UpdateValue(string tableName, string fieldIn, object valueIn, string idField, string idValue, DbTransaction transaction = null)
+        {
+            string sqlUpdateQry = "UPDATE " + tableName + " SET " + fieldIn + "=@ValueIN  WHERE " + idField + "='" + idValue + "'";
+            if (transaction != null)
+            {
+                var conn = (MySqlConnection)transaction.Connection;
+                using (var cmd = new MySqlCommand(sqlUpdateQry, conn, (MySqlTransaction)transaction))
+                {
+                    cmd.Parameters.AddWithValue("@ValueIN", valueIn);
+                    return cmd.ExecuteNonQuery();
+                }
+
+            }
+            else
+            {
+                using (var conn = NewConnection())
+                {
+                    using (MySqlCommand cmd = new MySqlCommand(sqlUpdateQry, conn))
+                    {
+                        OpenConnection(conn);
+                        cmd.Parameters.AddWithValue("@ValueIN", valueIn);
+                        return cmd.ExecuteNonQuery();
+                    }
+
+                }
+
+            }
+
+        }
+
+        public DbCommand GetCommand(string qryString = "")
+        {
+            return new MySqlCommand(qryString);
+        }
+
+        public DbCommand GetCommandFromParams(string query, List<DBQueryParameter> @params)
+        {
+            var cmd = new MySqlCommand();
+            string ParamQuery = "";
+            foreach (var param in @params)
+            {
+                if (param.Value is bool)
+                {
+                    ParamQuery += " " + param.FieldName + "=@" + param.FieldName;
+                    cmd.Parameters.AddWithValue("@" + param.FieldName, Convert.ToInt32(param.Value));
+                }
+                else
+                {
+                    if (param.IsExact)
+                    {
+                        ParamQuery += " " + param.FieldName + "=@" + param.FieldName;
+                        cmd.Parameters.AddWithValue("@" + param.FieldName, param.Value);
+                    }
+                    else
+                    {
+                        ParamQuery += " " + param.FieldName + " LIKE @" + param.FieldName;
+                        cmd.Parameters.AddWithValue("@" + param.FieldName, "%" + param.Value.ToString() + "%");
+                    }
+                }
+                //Add operator if we are not on the last entry
+                if (@params.IndexOf(param) < @params.Count - 1)
+                {
+                    ParamQuery += " " + param.OperatorString;
+                }
+            }
+            cmd.CommandText = query + ParamQuery;
+            return cmd;
+        }
+
+        #endregion
+
+    }
+}
