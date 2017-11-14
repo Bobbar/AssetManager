@@ -8,9 +8,11 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms.AdminTools
 {
-	public partial class UserManagerForm
+	public partial class UserManagerForm : ExtendedForm
 	{
 		private List<AccessGroupObject> ModuleIndex = new List<AccessGroupObject>();
 		private LocalUserInfoStruct CurrentUser;
@@ -45,7 +47,7 @@ namespace AssetManager
 
 		private void SendToGrid()
 		{
-			UserGrid.DataSource = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(UserDataQuery);
+			UserGrid.DataSource = DBFactory.GetDatabase().DataTableFromQueryString(UserDataQuery);
 			UserGrid.Columns[UsersCols.UID].ReadOnly = true;
 		}
 
@@ -69,7 +71,7 @@ namespace AssetManager
 		public List<AccessGroupObject> BuildModuleIndex()
 		{
 			List<AccessGroupObject> tmpList = new List<AccessGroupObject>();
-			using (DataTable ModuleTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + SecurityCols.TableName + " ORDER BY " + SecurityCols.AccessLevel + "")) {
+			using (DataTable ModuleTable = DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + SecurityCols.TableName + " ORDER BY " + SecurityCols.AccessLevel + "")) {
 				foreach (DataRow row in ModuleTable.Rows) {
 					tmpList.Add(new AccessGroupObject(row));
 				}

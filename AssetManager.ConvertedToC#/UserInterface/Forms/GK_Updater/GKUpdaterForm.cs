@@ -12,10 +12,11 @@ using System.Windows.Forms;
 using System.Net;
 using System.Security;
 using System.ComponentModel;
+using AssetManager.UserInterface.CustomControls;
 
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.GK_Updater
 {
-    public partial class GKUpdaterForm
+    public partial class GKUpdaterForm : ExtendedForm
     {
         private bool QueueIsRunning = false;
         private int MaxSimUpdates = 4;

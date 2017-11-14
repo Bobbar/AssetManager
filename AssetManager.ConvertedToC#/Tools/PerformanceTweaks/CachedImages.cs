@@ -8,6 +8,9 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
+using AssetManager.UserInterface.CustomControls;
+
+
 namespace AssetManager
 {
     /// <summary>

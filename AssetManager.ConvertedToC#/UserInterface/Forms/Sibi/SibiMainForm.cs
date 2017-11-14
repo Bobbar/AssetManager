@@ -10,10 +10,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Data.Common;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms.Sibi
 {
 
-    public partial class SibiMainForm
+    public partial class SibiMainForm : ExtendedForm
     {
         private bool bolGridFilling = false;
         private WindowList MyWindowList;// = new WindowList(this);

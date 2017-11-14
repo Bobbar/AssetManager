@@ -8,10 +8,12 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms.AssetManager
 {
 	[Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-	partial class ViewDeviceForm : ExtendedForm
+	partial class ViewDeviceForm
 	{
 		//Form overrides dispose to clean up the component list.
 		[System.Diagnostics.DebuggerNonUserCode()]
@@ -102,7 +104,7 @@ namespace AssetManager
 			this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tmr_RDPRefresher = new System.Windows.Forms.Timer(this.components);
 			this.fieldErrorIcon = new System.Windows.Forms.ErrorProvider(this.components);
-			this.tsSaveModify = new AssetManager.OneClickToolStrip();
+			this.tsSaveModify = new OneClickToolStrip();
 			this.cmdAccept_Tool = new System.Windows.Forms.ToolStripButton();
 			this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.cmdCancel_Tool = new System.Windows.Forms.ToolStripButton();
@@ -133,7 +135,7 @@ namespace AssetManager
 			this.CheckOutTool = new System.Windows.Forms.ToolStripMenuItem();
 			this.CheckInTool = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-			this.ToolStrip1 = new AssetManager.OneClickToolStrip();
+			this.ToolStrip1 = new OneClickToolStrip();
 			this.tsbModify = new System.Windows.Forms.ToolStripButton();
 			this.tsbNewNote = new System.Windows.Forms.ToolStripButton();
 			this.tsbDeleteDevice = new System.Windows.Forms.ToolStripButton();

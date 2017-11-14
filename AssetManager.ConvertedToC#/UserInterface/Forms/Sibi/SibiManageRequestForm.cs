@@ -13,10 +13,13 @@ using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
+using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.AssetManager;
+using AssetManager.UserInterface.Forms.Attachments;
 
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.Sibi
 {
-    public partial class SibiManageRequestForm
+    public partial class SibiManageRequestForm : ExtendedForm
     {
 
         #region Fields

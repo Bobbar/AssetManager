@@ -8,10 +8,12 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms.Sibi
 {
 	[Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-	partial class SibiMainForm : ExtendedForm
+	partial class SibiMainForm
 	{
 		//Form overrides dispose to clean up the component list.
 		[System.Diagnostics.DebuggerNonUserCode()]
@@ -51,7 +53,7 @@ namespace AssetManager
 			this.Label2 = new System.Windows.Forms.Label();
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
 			this.ResultGrid = new System.Windows.Forms.DataGridView();
-			this.ToolStrip1 = new AssetManager.OneClickToolStrip();
+			this.ToolStrip1 = new OneClickToolStrip();
 			this.cmdManage = new System.Windows.Forms.ToolStripButton();
 			this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.Panel1.SuspendLayout();

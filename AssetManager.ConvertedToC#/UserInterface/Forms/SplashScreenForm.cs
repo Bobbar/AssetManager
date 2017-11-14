@@ -9,10 +9,12 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Deployment.Application;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms
 {
 
-    public partial class SplashScreenForm
+    public partial class SplashScreenForm : ExtendedForm
     {
 
         private void SplashScreen1_Load(object sender, System.EventArgs e)

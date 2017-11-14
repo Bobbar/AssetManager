@@ -13,11 +13,15 @@ using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
+using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.AssetManager;
+using AssetManager.UserInterface.Forms.Sibi;
 
 
-namespace AssetManager
+
+namespace AssetManager.UserInterface.Forms.Attachments
 {
-    public partial class AttachmentsForm
+    public partial class AttachmentsForm : ExtendedForm
     {
 
         #region Fields

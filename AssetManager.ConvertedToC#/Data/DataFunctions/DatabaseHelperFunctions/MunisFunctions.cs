@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
 using MyDialogLib;
+using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms;
 
 namespace AssetManager
 {

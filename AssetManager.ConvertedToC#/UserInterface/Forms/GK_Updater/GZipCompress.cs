@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.GK_Updater
 {
 
 	public class GZipCompress

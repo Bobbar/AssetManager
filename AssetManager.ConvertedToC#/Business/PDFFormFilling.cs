@@ -7,6 +7,7 @@ using System;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using System.Diagnostics;
+using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager
 {

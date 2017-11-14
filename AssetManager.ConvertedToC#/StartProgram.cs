@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using AssetManager.UserInterface.Forms;
+
+
 
 namespace AssetManager
 {
@@ -79,7 +82,7 @@ namespace AssetManager
                 return;
             }
             Status("Ready!");
-            Application.Run(new MainForm());
+            Application.Run(new UserInterface.Forms.AssetManager.MainForm());
             SplashScreen.Dispose();
         }
 

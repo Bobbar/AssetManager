@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using AssetManager.UserInterface.Forms.GK_Updater;
+using AssetManager.UserInterface.CustomControls;
 
 
-namespace AssetManager
+
+namespace AssetManager.UserInterface.Forms.AdminTools
 {
-    public partial class CopyFilesForm
+    public partial class CopyFilesForm : ExtendedForm
     {
         private DeviceObject TargetDevice;
         private string SourceDirectory;

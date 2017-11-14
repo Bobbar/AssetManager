@@ -15,12 +15,18 @@ using System.Drawing;
 using Microsoft.VisualBasic;
 using System.Data;
 using System.Diagnostics;
+using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.Attachments;
+using AssetManager.UserInterface.Forms.AssetManager;
+using AssetManager.UserInterface.Forms.Sibi;
+using AssetManager.UserInterface.Forms.GK_Updater;
+using AssetManager.UserInterface.Forms.AdminTools;
 
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.AssetManager
 {
 
 
-    public partial class MainForm
+    public partial class MainForm : ExtendedForm
     {
 
         #region "Fields"
@@ -30,8 +36,8 @@ namespace AssetManager
         private DbCommand LastCommand;
 
         private LiveBox MyLiveBox;// = new LiveBox(this);
-        private MunisToolBar MyMunisToolBar;// = new MunisToolBar(this);
-        private WindowList MyWindowList;// = new WindowList(this);
+        private CustomControls.MunisToolBar MyMunisToolBar;// = new MunisToolBar(this);
+        private CustomControls.WindowList MyWindowList;// = new WindowList(this);
         private bool QueryRunning = false;
         private ConnectionWatchdog WatchDog;
 
@@ -427,8 +433,8 @@ namespace AssetManager
             {
 
                 MyLiveBox = new LiveBox(this);
-                MyMunisToolBar = new MunisToolBar(this);
-                MyWindowList = new WindowList(this);
+                MyMunisToolBar = new CustomControls.MunisToolBar(this);
+                MyWindowList = new CustomControls.WindowList(this);
 
 
                 ShowAll();
@@ -488,10 +494,10 @@ namespace AssetManager
                 if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi))
                     return;
                 Waiting();
-                var SibiForm = ChildFormControl.GetChildOfType(this, typeof(SibiMainForm));
+                var SibiForm = ChildFormControl.GetChildOfType(this, typeof(Sibi.SibiMainForm));
                 if (SibiForm == null)
                 {
-                    SibiMainForm NewSibi = new SibiMainForm(this);
+                    Sibi.SibiMainForm NewSibi = new Sibi.SibiMainForm(this);
                 }
                 else
                 {

@@ -5,7 +5,7 @@ Imports System.Net.NetworkInformation
 Imports System.Text
 Imports System.Windows.Forms
 
-Public Class GK_Updater : Implements IDisposable
+Public Class GKUpdaterLibClass : Implements IDisposable
 
 #Region "Members"
 

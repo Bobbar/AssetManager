@@ -657,59 +657,53 @@
             <param name="scriptBytes">PowerShell script as a byte array.</param>
             <returns>Returns any error messages.</returns>
         </member>
-        <member name="T:AssetManager.ExtendedForm">
+        <member name="T:AssetManager.UserInterface.CustomControls.ExtendedForm">
             <summary>
             Custom form with project specific properties and methods.
             </summary>
         </member>
-        <member name="P:AssetManager.ExtendedForm.GridTheme">
+        <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.GridTheme">
             <summary>
             Unique identifying string used to locate specific instances of this form.
             </summary>
             <returns></returns>
         </member>
-        <member name="P:AssetManager.ExtendedForm.FormUID">
+        <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.FormUID">
             <summary>
             Gets or sets the Grid Theme for the DataGridView controls within the form.
             </summary>
             <returns></returns>
         </member>
-        <member name="P:AssetManager.ExtendedForm.ParentForm">
+        <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.ParentForm">
             <summary>
-            Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="P:AssetManager.ExtendedForm.GridTheme"/> from the parent form.
+            Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="P:AssetManager.UserInterface.CustomControls.ExtendedForm.GridTheme"/> from the parent form.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.ExtendedForm.RefreshData">
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.RefreshData">
             <summary>
             Override and add code to refresh data from the database.
             </summary>
         </member>
-        <member name="M:AssetManager.LiveBox.ProcessSearch(System.String)">
-            <summary>
-            Runs the DB query Asynchronously.
-            </summary>
-            <param name="SearchString"></param>
-        </member>
-        <member name="M:AssetManager.MunisToolBar.InsertMunisDropDown(AssetManager.OneClickToolStrip,System.Int32)">
+        <member name="M:AssetManager.UserInterface.CustomControls.MunisToolBar.InsertMunisDropDown(AssetManager.UserInterface.CustomControls.OneClickToolStrip,System.Int32)">
             <summary>
             Inserts the MunisToolBar into the specified toolstrip.
             </summary>
             <param name="TargetStrip"></param>
             <param name="LocationIndex"></param>
         </member>
-        <member name="T:AssetManager.OneClickToolStrip">
+        <member name="T:AssetManager.UserInterface.CustomControls.OneClickToolStrip">
             <summary>
             Modified Toolstrip that responds to clicks as soon as the parent form is activated. As opposed to requiring two clicks (one to activate, another to focus).
             </summary>
         </member>
-        <member name="M:AssetManager.SliderLabel.DrawText(System.Drawing.Graphics)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.DrawText(System.Drawing.Graphics)">
             <summary>
             Primary text renderer.
             </summary>
             <param name="canvas"></param>
         </member>
-        <member name="M:AssetManager.SliderLabel.NewSlideMessage(System.String,AssetManager.SlideDirection,AssetManager.SlideDirection,System.Int32)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.NewSlideMessage(System.String,AssetManager.UserInterface.CustomControls.SlideDirection,AssetManager.UserInterface.CustomControls.SlideDirection,System.Int32)">
             <summary>
             Adds new message to queue.
             </summary>
@@ -718,14 +712,14 @@
             <param name="slideOutDirection">Slide out direction.</param>
             <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
         </member>
-        <member name="M:AssetManager.SliderLabel.ToToolStripControl(System.Windows.Forms.Control)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.ToToolStripControl(System.Windows.Forms.Control)">
             <summary>
             Returns a <see cref="T:System.Windows.Forms.ToolStripControlHost"/> of this control for insertion into tool strips/status strips.
             </summary>
             <param name="parentControl">Target strip for this control. For inheriting font and color.</param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.SliderLabel.AddMessageToQueue(System.String,AssetManager.SlideDirection,AssetManager.SlideDirection,System.Int32)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.AddMessageToQueue(System.String,AssetManager.UserInterface.CustomControls.SlideDirection,AssetManager.UserInterface.CustomControls.SlideDirection,System.Int32)">
             <summary>
             Adds a new text message to the queue.
             </summary>
@@ -734,99 +728,121 @@
             <param name="slideOutDirection"></param>
             <param name="displayTime"></param>
         </member>
-        <member name="M:AssetManager.SliderLabel.DisplayText(AssetManager.SliderLabel.MessageParameters)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.DisplayText(AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters)">
             <summary>
             Displays the specified text and starts the animation.
             </summary>
             <param name="message"></param>
         </member>
-        <member name="M:AssetManager.SliderLabel.GetTextSize(System.String)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.GetTextSize(System.String)">
             <summary>
             Measures the graphical size of the specified text.
             </summary>
             <param name="text"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.SliderLabel.Pause(System.Int32)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.Pause(System.Int32)">
             <summary>
             Async pause task.
             </summary>
             <param name="pauseTime"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.SliderLabel.ProcessQueue">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.ProcessQueue">
             <summary>
             Handles the message queue. Messages are queued until they their animation is complete. Messages with a display time of 0 are moved to the slide out animation status, then replaced with the next message when complete.
             </summary>
         </member>
-        <member name="M:AssetManager.SliderLabel.SetControlSize">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.SetControlSize">
             <summary>
             If autosize set to true, sets the control size to fit the text.
             </summary>
         </member>
-        <member name="M:AssetManager.SliderLabel.SetSlideInAnimation">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.SetSlideInAnimation">
             <summary>
             Sets states, current positions and ending positions for a slide-in animation.
             </summary>
         </member>
-        <member name="M:AssetManager.SliderLabel.SetSlideOutAnimation">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.SetSlideOutAnimation">
             <summary>
             Sets states, current positions and ending positions for a slide-out animation.
             </summary>
         </member>
-        <member name="M:AssetManager.SliderLabel.Tick(System.Object,System.EventArgs)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.Tick(System.Object,System.EventArgs)">
             <summary>
             Timer tick event for animation.
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
         </member>
-        <member name="M:AssetManager.SliderLabel.UpdateTextPosition">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.UpdateTextPosition">
             <summary>
             Primary animation routine. Messages are animated per their current state and specified directions.
             </summary>
         </member>
-        <member name="T:AssetManager.SliderLabel.MessageParameters">
+        <member name="T:AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters">
             <summary>
             Parameters for messages to be queued.
             </summary>
         </member>
-        <member name="M:AssetManager.WindowList.BuildWindowList(AssetManager.ExtendedForm,System.Windows.Forms.ToolStripItemCollection)">
+        <member name="M:AssetManager.UserInterface.CustomControls.WindowList.BuildWindowList(AssetManager.UserInterface.CustomControls.ExtendedForm,System.Windows.Forms.ToolStripItemCollection)">
             <summary>
             Recursively build ToolStripItemCollections of Forms and their Children and add them to the ToolStrip. Making sure to add SibiMain to the top of the list.
             </summary>
             <param name="ParentForm">Form to add to ToolStrip.</param>
             <param name="TargetMenuItem">Item to add the Form item to.</param>
         </member>
-        <member name="M:AssetManager.ViewHistoryForm.GetChangedFields(System.Data.DataTable)">
+        <member name="F:AssetManager.UserInterface.Forms.AssetManager.MainForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.AssetManager.MainForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.AssetManager.ViewHistoryForm.GetChangedFields(System.Data.DataTable)">
             <summary>
             Returns a list of controls whose value differs from the previous historical state.
             </summary>
             <param name="currentData"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Attachment.#ctor(System.String,AssetManager.AttachmentsBaseCols)">
-            <summary>
-            Create new Attachment from a file path.
-            </summary>
-            <param name="NewFile">Full path to file.</param>
-        </member>
-        <member name="F:AssetManager.AttachmentsForm.FTPUri">
+        <member name="F:AssetManager.UserInterface.Forms.Attachments.AttachmentsForm.FTPUri">
             <summary>
             "ftp://  strServerIP  /attachments/  CurrentDB  /"
             </summary>
         </member>
-        <member name="M:AssetManager.GKProgressControl.GKLogEvent(System.Object,System.EventArgs)">
+        <member name="F:AssetManager.UserInterface.Forms.Form1.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.Form1.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.Form1.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.GKProgressControl.GKLogEvent(System.Object,System.EventArgs)">
             <summary>
             Log message event from GKUpdater.  This even can fire very rapidly. So the result is stored in a buffer to be added to the rtbLog control in a more controlled manner.
             </summary>
         </member>
-        <member name="M:AssetManager.GKProgressControl.UI_Timer_Tick(System.Object,System.EventArgs)">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.GKProgressControl.UI_Timer_Tick(System.Object,System.EventArgs)">
             <summary>
             Timer that updates the rtbLog control with chunks of data from the log buffer.
             </summary>
         </member>
-        <member name="M:AssetManager.GZipCompress.GetGzOriginalFileSize(System.String)">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.GZipCompress.GetGzOriginalFileSize(System.String)">
             <summary>
             Extracts the original filesize of the compressed file.
             </summary>
@@ -834,7 +850,7 @@
             <returns>Size of the compressed file, when its decompressed.</returns>
             <remarks>More information at <a href="http://tools.ietf.org/html/rfc1952">http://tools.ietf.org/html/rfc1952</a> section 2.3</remarks>
         </member>
-        <member name="M:AssetManager.GZipCompress.GetGzOriginalFileSize(System.IO.FileInfo)">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.GZipCompress.GetGzOriginalFileSize(System.IO.FileInfo)">
             <summary>
             Extracts the original filesize of the compressed file.
             </summary>
@@ -842,13 +858,13 @@
             <returns>Size of the compressed file, when its decompressed.</returns>
             <remarks>More information at <a href="http://tools.ietf.org/html/rfc1952">http://tools.ietf.org/html/rfc1952</a> section 2.3</remarks>
         </member>
-        <member name="M:AssetManager.ManagePackFile.DownloadPack">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.DownloadPack">
             <summary>
             Creates and cleans the pack file directories then downloads a new pack file from the server location.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.ManagePackFile.VerifyPackFile">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.VerifyPackFile">
              <summary>
              Verifies directory structure, checks if pack file is present, then compares local and remote hashes of the pack file.
             
@@ -856,13 +872,13 @@
              </summary>
              <returns></returns>
         </member>
-        <member name="M:AssetManager.ManagePackFile.GetRemoteHash">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.GetRemoteHash">
             <summary>
             Returns the contents of the hash text file located in <see cref="!:GKRemotePackFileDir"/>
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.ManagePackFile.CopyPackFile(System.String,System.String)">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.CopyPackFile(System.String,System.String)">
             <summary>
             Copies a single file to the <paramref name="dest"/> path.
             </summary>
@@ -872,69 +888,81 @@
             Path of destination.
             <returns></returns>
         </member>
-        <member name="M:AssetManager.ManagePackFile.CopyFile(System.String,System.String)">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.CopyFile(System.String,System.String)">
             <summary>
             Performs a buffered file stream transfer.
             </summary>
             <param name="Source"></param>
             <param name="Dest"></param>
         </member>
-        <member name="M:AssetManager.ManagePackFile.PackGKDir">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.PackGKDir">
             <summary>
             Compresses the local Gatekeeper directory into a new pack file.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.ManagePackFile.UnPackGKDir">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.UnPackGKDir">
             <summary>
             Decompresses the pack file into a local working directory.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.ManagePackFile.UploadPackFiles">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.UploadPackFiles">
             <summary>
             Copies the pack file and hash file to the server directory.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.ManagePackFile.ProcessPackFile">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.ProcessPackFile">
             <summary>
             Verifies the local pack file and downloads a new one if needed.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.ManagePackFile.CreateNewPackFile">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.CreateNewPackFile">
             <summary>
             Creates a new pack file and hash file and copies them to the server location.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.ManagePackFile.CreateHashFile">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.CreateHashFile">
             <summary>
             Creates a text file containing the hash string of the pack file.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.GKUpdaterForm.CanRunMoreUpdates">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.GKUpdaterForm.CanRunMoreUpdates">
             <summary>
             Returns True if number of running updates is less than the maximum simultaneous allowed updates and RunQueue is True.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.GKUpdaterForm.PruneQueue">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.GKUpdaterForm.PruneQueue">
             <summary>
             Removes disposed update fragments from list.
             </summary>
         </member>
-        <member name="M:AssetManager.GKUpdaterForm.SortUpdates">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.GKUpdaterForm.SortUpdates">
             <summary>
-            Sorts all the GKProgressControls in order of the <see cref="T:AssetManager.GKProgressControl.ProgressStatus"/> enum.
+            Sorts all the GKProgressControls in order of the <see cref="T:AssetManager.UserInterface.Forms.GK_Updater.GKProgressControl.ProgressStatus"/> enum.
             </summary>
         </member>
-        <member name="M:AssetManager.GKUpdaterForm.StartNextUpdate">
+        <member name="M:AssetManager.UserInterface.Forms.GK_Updater.GKUpdaterForm.StartNextUpdate">
             <summary>
             Starts the next update that has a queued status.
             </summary>
+        </member>
+        <member name="M:AssetManager.LiveBox.ProcessSearch(System.String)">
+            <summary>
+            Runs the DB query Asynchronously.
+            </summary>
+            <param name="SearchString"></param>
+        </member>
+        <member name="M:AssetManager.Attachment.#ctor(System.String,AssetManager.AttachmentsBaseCols)">
+            <summary>
+            Create new Attachment from a file path.
+            </summary>
+            <param name="NewFile">Full path to file.</param>
         </member>
     </members>
 </doc>

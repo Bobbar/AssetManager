@@ -16,7 +16,8 @@ using Microsoft.VisualBasic;
 using System.Collections.Specialized;
 using System.Data.Common;
 using System.Diagnostics;
-
+using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.AdminTools;
 
 namespace AssetManager
 {

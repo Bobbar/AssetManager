@@ -8,7 +8,8 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+
+namespace AssetManager.UserInterface.CustomControls
 {
 	/// <summary>
 	/// Custom form with project specific properties and methods.

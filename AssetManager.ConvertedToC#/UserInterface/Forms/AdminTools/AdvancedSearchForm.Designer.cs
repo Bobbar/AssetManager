@@ -8,10 +8,12 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms.AdminTools
 {
 	[Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-	partial class AdvancedSearchForm : ExtendedForm
+	partial class AdvancedSearchForm
 	{
 
 		//Form overrides dispose to clean up the component list.
@@ -41,7 +43,7 @@ namespace AssetManager
 			this.Label2 = new System.Windows.Forms.Label();
 			this.SearchStringTextBox = new System.Windows.Forms.TextBox();
 			this.Label1 = new System.Windows.Forms.Label();
-			this.TableTree = new AssetManager.CorrectedTreeView();
+			this.TableTree = new CorrectedTreeView();
 			this.GroupBox1.SuspendLayout();
 			this.SuspendLayout();
 			//

@@ -10,10 +10,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 using System.Security;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms
 {
 
-    public partial class GetCredentialsForm
+    public partial class GetCredentialsForm : ExtendedForm
     {
         private NetworkCredential MyCreds;
 

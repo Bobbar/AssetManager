@@ -9,11 +9,12 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using AssetManager.UserInterface.CustomControls;
 
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.AssetManager
 {
 
-	public partial class UpdateDev
+	public partial class UpdateDev : ExtendedForm
 	{
 
 		public DeviceUpdateInfoStruct UpdateInfo {

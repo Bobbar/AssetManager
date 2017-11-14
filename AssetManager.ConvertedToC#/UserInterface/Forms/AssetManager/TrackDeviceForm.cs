@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Data;
 using Microsoft.VisualBasic;
+using AssetManager.UserInterface.CustomControls;
 
-
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.AssetManager
 {
-    public partial class TrackDeviceForm
+    public partial class TrackDeviceForm : ExtendedForm
     {
         private DeviceObject CurrentTrackingDevice = new DeviceObject();
         private DeviceTrackingObject CheckData = new DeviceTrackingObject();

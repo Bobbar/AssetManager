@@ -8,10 +8,12 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms.Sibi
 {
 	[Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-	partial class SibiManageRequestForm : ExtendedForm
+	partial class SibiManageRequestForm
 	{
 		//Form overrides dispose to clean up the component list.
 		[System.Diagnostics.DebuggerNonUserCode()]
@@ -91,7 +93,7 @@ namespace AssetManager
 			this.GroupBox4 = new System.Windows.Forms.GroupBox();
 			this.RequestItemsGrid = new System.Windows.Forms.DataGridView();
 			this.chkAllowDrag = new System.Windows.Forms.CheckBox();
-			this.ToolStrip = new AssetManager.OneClickToolStrip();
+			this.ToolStrip = new OneClickToolStrip();
 			this.cmdCreate = new System.Windows.Forms.ToolStripButton();
 			this.ModifyButton = new System.Windows.Forms.ToolStripButton();
 			this.cmdDelete = new System.Windows.Forms.ToolStripButton();

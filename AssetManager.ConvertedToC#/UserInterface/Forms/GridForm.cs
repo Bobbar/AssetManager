@@ -9,10 +9,12 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms
 {
 
-    public partial class GridForm
+    public partial class GridForm : ExtendedForm
     {
 
         #region "Fields"
@@ -142,7 +144,7 @@ namespace AssetManager
             if (!bolGridFilling)
             {
                 //TODO: See if this work.
-               // var grid = (DataGridView)sender;
+                // var grid = (DataGridView)sender;
 
                 StyleFunctions.HighlightRow((DataGridView)sender, this.GridTheme, e.RowIndex);
             }
@@ -228,6 +230,5 @@ namespace AssetManager
         }
 
         #endregion
-
     }
 }

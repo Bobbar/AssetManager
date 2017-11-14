@@ -8,9 +8,12 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+
+namespace AssetManager.UserInterface.Forms.AdminTools
 {
-	public partial class CrypterForm
+	public partial class CrypterForm : ExtendedForm
 	{
 
 		public CrypterForm(ExtendedForm parentForm)

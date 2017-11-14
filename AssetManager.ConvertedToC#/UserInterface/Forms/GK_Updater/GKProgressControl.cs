@@ -10,16 +10,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using GKUpdaterLib;
-namespace AssetManager
+
+
+
+namespace AssetManager.UserInterface.Forms.GK_Updater
 {
 
     public partial class GKProgressControl : IDisposable
     {
 
-        public GK_Updater MyUpdater;
+        public GKUpdaterLibClass MyUpdater;
         public ProgressStatus ProgStatus;
         private bool bolShow = false;
-        private GKUpdaterLib.GK_Updater.Status_Stats CurrentStatus;
+        private GKUpdaterLib.GKUpdaterLibClass.Status_Stats CurrentStatus;
         private DeviceObject CurDevice = new DeviceObject();
         private string LogBuff = "";
         private Form MyParentForm;
@@ -49,7 +52,7 @@ namespace AssetManager
             this.Size = this.MinimumSize;
             MyParentForm = parentForm;
             CurDevice = device;
-            MyUpdater = new GK_Updater(CurDevice.HostName, gkPath);
+            MyUpdater = new GKUpdaterLibClass(CurDevice.HostName, gkPath);
             MyUpdater.CreateMissingDirectories = createMissingDirs;
             this.DoubleBuffered = true;
             lblInfo.Text = CurDevice.Serial + " - " + CurDevice.CurrentUser;
@@ -78,7 +81,7 @@ namespace AssetManager
             this.Size = this.MinimumSize;
             MyParentForm = parentForm;
             CurDevice = device;
-            MyUpdater = new GK_Updater(CurDevice.HostName, sourcePath, destPath);
+            MyUpdater = new GKUpdaterLibClass(CurDevice.HostName, sourcePath, destPath);
             MyUpdater.CreateMissingDirectories = createMissingDirs;
             this.DoubleBuffered = true;
             lblInfo.Text = CurDevice.Serial + " - " + CurDevice.CurrentUser;
@@ -190,18 +193,18 @@ namespace AssetManager
         /// </summary>
         private void GKLogEvent(object sender, EventArgs e)
         {
-            var LogEvent = (GK_Updater.LogEvents)e;
+            var LogEvent = (GKUpdaterLibClass.LogEvents)e;
             Log(LogEvent.LogData.Message);
         }
 
         private void Log(string Message)
         {
-            LogBuff += Message + Constants.vbCrLf;
+            LogBuff += Message + Environment.NewLine;
         }
 
         private void GKStatusUpdateEvent(object sender, EventArgs e)
         {
-            var UpdateEvent = (GK_Updater.GKUpdateEvents)e;
+            var UpdateEvent = (GKUpdaterLibClass.GKUpdateEvents)e;
             SetStatus(ProgressStatus.Running);
             CurrentStatus = UpdateEvent.CurrentStatus;
             pbarProgress.Maximum = CurrentStatus.TotFiles;
@@ -216,7 +219,7 @@ namespace AssetManager
 
         private void GKUpdate_Complete(object sender, EventArgs e)
         {
-            var CompleteEvent = (GK_Updater.GKUpdateCompleteEvents)e;
+            var CompleteEvent = (GKUpdaterLibClass.GKUpdateCompleteEvents)e;
             if (CompleteEvent.HasErrors)
             {
                 SetStatus(ProgressStatus.Errors);
@@ -236,7 +239,7 @@ namespace AssetManager
                 }
                 else
                 {
-                    if (CompleteEvent.Errors is GK_Updater.MissingDirectoryException)
+                    if (CompleteEvent.Errors is GKUpdaterLibClass.MissingDirectoryException)
                     {
                         Log("Enable 'Create Missing Directories' option and re-enqueue this device to force creation.");
                     }

@@ -8,10 +8,10 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.AdminTools
 {
 	[Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-	partial class CopyFilesForm : ExtendedForm
+	partial class CopyFilesForm
 	{
 
 		//Form overrides dispose to clean up the component list.

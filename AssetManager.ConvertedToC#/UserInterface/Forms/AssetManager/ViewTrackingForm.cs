@@ -8,10 +8,12 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms.AssetManager
 {
 
-	public partial class ViewTrackingForm
+	public partial class ViewTrackingForm : ExtendedForm
 	{
 
 		public ViewTrackingForm(ExtendedForm parentForm, string entryGUID, DeviceObject device)
@@ -28,7 +30,7 @@ namespace AssetManager
 			try {
 				OtherFunctions.SetWaitCursor(true, this);
 				var strQry = "Select * FROM " + TrackablesCols.TableName + " WHERE  " + TrackablesCols.UID + " = '" + entryUID + "'";
-				using (DataTable results = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(strQry)) {
+				using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry)) {
 					foreach (DataRow r in results.Rows) {
 						txtTimeStamp.Text = DataConsistency.NoNull(r[TrackablesCols.DateStamp]);
 						txtCheckType.Text = DataConsistency.NoNull(r[TrackablesCols.CheckType]);

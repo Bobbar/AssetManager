@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data;
 using System.Drawing;
+using AssetManager.UserInterface.Forms.Attachments;
+using AssetManager.UserInterface.Forms.AssetManager;
+using AssetManager.UserInterface.Forms.Sibi;
+using AssetManager.UserInterface.Forms.GK_Updater;
+using AssetManager.UserInterface.Forms.AdminTools;
 
 
 namespace AssetManager

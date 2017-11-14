@@ -11,12 +11,13 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Data.Common;
 using System.IO;
+using AssetManager.UserInterface.CustomControls;
 
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.GK_Updater
 {
 
 
-    public partial class PackFileForm
+    public partial class PackFileForm : ExtendedForm
     {
         public bool PackVerified { get; set; }
         private bool Working = false;

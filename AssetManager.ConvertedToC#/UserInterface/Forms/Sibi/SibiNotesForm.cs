@@ -8,9 +8,11 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms.Sibi
 {
-	public partial class SibiNotesForm
+	public partial class SibiNotesForm : ExtendedForm
 	{
 
 		private RequestObject MyRequest;

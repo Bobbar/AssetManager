@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using System.Data;
 using System;
-
+using AssetManager.UserInterface.Forms;
 
 
 namespace AssetManager

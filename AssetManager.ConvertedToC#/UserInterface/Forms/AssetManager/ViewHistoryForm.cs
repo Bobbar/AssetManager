@@ -9,10 +9,12 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms.AssetManager
 {
 
-    public partial class ViewHistoryForm
+    public partial class ViewHistoryForm : ExtendedForm
     {
         private DBControlParser DataParser;// = new DBControlParser(this);
 
@@ -69,7 +71,7 @@ namespace AssetManager
             try
             {
                 var strQry = "Select * FROM " + HistoricalDevicesCols.TableName + " WHERE  " + HistoricalDevicesCols.HistoryEntryUID + " = '" + EntryUID + "'";
-                using (DataTable results = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(strQry))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
                 {
                     HighlightChangedFields(results);
                     FillControls(results);

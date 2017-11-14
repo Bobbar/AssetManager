@@ -8,6 +8,9 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
+using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms;
+
 namespace AssetManager
 {
     public static class GridFunctions

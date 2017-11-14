@@ -8,9 +8,11 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+using AssetManager.UserInterface.CustomControls;
+
+namespace AssetManager.UserInterface.Forms.Sibi
 {
-    public partial class SibiSelectorForm
+    public partial class SibiSelectorForm : ExtendedForm
     {
 
         public string SibiUID
@@ -66,7 +68,7 @@ namespace AssetManager
 
         private void ShowAll()
         {
-            SendToGrid(AssetManager.DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + SibiRequestCols.TableName + " ORDER BY " + SibiRequestCols.NeedBy));
+            SendToGrid(DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + SibiRequestCols.TableName + " ORDER BY " + SibiRequestCols.NeedBy));
         }
 
         private void ResultGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

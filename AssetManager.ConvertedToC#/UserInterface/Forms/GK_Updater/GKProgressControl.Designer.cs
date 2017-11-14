@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.GK_Updater
 {
 	[Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
 	partial class GKProgressControl : System.Windows.Forms.UserControl

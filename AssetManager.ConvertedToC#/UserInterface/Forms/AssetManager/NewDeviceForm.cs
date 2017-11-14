@@ -13,10 +13,11 @@ using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
+using AssetManager.UserInterface.CustomControls;
 
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.AssetManager
 {
-    public partial class NewDeviceForm
+    public partial class NewDeviceForm : ExtendedForm
     {
 
         #region Fields

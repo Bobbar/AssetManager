@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data;
 using Microsoft.VisualBasic;
+using AssetManager.UserInterface.CustomControls;
 
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.AdminTools
 {
-    public partial class AdvancedSearchForm
+    public partial class AdvancedSearchForm : ExtendedForm
+
     {
 
         public AdvancedSearchForm(ExtendedForm parentForm)

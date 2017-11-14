@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+namespace AssetManager.UserInterface.CustomControls
 {
 	/// <summary>
 	/// Modified Toolstrip that responds to clicks as soon as the parent form is activated. As opposed to requiring two clicks (one to activate, another to focus).

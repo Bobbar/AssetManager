@@ -1,25 +1,25 @@
 ﻿using System.ComponentModel;
-using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
 using Microsoft.VisualBasic;
-using System.Collections.Specialized;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
 using PingVisLib;
+using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.Attachments;
+using AssetManager.UserInterface.Forms.AssetManager;
+using AssetManager.UserInterface.Forms.Sibi;
+using AssetManager.UserInterface.Forms.GK_Updater;
+using AssetManager.UserInterface.Forms.AdminTools;
 
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.AssetManager
 {
 
-    public partial class ViewDeviceForm
+    public partial class ViewDeviceForm : ExtendedForm
     {
 
         #region Fields

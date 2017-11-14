@@ -8,10 +8,10 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-namespace AssetManager
+namespace AssetManager.UserInterface.Forms.AssetManager
 {
 	[Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-	partial class ViewHistoryForm : ExtendedForm
+	partial class ViewHistoryForm
 	{
 		//Form overrides dispose to clean up the component list.
 		[System.Diagnostics.DebuggerNonUserCode()]

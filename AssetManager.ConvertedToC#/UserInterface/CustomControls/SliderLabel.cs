@@ -17,7 +17,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Timers;
 
-namespace AssetManager
+namespace AssetManager.UserInterface.CustomControls
 {
 
     public enum SlideDirection

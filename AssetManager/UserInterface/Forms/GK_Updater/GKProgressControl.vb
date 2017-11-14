@@ -4,10 +4,10 @@ Imports GKUpdaterLib
 Public Class GKProgressControl
     Implements IDisposable
 
-    Public WithEvents MyUpdater As GK_Updater
+    Public WithEvents MyUpdater As GKUpdaterLibClass
     Public ProgStatus As ProgressStatus
     Private bolShow As Boolean = False
-    Private CurrentStatus As GK_Updater.Status_Stats
+    Private CurrentStatus As GKUpdaterLibClass.Status_Stats
     Private CurDevice As New DeviceObject
     Private LogBuff As String = ""
     Private MyParentForm As Form
@@ -34,7 +34,7 @@ Public Class GKProgressControl
         Me.Size = Me.MinimumSize
         MyParentForm = parentForm
         CurDevice = device
-        MyUpdater = New GK_Updater(CurDevice.HostName, gkPath)
+        MyUpdater = New GKUpdaterLibClass(CurDevice.HostName, gkPath)
         MyUpdater.CreateMissingDirectories = createMissingDirs
         Me.DoubleBuffered = True
         lblInfo.Text = CurDevice.Serial & " - " & CurDevice.CurrentUser
@@ -58,7 +58,7 @@ Public Class GKProgressControl
         Me.Size = Me.MinimumSize
         MyParentForm = parentForm
         CurDevice = device
-        MyUpdater = New GK_Updater(CurDevice.HostName, sourcePath, destPath)
+        MyUpdater = New GKUpdaterLibClass(CurDevice.HostName, sourcePath, destPath)
         MyUpdater.CreateMissingDirectories = createMissingDirs
         Me.DoubleBuffered = True
         lblInfo.Text = CurDevice.Serial & " - " & CurDevice.CurrentUser
@@ -144,7 +144,7 @@ Public Class GKProgressControl
     ''' Log message event from GKUpdater.  This even can fire very rapidly. So the result is stored in a buffer to be added to the rtbLog control in a more controlled manner.
     ''' </summary>
     Private Sub GKLogEvent(sender As Object, e As EventArgs)
-        Dim LogEvent = DirectCast(e, GK_Updater.LogEvents)
+        Dim LogEvent = DirectCast(e, GKUpdaterLibClass.LogEvents)
         Log(LogEvent.LogData.Message)
     End Sub
 
@@ -153,7 +153,7 @@ Public Class GKProgressControl
     End Sub
 
     Private Sub GKStatusUpdateEvent(sender As Object, e As EventArgs)
-        Dim UpdateEvent = DirectCast(e, GK_Updater.GKUpdateEvents)
+        Dim UpdateEvent = DirectCast(e, GKUpdaterLibClass.GKUpdateEvents)
         SetStatus(ProgressStatus.Running)
         CurrentStatus = UpdateEvent.CurrentStatus
         pbarProgress.Maximum = CurrentStatus.TotFiles
@@ -166,7 +166,7 @@ Public Class GKProgressControl
     End Sub
 
     Private Sub GKUpdate_Complete(sender As Object, e As EventArgs)
-        Dim CompleteEvent = DirectCast(e, GK_Updater.GKUpdateCompleteEvents)
+        Dim CompleteEvent = DirectCast(e, GKUpdaterLibClass.GKUpdateCompleteEvents)
         If CompleteEvent.HasErrors Then
             SetStatus(ProgressStatus.Errors)
             ErrHandle(CompleteEvent.Errors, System.Reflection.MethodInfo.GetCurrentMethod())
@@ -182,7 +182,7 @@ Public Class GKProgressControl
                 End If
             Else
                 Select Case True
-                    Case TypeOf CompleteEvent.Errors Is GK_Updater.MissingDirectoryException
+                    Case TypeOf CompleteEvent.Errors Is GKUpdaterLibClass.MissingDirectoryException
                         Log("Enable 'Create Missing Directories' option and re-enqueue this device to force creation.")
                 End Select
             End If
