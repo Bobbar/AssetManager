@@ -1097,15 +1097,15 @@ namespace AssetManager
         {
             if (!bolGridFilling)
             {
-                DataGridView grid = AttachGrid;
-                StyleFunctions.HighlightRow(ref grid, GridTheme, e.RowIndex);
+               // DataGridView grid = AttachGrid;
+                StyleFunctions.HighlightRow(AttachGrid, GridTheme, e.RowIndex);
             }
         }
 
         private void AttachGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridView grid = AttachGrid;
-            StyleFunctions.LeaveRow(ref grid, GridTheme, e.RowIndex);
+            //DataGridView grid = AttachGrid;
+            StyleFunctions.LeaveRow(AttachGrid, GridTheme, e.RowIndex);
         }
 
         private void AttachGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)

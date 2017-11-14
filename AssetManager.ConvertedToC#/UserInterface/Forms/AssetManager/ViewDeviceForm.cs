@@ -261,17 +261,19 @@ namespace AssetManager
                             p.Start();
                             p.WaitForExit();
                         }
-                });
+                    });
+                }
+
             }
+            catch (Exception ex)
+            {
 
-    } catch (Exception ex) {
-
-       ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-	}
-}
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+            }
+        }
 
 
-private bool CancelModify()
+        private bool CancelModify()
         {
             if (EditMode)
             {
@@ -567,31 +569,31 @@ private bool CancelModify()
         {
             foreach (Control c in control.Controls)
             {
-                if (true)
+                if (c is TextBox)
                 {
                     TextBox txt = (TextBox)c;
                     txt.ReadOnly = true;
                 }
-                else if (true)
+                else if (c is MaskedTextBox)
                 {
                     MaskedTextBox txt = (MaskedTextBox)c;
                     txt.ReadOnly = true;
                 }
-                else if (true)
+                else if (c is ComboBox)
                 {
                     ComboBox cmb = (ComboBox)c;
                     cmb.Enabled = false;
                 }
-                else if (true)
+                else if (c is DateTimePicker)
                 {
                     DateTimePicker dtp = (DateTimePicker)c;
                     dtp.Enabled = false;
                 }
-                else if (true)
+                else if (c is CheckBox)
                 {
                     c.Enabled = false;
                 }
-                else if (true)
+                else if (c is Label)
                 {
                     //do nut-zing
                 }
@@ -632,34 +634,36 @@ private bool CancelModify()
         {
             foreach (Control c in control.Controls)
             {
-                if (true)
+
+                if (c is TextBox)
                 {
                     TextBox txt = (TextBox)c;
                     txt.ReadOnly = false;
                 }
-                else if (true)
+                else if (c is MaskedTextBox)
                 {
                     MaskedTextBox txt = (MaskedTextBox)c;
                     txt.ReadOnly = false;
                 }
-                else if (true)
+                else if (c is ComboBox)
                 {
                     ComboBox cmb = (ComboBox)c;
                     cmb.Enabled = true;
                 }
-                else if (true)
+                else if (c is DateTimePicker)
                 {
                     DateTimePicker dtp = (DateTimePicker)c;
                     dtp.Enabled = true;
                 }
-                else if (true)
+                else if (c is CheckBox)
                 {
                     c.Enabled = true;
                 }
-                else if (true)
+                else if (c is Label)
                 {
                     //do nut-zing
                 }
+
                 if (c.HasChildren)
                 {
                     EnableControlsRecursive(c);
@@ -800,10 +804,10 @@ private bool CancelModify()
             txtCurUser_View_REQ.Tag = new DBControlInfo(DevicesBaseCols.CurrentUser, true);
             txtDescription_View_REQ.Tag = new DBControlInfo(DevicesBaseCols.Description, true);
             dtPurchaseDate_View_REQ.Tag = new DBControlInfo(DevicesBaseCols.PurchaseDate, true);
-            cmbEquipType_View_REQ.Tag = new DBControlInfo(DevicesBaseCols.EQType,GlobalInstances.DeviceAttribute.EquipType, true);
-            cmbLocation_View_REQ.Tag = new DBControlInfo(DevicesBaseCols.Location,GlobalInstances.DeviceAttribute.Locations, true);
-            cmbOSVersion_REQ.Tag = new DBControlInfo(DevicesBaseCols.OSVersion,GlobalInstances.DeviceAttribute.OSType, true);
-            cmbStatus_REQ.Tag = new DBControlInfo(DevicesBaseCols.Status,GlobalInstances.DeviceAttribute.StatusType, true);
+            cmbEquipType_View_REQ.Tag = new DBControlInfo(DevicesBaseCols.EQType, GlobalInstances.DeviceAttribute.EquipType, true);
+            cmbLocation_View_REQ.Tag = new DBControlInfo(DevicesBaseCols.Location, GlobalInstances.DeviceAttribute.Locations, true);
+            cmbOSVersion_REQ.Tag = new DBControlInfo(DevicesBaseCols.OSVersion, GlobalInstances.DeviceAttribute.OSType, true);
+            cmbStatus_REQ.Tag = new DBControlInfo(DevicesBaseCols.Status, GlobalInstances.DeviceAttribute.StatusType, true);
 
             //Non-required and Misc Fields
             txtPONumber.Tag = new DBControlInfo(DevicesBaseCols.PO, false);
@@ -1138,7 +1142,7 @@ private bool CancelModify()
                 }
                 StyleFunctions.SetGridStyle(DataGridHistory);
                 StyleFunctions.SetGridStyle(TrackingGrid);
-                DataGridHistory.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
+                DataGridHistory.DefaultCellStyle.SelectionBackColor = this.GridTheme.CellSelectColor;
                 ExpandSplitter(true);
                 TrackingBox.Visible = true;
                 tsTracking.Visible = bolEnabled;
@@ -1151,7 +1155,7 @@ private bool CancelModify()
                 TabControl1.TabPages.Remove(TrackingTab);
                 StyleFunctions.SetGridStyle(DataGridHistory);
                 StyleFunctions.SetGridStyle(TrackingGrid);
-                DataGridHistory.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
+                DataGridHistory.DefaultCellStyle.SelectionBackColor = this.GridTheme.CellSelectColor;
                 TrackingBox.Visible = false;
                 ExpandSplitter();
             }
@@ -1444,16 +1448,16 @@ private bool CancelModify()
             if (!bolGridFilling)
             {
                 //TODO: See if this works.
-                var grid = DataGridHistory;
-                StyleFunctions.HighlightRow(ref grid, GridTheme, e.RowIndex);
+               // var grid = DataGridHistory;
+                StyleFunctions.HighlightRow(DataGridHistory, GridTheme, e.RowIndex);
             }
         }
 
         private void DataGridHistory_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
             //TODO: See if this works.
-            var grid = DataGridHistory;
-            StyleFunctions.LeaveRow(ref grid, GridTheme, e.RowIndex);
+           // var grid = DataGridHistory;
+            StyleFunctions.LeaveRow(DataGridHistory, GridTheme, e.RowIndex);
         }
 
         private void DataGridHistory_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -1668,7 +1672,7 @@ private bool CancelModify()
 
         #endregion
 
-#endregion
+        #endregion
 
     }
 }

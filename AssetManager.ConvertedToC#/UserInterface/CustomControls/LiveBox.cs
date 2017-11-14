@@ -89,7 +89,7 @@ namespace AssetManager
                         StartLiveSearch(arg);
                     }
                 }
-                
+
                 //switch (e.KeyCode)
                 //{
                 //    case Keys.ShiftKey:
@@ -176,7 +176,7 @@ namespace AssetManager
                 }
             }
             return null;
-           
+
         }
 
         private void InitializeControl(Form parentForm)
@@ -192,6 +192,7 @@ namespace AssetManager
             ExtendedMethods.DoubleBufferedListBox(LiveListBox, true);
             LiveListBox.Visible = false;
             SetStyle();
+            CurrentLiveBoxArgs = new LiveBoxArgs();
         }
 
         private void LiveBox_LostFocus(object sender, EventArgs e)
@@ -201,8 +202,8 @@ namespace AssetManager
 
         private void LiveBox_KeyDown(object sender, KeyEventArgs e)
         {
-            
-            
+
+
             if (e.KeyCode == Keys.Enter)
             {
                 LiveBoxSelect();
@@ -211,8 +212,8 @@ namespace AssetManager
             {
                 HideLiveBox();
             }
-            
-            
+
+
             //switch (e.KeyCode)
             //{
             //    case Keys.Enter:
@@ -224,7 +225,7 @@ namespace AssetManager
 
         private void LiveBox_MouseDown(object sender, MouseEventArgs e)
         {
-           
+
             if (e.Button == MouseButtons.Left)
             {
                 LiveBoxSelect();
@@ -233,9 +234,9 @@ namespace AssetManager
             {
                 HideLiveBox();
             }
-            
-            
-            
+
+
+
             //switch (e.Button)
             //{
             //    case MouseButtons.Left:
@@ -435,7 +436,7 @@ namespace AssetManager
 
             public TextBox Control { get; set; }
             public string DisplayMember { get; set; }
-            public AssetManager.LiveBoxType Type { get; set; }
+            public Nullable<LiveBoxType> Type { get; set; }
             public string ValueMember { get; set; }
 
             public LiveBoxArgs(TextBox control, string displayMember, AssetManager.LiveBoxType type, string valueMember)
@@ -444,6 +445,14 @@ namespace AssetManager
                 this.DisplayMember = displayMember;
                 this.Type = type;
                 this.ValueMember = valueMember;
+            }
+
+            public LiveBoxArgs()
+            {
+                this.Control = null;
+                this.DisplayMember = null;
+                this.Type = null;
+                this.ValueMember = null;
             }
 
 

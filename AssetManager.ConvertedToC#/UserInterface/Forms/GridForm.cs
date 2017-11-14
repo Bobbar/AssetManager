@@ -142,9 +142,9 @@ namespace AssetManager
             if (!bolGridFilling)
             {
                 //TODO: See if this work.
-                var grid = (DataGridView)sender;
+               // var grid = (DataGridView)sender;
 
-                StyleFunctions.HighlightRow(ref grid, this.GridTheme, e.RowIndex);
+                StyleFunctions.HighlightRow((DataGridView)sender, this.GridTheme, e.RowIndex);
             }
         }
 
@@ -177,8 +177,8 @@ namespace AssetManager
         private void GridLeaveCell(object sender, DataGridViewCellEventArgs e)
         {
             //TODO: See if this work.
-            var grid = (DataGridView)sender;
-            StyleFunctions.LeaveRow(ref grid, this.GridTheme, e.RowIndex);
+            //var grid = (DataGridView)sender;
+            StyleFunctions.LeaveRow((DataGridView)sender, this.GridTheme, e.RowIndex);
         }
 
         private void ResizeGridPanel()

@@ -205,7 +205,6 @@
     <Compile Include="Helpers\ThemeHelpers\Colors.cs" />
     <Compile Include="Helpers\ThemeHelpers\GridThemeClass.cs" />
     <Compile Include="Helpers\ThemeHelpers\StyleFunctions.cs" />
-    <Compile Include="LoadProgram.cs" />
     <Compile Include="My Project\Application.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>

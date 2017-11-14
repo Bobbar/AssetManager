@@ -765,32 +765,30 @@ namespace AssetManager
         {
             foreach (Control c in control.Controls)
             {
-                if (true)
+
+                if (c is TextBox)
                 {
                     var txt = (TextBox)c;
                     txt.ReadOnly = true;
                 }
-                else if (true)
+                else if (c is ComboBox)
                 {
                     var cmb = (ComboBox)c;
                     cmb.Enabled = false;
                 }
-                else if (true)
+                else if (c is DateTimePicker)
                 {
                     var dtp = (DateTimePicker)c;
                     dtp.Enabled = false;
                 }
-                else if (true)
+                else if (c is CheckBox)
                 {
                     if (c != chkAllowDrag)
                     {
                         c.Enabled = false;
                     }
                 }
-                else if (true)
-                {
-                    //do nut-zing
-                }
+
                 if (c.HasChildren)
                 {
                     DisableControlsRecursive(c);
@@ -815,7 +813,8 @@ namespace AssetManager
         {
             foreach (Control c in control.Controls)
             {
-                if (true)
+
+                if (c is TextBox)
                 {
                     var txt = (TextBox)c;
                     if (txt != txtRequestNum && txt != txtCreateDate)
@@ -823,24 +822,21 @@ namespace AssetManager
                         txt.ReadOnly = false;
                     }
                 }
-                else if (true)
+                else if (c is ComboBox)
                 {
                     var cmb = (ComboBox)c;
                     cmb.Enabled = true;
                 }
-                else if (true)
+                else if (c is DateTimePicker)
                 {
                     var dtp = (DateTimePicker)c;
                     dtp.Enabled = true;
                 }
-                else if (true)
+                else if (c is CheckBox)
                 {
                     c.Enabled = true;
                 }
-                else if (true)
-                {
-                    //do nut-zing
-                }
+                                
                 if (c.HasChildren)
                 {
                     EnableControlsRecursive(c);
@@ -963,8 +959,8 @@ namespace AssetManager
                 if (!bolGridFilling)
                 {
                     //TODO: See if this works.
-                    var grid = RequestItemsGrid;
-                    StyleFunctions.HighlightRow(ref grid, GridTheme, Row);
+                    // var grid = RequestItemsGrid;
+                    StyleFunctions.HighlightRow(RequestItemsGrid, GridTheme, Row);
                 }
             }
             catch
@@ -1045,16 +1041,16 @@ namespace AssetManager
             //}
             //else
             //{
-                var intDistanceMoved = Math.Sqrt(Math.Pow((MouseStartPos.X - CurrentPos.X), 2) + Math.Pow((MouseStartPos.Y - CurrentPos.Y), 2));
-                if (System.Convert.ToInt32(intDistanceMoved) > intMouseMoveThreshold)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-           // }
+            var intDistanceMoved = Math.Sqrt(Math.Pow((MouseStartPos.X - CurrentPos.X), 2) + Math.Pow((MouseStartPos.Y - CurrentPos.Y), 2));
+            if (System.Convert.ToInt32(intDistanceMoved) > intMouseMoveThreshold)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            // }
             return false;
         }
 
@@ -1167,8 +1163,8 @@ namespace AssetManager
         private void RequestItemsGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
             //TODO: See if this works.
-            var grid = RequestItemsGrid;
-            StyleFunctions.LeaveRow(ref grid, GridTheme, e.RowIndex);
+            //var grid = RequestItemsGrid;
+            StyleFunctions.LeaveRow(RequestItemsGrid, GridTheme, e.RowIndex);
         }
 
         private void RequestItemsGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)

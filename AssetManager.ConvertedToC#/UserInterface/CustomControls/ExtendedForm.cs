@@ -15,7 +15,7 @@ namespace AssetManager
 	/// </summary>
 	public class ExtendedForm : Form
 	{
-        private bool inheritTheme = false;
+        private bool inheritTheme = true;
 
         public bool InheritTheme
         {

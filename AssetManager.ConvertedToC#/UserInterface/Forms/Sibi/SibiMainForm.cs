@@ -391,8 +391,8 @@ namespace AssetManager
                 if (!bolGridFilling)
                 {
                     //TODO: See if this works.
-                    var grid = ResultGrid;
-                    StyleFunctions.HighlightRow(ref grid, GridTheme, Row);
+                    //var grid = ResultGrid;
+                    StyleFunctions.HighlightRow(ResultGrid, GridTheme, Row);
                 }
             }
             catch
@@ -408,8 +408,8 @@ namespace AssetManager
         private void ResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
             //TODO: See if this works.
-            var grid = ResultGrid;
-            StyleFunctions.LeaveRow(ref grid, GridTheme, e.RowIndex);
+            //var grid = ResultGrid;
+            StyleFunctions.LeaveRow(ResultGrid, GridTheme, e.RowIndex);
         }
 
         private void cmbDisplayYear_SelectedIndexChanged(object sender, EventArgs e)

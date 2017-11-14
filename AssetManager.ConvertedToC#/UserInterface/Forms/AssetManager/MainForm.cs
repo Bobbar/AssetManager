@@ -957,17 +957,17 @@ namespace AssetManager
             if (!bolGridFilling)
             {
                 //NOTE: Not sure if this will work.
-                DataGridView grid = ResultGrid;
-                StyleFunctions.HighlightRow(ref grid, GridTheme, e.RowIndex);
+                //DataGridView grid = ResultGrid;
+                StyleFunctions.HighlightRow(ResultGrid, GridTheme, e.RowIndex);
             }
         }
 
         // ERROR: Handles clauses are not supported in C#
         private void ResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            //NOTE: Not sure if this will work.
-            DataGridView grid = ResultGrid;
-            StyleFunctions.LeaveRow(ref grid, GridTheme, e.RowIndex);
+            ////NOTE: Not sure if this will work.
+            //DataGridView grid = ResultGrid;
+            StyleFunctions.LeaveRow(ResultGrid, GridTheme, e.RowIndex);
         }
 
         // ERROR: Handles clauses are not supported in C#
