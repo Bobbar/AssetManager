@@ -185,15 +185,15 @@
     <Compile Include="Data\DataComms\AssetManager\SQL\MySQL\NoPingException.cs" />
     <Compile Include="Data\DataComms\AssetManager\SQL\SQLite\SQLiteComms.cs" />
     <Compile Include="Data\DataComms\AssetManager\SQL\SQLite\SQLiteComms.vb" />
-    <Compile Include="Data\DataComms\Munis\MunisComms.vb" />
+    <Compile Include="Data\DataComms\Munis\MunisComms.cs" />
     <Compile Include="Data\DataFunctions\ClientSideFunctions\AttribIndexFunctions.cs" />
     <Compile Include="Data\DataFunctions\ClientSideFunctions\DataConsistency.cs" />
     <Compile Include="Data\DataFunctions\ConnectionWatchdog.cs" />
     <Compile Include="Data\DataFunctions\ConnectionWatchdog.vb" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AdvancedSearch.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AssetManagerFunctions.cs" />
-    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\FTPFunctions.vb" />
-    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\MunisFunctions.vb" />
+    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\FTPFunctions.cs" />
+    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\MunisFunctions.cs" />
     <Compile Include="Data\DataFunctions\DBCacheFunctions.cs" />
     <Compile Include="Data\DataFunctions\DBControlParser.cs" />
     <Compile Include="GlobalObjects\Enums.cs" />
@@ -290,10 +290,12 @@
     <Compile Include="UserInterface\Forms\AssetManager\MunisUserForm.Designer.cs">
       <DependentUpon>MunisUserForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserInterface\Forms\AssetManager\NewDeviceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Forms\AssetManager\NewDeviceForm.Designer.cs">
       <DependentUpon>NewDeviceForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\AssetManager\NewDeviceForm.vb" />
     <Compile Include="UserInterface\Forms\AssetManager\TrackDeviceForm.Designer.cs">
       <DependentUpon>TrackDeviceForm.cs</DependentUpon>
     </Compile>

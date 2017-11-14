@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
+using System.IO;
+
 namespace AssetManager
 {
 
@@ -19,14 +21,14 @@ namespace AssetManager
 
 		private const string EncFTPUserPass = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ=";
 		private const string strFTPUser = "asset_manager";
-		private NetworkCredential FTPcreds = new NetworkCredential(strFTPUser, AssetManager.SecurityTools.SecurityFunctions.DecodePassword(EncFTPUserPass));
+		private NetworkCredential FTPcreds = new NetworkCredential(strFTPUser, SecurityTools.DecodePassword(EncFTPUserPass));
 
 		private int intSocketTimeout = 5000;
 		#endregion
 
 		#region "Methods"
 
-		public IO.Stream ReturnFtpRequestStream(string uri, string method)
+		public Stream ReturnFtpRequestStream(string uri, string method)
 		{
 			FtpWebRequest request = (FtpWebRequest)FtpWebRequest.Create(uri);
 			var _with1 = request;
@@ -36,7 +38,7 @@ namespace AssetManager
 			_with1.Method = method;
 			_with1.ReadWriteTimeout = intSocketTimeout;
 			_with1.Timeout = intSocketTimeout;
-			return _with1.GetRequestStream;
+			return _with1.GetRequestStream();
 		}
 
 		public WebResponse ReturnFtpResponse(string uri, string method)
@@ -49,7 +51,7 @@ namespace AssetManager
 			_with2.Method = method;
 			_with2.ReadWriteTimeout = intSocketTimeout;
 			_with2.Timeout = intSocketTimeout;
-			return _with2.GetResponse;
+			return _with2.GetResponse();
 		}
 
 		#endregion
