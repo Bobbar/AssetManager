@@ -393,12 +393,12 @@ namespace AssetManager
         private async Task<bool> CheckPackFile()
         {
             ManagePackFile PackFileManager = new ManagePackFile();
-            PackFileReady = await PackFileManager.VerifyPackFile;
+            PackFileReady = await PackFileManager.VerifyPackFile();
             RunQueue(PackFileReady);
             if (!PackFileReady)
             {
                 CancelAll();
-                Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", vbOKOnly + vbExclamation, "Pack file out of date", this);
+                OtherFunctions.Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Pack file out of date", this);
                 ProcessPackFile();
             }
             return true;
@@ -407,7 +407,7 @@ namespace AssetManager
         // ERROR: Handles clauses are not supported in C#
         private void GKPackageVeriToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!FormTypeIsOpen(typeof(PackFileForm)))
+            if (!ChildFormControl.FormTypeIsOpen(typeof(PackFileForm)))
             {
                 PackFileForm NewUnPack = new PackFileForm(true);
                 NewUnPack.Show();

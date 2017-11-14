@@ -61,7 +61,7 @@ namespace AssetManager
             {
                 SecurityTools.VerifyAdminCreds("Credentials for Vinton AD");
             }
-            return DomainNames(database);
+            return DomainNames[database];
         }
 
 

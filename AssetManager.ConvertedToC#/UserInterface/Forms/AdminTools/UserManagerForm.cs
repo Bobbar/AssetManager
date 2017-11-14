@@ -53,7 +53,7 @@ namespace AssetManager
 		{
 			CheckState[] clbItemStates = new CheckState[clbModules.Items.Count];
 			foreach (CheckBox chkBox in clbModules.Items) {
-				if (AssetManager.SecurityTools.SecurityFunctions.CanAccess(chkBox.Name, intAccessLevel)) {
+				if (SecurityTools.CanAccess(chkBox.Name, intAccessLevel)) {
 					clbItemStates[clbModules.Items.IndexOf(chkBox)] = CheckState.Checked;
 				} else {
 					clbItemStates[clbModules.Items.IndexOf(chkBox)] = CheckState.Unchecked;
@@ -97,7 +97,7 @@ namespace AssetManager
 			int intAccessLevel = 0;
 			foreach (CheckBox chkBox in clbModules.Items) {
 				if (clbModules.GetItemCheckState(clbModules.Items.IndexOf(chkBox)) == CheckState.Checked) {
-					intAccessLevel += AssetManager.SecurityTools.SecurityFunctions.GetSecGroupValue(chkBox.Name);
+					intAccessLevel += SecurityTools.GetSecGroupValue(chkBox.Name);
 				}
 			}
 			return intAccessLevel;
@@ -105,8 +105,8 @@ namespace AssetManager
 
 		private void UserGrid_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (UserGrid[AssetManager.GridFunctions.GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index].Value is int) {
-				DisplayAccess(Convert.ToInt32(UserGrid[AssetManager.GridFunctions.GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index].Value));
+			if (UserGrid[GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index].Value is int) {
+				DisplayAccess(Convert.ToInt32(UserGrid[GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index].Value));
 				GetUserInfo();
 			} else {
 				DisplayAccess(0);
@@ -117,22 +117,22 @@ namespace AssetManager
 		private void GetUserInfo()
 		{
 			var _with2 = CurrentUser;
-			_with2.AccessLevel = Convert.ToInt32(AssetManager.GridFunctions.GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.AccessLevel));
-			_with2.UserName = AssetManager.GridFunctions.GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.UserName);
-			_with2.GUID = AssetManager.GridFunctions.GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.UID);
-			_with2.Fullname = AssetManager.GridFunctions.GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.FullName);
+			_with2.AccessLevel = Convert.ToInt32(GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.AccessLevel));
+			_with2.UserName = GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.UserName);
+			_with2.GUID = GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.UID);
+			_with2.Fullname = GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.FullName);
 		}
 
 		private void cmdUpdate_Click(object sender, EventArgs e)
 		{
 			try {
-				var blah = Message("Are you sure?  Committed changes cannot be undone.", Constants.vbYesNo + Constants.vbQuestion, "Commit Changes", this);
-				if (blah == DialogResult.Yes) {
+				var blah = OtherFunctions.Message("Are you sure?  Committed changes cannot be undone.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Commit Changes", this);
+				if (blah == MsgBoxResult.Yes) {
 					UserGrid.EndEdit();
 					AddGUIDs();
-					AssetManager.DBFactory.GetDatabase().UpdateTable(UserDataQuery, (DataTable)UserGrid.DataSource);
+					DBFactory.GetDatabase().UpdateTable(UserDataQuery, (DataTable)UserGrid.DataSource);
 					ListUsers();
-					AssetManager.SecurityTools.SecurityFunctions.GetUserAccess();
+					SecurityTools.GetUserAccess();
 
 				} else {
 				}
@@ -144,18 +144,18 @@ namespace AssetManager
 		private void AddGUIDs()
 		{
 			foreach (DataGridViewRow rows in UserGrid.Rows) {
-				if (string.IsNullOrEmpty(rows.Cells[AssetManager.GridFunctions.GridFunctions.GetColIndex(UserGrid, UsersCols.UID)].EditedFormattedValue.ToString())) {
+				if (string.IsNullOrEmpty(rows.Cells[GridFunctions.GetColIndex(UserGrid, UsersCols.UID)].EditedFormattedValue.ToString())) {
 					string UserUID = Guid.NewGuid().ToString();
-					rows.Cells[AssetManager.GridFunctions.GridFunctions.GetColIndex(UserGrid, UsersCols.UID)].Value = UserUID;
+					rows.Cells[GridFunctions.GetColIndex(UserGrid, UsersCols.UID)].Value = UserUID;
 				}
 			}
 		}
 
 		private void AddAccessLevelToGrid()
 		{
-			UserGrid.Rows[SelectedRow].Cells[AssetManager.GridFunctions.GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel)].Selected = true;
+			UserGrid.Rows[SelectedRow].Cells[GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel)].Selected = true;
 			UserGrid.BeginEdit(false);
-			UserGrid.Rows[SelectedRow].Cells[AssetManager.GridFunctions.GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel)].Value = CalcAccessLevel();
+			UserGrid.Rows[SelectedRow].Cells[GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel)].Value = CalcAccessLevel();
 			UserGrid.EndEdit();
 		}
 

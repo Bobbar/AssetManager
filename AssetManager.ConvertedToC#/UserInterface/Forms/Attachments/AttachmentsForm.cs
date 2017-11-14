@@ -852,7 +852,7 @@ namespace AssetManager
                                 });
                                 if (cancelToken.IsCancellationRequested)
                                 {
-                                    FTPFunc.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID);
+                                    GlobalInstances.FTPFunc.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID);
                                 }
                                 else
                                 {

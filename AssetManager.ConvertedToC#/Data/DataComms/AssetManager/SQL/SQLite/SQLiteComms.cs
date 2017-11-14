@@ -86,7 +86,7 @@ namespace AssetManager
         {
             List<string> RemoteHashes = new List<string>();
             RemoteHashes = RemoteTableHashList();
-            return CompareTableHashes(RemoteHashes, DBCache.SQLiteTableHashes);
+            return CompareTableHashes(RemoteHashes, DBCacheFunctions.SQLiteTableHashes);
         }
 
         public bool CompareTableHashes(List<string> tableHashesA, List<string> tableHashesB)
@@ -99,7 +99,7 @@ namespace AssetManager
                 }
                 for (int i = 0; i <= tableHashesA.Count - 1; i++)
                 {
-                    if (tableHashesA(i) != tableHashesB(i))
+                    if (tableHashesA[i] != tableHashesB[i])
                     {
                         return false;
                     }
@@ -117,7 +117,7 @@ namespace AssetManager
             using (SQLiteCommand cmd = new SQLiteCommand("pragma schema_version"))
             {
                 cmd.Connection = Connection;
-                return System.Convert.ToInt32(cmd.ExecuteScalar);
+                return System.Convert.ToInt32(cmd.ExecuteScalar());
             }
 
         }
@@ -126,12 +126,12 @@ namespace AssetManager
         {
             try
             {
-                if (DBCache.SQLiteTableHashes != null && CheckLocalCacheHash())
+                if (DBCacheFunctions.SQLiteTableHashes != null && CheckLocalCacheHash())
                 {
                     return;
                 }
 
-                Logger("Rebuilding local DB cache...");
+                Logging.Logger("Rebuilding local DB cache...");
                 CloseConnection();
                 GC.Collect();
                 if (!File.Exists(System.Convert.ToString(Paths.SQLiteDir)))
@@ -146,7 +146,7 @@ namespace AssetManager
                 Connection = NewConnection();
                 Connection.SetPassword(SecurityTools.DecodePassword(EncSQLitePass));
                 OpenConnection();
-                using (var trans = Connection.BeginTransaction)
+                using (var trans = Connection.BeginTransaction())
                 {
                     foreach (var table in TableList())
                     {
@@ -155,14 +155,14 @@ namespace AssetManager
                     trans.Commit();
                 }
 
-                DBCache.SQLiteTableHashes = LocalTableHashList();
-                DBCache.RemoteTableHashes = RemoteTableHashList();
-                Logger("Local DB cache complete...");
+                DBCacheFunctions.SQLiteTableHashes = LocalTableHashList();
+                DBCacheFunctions.RemoteTableHashes = RemoteTableHashList();
+                Logging.Logger("Local DB cache complete...");
             }
             catch (Exception ex)
             {
-                Logger("Errors during cache rebuild!");
-                Logger("STACK TRACE: " + ex.ToString());
+                Logging.Logger("Errors during cache rebuild!");
+                Logging.Logger("STACK TRACE: " + ex.ToString());
             }
         }
 
@@ -231,7 +231,7 @@ namespace AssetManager
             createStatement = createStatement.Replace("AUTO_INCREMENT", "");
 
             //Split the statement by commas
-            ColumnDefs = createStatement.Split(',').ToList;
+            ColumnDefs = createStatement.Split(',').ToList();
 
             //Find the primary key column name
             foreach (var item in ColumnDefs)
@@ -264,12 +264,13 @@ namespace AssetManager
                     KeyStringIndex = System.Convert.ToInt32(ColumnDefs.IndexOf(item));
                     if (item.Contains("CREATE")) //If the key is at the start of the statement, add all the correct syntax
                     {
-                        var firstDef = (item.Replace(Constants.vbLf, "")).Split(' ');
+                        //TODO: Make sure "\n" works as equivalent of vbLf.
+                        var firstDef = (item.Replace("\n", "")).Split(' ');
                         NewKeyString = firstDef[0] + " " + System.Convert.ToString(firstDef[1]) + " " + System.Convert.ToString(firstDef[2]) + " " + System.Convert.ToString(firstDef[3]) + " " + System.Convert.ToString(firstDef[5]) + " " + System.Convert.ToString(firstDef[6]) + " PRIMARY KEY";
                     }
                     else
                     {
-                        var keyString = (item.Replace(Constants.vbLf, "")).Split(' ');
+                        var keyString = (item.Replace("\n", "")).Split(' ');
                         NewKeyString = " " + System.Convert.ToString(keyString[2]) + " " + System.Convert.ToString(keyString[3]) + " PRIMARY KEY";
                     }
                 }
@@ -315,7 +316,7 @@ namespace AssetManager
             {
                 using (DataTable results = new DataTable())
                 {
-                    using (var conn = MySQLDB.NewConnection)
+                    using (var conn = MySQLDB.NewConnection())
                     {
                         using (var adapter = MySQLDB.ReturnMySqlAdapter(qry, conn))
                         {
@@ -340,7 +341,7 @@ namespace AssetManager
             {
                 using (var results = MySQLDB.DataTableFromQueryString(qry))
                 {
-                    return results.Rows(0).Item(1).ToString();
+                    return results.Rows[0][1].ToString();
                 }
 
             }
@@ -350,7 +351,7 @@ namespace AssetManager
         private void ImportDatabase(string tableName, SQLiteTransaction transaction)
         {
             OpenConnection();
-            using (var cmd = Connection.CreateCommand)
+            using (var cmd = Connection.CreateCommand())
             {
                 using (var adapter = new SQLiteDataAdapter(cmd))
                 {
@@ -386,10 +387,10 @@ namespace AssetManager
 
         private DataTable ToStringTable(DataTable table)
         {
-            DataTable tmpTable = table.Clone;
+            DataTable tmpTable = table.Clone();
             for (var i = 0; i <= tmpTable.Columns.Count - 1; i++)
             {
-                tmpTable.Columns(i).DataType = typeof(string);
+                tmpTable.Columns[i].DataType = typeof(string);
             }
             foreach (DataRow row in table.Rows)
             {
@@ -479,7 +480,7 @@ namespace AssetManager
                 {
                     command.Connection = conn;
                     command.Connection.Open();
-                    return command.ExecuteScalar;
+                    return command.ExecuteScalar();
                 }
 
             }
@@ -496,7 +497,7 @@ namespace AssetManager
                 using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
                 {
                     cmd.Connection.Open();
-                    return cmd.ExecuteScalar;
+                    return cmd.ExecuteScalar();
                 }
 
             }

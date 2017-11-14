@@ -22,7 +22,7 @@ namespace AssetManager
         private bool Working = false;
 
         private ManagePackFile PackFunc = new ManagePackFile();
-        PackFileForm(bool showFunctions)
+        public PackFileForm(bool showFunctions)
         {
             InitializeComponent();
             FunctionPanel.Visible = showFunctions;

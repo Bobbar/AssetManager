@@ -165,9 +165,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GK_Updater_Module\NetworkConnection.vb">
-      <Link>Data\DataComms\NetDriveMapper\NetworkConnection.vb</Link>
-    </Compile>
     <Compile Include="ApplicationEvents.cs" />
     <Compile Include="Business\PDFFormFilling.cs" />
     <Compile Include="Data\DataClasses\DataClassMapping\ColumnNameAttribute.cs" />
@@ -183,13 +180,11 @@
     <Compile Include="Data\DataComms\AssetManager\SQL\MySQL\MySQLComms.cs" />
     <Compile Include="Data\DataComms\AssetManager\SQL\MySQL\NoPingException.cs" />
     <Compile Include="Data\DataComms\AssetManager\SQL\SQLite\SQLiteComms.cs" />
-    <Compile Include="Data\DataComms\AssetManager\SQL\SQLite\SQLiteComms.vb" />
     <Compile Include="Data\DataComms\Munis\MunisComms.cs" />
     <Compile Include="Data\DataComms\NetDriveMapper\NetworkConnection.cs" />
     <Compile Include="Data\DataFunctions\ClientSideFunctions\AttribIndexFunctions.cs" />
     <Compile Include="Data\DataFunctions\ClientSideFunctions\DataConsistency.cs" />
     <Compile Include="Data\DataFunctions\ConnectionWatchdog.cs" />
-    <Compile Include="Data\DataFunctions\ConnectionWatchdog.vb" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AdvancedSearch.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AssetManagerFunctions.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\FTPFunctions.cs" />
@@ -243,7 +238,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\CustomControls\LiveBox.cs" />
-    <Compile Include="UserInterface\CustomControls\LiveBox.vb" />
     <Compile Include="UserInterface\CustomControls\MunisToolBar.cs" />
     <Compile Include="UserInterface\CustomControls\OneClickToolStrip.cs">
       <SubType>Component</SubType>
@@ -258,10 +252,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserInterface\CustomControls\WindowList.cs" />
+    <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.Designer.cs">
       <DependentUpon>AdvancedSearchForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.vb" />
     <Compile Include="UserInterface\Forms\AdminTools\CopyFilesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -317,7 +313,6 @@
     <Compile Include="UserInterface\Forms\AssetManager\ViewDeviceForm.Designer.cs">
       <DependentUpon>ViewDeviceForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\AssetManager\ViewDeviceForm.vb" />
     <Compile Include="UserInterface\Forms\AssetManager\ViewHistoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -336,13 +331,6 @@
     </Compile>
     <Compile Include="UserInterface\Forms\Attachments\AttachmentsForm.Designer.cs">
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Attachments\AttachmentsForm.vb" />
-    <Compile Include="UserInterface\Forms\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\Forms\GetCredentialsForm.cs">
       <SubType>Form</SubType>
@@ -382,10 +370,12 @@
     <Compile Include="UserInterface\Forms\Sibi\SibiMainForm.Designer.cs">
       <DependentUpon>SibiMainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserInterface\Forms\Sibi\SibiManageRequestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Forms\Sibi\SibiManageRequestForm.Designer.cs">
       <DependentUpon>SibiManageRequestForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\Sibi\SibiManageRequestForm.vb" />
     <Compile Include="UserInterface\Forms\Sibi\SibiNotesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -474,9 +464,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Attachments\AttachmentsForm.resx">
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GetCredentialsForm.resx">
       <DependentUpon>GetCredentialsForm.cs</DependentUpon>
