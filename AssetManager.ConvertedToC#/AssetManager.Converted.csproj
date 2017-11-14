@@ -215,7 +215,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="MyNamespaceSupportForCSharp.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -223,6 +222,7 @@
     </Compile>
     <Compile Include="Security\Crypto.cs" />
     <Compile Include="Security\SecurityFunctions.cs" />
+    <Compile Include="StartProgram.cs" />
     <Compile Include="Tools\ActiveDirectory\ActiveDirectoryWrapper.cs" />
     <Compile Include="Tools\FileIcon.cs" />
     <Compile Include="Tools\NetworkInfo.cs" />

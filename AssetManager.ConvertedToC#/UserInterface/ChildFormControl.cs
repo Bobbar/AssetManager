@@ -51,7 +51,7 @@ namespace AssetManager
 
         public static List<ExtendedForm> GetChildren(ExtendedForm parentForm)
         {
-            return AssetManager.My.MyProject.Application.OpenForms.OfType<ExtendedForm>().ToList().FindAll(f => object.ReferenceEquals(f.ParentForm, parentForm) & !f.IsDisposed);
+            return Application.OpenForms.OfType<ExtendedForm>().ToList().FindAll(f => object.ReferenceEquals(f.ParentForm, parentForm) & !f.IsDisposed);
         }
 
         public static void LookupDevice(ExtendedForm parentForm, DeviceObject device)
@@ -101,7 +101,7 @@ namespace AssetManager
 
         public static bool FormTypeIsOpen(Type formType)
         {
-            foreach (ExtendedForm frm in AssetManager.My.MyProject.Application.OpenForms)
+            foreach (ExtendedForm frm in Application.OpenForms)
             {
                 if (frm.GetType() == formType)
                     return true;
@@ -111,7 +111,7 @@ namespace AssetManager
 
         public static bool FormIsOpenByUID(Type formType, string UID)
         {
-            foreach (ExtendedForm frm in AssetManager.My.MyProject.Application.OpenForms)
+            foreach (ExtendedForm frm in Application.OpenForms)
             {
                 if (frm.GetType() == formType && frm.FormUID == UID)
                 {

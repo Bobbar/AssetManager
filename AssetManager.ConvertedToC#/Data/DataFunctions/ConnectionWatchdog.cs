@@ -133,7 +133,7 @@ namespace AssetManager
                 {
                     using (MySQLDatabase MySQLDB = new MySQLDatabase())
                     {
-                        return MySQLDB.ExecuteScalarFromQueryString("SELECT NOW()").ToString;
+                        return MySQLDB.ExecuteScalarFromQueryString("SELECT NOW()").ToString();
                     }
                 });
             }

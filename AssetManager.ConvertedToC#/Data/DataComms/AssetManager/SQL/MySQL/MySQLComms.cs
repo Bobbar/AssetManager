@@ -216,7 +216,7 @@ namespace AssetManager
 
         }
 
-        public dynamic ExecuteScalarFromCommand(DbCommand command)
+        public object ExecuteScalarFromCommand(DbCommand command)
         {
             try
             {
@@ -234,7 +234,7 @@ namespace AssetManager
             }
         }
 
-        public dynamic ExecuteScalarFromQueryString(string query)
+        public object ExecuteScalarFromQueryString(string query)
         {
             using (var conn = NewConnection())
             {

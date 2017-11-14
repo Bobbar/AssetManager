@@ -28,24 +28,24 @@ namespace AssetManager.My
 	// (go to Project Properties or double-click the My Project node in
 	// Solution Explorer), and make changes on the Application tab.
 	//
-	internal partial class MyApplication
-	{
+	//internal partial class MyApplication
+	//{
 
-		[System.Diagnostics.DebuggerStepThroughAttribute()]
-		public MyApplication() : base(global::Microsoft.VisualBasic.ApplicationServices.AuthenticationMode.Windows)
-		{
-			UnhandledException += MyApplication_UnhandledException;
-			Startup += LoadSplash;
-			this.IsSingleInstance = false;
-			this.EnableVisualStyles = true;
-			this.SaveMySettingsOnExit = true;
-			this.ShutdownStyle = global::Microsoft.VisualBasic.ApplicationServices.ShutdownMode.AfterMainFormCloses;
-		}
+	//	[System.Diagnostics.DebuggerStepThroughAttribute()]
+	//	public MyApplication() : base(global::Microsoft.VisualBasic.ApplicationServices.AuthenticationMode.Windows)
+	//	{
+	//		UnhandledException += MyApplication_UnhandledException;
+	//		Startup += LoadSplash;
+	//		this.IsSingleInstance = false;
+	//		this.EnableVisualStyles = true;
+	//		this.SaveMySettingsOnExit = true;
+	//		this.ShutdownStyle = global::Microsoft.VisualBasic.ApplicationServices.ShutdownMode.AfterMainFormCloses;
+	//	}
 
-		[System.Diagnostics.DebuggerStepThroughAttribute()]
-		protected override void OnCreateMainForm()
-		{
-			this.MainForm = My.MyProject.Forms.MainForm;
-		}
-	}
+	//	[System.Diagnostics.DebuggerStepThroughAttribute()]
+	//	protected override void OnCreateMainForm()
+	//	{
+	//		this.MainForm = My.MyProject.Forms.MainForm;
+	//	}
+	//}
 }

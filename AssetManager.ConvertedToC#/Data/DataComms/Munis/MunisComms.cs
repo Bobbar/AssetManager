@@ -106,7 +106,7 @@ namespace AssetManager
 
         }
 
-        public dynamic ReturnSqlValue(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
+        public object ReturnSqlValue(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
         {
             string sqlQRY = "";
             List<DBQueryParameter> Params = new List<DBQueryParameter>();
