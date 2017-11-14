@@ -8,8 +8,8 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-
 using System.ComponentModel;
+
 namespace AssetManager
 {
 
@@ -26,7 +26,7 @@ namespace AssetManager
 		{
 			InitializeComponent();
 			this.ParentForm = parentForm;
-			AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.ChangeType, ref UpdateTypeCombo);
+			AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.ChangeType,  UpdateTypeCombo);
 			if (isNoteOnly) {
 				UpdateTypeCombo.SelectedIndex = AttribIndexFunctions.GetComboIndexFromCode(GlobalInstances.DeviceAttribute.ChangeType, "NOTE");
 				UpdateTypeCombo.Enabled = false;

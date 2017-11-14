@@ -170,7 +170,6 @@
     </Compile>
     <Compile Include="ApplicationEvents.cs" />
     <Compile Include="Business\PDFFormFilling.cs" />
-    <Compile Include="Business\PDFFormFilling.vb" />
     <Compile Include="Data\DataClasses\DataClassMapping\ColumnNameAttribute.cs" />
     <Compile Include="Data\DataClasses\DataClassMapping\DataMapper.cs" />
     <Compile Include="Data\DataClasses\DataClassMapping\MappableClasses.cs" />
@@ -186,6 +185,7 @@
     <Compile Include="Data\DataComms\AssetManager\SQL\SQLite\SQLiteComms.cs" />
     <Compile Include="Data\DataComms\AssetManager\SQL\SQLite\SQLiteComms.vb" />
     <Compile Include="Data\DataComms\Munis\MunisComms.cs" />
+    <Compile Include="Data\DataComms\NetDriveMapper\NetworkConnection.cs" />
     <Compile Include="Data\DataFunctions\ClientSideFunctions\AttribIndexFunctions.cs" />
     <Compile Include="Data\DataFunctions\ClientSideFunctions\DataConsistency.cs" />
     <Compile Include="Data\DataFunctions\ConnectionWatchdog.cs" />
@@ -228,14 +228,13 @@
     </Compile>
     <Compile Include="Security\Crypto.cs" />
     <Compile Include="Security\SecurityFunctions.cs" />
-    <Compile Include="Tools\ActiveDirectory\ActiveDirectoryWrapper.vb" />
+    <Compile Include="Tools\ActiveDirectory\ActiveDirectoryWrapper.cs" />
     <Compile Include="Tools\FileIcon.cs" />
     <Compile Include="Tools\NetworkInfo.cs" />
-    <Compile Include="Tools\NetworkInfo.vb" />
     <Compile Include="Tools\PerformanceTweaks\CachedImages.cs" />
     <Compile Include="Tools\PowerShell\PowerShellWrapper.cs" />
     <Compile Include="Tools\ProgressCounter.cs" />
-    <Compile Include="Tools\TeamViewer\TeamViewerDeploy.vb" />
+    <Compile Include="Tools\TeamViewer\TeamViewerDeploy.cs" />
     <Compile Include="UserInterface\ChildFormControl.cs" />
     <Compile Include="UserInterface\CustomControls\CorrectedTreeView.cs">
       <SubType>Component</SubType>
@@ -255,16 +254,20 @@
     <Compile Include="UserInterface\CustomControls\SliderLabel.Designer.cs">
       <DependentUpon>SliderLabel.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\CustomControls\SliderLabel.vb" />
+    <Compile Include="UserInterface\CustomControls\SliderLabel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserInterface\CustomControls\WindowList.cs" />
     <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.Designer.cs">
       <DependentUpon>AdvancedSearchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.vb" />
+    <Compile Include="UserInterface\Forms\AdminTools\CopyFilesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Forms\AdminTools\CopyFilesForm.Designer.cs">
       <DependentUpon>CopyFilesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\AdminTools\CopyFilesForm.vb" />
     <Compile Include="UserInterface\Forms\AdminTools\CrypterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -296,15 +299,20 @@
     <Compile Include="UserInterface\Forms\AssetManager\NewDeviceForm.Designer.cs">
       <DependentUpon>NewDeviceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserInterface\Forms\AssetManager\TrackDeviceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\Forms\AssetManager\TrackDeviceForm.Designer.cs">
       <DependentUpon>TrackDeviceForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\AssetManager\TrackDeviceForm.vb" />
     <Compile Include="UserInterface\Forms\AssetManager\UpdateTypeForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\AssetManager\UpdateTypeForm.Designer.cs">
       <DependentUpon>UpdateTypeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\AssetManager\ViewDeviceForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\AssetManager\ViewDeviceForm.Designer.cs">
       <DependentUpon>ViewDeviceForm.cs</DependentUpon>
