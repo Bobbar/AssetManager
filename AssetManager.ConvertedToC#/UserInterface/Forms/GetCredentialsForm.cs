@@ -100,6 +100,5 @@ namespace AssetManager.UserInterface.Forms
             }
             return string.Empty;
         }
-
     }
 }

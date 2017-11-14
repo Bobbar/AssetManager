@@ -53,7 +53,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // GridPanel
             // 
-            this.GridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.GridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GridPanel.AutoSize = true;
             this.GridPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -78,8 +78,8 @@ namespace AssetManager.UserInterface.Forms
             // 
             // Panel1
             // 
-            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel1.AutoScroll = true;
             this.Panel1.AutoScrollMargin = new System.Drawing.Size(0, 20);
@@ -95,7 +95,7 @@ namespace AssetManager.UserInterface.Forms
             this.CopySelectedToolStripMenuItem,
             this.SendToNewGridForm});
             this.PopUpMenu.Name = "PopUpMenu";
-            this.PopUpMenu.Size = new System.Drawing.Size(167, 70);
+            this.PopUpMenu.Size = new System.Drawing.Size(167, 48);
             // 
             // CopySelectedToolStripMenuItem
             // 
@@ -103,6 +103,7 @@ namespace AssetManager.UserInterface.Forms
             this.CopySelectedToolStripMenuItem.Name = "CopySelectedToolStripMenuItem";
             this.CopySelectedToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.CopySelectedToolStripMenuItem.Text = "Copy Selected";
+            this.CopySelectedToolStripMenuItem.Click += new System.EventHandler(this.CopySelectedToolStripMenuItem_Click);
             // 
             // SendToNewGridForm
             // 
