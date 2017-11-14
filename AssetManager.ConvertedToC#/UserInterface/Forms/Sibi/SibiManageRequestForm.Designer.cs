@@ -136,14 +136,14 @@ namespace AssetManager
 			//
 			//tsmPopFA
 			//
-			this.tsmPopFA.Image = global::AssetManager.My.Resources.Resources.ImportIcon;
+			this.tsmPopFA.Image = Properties.Resources.ImportIcon;
 			this.tsmPopFA.Name = "tsmPopFA";
 			this.tsmPopFA.Size = new System.Drawing.Size(178, 26);
 			this.tsmPopFA.Text = "Populate From FA";
 			//
 			//tsmLookupDevice
 			//
-			this.tsmLookupDevice.Image = global::AssetManager.My.Resources.Resources.SearchIcon;
+			this.tsmLookupDevice.Image = Properties.Resources.SearchIcon;
 			this.tsmLookupDevice.Name = "tsmLookupDevice";
 			this.tsmLookupDevice.Size = new System.Drawing.Size(178, 26);
 			this.tsmLookupDevice.Text = "Lookup Device";
@@ -151,7 +151,7 @@ namespace AssetManager
 			//
 			//tsmGLBudget
 			//
-			this.tsmGLBudget.Image = global::AssetManager.My.Resources.Resources.MoneyCircle2Icon;
+			this.tsmGLBudget.Image = Properties.Resources.MoneyCircle2Icon;
 			this.tsmGLBudget.Name = "tsmGLBudget";
 			this.tsmGLBudget.Size = new System.Drawing.Size(178, 26);
 			this.tsmGLBudget.Text = "Lookup GL/Budget";
@@ -159,14 +159,14 @@ namespace AssetManager
 			//
 			//tsmCopyText
 			//
-			this.tsmCopyText.Image = global::AssetManager.My.Resources.Resources.CopyIcon;
+			this.tsmCopyText.Image = Properties.Resources.CopyIcon;
 			this.tsmCopyText.Name = "tsmCopyText";
 			this.tsmCopyText.Size = new System.Drawing.Size(178, 26);
 			this.tsmCopyText.Text = "Copy Selected";
 			//
 			//NewDeviceMenuItem
 			//
-			this.NewDeviceMenuItem.Image = global::AssetManager.My.Resources.Resources.AddIcon;
+			this.NewDeviceMenuItem.Image = Properties.Resources.AddIcon;
 			this.NewDeviceMenuItem.Name = "NewDeviceMenuItem";
 			this.NewDeviceMenuItem.Size = new System.Drawing.Size(178, 26);
 			this.NewDeviceMenuItem.Text = "Import New Asset";
@@ -178,7 +178,7 @@ namespace AssetManager
 			//
 			//tsmDeleteItem
 			//
-			this.tsmDeleteItem.Image = global::AssetManager.My.Resources.Resources.DeleteRedIcon;
+			this.tsmDeleteItem.Image = Properties.Resources.DeleteRedIcon;
 			this.tsmDeleteItem.Name = "tsmDeleteItem";
 			this.tsmDeleteItem.Size = new System.Drawing.Size(178, 26);
 			this.tsmDeleteItem.Text = "Delete Item";
@@ -230,7 +230,7 @@ namespace AssetManager
 			//
 			//cmdNewNote
 			//
-			this.cmdNewNote.Image = global::AssetManager.My.Resources.Resources.AddNoteIcon;
+			this.cmdNewNote.Image = Properties.Resources.AddNoteIcon;
 			this.cmdNewNote.Name = "cmdNewNote";
 			this.cmdNewNote.Size = new System.Drawing.Size(136, 22);
 			this.cmdNewNote.Text = "Add Note";
@@ -242,7 +242,7 @@ namespace AssetManager
 			//
 			//cmdDeleteNote
 			//
-			this.cmdDeleteNote.Image = global::AssetManager.My.Resources.Resources.DeleteRedIcon;
+			this.cmdDeleteNote.Image = Properties.Resources.DeleteRedIcon;
 			this.cmdDeleteNote.Name = "cmdDeleteNote";
 			this.cmdDeleteNote.Size = new System.Drawing.Size(136, 22);
 			this.cmdDeleteNote.Text = "Delete Note";
@@ -712,7 +712,7 @@ namespace AssetManager
 			//cmdCreate
 			//
 			this.cmdCreate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.cmdCreate.Image = global::AssetManager.My.Resources.Resources.AddIcon;
+			this.cmdCreate.Image = Properties.Resources.AddIcon;
 			this.cmdCreate.Name = "cmdCreate";
 			this.cmdCreate.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
 			this.cmdCreate.Size = new System.Drawing.Size(39, 34);
@@ -721,7 +721,7 @@ namespace AssetManager
 			//ModifyButton
 			//
 			this.ModifyButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.ModifyButton.Image = global::AssetManager.My.Resources.Resources.EditIcon;
+			this.ModifyButton.Image = Properties.Resources.EditIcon;
 			this.ModifyButton.Name = "ModifyButton";
 			this.ModifyButton.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
 			this.ModifyButton.Size = new System.Drawing.Size(39, 34);
@@ -731,7 +731,7 @@ namespace AssetManager
 			//cmdDelete
 			//
 			this.cmdDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.cmdDelete.Image = global::AssetManager.My.Resources.Resources.DeleteRedIcon;
+			this.cmdDelete.Image = Properties.Resources.DeleteRedIcon;
 			this.cmdDelete.Name = "cmdDelete";
 			this.cmdDelete.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
 			this.cmdDelete.Size = new System.Drawing.Size(39, 34);
@@ -740,7 +740,7 @@ namespace AssetManager
 			//cmdAddNote
 			//
 			this.cmdAddNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.cmdAddNote.Image = global::AssetManager.My.Resources.Resources.AddNoteIcon;
+			this.cmdAddNote.Image = Properties.Resources.AddNoteIcon;
 			this.cmdAddNote.Name = "cmdAddNote";
 			this.cmdAddNote.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
 			this.cmdAddNote.Size = new System.Drawing.Size(39, 34);
@@ -753,7 +753,7 @@ namespace AssetManager
 			//
 			//cmdAttachments
 			//
-			this.cmdAttachments.Image = global::AssetManager.My.Resources.Resources.PaperClipIcon;
+			this.cmdAttachments.Image = Properties.Resources.PaperClipIcon;
 			this.cmdAttachments.Name = "cmdAttachments";
 			this.cmdAttachments.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
 			this.cmdAttachments.Size = new System.Drawing.Size(136, 34);
@@ -767,7 +767,7 @@ namespace AssetManager
 			//tsbRefresh
 			//
 			this.tsbRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbRefresh.Image = global::AssetManager.My.Resources.Resources.RefreshIcon;
+			this.tsbRefresh.Image = Properties.Resources.RefreshIcon;
 			this.tsbRefresh.Name = "tsbRefresh";
 			this.tsbRefresh.Size = new System.Drawing.Size(29, 34);
 			this.tsbRefresh.ToolTipText = "Refresh";

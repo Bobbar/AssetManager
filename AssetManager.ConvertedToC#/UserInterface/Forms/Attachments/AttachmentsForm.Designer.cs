@@ -158,7 +158,7 @@ namespace AssetManager
 			//
 			//DeleteAttachmentToolStripMenuItem
 			//
-			this.DeleteAttachmentToolStripMenuItem.Image = global::AssetManager.My.Resources.Resources.DeleteRedIcon;
+			this.DeleteAttachmentToolStripMenuItem.Image = Properties.Resources.DeleteRedIcon;
 			this.DeleteAttachmentToolStripMenuItem.Name = "DeleteAttachmentToolStripMenuItem";
 			this.DeleteAttachmentToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
 			this.DeleteAttachmentToolStripMenuItem.Text = "Delete Attachment";
@@ -459,7 +459,7 @@ namespace AssetManager
 			//
 			//Spinner
 			//
-			this.Spinner.Image = global::AssetManager.My.Resources.Resources.LoadingAni;
+			this.Spinner.Image = Properties.Resources.LoadingAni;
 			this.Spinner.Name = "Spinner";
 			this.Spinner.Size = new System.Drawing.Size(16, 17);
 			this.Spinner.Visible = false;
@@ -480,7 +480,7 @@ namespace AssetManager
 			//cmdCancel
 			//
 			this.cmdCancel.Font = new System.Drawing.Font("Segoe UI", 9f, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
-			this.cmdCancel.Image = global::AssetManager.My.Resources.Resources.CloseCancelDeleteIcon;
+			this.cmdCancel.Image = Properties.Resources.CloseCancelDeleteIcon;
 			this.cmdCancel.Name = "cmdCancel";
 			this.cmdCancel.ShowDropDownArrow = false;
 			this.cmdCancel.Size = new System.Drawing.Size(63, 20);

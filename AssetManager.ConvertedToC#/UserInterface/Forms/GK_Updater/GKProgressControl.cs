@@ -376,16 +376,16 @@ namespace AssetManager
             switch (Status)
             {
                 case ProgressStatus.Running:
-                    pbRestart.Image = ImageCaching.ImageCache("PauseIcon", AssetManager.My.Resources.Resources.PauseIcon);
+                    pbRestart.Image = ImageCaching.ImageCache("PauseIcon", Properties.Resources.PauseIcon);
                     MyToolTip.SetToolTip(pbRestart, "Pause");
                     break;
                 case ProgressStatus.Paused:
                 case ProgressStatus.Queued:
-                    pbRestart.Image = ImageCaching.ImageCache("PlayIcon", AssetManager.My.Resources.Resources.PlayIcon);
+                    pbRestart.Image = ImageCaching.ImageCache("PlayIcon", Properties.Resources.PlayIcon);
                     MyToolTip.SetToolTip(pbRestart, "Resume");
                     break;
                 default:
-                    pbRestart.Image = ImageCaching.ImageCache("RestartIcon", AssetManager.My.Resources.Resources.RestartIcon);
+                    pbRestart.Image = ImageCaching.ImageCache("RestartIcon", Properties.Resources.RestartIcon);
                     MyToolTip.SetToolTip(pbRestart, "Restart");
                     break;
             }

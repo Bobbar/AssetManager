@@ -47,7 +47,7 @@ namespace AssetManager
 				string NoteText = GlobalInstances.AssetFunc.GetSqlValue(SibiNotesCols.TableName, SibiNotesCols.NoteUID, noteUID, SibiNotesCols.Note);
 				string NoteTimeStamp = GlobalInstances.AssetFunc.GetSqlValue(SibiNotesCols.TableName, SibiNotesCols.NoteUID, noteUID, SibiNotesCols.DateStamp);
 				this.Text += " - " + NoteTimeStamp;
-				OtherFunctions.SetRichTextBox(ref rtbNotes, NoteText);
+				OtherFunctions.SetRichTextBox(rtbNotes, NoteText);
 				rtbNotes.ReadOnly = true;
 				rtbNotes.BackColor = Color.White;
 				Show();

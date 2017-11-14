@@ -93,14 +93,14 @@ namespace AssetManager
 			//
 			//CopySelectedToolStripMenuItem
 			//
-			this.CopySelectedToolStripMenuItem.Image = global::AssetManager.My.Resources.Resources.CopyIcon;
+			this.CopySelectedToolStripMenuItem.Image = Properties.Resources.CopyIcon;
 			this.CopySelectedToolStripMenuItem.Name = "CopySelectedToolStripMenuItem";
 			this.CopySelectedToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
 			this.CopySelectedToolStripMenuItem.Text = "Copy Selected";
 			//
 			//SendToNewGridForm
 			//
-			this.SendToNewGridForm.Image = global::AssetManager.My.Resources.Resources.TransferArrowsIcon;
+			this.SendToNewGridForm.Image = Properties.Resources.TransferArrowsIcon;
 			this.SendToNewGridForm.Name = "SendToNewGridForm";
 			this.SendToNewGridForm.Size = new System.Drawing.Size(166, 22);
 			this.SendToNewGridForm.Text = "Send to New Grid";

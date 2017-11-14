@@ -261,7 +261,7 @@ namespace AssetManager
 			//
 			//cmdManage
 			//
-			this.cmdManage.Image = global::AssetManager.My.Resources.Resources.AddIcon;
+			this.cmdManage.Image = Properties.Resources.AddIcon;
 			this.cmdManage.Name = "cmdManage";
 			this.cmdManage.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.cmdManage.Size = new System.Drawing.Size(141, 34);

@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{205C062A-ECE5-4E01-9842-2FBD9F98FB10}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>AssetManager.My.MyApplication</StartupObject>
+    <StartupObject>AssetManager.StartProgram</StartupObject>
     <RootNamespace>AssetManager</RootNamespace>
     <AssemblyName>AssetManager</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -137,9 +137,9 @@
       <HintPath>..\packages\Fastenshtein.1.0.0.4\lib\net40-client\Fastenshtein.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="itextsharp">
-      <HintPath>..\..\..\Users\rl12184\Downloads\itextsharp-all-5.5.9\itextsharp-dll-core\itextsharp.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+    <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Git\AssetManagerTesting\AssetManager\AssetManager\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
@@ -205,16 +205,12 @@
     <Compile Include="Helpers\ThemeHelpers\Colors.cs" />
     <Compile Include="Helpers\ThemeHelpers\GridThemeClass.cs" />
     <Compile Include="Helpers\ThemeHelpers\StyleFunctions.cs" />
+    <Compile Include="LoadProgram.cs" />
     <Compile Include="My Project\Application.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.cs" />
-    <Compile Include="My Project\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -408,12 +404,6 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="My Project\Resources.resx">
-      <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>
-      <CustomToolNamespace>My.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -606,6 +596,7 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Image1.bmp" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

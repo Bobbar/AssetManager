@@ -15,7 +15,7 @@ namespace AssetManager
 
 		public static IDataBase GetDatabase()
 		{
-			if (AssetManager.GlobalSwitches.GlobalSwitchDeclarations.CachedMode) {
+			if (GlobalSwitches.CachedMode) {
 				return new SQLiteDatabase(false);
 			} else {
 				return new MySQLDatabase();

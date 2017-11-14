@@ -7,15 +7,15 @@ using System.Windows.Forms;
 
 namespace AssetManager
 {
-    class StartProgram
+    static class StartProgram
     {
-        private SplashScreenForm SplashScreen;
+        private static SplashScreenForm SplashScreen;
 
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        public void Main()
+        public static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -24,6 +24,8 @@ namespace AssetManager
             Application.ThreadException += MyApplication_UnhandledException;
 
             ProcessCommandArgs();
+
+            GlobalConstants.LocalDomainUser = Environment.UserName;
 
             bool ConnectionSuccessful = false;
             bool CacheAvailable = false;
@@ -69,18 +71,21 @@ namespace AssetManager
             Status("Checking Access Level...");
             SecurityTools.PopulateAccessGroups();
             SecurityTools.GetUserAccess();
-            if (!SecurityTools.CanAccess(AssetManager.SecurityTools.AccessGroup.CanRun))
+            if (!SecurityTools.CanAccess(SecurityTools.AccessGroup.CanRun))
             {
                 OtherFunctions.Message("You do not have permission to run this software.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Access Denied");
                 // e.Cancel = true;
                 Application.Exit();
+                return;
             }
             Status("Ready!");
             Application.Run(new MainForm());
             SplashScreen.Dispose();
         }
 
-        private void Status(string Text)
+
+      
+        private static void Status(string Text)
         {
             //My.MyProject.Forms.SplashScreenForm.SetStatus(Text);
             SplashScreen.SetStatus(Text);
@@ -135,7 +140,7 @@ namespace AssetManager
             }
         }
 
-        private void MyApplication_UnhandledException(object sender, ThreadExceptionEventArgs e)
+        private static void MyApplication_UnhandledException(object sender, ThreadExceptionEventArgs e)
         {
             ErrorHandling.ErrHandle(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod());
         }

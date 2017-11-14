@@ -33,9 +33,9 @@ namespace AssetManager
 						txtTimeStamp.Text = DataConsistency.NoNull(r[TrackablesCols.DateStamp]);
 						txtCheckType.Text = DataConsistency.NoNull(r[TrackablesCols.CheckType]);
 						if (txtCheckType.Text == "IN") {
-							txtCheckType.BackColor = AssetManager.Colors.Colors.CheckIn;
+							txtCheckType.BackColor = Colors.CheckIn;
 						} else if (txtCheckType.Text == "OUT") {
-							txtCheckType.BackColor = AssetManager.Colors.Colors.CheckOut;
+							txtCheckType.BackColor = Colors.CheckOut;
 						}
 						txtDescription.Text = device.Description;
 						txtGUID.Text = DataConsistency.NoNull(r[TrackablesCols.DeviceUID]);

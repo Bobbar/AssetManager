@@ -297,7 +297,7 @@ namespace AssetManager
                     else if (ctlType == typeof(RichTextBox))
                     {
                         RichTextBox dbRtb = (RichTextBox)ctl;
-                        OtherFunctions.SetRichTextBox(ref dbRtb, Row[DBColumn].ToString());
+                        OtherFunctions.SetRichTextBox(dbRtb, Row[DBColumn].ToString());
                     }
                     else
                     {
@@ -487,7 +487,8 @@ namespace AssetManager
             DataTable tmpTable = null;
             tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(selectQry);
             tmpTable.Rows.Add();
-            UpdateDBControlRow(ref tmpTable.Rows[0]);
+            //UpdateDBControlRow(ref tmpTable.Rows[0]);
+            UpdateDBControlRow(tmpTable.Rows[0]);
             return tmpTable;
         }
 
@@ -506,7 +507,8 @@ namespace AssetManager
             DataTable tmpTable = new DataTable();
             tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(selectQry);
             tmpTable.TableName = "UpdateTable";
-            UpdateDBControlRow(ref tmpTable.Rows[0]);
+            //UpdateDBControlRow(ref tmpTable.Rows[0]);
+            UpdateDBControlRow(tmpTable.Rows[0]);
             return tmpTable;
         }
 
@@ -514,42 +516,80 @@ namespace AssetManager
         /// Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControls(Control, List(Of Control))"/>
         /// </summary>
         /// <param name="DBRow">DataRow to be modified.</param>
-        private void UpdateDBControlRow(ref DataRow DBRow)
+        //private void UpdateDBControlRow(ref DataRow DBRow)
+        private void UpdateDBControlRow(DataRow DBRow)
         {
             foreach (Control ctl in GetDBControls(ParentForm))
             {
                 DBControlInfo DBInfo = (DBControlInfo)ctl.Tag;
                 if (DBInfo.ParseType != ParseType.DisplayOnly)
                 {
-                    switch (true)
+
+
+                    if (ctl is TextBox)
                     {
-                        case ctl is TextBox:
-                            TextBox dbTxt = (TextBox)ctl;
-                            DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbTxt.Text);
-
-                            break;
-                        case ctl is MaskedTextBox:
-                            MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
-                            DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbMaskTxt.Text);
-
-                            break;
-                        case ctl is DateTimePicker:
-                            DateTimePicker dbDtPick = (DateTimePicker)ctl;
-                            DBRow[DBInfo.DataColumn] = dbDtPick.Value;
-
-                            break;
-                        case ctl is ComboBox:
-                            ComboBox dbCmb = (ComboBox)ctl;
-                            DBRow[DBInfo.DataColumn] = AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
-
-                            break;
-                        case ctl is CheckBox:
-                            CheckBox dbChk = (CheckBox)ctl;
-                            DBRow[DBInfo.DataColumn] = dbChk.Checked;
-                            break;
-                        default:
-                            throw new Exception("Unexpected type.");
+                        TextBox dbTxt = (TextBox)ctl;
+                        DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbTxt.Text);
                     }
+                    else if (ctl is MaskedTextBox)
+                    {
+                        MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
+                        DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbMaskTxt.Text);
+                    }
+                    else if (ctl is DateTimePicker)
+                    {
+                        DateTimePicker dbDtPick = (DateTimePicker)ctl;
+                        DBRow[DBInfo.DataColumn] = dbDtPick.Value;
+                    }
+                    else if (ctl is ComboBox)
+                    {
+                        ComboBox dbCmb = (ComboBox)ctl;
+                        DBRow[DBInfo.DataColumn] = AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
+                    }
+                    else if (ctl is CheckBox)
+                    {
+                        CheckBox dbChk = (CheckBox)ctl;
+                        DBRow[DBInfo.DataColumn] = dbChk.Checked;
+                    }
+                    else
+                    {
+                        throw new Exception("Unexpected type.");
+                        //return null;
+                    }
+
+
+
+
+
+                    //switch (true)
+                    //{
+                    //    case ctl is TextBox:
+                    //        TextBox dbTxt = (TextBox)ctl;
+                    //        DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbTxt.Text);
+
+                    //        break;
+                    //    case ctl is MaskedTextBox:
+                    //        MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
+                    //        DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbMaskTxt.Text);
+
+                    //        break;
+                    //    case ctl is DateTimePicker:
+                    //        DateTimePicker dbDtPick = (DateTimePicker)ctl;
+                    //        DBRow[DBInfo.DataColumn] = dbDtPick.Value;
+
+                    //        break;
+                    //    case ctl is ComboBox:
+                    //        ComboBox dbCmb = (ComboBox)ctl;
+                    //        DBRow[DBInfo.DataColumn] = AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
+
+                    //        break;
+                    //    case ctl is CheckBox:
+                    //        CheckBox dbChk = (CheckBox)ctl;
+                    //        DBRow[DBInfo.DataColumn] = dbChk.Checked;
+                    //        break;
+                    //    default:
+                    //        throw new Exception("Unexpected type.");
+                    //}
                 }
             }
         }

@@ -52,7 +52,7 @@ namespace AssetManager
 				SHFILEINFO shinfo = new SHFILEINFO();
 				shinfo.szDisplayName = new string(Strings.Chr(0), MAX_PATH);
 				shinfo.szTypeName = new string(Strings.Chr(0), 80);
-				SHGetFileInfo(fileExt, FILE_ATTRIBUTE_NORMAL, ref shinfo, Marshal.SizeOf(shinfo), SHGFI_ICON | ICOSize | SHGFI_USEFILEATTRIBUTES);
+				SHGetFileInfo(fileExt, FILE_ATTRIBUTE_NORMAL, ref shinfo, Marshal.SizeOf(shinfo), SHGFI_ICON | (int)ICOSize | SHGFI_USEFILEATTRIBUTES);
 				Bitmap bmp = System.Drawing.Icon.FromHandle(shinfo.hIcon).ToBitmap();
 				DestroyIcon(shinfo.hIcon);
 				// must destroy icon to avoid GDI leak!

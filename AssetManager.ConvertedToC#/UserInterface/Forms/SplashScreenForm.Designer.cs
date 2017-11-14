@@ -69,7 +69,7 @@ namespace AssetManager
 			//PictureBox1
 			//
 			this.PictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.PictureBox1.Image = global::AssetManager.My.Resources.Resources.AssetManagerIcon;
+			this.PictureBox1.Image = Properties.Resources.AssetManagerIcon;
 			this.PictureBox1.Location = new System.Drawing.Point(53, 47);
 			this.PictureBox1.Name = "PictureBox1";
 			this.PictureBox1.Size = new System.Drawing.Size(132, 132);
@@ -89,7 +89,7 @@ namespace AssetManager
 			//
 			//PictureBox2
 			//
-			this.PictureBox2.Image = global::AssetManager.My.Resources.Resources.Title_Text_Orange;
+			this.PictureBox2.Image = Properties.Resources.Title_Text_Orange;
 			this.PictureBox2.Location = new System.Drawing.Point(215, 52);
 			this.PictureBox2.Name = "PictureBox2";
 			this.PictureBox2.Size = new System.Drawing.Size(215, 121);

@@ -529,7 +529,7 @@ namespace AssetManager
 			//
 			//cmdGKUpdate
 			//
-			this.cmdGKUpdate.BackgroundImage = global::AssetManager.My.Resources.Resources.GK__UpdateIcon;
+			this.cmdGKUpdate.BackgroundImage = Properties.Resources.GK__UpdateIcon;
 			this.cmdGKUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.cmdGKUpdate.Location = new System.Drawing.Point(1, 1);
 			this.cmdGKUpdate.Margin = new System.Windows.Forms.Padding(1);
@@ -541,7 +541,7 @@ namespace AssetManager
 			//
 			//cmdBrowseFiles
 			//
-			this.cmdBrowseFiles.BackgroundImage = global::AssetManager.My.Resources.Resources.FolderIcon;
+			this.cmdBrowseFiles.BackgroundImage = Properties.Resources.FolderIcon;
 			this.cmdBrowseFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.cmdBrowseFiles.Location = new System.Drawing.Point(48, 1);
 			this.cmdBrowseFiles.Margin = new System.Windows.Forms.Padding(1);
@@ -555,7 +555,7 @@ namespace AssetManager
 			//
 			this.cmdRestart.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.cmdRestart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.cmdRestart.Image = global::AssetManager.My.Resources.Resources.RestartIcon;
+			this.cmdRestart.Image = Properties.Resources.RestartIcon;
 			this.cmdRestart.Location = new System.Drawing.Point(95, 1);
 			this.cmdRestart.Margin = new System.Windows.Forms.Padding(1);
 			this.cmdRestart.Name = "cmdRestart";
@@ -567,7 +567,7 @@ namespace AssetManager
 			//
 			//cmdRDP
 			//
-			this.cmdRDP.BackgroundImage = global::AssetManager.My.Resources.Resources.RDPIcon;
+			this.cmdRDP.BackgroundImage = Properties.Resources.RDPIcon;
 			this.cmdRDP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.cmdRDP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.cmdRDP.Location = new System.Drawing.Point(142, 1);
@@ -580,7 +580,7 @@ namespace AssetManager
 			//
 			//DeployTVButton
 			//
-			this.DeployTVButton.BackgroundImage = global::AssetManager.My.Resources.Resources.TeamViewerIcon;
+			this.DeployTVButton.BackgroundImage = Properties.Resources.TeamViewerIcon;
 			this.DeployTVButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.DeployTVButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.DeployTVButton.Location = new System.Drawing.Point(189, 1);
@@ -593,7 +593,7 @@ namespace AssetManager
 			//
 			//UpdateChromeButton
 			//
-			this.UpdateChromeButton.BackgroundImage = global::AssetManager.My.Resources.Resources.ChromeIcon;
+			this.UpdateChromeButton.BackgroundImage = Properties.Resources.ChromeIcon;
 			this.UpdateChromeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.UpdateChromeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.UpdateChromeButton.Location = new System.Drawing.Point(236, 1);
@@ -627,7 +627,7 @@ namespace AssetManager
 			//
 			//DeleteEntryToolStripMenuItem
 			//
-			this.DeleteEntryToolStripMenuItem.Image = global::AssetManager.My.Resources.Resources.DeleteIcon;
+			this.DeleteEntryToolStripMenuItem.Image = Properties.Resources.DeleteIcon;
 			this.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem";
 			this.DeleteEntryToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
 			this.DeleteEntryToolStripMenuItem.Text = "Delete Entry";
@@ -931,7 +931,7 @@ namespace AssetManager
 			//cmdAccept_Tool
 			//
 			this.cmdAccept_Tool.Font = new System.Drawing.Font("Segoe UI", 12f, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
-			this.cmdAccept_Tool.Image = global::AssetManager.My.Resources.Resources.CheckedBoxIcon;
+			this.cmdAccept_Tool.Image = Properties.Resources.CheckedBoxIcon;
 			this.cmdAccept_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.cmdAccept_Tool.Name = "cmdAccept_Tool";
 			this.cmdAccept_Tool.Padding = new System.Windows.Forms.Padding(50, 5, 5, 0);
@@ -946,7 +946,7 @@ namespace AssetManager
 			//cmdCancel_Tool
 			//
 			this.cmdCancel_Tool.Font = new System.Drawing.Font("Segoe UI Semibold", 12f, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
-			this.cmdCancel_Tool.Image = global::AssetManager.My.Resources.Resources.CloseCancelDeleteIcon;
+			this.cmdCancel_Tool.Image = Properties.Resources.CloseCancelDeleteIcon;
 			this.cmdCancel_Tool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.cmdCancel_Tool.Name = "cmdCancel_Tool";
 			this.cmdCancel_Tool.Padding = new System.Windows.Forms.Padding(50, 5, 5, 0);
@@ -1255,7 +1255,7 @@ namespace AssetManager
 				this.CheckInTool
 			});
 			this.ToolStripDropDownButton1.Font = new System.Drawing.Font("Segoe UI", 12f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
-			this.ToolStripDropDownButton1.Image = global::AssetManager.My.Resources.Resources.CheckOutIcon;
+			this.ToolStripDropDownButton1.Image = Properties.Resources.CheckOutIcon;
 			this.ToolStripDropDownButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1";
 			this.ToolStripDropDownButton1.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
@@ -1265,7 +1265,7 @@ namespace AssetManager
 			//CheckOutTool
 			//
 			this.CheckOutTool.Font = new System.Drawing.Font("Segoe UI", 9f, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
-			this.CheckOutTool.Image = global::AssetManager.My.Resources.Resources.CheckedBoxRedIcon;
+			this.CheckOutTool.Image = Properties.Resources.CheckedBoxRedIcon;
 			this.CheckOutTool.Name = "CheckOutTool";
 			this.CheckOutTool.Size = new System.Drawing.Size(135, 22);
 			this.CheckOutTool.Text = "Check Out";
@@ -1273,7 +1273,7 @@ namespace AssetManager
 			//CheckInTool
 			//
 			this.CheckInTool.Font = new System.Drawing.Font("Segoe UI", 9f, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
-			this.CheckInTool.Image = global::AssetManager.My.Resources.Resources.CheckedBoxGreenIcon;
+			this.CheckInTool.Image = Properties.Resources.CheckedBoxGreenIcon;
 			this.CheckInTool.Name = "CheckInTool";
 			this.CheckInTool.Size = new System.Drawing.Size(135, 22);
 			this.CheckInTool.Text = "Check In";
@@ -1310,7 +1310,7 @@ namespace AssetManager
 			//tsbModify
 			//
 			this.tsbModify.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbModify.Image = global::AssetManager.My.Resources.Resources.EditIcon;
+			this.tsbModify.Image = Properties.Resources.EditIcon;
 			this.tsbModify.Name = "tsbModify";
 			this.tsbModify.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
 			this.tsbModify.Size = new System.Drawing.Size(39, 34);
@@ -1319,7 +1319,7 @@ namespace AssetManager
 			//tsbNewNote
 			//
 			this.tsbNewNote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbNewNote.Image = global::AssetManager.My.Resources.Resources.AddNoteIcon;
+			this.tsbNewNote.Image = Properties.Resources.AddNoteIcon;
 			this.tsbNewNote.Name = "tsbNewNote";
 			this.tsbNewNote.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
 			this.tsbNewNote.Size = new System.Drawing.Size(39, 34);
@@ -1328,7 +1328,7 @@ namespace AssetManager
 			//tsbDeleteDevice
 			//
 			this.tsbDeleteDevice.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbDeleteDevice.Image = global::AssetManager.My.Resources.Resources.DeleteRedIcon;
+			this.tsbDeleteDevice.Image = Properties.Resources.DeleteRedIcon;
 			this.tsbDeleteDevice.Name = "tsbDeleteDevice";
 			this.tsbDeleteDevice.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
 			this.tsbDeleteDevice.Size = new System.Drawing.Size(39, 34);
@@ -1337,7 +1337,7 @@ namespace AssetManager
 			//RefreshToolStripButton
 			//
 			this.RefreshToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.RefreshToolStripButton.Image = global::AssetManager.My.Resources.Resources.RefreshIcon;
+			this.RefreshToolStripButton.Image = Properties.Resources.RefreshIcon;
 			this.RefreshToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.RefreshToolStripButton.Name = "RefreshToolStripButton";
 			this.RefreshToolStripButton.Size = new System.Drawing.Size(29, 34);
@@ -1351,7 +1351,7 @@ namespace AssetManager
 			//
 			//AttachmentTool
 			//
-			this.AttachmentTool.Image = global::AssetManager.My.Resources.Resources.PaperClipIcon;
+			this.AttachmentTool.Image = Properties.Resources.PaperClipIcon;
 			this.AttachmentTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.AttachmentTool.Name = "AttachmentTool";
 			this.AttachmentTool.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
@@ -1369,28 +1369,28 @@ namespace AssetManager
 				this.tsmAssetTransferForm,
 				this.AssetDisposalForm
 			});
-			this.ToolStripDropDownButton2.Image = global::AssetManager.My.Resources.Resources.FormIcon;
+			this.ToolStripDropDownButton2.Image = Properties.Resources.FormIcon;
 			this.ToolStripDropDownButton2.Name = "ToolStripDropDownButton2";
 			this.ToolStripDropDownButton2.Size = new System.Drawing.Size(189, 34);
 			this.ToolStripDropDownButton2.Text = "Asset Control Forms";
 			//
 			//tsmAssetInputForm
 			//
-			this.tsmAssetInputForm.Image = global::AssetManager.My.Resources.Resources.ImportIcon;
+			this.tsmAssetInputForm.Image = Properties.Resources.ImportIcon;
 			this.tsmAssetInputForm.Name = "tsmAssetInputForm";
 			this.tsmAssetInputForm.Size = new System.Drawing.Size(230, 32);
 			this.tsmAssetInputForm.Text = "Asset Input Form";
 			//
 			//tsmAssetTransferForm
 			//
-			this.tsmAssetTransferForm.Image = global::AssetManager.My.Resources.Resources.TransferArrowsIcon;
+			this.tsmAssetTransferForm.Image = Properties.Resources.TransferArrowsIcon;
 			this.tsmAssetTransferForm.Name = "tsmAssetTransferForm";
 			this.tsmAssetTransferForm.Size = new System.Drawing.Size(230, 32);
 			this.tsmAssetTransferForm.Text = "Asset Transfer Form";
 			//
 			//AssetDisposalForm
 			//
-			this.AssetDisposalForm.Image = global::AssetManager.My.Resources.Resources.TrashIcon;
+			this.AssetDisposalForm.Image = Properties.Resources.TrashIcon;
 			this.AssetDisposalForm.Name = "AssetDisposalForm";
 			this.AssetDisposalForm.Size = new System.Drawing.Size(230, 32);
 			this.AssetDisposalForm.Text = "Asset Disposal Form";

@@ -130,7 +130,7 @@ namespace AssetManager
 			//
 			this.pbRestart.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.pbRestart.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.pbRestart.Image = global::AssetManager.My.Resources.Resources.RestartIcon;
+			this.pbRestart.Image = Properties.Resources.RestartIcon;
 			this.pbRestart.Location = new System.Drawing.Point(350, 2);
 			this.pbRestart.Name = "pbRestart";
 			this.pbRestart.Size = new System.Drawing.Size(20, 20);
@@ -143,7 +143,7 @@ namespace AssetManager
 			//
 			this.pbCancelClose.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.pbCancelClose.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.pbCancelClose.Image = global::AssetManager.My.Resources.Resources.CloseCancelDeleteIcon;
+			this.pbCancelClose.Image = Properties.Resources.CloseCancelDeleteIcon;
 			this.pbCancelClose.Location = new System.Drawing.Point(376, 2);
 			this.pbCancelClose.Name = "pbCancelClose";
 			this.pbCancelClose.Size = new System.Drawing.Size(20, 20);

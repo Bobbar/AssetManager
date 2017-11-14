@@ -166,7 +166,7 @@ namespace AssetManager
             }
         }
 
-        public static void SetRichTextBox(ref RichTextBox richTextBox, string text)
+        public static void SetRichTextBox(RichTextBox richTextBox, string text)
         {
             if (text.StartsWith("{\\rtf"))
             {

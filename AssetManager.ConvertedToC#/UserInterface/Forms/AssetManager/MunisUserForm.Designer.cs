@@ -127,7 +127,7 @@ namespace AssetManager
 			//
 			//pbWorking
 			//
-			this.pbWorking.Image = global::AssetManager.My.Resources.Resources.LoadingAni;
+			this.pbWorking.Image = Properties.Resources.LoadingAni;
 			this.pbWorking.Location = new System.Drawing.Point(178, 48);
 			this.pbWorking.Name = "pbWorking";
 			this.pbWorking.Size = new System.Drawing.Size(22, 22);

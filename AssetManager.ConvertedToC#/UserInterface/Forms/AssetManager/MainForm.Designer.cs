@@ -198,21 +198,21 @@ namespace AssetManager
 			//ViewToolStripMenuItem
 			//
 			this.ViewToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9.75f, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
-			this.ViewToolStripMenuItem.Image = global::AssetManager.My.Resources.Resources.DetailsIcon;
+			this.ViewToolStripMenuItem.Image = Properties.Resources.DetailsIcon;
 			this.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem";
 			this.ViewToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
 			this.ViewToolStripMenuItem.Text = "View";
 			//
 			//tsmAddGKUpdate
 			//
-			this.tsmAddGKUpdate.Image = global::AssetManager.My.Resources.Resources.GK_SmallIcon;
+			this.tsmAddGKUpdate.Image = Properties.Resources.GK_SmallIcon;
 			this.tsmAddGKUpdate.Name = "tsmAddGKUpdate";
 			this.tsmAddGKUpdate.Size = new System.Drawing.Size(179, 22);
 			this.tsmAddGKUpdate.Text = "Enqueue GK Update";
 			//
 			//tsmSendToGridForm
 			//
-			this.tsmSendToGridForm.Image = global::AssetManager.My.Resources.Resources.TransferArrowsIcon;
+			this.tsmSendToGridForm.Image = Properties.Resources.TransferArrowsIcon;
 			this.tsmSendToGridForm.Name = "tsmSendToGridForm";
 			this.tsmSendToGridForm.Size = new System.Drawing.Size(179, 22);
 			this.tsmSendToGridForm.Text = "Send to Grid Form";
@@ -224,7 +224,7 @@ namespace AssetManager
 			//
 			//CopyTool
 			//
-			this.CopyTool.Image = global::AssetManager.My.Resources.Resources.CopyIcon;
+			this.CopyTool.Image = Properties.Resources.CopyIcon;
 			this.CopyTool.Name = "CopyTool";
 			this.CopyTool.Size = new System.Drawing.Size(179, 22);
 			this.CopyTool.Text = "Copy Selected";
@@ -623,7 +623,7 @@ namespace AssetManager
 			//
 			//StripSpinner
 			//
-			this.StripSpinner.Image = global::AssetManager.My.Resources.Resources.LoadingAni;
+			this.StripSpinner.Image = Properties.Resources.LoadingAni;
 			this.StripSpinner.Name = "StripSpinner";
 			this.StripSpinner.Size = new System.Drawing.Size(16, 17);
 			this.StripSpinner.Visible = false;
@@ -734,7 +734,7 @@ namespace AssetManager
 			//
 			//AddDeviceTool
 			//
-			this.AddDeviceTool.Image = global::AssetManager.My.Resources.Resources.AddIcon;
+			this.AddDeviceTool.Image = Properties.Resources.AddIcon;
 			this.AddDeviceTool.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.AddDeviceTool.Name = "AddDeviceTool";
 			this.AddDeviceTool.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -756,7 +756,7 @@ namespace AssetManager
 				this.StartTransactionToolStripMenuItem,
 				this.PSScriptMenuItem
 			});
-			this.AdminDropDown.Image = global::AssetManager.My.Resources.Resources.AdminIcon;
+			this.AdminDropDown.Image = Properties.Resources.AdminIcon;
 			this.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.AdminDropDown.Name = "AdminDropDown";
 			this.AdminDropDown.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
@@ -851,7 +851,7 @@ namespace AssetManager
 			//
 			this.cmdSibi.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
 			this.cmdSibi.Font = new System.Drawing.Font("Segoe UI", 9.75f, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
-			this.cmdSibi.Image = global::AssetManager.My.Resources.Resources.SibiIcon;
+			this.cmdSibi.Image = Properties.Resources.SibiIcon;
 			this.cmdSibi.Name = "cmdSibi";
 			this.cmdSibi.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
 			this.cmdSibi.Size = new System.Drawing.Size(232, 34);
