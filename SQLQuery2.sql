@@ -1,1 +1,0 @@
-﻿SELECT TOP 10 * FROM famaster WHERE fama_asset='14479';
