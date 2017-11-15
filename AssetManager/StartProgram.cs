@@ -82,12 +82,12 @@ namespace AssetManager
                 return;
             }
             Status("Ready!");
-            Application.Run(new UserInterface.Forms.AssetManagement.MainForm());
             SplashScreen.Dispose();
+            Application.Run(new UserInterface.Forms.AssetManagement.MainForm());
         }
 
 
-      
+
         private static void Status(string Text)
         {
             //My.MyProject.Forms.SplashScreenForm.SetStatus(Text);

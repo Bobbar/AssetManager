@@ -31,11 +31,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private bool bolDragging = false;
         private bool bolFieldsValid;
         private bool bolGridFilling = false;
-        private DBControlParser DataParser; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
+        private DBControlParser DataParser;
         private Point MouseStartPos;
-        private MunisToolBar MyMunisToolBar; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
+        private MunisToolBar MyMunisToolBar;
         private string TitleText = "Manage Request";
-        private WindowList MyWindowList; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
+        private WindowList MyWindowList;
         private FormWindowState PrevWindowState;
         private SliderLabel StatusSlider;
 
@@ -45,7 +45,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         public SibiManageRequestForm(ExtendedForm parentForm, string requestUID)
         {
-            // VBConversions Note: Non-static class variable initialization is below.  Class variables cannot be initially assigned non-static values in C#.
             DataParser = new DBControlParser(this);
             MyMunisToolBar = new MunisToolBar(this);
             MyWindowList = new WindowList(this);
@@ -57,7 +56,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         public SibiManageRequestForm(ExtendedForm parentForm)
         {
-            // VBConversions Note: Non-static class variable initialization is below.  Class variables cannot be initially assigned non-static values in C#.
             DataParser = new DBControlParser(this);
             MyMunisToolBar = new MunisToolBar(this);
             MyWindowList = new WindowList(this);
@@ -839,7 +837,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     c.Enabled = true;
                 }
-                                
+
                 if (c.HasChildren)
                 {
                     EnableControlsRecursive(c);
@@ -878,44 +876,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 CanClose = false;
             }
             return CanClose;
-        }
-
-        private void frmManageRequest_Closing(object sender, CancelEventArgs e)
-        {
-            if (!OKToClose())
-            {
-                e.Cancel = true;
-            }
-        }
-
-        private void frmManageRequest_Disposed(object sender, EventArgs e)
-        {
-            MyMunisToolBar.Dispose();
-            MyWindowList.Dispose();
-            Helpers.ChildFormControl.CloseChildren(this);
-        }
-
-        private void frmManageRequest_Resize(object sender, EventArgs e)
-        {
-            Form f = (Form)sender;
-            if (f.WindowState == FormWindowState.Minimized)
-            {
-                Helpers.ChildFormControl.MinimizeChildren(this);
-                PrevWindowState = f.WindowState;
-            }
-            else if (f.WindowState != PrevWindowState && f.WindowState == FormWindowState.Normal)
-            {
-                if (PrevWindowState != FormWindowState.Maximized)
-                {
-                    Helpers.ChildFormControl.RestoreChildren(this);
-                }
-            }
-        }
-
-        private void frmManageRequest_ResizeBegin(object sender, EventArgs e)
-        {
-            Form f = (Form)sender;
-            PrevWindowState = f.WindowState;
         }
 
         private DataTable GetInsertTable(string selectQuery, string UID)
@@ -1321,15 +1281,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ResetBackColors(Control parent)
         {
-            Control c = default(Control);
-            foreach (Control tempLoopVar_c in parent.Controls)
+            foreach (Control c in parent.Controls)
             {
-                c = tempLoopVar_c;
-                if (true)
+
+                if (c is TextBox)
                 {
                     c.BackColor = Color.Empty;
                 }
-                else if (true)
+                else if (c is ComboBox)
                 {
                     c.BackColor = Color.Empty;
                 }
@@ -1553,22 +1512,22 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                int ColIndex = System.Convert.ToInt32(RequestItemsGrid.CurrentCell.ColumnIndex);
-                if (true)
+                int colIndex = System.Convert.ToInt32(RequestItemsGrid.CurrentCell.ColumnIndex);
+                if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.ReplaceAsset))
                 {
-                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
+                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
                 }
-                else if (true)
+                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.ReplaceSerial))
                 {
-                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
+                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
                 }
-                else if (true)
+                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.NewAsset))
                 {
-                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
+                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
                 }
-                else if (true)
+                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.NewSerial))
                 {
-                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
+                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
                 }
             }
             catch (Exception ex)
@@ -1779,19 +1738,21 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                if (true)
+
+                var colIndex = RequestItemsGrid.CurrentCell.ColumnIndex;
+                if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.ReplaceAsset))
                 {
                     return true;
                 }
-                else if (true)
+                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.ReplaceSerial))
                 {
                     return true;
                 }
-                else if (true)
+                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.NewAsset))
                 {
                     return true;
                 }
-                else if (true)
+                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.NewSerial))
                 {
                     return true;
                 }
@@ -1819,7 +1780,51 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         }
 
+        private void SibiManageRequestForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!OKToClose())
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void SibiManageRequestForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            MyMunisToolBar.Dispose();
+            MyWindowList.Dispose();
+            Helpers.ChildFormControl.CloseChildren(this);
+        }
+
+        private void SibiManageRequestForm_Resize(object sender, EventArgs e)
+        {
+            //Form f = (Form)sender;
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                Helpers.ChildFormControl.MinimizeChildren(this);
+                PrevWindowState = this.WindowState;
+            }
+            else if (this.WindowState != PrevWindowState && this.WindowState == FormWindowState.Normal)
+            {
+                if (PrevWindowState != FormWindowState.Maximized)
+                {
+                    Helpers.ChildFormControl.RestoreChildren(this);
+                }
+            }
+        }
+
+        private void SibiManageRequestForm_ResizeBegin(object sender, EventArgs e)
+        {
+            //Form f = (Form)sender;
+            PrevWindowState = this.WindowState;
+        }
+
+        private void SibiManageRequestForm_Load(object sender, EventArgs e)
+        {
+            // InitForm();
+        }
+
         #endregion
+
 
     }
 }

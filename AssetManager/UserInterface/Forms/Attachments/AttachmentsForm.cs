@@ -413,7 +413,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         StreamReader sr = new StreamReader(streamFileName);
                         string fullString = sr.ReadToEnd();
                         fullString = fullString.Replace(Constants.vbNullChar, "");
-                        fullString = fullString.Replace(Strings.ChrW(1), Char.Parse(""));
+                        fullString = fullString.Replace(Strings.ChrW(1).ToString(), "");
                         return fullString;
                     }
 
