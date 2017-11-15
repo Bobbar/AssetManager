@@ -326,12 +326,6 @@
     <Compile Include="UserInterface\Forms\Attachments\AttachmentsForm.Designer.cs">
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserInterface\Forms\GetCredentialsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -458,9 +452,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Attachments\AttachmentsForm.resx">
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GetCredentialsForm.resx">
       <DependentUpon>GetCredentialsForm.cs</DependentUpon>

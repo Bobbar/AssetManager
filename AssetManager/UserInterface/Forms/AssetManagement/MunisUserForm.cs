@@ -80,9 +80,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void MunisResults_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            var _with1 = SelectedEmpInfo;
-            _with1.Name = GridFunctions.GetCurrentCellValue(MunisResults, "a_name_first") + " " + GridFunctions.GetCurrentCellValue(MunisResults, "a_name_last");
-            _with1.Number = GridFunctions.GetCurrentCellValue(MunisResults, "a_employee_number");
+            SelectedEmpInfo.Name = GridFunctions.GetCurrentCellValue(MunisResults, "a_name_first") + " " + GridFunctions.GetCurrentCellValue(MunisResults, "a_name_last");
+            SelectedEmpInfo.Number = GridFunctions.GetCurrentCellValue(MunisResults, "a_employee_number");
             lblSelectedEmp.Text = "Selected Emp: " + SelectedEmpInfo.Name + " - " + SelectedEmpInfo.Number;
         }
 
