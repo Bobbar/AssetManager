@@ -669,8 +669,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // TabControl1
             // 
-            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TabControl1.Controls.Add(this.HistoryTab);
             this.TabControl1.Controls.Add(this.TrackingTab);
@@ -1008,7 +1008,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // FieldsPanel
             // 
-            this.FieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.FieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FieldsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.FieldsPanel.Controls.Add(this.InfoDataSplitter);
@@ -1516,260 +1516,34 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         }
         internal Label Label9;
-        //private ComboBox withEventsField_cmbStatus_REQ;
         internal ComboBox cmbStatus_REQ;
-        //{
-        //    get { return withEventsField_cmbStatus_REQ; }
-        //    set
-        //    {
-        //        if (withEventsField_cmbStatus_REQ != null)
-        //        {
-        //            withEventsField_cmbStatus_REQ.DropDown -= cmbStatus_REQ_DropDown;
-        //            withEventsField_cmbStatus_REQ.SelectedIndexChanged -= cmbStatus_REQ_SelectedIndexChanged;
-        //        }
-        //        withEventsField_cmbStatus_REQ = value;
-        //        if (withEventsField_cmbStatus_REQ != null)
-        //        {
-        //            withEventsField_cmbStatus_REQ.DropDown += cmbStatus_REQ_DropDown;
-        //            withEventsField_cmbStatus_REQ.SelectedIndexChanged += cmbStatus_REQ_SelectedIndexChanged;
-        //        }
-        //    }
-        //}
         internal Label Label8;
-        //private ComboBox withEventsField_cmbOSVersion_REQ;
         internal ComboBox cmbOSVersion_REQ;
-        //{
-        //    get { return withEventsField_cmbOSVersion_REQ; }
-        //    set
-        //    {
-        //        if (withEventsField_cmbOSVersion_REQ != null)
-        //        {
-        //            withEventsField_cmbOSVersion_REQ.DropDown -= cmbOSVersion_REQ_DropDown;
-        //            withEventsField_cmbOSVersion_REQ.SelectedIndexChanged -= cmbOSVersion_REQ_SelectedIndexChanged;
-        //        }
-        //        withEventsField_cmbOSVersion_REQ = value;
-        //        if (withEventsField_cmbOSVersion_REQ != null)
-        //        {
-        //            withEventsField_cmbOSVersion_REQ.DropDown += cmbOSVersion_REQ_DropDown;
-        //            withEventsField_cmbOSVersion_REQ.SelectedIndexChanged += cmbOSVersion_REQ_SelectedIndexChanged;
-        //        }
-        //    }
-        //}
         internal Label Label13;
-        //private ComboBox withEventsField_cmbEquipType_View_REQ;
         internal ComboBox cmbEquipType_View_REQ;
-        //{
-        //    get { return withEventsField_cmbEquipType_View_REQ; }
-        //    set
-        //    {
-        //        if (withEventsField_cmbEquipType_View_REQ != null)
-        //        {
-        //            withEventsField_cmbEquipType_View_REQ.DropDown -= cmbEquipType_View_REQ_DropDown;
-        //            withEventsField_cmbEquipType_View_REQ.SelectedIndexChanged -= cmbEquipType_View_REQ_SelectedIndexChanged;
-        //        }
-        //        withEventsField_cmbEquipType_View_REQ = value;
-        //        if (withEventsField_cmbEquipType_View_REQ != null)
-        //        {
-        //            withEventsField_cmbEquipType_View_REQ.DropDown += cmbEquipType_View_REQ_DropDown;
-        //            withEventsField_cmbEquipType_View_REQ.SelectedIndexChanged += cmbEquipType_View_REQ_SelectedIndexChanged;
-        //        }
-        //    }
-        //}
         internal Label Label7;
         internal TextBox txtReplacementYear_View;
         internal Label Label6;
-        //private DateTimePicker withEventsField_dtPurchaseDate_View_REQ;
         internal DateTimePicker dtPurchaseDate_View_REQ;
-        //{
-        //    get { return withEventsField_dtPurchaseDate_View_REQ; }
-        //    set
-        //    {
-        //        if (withEventsField_dtPurchaseDate_View_REQ != null)
-        //        {
-        //            withEventsField_dtPurchaseDate_View_REQ.ValueChanged -= dtPurchaseDate_View_REQ_ValueChanged;
-        //        }
-        //        withEventsField_dtPurchaseDate_View_REQ = value;
-        //        if (withEventsField_dtPurchaseDate_View_REQ != null)
-        //        {
-        //            withEventsField_dtPurchaseDate_View_REQ.ValueChanged += dtPurchaseDate_View_REQ_ValueChanged;
-        //        }
-        //    }
-        //}
         internal Label Label5;
-        //private ComboBox withEventsField_cmbLocation_View_REQ;
         internal ComboBox cmbLocation_View_REQ;
-        //{
-        //    get { return withEventsField_cmbLocation_View_REQ; }
-        //    set
-        //    {
-        //        if (withEventsField_cmbLocation_View_REQ != null)
-        //        {
-        //            withEventsField_cmbLocation_View_REQ.DropDown -= cmbLocation_View_REQ_DropDown;
-        //            withEventsField_cmbLocation_View_REQ.SelectedIndexChanged -= cmbLocation_View_REQ_SelectedIndexChanged;
-        //        }
-        //        withEventsField_cmbLocation_View_REQ = value;
-        //        if (withEventsField_cmbLocation_View_REQ != null)
-        //        {
-        //            withEventsField_cmbLocation_View_REQ.DropDown += cmbLocation_View_REQ_DropDown;
-        //            withEventsField_cmbLocation_View_REQ.SelectedIndexChanged += cmbLocation_View_REQ_SelectedIndexChanged;
-        //        }
-        //    }
-        //}
         internal Label Label4;
-        //private TextBox withEventsField_txtDescription_View_REQ;
         internal TextBox txtDescription_View_REQ;
-        //{
-        //    get { return withEventsField_txtDescription_View_REQ; }
-        //    set
-        //    {
-        //        if (withEventsField_txtDescription_View_REQ != null)
-        //        {
-        //            withEventsField_txtDescription_View_REQ.TextChanged -= txtDescription_View_REQ_TextChanged;
-        //        }
-        //        withEventsField_txtDescription_View_REQ = value;
-        //        if (withEventsField_txtDescription_View_REQ != null)
-        //        {
-        //            withEventsField_txtDescription_View_REQ.TextChanged += txtDescription_View_REQ_TextChanged;
-        //        }
-        //    }
-        //}
         internal Label Label3;
-        //private TextBox withEventsField_txtCurUser_View_REQ;
         internal TextBox txtCurUser_View_REQ;
-        //{
-        //    get { return withEventsField_txtCurUser_View_REQ; }
-        //    set
-        //    {
-        //        if (withEventsField_txtCurUser_View_REQ != null)
-        //        {
-        //            withEventsField_txtCurUser_View_REQ.TextChanged -= txtCurUser_View_REQ_TextChanged;
-        //        }
-        //        withEventsField_txtCurUser_View_REQ = value;
-        //        if (withEventsField_txtCurUser_View_REQ != null)
-        //        {
-        //            withEventsField_txtCurUser_View_REQ.TextChanged += txtCurUser_View_REQ_TextChanged;
-        //        }
-        //    }
-        //}
         internal Label Label2;
-        //private TextBox withEventsField_txtSerial_View_REQ;
         internal TextBox txtSerial_View_REQ;
-        //{
-        //    get { return withEventsField_txtSerial_View_REQ; }
-        //    set
-        //    {
-        //        if (withEventsField_txtSerial_View_REQ != null)
-        //        {
-        //            withEventsField_txtSerial_View_REQ.TextChanged -= txtSerial_View_REQ_TextChanged;
-        //        }
-        //        withEventsField_txtSerial_View_REQ = value;
-        //        if (withEventsField_txtSerial_View_REQ != null)
-        //        {
-        //            withEventsField_txtSerial_View_REQ.TextChanged += txtSerial_View_REQ_TextChanged;
-        //        }
-        //    }
-        //}
         internal Label Label1;
-        //private TextBox withEventsField_txtAssetTag_View_REQ;
         internal TextBox txtAssetTag_View_REQ;
-        //{
-        //    get { return withEventsField_txtAssetTag_View_REQ; }
-        //    set
-        //    {
-        //        if (withEventsField_txtAssetTag_View_REQ != null)
-        //        {
-        //            withEventsField_txtAssetTag_View_REQ.TextChanged -= txtAssetTag_View_REQ_TextChanged;
-        //        }
-        //        withEventsField_txtAssetTag_View_REQ = value;
-        //        if (withEventsField_txtAssetTag_View_REQ != null)
-        //        {
-        //            withEventsField_txtAssetTag_View_REQ.TextChanged += txtAssetTag_View_REQ_TextChanged;
-        //        }
-        //    }
-        //}
         internal Label Label10;
         internal ContextMenuStrip RightClickMenu;
-        //private ToolStripMenuItem withEventsField_DeleteEntryToolStripMenuItem;
         internal ToolStripMenuItem DeleteEntryToolStripMenuItem;
-        //{
-        //    get { return withEventsField_DeleteEntryToolStripMenuItem; }
-        //    set
-        //    {
-        //        if (withEventsField_DeleteEntryToolStripMenuItem != null)
-        //        {
-        //            withEventsField_DeleteEntryToolStripMenuItem.Click -= DeleteEntryToolStripMenuItem_Click;
-        //        }
-        //        withEventsField_DeleteEntryToolStripMenuItem = value;
-        //        if (withEventsField_DeleteEntryToolStripMenuItem != null)
-        //        {
-        //            withEventsField_DeleteEntryToolStripMenuItem.Click += DeleteEntryToolStripMenuItem_Click;
-        //        }
-        //    }
-        //}
         internal CheckBox chkTrackable;
-        //private TabControl withEventsField_TabControl1;
         internal TabControl TabControl1;
-        //{
-        //    get { return withEventsField_TabControl1; }
-        //    set
-        //    {
-        //        if (withEventsField_TabControl1 != null)
-        //        {
-        //            withEventsField_TabControl1.MouseDown -= TabControl1_MouseDown;
-        //        }
-        //        withEventsField_TabControl1 = value;
-        //        if (withEventsField_TabControl1 != null)
-        //        {
-        //            withEventsField_TabControl1.MouseDown += TabControl1_MouseDown;
-        //        }
-        //    }
-        //}
         internal TabPage HistoryTab;
-        //private DataGridView withEventsField_DataGridHistory;
         internal DataGridView DataGridHistory;
-        //{
-        //    get { return withEventsField_DataGridHistory; }
-        //    set
-        //    {
-        //        if (withEventsField_DataGridHistory != null)
-        //        {
-        //            withEventsField_DataGridHistory.CellDoubleClick -= DataGridHistory_CellDoubleClick;
-        //            withEventsField_DataGridHistory.CellEnter -= DataGridHistory_CellEnter;
-        //            withEventsField_DataGridHistory.CellLeave -= DataGridHistory_CellLeave;
-        //            withEventsField_DataGridHistory.CellMouseDown -= DataGridHistory_CellMouseDown;
-        //        }
-        //        withEventsField_DataGridHistory = value;
-        //        if (withEventsField_DataGridHistory != null)
-        //        {
-        //            withEventsField_DataGridHistory.CellDoubleClick += DataGridHistory_CellDoubleClick;
-        //            withEventsField_DataGridHistory.CellEnter += DataGridHistory_CellEnter;
-        //            withEventsField_DataGridHistory.CellLeave += DataGridHistory_CellLeave;
-        //            withEventsField_DataGridHistory.CellMouseDown += DataGridHistory_CellMouseDown;
-        //        }
-        //    }
-        //}
         internal TabPage TrackingTab;
-        //private DataGridView withEventsField_TrackingGrid;
         internal DataGridView TrackingGrid;
-        //{
-        //    get { return withEventsField_TrackingGrid; }
-        //    set
-        //    {
-        //        if (withEventsField_TrackingGrid != null)
-        //        {
-        //            withEventsField_TrackingGrid.CellDoubleClick -= TrackingGrid_CellDoubleClick;
-        //            withEventsField_TrackingGrid.Paint -= TrackingGrid_Paint;
-        //            withEventsField_TrackingGrid.RowPrePaint -= TrackingGrid_RowPrePaint;
-        //        }
-        //        withEventsField_TrackingGrid = value;
-        //        if (withEventsField_TrackingGrid != null)
-        //        {
-        //            withEventsField_TrackingGrid.CellDoubleClick += TrackingGrid_CellDoubleClick;
-        //            withEventsField_TrackingGrid.Paint += TrackingGrid_Paint;
-        //            withEventsField_TrackingGrid.RowPrePaint += TrackingGrid_RowPrePaint;
-        //        }
-        //    }
-        //}
         internal GroupBox TrackingBox;
         internal TextBox txtCheckOut;
         internal Label Label11;
@@ -1785,399 +1559,45 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal OneClickToolStrip tsSaveModify;
         internal ToolStripSeparator ToolStripSeparator3;
         internal StatusStrip StatusStrip1;
-        //private ToolStripButton withEventsField_cmdCancel_Tool;
         internal ToolStripButton cmdCancel_Tool;
-        //{
-        //    get { return withEventsField_cmdCancel_Tool; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdCancel_Tool != null)
-        //        {
-        //            withEventsField_cmdCancel_Tool.Click -= cmdCancel_Tool_Click;
-        //        }
-        //        withEventsField_cmdCancel_Tool = value;
-        //        if (withEventsField_cmdCancel_Tool != null)
-        //        {
-        //            withEventsField_cmdCancel_Tool.Click += cmdCancel_Tool_Click;
-        //        }
-        //    }
-        //}
-        //private ToolStripButton withEventsField_cmdAccept_Tool;
         internal ToolStripButton cmdAccept_Tool;
-        //{
-        //    get { return withEventsField_cmdAccept_Tool; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdAccept_Tool != null)
-        //        {
-        //            withEventsField_cmdAccept_Tool.Click -= cmdAccept_Tool_Click;
-        //        }
-        //        withEventsField_cmdAccept_Tool = value;
-        //        if (withEventsField_cmdAccept_Tool != null)
-        //        {
-        //            withEventsField_cmdAccept_Tool.Click += cmdAccept_Tool_Click;
-        //        }
-        //    }
-        //}
-        //private Button withEventsField_cmdMunisInfo;
         internal Button cmdMunisInfo;
-        //{
-        //    get { return withEventsField_cmdMunisInfo; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdMunisInfo != null)
-        //        {
-        //            withEventsField_cmdMunisInfo.Click -= cmdMunisInfo_Click;
-        //        }
-        //        withEventsField_cmdMunisInfo = value;
-        //        if (withEventsField_cmdMunisInfo != null)
-        //        {
-        //            withEventsField_cmdMunisInfo.Click += cmdMunisInfo_Click;
-        //        }
-        //    }
-        //}
-        //private Button withEventsField_cmdRDP;
         internal Button cmdRDP;
-        //{
-        //    get { return withEventsField_cmdRDP; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdRDP != null)
-        //        {
-        //            withEventsField_cmdRDP.Click -= cmdRDP_Click;
-        //        }
-        //        withEventsField_cmdRDP = value;
-        //        if (withEventsField_cmdRDP != null)
-        //        {
-        //            withEventsField_cmdRDP.Click += cmdRDP_Click;
-        //        }
-        //    }
-        //}
         internal Label Label12;
         internal TextBox txtPONumber;
-        //private Timer withEventsField_tmr_RDPRefresher;
         internal Timer tmr_RDPRefresher;
-        //{
-        //    get { return withEventsField_tmr_RDPRefresher; }
-        //    set
-        //    {
-        //        if (withEventsField_tmr_RDPRefresher != null)
-        //        {
-        //            withEventsField_tmr_RDPRefresher.Tick -= tmr_RDPRefresher_Tick;
-        //        }
-        //        withEventsField_tmr_RDPRefresher = value;
-        //        if (withEventsField_tmr_RDPRefresher != null)
-        //        {
-        //            withEventsField_tmr_RDPRefresher.Tick += tmr_RDPRefresher_Tick;
-        //        }
-        //    }
-        //}
-        //private Button withEventsField_cmdSibiLink;
         internal Button cmdSibiLink;
-        //{
-        //    get { return withEventsField_cmdSibiLink; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdSibiLink != null)
-        //        {
-        //            withEventsField_cmdSibiLink.Click -= cmdSibiLink_Click;
-        //        }
-        //        withEventsField_cmdSibiLink = value;
-        //        if (withEventsField_cmdSibiLink != null)
-        //        {
-        //            withEventsField_cmdSibiLink.Click += cmdSibiLink_Click;
-        //        }
-        //    }
-        //}
         internal Panel pnlOtherFunctions;
         internal ErrorProvider fieldErrorIcon;
-        //private Button withEventsField_cmdBrowseFiles;
         internal Button cmdBrowseFiles;
-        //{
-        //    get { return withEventsField_cmdBrowseFiles; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdBrowseFiles != null)
-        //        {
-        //            withEventsField_cmdBrowseFiles.Click -= cmdBrowseFiles_Click;
-        //        }
-        //        withEventsField_cmdBrowseFiles = value;
-        //        if (withEventsField_cmdBrowseFiles != null)
-        //        {
-        //            withEventsField_cmdBrowseFiles.Click += cmdBrowseFiles_Click;
-        //        }
-        //    }
-        //}
         internal GroupBox RemoteToolsBox;
-        //private Button withEventsField_cmdMunisSearch;
         internal Button cmdMunisSearch;
-        //{
-        //    get { return withEventsField_cmdMunisSearch; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdMunisSearch != null)
-        //        {
-        //            withEventsField_cmdMunisSearch.Click -= cmdMunisSearch_Click;
-        //        }
-        //        withEventsField_cmdMunisSearch = value;
-        //        if (withEventsField_cmdMunisSearch != null)
-        //        {
-        //            withEventsField_cmdMunisSearch.Click += cmdMunisSearch_Click;
-        //        }
-        //    }
-        //}
-        //private Label withEventsField_lblGUID;
         internal Label lblGUID;
-        //{
-        //    get { return withEventsField_lblGUID; }
-        //    set
-        //    {
-        //        if (withEventsField_lblGUID != null)
-        //        {
-        //            withEventsField_lblGUID.Click -= lblGUID_Click;
-        //        }
-        //        withEventsField_lblGUID = value;
-        //        if (withEventsField_lblGUID != null)
-        //        {
-        //            withEventsField_lblGUID.Click += lblGUID_Click;
-        //        }
-        //    }
-        //}
-        //private Button withEventsField_cmdShowIP;
         internal Button cmdShowIP;
-        //{
-        //    get { return withEventsField_cmdShowIP; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdShowIP != null)
-        //        {
-        //            withEventsField_cmdShowIP.Click -= cmdShowIP_Click;
-        //        }
-        //        withEventsField_cmdShowIP = value;
-        //        if (withEventsField_cmdShowIP != null)
-        //        {
-        //            withEventsField_cmdShowIP.Click += cmdShowIP_Click;
-        //        }
-        //    }
-        //}
         internal Label Label14;
-        //private Button withEventsField_cmdGKUpdate;
         internal Button cmdGKUpdate;
-        //{
-        //    get { return withEventsField_cmdGKUpdate; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdGKUpdate != null)
-        //        {
-        //            withEventsField_cmdGKUpdate.Click -= cmdGKUpdate_Click;
-        //        }
-        //        withEventsField_cmdGKUpdate = value;
-        //        if (withEventsField_cmdGKUpdate != null)
-        //        {
-        //            withEventsField_cmdGKUpdate.Click += cmdGKUpdate_Click;
-        //        }
-        //    }
-        //}
-        //private MaskedTextBox withEventsField_txtPhoneNumber;
         internal MaskedTextBox txtPhoneNumber;
-        //{
-        //    get { return withEventsField_txtPhoneNumber; }
-        //    set
-        //    {
-        //        if (withEventsField_txtPhoneNumber != null)
-        //        {
-        //            withEventsField_txtPhoneNumber.Leave -= txtPhoneNumber_Leave;
-        //            withEventsField_txtPhoneNumber.TextChanged -= txtPhoneNumber_TextChanged;
-        //        }
-        //        withEventsField_txtPhoneNumber = value;
-        //        if (withEventsField_txtPhoneNumber != null)
-        //        {
-        //            withEventsField_txtPhoneNumber.Leave += txtPhoneNumber_Leave;
-        //            withEventsField_txtPhoneNumber.TextChanged += txtPhoneNumber_TextChanged;
-        //        }
-        //    }
-        //}
         internal Panel FieldsPanel;
         internal ToolStripContainer ToolStripContainer1;
         internal OneClickToolStrip ToolStrip1;
-        //private ToolStripButton withEventsField_tsbModify;
         internal ToolStripButton tsbModify;
-        //{
-        //    get { return withEventsField_tsbModify; }
-        //    set
-        //    {
-        //        if (withEventsField_tsbModify != null)
-        //        {
-        //            withEventsField_tsbModify.Click -= tsbModify_Click;
-        //        }
-        //        withEventsField_tsbModify = value;
-        //        if (withEventsField_tsbModify != null)
-        //        {
-        //            withEventsField_tsbModify.Click += tsbModify_Click;
-        //        }
-        //    }
-        //}
-        //private ToolStripButton withEventsField_tsbNewNote;
         internal ToolStripButton tsbNewNote;
-        //{
-        //    get { return withEventsField_tsbNewNote; }
-        //    set
-        //    {
-        //        if (withEventsField_tsbNewNote != null)
-        //        {
-        //            withEventsField_tsbNewNote.Click -= tsbNewNote_Click;
-        //        }
-        //        withEventsField_tsbNewNote = value;
-        //        if (withEventsField_tsbNewNote != null)
-        //        {
-        //            withEventsField_tsbNewNote.Click += tsbNewNote_Click;
-        //        }
-        //    }
-        //}
-        //private ToolStripButton withEventsField_tsbDeleteDevice;
         internal ToolStripButton tsbDeleteDevice;
-        //{
-        //    get { return withEventsField_tsbDeleteDevice; }
-        //    set
-        //    {
-        //        if (withEventsField_tsbDeleteDevice != null)
-        //        {
-        //            withEventsField_tsbDeleteDevice.Click -= tsbDeleteDevice_Click;
-        //        }
-        //        withEventsField_tsbDeleteDevice = value;
-        //        if (withEventsField_tsbDeleteDevice != null)
-        //        {
-        //            withEventsField_tsbDeleteDevice.Click += tsbDeleteDevice_Click;
-        //        }
-        //    }
-        //}
-        //private ToolStripButton withEventsField_AttachmentTool;
         internal ToolStripButton AttachmentTool;
-        //{
-        //    get { return withEventsField_AttachmentTool; }
-        //    set
-        //    {
-        //        if (withEventsField_AttachmentTool != null)
-        //        {
-        //            withEventsField_AttachmentTool.Click -= AttachmentTool_Click;
-        //        }
-        //        withEventsField_AttachmentTool = value;
-        //        if (withEventsField_AttachmentTool != null)
-        //        {
-        //            withEventsField_AttachmentTool.Click += AttachmentTool_Click;
-        //        }
-        //    }
-        //}
         internal ToolStripSeparator ToolStripSeparator7;
         internal ToolStripDropDownButton ToolStripDropDownButton2;
-        //private ToolStripMenuItem withEventsField_tsmAssetInputForm;
         internal ToolStripMenuItem tsmAssetInputForm;
-        //{
-        //    get { return withEventsField_tsmAssetInputForm; }
-        //    set
-        //    {
-        //        if (withEventsField_tsmAssetInputForm != null)
-        //        {
-        //            withEventsField_tsmAssetInputForm.Click -= tsmAssetInputForm_Click;
-        //        }
-        //        withEventsField_tsmAssetInputForm = value;
-        //        if (withEventsField_tsmAssetInputForm != null)
-        //        {
-        //            withEventsField_tsmAssetInputForm.Click += tsmAssetInputForm_Click;
-        //        }
-        //    }
-        //}
-        //private ToolStripMenuItem withEventsField_tsmAssetTransferForm;
         internal ToolStripMenuItem tsmAssetTransferForm;
-        //{
-        //    get { return withEventsField_tsmAssetTransferForm; }
-        //    set
-        //    {
-        //        if (withEventsField_tsmAssetTransferForm != null)
-        //        {
-        //            withEventsField_tsmAssetTransferForm.Click -= tsmAssetTransferForm_Click;
-        //        }
-        //        withEventsField_tsmAssetTransferForm = value;
-        //        if (withEventsField_tsmAssetTransferForm != null)
-        //        {
-        //            withEventsField_tsmAssetTransferForm.Click += tsmAssetTransferForm_Click;
-        //        }
-        //    }
-        //}
-        //private ToolStripMenuItem withEventsField_AssetDisposalForm;
         internal ToolStripMenuItem AssetDisposalForm;
-        //{
-        //    get { return withEventsField_AssetDisposalForm; }
-        //    set
-        //    {
-        //        if (withEventsField_AssetDisposalForm != null)
-        //        {
-        //            withEventsField_AssetDisposalForm.Click -= AssetDisposalFormToolStripMenuItem_Click;
-        //        }
-        //        withEventsField_AssetDisposalForm = value;
-        //        if (withEventsField_AssetDisposalForm != null)
-        //        {
-        //            withEventsField_AssetDisposalForm.Click += AssetDisposalFormToolStripMenuItem_Click;
-        //        }
-        //    }
-        //}
         internal ToolStripSeparator ToolStripSeparator9;
         internal ToolStripSeparator ToolStripSeparator1;
         internal ToolStrip tsTracking;
         internal ToolStripDropDownButton ToolStripDropDownButton1;
-        //private ToolStripMenuItem withEventsField_CheckOutTool;
         internal ToolStripMenuItem CheckOutTool;
-        //{
-        //    get { return withEventsField_CheckOutTool; }
-        //    set
-        //    {
-        //        if (withEventsField_CheckOutTool != null)
-        //        {
-        //            withEventsField_CheckOutTool.Click -= CheckOutTool_Click;
-        //        }
-        //        withEventsField_CheckOutTool = value;
-        //        if (withEventsField_CheckOutTool != null)
-        //        {
-        //            withEventsField_CheckOutTool.Click += CheckOutTool_Click;
-        //        }
-        //    }
-        //}
-        //private ToolStripMenuItem withEventsField_CheckInTool;
         internal ToolStripMenuItem CheckInTool;
-        //{
-        //    get { return withEventsField_CheckInTool; }
-        //    set
-        //    {
-        //        if (withEventsField_CheckInTool != null)
-        //        {
-        //            withEventsField_CheckInTool.Click -= CheckInTool_Click;
-        //        }
-        //        withEventsField_CheckInTool = value;
-        //        if (withEventsField_CheckInTool != null)
-        //        {
-        //            withEventsField_CheckInTool.Click += CheckInTool_Click;
-        //        }
-        //    }
-        //}
         internal ToolStripSeparator ToolStripSeparator2;
         internal ToolStripSeparator ToolStripSeparator4;
-        //private PictureBox withEventsField_cmdRestart;
         internal PictureBox cmdRestart;
-        //{
-        //    get { return withEventsField_cmdRestart; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdRestart != null)
-        //        {
-        //            withEventsField_cmdRestart.Click -= cmdRestart_Click;
-        //        }
-        //        withEventsField_cmdRestart = value;
-        //        if (withEventsField_cmdRestart != null)
-        //        {
-        //            withEventsField_cmdRestart.Click += cmdRestart_Click;
-        //        }
-        //    }
-        //}
         internal TextBox txtHostname;
         internal Label Label15;
         internal TabControl FieldTabs;
@@ -2198,59 +1618,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal TextBox ADOSVerTextBox;
         internal Label Label19;
         internal TextBox ADOSTextBox;
-        //private ToolStripButton withEventsField_RefreshToolStripButton;
         internal ToolStripButton RefreshToolStripButton;
-        //{
-        //    get { return withEventsField_RefreshToolStripButton; }
-        //    set
-        //    {
-        //        if (withEventsField_RefreshToolStripButton != null)
-        //        {
-        //            withEventsField_RefreshToolStripButton.Click -= RefreshToolStripButton_Click;
-        //        }
-        //        withEventsField_RefreshToolStripButton = value;
-        //        if (withEventsField_RefreshToolStripButton != null)
-        //        {
-        //            withEventsField_RefreshToolStripButton.Click += RefreshToolStripButton_Click;
-        //        }
-        //    }
-        //}
         internal ToolStripStatusLabel StatusLabel;
         internal FlowLayoutPanel FlowLayoutPanel1;
-        //private Button withEventsField_DeployTVButton;
         internal Button DeployTVButton;
-        //{
-        //    get { return withEventsField_DeployTVButton; }
-        //    set
-        //    {
-        //        if (withEventsField_DeployTVButton != null)
-        //        {
-        //            withEventsField_DeployTVButton.Click -= DeployTVButton_Click;
-        //        }
-        //        withEventsField_DeployTVButton = value;
-        //        if (withEventsField_DeployTVButton != null)
-        //        {
-        //            withEventsField_DeployTVButton.Click += DeployTVButton_Click;
-        //        }
-        //    }
-        //}
-        //private Button withEventsField_UpdateChromeButton;
         internal Button UpdateChromeButton;
-        //{
-        //    get { return withEventsField_UpdateChromeButton; }
-        //    set
-        //    {
-        //        if (withEventsField_UpdateChromeButton != null)
-        //        {
-        //            withEventsField_UpdateChromeButton.Click -= UpdateChromeButton_Click;
-        //        }
-        //        withEventsField_UpdateChromeButton = value;
-        //        if (withEventsField_UpdateChromeButton != null)
-        //        {
-        //            withEventsField_UpdateChromeButton.Click += UpdateChromeButton_Click;
-        //        }
-        //    }
-        //}
         internal SplitContainer InfoDataSplitter;
         internal Panel Panel3;
     }

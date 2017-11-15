@@ -23,7 +23,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
 
             DataParser = new DBControlParser(this);
-            Closing += ViewHistoryForm_Closing;
             InitializeComponent();
             InitDBControls();
             this.ParentForm = parentForm;
@@ -139,10 +138,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             NotesTextBox.BackColor = Color.White;
         }
 
-        private void ViewHistoryForm_Closing(object sender, CancelEventArgs e)
+        private void ViewHistoryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.Dispose();
+            Dispose();
         }
-
     }
 }
