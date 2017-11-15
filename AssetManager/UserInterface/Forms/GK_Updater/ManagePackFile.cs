@@ -68,9 +68,9 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                 }
                 else
                 {
-                    object LocalHash = await Task.Run(() => { return SecurityTools.GetMD5OfFile(Paths.GKPackFileFullPath); });
+                    string LocalHash = await Task.Run(() => { return SecurityTools.GetMD5OfFile(Paths.GKPackFileFullPath); });
 
-                    object RemoteHash = await Task.Run(() => { return GetRemoteHash(); });
+                    string RemoteHash = await Task.Run(() => { return GetRemoteHash(); });
 
                     if (LocalHash == RemoteHash)
                     {
@@ -90,7 +90,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         }
 
         /// <summary>
-        /// Returns the contents of the hash text file located in <see cref="GKRemotePackFileDir"/>
+        /// Returns the contents of the hash text file located in <see cref="Paths.GKRemotePackFileDir"/>
         /// </summary>
         /// <returns></returns>
         private string GetRemoteHash()
@@ -137,7 +137,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         private void CopyFile(string Source, string Dest)
         {
             int BufferSize = 256000;
-            byte[] buffer = new byte[BufferSize - 1];
+            byte[] buffer = new byte[BufferSize];
             int bytesIn = 1;
             FileInfo CurrentFile = new FileInfo(Source);
             Progress.ResetProgress();

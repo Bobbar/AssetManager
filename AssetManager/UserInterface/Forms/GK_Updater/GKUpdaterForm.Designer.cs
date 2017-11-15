@@ -299,6 +299,8 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gatekeeper Updater";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GKUpdaterForm_FormClosing);
+            this.Shown += new System.EventHandler(this.GKUpdaterForm_Shown);
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox3.ResumeLayout(false);
             this.GroupBox3.PerformLayout();
@@ -310,135 +312,23 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         }
         internal GroupBox GroupBox1;
-        //private Timer withEventsField_QueueChecker;
         internal Timer QueueChecker;
-        //{
-        //    get { return withEventsField_QueueChecker; }
-        //    set
-        //    {
-        //        if (withEventsField_QueueChecker != null)
-        //        {
-        //            withEventsField_QueueChecker.Tick -= QueueChecker_Tick;
-        //        }
-        //        withEventsField_QueueChecker = value;
-        //        if (withEventsField_QueueChecker != null)
-        //        {
-        //            withEventsField_QueueChecker.Tick += QueueChecker_Tick;
-        //        }
-        //    }
-        //}
         internal GroupBox GroupBox3;
         internal Label lblQueued;
         internal Label lblRunning;
         internal Label lblComplete;
         internal Label lblTotUpdates;
-        //private Button withEventsField_cmdPauseResume;
         internal Button cmdPauseResume;
-        //{
-        //    get { return withEventsField_cmdPauseResume; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdPauseResume != null)
-        //        {
-        //            withEventsField_cmdPauseResume.Click -= cmdPauseResume_Click;
-        //        }
-        //        withEventsField_cmdPauseResume = value;
-        //        if (withEventsField_cmdPauseResume != null)
-        //        {
-        //            withEventsField_cmdPauseResume.Click += cmdPauseResume_Click;
-        //        }
-        //    }
-        //}
         internal Label Label1;
-        //private NumericUpDown withEventsField_MaxUpdates;
         internal NumericUpDown MaxUpdates;
-        //{
-        //    get { return withEventsField_MaxUpdates; }
-        //    set
-        //    {
-        //        if (withEventsField_MaxUpdates != null)
-        //        {
-        //            withEventsField_MaxUpdates.ValueChanged -= MaxUpdates_ValueChanged;
-        //        }
-        //        withEventsField_MaxUpdates = value;
-        //        if (withEventsField_MaxUpdates != null)
-        //        {
-        //            withEventsField_MaxUpdates.ValueChanged += MaxUpdates_ValueChanged;
-        //        }
-        //    }
-        //}
-        //private Button withEventsField_cmdCancelAll;
         internal Button cmdCancelAll;
-        //{
-        //    get { return withEventsField_cmdCancelAll; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdCancelAll != null)
-        //        {
-        //            withEventsField_cmdCancelAll.Click -= cmdCancelAll_Click;
-        //        }
-        //        withEventsField_cmdCancelAll = value;
-        //        if (withEventsField_cmdCancelAll != null)
-        //        {
-        //            withEventsField_cmdCancelAll.Click += cmdCancelAll_Click;
-        //        }
-        //    }
-        //}
         internal FlowLayoutPanel Updater_Table;
         internal Label lblTransferRate;
-        //private Button withEventsField_cmdSort;
         internal Button cmdSort;
-        //{
-        //    get { return withEventsField_cmdSort; }
-        //    set
-        //    {
-        //        if (withEventsField_cmdSort != null)
-        //        {
-        //            withEventsField_cmdSort.Click -= cmdSort_Click;
-        //        }
-        //        withEventsField_cmdSort = value;
-        //        if (withEventsField_cmdSort != null)
-        //        {
-        //            withEventsField_cmdSort.Click += cmdSort_Click;
-        //        }
-        //    }
-        //}
         internal MenuStrip MenuStrip;
         internal ToolStripMenuItem OptionsToolStripMenuItem;
-        //private ToolStripMenuItem withEventsField_tsmCreateDirs;
         internal ToolStripMenuItem tsmCreateDirs;
-        //{
-        //    get { return withEventsField_tsmCreateDirs; }
-        //    set
-        //    {
-        //        if (withEventsField_tsmCreateDirs != null)
-        //        {
-        //            withEventsField_tsmCreateDirs.Click -= tsmCreateDirs_Click;
-        //        }
-        //        withEventsField_tsmCreateDirs = value;
-        //        if (withEventsField_tsmCreateDirs != null)
-        //        {
-        //            withEventsField_tsmCreateDirs.Click += tsmCreateDirs_Click;
-        //        }
-        //    }
-        //}
         internal ToolStripMenuItem FunctionsToolStripMenuItem;
-        //private ToolStripMenuItem withEventsField_GKPackageVeriToolStripMenuItem;
         internal ToolStripMenuItem GKPackageVeriToolStripMenuItem;
-        //{
-        //    get { return withEventsField_GKPackageVeriToolStripMenuItem; }
-        //    set
-        //    {
-        //        if (withEventsField_GKPackageVeriToolStripMenuItem != null)
-        //        {
-        //            withEventsField_GKPackageVeriToolStripMenuItem.Click -= GKPackageVeriToolStripMenuItem_Click;
-        //        }
-        //        withEventsField_GKPackageVeriToolStripMenuItem = value;
-        //        if (withEventsField_GKPackageVeriToolStripMenuItem != null)
-        //        {
-        //            withEventsField_GKPackageVeriToolStripMenuItem.Click += GKPackageVeriToolStripMenuItem_Click;
-        //        }
-        //    }
-        //}
     }
 }

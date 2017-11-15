@@ -49,7 +49,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void ProgressTimer_Tick(object sender, EventArgs e)
         {
             try
@@ -77,24 +76,24 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void VerifyPackButton_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    if (!GKUpdaterForm.ActiveUpdates)
-            //    {
-            //        CheckPackFile();
-            //    }
-            //    else
-            //    {
-            //        OtherFunctions.Message("This process will interfere with the active running updates. Please stop all updates and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Cannot Continue", this);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            //}
+            try
+            {
+                var GKFormInstance = Helpers.ChildFormControl.GKUpdaterInstance();
+                if (!GKFormInstance.ActiveUpdates())
+                {
+                    CheckPackFile();
+                }
+                else
+                {
+                    OtherFunctions.Message("This process will interfere with the active running updates. Please stop all updates and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Cannot Continue", this);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+            }
         }
 
         private async void NewPackFile()
@@ -114,7 +113,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void NewPackButton_Click(object sender, EventArgs e)
         {
             try
@@ -127,11 +125,9 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
-        private void PackFileForm_Closing(object sender, CancelEventArgs e)
+        private void PackFileForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = Working;
         }
-
     }
 }

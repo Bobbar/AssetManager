@@ -870,7 +870,7 @@
         </member>
         <member name="M:AssetManager.UserInterface.Forms.GK_Updater.ManagePackFile.GetRemoteHash">
             <summary>
-            Returns the contents of the hash text file located in <see cref="!:GKRemotePackFileDir"/>
+            Returns the contents of the hash text file located in <see cref="F:AssetManager.Paths.GKRemotePackFileDir"/>
             </summary>
             <returns></returns>
         </member>

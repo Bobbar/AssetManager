@@ -152,19 +152,15 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                 foreach (GKProgressControl upd in MyUpdates)
                 {
 
-                    if (upd.ProgStatus == GKProgressControl.ProgressStatus.Running || upd.ProgStatus == GKProgressControl.ProgressStatus.Starting || upd.ProgStatus == GKProgressControl.ProgressStatus.Paused)
+                    switch (upd.ProgStatus)
                     {
-                        if (!upd.IsDisposed)
-                            RunningUpdates += 1;
+                        case GKProgressControl.ProgressStatus.Running:
+                        case GKProgressControl.ProgressStatus.Starting:
+                        case GKProgressControl.ProgressStatus.Paused:
+                            if (!upd.IsDisposed)
+                                RunningUpdates += 1;
+                            break;
                     }
-                    //switch (upd.ProgStatus)
-                    //{
-                    //    case GKProgressControl.ProgressStatus.Running:
-                    //    case GKProgressControl.ProgressStatus.Starting:
-                    //    case GKProgressControl.ProgressStatus.Paused:
-                    //        if (!upd.IsDisposed)
-                    //            RunningUpdates += 1;
-                    //}
                 }
                 if (RunningUpdates < MaxSimUpdates)
                     return true;
@@ -172,14 +168,12 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             return false;
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmdCancelAll_Click(object sender, EventArgs e)
         {
             CancelAll();
             StopQueue();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmdPauseResume_Click(object sender, EventArgs e)
         {
             if (QueueIsRunning)
@@ -192,7 +186,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmdSort_Click(object sender, EventArgs e)
         {
             SortUpdates();
@@ -210,20 +203,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
-        private void GKUpdater_Form_Closing(object sender, CancelEventArgs e)
-        {
-            if (!OKToClose())
-            {
-                e.Cancel = true;
-            }
-            else
-            {
-                DisposeUpdates();
-                this.Dispose();
-            }
-        }
-
         public override bool OKToClose()
         {
             if (ActiveUpdates())
@@ -236,7 +215,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             return true;
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void MaxUpdates_ValueChanged(object sender, EventArgs e)
         {
             if (!bolStarting)
@@ -261,7 +239,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             MyUpdates = MyUpdates.FindAll(upd => !upd.IsDisposed);
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void QueueChecker_Tick(object sender, EventArgs e)
         {
             ProcessUpdates();
@@ -276,30 +253,19 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             foreach (GKProgressControl upd in MyUpdates)
             {
 
-                if (upd.ProgStatus == GKProgressControl.ProgressStatus.Queued)
+                switch (upd.ProgStatus)
                 {
-                    intQueued += 1;
+                    case GKProgressControl.ProgressStatus.Queued:
+                        intQueued += 1;
+                        break;
+                    case GKProgressControl.ProgressStatus.Running:
+                        TransferRateSum += upd.MyUpdater.UpdateStatus.CurTransferRate;
+                        intRunning += 1;
+                        break;
+                    case GKProgressControl.ProgressStatus.Complete:
+                        intComplete += 1;
+                        break;
                 }
-                else if (upd.ProgStatus == GKProgressControl.ProgressStatus.Running)
-                {
-                    TransferRateSum += upd.MyUpdater.UpdateStatus.CurTransferRate;
-                    intRunning += 1;
-                }
-                else if (upd.ProgStatus == GKProgressControl.ProgressStatus.Complete)
-                {
-                    intComplete += 1;
-                }
-
-                //switch (upd.ProgStatus)
-                //{
-                //    case GKProgressControl.ProgressStatus.Queued:
-                //        intQueued += 1;
-                //    case GKProgressControl.ProgressStatus.Running:
-                //        TransferRateSum += upd.MyUpdater.UpdateStatus.CurTransferRate;
-                //        intRunning += 1;
-                //    case GKProgressControl.ProgressStatus.Complete:
-                //        intComplete += 1;
-                //}
             }
             lblQueued.Text = "Queued: " + intQueued;
             lblRunning.Text = "Running: " + intRunning;
@@ -368,13 +334,11 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void tsmCreateDirs_Click(object sender, EventArgs e)
         {
             bolCreateMissingDirs = tsmCreateDirs.Checked;
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private async void GKUpdaterForm_Shown(object sender, EventArgs e)
         {
             SetQueueButton();
@@ -405,7 +369,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             return true;
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void GKPackageVeriToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Helpers.ChildFormControl.FormTypeIsOpen(typeof(PackFileForm)))
@@ -415,5 +378,17 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
+        private void GKUpdaterForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!OKToClose())
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                DisposeUpdates();
+                this.Dispose();
+            }
+        }
     }
 }
