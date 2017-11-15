@@ -1,13 +1,7 @@
 using Microsoft.VisualBasic;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel;
 using GKUpdaterLib;
 
@@ -243,13 +237,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                     {
                         Log("Enable 'Create Missing Directories' option and re-enqueue this device to force creation.");
                     }
-                        
-                    //switch (true)
-                    //{
-                    //    case CompleteEvent.Errors is GK_Updater.MissingDirectoryException:
-                    //        Log("Enable 'Create Missing Directories' option and re-enqueue this device to force creation.");
-                    //        break;
-                    //}
                 }
             }
             else
@@ -284,8 +271,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         private void lblInfo_Click(object sender, EventArgs e)
         {
-            //TODO: 'nother instance needed.
-            //ChildFormControl.LookupDevice(MainForm, CurDevice);
+            Helpers.ChildFormControl.LookupDevice(Helpers.ChildFormControl.MainFormInstance(), CurDevice);
         }
 
         private void lblShowHide_Click(object sender, EventArgs e)
