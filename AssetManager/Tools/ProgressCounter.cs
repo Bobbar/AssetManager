@@ -58,7 +58,7 @@ namespace AssetManager
             {
                 if (_progTotalBytes > 0)
                 {
-                    return (int)(_progBytesMoved / _progTotalBytes) * 100;
+                    return (int)(((float)_progBytesMoved / _progTotalBytes) * 100);
                 }
                 else
                 {

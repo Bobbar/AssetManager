@@ -1209,7 +1209,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 ProgressBar1.Value = System.Convert.ToInt32(Progress.Percent);
                 if (Progress.Percent > 1)
                 {
-                    ProgressBar1.Value--; //doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
+                    ProgressBar1.Value -= 1; //doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
                 }
                 ProgressBar1.Value = System.Convert.ToInt32(Progress.Percent);
             }
@@ -1340,8 +1340,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             }
             else
             {
-                OtherFunctions.Message("A folder with that name already exists.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information
-, "Duplicate Name", this);
+                OtherFunctions.Message("A folder with that name already exists.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Duplicate Name", this);
             }
         }
 
