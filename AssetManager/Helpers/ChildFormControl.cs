@@ -181,6 +181,11 @@ namespace AssetManager.Helpers
             return null;
         }
 
+        public static MainForm MainFormInstance()
+        {
+            return  (MainForm)FindFormByType(typeof(MainForm));
+        }
+
 
     }
 }

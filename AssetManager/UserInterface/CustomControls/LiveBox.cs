@@ -11,7 +11,7 @@ using AssetManager.UserInterface.Forms.AssetManagement;
 using AssetManager.UserInterface.Forms.Sibi;
 using AssetManager.UserInterface.Forms.GK_Updater;
 using AssetManager.UserInterface.Forms.AdminTools;
-
+using System.Diagnostics;
 
 namespace AssetManager
 {
@@ -84,7 +84,7 @@ namespace AssetManager
                 //don't respond to non-alpha keys
                 if (e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.Alt || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.Menu)
                 {
-                    //do nothing             
+                    //do nothing
                 }
                 else
                 {
@@ -95,20 +95,6 @@ namespace AssetManager
                     }
                 }
 
-                //switch (e.KeyCode)
-                //{
-                //    case Keys.ShiftKey:
-                //    case Keys.Alt:
-                //    case Keys.ControlKey:
-                //    case Keys.Menu:
-                //    //do nothing
-                //    default:
-                //        object arg = GetSenderArgs(sender);
-                //        if (!arg.Control.ReadOnly)
-                //        {
-                //            StartLiveSearch(arg);
-                //        }
-                //}
             }
         }
 
@@ -190,16 +176,17 @@ namespace AssetManager
             LiveListBox.Parent = parentForm;
             LiveListBox.BringToFront();
             //AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
-           
+
             LiveListBox.MouseDown += LiveBox_MouseDown;
             LiveListBox.MouseMove += LiveBox_MouseMove;
             LiveListBox.KeyDown += LiveBox_KeyDown;
             LiveListBox.LostFocus += LiveBox_LostFocus;
             ExtendedMethods.DoubleBufferedListBox(LiveListBox, true);
             LiveListBox.Visible = false;
-            SetStyle();
             CurrentLiveBoxArgs = new LiveBoxArgs();
+            SetStyle();
         }
+
 
         private void LiveBox_LostFocus(object sender, EventArgs e)
         {
@@ -209,7 +196,6 @@ namespace AssetManager
         private void LiveBox_KeyDown(object sender, KeyEventArgs e)
         {
 
-
             if (e.KeyCode == Keys.Enter)
             {
                 LiveBoxSelect();
@@ -218,15 +204,6 @@ namespace AssetManager
             {
                 HideLiveBox();
             }
-
-
-            //switch (e.KeyCode)
-            //{
-            //    case Keys.Enter:
-            //        LiveBoxSelect();
-            //    case Keys.Escape:
-            //        HideLiveBox();
-            //}
         }
 
         private void LiveBox_MouseDown(object sender, MouseEventArgs e)
@@ -240,16 +217,6 @@ namespace AssetManager
             {
                 HideLiveBox();
             }
-
-
-
-            //switch (e.Button)
-            //{
-            //    case MouseButtons.Left:
-            //        LiveBoxSelect();
-            //    case MouseButtons.Right:
-            //        HideLiveBox();
-            //}
         }
 
         private void LiveBox_MouseMove(object sender, MouseEventArgs e)
@@ -267,12 +234,12 @@ namespace AssetManager
             if (CurrentLiveBoxArgs.Type == LiveBoxType.DynamicSearch)
             {
                 CurrentLiveBoxArgs.Control.Text = SelectedText;
-                //MainForm.DynamicSearch(); //TODO: Find another way to call this.
+                Helpers.ChildFormControl.MainFormInstance().DynamicSearch();
             }
             else if (CurrentLiveBoxArgs.Type == LiveBoxType.InstaLoad)
             {
                 CurrentLiveBoxArgs.Control.Text = "";
-                //MainForm.LoadDevice(SelectedValue); //TODO: Find another way to call this.
+                Helpers.ChildFormControl.MainFormInstance().LoadDevice(SelectedValue);
             }
             else if (CurrentLiveBoxArgs.Type == LiveBoxType.SelectValue)
             {
@@ -366,7 +333,7 @@ namespace AssetManager
         /// <summary>
         /// Runs the DB query Asynchronously.
         /// </summary>
-        /// <param name="SearchString"></param>
+        /// <param name="searchString"></param>
         private async void ProcessSearch(string searchString)
         {
             strPrevSearchString = searchString;
@@ -403,13 +370,12 @@ namespace AssetManager
 
         private void SetStyle()
         {
-            Font LiveBoxFont = new Font(new FontFamily("Consolas"), 11.25f, FontStyle.Bold);
+            Font LiveBoxFont = new Font("Consolas", 11.25f, FontStyle.Bold);
             LiveListBox.BackColor = Color.FromArgb(255, 208, 99);
             LiveListBox.BorderStyle = BorderStyle.FixedSingle;
             LiveListBox.Font = LiveBoxFont;
             LiveListBox.ForeColor = Color.Black;
             LiveListBox.Padding = new Padding(0, 0, 0, 10);
-
         }
 
         private void StartLiveSearch(LiveBoxArgs args)

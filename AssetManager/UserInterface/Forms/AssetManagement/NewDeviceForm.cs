@@ -21,7 +21,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
     {
 
         #region Fields
-        private MunisEmployeeStruct _munisUser; //= null;
+        private MunisEmployeeStruct _munisUser;
         public MunisEmployeeStruct MunisUser
         {
             get
@@ -37,9 +37,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private int intReplacementSched = 4;
         private bool bolCheckFields;
-        private DBControlParser DataParser; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
+        private DBControlParser DataParser;
         private DeviceObject Device = new DeviceObject();
-        private LiveBox MyLiveBox; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
+        private LiveBox MyLiveBox;
         private string NewUID;
 
         #endregion
@@ -48,17 +48,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public NewDeviceForm(ExtendedForm parentForm)
         {
-            // VBConversions Note: Non-static class variable initialization is below.  Class variables cannot be initially assigned non-static values in C#.
             DataParser = new DBControlParser(this);
-            MyLiveBox = new LiveBox(this);
-
             InitializeComponent();
             this.ParentForm = parentForm;
             this.Owner = parentForm;
             ClearAll();
             InitDBControls();
-            MyLiveBox.AttachToControl(txtCurUser_REQ, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
-            MyLiveBox.AttachToControl(txtDescription_REQ, DevicesCols.Description, LiveBoxType.SelectValue);
             this.Show();
             this.Activate();
         }
@@ -154,11 +149,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void NewDeviceForm_Disposed(object sender, EventArgs e)
-        {
-            MyLiveBox.Dispose();
-        }
-
         private bool AddNewDevice()
         {
             using (var trans = DBFactory.GetDatabase().StartTransaction())
@@ -206,11 +196,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     DBInfo = (DBControlInfo)ctl.Tag;
                 }
-                if (true)
+
+                if (ctl is TextBox)
                 {
                     if (DBInfo.Required)
                     {
-                        if (Strings.Trim(System.Convert.ToString(ctl.Text)) == "")
+                        if (ctl.Text.Trim() != "")
                         {
                             bolValidFields = false;
                             //  ctl.BackColor = Colors.MissingField
@@ -220,17 +211,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         {
                             // ctl.BackColor = Color.Empty
                             ClearErrorIcon(ctl);
-
                             if (ReferenceEquals(ctl, txtCurUser_REQ))
                             {
                                 LockUnlockUserField();
                             }
-
                         }
                     }
                     if (ReferenceEquals(ctl, txtPhoneNumber))
                     {
-                        if (Strings.Trim(System.Convert.ToString(txtPhoneNumber.Text)) != "" && !DataConsistency.ValidPhoneNumber(txtPhoneNumber.Text))
+                        if (txtPhoneNumber.Text.Trim() != "" && !DataConsistency.ValidPhoneNumber(txtPhoneNumber.Text))
                         {
                             bolValidFields = false;
                             AddErrorIcon(ctl);
@@ -238,7 +227,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                     }
                 }
-                else if (true)
+                else if (ctl is ComboBox)
                 {
                     ComboBox cmb = (ComboBox)ctl;
                     if (DBInfo.Required)
@@ -256,6 +245,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                     }
                 }
+
                 if (ctl.HasChildren)
                 {
                     bolValidFields = CheckFields(ctl, bolValidFields);
@@ -283,6 +273,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void ClearAll()
         {
             RefreshCombos();
+            MunisUser = new MunisEmployeeStruct();  //null;
             ClearFields(this);
             dtPurchaseDate_REQ.Value = DateTime.Now;
             cmbStatus_REQ.SelectedIndex = AttribIndexFunctions.GetComboIndexFromCode(GlobalInstances.DeviceAttribute.StatusType, "INSRV");
@@ -301,7 +292,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ClearFields(Control Parent)
         {
-            MunisUser = new MunisEmployeeStruct();  //null;
+
             foreach (Control ctl in Parent.Controls)
             {
                 if (ctl is TextBox)
@@ -551,8 +542,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
+        private void NewDeviceForm_Load(object sender, EventArgs e)
+        {
+            MyLiveBox = new LiveBox(this);
+            MyLiveBox.AttachToControl(txtCurUser_REQ, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
+            MyLiveBox.AttachToControl(txtDescription_REQ, DevicesCols.Description, LiveBoxType.SelectValue);
+        }
+
 
         #endregion
 
+        private void NewDeviceForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            MyLiveBox.Dispose();
+        }
     }
 }

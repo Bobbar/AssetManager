@@ -1,52 +1,56 @@
-﻿using System;
+﻿using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.AdminTools;
+using Microsoft.VisualBasic;
+using MyDialogLib;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Data;
 using System.Data.Common;
 using System.Deployment.Application;
-using System.Management.Automation.Runspaces;
-using MyDialogLib;
-using System.Windows.Forms;
-using System.Drawing;
-using Microsoft.VisualBasic;
-using System.Data;
 using System.Diagnostics;
-using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.AdminTools;
+using System.Drawing;
+using System.Management.Automation.Runspaces;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
-
-
     public partial class MainForm : ExtendedForm
     {
-
         #region "Fields"
 
         private const string strShowAllQry = "SELECT * FROM " + DevicesCols.TableName + " ORDER BY " + DevicesCols.InputDateTime + " DESC";
         private bool bolGridFilling = false;
         private DbCommand LastCommand;
 
-        private LiveBox MyLiveBox;// = new LiveBox(this);
-        private CustomControls.MunisToolBar MyMunisToolBar;// = new MunisToolBar(this);
-        private CustomControls.WindowList MyWindowList;// = new WindowList(this);
+        private LiveBox MyLiveBox;
+        private MunisToolBar MyMunisToolBar;
+        private WindowList MyWindowList;
         private bool QueryRunning = false;
         private ConnectionWatchdog WatchDog;
 
         private DbTransaction CurrentTransaction = null;
-        #endregion
+
+        #endregion "Fields"
 
         #region "Delegates"
 
-        delegate void ConnectStatusVoidDelegate(string text, Color foreColor, Color backColor, string toolTipText);
+        private delegate void ConnectStatusVoidDelegate(string text, Color foreColor, Color backColor, string toolTipText);
 
-        delegate void StatusVoidDelegate(string text, int timeOut = 0);
+        private delegate void StatusVoidDelegate(string text, int timeOut = 0);
 
-        delegate void ServerTimeVoidDelegate(string serverTime);
+        private delegate void ServerTimeVoidDelegate(string serverTime);
 
-        #endregion
+        #endregion "Delegates"
 
         #region "Methods"
+
+        public MainForm()
+        {
+            InitializeComponent();
+        }
+
         private void StartTransaction()
         {
             if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.CanStartTransaction))
@@ -188,15 +192,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         case DevicesCols.OSVersion:
                             IsExact = true;
                             break;
+
                         case DevicesCols.EQType:
                             IsExact = true;
                             break;
+
                         case DevicesCols.Location:
                             IsExact = true;
                             break;
+
                         case DevicesCols.Status:
                             IsExact = true;
                             break;
+
                         default:
                             IsExact = false;
                             break;
@@ -266,19 +274,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             Logging.Logger("Connection Status changed to: " + ConnectionEventArgs.ConnectionStatus.ToString());
             switch (ConnectionEventArgs.ConnectionStatus)
             {
-
                 case WatchDogConnectionStatus.Online:
                     ConnectStatus("Connected", Color.Green, Colors.DefaultFormBackColor, "Connection OK");
                     GlobalSwitches.CachedMode = false;
                     ServerInfo.ServerPinging = true;
 
                     break;
+
                 case WatchDogConnectionStatus.Offline:
                     ConnectStatus("Offline", Color.Red, Colors.StatusBarProblem, "No connection. Cache unavailable.");
                     GlobalSwitches.CachedMode = false;
                     ServerInfo.ServerPinging = false;
 
                     break;
+
                 case WatchDogConnectionStatus.CachedMode:
                     ConnectStatus("Cached Mode", Color.Black, Colors.StatusBarProblem, "Server Offline. Using Local DB Cache.");
                     GlobalSwitches.CachedMode = true;
@@ -340,11 +349,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     SelectedDevices.Add(GlobalInstances.AssetFunc.GetDeviceInfoFromGUID(DevUID));
                 }
 
-               // GKUpdaterForm.AddMultipleUpdates(SelectedDevices); //TODO: Start an actual instance of GKUpdaterForm.
+                Helpers.ChildFormControl.GKUpdaterInstance().AddMultipleUpdates(SelectedDevices);
+               
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void Form1_Closing(object sender, CancelEventArgs e)
         {
             if (CurrentTransaction != null)
@@ -423,11 +432,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-
                 MyLiveBox = new LiveBox(this);
                 MyMunisToolBar = new CustomControls.MunisToolBar(this);
                 MyWindowList = new CustomControls.WindowList(this);
-
 
                 ShowAll();
                 DateTimeLabel.Text = DateAndTime.Now.ToString();
@@ -464,12 +471,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
                 OtherFunctions.EndProgram();
             }
-        }
-
-        // ERROR: Handles clauses are not supported in C#
-        private void MainForm_Shown(object sender, EventArgs e)
-        {
-            //SplashScreenForm.Dispose(); //TODO: Figure out how to find and dispose this.
         }
 
         private void NewTextCrypterForm()
@@ -593,12 +594,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     var Results = await Task.Run(() =>
                     {
                         LastCommand = QryCommand;
-                    // If CurrentTransaction IsNot Nothing Then
-                    return DBFactory.GetDatabase().DataTableFromCommand(QryCommand, CurrentTransaction);
-                    //Else
-                    //    Return DBFactory.GetDatabase().DataTableFromCommand(QryCommand)
-                    //End If
-                });
+                        // If CurrentTransaction IsNot Nothing Then
+                        return DBFactory.GetDatabase().DataTableFromCommand(QryCommand, CurrentTransaction);
+                        //Else
+                        //    Return DBFactory.GetDatabase().DataTableFromCommand(QryCommand)
+                        //End If
+                    });
                     QryCommand.Dispose();
                     SendToGrid(ref Results);
                 }
@@ -688,7 +689,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before switching databases.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Stop");
                 }
-
             }
             finally
             {
@@ -703,14 +703,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 case Databases.asset_manager:
                     this.Text = "Asset Manager - Main";
                     break;
+
                 case Databases.test_db:
                     this.Text = "Asset Manager - Main - ****TEST DATABASE****";
                     break;
+
                 case Databases.vintondd:
                     this.Text = "Asset Manager - Main - Vinton DD";
                     break;
             }
-
         }
 
         private void ShowTestDBWarning()
@@ -836,64 +837,53 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-
         #region "Control Event Methods"
 
-        // ERROR: Handles clauses are not supported in C#
         private void AdvancedSearchMenuItem_Click(object sender, EventArgs e)
         {
             StartAdvancedSearch();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void AddDeviceTool_Click(object sender, EventArgs e)
         {
             AddNewDevice();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmbEquipType_DropDown(object sender, EventArgs e)
         {
             OtherFunctions.AdjustComboBoxWidth(sender, e);
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmbLocation_DropDown(object sender, EventArgs e)
         {
             OtherFunctions.AdjustComboBoxWidth(sender, e);
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmbOSType_DropDown(object sender, EventArgs e)
         {
             OtherFunctions.AdjustComboBoxWidth(sender, e);
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmdClear_Click(object sender, EventArgs e)
         {
             Clear_All();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmdSearch_Click(object sender, EventArgs e)
         {
             DynamicSearch();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmdShowAll_Click(object sender, EventArgs e)
         {
             ShowAll();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmdSibi_Click(object sender, EventArgs e)
         {
             OpenSibiMainForm();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void cmdSupDevSearch_Click(object sender, EventArgs e)
         {
             try
@@ -918,18 +908,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void CopyTool_Click(object sender, EventArgs e)
         {
             GridFunctions.CopySelectedGridData(ResultGrid);
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void DateTimeLabel_Click(object sender, EventArgs e)
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                OtherFunctions.Message(ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(), (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information,"Version", this);
+                OtherFunctions.Message(ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(), (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Version", this);
             }
             else
             {
@@ -937,38 +925,29 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void PanelNoScrollOnFocus1_MouseWheel(object sender, MouseEventArgs e)
         {
             MyLiveBox.HideLiveBox();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void PanelNoScrollOnFocus1_Scroll(object sender, ScrollEventArgs e)
         {
             MyLiveBox.HideLiveBox();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void ResultGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (!bolGridFilling)
             {
-                //NOTE: Not sure if this will work.
-                //DataGridView grid = ResultGrid;
                 StyleFunctions.HighlightRow(ResultGrid, GridTheme, e.RowIndex);
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void ResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            ////NOTE: Not sure if this will work.
-            //DataGridView grid = ResultGrid;
             StyleFunctions.LeaveRow(ResultGrid, GridTheme, e.RowIndex);
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void ResultGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.ColumnIndex >= 0 & e.RowIndex >= 0)
@@ -981,13 +960,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        //// ERROR: Handles clauses are not supported in C#
-        //private void ResultGrid_CellDoubleClick(object sender, EventArgs e)
-        //{
-        //    LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
-        //}
 
-        // ERROR: Handles clauses are not supported in C#
         private void ResultGrid_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -997,28 +970,23 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void ScanAttachmentToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StartAttachScan();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void TextEnCrypterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewTextCrypterForm();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void tsmAddGKUpdate_Click(object sender, EventArgs e)
         {
             EnqueueGKUpdate();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void tsmGKUpdater_Click(object sender, EventArgs e)
         {
-
             var GKUpdater = Helpers.ChildFormControl.GKUpdaterInstance();
             if (!GKUpdater.Visible)
             {
@@ -1029,22 +997,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 GKUpdater.WindowState = FormWindowState.Normal;
                 GKUpdater.Activate();
             }
-                      
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void tsmSendToGridForm_Click(object sender, EventArgs e)
         {
             GridFunctions.CopyToGridForm(ResultGrid, this);
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void tsmUserManager_Click(object sender, EventArgs e)
         {
             StartUserManager();
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void txtGUID_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
@@ -1054,21 +1018,66 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
         }
 
-        // ERROR: Handles clauses are not supported in C#
         private void InstallChromeMenuItem_Click(object sender, EventArgs e)
         {
-          
             StartPowerShellScript(Properties.Resources.UpdateChrome);
         }
 
-        // ERROR: Handles clauses are not supported in C#
-        private void MainForm_Disposed(object sender, EventArgs e)
+        private void ReEnterLACredentialsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SecurityTools.ClearAdminCreds();
+            SecurityTools.VerifyAdminCreds();
+        }
+
+        private void ViewLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo StartInfo = new ProcessStartInfo();
+            StartInfo.FileName = Paths.LogPath;
+            Process.Start(StartInfo);
+        }
+
+        private void DatabaseToolCombo_DropDownClosed(object sender, EventArgs e)
+        {
+            ChangeDatabase((Databases)DatabaseToolCombo.SelectedIndex);
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            LoadProgram();
+            Application.DoEvents();
+        }
+
+        private void CommitButton_Click(object sender, EventArgs e)
+        {
+            CommitTransaction();
+        }
+
+        private void RollbackButton_Click(object sender, EventArgs e)
+        {
+            RollbackTransaction();
+        }
+
+        private void StartTransactionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StartTransaction();
+        }
+
+        private void UpdateButton_Click(object sender, EventArgs e)
+        {
+            UpdateRecords();
+        }
+
+        private void ResultGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             LastCommand.Dispose();
             MyLiveBox.Dispose();
@@ -1077,64 +1086,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             WatchDog.Dispose();
         }
 
-        // ERROR: Handles clauses are not supported in C#
-        private void ReEnterLACredentialsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SecurityTools.ClearAdminCreds();
-            SecurityTools.VerifyAdminCreds();
-        }
+        #endregion "Control Event Methods"
 
-        // ERROR: Handles clauses are not supported in C#
-        private void ViewLogToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ProcessStartInfo StartInfo = new ProcessStartInfo();
-            StartInfo.FileName = Paths.LogPath;
-            Process.Start(StartInfo);
-        }
-
-        // ERROR: Handles clauses are not supported in C#
-        private void DatabaseToolCombo_DropDownClosed(object sender, EventArgs e)
-        {
-            ChangeDatabase((Databases)DatabaseToolCombo.SelectedIndex);
-        }
-
-        // ERROR: Handles clauses are not supported in C#
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            LoadProgram();
-            Application.DoEvents();
-        }
-        // ERROR: Handles clauses are not supported in C#
-        private void CommitButton_Click(object sender, EventArgs e)
-        {
-            CommitTransaction();
-        }
-
-        // ERROR: Handles clauses are not supported in C#
-        private void RollbackButton_Click(object sender, EventArgs e)
-        {
-            RollbackTransaction();
-        }
-
-        // ERROR: Handles clauses are not supported in C#
-        private void StartTransactionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            StartTransaction();
-        }
-
-        // ERROR: Handles clauses are not supported in C#
-        private void UpdateButton_Click(object sender, EventArgs e)
-        {
-            UpdateRecords();
-        }
-
-        #endregion
-
-        #endregion
-
-        private void ResultGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
-        }
+        #endregion "Methods"
     }
 }
