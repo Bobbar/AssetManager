@@ -989,11 +989,11 @@ namespace AssetManager.UserInterface.Forms.AssetManager
             }
         }
 
-        // ERROR: Handles clauses are not supported in C#
-        private void ResultGrid_DoubleClick(object sender, EventArgs e)
-        {
-            LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
-        }
+        //// ERROR: Handles clauses are not supported in C#
+        //private void ResultGrid_CellDoubleClick(object sender, EventArgs e)
+        //{
+        //    LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
+        //}
 
         // ERROR: Handles clauses are not supported in C#
         private void ResultGrid_KeyDown(object sender, KeyEventArgs e)
@@ -1138,5 +1138,9 @@ namespace AssetManager.UserInterface.Forms.AssetManager
 
         #endregion
 
+        private void ResultGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
+        }
     }
 }

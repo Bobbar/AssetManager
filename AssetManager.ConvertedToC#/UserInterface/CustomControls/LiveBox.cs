@@ -190,6 +190,7 @@ namespace AssetManager
             LiveListBox.Parent = parentForm;
             LiveListBox.BringToFront();
             //AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
+           
             LiveListBox.MouseDown += LiveBox_MouseDown;
             LiveListBox.MouseMove += LiveBox_MouseMove;
             LiveListBox.KeyDown += LiveBox_KeyDown;
@@ -403,7 +404,11 @@ namespace AssetManager
         private void SetStyle()
         {
             Font LiveBoxFont = new Font(new FontFamily("Consolas"), 11.25f, FontStyle.Bold);
-            // ERROR: Not supported in C#: WithStatement
+            LiveListBox.BackColor = Color.FromArgb(255, 208, 99);
+            LiveListBox.BorderStyle = BorderStyle.FixedSingle;
+            LiveListBox.Font = LiveBoxFont;
+            LiveListBox.ForeColor = Color.Black;
+            LiveListBox.Padding = new Padding(0, 0, 0, 10);
 
         }
 
