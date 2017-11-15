@@ -36,16 +36,17 @@ namespace AssetManager.UserInterface.CustomControls
 		[System.Diagnostics.DebuggerStepThrough()]
 		private void InitializeComponent()
 		{
-			this.SuspendLayout();
-			//
-			//SliderLabel
-			//
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6f, 13f);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.Color.White;
-			this.Name = "SliderLabel";
-			this.Size = new System.Drawing.Size(141, 25);
-			this.ResumeLayout(false);
+            this.SuspendLayout();
+            // 
+            // SliderLabel
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.Name = "SliderLabel";
+            this.Size = new System.Drawing.Size(141, 25);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.SliderTextBoxPaint);
+            this.ResumeLayout(false);
 
 		}
 

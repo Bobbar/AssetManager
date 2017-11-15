@@ -812,7 +812,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
             this.DatabaseToolCombo.Name = "DatabaseToolCombo";
             this.DatabaseToolCombo.Size = new System.Drawing.Size(121, 25);
             this.DatabaseToolCombo.ToolTipText = "Change Database";
-            this.DatabaseToolCombo.Click += new System.EventHandler(this.DatabaseToolCombo_DropDownClosed);
+            this.DatabaseToolCombo.DropDownClosed += new System.EventHandler(this.DatabaseToolCombo_DropDownClosed);
             // 
             // tsmUserManager
             // 

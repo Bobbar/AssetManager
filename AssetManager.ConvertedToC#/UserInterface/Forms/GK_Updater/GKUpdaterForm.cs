@@ -408,7 +408,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         // ERROR: Handles clauses are not supported in C#
         private void GKPackageVeriToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!ChildFormControl.FormTypeIsOpen(typeof(PackFileForm)))
+            if (!Helpers.ChildFormControl.FormTypeIsOpen(typeof(PackFileForm)))
             {
                 PackFileForm NewUnPack = new PackFileForm(true);
                 NewUnPack.Show();

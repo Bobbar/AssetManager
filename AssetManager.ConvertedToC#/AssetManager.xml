@@ -657,6 +657,19 @@
             <param name="scriptBytes">PowerShell script as a byte array.</param>
             <returns>Returns any error messages.</returns>
         </member>
+        <member name="M:AssetManager.Helpers.ChildFormControl.FindFormByType(System.Type)">
+            <summary>
+            Find a form by its type and returns it if found.
+            </summary>
+            <param name="formType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Helpers.ChildFormControl.GKUpdaterInstance">
+            <summary>
+            Returns the current instance of <see cref="T:AssetManager.UserInterface.Forms.GK_Updater.GKUpdaterForm"/>. If one does not exists, creates new instance and returns it.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:AssetManager.UserInterface.CustomControls.ExtendedForm">
             <summary>
             Custom form with project specific properties and methods.

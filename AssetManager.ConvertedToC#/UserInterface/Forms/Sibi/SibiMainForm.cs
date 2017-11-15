@@ -290,7 +290,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 OtherFunctions.SetWaitCursor(true, this);
-                if (!ChildFormControl.FormIsOpenByUID(typeof(SibiManageRequestForm), strUID))
+                if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiManageRequestForm), strUID))
                 {
                     SibiManageRequestForm NewRequest = new SibiManageRequestForm(this, strUID);
                 }
@@ -425,7 +425,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         public override bool OKToClose()
         {
             bool CanClose = true;
-            if (!ChildFormControl.OKToCloseChildren(this))
+            if (!Helpers.ChildFormControl.OKToCloseChildren(this))
                 CanClose = false;
             return CanClose;
         }
@@ -463,7 +463,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             if (LastCmd != null)
                 LastCmd.Dispose();
             MyWindowList.Dispose();
-            ChildFormControl.CloseChildren(this);
+            Helpers.ChildFormControl.CloseChildren(this);
         }
 
     }

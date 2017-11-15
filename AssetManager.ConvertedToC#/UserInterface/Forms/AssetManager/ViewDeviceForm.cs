@@ -120,7 +120,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
         public override bool OKToClose()
         {
             bool CanClose = true;
-            if (!ChildFormControl.OKToCloseChildren(this))
+            if (!Helpers.ChildFormControl.OKToCloseChildren(this))
             {
                 CanClose = false;
             }
@@ -852,7 +852,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
                         HistoricalResults.TableName = HistoricalDevicesCols.TableName;
                         if (DeviceResults.Rows.Count < 1)
                         {
-                            ChildFormControl.CloseChildren(this);
+                            Helpers.ChildFormControl.CloseChildren(this);
                             CurrentViewDevice = null;
                             OtherFunctions.Message("That device was not found!  It may have been deleted.  Re-execute your search.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Not Found", this);
                             return false;
@@ -951,7 +951,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
                 }
                 else
                 {
-                    if (!ChildFormControl.FormIsOpenByUID(typeof(SibiManageRequestForm), SibiUID))
+                    if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiManageRequestForm), SibiUID))
                     {
                         SibiManageRequestForm NewRequest = new SibiManageRequestForm(this, SibiUID);
                     }
@@ -1228,14 +1228,14 @@ namespace AssetManager.UserInterface.Forms.AssetManager
                         if (rows == 2)
                         {
                             trans.Commit();
-                            LoadDevice(System.Convert.ToString(CurrentViewDevice.GUID));
+                            LoadDevice(CurrentViewDevice.GUID);
                             //OtherFunctions.Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
                             SetStatusBar("Update successful!");
                         }
                         else
                         {
                             trans.Rollback();
-                            LoadDevice(System.Convert.ToString(CurrentViewDevice.GUID));
+                            LoadDevice(CurrentViewDevice.GUID);
                             OtherFunctions.Message("Unsuccessful! The number of affected rows was not what was expected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Unexpected Result", this);
                         }
                     }
@@ -1257,7 +1257,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
             {
                 return;
             }
-            if (!ChildFormControl.AttachmentsIsOpen(this))
+            if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
                 AttachmentsForm NewAttachments = new AttachmentsForm(this, new DeviceAttachmentsCols(), CurrentViewDevice);
             }
@@ -1437,7 +1437,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
         private void DataGridHistory_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             string EntryUID = System.Convert.ToString(GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID));
-            if (!ChildFormControl.FormIsOpenByUID(typeof(ViewHistoryForm), EntryUID))
+            if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewHistoryForm), EntryUID))
             {
                 NewEntryView(EntryUID);
             }
@@ -1505,7 +1505,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
         private void TrackingGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             var EntryUID = GridFunctions.GetCurrentCellValue(TrackingGrid, TrackablesCols.UID);
-            if (!ChildFormControl.FormIsOpenByUID(typeof(ViewTrackingForm), EntryUID))
+            if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewTrackingForm), EntryUID))
             {
                 NewTrackingView(System.Convert.ToString(EntryUID));
             }
@@ -1644,7 +1644,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
             MyWindowList.Dispose();
             MyLiveBox.Dispose();
             MyMunisToolBar.Dispose();
-            ChildFormControl.CloseChildren(this);
+            Helpers.ChildFormControl.CloseChildren(this);
             if (MyPingVis != null)
             {
                 MyPingVis.Dispose();
@@ -1656,7 +1656,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
-                ChildFormControl.MinimizeChildren(this);
+                Helpers.ChildFormControl.MinimizeChildren(this);
             }
         }
 

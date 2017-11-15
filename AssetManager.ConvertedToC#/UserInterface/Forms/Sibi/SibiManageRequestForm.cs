@@ -522,7 +522,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 return;
             }
-            if (!ChildFormControl.AttachmentsIsOpen(this))
+            if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
                 if (CurrentRequest.GUID != "" && !IsNewRequest)
                 {
@@ -753,7 +753,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 var NoteUID = GridFunctions.GetCurrentCellValue(dgvNotes, SibiNotesCols.NoteUID);
-                if (!ChildFormControl.FormIsOpenByUID(typeof(SibiNotesForm), NoteUID))
+                if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiNotesForm), NoteUID))
                 {
                     SibiNotesForm ViewNote = new SibiNotesForm(this, NoteUID);
                 }
@@ -869,7 +869,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         public override bool OKToClose()
         {
             bool CanClose = true;
-            if (!ChildFormControl.OKToCloseChildren(this))
+            if (!Helpers.ChildFormControl.OKToCloseChildren(this))
             {
                 CanClose = false;
             }
@@ -892,7 +892,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             MyMunisToolBar.Dispose();
             MyWindowList.Dispose();
-            ChildFormControl.CloseChildren(this);
+            Helpers.ChildFormControl.CloseChildren(this);
         }
 
         private void frmManageRequest_Resize(object sender, EventArgs e)
@@ -900,14 +900,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
             Form f = (Form)sender;
             if (f.WindowState == FormWindowState.Minimized)
             {
-                ChildFormControl.MinimizeChildren(this);
+                Helpers.ChildFormControl.MinimizeChildren(this);
                 PrevWindowState = f.WindowState;
             }
             else if (f.WindowState != PrevWindowState && f.WindowState == FormWindowState.Normal)
             {
                 if (PrevWindowState != FormWindowState.Maximized)
                 {
-                    ChildFormControl.RestoreChildren(this);
+                    Helpers.ChildFormControl.RestoreChildren(this);
                 }
             }
         }
@@ -1556,19 +1556,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 int ColIndex = System.Convert.ToInt32(RequestItemsGrid.CurrentCell.ColumnIndex);
                 if (true)
                 {
-                    ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
+                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
                 }
                 else if (true)
                 {
-                    ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
+                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
                 }
                 else if (true)
                 {
-                    ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
+                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
                 }
                 else if (true)
                 {
-                    ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
+                    Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[ColIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
                 }
             }
             catch (Exception ex)

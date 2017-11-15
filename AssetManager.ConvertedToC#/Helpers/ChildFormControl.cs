@@ -14,7 +14,7 @@ using AssetManager.UserInterface.Forms.Sibi;
 using AssetManager.UserInterface.Forms.GK_Updater;
 using AssetManager.UserInterface.CustomControls;
 
-namespace AssetManager.UserInterface
+namespace AssetManager.Helpers
 {
     public static class ChildFormControl
     {
@@ -115,6 +115,21 @@ namespace AssetManager.UserInterface
             return false;
         }
 
+        /// <summary>
+        /// Find a form by its type and returns it if found.
+        /// </summary>
+        /// <param name="formType"></param>
+        /// <returns></returns>
+        public static ExtendedForm FindFormByType(Type formType)
+        {
+            foreach (ExtendedForm frm in Application.OpenForms)
+            {
+                if (frm.GetType() == formType)
+                    return frm;
+            }
+            return null;
+        }
+
         public static bool FormIsOpenByUID(Type formType, string UID)
         {
             foreach (ExtendedForm frm in Application.OpenForms)
@@ -139,6 +154,33 @@ namespace AssetManager.UserInterface
             }
             return CanClose;
         }
+
+        /// <summary>
+        /// Returns the current instance of <see cref="GKUpdaterForm"/>. If one does not exists, creates new instance and returns it.
+        /// </summary>
+        /// <returns></returns>
+        public static GKUpdaterForm GKUpdaterInstance()
+        {
+            GKUpdaterForm currentGKUpdInstance;
+            //Check for current instance.
+            if (!FormTypeIsOpen(typeof(GKUpdaterForm)))
+            {
+                //If no current instance, create a new one and return it.
+                currentGKUpdInstance = new GKUpdaterForm();
+                return currentGKUpdInstance;
+            }
+            else
+            {
+                //If an instance is found, return the current instance.
+                currentGKUpdInstance = (GKUpdaterForm)FindFormByType(typeof(GKUpdaterForm));
+                if (currentGKUpdInstance != null)
+                {
+                    return currentGKUpdInstance;
+                }
+            }
+            return null;
+        }
+
 
     }
 }

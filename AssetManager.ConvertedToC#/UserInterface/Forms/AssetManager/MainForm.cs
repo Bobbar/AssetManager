@@ -1,25 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Data.Common;
 using System.Deployment.Application;
-using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using MyDialogLib;
-using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
 using Microsoft.VisualBasic;
 using System.Data;
 using System.Diagnostics;
 using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.Attachments;
-using AssetManager.UserInterface.Forms.AssetManager;
-using AssetManager.UserInterface.Forms.Sibi;
-using AssetManager.UserInterface.Forms.GK_Updater;
 using AssetManager.UserInterface.Forms.AdminTools;
 
 namespace AssetManager.UserInterface.Forms.AssetManager
@@ -152,7 +144,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
 
         public void LoadDevice(string deviceGUID)
         {
-            if (!ChildFormControl.FormIsOpenByUID(typeof(ViewDeviceForm), deviceGUID))
+            if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewDeviceForm), deviceGUID))
             {
                 Waiting();
                 ViewDeviceForm NewView = new ViewDeviceForm(this, deviceGUID);
@@ -169,14 +161,14 @@ namespace AssetManager.UserInterface.Forms.AssetManager
         {
             if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice))
                 return;
-            var NewDevForm = ChildFormControl.GetChildOfType(this, typeof(NewDeviceForm));
+            var NewDevForm = Helpers.ChildFormControl.GetChildOfType(this, typeof(NewDeviceForm));
             if (NewDevForm == null)
             {
                 NewDeviceForm NewDev = new NewDeviceForm(this);
             }
             else
             {
-                ChildFormControl.ActivateForm(NewDevForm);
+                Helpers.ChildFormControl.ActivateForm(NewDevForm);
             }
         }
 
@@ -360,7 +352,7 @@ namespace AssetManager.UserInterface.Forms.AssetManager
                 OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Cannot Close");
             }
 
-            if (!OtherFunctions.OKToEnd() | !ChildFormControl.OKToCloseChildren(this) | CurrentTransaction != null)
+            if (!OtherFunctions.OKToEnd() | !Helpers.ChildFormControl.OKToCloseChildren(this) | CurrentTransaction != null)
             {
                 e.Cancel = true;
             }
@@ -494,14 +486,14 @@ namespace AssetManager.UserInterface.Forms.AssetManager
                 if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi))
                     return;
                 Waiting();
-                var SibiForm = ChildFormControl.GetChildOfType(this, typeof(Sibi.SibiMainForm));
+                var SibiForm = Helpers.ChildFormControl.GetChildOfType(this, typeof(Sibi.SibiMainForm));
                 if (SibiForm == null)
                 {
                     Sibi.SibiMainForm NewSibi = new Sibi.SibiMainForm(this);
                 }
                 else
                 {
-                    ChildFormControl.ActivateForm(SibiForm);
+                    Helpers.ChildFormControl.ActivateForm(SibiForm);
                 }
             }
             finally
@@ -670,9 +662,9 @@ namespace AssetManager.UserInterface.Forms.AssetManager
                             var blah = OtherFunctions.Message("Are you sure? This will close all open forms.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Change Database", this);
                             if (blah == MsgBoxResult.Yes)
                             {
-                                if (ChildFormControl.OKToCloseChildren(this))
+                                if (Helpers.ChildFormControl.OKToCloseChildren(this))
                                 {
-                                    ChildFormControl.CloseChildren(this);
+                                    Helpers.ChildFormControl.CloseChildren(this);
                                     ServerInfo.CurrentDataBase = database;
                                     AttribIndexFunctions.PopulateAttributeIndexes();
                                     RefreshCombos();
@@ -1026,16 +1018,18 @@ namespace AssetManager.UserInterface.Forms.AssetManager
         // ERROR: Handles clauses are not supported in C#
         private void tsmGKUpdater_Click(object sender, EventArgs e)
         {
-           //TODO: Global instance, or findform to do this.
-            //if (!GKUpdaterForm.Visible)
-            //{
-            //    GKUpdaterForm.Show();
-            //}
-            //else
-            //{
-            //    GKUpdaterForm.WindowState = FormWindowState.Normal;
-            //    GKUpdaterForm.Activate();
-            //}
+
+            var GKUpdater = Helpers.ChildFormControl.GKUpdaterInstance();
+            if (!GKUpdater.Visible)
+            {
+                GKUpdater.Show();
+            }
+            else
+            {
+                GKUpdater.WindowState = FormWindowState.Normal;
+                GKUpdater.Activate();
+            }
+                      
         }
 
         // ERROR: Handles clauses are not supported in C#

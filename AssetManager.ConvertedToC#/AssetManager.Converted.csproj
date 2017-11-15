@@ -225,7 +225,7 @@
     <Compile Include="Tools\PowerShell\PowerShellWrapper.cs" />
     <Compile Include="Tools\ProgressCounter.cs" />
     <Compile Include="Tools\TeamViewer\TeamViewerDeploy.cs" />
-    <Compile Include="UserInterface\ChildFormControl.cs" />
+    <Compile Include="Helpers\ChildFormControl.cs" />
     <Compile Include="UserInterface\CustomControls\CorrectedTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -468,6 +468,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKProgressControl.resx">
       <DependentUpon>GKProgressControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKUpdaterForm.resx">
+      <DependentUpon>GKUpdaterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GK_Updater\PackFileForm.resx">
       <DependentUpon>PackFileForm.cs</DependentUpon>

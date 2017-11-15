@@ -81,7 +81,7 @@ namespace AssetManager.UserInterface.CustomControls
         /// <param name="TargetMenuItem">Item to add the Form item to.</param>
         private void BuildWindowList(ExtendedForm parentForm, ToolStripItemCollection targetMenuItem)
         {
-            foreach (ExtendedForm frm in ChildFormControl.GetChildren(parentForm))
+            foreach (ExtendedForm frm in Helpers.ChildFormControl.GetChildren(parentForm))
             {
                 if (HasChildren(frm))
                 {
@@ -135,7 +135,7 @@ namespace AssetManager.UserInterface.CustomControls
         private int FormCount(ExtendedForm parentForm)
         {
             int i = 0;
-            foreach (ExtendedForm frm in ChildFormControl.GetChildren(parentForm))
+            foreach (ExtendedForm frm in Helpers.ChildFormControl.GetChildren(parentForm))
             {
                 if (!frm.Modal & !object.ReferenceEquals(frm, parentForm))
                 {
@@ -147,7 +147,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private bool HasChildren(ExtendedForm parentForm)
         {
-            var Children = ChildFormControl.GetChildren(parentForm);
+            var Children = Helpers.ChildFormControl.GetChildren(parentForm);
             if (Children.Count == 0)
             {
                 return false;
@@ -242,7 +242,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (!frm.IsDisposed)
                 {
-                    ChildFormControl.ActivateForm(frm);
+                    Helpers.ChildFormControl.ActivateForm(frm);
                 }
                 else
                 {
