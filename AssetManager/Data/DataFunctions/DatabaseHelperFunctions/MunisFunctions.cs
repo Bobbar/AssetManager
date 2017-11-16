@@ -63,13 +63,13 @@ namespace AssetManager
 
             if (device.AssetTag != null && device.AssetTag != "")
             {
-                POFromAsset = System.Convert.ToString(await MunisComms.ReturnSqlValueAsync("famaster", "fama_tag", device.AssetTag, "fama_purch_memo"));
-                POFromAssetFromPurchaseHist = System.Convert.ToString(await MunisComms.ReturnSqlValueAsync("fapurchh", "faph_asset", device.AssetTag, "faph_po_num"));
+                POFromAsset = await MunisComms.ReturnSqlValueAsync("famaster", "fama_tag", device.AssetTag, "fama_purch_memo");
+                POFromAssetFromPurchaseHist = await MunisComms.ReturnSqlValueAsync("fapurchh", "faph_asset", device.AssetTag, "faph_po_num");
             }
 
             if (device.Serial != null && device.Serial != "")
             {
-                POFromSerial = System.Convert.ToString(await MunisComms.ReturnSqlValueAsync("famaster", "fama_serial", device.Serial, "fama_purch_memo"));
+                POFromSerial = await MunisComms.ReturnSqlValueAsync("famaster", "fama_serial", device.Serial, "fama_purch_memo");
             }
 
             POFromAsset = POFromAsset.Trim();
@@ -135,14 +135,14 @@ namespace AssetManager
 
         public string GetFYFromAsset(string assetTag)
         {
-            return Strings.Trim(MunisComms.ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_fisc_yr").ToString());
+            return MunisComms.ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_fisc_yr").ToString().Trim();
         }
 
         public DateTime GetPODate(string PO)
         {
             try
             {
-                return DateTime.Parse(Strings.Trim(MunisComms.ReturnSqlValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate").ToString()));
+                return DateTime.Parse(MunisComms.ReturnSqlValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate").ToString().Trim());
             }
             catch (Exception)
             {
@@ -175,7 +175,7 @@ namespace AssetManager
         public async Task<string> GetPOStatusFromPO(int PO)
         {
             string StatusString = "";
-            string StatusCode = System.Convert.ToString(await MunisComms.ReturnSqlValueAsync("poheader", "pohd_pur_no", PO, "pohd_sta_cd"));
+            string StatusCode = await MunisComms.ReturnSqlValueAsync("poheader", "pohd_pur_no", PO, "pohd_sta_cd");
             if (!string.IsNullOrEmpty(StatusCode))
             {
                 int ParseCode = -1;
@@ -192,7 +192,7 @@ namespace AssetManager
         public async Task<string> GetReqStatusFromReqNum(string reqNum, int FY)
         {
             string StatusString = "";
-            string StatusCode = System.Convert.ToString(await MunisComms.ReturnSqlValueAsync("rqheader", "rqhd_req_no", reqNum, "rqhd_sta_cd", "rqhd_fsc_yr", FY));
+            string StatusCode = await MunisComms.ReturnSqlValueAsync("rqheader", "rqhd_req_no", reqNum, "rqhd_sta_cd", "rqhd_fsc_yr", FY);
             if (!string.IsNullOrEmpty(StatusCode))
             {
                 int ParseCode = -1;
@@ -268,8 +268,8 @@ namespace AssetManager
                     NewDialog.ShowDialog();
                     if (NewDialog.DialogResult == DialogResult.OK)
                     {
-                        Device.AssetTag = Strings.Trim(NewDialog.GetControlValue("txtAsset").ToString());
-                        Device.Serial = Strings.Trim(NewDialog.GetControlValue("txtSerial").ToString());
+                        Device.AssetTag = NewDialog.GetControlValue("txtAsset").ToString().Trim();
+                        Device.Serial = NewDialog.GetControlValue("txtSerial").ToString().Trim();
                         LoadMunisInfoByDevice(Device, parentForm);
                     }
                 }
@@ -293,9 +293,9 @@ namespace AssetManager
                     if (NewDialog.DialogResult == DialogResult.OK)
                     {
                         var strName = NewDialog.GetControlValue("txtName").ToString();
-                        if (Strings.Trim(System.Convert.ToString(strName)) != "")
+                        if (strName.Trim() != "")
                         {
-                            NewMunisEmployeeSearch(System.Convert.ToString(strName), parentForm);
+                            NewMunisEmployeeSearch(strName.Trim(), parentForm);
                         }
                     }
                 }
@@ -417,7 +417,7 @@ namespace AssetManager
                 OtherFunctions.SetWaitCursor(true, parentForm);
                 GridForm NewGridForm = new GridForm(parentForm, "Org/Obj Info");
                 string GLColumns = " glma_org, glma_obj, glma_desc, glma_seg5, glma_bud_yr, glma_orig_bud_cy, glma_rev_bud_cy, glma_encumb_cy, glma_memo_bal_cy, glma_rev_bud_cy-glma_encumb_cy-glma_memo_bal_cy AS 'Funds Available' ";
-                string GLMasterQry = "Select TOP " + System.Convert.ToString(intMaxResults) + " " + GLColumns + "FROM glmaster";
+                string GLMasterQry = "Select TOP " + intMaxResults + " " + GLColumns + "FROM glmaster";
 
                 List<DBQueryParameter> GL_Params = new List<DBQueryParameter>();
                 GL_Params.Add(new DBQueryParameter("glma_org", org, true));
@@ -426,9 +426,9 @@ namespace AssetManager
                 {
                     GL_Params.Add(new DBQueryParameter("glma_obj", obj, true));
 
-                    string RollUpCode = System.Convert.ToString(await MunisComms.ReturnSqlValueAsync("gl_budget_rollup", "a_org", org, "a_rollup_code"));
-                    string RollUpByCodeQry = "SELECT TOP " + System.Convert.ToString(intMaxResults) + " * FROM gl_budget_rollup WHERE a_rollup_code = '" + RollUpCode + "'";
-                    string BudgetQry = "SELECT TOP " + System.Convert.ToString(intMaxResults) + " a_projection_no,a_org,a_object,db_line,db_bud_desc_line1,db_bud_reason_desc,db_bud_req_qty5,db_bud_unit_cost,db_bud_req_amt5,a_account_id FROM gl_budget_detail_2"; // WHERE a_projection_no='" & FY & "' AND a_org='" & Org & "' AND a_object='" & Obj & "'"
+                    string RollUpCode = await MunisComms.ReturnSqlValueAsync("gl_budget_rollup", "a_org", org, "a_rollup_code");
+                    string RollUpByCodeQry = "SELECT TOP " + intMaxResults + " * FROM gl_budget_rollup WHERE a_rollup_code = '" + RollUpCode + "'";
+                    string BudgetQry = "SELECT TOP " + intMaxResults + " a_projection_no,a_org,a_object,db_line,db_bud_desc_line1,db_bud_reason_desc,db_bud_req_qty5,db_bud_unit_cost,db_bud_req_amt5,a_account_id FROM gl_budget_detail_2"; // WHERE a_projection_no='" & FY & "' AND a_org='" & Org & "' AND a_object='" & Obj & "'"
 
                     List<DBQueryParameter> Budget_Params = new List<DBQueryParameter>();
                     Budget_Params.Add(new DBQueryParameter("a_projection_no", FY, true));
@@ -441,7 +441,7 @@ namespace AssetManager
                 }
                 else // Show Rollup info for all Objects in Org
                 {
-                    string RollUpAllQry = "SELECT TOP " + System.Convert.ToString(intMaxResults) + " * FROM gl_budget_rollup";
+                    string RollUpAllQry = "SELECT TOP " + intMaxResults + " * FROM gl_budget_rollup";
 
                     List<DBQueryParameter> Roll_Params = new List<DBQueryParameter>();
                     Roll_Params.Add(new DBQueryParameter("a_org", org, true));
@@ -467,7 +467,7 @@ namespace AssetManager
             {
                 OtherFunctions.SetWaitCursor(true, parentForm);
                 string strColumns = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last";
-                string strQRY = "SELECT TOP " + System.Convert.ToString(intMaxResults) + " " + strColumns + @"
+                string strQRY = "SELECT TOP " + intMaxResults + " " + strColumns + @"
 FROM pr_employee_master e
 INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
 
@@ -508,7 +508,7 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
                 {
                     return;
                 }
-                string strQRY = "SELECT TOP " + System.Convert.ToString(intMaxResults) + @" pohd_pur_no, pohd_fsc_yr, pohd_req_no, pohd_gen_cm, pohd_buy_id, pohd_pre_dt, pohd_exp_dt, pohd_sta_cd, pohd_vnd_cd, pohd_dep_cd, pohd_shp_cd, pohd_tot_amt, pohd_serial
+                string strQRY = "SELECT TOP " + intMaxResults + @" pohd_pur_no, pohd_fsc_yr, pohd_req_no, pohd_gen_cm, pohd_buy_id, pohd_pre_dt, pohd_exp_dt, pohd_sta_cd, pohd_vnd_cd, pohd_dep_cd, pohd_shp_cd, pohd_tot_amt, pohd_serial
 FROM poheader";
 
                 List<DBQueryParameter> Params = new List<DBQueryParameter>();
@@ -594,7 +594,7 @@ FROM poheader";
             {
                 return null;
             }
-            string Query = "SELECT TOP " + System.Convert.ToString(intMaxResults) + " * FROM rqheader";
+            string Query = "SELECT TOP " + intMaxResults + " * FROM rqheader";
             List<DBQueryParameter> Params = new List<DBQueryParameter>();
             @Params.Add(new DBQueryParameter("rqhd_req_no", reqNumber, true));
             @Params.Add(new DBQueryParameter("rqhd_fsc_yr", fiscalYr, true));
@@ -612,9 +612,9 @@ FROM poheader";
             {
                 return null;
             }
-            string VendorName = System.Convert.ToString(await MunisComms.ReturnSqlValueAsync("ap_vendor", "a_vendor_number", VendorNum, "a_vendor_name"));
-            string strQRY = "SELECT TOP " + System.Convert.ToString(intMaxResults) + @" dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc,
-'" + VendorName + "' AS a_vendor_name, '" + System.Convert.ToString(VendorNum) + @"' AS a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr, dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
+            string VendorName = await MunisComms.ReturnSqlValueAsync("ap_vendor", "a_vendor_number", VendorNum, "a_vendor_name");
+            string strQRY = "SELECT TOP " + intMaxResults + @" dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc,
+'" + VendorName + "' AS a_vendor_name, '" + VendorNum + @"' AS a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr, dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
 FROM dbo.rq_gl_info INNER JOIN
 dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr";
             List<DBQueryParameter> Params = new List<DBQueryParameter>();
@@ -640,16 +640,16 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                 DataTable ReqHeaderTable = new DataTable();
                 DataTable InventoryTable = new DataTable();
 
-                if (device.PO == "")
+                if (device.PO == "" || device.PO == null)
                 {
                     device.PO = await GetPOFromDevice(device);
                 }
 
-                if (device.PO != "")
+                if (device.PO != string.Empty)
                 {
                     InventoryTable = await LoadMunisInventoryGrid(device);
-                    ReqLinesTable = await GetReqLineItemsFromReqNum(System.Convert.ToString(await GetReqNumberFromPOAsync(System.Convert.ToString(device.PO))), System.Convert.ToString(GetFYFromPO(device.PO)));
-                    ReqHeaderTable = await GetReqHeaderFromReqNum(System.Convert.ToString(await GetReqNumberFromPOAsync(System.Convert.ToString(device.PO))), System.Convert.ToString(GetFYFromPO(device.PO)));
+                    ReqLinesTable = await GetReqLineItemsFromReqNum(await GetReqNumberFromPOAsync(device.PO), GetFYFromPO(device.PO));
+                    ReqHeaderTable = await GetReqHeaderFromReqNum(await GetReqNumberFromPOAsync(device.PO), GetFYFromPO(device.PO));
                 }
                 else
                 {

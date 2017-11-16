@@ -1,14 +1,7 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Deployment.Application;
+using System.Reflection;
 using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager.UserInterface.Forms
@@ -41,8 +34,9 @@ namespace AssetManager.UserInterface.Forms
             {
                 Version.Text = "Debug";
             }
-            //TODO: Do this another way.
-            //Copyright.Text = Application.Info.Copyright;
+            Assembly asm = Assembly.GetExecutingAssembly();
+            string copyright = ((AssemblyCopyrightAttribute)asm.GetCustomAttribute(typeof(AssemblyCopyrightAttribute))).Copyright;
+            Copyright.Text = copyright;
         }
 
         public void Hide()

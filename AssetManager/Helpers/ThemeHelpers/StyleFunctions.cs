@@ -48,7 +48,7 @@ namespace AssetManager
 
         public static void SetGridStyle(DataGridView grid, GridTheme theme)
         {
-            grid.BackgroundColor = Colors.DefaultGridBackColor;
+           // grid.BackgroundColor = Colors.DefaultGridBackColor;
             grid.DefaultCellStyle = new DataGridViewCellStyle(DefaultGridStyles);
             grid.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle(AlternatingRowDefaultStyles);
             grid.AlternatingRowsDefaultCellStyle.SelectionBackColor = theme.CellAltSelectColor;

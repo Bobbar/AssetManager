@@ -1092,8 +1092,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private List<DataGridColumn> NotesGridColumns()
         {
             List<DataGridColumn> ColList = new List<DataGridColumn>();
-            ColList.Add(new DataGridColumn(SibiNotesCols.DateStamp, "Date Stamp", typeof(DateTime)));
             ColList.Add(new DataGridColumn(SibiNotesCols.Note, "Note", typeof(string), ColumnFormatTypes.NotePreview));
+            ColList.Add(new DataGridColumn(SibiNotesCols.DateStamp, "Date Stamp", typeof(DateTime)));
             ColList.Add(new DataGridColumn(SibiNotesCols.NoteUID, "UID", typeof(string), true, false));
             return ColList;
         }

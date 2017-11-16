@@ -201,7 +201,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     if (DBInfo.Required)
                     {
-                        if (ctl.Text.Trim() != "")
+                        if (ctl.Text.Trim() == "")
                         {
                             bolValidFields = false;
                             //  ctl.BackColor = Colors.MissingField
