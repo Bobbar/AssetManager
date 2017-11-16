@@ -1,24 +1,17 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
-using AssetManager.UserInterface.Forms.Attachments;
-using AssetManager.UserInterface.Forms.AssetManagement;
-using AssetManager.UserInterface.Forms.Sibi;
-using AssetManager.UserInterface.Forms.GK_Updater;
 using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.AssetManagement;
+using AssetManager.UserInterface.Forms.Attachments;
+using AssetManager.UserInterface.Forms.GK_Updater;
+using AssetManager.UserInterface.Forms.Sibi;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace AssetManager.Helpers
 {
     public static class ChildFormControl
     {
-
         public static void ActivateForm(ExtendedForm form)
         {
             if (!form.IsDisposed)
@@ -183,9 +176,7 @@ namespace AssetManager.Helpers
 
         public static MainForm MainFormInstance()
         {
-            return  (MainForm)FindFormByType(typeof(MainForm));
+            return (MainForm)FindFormByType(typeof(MainForm));
         }
-
-
     }
 }

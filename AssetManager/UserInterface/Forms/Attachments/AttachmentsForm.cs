@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
@@ -41,7 +40,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
         /// <summary>
         /// "ftp://  strServerIP  /attachments/  CurrentDB  /"
         /// </summary>
-        private string FTPUri; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
+        private string FTPUri;
 
         private Point MouseStartPos;
         private ProgressCounter Progress = new ProgressCounter();
@@ -82,7 +81,6 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         public AttachmentsForm(ExtendedForm ParentForm, AttachmentsBaseCols AttachTable, object AttachInfo = null)
         {
-            // VBConversions Note: Non-static class variable initialization is below.  Class variables cannot be initially assigned non-static values in C#.
             FTPUri = "ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/";
 
             InitializeComponent();
@@ -227,7 +225,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 this.WindowState = FormWindowState.Normal;
                 this.Activate();
                 var blah = OtherFunctions.Message("There are active uploads/downloads. Do you wish to cancel the current operation?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Worker Busy", this);
-                if (blah == MsgBoxResult.Yes)
+                if (blah == DialogResult.Yes)
                 {
                     CancelTransfers();
                     return true;
@@ -334,15 +332,15 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         MemoryStream memStream = new MemoryStream();
                         byte[] buffer = new byte[1024];
                         int bytesIn = 0;
-                    //ftp download
-                    bytesIn = 1;
+                        //ftp download
+                        bytesIn = 1;
                         while (!(bytesIn < 1 || cancelToken.IsCancellationRequested))
                         {
                             bytesIn = System.Convert.ToInt32(respStream.Read(buffer, 0, 1024));
                             if (bytesIn > 0)
                             {
                                 memStream.Write(buffer, 0, bytesIn); //download data to memory before saving to disk
-                            Progress.BytesMoved = bytesIn;
+                                Progress.BytesMoved = bytesIn;
                             }
                         }
                         return memStream;
@@ -494,8 +492,8 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         var resp = (FtpWebResponse)ex.Response;
                         if (resp.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
                         {
-                        //directory already exists
-                        return true;
+                            //directory already exists
+                            return true;
                         }
                     }
                     return false;
@@ -763,7 +761,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 }
                 string strFilename = System.Convert.ToString(AttachGrid[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileName), AttachGrid.CurrentRow.Index].Value.ToString());
                 var blah = OtherFunctions.Message("Are you sure you want to delete '" + strFilename + "'?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Confirm Delete", this);
-                if (blah == Constants.vbYes)
+                if (blah == DialogResult.Yes)
                 {
                     Waiting();
                     if (GlobalInstances.AssetFunc.DeleteSqlAttachment(GetSQLAttachment(AttachUID)) > 0)
@@ -1101,7 +1099,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
         {
             if (!bolGridFilling)
             {
-               // DataGridView grid = AttachGrid;
+                // DataGridView grid = AttachGrid;
                 StyleFunctions.HighlightRow(AttachGrid, GridTheme, e.RowIndex);
             }
         }
@@ -1236,7 +1234,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         private void AttachmentsForm_Disposed(object sender, EventArgs e)
         {
-           OtherFunctions.PurgeTempDir();
+            OtherFunctions.PurgeTempDir();
         }
 
         private void FolderListView_ItemActivate(object sender, EventArgs e)

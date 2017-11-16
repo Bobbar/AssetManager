@@ -1,13 +1,3 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 namespace AssetManager
 {
     public struct AttributeDataStruct
@@ -77,7 +67,7 @@ namespace AssetManager
         {
             this.SearchResult = munisInfo;
             this.SearchString = searchString;
-            MatchLength = Strings.Len(searchString);
+            MatchLength = searchString.Length;
             this.MatchDistance = matchDistance;
 
         }
@@ -86,7 +76,7 @@ namespace AssetManager
         {
             this.SearchResult = munisInfo;
             this.SearchString = searchString;
-            MatchLength = Strings.Len(searchString);
+            MatchLength = searchString.Length;
             this.MatchDistance = 0;
 
         }

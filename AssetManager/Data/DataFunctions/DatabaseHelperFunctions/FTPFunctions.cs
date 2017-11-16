@@ -1,33 +1,20 @@
-﻿using System.ComponentModel;
-using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Data;
-using Microsoft.VisualBasic;
-using System.Collections.Specialized;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics;
+using System.Data;
+using System.IO;
 using System.Linq;
-
+using System.Net;
+using System.Windows.Forms;
 
 namespace AssetManager
 {
-
-
     public class FtpFunctions
     {
-
         #region Fields
 
         private FtpComms FTPComms = new FtpComms();
 
-        #endregion
+        #endregion Fields
 
         #region Methods
 
@@ -74,7 +61,6 @@ namespace AssetManager
                             return true;
                         }
                     }
-
                 }
                 return false;
             }
@@ -137,7 +123,7 @@ Missing Dirs: " + MissingSQLDirs.Count + @"
 Missing Files: " + MissingSQLFiles.Count;
 
                     var blah = OtherFunctions.Message(StatsText, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Orphans Found");
-                    if (blah == MsgBoxResult.Yes)
+                    if (blah == DialogResult.Yes)
                     {
                         //clean it up
                         Logging.Logger("Cleaning attachments...");
@@ -221,7 +207,6 @@ Missing Files: " + MissingSQLFiles.Count;
                 {
                     if (!CheckForPrimaryItem(System.Convert.ToString(sqlItem.FKey)))
                     {
-
                         var DeviceRows = DBFactory.GetDatabase().ExecuteQuery("DELETE FROM " + DeviceTable.TableName + " WHERE " + DeviceTable.FKey + "='" + sqlItem.FKey + "'");
                         if (System.Convert.ToInt32(DeviceRows) > 0)
                         {
@@ -235,7 +220,6 @@ Missing Files: " + MissingSQLFiles.Count;
                             deletions += System.Convert.ToInt32(SibiRows);
                             Logging.Logger("Deleted " + System.Convert.ToString(SibiRows) + " Sibi SQL Entries For: " + sqlItem.FKey);
                         }
-
                     }
                 }
                 return deletions;
@@ -283,7 +267,7 @@ Missing Files: " + MissingSQLFiles.Count;
             foreach (var SQLfile in sqlFiles)
             {
                 bool match = false;
-                ftpDirs.ForEach(f => 
+                ftpDirs.ForEach(f =>
                 {
                     if (SQLfile.FKey == f)
                     {
@@ -322,7 +306,6 @@ Missing Files: " + MissingSQLFiles.Count;
         /// <returns></returns>
         private List<AttachScanInfo> ListMissingSQLFiles(List<AttachScanInfo> sqlFiles, List<AttachScanInfo> ftpFiles)
         {
-            
             var MissingFiles = sqlFiles.Except(ftpFiles).ToList();
             MissingFiles.ForEach(f => Logging.Logger("Orphan SQL File Found: " + f.FKey + "/" + f.FileUID));
             return sqlFiles.Except(ftpFiles).ToList();
@@ -391,9 +374,7 @@ Missing Files: " + MissingSQLFiles.Count;
                         }
                         return files;
                     }
-
                 }
-
             }
             catch (Exception ex)
             {
@@ -412,10 +393,8 @@ Missing Files: " + MissingSQLFiles.Count;
                 this.FKey = FKey;
                 this.FileUID = FileUID;
             }
-
         }
 
-        #endregion
-
+        #endregion Methods
     }
 }

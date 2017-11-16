@@ -1,35 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.AdminTools;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Management.Automation.Runspaces;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data;
-using Microsoft.VisualBasic;
-using System.Collections.Specialized;
-using System.Data.Common;
-using System.Diagnostics;
-using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.AdminTools;
 
 namespace AssetManager
 {
     public class TeamViewerDeploy
     {
-        public TeamViewerDeploy()
-        {
-            // VBConversions Note: Non-static class variable initialization is below.  Class variables cannot be initially assigned non-static values in C#.
-            WatchDogTask = new Task(() => WatchDog());
-
-        }
-
         #region Fields
 
         private const string DeploymentFilesDirectory = "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Tools\\TeamViewer\\Deploy";
@@ -42,16 +23,26 @@ namespace AssetManager
         private PowerShellWrapper PSWrapper = new PowerShellWrapper();
         private RichTextBox RTBLog;
         private int TimeoutSeconds = 120;
-        private Task WatchDogTask; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
-        #endregion
+        private Task WatchDogTask;
+
+        #endregion Fields
 
         #region Delegates
 
-        delegate void RTBLogDelegate(string message);
+        private delegate void RTBLogDelegate(string message);
 
-        #endregion
+        #endregion Delegates
 
         #region Methods
+
+        #region Constructors
+
+        public TeamViewerDeploy()
+        {
+            WatchDogTask = new Task(() => WatchDog());
+        }
+
+        #endregion Constructors
 
         public async Task<bool> DeployToDevice(ExtendedForm parentForm, DeviceObject targetDevice)
         {
@@ -112,7 +103,6 @@ namespace AssetManager
                                 OtherFunctions.Message("Error occurred while executing deployment command!");
                                 return false;
                             }
-
                         }
                         else
                         {
@@ -162,7 +152,6 @@ namespace AssetManager
 
                         Finished = true;
                         DepLog("Done.");
-
                     }
 
                     DepLog("-------------------");
@@ -266,7 +255,7 @@ namespace AssetManager
             {
                 if (!CancelOperation)
                 {
-                    if (OtherFunctions.Message("Cancel the current operation?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Cancel?", ParentForm) == MsgBoxResult.Yes)
+                    if (OtherFunctions.Message("Cancel the current operation?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Cancel?", ParentForm) == DialogResult.Yes)
                     {
                         CancelOperation = true;
                         PSWrapper.StopPowerShellCommand();
@@ -340,10 +329,10 @@ namespace AssetManager
             }
         }
 
-        #endregion
+        #endregion Methods
+
         private class DeploymentCanceledException : Exception
         {
-
             public DeploymentCanceledException()
             {
             }
@@ -355,9 +344,6 @@ namespace AssetManager
             public DeploymentCanceledException(string message, Exception inner) : base(message, inner)
             {
             }
-
         }
-
-
     }
 }

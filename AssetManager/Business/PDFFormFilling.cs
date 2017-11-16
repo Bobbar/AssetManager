@@ -5,7 +5,6 @@ using MyDialogLib;
 using System.Collections.Generic;
 using System;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
 using System.Diagnostics;
 using AssetManager.UserInterface.CustomControls;
 
@@ -128,7 +127,7 @@ namespace AssetManager
         private bool FlattenPrompt()
         {
             var blah = OtherFunctions.Message("Select 'Yes' to save the PDF as an editable form. Select 'No' to save the PDF as a flattened, ready to print document.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "PDF Type");
-            if (blah == MsgBoxResult.Yes)
+            if (blah == DialogResult.Yes)
             {
                 return false;
             }

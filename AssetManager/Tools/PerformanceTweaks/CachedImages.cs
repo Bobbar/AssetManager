@@ -1,15 +1,7 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using AssetManager.UserInterface.CustomControls;
-
+using System.Collections;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace AssetManager
 {
@@ -21,10 +13,10 @@ namespace AssetManager
     ///  reduce memory usage by comical orders of magnitude.
     ///  ResourceManager.GetObject can "Die a prolonged and relentlessly agonizing death."
     /// </summary>
-    static class ImageCaching
+    internal static class ImageCaching
     {
-
         private static Hashtable ImageCacheHashTable = new Hashtable();
+
         /// <summary>
         /// Controls passed to this method will have all their child Control images replaced with a single centrally cached instance of that image.
         /// </summary>
@@ -98,7 +90,6 @@ namespace AssetManager
         /// <param name="ctl"></param>
         private static void SetControlImage(object ctl)
         {
-            
             if (ctl is Button)
             {
                 var but = (Button)ctl;
@@ -138,6 +129,5 @@ namespace AssetManager
             //        break;
             //}
         }
-
     }
 }

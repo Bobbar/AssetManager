@@ -1,23 +1,16 @@
-using Microsoft.VisualBasic;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
+
 namespace AssetManager.UserInterface.CustomControls
 {
     public class MunisToolBar : IDisposable
     {
-
         #region "Fields"
 
-
         private ToolStripDropDownButton MunisDropDown = new ToolStripDropDownButton();
-        #endregion
+
+        #endregion "Fields"
 
         #region "Constructors"
 
@@ -27,7 +20,7 @@ namespace AssetManager.UserInterface.CustomControls
             InitToolItems(parentForm);
         }
 
-        #endregion
+        #endregion "Constructors"
 
         #region "Methods"
 
@@ -121,7 +114,7 @@ namespace AssetManager.UserInterface.CustomControls
             ClickAction();
         }
 
-        #endregion
+        #endregion "Methods"
 
         #region "IDisposable Support"
 
@@ -161,7 +154,6 @@ namespace AssetManager.UserInterface.CustomControls
         //    MyBase.Finalize()
         //End Sub
 
-        #endregion
-
+        #endregion "IDisposable Support"
     }
 }

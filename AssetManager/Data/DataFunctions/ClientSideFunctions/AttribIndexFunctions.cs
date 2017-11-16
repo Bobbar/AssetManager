@@ -1,12 +1,7 @@
-using Microsoft.VisualBasic;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Linq;
 using System.Threading.Tasks;
 namespace AssetManager
 {
@@ -106,7 +101,7 @@ namespace AssetManager
                         string DisplayValue = "";
                         if (r.Table.Columns.Contains("munis_code"))
                         {
-                            if (!Information.IsDBNull(r["munis_code"]))
+                            if (r["munis_code"] != DBNull.Value)
                             {
                                 DisplayValue = r[ComboCodesBaseCols.DisplayValue].ToString() + " - " + r["munis_code"].ToString();
                             }

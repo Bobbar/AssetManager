@@ -1,13 +1,4 @@
-using Microsoft.VisualBasic;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using System.IO;
 namespace AssetManager
 {
@@ -20,7 +11,6 @@ namespace AssetManager
             short MaxLogSizeKiloBytes = 500;
             string DateStamp = DateTime.Now.ToString();
             FileInfo infoReader = null;
-            // infoReader = AssetManager.My.MyProject.Computer.FileSystem.GetFileInfo(Paths.LogPath);
             infoReader = new FileInfo(Paths.LogPath);
             if (!File.Exists(Paths.LogPath))
             {

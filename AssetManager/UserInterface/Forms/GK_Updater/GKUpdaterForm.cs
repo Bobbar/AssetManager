@@ -1,17 +1,7 @@
-﻿using Microsoft.VisualBasic;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Collections;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Net;
-using System.Security;
-using System.ComponentModel;
 using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager.UserInterface.Forms.GK_Updater
@@ -88,7 +78,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                 else
                 {
                     var blah = OtherFunctions.Message("An update for device " + device.Serial + " already exists.  Do you want to restart the update for this device?", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Exclamation, "Duplicate Update", this);
-                    if (blah == MsgBoxResult.Ok)
+                    if (blah == DialogResult.OK)
                     {
                         StartUpdateByDevice(device);
 

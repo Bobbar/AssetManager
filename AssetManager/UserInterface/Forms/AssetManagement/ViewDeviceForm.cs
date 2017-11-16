@@ -3,7 +3,6 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
-using Microsoft.VisualBasic;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
@@ -276,7 +275,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 this.WindowState = FormWindowState.Normal;
                 this.Activate();
                 var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Discard Changes?", this);
-                if (blah == Constants.vbYes)
+                if (blah == DialogResult.Yes)
                 {
                     bolCheckFields = false;
                     fieldErrorIcon.Clear();
@@ -302,7 +301,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     if (DBInfo.Required)
                     {
-                        if (Strings.Trim(System.Convert.ToString(c.Text)) == "")
+                        if (c.Text.Trim() == "")
                         {
                             bolMissingField = true;
                             c.BackColor = Colors.MissingField;
@@ -410,7 +409,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 return;
             }
             var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "WARNING", this);
-            if (blah == Constants.vbYes)
+            if (blah == DialogResult.Yes)
             {
                 if (GlobalInstances.AssetFunc.DeleteFtpAndSql(CurrentViewDevice.GUID, EntryType.Device))
                 {
@@ -463,7 +462,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
 
             var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + strGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "WARNING", this);
-            if (blah == Constants.vbYes)
+            if (blah == DialogResult.Yes)
             {
                 OtherFunctions.Message(DeleteHistoryEntry(strGUID) + " rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Deletion Results", this);
                 LoadDevice(System.Convert.ToString(CurrentViewDevice.GUID));
@@ -480,7 +479,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 return;
             }
-            if (OtherFunctions.Message("Deploy TeamViewer to this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", this) != MsgBoxResult.Yes)
+            if (OtherFunctions.Message("Deploy TeamViewer to this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", this) != DialogResult.Yes)
             {
                 return;
             }
@@ -517,7 +516,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 return;
             }
-            if (OtherFunctions.Message("Update/Install Chrome on this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", this) != MsgBoxResult.Yes)
+            if (OtherFunctions.Message("Update/Install Chrome on this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", this) != DialogResult.Yes)
             {
                 return;
             }
@@ -757,9 +756,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             else
             {
-                if (CurrentViewDevice.CurrentUser != Strings.Trim(System.Convert.ToString(txtCurUser_View_REQ.Text)))
+                if (CurrentViewDevice.CurrentUser != txtCurUser_View_REQ.Text.Trim())
                 {
-                    DBRow[DevicesCols.CurrentUser] = Strings.Trim(System.Convert.ToString(txtCurUser_View_REQ.Text));
+                    DBRow[DevicesCols.CurrentUser] = txtCurUser_View_REQ.Text.Trim();
                     DBRow[DevicesCols.MunisEmpNum] = DBNull.Value;
                 }
                 else
@@ -1394,7 +1393,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private async void cmdRestart_Click(object sender, EventArgs e)
         {
             var blah = OtherFunctions.Message("Click 'Yes' to reboot this device.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?");
-            if (blah == Constants.vbYes)
+            if (blah == DialogResult.Yes)
             {
                 string IP = System.Convert.ToString(MyPingVis.CurrentResult.Address.ToString());
                 string DeviceName = System.Convert.ToString(CurrentViewDevice.HostName);
@@ -1415,7 +1414,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (!ReferenceEquals(cmdShowIP.Tag, null))
             {
                 var blah = OtherFunctions.Message(cmdShowIP.Tag.ToString() + " - " + NetworkInfo.LocationOfIP(cmdShowIP.Tag.ToString()) + "\r\n" + "\r\n" + "Press 'Yes' to copy to clipboard.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Information, "IP Address", this);
-                if (blah == Constants.vbYes)
+                if (blah == DialogResult.Yes)
                 {
                     Clipboard.SetText(cmdShowIP.Tag.ToString());
                 }
@@ -1594,7 +1593,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void txtPhoneNumber_Leave(object sender, EventArgs e)
         {
-            if (Strings.Trim(System.Convert.ToString(txtPhoneNumber.Text)) != "" && !DataConsistency.ValidPhoneNumber(txtPhoneNumber.Text))
+            if (txtPhoneNumber.Text.Trim() != "" && !DataConsistency.ValidPhoneNumber(txtPhoneNumber.Text))
             {
                 OtherFunctions.Message("Invalid phone number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
                 txtPhoneNumber.Focus();

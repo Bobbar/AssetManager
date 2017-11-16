@@ -1,25 +1,14 @@
-﻿using System.ComponentModel;
-using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Data;
-using Microsoft.VisualBasic;
-using System.Collections.Specialized;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics;
-using MyDialogLib;
-using AssetManager.UserInterface.CustomControls;
+﻿using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms;
+using MyDialogLib;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AssetManager
 {
-
     public class MunisFunctions //Be warned. This whole class is a horrible bastard...
     {
         private const int intMaxResults = 100;
@@ -212,22 +201,31 @@ namespace AssetManager
             {
                 case 0:
                     return "Closed";
+
                 case 1:
                     return "Rejected";
+
                 case 2:
                     return "Created";
+
                 case 4:
                     return "Allocated";
+
                 case 5:
                     return "Released";
+
                 case 6:
                     return "Posted";
+
                 case 8:
                     return "Printed";
+
                 case 9:
                     return "Carry Forward";
+
                 case 10:
                     return "Canceled";
+
                 case 11:
                     return "Closed";
             }
@@ -240,14 +238,19 @@ namespace AssetManager
             {
                 case 0:
                     return "Converted";
+
                 case 1:
                     return "Rejected";
+
                 case 2:
                     return "Created";
+
                 case 4:
                     return "Allocated";
+
                 case 6:
                     return "Released";
+
                 default:
                     return "NA";
             }
@@ -273,7 +276,6 @@ namespace AssetManager
                         LoadMunisInfoByDevice(Device, parentForm);
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -299,7 +301,6 @@ namespace AssetManager
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -323,7 +324,6 @@ namespace AssetManager
                         NewMunisPOSearch(PO, parentForm);
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -358,7 +358,6 @@ namespace AssetManager
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -396,7 +395,6 @@ namespace AssetManager
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -487,7 +485,6 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -526,7 +523,6 @@ FROM poheader";
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -700,6 +696,5 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             string Query = "SELECT TOP 1 " + strFields + " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" + device.AssetTag + "' AND fama_tag <> '' OR fama_serial='" + device.Serial + "' AND fama_serial <> ''";
             return await MunisComms.ReturnSqlTableAsync(Query);
         }
-
     }
 }

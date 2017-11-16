@@ -3,7 +3,6 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
-using Microsoft.VisualBasic;
 using System.Collections.Generic;
 using System.Diagnostics;
 using AssetManager.UserInterface.CustomControls;
@@ -70,7 +69,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 this.WindowState = FormWindowState.Normal;
                 this.Activate();
                 var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Discard Changes?", this);
-                if (blah == MsgBoxResult.Yes)
+                if (blah == DialogResult.Yes)
                 {
                     if (IsNewRequest)
                     {
@@ -122,7 +121,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 if (IsModifying)
                 {
                     var blah = OtherFunctions.Message("All current changes will be lost. Are you sure you want to create a new request?", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Question, "Create New Request", this);
-                    if (blah != Constants.vbOK)
+                    if (blah != DialogResult.OK)
                     {
                         return;
                     }
@@ -329,7 +328,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     SibiNotesForm NewNote = new SibiNotesForm(this, CurrentRequest);
                     if (NewNote.DialogResult == DialogResult.OK)
                     {
-                        AddNewNote(System.Convert.ToString(NewNote.Request.GUID), Strings.Trim(System.Convert.ToString(NewNote.rtbNotes.Rtf)));
+                        AddNewNote(System.Convert.ToString(NewNote.Request.GUID), NewNote.rtbNotes.Rtf.Trim());
                         LoadNotes(System.Convert.ToString(CurrentRequest.GUID));
                     }
                 }
@@ -355,7 +354,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     if (true)
                     {
-                        if (Strings.Trim(System.Convert.ToString(c.Text)) == "")
+                        if (c.Text.Trim() == "")
                         {
                             bolFieldsValid = false;
                             c.BackColor = Colors.MissingField;
@@ -399,7 +398,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 if (GetPO != null && GetPO.Length > 1)
                 {
                     var blah = OtherFunctions.Message("PO Number " + GetPO + " was detected in the Requisition. Do you wish to add it to this request?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "New PO Detected", this);
-                    if (blah == MsgBoxResult.Yes)
+                    if (blah == DialogResult.Yes)
                     {
                         InsertPONumber(GetPO);
                         OpenRequest(System.Convert.ToString(CurrentRequest.GUID));
@@ -551,7 +550,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     return;
                 }
                 var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "WARNING", this);
-                if (blah == Constants.vbYes)
+                if (blah == DialogResult.Yes)
                 {
                     OtherFunctions.SetWaitCursor(true, this);
                     if (GlobalInstances.AssetFunc.DeleteFtpAndSql(CurrentRequest.GUID, EntryType.Sibi))
@@ -598,7 +597,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             if (dgvNotes.CurrentRow != null && dgvNotes.CurrentRow.Index > -1)
             {
                 var blah = OtherFunctions.Message("Are you sure?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Delete Note", this);
-                if (blah == Constants.vbYes)
+                if (blah == DialogResult.Yes)
                 {
                     string NoteUID = System.Convert.ToString(GridFunctions.GetCurrentCellValue(dgvNotes, SibiNotesCols.NoteUID));
                     if (!string.IsNullOrEmpty(NoteUID))
@@ -647,14 +646,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 RequestObject info = new RequestObject();
-                info.Description = Strings.Trim(System.Convert.ToString(txtDescription.Text));
-                info.RequestUser = Strings.Trim(System.Convert.ToString(txtUser.Text));
+                info.Description = txtDescription.Text.Trim();
+                info.RequestUser = txtUser.Text.Trim();
                 info.RequestType = AttribIndexFunctions.GetDBValue(GlobalInstances.SibiAttribute.RequestType, cmbType.SelectedIndex);
                 info.NeedByDate = dtNeedBy.Value;
                 info.Status = AttribIndexFunctions.GetDBValue(GlobalInstances.SibiAttribute.StatusType, cmbStatus.SelectedIndex);
-                info.PO = Strings.Trim(System.Convert.ToString(txtPO.Text));
-                info.RequisitionNumber = Strings.Trim(System.Convert.ToString(txtReqNumber.Text));
-                info.RTNumber = Strings.Trim(System.Convert.ToString(txtRTNumber.Text));
+                info.PO = txtPO.Text.Trim();
+                info.RequisitionNumber = txtReqNumber.Text.Trim();
+                info.RTNumber = txtRTNumber.Text.Trim();
                 RequestItemsGrid.EndEdit();
                 foreach (DataGridViewRow row in RequestItemsGrid.Rows)
                 {
@@ -662,7 +661,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     {
                         if (dcell.Value != null)
                         {
-                            dcell.Value = Strings.Trim(System.Convert.ToString(dcell.Value.ToString()));
+                            dcell.Value = dcell.Value.ToString().Trim();
                         }
                         else
                         {
@@ -1463,7 +1462,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     return;
                 }
                 var blah = OtherFunctions.Message("Delete selected row?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Delete Item Row", this);
-                if (blah == Constants.vbYes)
+                if (blah == DialogResult.Yes)
                 {
                     if (!DeleteItem_FromLocal(System.Convert.ToInt32(RequestItemsGrid.CurrentRow.Index)))
                     {
@@ -1554,7 +1553,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void txtPO_Click(object sender, EventArgs e)
         {
-            string PO = Strings.Trim(System.Convert.ToString(txtPO.Text));
+            string PO = txtPO.Text.Trim();
             if (!IsModifying && !string.IsNullOrEmpty(PO))
             {
                 GlobalInstances.MunisFunc.NewMunisPOSearch(PO, this);
@@ -1566,7 +1565,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 OtherFunctions.SetWaitCursor(true, this);
-                string ReqNum = Strings.Trim(System.Convert.ToString(txtReqNumber.Text));
+                string ReqNum = txtReqNumber.Text.Trim();
                 if (!IsModifying && !string.IsNullOrEmpty(ReqNum))
                 {
                     GlobalInstances.MunisFunc.NewMunisReqSearch(ReqNum, DataConsistency.YearFromDate(CurrentRequest.DateStamp), this);
@@ -1586,7 +1585,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                string RTNum = Strings.Trim(System.Convert.ToString(txtRTNumber.Text));
+                string RTNum = txtRTNumber.Text.Trim();
                 if (!IsModifying && !string.IsNullOrEmpty(RTNum))
                 {
                     Process.Start("http://rt.co.fairfield.oh.us/rt/Ticket/Display.html?id=" + RTNum);

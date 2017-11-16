@@ -1,6 +1,5 @@
 ﻿using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
-using Microsoft.VisualBasic;
 using MyDialogLib;
 using System;
 using System.Collections.Generic;
@@ -54,7 +53,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.CanStartTransaction))
                 return;
-            if (OtherFunctions.Message("This will allow unchecked changes to the database. Incorrect inputs WILL BREAK THINGS! \r\n" + Environment.NewLine + "Changes must be 'applied' and 'committed' before they will be permanently stored in the database.", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Exclamation, "WARNING", this) == MsgBoxResult.Ok)
+            if (OtherFunctions.Message("This will allow unchecked changes to the database. Incorrect inputs WILL BREAK THINGS! \r\n" + Environment.NewLine + "Changes must be 'applied' and 'committed' before they will be permanently stored in the database.", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Exclamation, "WARNING", this) == DialogResult.OK)
             {
                 CurrentTransaction = DBFactory.GetDatabase().StartTransaction();
                 RefreshData();
@@ -67,7 +66,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (CurrentTransaction != null)
             {
-                if (OtherFunctions.Message("Are you sure? This will permanently apply the changes to the database.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Commit Transaction", this) == MsgBoxResult.Yes)
+                if (OtherFunctions.Message("Are you sure? This will permanently apply the changes to the database.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Commit Transaction", this) == DialogResult.Yes)
                 {
                     CurrentTransaction.Commit();
                     CurrentTransaction.Dispose();
@@ -83,7 +82,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (CurrentTransaction != null)
             {
-                if (OtherFunctions.Message("Restore database to original state?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Rollback Transaction", this) == MsgBoxResult.Yes)
+                if (OtherFunctions.Message("Restore database to original state?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Rollback Transaction", this) == DialogResult.Yes)
                 {
                     CurrentTransaction.Rollback();
                     CurrentTransaction.Dispose();
@@ -417,7 +416,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 MyWindowList = new CustomControls.WindowList(this);
 
                 ShowAll();
-                DateTimeLabel.Text = DateAndTime.Now.ToString();
+                DateTimeLabel.Text = DateTime.Now.ToString();
                 ToolStrip1.BackColor = Colors.AssetToolBarColor;
                 ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, true);
                 if (SecurityTools.CanAccess(SecurityTools.AccessGroup.IsAdmin))
@@ -640,7 +639,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         if (database != ServerInfo.CurrentDataBase)
                         {
                             var blah = OtherFunctions.Message("Are you sure? This will close all open forms.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Change Database", this);
-                            if (blah == MsgBoxResult.Yes)
+                            if (blah == DialogResult.Yes)
                             {
                                 if (Helpers.ChildFormControl.OKToCloseChildren(this))
                                 {

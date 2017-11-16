@@ -1,21 +1,15 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AssetManagement;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace AssetManager
 {
     public class AssetManagerFunctions
     {
-
         #region "Methods"
 
         public void AddNewEmp(MunisEmployeeStruct empInfo)
@@ -38,7 +32,6 @@ namespace AssetManager
             }
         }
 
-
         /// <summary>
         /// Searches the database for the best possible match to the specified search name using a Levenshtein distance algorithm.
         /// </summary>
@@ -47,7 +40,6 @@ namespace AssetManager
         /// <returns></returns>
         public MunisEmployeeStruct SmartEmployeeSearch(string empSearchName, int MinSearchDistance = 10)
         {
-
             if (empSearchName.Trim() != "")
             {
                 string[] SplitName = empSearchName.Split(char.Parse(" "));
@@ -62,13 +54,11 @@ namespace AssetManager
 
                 foreach (string s in SplitName)
                 {
-
                     //Get results for partial name from employees table
                     Results.AddRange(GetEmpSearchResults(EmployeesCols.TableName, s, EmployeesCols.Name, EmployeesCols.Number));
 
                     //Get results for partial name from devices table
                     Results.AddRange(GetEmpSearchResults(DevicesCols.TableName, s, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum));
-
                 }
 
                 if (Results.Count > 0)
@@ -83,9 +73,6 @@ namespace AssetManager
             }
             return new MunisEmployeeStruct();
         }
-
-
-
 
         /// <summary>
         /// Reprocesses the search results to obtain a more accurate Levenshtein distance calculation.
@@ -152,7 +139,6 @@ namespace AssetManager
                 {
                     MinDist = System.Convert.ToInt32(result.MatchDistance);
                     MinMatch = result;
-
                 }
             }
             //De-duplicate the results and iterate to determine which result of the Levenshtein shortest distances has the longest match length. (Greatest number of matches)
@@ -177,7 +163,6 @@ namespace AssetManager
             //Return best match by Levenshtein distance only. (If no duplicates)
             return MinMatch;
         }
-
 
         /// <summary>
         /// Queries the database for a list of results that contains the employee name result and computed Levenshtein distance to the search string.
@@ -212,6 +197,7 @@ namespace AssetManager
                     case EntryType.Device:
                         DeleteQuery = "DELETE FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + sqlGUID + "'";
                         break;
+
                     case EntryType.Sibi:
                         DeleteQuery = "DELETE FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.UID + "='" + sqlGUID + "'";
                         break;
@@ -400,7 +386,6 @@ namespace AssetManager
             }
         }
 
-
         public DeviceObject GetDeviceInfoFromGUID(string deviceGUID)
         {
             return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + deviceGUID + "'"));
@@ -445,7 +430,6 @@ namespace AssetManager
             return AssetManager.DBFactory.GetDatabase().UpdateValue(table, fieldIn, valueIn, idField, idValue);
         }
 
-        #endregion
-
+        #endregion "Methods"
     }
 }

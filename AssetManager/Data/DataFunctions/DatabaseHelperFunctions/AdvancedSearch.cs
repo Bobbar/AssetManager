@@ -1,25 +1,17 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
+
 namespace AssetManager.AdvancedSearch
 {
-
     public class Search
     {
-
         #region "Fields"
 
         private string _searchString;
 
         private List<TableInfo> _searchTables;
-        #endregion
+
+        #endregion "Fields"
 
         #region "Constructors"
 
@@ -29,7 +21,7 @@ namespace AssetManager.AdvancedSearch
             _searchTables = searchTables;
         }
 
-        #endregion
+        #endregion "Constructors"
 
         #region "Methods"
 
@@ -92,22 +84,20 @@ namespace AssetManager.AdvancedSearch
             return SelectString;
         }
 
-        #endregion
-
+        #endregion "Methods"
     }
 
     #region "Structs"
 
     public struct TableInfo
     {
-
         #region "Fields"
 
         public List<string> Columns { get; }
         public string TableKey { get; set; }
         public string TableName { get; set; }
 
-        #endregion
+        #endregion "Fields"
 
         #region "Constructors"
 
@@ -118,10 +108,8 @@ namespace AssetManager.AdvancedSearch
             TableKey = string.Empty;
         }
 
-        #endregion
-
+        #endregion "Constructors"
     }
 
-    #endregion
-
+    #endregion "Structs"
 }

@@ -1,13 +1,7 @@
-using Microsoft.VisualBasic;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using System.IO;
 using MyDialogLib;
 namespace AssetManager
@@ -82,7 +76,14 @@ namespace AssetManager
         {
             if (!string.IsNullOrEmpty(Note))
             {
-                return Strings.Left(Note, CharLimit) + (Strings.Len(Note) > CharLimit ? "..." : "").ToString();
+                if (Note.Length > CharLimit)
+                {
+                    return Note.Substring(0, CharLimit) + "...";
+                }
+                else
+                {
+                    return Note;
+                }
             }
             else
             {
@@ -90,7 +91,7 @@ namespace AssetManager
             }
         }
 
-        public static MsgBoxResult Message(string Prompt, int Buttons = (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, string Title = null, Form ParentFrm = null)
+        public static DialogResult Message(string Prompt, int Buttons = (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, string Title = null, Form ParentFrm = null)
         {
             SetWaitCursor(false, ParentFrm);
             AdvancedDialog NewMessage = new AdvancedDialog(ParentFrm);

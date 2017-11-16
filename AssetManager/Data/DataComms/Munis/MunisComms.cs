@@ -1,21 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using System.ComponentModel;
-using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Data;
-using Microsoft.VisualBasic;
-using System.Collections.Specialized;
-using System.Data.Common;
-using System.Diagnostics;
 
 namespace AssetManager
 {

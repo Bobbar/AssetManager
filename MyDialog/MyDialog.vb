@@ -141,7 +141,7 @@ Public Class AdvancedDialog
     ''' <param name="Title">Optional. Title text of dialog.</param>
     ''' <param name="ParentFrm">Optional. Form to which the modal dialog will be bound. (Default: <see cref="ActiveForm"/></param>
     ''' <returns><see cref="MsgBoxResult"/></returns>
-    Public Function DialogMessage(ByVal Prompt As String, Optional ByVal Style As Integer = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As MsgBoxResult
+    Public Function DialogMessage(ByVal Prompt As String, Optional ByVal Style As Integer = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As DialogResult 'MsgBoxResult
         IsMessageBox = True
         If IsNothing(Title) Then
             Me.Text = My.Application.Info.AssemblyName
@@ -157,7 +157,8 @@ Public Class AdvancedDialog
             Me.ShowDialog(ActiveForm)
         End If
         Me.Dispose()
-        Return CType(Me.DialogResult, MsgBoxResult)
+        'Return CType(Me.DialogResult, MsgBoxResult)
+        Return Me.DialogResult
     End Function
 
     ''' <summary>

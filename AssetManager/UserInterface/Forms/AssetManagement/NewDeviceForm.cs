@@ -1,18 +1,8 @@
-﻿using System.ComponentModel;
-using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
-using Microsoft.VisualBasic;
-using System.Collections.Specialized;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics;
 using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
@@ -100,7 +90,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 else
                 {
-                    if (GlobalInstances.AssetFunc.DeviceExists(Strings.Trim(System.Convert.ToString(txtAssetTag_REQ.Text)), Strings.Trim(System.Convert.ToString(txtSerial_REQ.Text))))
+                    if (GlobalInstances.AssetFunc.DeviceExists(txtAssetTag_REQ.Text.ToString().Trim(), txtSerial_REQ.Text.ToString().Trim()))
                     {
                         OtherFunctions.Message("A device with that serial and/or asset tag already exists.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Duplicate Device", this);
                         return;
@@ -117,7 +107,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         {
                             ClearAll();
                         }
-                        if (blah == Constants.vbNo)
+                        if (blah == DialogResult.No)
                         {
                             this.Dispose();
                         }
@@ -422,7 +412,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             var DBRow = tmpTable.Rows[0];
             //Add Add'l info
             DBRow[HistoricalDevicesCols.ChangeType] = "NEWD";
-            DBRow[HistoricalDevicesCols.Notes] = Strings.Trim(System.Convert.ToString(txtNotes.Text));
+            DBRow[HistoricalDevicesCols.Notes] = txtNotes.Text.ToString().Trim();
             DBRow[HistoricalDevicesCols.ActionUser] = GlobalConstants.LocalDomainUser;
             DBRow[HistoricalDevicesCols.DeviceUID] = NewUID;
             return tmpTable;
@@ -514,7 +504,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void txtPhoneNumber_Leave(object sender, EventArgs e)
         {
-            if (Strings.Trim(System.Convert.ToString(txtPhoneNumber.Text)) != "" && !DataConsistency.ValidPhoneNumber(txtPhoneNumber.Text))
+            if (txtPhoneNumber.Text.ToString().Trim() != "" && !DataConsistency.ValidPhoneNumber(txtPhoneNumber.Text))
             {
                 OtherFunctions.Message("Invalid phone number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
                 txtPhoneNumber.Focus();

@@ -205,11 +205,7 @@
     <Compile Include="Helpers\ThemeHelpers\Colors.cs" />
     <Compile Include="Helpers\ThemeHelpers\GridThemeClass.cs" />
     <Compile Include="Helpers\ThemeHelpers\StyleFunctions.cs" />
-    <Compile Include="My Project\Application.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Application.myapp</DependentUpon>
-    </Compile>
-    <Compile Include="My Project\AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -247,6 +243,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserInterface\CustomControls\WindowList.cs" />
+    <Compile Include="UserInterface\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -486,14 +488,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="AssetManager.ruleset" />
     <None Include="inventory_icon_orange_large.ico" />
     <None Include="My Project\app.manifest" />
-    <None Include="My Project\Application.myapp">
-      <Generator>MyApplicationCodeGenerator</Generator>
-      <LastGenOutput>Application.Designer.cs</LastGenOutput>
-    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

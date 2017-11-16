@@ -1,13 +1,8 @@
-using Microsoft.VisualBasic;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
+
 namespace AssetManager
 {
     /// <summary>
@@ -15,7 +10,6 @@ namespace AssetManager
     /// </summary>
     public enum ParseType
     {
-
         /// <summary>
         /// The control is filled only.
         /// </summary>
@@ -25,18 +19,16 @@ namespace AssetManager
         /// The control is filled and will also be added to Update and Insert tables.
         /// </summary>
         UpdateAndDisplay
-
     }
 }
+
 namespace AssetManager
 {
-
     /// <summary>
     /// Instantiate and assign to <see cref="Control.Tag"/> property to enable DBParsing functions.
     /// </summary>
     public class DBControlInfo
     {
-
         #region "Fields"
 
         private AttributeDataStruct[] db_attrib_index;
@@ -44,7 +36,8 @@ namespace AssetManager
         private ParseType db_parse_type;
 
         private bool db_required;
-        #endregion
+
+        #endregion "Fields"
 
         #region "Constructors"
 
@@ -88,7 +81,7 @@ namespace AssetManager
             db_attrib_index = attribIndex;
         }
 
-        #endregion
+        #endregion "Constructors"
 
         #region "Properties"
 
@@ -132,17 +125,17 @@ namespace AssetManager
             set { db_required = value; }
         }
 
-        #endregion
-
+        #endregion "Properties"
     }
 }
+
 namespace AssetManager
 {
-
     public struct DBRemappingInfo
     {
         public string FromColumnName { get; set; }
         public string ToColumnName { get; set; }
+
         public DBRemappingInfo(string fromColumn, string toColumn)
         {
             FromColumnName = fromColumn;
@@ -150,17 +143,16 @@ namespace AssetManager
         }
     }
 }
+
 namespace AssetManager
 {
-
     public class DBControlParser
     {
-
         #region "Fields"
 
-
         private Form ParentForm;
-        #endregion
+
+        #endregion "Fields"
 
         #region "Constructors"
 
@@ -173,7 +165,7 @@ namespace AssetManager
             this.ParentForm = parentForm;
         }
 
-        #endregion
+        #endregion "Constructors"
 
         #region "Methods"
 
@@ -200,9 +192,8 @@ namespace AssetManager
 
                 if (Row.Table.Columns.Contains(DBColumn))
                 {
-
-
                     #region "Type Finder - Dictionary method"
+
                     //var setDataMap = new Dictionary<Type, Delegate>
                     //{
                     //    {typeof(TextBox), new Action<Control>(c =>
@@ -217,7 +208,7 @@ namespace AssetManager
                     //        }
                     //        }
                     //    }) },
-                    //    {typeof(MaskedTextBox), new Action<Control>(c => 
+                    //    {typeof(MaskedTextBox), new Action<Control>(c =>
                     //    {
                     //        MaskedTextBox dbMaskTxt = (MaskedTextBox)c;
                     //        dbMaskTxt.Text = Row[DBColumn].ToString();
@@ -247,13 +238,9 @@ namespace AssetManager
                     //var t = ctl.GetType();
                     //setDataMap[t].DynamicInvoke(ctl);
 
-                    #endregion
-
-
-
+                    #endregion "Type Finder - Dictionary method"
 
                     #region "Type Finder - If ElseIf method"
-
 
                     Type ctlType = ctl.GetType();
 
@@ -304,11 +291,7 @@ namespace AssetManager
                         throw new Exception("Unexpected type.");
                     }
 
-                    #endregion
-
-
-
-
+                    #endregion "Type Finder - If ElseIf method"
 
                     //               switch (true) {
                     //	case ctl is TextBox:
@@ -354,9 +337,7 @@ namespace AssetManager
                     //		throw new Exception("Unexpected type.");
                     //}
                 }
-
             }
-
         }
 
         /// <summary>
@@ -393,13 +374,11 @@ namespace AssetManager
                     controlList.Add(ctl);
                 }
 
-
                 //switch (true) {
                 //	case ctl.Tag is DBControlInfo:
                 //		controlList.Add(ctl);
                 //		break;
                 //}
-
 
                 if (ctl.HasChildren)
                 {
@@ -443,7 +422,6 @@ namespace AssetManager
                 throw new Exception("Unexpected type.");
                 //return null;
             }
-
 
             //switch (true)
             //{
@@ -524,8 +502,6 @@ namespace AssetManager
                 DBControlInfo DBInfo = (DBControlInfo)ctl.Tag;
                 if (DBInfo.ParseType != ParseType.DisplayOnly)
                 {
-
-
                     if (ctl is TextBox)
                     {
                         TextBox dbTxt = (TextBox)ctl;
@@ -556,10 +532,6 @@ namespace AssetManager
                         throw new Exception("Unexpected type.");
                         //return null;
                     }
-
-
-
-
 
                     //switch (true)
                     //{
@@ -594,7 +566,6 @@ namespace AssetManager
             }
         }
 
-        #endregion
-
+        #endregion "Methods"
     }
 }

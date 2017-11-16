@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.DirectoryServices.AccountManagement;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
 using System.Data;
 using System;
 using AssetManager.UserInterface.Forms;
@@ -14,7 +13,7 @@ using AssetManager.UserInterface.Forms;
 
 namespace AssetManager
 {
-   public static class SecurityTools
+    public static class SecurityTools
     {
         public static NetworkCredential AdminCreds = null;
         private static Dictionary<string, AccessGroupObject> AccessGroups = new Dictionary<string, AccessGroupObject>();
@@ -44,7 +43,7 @@ namespace AssetManager
             if (!ValidCreds)
             {
                 ClearAdminCreds();
-                if (OtherFunctions.Message("Could not authenticate with provided credentials.  Do you wish to re-enter?", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Exclamation, "Auth Error") == MsgBoxResult.Ok)
+                if (OtherFunctions.Message("Could not authenticate with provided credentials.  Do you wish to re-enter?", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Exclamation, "Auth Error") == DialogResult.OK)
                 {
                     return VerifyAdminCreds(credentialDescription);
                 }
