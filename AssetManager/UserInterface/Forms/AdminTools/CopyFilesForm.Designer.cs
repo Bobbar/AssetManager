@@ -36,18 +36,19 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 		[System.Diagnostics.DebuggerStepThrough()]
 		private void InitializeComponent()
 		{
-			this.SuspendLayout();
-			//
-			//CopyFilesForm
-			//
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6f, 13f);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.AutoSize = true;
-			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.ClientSize = new System.Drawing.Size(426, 316);
-			this.Name = "CopyFilesForm";
-			this.Text = "Push Files";
-			this.ResumeLayout(false);
+            this.SuspendLayout();
+            // 
+            // CopyFilesForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(426, 316);
+            this.Name = "CopyFilesForm";
+            this.Text = "Push Files";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CopyFilesForm_FormClosed);
+            this.ResumeLayout(false);
 
 		}
 	}

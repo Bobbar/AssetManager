@@ -345,7 +345,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
                 foreach (var row in Rows)
                 {
-                    string DevUID = GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID);
+                    string DevUID = ResultGrid[DevicesCols.DeviceUID, row].Value.ToString();
                     SelectedDevices.Add(GlobalInstances.AssetFunc.GetDeviceInfoFromGUID(DevUID));
                 }
 

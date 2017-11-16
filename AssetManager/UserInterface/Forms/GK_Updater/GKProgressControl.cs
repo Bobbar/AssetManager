@@ -217,7 +217,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             if (CompleteEvent.HasErrors)
             {
                 SetStatus(ProgressStatus.Errors);
-                ErrorHandling.ErrHandle(CompleteEvent.Errors, System.Reflection.MethodInfo.GetCurrentMethod());
+               // ErrorHandling.ErrHandle(CompleteEvent.Errors, System.Reflection.MethodInfo.GetCurrentMethod());
 
                 if (CompleteEvent.Errors is Win32Exception)
                 {

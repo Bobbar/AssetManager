@@ -72,7 +72,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             SecurityTools.ClearAdminCreds();
         }
 
-        private void CopyFilesForm_Disposed(object sender, EventArgs e)
+        private void CopyFilesForm_FormClosed(object sender, System.Windows.Forms.FormClosedEventArgs e)
         {
             if (PushFilesControl != null)
             {
