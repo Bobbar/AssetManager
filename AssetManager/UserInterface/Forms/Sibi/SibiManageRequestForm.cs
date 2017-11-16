@@ -1,17 +1,10 @@
-﻿using System.ComponentModel;
-using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
 using Microsoft.VisualBasic;
-using System.Collections.Specialized;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Diagnostics;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AssetManagement;
@@ -76,8 +69,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 this.WindowState = FormWindowState.Normal;
                 this.Activate();
-                var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Question, "Discard Changes", this);
-                if (blah == Constants.vbOK)
+                var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Discard Changes?", this);
+                if (blah == MsgBoxResult.Yes)
                 {
                     if (IsNewRequest)
                     {

@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
+using System.Linq;
 
 namespace AssetManager
 {
     public class SQLiteDatabase : IDisposable, IDataBase
     {
-
         #region Fields
 
         private const string EncSQLitePass = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU";
         private SQLiteConnection Connection { get; set; }
-        private string SQLiteConnectString; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
+        private string SQLiteConnectString;
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
         public SQLiteDatabase(bool openConnectionOnCall = true)
         {
-            // VBConversions Note: Non-static class variable initialization is below.  Class variables cannot be initially assigned non-static values in C#.
             SQLiteConnectString = "Data Source=" + Paths.SQLitePath + ";Password=" + SecurityTools.DecodePassword(EncSQLitePass);
 
             if (openConnectionOnCall)
@@ -36,7 +32,7 @@ namespace AssetManager
             }
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -78,7 +74,7 @@ namespace AssetManager
             }
         }
 
-        #endregion
+        #endregion Connection Methods
 
         #region CacheManagement
 
@@ -119,7 +115,6 @@ namespace AssetManager
                 cmd.Connection = Connection;
                 return System.Convert.ToInt32(cmd.ExecuteScalar());
             }
-
         }
 
         public void RefreshSqlCache()
@@ -178,7 +173,6 @@ namespace AssetManager
                         results.TableName = table;
                         hashList.Add(SecurityTools.GetSHAOfTable(results));
                     }
-
                 }
                 return hashList;
             }
@@ -200,11 +194,9 @@ namespace AssetManager
                         results.TableName = table;
                         hashList.Add(SecurityTools.GetSHAOfTable(results));
                     }
-
                 }
                 return hashList;
             }
-
         }
 
         private void AddTable(string tableName, SQLiteTransaction transaction)
@@ -264,7 +256,6 @@ namespace AssetManager
                     KeyStringIndex = System.Convert.ToInt32(ColumnDefs.IndexOf(item));
                     if (item.Contains("CREATE")) //If the key is at the start of the statement, add all the correct syntax
                     {
-                        //TODO: Make sure "\n" works as equivalent of vbLf.
                         var firstDef = (item.Replace("\n", "")).Split(' ');
                         NewKeyString = firstDef[0] + " " + System.Convert.ToString(firstDef[1]) + " " + System.Convert.ToString(firstDef[2]) + " " + System.Convert.ToString(firstDef[3]) + " " + System.Convert.ToString(firstDef[5]) + " " + System.Convert.ToString(firstDef[6]) + " PRIMARY KEY";
                     }
@@ -306,7 +297,6 @@ namespace AssetManager
                 cmd.Transaction = transaction;
                 cmd.ExecuteNonQuery();
             }
-
         }
 
         private DataTable GetRemoteDBTable(string tableName)
@@ -325,13 +315,9 @@ namespace AssetManager
                             results.TableName = tableName;
                             return results;
                         }
-
                     }
-
                 }
-
             }
-
         }
 
         private string GetTableCreateStatement(string tableName)
@@ -343,9 +329,7 @@ namespace AssetManager
                 {
                     return results.Rows[0][1].ToString();
                 }
-
             }
-
         }
 
         private void ImportDatabase(string tableName, SQLiteTransaction transaction)
@@ -361,11 +345,8 @@ namespace AssetManager
                         cmd.CommandText = "SELECT * FROM " + tableName;
                         adapter.Update(GetRemoteDBTable(tableName));
                     }
-
                 }
-
             }
-
         }
 
         private List<string> TableList()
@@ -400,7 +381,7 @@ namespace AssetManager
             return tmpTable;
         }
 
-        #endregion
+        #endregion CacheManagement
 
         #region IDataBase
 
@@ -412,26 +393,16 @@ namespace AssetManager
         public DataTable DataTableFromQueryString(string query)
         {
             using (DataTable results = new DataTable())
+            using (DbDataAdapter da = new SQLiteDataAdapter())
+            using (var cmd = new SQLiteCommand(query))
+            using (var conn = NewConnection())
             {
-                using (DbDataAdapter da = new SQLiteDataAdapter())
-                {
-                    using (var cmd = new SQLiteCommand(query))
-                    {
-                        using (var conn = NewConnection())
-                        {
-                            cmd.Connection = conn;
-                            da.SelectCommand = cmd;
-                            da.Fill(results);
-                            return results;
-                            //						da.SelectCommand.Connection.Dispose();
-                        }
-
-                    }
-
-                }
-
+                cmd.Connection = conn;
+                da.SelectCommand = cmd;
+                da.Fill(results);
+                return results;
+                //						da.SelectCommand.Connection.Dispose();
             }
-
         }
 
         public DataTable DataTableFromCommand(DbCommand command, DbTransaction transaction = null)
@@ -441,35 +412,24 @@ namespace AssetManager
                 throw (new NotImplementedException());
             }
             using (DbDataAdapter da = new SQLiteDataAdapter())
+            using (DataTable results = new DataTable())
+            using (var conn = NewConnection())
             {
-                using (DataTable results = new DataTable())
-                {
-                    using (var conn = NewConnection())
-                    {
-                        command.Connection = conn;
-                        da.SelectCommand = command;
-                        da.Fill(results);
-                        command.Dispose();
-                        return results;
-                    }
-
-                }
-
+                command.Connection = conn;
+                da.SelectCommand = command;
+                da.Fill(results);
+                command.Dispose();
+                return results;
             }
-
         }
 
         public DataTable DataTableFromParameters(string query, List<DBQueryParameter> @params)
         {
             using (var cmd = GetCommandFromParams(query, @params))
+            using (var results = DataTableFromCommand(cmd))
             {
-                using (var results = DataTableFromCommand(cmd))
-                {
-                    return results;
-                }
-
+                return results;
             }
-
         }
 
         public dynamic ExecuteScalarFromCommand(DbCommand command)
@@ -482,7 +442,6 @@ namespace AssetManager
                     command.Connection.Open();
                     return command.ExecuteScalar();
                 }
-
             }
             finally
             {
@@ -493,15 +452,11 @@ namespace AssetManager
         public dynamic ExecuteScalarFromQueryString(string query)
         {
             using (var conn = NewConnection())
+            using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Connection.Open();
-                    return cmd.ExecuteScalar();
-                }
-
+                cmd.Connection.Open();
+                return cmd.ExecuteScalar();
             }
-
         }
 
         public int ExecuteQuery(string query)
@@ -563,9 +518,9 @@ namespace AssetManager
             return cmd;
         }
 
-        #endregion
+        #endregion IDataBase
 
-        #endregion
+        #endregion Methods
 
         #region IDisposable Support
 
@@ -604,7 +559,6 @@ namespace AssetManager
         //    MyBase.Finalize()
         //End Sub
 
-        #endregion
-
+        #endregion IDisposable Support
     }
 }

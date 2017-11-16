@@ -1,15 +1,13 @@
-﻿using System.Data.Common;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
-using System.Data;
 using System.Collections.Generic;
-
+using System.Data;
+using System.Data.Common;
 
 namespace AssetManager
 {
     public class MySQLDatabase : IDisposable, IDataBase
     {
-
         #region IDisposable Support
 
         private bool disposedValue; // To detect redundant calls
@@ -46,25 +44,23 @@ namespace AssetManager
         //    MyBase.Finalize()
         //End Sub
 
-        #endregion
+        #endregion IDisposable Support
 
         #region Fields
 
         private const string EncMySqlPass = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG";
         private string MySQLConnectString;
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
         public MySQLDatabase()
         {
-           
             MySQLConnectString = "server=" + ServerInfo.MySQLServerIP + ";uid=asset_mgr_usr;pwd=" + SecurityTools.DecodePassword(EncMySqlPass) + ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database=";
-
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -91,7 +87,6 @@ namespace AssetManager
             {
                 return TryOpenConnection(connection);
             }
-
         }
 
         private bool TryOpenConnection(MySqlConnection connection)
@@ -124,7 +119,7 @@ namespace AssetManager
             return new MySqlDataAdapter(sqlQry, connection);
         }
 
-        #endregion
+        #endregion Methods
 
         #region IDataBase
 
@@ -139,26 +134,16 @@ namespace AssetManager
         public DataTable DataTableFromQueryString(string query)
         {
             using (DataTable results = new DataTable())
+            using (var da = new MySqlDataAdapter())
+            using (var cmd = new MySqlCommand(query))
+            using (var conn = NewConnection())
             {
-                using (var da = new MySqlDataAdapter())
-                {
-                    using (var cmd = new MySqlCommand(query))
-                    {
-                        using (var conn = NewConnection())
-                        {
-                            OpenConnection(conn);
-                            cmd.Connection = conn;
-                            da.SelectCommand = cmd;
-                            da.Fill(results);
-                            return results;
-                        }
-
-                    }
-
-                }
-
+                OpenConnection(conn);
+                cmd.Connection = conn;
+                da.SelectCommand = cmd;
+                da.Fill(results);
+                return results;
             }
-
         }
 
         public DataTable DataTableFromCommand(DbCommand command, DbTransaction transaction = null)
@@ -166,54 +151,39 @@ namespace AssetManager
             if (ReferenceEquals(transaction, null))
             {
                 using (DbDataAdapter da = new MySqlDataAdapter())
+                using (DataTable results = new DataTable())
+                using (var conn = NewConnection())
                 {
-                    using (DataTable results = new DataTable())
-                    {
-                        using (var conn = NewConnection())
-                        {
-                            OpenConnection(conn);
-                            command.Connection = conn;
-                            da.SelectCommand = command;
-                            da.Fill(results);
-                            command.Dispose();
-                            return results;
-                        }
-
-                    }
-
+                    OpenConnection(conn);
+                    command.Connection = conn;
+                    da.SelectCommand = command;
+                    da.Fill(results);
+                    command.Dispose();
+                    return results;
                 }
-
             }
             else
             {
                 var conn = (MySqlConnection)transaction.Connection;
                 using (DbDataAdapter da = new MySqlDataAdapter())
+                using (DataTable results = new DataTable())
                 {
-                    using (DataTable results = new DataTable())
-                    {
-                        command.Connection = conn;
-                        da.SelectCommand = command;
-                        da.Fill(results);
-                        command.Dispose();
-                        return results;
-                    }
-
+                    command.Connection = conn;
+                    da.SelectCommand = command;
+                    da.Fill(results);
+                    command.Dispose();
+                    return results;
                 }
-
             }
         }
 
         public DataTable DataTableFromParameters(string query, List<DBQueryParameter> @params)
         {
             using (var cmd = GetCommandFromParams(query, @params))
+            using (var results = DataTableFromCommand(cmd))
             {
-                using (var results = DataTableFromCommand(cmd))
-                {
-                    return results;
-                }
-
+                return results;
             }
-
         }
 
         public object ExecuteScalarFromCommand(DbCommand command)
@@ -226,7 +196,6 @@ namespace AssetManager
                     command.Connection = conn;
                     return command.ExecuteScalar();
                 }
-
             }
             finally
             {
@@ -237,29 +206,21 @@ namespace AssetManager
         public object ExecuteScalarFromQueryString(string query)
         {
             using (var conn = NewConnection())
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                {
-                    OpenConnection(conn);
-                    return cmd.ExecuteScalar();
-                }
-
+                OpenConnection(conn);
+                return cmd.ExecuteScalar();
             }
-
         }
 
         public int ExecuteQuery(string query)
         {
             using (var conn = NewConnection())
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                {
-                    OpenConnection(conn);
-                    return cmd.ExecuteNonQuery();
-                }
-
+                OpenConnection(conn);
+                return cmd.ExecuteNonQuery();
             }
-
         }
 
         public int InsertFromParameters(string tableName, List<DBParameter> @params, DbTransaction transaction = null)
@@ -269,47 +230,33 @@ namespace AssetManager
             {
                 var conn = (MySqlConnection)transaction.Connection;
                 using (var cmd = new MySqlCommand(SelectQuery, conn, (MySqlTransaction)transaction))
+                using (var Adapter = new MySqlDataAdapter(cmd))
+                using (var Builder = new MySqlCommandBuilder(Adapter))
                 {
-                    using (var Adapter = new MySqlDataAdapter(cmd))
+                    var table = DataTableFromQueryString(SelectQuery);
+                    table.Rows.Add();
+                    foreach (var param in @params)
                     {
-                        using (var Builder = new MySqlCommandBuilder(Adapter))
-                        {
-                            var table = DataTableFromQueryString(SelectQuery);
-                            table.Rows.Add();
-                            foreach (var param in @params)
-                            {
-                                table.Rows[0][param.FieldName] = param.Value;
-                            }
-                            return Adapter.Update(table);
-                        }
-
+                        table.Rows[0][param.FieldName] = param.Value;
                     }
-
+                    return Adapter.Update(table);
                 }
-
             }
             else
             {
                 using (var conn = NewConnection())
+                using (var Adapter = new MySqlDataAdapter(SelectQuery, conn))
+                using (var Builder = new MySqlCommandBuilder(Adapter))
                 {
-                    using (var Adapter = new MySqlDataAdapter(SelectQuery, conn))
+                    OpenConnection(conn);
+                    var table = DataTableFromQueryString(SelectQuery);
+                    table.Rows.Add();
+                    foreach (var param in @params)
                     {
-                        using (var Builder = new MySqlCommandBuilder(Adapter))
-                        {
-                            OpenConnection(conn);
-                            var table = DataTableFromQueryString(SelectQuery);
-                            table.Rows.Add();
-                            foreach (var param in @params)
-                            {
-                                table.Rows[0][param.FieldName] = param.Value;
-                            }
-                            return Adapter.Update(table);
-                        }
-
+                        table.Rows[0][param.FieldName] = param.Value;
                     }
-
+                    return Adapter.Update(table);
                 }
-
             }
         }
 
@@ -319,35 +266,21 @@ namespace AssetManager
             {
                 var conn = (MySqlConnection)transaction.Connection;
                 using (var cmd = new MySqlCommand(selectQuery, conn, (MySqlTransaction)transaction))
+                using (var Adapter = new MySqlDataAdapter(cmd))
+                using (var Builder = new MySqlCommandBuilder(Adapter))
                 {
-                    using (var Adapter = new MySqlDataAdapter(cmd))
-                    {
-                        using (var Builder = new MySqlCommandBuilder(Adapter))
-                        {
-                            return Adapter.Update(table);
-                        }
-
-                    }
-
+                    return Adapter.Update(table);
                 }
-
             }
             else
             {
                 using (var conn = NewConnection())
+                using (var Adapter = new MySqlDataAdapter(selectQuery, conn))
+                using (var Builder = new MySqlCommandBuilder(Adapter))
                 {
-                    using (var Adapter = new MySqlDataAdapter(selectQuery, conn))
-                    {
-                        using (var Builder = new MySqlCommandBuilder(Adapter))
-                        {
-                            OpenConnection(conn);
-                            return Adapter.Update(table);
-                        }
-
-                    }
-
+                    OpenConnection(conn);
+                    return Adapter.Update(table);
                 }
-
             }
         }
 
@@ -362,23 +295,17 @@ namespace AssetManager
                     cmd.Parameters.AddWithValue("@ValueIN", valueIn);
                     return cmd.ExecuteNonQuery();
                 }
-
             }
             else
             {
                 using (var conn = NewConnection())
+                using (MySqlCommand cmd = new MySqlCommand(sqlUpdateQry, conn))
                 {
-                    using (MySqlCommand cmd = new MySqlCommand(sqlUpdateQry, conn))
-                    {
-                        OpenConnection(conn);
-                        cmd.Parameters.AddWithValue("@ValueIN", valueIn);
-                        return cmd.ExecuteNonQuery();
-                    }
-
+                    OpenConnection(conn);
+                    cmd.Parameters.AddWithValue("@ValueIN", valueIn);
+                    return cmd.ExecuteNonQuery();
                 }
-
             }
-
         }
 
         public DbCommand GetCommand(string qryString = "")
@@ -420,7 +347,6 @@ namespace AssetManager
             return cmd;
         }
 
-        #endregion
-
+        #endregion IDataBase
     }
 }

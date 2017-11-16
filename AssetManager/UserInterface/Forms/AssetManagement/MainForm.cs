@@ -4,7 +4,6 @@ using Microsoft.VisualBasic;
 using MyDialogLib;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Deployment.Application;
@@ -354,7 +353,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void Form1_Closing(object sender, CancelEventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (CurrentTransaction != null)
             {
@@ -364,14 +363,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (!OtherFunctions.OKToEnd() | !Helpers.ChildFormControl.OKToCloseChildren(this) | CurrentTransaction != null)
             {
                 e.Cancel = true;
-            }
-            else
-            {
-                LastCommand.Dispose();
-                MyLiveBox.Dispose();
-                MyWindowList.Dispose();
-                MyMunisToolBar.Dispose();
-                OtherFunctions.EndProgram();
             }
         }
 
@@ -1072,10 +1063,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             MyMunisToolBar.Dispose();
             MyWindowList.Dispose();
             WatchDog.Dispose();
+            OtherFunctions.EndProgram();
         }
 
         #endregion "Control Event Methods"
 
         #endregion "Methods"
+
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -11,10 +10,7 @@ using System.Net.NetworkInformation;
 using PingVisLib;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.Attachments;
-using AssetManager.UserInterface.Forms.AssetManagement;
 using AssetManager.UserInterface.Forms.Sibi;
-using AssetManager.UserInterface.Forms.GK_Updater;
-using AssetManager.UserInterface.Forms.AdminTools;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
@@ -24,19 +20,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #region Fields
 
-        public MunisEmployeeStruct MunisUser = new MunisEmployeeStruct(); //null;
+        public MunisEmployeeStruct MunisUser = new MunisEmployeeStruct();
         private bool bolCheckFields;
         private bool bolGridFilling = false;
         private string CurrentHash;
         private DeviceObject CurrentViewDevice = new DeviceObject();
-        private DBControlParser DataParser; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
+        private DBControlParser DataParser;
         private string DeviceHostname = null;
         private bool EditMode = false;
         private int intFailedPings = 0;
-        private LiveBox MyLiveBox; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
-        private MunisToolBar MyMunisToolBar; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
+        private LiveBox MyLiveBox;
+        private MunisToolBar MyMunisToolBar;
         private PingVis MyPingVis;
-        private WindowList MyWindowList; // VBConversions Note: Initial value cannot be assigned here since it is non-static.  Assignment has been moved to the class constructors.
+        private WindowList MyWindowList;
         private SliderLabel StatusSlider;
 
         #endregion
@@ -51,7 +47,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public ViewDeviceForm(ExtendedForm parentForm, string deviceGUID)
         {
-            // VBConversions Note: Non-static class variable initialization is below.  Class variables cannot be initially assigned non-static values in C#.
+
             DataParser = new DBControlParser(this);
             MyLiveBox = new LiveBox(this);
             MyMunisToolBar = new MunisToolBar(this);
@@ -279,7 +275,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 this.WindowState = FormWindowState.Normal;
                 this.Activate();
-                var blah = OtherFunctions.Message("All changes will be lost.  Are you sure you want to cancel?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Cancel Edit", this);
+                var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Discard Changes?", this);
                 if (blah == Constants.vbYes)
                 {
                     bolCheckFields = false;

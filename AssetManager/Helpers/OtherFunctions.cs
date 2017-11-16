@@ -46,7 +46,6 @@ namespace AssetManager
             GlobalSwitches.ProgramEnding = true;
             Logging.Logger("Ending Program...");
             PurgeTempDir();
-            Application.Exit();
         }
 
         public static void PurgeTempDir()
@@ -105,7 +104,7 @@ namespace AssetManager
                 Message("Still building DB Cache. Please wait and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Critical Function Running");
                 return false;
             }
-           
+
             var GKUpdInstance = Helpers.ChildFormControl.GKUpdaterInstance();
             if (GKUpdInstance.Visible && !GKUpdInstance.OKToClose())
                 return false;
