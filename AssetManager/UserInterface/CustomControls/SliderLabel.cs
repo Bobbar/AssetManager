@@ -1,20 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
-using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
-using Microsoft.VisualBasic;
-using System.Collections.Specialized;
-using System.Data.Common;
-using System.Diagnostics;
 using System.Timers;
 
 namespace AssetManager.UserInterface.CustomControls
@@ -46,25 +36,28 @@ namespace AssetManager.UserInterface.CustomControls
         #region Fields
 
         private const int defaultDisplayTime = 4;
+        private const int AnimationTimerInterval = 15;
+        private int currentDisplayTime = defaultDisplayTime;
+
         private const SlideDirection defaultSlideInDirection = SlideDirection.Up;
         private const SlideDirection defaultSlideOutDirection = SlideDirection.Left;
 
-        //  Private stepSize As Single = 0.25
-        private float Acceleration = (float)(0.5F);
+        private float slideAcceleration = (float)(0.5F);
+        private float currentSlideSpeed = 0;
 
         private SlideDirection CurrentDirection;
         private SlideState CurrentSlideState = SlideState.Done;
-        private float CurrentSpeed = 0;
-        private int DisplayTime = 4;
-        private List<MessageParameters> MessageQueue = new List<MessageParameters>();
-        private int AnimationTimerInterval = 15;
         private SlideDirection SlideInDirection;
         private SlideDirection SlideOutDirection;
+        
+        private List<MessageParameters> MessageQueue = new List<MessageParameters>();
+        
         private System.Timers.Timer SlideTimer;
         private SizeF TextSize;
         private PointF StartPosition = new PointF();
         private PointF EndPosition = new PointF();
         private PointF CurrentPosition = new PointF();
+
         private bool SlideComplete = false;
         private RectangleF lastPositionRect;
 
@@ -88,6 +81,8 @@ namespace AssetManager.UserInterface.CustomControls
 
             SlideInDirection = defaultSlideInDirection;
             SlideOutDirection = defaultSlideOutDirection;
+
+            this.Disposed += SliderLabel_Disposed;
         }
 
         #endregion
@@ -98,11 +93,11 @@ namespace AssetManager.UserInterface.CustomControls
         {
             get
             {
-                return DisplayTime;
+                return currentDisplayTime;
             }
             set
             {
-                DisplayTime = value;
+                currentDisplayTime = value;
             }
         }
 
@@ -120,41 +115,6 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         #endregion
-
-        //Sub New(text As String)
-        //    InitializeComponent()
-
-        //    ' text = text
-        //    slideInDirection = SlideDirection.DefaultSlide
-        //    slideOutDirection = SlideDirection.DefaultSlide
-        //End Sub
-
-        //Sub New(text As String, displayTime As Integer)
-        //    InitializeComponent()
-
-        //    ' text = text
-        //    displayTime = displayTime
-        //    slideInDirection = SlideDirection.DefaultSlide
-        //    slideOutDirection = SlideDirection.DefaultSlide
-        //End Sub
-
-        //Sub New(text As String, displayTime As Integer, slideInDirection As SlideDirection)
-        //    InitializeComponent()
-
-        //    ' text = text
-        //    displayTime = displayTime
-        //    slideInDirection = slideInDirection
-        //    slideOutDirection = SlideDirection.DefaultSlide
-        //End Sub
-
-        //Sub New(text As String, displayTime As Integer, slideInDirection As SlideDirection, slideOutDirection As SlideDirection)
-        //    InitializeComponent()
-
-        //    ' text = text
-        //    displayTime = displayTime
-        //    slideInDirection = slideInDirection
-        //    slideOutDirection = slideOutDirection
-        //End Sub
 
         #region Methods
 
@@ -236,7 +196,7 @@ namespace AssetManager.UserInterface.CustomControls
             if (!string.IsNullOrEmpty(message.Message))
             {
                 Text = message.Message;
-                DisplayTime = message.DisplayTime;
+                currentDisplayTime = message.DisplayTime;
                 TextSize = GetTextSize(message.Message);
                 SlideInDirection = message.SlideInDirection;
                 SlideOutDirection = message.SlideOutDirection;
@@ -327,7 +287,7 @@ namespace AssetManager.UserInterface.CustomControls
             CurrentDirection = SlideInDirection;
             CurrentSlideState = SlideState.SlideIn;
             CurrentPosition = new PointF(0, 0);
-            CurrentSpeed = 0;
+            currentSlideSpeed = 0;
             SlideComplete = false;
             switch (SlideInDirection)
             {
@@ -367,7 +327,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             CurrentDirection = SlideOutDirection;
             CurrentSlideState = SlideState.SlideOut;
-            CurrentSpeed = 0;
+            currentSlideSpeed = 0;
             SlideComplete = false;
             switch (SlideOutDirection)
             {
@@ -441,10 +401,10 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 case SlideDirection.DefaultSlide:
                 case SlideDirection.Up:
-                    if (CurrentPosition.Y + CurrentSpeed > EndPosition.Y)
+                    if (CurrentPosition.Y + currentSlideSpeed > EndPosition.Y)
                     {
-                        CurrentSpeed -= Acceleration;
-                        CurrentPosition.Y += CurrentSpeed;
+                        currentSlideSpeed -= slideAcceleration;
+                        CurrentPosition.Y += currentSlideSpeed;
                     }
                     else
                     {
@@ -453,10 +413,10 @@ namespace AssetManager.UserInterface.CustomControls
                     }
                     break;
                 case SlideDirection.Down:
-                    if (CurrentPosition.Y + CurrentSpeed < EndPosition.Y)
+                    if (CurrentPosition.Y + currentSlideSpeed < EndPosition.Y)
                     {
-                        CurrentSpeed += Acceleration;
-                        CurrentPosition.Y += CurrentSpeed;
+                        currentSlideSpeed += slideAcceleration;
+                        CurrentPosition.Y += currentSlideSpeed;
                     }
                     else
                     {
@@ -465,10 +425,10 @@ namespace AssetManager.UserInterface.CustomControls
                     }
                     break;
                 case SlideDirection.Left:
-                    if (CurrentPosition.X + CurrentSpeed > EndPosition.X)
+                    if (CurrentPosition.X + currentSlideSpeed > EndPosition.X)
                     {
-                        CurrentSpeed -= Acceleration;
-                        CurrentPosition.X += CurrentSpeed;
+                        currentSlideSpeed -= slideAcceleration;
+                        CurrentPosition.X += currentSlideSpeed;
                     }
                     else
                     {
@@ -477,10 +437,10 @@ namespace AssetManager.UserInterface.CustomControls
                     }
                     break;
                 case SlideDirection.Right:
-                    if (CurrentPosition.X + CurrentSpeed < EndPosition.X)
+                    if (CurrentPosition.X + currentSlideSpeed < EndPosition.X)
                     {
-                        CurrentSpeed += Acceleration;
-                        CurrentPosition.X += CurrentSpeed;
+                        currentSlideSpeed += slideAcceleration;
+                        CurrentPosition.X += currentSlideSpeed;
                     }
                     else
                     {
@@ -501,10 +461,10 @@ namespace AssetManager.UserInterface.CustomControls
             {
 
                 //Reset speed.
-                CurrentSpeed = 0;
+                currentSlideSpeed = 0;
 
                 //If current state is slide-in and display time is not forever.
-                if (CurrentSlideState == SlideState.SlideIn & DisplayTime > 0)
+                if (CurrentSlideState == SlideState.SlideIn & currentDisplayTime > 0)
                 {
 
                     //Stop the animation timer, change state to paused, and pause for the specified display time.
@@ -512,7 +472,7 @@ namespace AssetManager.UserInterface.CustomControls
                     CurrentSlideState = SlideState.Paused;
 
                     //Asynchronous wait task. (Keeps UI alive)
-                    await Pause(DisplayTime);
+                    await Pause(currentDisplayTime);
 
                     //Once the wait is complete, set the next state (slide-out) and re-start the animation timer.
                     SetSlideOutAnimation();
@@ -521,7 +481,7 @@ namespace AssetManager.UserInterface.CustomControls
                 else
                 {
                     //If the display time is forever
-                    if (DisplayTime == 0)
+                    if (currentDisplayTime == 0)
                     {
 
                         //If the forever displayed message state is slide-out, then the forever message is being replaced with a new message, so change the state to done.

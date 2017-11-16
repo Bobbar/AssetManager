@@ -45,6 +45,7 @@ namespace AssetManager.UserInterface.CustomControls
             this.BackColor = System.Drawing.Color.White;
             this.Name = "SliderLabel";
             this.Size = new System.Drawing.Size(141, 25);
+            this.Load += new System.EventHandler(this.SliderLabelLoad);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SliderTextBoxPaint);
             this.ResumeLayout(false);
 
