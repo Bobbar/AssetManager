@@ -350,7 +350,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
 
                 Helpers.ChildFormControl.GKUpdaterInstance().AddMultipleUpdates(SelectedDevices);
-               
+
             }
         }
 
@@ -377,24 +377,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void GetGridStyles()
         {
-            //set colors
-
+            //Set default styles for all grid forms.
             Colors.DefaultGridBackColor = ResultGrid.DefaultCellStyle.BackColor;
-            Colors.DefaultGridSelectColor = ResultGrid.DefaultCellStyle.SelectionBackColor;
-
             ResultGrid.DefaultCellStyle.SelectionBackColor = Colors.OrangeSelectColor;
-
-            this.GridTheme = new GridTheme(Colors.OrangeHighlightColor, ResultGrid.DefaultCellStyle.SelectionBackColor, ResultGrid.DefaultCellStyle.BackColor);
-
-            System.Windows.Forms.DataGridViewCellStyle tmpStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            tmpStyle.Alignment = ResultGrid.DefaultCellStyle.Alignment;
-            tmpStyle.BackColor = ResultGrid.DefaultCellStyle.BackColor;
-            tmpStyle.Font = ResultGrid.DefaultCellStyle.Font;
-            tmpStyle.ForeColor = ResultGrid.DefaultCellStyle.ForeColor;
-            tmpStyle.SelectionBackColor = ResultGrid.DefaultCellStyle.SelectionBackColor;
-            tmpStyle.SelectionForeColor = ResultGrid.DefaultCellStyle.SelectionForeColor;
-            tmpStyle.WrapMode = ResultGrid.DefaultCellStyle.WrapMode;
-            StyleFunctions.GridStyles = tmpStyle;
+            this.GridTheme = new GridTheme(Colors.OrangeHighlightColor, Colors.OrangeSelectColor, Colors.OrangeSelectAltColor, ResultGrid.DefaultCellStyle.BackColor);
+            StyleFunctions.DefaultGridStyles = new DataGridViewCellStyle(ResultGrid.DefaultCellStyle);
+            StyleFunctions.AlternatingRowDefaultStyles = new DataGridViewCellStyle(ResultGrid.AlternatingRowsDefaultCellStyle);
+            StyleFunctions.SetGridStyle(ResultGrid, GridTheme);
         }
 
         private void InitDBControls()
@@ -449,7 +438,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     AdminDropDown.Visible = false;
                 }
                 GetGridStyles();
-                StyleFunctions.SetGridStyle(ResultGrid);
 
                 WatchDog = new ConnectionWatchdog(GlobalSwitches.CachedMode);
                 WatchDog.StatusChanged += WatchDogStatusChanged;

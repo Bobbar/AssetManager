@@ -75,7 +75,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void MunisUser_Load(object sender, EventArgs e)
         {
-            MunisResults.DefaultCellStyle = StyleFunctions.GridStyles;
+            MunisResults.DefaultCellStyle = StyleFunctions.DefaultGridStyles;
         }
 
         private void MunisResults_CellClick(object sender, DataGridViewCellEventArgs e)

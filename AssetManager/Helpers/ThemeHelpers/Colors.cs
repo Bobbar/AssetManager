@@ -19,9 +19,12 @@ namespace AssetManager
         public static Color HighlightBlue { get; } = Color.FromArgb(46, 112, 255);
         //ColorTranslator.FromHtml("#8BCEE8")
         public static Color SibiSelectColor { get; } = Color.FromArgb(185, 205, 255);
+        public static Color SibiSelectAltColor { get; } = Color.FromArgb(172, 191, 237);
+
         //(146, 148, 255) '(31, 47, 155)
         public static Color OrangeHighlightColor { get; } = ColorTranslator.FromHtml("#FF6600");
-        public static Color OrangeSelectColor { get; } = ColorTranslator.FromHtml("#FFB917");
+        public static Color OrangeSelectColor { get; } = Color.FromArgb(255, 185, 23);
+        public static Color OrangeSelectAltColor { get; } = Color.FromArgb(255, 152, 30);
         public static Color EditColor { get; } = ColorTranslator.FromHtml("#81EAAA");
         public static Color DefaultFormBackColor { get; } = Color.FromArgb(232, 232, 232);
         public static Color StatusBarProblem { get; } = ColorTranslator.FromHtml("#FF9696");

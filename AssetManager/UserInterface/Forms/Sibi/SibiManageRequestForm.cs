@@ -958,10 +958,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.FormUID = UID;
             ImageCaching.CacheControlImages(this);
             MyWindowList.InsertWindowList(ToolStrip);
-            dgvNotes.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
-            RequestItemsGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
+            StyleFunctions.SetGridStyle(RequestItemsGrid, GridTheme);
+            StyleFunctions.SetGridStyle(dgvNotes, GridTheme);
             ToolStrip.BackColor = Colors.SibiToolBarColor;
-
         }
 
         private void InsertPONumber(string PO)

@@ -1140,9 +1140,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     TabControl1.TabPages.Insert(1, TrackingTab);
                 }
-                StyleFunctions.SetGridStyle(DataGridHistory);
-                StyleFunctions.SetGridStyle(TrackingGrid);
-                DataGridHistory.DefaultCellStyle.SelectionBackColor = this.GridTheme.CellSelectColor;
                 ExpandSplitter(true);
                 TrackingBox.Visible = true;
                 tsTracking.Visible = bolEnabled;
@@ -1153,12 +1150,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 tsTracking.Visible = bolEnabled;
                 TabControl1.TabPages.Remove(TrackingTab);
-                StyleFunctions.SetGridStyle(DataGridHistory);
-                StyleFunctions.SetGridStyle(TrackingGrid);
-                DataGridHistory.DefaultCellStyle.SelectionBackColor = this.GridTheme.CellSelectColor;
                 TrackingBox.Visible = false;
                 ExpandSplitter();
             }
+            StyleFunctions.SetGridStyle(DataGridHistory, GridTheme);
+            StyleFunctions.SetGridStyle(TrackingGrid, GridTheme);
         }
 
         private void SetupNetTools(PingVis.PingInfo PingResults)

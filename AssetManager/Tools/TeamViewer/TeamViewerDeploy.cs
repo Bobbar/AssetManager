@@ -255,7 +255,7 @@ namespace AssetManager
             LogView.Owner = parentForm;
             RTBLog = new RichTextBox();
             RTBLog.Dock = DockStyle.Fill;
-            RTBLog.Font = StyleFunctions.GridFont;
+            RTBLog.Font = StyleFunctions.DefaultGridFont;
             LogView.Controls.Add(RTBLog);
             LogView.Show();
         }

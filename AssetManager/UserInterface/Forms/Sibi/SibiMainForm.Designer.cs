@@ -56,21 +56,21 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.cmbDisplayYear = new System.Windows.Forms.ComboBox();
             this.Label2 = new System.Windows.Forms.Label();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
-            this.ResultGrid = new System.Windows.Forms.DataGridView();
+            this.SibiResultGrid = new System.Windows.Forms.DataGridView();
             this.ToolStrip1 = new AssetManager.UserInterface.CustomControls.OneClickToolStrip();
             this.cmdManage = new System.Windows.Forms.ToolStripButton();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.Panel1.SuspendLayout();
             this.GroupBox2.SuspendLayout();
             this.GroupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ResultGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SibiResultGrid)).BeginInit();
             this.ToolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Panel1
             // 
-            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel1.Controls.Add(this.GroupBox2);
             this.Panel1.Controls.Add(this.GroupBox1);
@@ -82,7 +82,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // GroupBox2
             // 
-            this.GroupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox2.Controls.Add(this.txtRTNum);
             this.GroupBox2.Controls.Add(this.txtReq);
@@ -203,10 +203,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.GroupBox1.Controls.Add(this.ResultGrid);
+            this.GroupBox1.Controls.Add(this.SibiResultGrid);
             this.GroupBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox1.Location = new System.Drawing.Point(6, 81);
             this.GroupBox1.Name = "GroupBox1";
@@ -215,19 +215,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Requests:";
             // 
-            // ResultGrid
+            // SibiResultGrid
             // 
-            this.ResultGrid.AllowUserToAddRows = false;
-            this.ResultGrid.AllowUserToDeleteRows = false;
-            this.ResultGrid.AllowUserToResizeRows = false;
-            this.ResultGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.SibiResultGrid.AllowUserToAddRows = false;
+            this.SibiResultGrid.AllowUserToDeleteRows = false;
+            this.SibiResultGrid.AllowUserToResizeRows = false;
+            this.SibiResultGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ResultGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.ResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            this.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SibiResultGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.SibiResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.SibiResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.SibiResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+            this.SibiResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -235,13 +235,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(39)))));
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ResultGrid.DefaultCellStyle = dataGridViewCellStyle1;
-            this.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.ResultGrid.Location = new System.Drawing.Point(6, 22);
-            this.ResultGrid.MultiSelect = false;
-            this.ResultGrid.Name = "ResultGrid";
-            this.ResultGrid.ReadOnly = true;
-            this.ResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.SibiResultGrid.DefaultCellStyle = dataGridViewCellStyle1;
+            this.SibiResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.SibiResultGrid.Location = new System.Drawing.Point(6, 22);
+            this.SibiResultGrid.MultiSelect = false;
+            this.SibiResultGrid.Name = "SibiResultGrid";
+            this.SibiResultGrid.ReadOnly = true;
+            this.SibiResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -249,20 +249,20 @@ namespace AssetManager.UserInterface.Forms.Sibi
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ResultGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.ResultGrid.RowHeadersVisible = false;
-            this.ResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.ResultGrid.ShowCellErrors = false;
-            this.ResultGrid.ShowCellToolTips = false;
-            this.ResultGrid.ShowEditingIcon = false;
-            this.ResultGrid.Size = new System.Drawing.Size(1158, 484);
-            this.ResultGrid.TabIndex = 18;
-            this.ResultGrid.VirtualMode = true;
-            this.ResultGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellDoubleClick);
-            this.ResultGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellEnter);
-            this.ResultGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellLeave);
-            this.ResultGrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.ResultGrid_RowPostPaint);
+            this.SibiResultGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.SibiResultGrid.RowHeadersVisible = false;
+            this.SibiResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.SibiResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.SibiResultGrid.ShowCellErrors = false;
+            this.SibiResultGrid.ShowCellToolTips = false;
+            this.SibiResultGrid.ShowEditingIcon = false;
+            this.SibiResultGrid.Size = new System.Drawing.Size(1158, 484);
+            this.SibiResultGrid.TabIndex = 18;
+            this.SibiResultGrid.VirtualMode = true;
+            this.SibiResultGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellDoubleClick);
+            this.SibiResultGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellEnter);
+            this.SibiResultGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellLeave);
+            this.SibiResultGrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.ResultGrid_RowPostPaint);
             // 
             // ToolStrip1
             // 
@@ -313,14 +313,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox2.ResumeLayout(false);
             this.GroupBox2.PerformLayout();
             this.GroupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ResultGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SibiResultGrid)).EndInit();
             this.ToolStrip1.ResumeLayout(false);
             this.ToolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
         internal Panel Panel1;
-        internal DataGridView ResultGrid;
+        internal DataGridView SibiResultGrid;
         internal Button cmdShowAll;
         internal OneClickToolStrip ToolStrip1;
         internal ToolStripButton cmdManage;

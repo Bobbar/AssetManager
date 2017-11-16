@@ -24,6 +24,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 			Load += frmUserManager_Load;
 			InitializeComponent();
 			this.ParentForm = parentForm;
+            StyleFunctions.SetGridStyle(UserGrid, GridTheme);
 			Show();
 		}
 

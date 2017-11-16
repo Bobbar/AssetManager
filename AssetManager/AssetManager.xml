@@ -828,6 +828,23 @@
             "ftp://  strServerIP  /attachments/  CurrentDB  /"
             </summary>
         </member>
+        <member name="F:AssetManager.UserInterface.Forms.Form1.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.Form1.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.Form1.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="M:AssetManager.UserInterface.Forms.GK_Updater.GKProgressControl.GKLogEvent(System.Object,System.EventArgs)">
             <summary>
             Log message event from GKUpdater.  This even can fire very rapidly. So the result is stored in a buffer to be added to the rtbLog control in a more controlled manner.

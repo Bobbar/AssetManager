@@ -114,8 +114,6 @@ namespace AssetManager.UserInterface.Forms
             NewGrid.Name = name;
             NewGrid.Tag = label;
             NewGrid.Dock = DockStyle.Fill;
-            NewGrid.DefaultCellStyle = StyleFunctions.GridStyles;
-            NewGrid.DefaultCellStyle.SelectionBackColor = this.GridTheme.CellSelectColor;
             NewGrid.RowHeadersVisible = false;
             NewGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
             NewGrid.AllowUserToResizeRows = false;
@@ -125,6 +123,7 @@ namespace AssetManager.UserInterface.Forms
             NewGrid.AllowUserToDeleteRows = false;
             NewGrid.Padding = new Padding(0, 0, 0, 10);
             NewGrid.ContextMenuStrip = PopUpMenu;
+            StyleFunctions.SetGridStyle(NewGrid, ParentForm.GridTheme);
             NewGrid.CellLeave += GridLeaveCell;
             NewGrid.CellEnter += GridEnterCell;
             NewGrid.CellDoubleClick += GridDoubleClickCell;
@@ -143,9 +142,6 @@ namespace AssetManager.UserInterface.Forms
         {
             if (!bolGridFilling)
             {
-                //TODO: See if this work.
-                // var grid = (DataGridView)sender;
-
                 StyleFunctions.HighlightRow((DataGridView)sender, this.GridTheme, e.RowIndex);
             }
         }
@@ -178,8 +174,6 @@ namespace AssetManager.UserInterface.Forms
 
         private void GridLeaveCell(object sender, DataGridViewCellEventArgs e)
         {
-            //TODO: See if this work.
-            //var grid = (DataGridView)sender;
             StyleFunctions.LeaveRow((DataGridView)sender, this.GridTheme, e.RowIndex);
         }
 

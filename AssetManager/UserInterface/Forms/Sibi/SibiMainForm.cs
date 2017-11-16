@@ -41,8 +41,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, true);
-                this.GridTheme = new GridTheme(Colors.HighlightBlue, Colors.SibiSelectColor, ResultGrid.DefaultCellStyle.BackColor);
+                ExtendedMethods.DoubleBufferedDataGrid(SibiResultGrid, true);
+                this.GridTheme = new GridTheme(Colors.HighlightBlue, Colors.SibiSelectColor, Colors.SibiSelectAltColor, SibiResultGrid.DefaultCellStyle.BackColor);
+                StyleFunctions.SetGridStyle(SibiResultGrid, this.GridTheme);
                 ToolStrip1.BackColor = Colors.SibiToolBarColor;
                 ImageCaching.CacheControlImages(this);
                 MyWindowList.InsertWindowList(ToolStrip1);
@@ -178,8 +179,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     bolGridFilling = true;
                     StatusColors = GetStatusColors(results);
-                    GridFunctions.PopulateGrid(ResultGrid, results, SibiTableColumns());
-                    ResultGrid.ClearSelection();
+                    GridFunctions.PopulateGrid(SibiResultGrid, results, SibiTableColumns());
+                    SibiResultGrid.ClearSelection();
                     bolGridFilling = false;
                 }
             }
@@ -218,9 +219,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void SetGridHeaders()
         {
-            foreach (DataGridViewColumn col in ResultGrid.Columns)
+            foreach (DataGridViewColumn col in SibiResultGrid.Columns)
             {
-                col.HeaderText = ((DataTable)ResultGrid.DataSource).Columns[col.HeaderText].Caption;
+                col.HeaderText = ((DataTable)SibiResultGrid.DataSource).Columns[col.HeaderText].Caption;
             }
         }
 
@@ -281,8 +282,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ResultGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (ResultGrid.CurrentRow.Index > -1)
-                OpenRequest(GridFunctions.GetCurrentCellValue(ResultGrid, SibiRequestCols.UID));
+            if (SibiResultGrid.CurrentRow.Index > -1)
+                OpenRequest(GridFunctions.GetCurrentCellValue(SibiResultGrid, SibiRequestCols.UID));
         }
 
         private void OpenRequest(string strUID)
@@ -305,8 +306,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             if (e.RowIndex > -1)
             {
-                DataGridViewCell dvgCell = ResultGrid.Rows[e.RowIndex].Cells[SibiRequestCols.Status];
-                DataGridViewRow dvgRow = ResultGrid.Rows[e.RowIndex];
+                DataGridViewCell dvgCell = SibiResultGrid.Rows[e.RowIndex].Cells[SibiRequestCols.Status];
+                DataGridViewRow dvgRow = SibiResultGrid.Rows[e.RowIndex];
                 Color BackCol = default(Color);
                 Color ForeCol = default(Color);
                 BackCol = GetRowColorFromID(dvgRow.Cells[SibiRequestCols.RequestNumber].Value.ToString());
@@ -392,7 +393,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (!bolGridFilling)
                 {
-                    StyleFunctions.HighlightRow(ResultGrid, GridTheme, Row);
+                    StyleFunctions.HighlightRow(SibiResultGrid, GridTheme, Row);
                 }
             }
             catch
@@ -407,7 +408,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            StyleFunctions.LeaveRow(ResultGrid, GridTheme, e.RowIndex);
+            StyleFunctions.LeaveRow(SibiResultGrid, GridTheme, e.RowIndex);
         }
 
         private void cmbDisplayYear_SelectedIndexChanged(object sender, EventArgs e)
