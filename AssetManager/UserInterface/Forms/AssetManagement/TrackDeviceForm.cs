@@ -1,9 +1,8 @@
-﻿using System;
+﻿using AssetManager.UserInterface.CustomControls;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Data;
-using Microsoft.VisualBasic;
-using AssetManager.UserInterface.CustomControls;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
@@ -37,7 +36,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         if (c.Visible)
                         {
-                            if (Strings.Trim(System.Convert.ToString(c.Text)) == "")
+                            if (c.Text.Trim() == "")
                             {
                                 OtherFunctions.Message("Please complete all fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
                                 return false;
@@ -54,7 +53,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     c = tempLoopVar_c;
                     if (c is TextBox)
                     {
-                        if (Strings.Trim(System.Convert.ToString(c.Text)) == "")
+                        if (c.Text.Trim() == "")
                         {
                             OtherFunctions.Message("Please complete all fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
                             return false;
@@ -64,9 +63,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             CheckData.CheckoutTime = dtCheckOut.Value; //.ToString(strDBDateTimeFormat)
             CheckData.DueBackTime = dtDueBack.Value; //.ToString(strDBDateTimeFormat)
-            CheckData.UseLocation = Strings.Trim(System.Convert.ToString(txtUseLocation.Text)).ToUpper();
-            CheckData.UseReason = Strings.Trim(System.Convert.ToString(txtUseReason.Text)).ToUpper();
-            CheckData.CheckinNotes = Strings.Trim(System.Convert.ToString(txtCheckInNotes.Text)).ToUpper();
+            CheckData.UseLocation = txtUseLocation.Text.Trim().ToUpper();
+            CheckData.UseReason = txtUseReason.Text.Trim().ToUpper();
+            CheckData.CheckinNotes = txtCheckInNotes.Text.Trim().ToUpper();
             CheckData.DeviceGUID = CurrentTrackingDevice.GUID;
             CheckData.CheckoutUser = GlobalConstants.LocalDomainUser;
             CheckData.CheckinTime = dtCheckIn.Value; //.ToString(strDBDateTimeFormat)
@@ -83,7 +82,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     CurrentTrackingDevice.MapClassProperties(CurrentTrackingDevice, results);
                 }
             }
-
         }
 
         private void LoadTracking()
@@ -186,7 +184,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     }
                 }
             }
-
         }
 
         private void CheckIn()
@@ -240,7 +237,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     }
                 }
             }
-
         }
 
         private void cmdCheckOut_Click(object sender, EventArgs e)
@@ -255,18 +251,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void txtUseLocation_LostFocus(object sender, EventArgs e)
         {
-            txtUseLocation.Text = Strings.Trim(System.Convert.ToString(txtUseLocation.Text)).ToUpper();
+            txtUseLocation.Text = txtUseLocation.Text.Trim().ToUpper();
         }
 
         private void txtUseReason_LostFocus(object sender, EventArgs e)
         {
-            txtUseReason.Text = Strings.Trim(System.Convert.ToString(txtUseReason.Text)).ToUpper();
+            txtUseReason.Text = txtUseReason.Text.Trim().ToUpper();
         }
 
         private void txtCheckInNotes_LostFocus(object sender, EventArgs e)
         {
-            txtCheckInNotes.Text = Strings.Trim(System.Convert.ToString(txtCheckInNotes.Text)).ToUpper();
+            txtCheckInNotes.Text = txtCheckInNotes.Text.Trim().ToUpper();
         }
-
     }
 }

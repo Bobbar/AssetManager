@@ -1,16 +1,7 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Windows.Forms;
 namespace AssetManager.UserInterface.Forms.GK_Updater
 {
-    
+
     partial class GKUpdaterForm
     {
 

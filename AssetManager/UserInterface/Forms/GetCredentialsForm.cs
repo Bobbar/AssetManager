@@ -1,25 +1,17 @@
-using Microsoft.VisualBasic;
+using AssetManager.UserInterface.CustomControls;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
 using System.Security;
-using AssetManager.UserInterface.CustomControls;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms
 {
-
     public partial class GetCredentialsForm : ExtendedForm
     {
         private NetworkCredential MyCreds;
 
         private SecureString SecurePwd = new SecureString();
+
         public NetworkCredential Credentials
         {
             get { return MyCreds; }
@@ -39,7 +31,7 @@ namespace AssetManager.UserInterface.Forms
         private void Accept()
         {
             string Username = null;
-            Username = Strings.Trim(txtUsername.Text);
+            Username = txtUsername.Text.Trim();
             if (!string.IsNullOrEmpty(Username) & SecurePwd.Length > 0)
             {
                 SecurePwd.MakeReadOnly();

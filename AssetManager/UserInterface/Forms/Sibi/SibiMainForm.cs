@@ -1,20 +1,14 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Data.Common;
 using AssetManager.UserInterface.CustomControls;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.Common;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
-
     public partial class SibiMainForm : ExtendedForm
     {
         private bool bolGridFilling = false;
@@ -23,9 +17,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private bool bolRebuildingCombo = false;
 
         private List<StatusColumnColorStruct> StatusColors;
+
         public SibiMainForm(ExtendedForm parentForm)
         {
-
             MyWindowList = new WindowList(this);
             Disposed += SibiMainForm_Disposed;
             Closing += frmSibiMain_Closing;
@@ -107,11 +101,21 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private List<DBQueryParameter> BuildSearchListNew()
         {
             List<DBQueryParameter> tmpList = new List<DBQueryParameter>();
-            tmpList.Add(new DBQueryParameter(SibiRequestCols.RTNumber, Strings.Trim(txtRTNum.Text), false));
-            tmpList.Add(new DBQueryParameter(SibiRequestCols.Description, Strings.Trim(txtDescription.Text), false));
+            tmpList.Add(new DBQueryParameter(SibiRequestCols.RTNumber, txtRTNum.Text.Trim(), false));
+            tmpList.Add(new DBQueryParameter(SibiRequestCols.Description, txtDescription.Text.Trim(), false));
             tmpList.Add(new DBQueryParameter(SibiRequestCols.PO, txtPO.Text, false));
             tmpList.Add(new DBQueryParameter(SibiRequestCols.RequisitionNumber, txtReq.Text, false));
-            return tmpList;
+
+            //Filter out unpopulated fields.
+            var popList = new List<DBQueryParameter>();
+            foreach (DBQueryParameter param in tmpList)
+            {
+                if (param.Value.ToString() != "")
+                {
+                    popList.Add(param);
+                }
+            }
+            return popList;
         }
 
         //dynamically creates sql query using any combination of search filters the users wants
@@ -128,9 +132,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     if (!string.IsNullOrEmpty(fld.Value.ToString()))
                     {
-                        strDynaQry = strDynaQry + " " + fld.FieldName + " LIKE @" + fld.FieldName + " AND";
+                        strDynaQry += " " + fld.FieldName + " LIKE @" + fld.FieldName;
                         string Value = "%" + fld.Value.ToString() + "%";
                         cmd.AddParameterWithValue("@" + fld.FieldName, Value);
+                        if (SearchValCol.IndexOf(fld) != SearchValCol.Count - 1)
+                        {
+                            strDynaQry += " AND";
+                        }
                     }
                 }
             }
@@ -139,11 +147,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 return;
             }
             var strQry = strStartQry + strDynaQry;
-            //remove trailing AND from dynamic query
-            if (Strings.Right(strQry, 3) == "AND")
-            {
-                strQry = Strings.Left(strQry, Strings.Len(strQry) - 3);
-            }
             strQry += " ORDER BY " + SibiRequestCols.RequestNumber + " DESC";
             cmd.CommandText = strQry;
             ExecuteCmd(ref cmd);
@@ -256,14 +259,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 DbCommand newCommand;
                 newCommand = DBFactory.GetDatabase().GetCommand("SELECT * FROM " + SibiRequestCols.TableName + " ORDER BY " + SibiRequestCols.RequestNumber + " DESC");
                 ExecuteCmd(ref newCommand);//DBFactory.GetDatabase().GetCommand("SELECT * FROM " + SibiRequestCols.TableName + " ORDER BY " + SibiRequestCols.RequestNumber + " DESC"));
-
             }
             else
             {
                 DbCommand newCommand;
                 newCommand = DBFactory.GetDatabase().GetCommand("SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.DateStamp + " LIKE '%" + Year + "%' ORDER BY " + SibiRequestCols.RequestNumber + " DESC");
                 ExecuteCmd(ref newCommand);//DBFactory.GetDatabase().GetCommand("SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.DateStamp + " LIKE '%" + Year + "%' ORDER BY " + SibiRequestCols.RequestNumber + " DESC"));
-
             }
         }
 
@@ -336,26 +337,37 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 case "NEW":
                     return ColorAlphaBlend(Color.FromArgb(0, 255, 30), DarkColor);
+
                 case "QTN":
                     return ColorAlphaBlend(Color.FromArgb(242, 255, 0), DarkColor);
+
                 case "QTR":
                     return ColorAlphaBlend(Color.FromArgb(255, 208, 0), DarkColor);
+
                 case "QRC":
                     return ColorAlphaBlend(Color.FromArgb(255, 162, 0), DarkColor);
+
                 case "RQN":
                     return ColorAlphaBlend(Color.FromArgb(0, 255, 251), DarkColor);
+
                 case "RQR":
                     return ColorAlphaBlend(Color.FromArgb(0, 140, 255), DarkColor);
+
                 case "POS":
                     return ColorAlphaBlend(Color.FromArgb(197, 105, 255), DarkColor);
+
                 case "SHD":
                     return ColorAlphaBlend(Color.FromArgb(255, 79, 243), DarkColor);
+
                 case "ORC":
                     return ColorAlphaBlend(Color.FromArgb(79, 144, 255), DarkColor);
+
                 case "NPAY":
                     return ColorAlphaBlend(Color.FromArgb(255, 36, 36), DarkColor);
+
                 case "RCOMP":
                     return ColorAlphaBlend(Color.FromArgb(158, 158, 158), DarkColor);
+
                 case "ONH":
                     return ColorAlphaBlend(Color.FromArgb(255, 255, 255), DarkColor);
             }
@@ -462,6 +474,5 @@ namespace AssetManager.UserInterface.Forms.Sibi
             MyWindowList.Dispose();
             Helpers.ChildFormControl.CloseChildren(this);
         }
-
     }
 }

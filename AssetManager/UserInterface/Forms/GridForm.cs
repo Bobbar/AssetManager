@@ -1,29 +1,22 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel;
 using AssetManager.UserInterface.CustomControls;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms
 {
-
     public partial class GridForm : ExtendedForm
     {
-
         #region "Fields"
 
         private bool bolGridFilling = true;
         private List<DataGridView> GridList = new List<DataGridView>();
 
         private DataGridViewRow LastDoubleClickRow;
-        #endregion
+
+        #endregion "Fields"
 
         #region "Constructors"
 
@@ -44,7 +37,7 @@ namespace AssetManager.UserInterface.Forms
             GridPanel.RowStyles.Clear();
         }
 
-        #endregion
+        #endregion "Constructors"
 
         #region "Properties"
 
@@ -58,7 +51,7 @@ namespace AssetManager.UserInterface.Forms
             get { return LastDoubleClickRow; }
         }
 
-        #endregion
+        #endregion "Properties"
 
         #region "Methods"
 
@@ -223,6 +216,6 @@ namespace AssetManager.UserInterface.Forms
             bolGridFilling = false;
         }
 
-        #endregion
+        #endregion "Methods"
     }
 }

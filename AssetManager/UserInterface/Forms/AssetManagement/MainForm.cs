@@ -134,7 +134,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     strStartQry = "SELECT * FROM " + DevicesCols.TableName + " WHERE ";
                 }
-                string strDynaQry = "";
+
                 List<DBQueryParameter> SearchValCol = BuildSearchList();
                 StartBigQuery(DBFactory.GetDatabase().GetCommandFromParams(strStartQry, SearchValCol));
             }

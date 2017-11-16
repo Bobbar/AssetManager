@@ -1,17 +1,15 @@
-﻿using System;
+﻿using AssetManager.UserInterface.CustomControls;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data;
-using Microsoft.VisualBasic;
-using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager.UserInterface.Forms.AdminTools
 {
     public partial class AdvancedSearchForm : ExtendedForm
 
     {
-
         public AdvancedSearchForm(ExtendedForm parentForm)
         {
             InitializeComponent();
@@ -52,7 +50,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         {
             List<string> Tables = new List<string>();
             var Qry = "SHOW TABLES IN " + ServerInfo.CurrentDataBase.ToString();
-            using (DataTable Results =  DBFactory.GetDatabase().DataTableFromQueryString(Qry))
+            using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Qry))
             {
                 foreach (DataRow row in Results.Rows)
                 {
@@ -67,7 +65,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         {
             List<string> colList = new List<string>();
             var SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + ServerInfo.CurrentDataBase.ToString() + "' AND TABLE_NAME = '" + table + "'";
-            using (var results =  DBFactory.GetDatabase().DataTableFromQueryString(SQLQry))
+            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(SQLQry))
             {
                 foreach (DataRow row in results.Rows)
                 {
@@ -83,7 +81,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             try
             {
                 OtherFunctions.SetWaitCursor(true, ParentForm);
-                AdvancedSearch.Search AdvSearch = new AdvancedSearch.Search(Strings.Trim(System.Convert.ToString(SearchStringTextBox.Text)), GetSelectedTables()); // GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
+                AdvancedSearch.Search AdvSearch = new AdvancedSearch.Search(SearchStringTextBox.Text.Trim(), GetSelectedTables()); // GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
                 GridForm DisplayGrid = new GridForm(ParentForm, "Advanced Search Results");
 
                 List<DataTable> Tables = await Task.Run(() =>
@@ -105,7 +103,6 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             {
                 OtherFunctions.SetWaitCursor(false, ParentForm);
             }
-
         }
 
         private List<AdvancedSearch.TableInfo> GetSelectedTables()
@@ -176,6 +173,5 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                 }
             }
         }
-
     }
 }

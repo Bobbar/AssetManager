@@ -1,28 +1,16 @@
-﻿using Microsoft.VisualBasic;
+﻿using AssetManager.UserInterface.CustomControls;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Data.Common;
-using System.IO;
-using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager.UserInterface.Forms.GK_Updater
 {
-
-
     public partial class PackFileForm : ExtendedForm
     {
         public bool PackVerified { get; set; }
         private bool Working = false;
 
         private ManagePackFile PackFunc = new ManagePackFile();
+
         public PackFileForm(bool showFunctions)
         {
             InitializeComponent();

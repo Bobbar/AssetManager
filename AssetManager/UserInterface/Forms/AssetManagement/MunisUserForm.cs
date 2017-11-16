@@ -1,19 +1,12 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using AssetManager.UserInterface.CustomControls;
+using System;
+using System.Data;
+using System.Windows.Forms;
+
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class MunisUserForm : ExtendedForm
     {
-
         public MunisEmployeeStruct EmployeeInfo
         {
             get
@@ -32,6 +25,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private MunisEmployeeStruct SelectedEmpInfo;
 
         private const int intMaxResults = 50;
+
         public MunisUserForm(ExtendedForm parentForm)
         {
             Shown += MunisUserForm_Shown;
@@ -47,7 +41,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 MunisResults.DataSource = null;
                 string strColumns = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short";
-                string strQRY = "SELECT TOP " + intMaxResults + " " + strColumns + " FROM pr_employee_master WHERE a_name_last LIKE '%" + Strings.UCase(Name) + "%' OR a_name_first LIKE '" + Strings.UCase(Name) + "'";
+                string strQRY = "SELECT TOP " + intMaxResults + " " + strColumns + " FROM pr_employee_master WHERE a_name_last LIKE '%" + Name.ToUpper() + "%' OR a_name_first LIKE '" + Name.ToUpper() + "'";
                 MunisComms MunisComms = new MunisComms();
                 SetWorking(true);
                 using (DataTable results = await MunisComms.ReturnSqlTableAsync(strQRY))
@@ -88,7 +82,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void cmdSearch_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            EmpNameSearch(Strings.Trim(txtSearchName.Text));
+            EmpNameSearch(txtSearchName.Text.Trim());
             this.Cursor = Cursors.Default;
         }
 
@@ -117,7 +111,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (e.KeyCode == Keys.Enter)
             {
                 this.Cursor = Cursors.WaitCursor;
-                EmpNameSearch(Strings.Trim(txtSearchName.Text));
+                EmpNameSearch(txtSearchName.Text.Trim());
                 this.Cursor = Cursors.Default;
             }
         }
@@ -131,6 +125,5 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             txtSearchName.Focus();
         }
-
     }
 }

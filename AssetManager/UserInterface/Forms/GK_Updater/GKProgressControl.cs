@@ -1,18 +1,13 @@
-using Microsoft.VisualBasic;
+using GKUpdaterLib;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using System.ComponentModel;
-using GKUpdaterLib;
-
-
 
 namespace AssetManager.UserInterface.Forms.GK_Updater
 {
-
     public partial class GKProgressControl : IDisposable
     {
-
         public GKUpdaterLibClass MyUpdater;
         public ProgressStatus ProgStatus;
         private bool bolShow = false;
@@ -22,6 +17,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         private Form MyParentForm;
 
         private Color PrevColor;
+
         public DeviceObject Device
         {
             get { return CurDevice; }
@@ -34,9 +30,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             InitializeComponent();
 
             // Add any initialization after the InitializeComponent() call.
-
         }
-
 
         public GKProgressControl(Form parentForm, DeviceObject device, bool createMissingDirs, string gkPath, int seq = 0)
         {
@@ -95,8 +89,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             MyUpdater.UpdateCanceled += GKUpdate_Cancelled;
             ExtendedMethods.DoubleBufferedPanel(Panel1, true);
         }
-
-
 
         public event EventHandler CriticalStopError;
 
@@ -179,7 +171,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             MyUpdater.UpdateComplete -= GKUpdate_Complete;
             MyUpdater.UpdateCanceled -= GKUpdate_Cancelled;
             MyUpdater.Dispose();
-
         }
 
         /// <summary>
@@ -217,7 +208,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             if (CompleteEvent.HasErrors)
             {
                 SetStatus(ProgressStatus.Errors);
-               // ErrorHandling.ErrHandle(CompleteEvent.Errors, System.Reflection.MethodInfo.GetCurrentMethod());
+                // ErrorHandling.ErrHandle(CompleteEvent.Errors, System.Reflection.MethodInfo.GetCurrentMethod());
 
                 if (CompleteEvent.Errors is Win32Exception)
                 {
@@ -314,10 +305,12 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                     MyUpdater.ResumeUpdate();
                     SetStatus(ProgressStatus.Running);
                     break;
+
                 case ProgressStatus.Running:
                     MyUpdater.PauseUpdate();
                     SetStatus(ProgressStatus.Paused);
                     break;
+
                 case ProgressStatus.Queued:
                     var blah = OtherFunctions.Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Warning", MyParentForm);
                     if (blah == DialogResult.Yes)
@@ -325,6 +318,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                         StartUpdate();
                     }
                     break;
+
                 default:
                     StartUpdate();
                     break;
@@ -350,10 +344,12 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                 case ProgressStatus.Starting:
                     DrawLight(Color.LimeGreen);
                     break;
+
                 case ProgressStatus.Queued:
                 case ProgressStatus.Paused:
                     DrawLight(Color.Yellow);
                     break;
+
                 default:
                     DrawLight(Color.Red);
                     break;
@@ -368,11 +364,13 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                     pbRestart.Image = ImageCaching.ImageCache("PauseIcon", Properties.Resources.PauseIcon);
                     MyToolTip.SetToolTip(pbRestart, "Pause");
                     break;
+
                 case ProgressStatus.Paused:
                 case ProgressStatus.Queued:
                     pbRestart.Image = ImageCaching.ImageCache("PlayIcon", Properties.Resources.PlayIcon);
                     MyToolTip.SetToolTip(pbRestart, "Resume");
                     break;
+
                 default:
                     pbRestart.Image = ImageCaching.ImageCache("RestartIcon", Properties.Resources.RestartIcon);
                     MyToolTip.SetToolTip(pbRestart, "Restart");
@@ -387,21 +385,27 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                 case ProgressStatus.Queued:
                     lblStatus.Text = "Queued...";
                     break;
+
                 case ProgressStatus.Canceled:
                     lblStatus.Text = "Canceled!";
                     break;
+
                 case ProgressStatus.Errors:
                     lblStatus.Text = "ERROR!";
                     break;
+
                 case ProgressStatus.CompleteWithErrors:
                     lblStatus.Text = "Completed with errors: " + MyUpdater.ErrorList.Count;
                     break;
+
                 case ProgressStatus.Complete:
                     lblStatus.Text = "Complete!";
                     break;
+
                 case ProgressStatus.Starting:
                     lblStatus.Text = "Starting...";
                     break;
+
                 case ProgressStatus.Paused:
                     lblStatus.Text = "Paused.";
                     break;
@@ -435,6 +439,5 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             rtbLog.Refresh();
             LogBuff = "";
         }
-
     }
 }

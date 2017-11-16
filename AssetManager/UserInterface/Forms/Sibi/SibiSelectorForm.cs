@@ -1,27 +1,19 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using AssetManager.UserInterface.CustomControls;
+using System;
+using System.Data;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
     public partial class SibiSelectorForm : ExtendedForm
     {
-
         public string SibiUID
         {
             get { return SelectedUID; }
         }
 
-
         private string SelectedUID;
+
         public SibiSelectorForm(Form parentForm)
         {
             Load += frmSibiSelector_Load;
@@ -76,6 +68,5 @@ namespace AssetManager.UserInterface.Forms.Sibi
             SelectedUID = ResultGrid[GridFunctions.GetColIndex(ResultGrid, "UID"), ResultGrid.CurrentRow.Index].Value.ToString();
             this.DialogResult = DialogResult.OK;
         }
-
     }
 }

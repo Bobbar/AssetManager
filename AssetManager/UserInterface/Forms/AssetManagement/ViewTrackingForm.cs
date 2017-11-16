@@ -1,21 +1,11 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using AssetManager.UserInterface.CustomControls;
+using System;
+using System.Data;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
-
     public partial class ViewTrackingForm : ExtendedForm
     {
-
         public ViewTrackingForm(ExtendedForm parentForm, string entryGUID, DeviceObject device)
         {
             InitializeComponent();
@@ -75,6 +65,5 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             this.Dispose();
         }
-
     }
 }

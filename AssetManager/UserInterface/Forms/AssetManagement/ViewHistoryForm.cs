@@ -1,27 +1,20 @@
-using Microsoft.VisualBasic;
+using AssetManager.UserInterface.CustomControls;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
-
     public partial class ViewHistoryForm : ExtendedForm
     {
-        private DBControlParser DataParser;// = new DBControlParser(this);
+        private DBControlParser DataParser;
 
         private string _DeviceGUID;
+
         public ViewHistoryForm(ExtendedForm parentForm, string entryUID, string deviceGUID)
         {
-
             DataParser = new DBControlParser(this);
             InitializeComponent();
             InitDBControls();
@@ -29,7 +22,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             FormUID = entryUID;
             _DeviceGUID = deviceGUID;
             ViewEntry(entryUID);
-
         }
 
         //TODO: Iterate through properties and dynamically generate controls at runtime.

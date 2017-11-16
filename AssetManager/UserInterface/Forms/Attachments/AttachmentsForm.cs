@@ -410,8 +410,8 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         streamFileName.Position = 0;
                         StreamReader sr = new StreamReader(streamFileName);
                         string fullString = sr.ReadToEnd();
-                        fullString = fullString.Replace(Constants.vbNullChar, "");
-                        fullString = fullString.Replace(Strings.ChrW(1).ToString(), "");
+                        fullString = fullString.Replace("\0", "");
+                        fullString = fullString.Replace("\u0001", "");
                         return fullString;
                     }
 
@@ -735,6 +735,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 }
                 string strCurrentFileName = System.Convert.ToString(GlobalInstances.AssetFunc.GetSqlValue(_attachTable.TableName, _attachTable.FileUID, SelectedAttachmentUID(), _attachTable.FileName));
                 string strAttachUID = SelectedAttachmentUID();
+                //TODO: Make a replacement for these inputboxes.
                 string blah = Interaction.InputBox("Enter new filename.", "Rename", strCurrentFileName);
                 if (string.IsNullOrEmpty(blah))
                 {
@@ -1331,6 +1332,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             {
                 return;
             }
+            //TODO: Make a replacement for these inputboxes.
             string NewFolderName = Interaction.InputBox("Enter new folder name.", "New Folder").Trim();
             if (!FolderNameExists(NewFolderName))
             {

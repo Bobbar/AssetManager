@@ -1,17 +1,9 @@
-using Microsoft.VisualBasic;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Linq;
-using System.Threading.Tasks;
 using System.IO;
+
 namespace AssetManager
 {
-
     public class Attachment : IDisposable
     {
         private FileInfo _fileInfo;
@@ -25,6 +17,7 @@ namespace AssetManager
         private AttachmentsBaseCols _attachTable;
 
         private Stream _dataStream;
+
         public Attachment()
         {
             _fileInfo = null;
@@ -77,7 +70,7 @@ namespace AssetManager
             _fileInfo = null;
             _dataStream = null;
             _attachTable = attachTable;
-            
+
             _fileName = TableRow[attachTable.FileName].ToString();
             _fileUID = TableRow[attachTable.FileUID].ToString();
             _MD5 = TableRow[attachTable.FileHash].ToString();
@@ -164,7 +157,6 @@ namespace AssetManager
                 {
                     return _extention;
                 }
-
             }
         }
 
@@ -274,7 +266,6 @@ namespace AssetManager
             // GC.SuppressFinalize(Me)
         }
 
-        #endregion
-
+        #endregion "IDisposable Support"
     }
 }
