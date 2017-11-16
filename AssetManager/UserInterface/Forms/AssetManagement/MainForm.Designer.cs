@@ -12,7 +12,7 @@ using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
-    //[Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
+    //
     partial class MainForm
     {
         /// <summary>
@@ -35,7 +35,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         //NOTE: The following procedure is required by the Windows Form Designer
         //It can be modified using the Windows Form Designer.  
         //Do not modify it using the code editor.
-        //[System.Diagnostics.DebuggerStepThrough()]
+        //
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();

@@ -10,12 +10,12 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace AssetManager.UserInterface.Forms.GK_Updater
 {
-    [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
+    
     partial class GKProgressControl : System.Windows.Forms.UserControl
     {
 
         //UserControl overrides dispose to clean up the component list.
-        [System.Diagnostics.DebuggerNonUserCode()]
+        
         protected override void Dispose(bool disposing)
         {
             try
@@ -37,7 +37,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         //NOTE: The following procedure is required by the Windows Form Designer
         //It can be modified using the Windows Form Designer.  
         //Do not modify it using the code editor.
-        [System.Diagnostics.DebuggerStepThrough()]
+        
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
