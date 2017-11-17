@@ -28,7 +28,7 @@ namespace AssetManager
         DataTable DataTableFromCommand(DbCommand command, DbTransaction transaction = null);
 
         /// <summary>
-        /// Returns a DataTable from a partial SQL query string and a <see cref="List(Of DBQueryParameter)"/>.
+        /// Returns a DataTable from a partial SQL query string and a <see cref="List{T}"/> of <see cref="DBQueryParameter"/>.
         /// </summary>
         /// <param name="query"></param>
         /// <param name="params"></param>

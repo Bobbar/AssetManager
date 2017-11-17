@@ -28,10 +28,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (!CurrentTrackingDevice.Tracking.IsCheckedOut)
             {
-                Control c = default(Control);
-                foreach (Control tempLoopVar_c in CheckOutBox.Controls)
+                foreach (Control c in CheckOutBox.Controls)
                 {
-                    c = tempLoopVar_c;
                     if (c is TextBox)
                     {
                         if (c.Visible)
@@ -47,10 +45,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             else
             {
-                Control c = default(Control);
-                foreach (Control tempLoopVar_c in CheckInBox.Controls)
+                foreach (Control c in CheckInBox.Controls)
                 {
-                    c = tempLoopVar_c;
                     if (c is TextBox)
                     {
                         if (c.Text.Trim() == "")
@@ -101,16 +97,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ClearAll()
         {
-            Control c = default(Control);
-            foreach (Control tempLoopVar_c in this.Controls)
+            foreach (Control c in this.Controls)
             {
-                c = tempLoopVar_c;
                 if (c is GroupBox)
                 {
-                    Control gc = default(Control);
-                    foreach (Control tempLoopVar_gc in c.Controls)
+                    foreach (Control gc in c.Controls)
                     {
-                        gc = tempLoopVar_gc;
                         if (gc is TextBox)
                         {
                             TextBox txt = (TextBox)gc;

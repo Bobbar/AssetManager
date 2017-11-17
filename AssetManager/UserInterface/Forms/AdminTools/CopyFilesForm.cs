@@ -61,7 +61,6 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             catch (Exception ex)
             {
                 throw (ex);
-                return false;
             }
 
         }

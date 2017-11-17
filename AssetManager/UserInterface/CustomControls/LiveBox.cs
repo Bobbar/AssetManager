@@ -23,7 +23,6 @@ namespace AssetManager
         private LiveBoxArgs CurrentLiveBoxArgs;
         private ListBox LiveListBox;
         private List<LiveBoxArgs> LiveBoxControls = new List<LiveBoxArgs>();
-        private bool QueryRunning = false;
         private int RowLimit = 30;
 
         private string strPrevSearchString;

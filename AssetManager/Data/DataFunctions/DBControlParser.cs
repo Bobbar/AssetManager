@@ -192,55 +192,7 @@ namespace AssetManager
 
                 if (Row.Table.Columns.Contains(DBColumn))
                 {
-                    #region "Type Finder - Dictionary method"
 
-                    //var setDataMap = new Dictionary<Type, Delegate>
-                    //{
-                    //    {typeof(TextBox), new Action<Control>(c =>
-                    //    {
-                    //        TextBox dbTxt = (TextBox)c;
-                    //        if (DBInfo.AttribIndex != null)
-                    //        {
-                    //          if (DBInfo.AttribIndex != null) {
-                    //            dbTxt.Text = AttribIndexFunctions.GetDisplayValueFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
-                    //        } else {
-                    //            dbTxt.Text = Row[DBColumn].ToString();
-                    //        }
-                    //        }
-                    //    }) },
-                    //    {typeof(MaskedTextBox), new Action<Control>(c =>
-                    //    {
-                    //        MaskedTextBox dbMaskTxt = (MaskedTextBox)c;
-                    //        dbMaskTxt.Text = Row[DBColumn].ToString();
-                    //    }) },
-                    //    {typeof(DateTimePicker), new Action<Control>(c => {
-                    //        DateTimePicker dbDtPick = (DateTimePicker)c;
-                    //        dbDtPick.Value = DateTime.Parse(Row[DBColumn].ToString());
-                    //    }) },
-                    //    {typeof(ComboBox), new Action<Control>(c => {
-                    //        ComboBox dbCmb = (ComboBox)c;
-                    //        dbCmb.SelectedIndex = AttribIndexFunctions.GetComboIndexFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
-                    //     }) },
-                    //    {typeof(Label), new Action<Label>(c => {
-                    //       Label dbLbl = (Label)c;
-                    //        dbLbl.Text = Row[DBColumn].ToString();
-                    //     }) },
-                    //    {typeof(CheckBox), new Action<CheckBox>(c => {
-                    //      CheckBox dbChk = (CheckBox)c;
-                    //        dbChk.Checked = Convert.ToBoolean(Row[DBColumn]);
-                    //     }) },
-                    //    {typeof(RichTextBox), new Action<RichTextBox>(c => {
-                    //     RichTextBox dbRtb = (RichTextBox)c;
-                    //     OtherFunctions.SetRichTextBox(ref dbRtb, Row[DBColumn].ToString());
-                    //     }) }
-                    //};
-
-                    //var t = ctl.GetType();
-                    //setDataMap[t].DynamicInvoke(ctl);
-
-                    #endregion "Type Finder - Dictionary method"
-
-                    #region "Type Finder - If ElseIf method"
 
                     Type ctlType = ctl.GetType();
 
@@ -291,51 +243,6 @@ namespace AssetManager
                         throw new Exception("Unexpected type.");
                     }
 
-                    #endregion "Type Finder - If ElseIf method"
-
-                    //               switch (true) {
-                    //	case ctl is TextBox:
-                    //		TextBox dbTxt = (TextBox)ctl;
-                    //		if (DBInfo.AttribIndex != null) {
-                    //			dbTxt.Text = AttribIndexFunctions.GetDisplayValueFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
-                    //		} else {
-                    //			dbTxt.Text = Row[DBColumn].ToString();
-                    //		}
-
-                    //		break;
-                    //	case ctl is MaskedTextBox:
-                    //		MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
-                    //		dbMaskTxt.Text = Row[DBColumn].ToString();
-
-                    //		break;
-                    //	case ctl is DateTimePicker:
-                    //		DateTimePicker dbDtPick = (DateTimePicker)ctl;
-                    //		dbDtPick.Value = DateTime.Parse(Row[DBColumn].ToString());
-
-                    //		break;
-                    //	case ctl is ComboBox:
-                    //		ComboBox dbCmb = (ComboBox)ctl;
-                    //		dbCmb.SelectedIndex = AttribIndexFunctions.GetComboIndexFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
-
-                    //		break;
-                    //	case ctl is Label:
-                    //		Label dbLbl = (Label)ctl;
-                    //		dbLbl.Text = Row[DBColumn].ToString();
-
-                    //		break;
-                    //	case ctl is CheckBox:
-                    //		CheckBox dbChk = (CheckBox)ctl;
-                    //		dbChk.Checked = Convert.ToBoolean(Row[DBColumn]);
-
-                    //		break;
-                    //	case ctl is RichTextBox:
-                    //		RichTextBox dbRtb = (RichTextBox)ctl;
-                    //		OtherFunctions.SetRichTextBox(ref dbRtb, Row[DBColumn].ToString());
-
-                    //		break;
-                    //	default:
-                    //		throw new Exception("Unexpected type.");
-                    //}
                 }
             }
         }
@@ -373,12 +280,6 @@ namespace AssetManager
                 {
                     controlList.Add(ctl);
                 }
-
-                //switch (true) {
-                //	case ctl.Tag is DBControlInfo:
-                //		controlList.Add(ctl);
-                //		break;
-                //}
 
                 if (ctl.HasChildren)
                 {
@@ -423,42 +324,17 @@ namespace AssetManager
                 //return null;
             }
 
-            //switch (true)
-            //{
-            //    case dbControl is TextBox:
-            //        TextBox dbTxt = (TextBox)dbControl;
-
-            //        return DataConsistency.CleanDBValue(dbTxt.Text);
-            //    case dbControl is MaskedTextBox:
-            //        MaskedTextBox dbMaskTxt = (MaskedTextBox)dbControl;
-
-            //        return DataConsistency.CleanDBValue(dbMaskTxt.Text);
-            //    case dbControl is DateTimePicker:
-            //        DateTimePicker dbDtPick = (DateTimePicker)dbControl;
-
-            //        return dbDtPick.Value;
-            //    case dbControl is ComboBox:
-            //        ComboBox dbCmb = (ComboBox)dbControl;
-
-            //        return AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
-            //    case dbControl is CheckBox:
-            //        CheckBox dbChk = (CheckBox)dbControl;
-            //        return dbChk.Checked;
-            //    default:
-            //        throw new Exception("Unexpected type.");
-            //}
-            //return null;
         }
 
         /// <summary>
         /// Collects an EMPTY DataTable via a SQL Select statement and adds a new row for SQL Insertion.
         /// </summary>
         /// <remarks>
-        /// The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="UpdateDBControlRow(ByRef DataRow)"/>
+        /// The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="UpdateDBControlRow(DataRow)"/>
         /// </remarks>
         /// <param name="selectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
         /// <returns>
-        /// Returns a DataTable with a new row added via <see cref="UpdateDBControlRow(ByRef DataRow)"/>
+        /// Returns a DataTable with a new row added via <see cref="UpdateDBControlRow(DataRow)"/>
         /// </returns>
         public DataTable ReturnInsertTable(string selectQry)
         {
@@ -471,14 +347,14 @@ namespace AssetManager
         }
 
         /// <summary>
-        /// Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="UpdateDBControlRow(ByRef DataRow)"/>
+        /// Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="UpdateDBControlRow(DataRow)"/>
         /// </summary>
         /// <remarks>
         /// The SQL SELECT statement should return a single row only. This is will be the table row that you wish to update.
         /// </remarks>
         /// <param name="selectQry">A SQL Select query string that will return the table row that is to be updated.</param>
         /// <returns>
-        /// Returns a DataTable modified by the controls identified by <see cref="GetDBControls(Control, List(Of Control))"/>
+        /// Returns a DataTable modified by the controls identified by <see cref="GetDBControls(Control, List{Control})"/>
         /// </returns>
         public DataTable ReturnUpdateTable(string selectQry)
         {
@@ -491,7 +367,7 @@ namespace AssetManager
         }
 
         /// <summary>
-        /// Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControls(Control, List(Of Control))"/>
+        /// Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControls(Control, List{Control})"/>
         /// </summary>
         /// <param name="DBRow">DataRow to be modified.</param>
         //private void UpdateDBControlRow(ref DataRow DBRow)

@@ -254,7 +254,6 @@ namespace AssetManager
                 default:
                     return "NA";
             }
-            return string.Empty;
         }
 
         public void AssetSearch(ExtendedForm parentForm)

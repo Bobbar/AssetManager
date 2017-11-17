@@ -1001,9 +1001,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
         }
 
-        private void InstallChromeMenuItem_Click(object sender, EventArgs e)
+        private async void InstallChromeMenuItem_Click(object sender, EventArgs e)
         {
-            StartPowerShellScript(Properties.Resources.UpdateChrome);
+            await StartPowerShellScript(Properties.Resources.UpdateChrome);
         }
 
         private void ReEnterLACredentialsToolStripMenuItem_Click(object sender, EventArgs e)

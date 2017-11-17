@@ -38,7 +38,7 @@ namespace AssetManager
 namespace AssetManager
 {
 
-    public struct MunisEmployeeStruct
+    public class MunisEmployeeStruct
     {
         public string Number;
         public string Name;
@@ -48,7 +48,14 @@ namespace AssetManager
         {
             this.Name = name;
             this.Number = number;
-            this.GUID = "";
+            this.GUID = string.Empty;
+        }
+
+        public MunisEmployeeStruct()
+        {
+            this.Name = string.Empty;
+            this.Number = string.Empty;
+            this.GUID = string.Empty;
         }
     }
 }

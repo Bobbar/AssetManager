@@ -1,15 +1,13 @@
-using System.Drawing;
-using System.Windows.Forms;
-using System.Deployment.Application;
-using System.Reflection;
 using AssetManager.UserInterface.CustomControls;
+using System.Deployment.Application;
+using System.Drawing;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms
 {
-
     public partial class SplashScreenForm : ExtendedForm
     {
-
         private void SplashScreen1_Load(object sender, System.EventArgs e)
         {
             this.FormBorderStyle = FormBorderStyle.None;
@@ -39,21 +37,16 @@ namespace AssetManager.UserInterface.Forms
             Copyright.Text = copyright;
         }
 
-        public void Hide()
-        {
-            this.Dispose();
-        }
-
         public void SetStatus(string text)
         {
             lblStatus.Text = text;
             this.Refresh();
         }
+
         public SplashScreenForm()
         {
             Load += SplashScreen1_Load;
             InitializeComponent();
         }
-
     }
 }

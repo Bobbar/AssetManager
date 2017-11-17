@@ -17,12 +17,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         return SelectedEmpInfo;
                     }
-                    return new MunisEmployeeStruct();//null;
+                    return new MunisEmployeeStruct();
                 }
             }
         }
 
-        private MunisEmployeeStruct SelectedEmpInfo;
+        private MunisEmployeeStruct SelectedEmpInfo = new MunisEmployeeStruct();
 
         private const int intMaxResults = 50;
 

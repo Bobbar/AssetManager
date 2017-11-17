@@ -297,7 +297,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             foreach (Control c in DataParser.GetDBControls(this))
             {
                 DBControlInfo DBInfo = (DBControlInfo)c.Tag;
-                if (true)
+                if (c is TextBox)
                 {
                     if (DBInfo.Required)
                     {
@@ -314,7 +314,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                     }
                 }
-                else if (true)
+                else if (c is ComboBox)
                 {
                     ComboBox cmb = (ComboBox)c;
                     if (DBInfo.Required)
@@ -601,10 +601,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DisableSorting(DataGridView Grid)
         {
-            DataGridViewColumn c = default(DataGridViewColumn);
-            foreach (DataGridViewColumn tempLoopVar_c in Grid.Columns)
+            foreach (DataGridViewColumn c in Grid.Columns)
             {
-                c = tempLoopVar_c;
                 c.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
         }
@@ -970,11 +968,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             foreach (Control c in DataParser.GetDBControls(this))
             {
-                if (true)
+                if (c is TextBox)
                 {
                     c.BackColor = Color.Empty;
                 }
-                else if (true)
+                else if (c is ComboBox)
                 {
                     c.BackColor = Color.Empty;
                 }

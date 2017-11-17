@@ -341,10 +341,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private bool CheckFields(Control parent)
         {
-            Control c = default(Control);
-            foreach (Control tempLoopVar_c in parent.Controls)
+            foreach (Control c in parent.Controls)
             {
-                c = tempLoopVar_c;
                 DBControlInfo DBInfo = new DBControlInfo();
                 if (c.Tag != null)
                 {
@@ -352,7 +350,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 }
                 if (DBInfo.Required)
                 {
-                    if (true)
+                    if (c is TextBox)
                     {
                         if (c.Text.Trim() == "")
                         {
@@ -366,7 +364,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                             ClearErrorIcon(c);
                         }
                     }
-                    else if (true)
+                    else if (c is ComboBox)
                     {
                         var cmb = (ComboBox)c;
                         if (cmb.SelectedIndex == -1)
@@ -989,12 +987,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private bool MouseIsDragging(Point CurrentPos)
         {
             int intMouseMoveThreshold = 50;
-            //if (NewStartPos != null)
-            //{
-            //    MouseStartPos = NewStartPos;
-            //}
-            //else
-            //{
             var intDistanceMoved = Math.Sqrt(Math.Pow((MouseStartPos.X - CurrentPos.X), 2) + Math.Pow((MouseStartPos.Y - CurrentPos.Y), 2));
             if (System.Convert.ToInt32(intDistanceMoved) > intMouseMoveThreshold)
             {
@@ -1004,8 +996,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 return false;
             }
-            // }
-            return false;
         }
 
         private async void PopulateFromFA(string ColumnName)
@@ -1318,8 +1308,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             if (RequestItemsGrid.CurrentCell != null)
             {
-                int ColIndex = RequestItemsGrid.CurrentCell.ColumnIndex;
-                if ((true) || (true))
+                if (RequestItemsGrid.CurrentCell.OwningColumn.Name == SibiRequestItemsCols.ObjectCode || RequestItemsGrid.CurrentCell.OwningColumn.Name == SibiRequestItemsCols.OrgCode)
                 {
                     if (GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ObjectCode) != "" && GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.OrgCode) != "")
                     {
@@ -1751,7 +1740,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     return false;
                 }
-                return false;
             }
             catch (Exception ex)
             {

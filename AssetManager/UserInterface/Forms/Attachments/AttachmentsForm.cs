@@ -407,8 +407,6 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         fullString = fullString.Replace("\u0001", "");
                         return fullString;
                     }
-
-                    break;
             }
             return null;
         }

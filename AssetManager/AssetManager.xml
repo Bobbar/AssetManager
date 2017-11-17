@@ -38,7 +38,7 @@
         </member>
         <member name="M:AssetManager.IDataBase.DataTableFromParameters(System.String,System.Collections.Generic.List{AssetManager.DBQueryParameter})">
             <summary>
-            Returns a DataTable from a partial SQL query string and a <see cref="!:List(Of DBQueryParameter)"/>.
+            Returns a DataTable from a partial SQL query string and a <see cref="T:System.Collections.Generic.List`1"/> of <see cref="T:AssetManager.DBQueryParameter"/>.
             </summary>
             <param name="query"></param>
             <param name="params"></param>
@@ -298,28 +298,28 @@
             Collects an EMPTY DataTable via a SQL Select statement and adds a new row for SQL Insertion.
             </summary>
             <remarks>
-            The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="!:UpdateDBControlRow(ByRef DataRow)"/>
+            The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="M:AssetManager.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
             </remarks>
             <param name="selectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
             <returns>
-            Returns a DataTable with a new row added via <see cref="!:UpdateDBControlRow(ByRef DataRow)"/>
+            Returns a DataTable with a new row added via <see cref="M:AssetManager.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
             </returns>
         </member>
         <member name="M:AssetManager.DBControlParser.ReturnUpdateTable(System.String)">
             <summary>
-            Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="!:UpdateDBControlRow(ByRef DataRow)"/>
+            Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="M:AssetManager.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
             </summary>
             <remarks>
             The SQL SELECT statement should return a single row only. This is will be the table row that you wish to update.
             </remarks>
             <param name="selectQry">A SQL Select query string that will return the table row that is to be updated.</param>
             <returns>
-            Returns a DataTable modified by the controls identified by <see cref="!:GetDBControls(Control, List(Of Control))"/>
+            Returns a DataTable modified by the controls identified by <see cref="M:AssetManager.DBControlParser.GetDBControls(System.Windows.Forms.Control,System.Collections.Generic.List{System.Windows.Forms.Control})"/>
             </returns>
         </member>
         <member name="M:AssetManager.DBControlParser.UpdateDBControlRow(System.Data.DataRow)">
             <summary>
-            Modifies a DataRow with data parsed from controls collected by <see cref="!:GetDBControls(Control, List(Of Control))"/>
+            Modifies a DataRow with data parsed from controls collected by <see cref="M:AssetManager.DBControlParser.GetDBControls(System.Windows.Forms.Control,System.Collections.Generic.List{System.Windows.Forms.Control})"/>
             </summary>
             <param name="DBRow">DataRow to be modified.</param>
         </member>
@@ -965,7 +965,7 @@
             <summary>
             Create new Attachment from a file path.
             </summary>
-            <param name="NewFile">Full path to file.</param>
+            <param name="newFile">Full path to file.</param>
         </member>
     </members>
 </doc>

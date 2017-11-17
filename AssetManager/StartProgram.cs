@@ -1,5 +1,4 @@
-﻿using AssetManager.UserInterface.Forms;
-using System;
+﻿using System;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -7,6 +6,7 @@ namespace AssetManager
 {
     internal static class StartProgram
     {
+        #region Methods
 
         /// <summary>
         /// The main entry point for the application.
@@ -16,13 +16,10 @@ namespace AssetManager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            // Application.Run(new Form1());
 
             Application.ThreadException += MyApplication_UnhandledException;
 
             Helpers.ChildFormControl.SplashScreenInstance().Show();
-            //SplashScreen = new SplashScreenForm();
-            //SplashScreen.Show();
 
             ProcessCommandArgs();
 
@@ -31,7 +28,6 @@ namespace AssetManager
             bool ConnectionSuccessful = false;
             bool CacheAvailable = false;
 
-            // My.MyProject.Forms.SplashScreenForm.Show();
             Logging.Logger("Starting AssetManager...");
             Status("Checking Server Connection...");
 
@@ -82,11 +78,6 @@ namespace AssetManager
             Application.Run(new UserInterface.Forms.AssetManagement.MainForm());
         }
 
-        private static void Status(string Text)
-        {
-            Helpers.ChildFormControl.SplashScreenInstance().SetStatus(Text);
-        }
-
         private static bool CheckConnection()
         {
             try
@@ -103,6 +94,11 @@ namespace AssetManager
             {
                 return false;
             }
+        }
+
+        private static void MyApplication_UnhandledException(object sender, ThreadExceptionEventArgs e)
+        {
+            ErrorHandling.ErrHandle(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod());
         }
 
         private static void ProcessCommandArgs()
@@ -138,9 +134,11 @@ namespace AssetManager
             }
         }
 
-        private static void MyApplication_UnhandledException(object sender, ThreadExceptionEventArgs e)
+        private static void Status(string Text)
         {
-            ErrorHandling.ErrHandle(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod());
+            Helpers.ChildFormControl.SplashScreenInstance().SetStatus(Text);
         }
+
+        #endregion Methods
     }
 }

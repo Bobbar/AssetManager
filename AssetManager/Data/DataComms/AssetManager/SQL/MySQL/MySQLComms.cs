@@ -80,7 +80,6 @@ namespace AssetManager
                 else //Throw exception.
                 {
                     throw (new NoPingException());
-                    return false;
                 }
             }
             else //Server is pinging, try to open connection.

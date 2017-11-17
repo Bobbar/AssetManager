@@ -450,11 +450,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             foreach (Control ctl in Parent.Controls)
             {
-                if (true)
+                if (ctl is TextBox)
                 {
                     ctl.BackColor = Color.Empty;
                 }
-                else if (true)
+                else if (ctl is ComboBox)
                 {
                     ctl.BackColor = Color.Empty;
                 }

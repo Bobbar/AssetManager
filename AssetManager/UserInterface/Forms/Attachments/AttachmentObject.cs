@@ -35,7 +35,7 @@ namespace AssetManager
         /// <summary>
         /// Create new Attachment from a file path.
         /// </summary>
-        /// <param name="NewFile">Full path to file.</param>
+        /// <param name="newFile">Full path to file.</param>
         public Attachment(string newFile, AttachmentsBaseCols attachTable)
         {
             _fileInfo = new FileInfo(newFile);
