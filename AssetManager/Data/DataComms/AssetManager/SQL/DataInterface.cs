@@ -24,6 +24,7 @@ namespace AssetManager
         /// Returns a DataTable from a <see cref="DbCommand"/>.
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="transaction"></param>
         /// <returns></returns>
         DataTable DataTableFromCommand(DbCommand command, DbTransaction transaction = null);
 

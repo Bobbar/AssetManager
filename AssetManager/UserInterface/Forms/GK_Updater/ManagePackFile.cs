@@ -122,7 +122,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                     CopyFile(source, dest);
                     return true;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return false;
                 }

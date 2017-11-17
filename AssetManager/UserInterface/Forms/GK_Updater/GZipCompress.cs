@@ -143,7 +143,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                     }
                 }
             }
-            catch (Exception generatedExceptionName)
+            catch
             {
                 return -1;
             }

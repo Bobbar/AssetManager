@@ -34,6 +34,7 @@
             Returns a DataTable from a <see cref="T:System.Data.Common.DbCommand"/>.
             </summary>
             <param name="command"></param>
+            <param name="transaction"></param>
             <returns></returns>
         </member>
         <member name="M:AssetManager.IDataBase.DataTableFromParameters(System.String,System.Collections.Generic.List{AssetManager.DBQueryParameter})">
@@ -277,6 +278,7 @@
             Populates all Controls in the ParentForm that have been initiated via <see cref="T:AssetManager.DBControlInfo"/> with their corresponding column names.
             </summary>
             <param name="data">DataTable that contains the rows and columns associated with the controls.</param>
+            <param name="remappingList">List of remapping objects for mapping between different column names.</param>
         </member>
         <member name="M:AssetManager.DBControlParser.GetRemappedColumnName(System.String,System.Collections.Generic.List{AssetManager.DBRemappingInfo})">
             <summary>
@@ -655,6 +657,7 @@
             </summary>
             <param name="hostname">Hostname of the remote computer.</param>
             <param name="scriptBytes">PowerShell script as a byte array.</param>
+            <param name="credentials">Credentials used when creating the remote runspace.</param>
             <returns>Returns any error messages.</returns>
         </member>
         <member name="M:AssetManager.Helpers.ChildFormControl.FindFormByType(System.Type)">
@@ -702,8 +705,8 @@
             <summary>
             Inserts the MunisToolBar into the specified toolstrip.
             </summary>
-            <param name="TargetStrip"></param>
-            <param name="LocationIndex"></param>
+            <param name="targetStrip"></param>
+            <param name="locationIndex"></param>
         </member>
         <member name="T:AssetManager.UserInterface.CustomControls.OneClickToolStrip">
             <summary>
@@ -802,8 +805,8 @@
             <summary>
             Recursively build ToolStripItemCollections of Forms and their Children and add them to the ToolStrip. Making sure to add SibiMain to the top of the list.
             </summary>
-            <param name="ParentForm">Form to add to ToolStrip.</param>
-            <param name="TargetMenuItem">Item to add the Form item to.</param>
+            <param name="parentForm">Form to add to ToolStrip.</param>
+            <param name="targetMenuItem">Item to add the Form item to.</param>
         </member>
         <member name="F:AssetManager.UserInterface.Forms.AssetManagement.MainForm.components">
             <summary>
@@ -966,6 +969,7 @@
             Create new Attachment from a file path.
             </summary>
             <param name="newFile">Full path to file.</param>
+            <param name="attachTable">The table that will be assigned to this instance.</param>
         </member>
     </members>
 </doc>

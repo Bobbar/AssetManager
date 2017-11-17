@@ -27,8 +27,8 @@ namespace AssetManager.UserInterface.CustomControls
         /// <summary>
         /// Inserts the MunisToolBar into the specified toolstrip.
         /// </summary>
-        /// <param name="TargetStrip"></param>
-        /// <param name="LocationIndex"></param>
+        /// <param name="targetStrip"></param>
+        /// <param name="locationIndex"></param>
         public void InsertMunisDropDown(OneClickToolStrip targetStrip, int locationIndex = -1)
         {
             if (locationIndex >= 0)

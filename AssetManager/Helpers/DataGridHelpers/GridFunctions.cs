@@ -193,7 +193,7 @@ namespace AssetManager
             {
                 return grid.Columns[columnName].Index;
             }
-            catch (Exception ex)
+            catch
             {
                 return -1;
             }

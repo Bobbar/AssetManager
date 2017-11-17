@@ -21,27 +21,25 @@ namespace AssetManager
         public Stream ReturnFtpRequestStream(string uri, string method)
         {
             FtpWebRequest request = (FtpWebRequest)FtpWebRequest.Create(uri);
-            var _with1 = request;
-            _with1.Proxy = new WebProxy();
+            request.Proxy = new WebProxy();
             //set proxy to nothing to bypass .NET auto-detect process. This speeds up the initial connection greatly.
-            _with1.Credentials = FTPcreds;
-            _with1.Method = method;
-            _with1.ReadWriteTimeout = intSocketTimeout;
-            _with1.Timeout = intSocketTimeout;
-            return _with1.GetRequestStream();
+            request.Credentials = FTPcreds;
+            request.Method = method;
+            request.ReadWriteTimeout = intSocketTimeout;
+            request.Timeout = intSocketTimeout;
+            return request.GetRequestStream();
         }
 
         public WebResponse ReturnFtpResponse(string uri, string method)
         {
             FtpWebRequest request = (FtpWebRequest)FtpWebRequest.Create(uri);
-            var _with2 = request;
-            _with2.Proxy = new WebProxy();
+            request.Proxy = new WebProxy();
             //set proxy to nothing to bypass .NET auto-detect process. This speeds up the initial connection greatly.
-            _with2.Credentials = FTPcreds;
-            _with2.Method = method;
-            _with2.ReadWriteTimeout = intSocketTimeout;
-            _with2.Timeout = intSocketTimeout;
-            return _with2.GetResponse();
+            request.Credentials = FTPcreds;
+            request.Method = method;
+            request.ReadWriteTimeout = intSocketTimeout;
+            request.Timeout = intSocketTimeout;
+            return request.GetResponse();
         }
 
         #endregion

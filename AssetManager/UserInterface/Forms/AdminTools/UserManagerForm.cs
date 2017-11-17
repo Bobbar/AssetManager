@@ -10,7 +10,6 @@ namespace AssetManager.UserInterface.Forms.AdminTools
     public partial class UserManagerForm : ExtendedForm
     {
         private List<AccessGroupObject> ModuleIndex = new List<AccessGroupObject>();
-        private LocalUserInfoStruct CurrentUser;
         private string UserDataQuery = "SELECT * FROM " + UsersCols.TableName;
 
         private int SelectedRow;
@@ -90,9 +89,8 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             foreach (AccessGroupObject ModuleBox in ModuleIndex)
             {
                 chkModuleBox = new CheckBox();
-                var _with1 = chkModuleBox;
-                _with1.Text = ModuleBox.Description;
-                _with1.Name = ModuleBox.AccessModule;
+                chkModuleBox.Text = ModuleBox.Description;
+                chkModuleBox.Name = ModuleBox.AccessModule;
                 clbModules.DisplayMember = "Text";
                 clbModules.Items.Add(chkModuleBox);
             }
@@ -117,22 +115,12 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             if (UserGrid[GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index].Value is int)
             {
                 DisplayAccess(Convert.ToInt32(UserGrid[GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index].Value));
-                GetUserInfo();
             }
             else
             {
                 DisplayAccess(0);
             }
             SelectedRow = e.RowIndex;
-        }
-
-        private void GetUserInfo()
-        {
-            var _with2 = CurrentUser;
-            _with2.AccessLevel = Convert.ToInt32(GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.AccessLevel));
-            _with2.UserName = GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.UserName);
-            _with2.GUID = GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.UID);
-            _with2.Fullname = GridFunctions.GetCurrentCellValue(UserGrid, UsersCols.FullName);
         }
 
         private void cmdUpdate_Click(object sender, EventArgs e)

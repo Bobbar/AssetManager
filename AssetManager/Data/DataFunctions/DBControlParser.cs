@@ -173,6 +173,7 @@ namespace AssetManager
         /// Populates all Controls in the ParentForm that have been initiated via <see cref="DBControlInfo"/> with their corresponding column names.
         /// </summary>
         /// <param name="data">DataTable that contains the rows and columns associated with the controls.</param>
+        /// <param name="remappingList">List of remapping objects for mapping between different column names.</param>
         public void FillDBFields(DataTable data, List<DBRemappingInfo> remappingList = null)
         {
             DataRow Row = data.Rows[0];

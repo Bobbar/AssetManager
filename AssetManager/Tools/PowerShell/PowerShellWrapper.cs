@@ -22,6 +22,7 @@ namespace AssetManager
         /// </summary>
         /// <param name="hostname">Hostname of the remote computer.</param>
         /// <param name="scriptBytes">PowerShell script as a byte array.</param>
+        /// <param name="credentials">Credentials used when creating the remote runspace.</param>
         /// <returns>Returns any error messages.</returns>
         public string ExecuteRemotePSScript(string hostname, byte[] scriptBytes, NetworkCredential credentials)
         {
@@ -165,7 +166,7 @@ namespace AssetManager
                     CurrentPowerShellObject.Stop();
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 //don't care about errors here
             }
@@ -180,7 +181,7 @@ namespace AssetManager
                     CurrentPipelineObject.Stop();
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 //don't care about errors here
             }

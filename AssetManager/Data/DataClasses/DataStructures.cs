@@ -33,7 +33,16 @@ namespace AssetManager
         public string Fullname;
         public int AccessLevel;
         public string GUID;
+
+        public LocalUserInfoStruct(string userName,string fullName,int accessLevel,string guid)
+        {
+            UserName = userName;
+            Fullname = fullName;
+            AccessLevel = accessLevel;
+            GUID = guid;
+        }
     }
+    
 }
 namespace AssetManager
 {

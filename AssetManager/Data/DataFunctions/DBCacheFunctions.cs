@@ -99,7 +99,7 @@ namespace AssetManager
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

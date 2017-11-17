@@ -51,7 +51,7 @@ namespace AssetManager
                 File.Delete(Paths.LogPath);
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

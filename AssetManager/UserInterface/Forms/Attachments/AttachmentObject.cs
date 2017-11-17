@@ -36,6 +36,7 @@ namespace AssetManager
         /// Create new Attachment from a file path.
         /// </summary>
         /// <param name="newFile">Full path to file.</param>
+        /// <param name="attachTable">The table that will be assigned to this instance.</param>
         public Attachment(string newFile, AttachmentsBaseCols attachTable)
         {
             _fileInfo = new FileInfo(newFile);
@@ -100,7 +101,6 @@ namespace AssetManager
             _fileInfo = null;
             _dataStream = null;
             _attachTable = attachTable;
-            var _with2 = TableRow;
             _fileName = TableRow[attachTable.FileName].ToString();
             _fileUID = TableRow[attachTable.FileUID].ToString();
             _MD5 = TableRow[attachTable.FileHash].ToString();
