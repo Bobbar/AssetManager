@@ -1,7 +1,6 @@
 ﻿using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AssetManagement;
 using AssetManager.UserInterface.Forms.Sibi;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -14,6 +13,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MyDialogLib;
 
 namespace AssetManager.UserInterface.Forms.Attachments
 {
@@ -1352,11 +1352,24 @@ namespace AssetManager.UserInterface.Forms.Attachments
             {
                 return;
             }
-            //TODO: Make a replacement for these inputboxes.
-            string NewFolderName = Interaction.InputBox("Enter new folder name.", "New Folder").Trim();
-            if (!FolderNameExists(NewFolderName))
+            string newFolderName;
+            using (AdvancedDialog FolderDialog = new AdvancedDialog(this))
             {
-                MoveAttachToFolder(SelectedAttachmentUID(), NewFolderName, true);
+                FolderDialog.AddTextBox("FolderName", "Enter folder name:");
+                FolderDialog.ShowDialog();
+                if (FolderDialog.DialogResult == DialogResult.OK)
+                {
+                    newFolderName = FolderDialog.GetControlValue("FolderName").ToString();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            if (!FolderNameExists(newFolderName))
+            {
+                MoveAttachToFolder(SelectedAttachmentUID(), newFolderName, true);
             }
             else
             {

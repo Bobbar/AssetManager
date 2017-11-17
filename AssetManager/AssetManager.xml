@@ -323,6 +323,23 @@
             </summary>
             <param name="DBRow">DataRow to be modified.</param>
         </member>
+        <member name="F:AssetManager.Form1.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:AssetManager.Form1.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:AssetManager.Form1.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="M:AssetManager.GridFunctions.ColumnsString(System.Collections.Generic.List{AssetManager.DataGridColumn})">
             <summary>
             Returns a comma separated string containing the DB columns within a List(Of ColumnStruct). For use in queries.
@@ -804,23 +821,6 @@
             </summary>
             <param name="ParentForm">Form to add to ToolStrip.</param>
             <param name="TargetMenuItem">Item to add the Form item to.</param>
-        </member>
-        <member name="F:AssetManager.UserInterface.Form1.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:AssetManager.UserInterface.Form1.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:AssetManager.UserInterface.Form1.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
         </member>
         <member name="F:AssetManager.UserInterface.Forms.AssetManagement.MainForm.components">
             <summary>
