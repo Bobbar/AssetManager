@@ -97,7 +97,7 @@ namespace AssetManager
             AdvancedDialog NewMessage = new AdvancedDialog(ParentFrm);
             return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm);
         }
-
+        
         public static bool OKToEnd()
         {
             if (GlobalSwitches.BuildingCache)

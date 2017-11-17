@@ -189,8 +189,8 @@ namespace AssetManager.UserInterface.Forms.Attachments
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.GroupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
@@ -208,8 +208,8 @@ namespace AssetManager.UserInterface.Forms.Attachments
             // 
             // Panel1
             // 
-            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Panel1.Controls.Add(this.AttachContainer);
@@ -222,8 +222,8 @@ namespace AssetManager.UserInterface.Forms.Attachments
             // 
             // AttachContainer
             // 
-            this.AttachContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.AttachContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.AttachContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.AttachContainer.Location = new System.Drawing.Point(3, 22);
@@ -322,10 +322,12 @@ namespace AssetManager.UserInterface.Forms.Attachments
             this.AttachGrid.TabIndex = 18;
             this.AttachGrid.VirtualMode = true;
             this.AttachGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachGrid_CellDoubleClick);
+            this.AttachGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachGrid_CellEndEdit);
             this.AttachGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachGrid_CellEnter);
             this.AttachGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachGrid_CellLeave);
             this.AttachGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AttachGrid_CellMouseDown);
             this.AttachGrid.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AttachGrid_CellMouseUp);
+            this.AttachGrid.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.AttachGrid_CellValidating);
             this.AttachGrid.DragDrop += new System.Windows.Forms.DragEventHandler(this.AttachGrid_DragDrop);
             this.AttachGrid.DragOver += new System.Windows.Forms.DragEventHandler(this.AttachGrid_DragOver);
             this.AttachGrid.DragLeave += new System.EventHandler(this.AttachGrid_DragLeave);
@@ -595,7 +597,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             // 
             // Panel2
             // 
-            this.Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel2.Controls.Add(this.DeviceGroup);
             this.Panel2.Controls.Add(this.SibiGroup);
@@ -619,6 +621,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             this.Name = "AttachmentsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Attachments";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AttachmentsForm_FormClosing);
             this.Load += new System.EventHandler(this.AttachmentsForm_Load);
             this.Shown += new System.EventHandler(this.AttachmentsForm_Shown);
             this.RightClickMenu.ResumeLayout(false);

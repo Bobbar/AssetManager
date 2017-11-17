@@ -243,12 +243,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserInterface\CustomControls\WindowList.cs" />
-    <Compile Include="UserInterface\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>

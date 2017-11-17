@@ -1,28 +1,24 @@
-﻿using System.ComponentModel;
+﻿using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.AssetManagement;
+using AssetManager.UserInterface.Forms.Sibi;
+using Microsoft.VisualBasic;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Data;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
-using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
-using Microsoft.VisualBasic;
-using System.Collections.Specialized;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics;
-using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.AssetManagement;
-using AssetManager.UserInterface.Forms.Sibi;
-
-
 
 namespace AssetManager.UserInterface.Forms.Attachments
 {
     public partial class AttachmentsForm : ExtendedForm
     {
-
         #region Fields
 
         private string AttachFolderUID;
@@ -75,7 +71,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             }
         }
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
@@ -132,7 +128,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             this.Show();
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -238,7 +234,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             return true;
         }
 
-        private void Attachments_Closing(object sender, CancelEventArgs e)
+        private void AttachmentsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!OKToClose())
             {
@@ -272,7 +268,6 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         return;
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -294,7 +289,6 @@ namespace AssetManager.UserInterface.Forms.Attachments
                     return strFullPath;
                 }
             }
-
         }
 
         private void DoneWaiting()
@@ -345,7 +339,6 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         }
                         return memStream;
                     }
-
                 });
 
                 if (!cancelToken.IsCancellationRequested)
@@ -483,7 +476,6 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         }
                         return false;
                     }
-
                 }
                 catch (WebException ex)
                 {
@@ -582,7 +574,6 @@ namespace AssetManager.UserInterface.Forms.Attachments
                     SaveAttachmentToDisk(saveAttachment, strFullPath);
                     Process.Start(strFullPath);
                 }
-
             }
             catch (Exception ex)
             {
@@ -712,42 +703,55 @@ namespace AssetManager.UserInterface.Forms.Attachments
             }
         }
 
-        private void RenameAttachement(string AttachUID, string NewFileName)
+        private void UpdateDbAttachementName(string AttachUID, string NewFileName)
         {
-            try
-            {
-                GlobalInstances.AssetFunc.UpdateSqlValue(_attachTable.TableName, _attachTable.FileName, NewFileName, _attachTable.FileUID, AttachUID);
-                ListAttachments();
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
+            GlobalInstances.AssetFunc.UpdateSqlValue(_attachTable.TableName, _attachTable.FileName, NewFileName, _attachTable.FileUID, AttachUID);
         }
 
-        private void RenameAttachmentDialog()
+        private void BeginRenameAttachment()
+        {
+            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment))
+            {
+                return;
+            }
+            //Enable read/write mode, set current cell to the filename cell and begin edit.
+            AttachGrid.ReadOnly = false;
+            AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            AttachGrid.CurrentRow.Cells[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileName)].ReadOnly = false;
+            AttachGrid.CurrentCell = AttachGrid.CurrentRow.Cells[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileName)];
+            AttachGrid.BeginEdit(true);
+        }
+
+        /// <summary>
+        /// Updates the attachment filename if the new name is different from the current filename.
+        /// </summary>
+        /// <param name="row">Row of the attachment to be renamed.</param>
+        /// <param name="newFilename">New filename for the attachment.</param>
+        private void EndRenameAttachment(int row, string newFilename)
         {
             try
             {
-                if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment))
+                //The current (old) value is pulled from the DataGrid indexer.
+                string oldFilename = AttachGrid[_attachTable.FileName, row].Value.ToString().Trim();
+
+                //Make sure filename has changed.
+                if (newFilename != oldFilename && newFilename != "")
                 {
-                    return;
-                }
-                string strCurrentFileName = System.Convert.ToString(GlobalInstances.AssetFunc.GetSqlValue(_attachTable.TableName, _attachTable.FileUID, SelectedAttachmentUID(), _attachTable.FileName));
-                string strAttachUID = SelectedAttachmentUID();
-                //TODO: Make a replacement for these inputboxes.
-                string blah = Interaction.InputBox("Enter new filename.", "Rename", strCurrentFileName);
-                if (string.IsNullOrEmpty(blah))
-                {
-                    blah = strCurrentFileName;
+                    //Get the UID of the attachment for the update method.
+                    string renamedUID = AttachGrid[_attachTable.FileUID, row].Value.ToString();
+                    UpdateDbAttachementName(renamedUID, newFilename);
                 }
                 else
                 {
-                    RenameAttachement(strAttachUID, blah.Trim());
+                    //If no change, call cancel edit to restore the cell to the previous value.
+                    AttachGrid.CancelEdit();
                 }
             }
             catch (Exception ex)
             {
+                //Expecting a MySQLException if the given filename is too long for the DB column.
+                //Cancel edit, then pass the exception to the error handler for logging and user prompt.
+                AttachGrid.CancelEdit();
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
             }
         }
@@ -844,14 +848,12 @@ namespace AssetManager.UserInterface.Forms.Attachments
                                                 bytesIn = System.Convert.ToInt32(FileStream.Read(buffer, 0, 1024));
                                                 if (bytesIn > 0)
                                                 {
-
                                                     FTPStream.Write(buffer, 0, bytesIn);
                                                     Progress.BytesMoved = bytesIn;
                                                 }
                                             }
                                         }
                                     }
-
                                 });
                                 if (cancelToken.IsCancellationRequested)
                                 {
@@ -870,7 +872,6 @@ namespace AssetManager.UserInterface.Forms.Attachments
                             }
                         }
                     }
-
                 }
             }
             catch (Exception ex)
@@ -924,9 +925,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                             SaveAttachmentToDisk(saveAttachment, System.Convert.ToString(saveDialog.FileName));
                         }
                     }
-
                 }
-
             }
             catch (Exception ex)
             {
@@ -1040,7 +1039,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         private string SelectedAttachmentUID()
         {
-            string AttachUID = System.Convert.ToString(AttachGrid[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileUID), AttachGrid.CurrentRow.Index].Value.ToString());
+            string AttachUID = AttachGrid[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileUID), AttachGrid.CurrentRow.Index].Value.ToString();
             if (!string.IsNullOrEmpty(AttachUID))
             {
                 return AttachUID;
@@ -1093,21 +1092,43 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         private void AttachGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            DownloadAndOpenAttachment(SelectedAttachmentUID());
+            if (!AttachGrid.IsCurrentCellInEditMode)
+            {
+                DownloadAndOpenAttachment(SelectedAttachmentUID());
+            }
+        }
+
+        private void AttachGrid_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            //Must do this to keep the current cell selection highlight from sticking.
+            if (bolAllowDrag)
+            {
+                AttachGrid.ClearSelection();
+            }
+            if (AttachGrid.IsCurrentCellInEditMode)
+            {
+                string newFileName = e.FormattedValue.ToString().Trim();
+                EndRenameAttachment(e.RowIndex, newFileName);
+            }
+        }
+
+        private void AttachGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            //After editing, return the datagrid to original read-only mode.
+            AttachGrid.ReadOnly = true;
+            AttachGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
         private void AttachGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (!bolGridFilling)
             {
-                // DataGridView grid = AttachGrid;
                 StyleFunctions.HighlightRow(AttachGrid, GridTheme, e.RowIndex);
             }
         }
 
         private void AttachGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            //DataGridView grid = AttachGrid;
             StyleFunctions.LeaveRow(AttachGrid, GridTheme, e.RowIndex);
         }
 
@@ -1220,7 +1241,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         private void RenameStripMenuItem_Click(object sender, EventArgs e)
         {
-            RenameAttachmentDialog();
+            BeginRenameAttachment();
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -1249,7 +1270,6 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 PrevSelectedFolder = CurrentSelectedFolder;
             }
             ListAttachments();
-
         }
 
         private void FolderListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -1360,7 +1380,6 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         ((Control.MousePosition.Y) < f.DesktopBounds.Top) ||
                         ((Control.MousePosition.Y) > f.DesktopBounds.Bottom))
                 {
-
                     AddAttachmentFileToDragDropObject(SelectedAttachmentUID());
                 }
                 else
@@ -1369,16 +1388,12 @@ namespace AssetManager.UserInterface.Forms.Attachments
                     {
                         CancelTransfers();
                     }
-
                 }
-
             }
         }
 
-        #endregion
+        #endregion Control Event Methods
 
-        #endregion
-
-
+        #endregion Methods
     }
 }
