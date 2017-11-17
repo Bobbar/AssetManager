@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using AssetManager.UserInterface.Forms;
+using System;
 using System.Threading;
 using System.Windows.Forms;
-using AssetManager.UserInterface.Forms;
-
-
 
 namespace AssetManager
 {
-    static class StartProgram
+    internal static class StartProgram
     {
-        private static SplashScreenForm SplashScreen;
 
         /// <summary>
         /// The main entry point for the application.
@@ -26,14 +20,17 @@ namespace AssetManager
 
             Application.ThreadException += MyApplication_UnhandledException;
 
+            Helpers.ChildFormControl.SplashScreenInstance().Show();
+            //SplashScreen = new SplashScreenForm();
+            //SplashScreen.Show();
+
             ProcessCommandArgs();
 
             GlobalConstants.LocalDomainUser = Environment.UserName;
 
             bool ConnectionSuccessful = false;
             bool CacheAvailable = false;
-            SplashScreen = new SplashScreenForm();
-            SplashScreen.Show();
+
             // My.MyProject.Forms.SplashScreenForm.Show();
             Logging.Logger("Starting AssetManager...");
             Status("Checking Server Connection...");
@@ -82,16 +79,12 @@ namespace AssetManager
                 return;
             }
             Status("Ready!");
-            SplashScreen.Dispose();
             Application.Run(new UserInterface.Forms.AssetManagement.MainForm());
         }
 
-
-
         private static void Status(string Text)
         {
-            //My.MyProject.Forms.SplashScreenForm.SetStatus(Text);
-            SplashScreen.SetStatus(Text);
+            Helpers.ChildFormControl.SplashScreenInstance().SetStatus(Text);
         }
 
         private static bool CheckConnection()
@@ -111,6 +104,7 @@ namespace AssetManager
                 return false;
             }
         }
+
         private static void ProcessCommandArgs()
         {
             try
@@ -126,6 +120,7 @@ namespace AssetManager
                             case CommandArgs.TESTDB:
                                 ServerInfo.CurrentDataBase = Databases.test_db;
                                 break;
+
                             case CommandArgs.VINTONDD:
                                 ServerInfo.CurrentDataBase = Databases.vintondd;
                                 break;
@@ -147,6 +142,5 @@ namespace AssetManager
         {
             ErrorHandling.ErrHandle(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod());
         }
-
     }
 }

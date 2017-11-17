@@ -3,10 +3,12 @@ using AssetManager.UserInterface.Forms.AssetManagement;
 using AssetManager.UserInterface.Forms.Attachments;
 using AssetManager.UserInterface.Forms.GK_Updater;
 using AssetManager.UserInterface.Forms.Sibi;
+using AssetManager.UserInterface.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+
 
 namespace AssetManager.Helpers
 {
@@ -169,6 +171,26 @@ namespace AssetManager.Helpers
                 if (currentGKUpdInstance != null)
                 {
                     return currentGKUpdInstance;
+                }
+            }
+            return null;
+        }
+
+        public static SplashScreenForm SplashScreenInstance()
+        {
+            SplashScreenForm currentSplashScreenInstance;
+
+            if (!FormTypeIsOpen(typeof(SplashScreenForm)))
+            {
+                currentSplashScreenInstance = new SplashScreenForm();
+                return currentSplashScreenInstance;
+            }
+            else
+            {
+                currentSplashScreenInstance = (SplashScreenForm)FindFormByType(typeof(SplashScreenForm));
+                if (currentSplashScreenInstance != null)
+                {
+                    return currentSplashScreenInstance;
                 }
             }
             return null;

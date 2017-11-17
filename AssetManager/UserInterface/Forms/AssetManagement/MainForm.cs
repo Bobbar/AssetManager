@@ -1029,6 +1029,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             LoadProgram();
             Application.DoEvents();
         }
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            Helpers.ChildFormControl.SplashScreenInstance().Dispose();
+        }
 
         private void CommitButton_Click(object sender, EventArgs e)
         {
@@ -1065,10 +1069,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             OtherFunctions.EndProgram();
         }
 
+
         #endregion "Control Event Methods"
 
         #endregion "Methods"
 
-
+      
     }
 }
