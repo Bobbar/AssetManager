@@ -174,13 +174,13 @@ namespace AssetManager
             {
                 if (fld.IsExact)
                 {
-                    ParamString += " " + fld.FieldName + "=@Value" + System.Convert.ToString(ValSeq) + " " + fld.OperatorString;
-                    cmd.Parameters.AddWithValue("@Value" + System.Convert.ToString(ValSeq), fld.Value);
+                    ParamString += " " + fld.FieldName + "=@Value" + ValSeq.ToString() + " " + fld.OperatorString;
+                    cmd.Parameters.AddWithValue("@Value" + ValSeq.ToString(), fld.Value);
                 }
                 else
                 {
-                    ParamString += " " + fld.FieldName + " LIKE CONCAT('%', @Value" + System.Convert.ToString(ValSeq) + ", '%') " + fld.OperatorString;
-                    cmd.Parameters.AddWithValue("@Value" + System.Convert.ToString(ValSeq), fld.Value);
+                    ParamString += " " + fld.FieldName + " LIKE CONCAT('%', @Value" + ValSeq.ToString() + ", '%') " + fld.OperatorString;
+                    cmd.Parameters.AddWithValue("@Value" + ValSeq.ToString(), fld.Value);
                 }
                 ValSeq++;
             }

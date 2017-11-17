@@ -132,7 +132,7 @@ Missing Files: " + MissingSQLFiles.Count;
                         itemsCleaned += CleanFTPDirs(MissingFTPDirs);
                         itemsCleaned += CleanSQLFiles(MissingSQLFiles);
                         itemsCleaned += CleanSQLEntries(MissingSQLDirs);
-                        OtherFunctions.Message("Cleaned " + System.Convert.ToString(itemsCleaned) + " orphans.");
+                        OtherFunctions.Message("Cleaned " + itemsCleaned.ToString() + " orphans.");
                         ScanAttachements();
                     }
                 }
@@ -178,16 +178,16 @@ Missing Files: " + MissingSQLFiles.Count;
                 foreach (var sqlItem in missingSQLFiles)
                 {
                     var DeviceRows = DBFactory.GetDatabase().ExecuteQuery("DELETE FROM " + DeviceTable.TableName + " WHERE " + DeviceTable.FileUID + "='" + sqlItem.FileUID + "'");
-                    if (System.Convert.ToInt32(DeviceRows) > 0)
+                    if (DeviceRows > 0)
                     {
-                        deletions += System.Convert.ToInt32(DeviceRows);
+                        deletions += DeviceRows;
                         Logging.Logger("Deleted Device SQL File: " + sqlItem.FKey + "/" + sqlItem.FileUID);
                     }
 
                     var SibiRows = DBFactory.GetDatabase().ExecuteQuery("DELETE FROM " + SibiTable.TableName + " WHERE " + SibiTable.FileUID + "='" + sqlItem.FileUID + "'");
-                    if (System.Convert.ToInt32(SibiRows) > 0)
+                    if (SibiRows > 0)
                     {
-                        deletions += System.Convert.ToInt32(SibiRows);
+                        deletions += SibiRows;
                         Logging.Logger("Deleted Sibi SQL File: " + sqlItem.FKey + "/" + sqlItem.FileUID);
                     }
                 }
@@ -205,20 +205,20 @@ Missing Files: " + MissingSQLFiles.Count;
                 int deletions = 0;
                 foreach (var sqlItem in missingSQLDirs)
                 {
-                    if (!CheckForPrimaryItem(System.Convert.ToString(sqlItem.FKey)))
+                    if (!CheckForPrimaryItem(sqlItem.FKey))
                     {
                         var DeviceRows = DBFactory.GetDatabase().ExecuteQuery("DELETE FROM " + DeviceTable.TableName + " WHERE " + DeviceTable.FKey + "='" + sqlItem.FKey + "'");
-                        if (System.Convert.ToInt32(DeviceRows) > 0)
+                        if (DeviceRows > 0)
                         {
-                            deletions += System.Convert.ToInt32(DeviceRows);
-                            Logging.Logger("Deleted " + System.Convert.ToString(DeviceRows) + " Device SQL Entries For: " + sqlItem.FKey);
+                            deletions += DeviceRows;
+                            Logging.Logger("Deleted " + DeviceRows.ToString() + " Device SQL Entries For: " + sqlItem.FKey);
                         }
 
                         var SibiRows = DBFactory.GetDatabase().ExecuteQuery("DELETE FROM " + SibiTable.TableName + " WHERE " + SibiTable.FKey + "='" + sqlItem.FKey + "'");
-                        if (System.Convert.ToInt32(SibiRows) > 0)
+                        if (SibiRows > 0)
                         {
-                            deletions += System.Convert.ToInt32(SibiRows);
-                            Logging.Logger("Deleted " + System.Convert.ToString(SibiRows) + " Sibi SQL Entries For: " + sqlItem.FKey);
+                            deletions += SibiRows;
+                            Logging.Logger("Deleted " + SibiRows.ToString() + " Sibi SQL Entries For: " + sqlItem.FKey);
                         }
                     }
                 }
@@ -232,7 +232,7 @@ Missing Files: " + MissingSQLFiles.Count;
             int deletions = 0;
             foreach (var file in missingFTPFiles)
             {
-                if (DeleteFtpAttachment(System.Convert.ToString(file.FileUID), System.Convert.ToString(file.FKey)))
+                if (DeleteFtpAttachment(file.FileUID, file.FKey))
                 {
                     deletions++;
                     Logging.Logger("Deleted SQL File: " + file.FKey + "/" + file.FileUID);
@@ -246,10 +246,10 @@ Missing Files: " + MissingSQLFiles.Count;
             int deletions = 0;
             foreach (var fDir in missingFTPDirs)
             {
-                if (DeleteFtpFolder(System.Convert.ToString(fDir)))
+                if (DeleteFtpFolder(fDir))
                 {
                     deletions++;
-                    Logging.Logger("Deleted SQL Directory: " + System.Convert.ToString(fDir));
+                    Logging.Logger("Deleted SQL Directory: " + fDir);
                 }
             }
             return deletions;
@@ -293,8 +293,8 @@ Missing Files: " + MissingSQLFiles.Count;
         /// <returns></returns>
         private List<string> ListMissingFTPDirs(List<string> ftpDirs)
         {
-            var MissingDirs = ftpDirs.FindAll(f => !CheckForPrimaryItem(System.Convert.ToString(f)));
-            MissingDirs.ForEach(f => Logging.Logger("Orphan FTP Dir Found: " + System.Convert.ToString(f)));
+            var MissingDirs = ftpDirs.FindAll(f => !CheckForPrimaryItem(f));
+            MissingDirs.ForEach(f => Logging.Logger("Orphan FTP Dir Found: " + f));
             return MissingDirs;
         }
 
@@ -329,7 +329,7 @@ Missing Files: " + MissingSQLFiles.Count;
             List<AttachScanInfo> FTPFileList = new List<AttachScanInfo>();
             foreach (var fDir in ftpDirs)
             {
-                foreach (var file in ListDirectory("ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/" + System.Convert.ToString(fDir) + "/"))
+                foreach (var file in ListDirectory("ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/" + fDir + "/"))
                 {
                     FTPFileList.Add(new AttachScanInfo(fDir, file));
                 }

@@ -86,9 +86,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     if (CurrentViewDevice.IsTrackable)
                     {
-                        LoadTracking(System.Convert.ToString(CurrentViewDevice.GUID));
+                        LoadTracking(CurrentViewDevice.GUID);
                     }
-                    SetTracking(System.Convert.ToBoolean(CurrentViewDevice.IsTrackable), System.Convert.ToBoolean(CurrentViewDevice.Tracking.IsCheckedOut));
+                    SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut);
                     this.Text = this.Text + FormTitle(CurrentViewDevice);
                     DeviceHostname = CurrentViewDevice.HostName + "." + NetworkInfo.CurrentDomain;
                     CheckRDP();
@@ -141,7 +141,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     MyPingVis.Dispose();
                     MyPingVis = null;
                 }
-                LoadDevice(System.Convert.ToString(CurrentViewDevice.GUID));
+                LoadDevice(CurrentViewDevice.GUID);
             }
         }
 
@@ -384,9 +384,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private bool ConcurrencyCheck()
         {
-            using (var DeviceResults = GetDevicesTable(System.Convert.ToString(CurrentViewDevice.GUID)))
+            using (var DeviceResults = GetDevicesTable(CurrentViewDevice.GUID))
             {
-                using (var HistoricalResults = GetHistoricalTable(System.Convert.ToString(CurrentViewDevice.GUID)))
+                using (var HistoricalResults = GetHistoricalTable(CurrentViewDevice.GUID))
                 {
                     DeviceResults.TableName = DevicesCols.TableName;
                     HistoricalResults.TableName = HistoricalDevicesCols.TableName;
@@ -437,7 +437,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 int rows = 0;
                 string DeleteEntryQuery = "DELETE FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + strGUID + "'";
-                rows = System.Convert.ToInt32(DBFactory.GetDatabase().ExecuteQuery(DeleteEntryQuery));
+                rows = DBFactory.GetDatabase().ExecuteQuery(DeleteEntryQuery);
                 return rows;
             }
             catch (Exception ex)
@@ -453,7 +453,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 return;
             }
-            string strGUID = System.Convert.ToString(GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID));
+            string strGUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
             DeviceObject Info = default(DeviceObject);
             var strQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + strGUID + "'";
             using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
@@ -465,7 +465,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (blah == DialogResult.Yes)
             {
                 OtherFunctions.Message(DeleteHistoryEntry(strGUID) + " rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Deletion Results", this);
-                LoadDevice(System.Convert.ToString(CurrentViewDevice.GUID));
+                LoadDevice(CurrentViewDevice.GUID);
             }
             else
             {
@@ -686,7 +686,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void FillTrackingBox()
         {
-            if (System.Convert.ToBoolean(CurrentViewDevice.Tracking.IsCheckedOut))
+            if (CurrentViewDevice.Tracking.IsCheckedOut)
             {
                 txtCheckOut.BackColor = Colors.CheckOut;
                 txtCheckLocation.Text = CurrentViewDevice.Tracking.UseLocation;
@@ -933,12 +933,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     }
                     else
                     {
-                        SibiUID = System.Convert.ToString(GlobalInstances.AssetFunc.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, LinkDevice.PO, SibiRequestCols.UID));
+                        SibiUID = GlobalInstances.AssetFunc.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, LinkDevice.PO, SibiRequestCols.UID);
                     }
                 }
                 else
                 {
-                    SibiUID = System.Convert.ToString(LinkDevice.SibiLink);
+                    SibiUID = LinkDevice.SibiLink;
                 }
                 if (string.IsNullOrEmpty(SibiUID))
                 {
@@ -990,27 +990,24 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     cmdRestart.Image = Properties.Resources.LoadingAni;
                     string FullPath = "\\\\" + IP;
-                    string output = System.Convert.ToString(await Task.Run(() =>
+                    string output = await Task.Run(() =>
                     {
                         using (NetworkConnection NetCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
+                        using (Process p = new Process())
                         {
-                            using (Process p = new Process())
-                            {
-                                p.StartInfo.UseShellExecute = false;
-                                p.StartInfo.RedirectStandardOutput = true;
-                                p.StartInfo.RedirectStandardError = true;
-                                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                                p.StartInfo.FileName = "shutdown.exe";
-                                p.StartInfo.Arguments = "/m " + FullPath + " /f /r /t 0";
-                                p.Start();
-                                output = p.StandardError.ReadToEnd();
-                                p.WaitForExit();
-                                output = output.Trim();
-                                return output;
-                            }
+                            p.StartInfo.UseShellExecute = false;
+                            p.StartInfo.RedirectStandardOutput = true;
+                            p.StartInfo.RedirectStandardError = true;
+                            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                            p.StartInfo.FileName = "shutdown.exe";
+                            p.StartInfo.Arguments = "/m " + FullPath + " /f /r /t 0";
+                            p.Start();
+                            output = p.StandardError.ReadToEnd();
+                            p.WaitForExit();
+                            output = output.Trim();
+                            return output;
                         }
-
-                    }));
+                    });
                     return output;
                 }
             }
@@ -1213,8 +1210,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     try
                     {
-                        rows += System.Convert.ToInt32(DBFactory.GetDatabase().UpdateTable(SelectQry, GetUpdateTable(SelectQry), trans));
-                        rows += System.Convert.ToInt32(DBFactory.GetDatabase().UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo), trans));
+                        rows += DBFactory.GetDatabase().UpdateTable(SelectQry, GetUpdateTable(SelectQry), trans);
+                        rows += DBFactory.GetDatabase().UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo), trans);
 
                         if (rows == 2)
                         {
@@ -1235,7 +1232,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         trans.Rollback();
                         if (ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()))
                         {
-                            LoadDevice(System.Convert.ToString(CurrentViewDevice.GUID));
+                            LoadDevice(CurrentViewDevice.GUID);
                         }
                     }
                 }
@@ -1395,8 +1392,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             var blah = OtherFunctions.Message("Click 'Yes' to reboot this device.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?");
             if (blah == DialogResult.Yes)
             {
-                string IP = System.Convert.ToString(MyPingVis.CurrentResult.Address.ToString());
-                string DeviceName = System.Convert.ToString(CurrentViewDevice.HostName);
+                string IP = MyPingVis.CurrentResult.Address.ToString();
+                string DeviceName = CurrentViewDevice.HostName;
                 var RestartOutput = await SendRestart(IP, DeviceName);
                 if ((string)RestartOutput == "")
                 {
@@ -1404,7 +1401,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 else
                 {
-                    OtherFunctions.Message("Failed" + "\r\n" + "\r\n" + "Output: " + System.Convert.ToString(RestartOutput), (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Restart Device", this);
+                    OtherFunctions.Message("Failed" + "\r\n" + "\r\n" + "Output: " + RestartOutput, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Restart Device", this);
                 }
             }
         }
@@ -1428,7 +1425,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DataGridHistory_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            string EntryUID = System.Convert.ToString(GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID));
+            string EntryUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
             if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewHistoryForm), EntryUID))
             {
                 NewEntryView(EntryUID);
@@ -1497,7 +1494,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             var EntryUID = GridFunctions.GetCurrentCellValue(TrackingGrid, TrackablesCols.UID);
             if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewTrackingForm), EntryUID))
             {
-                NewTrackingView(System.Convert.ToString(EntryUID));
+                NewTrackingView(EntryUID);
             }
         }
 
@@ -1522,7 +1519,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 TrackingGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Colors.CheckIn;
                 Color c2 = Color.FromArgb(Colors.CheckIn.R, Colors.CheckIn.G, Colors.CheckIn.B);
                 Color BlendColor = default(Color);
-                BlendColor = Color.FromArgb(System.Convert.ToInt32((double)((System.Convert.ToInt32(c1.A)) + System.Convert.ToInt32(c2.A)) / 2), System.Convert.ToInt32((double)((System.Convert.ToInt32(c1.R)) + System.Convert.ToInt32(c2.R)) / 2), System.Convert.ToInt32((double)((System.Convert.ToInt32(c1.G)) + System.Convert.ToInt32(c2.G)) / 2), System.Convert.ToInt32((double)((System.Convert.ToInt32(c1.B)) + System.Convert.ToInt32(c2.B)) / 2));
+                BlendColor = Color.FromArgb(Convert.ToInt32((Convert.ToInt32(c1.A) + Convert.ToInt32(c2.A)) / 2),
+                         Convert.ToInt32((Convert.ToInt32(c1.R) + Convert.ToInt32(c2.R)) / 2),
+                         Convert.ToInt32((Convert.ToInt32(c1.G) + Convert.ToInt32(c2.G)) / 2),
+                         Convert.ToInt32((Convert.ToInt32(c1.B) + Convert.ToInt32(c2.B)) / 2));
                 TrackingGrid.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = BlendColor;
             }
             else if (TrackingGrid.Rows[e.RowIndex].Cells[GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType)].Value.ToString() == CheckType.Checkout)
@@ -1530,7 +1530,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 TrackingGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Colors.CheckOut;
                 Color c2 = Color.FromArgb(Colors.CheckOut.R, Colors.CheckOut.G, Colors.CheckOut.B);
                 Color BlendColor = default(Color);
-                BlendColor = Color.FromArgb(System.Convert.ToInt32((double)((System.Convert.ToInt32(c1.A)) + System.Convert.ToInt32(c2.A)) / 2), System.Convert.ToInt32((double)((System.Convert.ToInt32(c1.R)) + System.Convert.ToInt32(c2.R)) / 2), System.Convert.ToInt32((double)((System.Convert.ToInt32(c1.G)) + System.Convert.ToInt32(c2.G)) / 2), System.Convert.ToInt32((double)((System.Convert.ToInt32(c1.B)) + System.Convert.ToInt32(c2.B)) / 2));
+                BlendColor = Color.FromArgb(Convert.ToInt32((Convert.ToInt32(c1.A) + Convert.ToInt32(c2.A)) / 2),
+                         Convert.ToInt32((Convert.ToInt32(c1.R) + Convert.ToInt32(c2.R)) / 2),
+                         Convert.ToInt32((Convert.ToInt32(c1.G) + Convert.ToInt32(c2.G)) / 2),
+                         Convert.ToInt32((Convert.ToInt32(c1.B) + Convert.ToInt32(c2.B)) / 2));
                 TrackingGrid.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = BlendColor;
             }
         }

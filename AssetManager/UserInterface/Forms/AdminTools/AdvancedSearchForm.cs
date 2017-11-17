@@ -30,7 +30,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                     childAllNode.Tag = true;
                     childAllNode.Checked = true;
                     parentNode.Nodes.Add(childAllNode);
-                    foreach (var col in GetColumns(System.Convert.ToString(table)))
+                    foreach (var col in GetColumns(table))
                     {
                         TreeNode childNode = new TreeNode(col);
                         childNode.Tag = false;

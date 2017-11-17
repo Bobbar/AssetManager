@@ -61,7 +61,7 @@ namespace AssetManager
             {
                 OtherFunctions.Message("Please Double-Click a MUNIS line item on the following window.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Input Needed");
                 var SelectedPrice = await GlobalInstances.MunisFunc.NewMunisReqSearch(GlobalInstances.MunisFunc.GetReqNumberFromPO(CurrentDevice.PO), GlobalInstances.MunisFunc.GetFYFromPO(CurrentDevice.PO), ParentForm, true);
-                decimal decPrice = System.Convert.ToDecimal(Convert.ToDecimal(SelectedPrice));
+                decimal decPrice = Convert.ToDecimal(SelectedPrice);
                 var SelectedUnitPrice = decPrice.ToString("C");
                 CurrentDialog.SetControlValue(UnitPriceTxtName, SelectedUnitPrice);
             }
@@ -75,7 +75,7 @@ namespace AssetManager
         {
             try
             {
-                Directory.CreateDirectory(System.Convert.ToString(Paths.DownloadPath));
+                Directory.CreateDirectory(Paths.DownloadPath);
                 string strTimeStamp = DateTime.Now.ToString("_hhmmss");
                 string newFile = Paths.DownloadPath + CurrentDevice.Description + strTimeStamp + ".pdf";
 

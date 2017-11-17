@@ -55,7 +55,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                     }
                     else
                     {
-                        _currentFolder = System.Convert.ToString(FolderListView.SelectedItems[0].Text);
+                        _currentFolder = FolderListView.SelectedItems[0].Text;
                     }
                     return _currentFolder;
                 }
@@ -91,7 +91,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 if (AttachInfo is RequestObject)
                 {
                     AttachRequest = (RequestObject)AttachInfo;
-                    AttachFolderUID = System.Convert.ToString(AttachRequest.GUID);
+                    AttachFolderUID = AttachRequest.GUID;
                     FormUID = AttachFolderUID;
                     this.Text = "Sibi Attachments";
                     DeviceGroup.Visible = false;
@@ -101,7 +101,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 else if (AttachInfo is DeviceObject)
                 {
                     AttachDevice = (DeviceObject)AttachInfo;
-                    AttachFolderUID = System.Convert.ToString(AttachDevice.GUID);
+                    AttachFolderUID = AttachDevice.GUID;
                     FormUID = AttachFolderUID;
                     this.Text = "Device Attachments";
                     SibiGroup.Visible = false;
@@ -253,7 +253,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 using (OpenFileDialog fd = new OpenFileDialog())
                 {
                     fd.ShowHelp = true;
-                    fd.Title = "Select File To Upload - " + System.Convert.ToString(FileSizeMBLimit) + "MB Limit";
+                    fd.Title = "Select File To Upload - " + FileSizeMBLimit.ToString() + "MB Limit";
                     fd.InitialDirectory = "C:\\";
                     fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*";
                     fd.FilterIndex = 2;
@@ -280,7 +280,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             string FileName = GetAttachFileName(AttachObject, DataFormat);
             string[] strFullPath = new string[1];
             strFullPath[0] = Paths.DownloadPath + FileName;
-            Directory.CreateDirectory(System.Convert.ToString(Paths.DownloadPath));
+            Directory.CreateDirectory(Paths.DownloadPath);
             using (var streamFileData = (MemoryStream)(AttachObject.GetData("FileContents")))
             {
                 using (var outputStream = File.Create(strFullPath[0]))
@@ -330,7 +330,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         bytesIn = 1;
                         while (!(bytesIn < 1 || cancelToken.IsCancellationRequested))
                         {
-                            bytesIn = System.Convert.ToInt32(respStream.Read(buffer, 0, 1024));
+                            bytesIn = respStream.Read(buffer, 0, 1024);
                             if (bytesIn > 0)
                             {
                                 memStream.Write(buffer, 0, bytesIn); //download data to memory before saving to disk
@@ -548,7 +548,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         private bool OKFileSize(Attachment File)
         {
-            var FileSizeMB = System.Convert.ToInt32(File.Filesize / (1024 * 1024));
+            var FileSizeMB = System.Convert.ToInt32(File.Filesize / (float)(1024 * 1024));
             if (FileSizeMB > FileSizeMBLimit)
             {
                 return false;
@@ -623,7 +623,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         //Cast out the datarow, get the attach UID, and move the attachment to the new folder.
                         var DragRow = (DataGridViewRow)(dropObject.GetData(typeof(DataGridViewRow)));
                         CurrentSelectedFolder = PrevSelectedFolder;
-                        MoveAttachToFolder(System.Convert.ToString(DragRow.Cells[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileUID)].Value.ToString()), folder);
+                        MoveAttachToFolder(DragRow.Cells[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileUID)].Value.ToString(), folder);
                     }
                     else
                     {
@@ -764,7 +764,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 {
                     return;
                 }
-                string strFilename = System.Convert.ToString(AttachGrid[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileName), AttachGrid.CurrentRow.Index].Value.ToString());
+                string strFilename = AttachGrid[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileName), AttachGrid.CurrentRow.Index].Value.ToString();
                 var blah = OtherFunctions.Message("Are you sure you want to delete '" + strFilename + "'?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Confirm Delete", this);
                 if (blah == DialogResult.Yes)
                 {
@@ -815,18 +815,18 @@ namespace AssetManager.UserInterface.Forms.Attachments
                     if (!OKFileSize(CurrentAttachment))
                     {
                         CurrentAttachment.Dispose();
-                        OtherFunctions.Message("The file is too large.   Please select a file less than " + System.Convert.ToString(FileSizeMBLimit) + "MB.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Size Limit Exceeded", this);
+                        OtherFunctions.Message("The file is too large.   Please select a file less than " + FileSizeMBLimit.ToString() + "MB.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Size Limit Exceeded", this);
                         continue;
                     }
                     SetStatusBar("Creating Directory...");
-                    if (!await MakeDirectory(System.Convert.ToString(CurrentAttachment.FolderGUID)))
+                    if (!await MakeDirectory(CurrentAttachment.FolderGUID))
                     {
                         CurrentAttachment.Dispose();
                         OtherFunctions.Message("Error creating FTP directory.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "FTP Upload Error", this);
                         return;
                     }
                     var fileList = new List<string>(files);
-                    SetStatusBar("Uploading... " + System.Convert.ToString(fileList.IndexOf(file) + 1) + " of " + System.Convert.ToString(files.Length));
+                    SetStatusBar("Uploading... " + (fileList.IndexOf(file) + 1).ToString() + " of " + files.Length.ToString());
                     Progress = new ProgressCounter();
                     using (var trans = DBFactory.GetDatabase().StartTransaction())
                     {
@@ -845,7 +845,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                                             Progress.BytesToTransfer = System.Convert.ToInt32(FileStream.Length);
                                             while (!(bytesIn < 1 || cancelToken.IsCancellationRequested))
                                             {
-                                                bytesIn = System.Convert.ToInt32(FileStream.Read(buffer, 0, 1024));
+                                                bytesIn = FileStream.Read(buffer, 0, 1024);
                                                 if (bytesIn > 0)
                                                 {
                                                     FTPStream.Write(buffer, 0, bytesIn);
@@ -922,7 +922,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         saveDialog.FileName = saveAttachment.FullFileName;
                         if (saveDialog.ShowDialog() == DialogResult.OK)
                         {
-                            SaveAttachmentToDisk(saveAttachment, System.Convert.ToString(saveDialog.FileName));
+                            SaveAttachmentToDisk(saveAttachment, saveDialog.FileName);
                         }
                     }
                 }
@@ -963,7 +963,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             try
             {
                 SetStatusBar("Saving to disk...");
-                Directory.CreateDirectory(System.Convert.ToString(Paths.DownloadPath));
+                Directory.CreateDirectory(Paths.DownloadPath);
                 using (var outputStream = File.Create(savePath))
                 {
                     using (var memStream = (MemoryStream)attachment.DataStream)
@@ -996,7 +996,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             else
             {
                 //something is very wrong
-                Logging.Logger("FILE VERIFICATION FAILURE: Device:" + attachment.FolderGUID + "  FileUID: " + attachment.FileUID + " | Expected hash:" + attachment.MD5 + " Result hash:" + System.Convert.ToString(FileResultHash));
+                Logging.Logger("FILE VERIFICATION FAILURE: Device:" + attachment.FolderGUID + "  FileUID: " + attachment.FileUID + " | Expected hash:" + attachment.MD5 + " Result hash:" + FileResultHash);
                 OtherFunctions.Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Hash Value Mismatch", this);
                 attachment.Dispose();
                 OtherFunctions.PurgeTempDir();
@@ -1226,12 +1226,12 @@ namespace AssetManager.UserInterface.Forms.Attachments
             {
                 statMBPS.Text = Progress.Throughput.ToString("0.00") + " MB/s";
 
-                ProgressBar1.Value = System.Convert.ToInt32(Progress.Percent);
+                ProgressBar1.Value = Progress.Percent;
                 if (Progress.Percent > 1)
                 {
                     ProgressBar1.Value -= 1; //doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
                 }
-                ProgressBar1.Value = System.Convert.ToInt32(Progress.Percent);
+                ProgressBar1.Value = Progress.Percent;
             }
             else
             {
@@ -1328,7 +1328,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             }
             else
             {
-                ProcessFolderListDrop(e.Data, System.Convert.ToString(dragToItem.Text));
+                ProcessFolderListDrop(e.Data, dragToItem.Text);
             }
             bolDragging = false;
         }

@@ -127,7 +127,7 @@ namespace AssetManager
         private SmartEmpSearchStruct FindBestSmartSearchMatch(List<SmartEmpSearchStruct> results)
         {
             //Initial minimum distance
-            int MinDist = System.Convert.ToInt32(results.First().MatchDistance);
+            int MinDist = results.First().MatchDistance;
             //Initial minimum match
             SmartEmpSearchStruct MinMatch = results.First();
             SmartEmpSearchStruct LongestMatch = new SmartEmpSearchStruct();
@@ -137,7 +137,7 @@ namespace AssetManager
             {
                 if (result.MatchDistance < MinDist)
                 {
-                    MinDist = System.Convert.ToInt32(result.MatchDistance);
+                    MinDist = result.MatchDistance;
                     MinMatch = result;
                 }
             }
@@ -152,7 +152,7 @@ namespace AssetManager
                     {
                         if (dup.MatchLength > MaxMatchLen)
                         {
-                            MaxMatchLen = System.Convert.ToInt32(dup.MatchLength);
+                            MaxMatchLen = dup.MatchLength;
                             LongestMatch = dup;
                         }
                     }

@@ -78,7 +78,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     else
                     {
                         HideEditControls();
-                        OpenRequest(System.Convert.ToString(CurrentRequest.GUID));
+                        OpenRequest(CurrentRequest.GUID);
                         return true;
                     }
                 }
@@ -168,7 +168,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         CollectRequestInfo(RequestResults, RequestItemsResults);
                         DataParser.FillDBFields(RequestResults);
                         SendToGrid(RequestItemsResults);
-                        LoadNotes(System.Convert.ToString(CurrentRequest.GUID));
+                        LoadNotes(CurrentRequest.GUID);
                         DisableControls();
                         SetTitle(false);
                         SetAttachCount();
@@ -194,8 +194,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private string GetHash(DataTable RequestTable, DataTable ItemsTable)
         {
-            string RequestHash = System.Convert.ToString(SecurityTools.GetSHAOfTable(RequestTable));
-            string ItemHash = System.Convert.ToString(SecurityTools.GetSHAOfTable(ItemsTable));
+            string RequestHash = SecurityTools.GetSHAOfTable(RequestTable);
+            string ItemHash = SecurityTools.GetSHAOfTable(ItemsTable);
             return RequestHash + ItemHash;
         }
 
@@ -256,7 +256,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private bool AddNewNote(string RequestUID, string Note)
         {
-            string NoteUID = System.Convert.ToString(Guid.NewGuid().ToString());
+            string NoteUID = Guid.NewGuid().ToString();
             try
             {
                 List<DBParameter> NewNoteParams = new List<DBParameter>();
@@ -295,13 +295,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     {
                         string InsertRequestQry = "SELECT * FROM " + SibiRequestCols.TableName + " LIMIT 0";
                         string InsertRequestItemsQry = "SELECT " + GridFunctions.ColumnsString(RequestItemsColumns()) + " FROM " + SibiRequestItemsCols.TableName + " LIMIT 0";
-                        DBFactory.GetDatabase().UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, System.Convert.ToString(CurrentRequest.GUID)), trans);
+                        DBFactory.GetDatabase().UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), trans);
                         DBFactory.GetDatabase().UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans);
                         pnlCreate.Visible = false;
                         trans.Commit();
                         IsModifying = false;
                         IsNewRequest = false;
-                        OpenRequest(System.Convert.ToString(CurrentRequest.GUID));
+                        OpenRequest(CurrentRequest.GUID);
                         ParentForm.RefreshData();
                         OtherFunctions.Message("New Request Added.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Complete", this);
                     }
@@ -328,8 +328,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     SibiNotesForm NewNote = new SibiNotesForm(this, CurrentRequest);
                     if (NewNote.DialogResult == DialogResult.OK)
                     {
-                        AddNewNote(System.Convert.ToString(NewNote.Request.GUID), NewNote.rtbNotes.Rtf.Trim());
-                        LoadNotes(System.Convert.ToString(CurrentRequest.GUID));
+                        AddNewNote(NewNote.Request.GUID, NewNote.rtbNotes.Rtf.Trim());
+                        LoadNotes(CurrentRequest.GUID);
                     }
                 }
             }
@@ -394,14 +394,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             if (CurrentRequest.RequisitionNumber != "" && CurrentRequest.PO == "")
             {
-                string GetPO = System.Convert.ToString(await GlobalInstances.MunisFunc.GetPOFromReqNumberAsync(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year.ToString()));
+                string GetPO = await GlobalInstances.MunisFunc.GetPOFromReqNumberAsync(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year.ToString());
                 if (GetPO != null && GetPO.Length > 1)
                 {
                     var blah = OtherFunctions.Message("PO Number " + GetPO + " was detected in the Requisition. Do you wish to add it to this request?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "New PO Detected", this);
                     if (blah == DialogResult.Yes)
                     {
                         InsertPONumber(GetPO);
-                        OpenRequest(System.Convert.ToString(CurrentRequest.GUID));
+                        OpenRequest(CurrentRequest.GUID);
                     }
                     else
                     {
@@ -599,11 +599,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 var blah = OtherFunctions.Message("Are you sure?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Delete Note", this);
                 if (blah == DialogResult.Yes)
                 {
-                    string NoteUID = System.Convert.ToString(GridFunctions.GetCurrentCellValue(dgvNotes, SibiNotesCols.NoteUID));
+                    string NoteUID = GridFunctions.GetCurrentCellValue(dgvNotes, SibiNotesCols.NoteUID);
                     if (!string.IsNullOrEmpty(NoteUID))
                     {
-                        OtherFunctions.Message(DeleteItem_FromSQL(NoteUID, System.Convert.ToString(SibiNotesCols.NoteUID), System.Convert.ToString(SibiNotesCols.TableName)) + " Rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Delete Item", this);
-                        OpenRequest(System.Convert.ToString(CurrentRequest.GUID));
+                        OtherFunctions.Message(DeleteItem_FromSQL(NoteUID, SibiNotesCols.NoteUID, SibiNotesCols.TableName) + " Rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Delete Item", this);
+                        OpenRequest(CurrentRequest.GUID);
                     }
                 }
             }
@@ -723,7 +723,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 int rows = 0;
                 string DeleteItemQuery = "DELETE FROM " + Table + " WHERE " + ItemColumnName + "='" + ItemUID + "'";
-                rows = System.Convert.ToInt32(DBFactory.GetDatabase().ExecuteQuery(DeleteItemQuery));
+                rows = DBFactory.GetDatabase().ExecuteQuery(DeleteItemQuery);
                 return rows;
             }
             catch (Exception ex)
@@ -1078,7 +1078,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void RefreshRequest()
         {
-            OpenRequest(System.Convert.ToString(CurrentRequest.GUID));
+            OpenRequest(CurrentRequest.GUID);
         }
 
         private List<DataGridColumn> NotesGridColumns()
@@ -1111,7 +1111,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void RequestItemsGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            HighlightCurrentRow(System.Convert.ToInt32(e.RowIndex));
+            HighlightCurrentRow(e.RowIndex);
         }
 
         private void RequestItemsGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
@@ -1127,7 +1127,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (e.ColumnIndex >= -1 && e.RowIndex >= 0)
                 {
-                    int ColIndex = System.Convert.ToInt32(System.Convert.ToInt32(e.ColumnIndex == -1 ? 0 : e.ColumnIndex));
+                    int ColIndex = (e.ColumnIndex == -1 ? 0 : e.ColumnIndex);
                     if (!RequestItemsGrid[ColIndex, e.RowIndex].Selected)
                     {
                         RequestItemsGrid.Rows[e.RowIndex].Selected = true;
@@ -1318,7 +1318,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             if (RequestItemsGrid.CurrentCell != null)
             {
-                int ColIndex = System.Convert.ToInt32(RequestItemsGrid.CurrentCell.ColumnIndex);
+                int ColIndex = RequestItemsGrid.CurrentCell.ColumnIndex;
                 if ((true) || (true))
                 {
                     if (GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ObjectCode) != "" && GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.OrgCode) != "")
@@ -1343,9 +1343,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (CurrentRequest != null)
                 {
-                    SetReqStatus(System.Convert.ToString(CurrentRequest.RequisitionNumber), System.Convert.ToInt32(CurrentRequest.DateStamp.Year));
+                    SetReqStatus(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year);
                     CheckForPO();
-                    SetPOStatus(System.Convert.ToString(CurrentRequest.PO));
+                    SetPOStatus(CurrentRequest.PO);
                 }
                 else
                 {
@@ -1361,7 +1361,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             lblPOStatus.Text = "Status: NA";
             if (PO != "" && int.TryParse(PO, out intPO))
             {
-                string GetStatusString = System.Convert.ToString(await GlobalInstances.MunisFunc.GetPOStatusFromPO(intPO));
+                string GetStatusString = await GlobalInstances.MunisFunc.GetPOStatusFromPO(intPO);
                 if (!string.IsNullOrEmpty(GetStatusString))
                 {
                     lblPOStatus.Text = "Status: " + GetStatusString;
@@ -1377,7 +1377,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (ReqNum != "" && int.TryParse(ReqNum, out intReq))
                 {
-                    string GetStatusString = System.Convert.ToString(await GlobalInstances.MunisFunc.GetReqStatusFromReqNum(ReqNum, FY));
+                    string GetStatusString = await GlobalInstances.MunisFunc.GetReqStatusFromReqNum(ReqNum, FY);
                     if (!string.IsNullOrEmpty(GetStatusString))
                     {
                         lblReqStatus.Text = "Status: " + GetStatusString;
@@ -1442,7 +1442,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             if (!IsNewRequest)
             {
-                OpenRequest(System.Convert.ToString(CurrentRequest.GUID));
+                OpenRequest(CurrentRequest.GUID);
             }
         }
 
@@ -1464,7 +1464,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 var blah = OtherFunctions.Message("Delete selected row?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Delete Item Row", this);
                 if (blah == DialogResult.Yes)
                 {
-                    if (!DeleteItem_FromLocal(System.Convert.ToInt32(RequestItemsGrid.CurrentRow.Index)))
+                    if (!DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index))
                     {
                         blah = OtherFunctions.Message("Failed to delete row.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
                     }
@@ -1503,7 +1503,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                int colIndex = System.Convert.ToInt32(RequestItemsGrid.CurrentCell.ColumnIndex);
+                int colIndex = RequestItemsGrid.CurrentCell.ColumnIndex;
                 if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.ReplaceAsset))
                 {
                     Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
@@ -1537,7 +1537,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (ValidColumn())
                 {
-                    PopulateFromFA(System.Convert.ToString(RequestItemsGrid.CurrentCell.OwningColumn.Name));
+                    PopulateFromFA(RequestItemsGrid.CurrentCell.OwningColumn.Name);
                 }
             }
             catch (Exception ex)
@@ -1649,7 +1649,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         trans.Commit();
 
                         ParentForm.RefreshData();
-                        OpenRequest(System.Convert.ToString(CurrentRequest.GUID));
+                        OpenRequest(CurrentRequest.GUID);
                         StatusSlider.NewSlideMessage("Update successful!");
                     }
                     catch (Exception ex)
@@ -1689,7 +1689,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         string CellString = "";
                         if (dcell.Value != null)
                         {
-                            CellString = System.Convert.ToString(dcell.Value.ToString());
+                            CellString = dcell.Value.ToString();
                         }
                         else
                         {

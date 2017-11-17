@@ -129,13 +129,13 @@ namespace AssetManager
                 Logging.Logger("Rebuilding local DB cache...");
                 CloseConnection();
                 GC.Collect();
-                if (!File.Exists(System.Convert.ToString(Paths.SQLiteDir)))
+                if (!File.Exists(Paths.SQLiteDir))
                 {
-                    Directory.CreateDirectory(System.Convert.ToString(Paths.SQLiteDir));
+                    Directory.CreateDirectory(Paths.SQLiteDir);
                 }
-                if (File.Exists(System.Convert.ToString(Paths.SQLitePath)))
+                if (File.Exists(Paths.SQLitePath))
                 {
-                    File.Delete(System.Convert.ToString(Paths.SQLitePath));
+                    File.Delete(Paths.SQLitePath);
                 }
                 SQLiteConnection.CreateFile(Paths.SQLitePath);
                 Connection = NewConnection();
@@ -145,7 +145,7 @@ namespace AssetManager
                 {
                     foreach (var table in TableList())
                     {
-                        AddTable(System.Convert.ToString(table), trans);
+                        AddTable(table, trans);
                     }
                     trans.Commit();
                 }
@@ -168,7 +168,7 @@ namespace AssetManager
                 List<string> hashList = new List<string>();
                 foreach (var table in TableList())
                 {
-                    using (var results = ToStringTable(DataTableFromQueryString("SELECT * FROM " + System.Convert.ToString(table))))
+                    using (var results = ToStringTable(DataTableFromQueryString("SELECT * FROM " + table)))
                     {
                         results.TableName = table;
                         hashList.Add(SecurityTools.GetSHAOfTable(results));
@@ -189,7 +189,7 @@ namespace AssetManager
             {
                 foreach (var table in TableList())
                 {
-                    using (var results = ToStringTable(MySQLDB.DataTableFromQueryString("SELECT * FROM " + System.Convert.ToString(table))))
+                    using (var results = ToStringTable(MySQLDB.DataTableFromQueryString("SELECT * FROM " + table)))
                     {
                         results.TableName = table;
                         hashList.Add(SecurityTools.GetSHAOfTable(results));
@@ -230,7 +230,7 @@ namespace AssetManager
             {
                 if (item.Contains("PRIMARY KEY"))
                 {
-                    key = System.Convert.ToString(item.Split('`')[1]);
+                    key = item.Split('`')[1];
                 }
             }
 
@@ -253,16 +253,16 @@ namespace AssetManager
             {
                 if (item.Contains(key)) //Find primary key location
                 {
-                    KeyStringIndex = System.Convert.ToInt32(ColumnDefs.IndexOf(item));
+                    KeyStringIndex = ColumnDefs.IndexOf(item);
                     if (item.Contains("CREATE")) //If the key is at the start of the statement, add all the correct syntax
                     {
                         var firstDef = (item.Replace("\n", "")).Split(' ');
-                        NewKeyString = firstDef[0] + " " + System.Convert.ToString(firstDef[1]) + " " + System.Convert.ToString(firstDef[2]) + " " + System.Convert.ToString(firstDef[3]) + " " + System.Convert.ToString(firstDef[5]) + " " + System.Convert.ToString(firstDef[6]) + " PRIMARY KEY";
+                        NewKeyString = firstDef[0] + " " + firstDef[1] + " " + firstDef[2] + " " + firstDef[3] + " " +firstDef[5] + " " + firstDef[6] + " PRIMARY KEY";
                     }
                     else
                     {
                         var keyString = (item.Replace("\n", "")).Split(' ');
-                        NewKeyString = " " + System.Convert.ToString(keyString[2]) + " " + System.Convert.ToString(keyString[3]) + " PRIMARY KEY";
+                        NewKeyString = " " + keyString[2] + " " + keyString[3] + " PRIMARY KEY";
                     }
                 }
             }

@@ -56,7 +56,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 DataParser.FillDBFields(results, ImportColumnRemaps());
                 MunisUser = GlobalInstances.AssetFunc.SmartEmployeeSearch(results.Rows[0][SibiRequestItemsCols.User].ToString().ToUpper());
-                POPurchaseDate = System.Convert.ToDateTime(GlobalInstances.MunisFunc.GetPODate(results.Rows[0][SibiRequestCols.PO].ToString()));
+                POPurchaseDate = GlobalInstances.MunisFunc.GetPODate(results.Rows[0][SibiRequestCols.PO].ToString());
             }
 
 
@@ -147,13 +147,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     try
                     {
-                        NewUID = System.Convert.ToString(Guid.NewGuid().ToString());
+                        NewUID = Guid.NewGuid().ToString();
                         int rows = 0;
                         string DeviceInsertQry = "SELECT * FROM " + DevicesCols.TableName + " LIMIT 0";
                         string HistoryInsertQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " LIMIT 0";
 
-                        rows += System.Convert.ToInt32(DBFactory.GetDatabase().UpdateTable(DeviceInsertQry, DeviceInsertTable(DeviceInsertQry), trans));
-                        rows += System.Convert.ToInt32(DBFactory.GetDatabase().UpdateTable(HistoryInsertQry, HistoryInsertTable(HistoryInsertQry), trans));
+                        rows += DBFactory.GetDatabase().UpdateTable(DeviceInsertQry, DeviceInsertTable(DeviceInsertQry), trans);
+                        rows += DBFactory.GetDatabase().UpdateTable(HistoryInsertQry, HistoryInsertTable(HistoryInsertQry), trans);
 
                         if (rows == 2)
                         {
@@ -403,7 +403,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 CheckFields(this, false);
             }
-            SetReplacementYear(System.Convert.ToDateTime(dtPurchaseDate_REQ.Value));
+            SetReplacementYear(dtPurchaseDate_REQ.Value);
         }
 
         private DataTable HistoryInsertTable(string selectQuery)

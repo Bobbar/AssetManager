@@ -275,7 +275,7 @@ namespace AssetManager.UserInterface.CustomControls
             this.BackColor = this.Parent.BackColor;
             if (this.AutoSize)
             {
-                this.Size = GetTextSize(System.Convert.ToString(Text)).ToSize();
+                this.Size = GetTextSize(Text).ToSize();
             }
         }
 

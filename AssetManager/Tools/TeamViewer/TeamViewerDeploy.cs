@@ -77,7 +77,7 @@ namespace AssetManager
 
                         ActivityTick();
                         DepLog("Checking for previous installation...");
-                        TVExists = System.Convert.ToBoolean(await TeamViewerInstalled(targetDevice));
+                        TVExists = await TeamViewerInstalled(targetDevice);
                         if (TVExists)
                         {
                             DepLog("TeamViewer already installed.");
@@ -188,7 +188,7 @@ namespace AssetManager
 
         private Command GetTVAssignCommand()
         {
-            string ApiToken = System.Convert.ToString(GlobalInstances.AssetFunc.GetTVApiToken());
+            string ApiToken = GlobalInstances.AssetFunc.GetTVApiToken();
             var cmd = new Command("Start-Process", false, true);
             cmd.Parameters.Add("FilePath", "C:\\Temp\\TVDeploy\\Assignment\\TeamViewer_Assignment.exe");
             cmd.Parameters.Add("ArgumentList", "-apitoken " + ApiToken + " -datafile ${ProgramFiles}\\TeamViewer\\AssignmentData.json");
@@ -299,7 +299,7 @@ namespace AssetManager
 
         private int SecondsSinceLastActivity()
         {
-            return System.Convert.ToInt32(System.Convert.ToInt32(System.Convert.ToInt32(DateTime.Now.Ticks - LastActivity) / 10000) / 1000);
+            return System.Convert.ToInt32(((DateTime.Now.Ticks - LastActivity) / 10000f) / 1000f);
         }
 
         private void WatchDog()

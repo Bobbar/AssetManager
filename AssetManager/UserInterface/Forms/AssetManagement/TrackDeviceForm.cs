@@ -19,7 +19,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ClearAll();
             SetDates();
             SetGroups();
-            GetCurrentTracking(System.Convert.ToString(CurrentTrackingDevice.GUID));
+            GetCurrentTracking(CurrentTrackingDevice.GUID);
             LoadTracking();
             Show();
         }
@@ -149,7 +149,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                         OtherFunctions.SetWaitCursor(true, this);
                         int rows = 0;
-                        rows += System.Convert.ToInt32(DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans));
+                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans);
 
                         List<DBParameter> CheckOutParams = new List<DBParameter>();
                         CheckOutParams.Add(new DBParameter(TrackablesCols.CheckType, CheckType.Checkout));
@@ -159,7 +159,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         CheckOutParams.Add(new DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation));
                         CheckOutParams.Add(new DBParameter(TrackablesCols.Notes, CheckData.UseReason));
                         CheckOutParams.Add(new DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID));
-                        rows += System.Convert.ToInt32(DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans));
+                        rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans);
 
                         if (rows == 2)
                         {
@@ -200,7 +200,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                         OtherFunctions.SetWaitCursor(true, this);
                         int rows = 0;
-                        rows += System.Convert.ToInt32(DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans));
+                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans);
 
                         List<DBParameter> CheckOutParams = new List<DBParameter>();
                         CheckOutParams.Add(new DBParameter(TrackablesCols.CheckType, CheckType.Checkin));
@@ -212,7 +212,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         CheckOutParams.Add(new DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation));
                         CheckOutParams.Add(new DBParameter(TrackablesCols.Notes, CheckData.CheckinNotes));
                         CheckOutParams.Add(new DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID));
-                        rows += System.Convert.ToInt32(DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans));
+                        rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans);
 
                         if (rows == 2)
                         {
