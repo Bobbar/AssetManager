@@ -415,7 +415,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     OtherFunctions.Message("Device deleted successfully.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Device Deleted", this);
                     CurrentViewDevice = null;
-                    //MainForm.RefreshData(); //TODO: Fine new way to do this.
+                    Helpers.ChildFormControl.MainFormInstance().RefreshData();
                 }
                 else
                 {
@@ -1343,7 +1343,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void cmdGKUpdate_Click(object sender, EventArgs e)
         {
-            //TODO: GKUpdaterFrom instance again.
             if (SecurityTools.VerifyAdminCreds())
             {
                 var GKInstance = Helpers.ChildFormControl.GKUpdaterInstance();
@@ -1445,8 +1444,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DataGridHistory_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-
-            //TODO: Is this really needed?
             if (e.Button == MouseButtons.Right && e.ColumnIndex > -1 && e.RowIndex > -1)
             {
                 DataGridHistory.CurrentCell = DataGridHistory[e.ColumnIndex, e.RowIndex];

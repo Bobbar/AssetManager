@@ -911,8 +911,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (!bolGridFilling)
                 {
-                    //TODO: See if this works.
-                    // var grid = RequestItemsGrid;
                     StyleFunctions.HighlightRow(RequestItemsGrid, GridTheme, Row);
                 }
             }
@@ -1106,8 +1104,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void RequestItemsGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            //TODO: See if this works.
-            //var grid = RequestItemsGrid;
             StyleFunctions.LeaveRow(RequestItemsGrid, GridTheme, e.RowIndex);
         }
 

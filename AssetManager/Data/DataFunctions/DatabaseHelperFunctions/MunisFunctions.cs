@@ -261,7 +261,6 @@ namespace AssetManager
             try
             {
                 DeviceObject Device = new DeviceObject();
-                //Device.PurchaseDate = null; //TODO: F
                 using (AdvancedDialog NewDialog = new AdvancedDialog(parentForm))
                 {
                     NewDialog.Text = "Asset Search";
