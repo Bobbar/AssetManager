@@ -137,7 +137,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         private void CopyFile(string Source, string Dest)
         {
             int BufferSize = 256000;
-            byte[] buffer = new byte[BufferSize];
+            byte[] buffer = new byte[BufferSize - 1];
             int bytesIn = 1;
             FileInfo CurrentFile = new FileInfo(Source);
             Progress.ResetProgress();

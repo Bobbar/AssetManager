@@ -747,7 +747,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             var tmpTable = DataParser.ReturnUpdateTable(selectQuery);
             var DBRow = tmpTable.Rows[0];
             //Add Add'l info
-            if (MunisUser.Number != null)
+            if (MunisUser.Number != null && MunisUser.Number != string.Empty)
             {
                 DBRow[DevicesCols.CurrentUser] = MunisUser.Name;
                 DBRow[DevicesCols.MunisEmpNum] = MunisUser.Number;

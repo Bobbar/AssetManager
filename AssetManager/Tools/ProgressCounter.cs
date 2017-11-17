@@ -58,7 +58,7 @@ namespace AssetManager
             {
                 if (_progTotalBytes > 0)
                 {
-                    return (int)(((float)_progBytesMoved / _progTotalBytes) * 100);
+                    return (int)Math.Round((((float)_progBytesMoved / (float)_progTotalBytes) * 100), 0);
                 }
                 else
                 {

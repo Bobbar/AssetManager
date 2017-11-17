@@ -1180,7 +1180,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             catch (Exception)
             {
-                bolDragging = false;
+
             }
         }
 
@@ -1189,14 +1189,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             e.Effect = DragDropEffects.Copy;
         }
 
-        private void RequestItemsGrid_DragLeave(object sender, EventArgs e)
-        {
-            bolDragging = false;
-        }
-
         private void RequestItemsGrid_MouseDown(object sender, MouseEventArgs e)
         {
-            // MouseIsDragging(e.Location);
             MouseStartPos = e.Location;
         }
 
@@ -1212,15 +1206,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         {
                             bolDragging = true;
                             RequestItemsGrid.DoDragDrop(RequestItemsGrid.SelectedRows[0], DragDropEffects.All);
+                            bolDragging = false;
                         }
                     }
                 }
             }
-        }
-
-        private void RequestItemsGrid_MouseUp(object sender, MouseEventArgs e)
-        {
-            bolDragging = false;
         }
 
         private void RequestItemsGrid_RowEnter(object sender, DataGridViewCellEventArgs e)
@@ -1245,6 +1235,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void RequestItemsGrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
+            //Draw row numbers in row header.
             using (SolidBrush b = new SolidBrush(Color.Black))
             {
                 e.Graphics.DrawString((e.RowIndex + 1).ToString(),
